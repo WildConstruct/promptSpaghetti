@@ -18,7 +18,11 @@ import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
+import { KeyboardShortcuts } from './KeyboardShortcuts';
+import { PanZoomControls } from './PanZoomControls';
 import './Epic1GraphEditor.css';
+import './KeyboardShortcuts.css';
+import './PanZoomControls.css';
 
 export interface Epic1GraphEditorProps {
   initialNodes?: Node<EditableNodeData>[];
@@ -115,6 +119,65 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     onExecute?.(enhancedNodes, edges);
   };
 
+  // Keyboard shortcut handlers
+  const handleSave = useCallback(() => {
+    // Save current graph state
+    const graphData = { nodes: enhancedNodes, edges };
+    localStorage.setItem('epic1-graph', JSON.stringify(graphData));
+    showToast('success', 'Graph saved!');
+  }, [enhancedNodes, edges, showToast]);
+
+  const handleLoad = useCallback(() => {
+    // Load graph from localStorage
+    const saved = localStorage.getItem('epic1-graph');
+    if (saved) {
+      const { nodes: loadedNodes, edges: loadedEdges } = JSON.parse(saved);
+      setNodes(loadedNodes);
+      setEdges(loadedEdges);
+      showToast('success', 'Graph loaded!');
+    } else {
+      showToast('info', 'No saved graph found');
+    }
+  }, [setNodes, setEdges, showToast]);
+
+  const handleExport = useCallback(() => {
+    // Export graph as JSON
+    const graphData = { nodes: enhancedNodes, edges };
+    const blob = new Blob([JSON.stringify(graphData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'graph.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('success', 'Graph exported!');
+  }, [enhancedNodes, edges, showToast]);
+
+  const handleDelete = useCallback((nodesToDelete: Node[]) => {
+    const nodeIds = nodesToDelete.map(n => n.id);
+    setNodes((nds) => nds.filter(n => !nodeIds.includes(n.id)));
+    setEdges((eds) => eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
+    showToast('info', `Deleted ${nodeIds.length} node(s)`);
+  }, [setNodes, setEdges, showToast]);
+
+  const handleDuplicate = useCallback((nodesToDuplicate: Node[]) => {
+    const newNodes = nodesToDuplicate.map(node => ({
+      ...node,
+      id: `${node.id}-copy-${Date.now()}`,
+      position: {
+        x: node.position.x + 50,
+        y: node.position.y + 50,
+      },
+      selected: false,
+    }));
+    setNodes((nds) => [...nds, ...newNodes]);
+    showToast('success', `Duplicated ${newNodes.length} node(s)`);
+  }, [setNodes, showToast]);
+
+  const handleSelectAll = useCallback(() => {
+    setNodes((nds) => nds.map(n => ({ ...n, selected: true })));
+  }, [setNodes]);
+
   return (
     <div className="epic1-graph-editor">
       <ReactFlow
@@ -160,13 +223,26 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
         {/* Instructions panel */}
         <Panel position="bottom-center">
           <div className="epic1-instructions">
-            Click any node to edit • Tab/Shift+Tab to navigate • Enter to confirm • Escape to cancel
+            Click any node to edit • Tab/Shift+Tab to navigate • Enter to confirm • Escape to cancel • Press ? for help
           </div>
         </Panel>
 
         {/* Connection validation feedback */}
         <ConnectionFeedback nodes={nodes} edges={edges} />
+        
+        {/* Pan/Zoom controls */}
+        <PanZoomControls position="bottom-right" />
       </ReactFlow>
+
+      {/* Keyboard shortcuts handler */}
+      <KeyboardShortcuts
+        onSave={handleSave}
+        onLoad={handleLoad}
+        onExport={handleExport}
+        onDelete={handleDelete}
+        onDuplicate={handleDuplicate}
+        onSelectAll={handleSelectAll}
+      />
 
       {/* Toast notifications */}
       {toasts.map((toast) => (

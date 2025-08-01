@@ -1,0 +1,248 @@
+/* Epic 1 Keyboard Shortcuts Styles */
+
+/* Help overlay */
+.epic1-keyboard-help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.epic1-keyboard-help-content {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.epic1-keyboard-help-content h2 {
+  margin: 0 0 24px 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.epic1-shortcuts-section {
+  margin-bottom: 24px;
+}
+
+.epic1-shortcuts-section h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.epic1-shortcut-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.epic1-shortcut-row:last-child {
+  border-bottom: none;
+}
+
+.epic1-shortcut-keys {
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-size: 13px;
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.epic1-shortcut-desc {
+  font-size: 14px;
+  color: #666;
+  margin-left: 16px;
+  flex: 1;
+}
+
+.epic1-help-close {
+  margin-top: 24px;
+  padding: 10px 20px;
+  background: #4a9eff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.epic1-help-close:hover {
+  background: #357abd;
+  transform: translateY(-1px);
+}
+
+/* Visual hints for keyboard navigation */
+.epic1-keyboard-hint {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  pointer-events: none;
+  z-index: 100;
+  animation: fadeInOut 3s ease;
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0;
+  }
+  20%, 80% {
+    opacity: 1;
+  }
+}
+
+/* Focus indicator for keyboard navigation */
+.react-flow__node.selected {
+  outline: 2px solid #4a9eff !important;
+  outline-offset: 2px;
+}
+
+/* Pan mode indicator */
+.epic1-pan-mode-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 50;
+}
+
+.epic1-pan-mode-indicator svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.3;
+  animation: pulse 1.5s ease infinite;
+}
+
+/* Zoom level indicator */
+.epic1-zoom-indicator {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity 0.2s ease;
+}
+
+.epic1-zoom-indicator.changing {
+  animation: zoomPulse 0.3s ease;
+}
+
+@keyframes zoomPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Navigation breadcrumbs */
+.epic1-node-navigation-breadcrumb {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.epic1-node-navigation-breadcrumb .current {
+  font-weight: 600;
+  color: #4a9eff;
+}
+
+/* Smooth pan/zoom transitions */
+.react-flow__viewport {
+  transition: transform 0.2s ease !important;
+}
+
+/* Dark theme support */
+.epic1-keyboard-help-content.dark {
+  background: #1a1a1a;
+  color: #f0f0f0;
+}
+
+.epic1-keyboard-help-content.dark h2 {
+  color: #f0f0f0;
+}
+
+.epic1-keyboard-help-content.dark h3 {
+  color: #999;
+}
+
+.epic1-keyboard-help-content.dark .epic1-shortcut-keys {
+  background: #2a2a2a;
+  color: #f0f0f0;
+}
+
+.epic1-keyboard-help-content.dark .epic1-shortcut-desc {
+  color: #ccc;
+}
+
+.epic1-keyboard-help-content.dark .epic1-shortcut-row {
+  border-bottom-color: #333;
+}
