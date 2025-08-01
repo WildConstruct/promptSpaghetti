@@ -5,9 +5,11 @@
  * loading states, error handling, and seed controls.
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { PreviewEngine, PreviewState, PreviewUpdate } from './PreviewEngine';
 import { ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
+import { DiffEngine, ChangeSet } from './DiffEngine';
+import { DiffViewer, DiffIndicator, ChangeHighlight } from './DiffViewer';
 import './PreviewPanel.css';
 
 export interface PreviewPanelProps {
@@ -35,11 +37,34 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   const [seeds, setSeeds] = useState<SeedConfig[]>([]);
   const [showSeedControls, setShowSeedControls] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  
+  // Diff tracking
+  const diffEngine = useRef(new DiffEngine());
+  const [changeSet, setChangeSet] = useState<ChangeSet | null>(null);
+  const previousResults = useRef<string[]>([]);
 
   // Subscribe to preview engine updates
   useEffect(() => {
     const unsubscribe = previewEngine.subscribe((update) => {
       setPreviewUpdate(update);
+      
+      // Track changes when we have results
+      if (update.state === PreviewState.IDLE && update.results) {
+        const currentOutputs = update.results.map(r => r.output || '');
+        
+        if (previousResults.current.length > 0) {
+          const changes = diffEngine.current.trackChanges(
+            previousResults.current,
+            currentOutputs
+          );
+          setChangeSet(changes);
+          
+          // Clear change highlights after animation
+          setTimeout(() => setChangeSet(null), 3000);
+        }
+        
+        previousResults.current = currentOutputs;
+      }
     });
 
     // Initialize seeds from engine
@@ -116,11 +141,22 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
     const hasError = !result.success;
     const output = result.output || '';
     const seed = seeds[index]?.value || 'Unknown';
+    
+    // Check if this result has changes
+    const isChanged = changeSet?.changedIndices.includes(index) || false;
+    const diffData = changeSet?.diffs.find(d => d.index === index);
 
     return (
-      <div key={index} className={`preview-result ${hasError ? 'has-error' : ''}`}>
+      <ChangeHighlight key={index} isChanged={isChanged} className={`preview-result ${hasError ? 'has-error' : ''}`}>
         <div className="preview-result-header">
           <span className="preview-seed">Seed: {seed}</span>
+          {diffData && (
+            <DiffIndicator 
+              hasChanges={true}
+              addedCount={diffData.diff.addedCount}
+              removedCount={diffData.diff.removedCount}
+            />
+          )}
           <div className="preview-result-actions">
             <button
               className={`preview-copy-btn ${copiedIndex === index ? 'copied' : ''}`}
@@ -139,7 +175,13 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
               {result.stats.errors[0]?.error.message || 'Execution failed'}
             </div>
           ) : (
-            <div className="preview-result-text">{output}</div>
+            <>
+              {diffData ? (
+                <DiffViewer diff={diffData.diff} className="preview-result-text" />
+              ) : (
+                <div className="preview-result-text">{output}</div>
+              )}
+            </>
           )}
         </div>
 
@@ -152,7 +194,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
             ))}
           </div>
         )}
-      </div>
+      </ChangeHighlight>
     );
   };
 
@@ -261,6 +303,11 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
                 {previewUpdate.state === PreviewState.IDLE && (
                   <span className="preview-timing">
                     {Math.max(...previewUpdate.results.map(r => r.stats.totalDuration))}ms
+                  </span>
+                )}
+                {changeSet && changeSet.changedIndices.length > 0 && (
+                  <span className="preview-change-summary">
+                    {diffEngine.current.summarizeChanges(changeSet)}
                   </span>
                 )}
               </>

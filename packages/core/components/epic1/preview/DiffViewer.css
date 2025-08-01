@@ -1,0 +1,218 @@
+/* Epic 1 Diff Viewer Styles */
+
+.epic1-diff-viewer {
+  position: relative;
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Inline diff styles */
+.epic1-diff-content {
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.epic1-diff-added {
+  background-color: #d4f4dd;
+  color: #1e7e34;
+  text-decoration: none;
+  padding: 2px 4px;
+  border-radius: 3px;
+  position: relative;
+}
+
+.epic1-diff-added::before {
+  content: '+';
+  position: absolute;
+  left: -12px;
+  color: #28a745;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.epic1-diff-viewer:hover .epic1-diff-added::before {
+  opacity: 1;
+}
+
+.epic1-diff-removed {
+  background-color: #fdd9d7;
+  color: #bd2130;
+  text-decoration: line-through;
+  padding: 2px 4px;
+  border-radius: 3px;
+  position: relative;
+  opacity: 0.7;
+}
+
+.epic1-diff-removed::before {
+  content: '-';
+  position: absolute;
+  left: -12px;
+  color: #dc3545;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.epic1-diff-viewer:hover .epic1-diff-removed::before {
+  opacity: 1;
+}
+
+/* Change summary */
+.epic1-diff-summary {
+  position: absolute;
+  top: -20px;
+  right: 0;
+  font-size: 11px;
+  color: #666;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 6px;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Diff indicator badge */
+.epic1-diff-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.epic1-diff-indicator-dot {
+  width: 6px;
+  height: 6px;
+  background: #f39c12;
+  border-radius: 50%;
+  animation: epic1-pulse 2s ease-in-out infinite;
+}
+
+@keyframes epic1-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+.epic1-diff-indicator-text {
+  display: flex;
+  gap: 6px;
+}
+
+.epic1-diff-indicator-added {
+  color: #28a745;
+}
+
+.epic1-diff-indicator-removed {
+  color: #dc3545;
+}
+
+/* Change highlight wrapper */
+.epic1-change-highlight {
+  position: relative;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.epic1-change-highlight.is-changed {
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 193, 7, 0.1) 10%,
+    rgba(255, 193, 7, 0.1) 90%,
+    transparent
+  );
+  animation: epic1-highlight-fade 2s ease-out;
+}
+
+.epic1-change-highlight.is-changed::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #ffc107;
+  border-radius: 2px;
+  animation: epic1-highlight-bar 0.5s ease-out;
+}
+
+@keyframes epic1-highlight-fade {
+  0% {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 193, 7, 0.3) 10%,
+      rgba(255, 193, 7, 0.3) 90%,
+      transparent
+    );
+  }
+  100% {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 193, 7, 0.1) 10%,
+      rgba(255, 193, 7, 0.1) 90%,
+      transparent
+    );
+  }
+}
+
+@keyframes epic1-highlight-bar {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .epic1-diff-added {
+    background-color: #1e3a2e;
+    color: #4ade80;
+  }
+
+  .epic1-diff-removed {
+    background-color: #3a1e1e;
+    color: #f87171;
+  }
+
+  .epic1-diff-summary {
+    background: rgba(0, 0, 0, 0.8);
+    color: #aaa;
+  }
+
+  .epic1-diff-indicator {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  .epic1-change-highlight.is-changed {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 193, 7, 0.2) 10%,
+      rgba(255, 193, 7, 0.2) 90%,
+      transparent
+    );
+  }
+}

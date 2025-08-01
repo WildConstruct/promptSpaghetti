@@ -352,6 +352,16 @@
   font-weight: 500;
 }
 
+.preview-change-summary {
+  color: #f39c12;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: rgba(243, 156, 18, 0.1);
+  border-radius: 4px;
+  border: 1px solid rgba(243, 156, 18, 0.2);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .preview-panel {
