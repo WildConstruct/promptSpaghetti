@@ -18,16 +18,11 @@ console.log('Environment:', process.env.NODE_ENV);
 console.log('NETLIFY:', process.env.NETLIFY);
 console.log('Current working directory:', process.cwd());
 
-// Core package copying disabled for deployment - using minimal inline components instead
-console.log('Core package copying disabled - using minimal inline components for deployment');
+// For Epic 1 MVP, we need the full core package
+console.log('Building with full Epic 1 functionality...');
 
 console.log('Running production build...');
-// Try safe config first, fall back to regular if it fails
-try {
-  execSync('vite build --config vite.config.production-safe.ts', { stdio: 'inherit' });
-} catch {
-  console.log('Safe config failed, trying regular config...');
-  execSync('vite build --config vite.config.production.ts', { stdio: 'inherit' });
-}
+// Use the standard vite config which includes the core package alias
+execSync('vite build', { stdio: 'inherit' });
 
 console.log('Standalone build complete!');

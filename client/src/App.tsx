@@ -1,5 +1,5 @@
 import React from 'react';
-import { Epic1GraphEditorWithProvider } from '../../packages/core/components/epic1/Epic1GraphEditor';
+import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import 'reactflow/dist/style.css';
