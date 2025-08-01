@@ -12,6 +12,7 @@ export interface EditableNodeData {
   onEdit?: (newValue: string) => void;
   onEditStart?: () => void;
   onEditEnd?: () => void;
+  onContextMenu?: (event: React.MouseEvent) => void;
   [key: string]: any;
 }
 
@@ -125,11 +126,19 @@ export const BaseEditableNode = memo(({
     }
   };
 
+  // Context menu handler
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    data.onContextMenu?.(e);
+  };
+
   return (
     <div
       ref={nodeRef}
       className={`epic1-editable-node ${className} ${isEditing ? 'editing' : ''} ${selected ? 'selected' : ''}`}
       onClick={handleNodeClick}
+      onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}
       style={{
         minWidth: `${minWidth}px`,

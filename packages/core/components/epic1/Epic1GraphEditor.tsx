@@ -28,6 +28,8 @@ import { PreviewPanel } from './preview/PreviewPanel';
 import { Epic1Graph } from '../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
+import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
+import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -70,6 +72,12 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
+  
+  // Context menu and save-as-preset state
+  const [contextMenuPosition, setContextMenuPosition] = useState<ContextMenuPosition | null>(null);
+  const [contextMenuNodeId, setContextMenuNodeId] = useState<string | null>(null);
+  const [saveAsPresetNodeId, setSaveAsPresetNodeId] = useState<string | null>(null);
+  const [customPresets, setCustomPresets] = useState<Preset[]>([]);
   
   // Toast system for error messages
   const { toasts, showToast, dismissToast } = useToast();
@@ -119,6 +127,10 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
       onEdit: (newValue: string) => handleNodeEdit(nodeId, newValue),
       onEditStart: () => setSelectedNodeId(nodeId),
       onEditEnd: () => setSelectedNodeId(null),
+      onContextMenu: (event: React.MouseEvent) => {
+        setContextMenuPosition({ x: event.clientX, y: event.clientY });
+        setContextMenuNodeId(nodeId);
+      },
     };
   }, [handleNodeEdit]);
 
@@ -298,6 +310,32 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     }
   }, [isPreviewVisible, previewPosition, previewWidth]);
 
+  // Context menu handlers
+  const handleSaveAsPreset = useCallback(() => {
+    if (contextMenuNodeId) {
+      setSaveAsPresetNodeId(contextMenuNodeId);
+      setContextMenuPosition(null);
+    }
+  }, [contextMenuNodeId]);
+
+  const handleSavePreset = useCallback((preset: Preset) => {
+    // Add to custom presets
+    setCustomPresets(prev => [...prev, preset]);
+    
+    // Show success toast
+    showToast('Preset saved successfully!', 'success');
+    
+    // Clear save dialog
+    setSaveAsPresetNodeId(null);
+  }, [showToast]);
+
+  // Get node data for save-as-preset dialog
+  const saveAsPresetNode = useMemo(() => {
+    if (!saveAsPresetNodeId) return null;
+    const node = nodes.find(n => n.id === saveAsPresetNodeId);
+    return node ? { data: node.data, type: node.type || 'textBlock' } : null;
+  }, [saveAsPresetNodeId, nodes]);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="epic1-graph-editor" style={editorStyle}>
@@ -406,6 +444,24 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           onClose={handleTogglePreview}
         />
       )}
+      
+      {/* Context Menu */}
+      <NodeContextMenu
+        nodeId={contextMenuNodeId || ''}
+        nodeType={nodes.find(n => n.id === contextMenuNodeId)?.type || 'textBlock'}
+        position={contextMenuPosition}
+        onClose={() => setContextMenuPosition(null)}
+        onSaveAsPreset={handleSaveAsPreset}
+      />
+      
+      {/* Save As Preset Dialog */}
+      <SaveAsPresetDialog
+        isOpen={!!saveAsPresetNodeId}
+        nodeData={saveAsPresetNode?.data || null}
+        nodeType={saveAsPresetNode?.type || 'textBlock'}
+        onClose={() => setSaveAsPresetNodeId(null)}
+        onSave={handleSavePreset}
+      />
       </div>
     </DndProvider>
   );

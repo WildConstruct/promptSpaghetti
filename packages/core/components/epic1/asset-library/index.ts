@@ -5,6 +5,8 @@
 export { AssetLibrary } from './AssetLibrary';
 export type { AssetLibraryProps } from './AssetLibrary';
 
+export { SaveAsPresetDialog } from './SaveAsPresetDialog';
+
 export { withDroppableNode } from './DroppableNode';
 export type { DroppableNodeProps } from './DroppableNode';
 

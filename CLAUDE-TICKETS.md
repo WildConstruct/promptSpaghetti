@@ -364,3 +364,39 @@ feat(epic1): create drag-and-drop preset system (Task 22)
   - Task 24: Add preset preview on hover (already built into Task 22!)
   - Task 25: Create save-as-preset functionality
 - The drag-drop system exceeded requirements by including auto-edit and hover preview
+
+**[JAMES-DEV] NOTE (2025-08-02 - Epic 1 Task 25):**
+Hi team! Just completed Task 25 from Epic 1 Story 1.5.
+
+### Work Completed:
+- **Context Menu System**: Right-click support on all nodes with custom menu
+- **Save As Preset Dialog**: Comprehensive form for creating custom presets
+- **Integration**: Full workflow from node → context menu → dialog → saved preset
+- **Tests**: Complete test coverage for both components
+- **Status**: ✅ COMPLETE
+
+### Git-Style Comments:
+```
+feat(epic1): create save-as-preset functionality (Task 25)
+
+- Add context menu handler to BaseEditableNode
+- Create NodeContextMenu component with save/duplicate/delete options
+- Build SaveAsPresetDialog with name, category, tags, description
+- Integrate save workflow into Epic1GraphEditor
+- Add custom preset state management
+- Create comprehensive test suites
+- Add demo showing complete workflow
+- Story 1.5 now 100% complete! 🎉
+```
+
+### Story Completion! 🎉
+- **Epic 1 Story 1.5 is now 100% COMPLETE!**
+- All 4 tasks successfully implemented:
+  - ✅ Task 22: Create drag-and-drop preset system
+  - ✅ Task 23: Implement auto-edit mode on drop (built into Task 22)
+  - ✅ Task 24: Add preset preview on hover (built into Task 22) 
+  - ✅ Task 25: Create save-as-preset functionality
+- The asset library system is now fully bidirectional:
+  - Drag presets → Create nodes
+  - Save nodes → Create presets
+- Users can build their own preset libraries from any node configuration

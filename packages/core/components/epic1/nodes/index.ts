@@ -17,6 +17,9 @@ export type { VariableNodeData } from './VariableNode';
 export { OutputNode } from './OutputNode';
 export type { OutputNodeData } from './OutputNode';
 
+export { NodeContextMenu } from './NodeContextMenu';
+export type { ContextMenuPosition } from './NodeContextMenu';
+
 // Node type mapping for React Flow
 export const epic1NodeTypes = {
   textBlock: TextBlockNode,
