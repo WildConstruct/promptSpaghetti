@@ -30,6 +30,9 @@ import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
 import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
+import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
+import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
+import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -81,6 +84,10 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   
   // Toast system for error messages
   const { toasts, showToast, dismissToast } = useToast();
+  
+  // Micro-interactions and node interactions
+  const { addNodeWithBounce, highlightConnection } = useNodeInteractions();
+  const { interactions, trigger } = useMicroInteractions();
 
   // Preview engine
   const previewEngineRef = useRef<PreviewEngine | null>(null);
@@ -147,8 +154,14 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   const onConnect = useCallback(
     (params: Connection) => {
       setEdges((eds) => addEdge(params, eds));
+      
+      // Highlight the new connection
+      if (params.source && params.target) {
+        highlightConnection(params.source, params.target);
+        showToast('success', 'Connection created!');
+      }
     },
-    [setEdges]
+    [setEdges, highlightConnection, showToast]
   );
 
   // Use connection validation hook with error handling

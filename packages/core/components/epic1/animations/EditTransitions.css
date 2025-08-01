@@ -1,0 +1,367 @@
+/**
+ * Epic 1 Edit Transition Animations
+ * Smooth, professional animations for all edit state transitions
+ */
+
+/* ===== Core Edit State Transitions ===== */
+
+/* Node enters edit mode */
+.epic1-editable-node.entering-edit {
+  animation: enterEditMode 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes enterEditMode {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Node exits edit mode */
+.epic1-editable-node.exiting-edit {
+  animation: exitEditMode 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes exitEditMode {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* ===== Input Field Transitions ===== */
+
+/* Input field appears */
+.epic1-node-input {
+  animation: inputAppear 0.2s ease-out;
+  transform-origin: center;
+}
+
+@keyframes inputAppear {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* Focus ring animation */
+.epic1-node-input:focus {
+  animation: focusRing 0.3s ease-out;
+}
+
+@keyframes focusRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 122, 204, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2);
+  }
+}
+
+/* ===== Value Change Animations ===== */
+
+/* Value confirmed */
+.epic1-value-confirmed {
+  animation: valueConfirmed 0.4s ease-out;
+}
+
+@keyframes valueConfirmed {
+  0% {
+    background-color: transparent;
+  }
+  25% {
+    background-color: rgba(76, 175, 80, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Value cancelled */
+.epic1-value-cancelled {
+  animation: valueCancelled 0.3s ease-out;
+}
+
+@keyframes valueCancelled {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+/* ===== Tab Navigation Animations ===== */
+
+/* Node receives focus via tab */
+.epic1-tab-focus {
+  animation: tabFocus 0.3s ease-out;
+}
+
+@keyframes tabFocus {
+  0% {
+    outline-offset: 8px;
+    outline-color: rgba(0, 122, 204, 0);
+  }
+  100% {
+    outline-offset: 2px;
+    outline-color: rgba(0, 122, 204, 1);
+  }
+}
+
+/* Node loses focus */
+.epic1-tab-blur {
+  animation: tabBlur 0.2s ease-out;
+}
+
+@keyframes tabBlur {
+  0% {
+    outline-offset: 2px;
+    outline-color: rgba(0, 122, 204, 1);
+  }
+  100% {
+    outline-offset: 8px;
+    outline-color: rgba(0, 122, 204, 0);
+  }
+}
+
+/* ===== Node Type Specific Animations ===== */
+
+/* TextBlock expand/collapse */
+.epic1-textblock-expanding {
+  animation: textExpand 0.3s ease-out;
+}
+
+@keyframes textExpand {
+  0% {
+    max-height: 60px;
+  }
+  100% {
+    max-height: 300px;
+  }
+}
+
+/* WeightedChoice option animations */
+.epic1-weighted-option {
+  transition: all 0.2s ease;
+}
+
+.epic1-weighted-option-entering {
+  animation: optionEnter 0.3s ease-out;
+}
+
+@keyframes optionEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.epic1-weighted-option-exiting {
+  animation: optionExit 0.2s ease-out;
+}
+
+@keyframes optionExit {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+}
+
+/* Weight bar smooth transitions */
+.epic1-weight-bar {
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.epic1-weight-bar-changing {
+  animation: weightChange 0.3s ease-out;
+}
+
+@keyframes weightChange {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+    transform: scaleY(1.1);
+  }
+}
+
+/* ===== Error State Animations ===== */
+
+/* Invalid input shake */
+.epic1-input-error {
+  animation: errorShake 0.4s ease-out;
+  border-color: #f44336 !important;
+}
+
+@keyframes errorShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* Error message appear */
+.epic1-error-message {
+  animation: errorAppear 0.2s ease-out;
+}
+
+@keyframes errorAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Connection Animations ===== */
+
+/* Edge highlight when node editing */
+.epic1-edge-highlight {
+  animation: edgePulse 2s ease-in-out infinite;
+}
+
+@keyframes edgePulse {
+  0%, 100% {
+    stroke-opacity: 0.6;
+  }
+  50% {
+    stroke-opacity: 1;
+    stroke-width: 2.5;
+  }
+}
+
+/* ===== Micro-interactions ===== */
+
+/* Hover state transitions */
+.epic1-editable-node {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.epic1-editable-node:hover:not(.editing) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* Active state (mouse down) */
+.epic1-editable-node:active:not(.editing) {
+  transform: translateY(0);
+  transition-duration: 0.05s;
+}
+
+/* Input hover hint */
+.epic1-edit-hint {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.epic1-editable-node:hover .epic1-edit-hint {
+  opacity: 1;
+  animation: hintFade 0.3s ease-out;
+}
+
+@keyframes hintFade {
+  0% {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Performance Optimizations ===== */
+
+/* Use will-change for frequently animated properties */
+.epic1-editable-node.editing {
+  will-change: transform, box-shadow;
+}
+
+.epic1-node-input {
+  will-change: transform, opacity;
+}
+
+.epic1-weight-bar {
+  will-change: width;
+}
+
+/* ===== Accessibility Animations ===== */
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01s !important;
+  }
+  
+  .epic1-edge-highlight {
+    animation: none;
+    stroke-opacity: 1;
+  }
+}
+
+/* ===== Dark Mode Support ===== */
+
+@media (prefers-color-scheme: dark) {
+  @keyframes enterEditMode {
+    0% {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    100% {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+    }
+  }
+  
+  @keyframes focusRing {
+    100% {
+      box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.3);
+    }
+  }
+}

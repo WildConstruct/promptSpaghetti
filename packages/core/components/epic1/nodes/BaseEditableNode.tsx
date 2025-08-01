@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect, memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 import { SaveIndicator } from './SaveIndicator';
+import { useEditTransitions } from '../hooks/useEditTransitions';
 import './BaseEditableNode.css';
 import './VisualFeedbackEnhancements.css';
+import '../animations/EditTransitions.css';
 
 export interface EditableNodeData {
   isEditing?: boolean;
@@ -47,6 +49,18 @@ export const BaseEditableNode = memo(({
   const [editBuffer, setEditBuffer] = useState(data.editBuffer || data.value || '');
   const [saveTrigger, setSaveTrigger] = useState(0);
   const nodeRef = useRef<HTMLDivElement>(null);
+  
+  // Animation state management
+  const {
+    transitionState,
+    triggerValueConfirmed,
+    triggerValueCancelled,
+    animationClasses
+  } = useEditTransitions({
+    isEditing,
+    isFocused: selected,
+    hasError: false
+  });
 
   // Update edit buffer when value changes externally
   useEffect(() => {
@@ -77,6 +91,7 @@ export const BaseEditableNode = memo(({
       data.onEditEnd?.();
       // Trigger save animation
       setSaveTrigger(prev => prev + 1);
+      triggerValueConfirmed();
     }
   };
 
@@ -86,6 +101,7 @@ export const BaseEditableNode = memo(({
       setEditBuffer(data.value || '');
       setIsEditing(false);
       data.onEditEnd?.();
+      triggerValueCancelled();
     }
   };
 
@@ -136,14 +152,13 @@ export const BaseEditableNode = memo(({
   return (
     <div
       ref={nodeRef}
-      className={`epic1-editable-node ${className} ${isEditing ? 'editing' : ''} ${selected ? 'selected' : ''}`}
+      className={`epic1-editable-node ${className} ${isEditing ? 'editing' : ''} ${selected ? 'selected' : ''} ${animationClasses}`}
       onClick={handleNodeClick}
       onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}
       style={{
         minWidth: `${minWidth}px`,
         minHeight: `${minHeight}px`,
-        transition: 'all 0.2s ease',
       }}
     >
       <Handle
