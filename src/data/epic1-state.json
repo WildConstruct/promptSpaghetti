@@ -822,11 +822,11 @@
       "taskNumber": 3,
       "title": "Create medieval demo showcase",
       "description": "Create medieval demo showcase for Polish & Demo Optimization",
-      "status": "TODO",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 4,
-      "actualHours": null,
-      "assignedTo": null,
+      "actualHours": 3.5,
+      "assignedTo": "james-dev",
       "epic": "Epic 1",
       "tags": [
         "epic1",
@@ -834,14 +834,14 @@
         "inline-editing"
       ],
       "createdAt": "2025-08-01T04:57:39.883Z",
-      "updatedAt": "2025-08-01T04:57:39.883Z",
+      "updatedAt": "2025-08-02T08:30:00.000Z",
       "blockedBy": [],
       "blocks": [],
       "metadata": {
         "storyFile": "docs/stories/1.6.polish-demo-optimization.md",
         "taskIndex": 2,
         "totalTasksInStory": 4,
-        "storyProgress": 0
+        "storyProgress": 75
       }
     },
     {
