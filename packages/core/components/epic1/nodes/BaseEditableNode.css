@@ -1,0 +1,175 @@
+/* Epic 1 Base Editable Node Styles */
+
+.epic1-editable-node {
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+/* Editing state - glow effect and expansion */
+.epic1-editable-node.editing {
+  box-shadow: 0 0 20px rgba(100, 200, 255, 0.6);
+  transform: scale(1.05);
+  border-color: #4a9eff;
+  cursor: default;
+  z-index: 100;
+}
+
+/* Selected state - subtle highlight */
+.epic1-editable-node.selected:not(.editing) {
+  border-color: #4a9eff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Node content container */
+.epic1-node-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+/* React Flow handles */
+.epic1-handle {
+  width: 12px;
+  height: 12px;
+  background: #4a9eff;
+  border: 2px solid #ffffff;
+  transition: all 0.2s ease;
+}
+
+.epic1-handle:hover {
+  transform: scale(1.2);
+  background: #357abd;
+}
+
+.epic1-handle.target {
+  left: -6px;
+}
+
+.epic1-handle.source {
+  right: -6px;
+}
+
+/* Visual indicators */
+.epic1-edit-indicator {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  background: #4a9eff;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+.epic1-selected-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  background: #4a9eff;
+  border-radius: 50%;
+}
+
+/* Pulse animation for edit indicator */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Input styles for inline editing */
+.epic1-inline-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #4a9eff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  background: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.epic1-inline-input:focus {
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+}
+
+/* Textarea styles for multiline editing */
+.epic1-inline-textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid #4a9eff;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  background: #f8f9fa;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.epic1-inline-textarea:focus {
+  background: #ffffff;
+  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+}
+
+/* Node type specific colors */
+.epic1-editable-node.text-block {
+  border-color: #6366f1;
+}
+
+.epic1-editable-node.text-block.editing {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+}
+
+.epic1-editable-node.weighted-choice {
+  border-color: #f59e0b;
+}
+
+.epic1-editable-node.weighted-choice.editing {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+}
+
+.epic1-editable-node.concat {
+  border-color: #10b981;
+}
+
+.epic1-editable-node.concat.editing {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+}
+
+.epic1-editable-node.variable {
+  border-color: #8b5cf6;
+}
+
+.epic1-editable-node.variable.editing {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+}
+
+.epic1-editable-node.output {
+  border-color: #ef4444;
+}
+
+.epic1-editable-node.output.editing {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}

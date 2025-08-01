@@ -1,0 +1,261 @@
+/* WeightedChoice Node Styles */
+
+.epic1-node-type-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* Display mode styles */
+.epic1-weighted-choice-display {
+  width: 100%;
+}
+
+.epic1-options-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.epic1-option-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.epic1-option-text-preview {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.epic1-weight-bar-container {
+  position: relative;
+  height: 20px;
+  background: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.epic1-weight-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.epic1-weight-label {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+}
+
+/* Edit mode styles */
+.epic1-weighted-choice-editor {
+  width: 100%;
+}
+
+.epic1-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.epic1-option-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  position: relative;
+}
+
+.epic1-option-text {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.epic1-option-text:focus {
+  border-color: #f59e0b;
+}
+
+.epic1-weight-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.epic1-weight-slider {
+  flex: 1;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #e0e0e0;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.epic1-weight-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #f59e0b;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.epic1-weight-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  background: #f97316;
+}
+
+.epic1-weight-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #f59e0b;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.epic1-weight-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  background: #f97316;
+}
+
+.epic1-weight-value {
+  min-width: 35px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-align: right;
+}
+
+.epic1-remove-option {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.epic1-remove-option:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+/* Control buttons */
+.epic1-option-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.epic1-add-option {
+  padding: 6px 12px;
+  border: 1px dashed #f59e0b;
+  background: transparent;
+  color: #f59e0b;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.epic1-add-option:hover {
+  background: #fef3c7;
+  border-color: #f97316;
+  color: #f97316;
+}
+
+.epic1-edit-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.epic1-confirm,
+.epic1-cancel {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.epic1-confirm {
+  background: #10b981;
+  color: white;
+}
+
+.epic1-confirm:hover {
+  background: #059669;
+  transform: scale(1.05);
+}
+
+.epic1-cancel {
+  background: #ef4444;
+  color: white;
+}
+
+.epic1-cancel:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+/* Placeholder text */
+.epic1-placeholder {
+  color: #999;
+  font-style: italic;
+  font-size: 14px;
+}
+
+/* Additional text display styles */
+.epic1-text-display {
+  width: 100%;
+}
+
+.epic1-text-content {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

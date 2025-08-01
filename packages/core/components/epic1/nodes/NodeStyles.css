@@ -1,0 +1,53 @@
+/* Additional node-specific styles */
+
+/* Concat Node */
+.epic1-concat-display,
+.epic1-concat-editor {
+  text-align: center;
+}
+
+.epic1-separator-preview {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #10b981;
+  font-weight: 600;
+}
+
+.epic1-hint {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Variable Node */
+.epic1-variable-name {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: #8b5cf6;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.epic1-variable-prefix {
+  color: #6b7280;
+  font-size: 18px;
+}
+
+/* Output Node */
+.epic1-output-display {
+  text-align: center;
+}
+
+.epic1-output-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.epic1-output-icon {
+  font-size: 20px;
+  color: #ef4444;
+}
