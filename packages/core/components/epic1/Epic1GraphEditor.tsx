@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react';
+import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react';
 import ReactFlow, {
   Edge,
   Node,
@@ -20,6 +20,10 @@ import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedbac
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { PanZoomControls } from './PanZoomControls';
+import { PreviewEngine } from './preview/PreviewEngine';
+import { PreviewPanel } from './preview/PreviewPanel';
+import { Epic1Graph } from '../../runtime/nodes/epic1/Epic1ExecutionEngine';
+import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -30,6 +34,11 @@ export interface Epic1GraphEditorProps {
   onNodesChange?: (nodes: Node<EditableNodeData>[]) => void;
   onEdgesChange?: (edges: Edge[]) => void;
   onExecute?: (nodes: Node<EditableNodeData>[], edges: Edge[]) => void;
+  showPreview?: boolean;
+  previewPosition?: 'right' | 'bottom';
+  previewWidth?: number | string;
+  previewDebounceDelay?: number;
+  previewSeeds?: (string | number)[];
 }
 
 /**
@@ -41,13 +50,28 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   onNodesChange: onNodesChangeProp,
   onEdgesChange: onEdgesChangeProp,
   onExecute,
+  showPreview = true,
+  previewPosition = 'right',
+  previewWidth = '400px',
+  previewDebounceDelay = 300,
+  previewSeeds,
 }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState<EditableNodeData>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
   
   // Toast system for error messages
   const { toasts, showToast, dismissToast } = useToast();
+
+  // Preview engine
+  const previewEngineRef = useRef<PreviewEngine | null>(null);
+  if (!previewEngineRef.current) {
+    previewEngineRef.current = new PreviewEngine({
+      debounceDelay: previewDebounceDelay,
+      seeds: previewSeeds
+    });
+  }
 
   // Handle node data updates (from inline editing)
   const handleNodeEdit = useCallback((nodeId: string, newValue: string) => {
@@ -104,6 +128,44 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   const { isValidConnection } = useConnectionValidation(nodes, edges, (error) => {
     showToast('error', error);
   });
+
+  // Convert React Flow graph to runtime graph format
+  const convertToRuntimeGraph = useCallback((flowNodes: Node<EditableNodeData>[], flowEdges: Edge[]): Epic1Graph | null => {
+    try {
+      const runtimeNodes = new Map();
+      
+      for (const node of flowNodes) {
+        const runtimeNode = nodeDataToRuntimeNode(node);
+        if (runtimeNode) {
+          runtimeNodes.set(node.id, runtimeNode);
+        }
+      }
+
+      return {
+        nodes: runtimeNodes,
+        edges: flowEdges.map(edge => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          sourceHandle: edge.sourceHandle,
+          targetHandle: edge.targetHandle
+        }))
+      };
+    } catch (error) {
+      console.error('Error converting to runtime graph:', error);
+      return null;
+    }
+  }, []);
+
+  // Update preview when graph changes
+  useEffect(() => {
+    if (!isPreviewVisible || !previewEngineRef.current) return;
+
+    const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
+    if (runtimeGraph) {
+      previewEngineRef.current.updatePreview(runtimeGraph);
+    }
+  }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph]);
 
   // Notify parent of changes
   React.useEffect(() => {
@@ -178,80 +240,146 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     setNodes((nds) => nds.map(n => ({ ...n, selected: true })));
   }, [setNodes]);
 
+  // Toggle preview panel
+  const handleTogglePreview = useCallback(() => {
+    setIsPreviewVisible(prev => !prev);
+    showToast('info', `Preview ${!isPreviewVisible ? 'shown' : 'hidden'}`);
+  }, [isPreviewVisible, showToast]);
+
+  // Handle seed changes from preview panel
+  const handlePreviewSeedChange = useCallback((seeds: (string | number)[]) => {
+    if (previewEngineRef.current) {
+      // Seeds are already updated in the preview engine by the panel
+      // Just trigger a new execution with the updated seeds
+      const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
+      if (runtimeGraph) {
+        previewEngineRef.current.updatePreview(runtimeGraph);
+      }
+    }
+  }, [enhancedNodes, edges, convertToRuntimeGraph]);
+
+  // Cleanup preview engine on unmount
+  useEffect(() => {
+    return () => {
+      previewEngineRef.current?.dispose();
+    };
+  }, []);
+
+  const editorStyle = useMemo(() => {
+    if (!isPreviewVisible) return {};
+    
+    if (previewPosition === 'right') {
+      return {
+        display: 'grid',
+        gridTemplateColumns: `1fr ${previewWidth}`,
+        height: '100%'
+      };
+    } else {
+      return {
+        display: 'grid',
+        gridTemplateRows: `1fr ${previewWidth}`,
+        height: '100%'
+      };
+    }
+  }, [isPreviewVisible, previewPosition, previewWidth]);
+
   return (
-    <div className="epic1-graph-editor">
-      <ReactFlow
-        nodes={enhancedNodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        nodeTypes={epic1NodeTypes}
-        isValidConnection={isValidConnection}
-        connectionMode={ConnectionMode.Loose}
-        fitView
-        attributionPosition="bottom-left"
-      >
-        <Background variant="dots" gap={12} size={1} />
-        <Controls />
-        <MiniMap 
-          nodeColor={(node) => {
-            switch (node.type) {
-              case 'textBlock': return '#6366f1';
-              case 'weightedChoice': return '#f59e0b';
-              case 'concat': return '#10b981';
-              case 'variable': return '#8b5cf6';
-              case 'output': return '#ef4444';
-              default: return '#666';
-            }
+    <div className="epic1-graph-editor" style={editorStyle}>
+      <div style={{ position: 'relative', height: '100%' }}>
+        <ReactFlow
+          nodes={enhancedNodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          nodeTypes={epic1NodeTypes}
+          isValidConnection={isValidConnection}
+          connectionMode={ConnectionMode.Loose}
+          fitView
+          attributionPosition="bottom-left"
+        >
+          <Background variant="dots" gap={12} size={1} />
+          <Controls />
+          <MiniMap 
+            nodeColor={(node) => {
+              switch (node.type) {
+                case 'textBlock': return '#6366f1';
+                case 'weightedChoice': return '#f59e0b';
+                case 'concat': return '#10b981';
+                case 'variable': return '#8b5cf6';
+                case 'output': return '#ef4444';
+                default: return '#666';
+              }
+            }}
+          />
+          
+          {/* Epic 1 specific controls */}
+          <Panel position="top-right">
+            <div className="epic1-controls">
+              <button 
+                className="epic1-preview-toggle"
+                onClick={handleTogglePreview}
+                title="Toggle preview (P)"
+              >
+                {isPreviewVisible ? '👁️' : '👁️‍🗨️'}
+              </button>
+              {onExecute && (
+                <button 
+                  className="epic1-execute-button"
+                  onClick={handleExecute}
+                >
+                  Execute Graph
+                </button>
+              )}
+            </div>
+          </Panel>
+
+          {/* Instructions panel */}
+          <Panel position="bottom-center">
+            <div className="epic1-instructions">
+              Click any node to edit • Tab/Shift+Tab to navigate • Enter to confirm • Escape to cancel • Press P for preview • Press ? for help
+            </div>
+          </Panel>
+
+          {/* Connection validation feedback */}
+          <ConnectionFeedback nodes={nodes} edges={edges} />
+          
+          {/* Pan/Zoom controls */}
+          <PanZoomControls position="bottom-right" />
+        </ReactFlow>
+
+        {/* Keyboard shortcuts handler */}
+        <KeyboardShortcuts
+          onSave={handleSave}
+          onLoad={handleLoad}
+          onExport={handleExport}
+          onDelete={handleDelete}
+          onDuplicate={handleDuplicate}
+          onSelectAll={handleSelectAll}
+          additionalHandlers={{
+            'p': handleTogglePreview,
+            'P': handleTogglePreview
           }}
         />
-        
-        {/* Epic 1 specific controls */}
-        <Panel position="top-right">
-          <div className="epic1-controls">
-            <button 
-              className="epic1-execute-button"
-              onClick={handleExecute}
-              disabled={!onExecute}
-            >
-              Execute Graph
-            </button>
-          </div>
-        </Panel>
 
-        {/* Instructions panel */}
-        <Panel position="bottom-center">
-          <div className="epic1-instructions">
-            Click any node to edit • Tab/Shift+Tab to navigate • Enter to confirm • Escape to cancel • Press ? for help
-          </div>
-        </Panel>
+        {/* Toast notifications */}
+        {toasts.map((toast) => (
+          <ConnectionToast
+            key={toast.id}
+            message={toast}
+            onDismiss={() => dismissToast(toast.id)}
+          />
+        ))}
+      </div>
 
-        {/* Connection validation feedback */}
-        <ConnectionFeedback nodes={nodes} edges={edges} />
-        
-        {/* Pan/Zoom controls */}
-        <PanZoomControls position="bottom-right" />
-      </ReactFlow>
-
-      {/* Keyboard shortcuts handler */}
-      <KeyboardShortcuts
-        onSave={handleSave}
-        onLoad={handleLoad}
-        onExport={handleExport}
-        onDelete={handleDelete}
-        onDuplicate={handleDuplicate}
-        onSelectAll={handleSelectAll}
-      />
-
-      {/* Toast notifications */}
-      {toasts.map((toast) => (
-        <ConnectionToast
-          key={toast.id}
-          message={toast}
-          onDismiss={() => dismissToast(toast.id)}
+      {/* Preview Panel */}
+      {isPreviewVisible && previewEngineRef.current && (
+        <PreviewPanel
+          previewEngine={previewEngineRef.current}
+          onSeedChange={handlePreviewSeedChange}
+          onClose={handleTogglePreview}
         />
-      ))}
+      )}
     </div>
   );
 };

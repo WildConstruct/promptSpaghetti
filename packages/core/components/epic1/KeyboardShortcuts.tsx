@@ -10,6 +10,7 @@ interface KeyboardShortcutsProps {
   onDelete?: (nodes: Node[]) => void;
   onDuplicate?: (nodes: Node[]) => void;
   onSelectAll?: () => void;
+  additionalHandlers?: Record<string, () => void>;
 }
 
 /**
@@ -23,6 +24,7 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   onDelete,
   onDuplicate,
   onSelectAll,
+  additionalHandlers = {},
 }) => {
   const reactFlowInstance = useReactFlow();
   const [showHelp, setShowHelp] = useState(false);
@@ -251,6 +253,12 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
         event.preventDefault();
         // React Flow handles space for pan mode automatically
       }
+
+      // Check additional handlers
+      if (additionalHandlers[key] && !isInputField) {
+        event.preventDefault();
+        additionalHandlers[key]();
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -266,6 +274,7 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
     handleDelete,
     handleDuplicate,
     handleSelectAll,
+    additionalHandlers,
   ]);
 
   // Help overlay

@@ -59,6 +59,29 @@
   cursor: not-allowed;
 }
 
+/* Preview toggle button */
+.epic1-preview-toggle {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #4a9eff;
+  border: 2px solid #4a9eff;
+  border-radius: 6px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.epic1-preview-toggle:hover {
+  background: #4a9eff;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+}
+
 /* Instructions panel */
 .epic1-instructions {
   padding: 8px 16px;
