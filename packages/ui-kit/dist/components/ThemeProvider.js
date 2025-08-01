@@ -1,101 +1,92 @@
-import { jsx as _jsx, jsxs as _jsxs } from 'react/jsx-runtime';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /**
  * Theme Provider component for cross-platform theming
  */
 import { useState, useEffect, useMemo } from 'react';
 import { ThemeContext } from '../hooks/useTheme';
 import { createTheme } from '../platform';
-export const ThemeProvider = ({ children, theme: themeOverrides, defaultColorMode = 'system' }) => {
-  const [colorMode, setColorMode] = useState(() => {
-    if (defaultColorMode === 'system') {
-      return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
-    }
-    return defaultColorMode;
-  });
-  const [customTheme, setCustomTheme] = useState(themeOverrides || {});
-  // Listen for system color mode changes
-  useEffect(() => {
-    if (defaultColorMode === 'system' && typeof window !== 'undefined') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleChange = e => {
-        setColorMode(e.matches ? 'dark' : 'light');
-      };
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
-  }, [defaultColorMode]);
-  // Create theme with color mode and custom overrides
-  const theme = useMemo(() => {
-    const baseTheme = createTheme();
-    // Apply color mode
-    const colorModeTheme =
-      colorMode === 'dark'
-        ? {
-            ...baseTheme,
+export const ThemeProvider = ({ children, theme: themeOverrides, defaultColorMode = 'system', }) => {
+    const [colorMode, setColorMode] = useState(() => {
+        if (defaultColorMode === 'system') {
+            return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+        }
+        return defaultColorMode;
+    });
+    const [customTheme, setCustomTheme] = useState(themeOverrides || {});
+    // Listen for system color mode changes
+    useEffect(() => {
+        if (defaultColorMode === 'system' && typeof window !== 'undefined') {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            const handleChange = (e) => {
+                setColorMode(e.matches ? 'dark' : 'light');
+            };
+            mediaQuery.addEventListener('change', handleChange);
+            return () => mediaQuery.removeEventListener('change', handleChange);
+        }
+    }, [defaultColorMode]);
+    // Create theme with color mode and custom overrides
+    const theme = useMemo(() => {
+        const baseTheme = createTheme();
+        // Apply color mode
+        const colorModeTheme = colorMode === 'dark'
+            ? {
+                ...baseTheme,
+                colors: {
+                    primary: '#0A84FF',
+                    secondary: '#5E5CE6',
+                    accent: '#FF9F0A',
+                    background: '#000000',
+                    surface: '#1C1C1E',
+                    text: '#FFFFFF',
+                    textSecondary: '#8E8E93',
+                    border: '#38383A',
+                    error: '#FF453A',
+                    warning: '#FF9F0A',
+                    success: '#32D74B',
+                    info: '#64D2FF',
+                },
+            }
+            : baseTheme;
+        // Apply custom theme overrides
+        return {
+            ...colorModeTheme,
+            ...customTheme,
             colors: {
-              primary: '#0A84FF',
-              secondary: '#5E5CE6',
-              accent: '#FF9F0A',
-              background: '#000000',
-              surface: '#1C1C1E',
-              text: '#FFFFFF',
-              textSecondary: '#8E8E93',
-              border: '#38383A',
-              error: '#FF453A',
-              warning: '#FF9F0A',
-              success: '#32D74B',
-              info: '#64D2FF',
+                ...colorModeTheme.colors,
+                ...(customTheme.colors || {}),
             },
-          }
-        : baseTheme;
-    // Apply custom theme overrides
-    return {
-      ...colorModeTheme,
-      ...customTheme,
-      colors: {
-        ...colorModeTheme.colors,
-        ...(customTheme.colors || {}),
-      },
+        };
+    }, [colorMode, customTheme]);
+    const setTheme = (themeOverrides) => {
+        setCustomTheme(prev => ({
+            ...prev,
+            ...themeOverrides,
+            colors: {
+                ...prev.colors,
+                ...(themeOverrides.colors || {}),
+            },
+        }));
     };
-  }, [colorMode, customTheme]);
-  const setTheme = themeOverrides => {
-    setCustomTheme(prev => ({
-      ...prev,
-      ...themeOverrides,
-      colors: {
-        ...prev.colors,
-        ...(themeOverrides.colors || {}),
-      },
-    }));
-  };
-  const toggleColorMode = () => {
-    setColorMode(prev => (prev === 'light' ? 'dark' : 'light'));
-  };
-  const contextValue = {
-    theme,
-    setTheme,
-    toggleColorMode,
-    colorMode,
-  };
-  return _jsx(ThemeContext.Provider, {
-    value: contextValue,
-    children: _jsxs('div', {
-      className: 'ui-theme-provider',
-      style: {
-        backgroundColor: theme.colors.background,
-        color: theme.colors.text,
-        fontFamily: theme.typography.fontFamily,
-        fontSize: `${theme.typography.fontSize.md}px`,
-        lineHeight: theme.typography.lineHeight.normal,
-        minHeight: '100%',
-      },
-      children: [
-        children,
-        _jsx('style', {
-          dangerouslySetInnerHTML: {
-            __html: `
+    const toggleColorMode = () => {
+        setColorMode(prev => (prev === 'light' ? 'dark' : 'light'));
+    };
+    const contextValue = {
+        theme,
+        setTheme,
+        toggleColorMode,
+        colorMode,
+    };
+    return (_jsx(ThemeContext.Provider, { value: contextValue, children: _jsxs("div", { className: "ui-theme-provider", style: {
+                backgroundColor: theme.colors.background,
+                color: theme.colors.text,
+                fontFamily: theme.typography.fontFamily,
+                fontSize: `${theme.typography.fontSize.md}px`,
+                lineHeight: theme.typography.lineHeight.normal,
+                minHeight: '100%',
+            }, children: [children, _jsx("style", { dangerouslySetInnerHTML: {
+                        __html: `
             :root {
               --ui-primary: ${theme.colors.primary};
               --ui-secondary: ${theme.colors.secondary};
@@ -182,10 +173,6 @@ export const ThemeProvider = ({ children, theme: themeOverrides, defaultColorMod
               }
             }
           `,
-          },
-        }),
-      ],
-    }),
-  });
+                    } })] }) }));
 };
 //# sourceMappingURL=ThemeProvider.js.map

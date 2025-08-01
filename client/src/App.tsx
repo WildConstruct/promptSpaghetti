@@ -1,16 +1,22 @@
 import React from 'react';
-import { MinimalGraphEditor } from './components/MinimalGraphEditor';
-import { ReactFlowProvider } from 'reactflow';
+import { Epic1GraphEditorWithProvider } from '../../packages/core/components/epic1/Epic1GraphEditor';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import 'reactflow/dist/style.css';
 import './App.css';
 
 function App() {
   return (
-    <ReactFlowProvider>
-      <div className="App">
-        <MinimalGraphEditor />
+    <DndProvider backend={HTML5Backend}>
+      <div className="App" style={{ width: '100vw', height: '100vh' }}>
+        <Epic1GraphEditorWithProvider 
+          showPreview={true}
+          showAssetLibrary={true}
+          previewPosition="right"
+          assetLibraryPosition="left"
+        />
       </div>
-    </ReactFlowProvider>
+    </DndProvider>
   );
 }
 

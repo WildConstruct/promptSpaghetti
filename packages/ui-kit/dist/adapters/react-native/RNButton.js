@@ -1,49 +1,40 @@
-import { jsx as _jsx } from 'react/jsx-runtime';
+import { jsx as _jsx } from "react/jsx-runtime";
 import { Button } from '../../components/Button';
 import { usePlatformAdapter } from '../usePlatformAdapter';
-export const RNButton = ({
-  hapticFeedback,
-  accessibilityRole = 'button',
-  accessibilityHint,
-  testID,
-  onClick,
-  onLongPress,
-  children,
-  ...props
-}) => {
-  const adapter = usePlatformAdapter();
-  const handlePress = () => {
-    // Haptic feedback on button press
-    if (hapticFeedback) {
-      adapter.hapticFeedback(hapticFeedback);
-    }
-    onClick?.();
-  };
-  const handleLongPress = () => {
-    // Stronger haptic feedback for long press
-    adapter.hapticFeedback('medium');
-    onLongPress?.();
-  };
-  // Convert web-style props to React Native props
-  const rnProps = {
-    ...adapter.handlePress(handlePress),
-    ...(onLongPress && adapter.handleLongPress(handleLongPress)),
-    accessibilityRole,
-    accessibilityLabel: props['aria-label'],
-    accessibilityHint,
-    testID: testID || props.testId,
-    // React Native specific styling
-    style: {
-      ...props.style,
-      // Ensure proper touch target size (minimum 44x44 points)
-      minHeight: 44,
-      minWidth: 44,
-      // Remove web-specific properties
-      transition: undefined,
-      userSelect: undefined,
-      WebkitTapHighlightColor: undefined,
-    },
-  };
-  return _jsx(Button, { ...props, ...rnProps, style: rnProps.style, children: children });
+export const RNButton = ({ hapticFeedback, accessibilityRole = 'button', accessibilityHint, testID, onClick, onLongPress, children, ...props }) => {
+    const adapter = usePlatformAdapter();
+    const handlePress = () => {
+        // Haptic feedback on button press
+        if (hapticFeedback) {
+            adapter.hapticFeedback(hapticFeedback);
+        }
+        onClick?.();
+    };
+    const handleLongPress = () => {
+        // Stronger haptic feedback for long press
+        adapter.hapticFeedback('medium');
+        onLongPress?.();
+    };
+    // Convert web-style props to React Native props
+    const rnProps = {
+        ...adapter.handlePress(handlePress),
+        ...(onLongPress && adapter.handleLongPress(handleLongPress)),
+        accessibilityRole,
+        accessibilityLabel: props['aria-label'],
+        accessibilityHint,
+        testID: testID || props.testId,
+        // React Native specific styling
+        style: {
+            ...props.style,
+            // Ensure proper touch target size (minimum 44x44 points)
+            minHeight: 44,
+            minWidth: 44,
+            // Remove web-specific properties
+            transition: undefined,
+            userSelect: undefined,
+            WebkitTapHighlightColor: undefined,
+        },
+    };
+    return (_jsx(Button, { ...props, ...rnProps, style: rnProps.style, children: children }));
 };
 //# sourceMappingURL=RNButton.js.map
