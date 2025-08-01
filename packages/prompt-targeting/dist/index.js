@@ -34,9 +34,5 @@ export { ConfigurationPanel } from './src/ui/components/ConfigurationPanel';
 //   UseConfigurationOptions
 // } from './src/ui/hooks/useConfiguration';
 // Convenience factory functions
-export {
-  createPromptTargetingSystem,
-  createBasicPromptTargetingSystem,
-  createProductionPromptTargetingSystem,
-} from './src/factory';
+export { createPromptTargetingSystem, createBasicPromptTargetingSystem, createProductionPromptTargetingSystem, } from './src/factory';
 //# sourceMappingURL=index.js.map

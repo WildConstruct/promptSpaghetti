@@ -10,75 +10,14 @@ Core package copying disabled - using minimal inline components for deployment
 Running production build...
 vite v7.0.5 building for production...
 transforming...
-✓ 4 modules transformed.
-✗ Build failed in 52ms
-error during build:
-[vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:662:0: ERROR: Unexpected end of file
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:662:0
-
-Unexpected end of file
-660|    );
-661|  
-662|  
-   |  ^
-
-    at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
-    at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
-    at responseCallbacks.<computed> (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:601:9)
-    at handleIncomingPacket (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:656:12)
-    at Socket.readFromStdout (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:579:7)
-    at Socket.emit (node:events:507:28)
-    at addChunk (node:internal/streams/readable:559:12)
-    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
-    at Readable.push (node:internal/streams/readable:390:5)
-    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
-Safe config failed, trying regular config...
-vite v7.0.5 building for production...
-transforming...
-✓ 4 modules transformed.
-✗ Build failed in 62ms
-error during build:
-[vite:esbuild] Transform failed with 1 error:
-/Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:662:0: ERROR: Unexpected end of file
-file: /Users/brianbehm/CascadeProjects/prompt-spaghetti/client/src/App.tsx:662:0
-
-Unexpected end of file
-660|    );
-661|  
-662|  
-   |  ^
-
-    at failureErrorWithLog (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:1465:15)
-    at /Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:734:50
-    at responseCallbacks.<computed> (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:601:9)
-    at handleIncomingPacket (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:656:12)
-    at Socket.readFromStdout (/Users/brianbehm/CascadeProjects/prompt-spaghetti/node_modules/.pnpm/esbuild@0.25.6/node_modules/esbuild/lib/main.js:579:7)
-    at Socket.emit (node:events:507:28)
-    at addChunk (node:internal/streams/readable:559:12)
-    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
-    at Readable.push (node:internal/streams/readable:390:5)
-    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
-node:internal/errors:983
-  const err = new Error(message);
-              ^
-
-Error: Command failed: vite build --config vite.config.production.ts
-    at genericNodeError (node:internal/errors:983:15)
-    at wrappedFn (node:internal/errors:537:14)
-    at checkExecSyncError (node:child_process:924:11)
-    at execSync (node:child_process:996:15)
-    at file:///Users/brianbehm/CascadeProjects/prompt-spaghetti/client/build-standalone.js:30:3
-    at ModuleJob.run (node:internal/modules/esm/module_job:370:25)
-    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)
-    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5) {
-  status: 1,
-  signal: null,
-  output: [ null, null, null ],
-  pid: 5017,
-  stdout: null,
-  stderr: null
-}
-
-Node.js v24.4.0
- ELIFECYCLE  Command failed with exit code 1.
+✓ 195 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.55 kB │ gzip:  0.31 kB
+dist/assets/index-Bn6Fz9Gp.css   18.33 kB │ gzip:  4.18 kB
+dist/assets/utils-CAACcuB4.js     0.03 kB │ gzip:  0.05 kB
+dist/assets/index-t9mGcIv1.js     3.67 kB │ gzip:  1.86 kB
+dist/assets/vendor-DavUf6mE.js  141.72 kB │ gzip: 45.48 kB
+dist/assets/flow-D9etWI3N.js    145.57 kB │ gzip: 47.97 kB
+✓ built in 1.19s
+Standalone build complete!

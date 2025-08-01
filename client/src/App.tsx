@@ -1,12 +1,16 @@
 import React from 'react';
-import { SimpleGraphEditor } from './components/SimpleGraphEditor';
+import { MinimalGraphEditor } from './components/MinimalGraphEditor';
+import { ReactFlowProvider } from 'reactflow';
+import 'reactflow/dist/style.css';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <SimpleGraphEditor />
-    </div>
+    <ReactFlowProvider>
+      <div className="App">
+        <MinimalGraphEditor />
+      </div>
+    </ReactFlowProvider>
   );
 }
 
