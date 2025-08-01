@@ -7,20 +7,21 @@ import { AuditService } from '../auth/services/AuditService';
 import { ConsentData, GranularConsent } from './PolicyAcceptanceTrackingService';
 import { DataProtectionRule, RuleEvaluationContext } from '../types/DataProtectionRuleSchema';
 
-}
-}
+
+
 export interface FilterRequest {
   userId: string;
   dataType: string;
   operation: DataOperation;
   purpose: string;
   context: FilterContext;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FilterContext {
   requestId: string;
   sessionId: string;
@@ -28,9 +29,10 @@ export interface FilterContext {
   userAgent: string;
   timestamp: Date;
   metadata?: Record<string, any>;
-}
-}
-}
+
+
+
+
 
 export enum DataOperation {
   READ = 'READ',
@@ -40,10 +42,10 @@ export enum DataOperation {
   SHARE = 'share',
   PROCESS = 'process',
   ANALYZE = 'analyze'
-}
 
-}
-}
+
+
+
 export interface FilterResult {
   allowed: boolean;
   filteredFields?: string[];
@@ -51,12 +53,13 @@ export interface FilterResult {
   consentRequired?: boolean;
   applicableConsents: string[];
   auditEventId: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConsentFilter {
   purpose: string;
   dataTypes: string[];
@@ -65,9 +68,10 @@ export interface ConsentFilter {
   granted: boolean;
   grantedAt?: Date;
   expiresAt?: Date;
-}
-}
-}
+
+
+
+
 
 export class ConsentBasedDataFilterService {
   private db: DatabaseService;
@@ -76,7 +80,7 @@ export class ConsentBasedDataFilterService {
   constructor(db: DatabaseService, auditService: AuditService) {
     this.db = db;
     this.auditService = auditService;
-  }
+
 
   async filterDataAccess(request: FilterRequest): Promise<FilterResult> {
 
@@ -92,7 +96,7 @@ export class ConsentBasedDataFilterService {
       ...filterResult,
       auditEventId
     };
-  }
+
 
   async getUserConsents(userId: string): Promise<ConsentFilter[]> {
 
@@ -121,11 +125,11 @@ export class ConsentBasedDataFilterService {
           grantedAt: granularConsent.grantedAt,
           expiresAt: granularConsent.expiresAt
         });
-      }
-    }
+
+
     
     return filters;
-  }
+
 
   private getApplicableFilters(consents: ConsentFilter[], request: FilterRequest): ConsentFilter[] {
     return consents.filter(consent => 
@@ -133,7 +137,7 @@ export class ConsentBasedDataFilterService {
       consent.operations.includes(request.operation) &&
       (consent.purpose === request.purpose || consent.purpose === 'all')
     );
-  }
+
 
   private evaluateFilters(filters: ConsentFilter[], __request: FilterRequest): Omit<FilterResult, 'auditEventId'> {
     const applicableConsents = filters.map(f => f.purpose);
@@ -147,7 +151,7 @@ export class ConsentBasedDataFilterService {
         consentRequired: true,
         applicableConsents
       };
-    }
+
     
     // Check for expired consents
     const now = new Date();
@@ -159,7 +163,7 @@ export class ConsentBasedDataFilterService {
         consentRequired: true,
         applicableConsents
       };
-    }
+
     
     // Check if any consent allows the operation
     const allowingConsents = filters.filter(f => f.granted);
@@ -170,14 +174,14 @@ export class ConsentBasedDataFilterService {
         consentRequired: true,
         applicableConsents
       };
-    }
+
     
     return {
       allowed: true,
       reason: 'Access granted based on valid consent',
       applicableConsents
     };
-  }
+
 
   private getOperationsForPurpose(purpose: string): DataOperation[] {
     const purposeOperationMap: Record<string, DataOperation[]> = {
@@ -189,7 +193,7 @@ export class ConsentBasedDataFilterService {
     };
     
     return purposeOperationMap[purpose] || [DataOperation.READ];
-  }
+
 
   private async logFilterDecision(request: FilterRequest, result: Omit<FilterResult, 'auditEventId'>): Promise<string> {
 
@@ -203,7 +207,7 @@ export class ConsentBasedDataFilterService {
         allowed: result.allowed,
         reason: result.reason,
         context: request.context
-  }
+
       timestamp: new Date(),
       ipAddress: request.context.ipAddress,
       userAgent: request.context.userAgent,
@@ -211,7 +215,7 @@ export class ConsentBasedDataFilterService {
     };
     
     return await this.auditService.logEvent(auditEvent);
-  }
+
 
   async getFilterableFields(userId: string, dataType: string): Promise<string[]> {
 
@@ -235,5 +239,4 @@ export class ConsentBasedDataFilterService {
     });
     
     return Array.from(allowedFields);
-  }
-}
+

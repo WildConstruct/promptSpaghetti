@@ -13,8 +13,8 @@ export type ContributorRole = 'author' | 'co-author' | 'editor' | 'reviewer' | '
 export type ContributionCategory = 'getting-started' | 'tutorials' | 'best-practices' | 'case-studies' | 'troubleshooting' | 'advanced' | 'tools-resources' | 'community' | 'official' | 'experimental';
 
 }
-export interface ContributionSubmission {
-    id: string;
+}
+export interface ContributionSubmission { id: string;
     title: string;
     description: string;
     type: ContributionType;
@@ -27,7 +27,7 @@ export interface ContributionSubmission {
         intended_audience: string[];
         learning_objectives?: string[];
         prerequisites?: string[];
-        estimated_completion_time?: number;
+        estimated_completion_time?: number }
 }
     };
     status: ContributionStatus;
@@ -47,8 +47,8 @@ export interface ContributionSubmission {
     featured_at?: string;
 
 }
-export interface ContributionWorkflow {
-    current_stage: WorkflowStage;
+}
+export interface ContributionWorkflow { current_stage: WorkflowStage;
     assigned_reviewers: string[];
     review_deadlines: Record<string, string>;
     escalation_level: 'normal' | 'priority' | 'urgent';
@@ -59,21 +59,19 @@ export interface ContributionWorkflow {
     approval_chain: ApprovalEntry[];
     publication_schedule?: PublicationSchedule;
 
-export type WorkflowStage = 'submission' | 'intake_review' | 'quality_check' | 'editorial_review' | 'technical_review' | 'community_review' | 'final_approval' | 'publication' | 'post_publication';
-
+export type WorkflowStage = 'submission' | 'intake_review' | 'quality_check' | 'editorial_review' | 'technical_review' | 'community_review' | 'final_approval' | 'publication' | 'post_publication' }
 }
-export interface WorkflowStageEntry {
-    stage: WorkflowStage;
+}
+export interface WorkflowStageEntry { stage: WorkflowStage;
     entered_at: string;
     completed_at?: string;
     completed_by?: string;
     duration_hours?: number;
     notes?: string;
-    outcome: 'completed' | 'skipped' | 'failed' | 'escalated';
-
+    outcome: 'completed' | 'skipped' | 'failed' | 'escalated' }
 }
-export interface ReviewerAssignment {
-    reviewer_id: string;
+}
+export interface ReviewerAssignment { reviewer_id: string;
     reviewer_name: string;
     review_type: 'editorial' | 'technical' | 'subject_matter' | 'community' | 'accessibility';
     assigned_at: string;
@@ -81,60 +79,54 @@ export interface ReviewerAssignment {
     priority: 'low' | 'medium' | 'high' | 'urgent';
     status: 'assigned' | 'in_progress' | 'completed' | 'overdue' | 'declined';
     expertise_areas: string[];
-    workload_capacity: number;
-
+    workload_capacity: number }
 }
-export interface QualityGate {
-    name: string;
+}
+export interface QualityGate { name: string;
     type: 'automated' | 'manual' | 'hybrid';
     criteria: QualityGateCriteria;
     required: boolean;
     stage: WorkflowStage;
-    timeout_hours?: number;
-
+    timeout_hours?: number }
 }
-export interface QualityGateCriteria {
-    minimum_score?: number;
+}
+export interface QualityGateCriteria { minimum_score?: number;
     required_checks: string[];
     blocking_issues: string[];
     reviewer_consensus?: number;
-    automated_thresholds: Record<string, number>;
-
+    automated_thresholds: Record<string, number> }
 }
-export interface QualityGateResult {
-    gate_name: string;
+}
+export interface QualityGateResult { gate_name: string;
     passed: boolean;
     score?: number;
     issues_found: string[];
     recommendations: string[];
     checked_at: string;
     checked_by?: string;
-    retry_count: number;
-
+    retry_count: number }
 }
-export interface ApprovalEntry {
-    approver_id: string;
+}
+export interface ApprovalEntry { approver_id: string;
     approver_name: string;
     approver_role: string;
     approved_at: string;
     approval_type: 'conditional' | 'full' | 'escalated';
     conditions?: string[];
-    notes?: string;
-
+    notes?: string }
 }
-export interface PublicationSchedule {
-    scheduled_date?: string;
+}
+export interface PublicationSchedule { scheduled_date?: string;
     publication_priority: 'low' | 'medium' | 'high' | 'urgent';
     target_channels: PublicationChannel[];
     embargo_until?: string;
     auto_publish: boolean;
     notification_settings: NotificationConfiguration;
 
-export type PublicationChannel = 'knowledge_base' | 'community_forum' | 'newsletter' | 'social_media' | 'rss_feed' | 'api_endpoints' | 'mobile_app';
-
+export type PublicationChannel = 'knowledge_base' | 'community_forum' | 'newsletter' | 'social_media' | 'rss_feed' | 'api_endpoints' | 'mobile_app' }
 }
-export interface ContributionContributor {
-    user_id: string;
+}
+export interface ContributionContributor { user_id: string;
     name: string;
     email?: string;
     role: ContributorRole;
@@ -147,7 +139,7 @@ export interface ContributionContributor {
         expertise_areas: string[];
         website?: string;
         social_links: Record<string, string>;
-        preferred_attribution: string;
+        preferred_attribution: string }
 }
     };
     contribution_date: string;
@@ -155,8 +147,8 @@ export interface ContributionContributor {
     reputation_score: number;
 
 }
-export interface ContributionAttribution {
-    attribution_model: 'individual' | 'collaborative' | 'organizational' | 'anonymous';
+}
+export interface ContributionAttribution { attribution_model: 'individual' | 'collaborative' | 'organizational' | 'anonymous';
     primary_author: string;
     co_authors: string[];
     acknowledgments: string[];
@@ -164,7 +156,7 @@ export interface ContributionAttribution {
         show_contributors: boolean;
         contributor_order: 'contribution' | 'alphabetical' | 'chronological';
         show_roles: boolean;
-        show_percentages: boolean;
+        show_percentages: boolean }
 }
     };
     copyright_holder: string;
@@ -172,8 +164,8 @@ export interface ContributionAttribution {
     attribution_requirements: string[];
 
 }
-export interface ContributionEngagement {
-    total_views: number;
+}
+export interface ContributionEngagement { total_views: number;
     unique_views: number;
     view_sources: Record<string, number>;
     likes: number;
@@ -187,22 +179,20 @@ export interface ContributionEngagement {
     community_votes: {
         upvotes: number;
         downvotes: number;
-        expert_endorsements: number;
+        expert_endorsements: number }
 }
     };
     completion_rate: number;
     success_rate: number;
     time_to_complete: number;
-    feedback_summary: {
-        positive_feedback: string[];
+    feedback_summary: { positive_feedback: string[];
         improvement_suggestions: string[];
         error_reports: string[];
-        update_requests: string[];
-    };
+        update_requests: string[] };
 
 }
-export interface PublishingConfiguration {
-    visibility: 'public' | 'community' | 'restricted' | 'private';
+}
+export interface PublishingConfiguration { visibility: 'public' | 'community' | 'restricted' | 'private';
     access_level: 'free' | 'premium' | 'subscriber_only' | 'invitation_only';
     seo: {
         slug: string;
@@ -214,7 +204,7 @@ export interface PublishingConfiguration {
             title: string;
             description: string;
             image?: string;
-            type: string;
+            type: string }
 }
         };
     };
@@ -222,49 +212,41 @@ export interface PublishingConfiguration {
     tags: string[];
     difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
     estimated_reading_time: number;
-    distribution: {
-        include_in_search: boolean;
+    distribution: { include_in_search: boolean;
         include_in_recommendations: boolean;
         allow_syndication: boolean;
         allow_translations: boolean;
-        allow_derivatives: boolean;
-    };
-    notifications: {
-        notify_followers: boolean;
+        allow_derivatives: boolean };
+    notifications: { notify_followers: boolean;
         send_newsletter: boolean;
         post_to_social: boolean;
-        notify_collaborators: boolean;
-    };
+        notify_collaborators: boolean };
 
 }
-export interface MonetizationConfiguration {
-    monetization_enabled: boolean;
+}
+export interface MonetizationConfiguration { monetization_enabled: boolean;
     pricing_model: 'free' | 'one_time' | 'subscription' | 'donation' | 'sponsored';
     pricing: {
         base_price?: number;
         currency?: string;
         discount_percentage?: number;
         promotional_price?: number;
-        promotion_end_date?: string;
+        promotion_end_date?: string }
 }
     };
-    revenue_sharing: {
-        contributor_percentage: number;
+    revenue_sharing: { contributor_percentage: number;
         platform_percentage: number;
         charity_percentage?: number;
-        charity_organization?: string;
-    };
-    sponsorship?: {
-        sponsor_name: string;
+        charity_organization?: string };
+    sponsorship?: { sponsor_name: string;
         sponsor_logo?: string;
         sponsor_link?: string;
         sponsorship_type: 'brand' | 'product' | 'service' | 'educational';
-        disclosure_required: boolean;
-    };
+        disclosure_required: boolean };
 
 }
-export interface ReviewFeedbackEntry {
-    id: string;
+}
+export interface ReviewFeedbackEntry { id: string;
     reviewer_id: string;
     reviewer_name: string;
     review_type: 'editorial' | 'technical' | 'subject_matter' | 'community';
@@ -277,52 +259,44 @@ export interface ReviewFeedbackEntry {
     follow_up_required: boolean;
     follow_up_notes?: string;
     public_feedback?: string;
-    private_notes?: string;
-
+    private_notes?: string }
 }
-export interface DetailedFeedback {
-    content_quality: {
+}
+export interface DetailedFeedback { content_quality: {
         accuracy: number;
         clarity: number;
         completeness: number;
         usefulness: number;
-        originality: number;
+        originality: number }
 }
     };
-    technical_quality: {
-        formatting: number;
+    technical_quality: { formatting: number;
         code_quality?: number;
         accessibility: number;
-        seo_optimization: number;
-    };
+        seo_optimization: number };
     feedback_areas: FeedbackArea[];
-    suggestions: {
-        high_priority: string[];
+    suggestions: { high_priority: string[];
         medium_priority: string[];
         low_priority: string[];
-        nice_to_have: string[];
-    };
-    issues_found: {
-        factual_errors: string[];
+        nice_to_have: string[] };
+    issues_found: { factual_errors: string[];
         grammar_issues: string[];
         formatting_problems: string[];
         broken_links: string[];
-        accessibility_issues: string[];
-    };
+        accessibility_issues: string[] };
 
 }
-export interface FeedbackArea {
-    section: string;
+}
+export interface FeedbackArea { section: string;
     line_number?: number;
     issue_type: 'error' | 'suggestion' | 'question' | 'praise';
     severity: 'low' | 'medium' | 'high' | 'critical';
     description: string;
     suggested_change?: string;
-    explanation?: string;
-
+    explanation?: string }
 }
-export interface NotificationConfiguration {
-    notify_contributors: boolean;
+}
+export interface NotificationConfiguration { notify_contributors: boolean;
     notify_reviewers: boolean;
     notify_followers: boolean;
     notify_administrators: boolean;
@@ -331,26 +305,22 @@ export interface NotificationConfiguration {
         in_app: boolean;
         push_notification: boolean;
         slack?: boolean;
-        discord?: boolean;
+        discord?: boolean }
 }
     };
-    timing: {
-        immediate: boolean;
+    timing: { immediate: boolean;
         daily_digest: boolean;
         weekly_summary: boolean;
-        milestone_only: boolean;
-    };
-    notification_types: {
-        status_changes: boolean;
+        milestone_only: boolean };
+    notification_types: { status_changes: boolean;
         review_feedback: boolean;
         publication: boolean;
         engagement_milestones: boolean;
-        quality_improvements: boolean;
-    };
+        quality_improvements: boolean };
 
 }
-export interface ContributionRepository {
-    submitContribution(submission: Omit<ContributionSubmission, 'id' | 'created_at' | 'updated_at'>): Promise<ContributionSubmission>;
+}
+export interface ContributionRepository { submitContribution(submission: Omit<ContributionSubmission, 'id' | 'created_at' | 'updated_at'>): Promise<ContributionSubmission>;
     updateContribution(id: string, updates: Partial<ContributionSubmission>): Promise<ContributionSubmission>;
     getContribution(id: string): Promise<ContributionSubmission>;
     getContributionsByUser(userId: string, status?: ContributionStatus): Promise<ContributionSubmission[]>;
@@ -365,11 +335,10 @@ export interface ContributionRepository {
     featureContribution(contributionId: string): Promise<void>;
     getContributionAnalytics(contributionId: string): Promise<ContributionEngagement>;
     getContributorStatistics(userId: string): Promise<ContributorStatistics>;
-    getSystemMetrics(timeRange?: string): Promise<ContributionSystemMetrics>;
-
+    getSystemMetrics(timeRange?: string): Promise<ContributionSystemMetrics> }
 }
-export interface ContributorStatistics {
-    user_id: string;
+}
+export interface ContributorStatistics { user_id: string;
     total_contributions: number;
     published_contributions: number;
     featured_contributions: number;
@@ -388,21 +357,19 @@ export interface ContributorStatistics {
     community_engagement: number;
     average_review_time: number;
     revision_rate: number;
-    acceptance_rate: number;
-
+    acceptance_rate: number }
 }
-export interface ContributorBadge {
-    id: string;
+}
+export interface ContributorBadge { id: string;
     name: string;
     description: string;
     icon: string;
     rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
     earned_at: string;
-    criteria_met: string[];
-
+    criteria_met: string[] }
 }
-export interface ContributionSystemMetrics {
-    time_period: string;
+}
+export interface ContributionSystemMetrics { time_period: string;
     total_submissions: number;
     submissions_by_type: Record<ContributionType, number>;
     submissions_by_category: Record<ContributionCategory, number>;
@@ -410,84 +377,67 @@ export interface ContributionSystemMetrics {
     workflow_bottlenecks: Array<{
         stage: WorkflowStage;
         average_duration: number;
-        backlog_count: number;
+        backlog_count: number }
 }
     }>;
     average_quality_score: number;
     quality_distribution: Record<string, number>;
-    common_quality_issues: Array<{
-        issue_type: string;
+    common_quality_issues: Array<{ issue_type: string;
         frequency: number;
-        impact: string;
-    }>;
+        impact: string }>;
     publication_rate: number;
     featured_content_rate: number;
     content_longevity: number;
-    community_participation: {
-        active_contributors: number;
+    community_participation: { active_contributors: number;
         active_reviewers: number;
         community_feedback_volume: number;
-        collaboration_rate: number;
-    };
-    processing_efficiency: {
-        automated_approval_rate: number;
+        collaboration_rate: number };
+    processing_efficiency: { automated_approval_rate: number;
         quality_gate_pass_rate: number;
         escalation_rate: number;
-        reviewer_workload_balance: number;
-    };
+        reviewer_workload_balance: number };
 
-export declare const CONTRIBUTION_WORKFLOW_TEMPLATES: {
-    readonly trusted_contributor: {
+export declare const CONTRIBUTION_WORKFLOW_TEMPLATES: { readonly trusted_contributor: {
         readonly stages: readonly ["submission", "quality_check", "final_approval", "publication"];
         readonly quality_gates: readonly ["automated_quality", "plagiarism_check"];
         readonly review_requirements: {
             readonly min_reviewers: 1;
-            readonly specialist_required: false;
-        };
+            readonly specialist_required: false };
         readonly auto_publish_threshold: 85;
     };
-    readonly standard: {
-        readonly stages: readonly ["submission", "intake_review", "quality_check", "editorial_review", "final_approval", "publication"];
+    readonly standard: { readonly stages: readonly ["submission", "intake_review", "quality_check", "editorial_review", "final_approval", "publication"];
         readonly quality_gates: readonly ["automated_quality", "editorial_review", "technical_review"];
         readonly review_requirements: {
             readonly min_reviewers: 2;
-            readonly specialist_required: false;
-        };
+            readonly specialist_required: false };
         readonly auto_publish_threshold: 90;
     };
-    readonly comprehensive: {
-        readonly stages: readonly ["submission", "intake_review", "quality_check", "editorial_review", "technical_review", "community_review", "final_approval", "publication"];
+    readonly comprehensive: { readonly stages: readonly ["submission", "intake_review", "quality_check", "editorial_review", "technical_review", "community_review", "final_approval", "publication"];
         readonly quality_gates: readonly ["automated_quality", "editorial_review", "technical_review", "community_consensus"];
         readonly review_requirements: {
             readonly min_reviewers: 3;
-            readonly specialist_required: true;
-        };
+            readonly specialist_required: true };
         readonly auto_publish_threshold: 95;
     };
-    readonly express: {
-        readonly stages: readonly ["submission", "quality_check", "editorial_review", "publication"];
+    readonly express: { readonly stages: readonly ["submission", "quality_check", "editorial_review", "publication"];
         readonly quality_gates: readonly ["automated_quality", "expedited_review"];
         readonly review_requirements: {
             readonly min_reviewers: 1;
-            readonly specialist_required: false;
-        };
+            readonly specialist_required: false };
         readonly auto_publish_threshold: 80;
         readonly max_review_time: 24;
     };
 };
-export declare const QUALITY_GATE_PRESETS: {
-    readonly automated_basic: {
+export declare const QUALITY_GATE_PRESETS: { readonly automated_basic: {
         readonly minimum_score: 70;
         readonly required_checks: readonly ["grammar", "spelling", "readability"];
         readonly blocking_issues: readonly ["plagiarism_detected", "policy_violation"];
         readonly automated_thresholds: {
             readonly grammar_score: 80;
             readonly plagiarism_similarity: 15;
-            readonly readability_score: 70;
-        };
+            readonly readability_score: 70 };
     };
-    readonly automated_comprehensive: {
-        readonly minimum_score: 80;
+    readonly automated_comprehensive: { readonly minimum_score: 80;
         readonly required_checks: readonly ["grammar", "spelling", "readability", "seo", "accessibility"];
         readonly blocking_issues: readonly ["plagiarism_detected", "policy_violation", "accessibility_violation"];
         readonly automated_thresholds: {
@@ -495,17 +445,14 @@ export declare const QUALITY_GATE_PRESETS: {
             readonly plagiarism_similarity: 10;
             readonly readability_score: 75;
             readonly seo_score: 70;
-            readonly accessibility_score: 80;
-        };
+            readonly accessibility_score: 80 };
     };
-    readonly editorial_standard: {
-        readonly minimum_score: 75;
+    readonly editorial_standard: { readonly minimum_score: 75;
         readonly required_checks: readonly ["content_accuracy", "style_consistency", "target_audience"];
         readonly reviewer_consensus: 75;
         readonly automated_thresholds: {
             readonly editorial_score: 75;
-            readonly technical_accuracy: 80;
-        };
+            readonly technical_accuracy: 80 };
     };
 };
 //# sourceMappingURL=ContributionArchitecture.d.ts.map

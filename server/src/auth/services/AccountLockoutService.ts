@@ -7,8 +7,8 @@ import { AuditService } from './AuditService';
 import { EmailService } from './EmailService';
 import { User } from '../types';
 
-}
-}
+
+
 export interface LockoutConfig {
   maxFailedAttempts: number;
   lockoutDurationMinutes: number;
@@ -20,12 +20,13 @@ export interface LockoutConfig {
   adminEmails: string[];
   allowSelfUnlock: boolean;
   captchaThreshold: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockoutAttempt {
   userId?: string;
   email: string;
@@ -34,12 +35,13 @@ export interface LockoutAttempt {
   timestamp: Date;
   success: boolean;
   failureReason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockoutStatus {
   isLocked: boolean;
   lockCount: number;
@@ -49,12 +51,13 @@ export interface LockoutStatus {
   nextAttemptAt?: Date;
   requiresCaptcha: boolean;
   lockoutReason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockoutEvent {
   userId?: string;
   email: string;
@@ -66,9 +69,10 @@ export interface LockoutEvent {
   timestamp: Date;
   adminAction?: boolean;
   unlockMethod?: 'time' | 'admin' | 'token' | 'password_reset';
-}
-}
-}
+
+
+
+
 
 export class AccountLockoutService {
   private db: DatabaseService;
@@ -89,7 +93,7 @@ export class AccountLockoutService {
     this.auditService = auditService;
     this.emailService = emailService;
     this.config = config;
-  }
+
 
   // Record a login attempt and determine if account should be locked
   async recordLoginAttempt(attempt: LockoutAttempt): Promise<LockoutStatus> {
@@ -104,7 +108,7 @@ export class AccountLockoutService {
       if (currentStatus.lockedUntil && currentStatus.lockedUntil <= new Date()) {
         await this.unlockAccount(email, 'time');
         return await this.getLockoutStatus(email);
-      } else {
+ else {
         // Account is still locked
         await this.logLockoutEvent({
           userId,
@@ -116,21 +120,21 @@ export class AccountLockoutService {
           timestamp: new Date()
         });
         return currentStatus;
-      }
-    }
+
+
 
     if (success) {
       // Successful login - reset failed attempts
       await this.resetFailedAttempts(email);
       return await this.getLockoutStatus(email);
-    }
+
 
     // Failed login - increment attempts and check for lockout
     const failedAttempts = await this.incrementFailedAttempts(email, attempt);
 
     if (failedAttempts >= this.config.maxFailedAttempts) {
       return await this.lockAccount(email, attempt);
-    }
+
 
     // Not locked yet, but log the failed attempt
     await this.logLockoutEvent({
@@ -144,7 +148,7 @@ export class AccountLockoutService {
     });
 
     return await this.getLockoutStatus(email);
-  }
+
 
   // Get current lockout status for an account
   async getLockoutStatus(email: string): Promise<LockoutStatus> {
@@ -164,7 +168,7 @@ export class AccountLockoutService {
 
       if (result.rows.length === 0) {
         return this.createDefaultStatus();
-      }
+
 
       const user = result.rows[0];
       const now = new Date();
@@ -180,7 +184,7 @@ export class AccountLockoutService {
       if (failedAttempts > 0 && failedAttempts < this.config.maxFailedAttempts) {
         const cooldownSeconds = Math.min(30 * Math.pow(2, failedAttempts - 1), 300); // Exponential backoff, max 5 minutes
         nextAttemptAt = new Date(now.getTime() + cooldownSeconds * 1000);
-      }
+
 
       return {
         isLocked,
@@ -192,11 +196,11 @@ export class AccountLockoutService {
         requiresCaptcha,
         lockoutReason: this.generateLockoutReason(isLocked, lockCount, failedAttempts)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting lockout status:', error);
       return this.createDefaultStatus();
-    }
-  }
+
+
 
   // Lock an account due to failed attempts
   async lockAccount(email: string, lastAttempt: LockoutAttempt): Promise<LockoutStatus> {
@@ -251,11 +255,11 @@ export class AccountLockoutService {
       });
 
       return await this.getLockoutStatus(email);
-    } catch (error) {
+ catch (error) {
       console.error('Error locking account:', error);
       throw new Error('Failed to lock account');
-    }
-  }
+
+
 
   // Unlock an account
   async unlockAccount(
@@ -272,7 +276,7 @@ export class AccountLockoutService {
 
       if (result.rows.length === 0) {
         throw new Error('User not found');
-      }
+
 
       const userId = result.rows[0].user_id;
       const lockCount = result.rows[0].lockout_count || 0;
@@ -312,7 +316,7 @@ export class AccountLockoutService {
           timestamp: new Date(),
           ipAddress: context?.ipAddress
         });
-      }
+
 
       // Audit log
       await this.auditService.logEvent({
@@ -323,23 +327,23 @@ export class AccountLockoutService {
           adminId,
           lockCount,
           email: this.hashEmail(email)
-  }
+
         ipAddress: context?.ipAddress,
         userAgent: context?.userAgent,
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error unlocking account:', error);
       throw new Error('Failed to unlock account');
-    }
-  }
+
+
 
   // Generate unlock token for self-service unlock
   async generateUnlockToken(email: string): Promise<string> {
 
     if (!this.config.allowSelfUnlock) {
       throw new Error('Self-unlock is not allowed');
-    }
+
 
     const user = await this.db.query(`
       SELECT user_id FROM users WHERE email = $1 AND account_locked = true
@@ -347,7 +351,7 @@ export class AccountLockoutService {
 
     if (user.rows.length === 0) {
       throw new Error('Account not found or not locked');
-    }
+
 
     // Generate secure token
     const crypto = require('crypto');
@@ -371,7 +375,7 @@ export class AccountLockoutService {
     });
 
     return token;
-  }
+
 
   // Verify and use unlock token
   async verifyUnlockToken(email: string, token: string): Promise<boolean> {
@@ -380,12 +384,12 @@ export class AccountLockoutService {
       const tokenData = await this.redis.get(`unlock_token:${email}`);
       if (!tokenData) {
         return false;
-      }
+
 
       const parsed = JSON.parse(tokenData);
       if (parsed.token !== token || new Date(parsed.expiresAt) < new Date()) {
         return false;
-      }
+
 
       // Token is valid - unlock account
       await this.unlockAccount(email, 'token');
@@ -394,11 +398,11 @@ export class AccountLockoutService {
       await this.redis.del(`unlock_token:${email}`);
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error verifying unlock token:', error);
       return false;
-    }
-  }
+
+
 
   // Get lockout statistics
   async getLockoutStatistics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<{
@@ -408,7 +412,7 @@ export class AccountLockoutService {
     topLockoutReasons: Array<{ reason: string; count: number }>;
     lockoutsByLevel: Array<{ level: number; count: number }>;
     unlockMethods: Array<{ method: string; count: number }>;
-  }> {
+> {
     const timeframes = {
       day: '1 day',
       week: '1 week',
@@ -489,11 +493,11 @@ export class AccountLockoutService {
           count: parseInt(row.count)
         }))
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting lockout statistics:', error);
       throw error;
-    }
-  }
+
+
 
   // Admin function to get locked accounts
   async getLockedAccounts(limit = 50, offset = 0): Promise<Array<{
@@ -504,7 +508,7 @@ export class AccountLockoutService {
     lockCount: number;
     failedAttempts: number;
     lastAttemptIp?: string;
-  }>> {
+>> {
     try {
       const result = await this.db.query(`
         SELECT 
@@ -537,11 +541,11 @@ export class AccountLockoutService {
         failedAttempts: row.failed_login_attempts || 0,
         lastAttemptIp: row.last_attempt_ip
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting locked accounts:', error);
       throw error;
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -564,7 +568,7 @@ export class AccountLockoutService {
     `, [email.toLowerCase()]);
 
     return attempts;
-  }
+
 
   private async resetFailedAttempts(email: string): Promise<void> {
 
@@ -579,23 +583,23 @@ export class AccountLockoutService {
         last_failed_at = NULL
       WHERE email = $1
     `, [email.toLowerCase()]);
-  }
+
 
   private async clearRedisAttempts(email: string): Promise<void> {
 
     await this.redis.del(`failed_attempts:${email}`);
-  }
+
 
   private calculateLockoutDuration(lockCount: number): number {
     if (!this.config.progressiveLockout) {
       return this.config.lockoutDurationMinutes;
-    }
+
 
     const multiplierIndex = Math.min(lockCount - 1, this.config.progressiveMultipliers.length - 1);
     const multiplier = this.config.progressiveMultipliers[multiplierIndex] || 1;
     
     return Math.round(this.config.lockoutDurationMinutes * multiplier);
-  }
+
 
   private async logLockoutEvent(event: LockoutEvent): Promise<void> {
 
@@ -617,10 +621,10 @@ export class AccountLockoutService {
         event.adminAction || false,
         event.unlockMethod
       ]);
-    } catch (error) {
+ catch (error) {
       console.error('Error logging lockout event:', error);
-    }
-  }
+
+
 
   private async sendLockoutNotifications(
     email: string, 
@@ -644,7 +648,7 @@ export class AccountLockoutService {
           ipAddress: lockoutInfo.ipAddress,
           timestamp: new Date()
         });
-      }
+
 
       // Send admin notifications for repeated lockouts
       if (this.config.notifyAdmins && lockoutInfo.lockCount >= 3) {
@@ -657,34 +661,34 @@ export class AccountLockoutService {
             userAgent: lockoutInfo.userAgent,
             timestamp: new Date()
           });
-        }
-      }
-    } catch (error) {
+
+
+ catch (error) {
       console.error('Error sending lockout notifications:', error);
-    }
-  }
+
+
 
   private async generateUnlockUrl(email: string): Promise<string> {
 
     const token = await this.generateUnlockToken(email);
     const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
     return `${baseUrl}/auth/unlock?email=${encodeURIComponent(email)}&token=${token}`;
-  }
+
 
   private generateLockoutReason(isLocked: boolean, lockCount: number, failedAttempts: number): string {
     if (!isLocked) {
       if (failedAttempts > 0) {
         return `${failedAttempts} failed attempts (${this.config.maxFailedAttempts - failedAttempts} remaining)`;
-      }
+
       return 'Account is active';
-    }
+
 
     if (lockCount === 1) {
       return 'Account locked due to multiple failed login attempts';
-    }
+
 
     return `Account locked (${lockCount} total lockouts) due to repeated failed attempts`;
-  }
+
 
   private createDefaultStatus(): LockoutStatus {
     return {
@@ -695,10 +699,9 @@ export class AccountLockoutService {
       requiresCaptcha: false,
       lockoutReason: 'Account is active'
     };
-  }
+
 
   private hashEmail(email: string): string {
     const crypto = require('crypto');
     return crypto.createHash('sha256').update(email.toLowerCase()).digest('hex');
-  }
-}
+

@@ -9,52 +9,57 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import ConsentFeatureToggleService, { ConsentAwareContext, FeatureConsentMapping } from '../services/ConsentFeatureToggleService';
 import { FeatureToggleDAO } from '../database/feature-toggle-dao';
 
-}
-}
+
+
 interface EvaluateToggleParams {
   key: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface EvaluateToggleQuery {
   userId?: string;
   sessionId?: string;
   orgId?: string;
   includeConsentData?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface BatchEvaluateBody {
   keys: string[];
   context?: ConsentAwareContext;
   includeConsentData?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RegisterMappingBody {
   mappings: FeatureConsentMapping[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ConsentStatusBody {
   consents: Record<string, string>;
   userId?: string;
   sessionId?: string;
-}
-}
-}
+
+
+
+
 
 // Initialize the consent-aware toggle service
 let consentToggleService: ConsentFeatureToggleService;
@@ -78,15 +83,15 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: EvaluateToggleParams;
     Querystring: EvaluateToggleQuery;
-  }>('/consent-toggles/:key', {
+>('/consent-toggles/:key', {
     schema: {
       params: {
         type: 'object',
         properties: {
           key: { type: 'string' }
-  }
+
         required: ['key']
-  }
+
       querystring: {
         type: 'object',
         properties: {
@@ -94,8 +99,8 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
           sessionId: { type: 'string' },
           orgId: { type: 'string' },
           includeConsentData: { type: 'boolean' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -110,15 +115,15 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
                 variantKey: { type: 'string' },
                 ruleMatched: { type: 'string' },
                 metadata: { type: 'object' }
-  }
+
               required: ['enabled', 'value', 'reason']
-  }
+
             consentInfo: { type: 'object' }
-  }
+
           required: ['success', 'result']
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { key } = request.params;
@@ -147,17 +152,17 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
           consentChecked: result.metadata?.consentChecked || false,
           consentGranted: result.metadata?.consentGranted || false
         };
-      }
+
 
       return response;
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Consent toggle evaluation error:', error);
       return reply.status(500).send({
         success: false,
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -166,7 +171,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: BatchEvaluateBody;
-  }>('/consent-toggles/batch', {
+>('/consent-toggles/batch', {
     schema: {
       body: {
         type: 'object',
@@ -176,7 +181,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             items: { type: 'string' },
             minItems: 1,
             maxItems: 50
-  }
+
           context: {
             type: 'object',
             properties: {
@@ -184,12 +189,12 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
               sessionId: { type: 'string' },
               orgId: { type: 'string' },
               consents: { type: 'object' }
-            }
-  }
+
+
           includeConsentData: { type: 'boolean' }
-  }
+
         required: ['keys']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -197,11 +202,11 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             results: { type: 'object' },
             consentInfo: { type: 'object' }
-  }
+
           required: ['success', 'results']
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { keys, context = {}, includeConsentData } = request.body;
@@ -230,20 +235,20 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             consentChecked: results[key]?.metadata?.consentChecked || false,
             consentGranted: results[key]?.metadata?.consentGranted || false
           };
-        }
+
         
         response.consentInfo = consentInfo;
-      }
+
 
       return response;
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Batch consent toggle evaluation error:', error);
       return reply.status(500).send({
         success: false,
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -258,11 +263,11 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
           properties: {
             success: { type: 'boolean' },
             mappings: { type: 'object' }
-  }
+
           required: ['success', 'mappings']
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const mappings = consentToggleService.getConsentMappings();
@@ -271,14 +276,14 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
         success: true,
         mappings
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get consent mappings error:', error);
       return reply.status(500).send({
         success: false,
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -287,7 +292,7 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: RegisterMappingBody;
-  }>('/consent-toggles/mappings', {
+>('/consent-toggles/mappings', {
     schema: {
       body: {
         type: 'object',
@@ -301,23 +306,23 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
                 requiredConsents: {
                   type: 'array',
                   items: { type: 'string' }
-  }
+
                 requiredConsentLogic: {
                   type: 'string',
                   enum: ['AND', 'OR']
-  }
+
                 fallbackBehavior: {
                   type: 'string',
                   enum: ['disable', 'default', 'minimal']
-  }
+
                 consentExplanation: { type: 'string' }
-  }
+
               required: ['featureKey', 'requiredConsents', 'requiredConsentLogic', 'fallbackBehavior']
-            }
-          }
-  }
+
+
+
         required: ['mappings']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -325,11 +330,11 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             success: { type: 'boolean' },
             message: { type: 'string' },
             registeredCount: { type: 'number' }
-  }
+
           required: ['success']
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { mappings } = request.body;
@@ -341,14 +346,14 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
         message: 'Consent mappings registered successfully',
         registeredCount: mappings.length
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Register consent mappings error:', error);
       return reply.status(500).send({
         success: false,
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -357,15 +362,15 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: EvaluateToggleParams;
-  }>('/consent-toggles/:key/requirements', {
+>('/consent-toggles/:key/requirements', {
     schema: {
       params: {
         type: 'object',
         properties: {
           key: { type: 'string' }
-  }
+
         required: ['key']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -376,13 +381,13 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             requiredConsents: {
               type: 'array',
               items: { type: 'string' }
-  }
+
             mapping: { type: 'object' }
-  }
+
           required: ['success', 'featureKey', 'isConsentRequired']
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { key } = request.params;
@@ -399,14 +404,14 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
         requiredConsents,
         mapping: mapping || null
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Get consent requirements error:', error);
       return reply.status(500).send({
         success: false,
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -415,26 +420,26 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: ConsentStatusBody;
-  }>('/consent-toggles/invalidate-cache', {
+>('/consent-toggles/invalidate-cache', {
     schema: {
       body: {
         type: 'object',
         properties: {
           userId: { type: 'string' },
           sessionId: { type: 'string' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
           properties: {
             success: { type: 'boolean' },
             message: { type: 'string' }
-  }
+
           required: ['success']
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const { userId, sessionId } = request.body;
@@ -445,14 +450,14 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Consent cache invalidated successfully'
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Invalidate consent cache error:', error);
       return reply.status(500).send({
         success: false,
         error: 'Internal server error',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   /**
@@ -469,11 +474,11 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             mappingsCount: { type: 'number' },
             consentCheckingEnabled: { type: 'boolean' }
-  }
+
           required: ['success', 'status']
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     try {
       const mappings = consentToggleService.getConsentMappings();
@@ -484,15 +489,15 @@ export default async function consentToggleRoutes(fastify: FastifyInstance) {
         mappingsCount: Object.keys(mappings).length,
         consentCheckingEnabled: true
       };
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Consent toggles health check error:', error);
       return reply.status(500).send({
         success: false,
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
-}
+
 
 export { consentToggleService };

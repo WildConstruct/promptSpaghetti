@@ -11,7 +11,7 @@ import {
   CompressionAlgorithm,
   CompressionLevel,
   DataType
-} from '../../../packages/core/utils/CompressionService';
+ from '../../../packages/core/utils/CompressionService';
 import { CompressionMiddleware } from '../middleware/compression.middleware';
 import FileCompressionUtils from '../utils/FileCompressionUtils';
 import { writeFileSync, readFileSync, unlinkSync, mkdirSync, rmSync } from 'fs';
@@ -64,7 +64,7 @@ describe('Compression System Tests', () => {
             theme: 'dark',
             notifications: true,
             language: 'en'
-          }
+
         }))
       };
       
@@ -97,7 +97,7 @@ describe('Compression System Tests', () => {
         // Test decompression
         const decompressed = await compressionService.decompress(result.data, algorithm);
         expect(decompressed.toString('utf8')).toBe(testData);
-      }
+
       
       // All algorithms should produce different compressed sizes
       const sizes = results.map(r => r.compressedSize);
@@ -148,7 +148,7 @@ describe('Compression System Tests', () => {
         expect(result.success).toBe(true);
         expect(result.algorithm).toBe(algorithm);
         expect(result.compressionTime).toBeGreaterThan(0);
-      }
+
     });
   });
 
@@ -190,7 +190,7 @@ describe('Compression System Tests', () => {
         header: jest.fn((name, value) => {
           compressionHeaders[name] = value;
           return mockReply;
-  }
+
       };
       
             const handler = middleware.getHandler();
@@ -291,7 +291,7 @@ describe('Compression System Tests', () => {
         const filePath = join(testDir, `batch-test-${i}.txt`);
         writeFileSync(filePath, `Batch test file ${i} content. `.repeat(50));
         files.push(filePath);
-      }
+
       
       const result = await FileCompressionUtils.compressFiles(files, {
         algorithm: CompressionAlgorithm.GZIP,
@@ -357,7 +357,7 @@ describe('Compression System Tests', () => {
           : JSON.stringify(testCase.data);
         
         expect(decompressed.toString('utf8')).toBe(expectedString);
-      }
+
     });
     
     test('should maintain performance under load', async () => {
@@ -374,7 +374,7 @@ describe('Compression System Tests', () => {
           dataType: DataType.TEXT
         });
         results.push(result);
-      }
+
       
       const endTime = performance.now();
       const totalTime = endTime - startTime;
@@ -408,9 +408,9 @@ describe('Compression System Tests', () => {
       // Test decompression with wrong algorithm
       try {
         await compressionService.decompress(Buffer.from('invalid data'), CompressionAlgorithm.GZIP);
-      } catch (error) {
+ catch (error) {
         expect(error).toBeDefined();
-      }
+
       
       // Test file compression with non-existent file
       const fileResult = await FileCompressionUtils.compressFile('/non/existent/file.txt');

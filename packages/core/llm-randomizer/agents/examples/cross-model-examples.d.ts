@@ -1,5 +1,4 @@
-export interface CrossModelTestResult {
-    openai?: any;
+export interface CrossModelTestResult { openai?: any;
     claude?: any;
     gemini?: any;
     comparison: {
@@ -7,12 +6,11 @@ export interface CrossModelTestResult {
         successCount: number;
         totalAttempts: number;
         averageGenerationTime: number;
-        consistencyScore: number;
+        consistencyScore: number }
 }
     };
 
-export declare class CrossModelTester {
-    /**
+export declare class CrossModelTester { /**
      * Test all three models with the same request
      */
     testAllModels(baseRequest: any): Promise<CrossModelTestResult>;
@@ -42,26 +40,22 @@ export declare const testCases: {
         nodeTypes: string[];
         specificRequirements: string[];
         style: "creative";
-        domain: string;
-    };
+        domain: string };
     /**
      * Moderate complexity test case
      */
-    contentGenerator: {
-        purpose: string;
+    contentGenerator: { purpose: string;
         complexity: "moderate";
         nodeCount: number;
         nodeTypes: string[];
         specificRequirements: string[];
         focusAreas: string[];
         style: "balanced";
-        domain: string;
-    };
+        domain: string };
     /**
      * Complex test case with advanced features
      */
-    intelligentTutor: {
-        purpose: string;
+    intelligentTutor: { purpose: string;
         complexity: "complex";
         nodeCount: number;
         nodeTypes: string[];
@@ -69,13 +63,11 @@ export declare const testCases: {
         focusAreas: string[];
         style: "logical";
         domain: string;
-        constraints: string[];
-    };
+        constraints: string[] };
     /**
      * Creative writing assistant
      */
-    storyGenerator: {
-        purpose: string;
+    storyGenerator: { purpose: string;
         complexity: "moderate";
         nodeCount: number;
         nodeTypes: string[];
@@ -83,27 +75,23 @@ export declare const testCases: {
         focusAreas: string[];
         style: "creative";
         domain: string;
-        examples: string[];
-    };
+        examples: string[] };
     /**
      * Data processing pipeline
      */
-    dataProcessor: {
-        purpose: string;
+    dataProcessor: { purpose: string;
         complexity: "complex";
         nodeCount: number;
         nodeTypes: string[];
         specificRequirements: string[];
         focusAreas: string[];
         style: "logical";
-        domain: string;
-    };
+        domain: string };
 };
 /**
  * Run comprehensive cross-model tests
  */
-export declare function runCrossModelTests(): Promise<{
-    testResults: Record<string, CrossModelTestResult>;
+export declare function runCrossModelTests(): Promise<{ testResults: Record<string, CrossModelTestResult>;
     summary: {
         totalTests: number;
         successfulTests: number;
@@ -111,24 +99,18 @@ export declare function runCrossModelTests(): Promise<{
         modelPerformance: {
             openai: {
                 successRate: number;
-                avgTime: number;
-            };
-            claude: {
-                successRate: number;
-                avgTime: number;
-            };
-            gemini: {
-                successRate: number;
-                avgTime: number;
-            };
+                avgTime: number };
+            claude: { successRate: number;
+                avgTime: number };
+            gemini: { successRate: number;
+                avgTime: number };
         };
     };
 }>;
 /**
  * Generate a comparative report
  */
-export declare function generateTestReport(results: {)
+export declare function generateTestReport(results: { )
     testResults: Record<string, CrossModelTestResult>;
-    summary: any;
-}): string;
+    summary: any }): string;
 //# sourceMappingURL=cross-model-examples.d.ts.map

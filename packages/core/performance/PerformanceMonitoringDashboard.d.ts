@@ -6,24 +6,22 @@ import { EventEmitter } from 'events';
 import { PerformanceSnapshot, BudgetCheckResult } from './PerformanceBudget';
 
 }
-export interface DashboardConfig {
-    updateInterval: number;
+}
+export interface DashboardConfig { updateInterval: number;
     historyLimit: number;
     alertThresholds: {
         violations: number;
-        score: number;
+        score: number }
 }
     };
     autoOptimize: boolean;
-    reporting: {
-        enabled: boolean;
+    reporting: { enabled: boolean;
         interval: number;
-        recipients: string[];
-    };
+        recipients: string[] };
 
 }
-export interface DashboardData {
-    timestamp: number;
+}
+export interface DashboardData { timestamp: number;
     status: 'healthy' | 'warning' | 'critical';
     score: number;
     budgetResult: BudgetCheckResult;
@@ -33,14 +31,14 @@ export interface DashboardData {
         violations: number[];
         bundleSize: number[];
         memoryUsage: number[];
-        apiLatency: number[];
+        apiLatency: number[] }
 }
     };
     alerts: DashboardAlert[];
 
 }
-export interface DashboardAlert {
-    id: string;
+}
+export interface DashboardAlert { id: string;
     type: 'budget-violation' | 'performance-degradation' | 'system-health' | 'optimization-suggestion';
     severity: 'low' | 'medium' | 'high' | 'critical';
     title: string;
@@ -48,19 +46,17 @@ export interface DashboardAlert {
     timestamp: number;
     acknowledged: boolean;
     autoResolvable: boolean;
-    actions: AlertAction[];
-
+    actions: AlertAction[] }
 }
-export interface AlertAction {
-    id: string;
+}
+export interface AlertAction { id: string;
     label: string;
     type: 'optimize' | 'ignore' | 'investigate' | 'escalate';
     description: string;
-    automated: boolean;
-
+    automated: boolean }
 }
-export interface OptimizationSuggestion {
-    id: string;
+}
+export interface OptimizationSuggestion { id: string;
     category: 'bundle' | 'runtime' | 'api' | 'memory' | 'network' | 'build';
     priority: 'low' | 'medium' | 'high' | 'critical';
     title: string;
@@ -68,14 +64,12 @@ export interface OptimizationSuggestion {
     estimatedImpact: {
         scoreImprovement: number;
         sizeReduction?: number;
-        timeReduction?: number;
+        timeReduction?: number }
 }
     };
-    implementation: {
-        effort: 'low' | 'medium' | 'high';
+    implementation: { effort: 'low' | 'medium' | 'high';
         steps: string[];
-        codeExample?: string;
-    };
+        codeExample?: string };
     metrics: string[];
 /**
  * Performance Monitoring Dashboard

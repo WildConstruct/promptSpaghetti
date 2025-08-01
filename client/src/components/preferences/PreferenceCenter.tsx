@@ -16,8 +16,9 @@ import {
   DataManagementSettings,
   SecuritySettings,
   AccessibilitySettings
-} from '../../types/preferences';
-}
+ from '../../types/preferences';
+
+
 interface PreferenceCenterProps {
   userId: string;
   onClose?: () => void;
@@ -31,53 +32,54 @@ interface PreferenceCenterProps {
   | 'accessibility'
   | 'account';
   interface TabConfig {
-  id: PreferenceTab;,
+  id: PreferenceTab;
   label: string;
-  icon: React.ReactNode;,
+  icon: React.ReactNode;
   description: string;
   export const [preferences, setPreferences] = useState<UserPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const tabs: TabConfig = [
+  const tabs: TabConfig[] = [
   {
   id: 'privacy',
   label: 'Privacy & Consent',
   icon: <ShieldIcon />,
   description: 'Control how your data is collected and used',
-}
-}
+
+
+
     {
   id: 'communication',
   label: 'Communication',
   icon: <ChatIcon />,
   description: 'Manage how we communicate with you',
-}
+
     {
   id: 'notifications',
   label: 'Notifications',
   icon: <BellIcon />,
   description: 'Configure notification preferences',
-}
+
     {
   id: 'data',
   label: 'Data Management',
   icon: <DatabaseIcon />,
   description: 'Control your personal data',
-}
+
     {
   id: 'security',
   label: 'Security',
   icon: <LockIcon />,
   description: 'Account security settings',
-}
+
     {
   id: 'accessibility',
   label: 'Accessibility',
   icon: <AccessibilityIcon />,
   description: 'Accessibility and display options',
-}
+
     {
   id: 'account',
   label: 'Account',
@@ -93,9 +95,9 @@ interface PreferenceCenterProps {
       if (!response.ok) throw new Error('Failed to load preferences');
       const data = await response.json();
       setPreferences(data.preferences);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to load preferences');
-} finally {
+ catch (err) {
+  setError(err instanceof Error?: err.message : 'Failed to load preferences');
+ finally {
       setLoading(false);
   }, [userId]);
   const updatePreferences = (section: keyof UserPreferences, updates: Partial<unknown>) => {
@@ -103,6 +105,7 @@ interface PreferenceCenterProps {
   setPreferences(prev => ({)
   ...prev!,
   [section]: {
+    
   ...prev![section],
   ...updates
 }));
@@ -121,9 +124,9 @@ interface PreferenceCenterProps {
   });
       if (!response.ok) throw new Error('Failed to save preferences');
       setHasUnsavedChanges(false);
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to save preferences');
-} finally {
+ catch (err) {
+  setError(err instanceof Error?: err.message : 'Failed to save preferences');
+ finally {
       setSaving(false);
   };
   const exportUserData = async () => {
@@ -135,12 +138,12 @@ interface PreferenceCenterProps {
       if (!response.ok) throw new Error('Failed to initiate data export');
       const data = await response.json();
       alert(`Data export initiated. You will receive an email at ${data.email} when ready.`);}
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to export data');
+ catch (err) {
+  setError(err instanceof Error?: err.message : 'Failed to export data');
 };
   const deleteAccount = async () => {
     const confirmed = window.confirm(;);
-      'Are you sure you want to delete your account? This action cannot be undone.'
+      'Are you sure you want to delete your account?: This action cannot be undone.'
     );
     if (!confirmed) return;
     try {
@@ -150,19 +153,19 @@ interface PreferenceCenterProps {
   });
       if (!response.ok) throw new Error('Failed to delete account');
       alert('Account deletion initiated. You will receive a confirmation email.');
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to delete account');
+ catch (err) {
+  setError(err instanceof Error?: err.message : 'Failed to delete account');
 };
   if (loading) {
-    return;
-      <div className="flex items-center justify-center min-h-screen">
+    return (
+    <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         <span className="ml-3 text-lg">Loading your preferences...</span>
       </div>
-    );
+  );
   if (!preferences) {
-    return;
-      <div className="flex items-center justify-center min-h-screen">
+    return (
+    <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-gray-900">Unable to load preferences</h2>
           <p className="text-gray-600 mt-2">Please try again later.</p>
@@ -176,8 +179,8 @@ interface PreferenceCenterProps {
           )}
         </div>
       </div>
-    );
-  return;
+  );
+  return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
@@ -233,7 +236,7 @@ interface PreferenceCenterProps {
   activeTab === tab.id
   ? 'bg-blue-100 text-blue-700 border-l-4 border-blue-600'
   : 'text-gray-700 hover:bg-gray-100',
-}`}
+`}
                 >
                   <div className="flex items-center">
                     <span className="mr-3">{tab.icon}</span>
@@ -261,7 +264,7 @@ interface PreferenceCenterProps {
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ preferences: consentPrefs })
                       });
-                    }}
+
                     initialPreferences={preferences.privacy?.consentPreferences}
                   />
                 </div>
@@ -313,11 +316,12 @@ interface PreferenceCenterProps {
 };
 
 // Individual preference panels
-const CommunicationPreferencesPanel: React.FC<{,
+const CommunicationPreferencesPanel: React.FC<{
+    
   preferences: CommunicationPreferences;
   onChange: (updates: Partial<CommunicationPreferences>) => void;
-}> = ({ preferences, onChange }) => {
-  return;
+> = ({ preferences, onChange }) => {
+  return (
     <div>
       <h2 className="text-xl font-semibold mb-6">Communication Preferences</h2>
       <div className="space-y-6">
@@ -394,11 +398,12 @@ const CommunicationPreferencesPanel: React.FC<{,
     </div>
   );
 };
-const NotificationSettingsPanel: React.FC<{,
+const NotificationSettingsPanel: React.FC<{
+    
   preferences: NotificationSettings;
   onChange: (updates: Partial<NotificationSettings>) => void;
-}> = ({ preferences, onChange }) => {
-  return;
+> = ({ preferences, onChange }) => {
+  return (
     <div>
       <h2 className="text-xl font-semibold mb-6">Notification Settings</h2>
       <div className="space-y-6">
@@ -502,13 +507,14 @@ const NotificationSettingsPanel: React.FC<{,
     </div>
   );
 };
-const DataManagementPanel: React.FC<{,
+const DataManagementPanel: React.FC<{
+    
   preferences: DataManagementSettings;
-  onChange: (updates: Partial<DataManagementSettings>) => void;,
+  onChange: (updates: Partial<DataManagementSettings>) => void;
   onExportData: () => void;
   onDeleteAccount: () => void;
-}> = ({ preferences, onChange, onExportData, onDeleteAccount }) => {
-  return;
+> = ({ preferences, onChange, onExportData, onDeleteAccount }) => {
+  return (
     <div>
       <h2 className="text-xl font-semibold mb-6">Data Management</h2>
       <div className="space-y-8">
@@ -580,11 +586,12 @@ const DataManagementPanel: React.FC<{,
     </div>
   );
 };
-const SecuritySettingsPanel: React.FC<{,
+const SecuritySettingsPanel: React.FC<{
+    
   preferences: SecuritySettings;
   onChange: (updates: Partial<SecuritySettings>) => void;
-}> = ({ preferences, onChange }) => {
-  return;
+> = ({ preferences, onChange }) => {
+  return (
     <div>
       <h2 className="text-xl font-semibold mb-6">Security Settings</h2>
       <div className="space-y-6">
@@ -644,11 +651,12 @@ const SecuritySettingsPanel: React.FC<{,
     </div>
   );
 };
-const AccessibilitySettingsPanel: React.FC<{,
+const AccessibilitySettingsPanel: React.FC<{
+    
   preferences: AccessibilitySettings;
   onChange: (updates: Partial<AccessibilitySettings>) => void;
-}> = ({ preferences, onChange }) => {
-  return;
+> = ({ preferences, onChange }) => {
+  return (
     <div>
       <h2 className="text-xl font-semibold mb-6">Accessibility Settings</h2>
       <div className="space-y-6">
@@ -730,11 +738,12 @@ const AccessibilitySettingsPanel: React.FC<{,
     </div>
   );
 };
-const AccountSettingsPanel: React.FC<{,
+const AccountSettingsPanel: React.FC<{
+    
   preferences: unknown;
   onChange: (updates: unknown) => void;
-}> = ({ preferences, onChange }) => {
-  return;
+> = ({ preferences, onChange }) => {
+  return (
     <div>
       <h2 className="text-xl font-semibold mb-6">Account Settings</h2>
       <div className="space-y-6">
@@ -800,3 +809,24 @@ const LockIcon = () => <div className="w-5 h-5 bg-red-500 rounded"></div>;
 const AccessibilityIcon = () => <div className="w-5 h-5 bg-indigo-500 rounded"></div>;
 const UserIcon = () => <div className="w-5 h-5 bg-gray-500 rounded"></div>;
 const CloseIcon = () => <div className="w-5 h-5 bg-gray-400 rounded"></div>;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}

@@ -321,8 +321,9 @@ Promise < UnifiedProtectionResult > {
             }
             {
                 return this.coordinateResults(rateLimitResult, throttlingResult, 'hierarchical_throttling');
-                coordinateResults(rateLimitResult, RateLimitStatus);
-                throttlingResult: ThrottlingResult,
+                coordinateResults(rateLimitResult, RateLimitStatus),
+                    throttlingResult;
+                ThrottlingResult,
                     mode;
                 string;
                 UnifiedProtectionResult;
@@ -612,7 +613,7 @@ Promise < UnifiedProtectionResult > {
                                 updateRules: this.shouldUpdateRules(rateLimitResult, throttlingResult),
                             },
                             metadata: {
-                                protectionLayers: [,
+                                protectionLayers: [
                                     rateLimitResult.result !== 'allowed' ? 'rate_limiting' : '',
                                     throttlingResult.action !== 'allow' ? 'throttling' : '',
                                     'integration'
@@ -642,8 +643,7 @@ Promise < UnifiedProtectionResult > {
                                             system: 'rate_limiting',
                                             strategy: CoordinationStrategy.MOST_RESTRICTIVE,
                                             confidence: 60,
-                                            reasoning: `Fallback to rate limiting due to error: ${error instanceof Error ? error.message : 'Unknown error'}`
-                                        }
+                                            reasoning: `Fallback to rate limiting due to error: ${error instanceof Error ? error.message : 'Unknown error'}` }
                                     },
                                         recommendations;
                                     {
@@ -707,8 +707,7 @@ Promise < UnifiedProtectionResult > {
                                     recentThrottling: 0, // Would track recent throttling events
                                     systemCondition: this.throttlingEngine.getSystemCondition(),
                                     activeRules: Array.from({ length: throttlingStats.activeRules }, (_, i) => `rule-${i}`)
-                                }
-                            },
+                                } },
                             effectivenessScore: 85 // Would calculate from historical data;
                         };
                         // Add integration metadata

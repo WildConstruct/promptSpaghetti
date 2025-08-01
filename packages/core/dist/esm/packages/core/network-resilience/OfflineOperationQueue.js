@@ -149,7 +149,7 @@ export class OfflineOperationQueue extends EventEmitter {
                                         this.failedOperations.set(operationId, operation);
                                         this.metrics.failedOperations++;
                                         this.emit('operation_failed', operation, error);
-                                        console.error(`Operation ${operation.type} failed permanently after ${operation.retryCount},)}
+                                        console.error(`Operation ${operation.type} failed permanently after ${operation.retryCount})},
   retries:`, error);
                                     }
                                 }

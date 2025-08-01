@@ -16,8 +16,8 @@ import { DeviceFingerprintingService } from './DeviceFingerprintingService';
 import { TrustedDeviceManager } from './TrustedDeviceManager';
 
 }
-export interface WebSocketSecurityConfig {
-    enableMessageEncryption: boolean;
+}
+export interface WebSocketSecurityConfig { enableMessageEncryption: boolean;
     encryptionKeyRotationMinutes: number;
     requireE2EEncryption: boolean;
     requireDeviceVerification: boolean;
@@ -38,11 +38,10 @@ export interface WebSocketSecurityConfig {
     pinnedCertificates: string[];
     enableCSRFProtection: boolean;
     allowedOrigins: string[];
-    requireSecureTransport: boolean;
-
+    requireSecureTransport: boolean }
 }
-export interface ConnectionSecurityContext {
-    connectionId: string;
+}
+export interface ConnectionSecurityContext { connectionId: string;
     userId: string;
     sessionId: string;
     isAuthenticated: boolean;
@@ -68,13 +67,13 @@ export interface ConnectionSecurityContext {
         proxyDetected: boolean;
         botDetected: boolean;
         repeatedLoginAttempts: boolean;
-        anomalousPatterns: boolean;
+        anomalousPatterns: boolean }
 }
     };
 
 }
-export interface SecureWebSocketMessage {
-    id: string;
+}
+export interface SecureWebSocketMessage { id: string;
     type: string;
     payload: any;
     encrypted: boolean;
@@ -86,22 +85,20 @@ export interface SecureWebSocketMessage {
     signature?: string;
     originConnectionId: string;
     originUserId: string;
-    processingPath: string[];
-
+    processingPath: string[] }
 }
-export interface SecurityEvent {
-    id: string;
+}
+export interface SecurityEvent { id: string;
     type: 'authentication' | 'encryption' | 'threat_detected' | 'policy_violation' | 'anomaly';
     severity: 'info' | 'warning' | 'error' | 'critical';
     connectionId: string;
     userId?: string;
     timestamp: Date;
     description: string;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface ThreatDetectionRule {
-    id: string;
+}
+export interface ThreatDetectionRule { id: string;
     name: string;
     type: 'rate_limit' | 'pattern_match' | 'anomaly' | 'behavioral';
     enabled: boolean;
@@ -126,30 +123,29 @@ export declare class WebSocketSecurityManager extends EventEmitter {
     private suspiciousIPs;
     private blockedConnections;
     constructor();
-      config: WebSocketSecurityConfig,
-      keyManagementService: KeyManagementService,
-      dataClassifier: DataClassifier,
-      fingerprintService: DeviceFingerprintingService,
-      trustedDeviceManager: TrustedDeviceManager,
+      config: WebSocketSecurityConfig;
+      keyManagementService: KeyManagementService;
+      dataClassifier: DataClassifier;
+      fingerprintService: DeviceFingerprintingService;
+      trustedDeviceManager: TrustedDeviceManager }
     );
     /**
      * Initialize connection security context
      */
-    initializeConnection(connectionId: string, userId: string, requestInfo: {)
+    initializeConnection(connectionId: string, userId: string, requestInfo: { )
         ipAddress: string;
         userAgent: string;
         origin: string;
-        headers: Record<string, string>;
+        headers: Record<string, string> }
 }
     }): Promise<ConnectionSecurityContext>;
     /**
      * Authenticate connection with enhanced security
      */
-    authenticateConnection(connectionId: string, credentials: {)
+    authenticateConnection(connectionId: string, credentials: { )
         token: string;
         mfaCode?: string;
-        deviceVerificationToken?: string;
-    }): Promise<boolean>;
+        deviceVerificationToken?: string }): Promise<boolean>;
     /**
      * Encrypt outgoing message
      */
@@ -177,8 +173,7 @@ export declare class WebSocketSecurityManager extends EventEmitter {
     /**
      * Get security statistics
      */
-    getSecurityStats(): {
-        totalConnections: number;
+    getSecurityStats(): { totalConnections: number;
         authenticatedConnections: number;
         highRiskConnections: number;
         encryptedConnections: number;
@@ -186,8 +181,7 @@ export declare class WebSocketSecurityManager extends EventEmitter {
         blockedConnections: number;
         suspiciousIPs: number;
         securityEvents: number;
-        avgRiskScore: number;
-    };
+        avgRiskScore: number };
     private generateSessionEncryptionKey;
     private generateSessionId;
     private generateMessageId;

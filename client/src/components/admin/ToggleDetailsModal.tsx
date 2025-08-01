@@ -17,13 +17,14 @@ import {
   Settings,
   Users,
   Target
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import { UserPreviewTool } from './targeting/UserPreviewTool';
 import './targeting/UserPreviewTool.css';
 import './targeting/TargetingModalExtensions.css';
-}
+
+
 interface ToggleDetailsModalProps {
   isOpen: boolean;,
   onClose: () => void,
@@ -43,21 +44,22 @@ interface ToggleDetailsModalProps {
   version: number;
   createdBy?: string;
   updatedBy?: string,
-  scopes: Array<{
+  scopes: Array<{,
   id: string;,
   rule: unknown,
   priority: number;,
   createdAt: string;
-}
-}>;
-  recentAudit: Array<{
+
+
+>;
+  recentAudit: Array<{,
   id: string,
   action: string;
   actorId?: string;
   reason?: string,
   createdAt: string;,
   isEmergency: boolean;
-}>;
+>;
   dependencies: {
   dependencies: {
   requires: string;,
@@ -98,9 +100,9 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);}
       const data = await response.json();
       setToggle(data);
-    } catch (error) {
+ catch (error) {
   setError(error instanceof Error ? error.message : 'Failed to load toggle details');
-} finally {
+ finally {
       setLoading(false);
   }, [toggleId]);
   useEffect(() => {
@@ -153,7 +155,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
           <div className="variants-display">
             {toggle.value.variants?.map(()
               variant: { key?: string; value?: unknown; percentage?: number }, 
-              index: number) => (,
+              index: number) => (
               <div key={index} className="variant-item">
                 <span className="variant-key">{variant.key}</span>
                 <span className="variant-percentage">{variant.percentage}%</span>
@@ -171,7 +173,7 @@ export const ToggleDetailsModal: React.FC<ToggleDetailsModalProps> = ({
       );
   };
   const formatAuditAction = (action: string) => {
-    const actionMap: Record<string, { label: string, color: string; icon: JSX.Element }> = {
+    const actionMap: Record<string, { label: string, color: string, icon: JSX.Element }> = {
       'created': { label: 'Created', color: 'blue', icon: <CheckCircle size={14} /> },
       'updated': { label: 'Updated', color: 'yellow', icon: <Edit size={14} /> },
       'activated': { label: 'Activated', color: 'green', icon: <CheckCircle size={14} /> },

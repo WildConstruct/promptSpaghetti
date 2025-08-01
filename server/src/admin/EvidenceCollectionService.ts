@@ -34,7 +34,7 @@ export enum EvidenceType {
   API_ACCESS = 'api_access',
   CONTENT_INTERACTION = 'content_interaction',
   PRIVACY = 'privacy'
-}
+
 
 export enum EvidenceStatus {
   COLLECTED = 'collected',
@@ -43,7 +43,7 @@ export enum EvidenceStatus {
   PURGED = 'purged',
   UNDER_REVIEW = 'under_review',
   FLAGGED = 'flagged'
-}
+
 
 export enum ComplianceFramework {
   GDPR = 'gdpr',
@@ -53,7 +53,7 @@ export enum ComplianceFramework {
   STRIPE_AI_POLICY = 'stripe_ai_policy',
   PCI_DSS = 'pci_dss',
   ISO_27001 = 'iso_27001'
-}
+
 
 export enum RetentionPolicy {
   TRANSACTION_DATA = 'transaction_data', // 7 years
@@ -62,7 +62,7 @@ export enum RetentionPolicy {
   COMPLIANCE = 'compliance',             // Per regulation
   SECURITY_EVENTS = 'security_events',   // 3 years
   PERFORMANCE_DATA = 'performance_data'  // 1 year
-}
+
 
 const EvidenceMetadataSchema = z.object({
   id: z.string().uuid(),
@@ -186,8 +186,8 @@ export type EvidenceRecord = z.infer<typeof EvidenceRecordSchema>;
 // Evidence Collection Configuration
 // =============================================================================
 
-}
-}
+
+
 export interface EvidenceCollectionConfig {
   enableRealtimeCollection: boolean;
   batchSize: number;
@@ -219,16 +219,17 @@ export interface EvidenceCollectionConfig {
   suspiciousPatternThreshold: number;
   highVolumeThreshold: number;
   failureRateThreshold: number;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Evidence Collection Rules Engine
 // =============================================================================
 
-}
-}
+
+
 export interface CollectionRule {
   id: string;
   name: string;
@@ -239,41 +240,45 @@ export interface CollectionRule {
   priority: number;
   enabled: boolean;
   complianceFrameworks: ComplianceFramework[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CollectionTrigger {
   event: string;
   source: string;
   filters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CollectionCondition {
   field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'regex';
   value: any;
   required: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CollectionAction {
   type: 'collect' | 'verify' | 'alert' | 'archive' | 'purge';
   parameters: Record<string, any>;
   retryAttempts: number;
   timeoutMs: number;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // Main Evidence Collection Service
@@ -299,7 +304,7 @@ export class EvidenceCollectionService extends EventEmitter {
     this.config = config;
     this.initializeDefaultRules();
     this.startPeriodicProcessing();
-  }
+
 
   // =========================================================================
   // Core Collection Methods
@@ -320,7 +325,7 @@ export class EvidenceCollectionService extends EventEmitter {
       complianceFrameworks: ComplianceFramework[];
       retentionPolicy: RetentionPolicy;
       immediateVerification: boolean;
-    }> = {}
+> = {}
   ): Promise<EvidenceRecord> {
 
     const startTime = Date.now();
@@ -343,7 +348,7 @@ export class EvidenceCollectionService extends EventEmitter {
           accessedAt: new Date(),
           action: 'read',
           reason: 'Evidence collection'
-        }]
+]
       };
 
       // Validate evidence record
@@ -358,7 +363,7 @@ export class EvidenceCollectionService extends EventEmitter {
       // Trigger immediate verification if requested
       if (options.immediateVerification) {
         await this.verifyEvidence(validatedRecord.metadata.id);
-      }
+
 
       // Add to processing queue for batch operations
       this.processingQueue.push(validatedRecord);
@@ -375,8 +380,7 @@ export class EvidenceCollectionService extends EventEmitter {
       this.updatePerformanceMetrics('collected', Date.now() - startTime);
 
       return validatedRecord;
-
-    } catch (error) {
+ catch (error) {
       this.emit('collectionError', {
         type,
         source,
@@ -386,8 +390,8 @@ export class EvidenceCollectionService extends EventEmitter {
       
       this.updatePerformanceMetrics('failed', Date.now() - startTime);
       throw new Error(`Evidence collection failed: ${error.message}`);
-    }
-  }
+
+
 
   async collectTransactionEvidence(
     transactionId: string,
@@ -410,8 +414,8 @@ export class EvidenceCollectionService extends EventEmitter {
           currency,
           timestamp: new Date().toISOString(),
           ...paymentData
-        }
-  }
+
+
       {
         userId: buyerId,
         transactionId,
@@ -422,9 +426,9 @@ export class EvidenceCollectionService extends EventEmitter {
         retentionPolicy: RetentionPolicy.TRANSACTION_DATA,
         tags: ['transaction', 'payment', 'marketplace'],
         immediateVerification: true
-      }
+
     );
-  }
+
 
   async collectUserActionEvidence(
     userId: string,
@@ -442,7 +446,7 @@ export class EvidenceCollectionService extends EventEmitter {
         timestamp: new Date().toISOString(),
         userAgent: context.userAgent,
         ipAddress: context.ipAddress
-  }
+
       {
         userId,
         sessionId,
@@ -451,9 +455,9 @@ export class EvidenceCollectionService extends EventEmitter {
         complianceFrameworks: [ComplianceFramework.GDPR],
         retentionPolicy: RetentionPolicy.USER_ACTIVITY,
         tags: ['user-action', action.toLowerCase()]
-      }
+
     );
-  }
+
 
   async collectComplianceEvidence(
     framework: ComplianceFramework,
@@ -471,7 +475,7 @@ export class EvidenceCollectionService extends EventEmitter {
         result,
         context,
         timestamp: new Date().toISOString()
-  }
+
       {
         severity: 'high',
         sensitivity: 'confidential',
@@ -479,9 +483,9 @@ export class EvidenceCollectionService extends EventEmitter {
         retentionPolicy: RetentionPolicy.COMPLIANCE,
         tags: ['compliance', framework.toLowerCase(), checkType],
         immediateVerification: true
-      }
+
     );
-  }
+
 
   // =========================================================================
   // Evidence Verification
@@ -493,7 +497,7 @@ export class EvidenceCollectionService extends EventEmitter {
       const evidence = await this.getEvidence(evidenceId);
       if (!evidence) {
         throw new Error(`Evidence ${evidenceId} not found`);
-      }
+
 
       const verificationResults = await Promise.all([
         this.verifyDataIntegrity(evidence),
@@ -521,19 +525,18 @@ export class EvidenceCollectionService extends EventEmitter {
       if (allPassed) {
         await this.updateEvidenceStatus(evidenceId, EvidenceStatus.VERIFIED);
         this.emit('evidenceVerified', { evidenceId, success: true });
-      } else {
+ else {
         await this.updateEvidenceStatus(evidenceId, EvidenceStatus.FLAGGED);
         this.emit('evidenceVerificationFailed', { evidenceId, issues: verificationResults });
-      }
+
 
       this.updatePerformanceMetrics('verified');
       return allPassed;
-
-    } catch (error) {
+ catch (error) {
       this.emit('verificationError', { evidenceId, error: error.message });
       return false;
-    }
-  }
+
+
 
   private async verifyDataIntegrity(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
 
@@ -542,24 +545,24 @@ export class EvidenceCollectionService extends EventEmitter {
     
     if (computedHash === evidence.metadata.hash) {
       return { result: 'passed', message: 'Data integrity verified' };
-    } else {
+ else {
       return { result: 'failed', message: 'Data integrity check failed - hash mismatch' };
-    }
-  }
+
+
 
   private async verifyChainIntegrity(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
 
     if (!evidence.metadata.chainHash) {
       return { result: 'passed', message: 'No chain hash to verify' };
-    }
+
 
     const previousHash = this.evidenceChain.get(evidence.metadata.id);
     if (previousHash && previousHash === evidence.metadata.chainHash) {
       return { result: 'passed', message: 'Chain integrity verified' };
-    } else {
+ else {
       return { result: 'failed', message: 'Chain integrity check failed' };
-    }
-  }
+
+
 
   private async verifyComplianceRequirements(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
 
@@ -572,27 +575,27 @@ export class EvidenceCollectionService extends EventEmitter {
       case ComplianceFramework.GDPR:
         if (evidence.metadata.userId && !evidence.data.environment?.ipAddress) {
           issues.push('GDPR requires IP address logging for user actions');
-        }
+
         break;
       case ComplianceFramework.PSD3:
         if (evidence.metadata.type === EvidenceType.TRANSACTION && !evidence.data.financialData) {
           issues.push('PSD3 requires complete financial transaction data');
-        }
+
         break;
       case ComplianceFramework.STRIPE_AI_POLICY:
         if (evidence.metadata.templateId && !evidence.data.content.templateVerification) {
           issues.push('Stripe AI policy requires template AI verification');
-        }
+
         break;
-      }
-    }
+
+
 
     if (issues.length === 0) {
       return { result: 'passed', message: 'Compliance requirements satisfied' };
-    } else {
+ else {
       return { result: 'failed', message: issues.join('; ') };
-    }
-  }
+
+
 
   private async verifyRetentionPolicy(evidence: EvidenceRecord): Promise<{ result: string; message: string }> {
 
@@ -623,16 +626,16 @@ export class EvidenceCollectionService extends EventEmitter {
       break;
     default:
       maxRetentionDays = this.config.maxRetentionDays;
-    }
+
 
     const expirationDate = new Date(collectedAt.getTime() + (maxRetentionDays * 24 * 60 * 60 * 1000));
     
     if (now < expirationDate) {
       return { result: 'passed', message: `Evidence within retention period (expires ${expirationDate.toISOString()})` };
-    } else {
+ else {
       return { result: 'warning', message: 'Evidence past retention period, should be archived or purged' };
-    }
-  }
+
+
 
   // =========================================================================
   // Evidence Search and Reporting
@@ -653,7 +656,7 @@ export class EvidenceCollectionService extends EventEmitter {
     evidence: EvidenceRecord[];
     total: number;
     hasMore: boolean;
-  }> {
+> {
 
     // Implementation would query the evidence storage system
     // This is a placeholder for the database query logic
@@ -665,7 +668,7 @@ export class EvidenceCollectionService extends EventEmitter {
       total: mockResults.length,
       hasMore: false
     };
-  }
+
 
   async generateComplianceReport(
     framework: ComplianceFramework,
@@ -674,7 +677,7 @@ export class EvidenceCollectionService extends EventEmitter {
       includeUserData?: boolean;
       anonymizeData?: boolean;
       exportFormat?: 'json' | 'csv' | 'pdf';
-    } = {}
+ = {}
   ): Promise<{
     reportId: string;
     framework: ComplianceFramework;
@@ -687,7 +690,7 @@ export class EvidenceCollectionService extends EventEmitter {
     };
     evidenceIds: string[];
     downloadUrl?: string;
-  }> {
+> {
 
     const reportId = crypto.randomUUID();
     
@@ -703,10 +706,10 @@ export class EvidenceCollectionService extends EventEmitter {
         verifiedEvidence: 0,
         complianceRate: 100,
         criticalIssues: 0
-  }
+
       evidenceIds: []
     };
-  }
+
 
   // =========================================================================
   // Performance and Monitoring
@@ -721,19 +724,19 @@ export class EvidenceCollectionService extends EventEmitter {
     lastProcessedAt: Date;
     queueSize: number;
     storageUtilization: number;
-    } {
+ {
     return {
       ...this.performanceMetrics,
       queueSize: this.processingQueue.length,
       storageUtilization: 0 // Would calculate from storage service
     };
-  }
+
 
   async getHealthCheck(): Promise<{
     status: 'healthy' | 'degraded' | 'unhealthy';
     services: Record<string, { status: string; responseTime?: number; error?: string }>;
     metrics: object;
-  }> {
+> {
     const services: Record<string, { status: string; responseTime?: number; error?: string }> = {};
     
     // Check storage service
@@ -741,9 +744,9 @@ export class EvidenceCollectionService extends EventEmitter {
       const start = Date.now();
       // await this.checkStorageService();
       services.storage = { status: 'healthy', responseTime: Date.now() - start };
-    } catch (error) {
+ catch (error) {
       services.storage = { status: 'unhealthy', error: error.message };
-    }
+
 
     // Check encryption service
     if (this.config.encryptionEnabled) {
@@ -751,10 +754,10 @@ export class EvidenceCollectionService extends EventEmitter {
         const start = Date.now();
         // await this.checkEncryptionService();
         services.encryption = { status: 'healthy', responseTime: Date.now() - start };
-      } catch (error) {
+ catch (error) {
         services.encryption = { status: 'unhealthy', error: error.message };
-      }
-    }
+
+
 
     const healthyServices = Object.values(services).filter(s => s.status === 'healthy').length;
     const totalServices = Object.keys(services).length;
@@ -762,15 +765,15 @@ export class EvidenceCollectionService extends EventEmitter {
     let status: 'healthy' | 'degraded' | 'unhealthy' = 'healthy';
     if (healthyServices === 0) {
       status = 'unhealthy';
-    } else if (healthyServices < totalServices) {
+ else if (healthyServices < totalServices) {
       status = 'degraded';
-    }
+
 
     return {
       status,
       services,
       metrics: this.getPerformanceMetrics(};
-  }
+
 
   // =========================================================================
   // Private Helper Methods
@@ -816,7 +819,7 @@ export class EvidenceCollectionService extends EventEmitter {
       relatedEvidenceIds: [],
       parentEvidenceId: options.parentEvidenceId
     };
-  }
+
 
   private async prepareEvidenceData(
     data: Record<string, any>,
@@ -830,7 +833,7 @@ export class EvidenceCollectionService extends EventEmitter {
       apiContext: options.apiContext,
       financialData: options.financialData
     };
-  }
+
 
   private categorizeEvidence(type: EvidenceType, source: string): string {
     const categoryMap: Record<EvidenceType, string> = {
@@ -849,7 +852,7 @@ export class EvidenceCollectionService extends EventEmitter {
     };
     
     return categoryMap[type] || 'general';
-  }
+
 
   private getDefaultRetentionPolicy(type: EvidenceType): RetentionPolicy {
     const policyMap: Record<EvidenceType, RetentionPolicy> = {
@@ -868,7 +871,7 @@ export class EvidenceCollectionService extends EventEmitter {
     };
     
     return policyMap[type] || RetentionPolicy.USER_ACTIVITY;
-  }
+
 
   private getDefaultComplianceFrameworks(type: EvidenceType): ComplianceFramework[] {
     const frameworkMap: Record<EvidenceType, ComplianceFramework[]> = {
@@ -887,7 +890,7 @@ export class EvidenceCollectionService extends EventEmitter {
     };
     
     return frameworkMap[type] || [];
-  }
+
 
   private isRegulatoryRequirement(type: EvidenceType): boolean {
     return [
@@ -898,7 +901,7 @@ export class EvidenceCollectionService extends EventEmitter {
       EvidenceType.DISPUTE,
       EvidenceType.PRIVACY
     ].includes(type);
-  }
+
 
   private calculateExpirationDate(policy: RetentionPolicy): Date {
     const now = new Date();
@@ -912,39 +915,39 @@ export class EvidenceCollectionService extends EventEmitter {
     };
     
     return new Date(now.getTime() + (retentionDays[policy] * 24 * 60 * 60 * 1000));
-  }
+
 
   private getLastEvidenceHash(): string | null {
     // In real implementation, this would query the database for the latest evidence hash
     return null;
-  }
+
 
   private async storeEvidence(record: EvidenceRecord): Promise<void> {
 
     // Implementation would store evidence in database/storage service
     // This is a placeholder
-  }
+
 
   private async updateEvidenceChain(record: EvidenceRecord): Promise<void> {
 
     this.evidenceChain.set(record.metadata.id, record.metadata.hash);
-  }
+
 
   private async getEvidence(evidenceId: string): Promise<EvidenceRecord | null> {
 
     // Implementation would retrieve evidence from storage
     return null;
-  }
+
 
   private async updateEvidenceVerification(evidenceId: string, verification: any): Promise<void> {
 
     // Implementation would update evidence verification in storage
-  }
+
 
   private async updateEvidenceStatus(evidenceId: string, status: EvidenceStatus): Promise<void> {
 
     // Implementation would update evidence status in storage
-  }
+
 
   private updatePerformanceMetrics(operation: string, processingTime?: number): void {
     switch (operation) {
@@ -960,16 +963,16 @@ export class EvidenceCollectionService extends EventEmitter {
     case 'failed':
       // Update failure rate
       break;
-    }
+
 
     if (processingTime) {
       // Update average processing time using exponential moving average
       this.performanceMetrics.averageProcessingTime = 
         (this.performanceMetrics.averageProcessingTime * 0.9) + (processingTime * 0.1);
-    }
+
 
     this.performanceMetrics.lastProcessedAt = new Date();
-  }
+
 
   private initializeDefaultRules(): void {
     // Initialize default collection rules for common scenarios
@@ -984,19 +987,19 @@ export class EvidenceCollectionService extends EventEmitter {
         priority: 1,
         enabled: true,
         complianceFrameworks: [ComplianceFramework.PSD3, ComplianceFramework.STRIPE_AI_POLICY]
-      }
+
     ];
 
     defaultRules.forEach(rule => this.collectionRules.set(rule.id, rule));
-  }
+
 
   private startPeriodicProcessing(): void {
     setInterval(() => {
       if (!this.isProcessing && this.processingQueue.length > 0) {
         this.processEvidenceQueue();
-      }
+
     }, 30000); // Process every 30 seconds
-  }
+
 
   private async processEvidenceQueue(): Promise<void> {
 
@@ -1010,14 +1013,14 @@ export class EvidenceCollectionService extends EventEmitter {
       await Promise.all(batch.map(async (evidence) => {
         if (this.config.automaticVerification && evidence.status === EvidenceStatus.COLLECTED) {
           await this.verifyEvidence(evidence.metadata.id);
-        }
+
       }));
-    } catch (error) {
+ catch (error) {
       this.emit('batchProcessingError', { error: error.message, batchSize });
-    } finally {
+ finally {
       this.isProcessing = false;
-    }
-  }
-}
+
+
+
 
 export default EvidenceCollectionService;

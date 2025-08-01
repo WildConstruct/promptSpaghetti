@@ -72,38 +72,13 @@ const TIMEZONE_GROUPS = {
     { value: 'Asia/Kolkata', label: 'Mumbai/Kolkata (IST)', offset: '+05:30' }
 ];
 ;
-const COMMON_BUSINESS_HOURS = [];
-{
-    name: 'Standard (9 AM - 5 PM)', start;
-    '09:00', end;
-    '17:00', workdays;
-    [1, 2, 3, 4, 5];
-}
-{
-    name: 'Extended (8 AM - 6 PM)', start;
-    '08:00', end;
-    '18:00', workdays;
-    [1, 2, 3, 4, 5];
-}
-{
-    name: 'Early (7 AM - 3 PM)', start;
-    '07:00', end;
-    '15:00', workdays;
-    [1, 2, 3, 4, 5];
-}
-{
-    name: '24/7 Operations', start;
-    '00:00', end;
-    '23:59', workdays;
-    [0, 1, 2, 3, 4, 5, 6];
-}
-{
-    name: 'Weekend Only', start;
-    '09:00', end;
-    '17:00', workdays;
-    [0, 6];
-}
-;
+const COMMON_BUSINESS_HOURS = [
+    { name: 'Standard (9 AM - 5 PM)', start: '09:00', end: '17:00', workdays: [1, 2, 3, 4, 5] },
+    { name: 'Extended (8 AM - 6 PM)', start: '08:00', end: '18:00', workdays: [1, 2, 3, 4, 5] },
+    { name: 'Early (7 AM - 3 PM)', start: '07:00', end: '15:00', workdays: [1, 2, 3, 4, 5] },
+    { name: '24/7 Operations', start: '00:00', end: '23:59', workdays: [0, 1, 2, 3, 4, 5, 6] },
+    { name: 'Weekend Only', start: '09:00', end: '17:00', workdays: [0, 6] }
+];
 const WEEKDAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const WEEKDAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const AdvancedDateTimeControls = ({

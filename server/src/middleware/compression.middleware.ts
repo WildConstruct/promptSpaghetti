@@ -12,10 +12,10 @@ import {
   CompressionAlgorithm,
   CompressionLevel,
   DataType
-} from '../../../packages/core/utils/CompressionService';
+ from '../../../packages/core/utils/CompressionService';
 
-}
-}
+
+
 export interface CompressionMiddlewareOptions {
   threshold?: number; // Minimum response size to compress (bytes)
   level?: CompressionLevel;
@@ -27,12 +27,13 @@ export interface CompressionMiddlewareOptions {
   enableDeflate?: boolean;
   cacheCompressed?: boolean;
   maxCacheSize?: number; // MB
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CompressionStats {
   totalRequests: number;
   compressedRequests: number;
@@ -43,10 +44,11 @@ export interface CompressionStats {
     requests: number;
     bytesSaved: number;
     averageCompressionRatio: number;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 const DEFAULT_OPTIONS: CompressionMiddlewareOptions = {
   threshold: 1024, // 1KB
@@ -93,7 +95,7 @@ export class CompressionMiddleware {
     
     // Start cache cleanup interval
     setInterval(() => this.cleanupCache(), 5 * 60 * 1000); // Every 5 minutes
-  }
+
   
   /**
    * Get the middleware handler for Fastify
@@ -104,7 +106,7 @@ export class CompressionMiddleware {
       const acceptEncoding = request.headers['accept-encoding'] as string || '';
       if (!this.clientSupportsCompression(acceptEncoding)) {
         return next();
-      }
+
       
       // Intercept reply.send to compress response
       const originalSend = reply.send.bind(reply);
@@ -115,7 +117,7 @@ export class CompressionMiddleware {
       
       next();
     };
-  }
+
   
   /**
    * Compress response payload
@@ -137,7 +139,7 @@ export class CompressionMiddleware {
       // Check if compression should be applied
       if (!this.shouldCompress(payload, contentType)) {
         return originalSend(payload);
-      }
+
       
       // Convert payload to buffer
       const originalData = this.preparePayload(payload);
@@ -146,7 +148,7 @@ export class CompressionMiddleware {
       // Check size threshold
       if (originalSize < this.options.threshold!) {
         return originalSend(payload);
-      }
+
       
       // Select optimal compression algorithm
       const algorithm = this.selectCompressionAlgorithm(acceptEncoding, contentType, originalSize);
@@ -161,7 +163,7 @@ export class CompressionMiddleware {
         const cached = this.compressionCache.get(cacheKey)!;
         compressedData = cached.data;
         compressionTime = 0; // Cache hit
-      } else {
+ else {
         // Compress data
         const result = await compressionService.compress(originalData, {
           algorithm,
@@ -173,7 +175,7 @@ export class CompressionMiddleware {
         if (!result.success) {
           console.warn(`Compression failed for ${algorithm}:`, result.error);
           return originalSend(payload);
-        }
+
         
         compressedData = result.data;
         compressionTime = result.compressionTime;
@@ -181,8 +183,8 @@ export class CompressionMiddleware {
         // Cache the compressed result
         if (this.options.cacheCompressed) {
           this.cacheCompressedData(cacheKey, compressedData, algorithm);
-        }
-      }
+
+
       
       // Update statistics
       this.updateStats(algorithm, contentType, originalSize, compressedData.length, compressionTime);
@@ -199,17 +201,16 @@ export class CompressionMiddleware {
         reply.header('x-compression-time', compressionTime.toFixed(2) + 'ms');
         reply.header('x-compression-original-size', originalSize.toString());
         reply.header('x-compression-compressed-size', compressedData.length.toString());
-      }
+
       
       // Send compressed response
       return originalSend(compressedData);
-      
-    } catch (error) {
+ catch (error) {
       console.error('Compression middleware error:', error);
       // Fall back to uncompressed response
       return originalSend(payload);
-    }
-  }
+
+
   
   /**
    * Check if client supports compression
@@ -219,7 +220,7 @@ export class CompressionMiddleware {
       acceptEncoding.toLowerCase().includes(encoding)
     );
     return supported;
-  }
+
   
   /**
    * Determine if response should be compressed
@@ -233,17 +234,17 @@ export class CompressionMiddleware {
       contentType.toLowerCase().startsWith(excluded.toLowerCase())
     )) {
       return false;
-    }
+
     
     // Check include list (if specified)
     if (this.options.includeContentTypes?.length) {
       return this.options.includeContentTypes.some(included => 
         contentType.toLowerCase().startsWith(included.toLowerCase())
       );
-    }
+
     
     return true;
-  }
+
   
   /**
    * Select optimal compression algorithm based on client support and content
@@ -258,19 +259,19 @@ export class CompressionMiddleware {
     // Priority order: Brotli > Gzip > Deflate
     if (this.options.enableBrotli && encoding.includes('br')) {
       return CompressionAlgorithm.BROTLI;
-    }
+
     
     if (this.options.enableGzip && encoding.includes('gzip')) {
       return CompressionAlgorithm.GZIP;
-    }
+
     
     if (this.options.enableDeflate && encoding.includes('deflate')) {
       return CompressionAlgorithm.DEFLATE;
-    }
+
     
     // Fallback to Gzip (most widely supported)
     return CompressionAlgorithm.GZIP;
-  }
+
   
   /**
    * Map HTTP content type to compression data type
@@ -286,7 +287,7 @@ export class CompressionMiddleware {
     if (ct.includes('xml')) return DataType.TEXT;
     
     return DataType.BINARY;
-  }
+
   
   /**
    * Prepare payload for compression
@@ -294,18 +295,18 @@ export class CompressionMiddleware {
   private preparePayload(payload: unknown): Buffer {
     if (Buffer.isBuffer(payload)) {
       return payload;
-    }
+
     
     if (typeof payload === 'string') {
       return Buffer.from(payload, 'utf8');
-    }
+
     
     if (typeof payload === 'object') {
       return Buffer.from(JSON.stringify(payload), 'utf8');
-    }
+
     
     return Buffer.from(String(payload), 'utf8');
-  }
+
   
   /**
    * Generate cache key for compressed data
@@ -314,7 +315,7 @@ export class CompressionMiddleware {
     const crypto = require('crypto');
     const hash = crypto.createHash('sha256').update(data).digest('hex').substring(0, 16);
     return `${hash}_${algorithm}_${dataType}`;
-  }
+
   
   /**
    * Cache compressed data
@@ -325,7 +326,7 @@ export class CompressionMiddleware {
     // Check if cache is full
     if (this.cacheSize + data.length > maxCacheSizeBytes) {
       this.evictOldestCacheEntries(data.length);
-    }
+
     
     this.compressionCache.set(key, {
       data,
@@ -334,7 +335,7 @@ export class CompressionMiddleware {
     });
     
     this.cacheSize += data.length;
-  }
+
   
   /**
    * Evict oldest cache entries to make room
@@ -352,9 +353,9 @@ export class CompressionMiddleware {
       
       if (freedSpace >= requiredSpace) {
         break;
-      }
-    }
-  }
+
+
+
   
   /**
    * Clean up expired cache entries
@@ -367,9 +368,9 @@ export class CompressionMiddleware {
       if (now - entry.timestamp > maxAge) {
         this.compressionCache.delete(key);
         this.cacheSize -= entry.data.length;
-      }
-    }
-  }
+
+
+
   
   /**
    * Update compression statistics
@@ -400,7 +401,7 @@ export class CompressionMiddleware {
         averageCompressionRatio: 0
       };
       this.stats.contentTypeStats.set(baseContentType, ctStats);
-    }
+
     
     const bytesSaved = originalSize - compressedSize;
     const compressionRatio = compressedSize / originalSize;
@@ -409,7 +410,7 @@ export class CompressionMiddleware {
     ctStats.bytesSaved += bytesSaved;
     ctStats.averageCompressionRatio = 
       (ctStats.averageCompressionRatio * (ctStats.requests - 1) + compressionRatio) / ctStats.requests;
-  }
+
   
   /**
    * Get compression statistics
@@ -420,14 +421,14 @@ export class CompressionMiddleware {
       algorithmUsage: new Map(this.stats.algorithmUsage),
       contentTypeStats: new Map(this.stats.contentTypeStats)
     };
-  }
+
   
   /**
    * Reset statistics
    */
   public resetStats(): void {
     this.stats = this.initializeStats();
-  }
+
   
   /**
    * Get cache information
@@ -437,7 +438,7 @@ export class CompressionMiddleware {
     entries: number;
     hitRate: number;
     maxSize: number; // bytes
-    } {
+ {
     const maxSize = (this.options.maxCacheSize || 100) * 1024 * 1024;
     
     return {
@@ -447,7 +448,7 @@ export class CompressionMiddleware {
         (this.stats.compressedRequests - this.stats.totalRequests) / this.stats.totalRequests : 0,
       maxSize
     };
-  }
+
   
   /**
    * Initialize statistics object
@@ -461,8 +462,8 @@ export class CompressionMiddleware {
       algorithmUsage: new Map(),
       contentTypeStats: new Map()
     };
-  }
-}
+
+
 
 /**
  * Fastify plugin for compression middleware
@@ -486,7 +487,7 @@ export async function compressionPlugin(
         ...stats,
         algorithmUsage: Object.fromEntries(stats.algorithmUsage),
         contentTypeStats: Object.fromEntries(stats.contentTypeStats)
-  }
+
       cache: cacheInfo,
       compressionRatio: stats.totalRequests > 0 ? 
         stats.compressedRequests / stats.totalRequests : 0,
@@ -511,11 +512,11 @@ export async function compressionPlugin(
       
       return testData;
     });
-  }
+
   
   // Store middleware instance for external access
   fastify.decorate('compressionMiddleware', middleware);
-}
+
 
 // Export default instance for direct use
 export const compressionMiddleware = new CompressionMiddleware();

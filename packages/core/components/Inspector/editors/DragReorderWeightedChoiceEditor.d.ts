@@ -9,15 +9,15 @@
 import React from 'react';
 
 }
-export interface WeightedChoiceData {
-    choices?: Array<{
+}
+export interface WeightedChoiceData { choices?: Array<{
         text: string;
-        weight: number;
-
+        weight: number }
 }
     }>;
     [key: string]: unknown;
 
+}
 }
 export interface DragReorderWeightedChoiceEditorProps {
     data: WeightedChoiceData;
@@ -35,4 +35,5 @@ export interface DragReorderWeightedChoiceEditorProps {
 export declare const DragReorderWeightedChoiceEditor: React.FC<DragReorderWeightedChoiceEditorProps>;
 export default DragReorderWeightedChoiceEditor;
 //# sourceMappingURL=DragReorderWeightedChoiceEditor.d.ts.map
+}
 }

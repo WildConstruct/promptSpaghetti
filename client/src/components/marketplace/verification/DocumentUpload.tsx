@@ -1,14 +1,15 @@
 // Epic 17.5.5 - Document Upload Component for Verification System
 import React, { useState, useCallback } from 'react';
 import { DocumentType } from './types';
-}
+
+
 interface DocumentUploadProps {
   verificationRequestId: string;
   onUploadComplete?: (document: unknown) => void;
   onError?: (error: string) => void;
   interface UploadState {
   isUploading: boolean;,
-  progress: number;
+  progress: number;,
   error: string | null;,
   success: boolean;
   const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {,
@@ -19,10 +20,11 @@ interface DocumentUploadProps {
   portfolio: 'Portfolio/Work Samples',
   credential: 'Professional Credential/Certificate',
   other: 'Other Supporting Document',
-}
+
+
 };
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB;
-const ALLOWED_TYPES = [;
+const ALLOWED_TYPES = [
   'image/jpeg',
   'image/jpg', 
   'image/png',
@@ -79,13 +81,13 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`}
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   verification_request_id: verificationRequestId,
   document_type: documentType,
   file_name: selectedFile.name,
   file_size: selectedFile.size,
   file_type: selectedFile.type,
-}
+
       });
       if (!createResponse.ok) {
         const error = await createResponse.json();
@@ -125,7 +127,7 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
       setSelectedFile(null);
       // Notify parent component
       onUploadComplete?.(confirmedDocument);
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Upload failed';
   setUploadState({)
   isUploading: false,
@@ -219,8 +221,8 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
       <style>{`
         .document-upload {
           max-width: 600px;,
-  margin: 0 auto;
-          padding: 20px;,
+  margin: 0 auto;,
+  padding: 20px;,
   border: 1px solid #e0e0e0;
           border-radius: 8px;
           background-color: #fafafa;
@@ -239,8 +241,8 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
         .form-group select,
         .form-group input[type="file"] {
           width: 100%;,
-  padding: 10px;
-          border: 1px solid #ccc;
+  padding: 10px;,
+  border: 1px solid #ccc;
           border-radius: 4px;
           font-size: 14px;
         .form-group select:disabled,
@@ -259,13 +261,13 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
           width: 100%;,
   padding: 12px 24px;
           background-color: #007bff;,
-  color: white;
-          border: none;
+  color: white;,
+  border: none;
           border-radius: 4px;
           font-size: 16px;
           font-weight: 600;,
-  cursor: pointer;
-          transition: background-color 0.2s;
+  cursor: pointer;,
+  transition: background-color 0.2s;
         .upload-button:hover:not(:disabled) {
           background-color: #0056b3;
         .upload-button:disabled {
@@ -273,8 +275,8 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
   cursor: not-allowed;
         .progress-bar {
           position: relative;,
-  width: 100%;
-          height: 30px;
+  width: 100%;,
+  height: 30px;
           background-color: #e9ecef;
           border-radius: 4px;
           margin-top: 12px;,
@@ -285,8 +287,8 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
   transition: width 0.3s ease;
         .progress-text {
           position: absolute;,
-  top: 50%;
-          left: 50%;,
+  top: 50%;,
+  left: 50%;,
   transform: translate(-50%, -50%);
           font-weight: 600;,
   color: #333;
@@ -294,15 +296,15 @@ export const [documentType, setDocumentType] = useState<DocumentType>('identity'
           margin-top: 12px;,
   padding: 12px;
           background-color: #d4edda;,
-  color: #155724;
-          border: 1px solid #c3e6cb;
+  color: #155724;,
+  border: 1px solid #c3e6cb;
           border-radius: 4px;
         .error-message {
           margin-top: 12px;,
   padding: 12px;
           background-color: #f8d7da;,
-  color: #721c24;
-          border: 1px solid #f5c6cb;
+  color: #721c24;,
+  border: 1px solid #f5c6cb;
           border-radius: 4px;
         .upload-guidelines {
           background-color: #e7f3ff;,

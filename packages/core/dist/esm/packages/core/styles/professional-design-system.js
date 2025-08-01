@@ -97,18 +97,18 @@ glow: {
 ;
 export const professionalColors = {
     background: {
-        primary: '#1e1e1e', // Cinema 4D-inspired dark gray
-        secondary: '#2a2a2a', // Panel backgrounds
-        tertiary: '#353535', // Elevated surfaces
-        elevated: '#404040', // Modal backgrounds
-        inverse: '#f5f5f5' // Light surfaces
+        primary: '#1e1e1e', // Cinema 4D-inspired dark gray,
+        secondary: '#2a2a2a', // Panel backgrounds,
+        tertiary: '#353535', // Elevated surfaces,
+        elevated: '#404040', // Modal backgrounds,
+        inverse: '#f5f5f5' // Light surfaces,
     },
     text: {
-        primary: '#e8e8e8', // Primary text - high contrast
-        secondary: '#b8b8b8', // Secondary text
-        tertiary: '#888888', // Disabled text
-        inverse: '#1e1e1e', // Text on light backgrounds
-        accent: '#ff7c00' // Cinema 4D orange accent
+        primary: '#e8e8e8', // Primary text - high contrast,
+        secondary: '#b8b8b8', // Secondary text,
+        tertiary: '#888888', // Disabled text,
+        inverse: '#1e1e1e', // Text on light backgrounds,
+        accent: '#ff7c00' // Cinema 4D orange accent,
     },
     accent: {
         orange: '#ff7c00', // Cinema 4D signature orange,
@@ -128,12 +128,12 @@ export const professionalColors = {
         transform: '#f59e0b' // Amber for transforms,
     },
     ui: {
-        border: '#404040', // Default borders
-        borderHover: '#5a5a5a', // Hover borders
-        borderActive: '#ff7c00', // Active borders (Cinema 4D orange)
-        focus: '#4a9eff', // Focus ring color
-        selection: '#ff7c0040', // Selection highlight with opacity
-        hover: '#2d2d2d' // Hover background
+        border: '#404040', // Default borders,
+        borderHover: '#5a5a5a', // Hover borders,
+        borderActive: '#ff7c00', // Active borders (Cinema 4D orange),
+        focus: '#4a9eff', // Focus ring color,
+        selection: '#ff7c0040', // Selection highlight with opacity,
+        hover: '#2d2d2d' // Hover background,
     }
 };
 // Professional Typography System
@@ -167,7 +167,7 @@ export const professionalTypography = {
     letterSpacing: {
         tight: '-0.025em',
         normal: '0em',
-        wide: '0.025em'
+        wide: '0.025em',
     }
 };
 // Professional Shadow System
@@ -190,7 +190,7 @@ export const professionalShadows = {
         subtle: '0 0 10px rgba(255, 124, 0, 0.1)',
         medium: '0 0 20px rgba(255, 124, 0, 0.2)',
         strong: '0 0 30px rgba(255, 124, 0, 0.3)',
-        accent: '0 0 15px rgba(74, 158, 255, 0.25)'
+        accent: '0 0 15px rgba(74, 158, 255, 0.25)',
     }
 };
 // Professional Spacing System (8px grid)

@@ -7,8 +7,7 @@
 import { z } from 'zod';
 import { EventFilter } from './UnifiedEventBus';
 import { EventRepository } from './EventPersistenceLayer';
-export declare const BackupConfigSchema: z.ZodObject<{
-    backupLocation: z.ZodDefault<z.ZodString>;
+export declare const BackupConfigSchema: z.ZodObject<{ backupLocation: z.ZodDefault<z.ZodString>;
     compressionEnabled: z.ZodDefault<z.ZodBoolean>;
     encryptionEnabled: z.ZodDefault<z.ZodBoolean>;
     encryptionKey: z.ZodOptional<z.ZodString>;
@@ -17,9 +16,7 @@ export declare const BackupConfigSchema: z.ZodObject<{
     includeMetadata: z.ZodDefault<z.ZodBoolean>;
     verifyBackup: z.ZodDefault<z.ZodBoolean>;
     maxBackupSize: z.ZodDefault<z.ZodNumber>;
-    format: z.ZodDefault<z.ZodEnum<["json", "jsonl", "csv", "parquet"]>>;
-}, "strip", z.ZodTypeAny, {
-    format: "json" | "csv" | "parquet" | "jsonl";
+    format: z.ZodDefault<z.ZodEnum<["json", "jsonl", "csv", "parquet"]>> }, "strip", z.ZodTypeAny, { format: "json" | "csv" | "parquet" | "jsonl";
     includeMetadata: boolean;
     batchSize: number;
     retentionDays: number;
@@ -28,9 +25,7 @@ export declare const BackupConfigSchema: z.ZodObject<{
     encryptionEnabled: boolean;
     verifyBackup: boolean;
     maxBackupSize: number;
-    encryptionKey?: string | undefined;
-}, {
-    format?: "json" | "csv" | "parquet" | "jsonl" | undefined;
+    encryptionKey?: string | undefined }, { format?: "json" | "csv" | "parquet" | "jsonl" | undefined;
     includeMetadata?: boolean | undefined;
     batchSize?: number | undefined;
     encryptionKey?: string | undefined;
@@ -39,29 +34,27 @@ export declare const BackupConfigSchema: z.ZodObject<{
     backupLocation?: string | undefined;
     encryptionEnabled?: boolean | undefined;
     verifyBackup?: boolean | undefined;
-    maxBackupSize?: number | undefined;
-}>;
+    maxBackupSize?: number | undefined }>;
 export type BackupConfig = z.infer<typeof BackupConfigSchema>;
-export declare enum BackupStatus {
-    PENDING = "pending",
-    RUNNING = "running",
-    COMPLETED = "completed",
-    FAILED = "failed",
-    VERIFYING = "verifying",
-    VERIFIED = "verified",
+export declare enum BackupStatus { PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    VERIFYING = "verifying"
+    VERIFIED = "verified"
     CORRUPTED = "corrupted"
 
 export declare enum RecoveryStatus {
-    PENDING = "pending",
-    RUNNING = "running",
-    COMPLETED = "completed",
-    FAILED = "failed",
-    VALIDATING = "validating",
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    VALIDATING = "validating" }
     VALIDATED = "validated"
 
 }
-export interface BackupMetadata {
-    backupId: string;
+}
+export interface BackupMetadata { backupId: string;
     backupName: string;
     description?: string;
     status: BackupStatus;
@@ -72,7 +65,7 @@ export interface BackupMetadata {
     systemSources: string[];
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     config: BackupConfig;
@@ -84,8 +77,8 @@ export interface BackupMetadata {
     encrypted: boolean;
 
 }
-export interface RecoveryMetadata {
-    recoveryId: string;
+}
+export interface RecoveryMetadata { recoveryId: string;
     backupId: string;
     status: RecoveryStatus;
     startedAt: number;
@@ -95,13 +88,13 @@ export interface RecoveryMetadata {
     failedEventCount: number;
     validationResults?: {
         passed: boolean;
-        issues: string[];
+        issues: string[] }
 }
     };
 
 }
-export interface BackupProgress {
-    backupId: string;
+}
+export interface BackupProgress { backupId: string;
     status: BackupStatus;
     progress: {
         percentage: number;
@@ -110,21 +103,18 @@ export interface BackupProgress {
         currentBatch: number;
         totalBatches: number;
         bytesWritten: number;
-        estimatedTimeRemaining: number;
+        estimatedTimeRemaining: number }
 }
     };
     currentOperation: string;
-    throughput: {
-        eventsPerSecond: number;
-        bytesPerSecond: number;
-    };
+    throughput: { eventsPerSecond: number;
+        bytesPerSecond: number };
 /**
  * Backup and Recovery System
  *
  * Provides comprehensive backup and recovery capabilities for analytics data
  */
-export declare class BackupRecoverySystem {
-    private eventRepository;
+export declare class BackupRecoverySystem { private eventRepository;
     private backupMetadata;
     private recoveryMetadata;
     private activeBackups;
@@ -134,9 +124,9 @@ export declare class BackupRecoverySystem {
      * Create backup of analytics data
      */
     createBackup();
-      backupName: string,
-      filter?: EventFilter,
-      config?: Partial<BackupConfig>,
+      backupName: string
+      filter?: EventFilter
+      config?: Partial<BackupConfig> }
       description?: string
     ): Promise<string>;
     /**
@@ -154,17 +144,14 @@ export declare class BackupRecoverySystem {
     /**
      * Verify backup integrity
      */
-    verifyBackup(backupId: string): Promise<{
-        valid: boolean;
-        errors: string[];
-    }>;
+    verifyBackup(backupId: string): Promise<{ valid: boolean;
+        errors: string[] }>;
     /**
      * List all backups
      */
-    listBackups(filter?: {)
+    listBackups(filter?: { )
         status?: BackupStatus;
-        systemSource?: string;
-    }): BackupMetadata[];
+        systemSource?: string }): BackupMetadata[];
     /**
      * Get backup details
      */
@@ -251,14 +238,12 @@ export declare class BackupRecoverySystem {
     /**
      * Get backup summary
      */
-    getBackupSummary(): {
-        totalBackups: number;
+    getBackupSummary(): { totalBackups: number;
         completedBackups: number;
         totalSize: number;
         totalEvents: number;
         oldestBackup?: number;
-        newestBackup?: number;
-    };
+        newestBackup?: number };
 
 export default BackupRecoverySystem;
 //# sourceMappingURL=BackupRecoverySystem.d.ts.map

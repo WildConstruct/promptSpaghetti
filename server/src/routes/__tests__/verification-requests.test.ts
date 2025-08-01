@@ -26,7 +26,7 @@ describe('Verification Request API', () => {
       data: { email: 'test@example.com' },
       metadata: {
         requestSource: 'manual_request'
-      }
+
     };
 
     test('successfully submits email verification request', async () => {
@@ -98,8 +98,8 @@ describe('Verification Request API', () => {
             expirationDate: '2025-12-31',
             issuingAuthority: 'US State Department',
             documentImages: ['base64-image-data']
-          }
-        }
+
+
       };
 
       const response = await app.inject({
@@ -122,7 +122,7 @@ describe('Verification Request API', () => {
           userAgent: 'TestAgent/1.0',
           sessionId: 'session-abc',
           requestSource: 'profile_setup'
-        }
+
       };
 
       const response = await app.inject({
@@ -131,7 +131,7 @@ describe('Verification Request API', () => {
         payload: requestWithMetadata,
         headers: {
           'user-agent': 'TestAgent/1.0'
-        }
+
       });
 
       expect(response.statusCode).toBe(201);
@@ -168,7 +168,7 @@ describe('Verification Request API', () => {
           userId: 'user-status-test',
           verificationType: 'email_verification',
           data: { email: 'status-test@example.com' }
-        }
+
       });
     });
 
@@ -227,7 +227,7 @@ describe('Verification Request API', () => {
           userId: 'user-specific-test',
           verificationType: 'email_verification',
           data: { email: 'specific-test@example.com' }
-        }
+
       });
 
       const submitResult = JSON.parse(submitResponse.payload);
@@ -369,9 +369,9 @@ describe('Verification Request API', () => {
               expirationDate: '2025-12-31',
               issuingAuthority: 'US State Department',
               documentImages: []
-            }
-          }
-        }
+
+
+
       });
 
       const submitResult = JSON.parse(submitResponse.payload);
@@ -385,7 +385,7 @@ describe('Verification Request API', () => {
             name: 'passport.jpg',
             type: 'image/jpeg',
             data: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD' // Mock base64 data
-          }
+
         ]
       };
 
@@ -418,7 +418,7 @@ describe('Verification Request API', () => {
             name: 'document.txt',
             type: 'text/plain',
             data: 'data:text/plain;base64,dGVzdA=='
-          }
+
         ]
       };
 
@@ -446,7 +446,7 @@ describe('Verification Request API', () => {
             name: 'large-image.jpg',
             type: 'image/jpeg',
             data: largeData
-          }
+
         ]
       };
 
@@ -492,12 +492,12 @@ describe('Verification Request API', () => {
             name: 'front.jpg',
             type: 'image/jpeg',
             data: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD'
-  }
+
           {
             name: 'back.jpg',
             type: 'image/jpeg',
             data: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD'
-          }
+
         ]
       };
 
@@ -537,7 +537,7 @@ describe('Verification Request API', () => {
         }),
         headers: {
           // No content-type header
-        }
+
       });
 
       // Should still work with Fastify's auto-parsing
@@ -555,7 +555,7 @@ describe('Verification Request API', () => {
             userId: `rapid-user-${i}`,
             verificationType: 'email_verification',
             data: { email: `rapid${i}@example.com` }
-          }
+
   }
       );
 
@@ -579,7 +579,7 @@ describe('Verification Request API', () => {
       if (result.error) {
         expect(result.error).not.toContain('/etc/passwd');
         expect(result.error).not.toContain('../../');
-      }
+
     });
   });
 });

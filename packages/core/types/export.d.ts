@@ -1,8 +1,7 @@
 import { z } from 'zod';
 export declare const ExportFormatSchema: z.ZodEnum<["json", "yaml", "xml", "csv", "markdown", "pdf", "html", "zip", "vfx"]>;
 export declare const TemplateTypeSchema: z.ZodEnum<["full", "summary", "diff", "custom"]>;
-export declare const ExportTemplateSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ExportTemplateSchema: z.ZodObject<{ id: z.ZodString;
     project_id: z.ZodString;
     name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
@@ -24,9 +23,7 @@ export declare const ExportTemplateSchema: z.ZodObject<{
     is_public: z.ZodDefault<z.ZodBoolean>;
     is_system_template: z.ZodDefault<z.ZodBoolean>;
     usage_count: z.ZodDefault<z.ZodNumber>;
-    last_used_at: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    last_used_at: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { id: string;
     name: string;
     created_at: string;
     usage_count: number;
@@ -48,9 +45,7 @@ export declare const ExportTemplateSchema: z.ZodObject<{
     description?: string | undefined;
     template_content?: string | undefined;
     template_schema?: Record<string, unknown> | undefined;
-    last_used_at?: string | undefined;
-}, {
-    id: string;
+    last_used_at?: string | undefined }, { id: string;
     name: string;
     created_at: string;
     created_by: string;
@@ -72,10 +67,8 @@ export declare const ExportTemplateSchema: z.ZodObject<{
     template_schema?: Record<string, unknown> | undefined;
     is_public?: boolean | undefined;
     is_system_template?: boolean | undefined;
-    last_used_at?: string | undefined;
-}>;
-export declare const CreateExportTemplateSchema: z.ZodObject<Omit<{
-    id: z.ZodString;
+    last_used_at?: string | undefined }>;
+export declare const CreateExportTemplateSchema: z.ZodObject<Omit<{ id: z.ZodString;
     project_id: z.ZodString;
     name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
@@ -97,9 +90,7 @@ export declare const CreateExportTemplateSchema: z.ZodObject<Omit<{
     is_public: z.ZodDefault<z.ZodBoolean>;
     is_system_template: z.ZodDefault<z.ZodBoolean>;
     usage_count: z.ZodDefault<z.ZodNumber>;
-    last_used_at: z.ZodOptional<z.ZodString>;
-}, "id" | "created_at" | "usage_count" | "updated_at" | "last_used_at">, "strip", z.ZodTypeAny, {
-    name: string;
+    last_used_at: z.ZodOptional<z.ZodString> }, "id" | "created_at" | "usage_count" | "updated_at" | "last_used_at">, "strip", z.ZodTypeAny, { name: string;
     created_by: string;
     export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
@@ -116,9 +107,7 @@ export declare const CreateExportTemplateSchema: z.ZodObject<Omit<{
     is_system_template: boolean;
     description?: string | undefined;
     template_content?: string | undefined;
-    template_schema?: Record<string, unknown> | undefined;
-}, {
-    name: string;
+    template_schema?: Record<string, unknown> | undefined }, { name: string;
     created_by: string;
     export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
@@ -135,10 +124,8 @@ export declare const CreateExportTemplateSchema: z.ZodObject<Omit<{
     template_content?: string | undefined;
     template_schema?: Record<string, unknown> | undefined;
     is_public?: boolean | undefined;
-    is_system_template?: boolean | undefined;
-}>;
-export declare const UpdateExportTemplateSchema: z.ZodObject<{
-    name: z.ZodOptional<z.ZodString>;
+    is_system_template?: boolean | undefined }>;
+export declare const UpdateExportTemplateSchema: z.ZodObject<{ name: z.ZodOptional<z.ZodString>;
     description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     created_by: z.ZodOptional<z.ZodString>;
     export_format: z.ZodOptional<z.ZodEnum<["json", "yaml", "xml", "csv", "markdown", "pdf", "html", "zip", "vfx"]>>;
@@ -155,9 +142,7 @@ export declare const UpdateExportTemplateSchema: z.ZodObject<{
     template_content: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     template_schema: z.ZodOptional<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     is_public: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
-    is_system_template: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
-}, "strip", z.ZodTypeAny, {
-    name?: string | undefined;
+    is_system_template: z.ZodOptional<z.ZodDefault<z.ZodBoolean>> }, "strip", z.ZodTypeAny, { name?: string | undefined;
     description?: string | undefined;
     created_by?: string | undefined;
     export_format?: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml" | undefined;
@@ -174,9 +159,7 @@ export declare const UpdateExportTemplateSchema: z.ZodObject<{
     template_content?: string | undefined;
     template_schema?: Record<string, unknown> | undefined;
     is_public?: boolean | undefined;
-    is_system_template?: boolean | undefined;
-}, {
-    name?: string | undefined;
+    is_system_template?: boolean | undefined }, { name?: string | undefined;
     description?: string | undefined;
     created_by?: string | undefined;
     export_format?: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml" | undefined;
@@ -193,12 +176,10 @@ export declare const UpdateExportTemplateSchema: z.ZodObject<{
     template_content?: string | undefined;
     template_schema?: Record<string, unknown> | undefined;
     is_public?: boolean | undefined;
-    is_system_template?: boolean | undefined;
-}>;
+    is_system_template?: boolean | undefined }>;
 export declare const ExportJobStatusSchema: z.ZodEnum<["pending", "processing", "completed", "failed", "cancelled"]>;
 export declare const ExportTypeSchema: z.ZodEnum<["version", "branch", "comparison", "full_project"]>;
-export declare const ExportJobSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ExportJobSchema: z.ZodObject<{ id: z.ZodString;
     project_id: z.ZodString;
     template_id: z.ZodOptional<z.ZodString>;
     export_format: z.ZodEnum<["json", "yaml", "xml", "csv", "markdown", "pdf", "html", "zip", "vfx"]>;
@@ -223,9 +204,7 @@ export declare const ExportJobSchema: z.ZodObject<{
     processing_log: z.ZodOptional<z.ZodString>;
     processing_duration: z.ZodOptional<z.ZodNumber>;
     memory_usage: z.ZodOptional<z.ZodNumber>;
-    cpu_usage: z.ZodOptional<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    cpu_usage: z.ZodOptional<z.ZodNumber> }, "strip", z.ZodTypeAny, { id: string;
     status: "processing" | "pending" | "completed" | "failed" | "cancelled";
     export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
@@ -250,9 +229,7 @@ export declare const ExportJobSchema: z.ZodObject<{
     processing_log?: string | undefined;
     processing_duration?: number | undefined;
     memory_usage?: number | undefined;
-    cpu_usage?: number | undefined;
-}, {
-    id: string;
+    cpu_usage?: number | undefined }, { id: string;
     export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
     export_type: "version" | "branch" | "comparison" | "full_project";
@@ -277,10 +254,8 @@ export declare const ExportJobSchema: z.ZodObject<{
     processing_log?: string | undefined;
     processing_duration?: number | undefined;
     memory_usage?: number | undefined;
-    cpu_usage?: number | undefined;
-}>;
-export declare const CreateExportJobSchema: z.ZodObject<Omit<{
-    id: z.ZodString;
+    cpu_usage?: number | undefined }>;
+export declare const CreateExportJobSchema: z.ZodObject<Omit<{ id: z.ZodString;
     project_id: z.ZodString;
     template_id: z.ZodOptional<z.ZodString>;
     export_format: z.ZodEnum<["json", "yaml", "xml", "csv", "markdown", "pdf", "html", "zip", "vfx"]>;
@@ -305,9 +280,7 @@ export declare const CreateExportJobSchema: z.ZodObject<Omit<{
     processing_log: z.ZodOptional<z.ZodString>;
     processing_duration: z.ZodOptional<z.ZodNumber>;
     memory_usage: z.ZodOptional<z.ZodNumber>;
-    cpu_usage: z.ZodOptional<z.ZodNumber>;
-}, "id" | "status" | "download_url" | "progress_percentage" | "output_file_path" | "output_file_size" | "output_file_hash" | "started_at" | "completed_at" | "error_message" | "processing_log" | "processing_duration" | "memory_usage" | "cpu_usage">, "strip", z.ZodTypeAny, {
-    export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
+    cpu_usage: z.ZodOptional<z.ZodNumber> }, "id" | "status" | "download_url" | "progress_percentage" | "output_file_path" | "output_file_size" | "output_file_hash" | "started_at" | "completed_at" | "error_message" | "processing_log" | "processing_duration" | "memory_usage" | "cpu_usage">, "strip", z.ZodTypeAny, { export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
     export_type: "version" | "branch" | "comparison" | "full_project";
     export_scope: Record<string, unknown>;
@@ -318,9 +291,7 @@ export declare const CreateExportJobSchema: z.ZodObject<Omit<{
     template_id?: string | undefined;
     source_snapshot_id?: string | undefined;
     source_branch_id?: string | undefined;
-    comparison_snapshot_id?: string | undefined;
-}, {
-    export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
+    comparison_snapshot_id?: string | undefined }, { export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
     export_type: "version" | "branch" | "comparison" | "full_project";
     initiated_by: string;
@@ -331,10 +302,8 @@ export declare const CreateExportJobSchema: z.ZodObject<Omit<{
     source_branch_id?: string | undefined;
     comparison_snapshot_id?: string | undefined;
     export_options?: Record<string, unknown> | undefined;
-    custom_filters?: Record<string, unknown> | undefined;
-}>;
-export declare const UpdateExportJobSchema: z.ZodObject<{
-    status: z.ZodOptional<z.ZodEnum<["pending", "processing", "completed", "failed", "cancelled"]>>;
+    custom_filters?: Record<string, unknown> | undefined }>;
+export declare const UpdateExportJobSchema: z.ZodObject<{ status: z.ZodOptional<z.ZodEnum<["pending", "processing", "completed", "failed", "cancelled"]>>;
     progress_percentage: z.ZodOptional<z.ZodNumber>;
     output_file_path: z.ZodOptional<z.ZodString>;
     output_file_size: z.ZodOptional<z.ZodNumber>;
@@ -346,9 +315,7 @@ export declare const UpdateExportJobSchema: z.ZodObject<{
     processing_log: z.ZodOptional<z.ZodString>;
     processing_duration: z.ZodOptional<z.ZodNumber>;
     memory_usage: z.ZodOptional<z.ZodNumber>;
-    cpu_usage: z.ZodOptional<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    status?: "processing" | "pending" | "completed" | "failed" | "cancelled" | undefined;
+    cpu_usage: z.ZodOptional<z.ZodNumber> }, "strip", z.ZodTypeAny, { status?: "processing" | "pending" | "completed" | "failed" | "cancelled" | undefined;
     expires_at?: string | undefined;
     download_url?: string | undefined;
     progress_percentage?: number | undefined;
@@ -360,9 +327,7 @@ export declare const UpdateExportJobSchema: z.ZodObject<{
     processing_log?: string | undefined;
     processing_duration?: number | undefined;
     memory_usage?: number | undefined;
-    cpu_usage?: number | undefined;
-}, {
-    status?: "processing" | "pending" | "completed" | "failed" | "cancelled" | undefined;
+    cpu_usage?: number | undefined }, { status?: "processing" | "pending" | "completed" | "failed" | "cancelled" | undefined;
     expires_at?: string | undefined;
     download_url?: string | undefined;
     progress_percentage?: number | undefined;
@@ -374,10 +339,8 @@ export declare const UpdateExportJobSchema: z.ZodObject<{
     processing_log?: string | undefined;
     processing_duration?: number | undefined;
     memory_usage?: number | undefined;
-    cpu_usage?: number | undefined;
-}>;
-export declare const ExportScheduleSchema: z.ZodObject<{
-    id: z.ZodString;
+    cpu_usage?: number | undefined }>;
+export declare const ExportScheduleSchema: z.ZodObject<{ id: z.ZodString;
     project_id: z.ZodString;
     template_id: z.ZodString;
     name: z.ZodString;
@@ -394,9 +357,7 @@ export declare const ExportScheduleSchema: z.ZodObject<{
     next_run_at: z.ZodOptional<z.ZodString>;
     total_runs: z.ZodDefault<z.ZodNumber>;
     successful_runs: z.ZodDefault<z.ZodNumber>;
-    failed_runs: z.ZodDefault<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    failed_runs: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { id: string;
     name: string;
     created_at: string;
     schedule_expression: string;
@@ -413,9 +374,7 @@ export declare const ExportScheduleSchema: z.ZodObject<{
     failed_runs: number;
     description?: string | undefined;
     next_run_at?: string | undefined;
-    last_run_at?: string | undefined;
-}, {
-    id: string;
+    last_run_at?: string | undefined }, { id: string;
     name: string;
     created_at: string;
     schedule_expression: string;
@@ -432,10 +391,8 @@ export declare const ExportScheduleSchema: z.ZodObject<{
     notification_options?: Record<string, unknown> | undefined;
     total_runs?: number | undefined;
     successful_runs?: number | undefined;
-    failed_runs?: number | undefined;
-}>;
-export declare const CreateExportScheduleSchema: z.ZodObject<Omit<{
-    id: z.ZodString;
+    failed_runs?: number | undefined }>;
+export declare const CreateExportScheduleSchema: z.ZodObject<Omit<{ id: z.ZodString;
     project_id: z.ZodString;
     template_id: z.ZodString;
     name: z.ZodString;
@@ -452,9 +409,7 @@ export declare const CreateExportScheduleSchema: z.ZodObject<Omit<{
     next_run_at: z.ZodOptional<z.ZodString>;
     total_runs: z.ZodDefault<z.ZodNumber>;
     successful_runs: z.ZodDefault<z.ZodNumber>;
-    failed_runs: z.ZodDefault<z.ZodNumber>;
-}, "id" | "created_at" | "next_run_at" | "last_run_at" | "updated_at" | "total_runs" | "successful_runs" | "failed_runs">, "strip", z.ZodTypeAny, {
-    name: string;
+    failed_runs: z.ZodDefault<z.ZodNumber> }, "id" | "created_at" | "next_run_at" | "last_run_at" | "updated_at" | "total_runs" | "successful_runs" | "failed_runs">, "strip", z.ZodTypeAny, { name: string;
     schedule_expression: string;
     created_by: string;
     template_id: string;
@@ -463,9 +418,7 @@ export declare const CreateExportScheduleSchema: z.ZodObject<Omit<{
     export_options: Record<string, unknown>;
     is_enabled: boolean;
     notification_options: Record<string, unknown>;
-    description?: string | undefined;
-}, {
-    name: string;
+    description?: string | undefined }, { name: string;
     schedule_expression: string;
     created_by: string;
     template_id: string;
@@ -474,10 +427,8 @@ export declare const CreateExportScheduleSchema: z.ZodObject<Omit<{
     timezone?: string | undefined;
     export_options?: Record<string, unknown> | undefined;
     is_enabled?: boolean | undefined;
-    notification_options?: Record<string, unknown> | undefined;
-}>;
-export declare const UpdateExportScheduleSchema: z.ZodObject<{
-    name: z.ZodOptional<z.ZodString>;
+    notification_options?: Record<string, unknown> | undefined }>;
+export declare const UpdateExportScheduleSchema: z.ZodObject<{ name: z.ZodOptional<z.ZodString>;
     description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     schedule_expression: z.ZodOptional<z.ZodString>;
     created_by: z.ZodOptional<z.ZodString>;
@@ -486,9 +437,7 @@ export declare const UpdateExportScheduleSchema: z.ZodObject<{
     timezone: z.ZodOptional<z.ZodDefault<z.ZodString>>;
     export_options: z.ZodOptional<z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     is_enabled: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
-    notification_options: z.ZodOptional<z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-}, "strip", z.ZodTypeAny, {
-    name?: string | undefined;
+    notification_options: z.ZodOptional<z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>> }, "strip", z.ZodTypeAny, { name?: string | undefined;
     description?: string | undefined;
     schedule_expression?: string | undefined;
     created_by?: string | undefined;
@@ -497,9 +446,7 @@ export declare const UpdateExportScheduleSchema: z.ZodObject<{
     timezone?: string | undefined;
     export_options?: Record<string, unknown> | undefined;
     is_enabled?: boolean | undefined;
-    notification_options?: Record<string, unknown> | undefined;
-}, {
-    name?: string | undefined;
+    notification_options?: Record<string, unknown> | undefined }, { name?: string | undefined;
     description?: string | undefined;
     schedule_expression?: string | undefined;
     created_by?: string | undefined;
@@ -508,11 +455,9 @@ export declare const UpdateExportScheduleSchema: z.ZodObject<{
     timezone?: string | undefined;
     export_options?: Record<string, unknown> | undefined;
     is_enabled?: boolean | undefined;
-    notification_options?: Record<string, unknown> | undefined;
-}>;
+    notification_options?: Record<string, unknown> | undefined }>;
 export declare const ShareAccessLevelSchema: z.ZodEnum<["public", "password_protected", "private"]>;
-export declare const ExportShareSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ExportShareSchema: z.ZodObject<{ id: z.ZodString;
     export_job_id: z.ZodString;
     share_token: z.ZodString;
     access_level: z.ZodDefault<z.ZodEnum<["public", "password_protected", "private"]>>;
@@ -532,9 +477,7 @@ export declare const ExportShareSchema: z.ZodObject<{
     is_active: z.ZodDefault<z.ZodBoolean>;
     last_accessed_at: z.ZodOptional<z.ZodString>;
     access_count: z.ZodDefault<z.ZodNumber>;
-    share_url: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    share_url: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { id: string;
     created_at: string;
     is_active: boolean;
     created_by: string;
@@ -554,9 +497,7 @@ export declare const ExportShareSchema: z.ZodObject<{
     max_downloads?: number | undefined;
     expires_in_days?: number | undefined;
     last_accessed_at?: string | undefined;
-    share_url?: string | undefined;
-}, {
-    id: string;
+    share_url?: string | undefined }, { id: string;
     created_at: string;
     created_by: string;
     export_job_id: string;
@@ -576,10 +517,8 @@ export declare const ExportShareSchema: z.ZodObject<{
     expires_in_days?: number | undefined;
     last_accessed_at?: string | undefined;
     access_count?: number | undefined;
-    share_url?: string | undefined;
-}>;
-export declare const CreateExportShareSchema: z.ZodObject<Omit<{
-    id: z.ZodString;
+    share_url?: string | undefined }>;
+export declare const CreateExportShareSchema: z.ZodObject<Omit<{ id: z.ZodString;
     export_job_id: z.ZodString;
     share_token: z.ZodString;
     access_level: z.ZodDefault<z.ZodEnum<["public", "password_protected", "private"]>>;
@@ -599,9 +538,7 @@ export declare const CreateExportShareSchema: z.ZodObject<Omit<{
     is_active: z.ZodDefault<z.ZodBoolean>;
     last_accessed_at: z.ZodOptional<z.ZodString>;
     access_count: z.ZodDefault<z.ZodNumber>;
-    share_url: z.ZodOptional<z.ZodString>;
-}, "id" | "created_at" | "download_count" | "last_accessed_at" | "access_count">, "strip", z.ZodTypeAny, {
-    is_active: boolean;
+    share_url: z.ZodOptional<z.ZodString> }, "id" | "created_at" | "download_count" | "last_accessed_at" | "access_count">, "strip", z.ZodTypeAny, { is_active: boolean;
     created_by: string;
     export_job_id: string;
     share_token: string;
@@ -616,9 +553,7 @@ export declare const CreateExportShareSchema: z.ZodObject<Omit<{
     expires_at?: string | undefined;
     max_downloads?: number | undefined;
     expires_in_days?: number | undefined;
-    share_url?: string | undefined;
-}, {
-    created_by: string;
+    share_url?: string | undefined }, { created_by: string;
     export_job_id: string;
     share_token: string;
     description?: string | undefined;
@@ -633,35 +568,27 @@ export declare const CreateExportShareSchema: z.ZodObject<Omit<{
     track_access?: boolean | undefined;
     notify_on_access?: boolean | undefined;
     expires_in_days?: number | undefined;
-    share_url?: string | undefined;
-}>;
-export declare const UpdateExportShareSchema: z.ZodObject<{
-    share_name: z.ZodOptional<z.ZodString>;
+    share_url?: string | undefined }>;
+export declare const UpdateExportShareSchema: z.ZodObject<{ share_name: z.ZodOptional<z.ZodString>;
     password_protected: z.ZodOptional<z.ZodBoolean>;
     password_hash: z.ZodOptional<z.ZodString>;
     allowed_downloads: z.ZodOptional<z.ZodNumber>;
     allowed_ips: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     expires_at: z.ZodOptional<z.ZodString>;
-    is_active: z.ZodOptional<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    expires_at?: string | undefined;
+    is_active: z.ZodOptional<z.ZodBoolean> }, "strip", z.ZodTypeAny, { expires_at?: string | undefined;
     is_active?: boolean | undefined;
     password_protected?: boolean | undefined;
     allowed_ips?: string[] | undefined;
     share_name?: string | undefined;
     password_hash?: string | undefined;
-    allowed_downloads?: number | undefined;
-}, {
-    expires_at?: string | undefined;
+    allowed_downloads?: number | undefined }, { expires_at?: string | undefined;
     is_active?: boolean | undefined;
     password_protected?: boolean | undefined;
     allowed_ips?: string[] | undefined;
     share_name?: string | undefined;
     password_hash?: string | undefined;
-    allowed_downloads?: number | undefined;
-}>;
-export declare const ExportAnalyticsSchema: z.ZodObject<{
-    id: z.ZodString;
+    allowed_downloads?: number | undefined }>;
+export declare const ExportAnalyticsSchema: z.ZodObject<{ id: z.ZodString;
     project_id: z.ZodString;
     export_job_id: z.ZodOptional<z.ZodString>;
     template_id: z.ZodOptional<z.ZodString>;
@@ -674,9 +601,7 @@ export declare const ExportAnalyticsSchema: z.ZodObject<{
     ip_address: z.ZodOptional<z.ZodString>;
     exported_at: z.ZodString;
     date_bucket: z.ZodString;
-    hour_bucket: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    hour_bucket: z.ZodString }, "strip", z.ZodTypeAny, { id: string;
     export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
     download_count: number;
@@ -689,9 +614,7 @@ export declare const ExportAnalyticsSchema: z.ZodObject<{
     ip_address?: string | undefined;
     export_job_id?: string | undefined;
     export_size?: number | undefined;
-    processing_time?: number | undefined;
-}, {
-    id: string;
+    processing_time?: number | undefined }, { id: string;
     export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
     exported_at: string;
@@ -704,10 +627,8 @@ export declare const ExportAnalyticsSchema: z.ZodObject<{
     export_job_id?: string | undefined;
     download_count?: number | undefined;
     export_size?: number | undefined;
-    processing_time?: number | undefined;
-}>;
-export declare const CreateExportAnalyticsSchema: z.ZodObject<Omit<{
-    id: z.ZodString;
+    processing_time?: number | undefined }>;
+export declare const CreateExportAnalyticsSchema: z.ZodObject<Omit<{ id: z.ZodString;
     project_id: z.ZodString;
     export_job_id: z.ZodOptional<z.ZodString>;
     template_id: z.ZodOptional<z.ZodString>;
@@ -720,9 +641,7 @@ export declare const CreateExportAnalyticsSchema: z.ZodObject<Omit<{
     ip_address: z.ZodOptional<z.ZodString>;
     exported_at: z.ZodString;
     date_bucket: z.ZodString;
-    hour_bucket: z.ZodString;
-}, "id" | "exported_at" | "date_bucket" | "hour_bucket">, "strip", z.ZodTypeAny, {
-    export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
+    hour_bucket: z.ZodString }, "id" | "exported_at" | "date_bucket" | "hour_bucket">, "strip", z.ZodTypeAny, { export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
     download_count: number;
     user_id?: string | undefined;
@@ -731,9 +650,7 @@ export declare const CreateExportAnalyticsSchema: z.ZodObject<Omit<{
     ip_address?: string | undefined;
     export_job_id?: string | undefined;
     export_size?: number | undefined;
-    processing_time?: number | undefined;
-}, {
-    export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
+    processing_time?: number | undefined }, { export_format: "json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml";
     project_id: string;
     user_id?: string | undefined;
     template_id?: string | undefined;
@@ -742,10 +659,8 @@ export declare const CreateExportAnalyticsSchema: z.ZodObject<Omit<{
     export_job_id?: string | undefined;
     download_count?: number | undefined;
     export_size?: number | undefined;
-    processing_time?: number | undefined;
-}>;
-export declare const ExportFormatDefinitionSchema: z.ZodObject<{
-    id: z.ZodString;
+    processing_time?: number | undefined }>;
+export declare const ExportFormatDefinitionSchema: z.ZodObject<{ id: z.ZodString;
     format_name: z.ZodString;
     display_name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
@@ -761,9 +676,7 @@ export declare const ExportFormatDefinitionSchema: z.ZodObject<{
     is_enabled: z.ZodDefault<z.ZodBoolean>;
     is_system_format: z.ZodDefault<z.ZodBoolean>;
     created_at: z.ZodString;
-    updated_at: z.ZodString;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    updated_at: z.ZodString }, "strip", z.ZodTypeAny, { id: string;
     created_at: string;
     updated_at: string;
     is_enabled: boolean;
@@ -779,9 +692,7 @@ export declare const ExportFormatDefinitionSchema: z.ZodObject<{
     is_system_format: boolean;
     description?: string | undefined;
     max_file_size?: number | undefined;
-    validation_schema?: Record<string, unknown> | undefined;
-}, {
-    id: string;
+    validation_schema?: Record<string, unknown> | undefined }, { id: string;
     created_at: string;
     updated_at: string;
     format_name: string;
@@ -797,10 +708,8 @@ export declare const ExportFormatDefinitionSchema: z.ZodObject<{
     max_file_size?: number | undefined;
     default_options?: Record<string, unknown> | undefined;
     validation_schema?: Record<string, unknown> | undefined;
-    is_system_format?: boolean | undefined;
-}>;
-export declare const CreateExportFormatDefinitionSchema: z.ZodObject<Omit<{
-    id: z.ZodString;
+    is_system_format?: boolean | undefined }>;
+export declare const CreateExportFormatDefinitionSchema: z.ZodObject<Omit<{ id: z.ZodString;
     format_name: z.ZodString;
     display_name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
@@ -816,9 +725,7 @@ export declare const CreateExportFormatDefinitionSchema: z.ZodObject<Omit<{
     is_enabled: z.ZodDefault<z.ZodBoolean>;
     is_system_format: z.ZodDefault<z.ZodBoolean>;
     created_at: z.ZodString;
-    updated_at: z.ZodString;
-}, "id" | "created_at" | "updated_at">, "strip", z.ZodTypeAny, {
-    is_enabled: boolean;
+    updated_at: z.ZodString }, "id" | "created_at" | "updated_at">, "strip", z.ZodTypeAny, { is_enabled: boolean;
     format_name: string;
     display_name: string;
     file_extension: string;
@@ -831,9 +738,7 @@ export declare const CreateExportFormatDefinitionSchema: z.ZodObject<Omit<{
     is_system_format: boolean;
     description?: string | undefined;
     max_file_size?: number | undefined;
-    validation_schema?: Record<string, unknown> | undefined;
-}, {
-    format_name: string;
+    validation_schema?: Record<string, unknown> | undefined }, { format_name: string;
     display_name: string;
     file_extension: string;
     mime_type: string;
@@ -846,10 +751,8 @@ export declare const CreateExportFormatDefinitionSchema: z.ZodObject<Omit<{
     max_file_size?: number | undefined;
     default_options?: Record<string, unknown> | undefined;
     validation_schema?: Record<string, unknown> | undefined;
-    is_system_format?: boolean | undefined;
-}>;
-export declare const UpdateExportFormatDefinitionSchema: z.ZodObject<{
-    description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
+    is_system_format?: boolean | undefined }>;
+export declare const UpdateExportFormatDefinitionSchema: z.ZodObject<{ description: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     is_enabled: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
     format_name: z.ZodOptional<z.ZodString>;
     display_name: z.ZodOptional<z.ZodString>;
@@ -862,9 +765,7 @@ export declare const UpdateExportFormatDefinitionSchema: z.ZodObject<{
     max_file_size: z.ZodOptional<z.ZodOptional<z.ZodNumber>>;
     default_options: z.ZodOptional<z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
     validation_schema: z.ZodOptional<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnknown>>>;
-    is_system_format: z.ZodOptional<z.ZodDefault<z.ZodBoolean>>;
-}, "strip", z.ZodTypeAny, {
-    description?: string | undefined;
+    is_system_format: z.ZodOptional<z.ZodDefault<z.ZodBoolean>> }, "strip", z.ZodTypeAny, { description?: string | undefined;
     is_enabled?: boolean | undefined;
     format_name?: string | undefined;
     display_name?: string | undefined;
@@ -877,9 +778,7 @@ export declare const UpdateExportFormatDefinitionSchema: z.ZodObject<{
     max_file_size?: number | undefined;
     default_options?: Record<string, unknown> | undefined;
     validation_schema?: Record<string, unknown> | undefined;
-    is_system_format?: boolean | undefined;
-}, {
-    description?: string | undefined;
+    is_system_format?: boolean | undefined }, { description?: string | undefined;
     is_enabled?: boolean | undefined;
     format_name?: string | undefined;
     display_name?: string | undefined;
@@ -892,31 +791,24 @@ export declare const UpdateExportFormatDefinitionSchema: z.ZodObject<{
     max_file_size?: number | undefined;
     default_options?: Record<string, unknown> | undefined;
     validation_schema?: Record<string, unknown> | undefined;
-    is_system_format?: boolean | undefined;
-}>;
-export declare const CommonExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+    is_system_format?: boolean | undefined }>;
+export declare const CommonExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    include_metadata: boolean;
+}, "strip", z.ZodTypeAny, { include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
     include_branching: boolean;
@@ -926,12 +818,10 @@ export declare const CommonExportOptionsSchema: z.ZodObject<{
     encrypt_output: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    include_metadata?: boolean | undefined;
+}, { include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
     include_branching?: boolean | undefined;
@@ -939,40 +829,31 @@ export declare const CommonExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
     encryption_key?: string | undefined;
 }>;
-export declare const JsonExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const JsonExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    pretty: z.ZodDefault<z.ZodBoolean>;
+} & { pretty: z.ZodDefault<z.ZodBoolean>;
     include_schema: z.ZodDefault<z.ZodBoolean>;
-    array_format: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    pretty: boolean;
+    array_format: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { pretty: boolean;
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -985,12 +866,10 @@ export declare const JsonExportOptionsSchema: z.ZodObject<{
     array_format: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    pretty?: boolean | undefined;
+}, { pretty?: boolean | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
@@ -999,8 +878,7 @@ export declare const JsonExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1008,32 +886,24 @@ export declare const JsonExportOptionsSchema: z.ZodObject<{
     include_schema?: boolean | undefined;
     array_format?: boolean | undefined;
 }>;
-export declare const YamlExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const YamlExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    include_comments: z.ZodDefault<z.ZodBoolean>;
+} & { include_comments: z.ZodDefault<z.ZodBoolean>;
     flow_style: z.ZodDefault<z.ZodBoolean>;
-    explicit_start: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    include_metadata: boolean;
+    explicit_start: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
     include_branching: boolean;
@@ -1045,12 +915,10 @@ export declare const YamlExportOptionsSchema: z.ZodObject<{
     explicit_start: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    include_metadata?: boolean | undefined;
+}, { include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
     include_branching?: boolean | undefined;
@@ -1058,8 +926,7 @@ export declare const YamlExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1067,34 +934,26 @@ export declare const YamlExportOptionsSchema: z.ZodObject<{
     flow_style?: boolean | undefined;
     explicit_start?: boolean | undefined;
 }>;
-export declare const XmlExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const XmlExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    pretty: z.ZodDefault<z.ZodBoolean>;
+} & { pretty: z.ZodDefault<z.ZodBoolean>;
     include_schema: z.ZodDefault<z.ZodBoolean>;
     namespace: z.ZodOptional<z.ZodString>;
-    root_element: z.ZodDefault<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    pretty: boolean;
+    root_element: z.ZodDefault<z.ZodString> }, "strip", z.ZodTypeAny, { pretty: boolean;
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -1107,13 +966,11 @@ export declare const XmlExportOptionsSchema: z.ZodObject<{
     root_element: string;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
     namespace?: string | undefined;
-}, {
-    pretty?: boolean | undefined;
+}, { pretty?: boolean | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
@@ -1122,8 +979,7 @@ export declare const XmlExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1132,34 +988,26 @@ export declare const XmlExportOptionsSchema: z.ZodObject<{
     namespace?: string | undefined;
     root_element?: string | undefined;
 }>;
-export declare const CsvExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const CsvExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    delimiter: z.ZodDefault<z.ZodString>;
+} & { delimiter: z.ZodDefault<z.ZodString>;
     include_headers: z.ZodDefault<z.ZodBoolean>;
     quote_all: z.ZodDefault<z.ZodBoolean>;
-    flatten_objects: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    include_metadata: boolean;
+    flatten_objects: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
     include_branching: boolean;
@@ -1173,12 +1021,10 @@ export declare const CsvExportOptionsSchema: z.ZodObject<{
     flatten_objects: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    include_metadata?: boolean | undefined;
+}, { include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
     include_branching?: boolean | undefined;
@@ -1186,8 +1032,7 @@ export declare const CsvExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1197,34 +1042,26 @@ export declare const CsvExportOptionsSchema: z.ZodObject<{
     quote_all?: boolean | undefined;
     flatten_objects?: boolean | undefined;
 }>;
-export declare const MarkdownExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const MarkdownExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    include_toc: z.ZodDefault<z.ZodBoolean>;
+} & { include_toc: z.ZodDefault<z.ZodBoolean>;
     format: z.ZodDefault<z.ZodEnum<["github", "commonmark"]>>;
     heading_level: z.ZodDefault<z.ZodNumber>;
-    code_blocks: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    format: "github" | "commonmark";
+    code_blocks: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { format: "github" | "commonmark";
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -1238,12 +1075,10 @@ export declare const MarkdownExportOptionsSchema: z.ZodObject<{
     code_blocks: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    format?: "github" | "commonmark" | undefined;
+}, { format?: "github" | "commonmark" | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
@@ -1252,8 +1087,7 @@ export declare const MarkdownExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1262,50 +1096,39 @@ export declare const MarkdownExportOptionsSchema: z.ZodObject<{
     heading_level?: number | undefined;
     code_blocks?: boolean | undefined;
 }>;
-export declare const PdfExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const PdfExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    page_size: z.ZodDefault<z.ZodEnum<["A4", "A3", "Letter", "Legal"]>>;
+} & { page_size: z.ZodDefault<z.ZodEnum<["A4", "A3", "Letter", "Legal"]>>;
     orientation: z.ZodDefault<z.ZodEnum<["portrait", "landscape"]>>;
     include_images: z.ZodDefault<z.ZodBoolean>;
     font_size: z.ZodDefault<z.ZodNumber>;
-    margins: z.ZodDefault<z.ZodObject<{,
+    margins: z.ZodDefault<z.ZodObject<{ }
         top: z.ZodDefault<z.ZodNumber>;
         right: z.ZodDefault<z.ZodNumber>;
         bottom: z.ZodDefault<z.ZodNumber>;
         left: z.ZodDefault<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        top: number;
+    }, "strip", z.ZodTypeAny, { top: number;
         bottom: number;
         left: number;
-        right: number;
-    }, {
-        top?: number | undefined;
+        right: number }, { top?: number | undefined;
         bottom?: number | undefined;
         left?: number | undefined;
-        right?: number | undefined;
-    }>>;
-}, "strip", z.ZodTypeAny, {
-    orientation: "portrait" | "landscape";
+        right?: number | undefined }>>;
+}, "strip", z.ZodTypeAny, { orientation: "portrait" | "landscape";
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -1321,16 +1144,12 @@ export declare const PdfExportOptionsSchema: z.ZodObject<{
         top: number;
         bottom: number;
         left: number;
-        right: number;
-    };
-    date_range?: {
-        start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        right: number };
+    date_range?: { start?: string | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    orientation?: "portrait" | "landscape" | undefined;
+}, { orientation?: "portrait" | "landscape" | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
@@ -1339,8 +1158,7 @@ export declare const PdfExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1348,41 +1166,31 @@ export declare const PdfExportOptionsSchema: z.ZodObject<{
     page_size?: "A4" | "A3" | "Letter" | "Legal" | undefined;
     include_images?: boolean | undefined;
     font_size?: number | undefined;
-    margins?: {
-        top?: number | undefined;
+    margins?: { top?: number | undefined;
         bottom?: number | undefined;
         left?: number | undefined;
-        right?: number | undefined;
-    } | undefined;
+        right?: number | undefined } | undefined;
 }>;
-export declare const HtmlExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const HtmlExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    include_css: z.ZodDefault<z.ZodBoolean>;
+} & { include_css: z.ZodDefault<z.ZodBoolean>;
     standalone: z.ZodDefault<z.ZodBoolean>;
     theme: z.ZodDefault<z.ZodEnum<["default", "dark", "light"]>>;
-    minify: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    theme: "default" | "light" | "dark";
+    minify: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { theme: "default" | "light" | "dark";
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -1396,12 +1204,10 @@ export declare const HtmlExportOptionsSchema: z.ZodObject<{
     minify: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    theme?: "default" | "light" | "dark" | undefined;
+}, { theme?: "default" | "light" | "dark" | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
@@ -1410,8 +1216,7 @@ export declare const HtmlExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1420,33 +1225,25 @@ export declare const HtmlExportOptionsSchema: z.ZodObject<{
     standalone?: boolean | undefined;
     minify?: boolean | undefined;
 }>;
-export declare const ZipExportOptionsSchema: z.ZodObject<{
-    include_attribution: z.ZodDefault<z.ZodBoolean>;
+export declare const ZipExportOptionsSchema: z.ZodObject<{ include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    compression_level: z.ZodDefault<z.ZodNumber>;
+} & { compression_level: z.ZodDefault<z.ZodNumber>;
     include_metadata: z.ZodDefault<z.ZodBoolean>;
     separate_files: z.ZodDefault<z.ZodBoolean>;
-    folder_structure: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    include_metadata: boolean;
+    folder_structure: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
     include_branching: boolean;
@@ -1459,12 +1256,10 @@ export declare const ZipExportOptionsSchema: z.ZodObject<{
     folder_structure: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    include_metadata?: boolean | undefined;
+}, { include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
     include_branching?: boolean | undefined;
@@ -1472,8 +1267,7 @@ export declare const ZipExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1482,29 +1276,23 @@ export declare const ZipExportOptionsSchema: z.ZodObject<{
     separate_files?: boolean | undefined;
     folder_structure?: boolean | undefined;
 }>;
-export declare const VFXExportOptionsSchema: z.ZodObject<{
-    include_metadata: z.ZodDefault<z.ZodBoolean>;
+export declare const VFXExportOptionsSchema: z.ZodObject<{ include_metadata: z.ZodDefault<z.ZodBoolean>;
     include_attribution: z.ZodDefault<z.ZodBoolean>;
     include_history: z.ZodDefault<z.ZodBoolean>;
     include_branching: z.ZodDefault<z.ZodBoolean>;
     include_comments: z.ZodDefault<z.ZodBoolean>;
     include_attachments: z.ZodDefault<z.ZodBoolean>;
-    date_range: z.ZodOptional<z.ZodObject<{,
+    date_range: z.ZodOptional<z.ZodObject<{ }
         start: z.ZodOptional<z.ZodString>;
         end: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }, {
-        start?: string | undefined;
-        end?: string | undefined;
-    }>>;
+    }, "strip", z.ZodTypeAny, { start?: string | undefined;
+        end?: string | undefined }, { start?: string | undefined;
+        end?: string | undefined }>>;
     user_filters: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     compress_output: z.ZodDefault<z.ZodBoolean>;
     encrypt_output: z.ZodDefault<z.ZodBoolean>;
     encryption_key: z.ZodOptional<z.ZodString>;
-} & {
-    quality: z.ZodDefault<z.ZodEnum<["production", "preview", "debug"]>>;
+} & { quality: z.ZodDefault<z.ZodEnum<["production", "preview", "debug"]>>;
     include_debug_info: z.ZodDefault<z.ZodBoolean>;
     include_historical_data: z.ZodDefault<z.ZodBoolean>;
     include_performance_data: z.ZodDefault<z.ZodBoolean>;
@@ -1520,9 +1308,7 @@ export declare const VFXExportOptionsSchema: z.ZodObject<{
     include_reproducibility_data: z.ZodDefault<z.ZodBoolean>;
     exact_reproduction: z.ZodDefault<z.ZodBoolean>;
     preserve_node_configuration: z.ZodDefault<z.ZodBoolean>;
-    include_rng_states: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    quality: "debug" | "preview" | "production";
+    include_rng_states: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { quality: "debug" | "preview" | "production";
     include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
@@ -1549,12 +1335,10 @@ export declare const VFXExportOptionsSchema: z.ZodObject<{
     include_rng_states: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}, {
-    quality?: "debug" | "preview" | "production" | undefined;
+}, { quality?: "debug" | "preview" | "production" | undefined;
     include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
@@ -1563,8 +1347,7 @@ export declare const VFXExportOptionsSchema: z.ZodObject<{
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;
@@ -1586,77 +1369,59 @@ export declare const VFXExportOptionsSchema: z.ZodObject<{
     preserve_node_configuration?: boolean | undefined;
     include_rng_states?: boolean | undefined;
 }>;
-export declare const ExportResultSchema: z.ZodObject<{
-    job_id: z.ZodString;
+export declare const ExportResultSchema: z.ZodObject<{ job_id: z.ZodString;
     status: z.ZodEnum<["pending", "processing", "completed", "failed", "cancelled"]>;
     download_url: z.ZodOptional<z.ZodString>;
     file_size: z.ZodOptional<z.ZodNumber>;
     expires_at: z.ZodOptional<z.ZodString>;
     share_token: z.ZodOptional<z.ZodString>;
-    error_message: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    status: "processing" | "pending" | "completed" | "failed" | "cancelled";
+    error_message: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { status: "processing" | "pending" | "completed" | "failed" | "cancelled";
     job_id: string;
     expires_at?: string | undefined;
     download_url?: string | undefined;
     error_message?: string | undefined;
     share_token?: string | undefined;
-    file_size?: number | undefined;
-}, {
-    status: "processing" | "pending" | "completed" | "failed" | "cancelled";
+    file_size?: number | undefined }, { status: "processing" | "pending" | "completed" | "failed" | "cancelled";
     job_id: string;
     expires_at?: string | undefined;
     download_url?: string | undefined;
     error_message?: string | undefined;
     share_token?: string | undefined;
-    file_size?: number | undefined;
-}>;
-export declare const ExportProgressSchema: z.ZodObject<{
-    job_id: z.ZodString;
+    file_size?: number | undefined }>;
+export declare const ExportProgressSchema: z.ZodObject<{ job_id: z.ZodString;
     status: z.ZodEnum<["pending", "processing", "completed", "failed", "cancelled"]>;
     progress_percentage: z.ZodNumber;
     current_step: z.ZodOptional<z.ZodString>;
     estimated_completion: z.ZodOptional<z.ZodString>;
-    processing_log: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    status: "processing" | "pending" | "completed" | "failed" | "cancelled";
+    processing_log: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { status: "processing" | "pending" | "completed" | "failed" | "cancelled";
     progress_percentage: number;
     job_id: string;
     processing_log?: string | undefined;
     current_step?: string | undefined;
-    estimated_completion?: string | undefined;
-}, {
-    status: "processing" | "pending" | "completed" | "failed" | "cancelled";
+    estimated_completion?: string | undefined }, { status: "processing" | "pending" | "completed" | "failed" | "cancelled";
     progress_percentage: number;
     job_id: string;
     processing_log?: string | undefined;
     current_step?: string | undefined;
-    estimated_completion?: string | undefined;
-}>;
-export declare const ExportStatisticsSchema: z.ZodObject<{
-    project_id: z.ZodString;
+    estimated_completion?: string | undefined }>;
+export declare const ExportStatisticsSchema: z.ZodObject<{ project_id: z.ZodString;
     total_exports: z.ZodNumber;
     exports_by_format: z.ZodRecord<z.ZodEnum<["json", "yaml", "xml", "csv", "markdown", "pdf", "html", "zip", "vfx"]>, z.ZodNumber>;
     exports_by_type: z.ZodRecord<z.ZodEnum<["version", "branch", "comparison", "full_project"]>, z.ZodNumber>;
     total_size: z.ZodNumber;
     average_processing_time: z.ZodNumber;
-    most_used_templates: z.ZodArray<z.ZodObject<{,
+    most_used_templates: z.ZodArray<z.ZodObject<{ }
         template_id: z.ZodString;
         template_name: z.ZodString;
         usage_count: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        usage_count: number;
+    }, "strip", z.ZodTypeAny, { usage_count: number;
         template_id: string;
-        template_name: string;
-    }, {
-        usage_count: number;
+        template_name: string }, { usage_count: number;
         template_id: string;
-        template_name: string;
-    }>, "many">;
+        template_name: string }>, "many">;
     success_rate: z.ZodNumber;
     last_export_at: z.ZodOptional<z.ZodString>;
-}, "strip", z.ZodTypeAny, {
-    project_id: string;
+}, "strip", z.ZodTypeAny, { project_id: string;
     total_exports: number;
     exports_by_format: Partial<Record<"json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml", number>>;
     exports_by_type: Partial<Record<"version" | "branch" | "comparison" | "full_project", number>>;
@@ -1665,12 +1430,10 @@ export declare const ExportStatisticsSchema: z.ZodObject<{
     most_used_templates: {
         usage_count: number;
         template_id: string;
-        template_name: string;
-    }[];
+        template_name: string }[];
     success_rate: number;
     last_export_at?: string | undefined;
-}, {
-    project_id: string;
+}, { project_id: string;
     total_exports: number;
     exports_by_format: Partial<Record<"json" | "yaml" | "csv" | "markdown" | "html" | "vfx" | "zip" | "pdf" | "xml", number>>;
     exports_by_type: Partial<Record<"version" | "branch" | "comparison" | "full_project", number>>;
@@ -1679,8 +1442,7 @@ export declare const ExportStatisticsSchema: z.ZodObject<{
     most_used_templates: {
         usage_count: number;
         template_id: string;
-        template_name: string;
-    }[];
+        template_name: string }[];
     success_rate: number;
     last_export_at?: string | undefined;
 }>;
@@ -1719,24 +1481,17 @@ export type ExportResult = z.infer<typeof ExportResultSchema>;
 export type ExportProgress = z.infer<typeof ExportProgressSchema>;
 export type ExportStatistics = z.infer<typeof ExportStatisticsSchema>;
 
-export type ExportTemplateWithStats = ExportTemplate & {
-    recent_jobs: ExportJob[];
+export type ExportTemplateWithStats = ExportTemplate & { recent_jobs: ExportJob[];
     avg_processing_time: number;
-    success_rate: number;
-};
+    success_rate: number };
 
-export type ExportJobWithTemplate = ExportJob & {
-    template: ExportTemplate | null;
-    share: ExportShare | null;
-};
+export type ExportJobWithTemplate = ExportJob & { template: ExportTemplate | null;
+    share: ExportShare | null };
 
-export type ExportScheduleWithStats = ExportSchedule & {
-    template: ExportTemplate;
+export type ExportScheduleWithStats = ExportSchedule & { template: ExportTemplate;
     recent_jobs: ExportJob[];
-    next_scheduled_run: string;
-};
-export declare function validateExportOptions(format: ExportFormat, options: any): z.SafeParseSuccess<{
-    include_metadata: boolean;
+    next_scheduled_run: string };
+export declare function validateExportOptions(format: ExportFormat, options: any): z.SafeParseSuccess<{ include_metadata: boolean;
     include_attribution: boolean;
     include_history: boolean;
     include_branching: boolean;
@@ -1746,12 +1501,10 @@ export declare function validateExportOptions(format: ExportFormat, options: any
     encrypt_output: boolean;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     encryption_key?: string | undefined;
-}> | z.SafeParseError<{
-    include_metadata?: boolean | undefined;
+}> | z.SafeParseError<{ include_metadata?: boolean | undefined;
     include_attribution?: boolean | undefined;
     include_history?: boolean | undefined;
     include_branching?: boolean | undefined;
@@ -1759,8 +1512,7 @@ export declare function validateExportOptions(format: ExportFormat, options: any
     include_attachments?: boolean | undefined;
     date_range?: {
         start?: string | undefined;
-        end?: string | undefined;
-    } | undefined;
+        end?: string | undefined } | undefined;
     user_filters?: string[] | undefined;
     compress_output?: boolean | undefined;
     encrypt_output?: boolean | undefined;

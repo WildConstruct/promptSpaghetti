@@ -57,13 +57,13 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           challengeType: 'location',
           metadata: {
             currentLocation: 'New York'
-          }
-        }
+
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -86,7 +86,7 @@ describe('Enhanced Security API Routes', () => {
           details: expect.objectContaining({
             challengeType: 'location',
             challengeId: body.challengeId
-  }
+
   }
       );
     });
@@ -98,10 +98,10 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           challengeType: 'device'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -119,13 +119,13 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           challengeType: 'risk',
           metadata: {
             riskFactors: ['unusual_location', 'new_device']
-          }
-        }
+
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -143,10 +143,10 @@ describe('Enhanced Security API Routes', () => {
         url: '/auth/security/challenge',
         headers: {
           'content-type': 'application/json'
-  }
+
         payload: {
           challengeType: 'location'
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -159,10 +159,10 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           challengeType: 'invalid_type'
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -177,12 +177,12 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           action: 'terminate',
           sessionId: 'session-123',
           reason: 'User request'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -200,7 +200,7 @@ describe('Enhanced Security API Routes', () => {
           details: expect.objectContaining({
             action: 'terminate',
             sessionId: 'session-123'
-  }
+
   }
       );
     });
@@ -212,11 +212,11 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           action: 'terminate_all',
           reason: 'Security incident'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -234,11 +234,11 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           action: 'extend',
           sessionId: 'session-456'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -255,10 +255,10 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           action: 'terminate'
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -272,10 +272,10 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           action: 'invalid_action'
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -291,12 +291,12 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           includeRiskFactors: true,
           includeBehaviorAnalysis: true,
           includeDeviceFingerprint: true
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -322,7 +322,7 @@ describe('Enhanced Security API Routes', () => {
         expect(factor).toHaveProperty('factor');
         expect(factor).toHaveProperty('impact');
         expect(factor).toHaveProperty('description');
-      }
+
     });
 
     test('should handle minimal risk assessment', async () => {
@@ -332,12 +332,12 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           includeRiskFactors: false,
           includeBehaviorAnalysis: false,
           includeDeviceFingerprint: false
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -353,7 +353,7 @@ describe('Enhanced Security API Routes', () => {
           details: expect.objectContaining({
             riskScore: body.riskScore,
             riskLevel: body.riskLevel
-  }
+
   }
       );
     });
@@ -367,13 +367,13 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           credentialRequestOptions: {
             allowCredentials: []
-  }
+
           userVerification: 'preferred'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -408,11 +408,11 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           credentialRequestOptions: {},
           userVerification: 'required'
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -434,15 +434,15 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           frameworks: ['SOC2', 'GDPR'],
           dateRange: {
             start: '2024-01-01T00:00:00Z',
             end: '2024-01-31T23:59:59Z'
-  }
+
           includeMetrics: true
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -468,7 +468,7 @@ describe('Enhanced Security API Routes', () => {
           userId: adminUser.id,
           details: expect.objectContaining({
             frameworks: ['SOC2', 'GDPR']
-  }
+
   }
       );
     });
@@ -483,10 +483,10 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           frameworks: ['SOC2']
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -504,7 +504,7 @@ describe('Enhanced Security API Routes', () => {
         url: '/auth/security/monitoring/dashboard',
         headers: {
           'authorization': authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -544,7 +544,7 @@ describe('Enhanced Security API Routes', () => {
         url: '/auth/security/monitoring/dashboard',
         headers: {
           'authorization': authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(403);
@@ -605,10 +605,10 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           challengeType: 'location'
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -621,7 +621,7 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: 'invalid json'
       });
 
@@ -635,7 +635,7 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {} // Missing action field
       });
 
@@ -661,7 +661,7 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'origin': 'https://app.example.com',
           'access-control-request-method': 'POST'
-        }
+
       });
 
       expect([200, 204]).toContain(response.statusCode);
@@ -678,7 +678,7 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {}
       });
 
@@ -694,10 +694,10 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           challengeType: 'invalid_enum_value'
-        }
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -713,13 +713,13 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           dateRange: {
             start: 'invalid-date',
             end: '2024-01-31T23:59:59Z'
-          }
-        }
+
+
       });
 
       expect(response.statusCode).toBe(400);
@@ -732,11 +732,11 @@ describe('Enhanced Security API Routes', () => {
         headers: {
           'authorization': authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           // Missing credentialRequestOptions
           userVerification: 'preferred'
-        }
+
       });
 
       expect(response.statusCode).toBe(400);

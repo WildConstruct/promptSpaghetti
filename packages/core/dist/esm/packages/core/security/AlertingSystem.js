@@ -5,6 +5,7 @@
  * Unified alerting system for security events across all analytics and monitoring systems
  */
 ;
+;
 metadata: {
     correlation_id ?  : string;
     threat_level: number; // 0-10 scale,
@@ -23,6 +24,12 @@ resolution ?  : {
     notes: string
 };
 ;
+custom_conditions ?  : Array < {
+    field: string,
+    operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'matches_regex',
+    value: any
+} > ;
+;
 actions: {
     notifications: NotificationAction;
     escalation ?  : EscalationAction;
@@ -36,6 +43,7 @@ suppression ?  : {
 created_by: string;
 created_at: number;
 last_modified: number;
+;
 ;
 ;
 escalation_settings: {
@@ -179,8 +187,8 @@ export class CrossSystemAlertingSystem {
                                                 {
                                                     return Array.from(this.alertRules.values());
                                                     // Alert management
-                                                    getActiveAlerts(filters ?  : {});
-                                                    severity ?  : SecurityEvent['severity'];
+                                                    getActiveAlerts(filters ?  : {}),
+                                                        severity ?  : SecurityEvent['severity'];
                                                     type ?  : SecurityEvent['type'];
                                                     source ?  : string;
                                                     status ?  : SecurityEvent['status'];
@@ -601,11 +609,11 @@ export class CrossSystemAlertingSystem {
                                     // Use custom template
                                     return this.renderTemplate(action.template, alert);
                                     // Default message format
-                                    return `🚨 Security Alert: ${alert.title},}
-  Severity: ${alert.severity.toUpperCase()},}
-  Type: ${alert.type},}
-  Source: ${alert.source},}
-  Time: ${new Date(alert.timestamp).toISOString()},}
+                                    return `🚨 Security Alert: ${alert.title},},
+  Severity: ${alert.severity.toUpperCase()},},
+  Type: ${alert.type},},
+  Source: ${alert.source},},
+  Time: ${new Date(alert.timestamp).toISOString()},},
   Description: ${alert.description}
 Affected Systems: ${alert.details.affected_systems.join(', ')}
 ${alert.details.ip_addresses ? `IP Addresses: ${alert.details.ip_addresses.join(', ')}` : ''}

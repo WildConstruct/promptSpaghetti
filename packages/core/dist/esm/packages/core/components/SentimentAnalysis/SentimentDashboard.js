@@ -124,11 +124,11 @@ const getSentimentColor = (sentiment) => {
                         }, children: [_jsx("div", { style: {
                                     backgroundColor: '#059669',
                                     width: `${sentimentDistribution.positive.percentage}%`
-                                } }), ", display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: '600' }} >", sentimentDistribution.positive.percentage > 10 &&
+                                } }), ", display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: '600'; }} >", sentimentDistribution.positive.percentage > 10 &&
                                 formatPercentage(sentimentDistribution.positive.percentage)] }), _jsx("div", { style: {
                             backgroundColor: '#6b7280',
                             width: `${sentimentDistribution.neutral.percentage}%`
-                        } }), ", display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: '600' }} >", sentimentDistribution.neutral.percentage > 10 &&
+                        } }), ", display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '12px', fontWeight: '600'; }} >", sentimentDistribution.neutral.percentage > 10 &&
                         formatPercentage(sentimentDistribution.neutral.percentage)] })
                 ,
                     _jsx("div", { style: {
@@ -322,7 +322,7 @@ const renderToxicityAnalysis = () => {
                         toxicityAnalytics.overallLevel === 'medium' ? '#fef3c7' :
                             toxicityAnalytics.overallLevel === 'high' ? '#fef2f2' : '#fecaca',
                     border: `1px solid ${getToxicityColor(toxicityAnalytics.overallLevel)}40`
-                } }), ", borderRadius: '8px', padding: '12px', marginBottom: '16px', textAlign: 'center' }}>", _jsxs("div", { style: {
+                } }), ", borderRadius: '8px', padding: '12px', marginBottom: '16px', textAlign: 'center'; }}>", _jsxs("div", { style: {
                     fontSize: '16px',
                     fontWeight: '600',
                     color: getToxicityColor(toxicityAnalytics.overallLevel),

@@ -17,8 +17,8 @@ import { Database } from '../database/DatabaseService';
 import { AuditService } from './AuditService';
 import { DataRetentionService } from './DataRetentionService';
 
-}
-}
+
+
 export interface MergeRequest {
   id: string;
   primaryAccountId: string;
@@ -31,12 +31,13 @@ export interface MergeRequest {
   processedAt?: Date;
   completedAt?: Date;
   errorMessage?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MergeStrategy {
   profileMerge: 'keep_primary' | 'keep_secondary' | 'merge_fields' | 'manual';
   preferenceMerge: 'keep_primary' | 'keep_secondary' | 'merge_categories';
@@ -44,12 +45,13 @@ export interface MergeStrategy {
   oauthAccountMerge: 'merge_all' | 'keep_primary' | 'manual';
   sessionHandling: 'transfer_all' | 'invalidate_secondary' | 'keep_separate';
   preserveAuditTrail: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ConflictResolution {
   field: string;
   primaryValue: any;
@@ -57,12 +59,13 @@ export interface ConflictResolution {
   resolution: 'keep_primary' | 'keep_secondary' | 'merge' | 'manual';
   resolvedValue?: any;
   reason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MergeSummary {
   mergeRequestId: string;
   primaryAccountId: string;
@@ -78,40 +81,43 @@ export interface MergeSummary {
     oauthAccounts: number;
     sessions: number;
     uploads: number;
-}
-}
+
+
+
   };
   conflictsResolved: number;
   errors: string[];
   rollbackPlan?: RollbackPlan;
-}
 
-}
-}
+
+
+
 export interface RollbackPlan {
   id: string;
   mergeRequestId: string;
   actions: RollbackAction[];
   createdAt: Date;
   expiresAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RollbackAction {
   type: 'restore_record' | 'delete_record' | 'update_field' | 'restore_relationship';
   table: string;
   recordId: string;
   originalData: any;
   currentData: any;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccountMergePreview {
   primaryAccount: {
     id: string;
@@ -120,8 +126,9 @@ export interface AccountMergePreview {
     projectCount: number;
     lastLoginAt: Date;
     createdAt: Date;
-}
-}
+
+
+
   };
   secondaryAccount: {
     id: string;
@@ -139,7 +146,7 @@ export interface AccountMergePreview {
     factors: string[];
     recommendations: string[];
   };
-}
+
 
 export class AccountMergingService {
   private db: Database;
@@ -155,7 +162,7 @@ export class AccountMergingService {
     this.db = db;
     this.auditService = auditService;
     this.retentionService = retentionService;
-  }
+
 
   /**
    * Preview an account merge to show conflicts and recommended strategy
@@ -169,7 +176,7 @@ export class AccountMergingService {
     // Validate accounts exist and are different
     if (primaryAccountId === secondaryAccountId) {
       throw new Error('Cannot merge an account with itself');
-    }
+
 
     const [primaryAccount, secondaryAccount] = await Promise.all([
       this.getAccountDetails(primaryAccountId),
@@ -178,10 +185,10 @@ export class AccountMergingService {
 
     if (!primaryAccount) {
       throw new Error(`Primary account ${primaryAccountId} not found`);
-    }
+
     if (!secondaryAccount) {
       throw new Error(`Secondary account ${secondaryAccountId} not found`);
-    }
+
 
     // Detect conflicts
     const conflicts = await this.detectConflicts(primaryAccount, secondaryAccount);
@@ -211,7 +218,7 @@ export class AccountMergingService {
         projectCount: primaryAccount.projectCount,
         lastLoginAt: primaryAccount.last_login_at,
         createdAt: primaryAccount.created_at
-  }
+
       secondaryAccount: {
         id: secondaryAccount.id,
         email: secondaryAccount.email,
@@ -219,13 +226,13 @@ export class AccountMergingService {
         projectCount: secondaryAccount.projectCount,
         lastLoginAt: secondaryAccount.last_login_at,
         createdAt: secondaryAccount.created_at
-  }
+
       conflicts,
       recommendedStrategy,
       estimatedDuration: this.estimateMergeDuration(primaryAccount, secondaryAccount),
       riskAssessment
     };
-  }
+
 
   /**
    * Create a merge request
@@ -280,7 +287,7 @@ export class AccountMergingService {
       id: created.id,
       ...mergeRequest
     };
-  }
+
 
   /**
    * Process a merge request
@@ -293,11 +300,11 @@ export class AccountMergingService {
     const mergeRequest = await this.getMergeRequest(mergeRequestId);
     if (!mergeRequest) {
       throw new Error(`Merge request ${mergeRequestId} not found`);
-    }
+
 
     if (mergeRequest.status !== 'pending') {
       throw new Error(`Merge request ${mergeRequestId} is not in pending status`);
-    }
+
 
     try {
       // Update status to in_progress
@@ -324,8 +331,7 @@ export class AccountMergingService {
       );
 
       return summary;
-
-    } catch (error) {
+ catch (error) {
       // Update status to failed
       const errorMessage = error instanceof Error ? error.message : String(error);
       await this.updateMergeRequestStatus(mergeRequestId, 'failed', errorMessage, new Date());
@@ -341,8 +347,8 @@ export class AccountMergingService {
       );
 
       throw error;
-    }
-  }
+
+
 
   /**
    * Execute the actual merge
@@ -367,7 +373,7 @@ export class AccountMergingService {
         oauthAccounts: 0,
         sessions: 0,
         uploads: 0
-  }
+
       conflictsResolved: mergeRequest.conflictResolutions.length,
       errors: [],
       rollbackPlan
@@ -383,8 +389,8 @@ export class AccountMergingService {
         summary.itemsMerged.profiles = profileResult.mergedCount;
         if (profileResult.errors.length > 0) {
           summary.errors.push(...profileResult.errors);
-        }
-      }
+
+
 
       // 2. Merge user preferences
       const prefResult = await this.mergeUserPreferences(mergeRequest);
@@ -421,15 +427,14 @@ export class AccountMergingService {
       await this.db.query('COMMIT');
 
       return summary;
-
-    } catch (error) {
+ catch (error) {
       // Rollback transaction
       await this.db.query('ROLLBACK');
       summary.errors.push(error instanceof Error ? error.message : String(error));
       summary.status = 'failed';
       throw error;
-    }
-  }
+
+
 
   /**
    * Merge user profiles
@@ -437,7 +442,7 @@ export class AccountMergingService {
   private async mergeUserProfiles(mergeRequest: MergeRequest): Promise<{
     mergedCount: number;
     errors: string[];
-  }> {
+> {
 
     const errors: string[] = [];
     
@@ -462,8 +467,7 @@ export class AccountMergingService {
         `, [mergeRequest.primaryAccountId, mergeRequest.secondaryAccountId]);
         
         return { mergedCount: 1, errors };
-        
-      } else if (strategy === 'merge_fields') {
+ else if (strategy === 'merge_fields') {
         // Apply conflict resolutions for individual fields
         for (const resolution of mergeRequest.conflictResolutions) {
           if (resolution.field.startsWith('profile.')) {
@@ -476,19 +480,18 @@ export class AccountMergingService {
               SET ${fieldName} = $1, updated_at = NOW()
               WHERE user_id = $2
             `, [value, mergeRequest.primaryAccountId]);
-          }
-        }
+
+
         
         return { mergedCount: 1, errors };
-      }
+
 
       return { mergedCount: 0, errors };
-
-    } catch (error) {
+ catch (error) {
       errors.push(`Profile merge failed: ${error}`);
       return { mergedCount: 0, errors };
-    }
-  }
+
+
 
   /**
    * Merge user preferences
@@ -496,7 +499,7 @@ export class AccountMergingService {
   private async mergeUserPreferences(mergeRequest: MergeRequest): Promise<{
     mergedCount: number;
     errors: string[];
-  }> {
+> {
 
     const errors: string[] = [];
     let mergedCount = 0;
@@ -520,7 +523,7 @@ export class AccountMergingService {
               SET settings = settings || $1, updated_at = NOW()
               WHERE user_id = $2 AND category = $3
             `, [pref.settings, mergeRequest.primaryAccountId, pref.category]);
-          } else {
+ else {
             // Replace entire category
             await this.db.query(`
               INSERT INTO user_preferences (user_id, category, settings)
@@ -528,18 +531,17 @@ export class AccountMergingService {
               ON CONFLICT (user_id, category) 
               DO UPDATE SET settings = $3, updated_at = NOW()
             `, [mergeRequest.primaryAccountId, pref.category, pref.settings]);
-          }
+
           mergedCount++;
-        }
-      }
+
+
 
       return { mergedCount, errors };
-
-    } catch (error) {
+ catch (error) {
       errors.push(`Preferences merge failed: ${error}`);
       return { mergedCount: 0, errors };
-    }
-  }
+
+
 
   /**
    * Merge project data
@@ -547,7 +549,7 @@ export class AccountMergingService {
   private async mergeProjectData(mergeRequest: MergeRequest): Promise<{
     mergedCount: number;
     errors: string[];
-  }> {
+> {
 
     const errors: string[] = [];
     let mergedCount = 0;
@@ -565,15 +567,14 @@ export class AccountMergingService {
         `, [mergeRequest.primaryAccountId, mergeRequest.secondaryAccountId]);
 
         mergedCount = result.rowCount || 0;
-      }
+
 
       return { mergedCount, errors };
-
-    } catch (error) {
+ catch (error) {
       errors.push(`Project data merge failed: ${error}`);
       return { mergedCount: 0, errors };
-    }
-  }
+
+
 
   /**
    * Merge OAuth accounts
@@ -581,7 +582,7 @@ export class AccountMergingService {
   private async mergeOAuthAccounts(mergeRequest: MergeRequest): Promise<{
     mergedCount: number;
     errors: string[];
-  }> {
+> {
 
     const errors: string[] = [];
     let mergedCount = 0;
@@ -604,7 +605,7 @@ export class AccountMergingService {
             DELETE FROM oauth_accounts 
             WHERE user_id = $1 AND provider = ANY($2)
           `, [mergeRequest.secondaryAccountId, duplicates.rows.map(r => r.provider)]);
-        }
+
 
         // Transfer remaining OAuth accounts
         const result = await this.db.query(`
@@ -615,15 +616,14 @@ export class AccountMergingService {
         `, [mergeRequest.primaryAccountId, mergeRequest.secondaryAccountId]);
 
         mergedCount = result.rowCount || 0;
-      }
+
 
       return { mergedCount, errors };
-
-    } catch (error) {
+ catch (error) {
       errors.push(`OAuth accounts merge failed: ${error}`);
       return { mergedCount: 0, errors };
-    }
-  }
+
+
 
   /**
    * Handle session merging/transfer
@@ -631,7 +631,7 @@ export class AccountMergingService {
   private async handleSessions(mergeRequest: MergeRequest): Promise<{
     mergedCount: number;
     errors: string[];
-  }> {
+> {
 
     const errors: string[] = [];
     let mergedCount = 0;
@@ -649,22 +649,21 @@ export class AccountMergingService {
         `, [mergeRequest.primaryAccountId, mergeRequest.secondaryAccountId]);
 
         mergedCount = result.rowCount || 0;
-      } else if (strategy === 'invalidate_secondary') {
+ else if (strategy === 'invalidate_secondary') {
         // Revoke all secondary account sessions
         await this.db.query(`
           UPDATE user_sessions 
           SET revoked = true, revoked_at = NOW()
           WHERE user_id = $1
         `, [mergeRequest.secondaryAccountId]);
-      }
+
 
       return { mergedCount, errors };
-
-    } catch (error) {
+ catch (error) {
       errors.push(`Session handling failed: ${error}`);
       return { mergedCount: 0, errors };
-    }
-  }
+
+
 
   /**
    * Merge file uploads
@@ -672,7 +671,7 @@ export class AccountMergingService {
   private async mergeFileUploads(mergeRequest: MergeRequest): Promise<{
     mergedCount: number;
     errors: string[];
-  }> {
+> {
 
     const errors: string[] = [];
 
@@ -686,12 +685,11 @@ export class AccountMergingService {
       `, [mergeRequest.primaryAccountId, mergeRequest.secondaryAccountId]);
 
       return { mergedCount: result.rowCount || 0, errors };
-
-    } catch (error) {
+ catch (error) {
       errors.push(`File uploads merge failed: ${error}`);
       return { mergedCount: 0, errors };
-    }
-  }
+
+
 
   /**
    * Merge API keys
@@ -704,7 +702,7 @@ export class AccountMergingService {
       SET user_id = $1, updated_at = NOW()
       WHERE user_id = $2 AND status = 'active'
     `, [mergeRequest.primaryAccountId, mergeRequest.secondaryAccountId]);
-  }
+
 
   /**
    * Get account details for merging
@@ -730,7 +728,7 @@ export class AccountMergingService {
 
     const result = await this.db.query(query, [accountId]);
     return result.rows[0] || null;
-  }
+
 
   /**
    * Detect conflicts between accounts
@@ -754,8 +752,8 @@ export class AccountMergingService {
           secondaryValue: secondaryAccount[field],
           resolution: 'keep_primary' // Default resolution
         });
-      }
-    }
+
+
 
     // Email conflict (always exists for different accounts)
     if (primaryAccount.email !== secondaryAccount.email) {
@@ -766,10 +764,10 @@ export class AccountMergingService {
         resolution: 'keep_primary',
         reason: 'Primary account email takes precedence'
       });
-    }
+
 
     return conflicts;
-  }
+
 
   /**
    * Generate recommended merge strategy
@@ -791,7 +789,7 @@ export class AccountMergingService {
       sessionHandling: 'transfer_all',
       preserveAuditTrail: true
     };
-  }
+
 
   /**
    * Assess merge risk level
@@ -804,7 +802,7 @@ export class AccountMergingService {
     level: 'low' | 'medium' | 'high';
     factors: string[];
     recommendations: string[];
-  } {
+ {
     const factors: string[] = [];
     const recommendations: string[] = [];
     let riskScore = 0;
@@ -813,13 +811,13 @@ export class AccountMergingService {
       factors.push(`High number of conflicts (${conflicts.length})`);
       recommendations.push('Review all conflicts carefully before proceeding');
       riskScore += 2;
-    }
+
 
     if (primaryAccount.project_count > 10 || secondaryAccount.project_count > 10) {
       factors.push('Large amount of project data to merge');
       recommendations.push('Consider backing up project data before merge');
       riskScore += 1;
-    }
+
 
     const accountAgeDays = Math.abs(
       new Date(primaryAccount.created_at).getTime() - 
@@ -830,22 +828,22 @@ export class AccountMergingService {
       factors.push('Accounts have significant age difference');
       recommendations.push('Verify both accounts belong to the same user');
       riskScore += 1;
-    }
+
 
     let level: 'low' | 'medium' | 'high';
     if (riskScore >= 3) {
       level = 'high';
       recommendations.push('Consider manual review or staged merge approach');
-    } else if (riskScore >= 1) {
+ else if (riskScore >= 1) {
       level = 'medium';
       recommendations.push('Proceed with caution and monitor merge process');
-    } else {
+ else {
       level = 'low';
       recommendations.push('Low risk merge - can proceed automatically');
-    }
+
 
     return { level, factors, recommendations };
-  }
+
 
   /**
    * Estimate merge duration in milliseconds
@@ -862,7 +860,7 @@ export class AccountMergingService {
     estimatedMs += 5000; // 5 seconds base conflict resolution time
     
     return estimatedMs;
-  }
+
 
   /**
    * Create rollback plan
@@ -883,13 +881,12 @@ export class AccountMergingService {
 
     this.rollbackPlans.set(rollbackPlan.id, rollbackPlan);
     return rollbackPlan;
-  }
+
 
   /**
    * Additional helper methods would go here:
    * - getMergeRequest()
-   * - updateMergeRequestStatus()
-   * - validateMergeRequest(* - rollbackMerge(* etc.
+   * - updateMergeRequestStatus(* - validateMergeRequest(* - rollbackMerge(* etc.
    */
 
   private async getMergeRequest(mergeRequestId: string): Promise<MergeRequest | null> {
@@ -901,7 +898,7 @@ export class AccountMergingService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return {
@@ -917,7 +914,7 @@ export class AccountMergingService {
       completedAt: row.completed_at,
       errorMessage: row.error_message
     };
-  }
+
 
   private async updateMergeRequestStatus(
     mergeRequestId: string,
@@ -931,7 +928,7 @@ export class AccountMergingService {
       SET status = $1, error_message = $2, completed_at = $3, updated_at = NOW()
       WHERE id = $4
     `, [status, errorMessage, completedAt, mergeRequestId]);
-  }
+
 
   private async validateMergeRequest(
     primaryAccountId: string,
@@ -949,13 +946,13 @@ export class AccountMergingService {
 
     if (accounts.rows.length !== 2) {
       throw new Error('One or both accounts not found');
-    }
+
 
     for (const account of accounts.rows) {
       if (account.status !== 'active') {
         throw new Error(`Account ${account.id} is not in active status`);
-      }
-    }
+
+
 
     // Check for existing pending merge requests
     const existingRequest = await this.db.query(`
@@ -967,8 +964,8 @@ export class AccountMergingService {
 
     if (existingRequest.rows.length > 0) {
       throw new Error('An account merge is already in progress for one of these accounts');
-    }
-  }
-}
+
+
+
 
 export default AccountMergingService;

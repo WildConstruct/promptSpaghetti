@@ -110,7 +110,7 @@ number;
         // Extension Types
         EXTENSION_TYPES: ['node', 'ui', 'transform', 'storage'],
         // Lifecycle States
-        LIFECYCLE_STATES: [,
+        LIFECYCLE_STATES: [
             'uninitialized',
             'initializing',
             'initialized',
@@ -125,7 +125,7 @@ number;
         // Health Status Values
         HEALTH_STATUS_VALUES: ['healthy', 'warning', 'error', 'unknown'],
         // Error Types
-        ERROR_TYPES: [,
+        ERROR_TYPES: [
             'initialization_error',
             'activation_error',
             'runtime_error',

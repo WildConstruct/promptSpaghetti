@@ -10,7 +10,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 // Password Management Types
 
-}
+
 export interface PasswordPolicy {
   id: string;,
   name: string,
@@ -29,9 +29,11 @@ export interface PasswordPolicy {
   isActive: boolean,
   createdAt: string;,
   updatedAt: string;
-}
-}
-}
+
+
+
+
+
 export interface PasswordStrengthResult {
   score: number; // 0-100,
   level: 'weak' | 'fair' | 'good' | 'strong' | 'excellent';,
@@ -39,9 +41,11 @@ export interface PasswordStrengthResult {
   suggestions: string;,
   breachDetected: boolean,
   entropy: number;
-}
-}
-}
+
+
+
+
+
 export interface SecurityEvent {
   id: string;,
   type: 'password_breach' | 'weak_password' | 'policy_violation' | 'credential_rotation' | 'authentication_failure',
@@ -56,9 +60,11 @@ export interface SecurityEvent {
   resolved: boolean;
   resolvedAt?: string;
   resolvedBy?: string;
-}
-}
-}
+
+
+
+
+
 export interface PasswordManagementStats {
   totalUsers: number;,
   usersWithExpiredPasswords: number,
@@ -72,11 +78,12 @@ export interface PasswordManagementStats {
   interface PasswordManagementDashboardProps {
   userRole: string;
   onExport?: (type: string) => void;
-  }
+
+
 
 className?: string;
-}
-}
+
+
 export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardProps> = ({
   userRole,
   onExport,
@@ -136,7 +143,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   isActive: true,
   createdAt: '2024-01-15T00:00:00Z',
   updatedAt: '2024-03-01T00:00:00Z'
-}
+
         {
           id: 'policy-002',
           name: 'High Security',
@@ -166,7 +173,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
           details: { breachSource: 'HaveIBeenPwned', breachDate: '2023-12-15' },
           timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
           resolved: false;
-  }
+
         {
           id: 'event-002',
           type: 'weak_password',
@@ -182,10 +189,10 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
       setStats(mockStats);
       setPolicies(mockPolicies);
       setSecurityEvents(mockEvents);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load dashboard data:', error);
   setError('Failed to load password management data');
-} finally {
+ finally {
       setIsLoading(false);
   }, []);
   // Load data on component mount
@@ -200,7 +207,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   status?: 'good' | 'warning' | 'critical',
   icon: string;
   description?: string;
-}> = ({ title, value, trend, status = 'good', icon, description }) => {
+> = ({ title, value, trend, status = 'good', icon, description }) => {
   const statusColors = {
   good: '#10b981',
   warning: '#f59e0b',
@@ -213,7 +220,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
         padding: '20px',
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
         border: `2px solid ${statusColors[status]}15`}
-      }}>
+}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
           <h3 style={{ margin: 0, fontSize: '14px', fontWeight: '500', color: '#6b7280' }}>
             {title}
@@ -229,7 +236,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   fontSize: '12px',
   marginLeft: '8px',
   color: trend >= 0 ? '#10b981' : '#ef4444'
-}}>
+}>
               {trend >= 0 ? '↗' : '↘'} {Math.abs(trend).toFixed(1)}%
             </span>
           )}
@@ -320,7 +327,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   padding: '20px',
   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
   marginBottom: '24px'
-}}>
+}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600', color: '#1f2937' }}>
             Quick Actions
           </h3>
@@ -336,7 +343,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer'
-}}
+}
               >
                 📋 Update Password Policy
               </button>
@@ -351,7 +358,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer'
-}}
+}
             >
               📊 Export Expired Passwords
             </button>
@@ -365,7 +372,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer'
-}}
+}
             >
               📈 Generate Security Report
             </button>
@@ -380,7 +387,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer'
-}}
+}
               >
                 🚨 View Security Events
               </button>
@@ -398,7 +405,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   alignItems: 'center',
   justifyContent: 'space-between',
   marginBottom: '20px'
-}}>
+}>
         <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600', color: '#1f2937' }}>
           Password Policies
         </h3>
@@ -407,7 +414,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
             onClick={() => {
               setSelectedPolicy(null);
               setShowPolicyModal(true);
-            }}
+}
             style={{
   padding: '8px 16px',
   backgroundColor: '#3b82f6',
@@ -416,7 +423,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer'
-}}
+}
           >
             + Create Policy
           </button>
@@ -432,7 +439,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   padding: '20px',
   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
   border: policy.isActive ? '2px solid #10b981' : '1px solid #e5e7eb'
-}}
+}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -447,7 +454,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '12px',
   fontSize: '11px',
   fontWeight: '500'
-}}>
+}>
                     ACTIVE
                   </span>
                 )}
@@ -457,7 +464,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
                   onClick={() => {
                     setSelectedPolicy(policy);
                     setShowPolicyModal(true);
-                  }}
+}
                   style={{
   padding: '4px 8px',
   backgroundColor: '#f3f4f6',
@@ -465,7 +472,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '4px',
   fontSize: '12px',
   cursor: 'pointer'
-}}
+}
                 >
                   Edit
                 </button>
@@ -518,8 +525,8 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
                 event.severity === 'critical' ? '#dc2626' :
                   event.severity === 'high' ? '#ea580c' :
                     event.severity === 'medium' ? '#f59e0b' : '#6b7280'
-              }`
-            }}
+`
+
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -528,7 +535,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   color: event.severity === 'critical' ? '#dc2626' :,
   event.severity === 'high' ? '#ea580c' :,
   event.severity === 'medium' ? '#f59e0b' : '#6b7280'
-}}>
+}>
                   {event.type === 'password_breach' ? '🚨' :
                     event.type === 'weak_password' ? '⚠️' :
                       event.type === 'policy_violation' ? '📋' :
@@ -546,7 +553,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '12px',
   fontSize: '11px',
   fontWeight: '500'
-}}>
+}>
                   RESOLVED
                 </span>
               ) : ()
@@ -557,7 +564,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '12px',
   fontSize: '11px',
   fontWeight: '500'
-}}>
+}>
                   OPEN
                 </span>
               )}
@@ -587,7 +594,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   height: '400px',
   backgroundColor: '#f9fafb',
   borderRadius: '8px'
-}}>
+}>
         <div style={{ textAlign: 'center' }}>
           <div style={{
   width: '40px',
@@ -597,7 +604,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
   margin: '0 auto 16px'
-}} />
+} />
           <div style={{ fontSize: '14px', color: '#6b7280' }}>Loading password management data...</div>
         </div>
       </div>
@@ -611,7 +618,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   backgroundColor: '#fef2f2',
   borderRadius: '8px',
   border: '1px solid #fecaca'
-}}>
+}>
         <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔐</div>
         <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600', color: '#dc2626' }}>
           Error Loading Password Management
@@ -630,25 +637,25 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   borderRadius: '6px',
   fontSize: '14px',
   cursor: 'pointer'
-}}
+}
         >
           Retry
         </button>
       </div>
     );
   return;
-    <div className={`password-management-dashboard ${className}`} style={{}}
+    <div className={`password-management-dashboard ${className}`} style={{}},
   backgroundColor: '#f9fafb',
       borderRadius: '8px',
       padding: '20px';
-  }}>
+}>
       {/* Header */}
       <div style={{
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   marginBottom: '24px'
-}}>
+}>
         <div>
           <h2 style={{ margin: '0 0 4px 0', fontSize: '24px', fontWeight: '600', color: '#1f2937' }}>
             Password Management
@@ -667,7 +674,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   fontSize: '14px',
   cursor: 'pointer',
   color: '#374151'
-}}
+}
         >
           🔄 Refresh
         </button>
@@ -677,7 +684,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   display: 'flex',
   borderBottom: '1px solid #e5e7eb',
   marginBottom: '24px'
-}}>
+}>
         {[
           { key: 'overview', label: '📊 Overview', permission: true },
           { key: 'policies', label: '📋 Policies', permission: canManagePolicies },
@@ -695,7 +702,7 @@ export const PasswordManagementDashboard: React.FC<PasswordManagementDashboardPr
   fontSize: '14px',
   fontWeight: '500',
   cursor: 'pointer'
-}}
+
           >
             {tab.label}
           </button>

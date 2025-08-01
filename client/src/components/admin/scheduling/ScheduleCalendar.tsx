@@ -15,34 +15,35 @@ import {
   ListItem,
   ListItemText,
   Badge
-} from '@mui/material';
+ from '@mui/material';
 import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   Today as TodayIcon,
   Schedule as ScheduleIcon,
   Add as AddIcon
-} from '@mui/icons-material';
-}
+ from '@mui/icons-material';
+
+
 interface Schedule {
   id: string;,
-  toggleId: string;
+  toggleId: string;,
   toggleName: string;,
   name: string;
   description?: string;
   type: 'one_time' | 'recurring' | 'conditional';,
-  action: string;
+  action: string;,
   startTime: Date;
   endTime?: Date;
   timezone: string;,
-  status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';
+  status: 'pending' | 'active' | 'completed' | 'cancelled' | 'failed' | 'paused';,
   enabled: boolean;
   nextExecution?: Date;
   lastExecution?: Date;
   executionCount: number;,
-  failureCount: number;
+  failureCount: number;,
   priority: number;,
-  createdBy: string;
+  createdBy: string;,
   createdAt: Date;,
   updatedAt: Date;
   interface ScheduleCalendarProps {
@@ -56,10 +57,11 @@ interface Schedule {
   cancelled: '#9e9e9e',
   failed: '#f44336',
   paused: '#ff5722',
-}
+
+
 };
 const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHS = [;
+const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'
 ];
@@ -81,7 +83,7 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
     const newDate = new Date(currentDate);
     if (direction === 'prev') {
       newDate.setMonth(newDate.getMonth() - 1);
-    } else {
+ else {
       newDate.setMonth(newDate.getMonth() + 1);
     setCurrentDate(newDate);
   }, [currentDate]);
@@ -109,7 +111,7 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
       return;
     if (daySchedules.length === 1) {
       onScheduleClick(daySchedules[0]);
-    } else {
+ else {
       // Multiple schedules, show popover
       setSelectedDate(date);
       setPopoverSchedules(daySchedules);
@@ -149,9 +151,9 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
   cursor: 'pointer',
   bgcolor: isTodayDate ? 'primary.50' : 'background.paper',
   opacity: isCurrentMonthDay ? 1 : 0.5,
-  '&:hover': {
+  '&:hover': {,
   bgcolor: isTodayDate ? 'primary.100' : 'action.hover',
-}}
+}
         onClick={() => handleDayClick(date, daySchedules)}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
@@ -183,9 +185,9 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
   height: 18,
   bgcolor: STATUS_COLORS[schedule.status],
   color: 'white',
-  '& .MuiChip-label': {
+  '& .MuiChip-label': {,
   px: 1,
-}}
+}
               />
             </Tooltip>
           ))}
@@ -262,11 +264,11 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
         anchorOrigin={{
   vertical: 'center',
   horizontal: 'center',
-}}
+}
         transformOrigin={{
   vertical: 'top',
   horizontal: 'center',
-}}
+}
       >
         <Card sx={{ minWidth: 300, maxWidth: 400 }}>
           <CardContent>
@@ -281,14 +283,14 @@ export const [popoverSchedules, setPopoverSchedules] = useState<Schedule>([]);
                   onClick={() => {
                     onScheduleClick(schedule);
                     handleClosePopover();
-                  }}
+}
                   sx={{
   borderLeft: 4,
   borderLeftColor: STATUS_COLORS[schedule.status],
   mb: 1,
   borderRadius: 1,
   bgcolor: 'grey.50',
-}}
+}
                 >
                   <ListItemText
                     primary={schedule.name}

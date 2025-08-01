@@ -9,13 +9,14 @@ import {
   UserInteractionEvent,
   PerformanceMetricEvent,
   AnalyticsWindow 
-} from '../analytics/AnalyticsCollector';
+ from '../analytics/AnalyticsCollector';
 
 /**
  * Database models for analytics data
  */
-}
-}
+
+
+
 export interface AnalyticsSession {
   id: number;
   sessionId: string;
@@ -32,15 +33,17 @@ export interface AnalyticsSession {
   errorsEncountered: number;
   createdAt: number;
   updatedAt: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Project execution statistics for health monitoring
  */
-}
-}
+
+
+
 export interface ProjectExecutionStats {
   projectId: string;
   total: number;
@@ -48,12 +51,13 @@ export interface ProjectExecutionStats {
   failed: number;
   averageExecutionTime: number;
   lastExecution?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface GraphExecution {
   id: number;
   executionId: string;
@@ -73,12 +77,13 @@ export interface GraphExecution {
   memoryUsageMb?: number;
   cpuTimeMs?: number;
   createdAt: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface NodeExecution {
   id: number;
   executionId: string;
@@ -94,12 +99,13 @@ export interface NodeExecution {
   errorMessage?: string;
   memoryDeltaMb?: number;
   createdAt: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TokenUsage {
   id: number;
   usageId: string;
@@ -121,12 +127,13 @@ export interface TokenUsage {
   requestEnd?: number;
   latencyMs?: number;
   createdAt: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserInteraction {
   id: number;
   interactionId: string;
@@ -144,12 +151,13 @@ export interface UserInteraction {
   viewportY?: number;
   metadata: string;
   createdAt: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AnalyticsAggregation {
   id: number;
   timeBucket: number;
@@ -166,15 +174,17 @@ export interface AnalyticsAggregation {
   successRate: number;
   errorCount: number;
   createdAt: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Analytics query filters
  */
-}
-}
+
+
+
 export interface AnalyticsFilters {
   startTime?: number;
   endTime?: number;
@@ -188,15 +198,17 @@ export interface AnalyticsFilters {
   successOnly?: boolean;
   limit?: number;
   offset?: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Analytics summary data
  */
-}
-}
+
+
+
 export interface AnalyticsSummary {
   totalEvents: number;
   uniqueUsers: number;
@@ -207,13 +219,14 @@ export interface AnalyticsSummary {
   totalCost: number;
   averageExecutionTime: number;
   successRate: number;
-}
-}
+
+
+
   topGraphTypes: Array<{ type: string; count: number }>;
   topNodeTypes: Array<{ type: string; count: number; avgTime: number }>;
   providerUsage: Array<{ provider: string; tokens: number; cost: number }>;
   errorBreakdown: Array<{ type: string; count: number }>;
-}
+
 
 /**
  * Data Access Object for analytics data
@@ -223,7 +236,7 @@ export class AnalyticsDAO {
 
   constructor(database: Database.Database) {
     this.db = database;
-  }
+
 
   /**
    * Initialize analytics database schema
@@ -239,7 +252,7 @@ export class AnalyticsDAO {
     this.db.exec(schema);
     
     console.log('Analytics database schema initialized');
-  }
+
 
   /**
    * Create or update analytics session
@@ -280,7 +293,7 @@ export class AnalyticsDAO {
     );
 
     return result as AnalyticsSession;
-  }
+
 
   /**
    * Store analytics event
@@ -308,7 +321,7 @@ export class AnalyticsDAO {
       category,
       severity
     );
-  }
+
 
   /**
    * Store graph execution record
@@ -343,7 +356,7 @@ export class AnalyticsDAO {
     );
 
     return result as GraphExecution;
-  }
+
 
   /**
    * Store node execution record
@@ -374,7 +387,7 @@ export class AnalyticsDAO {
     );
 
     return result as NodeExecution;
-  }
+
 
   /**
    * Store token usage record
@@ -412,7 +425,7 @@ export class AnalyticsDAO {
     );
 
     return result as TokenUsage;
-  }
+
 
   /**
    * Store user interaction record
@@ -445,7 +458,7 @@ export class AnalyticsDAO {
     );
 
     return result as UserInteraction;
-  }
+
 
   /**
    * Get analytics summary for a time period
@@ -541,7 +554,7 @@ export class AnalyticsDAO {
       providerUsage: providerUsage || [],
       errorBreakdown: errorBreakdown || []
     };
-  }
+
 
   /**
    * Get time-series data for analytics dashboard
@@ -594,13 +607,13 @@ export class AnalyticsDAO {
         
     default:
       throw new Error(`Unknown metric: ${metric}`);
-    }
+
 
     return this.db.prepare(query).all(
       filters.startTime || 0, 
       filters.endTime || Date.now()
     );
-  }
+
 
   /**
    * Get heat map data for canvas interactions
@@ -624,7 +637,7 @@ export class AnalyticsDAO {
     `).all(this.buildWhereParams(filters));
 
     return heatMapData;
-  }
+
 
   /**
    * Update aggregation tables (should be run periodically)
@@ -684,7 +697,7 @@ export class AnalyticsDAO {
     `).run();
 
     console.log('Analytics aggregations updated');
-  }
+
 
   /**
    * Get events by filter criteria
@@ -698,8 +711,8 @@ export class AnalyticsDAO {
       limitClause = `LIMIT ${filters.limit}`;
       if (filters.offset) {
         limitClause += ` OFFSET ${filters.offset}`;
-      }
-    }
+
+
 
     const events = this.db.prepare(`
       SELECT * FROM analytics_events 
@@ -717,7 +730,7 @@ export class AnalyticsDAO {
       organizationId: row.organization_id,
       metadata: JSON.parse(row.metadata)
     }));
-  }
+
 
   /**
    * Delete old analytics data beyond retention period
@@ -754,7 +767,7 @@ export class AnalyticsDAO {
 
     console.log(`Cleaned up ${totalDeleted} old analytics records`);
     return totalDeleted;
-  }
+
 
   /**
    * Build WHERE clause for filtering
@@ -768,7 +781,7 @@ export class AnalyticsDAO {
           tableName === 'token_usage' ? 'request_start' :
             'timestamp';
       conditions.push(`${timeField} >= ?`);
-    }
+
     
     if (filters.endTime !== undefined) {
       const timeField = tableName === 'user_interactions' ? 'timestamp' : 
@@ -776,23 +789,23 @@ export class AnalyticsDAO {
           tableName === 'token_usage' ? 'request_start' :
             'timestamp';
       conditions.push(`${timeField} <= ?`);
-    }
+
     
     if (filters.userId !== undefined) {
       conditions.push('user_id = ?');
-    }
+
     
     if (filters.sessionId !== undefined) {
       conditions.push('session_id = ?');
-    }
+
     
     if (filters.eventTypes && filters.eventTypes.length > 0) {
       const placeholders = filters.eventTypes.map(() => '?').join(', ');
       conditions.push(`event_type IN (${placeholders})`);
-    }
+
 
     return conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
-  }
+
 
   /**
    * Build parameters array for WHERE clause
@@ -806,10 +819,10 @@ export class AnalyticsDAO {
     if (filters.sessionId !== undefined) params.push(filters.sessionId);
     if (filters.eventTypes && filters.eventTypes.length > 0) {
       params.push(...filters.eventTypes);
-    }
+
     
     return params;
-  }
+
 
   /**
    * Get event category from event type
@@ -820,7 +833,7 @@ export class AnalyticsDAO {
     if (eventType.includes('performance') || eventType.includes('token')) return 'performance';
     if (eventType.includes('error')) return 'error';
     return 'general';
-  }
+
 
   /**
    * Get event severity from event type
@@ -829,7 +842,7 @@ export class AnalyticsDAO {
     if (eventType.includes('error')) return 'error';
     if (eventType.includes('warning')) return 'warning';
     return 'info';
-  }
+
 
   /**
    * Get project execution statistics for health monitoring
@@ -856,7 +869,7 @@ export class AnalyticsDAO {
       averageExecutionTime: stats?.averageExecutionTime || 0,
       lastExecution: stats?.lastExecution
     };
-  }
+
 
   /**
    * Get user activity statistics for a project
@@ -866,7 +879,7 @@ export class AnalyticsDAO {
     activityCount: number;
     lastActivity: number;
     errorRate: number;
-  }> {
+> {
     const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
     
     return this.db.prepare(`
@@ -882,7 +895,7 @@ export class AnalyticsDAO {
       GROUP BY user_id
       ORDER BY activityCount DESC
     `).all(projectId, cutoffTime);
-  }
+
 
   /**
    * Get activity timeline for a project
@@ -892,7 +905,7 @@ export class AnalyticsDAO {
     activityCount: number;
     uniqueUsers: number;
     errorCount: number;
-  }> {
+> {
     const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
     
     return this.db.prepare(`
@@ -907,7 +920,7 @@ export class AnalyticsDAO {
       GROUP BY date(timestamp / 1000, 'unixepoch')
       ORDER BY date DESC
     `).all(projectId, cutoffTime);
-  }
+
 
   /**
    * Get collaboration patterns for a project
@@ -917,7 +930,7 @@ export class AnalyticsDAO {
     averageSessionParticipants: number;
     collaborationRate: number;
     topCollaborators: Array<{ userId: number; collaborationCount: number }>;
-  } {
+ {
     const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
     
     // Get collaborative sessions (sessions with multiple users)
@@ -974,7 +987,7 @@ export class AnalyticsDAO {
       collaborationRate,
       topCollaborators
     };
-  }
+
 
   /**
    * Get project health score based on multiple metrics
@@ -988,7 +1001,7 @@ export class AnalyticsDAO {
       userEngagement: number;
     };
     recommendation: string;
-  } {
+ {
     const execStats = this.getProjectExecutions(projectId, 7);
     const userActivity = this.getProjectUserActivity(projectId, 7);
     const collaborationStats = this.getProjectCollaborationStats(projectId, 7);
@@ -1010,11 +1023,11 @@ export class AnalyticsDAO {
     let recommendation = 'Project is healthy';
     if (score < 30) {
       recommendation = 'Critical: Project needs immediate attention';
-    } else if (score < 50) {
+ else if (score < 50) {
       recommendation = 'Warning: Project showing signs of stagnation';
-    } else if (score < 70) {
+ else if (score < 70) {
       recommendation = 'Monitor: Consider increasing team engagement';
-    }
+
 
     return {
       score: Math.round(score),
@@ -1023,8 +1036,7 @@ export class AnalyticsDAO {
         errorRate: Math.round(errorRate),
         collaborationLevel: Math.round(collaborationLevel),
         userEngagement: Math.round(userEngagement)
-  }
+
       recommendation
     };
-  }
-}
+

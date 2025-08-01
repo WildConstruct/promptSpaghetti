@@ -13,7 +13,7 @@ import {
   CreateWorkflowScheduleSchema,
   ApproveWorkflowSchema,
   RejectWorkflowSchema
-} from '../database/workflow-models';
+ from '../database/workflow-models';
 
 export async function workflowRoutes(fastify: FastifyInstance) {
   const workflowService = new WorkflowService(getDatabase());
@@ -31,7 +31,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       is_locked?: boolean;
       name_contains?: string;
     };
-  }>('/states/:workspaceId', {
+>('/states/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -42,7 +42,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
         is_locked: z.boolean().optional(),
         name_contains: z.string().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -58,38 +58,38 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       });
       
       reply.send(filteredStates);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch workflow states' });
-    }
+
   });
 
   // POST /api/workflow/states - Create new workflow state
   fastify.post<{
     Body: z.infer<typeof CreateWorkflowStateSchema>;
-  }>('/states', {
+>('/states', {
     schema: {
       body: CreateWorkflowStateSchema
-    }
+
   }, async (request, reply) => {
     try {
       const state = await workflowService.createWorkflowState(request.body);
       reply.status(201).send(state);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to create workflow state' });
-    }
+
   });
 
   // PUT /api/workflow/states/:id - Update workflow state
   fastify.put<{
     Params: { id: string };
     Body: Partial<z.infer<typeof CreateWorkflowStateSchema>>;
-  }>('/states/:id', {
+>('/states/:id', {
     schema: {
       params: z.object({
         id: z.string().uuid()
       }),
       body: CreateWorkflowStateSchema.partial()
-    }
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -97,23 +97,23 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       if (!state) {
         return reply.status(404).send({ error: 'Workflow state not found' });
-      }
+
       
       reply.send(state);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to update workflow state' });
-    }
+
   });
 
   // DELETE /api/workflow/states/:id - Delete workflow state
   fastify.delete<{
     Params: { id: string };
-  }>('/states/:id', {
+>('/states/:id', {
     schema: {
       params: z.object({
         id: z.string().uuid()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -121,12 +121,12 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       if (!deleted) {
         return reply.status(404).send({ error: 'Workflow state not found' });
-      }
+
       
       reply.status(204).send();
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to delete workflow state' });
-    }
+
   });
 
   // =============================================================================
@@ -137,7 +137,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
   fastify.get<{
     Params: { workspaceId: string };
     Querystring: { from_state_id?: string };
-  }>('/transitions/:workspaceId', {
+>('/transitions/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -145,7 +145,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       querystring: z.object({
         from_state_id: z.string().uuid().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -153,36 +153,36 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       const transitions = await workflowService.getWorkflowTransitions(workspaceId, from_state_id);
       reply.send(transitions);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch workflow transitions' });
-    }
+
   });
 
   // POST /api/workflow/transitions - Create workflow transition
   fastify.post<{
     Body: z.infer<typeof CreateWorkflowTransitionSchema>;
-  }>('/transitions', {
+>('/transitions', {
     schema: {
       body: CreateWorkflowTransitionSchema
-    }
+
   }, async (request, reply) => {
     try {
       const transition = await workflowService.createWorkflowTransition(request.body);
       reply.status(201).send(transition);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to create workflow transition' });
-    }
+
   });
 
   // DELETE /api/workflow/transitions/:id - Delete workflow transition
   fastify.delete<{
     Params: { id: string };
-  }>('/transitions/:id', {
+>('/transitions/:id', {
     schema: {
       params: z.object({
         id: z.string().uuid()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -190,12 +190,12 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       if (!deleted) {
         return reply.status(404).send({ error: 'Workflow transition not found' });
-      }
+
       
       reply.status(204).send();
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to delete workflow transition' });
-    }
+
   });
 
   // =============================================================================
@@ -213,7 +213,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       lock_duration?: number;
     };
     Headers: { 'x-user-id': string };
-  }>('/resources/:resourceId/transition', {
+>('/resources/:resourceId/transition', {
     schema: {
       params: z.object({
         resourceId: z.string().uuid()
@@ -227,8 +227,8 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { resourceId } = request.params;
@@ -243,9 +243,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       );
       
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to transition resource state' });
-    }
+
   });
 
   // =============================================================================
@@ -262,7 +262,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       priority?: 'low' | 'medium' | 'high' | 'urgent';
       overdue?: boolean;
     };
-  }>('/approvals/:workspaceId', {
+>('/approvals/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -274,7 +274,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
         priority: z.enum(['low', 'medium', 'high', 'urgent']).optional(),
         overdue: z.boolean().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -282,25 +282,25 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       const approvals = await workflowService.getWorkflowApprovals(workspaceId, filters);
       reply.send(approvals);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch workflow approvals' });
-    }
+
   });
 
   // POST /api/workflow/approvals - Create workflow approval
   fastify.post<{
     Body: z.infer<typeof CreateWorkflowApprovalSchema>;
-  }>('/approvals', {
+>('/approvals', {
     schema: {
       body: CreateWorkflowApprovalSchema
-    }
+
   }, async (request, reply) => {
     try {
       const approval = await workflowService.createWorkflowApproval(request.body);
       reply.status(201).send(approval);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to create workflow approval' });
-    }
+
   });
 
   // POST /api/workflow/approvals/:id/approve - Approve workflow
@@ -308,7 +308,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     Params: { id: string };
     Body: { comment?: string };
     Headers: { 'x-user-id': string };
-  }>('/approvals/:id/approve', {
+>('/approvals/:id/approve', {
     schema: {
       params: z.object({
         id: z.string().uuid()
@@ -318,8 +318,8 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -328,9 +328,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       const result = await workflowService.approveWorkflow(id, userId, comment);
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to approve workflow' });
-    }
+
   });
 
   // POST /api/workflow/approvals/:id/reject - Reject workflow
@@ -338,7 +338,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     Params: { id: string };
     Body: { reason: string };
     Headers: { 'x-user-id': string };
-  }>('/approvals/:id/reject', {
+>('/approvals/:id/reject', {
     schema: {
       params: z.object({
         id: z.string().uuid()
@@ -348,8 +348,8 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -360,12 +360,12 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       if (!result) {
         return reply.status(404).send({ error: 'Workflow approval not found' });
-      }
+
       
       reply.send({ success: true });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to reject workflow' });
-    }
+
   });
 
   // =============================================================================
@@ -381,7 +381,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       lock_type?: 'edit' | 'state_change' | 'delete' | 'custom';
       expired?: boolean;
     };
-  }>('/locks/:workspaceId', {
+>('/locks/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -392,7 +392,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
         lock_type: z.enum(['edit', 'state_change', 'delete', 'custom']).optional(),
         expired: z.boolean().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -400,9 +400,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       const locks = await workflowService.getWorkflowLocks(workspaceId, filters);
       reply.send(locks);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch workflow locks' });
-    }
+
   });
 
   // POST /api/workflow/locks - Acquire workflow lock
@@ -415,7 +415,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       metadata?: Record<string, any>;
     };
     Headers: { 'x-user-id': string };
-  }>('/locks', {
+>('/locks', {
     schema: {
       body: z.object({
         resource_id: z.string().uuid(),
@@ -426,8 +426,8 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { resource_id, lock_type, reason, duration, metadata } = request.body;
@@ -440,24 +440,24 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       });
       
       reply.status(201).send(lock);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to acquire workflow lock' });
-    }
+
   });
 
   // DELETE /api/workflow/locks/:id - Release workflow lock
   fastify.delete<{
     Params: { id: string };
     Headers: { 'x-user-id': string };
-  }>('/locks/:id', {
+>('/locks/:id', {
     schema: {
       params: z.object({
         id: z.string().uuid()
       }),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { id } = request.params;
@@ -467,12 +467,12 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       if (!released) {
         return reply.status(404).send({ error: 'Workflow lock not found' });
-      }
+
       
       reply.status(204).send();
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to release workflow lock' });
-    }
+
   });
 
   // DELETE /api/workflow/locks/resource/:resourceId - Release all locks for resource
@@ -480,7 +480,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     Params: { resourceId: string };
     Querystring: { lock_type?: string };
     Headers: { 'x-user-id': string };
-  }>('/locks/resource/:resourceId', {
+>('/locks/resource/:resourceId', {
     schema: {
       params: z.object({
         resourceId: z.string().uuid()
@@ -490,8 +490,8 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       }).optional(),
       headers: z.object({
         'x-user-id': z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { resourceId } = request.params;
@@ -501,9 +501,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       const releasedCount = await workflowService.releaseLocksByResource(resourceId, userId, lock_type);
       
       reply.send({ released_count: releasedCount });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to release workflow locks' });
-    }
+
   });
 
   // =============================================================================
@@ -522,7 +522,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       limit?: number;
       offset?: number;
     };
-  }>('/history/:workspaceId', {
+>('/history/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
@@ -536,7 +536,7 @@ export async function workflowRoutes(fastify: FastifyInstance) {
         limit: z.number().optional(),
         offset: z.number().optional()
       }).optional()
-    }
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
@@ -551,9 +551,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       
       const history = await workflowService.getWorkflowHistory(workspaceId, historyFilters);
       reply.send(history);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch workflow history' });
-    }
+
   });
 
   // =============================================================================
@@ -563,20 +563,20 @@ export async function workflowRoutes(fastify: FastifyInstance) {
   // GET /api/workflow/statistics/:workspaceId - Get workflow statistics
   fastify.get<{
     Params: { workspaceId: string };
-  }>('/statistics/:workspaceId', {
+>('/statistics/:workspaceId', {
     schema: {
       params: z.object({
         workspaceId: z.string().uuid()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { workspaceId } = request.params;
       const statistics = await workflowService.getWorkflowStatistics(workspaceId);
       reply.send(statistics);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to fetch workflow statistics' });
-    }
+
   });
 
   // =============================================================================
@@ -588,9 +588,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     try {
       const result = await workflowService.performMaintenance();
       reply.send(result);
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to perform maintenance' });
-    }
+
   });
 
   // POST /api/workflow/maintenance/expired-locks - Release expired locks
@@ -598,9 +598,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
     try {
       const releasedCount = await workflowService.releaseExpiredLocks();
       reply.send({ released_count: releasedCount });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to release expired locks' });
-    }
+
   });
 
   // =============================================================================
@@ -614,14 +614,14 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       to_state_id: string;
       user_id: string;
     };
-  }>('/validate/transition', {
+>('/validate/transition', {
     schema: {
       querystring: z.object({
         resource_id: z.string().uuid(),
         to_state_id: z.string().uuid(),
         user_id: z.string()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { resource_id, to_state_id, user_id } = request.query;
@@ -635,9 +635,9 @@ export async function workflowRoutes(fastify: FastifyInstance) {
         can_transition: canTransition,
         is_locked: isLocked
       });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to validate state transition' });
-    }
+
   });
 
   // GET /api/workflow/validate/lock - Check if resource is locked
@@ -646,21 +646,20 @@ export async function workflowRoutes(fastify: FastifyInstance) {
       resource_id: string;
       lock_type?: string;
     };
-  }>('/validate/lock', {
+>('/validate/lock', {
     schema: {
       querystring: z.object({
         resource_id: z.string().uuid(),
         lock_type: z.string().optional()
-  }
-    }
+
+
   }, async (request, reply) => {
     try {
       const { resource_id, lock_type } = request.query;
       
       const isLocked = await workflowService.isResourceLocked(resource_id, lock_type);
       reply.send({ is_locked: isLocked });
-    } catch (error) {
+ catch (error) {
       reply.status(500).send({ error: 'Failed to check resource lock status' });
-    }
+
   });
-}

@@ -67,8 +67,9 @@ export class ConstraintSuggestionEngine {
             suggestions.push(...this.generateRegionalSuggestions(violation, affectedNodes, context));
             break;
             return suggestions;
-            generateEraCompatibilitySuggestions(violation, any);
-            affectedNodes: UTDGNode,
+            generateEraCompatibilitySuggestions(violation, any),
+                affectedNodes;
+            UTDGNode,
                 context;
             SuggestionContext;
             ConstraintSuggestion;
@@ -132,8 +133,9 @@ constraint_id: violation.constraint_id,
 ['Maintains visual variety', 'Requires additional historical justification'];
 ;
 return suggestions;
-generateSocialClassSuggestions(violation, any);
-affectedNodes: UTDGNode,
+generateSocialClassSuggestions(violation, any),
+    affectedNodes;
+UTDGNode,
     context;
 SuggestionContext;
 ConstraintSuggestion;
@@ -169,8 +171,9 @@ appropriateAlternatives[0];
 ;
 ;
 return suggestions;
-generateMaterialAvailabilitySuggestions(violation, any);
-affectedNodes: UTDGNode,
+generateMaterialAvailabilitySuggestions(violation, any),
+    affectedNodes;
+UTDGNode,
     context;
 SuggestionContext;
 ConstraintSuggestion;
@@ -208,8 +211,9 @@ availableAlternatives[0];
 ;
 ;
 return suggestions;
-generateCulturalSuggestions(violation, any);
-affectedNodes: UTDGNode,
+generateCulturalSuggestions(violation, any),
+    affectedNodes;
+UTDGNode,
     context;
 SuggestionContext;
 ConstraintSuggestion;
@@ -266,8 +270,9 @@ constraint_id: violation.constraint_id,
 ;
 ;
 return suggestions;
-generateTemporalSuggestions(violation, any);
-affectedNodes: UTDGNode,
+generateTemporalSuggestions(violation, any),
+    affectedNodes;
+UTDGNode,
     context;
 SuggestionContext;
 ConstraintSuggestion;
@@ -299,8 +304,9 @@ description: 'Modify or replace items to fit within the common time period',
 `Items from ${commonPeriod.start}-${commonPeriod.end} would have coexisted naturally`;
 ;
 return suggestions;
-generateRegionalSuggestions(violation, any);
-affectedNodes: UTDGNode,
+generateRegionalSuggestions(violation, any),
+    affectedNodes;
+UTDGNode,
     context;
 SuggestionContext;
 ConstraintSuggestion;

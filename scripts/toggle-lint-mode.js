@@ -20,13 +20,13 @@ function switchToMode(targetMode: string): void {
   // Backup current configs
   if (fs.existsSync('.eslintrc.active.js')) {
     fs.unlinkSync('.eslintrc.active.js');
-  }
+
   if (fs.existsSync('.lintstagedrc.active.js')) {
     fs.unlinkSync('.lintstagedrc.active.js');
-  }
+
   if (fs.existsSync('.husky/pre-commit.active')) {
     fs.unlinkSync('.husky/pre-commit.active');
-  }
+
 
   // Copy preferred configs to active configs
   try {
@@ -47,28 +47,27 @@ function switchToMode(targetMode: string): void {
       console.log('   - Allows console.log statements');
       console.log('   - Auto-fixes common issues before commit');
       console.log('   - Fallback mode if strict linting fails');
-    } else {
+ else {
       console.log('\n💡 Strict mode benefits:');
       console.log('   - Enforces consistent code style');
       console.log('   - Catches potential bugs early');
       console.log('   - Maintains high code quality standards');
-    }
+
 
     console.log('\n📖 Usage:');
     console.log('   • Use .eslintrc.active.js in your IDE');
     console.log('   • Commits will use .lintstagedrc.active.js');
     console.log('   • Pre-commit hooks use .husky/pre-commit.active');
-    
-  } catch (error) {
+ catch (error) {
     console.error(`❌ Error switching modes: ${error.message}`);
     process.exit(1);
-  }
-}
+
+
 
 function getCurrentMode(): string {
   if (!fs.existsSync('.eslintrc.active.js')) {
     return 'none';
-  }
+
   
   const activeContent = fs.readFileSync('.eslintrc.active.js', 'utf8');
   const strictContent = fs.readFileSync('.eslintrc.js', 'utf8');
@@ -76,12 +75,12 @@ function getCurrentMode(): string {
   
   if (activeContent === strictContent) {
     return 'strict';
-  } else if (activeContent === permissiveContent) {
+ else if (activeContent === permissiveContent) {
     return 'permissive';
-  } else {
+ else {
     return 'custom';
-  }
-}
+
+
 
 function showStatus(): void {
   const current = getCurrentMode();
@@ -92,18 +91,18 @@ function showStatus(): void {
   if (current === 'none') {
     console.log('⚠️  No active configuration detected');
     console.log('💡 Run with "strict" or "permissive" to set up linting');
-  } else {
+ else {
     console.log('✅ Active configurations:');
     console.log('   - .eslintrc.active.js');
     console.log('   - .lintstagedrc.active.js'); 
     console.log('   - .husky/pre-commit.active');
-  }
+
   
   console.log('\n📖 Available modes:');
   console.log('   strict      - Strict linting (errors fail commits)');
   console.log('   permissive  - Permissive linting (warnings allowed)');
   console.log('   status      - Show current mode');
-}
+
 
 // Main logic
 if (mode === 'status' || mode === 'auto') {
@@ -114,12 +113,11 @@ if (mode === 'status' || mode === 'auto') {
     if (current === 'none') {
       console.log('\n🔄 Auto-switching to permissive mode for easier development...');
       switchToMode('permissive');
-    }
-  }
-} else if (mode === 'strict' || mode === 'permissive') {
+
+
+ else if (mode === 'strict' || mode === 'permissive') {
   switchToMode(mode);
-} else {
+ else {
   console.log('❌ Invalid mode. Use: strict, permissive, or status');
   console.log('\nUsage: node scripts/toggle-lint-mode.js [strict|permissive|status]');
   process.exit(1);
-}

@@ -6,6 +6,7 @@
  */
 import { ModelConfiguration, AIModelType, AIModelProvider } from './BaseAIModel';
 ;
+;
 features: {
     enableCaching: boolean;
     enableLoadBalancing: boolean;
@@ -541,16 +542,8 @@ ModelConfiguration;
                                                                             }[AIModelProvider.ANTHROPIC]
                                                                         }
                                                                     }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                                                                } }
+                                                        } } } } } } } }
                         };
                         {
                             parameters: {

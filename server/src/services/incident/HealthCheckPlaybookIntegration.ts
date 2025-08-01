@@ -21,11 +21,11 @@ import {
   MetricThreshold,
   PlaybookExecutionContext,
   PlaybookExecutionResult
-} from '../../../../packages/core/types/Epic17IncidentPlaybooks';
+ from '../../../../packages/core/types/Epic17IncidentPlaybooks';
 import { ActionSeverity } from '../../../../packages/core/types/EnforcementTypes';
 
-}
-}
+
+
 export interface HealthCheckFailureEvent {
   healthCheckId: string;
   healthCheckName: string;
@@ -35,12 +35,13 @@ export interface HealthCheckFailureEvent {
   consecutiveFailures: number;
   severity: ActionSeverity;
   metadata: HealthCheckMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthCheckMetadata {
   responseTime?: number;
   errorCode?: string;
@@ -48,12 +49,13 @@ export interface HealthCheckMetadata {
   previousState?: string;
   affectedEndpoints?: string[];
   diagnosticData?: unknown;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SystemAlert {
   alertId: string;
   alertType: 'system_error' | 'performance_degradation' | 'security_breach' | 'data_corruption' | 'configuration_error';
@@ -63,12 +65,13 @@ export interface SystemAlert {
   title: string;
   description: string;
   metadata: AlertMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertMetadata {
   affectedServices?: string[];
   errorRate?: number;
@@ -77,12 +80,13 @@ export interface AlertMetadata {
   businessImpact?: number;
   tags?: string[];
   correlationId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricAlert {
   metricName: string;
   system: Epic17System;
@@ -93,24 +97,26 @@ export interface MetricAlert {
   severity: ActionSeverity;
   timestamp: Date;
   metadata: MetricMetadata;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricMetadata {
   aggregationType: 'average' | 'sum' | 'max' | 'min' | 'count';
   timeWindow: number; // minutes
   samplesCount: number;
   trend: 'increasing' | 'stable' | 'decreasing';
   previousValue?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface IntegrationConfig {
   enabled: boolean;
   autoTriggerPlaybooks: boolean;
@@ -120,12 +126,13 @@ export interface IntegrationConfig {
   healthCheckMapping: HealthCheckMapping[];
   alertMapping: AlertMapping[];
   metricMapping: MetricMapping[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthCheckMapping {
   healthCheckId: string;
   playbookIds: string[];
@@ -133,36 +140,39 @@ export interface HealthCheckMapping {
   consecutiveFailuresThreshold: number;
   cooldownMinutes: number;
   autoExecute: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AlertMapping {
   alertPattern: string;
   playbookIds: string[];
   severityThreshold: ActionSeverity;
   frequencyThreshold: number;
   autoExecute: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MetricMapping {
   metricName: string;
   playbookIds: string[];
   thresholds: {
     warning: number;
     critical: number;
-}
-}
+
+
+
   };
   operator: 'above' | 'below';
   autoExecute: boolean;
-}
+
 
 export class HealthCheckPlaybookIntegration {
   private db: Database;
@@ -202,7 +212,7 @@ export class HealthCheckPlaybookIntegration {
     };
 
     this.initializeIntegration();
-  }
+
 
   // =============================================================================
   // Core Integration Methods
@@ -216,7 +226,7 @@ export class HealthCheckPlaybookIntegration {
     if (!this.config.enabled) {
       console.log('🔌 Health Check Playbook Integration disabled');
       return;
-    }
+
 
     console.log('🩺 Initializing Health Check Playbook Integration...');
 
@@ -237,11 +247,11 @@ export class HealthCheckPlaybookIntegration {
       await this.validateConfiguration();
 
       console.log('✅ Health Check Playbook Integration initialized successfully');
-    } catch (error) {
+ catch (error) {
       console.error('❌ Failed to initialize Health Check Playbook Integration:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Handle health check failure event
@@ -263,14 +273,13 @@ export class HealthCheckPlaybookIntegration {
       if (matchingMappings.length === 0) {
         console.log(`ℹ️ No playbook mappings found for health check: ${event.healthCheckId}`);
         return;
-      }
+
 
       // Process each matching mapping
       for (const mapping of matchingMappings) {
         await this.processMappingTrigger(mapping.playbookIds, event, 'health_check_failure');
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Failed to handle health check failure for ${event.healthCheckId}:`, error);
       await this.auditService.logEvent({
         userId: 'system',
@@ -279,11 +288,11 @@ export class HealthCheckPlaybookIntegration {
           healthCheckId: event.healthCheckId,
           system: event.system,
           error: error.message
-  }
+
         severity: 'error'
       });
-    }
-  }
+
+
 
   /**
    * Handle system alert event
@@ -304,14 +313,13 @@ export class HealthCheckPlaybookIntegration {
       if (matchingMappings.length === 0) {
         console.log(`ℹ️ No playbook mappings found for alert: ${alert.alertType}`);
         return;
-      }
+
 
       // Process each matching mapping
       for (const mapping of matchingMappings) {
         await this.processMappingTrigger(mapping.playbookIds, alert, 'system_alert');
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Failed to handle system alert ${alert.alertId}:`, error);
       await this.auditService.logEvent({
         userId: 'system',
@@ -320,11 +328,11 @@ export class HealthCheckPlaybookIntegration {
           alertId: alert.alertId,
           alertType: alert.alertType,
           error: error.message
-  }
+
         severity: 'error'
       });
-    }
-  }
+
+
 
   /**
    * Handle metric threshold breach
@@ -345,17 +353,16 @@ export class HealthCheckPlaybookIntegration {
       if (matchingMappings.length === 0) {
         console.log(`ℹ️ No playbook mappings found for metric: ${metricAlert.metricName}`);
         return;
-      }
+
 
       // Process each matching mapping
       for (const mapping of matchingMappings) {
         await this.processMappingTrigger(mapping.playbookIds, metricAlert, 'metric_threshold');
-      }
 
-    } catch (error) {
+ catch (error) {
       console.error(`❌ Failed to handle metric alert for ${metricAlert.metricName}:`, error);
-    }
-  }
+
+
 
   /**
    * Process mapping trigger and execute playbooks
@@ -373,21 +380,21 @@ export class HealthCheckPlaybookIntegration {
         if (this.isInCooldown(cooldownKey)) {
           console.log(`⏰ Playbook ${playbookId} is in cooldown period, skipping trigger`);
           continue;
-        }
+
 
         // Check concurrent trigger limit
         if (this.activeTriggers.size >= this.config.maxConcurrentTriggers) {
           console.log(`⏸️ Maximum concurrent triggers reached, queueing playbook ${playbookId}`);
           await this.queuePlaybookExecution(playbookId, triggerEvent, triggerType);
           continue;
-        }
+
 
         // Get playbook
         const playbook = this.registeredPlaybooks.get(playbookId);
         if (!playbook) {
           console.log(`⚠️ Playbook not found: ${playbookId}`);
           continue;
-        }
+
 
         // Execute playbook
         console.log(`🎭 Triggering playbook: ${playbook.name} due to ${triggerType}`);
@@ -400,7 +407,7 @@ export class HealthCheckPlaybookIntegration {
             event: triggerEvent,
             triggeredBy: 'health_check_integration',
             timestamp: new Date()
-  }
+
           {
             manualTrigger: false,
             userId: 'health_check_system',
@@ -422,15 +429,14 @@ export class HealthCheckPlaybookIntegration {
             triggerEvent: this.sanitizeEventForLogging(triggerEvent),
             executionId: executionResult.executionId,
             status: executionResult.status
-  }
+
           severity: 'info'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error(`❌ Failed to trigger playbook ${playbookId}:`, error);
-      }
-    }
-  }
+
+
+
 
   // =============================================================================
   // Registration and Configuration
@@ -451,11 +457,11 @@ export class HealthCheckPlaybookIntegration {
       // Register health check triggers
       for (const trigger of playbook.triggerConditions.healthCheckFailures) {
         await this.orchestrator.registerHealthCheckTrigger(trigger, playbook.id);
-      }
-    }
+
+
 
     console.log(`✅ Registered ${playbooks.length} Epic 17 playbooks`);
-  }
+
 
   /**
    * Set up health check listeners
@@ -475,10 +481,10 @@ export class HealthCheckPlaybookIntegration {
       };
 
       this.healthCheckListeners.set(listener.id, listener);
-    }
+
 
     console.log(`✅ Set up ${this.healthCheckListeners.size} health check listeners`);
-  }
+
 
   /**
    * Set up alert listeners
@@ -498,10 +504,10 @@ export class HealthCheckPlaybookIntegration {
       };
 
       this.alertListeners.set(listener.id, listener);
-    }
+
 
     console.log(`✅ Set up ${this.alertListeners.size} alert listeners`);
-  }
+
 
   /**
    * Set up metric listeners
@@ -521,10 +527,10 @@ export class HealthCheckPlaybookIntegration {
       };
 
       this.metricListeners.set(listener.id, listener);
-    }
+
 
     console.log(`✅ Set up ${this.metricListeners.size} metric listeners`);
-  }
+
 
   // =============================================================================
   // Default Configuration
@@ -539,7 +545,7 @@ export class HealthCheckPlaybookIntegration {
         consecutiveFailuresThreshold: 3,
         cooldownMinutes: 15,
         autoExecute: true
-  }
+
       {
         healthCheckId: 'admin-dashboard-health',
         playbookIds: ['epic17-admin-system-outage'],
@@ -547,7 +553,7 @@ export class HealthCheckPlaybookIntegration {
         consecutiveFailuresThreshold: 2,
         cooldownMinutes: 10,
         autoExecute: true
-  }
+
       {
         healthCheckId: 'content-management-health',
         playbookIds: ['epic17-content-security-incident'],
@@ -555,9 +561,9 @@ export class HealthCheckPlaybookIntegration {
         consecutiveFailuresThreshold: 3,
         cooldownMinutes: 20,
         autoExecute: true
-      }
+
     ];
-  }
+
 
   private getDefaultAlertMappings(): AlertMapping[] {
     return [
@@ -567,23 +573,23 @@ export class HealthCheckPlaybookIntegration {
         severityThreshold: 'high',
         frequencyThreshold: 5,
         autoExecute: true
-  }
+
       {
         alertPattern: 'admin.*unavailable',
         playbookIds: ['epic17-admin-system-outage'],
         severityThreshold: 'critical',
         frequencyThreshold: 1,
         autoExecute: true
-  }
+
       {
         alertPattern: 'fraud.*detected',
         playbookIds: ['epic17-marketplace-fraud'],
         severityThreshold: 'high',
         frequencyThreshold: 3,
         autoExecute: true
-      }
+
     ];
-  }
+
 
   private getDefaultMetricMappings(): MetricMapping[] {
     return [
@@ -593,23 +599,23 @@ export class HealthCheckPlaybookIntegration {
         thresholds: { warning: 3000, critical: 5000 },
         operator: 'above',
         autoExecute: true
-  }
+
       {
         metricName: 'admin_api_availability',
         playbookIds: ['epic17-admin-system-outage'],
         thresholds: { warning: 95, critical: 90 },
         operator: 'below',
         autoExecute: true
-  }
+
       {
         metricName: 'system_error_rate',
         playbookIds: ['epic17-system-performance'],
         thresholds: { warning: 1, critical: 5 },
         operator: 'above',
         autoExecute: true
-      }
+
     ];
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -618,22 +624,22 @@ export class HealthCheckPlaybookIntegration {
   private severityMeetsThreshold(severity: ActionSeverity, threshold: ActionSeverity): boolean {
     const severityLevels = { low: 1, medium: 2, high: 3, critical: 4 };
     return severityLevels[severity] >= severityLevels[threshold];
-  }
+
 
   private matchesAlertPattern(alert: SystemAlert, pattern: string): boolean {
     const regex = new RegExp(pattern);
     return regex.test(alert.alertType) || regex.test(alert.title) || regex.test(alert.description);
-  }
+
 
   private metricBreach(alert: MetricAlert, mapping: MetricMapping): boolean {
     const threshold = alert.severity === 'critical' ? mapping.thresholds.critical : mapping.thresholds.warning;
     
     if (mapping.operator === 'above') {
       return alert.currentValue > threshold;
-    } else {
+ else {
       return alert.currentValue < threshold;
-    }
-  }
+
+
 
   private isInCooldown(cooldownKey: string): boolean {
     const lastTrigger = this.triggerHistory.get(cooldownKey);
@@ -641,33 +647,33 @@ export class HealthCheckPlaybookIntegration {
     
     const cooldownMs = this.config.cooldownPeriod * 60 * 1000;
     return (Date.now() - lastTrigger.getTime()) < cooldownMs;
-  }
+
 
   private getTriggerEventId(event: HealthCheckFailureEvent | SystemAlert | MetricAlert): string {
     if ('healthCheckId' in event) {
       return event.healthCheckId;
-    } else if ('alertId' in event) {
+ else if ('alertId' in event) {
       return event.alertId;
-    } else {
+ else {
       return event.metricName;
-    }
-  }
+
+
 
   private getSourceSystem(event: HealthCheckFailureEvent | SystemAlert | MetricAlert): Epic17System {
     return event.system;
-  }
+
 
   private sanitizeEventForLogging(event: unknown): unknown {
     // Remove sensitive data from event before logging
     const sanitized = { ...event };
     delete sanitized.diagnosticData;
     return sanitized;
-  }
+
 
   private async validateConfiguration(): Promise<void> {
 
     console.log('✅ Configuration validation completed');
-  }
+
 
   private async queuePlaybookExecution(
     playbookId: string,
@@ -677,42 +683,45 @@ export class HealthCheckPlaybookIntegration {
 
     // Implementation for queueing playbook execution when at capacity
     console.log(`📋 Queued playbook execution: ${playbookId}`);
-  }
-}
+
+
 
 // Supporting interfaces
-}
-}
+
+
+
 interface HealthCheckEventListener {
   id: string;
   healthCheckId: string;
   callback: (event: HealthCheckFailureEvent) => Promise<void>;
   enabled: boolean;
   lastTriggered: Date | null;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface AlertEventListener {
   id: string;
   pattern: string;
   callback: (alert: SystemAlert) => Promise<void>;
   enabled: boolean;
   lastTriggered: Date | null;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface MetricEventListener {
   id: string;
   metricName: string;
   callback: (alert: MetricAlert) => Promise<void>;
   enabled: boolean;
   lastTriggered: Date | null;
-}
-}
-}
+
+
+

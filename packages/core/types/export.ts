@@ -20,7 +20,7 @@ export const TemplateTypeSchema = z.enum([)
   'custom'
 ]);
 
-export const ExportTemplateSchema = z.object({)
+export const ExportTemplateSchema = z.object({ )
   id: z.string().uuid(),
   project_id: z.string().uuid(),
   name: z.string().min(1).max(255),
@@ -34,7 +34,7 @@ export const ExportTemplateSchema = z.object({)
   include_history: z.boolean().default(false),
   include_branching: z.boolean().default(false),
   include_comments: z.boolean().default(false),
-  include_attachments: z.boolean().default(false),
+  include_attachments: z.boolean().default(false) }
   // Format-specific options
   format_options: z.record(z.unknown()).default({}),
   // Filtering options
@@ -53,12 +53,12 @@ export const ExportTemplateSchema = z.object({)
   last_used_at: z.string().datetime().optional();
   });
 
-export const CreateExportTemplateSchema = ExportTemplateSchema.omit({)
+export const CreateExportTemplateSchema = ExportTemplateSchema.omit({ )
   id: true,
   created_at: true,
   updated_at: true,
   usage_count: true,
-  last_used_at: true,
+  last_used_at: true }
 });
 
 export const UpdateExportTemplateSchema = CreateExportTemplateSchema.partial();
@@ -79,13 +79,13 @@ export const ExportTypeSchema = z.enum([)
   'full_project'
 ]);
 
-export const ExportJobSchema = z.object({)
+export const ExportJobSchema = z.object({ )
   id: z.string().uuid(),
   project_id: z.string().uuid(),
   template_id: z.string().uuid().optional(),
   // Export configuration
   export_format: ExportFormatSchema,
-  export_type: ExportTypeSchema,
+  export_type: ExportTypeSchema }
   export_scope: z.record(z.unknown()).default({}),
   // Source data
   source_snapshot_id: z.string().uuid().optional(),
@@ -115,7 +115,7 @@ export const ExportJobSchema = z.object({)
   cpu_usage: z.number().min(0).max(100).optional();
   });
 
-export const CreateExportJobSchema = ExportJobSchema.omit({)
+export const CreateExportJobSchema = ExportJobSchema.omit({ )
   id: true,
   started_at: true,
   status: true,
@@ -129,10 +129,10 @@ export const CreateExportJobSchema = ExportJobSchema.omit({)
   processing_log: true,
   processing_duration: true,
   memory_usage: true,
-  cpu_usage: true,
+  cpu_usage: true }
 });
 
-export const UpdateExportJobSchema = z.object({)
+export const UpdateExportJobSchema = z.object({ )
   status: ExportJobStatusSchema.optional(),
   progress_percentage: z.number().int().min(0).max(100).optional(),
   output_file_path: z.string().optional(),
@@ -145,11 +145,11 @@ export const UpdateExportJobSchema = z.object({)
   processing_log: z.string().optional(),
   processing_duration: z.number().int().min(0).optional(),
   memory_usage: z.number().int().min(0).optional(),
-  cpu_usage: z.number().min(0).max(100).optional(),
+  cpu_usage: z.number().min(0).max(100).optional() }
 });
 
 // Export Schedule Types
-export const ExportScheduleSchema = z.object({)
+export const ExportScheduleSchema = z.object({ )
   id: z.string().uuid(),
   project_id: z.string().uuid(),
   template_id: z.string().uuid(),
@@ -159,7 +159,7 @@ export const ExportScheduleSchema = z.object({)
   is_enabled: z.boolean().default(true),
   // Schedule timing
   schedule_expression: z.string().min(1).max(100), // Cron expression
-  timezone: z.string().default('UTC'),
+  timezone: z.string().default('UTC') }
   // Export configuration
   export_options: z.record(z.unknown()).default({}),
   notification_options: z.record(z.unknown()).default({}),
@@ -175,7 +175,7 @@ export const ExportScheduleSchema = z.object({)
   failed_runs: z.number().int().min(0).default(0);
   });
 
-export const CreateExportScheduleSchema = ExportScheduleSchema.omit({)
+export const CreateExportScheduleSchema = ExportScheduleSchema.omit({ )
   id: true,
   created_at: true,
   updated_at: true,
@@ -183,7 +183,7 @@ export const CreateExportScheduleSchema = ExportScheduleSchema.omit({)
   next_run_at: true,
   total_runs: true,
   successful_runs: true,
-  failed_runs: true,
+  failed_runs: true }
 });
 
 export const UpdateExportScheduleSchema = CreateExportScheduleSchema.partial();
@@ -195,7 +195,7 @@ export const ShareAccessLevelSchema = z.enum([)
   'private'
 ]);
 
-export const ExportShareSchema = z.object({)
+export const ExportShareSchema = z.object({ )
   id: z.string().uuid(),
   export_job_id: z.string().uuid(),
   // Share configuration
@@ -222,29 +222,29 @@ export const ExportShareSchema = z.object({)
   last_accessed_at: z.string().datetime().optional(),
   access_count: z.number().int().min(0).default(0),
   // Share URL
-  share_url: z.string().url().optional(),
+  share_url: z.string().url().optional() }
 });
 
-export const CreateExportShareSchema = ExportShareSchema.omit({)
+export const CreateExportShareSchema = ExportShareSchema.omit({ )
   id: true,
   created_at: true,
   download_count: true,
   last_accessed_at: true,
-  access_count: true,
+  access_count: true }
 });
 
-export const UpdateExportShareSchema = z.object({)
+export const UpdateExportShareSchema = z.object({ )
   share_name: z.string().max(255).optional(),
   password_protected: z.boolean().optional(),
   password_hash: z.string().max(255).optional(),
   allowed_downloads: z.number().int().optional(),
   allowed_ips: z.array(z.string()).optional(),
   expires_at: z.string().datetime().optional(),
-  is_active: z.boolean().optional(),
+  is_active: z.boolean().optional() }
 });
 
 // Export Analytics Types
-export const ExportAnalyticsSchema = z.object({)
+export const ExportAnalyticsSchema = z.object({ )
   id: z.string().uuid(),
   project_id: z.string().uuid(),
   export_job_id: z.string().uuid().optional(),
@@ -261,18 +261,18 @@ export const ExportAnalyticsSchema = z.object({)
   // Temporal data
   exported_at: z.string().datetime(),
   date_bucket: z.string().date(),
-  hour_bucket: z.string().datetime(),
+  hour_bucket: z.string().datetime() }
 });
 
-export const CreateExportAnalyticsSchema = ExportAnalyticsSchema.omit({)
+export const CreateExportAnalyticsSchema = ExportAnalyticsSchema.omit({ )
   id: true,
   exported_at: true,
   date_bucket: true,
-  hour_bucket: true,
+  hour_bucket: true }
 });
 
 // Export Format Definition Types
-export const ExportFormatDefinitionSchema = z.object({)
+export const ExportFormatDefinitionSchema = z.object({ )
   id: z.string().uuid(),
   format_name: z.string().max(50),
   // Format specification
@@ -285,7 +285,7 @@ export const ExportFormatDefinitionSchema = z.object({)
   supports_binary_data: z.boolean().default(false),
   supports_compression: z.boolean().default(false),
   supports_encryption: z.boolean().default(false),
-  max_file_size: z.number().int().min(0).optional(),
+  max_file_size: z.number().int().min(0).optional() }
   // Format configuration
   default_options: z.record(z.unknown()).default({}),
   validation_schema: z.record(z.unknown()).optional(),
@@ -296,16 +296,16 @@ export const ExportFormatDefinitionSchema = z.object({)
   updated_at: z.string().datetime();
   });
 
-export const CreateExportFormatDefinitionSchema = ExportFormatDefinitionSchema.omit({)
+export const CreateExportFormatDefinitionSchema = ExportFormatDefinitionSchema.omit({ )
   id: true,
   created_at: true,
-  updated_at: true,
+  updated_at: true }
 });
 
 export const UpdateExportFormatDefinitionSchema = CreateExportFormatDefinitionSchema.partial();
 
 // Export Options Types
-export const CommonExportOptionsSchema = z.object({)
+export const CommonExportOptionsSchema = z.object({ )
   // Content options
   include_metadata: z.boolean().default(true),
   include_attribution: z.boolean().default(true),
@@ -314,9 +314,9 @@ export const CommonExportOptionsSchema = z.object({)
   include_comments: z.boolean().default(false),
   include_attachments: z.boolean().default(false),
   // Filtering options
-  date_range: z.object({,)
+  date_range: z.object({);
   start: z.string().datetime().optional(),
-  end: z.string().datetime().optional(),
+  end: z.string().datetime().optional() }
 }).optional(),
   user_filters: z.array(z.string().uuid()).optional(),
   // Output options
@@ -325,72 +325,72 @@ export const CommonExportOptionsSchema = z.object({)
   encryption_key: z.string().optional();
   });
 
-export const JsonExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const JsonExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   pretty: z.boolean().default(true),
   include_schema: z.boolean().default(false),
-  array_format: z.boolean().default(false),
+  array_format: z.boolean().default(false) }
 });
 
-export const YamlExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const YamlExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   include_comments: z.boolean().default(true),
   flow_style: z.boolean().default(false),
-  explicit_start: z.boolean().default(false),
+  explicit_start: z.boolean().default(false) }
 });
 
-export const XmlExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const XmlExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   pretty: z.boolean().default(true),
   include_schema: z.boolean().default(true),
   namespace: z.string().optional(),
-  root_element: z.string().default('export'),
+  root_element: z.string().default('export') }
 });
 
-export const CsvExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const CsvExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   delimiter: z.string().default(','),
   include_headers: z.boolean().default(true),
   quote_all: z.boolean().default(false),
-  flatten_objects: z.boolean().default(true),
+  flatten_objects: z.boolean().default(true) }
 });
 
-export const MarkdownExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const MarkdownExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   include_toc: z.boolean().default(true),
   format: z.enum(['github', 'commonmark']).default('github'),
   heading_level: z.number().int().min(1).max(6).default(1),
-  code_blocks: z.boolean().default(true),
+  code_blocks: z.boolean().default(true) }
 });
 
-export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   page_size: z.enum(['A4', 'A3', 'Letter', 'Legal']).default('A4'),
   orientation: z.enum(['portrait', 'landscape']).default('portrait'),
   include_images: z.boolean().default(true),
   font_size: z.number().min(8).max(24).default(12),
-  margins: z.object({,)
+  margins: z.object({);
   top: z.number().min(0).default(20),
   right: z.number().min(0).default(20),
   bottom: z.number().min(0).default(20),
-  left: z.number().min(0).default(20),
-}).default({)
+  left: z.number().min(0).default(20) }
+}).default({ )
   top: 20,
   right: 20,
   bottom: 20,
-  left: 20,
-}
+  left: 20 }
+
 });
 
-export const HtmlExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const HtmlExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   include_css: z.boolean().default(true),
   standalone: z.boolean().default(true),
   theme: z.enum(['default', 'dark', 'light']).default('default'),
-  minify: z.boolean().default(false),
+  minify: z.boolean().default(false) }
 });
 
-export const ZipExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const ZipExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   compression_level: z.number().int().min(0).max(9).default(6),
   include_metadata: z.boolean().default(true),
   separate_files: z.boolean().default(false),
-  folder_structure: z.boolean().default(true),
+  folder_structure: z.boolean().default(true) }
 });
 
-export const VFXExportOptionsSchema = CommonExportOptionsSchema.extend({)
+export const VFXExportOptionsSchema = CommonExportOptionsSchema.extend({ )
   // Export quality level
   quality: z.enum(['production', 'preview', 'debug']).default('production'),
   // VFX-specific features
@@ -415,41 +415,41 @@ export const VFXExportOptionsSchema = CommonExportOptionsSchema.extend({)
   include_reproducibility_data: z.boolean().default(true),
   exact_reproduction: z.boolean().default(true),
   preserve_node_configuration: z.boolean().default(true),
-  include_rng_states: z.boolean().default(true),
+  include_rng_states: z.boolean().default(true) }
 });
 
 // Export Result Types
-export const ExportResultSchema = z.object({)
+export const ExportResultSchema = z.object({ )
   job_id: z.string().uuid(),
   status: ExportJobStatusSchema,
   download_url: z.string().url().optional(),
   file_size: z.number().int().min(0).optional(),
   expires_at: z.string().datetime().optional(),
   share_token: z.string().optional(),
-  error_message: z.string().optional(),
+  error_message: z.string().optional() }
 });
 
-export const ExportProgressSchema = z.object({)
+export const ExportProgressSchema = z.object({ )
   job_id: z.string().uuid(),
   status: ExportJobStatusSchema,
   progress_percentage: z.number().int().min(0).max(100),
   current_step: z.string().optional(),
   estimated_completion: z.string().datetime().optional(),
-  processing_log: z.string().optional(),
+  processing_log: z.string().optional() }
 });
 
 // Export Statistics Types
-export const ExportStatisticsSchema = z.object({)
+export const ExportStatisticsSchema = z.object({ )
   project_id: z.string().uuid(),
   total_exports: z.number().int().min(0),
   exports_by_format: z.record(ExportFormatSchema, z.number().int().min(0)),
   exports_by_type: z.record(ExportTypeSchema, z.number().int().min(0)),
   total_size: z.number().int().min(0),
   average_processing_time: z.number().min(0),
-  most_used_templates: z.array(z.object({)
+  most_used_templates: z.array(z.object({),
   template_id: z.string().uuid(),
   template_name: z.string(),
-  usage_count: z.number().int().min(0),
+  usage_count: z.number().int().min(0) }
 })),
   success_rate: z.number().min(0).max(100),
   last_export_at: z.string().datetime().optional();
@@ -499,22 +499,17 @@ export type ExportProgress = z.infer<typeof ExportProgressSchema>;
 export type ExportStatistics = z.infer<typeof ExportStatisticsSchema>;
 
 // Helper types for API responses
-export type ExportTemplateWithStats = ExportTemplate & {
-  recent_jobs: ExportJob;
+export type ExportTemplateWithStats = ExportTemplate & { recent_jobs: ExportJob;
   avg_processing_time: number;
-  success_rate: number;
-};
+  success_rate: number };
 
-export type ExportJobWithTemplate = ExportJob & {
-  template: ExportTemplate | null;
+export type ExportJobWithTemplate = ExportJob & { template: ExportTemplate | null }
   share: ExportShare | null;
 };
 
-export type ExportScheduleWithStats = ExportSchedule & {
-  template: ExportTemplate;
+export type ExportScheduleWithStats = ExportSchedule & { template: ExportTemplate;
   recent_jobs: ExportJob;
-  next_scheduled_run: string;
-};
+  next_scheduled_run: string };
 
 // Validation helpers
 export function validateExportOptions(format: ExportFormat, options: any) {

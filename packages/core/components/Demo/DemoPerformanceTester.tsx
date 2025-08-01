@@ -8,41 +8,37 @@ import React, { useState, useCallback, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 
-}
-export interface PerformanceTestResult {
-  nodeCount: number;
+
+export interface PerformanceTestResult { nodeCount: number;
   edgeCount: number;
   renderTime: number;
   fps: number;
   memoryUsage: number;
   testDuration: number;
   passedThreshold: boolean;
-  recommendations: string;
-}
-}
-}
-export interface DemoPerformanceTesterProps {
-  onTestComplete?: (result: PerformanceTestResult) => void;
+  recommendations: string }
+
+
+
+export interface DemoPerformanceTesterProps { onTestComplete?: (result: PerformanceTestResult) => void;
   onGraphGenerated?: (nodes: Node, edges: Edge) => void;
   targetFPS?: number;
-  maxRenderTime?: number;
-}
-}
-export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
-  onTestComplete,
-  onGraphGenerated,
-  targetFPS = 30,
+  maxRenderTime?: number }
+
+export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({ )
+  onTestComplete
+  onGraphGenerated
+  targetFPS = 30 }
   maxRenderTime = 16
-}) => {
-  const [isRunning, setIsRunning] = useState(false);
+}) => { const [isRunning, setIsRunning] = useState(false);
   const [currentTest, setCurrentTest] = useState<string>('');
   const [results, setResults] = useState<PerformanceTestResult>([]);
   const performanceObserverRef = useRef<PerformanceObserver | null>(null);
   const metricsRef = useRef({)
-  frameCount: 0,
-  renderTimeSum: 0,
-  lastFrameTime: 0,
-  startTime: 0,
+  frameCount: 0
+  renderTimeSum: 0
+  lastFrameTime: 0
+  startTime: 0 }
 });
   // Generate complex demo graph for testing
   const generateComplexDemoGraph = useCallback((nodeCount: number): { nodes: Node, edges: Edge } => {
@@ -60,24 +56,23 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   type: 'default',
         position: { x, y },
-        data: {
-  nodeType: category,
+        data: { ,
+  nodeType: category }
           label: `${category} ${i + 1}`}
-}
           // Add realistic data for different node types
           ...(category === 'WeightedChoice' && {)
-  choices: [,
+  choices: [
               { text: 'Option A', weight: 0.4 },
               { text: 'Option B', weight: 0.3 },
               { text: 'Option C', weight: 0.3 }
             ]
           }),
-          ...(category === 'Subject' && {)
-  variations: ['Character A', 'Character B', 'Character C'],
+          ...(category === 'Subject' && { )
+  variations: ['Character A', 'Character B', 'Character C'] }
 }),
-          ...(category === 'Action' && {)
-  variations: ['runs', 'walks', 'jumps', 'dances'],
-}
+          ...(category === 'Action' && { )
+  variations: ['runs', 'walks', 'jumps', 'dances'] }
+
       });
     // Generate edges to create realistic connections
     for (let i = 0; i < nodes.length - 1; i++) {
@@ -88,7 +83,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   source: nodes[i].id,
           target: nodes[i + 1].id,
-          type: 'smoothstep'
+          type: 'smoothstep';
   });
       // Add some branching connections
       if (i % 5 === 0 && i + 3 < nodes.length) {
@@ -97,7 +92,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   source: nodes[i].id,
           target: nodes[i + 3].id,
-          type: 'smoothstep'
+          type: 'smoothstep';
   });
       // Add convergence connections
       if (i % 7 === 0 && i + 2 < nodes.length) {
@@ -106,28 +101,25 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
 },
   source: nodes[i].id,
           target: nodes[i + 2].id,
-          type: 'straight'
+          type: 'straight';
   });
     return { nodes, edges };
   }, []);
   // Start performance monitoring
-  const startPerformanceMonitoring = useCallback(() => {
-  metricsRef.current = {
+  const startPerformanceMonitoring = useCallback(() => { metricsRef.current = {
   frameCount: 0,
   renderTimeSum: 0,
   lastFrameTime: performance.now(),
-  startTime: performance.now(),
+  startTime: performance.now() }
 };
     // Monitor frame rate
-    const measureFrame = (timestamp: number) => {
-      const metrics = metricsRef.current;
+    const measureFrame = (timestamp: number) => { const metrics = metricsRef.current;
       if (metrics.lastFrameTime) {
         metrics.frameCount++;
         const delta = timestamp - metrics.lastFrameTime;
         metrics.renderTimeSum += delta;
       metrics.lastFrameTime = timestamp;
-      requestAnimationFrame(measureFrame);
-    };
+      requestAnimationFrame(measureFrame) };
     requestAnimationFrame(measureFrame);
     // Monitor render performance with PerformanceObserver
     if ('PerformanceObserver' in window) {
@@ -138,13 +130,12 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
             // Track rendering performance
         });
       });
-      performanceObserverRef.current.observe({)
-  entryTypes: ['measure', 'navigation'],
+      performanceObserverRef.current.observe({ )
+  entryTypes: ['measure', 'navigation'] }
 });
   }, []);
   // Stop performance monitoring and calculate results
-  const stopPerformanceMonitoring = useCallback((nodeCount: number, edgeCount: number): PerformanceTestResult => {
-  const metrics = metricsRef.current;
+  const stopPerformanceMonitoring = useCallback((nodeCount: number, edgeCount: number): PerformanceTestResult => { const metrics = metricsRef.current;
   const testDuration = (performance.now() - metrics.startTime) / 1000; // seconds;
   // Calculate average FPS
   const avgFPS = metrics.frameCount / testDuration;
@@ -179,7 +170,7 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
   fps: avgFPS,
   memoryUsage,
   testDuration,
-  passedThreshold,
+  passedThreshold }
   recommendations
 };
   }, [targetFPS, maxRenderTime]);
@@ -214,53 +205,45 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
         await new Promise(resolve => setTimeout(resolve, 1000));
       setResults(testResults);
       setCurrentTest('Test suite completed');
-    } catch (error) {
-  console.error('Performance test failed:', error);
-  setCurrentTest('Test failed');
-} finally {
-      setIsRunning(false);
-  }, [runTest]);
+ catch (error) { console.error('Performance test failed:', error);
+  setCurrentTest('Test failed') } finally { setIsRunning(false) }, [runTest]);
   // Quick demo graph generation for presentations
-  const generateDemoScenarios = useCallback(() => {
-  const scenarios = [;
+  const generateDemoScenarios = useCallback(() => { const scenarios = [
   {
   name: 'Simple Film Prompt',
   nodeCount: 15,
-  description: 'Basic character + action + setting workflow',
-}
-      {
-  name: 'Complex Scene Builder',
+  description: 'Basic character + action + setting workflow' }
+
+      { name: 'Complex Scene Builder',
   nodeCount: 50,
-  description: 'Multiple characters, actions, and weighted choices',
-}
-      {
-  name: 'Enterprise Workflow',
+  description: 'Multiple characters, actions, and weighted choices' }
+
+      { name: 'Enterprise Workflow',
   nodeCount: 100,
-  description: 'Full production pipeline with multiple outputs',
-}
-      {
-  name: 'Stress Test',
-  nodeCount: 200,
+  description: 'Full production pipeline with multiple outputs' }
+
+      { name: 'Stress Test',
+  nodeCount: 200 }
   description: 'Maximum complexity for performance validation'];
   return scenarios;
 }, []);
   return;
-    <div style={{
-  position: 'fixed',
-  top: 60,
-  left: 10,
-  background: 'rgba(31, 41, 55, 0.98)',
-  border: '1px solid rgba(55, 65, 81, 0.6)',
-  borderRadius: '8px',
-  padding: '16px',
-  fontSize: '12px',
-  color: '#e5e7eb',
-  zIndex: 10000,
-  backdropFilter: 'blur(16px)',
-  minWidth: '280px',
-  maxHeight: '70vh',
-  overflow: 'auto',
-}}
+    <div style={ {
+  position: 'fixed'
+  top: 60
+  left: 10
+  background: 'rgba(31, 41, 55, 0.98)'
+  border: '1px solid rgba(55, 65, 81, 0.6)'
+  borderRadius: '8px'
+  padding: '16px'
+  fontSize: '12px'
+  color: '#e5e7eb'
+  zIndex: 10000
+  backdropFilter: 'blur(16px)'
+  minWidth: '280px'
+  maxHeight: '70vh'
+  overflow: 'auto' }
+
     className="development-only"
     >
       <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
@@ -276,16 +259,16 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
         <button
           onClick={runFullTestSuite}
           disabled={isRunning}
-          style={{
-  background: '#4CAF50',
-  border: 'none',
-  borderRadius: '4px',
-  color: 'white',
-  padding: '8px 12px',
-  cursor: isRunning ? 'not-allowed' : 'pointer',
-  fontSize: '12px',
-  opacity: isRunning ? 0.6 : 1,
-}}
+          style={ {
+  background: '#4CAF50'
+  border: 'none'
+  borderRadius: '4px'
+  color: 'white'
+  padding: '8px 12px'
+  cursor: isRunning ? 'not-allowed' : 'pointer'
+  fontSize: '12px'
+  opacity: isRunning ? 0.6 : 1 }
+
         >
           Run Full Test Suite
         </button>
@@ -295,17 +278,17 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
             key={index}
             onClick={() => runTest(scenario.nodeCount)}
             disabled={isRunning}
-            style={{
-  background: 'rgba(59, 130, 246, 0.1)',
-  border: '1px solid rgba(59, 130, 246, 0.3)',
-  borderRadius: '4px',
-  color: '#93c5fd',
-  padding: '8px 12px',
-  cursor: isRunning ? 'not-allowed' : 'pointer',
-  fontSize: '11px',
-  textAlign: 'left',
-  opacity: isRunning ? 0.6 : 1,
-}}
+            style={ {
+  background: 'rgba(59, 130, 246, 0.1)'
+  border: '1px solid rgba(59, 130, 246, 0.3)'
+  borderRadius: '4px'
+  color: '#93c5fd'
+  padding: '8px 12px'
+  cursor: isRunning ? 'not-allowed' : 'pointer'
+  fontSize: '11px'
+  textAlign: 'left'
+  opacity: isRunning ? 0.6 : 1 }
+
           >
             <div style={{ fontWeight: 500 }}>{scenario.name}</div>
             <div style={{ fontSize: 10, opacity: 0.8 }}>{scenario.description}</div>
@@ -320,22 +303,22 @@ export const DemoPerformanceTester: React.FC<DemoPerformanceTesterProps> = ({)
             {results.map((result, index) => ()
               <div
                 key={index}
-                style={{
-                  background: result.passedThreshold ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
+                style={ {
+                  background: result.passedThreshold ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)' }
                   border: `1px solid ${result.passedThreshold ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)'}`}
-},
-  borderRadius: '4px',
-                  padding: '8px',
-                  marginBottom: '8px',
-                  fontSize: '10px'
-  }}
+
+  borderRadius: '4px'
+                  padding: '8px'
+                  marginBottom: '8px'
+                  fontSize: '10px';
+
               >
                 <div style={{ fontWeight: 500, marginBottom: 4 }}>
                   {result.nodeCount} nodes ({result.edgeCount} edges)
-                  <span style={{
-  float: 'right',
-  color: result.passedThreshold ? '#4CAF50' : '#f44336',
-}}>
+                  <span style={ {
+  float: 'right'
+  color: result.passedThreshold ? '#4CAF50' : '#f44336' }
+}>
                     {result.passedThreshold ? '✓' : '✗'}
                   </span>
                 </div>

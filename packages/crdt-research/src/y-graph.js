@@ -14,13 +14,13 @@ export class YGraph extends Y.AbstractType {
     super();
     this.nodes = new Y.Map();
     this.edges = new Y.Map();
-  }
+
   /**
    * Get the type name for Yjs
    */
   get _name() {
     return 'Graph';
-  }
+
   /**
    * Clone the graph (required by Yjs)
    */
@@ -29,7 +29,7 @@ export class YGraph extends Y.AbstractType {
     // The maps will be replaced with document-integrated ones
     // so we don't need to copy data here
     return copy;
-  }
+
   /**
    * Write the graph to an update encoder (required by Yjs)
    */
@@ -38,7 +38,7 @@ export class YGraph extends Y.AbstractType {
     // The maps will handle their own serialization
     encoder.writeTypeRef(YGraph);
     encoder.writeVarUint(0); // No custom data
-  }
+
   /**
    * Add a node to the graph
    */
@@ -48,11 +48,11 @@ export class YGraph extends Y.AbstractType {
       this.doc.transact(() => {
         this.nodes.set(node.id, node);
       });
-    } else {
+ else {
       // Direct set for testing
       this.nodes.set(node.id, node);
-    }
-  }
+
+
   /**
    * Update a node in the graph
    */
@@ -62,15 +62,15 @@ export class YGraph extends Y.AbstractType {
         const node = this.nodes.get(nodeId);
         if (node) {
           this.nodes.set(nodeId, { ...node, ...updates });
-        }
+
       });
-    } else {
+ else {
       const node = this.nodes.get(nodeId);
       if (node) {
         this.nodes.set(nodeId, { ...node, ...updates });
-      }
-    }
-  }
+
+
+
   /**
    * Delete a node from the graph
    */
@@ -83,19 +83,19 @@ export class YGraph extends Y.AbstractType {
         this.edges.forEach((edge, edgeId) => {
           if (edge.source === nodeId || edge.target === nodeId) {
             this.edges.delete(edgeId);
-          }
+
         });
       });
-    } else {
+ else {
       // Direct operations for testing
       this.nodes.delete(nodeId);
       this.edges.forEach((edge, edgeId) => {
         if (edge.source === nodeId || edge.target === nodeId) {
           this.edges.delete(edgeId);
-        }
+
       });
-    }
-  }
+
+
   /**
    * Add an edge to the graph
    */
@@ -105,15 +105,15 @@ export class YGraph extends Y.AbstractType {
         // Verify source and target nodes exist
         if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
           this.edges.set(edge.id, edge);
-        }
+
       });
-    } else {
+ else {
       // Direct operations for testing
       if (this.nodes.has(edge.source) && this.nodes.has(edge.target)) {
         this.edges.set(edge.id, edge);
-      }
-    }
-  }
+
+
+
   /**
    * Update an edge in the graph
    */
@@ -122,9 +122,9 @@ export class YGraph extends Y.AbstractType {
       const edge = this.edges.get(edgeId);
       if (edge) {
         this.edges.set(edgeId, { ...edge, ...updates });
-      }
+
     });
-  }
+
   /**
    * Delete an edge from the graph
    */
@@ -133,78 +133,78 @@ export class YGraph extends Y.AbstractType {
       this.doc.transact(() => {
         this.edges.delete(edgeId);
       });
-    } else {
+ else {
       this.edges.delete(edgeId);
-    }
-  }
+
+
   /**
    * Get all nodes as an array
    */
   getNodes() {
     return Array.from(this.nodes.values());
-  }
+
   /**
    * Get all edges as an array
    */
   getEdges() {
     return Array.from(this.edges.values());
-  }
+
   /**
    * Get a specific node
    */
   getNode(nodeId) {
     return this.nodes.get(nodeId);
-  }
+
   /**
    * Get a specific edge
    */
   getEdge(edgeId) {
     return this.edges.get(edgeId);
-  }
+
   /**
    * Apply a graph operation
    */
   applyOperation(operation) {
     if (operation.type === 'node') {
       this._applyNodeOperation(operation);
-    } else if (operation.type === 'edge') {
+ else if (operation.type === 'edge') {
       this._applyEdgeOperation(operation);
-    }
-  }
+
+
   _applyNodeOperation(operation) {
     switch (operation.action) {
       case 'create':
         if (operation.data) {
           this.addNode(operation.data);
-        }
+
         break;
       case 'update':
         if (operation.data) {
           this.updateNode(operation.targetId, operation.data);
-        }
+
         break;
       case 'delete':
         this.deleteNode(operation.targetId);
         break;
-    }
-  }
+
+
   _applyEdgeOperation(operation) {
     switch (operation.action) {
       case 'create':
         if (operation.data) {
           this.addEdge(operation.data);
-        }
+
         break;
       case 'update':
         if (operation.data) {
           this.updateEdge(operation.targetId, operation.data);
-        }
+
         break;
       case 'delete':
         this.deleteEdge(operation.targetId);
         break;
-    }
-  }
+
+
   /**
    * Serialize the graph to JSON
    */
@@ -213,7 +213,7 @@ export class YGraph extends Y.AbstractType {
       nodes: this.getNodes(),
       edges: this.getEdges(),
     };
-  }
+
   /**
    * Load graph from JSON
    */
@@ -231,34 +231,34 @@ export class YGraph extends Y.AbstractType {
         this.edges.set(edge.id, edge);
       });
     });
-  }
+
   /**
    * Observe changes to nodes
    */
   observeNodes(callback) {
     this.nodes.observe(callback);
-  }
+
   /**
    * Observe changes to edges
    */
   observeEdges(callback) {
     this.edges.observe(callback);
-  }
+
   /**
    * Unobserve changes to nodes
    */
   unobserveNodes(callback) {
     this.nodes.unobserve(callback);
-  }
+
   /**
    * Unobserve changes to edges
    */
   unobserveEdges(callback) {
     this.edges.unobserve(callback);
-  }
-}
+
+
 // Register the custom type with Yjs
 export function registerYGraphType() {
   // @ts-ignore - Yjs type registration
   Y.registerType('Graph', YGraph);
-}
+

@@ -51,7 +51,7 @@ const anyTypeReplacements = [
     pattern: /\)\s*:\s*any(?=\s*[{;])/g,
     replacement: '): unknown',
     description: 'Return types: ): any → ): unknown'
-  }
+
 ];
 
 // More specific type replacements for common patterns
@@ -85,7 +85,7 @@ const specificTypeReplacements = [
     pattern: /(data|result|response)\s*:\s*any/g,
     replacement: '$1: Record<string, unknown>',
     description: 'Data objects: any → Record<string, unknown>'
-  }
+
 ];
 
 // Directories to process
@@ -119,7 +119,7 @@ async function analyzeAnyTypes(directory: string): Promise<any[]> {
     );
     console.log(`   ✅ No TypeScript any type issues found`);
     return [];
-  } catch (error) {
+ catch (error) {
     const output = String(error.stdout || error.stderr || '');
     
     // Extract any type violations
@@ -132,14 +132,14 @@ async function analyzeAnyTypes(directory: string): Promise<any[]> {
           file: parts[1],
           line: parseInt(parts[2])
         };
-      }
+
       return null;
     }).filter(Boolean);
     
     console.log(`   📊 Found ${issues.length} TypeScript any type issues`);
     return issues;
-  }
-}
+
+
 
 async function fixAnyTypesInFile(filePath: string, issues: any[]): Promise<boolean> {
   const filename = path.basename(filePath);
@@ -148,13 +148,13 @@ async function fixAnyTypesInFile(filePath: string, issues: any[]): Promise<boole
   if (!fs.existsSync(filePath)) {
     console.log(`   ⚠️  File not found: ${filePath}`);
     return 0;
-  }
+
   
   // Skip certain file patterns
   if (skipPatterns.some(pattern => pattern.test(filePath))) {
     console.log(`   ⚠️  Skipping file: ${filename}`);
     return 0;
-  }
+
   
   console.log(`   🔧 Fixing ${issues.length} any types in: ${filename}`);
   
@@ -171,9 +171,9 @@ async function fixAnyTypesInFile(filePath: string, issues: any[]): Promise<boole
         const changeCount = matches.length;
         fixCount += changeCount;
         console.log(`     ✓ ${replacement.description} (${changeCount} changes)`);
-      }
-    }
-  }
+
+
+
   
   // Apply general any type replacements
   for (const replacement of anyTypeReplacements) {
@@ -185,9 +185,9 @@ async function fixAnyTypesInFile(filePath: string, issues: any[]): Promise<boole
         const changeCount = matches.length;
         fixCount += changeCount;
         console.log(`     ✓ ${replacement.description} (${changeCount} changes)`);
-      }
-    }
-  }
+
+
+
   
   // Special handling for test files - can be more lenient
   if (filename.includes('test') || filename.includes('spec')) {
@@ -202,7 +202,7 @@ async function fixAnyTypesInFile(filePath: string, issues: any[]): Promise<boole
         pattern: /jest\.fn<.*?,\s*any>/g,
         replacement: 'jest.fn<unknown[], unknown>',
         description: 'Jest mocks: any → unknown'
-      }
+
     ];
     
     for (const replacement of testReplacements) {
@@ -214,21 +214,21 @@ async function fixAnyTypesInFile(filePath: string, issues: any[]): Promise<boole
           const changeCount = matches.length;
           fixCount += changeCount;
           console.log(`     ✓ ${replacement.description} (${changeCount} changes)`);
-        }
-      }
-    }
-  }
+
+
+
+
   
   // Write back to file if we made changes
   if (fixCount > 0) {
     fs.writeFileSync(filePath, content, 'utf8');
     console.log(`   ✅ Fixed ${fixCount} any types in ${filename}`);
-  } else {
+ else {
     console.log(`   ℹ️  No fixable any types found in ${filename}`);
-  }
+
   
   return fixCount;
-}
+
 
 async function processDirectory(directory: string): Promise<void> {
   console.log(`\n🚀 Processing directory: ${directory}`);
@@ -237,13 +237,13 @@ async function processDirectory(directory: string): Promise<void> {
   
   if (issues.length === 0) {
     return 0;
-  }
+
   
   // Group issues by file
   const issuesByFile = issues.reduce((acc, issue) => {
     if (!acc[issue.file]) {
       acc[issue.file] = [];
-    }
+
     acc[issue.file].push(issue);
     return acc;
   }, {});
@@ -256,11 +256,11 @@ async function processDirectory(directory: string): Promise<void> {
     
     // Brief pause between files to avoid overwhelming output
     await new Promise(resolve => setTimeout(resolve, 50));
-  }
+
   
   console.log(`   🎉 Directory summary: ${totalFixed} any types fixed`);
   return totalFixed;
-}
+
 
 async function main(): Promise<void> {
   console.log('🎯 TypeScript Any Type Cleanup Script');
@@ -276,11 +276,11 @@ async function main(): Promise<void> {
   console.log('📊 Getting baseline any type count...');
   try {
     execSync('pnpm lint', { stdio: 'pipe' });
-  } catch (error) {
+ catch (error) {
     const output = String(error.stdout || error.stderr || '');
     const anyCount = (output.match(/Unexpected any/g) || []).length;
     console.log(`📈 Found ~${anyCount} any type violations\n`);
-  }
+
   
   let totalFixed = 0;
   
@@ -290,7 +290,7 @@ async function main(): Promise<void> {
     
     // Brief pause between directories
     await new Promise(resolve => setTimeout(resolve, 500));
-  }
+
   
   console.log('\n📊 ANY TYPE CLEANUP SUMMARY:');
   console.log(`🎉 Total any types fixed: ${totalFixed}`);
@@ -300,7 +300,7 @@ async function main(): Promise<void> {
   try {
     execSync('pnpm lint', { stdio: 'pipe' });
     console.log('✅ All linting issues resolved!');
-  } catch (error) {
+ catch (error) {
     const output = String(error.stdout || error.stderr || '');
     const remaining = output.match(/(\d+) problems?/);
     const anyCount = (output.match(/Unexpected any/g) || []).length;
@@ -310,8 +310,8 @@ async function main(): Promise<void> {
     
     if (totalFixed > 0) {
       console.log(`🎉 Estimated improvement: ${totalFixed} issues fixed`);
-    }
-  }
+
+
   
   console.log('\n📝 Next steps:');
   console.log('   1. Review changes with: git diff');
@@ -322,10 +322,10 @@ async function main(): Promise<void> {
   console.log('\n⚠️  Note: Some changes from `any` to `unknown` may require');
   console.log('   additional type narrowing in your code. This is intentional');
   console.log('   and improves type safety!');
-}
+
 
 if (require.main === module) {
   main().catch(console.error);
-}
+
 
 module.exports = { analyzeAnyTypes, fixAnyTypesInFile, processDirectory };

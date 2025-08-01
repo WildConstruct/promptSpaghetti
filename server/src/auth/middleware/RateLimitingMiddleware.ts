@@ -6,8 +6,8 @@
 import { Request, Response, NextFunction } from 'express';
 import crypto from 'crypto';
 
-}
-}
+
+
 export interface RateLimitRule {
   id: string;
   name: string;
@@ -24,8 +24,9 @@ export interface RateLimitRule {
     routes?: string[];
     methods?: string[];
     userAgents?: string[];
-}
-}
+
+
+
   };
   
   // Limits
@@ -65,10 +66,10 @@ export interface RateLimitRule {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
-}
 
-}
-}
+
+
+
 export interface RateLimitAttempt {
   id: string;
   identifier: string; // IP or user ID
@@ -82,12 +83,13 @@ export interface RateLimitAttempt {
   headers: Record<string, string>;
   blocked: boolean;
   banExpires?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RateLimitStatus {
   identifier: string;
   currentWindow: {
@@ -96,8 +98,9 @@ export interface RateLimitStatus {
     limit: number;
     remaining: number;
     resetTime: Date;
-}
-}
+
+
+
   };
   totalRequests: number;
   blockedRequests: number;
@@ -105,10 +108,10 @@ export interface RateLimitStatus {
   banned: boolean;
   banExpires?: Date;
   appliedRules: string[];
-}
 
-}
-}
+
+
+
 export interface AdaptiveConfig {
   enabled: boolean;
   baselineRequests: number;
@@ -117,9 +120,10 @@ export interface AdaptiveConfig {
   maxLimit: number;
   learningPeriod: number; // hours
   adjustmentInterval: number; // minutes
-}
-}
-}
+
+
+
+
 
 export class RateLimitingMiddleware {
   private rules: Map<string, RateLimitRule> = new Map();
@@ -141,7 +145,7 @@ export class RateLimitingMiddleware {
   constructor() {
     this.initializeDefaultRules();
     this.startMaintenanceTasks();
-  }
+
 
   /**
    * Create Express middleware for rate limiting
@@ -151,7 +155,7 @@ export class RateLimitingMiddleware {
     skipSuccessfulRequests?: boolean;
     skipFailedRequests?: boolean;
     keyGenerator?: (req: Request) => string;
-  } = {}) {
+ = {}) {
     return async (req: Request, res: Response, next: NextFunction) => {
       const startTime = Date.now();
       
@@ -171,9 +175,9 @@ export class RateLimitingMiddleware {
               'X-RateLimit-Banned': 'true',
               'X-RateLimit-Ban-Expires': banExpires?.toISOString() || '',
               'Retry-After': banExpires ? Math.ceil((banExpires.getTime() - Date.now()) / 1000).toString() : '3600'
-            }
+
           });
-        }
+
 
         // Get applicable rules for this request
         const applicableRules = await this.getApplicableRules(req, identifier);
@@ -194,14 +198,14 @@ export class RateLimitingMiddleware {
             
             if (rule.actions.delayRequest) {
               delayMs = Math.max(delayMs, rule.actions.delayRequest);
-            }
+
             
             // If this rule blocks the request, stop checking other rules
             if (rule.actions.blockRequest) {
               break;
-            }
-          }
-        }
+
+
+
 
         // Record the attempt
         await this.recordAttempt({
@@ -224,7 +228,7 @@ export class RateLimitingMiddleware {
         // Apply ban if needed
         if (blocked && appliedRule?.actions.banDuration) {
           this.bannedIdentifiers.set(identifier, new Date(Date.now() + appliedRule.actions.banDuration));
-        }
+
 
         // Add rate limit headers
         if (limitStatus) {
@@ -232,14 +236,14 @@ export class RateLimitingMiddleware {
           res.setHeader('X-RateLimit-Remaining', limitStatus.currentWindow.remaining.toString());
           res.setHeader('X-RateLimit-Reset', Math.ceil(limitStatus.currentWindow.resetTime.getTime() / 1000).toString());
           res.setHeader('X-RateLimit-Window', '1');
-        }
+
 
         // Handle blocked request
         if (blocked && appliedRule) {
           // Apply delay if specified
           if (delayMs > 0) {
             await this.delay(delayMs);
-          }
+
 
           // Send custom response or default rate limit response
           const response = appliedRule.actions.customResponse || {
@@ -247,24 +251,24 @@ export class RateLimitingMiddleware {
             message: 'Too many requests',
             headers: {
               'Retry-After': limitStatus ? Math.ceil(limitStatus.currentWindow.resetTime.getTime() / 1000).toString() : '60'
-            }
+
           };
 
           return this.sendRateLimitResponse(res, response);
-        }
+
 
         // Apply delay for non-blocking rules
         if (delayMs > 0) {
           await this.delay(delayMs);
-        }
+
 
         next();
-      } catch (error) {
+ catch (error) {
         console.error('Rate limiting middleware error:', error);
         next(); // Allow request to proceed on error
-      }
+
     };
-  }
+
 
   /**
    * Add a new rate limiting rule
@@ -288,7 +292,7 @@ export class RateLimitingMiddleware {
     });
 
     return newRule;
-  }
+
 
   /**
    * Get rate limit status for an identifier
@@ -296,7 +300,7 @@ export class RateLimitingMiddleware {
   async getStatus(identifier: string): Promise<RateLimitStatus | null> {
 
     return this.statuses.get(identifier) || null;
-  }
+
 
   /**
    * Get rate limiting statistics
@@ -310,7 +314,7 @@ export class RateLimitingMiddleware {
     averageResponseTime: number;
     peakRequestTime: Date;
     adaptiveAdjustments: number;
-  }> {
+> {
     const allAttempts = Array.from(this.attempts.values()).flat()
       .filter(attempt => attempt.timestamp >= timeRange.start && attempt.timestamp <= timeRange.end);
 
@@ -365,7 +369,7 @@ export class RateLimitingMiddleware {
       peakRequestTime,
       adaptiveAdjustments: 0 // Would track actual adaptive adjustments
     };
-  }
+
 
   // Private helper methods
 
@@ -379,16 +383,16 @@ export class RateLimitingMiddleware {
       priority: 100,
       targets: {
         routes: ['/api/*']
-  }
+
       limits: {
         requests: 100,
         windowMs: 15 * 60 * 1000, // 15 minutes
         windowType: 'sliding'
-  }
+
       actions: {
         blockRequest: true,
         logAttempt: true
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -403,12 +407,12 @@ export class RateLimitingMiddleware {
       priority: 200,
       targets: {
         routes: ['/api/auth/login', '/api/auth/register', '/api/auth/reset-password']
-  }
+
       limits: {
         requests: 5,
         windowMs: 15 * 60 * 1000, // 15 minutes
         windowType: 'fixed'
-  }
+
       actions: {
         blockRequest: true,
         delayRequest: 1000, // 1 second delay
@@ -420,9 +424,9 @@ export class RateLimitingMiddleware {
           message: 'Too many authentication attempts. Please try again later.',
           headers: {
             'X-Security-Alert': 'true'
-          }
-        }
-  }
+
+
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -437,20 +441,20 @@ export class RateLimitingMiddleware {
       priority: 300,
       targets: {
         routes: ['/api/admin/*', '/api/export/*', '/api/billing/*']
-  }
+
       limits: {
         requests: 10,
         windowMs: 60 * 60 * 1000, // 1 hour
         windowType: 'token_bucket',
         burst: 3,
         refillRate: 0.1 // 1 token every 10 seconds
-  }
+
       actions: {
         blockRequest: true,
         requireMFA: true,
         logAttempt: true,
         notifyAdmin: true
-  }
+
       createdAt: new Date(),
       updatedAt: new Date(),
       createdBy: 'system'
@@ -459,20 +463,20 @@ export class RateLimitingMiddleware {
     this.rules.set(generalRule.id, generalRule);
     this.rules.set(authRule.id, authRule);
     this.rules.set(sensitiveRule.id, sensitiveRule);
-  }
+
 
   private generateIdentifier(req: Request, trustProxy: boolean = false): string {
     // Get IP address
     let ip = req.ip;
     if (trustProxy && req.headers['x-forwarded-for']) {
       ip = (req.headers['x-forwarded-for'] as string).split(',')[0].trim();
-    }
+
 
     // Include user ID if authenticated
     const userId = (req as any).user?.id;
     
     return userId ? `user:${userId}` : `ip:${ip}`;
-  }
+
 
   private async getApplicableRules(req: Request, identifier: string): Promise<RateLimitRule[]> {
 
@@ -483,11 +487,11 @@ export class RateLimitingMiddleware {
 
       if (await this.ruleApplies(rule, req, identifier)) {
         applicableRules.push(rule);
-      }
-    }
+
+
 
     return applicableRules.sort((a, b) => b.priority - a.priority);
-  }
+
 
   private async ruleApplies(rule: RateLimitRule, req: Request, identifier: string): Promise<boolean> {
 
@@ -499,12 +503,12 @@ export class RateLimitingMiddleware {
       return new RegExp(`^${routePattern}$`).test(req.path);
     })) {
       return false;
-    }
+
 
     // Check method targeting
     if (targets.methods && !targets.methods.includes(req.method)) {
       return false;
-    }
+
 
     // Check IP targeting
     if (targets.ipAddresses || targets.ipRanges) {
@@ -512,10 +516,10 @@ export class RateLimitingMiddleware {
       if (ip) {
         if (targets.ipAddresses && !targets.ipAddresses.includes(ip)) {
           return false;
-        }
+
         // IP range checking would be implemented here
-      }
-    }
+
+
 
     // Check user targeting
     if (targets.userIds || targets.userRoles) {
@@ -523,18 +527,18 @@ export class RateLimitingMiddleware {
       if (userId) {
         if (targets.userIds && !targets.userIds.includes(userId)) {
           return false;
-        }
+
         // User role checking would require user service integration
-      }
-    }
+
+
 
     // Check user agent targeting
     if (targets.userAgents) {
       const userAgent = req.headers['user-agent'] || '';
       if (!targets.userAgents.some(ua => userAgent.includes(ua))) {
         return false;
-      }
-    }
+
+
 
     // Check conditions
     if (conditions) {
@@ -542,22 +546,22 @@ export class RateLimitingMiddleware {
         const isAuthenticated = !!(req as any).user;
         if (conditions.userAuthenticated !== isAuthenticated) {
           return false;
-        }
-      }
+
+
 
       if (conditions.headerPresent && !req.headers[conditions.headerPresent.toLowerCase()]) {
         return false;
-      }
+
 
       if (conditions.queryParamPresent && !req.query[conditions.queryParamPresent]) {
         return false;
-      }
+
 
       // Time-based conditions would be checked here
-    }
+
 
     return true;
-  }
+
 
   private async checkRule(
     rule: RateLimitRule, 
@@ -571,7 +575,7 @@ export class RateLimitingMiddleware {
     if (!status) {
       status = this.createInitialStatus(identifier, rule, now);
       this.statuses.set(identifier, status);
-    }
+
 
     // Update status based on window type
     switch (rule.limits.windowType) {
@@ -583,8 +587,8 @@ export class RateLimitingMiddleware {
       return this.checkTokenBucket(rule, status, identifier, now);
     default:
       return { allowed: true, status };
-    }
-  }
+
+
 
   private checkFixedWindow(
     rule: RateLimitRule, 
@@ -602,7 +606,7 @@ export class RateLimitingMiddleware {
         remaining: rule.limits.requests,
         resetTime: new Date(windowStart.getTime() + rule.limits.windowMs)
       };
-    }
+
 
     const allowed = status.currentWindow.requests < rule.limits.requests;
     
@@ -611,12 +615,12 @@ export class RateLimitingMiddleware {
       status.currentWindow.remaining = rule.limits.requests - status.currentWindow.requests;
       status.totalRequests++;
       status.lastRequest = now;
-    } else {
+ else {
       status.blockedRequests++;
-    }
+
 
     return { allowed, status };
-  }
+
 
   private checkSlidingWindow(
     rule: RateLimitRule, 
@@ -646,12 +650,12 @@ export class RateLimitingMiddleware {
     if (allowed) {
       status.totalRequests++;
       status.lastRequest = now;
-    } else {
+ else {
       status.blockedRequests++;
-    }
+
 
     return { allowed, status };
-  }
+
 
   private checkTokenBucket(
     rule: RateLimitRule, 
@@ -667,7 +671,7 @@ export class RateLimitingMiddleware {
         lastRefill: now
       };
       this.tokenBuckets.set(identifier, bucket);
-    }
+
 
     // Refill tokens based on time elapsed
     const timeSinceRefill = now.getTime() - bucket.lastRefill.getTime();
@@ -684,9 +688,9 @@ export class RateLimitingMiddleware {
       bucket.tokens--;
       status.totalRequests++;
       status.lastRequest = now;
-    } else {
+ else {
       status.blockedRequests++;
-    }
+
 
     // Update status
     status.currentWindow = {
@@ -698,7 +702,7 @@ export class RateLimitingMiddleware {
     };
 
     return { allowed, status };
-  }
+
 
   private createInitialStatus(identifier: string, rule: RateLimitRule, now: Date): RateLimitStatus {
     return {
@@ -709,14 +713,14 @@ export class RateLimitingMiddleware {
         limit: rule.limits.requests,
         remaining: rule.limits.requests,
         resetTime: new Date(now.getTime() + rule.limits.windowMs)
-  }
+
       totalRequests: 0,
       blockedRequests: 0,
       lastRequest: now,
       banned: false,
       appliedRules: [rule.id]
     };
-  }
+
 
   private isBanned(identifier: string): boolean {
     const banExpires = this.bannedIdentifiers.get(identifier);
@@ -725,10 +729,10 @@ export class RateLimitingMiddleware {
     if (banExpires <= new Date()) {
       this.bannedIdentifiers.delete(identifier);
       return false;
-    }
+
     
     return true;
-  }
+
 
   private async recordAttempt(attempt: RateLimitAttempt): Promise<void> {
 
@@ -740,7 +744,7 @@ export class RateLimitingMiddleware {
     attempts = attempts.filter(a => a.timestamp >= oneDayAgo);
     
     this.attempts.set(attempt.identifier, attempts);
-  }
+
 
   private sendRateLimitResponse(res: Response, response: {
     statusCode: number;
@@ -751,19 +755,19 @@ export class RateLimitingMiddleware {
       Object.entries(response.headers).forEach(([key, value]) => {
         res.setHeader(key, value);
       });
-    }
+
 
     res.status(response.statusCode).json({
       error: 'Rate limit exceeded',
       message: response.message,
       timestamp: new Date().toISOString()
     });
-  }
+
 
   private async delay(ms: number): Promise<void> {
 
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+
 
   private sanitizeHeaders(headers: any): Record<string, string> {
     const sanitized: Record<string, string> = {};
@@ -774,11 +778,11 @@ export class RateLimitingMiddleware {
         sanitized[header] = typeof headers[header] === 'string' 
           ? headers[header] 
           : headers[header].toString();
-      }
+
     });
 
     return sanitized;
-  }
+
 
   private startMaintenanceTasks(): void {
     // Clean up old data every hour
@@ -791,8 +795,8 @@ export class RateLimitingMiddleware {
       setInterval(() => {
         this.performAdaptiveAdjustments();
       }, this.adaptiveConfig.adjustmentInterval * 60 * 1000);
-    }
-  }
+
+
 
   private cleanupOldData(): void {
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
@@ -802,18 +806,18 @@ export class RateLimitingMiddleware {
       const recentAttempts = attempts.filter(a => a.timestamp >= oneDayAgo);
       if (recentAttempts.length === 0) {
         this.attempts.delete(identifier);
-      } else {
+ else {
         this.attempts.set(identifier, recentAttempts);
-      }
-    }
+
+
 
     // Clean up expired bans
     for (const [identifier, banExpires] of this.bannedIdentifiers.entries()) {
       if (banExpires <= new Date()) {
         this.bannedIdentifiers.delete(identifier);
-      }
-    }
-  }
+
+
+
 
   private performAdaptiveAdjustments(): void {
     // Analyze traffic patterns and adjust limits
@@ -823,38 +827,37 @@ export class RateLimitingMiddleware {
     // This would implement machine learning-based adaptive adjustments
     // For now, just log that adaptive adjustment would occur
     console.log('Performing adaptive rate limit adjustments based on traffic patterns');
-  }
+
 
   private async validateRule(rule: RateLimitRule): Promise<void> {
 
     if (rule.limits.requests <= 0) {
       throw new Error('Request limit must be positive');
-    }
+
 
     if (rule.limits.windowMs <= 0) {
       throw new Error('Window duration must be positive');
-    }
+
 
     if (rule.limits.windowType === 'token_bucket') {
       if (!rule.limits.burst || rule.limits.burst <= 0) {
         throw new Error('Token bucket burst size must be specified and positive');
-      }
+
       if (!rule.limits.refillRate || rule.limits.refillRate <= 0) {
         throw new Error('Token bucket refill rate must be specified and positive');
-      }
-    }
-  }
+
+
+
 
   private generateRuleId(): string {
     return `RL-${Date.now()}-${crypto.randomBytes(4).toString('hex')}`;
-  }
+
 
   private generateAttemptId(): string {
     return `RA-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
-  }
+
 
   private async logRateLimitEvent(action: string, target: string, performedBy: string, metadata: any): Promise<void> {
 
     console.log(`Rate Limit Event: ${action} for ${target} by ${performedBy}`, metadata);
-  }
-}
+

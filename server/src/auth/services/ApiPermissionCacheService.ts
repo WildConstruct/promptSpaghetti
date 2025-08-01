@@ -17,8 +17,8 @@ import { EventEmitter } from 'events';
 // Permission Cache Types
 // =============================================================================
 
-}
-}
+
+
 export interface PermissionCacheConfig {
   // Cache backends
   redisEnabled: boolean;
@@ -47,23 +47,25 @@ export interface PermissionCacheConfig {
   // Monitoring
   metricsEnabled: boolean;
   statsCollectionInterval: number; // milliseconds
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CacheKey {
   type: 'permission' | 'role' | 'assignment' | 'decision' | 'user_permissions' | 'policy_result';
   identifier: string;
   namespace?: string;
   version?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CacheEntry<T> {
   key: string;
   value: T;
@@ -77,10 +79,10 @@ export interface CacheEntry<T> {
     version: number;
     tags: string[];
   };
-}
 
-}
-}
+
+
+
 export interface CacheStats {
   // Hit/miss statistics
   totalHits: number;
@@ -98,8 +100,9 @@ export interface CacheStats {
     totalSize: number;
     maxSize: number;
     utilizationPercentage: number;
-}
-}
+
+
+
   };
   
   // Redis usage
@@ -125,10 +128,10 @@ export interface CacheStats {
     batchInvalidations: number;
     averageBatchSize: number;
   };
-}
 
-}
-}
+
+
+
 export interface UserPermissionsCacheEntry {
   userId: string;
   permissions: ApiPermission[];
@@ -136,20 +139,22 @@ export interface UserPermissionsCacheEntry {
   assignments: ApiPermissionAssignment[];
   lastUpdated: Date;
   effectiveUntil: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DecisionCacheEntry {
   requestSignature: string;
   decision: ApiAccessDecision;
   contextHash: string;
   dependencies: string[]; // Cache keys this decision depends on
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // API Permission Cache Service Implementation
@@ -189,7 +194,7 @@ export class ApiPermissionCacheService extends EventEmitter {
     
     this.stats = this.initializeStats();
     this.initializeService();
-  }
+
 
   // =============================================================================
   // Core Cache Operations
@@ -210,8 +215,8 @@ export class ApiPermissionCacheService extends EventEmitter {
         if (memoryResult !== null) {
           this.recordHit(Date.now() - startTime, 'memory');
           return memoryResult;
-        }
-      }
+
+
       
       // Try Redis cache (distributed)
       if (this.config.redisEnabled) {
@@ -220,23 +225,22 @@ export class ApiPermissionCacheService extends EventEmitter {
           // Populate memory cache for faster future access
           if (this.config.memoryEnabled) {
             await this.setInMemory(key, redisResult, this.getTTLForType(cacheKey.type));
-          }
+
           
           this.recordHit(Date.now() - startTime, 'redis');
           return redisResult;
-        }
-      }
+
+
       
       // Cache miss
       this.recordMiss(Date.now() - startTime);
       return null;
-      
-    } catch (error) {
+ catch (error) {
       console.error('Cache get error:', error);
       this.recordMiss(Date.now() - startTime);
       return null;
-    }
-  }
+
+
 
   /**
    * Set value in cache with multi-tier storage
@@ -251,23 +255,22 @@ export class ApiPermissionCacheService extends EventEmitter {
       // Set in memory cache
       if (this.config.memoryEnabled) {
         await this.setInMemory(key, value, effectiveTTL);
-      }
+
       
       // Set in Redis cache
       if (this.config.redisEnabled) {
         await this.setInRedis(key, value, effectiveTTL);
-      }
+
       
       this.recordSet(Date.now() - startTime);
       
       // Emit cache set event for monitoring
       this.emit('cache_set', { key, type: cacheKey.type, ttl: effectiveTTL });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Cache set error:', error);
       throw error;
-    }
-  }
+
+
 
   /**
    * Delete from all cache tiers
@@ -280,19 +283,18 @@ export class ApiPermissionCacheService extends EventEmitter {
       // Delete from memory
       if (this.config.memoryEnabled) {
         this.memoryCache.delete(key);
-      }
+
       
       // Delete from Redis
       if (this.config.redisEnabled) {
         await this.redisService.delete(key);
-      }
+
       
       this.emit('cache_delete', { key, type: cacheKey.type });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Cache delete error:', error);
-    }
-  }
+
+
 
   // =============================================================================
   // Domain-Specific Cache Methods
@@ -330,7 +332,7 @@ export class ApiPermissionCacheService extends EventEmitter {
         permission,
         this.config.permissionTTL
       );
-    }
+
     
     // Cache roles
     for (const role of roles) {
@@ -339,8 +341,8 @@ export class ApiPermissionCacheService extends EventEmitter {
         role,
         this.config.roleTTL
       );
-    }
-  }
+
+
 
   /**
    * Get cached user permissions
@@ -351,7 +353,7 @@ export class ApiPermissionCacheService extends EventEmitter {
       type: 'user_permissions',
       identifier: userId
     });
-  }
+
 
   /**
    * Cache access control decision with dependency tracking
@@ -377,7 +379,7 @@ export class ApiPermissionCacheService extends EventEmitter {
       decisionEntry,
       this.config.decisionTTL
     );
-  }
+
 
   /**
    * Get cached access control decision
@@ -398,14 +400,14 @@ export class ApiPermissionCacheService extends EventEmitter {
       // Context changed, invalidate this decision
       await this.delete({ type: 'decision', identifier: requestSignature });
       return null;
-    }
+
     
     // Mark decision as cached
     return {
       ...cachedEntry.decision,
       cached: true
     };
-  }
+
 
   /**
    * Batch cache permissions for performance
@@ -421,7 +423,7 @@ export class ApiPermissionCacheService extends EventEmitter {
     );
     
     await Promise.all(promises);
-  }
+
 
   /**
    * Prefetch related permissions based on access patterns
@@ -437,11 +439,10 @@ export class ApiPermissionCacheService extends EventEmitter {
       
       // Emit prefetch event for monitoring
       this.emit('prefetch_started', { userId });
-      
-    } catch (error) {
+ catch (error) {
       console.error('Prefetch error:', error);
-    }
-  }
+
+
 
   // =============================================================================
   // Cache Invalidation
@@ -459,16 +460,16 @@ export class ApiPermissionCacheService extends EventEmitter {
     
     if (this.config.invalidationStrategy === 'immediate') {
       await Promise.all(keysToInvalidate.map(key => this.delete(key)));
-    } else {
+ else {
       // Add to invalidation queue for lazy processing
       this.queueInvalidation(keysToInvalidate);
-    }
+
     
     this.stats.invalidations.total++;
     this.stats.invalidations.byType['user'] = (this.stats.invalidations.byType['user'] || 0) + 1;
     
     this.emit('cache_invalidated', { type: 'user', identifier: userId });
-  }
+
 
   /**
    * Invalidate permission-related caches
@@ -485,7 +486,7 @@ export class ApiPermissionCacheService extends EventEmitter {
     
     this.stats.invalidations.total += dependentKeys.length + 1;
     this.emit('cache_invalidated', { type: 'permission', identifier: permissionId });
-  }
+
 
   /**
    * Smart invalidation based on change type
@@ -498,31 +499,31 @@ export class ApiPermissionCacheService extends EventEmitter {
     const invalidationStrategies = {
       'permission_created': async (ids: string[]) => {
         // New permissions don't invalidate existing caches
-  }
+
       'permission_updated': async (ids: string[]) => {
         for (const id of ids) {
           await this.invalidatePermissionCache(id);
-        }
-  }
+
+
       'permission_deleted': async (ids: string[]) => {
         for (const id of ids) {
           await this.invalidatePermissionCache(id);
-        }
-  }
+
+
       'role_assigned': async (ids: string[]) => {
         for (const userId of ids) {
           await this.invalidateUserCache(userId);
-        }
-  }
+
+
       'role_revoked': async (ids: string[]) => {
         for (const userId of ids) {
           await this.invalidateUserCache(userId);
-        }
-      }
+
+
     };
     
     await invalidationStrategies[changeType](affectedIds);
-  }
+
 
   // =============================================================================
   // Cache Management and Monitoring
@@ -533,7 +534,7 @@ export class ApiPermissionCacheService extends EventEmitter {
    */
   getStats(): CacheStats {
     return { ...this.stats };
-  }
+
 
   /**
    * Clear all caches
@@ -546,13 +547,13 @@ export class ApiPermissionCacheService extends EventEmitter {
     // Clear Redis cache (pattern-based deletion)
     if (this.config.redisEnabled) {
       await this.redisService.deletePattern('api_perm:*');
-    }
+
     
     // Reset stats
     this.stats = this.initializeStats();
     
     this.emit('cache_cleared');
-  }
+
 
   /**
    * Optimize cache performance
@@ -568,8 +569,8 @@ export class ApiPermissionCacheService extends EventEmitter {
       if (entry.expiry <= now) {
         this.memoryCache.delete(key);
         optimizedCount++;
-      }
-    }
+
+
     
     // Remove rarely accessed entries if cache is too large
     if (this.memoryCache.size > this.config.maxMemoryEntries * 0.9) {
@@ -580,12 +581,12 @@ export class ApiPermissionCacheService extends EventEmitter {
       for (const [key] of toRemove) {
         this.memoryCache.delete(key);
         optimizedCount++;
-      }
-    }
+
+
     
     console.log(`Cache optimization completed: removed ${optimizedCount} entries in ${Date.now() - startTime}ms`);
     this.emit('cache_optimized', { removedEntries: optimizedCount });
-  }
+
 
   // =============================================================================
   // Private Helper Methods
@@ -594,17 +595,17 @@ export class ApiPermissionCacheService extends EventEmitter {
   private initializeService(): void {
     if (this.config.preloadEnabled) {
       this.preloadFrequentlyUsedData();
-    }
+
     
     if (this.config.metricsEnabled) {
       this.startStatsCollection();
-    }
+
     
     // Set up periodic optimization
     setInterval(() => this.optimize(), 300000); // Every 5 minutes
     
     console.log('✅ API Permission Cache Service initialized');
-  }
+
 
   private initializeStats(): CacheStats {
     return {
@@ -619,33 +620,33 @@ export class ApiPermissionCacheService extends EventEmitter {
         totalSize: 0,
         maxSize: this.config.maxMemorySize,
         utilizationPercentage: 0
-  }
+
       redisUsage: {
         connected: false,
         keyCount: 0,
         memoryUsed: 0,
         operationsPerSecond: 0
-  }
+
       efficiency: {
         frequentlyAccessed: [],
         rarelyAccessed: [],
         oversizedEntries: [],
         expiringSoon: []
-  }
+
       invalidations: {
         total: 0,
         byType: {},
         batchInvalidations: 0,
         averageBatchSize: 0
-      }
+
     };
-  }
+
 
   private buildCacheKey(cacheKey: CacheKey): string {
     const namespace = cacheKey.namespace || 'api_perm';
     const version = cacheKey.version || 1;
     return `${namespace}:${cacheKey.type}:${cacheKey.identifier}:v${version}`;
-  }
+
 
   private getTTLForType(type: string): number {
     const ttlMap: Record<string, number> = {
@@ -658,7 +659,7 @@ export class ApiPermissionCacheService extends EventEmitter {
     };
     
     return ttlMap[type] || this.config.permissionTTL;
-  }
+
 
   private getFromMemory<T>(key: string): T | null {
     const entry = this.memoryCache.get(key);
@@ -667,14 +668,14 @@ export class ApiPermissionCacheService extends EventEmitter {
     if (entry.expiry <= new Date()) {
       this.memoryCache.delete(key);
       return null;
-    }
+
     
     // Update access statistics
     entry.hitCount++;
     entry.lastAccess = new Date();
     
     return entry.value;
-  }
+
 
   private async setInMemory<T>(key: string, value: T, ttl: number): Promise<void> {
 
@@ -693,16 +694,16 @@ export class ApiPermissionCacheService extends EventEmitter {
         source: 'api_cache',
         version: 1,
         tags: []
-      }
+
     };
     
     // Check memory limits
     if (this.shouldEvictForMemory(size)) {
       this.evictLeastRecentlyUsed();
-    }
+
     
     this.memoryCache.set(key, entry);
-  }
+
 
   private async getFromRedis<T>(key: string): Promise<T | null> {
 
@@ -713,11 +714,11 @@ export class ApiPermissionCacheService extends EventEmitter {
       return this.config.compressionEnabled 
         ? this.decompress(result) 
         : JSON.parse(result);
-    } catch (error) {
+ catch (error) {
       console.error('Redis get error:', error);
       return null;
-    }
-  }
+
+
 
   private async setInRedis<T>(key: string, value: T, ttl: number): Promise<void> {
 
@@ -727,10 +728,10 @@ export class ApiPermissionCacheService extends EventEmitter {
         : JSON.stringify(value);
       
       await this.redisService.setex(key, ttl, serialized);
-    } catch (error) {
+ catch (error) {
       console.error('Redis set error:', error);
-    }
-  }
+
+
 
   private generateRequestSignature(request: ApiAccessRequest): string {
     // Create a signature for cache key based on request properties
@@ -743,7 +744,7 @@ export class ApiPermissionCacheService extends EventEmitter {
     ];
     
     return Buffer.from(sigParts.join('|')).toString('base64');
-  }
+
 
   private generateContextHash(request: ApiAccessRequest): string {
     // Generate hash of context that affects decisions
@@ -754,29 +755,29 @@ export class ApiPermissionCacheService extends EventEmitter {
     ];
     
     return Buffer.from(contextParts.join('|')).toString('base64');
-  }
+
 
   private async findDependentKeys(type: string, identifier: string): Promise<CacheKey[]> {
 
     // This would typically involve querying metadata to find dependent cache entries
     // For now, return empty array - in production this would be more sophisticated
     return [];
-  }
+
 
   private queueInvalidation(keys: CacheKey[]): void {
     // Implementation for lazy invalidation queue
     console.log(`Queued ${keys.length} keys for invalidation`);
-  }
+
 
   private shouldEvictForMemory(newEntrySize: number): boolean {
     const currentSize = this.getCurrentMemoryUsage();
     return currentSize + newEntrySize > this.config.maxMemorySize;
-  }
+
 
   private getCurrentMemoryUsage(): number {
     return Array.from(this.memoryCache.values())
       .reduce((total, entry) => total + entry.size, 0);
-  }
+
 
   private evictLeastRecentlyUsed(): void {
     if (this.memoryCache.size === 0) return;
@@ -788,52 +789,52 @@ export class ApiPermissionCacheService extends EventEmitter {
       if (entry.lastAccess.getTime() < oldestTime) {
         oldestTime = entry.lastAccess.getTime();
         oldestKey = key;
-      }
-    }
+
+
     
     if (oldestKey) {
       this.memoryCache.delete(oldestKey);
-    }
-  }
+
+
 
   private estimateObjectSize(obj: any): number {
     return JSON.stringify(obj).length * 2; // Rough estimate
-  }
+
 
   private compress(data: any): string {
     // Placeholder - would implement actual compression
     return JSON.stringify(data);
-  }
+
 
   private decompress(data: string): any {
     // Placeholder - would implement actual decompression
     return JSON.parse(data);
-  }
+
 
   private recordHit(duration: number, source: 'memory' | 'redis'): void {
     this.stats.totalHits++;
     this.stats.totalOperations++;
     this.stats.averageGetTime = (this.stats.averageGetTime + duration) / 2;
     this.updateHitRate();
-  }
+
 
   private recordMiss(duration: number): void {
     this.stats.totalMisses++;
     this.stats.totalOperations++;
     this.stats.averageGetTime = (this.stats.averageGetTime + duration) / 2;
     this.updateHitRate();
-  }
+
 
   private recordSet(duration: number): void {
     this.stats.totalOperations++;
     this.stats.averageSetTime = (this.stats.averageSetTime + duration) / 2;
-  }
+
 
   private updateHitRate(): void {
     this.stats.hitRate = this.stats.totalOperations > 0 
       ? (this.stats.totalHits / this.stats.totalOperations) * 100 
       : 0;
-  }
+
 
   private startStatsCollection(): void {
     this.statsInterval = setInterval(() => {
@@ -841,14 +842,14 @@ export class ApiPermissionCacheService extends EventEmitter {
       this.updateRedisUsage();
       this.updateEfficiencyMetrics();
     }, this.config.statsCollectionInterval);
-  }
+
 
   private updateMemoryUsage(): void {
     this.stats.memoryUsage.entries = this.memoryCache.size;
     this.stats.memoryUsage.totalSize = this.getCurrentMemoryUsage();
     this.stats.memoryUsage.utilizationPercentage = 
       (this.stats.memoryUsage.totalSize / this.config.maxMemorySize) * 100;
-  }
+
 
   private async updateRedisUsage(): Promise<void> {
 
@@ -857,10 +858,10 @@ export class ApiPermissionCacheService extends EventEmitter {
     try {
       this.stats.redisUsage.connected = await this.redisService.isConnected();
       // Additional Redis stats would be collected here
-    } catch (error) {
+ catch (error) {
       this.stats.redisUsage.connected = false;
-    }
-  }
+
+
 
   private updateEfficiencyMetrics(): void {
     // Update efficiency metrics based on cache usage patterns
@@ -888,26 +889,26 @@ export class ApiPermissionCacheService extends EventEmitter {
     this.stats.efficiency.expiringSoon = entries
       .filter(([, entry]) => entry.expiry <= soonThreshold)
       .map(([key]) => key);
-  }
+
 
   private async preloadFrequentlyUsedData(): Promise<void> {
 
     // This would typically preload commonly accessed permissions and roles
     console.log('Preloading frequently used permission data...');
-  }
+
 
   // Cleanup
   async shutdown(): Promise<void> {
 
     if (this.statsInterval) {
       clearInterval(this.statsInterval);
-    }
+
     
     this.memoryCache.clear();
     this.removeAllListeners();
     
     console.log('✅ API Permission Cache Service shut down');
-  }
-}
+
+
 
 export default ApiPermissionCacheService;

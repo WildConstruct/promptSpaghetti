@@ -7,8 +7,8 @@ import { SessionService, ActiveSession } from './SessionService';
 import { AuditService } from './AuditService';
 import { RedisService } from '../database/RedisService';
 
-}
-}
+
+
 export interface SessionMetrics {
   totalActiveSessions: number;
   sessionsByDevice: Record<string, number>;
@@ -16,12 +16,13 @@ export interface SessionMetrics {
   averageSessionDuration: number;
   suspiciousActivities: number;
   concurrentSessionsPerUser: Record<string, number>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionAlert {
   id: string;
   type: 'concurrent_limit' | 'suspicious_location' | 'unusual_device' | 'rapid_location_change' | 'session_hijack_attempt';
@@ -33,12 +34,13 @@ export interface SessionAlert {
   resolved: boolean;
   resolvedAt?: Date;
   resolvedBy?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface MonitoringRule {
   id: string;
   name: string;
@@ -47,16 +49,18 @@ export interface MonitoringRule {
   threshold?: number;
   parameters: Record<string, any>;
   action: 'alert' | 'block' | 'require_2fa' | 'notify_user';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SessionAnalytics {
   userId?: string;
-}
-}
+
+
+
   timeRange: { start: Date; end: Date };
   metrics: {
     totalSessions: number;
@@ -73,7 +77,7 @@ export interface SessionAnalytics {
     commonLocations: Array<{ location: string; count: number }>;
   };
   anomalies: SessionAlert[];
-}
+
 
 export class SessionMonitoringService {
   private config: AuthConfig;
@@ -104,33 +108,33 @@ export class SessionMonitoringService {
       rapidLocationChangeDistanceKm: 500,
       suspiciousDeviceScore: 0.7
     };
-  }
+
 
   // Start real-time monitoring
   startMonitoring(intervalMs: number = 60000): void {
     if (this.monitoringInterval) {
       this.stopMonitoring();
-    }
+
 
     this.monitoringInterval = setInterval(async () => {
       try {
         await this.performMonitoringCycle();
-      } catch (error) {
+ catch (error) {
         console.error('Session monitoring error:', error);
-      }
+
     }, intervalMs);
 
     // Perform initial monitoring
     this.performMonitoringCycle();
-  }
+
 
   // Stop monitoring
   stopMonitoring(): void {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = undefined;
-    }
-  }
+
+
 
   // Perform a monitoring cycle
   private async performMonitoringCycle(): Promise<void> {
@@ -138,7 +142,7 @@ export class SessionMonitoringService {
     const metrics = await this.collectMetrics();
     await this.checkForAnomalies(metrics);
     await this.updateMetricsCache(metrics);
-  }
+
 
   // Collect current session metrics
   async collectMetrics(): Promise<SessionMetrics> {
@@ -174,7 +178,7 @@ export class SessionMonitoringService {
       const location = await this.getLocationFromIP(session.ip_address);
       const country = location?.country || 'Unknown';
       sessionsByLocation[country] = (sessionsByLocation[country] || 0) + 1;
-    }
+
 
     // Calculate average session duration
     const durations = sessions.map(s => {
@@ -208,7 +212,7 @@ export class SessionMonitoringService {
       suspiciousActivities,
       concurrentSessionsPerUser
     };
-  }
+
 
   // Check for anomalies and generate alerts
   private async checkForAnomalies(metrics: SessionMetrics): Promise<void> {
@@ -223,10 +227,10 @@ export class SessionMonitoringService {
           details: {
             sessionCount: count,
             threshold: this.alertThresholds.maxConcurrentSessions
-          }
+
         });
-      }
-    }
+
+
 
     // Check for rapid location changes
     await this.checkRapidLocationChanges();
@@ -236,7 +240,7 @@ export class SessionMonitoringService {
 
     // Check for potential session hijacking
     await this.checkSessionHijacking();
-  }
+
 
   // Check for rapid location changes
   private async checkRapidLocationChanges(): Promise<void> {
@@ -283,12 +287,12 @@ export class SessionMonitoringService {
               toLocation: currentLocation,
               distanceKm: distance,
               timeMinutes: this.alertThresholds.rapidLocationChangeMinutes
-            }
+
           });
-        }
-      }
-    }
-  }
+
+
+
+
 
   // Check for suspicious devices
   private async checkSuspiciousDevices(): Promise<void> {
@@ -321,11 +325,11 @@ export class SessionMonitoringService {
             deviceInfo: session.device_info,
             userAgent: session.user_agent,
             suspiciousScore
-          }
+
         });
-      }
-    }
-  }
+
+
+
 
   // Check for potential session hijacking
   private async checkSessionHijacking(): Promise<void> {
@@ -358,7 +362,7 @@ export class SessionMonitoringService {
             userAgents: suspicious.user_agents,
             ipCount: suspicious.ip_count,
             userAgentCount: suspicious.ua_count
-          }
+
         });
 
         // Immediately revoke the potentially compromised session
@@ -366,9 +370,9 @@ export class SessionMonitoringService {
           suspicious.session_token,
           'Potential session hijacking detected'
         );
-      }
-    }
-  }
+
+
+
 
   // Create an alert
   async createAlert(alertData: Omit<SessionAlert, 'id' | 'createdAt' | 'resolved'>): Promise<SessionAlert> {
@@ -406,7 +410,7 @@ export class SessionMonitoringService {
         alertType: alert.type,
         severity: alert.severity,
         details: alert.details
-  }
+
       sessionId: alert.sessionId,
       severity: alert.severity as any
     });
@@ -414,10 +418,10 @@ export class SessionMonitoringService {
     // Take automatic action based on alert severity
     if (alert.severity === 'critical') {
       await this.handleCriticalAlert(alert);
-    }
+
 
     return alert;
-  }
+
 
   // Handle critical alerts
   private async handleCriticalAlert(alert: SessionAlert): Promise<void> {
@@ -428,8 +432,8 @@ export class SessionMonitoringService {
     // For session hijacking, revoke all sessions
     if (alert.type === 'session_hijack_attempt') {
       await this.sessionService.revokeAllUserSessions(alert.userId);
-    }
-  }
+
+
 
   // Resolve an alert
   async resolveAlert(alertId: string, resolvedBy: string): Promise<void> {
@@ -448,7 +452,7 @@ export class SessionMonitoringService {
       details: { alertId },
       severity: 'info'
     });
-  }
+
 
   // Get active alerts
   async getActiveAlerts(filters?: {
@@ -464,17 +468,17 @@ export class SessionMonitoringService {
     if (filters?.userId) {
       query += ` AND user_id = $${paramIndex++}`;
       params.push(filters.userId);
-    }
+
 
     if (filters?.type) {
       query += ` AND type = $${paramIndex++}`;
       params.push(filters.type);
-    }
+
 
     if (filters?.severity) {
       query += ` AND severity = $${paramIndex++}`;
       params.push(filters.severity);
-    }
+
 
     query += ' ORDER BY created_at DESC';
 
@@ -492,7 +496,7 @@ export class SessionMonitoringService {
       resolvedAt: row.resolved_at,
       resolvedBy: row.resolved_by
     }));
-  }
+
 
   // Get session analytics
   async getSessionAnalytics(
@@ -511,7 +515,7 @@ export class SessionMonitoringService {
     if (userId) {
       whereClause += ' AND user_id = $3';
       params.push(userId);
-    }
+
 
     // Get session metrics
     const metricsResult = await this.dbService.query(`
@@ -604,7 +608,7 @@ export class SessionMonitoringService {
         location: location?.city || location?.country || row.ip_address,
         count: parseInt(row.count)
       });
-    }
+
 
     // Get anomalies
     const anomalies = await this.getActiveAlerts({ userId });
@@ -617,10 +621,10 @@ export class SessionMonitoringService {
         mostActiveHours,
         commonDevices,
         commonLocations
-  }
+
       anomalies
     };
-  }
+
 
   // Update metrics cache
   private async updateMetricsCache(metrics: SessionMetrics): Promise<void> {
@@ -634,7 +638,7 @@ export class SessionMonitoringService {
         timestamp: new Date()
   }
     );
-  }
+
 
   // Get cached metrics
   async getCachedMetrics(): Promise<SessionMetrics | null> {
@@ -644,16 +648,16 @@ export class SessionMonitoringService {
     
     if (!cached) {
       return null;
-    }
+
 
     try {
       const data = JSON.parse(cached);
       return data.metrics;
-    } catch (error) {
+ catch (error) {
       console.error('Error parsing cached metrics:', error);
       return null;
-    }
-  }
+
+
 
   // Helper: Get location from IP address
   private async getLocationFromIP(ipAddress: string): Promise<any> {
@@ -666,7 +670,7 @@ export class SessionMonitoringService {
       latitude: 40.7128,
       longitude: -74.0060
     };
-  }
+
 
   // Helper: Calculate distance between two coordinates
   private calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -678,11 +682,11 @@ export class SessionMonitoringService {
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  }
+
 
   private toRad(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
+
 
   // Helper: Calculate device suspicious score
   private async calculateDeviceSuspiciousScore(
@@ -712,21 +716,21 @@ export class SessionMonitoringService {
     if (matchingDevice) {
       // Reduce score based on usage frequency
       score -= Math.min(0.5, matchingDevice.usage_count * 0.1);
-    }
+
 
     // Check user agent familiarity
     const matchingUA = knownDevices.find(d => d.user_agent === userAgent);
     if (matchingUA) {
       score -= 0.3;
-    }
+
 
     // Check for common suspicious patterns
     if (deviceInfo?.platform && ['Bot', 'Crawler'].includes(deviceInfo.platform)) {
       score = Math.max(score, 0.9);
-    }
+
 
     return Math.max(0, Math.min(1, score));
-  }
+
 
   // Helper: Notify user of security alert
   private async notifyUserOfSecurityAlert(alert: SessionAlert): Promise<void> {
@@ -739,7 +743,7 @@ export class SessionMonitoringService {
 
     if (userResult.rows.length === 0) {
       return;
-    }
+
 
     const email = userResult.rows[0].email;
 
@@ -758,7 +762,7 @@ export class SessionMonitoringService {
       new Date(),
       'high'
     ]);
-  }
+
 
   private generateAlertNotificationBody(alert: SessionAlert): string {
     const alertDescriptions = {
@@ -787,7 +791,7 @@ For your security, we may have automatically taken protective actions on your ac
 Best regards,
 Security Team
     `.trim();
-  }
+
 
   // Get monitoring rules
   async getMonitoringRules(): Promise<MonitoringRule[]> {
@@ -805,7 +809,7 @@ Security Team
       parameters: row.parameters,
       action: row.action
     }));
-  }
+
 
   // Update monitoring rule
   async updateMonitoringRule(ruleId: string, updates: Partial<MonitoringRule>): Promise<void> {
@@ -815,7 +819,7 @@ Security Team
     
     if (updateFields.length === 0) {
       return;
-    }
+
 
     const setClause = updateFields.map((field, index) => `${field} = $${index + 2}`).join(', ');
     const values = [ruleId, ...updateFields.map(field => 
@@ -826,5 +830,4 @@ Security Team
       `UPDATE session_monitoring_rules SET ${setClause}, updated_at = NOW() WHERE id = $1`,
       values
     );
-  }
-}
+

@@ -11,20 +11,19 @@
  */
 import { EventEmitter } from 'events';
 import { createCipheriv, createDecipheriv, randomBytes, createHmac } from 'crypto';
-import { 
-  KeyManagementService, 
+import { KeyManagementService, 
   KeyType, 
   KeyPurpose, 
-  KeyAlgorithm, 
+  KeyAlgorithm }
   StorageTier 
-} from './KeyManagementService';
+ from './KeyManagementService';
 import { DataClassifier, ClassificationLevel } from './DataClassifier';
 import { DeviceFingerprintingService, FingerprintContext } from './DeviceFingerprintingService';
 import { TrustedDeviceManager } from './TrustedDeviceManager';
 
 // Security configuration
 
-}
+
 export interface WebSocketSecurityConfig {
   // Encryption settings
   enableMessageEncryption: boolean;
@@ -56,11 +55,11 @@ export interface WebSocketSecurityConfig {
   allowedOrigins: string;
   requireSecureTransport: boolean;
   // Security context for connections
-}
-}
-}
-export interface ConnectionSecurityContext {
-  connectionId: string;
+
+
+
+
+export interface ConnectionSecurityContext { connectionId: string;
   userId: string;
   sessionId: string;
   // Authentication state
@@ -87,18 +86,19 @@ export interface ConnectionSecurityContext {
   bytesSent: number;
   bytesReceived: number;
   // Security flags
-  flags: {
+  flags: { }
   vpnDetected: boolean;
   proxyDetected: boolean;
   botDetected: boolean;
   repeatedLoginAttempts: boolean;
   anomalousPatterns: boolean;
-}
+
+
 };
 
 // Enhanced message with security metadata
-}
-}
+
+
 export interface SecureWebSocketMessage {
   id: string;
   type: string;
@@ -117,36 +117,36 @@ export interface SecureWebSocketMessage {
   originUserId: string;
   processingPath: string;
   // Security events
-}
-}
-}
-export interface SecurityEvent {
-  id: string;
+
+
+
+
+export interface SecurityEvent { id: string;
   type: 'authentication' | 'encryption' | 'threat_detected' | 'policy_violation' | 'anomaly';
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  severity: 'info' | 'warning' | 'error' | 'critical' }
   connectionId: string;
   userId?: string;
   timestamp: Date;
   description: string;
   metadata: Record<string, any>;
   // Threat detection rules
-}
-}
-}
-export interface ThreatDetectionRule {
-  id: string;
+
+
+
+
+export interface ThreatDetectionRule { id: string;
   name: string;
   type: 'rate_limit' | 'pattern_match' | 'anomaly' | 'behavioral';
   enabled: boolean;
   threshold: number;
   timeWindowMinutes: number;
-  action: 'log' | 'warn' | 'block' | 'disconnect';
+  action: 'log' | 'warn' | 'block' | 'disconnect' }
   description: string;
   /**
   * WebSocket Security Manager
   */
-}
-}
+
+
 export class WebSocketSecurityManager extends EventEmitter {
   private connectionContexts: Map<string, ConnectionSecurityContext> = new Map();
   private encryptionKeys: Map<string, Buffer> = new Map();
@@ -156,10 +156,10 @@ export class WebSocketSecurityManager extends EventEmitter {
   private suspiciousIPs: Set<string> = new Set();
   private blockedConnections: Set<string> = new Set();
   constructor();
-    private config: WebSocketSecurityConfig,
-    private keyManagementService: KeyManagementService,
-    private dataClassifier: DataClassifier,
-    private fingerprintService: DeviceFingerprintingService,
+    private config: WebSocketSecurityConfig
+    private keyManagementService: KeyManagementService
+    private dataClassifier: DataClassifier
+    private fingerprintService: DeviceFingerprintingService
     private trustedDeviceManager: TrustedDeviceManager
     super();
     this.initializeThreatDetectionRules();
@@ -168,116 +168,113 @@ export class WebSocketSecurityManager extends EventEmitter {
    * Initialize connection security context
    */
   public async initializeConnection(
-    connectionId: string,
-    userId: string,
-    requestInfo: {
+    connectionId: string
+    userId: string
+    requestInfo: { 
   ipAddress: string;
   userAgent: string;
   origin: string;
   headers: Record<string, string>;
-  ): Promise<ConnectionSecurityContext> {,
+  ): Promise<ConnectionSecurityContext> {
   try {
   // Create fingerprint context
-  const fingerprintContext: FingerprintContext = {,
-  ipAddress: requestInfo.ipAddress,
-  userAgent: requestInfo.userAgent,
-  headers: requestInfo.headers,
+  const fingerprintContext: FingerprintContext = {
+  ipAddress: requestInfo.ipAddress
+  userAgent: requestInfo.userAgent
+  headers: requestInfo.headers }
 };
       // Generate device fingerprint
       const deviceFingerprint = await this.fingerprintService.generateFingerprint(;);
         fingerprintContext
       );
       // Assess initial risk
-      const riskAssessment = this.fingerprintService.assessRisk(deviceFingerprint, {)
-  id: 'default-location',
-  timestamp: new Date(),
-  source: 'ip' as const,
-  accuracy: 1000,
-  confidence: 50,
+      const riskAssessment = this.fingerprintService.assessRisk(deviceFingerprint, { )
+  id: 'default-location'
+  timestamp: new Date()
+  source: 'ip' as const
+  accuracy: 1000
+  confidence: 50
   coordinates: {
-  latitude: 0,
-  longitude: 0,
-},
-  address: {
-  country: 'Unknown',
-  countryCode: 'XX',
-  region: 'Unknown',
-  regionCode: 'XX',
-  city: 'Unknown',
-},
-  network: {
-  ipAddress: requestInfo.ipAddress,
-  isp: 'Unknown',
-  timezone: 'UTC',
-  vpnDetected: false,
-  proxyDetected: false,
-  torDetected: false,
-  hostingProvider: false,
-  datacenter: false,
-},
-  metadata: {
-  language: 'en',
-  currency: 'USD',
-  callingCode: '+1',
+  latitude: 0
+  longitude: 0 }
+
+  address: { 
+  country: 'Unknown'
+  countryCode: 'XX'
+  region: 'Unknown'
+  regionCode: 'XX'
+  city: 'Unknown' }
+
+  network: { 
+  ipAddress: requestInfo.ipAddress
+  isp: 'Unknown'
+  timezone: 'UTC'
+  vpnDetected: false
+  proxyDetected: false
+  torDetected: false
+  hostingProvider: false
+  datacenter: false }
+
+  metadata: { 
+  language: 'en'
+  currency: 'USD'
+  callingCode: '+1' }
 });
       // Check if device is trusted
       const trustDecision = await this.trustedDeviceManager.checkDeviceTrust(;);
-        userId,
+        userId
         fingerprintContext
       );
       const deviceTrusted = trustDecision.trusted;
       // Create security context
-      const context: ConnectionSecurityContext = {
-  connectionId,
-  userId,
-  sessionId: this.generateSessionId(),
-  isAuthenticated: false,
-  mfaVerified: false,
-  deviceVerified: deviceTrusted,
-  trustLevel: 'none',
-  lastKeyRotation: new Date(),
-  riskScore: riskAssessment.riskScore,
-  threatLevel: this.mapRiskLevelToThreatLevel(riskAssessment.overallRisk),
-  suspiciousActivityCount: 0,
-  deviceFingerprint: deviceFingerprint.id,
-  deviceTrusted,
-  connectedAt: new Date(),
-  lastActivity: new Date(),
-  messageCount: 0,
-  bytesSent: 0,
-  bytesReceived: 0,
+      const context: ConnectionSecurityContext = { connectionId
+  userId
+  sessionId: this.generateSessionId()
+  isAuthenticated: false
+  mfaVerified: false
+  deviceVerified: deviceTrusted
+  trustLevel: 'none'
+  lastKeyRotation: new Date()
+  riskScore: riskAssessment.riskScore
+  threatLevel: this.mapRiskLevelToThreatLevel(riskAssessment.overallRisk)
+  suspiciousActivityCount: 0
+  deviceFingerprint: deviceFingerprint.id
+  deviceTrusted
+  connectedAt: new Date()
+  lastActivity: new Date()
+  messageCount: 0
+  bytesSent: 0
+  bytesReceived: 0
   flags: {
-  vpnDetected: riskAssessment.factors.some(f => f.factor.includes('vpn')),
-  proxyDetected: riskAssessment.factors.some(f => f.factor.includes('proxy')),
-  botDetected: false,
-  repeatedLoginAttempts: false,
-  anomalousPatterns: false,
+  vpnDetected: riskAssessment.factors.some(f => f.factor.includes('vpn'))
+  proxyDetected: riskAssessment.factors.some(f => f.factor.includes('proxy'))
+  botDetected: false
+  repeatedLoginAttempts: false
+  anomalousPatterns: false }
 };
       // Generate session encryption key if encryption is enabled
-      if (this.config.enableMessageEncryption) {
-  await this.generateSessionEncryptionKey(context);
+      if (this.config.enableMessageEncryption) { await this.generateSessionEncryptionKey(context);
   this.connectionContexts.set(connectionId, context);
   // Log security event
   await this.logSecurityEvent({)
-  type: 'authentication',
-  severity: 'info',
-  connectionId,
-  userId,
-  description: 'Connection security context initialized',
+  type: 'authentication'
+  severity: 'info'
+  connectionId
+  userId
+  description: 'Connection security context initialized'
   metadata: {
-  riskScore: context.riskScore,
-  threatLevel: context.threatLevel,
-  deviceTrusted: context.deviceTrusted,
-  flags: context.flags,
+  riskScore: context.riskScore
+  threatLevel: context.threatLevel
+  deviceTrusted: context.deviceTrusted
+  flags: context.flags }
 });
       return context;
-    } catch (error) {
-      await this.logSecurityEvent({)
-  type: 'authentication',
-        severity: 'error',
-        connectionId,
-        userId,
-        description: 'Failed to initialize connection security context',
+ catch (error) { await this.logSecurityEvent({)
+  type: 'authentication'
+        severity: 'error'
+        connectionId
+        userId
+        description: 'Failed to initialize connection security context' }
         metadata: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       throw error;
@@ -285,8 +282,8 @@ export class WebSocketSecurityManager extends EventEmitter {
    * Authenticate connection with enhanced security
    */
   public async authenticateConnection(
-    connectionId: string,
-    credentials: {
+    connectionId: string
+    credentials: { 
   token: string;
       mfaCode?: string;
       deviceVerificationToken?: string;
@@ -300,32 +297,30 @@ export class WebSocketSecurityManager extends EventEmitter {
       const tokenValid = await this.validateToken(credentials.token, context.userId);
       if (!tokenValid) {
         await this.logSecurityEvent({)
-  type: 'authentication',
-          severity: 'warning',
-          connectionId,
-          userId: context.userId,
-          description: 'Invalid authentication token',
+  type: 'authentication'
+          severity: 'warning'
+          connectionId
+          userId: context.userId
+          description: 'Invalid authentication token' }
           metadata: { attemptCount: context.suspiciousActivityCount + 1 }
         });
         context.suspiciousActivityCount++;
         return false;
       // MFA verification for high-risk connections
       if (this.config.enableMFAForHighRisk && )
-          (context.threatLevel === 'high' || context.threatLevel === 'critical')) {
-        if (!credentials.mfaCode || !await this.validateMFACode(context.userId, credentials.mfaCode)) {
+          (context.threatLevel === 'high' || context.threatLevel === 'critical')) { if (!credentials.mfaCode || !await this.validateMFACode(context.userId, credentials.mfaCode)) {
           await this.logSecurityEvent({)
-  type: 'authentication',
-            severity: 'warning',
-            connectionId,
-            userId: context.userId,
-            description: 'MFA verification failed for high-risk connection',
+  type: 'authentication'
+            severity: 'warning'
+            connectionId
+            userId: context.userId
+            description: 'MFA verification failed for high-risk connection' }
             metadata: { threatLevel: context.threatLevel }
           });
           return false;
         context.mfaVerified = true;
       // Device verification
-      if (this.config.requireDeviceVerification && credentials.deviceVerificationToken) {
-  const verifiedDevice = await this.trustedDeviceManager.verifyDevice(;);
+      if (this.config.requireDeviceVerification && credentials.deviceVerificationToken) { const verifiedDevice = await this.trustedDeviceManager.verifyDevice(;);
   credentials.deviceVerificationToken
   );
   context.deviceVerified = !!verifiedDevice;
@@ -334,24 +329,23 @@ export class WebSocketSecurityManager extends EventEmitter {
   context.trustLevel = this.calculateTrustLevel(context);
   context.lastActivity = new Date();
   await this.logSecurityEvent({)
-  type: 'authentication',
-  severity: 'info',
-  connectionId,
-  userId: context.userId,
-  description: 'Connection authenticated successfully',
+  type: 'authentication'
+  severity: 'info'
+  connectionId
+  userId: context.userId
+  description: 'Connection authenticated successfully'
   metadata: {
-  trustLevel: context.trustLevel,
-  mfaVerified: context.mfaVerified,
-  deviceVerified: context.deviceVerified,
+  trustLevel: context.trustLevel
+  mfaVerified: context.mfaVerified
+  deviceVerified: context.deviceVerified }
 });
       return true;
-    } catch (error) {
-      await this.logSecurityEvent({)
-  type: 'authentication',
-        severity: 'error',
-        connectionId,
-        userId: context.userId,
-        description: 'Authentication error',
+ catch (error) { await this.logSecurityEvent({)
+  type: 'authentication'
+        severity: 'error'
+        connectionId
+        userId: context.userId
+        description: 'Authentication error' }
         metadata: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       return false;
@@ -359,7 +353,7 @@ export class WebSocketSecurityManager extends EventEmitter {
    * Encrypt outgoing message
    */
   public async encryptMessage(((
-    connectionId: string,
+    connectionId: string
     message: any
   ): Promise<SecureWebSocketMessage> {
 
@@ -371,41 +365,38 @@ export class WebSocketSecurityManager extends EventEmitter {
       const classification = this.config.enableDataClassification;
         ? this.dataClassifier.classify({)
   id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
-},
-  fieldName: 'payload',
-          value: JSON.stringify(message),
-          dataType: 'json',
-          context: { messageType: message.type },
-          source: 'websocket',
+
+  fieldName: 'payload'
+          value: JSON.stringify(message)
+          dataType: 'json'
+          context: { messageType: message.type }
+          source: 'websocket'
           timestamp: new Date();
-  }
+
         : { level: ClassificationLevel.PUBLIC, category: 'operational', confidence: 100, matchedRules: [], complianceRequirements: [], encryptionRequired: false, retentionPeriod: '1 year', accessControls: [], reasoning: [] };
       // Check if encryption is required based on classification
       const shouldEncrypt = this.config.enableMessageEncryption ||;
                            classification.level === ClassificationLevel.CONFIDENTIAL ||
                            classification.level === ClassificationLevel.RESTRICTED;
-      const secureMessage: SecureWebSocketMessage = {,
-  id: this.generateMessageId(),
-  type: message.type,
-  payload: message.payload,
-  encrypted: shouldEncrypt,
-  signed: true,
-  classification: classification.level,
-  timestamp: Date.now(),
-  originConnectionId: connectionId,
-  originUserId: context.userId,
-  processingPath: ['websocket_security_manager'],
+      const secureMessage: SecureWebSocketMessage = { 
+  id: this.generateMessageId()
+  type: message.type
+  payload: message.payload
+  encrypted: shouldEncrypt
+  signed: true
+  classification: classification.level
+  timestamp: Date.now()
+  originConnectionId: connectionId
+  originUserId: context.userId
+  processingPath: ['websocket_security_manager'] }
 };
-      if (shouldEncrypt && context.encryptionSessionKey) {
-        // Encrypt payload
+      if (shouldEncrypt && context.encryptionSessionKey) { // Encrypt payload
         const iv = randomBytes(16);
         // Ensure key is 32 bytes for AES-256
         let key = context.encryptionSessionKey;
         if (key.length < 32) {
           // Pad key to 32 bytes if too short
-          key = Buffer.concat([key, Buffer.alloc(32 - key.length)]);
-        } else if (key.length > 32) {
-  key = key.slice(0, 32);
+          key = Buffer.concat([key, Buffer.alloc(32 - key.length)]) } else if (key.length > 32) { key = key.slice(0, 32);
   const cipher = createCipheriv('aes-256-gcm', key, iv);
   let encrypted = cipher.update(JSON.stringify(message.payload), 'utf8', 'hex');
   encrypted += cipher.final('hex');
@@ -432,19 +423,18 @@ export class WebSocketSecurityManager extends EventEmitter {
   connectionId,
   userId: context.userId,
   description: 'Classified message encrypted',
-  metadata: {
+  metadata: {,
   classification: classification.level,
   messageType: message.type,
-  encrypted: shouldEncrypt,
+  encrypted: shouldEncrypt }
 });
       return secureMessage;
-    } catch (error) {
-      await this.logSecurityEvent({)
+ catch (error) { await this.logSecurityEvent({)
   type: 'encryption',
         severity: 'error',
         connectionId,
         userId: context.userId,
-        description: 'Message encryption failed',
+        description: 'Message encryption failed' }
         metadata: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       throw error;
@@ -454,9 +444,7 @@ export class WebSocketSecurityManager extends EventEmitter {
   public async decryptMessage(((
     connectionId: string,
     secureMessage: SecureWebSocketMessage
-  ): Promise<any> {
-
-    const context = this.connectionContexts.get(connectionId);
+  ): Promise<any> { const context = this.connectionContexts.get(connectionId);
     if (!context) {
       throw new Error('Connection context not found');
     try {
@@ -474,9 +462,7 @@ export class WebSocketSecurityManager extends EventEmitter {
         let key = context.encryptionSessionKey;
         if (key.length < 32) {
           // Pad key to 32 bytes if too short
-          key = Buffer.concat([key, Buffer.alloc(32 - key.length)]);
-        } else if (key.length > 32) {
-  key = key.slice(0, 32);
+          key = Buffer.concat([key, Buffer.alloc(32 - key.length)]) } else if (key.length > 32) { key = key.slice(0, 32);
   // Split encrypted data and auth tag
   const [encryptedData, authTagHex] = (secureMessage.payload as string).split(':');
   const authTag = Buffer.from(authTagHex, 'hex');
@@ -494,26 +480,24 @@ export class WebSocketSecurityManager extends EventEmitter {
   return {
   type: secureMessage.type,
   payload,
-  metadata: {
+  metadata: {,
   classification: secureMessage.classification,
   encrypted: secureMessage.encrypted,
-  timestamp: secureMessage.timestamp,
+  timestamp: secureMessage.timestamp }
 };
-    } catch (error) {
-      await this.logSecurityEvent({)
+ catch (error) { await this.logSecurityEvent({)
   type: 'encryption',
         severity: 'error',
         connectionId,
         userId: context.userId,
-        description: 'Message decryption failed',
+        description: 'Message decryption failed' }
         metadata: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       throw error;
   /**
    * Check if connection should be blocked
    */
-  public isConnectionBlocked(connectionId: string, ipAddress: string): boolean {
-  return this.blockedConnections.has(connectionId) ||
+  public isConnectionBlocked(connectionId: string, ipAddress: string): boolean { return this.blockedConnections.has(connectionId) ||
   this.suspiciousIPs.has(ipAddress);
   /**
   * Block connection due to security violation
@@ -521,111 +505,103 @@ export class WebSocketSecurityManager extends EventEmitter {
   public async blockConnection(
   connectionId: string,
   reason: string,
-  duration?: number): Promise<void> {,
+  duration?: number): Promise<void> { }
   const context = this.connectionContexts.get(connectionId);
   this.blockedConnections.add(connectionId);
-  if (duration) {
-  setTimeout(() => {
-  this.blockedConnections.delete(connectionId);
-}, duration);
-    await this.logSecurityEvent({)
-  type: 'threat_detected',
-      severity: 'critical',
-      connectionId,
-      userId: context?.userId,
+  if (duration) { setTimeout(() => {
+  this.blockedConnections.delete(connectionId) }, duration);
+    await this.logSecurityEvent({ )
+  type: 'threat_detected'
+      severity: 'critical'
+      connectionId
+      userId: context?.userId }
       description: `Connection blocked: ${reason}`}
-},
+
   metadata: { duration, reason }
     });
-    this.emit('connectionBlocked', {)
-  connectionId,
-  userId: context?.userId,
-  reason,
-  duration,
-  timestamp: new Date(),
+    this.emit('connectionBlocked', { )
+  connectionId
+  userId: context?.userId
+  reason
+  duration
+  timestamp: new Date() }
 });
   /**
    * Get connection security context
    */
-  public getConnectionContext(connectionId: string): ConnectionSecurityContext | null {
-  return this.connectionContexts.get(connectionId) || null;
+  public getConnectionContext(connectionId: string): ConnectionSecurityContext | null { return this.connectionContexts.get(connectionId) || null;
   /**
   * Clean up connection resources
   */
-  public async cleanupConnection(connectionId: string): Promise<void> {,
+  public async cleanupConnection(connectionId: string): Promise<void> {
   const context = this.connectionContexts.get(connectionId);
   if (context) {
   // Revoke session encryption key
   if (context.encryptionKeyId) {
   try {
   await this.keyManagementService.revokeKey()
-  context.encryptionKeyId,
-  'system',
+  context.encryptionKeyId
+  'system' }
   'Session ended'
   );
-} catch (error) {
-  // Log but don't throw
+ catch (error) { // Log but don't throw
   console.warn('Failed to revoke session key:', error);
   // Remove from memory
   this.connectionContexts.delete(connectionId);
   this.encryptionKeys.delete(connectionId);
   this.rateLimiters.delete(connectionId);
   await this.logSecurityEvent({)
-  type: 'authentication',
-  severity: 'info',
-  connectionId,
-  userId: context.userId,
-  description: 'Connection security context cleaned up',
+  type: 'authentication'
+  severity: 'info'
+  connectionId
+  userId: context.userId
+  description: 'Connection security context cleaned up'
   metadata: {
-  sessionDuration: Date.now() - context.connectedAt.getTime(),
-  messageCount: context.messageCount,
+  sessionDuration: Date.now() - context.connectedAt.getTime()
+  messageCount: context.messageCount }
 });
   /**
    * Get security statistics
    */
-  public getSecurityStats() {
-  const contexts = Array.from(this.connectionContexts.values());
+  public getSecurityStats() { const contexts = Array.from(this.connectionContexts.values());
   return {
-  totalConnections: contexts.length,
-  authenticatedConnections: contexts.filter(c => c.isAuthenticated).length,
-  highRiskConnections: contexts.filter(c => c.threatLevel === 'high' || c.threatLevel === 'critical').length,
-  encryptedConnections: contexts.filter(c => c.encryptionKeyId).length,
-  trustedDevices: contexts.filter(c => c.deviceTrusted).length,
-  blockedConnections: this.blockedConnections.size,
-  suspiciousIPs: this.suspiciousIPs.size,
-  securityEvents: this.securityEvents.length,
-  avgRiskScore: contexts.length > 0 ,
+  totalConnections: contexts.length
+  authenticatedConnections: contexts.filter(c => c.isAuthenticated).length
+  highRiskConnections: contexts.filter(c => c.threatLevel === 'high' || c.threatLevel === 'critical').length
+  encryptedConnections: contexts.filter(c => c.encryptionKeyId).length
+  trustedDevices: contexts.filter(c => c.deviceTrusted).length
+  blockedConnections: this.blockedConnections.size
+  suspiciousIPs: this.suspiciousIPs.size
+  securityEvents: this.securityEvents.length
+  avgRiskScore: contexts.length > 0 
   ? contexts.reduce((sum, c) => sum + c.riskScore, 0) / contexts.length
-  : 0,
+  : 0 }
 };
   // Private helper methods
-  private async generateSessionEncryptionKey(context: ConnectionSecurityContext): Promise<void> {
-
-    try {
+  private async generateSessionEncryptionKey(context: ConnectionSecurityContext): Promise<void> { try {
       const key = await this.keyManagementService.generateKey({)
-  type: KeyType.SYMMETRIC,
-        purpose: KeyPurpose.SESSION_ENCRYPTION,
-        algorithm: KeyAlgorithm.AES_256_GCM,
+  type: KeyType.SYMMETRIC
+        purpose: KeyPurpose.SESSION_ENCRYPTION
+        algorithm: KeyAlgorithm.AES_256_GCM }
         name: `websocket_session_${context.sessionId}`}
-},
-  tier: StorageTier.HOT,
-        expirationDays: 1,
-        metadata: {
-  sessionId: context.sessionId,
-  connectionId: context.connectionId,
-  userId: context.userId,
+
+  tier: StorageTier.HOT
+        expirationDays: 1
+        metadata: { 
+  sessionId: context.sessionId
+  connectionId: context.connectionId
+  userId: context.userId }
 });
       context.encryptionKeyId = key.metadata.id;
       context.encryptionSessionKey = key.keyData;
       this.encryptionKeys.set(context.connectionId, key.keyData!);
-    } catch (error) {
+ catch (error) {
       console.error('Failed to generate session encryption key:', error);
   private generateSessionId(): string {
     return `ws_session_${Date.now()}_${randomBytes(8).toString('hex')}`;}
   private generateMessageId(): string {
     return `msg_${Date.now()}_${randomBytes(4).toString('hex')}`;}
-  private mapRiskLevelToThreatLevel(riskLevel: any): 'low' | 'medium' | 'high' | 'critical' {
-    // Map from risk levels to threat levels - handle both enum values and strings
+  private mapRiskLevelToThreatLevel(riskLevel: any): 'low' | 'medium' | 'high' | 'critical' { // Map from risk levels to threat levels - handle both enum values and strings
     const normalizedRisk = typeof riskLevel === 'string' ? riskLevel.toLowerCase() : riskLevel;
     switch (normalizedRisk) {
     case 'low': return 'low';
@@ -649,7 +625,7 @@ export class WebSocketSecurityManager extends EventEmitter {
     // This is a placeholder
     return code.length === 6 && /^\d+$/.test(code);
   private async checkForThreats(((
-    connectionId: string,
+    connectionId: string }
     message: SecureWebSocketMessage
   ): Promise<void> {
 
@@ -659,8 +635,7 @@ export class WebSocketSecurityManager extends EventEmitter {
     const rateLimitKey = `${connectionId}_rate_limit`;}
     const now = Date.now();
     const rateLimit = this.rateLimiters.get(rateLimitKey);
-    if (rateLimit) {
-      if (now < rateLimit.resetTime) {
+    if (rateLimit) { if (now < rateLimit.resetTime) {
         rateLimit.count++;
         if (rateLimit.count > this.config.rateLimitMessagesPerMinute) {
           await this.logSecurityEvent({)
@@ -668,19 +643,18 @@ export class WebSocketSecurityManager extends EventEmitter {
             severity: 'warning',
             connectionId,
             userId: context.userId,
-            description: 'Rate limit exceeded',
+            description: 'Rate limit exceeded' }
             metadata: { messageCount: rateLimit.count, timeWindow: 'per_minute' }
           });
           if (rateLimit.count > this.config.rateLimitMessagesPerMinute * 2) {
             await this.blockConnection(connectionId, 'Severe rate limit violation', 300000); // 5 minutes
-      } else {
+ else {
         // Reset rate limit window
         this.rateLimiters.set(rateLimitKey, { count: 1, resetTime: now + 60000 });
-    } else {
+ else {
       this.rateLimiters.set(rateLimitKey, { count: 1, resetTime: now + 60000 });
     // Check for suspicious patterns
-    if (this.config.enableAnomalyDetection) {
-      await this.detectAnomalies(connectionId, message);
+    if (this.config.enableAnomalyDetection) { await this.detectAnomalies(connectionId, message);
   private async detectAnomalies(((
     connectionId: string,
     message: SecureWebSocketMessage
@@ -695,11 +669,11 @@ export class WebSocketSecurityManager extends EventEmitter {
     if (messageSize > avgMessageSize * 10 && messageSize > 10000) {
       context.flags.anomalousPatterns = true;
       await this.logSecurityEvent({)
-  type: 'anomaly',
-        severity: 'warning',
-        connectionId,
-        userId: context.userId,
-        description: 'Unusually large message detected',
+  type: 'anomaly'
+        severity: 'warning'
+        connectionId
+        userId: context.userId
+        description: 'Unusually large message detected' }
         metadata: { messageSize, averageSize: avgMessageSize }
       });
     // Detect rapid succession of messages
@@ -716,50 +690,39 @@ export class WebSocketSecurityManager extends EventEmitter {
   threshold: this.config.rateLimitMessagesPerMinute,
   timeWindowMinutes: 1,
   action: 'warn',
-  description: 'Detect when users exceed message rate limits',
-}
-      {
-  id: 'rapid_reconnection',
+  description: 'Detect when users exceed message rate limits' }
+
+      { id: 'rapid_reconnection',
   name: 'Rapid Reconnection Detection',
   type: 'behavioral',
   enabled: true,
   threshold: 5,
   timeWindowMinutes: 5,
   action: 'block',
-  description: 'Detect rapid reconnection attempts',
-}
-      {
-  id: 'large_payload',
+  description: 'Detect rapid reconnection attempts' }
+
+      { id: 'large_payload',
   name: 'Large Payload Detection',
   type: 'anomaly',
   enabled: true,
   threshold: 100000, // 100KB,
   timeWindowMinutes: 1,
-  action: 'log',
+  action: 'log' }
   description: 'Detect unusually large message payloads'];
-  defaultRules.forEach(rule => {)
-  this.threatRules.set(rule.id, rule);
-});
-  private startSecurityMonitoring(): void {
-    // Clean up expired rate limiters every minute
+  defaultRules.forEach(rule => { )
+  this.threatRules.set(rule.id, rule) });
+  private startSecurityMonitoring(): void { // Clean up expired rate limiters every minute
     setInterval(() => {
       const now = Date.now();
       for (const [key, limiter] of this.rateLimiters) {
         if (now > limiter.resetTime) {
-          this.rateLimiters.delete(key);
-    }, 60000);
+          this.rateLimiters.delete(key) }, 60000);
     // Rotate session keys periodically
-    if (this.config.enableMessageEncryption && this.config.encryptionKeyRotationMinutes > 0) {
-      setInterval(async () => {
-        await this.rotateSessionKeys();
-      }, this.config.encryptionKeyRotationMinutes * 60000);
+    if (this.config.enableMessageEncryption && this.config.encryptionKeyRotationMinutes > 0) { setInterval(async () => {
+        await this.rotateSessionKeys() }, this.config.encryptionKeyRotationMinutes * 60000);
     // Clean up old security events
-    setInterval(() => {
-      this.cleanupOldSecurityEvents();
-    }, 3600000); // Every hour
-  private async rotateSessionKeys(): Promise<void> {
-
-    for (const [connectionId, context] of this.connectionContexts) {
+    setInterval(() => { this.cleanupOldSecurityEvents() }, 3600000); // Every hour
+  private async rotateSessionKeys(): Promise<void> { for (const [connectionId, context] of this.connectionContexts) {
       if (context.encryptionKeyId && )
           Date.now() - context.lastKeyRotation.getTime() > 
           this.config.encryptionKeyRotationMinutes * 60000) {
@@ -767,25 +730,24 @@ export class WebSocketSecurityManager extends EventEmitter {
           await this.generateSessionEncryptionKey(context);
           context.lastKeyRotation = new Date();
           await this.logSecurityEvent({)
-  type: 'encryption',
-            severity: 'info',
-            connectionId,
-            userId: context.userId,
-            description: 'Session encryption key rotated',
+  type: 'encryption'
+            severity: 'info'
+            connectionId
+            userId: context.userId
+            description: 'Session encryption key rotated' }
             metadata: { reason: 'scheduled_rotation' }
           });
-        } catch (error) {
-          console.error('Failed to rotate session key:', error);
+ catch (error) { console.error('Failed to rotate session key:', error);
   private cleanupOldSecurityEvents(): void {
     const cutoffTime = new Date(Date.now() - this.config.auditLogRetentionDays * 24 * 60 * 60 * 1000);
     this.securityEvents = this.securityEvents.filter(event => event.timestamp > cutoffTime);
   private async logSecurityEvent(eventData: Omit<SecurityEvent, 'id' | 'timestamp'>): Promise<void> {
 
     if (!this.config.enableSecurityAuditLog) return;
-    const event: SecurityEvent = {,
+    const event: SecurityEvent = { }
   id: `security_event_${Date.now()}_${randomBytes(4).toString('hex')}`}
-},
-  timestamp: new Date(),
+
+  timestamp: new Date()
       ...eventData
     };
     this.securityEvents.push(event);

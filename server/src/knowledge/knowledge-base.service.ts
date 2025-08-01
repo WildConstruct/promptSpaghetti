@@ -3,8 +3,8 @@
 
 import { Pool, PoolClient } from 'pg';
 
-}
-}
+
+
 export interface KnowledgeArticle {
   id: string;
   title: string;
@@ -20,8 +20,9 @@ export interface KnowledgeArticle {
     avatar_url?: string;
     creator_tier: string;
     verification_status: string;
-}
-}
+
+
+
   };
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimated_read_time: number; // minutes
@@ -38,11 +39,11 @@ export interface KnowledgeArticle {
     url: string;
     title: string;
     description?: string;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface Tutorial {
   id: string;
   title: string;
@@ -55,8 +56,9 @@ export interface Tutorial {
     id: string;
     display_name: string;
     avatar_url?: string;
-}
-}
+
+
+
   };
   difficulty_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   estimated_duration: number; // minutes
@@ -69,10 +71,10 @@ export interface Tutorial {
   is_interactive: boolean;
   created_at: string;
   updated_at: string;
-}
 
-}
-}
+
+
+
 export interface TutorialStep {
   id: string;
   order: number;
@@ -83,18 +85,19 @@ export interface TutorialStep {
     type: 'image' | 'video' | 'code' | 'template';
     url: string;
     caption?: string;
-}
-}
-  }>;
+
+
+
+>;
   interactive_elements?: Array<{
     type: 'quiz' | 'code_editor' | 'template_builder';
     config: any;
-  }>;
+>;
   estimated_duration: number;
-}
 
-}
-}
+
+
+
 export interface CaseStudy {
   id: string;
   title: string;
@@ -109,8 +112,9 @@ export interface CaseStudy {
     avatar_url?: string;
     company?: string;
     role?: string;
-}
-}
+
+
+
   };
   industry: string;
   use_case: string;
@@ -121,22 +125,22 @@ export interface CaseStudy {
     label: string;
     value: string;
     description?: string;
-  }>;
+>;
   templates_used?: Array<{
     id: string;
     title: string;
     url: string;
-  }>;
+>;
   screenshots?: string[];
   views_count: number;
   likes_count: number;
   is_featured: boolean;
   created_at: string;
   updated_at: string;
-}
 
-}
-}
+
+
+
 export interface LearningPath {
   id: string;
   title: string;
@@ -151,19 +155,20 @@ export interface LearningPath {
     resource_id: string;
     order: number;
     is_required: boolean;
-}
-}
-  }>;
+
+
+
+>;
   prerequisites?: string[];
   learning_objectives: string[];
   completion_count: number;
   rating: number;
   created_at: string;
   updated_at: string;
-}
 
-}
-}
+
+
+
 export interface CreateArticleRequest {
   title: string;
   content: string;
@@ -178,13 +183,14 @@ export interface CreateArticleRequest {
     url: string;
     title: string;
     description?: string;
-}
-}
-  }>;
-}
 
-}
-}
+
+
+>;
+
+
+
+
 export interface CreateTutorialRequest {
   title: string;
   description: string;
@@ -196,12 +202,13 @@ export interface CreateTutorialRequest {
   prerequisites?: string[];
   learning_objectives: string[];
   is_interactive?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreateCaseStudyRequest {
   title: string;
   description: string;
@@ -216,19 +223,20 @@ export interface CreateCaseStudyRequest {
     label: string;
     value: string;
     description?: string;
-}
-}
-  }>;
+
+
+
+>;
   templates_used?: Array<{
     id: string;
     title: string;
     url: string;
-  }>;
+>;
   screenshots?: string[];
-}
 
-}
-}
+
+
+
 export interface SearchFilters {
   category?: string;
   difficulty_level?: string;
@@ -237,9 +245,10 @@ export interface SearchFilters {
   author_id?: string;
   is_featured?: boolean;
   is_community_contributed?: boolean;
-}
-}
-}
+
+
+
+
 
 export class KnowledgeBaseService {
   constructor(private db: Pool) {}
@@ -282,13 +291,13 @@ export class KnowledgeBaseService {
 
       await client.query('COMMIT');
       return article;
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getArticles(filters: SearchFilters = {}, limit = 20, offset = 0): Promise<KnowledgeArticle[]> {
 
@@ -309,39 +318,39 @@ export class KnowledgeBaseService {
     if (filters.category) {
       query += ` AND a.category = $${params.length + 1}`;
       params.push(filters.category);
-    }
+
 
     if (filters.difficulty_level) {
       query += ` AND a.difficulty_level = $${params.length + 1}`;
       params.push(filters.difficulty_level);
-    }
+
 
     if (filters.is_featured !== undefined) {
       query += ` AND a.is_featured = $${params.length + 1}`;
       params.push(filters.is_featured);
-    }
+
 
     if (filters.is_community_contributed !== undefined) {
       query += ` AND a.is_community_contributed = $${params.length + 1}`;
       params.push(filters.is_community_contributed);
-    }
+
 
     if (filters.author_id) {
       query += ` AND a.author_id = $${params.length + 1}`;
       params.push(filters.author_id);
-    }
+
 
     if (filters.tags && filters.tags.length > 0) {
       query += ` AND a.tags ?| $${params.length + 1}`;
       params.push(filters.tags);
-    }
+
 
     query += ` ORDER BY a.is_featured DESC, a.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapRowToArticle);
-  }
+
 
   async searchArticles(searchTerm: string, filters: SearchFilters = {}, limit = 20): Promise<KnowledgeArticle[]> {
 
@@ -371,19 +380,19 @@ export class KnowledgeBaseService {
     if (filters.category) {
       query += ` AND a.category = $${params.length + 1}`;
       params.push(filters.category);
-    }
+
 
     if (filters.difficulty_level) {
       query += ` AND a.difficulty_level = $${params.length + 1}`;
       params.push(filters.difficulty_level);
-    }
+
 
     query += ` ORDER BY rank DESC, a.is_featured DESC, a.views_count DESC LIMIT $${params.length + 1}`;
     params.push(limit);
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapRowToArticle);
-  }
+
 
   // Tutorial management
   async createTutorial(authorId: string, tutorialData: CreateTutorialRequest): Promise<Tutorial> {
@@ -433,19 +442,19 @@ export class KnowledgeBaseService {
           step.interactive_elements ? JSON.stringify(step.interactive_elements) : null,
           step.estimated_duration
         ]);
-      }
+
 
       const tutorial = await this.getTutorialById(tutorialId);
 
       await client.query('COMMIT');
       return tutorial;
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getTutorials(filters: SearchFilters = {}, limit = 20, offset = 0): Promise<Tutorial[]> {
 
@@ -465,12 +474,12 @@ export class KnowledgeBaseService {
     if (filters.category) {
       query += ` AND t.category = $${params.length + 1}`;
       params.push(filters.category);
-    }
+
 
     if (filters.difficulty_level) {
       query += ` AND t.difficulty_level = $${params.length + 1}`;
       params.push(filters.difficulty_level);
-    }
+
 
     query += ` ORDER BY t.rating DESC, t.completion_count DESC, t.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
@@ -484,7 +493,7 @@ export class KnowledgeBaseService {
     }));
 
     return tutorials;
-  }
+
 
   // Case study management
   async createCaseStudy(authorId: string, caseStudyData: CreateCaseStudyRequest): Promise<CaseStudy> {
@@ -516,7 +525,7 @@ export class KnowledgeBaseService {
 
     const caseStudyId = result.rows[0].id;
     return this.getCaseStudyById(caseStudyId);
-  }
+
 
   async getCaseStudies(filters: SearchFilters = {}, limit = 20, offset = 0): Promise<CaseStudy[]> {
 
@@ -537,19 +546,19 @@ export class KnowledgeBaseService {
     if (filters.category) {
       query += ` AND cs.category = $${params.length + 1}`;
       params.push(filters.category);
-    }
+
 
     if (filters.is_featured !== undefined) {
       query += ` AND cs.is_featured = $${params.length + 1}`;
       params.push(filters.is_featured);
-    }
+
 
     query += ` ORDER BY cs.is_featured DESC, cs.views_count DESC, cs.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapRowToCaseStudy);
-  }
+
 
   // Analytics and engagement
   async recordView(
@@ -575,13 +584,13 @@ export class KnowledgeBaseService {
       `, [contentId]);
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async rateContent(
     contentType: 'article' | 'tutorial' | 'case_study',
@@ -614,13 +623,13 @@ export class KnowledgeBaseService {
       `, [countResult.rows[0].helpful_count, contentId]);
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Helper methods
   private async getArticleById(articleId: string): Promise<KnowledgeArticle> {
@@ -638,7 +647,7 @@ export class KnowledgeBaseService {
     `, [articleId]);
 
     return this.mapRowToArticle(result.rows[0]);
-  }
+
 
   private async getTutorialById(tutorialId: string): Promise<Tutorial> {
 
@@ -655,7 +664,7 @@ export class KnowledgeBaseService {
 
     const steps = await this.getTutorialSteps(tutorialId);
     return this.mapRowToTutorial(result.rows[0], steps);
-  }
+
 
   private async getCaseStudyById(caseStudyId: string): Promise<CaseStudy> {
 
@@ -672,7 +681,7 @@ export class KnowledgeBaseService {
     `, [caseStudyId]);
 
     return this.mapRowToCaseStudy(result.rows[0]);
-  }
+
 
   private async getTutorialSteps(tutorialId: string): Promise<TutorialStep[]> {
 
@@ -693,7 +702,7 @@ export class KnowledgeBaseService {
       interactive_elements: row.interactive_elements ? JSON.parse(row.interactive_elements) : undefined,
       estimated_duration: row.estimated_duration
     }));
-  }
+
 
   private mapRowToArticle(row: any): KnowledgeArticle {
     return {
@@ -711,7 +720,7 @@ export class KnowledgeBaseService {
         avatar_url: row.avatar_url,
         creator_tier: row.creator_tier,
         verification_status: row.verification_status
-  }
+
       difficulty_level: row.difficulty_level,
       estimated_read_time: row.estimated_read_time,
       views_count: row.views_count,
@@ -724,7 +733,7 @@ export class KnowledgeBaseService {
       related_articles: row.related_articles ? JSON.parse(row.related_articles) : undefined,
       attachments: row.attachments ? JSON.parse(row.attachments) : undefined
     };
-  }
+
 
   private mapRowToTutorial(row: any, steps: TutorialStep[]): Tutorial {
     return {
@@ -739,7 +748,7 @@ export class KnowledgeBaseService {
         id: row.author_id,
         display_name: row.display_name,
         avatar_url: row.avatar_url
-  }
+
       difficulty_level: row.difficulty_level,
       estimated_duration: row.estimated_duration,
       steps,
@@ -752,7 +761,7 @@ export class KnowledgeBaseService {
       created_at: row.created_at,
       updated_at: row.updated_at
     };
-  }
+
 
   private mapRowToCaseStudy(row: any): CaseStudy {
     return {
@@ -767,7 +776,7 @@ export class KnowledgeBaseService {
         id: row.author_id,
         display_name: row.display_name,
         avatar_url: row.avatar_url
-  }
+
       industry: row.industry,
       use_case: row.use_case,
       challenge: row.challenge,
@@ -782,7 +791,7 @@ export class KnowledgeBaseService {
       created_at: row.created_at,
       updated_at: row.updated_at
     };
-  }
+
 
   private generateSlug(title: string): string {
     return title
@@ -791,13 +800,13 @@ export class KnowledgeBaseService {
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')  
       .trim();
-  }
+
 
   private estimateReadTime(content: string): number {
     const wordsPerMinute = 200;
     const wordCount = content.split(/\s+/).length;
     return Math.ceil(wordCount / wordsPerMinute);
-  }
+
 
   private getTableName(contentType: 'article' | 'tutorial' | 'case_study'): string {
     switch (contentType) {
@@ -805,6 +814,5 @@ export class KnowledgeBaseService {
       case 'tutorial': return 'knowledge_tutorials';
       case 'case_study': return 'knowledge_case_studies';
       default: throw new Error(`Unknown content type: ${contentType}`);
-    }
-  }
-}
+
+

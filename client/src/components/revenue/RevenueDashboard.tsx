@@ -20,7 +20,8 @@ import { useRevenueAnalytics } from '../../hooks/useRevenueAnalytics';
 import { useRealtimeRevenue } from '../../hooks/useRealtimeRevenue';
 import { useRevenueForecast } from '../../hooks/useRevenueForecast';
 import './RevenueDashboard.css';
-}
+
+
 interface RevenueDashboardProps {
   /** Dashboard scope - global, creator-specific, or template-specific */
   scope: 'global' | 'creator' | 'template';
@@ -36,7 +37,7 @@ interface RevenueDashboardProps {
   exportEnabled?: boolean;
   /** Custom CSS class */
   className?: string;
-  export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({,)
+  export const RevenueDashboard: React.FC<RevenueDashboardProps> = ({),
   scope,
   entityId,
   initialTimeRange = RevenueTimeRange.LAST_30D,
@@ -44,14 +45,15 @@ interface RevenueDashboardProps {
   realtimeEnabled = true,
   exportEnabled = true,
   className = ''
-}
+
+
 }) => {
   // State management
   const [timeRange, setTimeRange] = useState<RevenueTimeRange>(initialTimeRange);
   const [customDateRange, setCustomDateRange] = useState<{
   start: Date | null;,
   end: Date | null;
-}>({ start: null, end: null });
+>({ start: null, end: null });
   const [filters, setFilters] = useState<RevenueFilters>({)
   paymentProviders: [],
   licenseTypes: [],
@@ -71,7 +73,7 @@ interface RevenueDashboardProps {
   error: analyticsError,
   refreshData,
   exportData
-} = useRevenueAnalytics({)
+ = useRevenueAnalytics({)
   scope,
   entityId,
   timeRange,
@@ -85,7 +87,7 @@ interface RevenueDashboardProps {
   isConnected: realtimeConnected,
   connect: connectRealtime,
   disconnect: disconnectRealtime,
-} = useRealtimeRevenue({)
+ = useRealtimeRevenue({)
   enabled: realtimeEnabled,
   scope,
   entityId,
@@ -97,7 +99,7 @@ interface RevenueDashboardProps {
   isLoading: forecastLoading,
   generateForecast,
   forecastAccuracy
-} = useRevenueForecast({)
+ = useRevenueForecast({)
   scope,
   entityId,
   historicalPeriod: 90 // 90 days of historical data,
@@ -130,9 +132,9 @@ interface RevenueDashboardProps {
     setRefreshing(true);
     try {
       await refreshData();
-    } catch {
+ catch {
       setError('Failed to refresh dashboard data');
-    } finally {
+ finally {
       setRefreshing(false);
   }, [refreshData]);
   const handleExport = useCallback(async (format: 'csv' | 'xlsx' | 'pdf') => {
@@ -145,13 +147,13 @@ interface RevenueDashboardProps {
   filters,
   includeForecast: !!forecast,
 });
-    } catch {
+ catch {
       setError('Failed to export dashboard data');
   }, [exportData, scope, entityId, timeRange, customDateRange, filters, forecast]);
   const handleGenerateForecast = useCallback(async () => {
     try {
       await generateForecast();
-    } catch {
+ catch {
       setError('Failed to generate revenue forecast');
   }, [generateForecast]);
   // Computed values

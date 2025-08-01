@@ -6,8 +6,7 @@
  * categories, and user engagement rankings with real-time updates.
  */
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Trophy,
+import { Trophy,
   Medal,
   Award,
   TrendingUp,
@@ -19,17 +18,16 @@ import {
   Eye,
   Calendar,
   Filter,
-  RefreshCw,
+  RefreshCw }
   ExternalLink
-} from 'lucide-react';
+ from 'lucide-react';
 
 // =============================================================================
 // Component Types
 // =============================================================================
 
-}
-export interface MarketplaceLeaderboardsProps {
-  defaultTab?: 'templates' | 'creators' | 'categories' | 'engagement';
+
+export interface MarketplaceLeaderboardsProps { defaultTab?: 'templates' | 'creators' | 'categories' | 'engagement';
   onTemplateClick?: (templateId: string) => void;
   onCreatorClick?: (creatorId: string) => void;
   onCategoryClick?: (categoryId: string) => void;
@@ -48,14 +46,16 @@ export interface MarketplaceLeaderboardsProps {
   totalEntries: number;
   lastUpdated: Date;
   timeframe: string;
-  metadata: {
+  metadata: { }
   averageScore: number;
   topScore: number;
   totalParticipants: number;
   updateFrequency: string;
-}
+
+
 };
-}
+
+
 interface LeaderboardFilter {
   timeframe: '24h' | '7d' | '30d' | '90d' | 'all';
   category?: string;
@@ -63,21 +63,20 @@ interface LeaderboardFilter {
   // =============================================================================
   // Marketplace Leaderboards Component
   // =============================================================================
-}
-}
-export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = ({)
-  defaultTab = 'templates',
-  onTemplateClick,
-  onCreatorClick,
-  onCategoryClick,
+
+
+export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = ({ )
+  defaultTab = 'templates'
+  onTemplateClick
+  onCreatorClick
+  onCategoryClick }
   className = ''
-}) => {
-  // State management
+}) => { // State management
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
   const [activeMetric, setActiveMetric] = useState<string>('revenue');
   const [filter, setFilter] = useState<LeaderboardFilter>({)
-  timeframe: 'all',
-  limit: 25,
+  timeframe: 'all'
+  limit: 25 }
 });
   const [leaderboard, setLeaderboard] = useState<LeaderboardResponse | null>(null);
   const [categories, setCategories] = useState<any>([]);
@@ -87,89 +86,65 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   // =============================================================================
   // Data Loading
   // =============================================================================
-  const fetchLeaderboard = useCallback(async () => {
-  try {
+  const fetchLeaderboard = useCallback(async () => { try {
   setLoading(true);
   setError(null);
   const params = new URLSearchParams({)
-  timeframe: filter.timeframe,
-  limit: filter.limit.toString(),
-  offset: '0',
+  timeframe: filter.timeframe
+  limit: filter.limit.toString()
+  offset: '0' }
 });
       if (filter.category) {
         params.append('category', filter.category);
       const endpoint = getLeaderboardEndpoint(activeTab, activeMetric);
       const response = await fetch(`${endpoint}?${params}`, {)}
-  },
+
   headers: {
           'Authorization': `Bearer ${getAuthToken()}`}
       });
-      if (!response.ok) {
-        throw new Error('Failed to load leaderboard');
+      if (!response.ok) { throw new Error('Failed to load leaderboard');
       const data = await response.json();
       if (data.success) {
         setLeaderboard(data);
-        setLastRefresh(new Date());
-      } else {
-        throw new Error(data.error || 'Failed to load leaderboard');
-    } catch (error) {
-  console.error('Failed to fetch leaderboard:', error);
-  setError(error instanceof Error ? error.message : 'Unknown error occurred');
-} finally {
-      setLoading(false);
-  }, [activeTab, activeMetric, filter]);
+        setLastRefresh(new Date()) } else { throw new Error(data.error || 'Failed to load leaderboard') } catch (error) { console.error('Failed to fetch leaderboard:', error);
+  setError(error instanceof Error ? error.message : 'Unknown error occurred') } finally { setLoading(false) }, [activeTab, activeMetric, filter]);
   const fetchCategories = useCallback(async () => {
     try {
       // Mock categories - would fetch from API
       setCategories([)
-        { id: 'writing', name: 'Writing & Content' },
-        { id: 'business', name: 'Business & Marketing' },
-        { id: 'education', name: 'Education & Training' },
-        { id: 'creative', name: 'Creative & Entertainment' },
-        { id: 'technical', name: 'Technical & Development' },
+        { id: 'writing', name: 'Writing & Content' }
+        { id: 'business', name: 'Business & Marketing' }
+        { id: 'education', name: 'Education & Training' }
+        { id: 'creative', name: 'Creative & Entertainment' }
+        { id: 'technical', name: 'Technical & Development' }
         { id: 'analysis', name: 'Analysis & Research' }
       ]);
-    } catch (error) {
-  console.error('Failed to fetch categories:', error);
-}, []);
-  useEffect(() => {
-    fetchLeaderboard();
-  }, [fetchLeaderboard]);
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+ catch (error) { console.error('Failed to fetch categories:', error) }, []);
+  useEffect(() => { fetchLeaderboard() }, [fetchLeaderboard]);
+  useEffect(() => { fetchCategories() }, [fetchCategories]);
   // Auto-refresh every 10 minutes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchLeaderboard();
-    }, 10 * 60 * 1000);
+  useEffect(() => { const interval = setInterval(() => {
+      fetchLeaderboard() }, 10 * 60 * 1000);
     return () => clearInterval(interval);
   }, [fetchLeaderboard]);
   // =============================================================================
   // Event Handlers
   // =============================================================================
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-    setActiveMetric(getDefaultMetric(tab));
-  };
-  const handleMetricChange = (metric: string) => {
-    setActiveMetric(metric);
-  };
+  const handleTabChange = (tab: string) => { setActiveTab(tab);
+    setActiveMetric(getDefaultMetric(tab)) };
+  const handleMetricChange = (metric: string) => { setActiveMetric(metric) };
   const handleFilterChange = (newFilter: Partial<LeaderboardFilter>) => {
     setFilter(prev => ({ ...prev, ...newFilter }));
   };
-  const handleRefresh = () => {
-    fetchLeaderboard();
-  };
-  const handleEntryClick = (entry: LeaderboardEntry) => {
-  switch (activeTab) {
-  case 'templates':,
+  const handleRefresh = () => { fetchLeaderboard() };
+  const handleEntryClick = (entry: LeaderboardEntry) => { switch (activeTab) {
+  case 'templates':
   onTemplateClick?.(entry.id);
   break;
-  case 'creators':,
+  case 'creators':
   onCreatorClick?.(entry.id);
   break;
-  case 'categories':,
+  case 'categories': }
   onCategoryClick?.(entry.id);
   break;
 };
@@ -177,10 +152,10 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
   // UI Rendering Methods
   // =============================================================================
   const renderTabNavigation = () => {
-    const tabs = [;
-      { id: 'templates', label: 'Templates', icon: FileText },
-      { id: 'creators', label: 'Creators', icon: Users },
-      { id: 'categories', label: 'Categories', icon: Award },
+    const tabs = [
+      { id: 'templates', label: 'Templates', icon: FileText }
+      { id: 'creators', label: 'Creators', icon: Users }
+      { id: 'categories', label: 'Categories', icon: Award }
       { id: 'engagement', label: 'Community', icon: Trophy }
     ];
     return;
@@ -190,11 +165,11 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
+              className={ `flex items-center py-4 px-1 border-b-2 font-medium text-sm ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
             >
               <tab.icon className="w-4 h-4 mr-2" />
               {tab.label}
@@ -212,11 +187,11 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
           <button
             key={metric.id}
             onClick={() => handleMetricChange(metric.id)}
-            className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
+            className={ `px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${
   activeMetric === metric.id
   ? 'bg-blue-100 text-blue-700'
-  : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-}`}
+  : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }
+`}
           >
             {metric.label}
           </button>
@@ -225,7 +200,7 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
     );
   };
   const renderFilters = () => {
-    const timeframes = [;
+    const timeframes = [
       { id: '24h', label: '24 Hours' },
       { id: '7d', label: '7 Days' },
       { id: '30d', label: '30 Days' },
@@ -309,11 +284,11 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
       <div
         key={entry.id}
         onClick={() => handleEntryClick(entry)}
-        className={`flex items-center p-4 rounded-lg border transition-all cursor-pointer ${
+        className={ `flex items-center p-4 rounded-lg border transition-all cursor-pointer ${
   isTopThree
-  ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 hover:from-yellow-100 hover:to-yellow-200',
-  : 'bg-white border-gray-200 hover:bg-gray-50',
-}`}
+  ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 hover:from-yellow-100 hover:to-yellow-200'
+  : 'bg-white border-gray-200 hover:bg-gray-50' }
+`}
       >
         {/* Rank */}
         <div className="flex-shrink-0 w-12 text-center">
@@ -336,10 +311,10 @@ export const MarketplaceLeaderboards: React.FC<MarketplaceLeaderboardsProps> = (
               <div className="text-lg font-bold text-gray-900">
                 {formatScore(entry.score, activeMetric)}
               </div>
-              {entry.change !== 0 && ()
+              { entry.change !== 0 && ()
                 <div className={`flex items-center text-sm ${
-  entry.change > 0 ? 'text-green-600' : 'text-red-600',
-}`}>
+  entry.change > 0 ? 'text-green-600' : 'text-red-600' }
+`}>
                   {entry.change > 0 ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
                   {Math.abs(entry.change)}
                 </div>
@@ -484,7 +459,7 @@ function getLeaderboardEndpoint(tab: string, metric: string): string {
   case 'categories':
     return `${baseUrl}/categories/${metric}`;}
   case 'engagement':
-    return `${baseUrl}/engagement/${metric}`;},}
+    return `${baseUrl}/engagement/${metric}`;},},
   default:
     return `${baseUrl}/templates/revenue`;}
 function getDefaultMetric(tab: string): string {
@@ -530,30 +505,28 @@ function getMetricsForTab(tab: string): Array<{ id: string; label: string }> {
     ];
   default:
     return [{ id: 'revenue', label: 'Revenue' }];
-function getLeaderboardTitle(tab: string, metric: string): string {
-  const metricLabels: Record<string, string> = {,
-  revenue: 'Top Revenue',
-  purchases: 'Most Purchased',
-  rating: 'Highest Rated',
-  trending: 'Trending',
-  templates: 'Most Templates',
-  badges: 'Most Badges',
-  growth: 'Fastest Growing',
-  points: 'Most Points',
-  reviews: 'Most Reviews',
-  contributions: 'Top Contributors',
+function getLeaderboardTitle(tab: string, metric: string): string { const metricLabels: Record<string, string> = {
+  revenue: 'Top Revenue'
+  purchases: 'Most Purchased'
+  rating: 'Highest Rated'
+  trending: 'Trending'
+  templates: 'Most Templates'
+  badges: 'Most Badges'
+  growth: 'Fastest Growing'
+  points: 'Most Points'
+  reviews: 'Most Reviews'
+  contributions: 'Top Contributors' }
 };
-  const tabLabels: Record<string, string> = {
-  templates: 'Templates',
-  creators: 'Creators',
-  categories: 'Categories',
-  engagement: 'Community',
+  const tabLabels: Record<string, string> = { templates: 'Templates'
+  creators: 'Creators'
+  categories: 'Categories'
+  engagement: 'Community' }
 };
   return `${metricLabels[metric]} ${tabLabels[tab]}`;}
 function formatScore(score: number, metric: string): string {
   switch (metric) {
   case 'revenue':
-    return `$${(score / 100).toFixed(2)}`;}
+    return `${(score / 100).toFixed(2)}`;}
   case 'rating':
     return `${score.toFixed(1)} ★`;}
   case 'growth':

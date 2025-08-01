@@ -19,8 +19,8 @@ import { AuditService } from '../auth/services/AuditService';
 // REQUEST/RESPONSE INTERFACES
 // ==========================================
 
-}
-}
+
+
 export interface ExecuteDiagnosticsRequest {
   suiteId?: string;
   diagnosticIds?: string[];
@@ -29,13 +29,14 @@ export interface ExecuteDiagnosticsRequest {
     timeout?: number;
     skipOnError?: boolean;
     generateReport?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface DiagnosticsResponse<T = any> {
   success: boolean;
   data?: T;
@@ -46,40 +47,43 @@ export interface DiagnosticsResponse<T = any> {
     processingTime: number;
     version: string;
   };
-}
 
-}
-}
+
+
+
 export interface HealthCheckQuery {
   includeDetails?: boolean;
   includeRecommendations?: boolean;
   includeTrends?: boolean;
   categories?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DiagnosticListQuery {
   category?: DiagnosticCategory;
   status?: 'enabled' | 'disabled' | 'all';
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface HealthReportQuery {
   startDate?: string;
   endDate?: string;
   limit?: number;
   includeDetails?: boolean;
-}
-}
-}
+
+
+
+
 
 // ==========================================
 // API PLUGIN IMPLEMENTATION
@@ -97,7 +101,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
     if (!authHeader) {
       reply.code(401).send({ error: 'Authorization header required' });
       return;
-    }
+
 
     const token = authHeader.replace('Bearer ', '');
     try {
@@ -105,12 +109,12 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
       if (!user || !user.permissions.includes('system_admin')) {
         reply.code(403).send({ error: 'Insufficient permissions for diagnostic operations' });
         return;
-      }
+
       request.user = user;
-    } catch (error) {
+ catch (error) {
       reply.code(401).send({ error: 'Invalid authentication token' });
       return;
-    }
+
   });
 
   // ==========================================
@@ -132,11 +136,11 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
               timeout: { type: 'integer' },
               skipOnError: { type: 'boolean' },
               generateReport: { type: 'boolean' }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
     const requestId = `exec_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -150,35 +154,35 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           request.body.suiteId,
           request.user.userId
         );
-      } else {
+ else {
         // For now, use the default health check suite
         execution = await diagnosticService.runDiagnosticSuite(
           'system_health_check',
           request.user.userId
         );
-      }
+
 
       // Optionally generate health report
       let healthReport: SystemHealthReport | null = null;
       if (request.body.configuration?.generateReport) {
         healthReport = await systemDiagnostics.generateSystemHealthReport(request.user.userId);
-      }
+
 
       const response: DiagnosticsResponse<{
         execution: DiagnosticExecution;
         healthReport?: SystemHealthReport;
-      }> = {
+> = {
         success: true,
         data: {
           execution,
           ...(healthReport && { healthReport })
-  }
+
         metadata: {
           timestamp: new Date(),
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
+
       };
 
       await auditService.logAction({
@@ -191,12 +195,11 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           resultCount: execution.results.length,
           overallHealth: execution.summary.overallHealth,
           timestamp: new Date()
-        }
+
       });
 
       reply.code(200).send(response);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Diagnostics execution error: ${error.message}`);
 
       await auditService.logAction({
@@ -207,7 +210,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId,
           error: error.message,
           timestamp: new Date()
-        }
+
       });
 
       reply.code(500).send({
@@ -218,9 +221,9 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
+
       });
-    }
+
   });
 
   // Get diagnostic execution status
@@ -236,7 +239,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           error: 'Diagnostic execution not found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
@@ -246,16 +249,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `get_exec_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Execution retrieval error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve execution status'
       });
-    }
+
   });
 
   // List diagnostic executions
@@ -267,9 +269,9 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           status: { type: 'string' },
           userId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -288,16 +290,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `list_exec_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Execution listing error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve execution list'
       });
-    }
+
   });
 
   // ==========================================
@@ -322,7 +323,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           overallHealth: healthReport.overallHealth,
           criticalIssueCount: healthReport.criticalIssues.length,
           timestamp: new Date()
-        }
+
       });
 
       reply.send({
@@ -333,16 +334,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Health report generation error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to generate health report'
       });
-    }
+
   });
 
   // Get latest health report
@@ -358,7 +358,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           error: 'No health reports found'
         });
         return;
-      }
+
 
       reply.send({
         success: true,
@@ -368,16 +368,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `latest_health_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Latest health report error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve latest health report'
       });
-    }
+
   });
 
   // List health reports with filtering
@@ -390,9 +389,9 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           endDate: { type: 'string', format: 'date' },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
           includeDetails: { type: 'boolean', default: false }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -403,10 +402,10 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
 
       if (request.query.startDate) {
         filters.startDate = new Date(request.query.startDate);
-      }
+
       if (request.query.endDate) {
         filters.endDate = new Date(request.query.endDate);
-      }
+
 
       const reports = await systemDiagnostics.getHealthReports(filters);
 
@@ -420,16 +419,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `list_health_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Health reports listing error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve health reports'
       });
-    }
+
   });
 
   // Quick health check endpoint
@@ -442,9 +440,9 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           includeRecommendations: { type: 'boolean', default: false },
           includeTrends: { type: 'boolean', default: false },
           categories: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -471,11 +469,11 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
       // Include additional details if requested
       if (request.query.includeDetails) {
         response.data.details = execution.results;
-      }
+
 
       if (request.query.includeRecommendations) {
         response.data.recommendations = execution.summary.recommendations;
-      }
+
 
       response.metadata = {
         timestamp: new Date(),
@@ -485,14 +483,13 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
       };
 
       reply.send(response);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Health check error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to perform health check'
       });
-    }
+
   });
 
   // ==========================================
@@ -509,9 +506,9 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           status: { type: 'string', enum: ['enabled', 'disabled', 'all'], default: 'all' },
           limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 },
           offset: { type: 'integer', minimum: 0, default: 0 }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -521,12 +518,12 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
       // Apply filters
       if (request.query.category) {
         diagnostics = diagnostics.filter(d => d.category === request.query.category);
-      }
+
 
       if (request.query.status !== 'all') {
         const isEnabled = request.query.status === 'enabled';
         diagnostics = diagnostics.filter(d => d.enabled === isEnabled);
-      }
+
 
       // Apply pagination
       const offset = request.query.offset || 0;
@@ -544,16 +541,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `list_diagnostics_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Diagnostics listing error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve diagnostic definitions'
       });
-    }
+
   });
 
   // Get diagnostic suites
@@ -572,16 +568,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `list_suites_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Suites listing error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve diagnostic suites'
       });
-    }
+
   });
 
   // Get system diagnostic configuration
@@ -599,16 +594,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `get_config_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Configuration retrieval error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to retrieve diagnostic configuration'
       });
-    }
+
   });
 
   // Update system diagnostic configuration
@@ -622,9 +616,9 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           alertThresholds: { type: 'object' },
           reportingSettings: { type: 'object' },
           maintenanceWindows: { type: 'array' }
-        }
-      }
-    }
+
+
+
   }, async (request, reply) => {
     const startTime = Date.now();
 
@@ -638,7 +632,7 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
         details: {
           changes: request.body,
           timestamp: new Date()
-        }
+
       });
 
       const updatedConfig = await systemDiagnostics.getConfiguration();
@@ -651,16 +645,15 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           requestId: `update_config_${Date.now()}`,
           processingTime: Date.now() - startTime,
           version: '1.0.0'
-        }
-      });
 
-    } catch (error) {
+      });
+ catch (error) {
       fastify.log.error(`Configuration update error: ${error.message}`);
       reply.code(500).send({
         success: false,
         error: 'Failed to update diagnostic configuration'
       });
-    }
+
   });
 
   // ==========================================
@@ -681,26 +674,25 @@ export const diagnosticsAPI: FastifyPluginAsync = async (fastify: FastifyInstanc
           trendAnalysis: true,
           alerting: true,
           configurationManagement: true
-  }
+
         statistics: {
           availableDiagnostics: (await diagnosticService.listAvailableDiagnostics()).length,
           availableSuites: (await diagnosticService.listDiagnosticSuites()).length,
           recentExecutions: (await diagnosticService.listDiagnosticExecutions({ limit: 10 })).length
-        }
+
       };
 
       reply.send({
         success: true,
         data: status
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error(`Status check error: ${error.message}`);
       reply.code(503).send({
         success: false,
         error: 'Service status check failed'
       });
-    }
+
   });
 
   fastify.log.info('Diagnostics API routes registered successfully');

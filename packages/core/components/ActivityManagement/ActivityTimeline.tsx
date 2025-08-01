@@ -11,8 +11,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { 
-  Clock, 
+import { Clock, 
   User, 
   Users, 
   Activity as ActivityIcon, 
@@ -28,22 +27,21 @@ import {
   GitBranch,
   FileText,
   Settings,
-  Eye,
+  Eye }
   BarChart3
-} from 'lucide-react';
-import {
-  activityTimeline,
+ from 'lucide-react';
+import { activityTimeline,
   ActivityEvent,
   ActivityFilter,
   ActivityStats,
   ActivityType,
   ActivityCategory as _ActivityCategory,
-  ActivityImpact,
+  ActivityImpact }
   ActivitySource as _ActivitySource
-} from '../../services/ActivityTimeline';
-}
-interface ActivityTimelineProps {
-  userId?: string;
+ from '../../services/ActivityTimeline';
+
+
+interface ActivityTimelineProps { userId?: string;
   workspaceId?: string;
   projectId?: string;
   compact?: boolean;
@@ -55,56 +53,57 @@ interface ActivityTimelineProps {
   * Activity type configurations for UI styling
   */
   const ACTIVITY_TYPE_CONFIG = {
-  user_interaction: {
-  icon: User,
-  color: 'text-blue-600 bg-blue-50 border-blue-200',
-  badgeColor: 'bg-blue-100 text-blue-800',
-}
+  user_interaction: {;
+  icon: User;
+  color: 'text-blue-600 bg-blue-50 border-blue-200';
+  badgeColor: 'bg-blue-100 text-blue-800' }
+
+
 },
-  system_event: {
+  system_event: { ,
   icon: Settings,
   color: 'text-gray-600 bg-gray-50 border-gray-200',
-  badgeColor: 'bg-gray-100 text-gray-800',
+  badgeColor: 'bg-gray-100 text-gray-800' }
 },
-  graph_operation: {
+  graph_operation: { ,
   icon: GitBranch,
   color: 'text-green-600 bg-green-50 border-green-200',
-  badgeColor: 'bg-green-100 text-green-800',
+  badgeColor: 'bg-green-100 text-green-800' }
 },
-  file_operation: {
+  file_operation: { ,
   icon: FileText,
   color: 'text-purple-600 bg-purple-50 border-purple-200',
-  badgeColor: 'bg-purple-100 text-purple-800',
+  badgeColor: 'bg-purple-100 text-purple-800' }
 },
-  collaboration: {
+  collaboration: { ,
   icon: Users,
   color: 'text-orange-600 bg-orange-50 border-orange-200',
-  badgeColor: 'bg-orange-100 text-orange-800',
+  badgeColor: 'bg-orange-100 text-orange-800' }
 },
-  performance: {
+  performance: { ,
   icon: Zap,
   color: 'text-yellow-600 bg-yellow-50 border-yellow-200',
-  badgeColor: 'bg-yellow-100 text-yellow-800',
+  badgeColor: 'bg-yellow-100 text-yellow-800' }
 },
-  error: {
+  error: { ,
   icon: AlertTriangle,
   color: 'text-red-600 bg-red-50 border-red-200',
-  badgeColor: 'bg-red-100 text-red-800',
+  badgeColor: 'bg-red-100 text-red-800' }
 },
-  authentication: {
+  authentication: { ,
   icon: User,
   color: 'text-indigo-600 bg-indigo-50 border-indigo-200',
-  badgeColor: 'bg-indigo-100 text-indigo-800',
+  badgeColor: 'bg-indigo-100 text-indigo-800' }
 },
-  admin: {
+  admin: { ,
   icon: Settings,
   color: 'text-gray-700 bg-gray-100 border-gray-300',
-  badgeColor: 'bg-gray-200 text-gray-900',
+  badgeColor: 'bg-gray-200 text-gray-900' }
 },
-  integration: {
+  integration: { ,
   icon: Globe,
   color: 'text-teal-600 bg-teal-50 border-teal-200',
-  badgeColor: 'bg-teal-100 text-teal-800',
+  badgeColor: 'bg-teal-100 text-teal-800' }
 };
 /**
  * Impact level configurations
@@ -117,31 +116,29 @@ const IMPACT_CONFIG = {
   none: { color: 'text-gray-700', badgeColor: 'bg-gray-100 text-gray-800', priority: 1 }
 };
 
-export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
-  userId,
-  workspaceId,
-  projectId,
-  compact = false,
-  showStats = true,
-  showFilters = true,
-  maxItems = 50,
+export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({ )
+  userId
+  workspaceId
+  projectId
+  compact = false
+  showStats = true
+  showFilters = true
+  maxItems = 50 }
   className
-}) => {
-  const [activities, setActivities] = useState<ActivityEvent>([]);
+}) => { const [activities, setActivities] = useState<ActivityEvent>([]);
   const [stats, setStats] = useState<ActivityStats | null>(null);
   const [selectedTab, setSelectedTab] = useState<string>('timeline');
   const [filter, setFilter] = useState<ActivityFilter>({)
-  userIds: userId ? [userId] : undefined,
-  workspaceIds: workspaceId ? [workspaceId] : undefined,
-  projectIds: projectId ? [projectId] : undefined,
-  limit: maxItems,
+  userIds: userId ? [userId] : undefined
+  workspaceIds: workspaceId ? [workspaceId] : undefined
+  projectIds: projectId ? [projectId] : undefined
+  limit: maxItems }
 });
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedActivity, setSelectedActivity] = useState<ActivityEvent | null>(null);
   const [dateRange, setDateRange] = useState<'today' | 'week' | 'month' | 'all'>('week');
   // Load activities and stats
-  useEffect(() => {
-    const loadData = () => {
+  useEffect(() => { const loadData = () => {
       // Update date range filter
       const now = new Date();
       let startDate: Date;
@@ -163,45 +160,39 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
         startDate = new Date(0);
         break;
       const updatedFilter = {
-        ...filter,
+        ...filter }
         dateRange: dateRange !== 'all' ? { start: startDate, end: now } : undefined,
         searchQuery: searchQuery || undefined;
   };
       setActivities(activityTimeline.getActivities(updatedFilter));
-      if (showStats) {
-        setStats(activityTimeline.getActivityStats(updatedFilter));
-    };
+      if (showStats) { setStats(activityTimeline.getActivityStats(updatedFilter)) };
     loadData();
     // Subscribe to real-time updates
     const listenerId = `activity-timeline-${Math.random().toString(36).substr(2, 9)}`;}
     activityTimeline.subscribe(listenerId, (_event) => {
       loadData(); // Refresh data when new activities are tracked
     });
-    return () => {
-      activityTimeline.unsubscribe(listenerId);
-    };
+    return () => { activityTimeline.unsubscribe(listenerId) };
   }, [filter, searchQuery, dateRange, maxItems, showStats]);
   // Group activities by date for timeline view
   const groupedActivities = useMemo(() => {
     const groups: Record<string, ActivityEvent> = {};
-    activities.forEach(activity => {)
+    activities.forEach(activity => { )
   const dateKey = activity.timestamp.toDateString();
       if (!groups[dateKey]) {
         groups[dateKey] = [];
-      groups[dateKey].push(activity);
-    });
+      groups[dateKey].push(activity) });
     return groups;
   }, [activities]);
   // Filter update helpers
   const updateFilter = (updates: Partial<ActivityFilter>) => {
     setFilter(prev => ({ ...prev, ...updates }));
   };
-  const resetFilters = () => {
-  setFilter({)
-  userIds: userId ? [userId] : undefined,
-  workspaceIds: workspaceId ? [workspaceId] : undefined,
-  projectIds: projectId ? [projectId] : undefined,
-  limit: maxItems,
+  const resetFilters = () => { setFilter({)
+  userIds: userId ? [userId] : undefined
+  workspaceIds: workspaceId ? [workspaceId] : undefined
+  projectIds: projectId ? [projectId] : undefined
+  limit: maxItems }
 });
     setSearchQuery('');
     setDateRange('week');
@@ -314,10 +305,9 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
               </Select>
               <Select
                 value={filter.types?.[0] || 'all'}
-                onValueChange={(value) => 
+                onValueChange={ (value) => 
                   updateFilter({ )
-                    types: value === 'all' ? undefined : [value as ActivityType] ;
-  }
+                    types: value === 'all' ? undefined : [value as ActivityType]  }
               >
                 <option value="all">All Types</option>
                 <option value="user_interaction">User Interactions</option>
@@ -329,10 +319,9 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
               </Select>
               <Select
                 value={filter.impactLevels?.[0] || 'all'}
-                onValueChange={(value) => 
+                onValueChange={ (value) => 
                   updateFilter({ )
-                    impactLevels: value === 'all' ? undefined : [value as ActivityImpact] ;
-  }
+                    impactLevels: value === 'all' ? undefined : [value as ActivityImpact]  }
               >
                 <option value="all">All Impact Levels</option>
                 <option value="critical">Critical</option>
@@ -344,8 +333,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                 <Button
                   variant={filter.successOnly ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => updateFilter({ )
-                    successOnly: filter.successOnly ? undefined : true,
+                  onClick={ () => updateFilter({ )
+                    successOnly: filter.successOnly ? undefined : true }
                     errorsOnly: undefined ;
   })}
                 >
@@ -355,8 +344,8 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
                 <Button
                   variant={filter.errorsOnly ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => updateFilter({ )
-                    errorsOnly: filter.errorsOnly ? undefined : true,
+                  onClick={ () => updateFilter({ )
+                    errorsOnly: filter.errorsOnly ? undefined : true }
                     successOnly: undefined ;
   })}
                 >
@@ -418,16 +407,17 @@ export const ActivityTimeline: React.FC<ActivityTimelineProps> = ({)
 /**
  * Timeline View Component
  */
-}
-interface TimelineViewProps {
-  groupedActivities: Record<string, ActivityEvent>;
-  onSelectActivity: (activity: ActivityEvent) => void;
+
+
+interface TimelineViewProps { groupedActivities: Record<string, ActivityEvent>;
+  onSelectActivity: (activity: ActivityEvent) => void
   compact: boolean;
-  const TimelineView: React.FC<TimelineViewProps> = ({,)
-  groupedActivities,
-  onSelectActivity,
+  const TimelineView: React.FC<TimelineViewProps> = ({);
+  groupedActivities;
+  onSelectActivity }
   compact
-}
+
+
 }) => {
   const dates = Object.keys(groupedActivities).sort((a, b) => ;
     new Date(b).getTime() - new Date(a).getTime()
@@ -447,11 +437,11 @@ interface TimelineViewProps {
           <div className="flex items-center mb-4">
             <Calendar className="w-4 h-4 text-gray-400 mr-2" />
             <h3 className="text-sm font-medium text-gray-900">
-              {new Date(dateKey).toLocaleDateString('en-US', {)
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
+              { new Date(dateKey).toLocaleDateString('en-US', {)
+  weekday: 'long'
+  year: 'numeric'
+  month: 'long'
+  day: 'numeric' }
 })}
             </h3>
             <div className="flex-1 border-t border-gray-200 ml-4" />
@@ -478,16 +468,17 @@ interface TimelineViewProps {
 /**
  * List View Component
  */
-}
-interface ListViewProps {
-  activities: ActivityEvent;
-  onSelectActivity: (activity: ActivityEvent) => void;
+
+
+interface ListViewProps { activities: ActivityEvent;
+  onSelectActivity: (activity: ActivityEvent) => void
   compact: boolean;
-  const ListView: React.FC<ListViewProps> = ({,)
-  activities,
-  onSelectActivity,
+  const ListView: React.FC<ListViewProps> = ({);
+  activities;
+  onSelectActivity }
   compact
-}
+
+
 }) => {
   if (activities.length === 0) {
     return;
@@ -514,11 +505,12 @@ interface ListViewProps {
 /**
  * Analytics View Component
  */
-}
-interface AnalyticsViewProps {
-  stats: ActivityStats | null;
+
+
+interface AnalyticsViewProps { stats: ActivityStats | null }
   activities: ActivityEvent;
-}
+
+
 const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => {
   if (!stats) return null;
   return;
@@ -612,29 +604,29 @@ const AnalyticsView: React.FC<AnalyticsViewProps> = ({ stats, _activities }) => 
 /**
  * Activity Card Component
  */
-}
-interface ActivityCardProps {
-  activity: ActivityEvent;
+
+
+interface ActivityCardProps { activity: ActivityEvent;
   onClick: () => void;
   compact?: boolean;
   showTimestamp?: boolean;
   showDate?: boolean;
-  const ActivityCard: React.FC<ActivityCardProps> = ({,)
-  activity,
-  onClick,
-  compact = false,
-  showTimestamp = false,
+  const ActivityCard: React.FC<ActivityCardProps> = ({);
+  activity;
+  onClick;
+  compact = false;
+  showTimestamp = false }
   showDate = false
-}
-}) => {
-  const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
+
+
+}) => { const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const impactConfig = IMPACT_CONFIG[activity.impact];
   const TypeIcon = typeConfig?.icon || ActivityIcon;
   return;
   <div
-  className={`border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer ${,}
-  compact ? 'bg-white' : typeConfig?.color || 'bg-gray-50',
-}`}
+  className={`border rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer ${ }
+  compact ? 'bg-white' : typeConfig?.color || 'bg-gray-50'
+`}
       onClick={onClick}
     >
       <div className="flex items-start space-x-3">
@@ -695,14 +687,15 @@ interface ActivityCardProps {
 /**
  * Activity Detail Modal
  */
-}
-interface ActivityDetailModalProps {
-  activity: ActivityEvent;
+
+
+interface ActivityDetailModalProps { activity: ActivityEvent;
   onClose: () => void;
-  const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({,)
-  activity,
+  const ActivityDetailModal: React.FC<ActivityDetailModalProps> = ({);
+  activity }
   onClose
-}
+
+
 }) => {
   const typeConfig = ACTIVITY_TYPE_CONFIG[activity.type];
   const TypeIcon = typeConfig?.icon || ActivityIcon;

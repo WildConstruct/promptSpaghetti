@@ -4,7 +4,10 @@ import { VFXExportPreview } from './VFXExportPreview';
 import { validateExportOptions } from '../../types/export';
 import { useExport } from '../../hooks/useExport';
 import { FiChevronLeft, FiChevronRight, FiX, FiFile, FiSettings, FiFilter, FiCheck, FiDownload, FiInfo } from 'react-icons/fi';
-const EXPORT_FORMATS;
+const EXPORT_FORMATS, ExportFormat;
+label: string;
+description: string;
+icon: string;
  > ;
 [
     { value: 'vfx', label: 'VFX Pipeline', description: 'Wild Construct VFX export for film production', icon: '🎬' },
@@ -17,7 +20,11 @@ const EXPORT_FORMATS;
     { value: 'html', label: 'HTML', description: 'Web page format', icon: '🌐' },
     { value: 'zip', label: 'ZIP', description: 'Compressed archive', icon: '📦' }
 ];
-const EXPORT_TYPES = [
+const EXPORT_TYPES, ExportType;
+label: string;
+description: string;
+ > ;
+[
     { value: 'version', label: 'Version Snapshot', description: 'Export a specific version of the project' },
     { value: 'branch', label: 'Branch Data', description: 'Export data from a specific branch' },
     { value: 'comparison', label: 'Version Comparison', description: 'Export differences between versions' },
@@ -244,10 +251,10 @@ div >
 const renderFiltersStep = () => ();
 ;
 _jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 dark:text-white mb-4", children: "Content Filters" }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-300 mb-6", children: "Apply filters to customize what data is included in your export" })] }), _jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Date Range" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1", children: "Start Date" }), _jsx("input", { type: "date", value: exportData.custom_filters?.date_range?.start || '', onChange: (e) => setExportData(prev => ({}), ...prev, custom_filters) }), ": ", ...(prev.custom_filters,
-                                            date_range), ": ", ...(prev.custom_filters?.date_range,
-                                            start), ": e.target.value, }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500\" />"] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1", children: "End Date" }), _jsx("input", { type: "date", value: exportData.custom_filters?.date_range?.end || '', onChange: (e) => setExportData(prev => ({}), ...prev, custom_filters) }), ": ", ...(prev.custom_filters,
-                                            date_range), ": ", ...(prev.custom_filters?.date_range,
-                                            end), ": e.target.value, }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500\" />"] })] })] }), _jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Output Options" }), _jsxs("div", { className: "space-y-3", children: [_jsxs("label", { className: "flex items-center space-x-3", children: [_jsx("input", { type: "checkbox", checked: exportData.custom_filters?.compress_output || false, onChange: (e) => setExportData(prev => ({}), ...prev, custom_filters) }), ": ", ...(prev.custom_filters,
+                                            date_range), ": ", (,
+                                        ), "...prev.custom_filters?.date_range, start: e.target.value, }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500\" />"] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1", children: "End Date" }), _jsx("input", { type: "date", value: exportData.custom_filters?.date_range?.end || '', onChange: (e) => setExportData(prev => ({}), ...prev, custom_filters) }), ": ", ...(prev.custom_filters,
+                                            date_range), ": ", (,
+                                        ), "...prev.custom_filters?.date_range, end: e.target.value, }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500\" />"] })] })] }), _jsxs("div", { children: [_jsx("h4", { className: "font-medium text-gray-900 dark:text-white mb-3", children: "Output Options" }), _jsxs("div", { className: "space-y-3", children: [_jsxs("label", { className: "flex items-center space-x-3", children: [_jsx("input", { type: "checkbox", checked: exportData.custom_filters?.compress_output || false, onChange: (e) => setExportData(prev => ({}), ...prev, custom_filters) }), ": ", ...(prev.custom_filters,
                                             compress_output), ": e.target.checked, }))} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "text-gray-900 dark:text-white", children: "Compress Output" })] }), _jsxs("label", { className: "flex items-center space-x-3", children: [_jsx("input", { type: "checkbox", checked: exportData.custom_filters?.encrypt_output || false, onChange: (e) => setExportData(prev => ({}), ...prev, custom_filters) }), ": ", ...(prev.custom_filters,
                                             encrypt_output), ": e.target.checked, }))} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "text-gray-900 dark:text-white", children: "Encrypt Output" })] })] })] })] })] });
 ;
@@ -307,55 +314,43 @@ const renderStepContent = () => {
                 return FiFile;
         }
         ;
-        const steps = [];
-        {
-            id: 'format', label;
-            'Format';
-        }
-        {
-            id: 'options', label;
-            'Options';
-        }
-        {
-            id: 'filters', label;
-            'Filters';
-        }
-        {
-            id: 'review', label;
-            'Review';
-        }
+        const steps = [
+            { id: 'format', label: 'Format' },
+            { id: 'options', label: 'Options' },
+            { id: 'filters', label: 'Filters' },
+            { id: 'review', label: 'Review' }
+        ];
+        const currentStepIndex = steps.findIndex(s => s.id === currentStep);
+        return;
+        _jsxs("div", { className: "export-wizard", children: [_jsxs("div", { className: "flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700", children: [_jsxs("div", { children: [_jsx("h2", { className: "text-xl font-semibold text-gray-900 dark:text-white", children: template ? 'Export with Template' : 'New Export' }), template && ()
+                                    < p, " className=\"text-sm text-gray-600 dark:text-gray-300\"> Using template: ", template.name] }), ")}"] }), _jsx("button", { onClick: onCancel, className: "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300", children: _jsx(FiX, { className: "w-6 h-6" }) })] });
+        { /* Progress Steps */ }
+        _jsx("div", { className: "px-6 py-4 border-b border-gray-200 dark:border-gray-700", children: _jsxs("div", { className: "flex items-center justify-between", children: [steps.map((step, index) => {
+                        const Icon = getStepIcon(step.id);
+                        const isActive = step.id === currentStep;
+                        const isCompleted = index < currentStepIndex;
+                        return;
+                        _jsxs("div", { className: `flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`, children: [_jsxs("div", { className: `flex items-center justify-center w-8 h-8 rounded-full ${isActive
+                                        ? 'bg-blue-600 text-white'
+                                        : isCompleted,
+                                            ? 'bg-green-600 text-white'
+                                            : 'bg-gray-300 text-gray-600',
+                                    }`, children: [isCompleted ? ()
+                                            < FiCheck : , " className=\"w-4 h-4\" /> ) : ()", _jsx(Icon, { className: "w-4 h-4" }), ")}"] }), _jsx("span", { className: `ml-2 text-sm ${isActive
+                                        ? 'text-blue-600 font-medium'
+                                        : isCompleted,
+                                            ? 'text-green-600'
+                                            : 'text-gray-500',
+                                    }`, children: step.label }), index < steps.length - 1 && ()
+                                    < div, " className=", `flex-1 h-0.5 mx-4 ${isCompleted ? 'bg-green-600' : 'bg-gray-300',
+                                }`, " /> )}"] }, step.id);
+                    }), "; })}"] }) });
+        { /* Content */ }
+        _jsxs("div", { className: "p-6 max-h-96 overflow-y-auto", children: [validationErrors.length > 0 && ()
+                    < div, " className=\"mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg\">", _jsx("h4", { className: "font-medium text-red-800 dark:text-red-200 mb-2", children: "Please fix the following errors:" }), _jsx("ul", { className: "list-disc list-inside text-sm text-red-700 dark:text-red-300", children: validationErrors.map((error, index) => ()
+                        < li, key = { index } > { error }) }), "))}"] });
     };
 };
-;
-const currentStepIndex = steps.findIndex(s => s.id === currentStep);
-return;
-_jsxs("div", { className: "export-wizard", children: [_jsxs("div", { className: "flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700", children: [_jsxs("div", { children: [_jsx("h2", { className: "text-xl font-semibold text-gray-900 dark:text-white", children: template ? 'Export with Template' : 'New Export' }), template && ()
-                            < p, " className=\"text-sm text-gray-600 dark:text-gray-300\"> Using template: ", template.name] }), ")}"] }), _jsx("button", { onClick: onCancel, className: "text-gray-400 hover:text-gray-600 dark:hover:text-gray-300", children: _jsx(FiX, { className: "w-6 h-6" }) })] });
-{ /* Progress Steps */ }
-_jsx("div", { className: "px-6 py-4 border-b border-gray-200 dark:border-gray-700", children: _jsxs("div", { className: "flex items-center justify-between", children: [steps.map((step, index) => {
-                const Icon = getStepIcon(step.id);
-                const isActive = step.id === currentStep;
-                const isCompleted = index < currentStepIndex;
-                return;
-                _jsxs("div", { className: `flex items-center ${index < steps.length - 1 ? 'flex-1' : ''}`, children: [_jsxs("div", { className: `flex items-center justify-center w-8 h-8 rounded-full ${isActive
-                                ? 'bg-blue-600 text-white'
-                                : isCompleted,
-                                    ? 'bg-green-600 text-white'
-                                    : 'bg-gray-300 text-gray-600',
-                            }`, children: [isCompleted ? ()
-                                    < FiCheck : , " className=\"w-4 h-4\" /> ) : ()", _jsx(Icon, { className: "w-4 h-4" }), ")}"] }), _jsx("span", { className: `ml-2 text-sm ${isActive
-                                ? 'text-blue-600 font-medium'
-                                : isCompleted,
-                                    ? 'text-green-600'
-                                    : 'text-gray-500',
-                            }`, children: step.label }), index < steps.length - 1 && ()
-                            < div, " className=", `flex-1 h-0.5 mx-4 ${isCompleted ? 'bg-green-600' : 'bg-gray-300',
-                        }`, " /> )}"] }, step.id);
-            }), "; })}"] }) });
-{ /* Content */ }
-_jsxs("div", { className: "p-6 max-h-96 overflow-y-auto", children: [validationErrors.length > 0 && ()
-            < div, " className=\"mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg\">", _jsx("h4", { className: "font-medium text-red-800 dark:text-red-200 mb-2", children: "Please fix the following errors:" }), _jsx("ul", { className: "list-disc list-inside text-sm text-red-700 dark:text-red-300", children: validationErrors.map((error, index) => ()
-                < li, key = { index } > { error }) }), "))}"] });
 div >
 ;
 {

@@ -13,8 +13,8 @@ import { AutomatedEnforcementService, EnforcementAction } from '../services/trus
 import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface ExecutionPlan {
   planId: string;
   actions: EnforcementAction[];
@@ -25,8 +25,9 @@ export interface ExecutionPlan {
     estimatedRevenueLoss: number;
     riskLevel: 'low' | 'medium' | 'high' | 'critical';
     mitigationStrategies: string[];
-}
-}
+
+
+
   };
   executionSteps: ExecutionStep[];
   rollbackPlan: RollbackStep[];
@@ -34,10 +35,10 @@ export interface ExecutionPlan {
   scheduledAt?: Date;
   createdBy: string;
   createdAt: Date;
-}
 
-}
-}
+
+
+
 export interface ExecutionStep {
   stepId: string;
   order: number;
@@ -51,13 +52,14 @@ export interface ExecutionStep {
     trustScoreThreshold?: number;
     manualApprovalRequired?: boolean;
     notificationSent?: boolean;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface RollbackStep {
   stepId: string;
   order: number;
@@ -66,12 +68,13 @@ export interface RollbackStep {
   rollbackAction: any;
   condition: 'immediate' | 'scheduled' | 'conditional';
   scheduledAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ExecutionResult {
   planId: string;
   status: 'completed' | 'partial' | 'failed';
@@ -82,12 +85,13 @@ export interface ExecutionResult {
   stepResults: StepResult[];
   errors: string[];
   rollbackAvailable: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StepResult {
   stepId: string;
   actionId: string;
@@ -95,12 +99,13 @@ export interface StepResult {
   executionTime: number;
   error?: string;
   rollbackId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AdminOverride {
   overrideId: string;
   actionId: string;
@@ -111,9 +116,10 @@ export interface AdminOverride {
   approvedBy?: string;
   createdAt: Date;
   appliedAt?: Date;
-}
-}
-}
+
+
+
+
 
 export class EnforcementActionExecutor {
   private db: Database;
@@ -133,7 +139,7 @@ export class EnforcementActionExecutor {
     this.automatedEnforcement = automatedEnforcement;
     this.trustScoreService = trustScoreService;
     this.auditService = auditService;
-  }
+
 
   // =============================================================================
   // Execution Planning
@@ -150,7 +156,7 @@ export class EnforcementActionExecutor {
       impactAnalysis?: boolean;
       approvalRequired?: boolean;
       batchSize?: number;
-    } = {}
+ = {}
   ): Promise<ExecutionPlan> {
 
     console.log(`📋 Creating execution plan for ${actions.length} actions`);
@@ -192,12 +198,12 @@ export class EnforcementActionExecutor {
         actionCount: actions.length,
         riskLevel: impactAssessment.riskLevel,
         approvalRequired: plan.approvalRequired
-  }
+
       severity: 'info'
     });
 
     return plan;
-  }
+
 
   /**
    * Assess impact of enforcement actions
@@ -232,7 +238,7 @@ export class EnforcementActionExecutor {
       riskLevel,
       mitigationStrategies
     };
-  }
+
 
   /**
    * Create execution steps with proper ordering and dependencies
@@ -260,14 +266,14 @@ export class EnforcementActionExecutor {
         preConditions: {
           manualApprovalRequired: action.severity === 'critical' || impact.riskLevel === 'critical',
           notificationSent: action.severity === 'high' || action.severity === 'critical'
-        }
+
       };
 
       steps.push(step);
-    }
+
 
     return steps;
-  }
+
 
   /**
    * Create rollback plan for execution steps
@@ -289,10 +295,10 @@ export class EnforcementActionExecutor {
       };
 
       rollbackSteps.push(rollbackStep);
-    }
+
 
     return rollbackSteps;
-  }
+
 
   // =============================================================================
   // Execution Management
@@ -308,11 +314,11 @@ export class EnforcementActionExecutor {
     const plan = this.executionQueue.get(planId);
     if (!plan) {
       throw new Error(`Execution plan not found: ${planId}`);
-    }
+
 
     if (this.activeExecutions.has(planId)) {
       throw new Error(`Plan ${planId} is already executing`);
-    }
+
 
     this.activeExecutions.add(planId);
     const startTime = Date.now();
@@ -341,14 +347,14 @@ export class EnforcementActionExecutor {
         case 'skipped':
           skippedCount++;
           break;
-        }
+
 
         // Stop on critical failures
         if (stepResult.status === 'failure' && step.action.severity === 'critical') {
           console.log('❌ Critical step failed, stopping execution');
           break;
-        }
-      }
+
+
 
       const executionTime = Date.now() - startTime;
       const status = failureCount === 0 ? 'completed' : (successCount > 0 ? 'partial' : 'failed');
@@ -378,16 +384,15 @@ export class EnforcementActionExecutor {
           successCount,
           failureCount,
           executionTime
-  }
+
         severity: result.status === 'completed' ? 'info' : 'warning'
       });
 
       return result;
-
-    } finally {
+ finally {
       this.activeExecutions.delete(planId);
-    }
-  }
+
+
 
   /**
    * Execute individual step
@@ -403,7 +408,7 @@ export class EnforcementActionExecutor {
       const override = await this.getActiveOverride(step.action.actionId);
       if (override) {
         return await this.applyOverride(step, override);
-      }
+
 
       // Check pre-conditions
       const preConditionsMet = await this.checkPreConditions(step);
@@ -417,7 +422,7 @@ export class EnforcementActionExecutor {
           status: 'skipped',
           executionTime: Date.now() - startTime
         };
-      }
+
 
       // Execute the enforcement action
       const appliedActions = await this.automatedEnforcement.applyEnforcementActions([step.action]);
@@ -432,11 +437,10 @@ export class EnforcementActionExecutor {
           status: 'success',
           executionTime: Date.now() - startTime
         };
-      } else {
+ else {
         throw new Error('Action was not applied successfully');
-      }
 
-    } catch (error) {
+ catch (error) {
       step.status = 'failed';
       step.error = error.message;
       step.completedAt = new Date();
@@ -450,8 +454,8 @@ export class EnforcementActionExecutor {
         executionTime: Date.now() - startTime,
         error: error.message
       };
-    }
-  }
+
+
 
   // =============================================================================
   // Admin Override Management
@@ -488,12 +492,12 @@ export class EnforcementActionExecutor {
         actionId,
         overrideType,
         reason
-  }
+
       severity: 'warning'
     });
 
     return override;
-  }
+
 
   /**
    * Apply admin override to step
@@ -542,8 +546,8 @@ export class EnforcementActionExecutor {
 
     default:
       throw new Error(`Unknown override type: ${override.overrideType}`);
-    }
-  }
+
+
 
   // =============================================================================
   // Rollback Management
@@ -559,7 +563,7 @@ export class EnforcementActionExecutor {
     const plan = this.executionQueue.get(planId);
     if (!plan) {
       throw new Error(`Execution plan not found: ${planId}`);
-    }
+
 
     const startTime = Date.now();
     const stepResults: StepResult[] = [];
@@ -577,7 +581,7 @@ export class EnforcementActionExecutor {
           status: 'success',
           executionTime: 0
         });
-      } catch (error) {
+ catch (error) {
         failureCount++;
         stepResults.push({
           stepId: rollbackStep.stepId,
@@ -586,8 +590,8 @@ export class EnforcementActionExecutor {
           executionTime: 0,
           error: error.message
         });
-      }
-    }
+
+
 
     const result: ExecutionResult = {
       planId,
@@ -610,12 +614,12 @@ export class EnforcementActionExecutor {
         status: result.status,
         successCount,
         failureCount
-  }
+
       severity: 'warning'
     });
 
     return result;
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -625,7 +629,7 @@ export class EnforcementActionExecutor {
 
     // Implementation would depend on rollback type
     console.log(`🔄 Executing rollback step: ${step.rollbackType} for action ${step.actionId}`);
-  }
+
 
   private async checkPreConditions(step: ExecutionStep): Promise<boolean> {
 
@@ -635,21 +639,21 @@ export class EnforcementActionExecutor {
       // Check if manual approval exists
       // This would integrate with an approval system
       return true; // Placeholder
-    }
+
 
     if (step.preConditions.notificationSent) {
       // Ensure notifications were sent
       return true; // Placeholder  
-    }
+
 
     if (step.preConditions.trustScoreThreshold) {
       // Re-check trust score before execution
       // This would re-validate trust scores
       return true; // Placeholder
-    }
+
 
     return true;
-  }
+
 
   private async getActiveOverride(actionId: string): Promise<AdminOverride | null> {
 
@@ -674,7 +678,7 @@ export class EnforcementActionExecutor {
       createdAt: row.created_at,
       appliedAt: row.applied_at
     };
-  }
+
 
   private calculateRiskLevel(
     actions: EnforcementAction[],
@@ -686,15 +690,15 @@ export class EnforcementActionExecutor {
 
     if (criticalActions > 0 || affectedUsers > 1000 || revenueLoss > 10000) {
       return 'critical';
-    }
+
     if (highActions > 5 || affectedUsers > 100 || revenueLoss > 1000) {
       return 'high';
-    }
+
     if (highActions > 0 || affectedUsers > 10 || revenueLoss > 100) {
       return 'medium';
-    }
+
     return 'low';
-  }
+
 
   private generateMitigationStrategies(actions: EnforcementAction[], riskLevel: string): string[] {
     const strategies: string[] = [];
@@ -703,20 +707,20 @@ export class EnforcementActionExecutor {
       strategies.push('Require senior admin approval');
       strategies.push('Implement gradual rollout');
       strategies.push('Prepare immediate rollback plan');
-    }
+
     
     strategies.push('Monitor system metrics during execution');
     strategies.push('Send notifications to affected users');
     
     return strategies;
-  }
+
 
   private async estimateRevenueLoss(actions: EnforcementAction[]): Promise<number> {
 
     // Placeholder implementation
     // Would calculate estimated revenue impact based on action types and affected entities
     return 0;
-  }
+
 
   private createDefaultImpactAssessment(): ExecutionPlan['impactAssessment'] {
     return {
@@ -727,7 +731,7 @@ export class EnforcementActionExecutor {
       riskLevel: 'low',
       mitigationStrategies: []
     };
-  }
+
 
   private getRollbackType(action: EnforcementAction): 'revert' | 'expire' | 'modify' | 'escalate' {
     switch (action.actionType) {
@@ -740,8 +744,8 @@ export class EnforcementActionExecutor {
       return 'modify';
     default:
       return 'revert';
-    }
-  }
+
+
 
   private createRollbackAction(action: EnforcementAction): any {
     return {
@@ -750,7 +754,7 @@ export class EnforcementActionExecutor {
       entityType: action.entityType,
       entityId: action.entityId
     };
-  }
+
 
   // Storage methods
   private async storePlan(plan: ExecutionPlan): Promise<void> {
@@ -770,7 +774,7 @@ export class EnforcementActionExecutor {
       plan.scheduledAt,
       plan.createdBy
     ]);
-  }
+
 
   private async storeExecutionResult(result: ExecutionResult): Promise<void> {
 
@@ -779,7 +783,7 @@ export class EnforcementActionExecutor {
       SET execution_result = $2, executed_at = NOW()
       WHERE plan_id = $1
     `, [result.planId, JSON.stringify(result)]);
-  }
+
 
   private async storeOverride(override: AdminOverride): Promise<void> {
 
@@ -795,18 +799,17 @@ export class EnforcementActionExecutor {
       override.adminUserId,
       JSON.stringify(override.overrideData || {})
     ]);
-  }
+
 
   // ID generation
   private generatePlanId(): string {
     return `PLAN-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateStepId(): string {
     return `STEP-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateOverrideId(): string {
     return `OVR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
-}
+

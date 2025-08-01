@@ -5,25 +5,22 @@
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 
 }
-export interface ExtensionStatus {
-    enabled: boolean;
+}
+export interface ExtensionStatus { enabled: boolean;
     loaded: boolean;
     hasErrors: boolean;
     lastError?: string;
     version: string;
     updateAvailable: boolean;
-    availableVersion?: string;
-
-
+    availableVersion?: string }
 }
-export interface ExtensionInstallation {
-    extension: ExtensionManifest;
+}
+export interface ExtensionInstallation { extension: ExtensionManifest;
     installedAt: Date;
     enabledAt?: Date;
     disabledAt?: Date;
-    configuration?: Record<string, any>;
-
-
+    configuration?: Record<string, any> }
+}
 }
 export interface ExtensionManagerState {
     installedExtensions: ExtensionManifest[];
@@ -49,4 +46,5 @@ export interface ExtensionManagerState {
 export declare const useExtensionManagerStore: import("zustand").UseBoundStore<import("zustand").StoreApi<ExtensionManagerState>>;
 export type ExtensionManagerStore = ReturnType<typeof useExtensionManagerStore>;
 //# sourceMappingURL=ExtensionManagerStore.d.ts.map
+}
 }

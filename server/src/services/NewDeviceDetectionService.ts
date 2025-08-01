@@ -9,8 +9,8 @@ import { VerificationThresholdService } from './VerificationThresholdService';
 import { EmailService } from '../auth/services/EmailService';
 import { EventEmitter } from 'events';
 
-}
-}
+
+
 export interface NewDeviceContext {
   userId: string;
   deviceFingerprint: string;
@@ -21,18 +21,19 @@ export interface NewDeviceContext {
     city: string;
     latitude?: number;
     longitude?: number;
-}
-}
+
+
+
   };
   metadata?: {
     loginTime: Date;
     sessionId?: string;
     authMethod?: string;
   };
-}
 
-}
-}
+
+
+
 export interface NewDeviceDetectionResult {
   isNewDevice: boolean;
   deviceId?: string;
@@ -44,14 +45,15 @@ export interface NewDeviceDetectionResult {
     fingerprint: string;
     similarity: number;
     lastSeen: Date;
-}
-}
-  }>;
-  recommendations: string[];
-}
 
-}
-}
+
+
+>;
+  recommendations: string[];
+
+
+
+
 export interface NewDevicePolicy {
   enabled: boolean;
   
@@ -61,8 +63,9 @@ export interface NewDevicePolicy {
     considerLocationChange: boolean;
     considerUserAgentChange: boolean;
     maxSimilarDevices: number;
-}
-}
+
+
+
   };
   
   // Risk assessment
@@ -109,7 +112,7 @@ export interface NewDevicePolicy {
     deviceListTtl: number;
     riskAssessmentTtl: number;
   };
-}
+
 
 export class NewDeviceDetectionService extends EventEmitter {
   private db: DatabaseService;
@@ -137,7 +140,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     this.policy = policy;
     this.verificationService = verificationService;
     this.emailService = emailService;
-  }
+
 
   async detectNewDevice(context: NewDeviceContext): Promise<NewDeviceDetectionResult> {
 
@@ -147,7 +150,7 @@ export class NewDeviceDetectionService extends EventEmitter {
       const cached = await this.redis.get(cacheKey);
       if (cached) {
         return JSON.parse(cached);
-      }
+
 
       // Get user's device history
       const userDevices = await this.getUserDevices(context.userId);
@@ -173,8 +176,8 @@ export class NewDeviceDetectionService extends EventEmitter {
           
           await this.cacheResult(cacheKey, result);
           return result;
-        }
-      }
+
+
 
       // Find similar devices
       const similarDevices = await this.findSimilarDevices(
@@ -214,7 +217,7 @@ export class NewDeviceDetectionService extends EventEmitter {
       // Send notifications if needed
       if (this.shouldNotify(result)) {
         await this.sendNewDeviceNotification(context, result);
-      }
+
 
       // Cache result
       await this.cacheResult(cacheKey, result);
@@ -223,11 +226,11 @@ export class NewDeviceDetectionService extends EventEmitter {
       this.emit('new_device_detected', context, result);
 
       return result;
-    } catch (error) {
+ catch (error) {
       console.error('Error detecting new device:', error);
       throw error;
-    }
-  }
+
+
 
   private async getUserDevices(userId: string): Promise<any[]> {
 
@@ -262,17 +265,17 @@ export class NewDeviceDetectionService extends EventEmitter {
         lastAccessed: row.last_accessed,
         verificationStatus: row.verification_status
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting user devices:', error);
       return [];
-    }
-  }
+
+
 
   private isDeviceExpired(device: Error): boolean {
     const gracePeriod = this.policy.verification.gracePeriodHours * 60 * 60 * 1000;
     const lastAccessed = new Date(device.lastAccessed).getTime();
     return Date.now() - lastAccessed > gracePeriod;
-  }
+
 
   private async detectSuspiciousChanges(
     context: NewDeviceContext,
@@ -289,8 +292,8 @@ export class NewDeviceDetectionService extends EventEmitter {
         lastLocation.city !== context.location.city
       )) {
         reasons.push('significant_location_change');
-      }
-    }
+
+
 
     // Check user agent change
     if (this.policy.detection.considerUserAgentChange) {
@@ -299,21 +302,21 @@ export class NewDeviceDetectionService extends EventEmitter {
         const similarity = this.calculateUserAgentSimilarity(lastUserAgent, context.userAgent);
         if (similarity < 80) { // Significant change
           reasons.push('user_agent_change');
-        }
-      }
-    }
+
+
+
 
     // Check for recent security events
     const recentEvents = await this.getRecentSecurityEvents(context.userId);
     if (recentEvents.length > 0) {
       reasons.push('recent_security_events');
-    }
+
 
     return {
       suspicious: reasons.length > 0,
       reasons
     };
-  }
+
 
   private async findSimilarDevices(
     fingerprint: string,
@@ -334,12 +337,12 @@ export class NewDeviceDetectionService extends EventEmitter {
             similarity,
             lastSeen: device.lastSeen
           });
-        }
-      }
-    }
+
+
+
 
     return similar.sort((a, b) => b.similarity - a.similarity);
-  }
+
 
   private async calculateRiskScore(
     context: NewDeviceContext,
@@ -352,32 +355,32 @@ export class NewDeviceDetectionService extends EventEmitter {
     const userTrust = await this.getUserTrustLevel(context.userId);
     if (userTrust > 70) {
       riskScore -= this.policy.riskAssessment.trustedUserDiscount;
-    }
+
 
     // Check for similar devices
     if (similarDevices.length === 0) {
       riskScore += 10; // Completely new device type
-    } else if (similarDevices[0].similarity < 70) {
+ else if (similarDevices[0].similarity < 70) {
       riskScore += 5; // Somewhat different from known devices
-    }
+
 
     // Check for suspicious patterns
     const suspiciousPatterns = await this.checkSuspiciousPatterns(context);
     if (suspiciousPatterns.length > 0) {
       riskScore *= this.policy.riskAssessment.suspiciousPatternMultiplier;
-    }
+
 
     // Check for recent breaches
     const recentBreach = await this.checkRecentBreaches(context.userId);
     if (recentBreach) {
       riskScore *= this.policy.riskAssessment.recentBreachMultiplier;
-    }
+
 
     // Location-based risk
     if (context.location) {
       const locationRisk = await this.assessLocationRisk(context.userId, context.location);
       riskScore += locationRisk;
-    }
+
 
     // Time-based risk
     const timeRisk = this.assessTimeRisk(context.metadata?.loginTime);
@@ -385,14 +388,14 @@ export class NewDeviceDetectionService extends EventEmitter {
 
     // Normalize score
     return Math.max(0, Math.min(100, Math.round(riskScore)));
-  }
+
 
   private calculateRiskLevel(riskScore: number): 'low' | 'medium' | 'high' | 'critical' {
     if (riskScore >= 80) return 'critical';
     if (riskScore >= 60) return 'high';
     if (riskScore >= 40) return 'medium';
     return 'low';
-  }
+
 
   private getVerificationMethods(riskLevel: string): string[] {
     switch (riskLevel) {
@@ -406,30 +409,30 @@ export class NewDeviceDetectionService extends EventEmitter {
       return this.policy.verification.criticalRiskMethods;
     default:
       return [];
-    }
-  }
+
+
 
   private canAutoApprove(context: NewDeviceContext, riskLevel: string): boolean {
     if (!this.policy.autoApproval.enabled) {
       return false;
-    }
+
 
     if (this.policy.autoApproval.requireLowRisk && riskLevel !== 'low') {
       return false;
-    }
+
 
     if (this.policy.autoApproval.requireBusinessHours) {
       const hour = new Date().getHours();
       if (hour < 8 || hour > 18) {
         return false;
-      }
-    }
+
+
 
     // Check auto-approval count for today
     // Implementation would check database for count
 
     return true;
-  }
+
 
   private generateRecommendations(
     context: NewDeviceContext,
@@ -442,20 +445,20 @@ export class NewDeviceDetectionService extends EventEmitter {
       recommendations.push('Enable multi-factor authentication');
       recommendations.push('Review recent account activity');
       recommendations.push('Update security contact information');
-    }
+
 
     if (similarDevices.length === 0) {
       recommendations.push('This appears to be your first device of this type');
       recommendations.push('Consider setting this as a trusted device after verification');
-    }
+
 
     if (context.location && this.isUnusualLocation(context.location)) {
       recommendations.push('Verify this login location is expected');
       recommendations.push('Enable location-based security alerts');
-    }
+
 
     return recommendations;
-  }
+
 
   private async getUserTrustLevel(userId: string): Promise<number> {
 
@@ -488,17 +491,17 @@ export class NewDeviceDetectionService extends EventEmitter {
       // Device trust average
       if (data.avg_trust_score) {
         trustLevel += (data.avg_trust_score - 50) * 0.5;
-      }
+
 
       // Penalty for security events
       trustLevel -= data.high_severity_events * 10;
 
       return Math.max(0, Math.min(100, trustLevel));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting user trust level:', error);
       return 50;
-    }
-  }
+
+
 
   private async checkSuspiciousPatterns(context: NewDeviceContext): Promise<string[]> {
 
@@ -514,7 +517,7 @@ export class NewDeviceDetectionService extends EventEmitter {
 
     if (recentDevices.rows[0]?.device_count > 3) {
       patterns.push('rapid_device_switching');
-    }
+
 
     // Check for unusual access patterns
     const hour = new Date().getHours();
@@ -531,10 +534,10 @@ export class NewDeviceDetectionService extends EventEmitter {
     const commonHours = userPattern.rows.map(r => parseInt(r.hour));
     if (!commonHours.includes(hour)) {
       patterns.push('unusual_access_time');
-    }
+
 
     return patterns;
-  }
+
 
   private async checkRecentBreaches(userId: string): Promise<boolean> {
 
@@ -547,7 +550,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     `, [userId]);
 
     return result.rows[0]?.breach_count > 0;
-  }
+
 
   private async assessLocationRisk(userId: string, location: unknown): Promise<number> {
 
@@ -566,10 +569,10 @@ export class NewDeviceDetectionService extends EventEmitter {
     const countries = knownCountries.rows.map(r => r.country);
     if (!countries.includes(location.country)) {
       risk += 20;
-    }
+
 
     return risk;
-  }
+
 
   private assessTimeRisk(loginTime?: Date): number {
     if (!loginTime) return 0;
@@ -584,7 +587,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     if (dayOfWeek === 0 || dayOfWeek === 6) return 5;
 
     return 0;
-  }
+
 
   private calculateUserAgentSimilarity(ua1: string, ua2: string): number {
     // Simple similarity calculation
@@ -595,12 +598,12 @@ export class NewDeviceDetectionService extends EventEmitter {
     const total = Math.max(parts1.length, parts2.length);
     
     return (common / total) * 100;
-  }
+
 
   private isUnusualLocation(location: unknown): boolean {
     // Simple check - could be enhanced
     return location.country === 'Unknown' || location.city === 'Unknown';
-  }
+
 
   private async getRecentSecurityEvents(userId: string): Promise<any[]> {
 
@@ -614,20 +617,20 @@ export class NewDeviceDetectionService extends EventEmitter {
     `, [userId]);
 
     return result.rows;
-  }
+
 
   private shouldNotify(result: NewDeviceDetectionResult): boolean {
     if (!this.policy.notifications.notifyOnNewDevice && result.isNewDevice) {
       return false;
-    }
+
 
     if (!this.policy.notifications.notifyOnHighRisk && 
         (result.riskLevel === 'high' || result.riskLevel === 'critical')) {
       return false;
-    }
+
 
     return true;
-  }
+
 
   private async sendNewDeviceNotification(
     context: NewDeviceContext,
@@ -650,7 +653,7 @@ export class NewDeviceDetectionService extends EventEmitter {
       let subject = 'New Device Login Detected';
       if (result.riskLevel === 'high' || result.riskLevel === 'critical') {
         subject = 'URGENT: Suspicious Device Login Detected';
-      }
+
 
       let body = `Hello ${display_name || 'User'},\n\n`;
       body += 'We detected a login to your account from a new device:\n\n';
@@ -660,27 +663,27 @@ export class NewDeviceDetectionService extends EventEmitter {
         body += `- Browser/App: ${context.userAgent.substring(0, 50)}...\n`;
         body += `- Trust Score: ${result.trustScore}/100\n`;
         body += `- Risk Level: ${result.riskLevel.toUpperCase()}\n`;
-      }
+
 
       if (this.policy.notifications.includeLocationDetails && context.location) {
         body += '\nLocation:\n';
         body += `- Country: ${context.location.country}\n`;
         body += `- City: ${context.location.city}\n`;
-      }
+
 
       body += `\nLogin Time: ${context.metadata?.loginTime || new Date()}\n`;
 
       if (result.requiresVerification) {
         body += '\n⚠️ Additional verification is required for this device.\n';
         body += `Verification methods: ${result.verificationMethods.join(', ')}\n`;
-      }
+
 
       if (result.recommendations.length > 0) {
         body += '\nSecurity Recommendations:\n';
         result.recommendations.forEach(rec => {
           body += `• ${rec}\n`;
         });
-      }
+
 
       body += '\nIf this wasn\'t you, please secure your account immediately.\n';
 
@@ -698,13 +701,13 @@ export class NewDeviceDetectionService extends EventEmitter {
           deviceFingerprint: context.deviceFingerprint,
           riskLevel: result.riskLevel,
           notificationType: 'email'
-  }
+
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error sending new device notification:', error);
-    }
-  }
+
+
 
   private async logNewDeviceDetection(
     context: NewDeviceContext,
@@ -723,16 +726,16 @@ export class NewDeviceDetectionService extends EventEmitter {
           requiresVerification: result.requiresVerification,
           location: context.location,
           similarDevicesCount: result.similarDevices?.length || 0
-  }
+
         severity: result.riskLevel === 'critical' ? 'error' : 
           result.riskLevel === 'high' ? 'warning' : 'info',
         ipAddress: context.ipAddress,
         userAgent: context.userAgent
       });
-    } catch (error) {
+ catch (error) {
       console.error('Error logging new device detection:', error);
-    }
-  }
+
+
 
   private async cacheResult(key: string, result: NewDeviceDetectionResult): Promise<void> {
 
@@ -742,10 +745,10 @@ export class NewDeviceDetectionService extends EventEmitter {
         this.policy.cache.detectionResultTtl,
         JSON.stringify(result)
       );
-    } catch (error) {
+ catch (error) {
       console.error('Error caching detection result:', error);
-    }
-  }
+
+
 
   async approveDevice(
     userId: string,
@@ -764,7 +767,7 @@ export class NewDeviceDetectionService extends EventEmitter {
         details: {
           deviceFingerprint,
           approvalMethod
-  }
+
         severity: 'info'
       });
 
@@ -776,11 +779,11 @@ export class NewDeviceDetectionService extends EventEmitter {
       this.emit('device_approved', { userId, deviceFingerprint, approvalMethod });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error approving device:', error);
       return false;
-    }
-  }
+
+
 
   async rejectDevice(
     userId: string,
@@ -799,7 +802,7 @@ export class NewDeviceDetectionService extends EventEmitter {
         details: {
           deviceFingerprint,
           reason
-  }
+
         severity: 'warning'
       });
 
@@ -811,11 +814,11 @@ export class NewDeviceDetectionService extends EventEmitter {
       this.emit('device_rejected', { userId, deviceFingerprint, reason });
 
       return true;
-    } catch (error) {
+ catch (error) {
       console.error('Error rejecting device:', error);
       return false;
-    }
-  }
+
+
 
   async getDeviceVerificationStatus(
     userId: string,
@@ -825,7 +828,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     verificationRequired: boolean;
     verificationMethods?: string[];
     attemptsRemaining?: number;
-  }> {
+> {
 
     try {
       // Check if device is already verified
@@ -857,7 +860,7 @@ export class NewDeviceDetectionService extends EventEmitter {
           verificationMethods: detection.verificationMethods,
           attemptsRemaining: this.policy.verification.maxAttempts
         };
-      }
+
 
       const row = device.rows[0];
       const verified = row.is_trusted || row.verification_status === 'verified';
@@ -866,14 +869,14 @@ export class NewDeviceDetectionService extends EventEmitter {
         verified,
         verificationRequired: !verified && row.trust_score < this.policy.detection.fingerprintSimilarityThreshold
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting device verification status:', error);
       return {
         verified: false,
         verificationRequired: true
       };
-    }
-  }
+
+
 
   async getRecentNewDevices(
     userId: string,
@@ -884,7 +887,7 @@ export class NewDeviceDetectionService extends EventEmitter {
     approved: boolean;
     riskLevel: string;
     location?: unknown;
-  }>> {
+>> {
     try {
       const result = await this.db.query(`
         SELECT 
@@ -910,9 +913,8 @@ export class NewDeviceDetectionService extends EventEmitter {
         riskLevel: row.risk_level,
         location: row.location
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting recent new devices:', error);
       return [];
-    }
-  }
-}
+
+

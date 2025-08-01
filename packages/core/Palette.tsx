@@ -1,53 +1,50 @@
 import React from 'react';
 import { professionalColors } from './styles/professional-design-system';
 
-export interface NodeMeta {
-  id: string;
+export interface NodeMeta { id: string;
   label: string;
   icon: React.ReactNode;
   category?: string;
-  tooltip: string;
-}
+  tooltip: string }
 
-export interface PaletteProps {
-  nodes: NodeMeta[];
+
+export interface PaletteProps { nodes: NodeMeta;
   collapsed: boolean;
   onToggle: () => void;
-  onDragStart?: (nodeId: string) => void;
-}
+  onDragStart?: (nodeId: string) => void }
 
-export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => {
-  return (
+
+export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => { return (
     <aside
       aria-label="Node Palette"
       style={{
-        width: collapsed ? 56 : 200,
-        background: professionalColors.background.primary,
-        color: professionalColors.text.primary,
-        borderRight: `1px solid ${professionalColors.ui.border}`,
-        padding: 0,
-        height: '100%',
-        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
+        width: collapsed ? 56 : 200
+        background: professionalColors.background.primary
+        color: professionalColors.text.primary }
+        borderRight: `1px solid ${professionalColors.ui.border}`
+        padding: 0
+        height: '100%'
+        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        overflow: 'hidden'
+        display: 'flex'
+        flexDirection: 'column'
+
     >
       <button
         aria-label={collapsed ? 'Expand palette' : 'Collapse palette'}
         aria-expanded={!collapsed}
         onClick={onToggle}
-        style={{
-          background: professionalColors.ui.hover,
-          border: `1px solid ${professionalColors.ui.border}`,
-          color: professionalColors.text.primary,
-          fontSize: 18,
-          width: '100%',
-          padding: '12px 0',
-          cursor: 'pointer',
-          outline: 'none',
-          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-        }}
+        style={ {
+          background: professionalColors.ui.hover }
+          border: `1px solid ${professionalColors.ui.border}`
+          color: professionalColors.text.primary
+          fontSize: 18
+          width: '100%'
+          padding: '12px 0'
+          cursor: 'pointer'
+          outline: 'none'
+          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+
       >
         {collapsed ? '»' : '«'}
       </button>
@@ -63,27 +60,25 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                 aria-label={`${node.label} - ${node.tooltip}`.trim()}
                 aria-describedby={`tooltip-${node.id}`}
                 aria-grabbed="false"
-                onDragStart={e => {
+                onDragStart={ e => {
                   e.dataTransfer?.setData?.('application/node-type', node.id);
-                  onDragStart?.(node.id);
-                }}
+                  onDragStart?.(node.id) }}
                 title={node.tooltip}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '10px 0',
-                  marginBottom: 4,
-                  borderRadius: 6,
-                  background: 'none',
-                  cursor: 'grab',
-                  outline: 'none',
-                }}
-                onKeyDown={e => {
+                style={ {
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  padding: '10px 0'
+  marginBottom: 4
+  borderRadius: 6
+  background: 'none'
+  cursor: 'grab'
+  outline: 'none' }
+}
+                onKeyDown={ e => {
                   if (e.key === 'Enter' || e.key === ' ') {
-                    onDragStart?.(node.id);
-                  }
-                }}
+                    onDragStart?.(node.id) }
+
               >
                 <span
                   id={`tooltip-${node.id}`}
@@ -95,53 +90,49 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
               </div>
             ))
           : // Expanded view - show by category
-            (() => {
-              const categories = nodes.reduce(
+            (() => { const categories = nodes.reduce(
                 (acc, node) => {
                   const category = node.category || 'other';
                   if (!acc[category]) acc[category] = [];
                   acc[category].push(node);
-                  return acc;
-                },
+                  return acc },
                 {} as Record<string, typeof nodes>
               );
               const categoryOrder = [
-                'content',
-                'flow',
-                'advanced',
-                'transform',
-                'output',
-                'memory',
-                'smart',
-                'process',
-                'other',
-              ];
-              const categoryLabels = {
-                content: 'Content Building Blocks',
-                flow: 'Content Flow Tools',
-                advanced: 'Advanced Nodes',
-                transform: 'Transform & Logic',
-                output: 'Final Output',
-                memory: 'Memory & Storage',
-                smart: 'Smart Tools',
-                process: 'Custom Processing',
-                other: 'Other Tools',
-              };
+                'content'
+                'flow'
+                'advanced'
+                'transform'
+                'output'
+                'memory'
+                'smart'
+                'process'
+                'other'];
+              const categoryLabels = { content: 'Content Building Blocks'
+  flow: 'Content Flow Tools'
+  advanced: 'Advanced Nodes'
+  transform: 'Transform & Logic'
+  output: 'Final Output'
+  memory: 'Memory & Storage'
+  smart: 'Smart Tools'
+  process: 'Custom Processing'
+  other: 'Other Tools' }
+};
               return categoryOrder.map(categoryKey => {
                 const categoryNodes = categories[categoryKey];
                 if (!categoryNodes || categoryNodes.length === 0) return null;
                 return (
                   <div key={categoryKey} style={{ marginBottom: 16 }}>
                     <div
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 600,
-                        color: '#9ca3af',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                        marginBottom: 8,
-                        paddingLeft: 8,
-                      }}
+                      style={ {
+  fontSize: 11
+  fontWeight: 600
+  color: '#9ca3af'
+  textTransform: 'uppercase'
+  letterSpacing: '0.5px'
+  marginBottom: 8
+  paddingLeft: 8 }
+}
                     >
                       {categoryLabels[categoryKey as keyof typeof categoryLabels]}
                     </div>
@@ -154,34 +145,30 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
                         aria-label={`${node.label} - ${node.tooltip}`.trim()}
                         aria-describedby={`tooltip-${node.id}`}
                         aria-grabbed="false"
-                        onDragStart={e => {
+                        onDragStart={ e => {
                           e.dataTransfer?.setData?.('application/node-type', node.id);
-                          onDragStart?.(node.id);
-                        }}
+                          onDragStart?.(node.id) }}
                         title={node.tooltip}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 12,
-                          padding: '10px 16px',
-                          marginBottom: 4,
-                          borderRadius: 6,
-                          background: 'none',
-                          cursor: 'grab',
-                          outline: 'none',
-                          transition: 'background-color 0.2s',
-                        }}
-                        onMouseEnter={e => {
-                          e.currentTarget.style.backgroundColor = '#2a2f3a';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.backgroundColor = 'none';
-                        }}
-                        onKeyDown={e => {
+                        style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 12
+  padding: '10px 16px'
+  marginBottom: 4
+  borderRadius: 6
+  background: 'none'
+  cursor: 'grab'
+  outline: 'none'
+  transition: 'background-color 0.2s' }
+
+                        onMouseEnter={ e => {
+                          e.currentTarget.style.backgroundColor = '#2a2f3a' }}
+                        onMouseLeave={ e => {
+                          e.currentTarget.style.backgroundColor = 'none' }}
+                        onKeyDown={ e => {
                           if (e.key === 'Enter' || e.key === ' ') {
-                            onDragStart?.(node.id);
-                          }
-                        }}
+                            onDragStart?.(node.id) }
+
                       >
                         <span
                           id={`tooltip-${node.id}`}

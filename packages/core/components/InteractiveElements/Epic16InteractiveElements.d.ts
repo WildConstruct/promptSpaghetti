@@ -6,8 +6,8 @@
  */
 import React from 'react';
 }
-interface Epic16InteractiveElementsProps {
-    userId: string;
+}
+interface Epic16InteractiveElementsProps { userId: string;
     userName: string;
     userAvatar?: string;
     userRole: 'user' | 'creator' | 'admin';
@@ -16,7 +16,7 @@ interface Epic16InteractiveElementsProps {
         pageUrl: string;
         pageType: 'marketplace' | 'community' | 'profile' | 'template' | 'learning';
         templateId?: string;
-        categoryId?: string;
+        categoryId?: string }
 }
     };
     onElementInteraction?: (elementId: string, interaction: unknown) => void;

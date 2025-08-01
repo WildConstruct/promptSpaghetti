@@ -15,9 +15,8 @@ import { promises as fs } from 'fs';
 import { join } from 'path';
 import * as semver from 'semver';
 
-}
-export interface RemotePlugin {
-  id: string;
+
+export interface RemotePlugin { id: string;
   name: string;
   description: string;
   version: string;
@@ -31,43 +30,40 @@ export interface RemotePlugin {
   downloads: number;
   rating: number;
   createdAt: Date;
-  updatedAt: Date;
-}
-}
-}
-export interface PluginUpdate {
-  pluginId: string;
+  updatedAt: Date }
+
+
+
+export interface PluginUpdate { pluginId: string;
   currentVersion: string;
   availableVersion: string;
   updateType: 'patch' | 'minor' | 'major';
   changelog?: string;
-  breaking: boolean;
-}
-}
-}
-export interface PluginRegistryConfig {
-  cacheDirectory: string;
+  breaking: boolean }
+
+
+
+export interface PluginRegistryConfig { cacheDirectory: string;
   autoUpdateCheck: boolean;
   allowRemoteSources: boolean;
   remoteRegistries: string;
-  updateCheckInterval: number; // milliseconds,
-  maxCacheAge: number; // milliseconds,
+  updateCheckInterval: number; // milliseconds;
+  maxCacheAge: number; // milliseconds }
   enableTelemetry: boolean;
   developmentMode: boolean;
-}
-}
-}
-export interface PluginInstallOptions {
-  version?: string;
+
+
+
+
+export interface PluginInstallOptions { version?: string;
   skipDependencies?: boolean;
   force?: boolean;
   source?: PluginSource;
-  activateAfterInstall?: boolean;
-}
-}
-}
-export interface PluginSearchOptions {
-  query?: string;
+  activateAfterInstall?: boolean }
+
+
+
+export interface PluginSearchOptions { query?: string;
   category?: string;
   author?: string;
   minRating?: number;
@@ -75,12 +71,12 @@ export interface PluginSearchOptions {
   limit?: number;
   offset?: number;
   sortBy?: 'name' | 'downloads' | 'rating' | 'updated';
-  sortOrder?: 'asc' | 'desc'
-}
-  }
-}
-export interface PluginRegistryStats {
-  totalPlugins: number;
+  sortOrder?: 'asc' | 'desc' }
+
+
+
+
+export interface PluginRegistryStats { totalPlugins: number;
   activePlugins: number;
   inactivePlugins: number;
   errorPlugins: number;
@@ -89,9 +85,8 @@ export interface PluginRegistryStats {
   unresolvedDependencies: number;
   updateCheckLastRun?: Date;
   availableUpdates: number;
-  cacheSize: number;
-}
-}
+  cacheSize: number }
+
 export class PluginRegistry extends EventEmitter {
   private baseRegistry: ExtensionPointRegistry;
   private pluginLoader: PluginLoader;
@@ -101,27 +96,26 @@ export class PluginRegistry extends EventEmitter {
   private installedPlugins: Map<string, LoadedPlugin>;
   private remotePluginCache: Map<string, RemotePlugin>;
   private updateCheckTimer?: NodeJS.Timeout;
-  constructor(config: Partial<PluginRegistryConfig> = {}) {
-  super();
+  constructor(config: Partial<PluginRegistryConfig> = {}) { super();
   this.config = {
-  cacheDirectory: join(process.cwd(), '.plugin-cache'),
-  autoUpdateCheck: true,
-  allowRemoteSources: false,
-  remoteRegistries: ['https://registry.npmjs.org'],
-  updateCheckInterval: 24 * 60 * 60 * 1000, // 24 hours,
-  maxCacheAge: 7 * 24 * 60 * 60 * 1000, // 7 days,
-  enableTelemetry: false,
-  developmentMode: process.env.NODE_ENV === 'development',
+  cacheDirectory: join(process.cwd(), '.plugin-cache')
+  autoUpdateCheck: true
+  allowRemoteSources: false
+  remoteRegistries: ['https://registry.npmjs.org']
+  updateCheckInterval: 24 * 60 * 60 * 1000, // 24 hours
+  maxCacheAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  enableTelemetry: false
+  developmentMode: process.env.NODE_ENV === 'development' }
   ...config
 };
     this.baseRegistry = ExtensionPointRegistry.getInstance();
     this.versionManager = new ExtensionVersionManager();
     this.dependencyResolver = new DependencyResolver(this.versionManager);
-    this.pluginLoader = new PluginLoader({)
-  enableSandbox: !this.config.developmentMode,
-  allowRemoteSources: this.config.allowRemoteSources,
-  cacheDirectory: this.config.cacheDirectory,
-  developmentMode: this.config.developmentMode,
+    this.pluginLoader = new PluginLoader({ )
+  enableSandbox: !this.config.developmentMode
+  allowRemoteSources: this.config.allowRemoteSources
+  cacheDirectory: this.config.cacheDirectory
+  developmentMode: this.config.developmentMode }
 });
     this.installedPlugins = new Map();
     this.remotePluginCache = new Map();
@@ -130,7 +124,7 @@ export class PluginRegistry extends EventEmitter {
    * Install a plugin from various sources
    */
   async installPlugin(((
-    pluginIdentifier: string,
+    pluginIdentifier: string
     options: PluginInstallOptions = {}
   ): Promise<LoadedPlugin> {
 
@@ -154,7 +148,7 @@ export class PluginRegistry extends EventEmitter {
       await this.saveInstallationRecord(plugin);
       this.emit('plugin:install:success', { plugin });
       return plugin;
-    } catch (error) {
+ catch (error) {
       this.emit('plugin:install:error', { pluginIdentifier, error });
       throw new Error(`Failed to install plugin ${pluginIdentifier}: ${error.message}`);}
   /**
@@ -183,7 +177,7 @@ export class PluginRegistry extends EventEmitter {
       if (removeData) {
         await this.removePluginData(pluginId);
       this.emit('plugin:uninstall:success', { pluginId });
-    } catch (error) {
+ catch (error) {
       this.emit('plugin:uninstall:error', { pluginId, error });
       throw error;
   /**
@@ -210,19 +204,15 @@ export class PluginRegistry extends EventEmitter {
         await this.saveInstallationRecord(updatedPlugin);
         this.emit('plugin:update:success', { pluginId, updatedPlugin });
         return updatedPlugin;
-      } catch (updateError) {
-        // Restore backup on failure
+ catch (updateError) { // Restore backup on failure
         await this.restorePluginBackup(pluginId);
-        throw updateError;
-    } catch (error) {
+        throw updateError } catch (error) {
       this.emit('plugin:update:error', { pluginId, error });
       throw error;
   /**
    * Search for plugins in remote registries
    */
-  async searchPlugins(options: PluginSearchOptions = {}): Promise<RemotePlugin> {
-
-  try {
+  async searchPlugins(options: PluginSearchOptions = {}): Promise<RemotePlugin> { try {
   const results: RemotePlugin = [];
   // Search in cached remote plugins
   for (const [registry, plugins] of this.remotePluginCache) {
@@ -243,23 +233,23 @@ export class PluginRegistry extends EventEmitter {
   results.sort((a, b) => {
   let aValue, bValue;
   switch (options.sortBy) {
-  case 'name':,
+  case 'name':
   aValue = a.name;
   bValue = b.name;
   break;
-  case 'downloads':,
+  case 'downloads':
   aValue = a.downloads;
   bValue = b.downloads;
   break;
-  case 'rating':,
+  case 'rating':
   aValue = a.rating;
   bValue = b.rating;
   break;
-  case 'updated':,
+  case 'updated':
   aValue = a.updatedAt;
   bValue = b.updatedAt;
   break;
-  default:,
+  default: }
   return 0;
   const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
   return options.sortOrder === 'desc' ? -comparison : comparison;
@@ -268,34 +258,31 @@ export class PluginRegistry extends EventEmitter {
       const offset = options.offset || 0;
       const limit = options.limit || 50;
       return results.slice(offset, offset + limit);
-    } catch (error) {
+ catch (error) {
       throw new Error(`Plugin search failed: ${error.message}`);}
   /**
    * Check for plugin updates
    */
-  async checkForUpdates(): Promise<PluginUpdate> {
-
-  const updates = await this.pluginLoader.checkForUpdates();
+  async checkForUpdates(): Promise<PluginUpdate> { const updates = await this.pluginLoader.checkForUpdates();
   return updates.map(update => ({)
-  ...update,
-  updateType: this.getUpdateType(update.currentVersion, update.availableVersion),
-  breaking: semver.major(update.availableVersion) > semver.major(update.currentVersion),
+  ...update
+  updateType: this.getUpdateType(update.currentVersion, update.availableVersion)
+  breaking: semver.major(update.availableVersion) > semver.major(update.currentVersion) }
 }));
   /**
    * Get plugin registry statistics
    */
-  getStats(): PluginRegistryStats {
-  const plugins = Array.from(this.installedPlugins.values());
+  getStats(): PluginRegistryStats { const plugins = Array.from(this.installedPlugins.values());
   return {
-  totalPlugins: plugins.length,
-  activePlugins: plugins.filter(p => p.status === 'active').length,
-  inactivePlugins: plugins.filter(p => p.status === 'inactive').length,
-  errorPlugins: plugins.filter(p => p.status === 'error').length,
-  totalDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0),
-  resolvedDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0),
-  unresolvedDependencies: 0, // Simplified,
-  availableUpdates: 0, // Would be populated by checkForUpdates,
-  cacheSize: this.remotePluginCache.size,
+  totalPlugins: plugins.length
+  activePlugins: plugins.filter(p => p.status === 'active').length
+  inactivePlugins: plugins.filter(p => p.status === 'inactive').length
+  errorPlugins: plugins.filter(p => p.status === 'error').length
+  totalDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0)
+  resolvedDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0)
+  unresolvedDependencies: 0, // Simplified
+  availableUpdates: 0, // Would be populated by checkForUpdates
+  cacheSize: this.remotePluginCache.size }
 };
   /**
    * Get all installed plugins
@@ -318,7 +305,7 @@ export class PluginRegistry extends EventEmitter {
         const updates = await this.checkForUpdates();
         if (updates.length > 0) {
           this.emit('updates:available', { updates });
-      } catch (error) {
+ catch (error) {
         this.emit('update-check:error', { error });
     }, this.config.updateCheckInterval);
   /**
@@ -337,10 +324,8 @@ export class PluginRegistry extends EventEmitter {
       // Load installed plugins from disk
       await this.loadInstalledPlugins();
       // Enable auto-update check if configured
-      if (this.config.autoUpdateCheck) {
-  this.enableAutoUpdateCheck();
-  this.emit('registry:initialized');
-} catch (error) {
+      if (this.config.autoUpdateCheck) { this.enableAutoUpdateCheck();
+  this.emit('registry:initialized') } catch (error) {
       this.emit('registry:error', { error });
       console.error('Failed to initialize plugin registry:', error);
   private async resolvePluginSource(identifier: string, version?: string): PluginSource {
@@ -384,42 +369,33 @@ export class PluginRegistry extends EventEmitter {
     const recordPath = join(this.config.cacheDirectory, 'installed.json');
     try {
       let records: any = {};
-      try {
-        const content = await fs.readFile(recordPath, 'utf-8');
-        records = JSON.parse(content);
-      } catch {
-  // File doesn't exist yet
+      try { const content = await fs.readFile(recordPath, 'utf-8');
+        records = JSON.parse(content) } catch { // File doesn't exist yet
   records[plugin.manifest.id] = {
-  version: plugin.manifest.version,
-  installedAt: plugin.loadedAt,
-  source: plugin.source,
+  version: plugin.manifest.version
+  installedAt: plugin.loadedAt
+  source: plugin.source }
 };
       await fs.writeFile(recordPath, JSON.stringify(records, null, 2));
-    } catch (error) {
+ catch (error) {
       console.warn(`Failed to save installation record for ${plugin.manifest.id}:`, error);}
-  private async removeInstallationRecord(pluginId: string): Promise<void> {
-
-    const recordPath = join(this.config.cacheDirectory, 'installed.json');
+  private async removeInstallationRecord(pluginId: string): Promise<void> { const recordPath = join(this.config.cacheDirectory, 'installed.json');
     try {
       const content = await fs.readFile(recordPath, 'utf-8');
       const records = JSON.parse(content);
       delete records[pluginId];
-      await fs.writeFile(recordPath, JSON.stringify(records, null, 2));
-    } catch (error) {
+      await fs.writeFile(recordPath, JSON.stringify(records, null, 2)) } catch (error) {
       console.warn(`Failed to remove installation record for ${pluginId}:`, error);}
-  private async loadInstalledPlugins(): Promise<void> {
-
-    const recordPath = join(this.config.cacheDirectory, 'installed.json');
+  private async loadInstalledPlugins(): Promise<void> { const recordPath = join(this.config.cacheDirectory, 'installed.json');
     try {
       const content = await fs.readFile(recordPath, 'utf-8');
       const records = JSON.parse(content);
       for (const [pluginId, record] of Object.entries(records)) {
         try {
           const plugin = await this.pluginLoader.loadPlugin((record as any).source);
-          this.installedPlugins.set(pluginId, plugin);
-        } catch (error) {
+          this.installedPlugins.set(pluginId, plugin) } catch (error) {
           console.warn(`Failed to load installed plugin ${pluginId}:`, error);}
-    } catch (error) {
+ catch (error) {
       // No installed plugins record exists yet
   private async createPluginBackup(plugin: LoadedPlugin): Promise<void> {
 

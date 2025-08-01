@@ -6,6 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Cinema 4D-inspired autosave with conflict resolution and recovery
  */
 import { useState, useCallback, useEffect, useRef } from 'react';
+;
 export class AutosaveSystem {
     sessionId;
     storageKey;
@@ -32,8 +33,8 @@ export class AutosaveSystem {
         const timestamp = Date.now();
         const checksum = this.generateChecksum(nodes, edges);
         const state = {
-            nodes: JSON.parse(JSON.stringify(nodes)), // Deep clone
-            edges: JSON.parse(JSON.stringify(edges)), // Deep clone
+            nodes: JSON.parse(JSON.stringify(nodes)), // Deep clone,
+            edges: JSON.parse(JSON.stringify(edges)), // Deep clone,
             timestamp,
             version: this.getNextVersion(),
             checksum,

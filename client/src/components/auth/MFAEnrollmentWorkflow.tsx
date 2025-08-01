@@ -18,13 +18,14 @@ import {
   AlertTriangle,
   Download,
   Copy
-} from 'lucide-react';
+ from 'lucide-react';
 import type { 
   MFAMethodType, 
   TOTPEnrollmentData, 
   MFAEnrollmentResponse 
-} from '../../types/MFATypes';
-}
+ from '../../types/MFATypes';
+
+
 interface MFAEnrollmentWorkflowProps {
   userId: string;,
   onComplete: (methodType: MFAMethodType, configId: string) => void;,
@@ -33,19 +34,19 @@ interface MFAEnrollmentWorkflowProps {
   type EnrollmentStep = 'select' | 'setup' | 'verify' | 'backup' | 'complete';
   interface EnrollmentState {
   step: EnrollmentStep;,
-  selectedMethod: MFAMethodType | null;
+  selectedMethod: MFAMethodType | null;,
   enrollmentData: MFAEnrollmentResponse | null;,
-  totpData: TOTPEnrollmentData | null;
+  totpData: TOTPEnrollmentData | null;,
   verificationCode: string;,
-  displayName: string;
+  displayName: string;,
   emailAddress: string;,
-  phoneNumber: string;
+  phoneNumber: string;,
   backupCodes: string;,
-  isLoading: boolean;
+  isLoading: boolean;,
   error: string | null;,
   timeRemaining: number;
   const MFA_METHOD_CONFIG = {
-  [MFAMethodType.TOTP]: {
+  [MFAMethodType.TOTP]: {,
   title: 'Authenticator App',
   description: 'Most secure option using Google Authenticator, Authy, or similar apps',
   icon: Smartphone,
@@ -53,8 +54,9 @@ interface MFAEnrollmentWorkflowProps {
   convenience: 'High',
   recommended: true,
   requirements: ['Smartphone', 'Authenticator app installed'],
-}
-}
+
+
+
   [MFAMethodType.EMAIL]: {
   title: 'Email Verification',
   description: 'Receive verification codes via email',
@@ -63,7 +65,7 @@ interface MFAEnrollmentWorkflowProps {
   convenience: 'High',
   recommended: false,
   requirements: ['Access to email account'],
-}
+
   [MFAMethodType.SMS]: {
   title: 'SMS Text Message',
   description: 'Receive codes via text message (fallback option only)',
@@ -79,7 +81,7 @@ export function MFAEnrollmentWorkflow({ )
   onComplete, 
   onCancel, 
   existingMethods = [] 
-}: MFAEnrollmentWorkflowProps) {
+: MFAEnrollmentWorkflowProps) {
   const [state, setState] = useState<EnrollmentState>({)
   step: 'select',
   selectedMethod: null,
@@ -146,7 +148,7 @@ export function MFAEnrollmentWorkflow({ )
   isLoading: false,
   timeRemaining: 300,
 }));
-    } catch (error) {
+ catch (error) {
   setState(prev => ({)
   ...prev,
   error: error instanceof Error ? error.message : 'Operation failed',
@@ -160,10 +162,10 @@ export function MFAEnrollmentWorkflow({ )
       const response = await fetch('/api/mfa/verify', {)
   method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({,)
+        body: JSON.stringify({);
   configurationId: state.enrollmentData.configurationId,
   code: state.verificationCode,
-}
+
       });
       if (!response.ok) throw new Error('Verification failed');
       const result = await response.json();
@@ -175,15 +177,15 @@ export function MFAEnrollmentWorkflow({ )
   backupCodes: state.totpData?.backupCodes ?? [],
   isLoading: false,
 }));
-        } else {
+ else {
           setState(prev => ({ ...prev, step: 'complete', isLoading: false }));
-      } else {
+ else {
   setState(prev => ({)
   ...prev,
   error: result.message || 'Invalid verification code',
   isLoading: false,
 }));
-    } catch (error) {
+ catch (error) {
   setState(prev => ({)
   ...prev,
   error: error instanceof Error ? error.message : 'Operation failed',
@@ -191,13 +193,13 @@ export function MFAEnrollmentWorkflow({ )
 }));
   };
   const downloadBackupCodes = () => {
-    const content = [;
+    const content = [
       'PromptScape MFA Backup Codes',
       '================================',
       `Generated: ${new Date().toISOString()}`}
-}
+
       `User: ${userId}`}
-}
+
       '',
       'IMPORTANT: Save these codes in a safe place.',
       'Each code can only be used once.',
@@ -246,7 +248,7 @@ export function MFAEnrollmentWorkflow({ )
   state.selectedMethod === method
   ? 'border-blue-500 bg-blue-50'
   : 'border-gray-200 hover:border-gray-300',
-}`}
+`}
                   onClick={() => handleMethodSelect(method)}
                 >
                   <div className="flex items-start gap-3">
@@ -515,7 +517,7 @@ export function MFAEnrollmentWorkflow({ )
               onChange={(e) => {
                 if (e.target.checked) {
                   setState(prev => ({ ...prev, step: 'complete' }));
-              }}
+}
             />
             <label htmlFor="backup-saved" className="text-sm">
               I have saved my backup codes in a safe place

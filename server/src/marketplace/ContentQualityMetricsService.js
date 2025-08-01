@@ -18,7 +18,7 @@ export class ContentQualityMetricsService {
     this.analyticsService = analyticsService;
     this.qualityService = qualityService;
     this.config = config || this.getDefaultConfig();
-  }
+
   /**
    * Assess comprehensive content quality for a template
    */
@@ -83,7 +83,7 @@ export class ContentQualityMetricsService {
     await this.storeQualityAssessment(qualityMetrics);
     console.log(`✅ Content quality assessment completed: ${qualityGrade} (${overallQualityScore}%)`);
     return qualityMetrics;
-  }
+
   /**
    * Get content quality dashboard for creator
    */
@@ -114,7 +114,7 @@ export class ContentQualityMetricsService {
       topPerformingTemplates: this.getTopPerformingTemplates(templates, templateQualities),
       improvementOpportunities: this.getImprovementOpportunities(templateQualities),
     };
-  }
+
   /**
    * Generate marketplace-wide quality insights
    */
@@ -141,7 +141,7 @@ export class ContentQualityMetricsService {
       insights: await this.generateMarketplaceInsights(timeRange),
       recommendations: await this.generateMarketplaceRecommendations(timeRange),
     };
-  }
+
   // Private assessment methods for each quality dimension
   async assessEffectiveness(templateId, metrics, timeRange) {
     const successRate = Math.min(100, metrics.metrics.success_rate * 100);
@@ -176,7 +176,7 @@ export class ContentQualityMetricsService {
       problemSolving,
       valueDelivery,
     };
-  }
+
   async assessUsability(templateId, metrics, timeRange) {
     const easeOfUse = {
       learningCurve: await this.calculateLearningCurve(templateId),
@@ -213,7 +213,7 @@ export class ContentQualityMetricsService {
       accessibility,
       userExperience,
     };
-  }
+
   async assessEngagement(templateId, metrics, timeRange) {
     const usage = {
       adoptionRate: metrics.metrics.conversion_rate,
@@ -247,7 +247,7 @@ export class ContentQualityMetricsService {
       virality,
       community,
     };
-  }
+
   async assessReliability(templateId, metrics, timeRange) {
     const stability = {
       errorRate: (metrics.metrics.error_count / Math.max(1, metrics.metrics.views)) * 100,
@@ -286,7 +286,7 @@ export class ContentQualityMetricsService {
       robustness,
       security,
     };
-  }
+
   async assessMaintainability(templateId, metrics, timeRange) {
     const updateFrequency = {
       releaseFrequency: await this.calculateReleaseFrequency(templateId, timeRange),
@@ -325,7 +325,7 @@ export class ContentQualityMetricsService {
       evolution,
       support,
     };
-  }
+
   async assessMarketFit(templateId, metrics, timeRange) {
     const demand = {
       popularityScore: Math.min(100, (metrics.metrics.views / 1000) * 100),
@@ -364,7 +364,7 @@ export class ContentQualityMetricsService {
       business,
       strategic,
     };
-  }
+
   // Helper calculation methods
   calculateOverallScore(dimensions) {
     const weights = this.config.weightings;
@@ -376,7 +376,7 @@ export class ContentQualityMetricsService {
         dimensions.maintainability.score * weights.maintainability +
         dimensions.marketFit.score * weights.marketFit
     );
-  }
+
   scoreToGrade(score) {
     if (score >= 97) return 'A+';
     if (score >= 93) return 'A';
@@ -386,7 +386,7 @@ export class ContentQualityMetricsService {
     if (score >= 80) return 'C';
     if (score >= 70) return 'D';
     return 'F';
-  }
+
   scoreToStatus(score) {
     const thresholds = this.config.thresholds;
     if (score >= thresholds.excellent) return 'excellent';
@@ -394,7 +394,7 @@ export class ContentQualityMetricsService {
     if (score >= thresholds.fair) return 'fair';
     if (score >= thresholds.poor) return 'poor';
     return 'critical';
-  }
+
   getDefaultConfig() {
     return {
       weightings: {
@@ -416,48 +416,48 @@ export class ContentQualityMetricsService {
       updateFrequency: 'daily',
       minimumDataPoints: 10,
     };
-  }
+
   // Placeholder methods for complex calculations - would be implemented with actual business logic
   calculateTaskCompletionRate(metrics) {
     return 85;
-  }
+
   async calculateRatingDistribution(templateId) {
     return { oneStar: 2, twoStar: 3, threeStar: 8, fourStar: 25, fiveStar: 62 };
-  }
+
   calculateSatisfactionScore(metrics) {
     return (metrics.metrics.average_rating / 5) * 100;
-  }
+
   async calculateQualityConsistency(templateId) {
     return 88;
-  }
+
   async calculateResolutionRate(templateId) {
     return 92;
-  }
+
   async calculateTimeToResolution(templateId) {
     return 45;
-  }
+
   async assessComplexityHandling(templateId) {
     return 78;
-  }
+
   calculateUserValueScore(metrics) {
     return 82;
-  }
+
   async calculateBusinessImpact(templateId) {
     return 75;
-  }
+
   async calculateEfficiencyGains(templateId) {
     return 68;
-  }
+
   // Additional placeholder methods would continue here...
   async storeQualityAssessment(metrics) {
     // Store in database
     console.log(`💾 Storing quality assessment for template: ${metrics.templateId}`);
-  }
+
   async getLatestQualityMetrics(templateId) {
     // Retrieve from database
     return null;
-  }
+
   calculateConfidenceLevel(metrics) {
     return Math.min(100, (metrics.metrics.views / 100) * 10 + 50);
-  }
-}
+
+

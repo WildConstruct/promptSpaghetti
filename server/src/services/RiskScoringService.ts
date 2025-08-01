@@ -1,8 +1,8 @@
 // Risk Scoring Algorithm for Login Anomaly Detection
 // Calculates risk scores based on multiple behavioral and contextual factors
 
-}
-}
+
+
 export interface LoginAttempt {
   userId?: string;
   ipAddress: string;
@@ -11,8 +11,9 @@ export interface LoginAttempt {
     country: string;
     region: string;
     city: string;
-}
-}
+
+
+
     coordinates?: { lat: number; lng: number };
   };
   timestamp: Date;
@@ -20,36 +21,37 @@ export interface LoginAttempt {
   sessionId?: string;
   deviceFingerprint?: string;
   twoFactorUsed?: boolean;
-}
 
-}
-}
+
+
+
 export interface UserProfile {
   userId: string;
   typicalLocations: Array<{
     country: string;
     region: string;
     frequency: number;
-}
-}
-  }>;
+
+
+
+>;
   typicalDevices: Array<{
     fingerprint: string;
     lastSeen: Date;
     frequency: number;
-  }>;
+>;
   typicalLoginTimes: Array<{
     hourOfDay: number;
     dayOfWeek: number;
     frequency: number;
-  }>;
+>;
   accountAge: number; // days
   mfaEnabled: boolean;
   riskLevel: 'low' | 'medium' | 'high';
-}
 
-}
-}
+
+
+
 export interface RiskFactors {
   // Location-based factors
   newLocation: number;          // 0-1: 0 = known location, 1 = completely new
@@ -70,12 +72,13 @@ export interface RiskFactors {
   threatIntelligence: number;   // 0-1: IP in threat databases
   accountRiskLevel: number;     // 0-1: user's baseline risk level
   mfaBypass: number;           // 0-1: attempts to bypass MFA
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskScore {
   overallScore: number;         // 0-100: final calculated risk score
   confidence: number;           // 0-1: confidence in the score
@@ -83,12 +86,13 @@ export interface RiskScore {
   recommendations: string[];
   severity: 'low' | 'medium' | 'high' | 'critical';
   explanation: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskScoringConfig {
   // Weight configuration for different risk factors
   weights: {
@@ -96,8 +100,9 @@ export interface RiskScoringConfig {
     behavioral: number;         // Weight for behavioral factors
     patterns: number;           // Weight for pattern-based factors
     contextual: number;         // Weight for contextual factors
-}
-}
+
+
+
   };
   
   // Threshold configuration
@@ -120,7 +125,7 @@ export interface RiskScoringConfig {
     maxReasonableDistance: number;  // KM for reasonable travel
     maxReasonableVelocity: number;  // KM/h for reasonable travel speed
   };
-}
+
 
 export class RiskScoringService {
   private config: RiskScoringConfig;
@@ -132,25 +137,25 @@ export class RiskScoringService {
         behavioral: 0.25,
         patterns: 0.3,
         contextual: 0.15
-  }
+
       thresholds: {
         low: 25,
         medium: 60,
         high: 85,
         critical: 100
-  }
+
       timeWindows: {
         bruteForceWindow: 15,
         velocityWindow: 60,
         frequencyWindow: 24
-  }
+
       limits: {
         maxReasonableDistance: 500, // 500 KM
         maxReasonableVelocity: 1000 // 1000 KM/h (accounting for flights)
-  }
+
       ...config
     };
-  }
+
 
   /**
    * Calculate risk score for a login attempt
@@ -187,7 +192,7 @@ export class RiskScoringService {
       severity,
       explanation
     };
-  }
+
 
   private async calculateRiskFactors(
     loginAttempt: LoginAttempt,
@@ -216,7 +221,7 @@ export class RiskScoringService {
       accountRiskLevel: this.mapAccountRiskLevel(userProfile.riskLevel),
       mfaBypass: this.calculateMfaBypassRisk(loginAttempt, userProfile)
     };
-  }
+
 
   private calculateLocationRisk(loginAttempt: LoginAttempt, userProfile: UserProfile): number {
     if (!loginAttempt.location) return 0.3; // Medium risk if no location data
@@ -231,7 +236,7 @@ export class RiskScoringService {
     if (matchingLocation) {
       // Risk decreases with frequency of use, but minimum risk for known locations
       return Math.max(0.05, 1 - (matchingLocation.frequency / 100));
-    }
+
     
     // Check for same country but different region
     const sameCountry = userProfile.typicalLocations.find(
@@ -240,15 +245,15 @@ export class RiskScoringService {
     
     if (sameCountry) {
       return 0.4; // Moderate risk for new region in known country
-    }
+
     
     return 0.9; // Higher risk for completely new location
-  }
+
 
   private calculateGeographicDistance(loginAttempt: LoginAttempt, userProfile: UserProfile): number {
     if (!loginAttempt.location?.coordinates || userProfile.typicalLocations.length === 0) {
       return 0.2; // Low-medium risk if no coordinate data
-    }
+
     
     const { lat, lng } = loginAttempt.location.coordinates;
     
@@ -264,11 +269,11 @@ export class RiskScoringService {
       );
       
       minDistance = Math.min(minDistance, distance);
-    }
+
     
     // Normalize distance (0-1 scale)
     return Math.min(1, minDistance / this.config.limits.maxReasonableDistance);
-  }
+
 
   private async detectVpnTor(ipAddress: string): Promise<number> {
 
@@ -283,7 +288,7 @@ export class RiskScoringService {
     
     const isSuspicious = suspiciousRanges.some(range => ipAddress.startsWith(range));
     return isSuspicious ? 0.6 : 0.1;
-  }
+
 
   private calculateTimeAnomaly(loginAttempt: LoginAttempt, userProfile: UserProfile): number {
     const hour = loginAttempt.timestamp.getHours();
@@ -296,7 +301,7 @@ export class RiskScoringService {
     
     if (matchingPattern) {
       return Math.max(0, 1 - (matchingPattern.frequency / 100));
-    }
+
     
     // Check for similar hour on any day
     const similarHour = userProfile.typicalLoginTimes.find(
@@ -305,10 +310,10 @@ export class RiskScoringService {
     
     if (similarHour) {
       return 0.3; // Moderate risk for unusual day but typical time
-    }
+
     
     return 0.7; // High risk for completely unusual time
-  }
+
 
   private calculateVelocityAnomaly(loginAttempt: LoginAttempt, recentAttempts: LoginAttempt[]): number {
     if (!loginAttempt.location?.coordinates) return 0;
@@ -344,7 +349,7 @@ export class RiskScoringService {
     
     // Normalize velocity (0-1 scale)
     return Math.min(1, Math.max(0, velocity / this.config.limits.maxReasonableVelocity));
-  }
+
 
   private calculateDeviceAnomaly(loginAttempt: LoginAttempt, userProfile: UserProfile): number {
     if (!loginAttempt.deviceFingerprint) return 0.4; // Medium risk if no fingerprint
@@ -360,10 +365,10 @@ export class RiskScoringService {
       if (daysSinceLastSeen > 30) return 0.4;
       if (daysSinceLastSeen > 7) return 0.2;
       return 0.1;
-    }
+
     
     return 0.6; // High risk for completely new device
-  }
+
 
   private calculateBruteForceRisk(loginAttempt: LoginAttempt, recentAttempts: LoginAttempt[]): number {
     const cutoffTime = new Date(
@@ -378,7 +383,7 @@ export class RiskScoringService {
     
     // Normalize failed attempts (0-1 scale, with 10+ attempts = max risk)
     return Math.min(1, recentFailedAttempts.length / 10);
-  }
+
 
   private calculateCredentialStuffingRisk(loginAttempt: LoginAttempt, recentAttempts: LoginAttempt[]): number {
     const cutoffTime = new Date(
@@ -396,7 +401,7 @@ export class RiskScoringService {
     
     // Normalize unique users (0-1 scale, with 20+ users = max risk)
     return Math.min(1, uniqueUsersFromIp.size / 20);
-  }
+
 
   private calculateFrequencyAnomaly(loginAttempt: LoginAttempt, recentAttempts: LoginAttempt[]): number {
     const cutoffTime = new Date(
@@ -410,7 +415,7 @@ export class RiskScoringService {
     
     // Normalize frequency (0-1 scale, with 20+ attempts in 24h = max risk)
     return Math.min(1, recentUserAttempts.length / 20);
-  }
+
 
   private async checkThreatIntelligence(ipAddress: string): Promise<number> {
 
@@ -424,7 +429,7 @@ export class RiskScoringService {
     
     const isThreat = suspiciousPatterns.some(pattern => pattern.test(ipAddress));
     return isThreat ? 0.8 : 0.1;
-  }
+
 
   private mapAccountRiskLevel(riskLevel: string): number {
     switch (riskLevel) {
@@ -432,15 +437,15 @@ export class RiskScoringService {
     case 'medium': return 0.4;
     case 'high': return 0.7;
     default: return 0.3;
-    }
-  }
+
+
 
   private calculateMfaBypassRisk(loginAttempt: LoginAttempt, userProfile: UserProfile): number {
     if (!userProfile.mfaEnabled) return 0; // No MFA to bypass
     if (loginAttempt.twoFactorUsed) return 0; // MFA was used
     
     return 0.8; // High risk if MFA is enabled but not used
-  }
+
 
   private calculateWeightedScore(factors: RiskFactors): number {
     const locationScore = (factors.newLocation + factors.geographicDistance + factors.vpnTorDetection) / 3;
@@ -455,7 +460,7 @@ export class RiskScoringService {
       (contextualScore * this.config.weights.contextual);
     
     return weightedScore * 100; // Convert to 0-100 scale
-  }
+
 
   private calculateConfidence(
     loginAttempt: LoginAttempt,
@@ -473,48 +478,48 @@ export class RiskScoringService {
     if (recentAttempts.length > 10) confidence += 0.1; // Good historical data
     
     return Math.min(1, confidence);
-  }
+
 
   private determineSeverity(score: number): 'low' | 'medium' | 'high' | 'critical' {
     if (score >= this.config.thresholds.critical) return 'critical';
     if (score >= this.config.thresholds.high) return 'high';
     if (score >= this.config.thresholds.medium) return 'medium';
     return 'low';
-  }
+
 
   private generateRecommendations(factors: RiskFactors, score: number): string[] {
     const recommendations: string[] = [];
     
     if (factors.newLocation > 0.5) {
       recommendations.push('Verify login from new location with additional authentication');
-    }
+
     
     if (factors.bruteForceIndicator > 0.5) {
       recommendations.push('Consider blocking IP address due to brute force pattern');
-    }
+
     
     if (factors.credentialStuffing > 0.5) {
       recommendations.push('Implement CAPTCHA or additional verification');
-    }
+
     
     if (factors.mfaBypass > 0.5) {
       recommendations.push('Enforce multi-factor authentication');
-    }
+
     
     if (factors.velocityAnomaly > 0.0001) {
       recommendations.push('Review for impossible travel patterns');
-    }
+
     
     if (factors.threatIntelligence > 0.6) {
       recommendations.push('IP address flagged in threat intelligence - consider blocking');
-    }
+
     
     if (score >= this.config.thresholds.high) {
       recommendations.push('Escalate to security team for manual review');
-    }
+
     
     return recommendations;
-  }
+
 
   private generateExplanation(factors: RiskFactors, score: number): string {
     const highFactors: string[] = [];
@@ -530,10 +535,10 @@ export class RiskScoringService {
     
     if (highFactors.length === 0) {
       return `Risk score of ${score} based on normal login patterns with no significant anomalies detected.`;
-    }
+
     
     return `Risk score of ${score} due to: ${highFactors.join(', ')}. Multiple risk factors indicate potential security concern.`;
-  }
+
 
   private calculateHaversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
     const R = 6371; // Earth's radius in kilometers
@@ -546,9 +551,8 @@ export class RiskScoringService {
     
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  }
+
 
   private degreesToRadians(degrees: number): number {
     return degrees * (Math.PI / 180);
-  }
-}
+

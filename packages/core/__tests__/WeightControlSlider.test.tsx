@@ -4,11 +4,11 @@ import '@testing-library/jest-dom';
 import { WeightControlSlider, WeightControlOption } from '../components/Inspector/WeightControlSlider';
 
 // Mock the UI settings store
-jest.mock('../stores/uiSettingsStore', () => ({)
-  useUISettingsStore: () => ({,)
+jest.mock('../stores/uiSettingsStore', () => ({ )
+  useUISettingsStore: () => ({);
   complexityLevel: 'advanced',
-  shouldShowTechnicalFields: () => true,
-}
+  shouldShowTechnicalFields: () => true }
+
 }));
 describe('WeightControlSlider', () => {
   const mockOptions: WeightControlOption = [
@@ -18,9 +18,7 @@ describe('WeightControlSlider', () => {
   ];
   const mockOnOptionsChange = jest.fn<unknown, unknown>();
   const mockOnPreviewRequest = jest.fn<unknown, unknown>();
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  beforeEach(() => { jest.clearAllMocks() });
   describe('Rendering', () => {
     it('renders weight control slider with options', () => {
       render();
@@ -100,8 +98,8 @@ describe('WeightControlSlider', () => {
       fireEvent.change(firstSlider, { target: { value: '40' } });
       await waitFor(() => {
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 40 },
-          { id: 'option2', text: 'Second Choice', weight: 50 },
+          { id: 'option1', text: 'First Choice', weight: 40 }
+          { id: 'option2', text: 'Second Choice', weight: 50 }
           { id: 'option3', text: 'Third Choice', weight: 20 }
         ]);
       });
@@ -118,8 +116,8 @@ describe('WeightControlSlider', () => {
       fireEvent.change(firstInput, { target: { value: '60' } });
       await waitFor(() => {
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 60 },
-          { id: 'option2', text: 'Second Choice', weight: 50 },
+          { id: 'option1', text: 'First Choice', weight: 60 }
+          { id: 'option2', text: 'Second Choice', weight: 50 }
           { id: 'option3', text: 'Third Choice', weight: 20 }
         ]);
       });
@@ -137,8 +135,8 @@ describe('WeightControlSlider', () => {
       fireEvent.change(firstSlider, { target: { value: '150' } });
       await waitFor(() => {
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 100 },
-          { id: 'option2', text: 'Second Choice', weight: 50 },
+          { id: 'option1', text: 'First Choice', weight: 100 }
+          { id: 'option2', text: 'Second Choice', weight: 50 }
           { id: 'option3', text: 'Third Choice', weight: 20 }
         ]);
       });
@@ -146,8 +144,8 @@ describe('WeightControlSlider', () => {
       fireEvent.change(firstSlider, { target: { value: '-10' } });
       await waitFor(() => {
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 0 },
-          { id: 'option2', text: 'Second Choice', weight: 50 },
+          { id: 'option1', text: 'First Choice', weight: 0 }
+          { id: 'option2', text: 'Second Choice', weight: 50 }
           { id: 'option3', text: 'Third Choice', weight: 20 }
         ]);
       });
@@ -165,16 +163,16 @@ describe('WeightControlSlider', () => {
       fireEvent.click(equalButton);
       await waitFor(() => {
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 33 },
-          { id: 'option2', text: 'Second Choice', weight: 33 },
+          { id: 'option1', text: 'First Choice', weight: 33 }
+          { id: 'option2', text: 'Second Choice', weight: 33 }
           { id: 'option3', text: 'Third Choice', weight: 34 } // Extra 1 for remainder
         ]);
       });
     });
     it('normalizes weights when normalize button is clicked', async () => {
-      const unnormalizedOptions = [;
-        { id: 'option1', text: 'First Choice', weight: 60 },
-        { id: 'option2', text: 'Second Choice', weight: 100 },
+      const unnormalizedOptions = [
+        { id: 'option1', text: 'First Choice', weight: 60 }
+        { id: 'option2', text: 'Second Choice', weight: 100 }
         { id: 'option3', text: 'Third Choice', weight: 40 }
       ];
       render();
@@ -188,8 +186,8 @@ describe('WeightControlSlider', () => {
       await waitFor(() => {
         // 60 + 100 + 40 = 200 total, so normalized should be 30, 50, 20
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 30 },
-          { id: 'option2', text: 'Second Choice', weight: 50 },
+          { id: 'option1', text: 'First Choice', weight: 30 }
+          { id: 'option2', text: 'Second Choice', weight: 50 }
           { id: 'option3', text: 'Third Choice', weight: 20 }
         ]);
       });
@@ -208,16 +206,16 @@ describe('WeightControlSlider', () => {
       fireEvent.click(firstLockButton);
       await waitFor(() => {
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 30, locked: true },
-          { id: 'option2', text: 'Second Choice', weight: 50 },
+          { id: 'option1', text: 'First Choice', weight: 30, locked: true }
+          { id: 'option2', text: 'Second Choice', weight: 50 }
           { id: 'option3', text: 'Third Choice', weight: 20 }
         ]);
       });
     });
     it('respects locked weights during equalization', async () => {
-      const optionsWithLock = [;
-        { id: 'option1', text: 'First Choice', weight: 30, locked: true },
-        { id: 'option2', text: 'Second Choice', weight: 50 },
+      const optionsWithLock = [
+        { id: 'option1', text: 'First Choice', weight: 30, locked: true }
+        { id: 'option2', text: 'Second Choice', weight: 50 }
         { id: 'option3', text: 'Third Choice', weight: 20 }
       ];
       render();
@@ -231,8 +229,8 @@ describe('WeightControlSlider', () => {
       await waitFor(() => {
         // First option should remain locked at 30
         expect(mockOnOptionsChange).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 30, locked: true },
-          { id: 'option2', text: 'Second Choice', weight: 35 },
+          { id: 'option1', text: 'First Choice', weight: 30, locked: true }
+          { id: 'option2', text: 'Second Choice', weight: 35 }
           { id: 'option3', text: 'Third Choice', weight: 35 }
         ]);
       });
@@ -255,8 +253,8 @@ describe('WeightControlSlider', () => {
       // Wait for debounced preview request
       await waitFor(() => {
         expect(mockOnPreviewRequest).toHaveBeenCalledWith([)
-          { id: 'option1', text: 'First Choice', weight: 40 },
-          { id: 'option2', text: 'Second Choice', weight: 50 },
+          { id: 'option1', text: 'First Choice', weight: 40 }
+          { id: 'option2', text: 'Second Choice', weight: 50 }
           { id: 'option3', text: 'Third Choice', weight: 20 }
         ]);
       }, { timeout: 200 });
@@ -318,9 +316,8 @@ describe('WeightControlSlider', () => {
         />
       );
       const sliders = screen.getAllByRole('slider');
-      sliders.forEach(slider => {)
-  expect(slider).toBeDisabled();
-      });
+      sliders.forEach(slider => { )
+  expect(slider).toBeDisabled() });
       const equalButton = screen.getByText('⚖️ Equal');
       expect(equalButton).toBeDisabled();
     });
@@ -333,9 +330,8 @@ describe('WeightControlSlider', () => {
         />
       );
       const sliders = screen.getAllByRole('slider');
-      sliders.forEach(slider => {)
-  expect(slider).toHaveStyle('opacity: 0.5');
-});
+      sliders.forEach(slider => { )
+  expect(slider).toHaveStyle('opacity: 0.5') });
     });
   });
 });

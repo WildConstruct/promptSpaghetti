@@ -1,8 +1,7 @@
 // Epic 9.4.2 - Approval Workflow Manager Component
 // Main component that orchestrates all approval workflow functionality
 import React, { useState, useEffect } from 'react';
-import { 
-  Cog6ToothIcon,
+import { Cog6ToothIcon,
   ClipboardDocumentListIcon,
   ChartBarIcon,
   UserGroupIcon,
@@ -10,15 +9,15 @@ import {
   PlusIcon,
   PencilIcon,
   TrashIcon,
-  CheckCircleIcon,
+  CheckCircleIcon }
   XCircleIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { ApprovalDashboard } from './ApprovalDashboard';
 import { ApprovalReviewInterface } from './ApprovalReviewInterface';
 import { ApprovalStatistics } from './ApprovalStatistics';
-}
-interface ApprovalCriteria {
-  id: string;
+
+
+interface ApprovalCriteria { id: string;
   workspace_id: string;
   name: string;
   description?: string;
@@ -51,13 +50,13 @@ interface ApprovalCriteria {
   workspaceId: string;
   currentUserId: string;
   userRole: 'admin' | 'manager' | 'reviewer' | 'user';
-  export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = ({,)
-  workspaceId,
-  currentUserId,
+  export const ApprovalWorkflowManager: React.FC<ApprovalWorkflowManagerProps> = ({);
+  workspaceId;
+  currentUserId }
   userRole
-}
-}) => {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'rules' | 'criteria' | 'statistics'>('dashboard');
+
+
+}) => { const [activeTab, setActiveTab] = useState<'dashboard' | 'rules' | 'criteria' | 'statistics'>('dashboard');
   const [approvalCriteria, setApprovalCriteria] = useState<ApprovalCriteria>([]);
   const [approvalRules, setApprovalRules] = useState<ApprovalRule>([]);
   const [selectedRequest, setSelectedRequest] = useState<unknown>(null);
@@ -71,123 +70,91 @@ interface ApprovalCriteria {
   // Determine dashboard mode based on user role
   const dashboardMode = userRole === 'admin' ? 'admin' : 'reviewer';
   useEffect(() => {
-  loadApprovalData();
-}, [workspaceId]);
+  loadApprovalData() }, [workspaceId]);
   const loadApprovalData = async () => {
     try {
       setLoading(true);
       setError(null);
       const [criteriaResponse, rulesResponse] = await Promise.all([)
         fetch(`/api/approval/criteria/${workspaceId}`)}
-}
+
         fetch(`/api/approval/rules/${workspaceId}`)}
       ]);
-      if (criteriaResponse.ok) {
-        const criteria = await criteriaResponse.json();
+      if (criteriaResponse.ok) { const criteria = await criteriaResponse.json();
         setApprovalCriteria(criteria);
       if (rulesResponse.ok) {
         const rules = await rulesResponse.json();
-        setApprovalRules(rules);
-    } catch (error) {
-      setError('Failed to load approval data');
-    } finally {
-      setLoading(false);
-  };
-  const handleCreateCriteria = async (data: Partial<ApprovalCriteria>) => {
-    try {
+        setApprovalRules(rules) } catch (error) { setError('Failed to load approval data') } finally { setLoading(false) };
+  const handleCreateCriteria = async (data: Partial<ApprovalCriteria>) => { try {
       const response = await fetch('/api/approval/criteria', {)
-  method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+  method: 'POST' }
+        headers: { 'Content-Type': 'application/json' }
         body: JSON.stringify({ ...data, workspace_id: workspaceId })
       });
-      if (response.ok) {
-        await loadApprovalData();
-        setShowCriteriaModal(false);
-    } catch (error) {
-      setError('Failed to create criteria');
-  };
+      if (response.ok) { await loadApprovalData();
+        setShowCriteriaModal(false) } catch (error) { setError('Failed to create criteria') };
   const handleUpdateCriteria = async (id: string, data: Partial<ApprovalCriteria>) => {
     try {
       const response = await fetch(`/api/approval/criteria/${id}`, {)}
-  },
-  method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+
+  method: 'PUT'
+        headers: { 'Content-Type': 'application/json' }
         body: JSON.stringify(data);
   });
-      if (response.ok) {
-        await loadApprovalData();
-        setEditingCriteria(null);
-    } catch (error) {
-      setError('Failed to update criteria');
-  };
+      if (response.ok) { await loadApprovalData();
+        setEditingCriteria(null) } catch (error) { setError('Failed to update criteria') };
   const handleDeleteCriteria = async (id: string) => {
     if (!confirm('Are you sure you want to delete this criteria?')) return;
     try {
       const response = await fetch(`/api/approval/criteria/${id}`, {)}
-  },
-  method: 'DELETE'
+
+  method: 'DELETE';
   });
-      if (response.ok) {
-        await loadApprovalData();
-    } catch (error) {
-      setError('Failed to delete criteria');
-  };
-  const _____handleCreateRule = async (data: Partial<ApprovalRule>) => {
-    try {
+      if (response.ok) { await loadApprovalData() } catch (error) { setError('Failed to delete criteria') };
+  const _____handleCreateRule = async (data: Partial<ApprovalRule>) => { try {
       const response = await fetch('/api/approval/rules', {)
-  method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+  method: 'POST' }
+        headers: { 'Content-Type': 'application/json' }
         body: JSON.stringify({ ...data, workspace_id: workspaceId })
       });
-      if (response.ok) {
-        await loadApprovalData();
-        setShowRuleModal(false);
-    } catch (error) {
-      setError('Failed to create rule');
-  };
+      if (response.ok) { await loadApprovalData();
+        setShowRuleModal(false) } catch (error) { setError('Failed to create rule') };
   const handleReviewSubmit = async (;);
-    decision: 'approve' | 'reject' | 'abstain',
-    comment?: string,
+    decision: 'approve' | 'reject' | 'abstain'
+    comment?: string
     criteriaEvaluations?: Record<string, any>
   ) => {
     if (!selectedRequest) return;
     try {
       const response = await fetch(`/api/approval/requests/${selectedRequest.id}/review`, {)}
-  },
-  method: 'POST',
-        headers: {
-  'Content-Type': 'application/json',
-  'x-user-id': currentUserId,
-},
-  body: JSON.stringify({),
-  decision,
-  comment,
-  criteria_evaluations: criteriaEvaluations,
-}
+
+  method: 'POST'
+        headers: { 'Content-Type': 'application/json'
+  'x-user-id': currentUserId }
+
+  body: JSON.stringify({ )
+  decision
+  comment
+  criteria_evaluations: criteriaEvaluations }
+
       });
       if (response.ok) {
         setShowReviewInterface(false);
         setSelectedRequest(null);
         // Refresh dashboard data would be handled by the dashboard component
-    } catch (error) {
-      setError('Failed to submit review');
-  };
-  const CriteriaModal: React.FC<{
-  criteria?: ApprovalCriteria;
-  onSave: (data: Partial<ApprovalCriteria>) => void;
+ catch (error) { setError('Failed to submit review') };
+  const CriteriaModal: React.FC<{ criteria?: ApprovalCriteria;
+  onSave: (data: Partial<ApprovalCriteria>) => void }
   onClose: () => void;
-}> = ({ criteria, onSave, onClose }) => {
-    const [formData, setFormData] = useState({)
-  name: criteria?.name || '',
-      description: criteria?.description || '',
-      weight: criteria?.weight || 1,
-      is_required: criteria?.is_required || false,
+> = ({ criteria, onSave, onClose }) => { const [formData, setFormData] = useState({)
+  name: criteria?.name || ''
+      description: criteria?.description || ''
+      weight: criteria?.weight || 1
+      is_required: criteria?.is_required || false }
       conditions: criteria?.conditions || {}
     });
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      onSave(formData);
-    };
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault();
+      onSave(formData) };
     return;
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
@@ -297,19 +264,19 @@ interface ApprovalCriteria {
       <div className="border-b border-gray-200">
         <nav className="-mb-px flex space-x-8">
           {[
-            { id: 'dashboard', label: 'Dashboard', icon: DocumentTextIcon },
-            { id: 'rules', label: 'Rules', icon: Cog6ToothIcon },
-            { id: 'criteria', label: 'Criteria', icon: ClipboardDocumentListIcon },
+            { id: 'dashboard', label: 'Dashboard', icon: DocumentTextIcon }
+            { id: 'rules', label: 'Rules', icon: Cog6ToothIcon }
+            { id: 'criteria', label: 'Criteria', icon: ClipboardDocumentListIcon }
             { id: 'statistics', label: 'Statistics', icon: ChartBarIcon }
           ].map(tab => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
+              className={ `flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${
   activeTab === tab.id
   ? 'border-blue-500 text-blue-600'
-  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-}`}
+  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }
+`}
             >
               <tab.icon className="h-4 w-4" />
               <span>{tab.label}</span>
@@ -459,10 +426,9 @@ interface ApprovalCriteria {
               workspaceId={workspaceId}
               currentUserId={currentUserId}
               onReviewSubmit={handleReviewSubmit}
-              onClose={() => {
+              onClose={ () => {
                 setShowReviewInterface(false);
-                setSelectedRequest(null);
-              }}
+                setSelectedRequest(null) }}
             />
           </div>
         </div>

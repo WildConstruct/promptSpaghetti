@@ -4,30 +4,26 @@ import React, { useState, useEffect } from 'react';
 import { Save, Settings, AlertTriangle, Info, Clock, Users, Shield } from 'lucide-react';
 import { LockPolicy } from '../types/locking';
 import { useLockingStore } from '../stores/lockingStore';
-}
-interface LockPolicyEditorProps {
-  workspaceId: string;
+
+
+interface LockPolicyEditorProps { workspaceId: string;
   onPolicyUpdate: () => void;
-  export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({,)
-  workspaceId,
+  export const LockPolicyEditor: React.FC<LockPolicyEditorProps> = ({);
+  workspaceId }
   onPolicyUpdate
-}
+
+
 }) => {
   const { policy, fetchPolicy, updatePolicy, isLoading, error } = useLockingStore();
   const [editingPolicy, setEditingPolicy] = useState<Partial<LockPolicy> | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-  useEffect(() => {
-    fetchPolicy(workspaceId);
-  }, [workspaceId]);
-  useEffect(() => {
-    if (policy) {
-      setEditingPolicy(policy);
-  }, [policy]);
+  useEffect(() => { fetchPolicy(workspaceId) }, [workspaceId]);
+  useEffect(() => { if (policy) {
+      setEditingPolicy(policy) }, [policy]);
   const validatePolicy = (policyData: Partial<LockPolicy>): Record<string, string> => {
     const errors: Record<string, string> = {};
-    if (!policyData.name?.trim()) {
-      errors.name = 'Policy name is required';
+    if (!policyData.name?.trim()) { errors.name = 'Policy name is required';
     if (policyData.max_locks_per_user && policyData.max_locks_per_user < 1) {
       errors.max_locks_per_user = 'Must be at least 1';
     if (policyData.max_locks_per_resource && policyData.max_locks_per_resource < 1) {
@@ -41,8 +37,7 @@ interface LockPolicyEditorProps {
       policyData.max_duration_minutes &&
       policyData.default_duration_minutes > policyData.max_duration_minutes
       errors.default_duration_minutes = 'Cannot exceed maximum duration';
-    return errors;
-  };
+    return errors };
   const handleInputChange = (field: keyof LockPolicy, value: Error) => {
     if (!editingPolicy) return;
     const updatedPolicy = { ...editingPolicy, [field]: value };
@@ -52,8 +47,7 @@ interface LockPolicyEditorProps {
     if (validationErrors[field]) {
       setValidationErrors(prev => ({ ...prev, [field]: undefined }));
   };
-  const handleSave = async () => {
-    if (!editingPolicy) return;
+  const handleSave = async () => { if (!editingPolicy) return;
     const errors = validatePolicy(editingPolicy);
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors);
@@ -62,10 +56,7 @@ interface LockPolicyEditorProps {
       const result = await updatePolicy(workspaceId, editingPolicy);
       if (result.success) {
         setHasChanges(false);
-        onPolicyUpdate();
-    } catch (error) {
-  console.error('Failed to save policy:', error);
-};
+        onPolicyUpdate() } catch (error) { console.error('Failed to save policy:', error) };
   const handleReset = () => {
     setEditingPolicy(policy);
     setHasChanges(false);
@@ -136,9 +127,9 @@ interface LockPolicyEditorProps {
               type="text"
               value={editingPolicy.name || ''}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-  validationErrors.name ? 'border-red-300' : 'border-gray-300',
-}`}
+              className={ `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+  validationErrors.name ? 'border-red-300' : 'border-gray-300' }
+`}
             />
             {validationErrors.name && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.name}</p>
@@ -173,9 +164,9 @@ interface LockPolicyEditorProps {
               min="1"
               value={editingPolicy.max_locks_per_user || ''}
               onChange={(e) => handleInputChange('max_locks_per_user', parseInt(e.target.value))}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-  validationErrors.max_locks_per_user ? 'border-red-300' : 'border-gray-300',
-}`}
+              className={ `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+  validationErrors.max_locks_per_user ? 'border-red-300' : 'border-gray-300' }
+`}
             />
             {validationErrors.max_locks_per_user && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_locks_per_user}</p>
@@ -190,9 +181,9 @@ interface LockPolicyEditorProps {
               min="1"
               value={editingPolicy.max_locks_per_resource || ''}
               onChange={(e) => handleInputChange('max_locks_per_resource', parseInt(e.target.value))}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-  validationErrors.max_locks_per_resource ? 'border-red-300' : 'border-gray-300',
-}`}
+              className={ `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+  validationErrors.max_locks_per_resource ? 'border-red-300' : 'border-gray-300' }
+`}
             />
             {validationErrors.max_locks_per_resource && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_locks_per_resource}</p>
@@ -216,9 +207,9 @@ interface LockPolicyEditorProps {
               min="1"
               value={editingPolicy.default_duration_minutes || ''}
               onChange={(e) => handleInputChange('default_duration_minutes', parseInt(e.target.value))}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-  validationErrors.default_duration_minutes ? 'border-red-300' : 'border-gray-300',
-}`}
+              className={ `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+  validationErrors.default_duration_minutes ? 'border-red-300' : 'border-gray-300' }
+`}
             />
             {validationErrors.default_duration_minutes && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.default_duration_minutes}</p>
@@ -233,9 +224,9 @@ interface LockPolicyEditorProps {
               min="1"
               value={editingPolicy.max_duration_minutes || ''}
               onChange={(e) => handleInputChange('max_duration_minutes', parseInt(e.target.value))}
-              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-  validationErrors.max_duration_minutes ? 'border-red-300' : 'border-gray-300',
-}`}
+              className={ `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+  validationErrors.max_duration_minutes ? 'border-red-300' : 'border-gray-300' }
+`}
             />
             {validationErrors.max_duration_minutes && ()
               <p className="text-sm text-red-600 mt-1">{validationErrors.max_duration_minutes}</p>

@@ -1,8 +1,8 @@
 import React from 'react';
 
 }
-export interface UserCursorProps {
-    userId: string;
+}
+export interface UserCursorProps { userId: string;
     userName?: string;
     userAvatar?: string;
     x: number;
@@ -14,18 +14,17 @@ export interface UserCursorProps {
     nodeId?: string;
     className?: string;
 
-export declare const UserCursor: React.FC<UserCursorProps>;
-
+export declare const UserCursor: React.FC<UserCursorProps> }
 }
-export interface UserCursorOverlayProps {
-    cursors: Array<{
+}
+export interface UserCursorOverlayProps { cursors: Array<{
         userId: string;
         userName?: string;
         userAvatar?: string;
         x: number;
         y: number;
         nodeId?: string;
-        visible?: boolean;
+        visible?: boolean }
 }
     }>;
     followingUserId?: string;
@@ -35,22 +34,21 @@ export interface UserCursorOverlayProps {
 export declare const UserCursorOverlay: React.FC<UserCursorOverlayProps>;
 
 }
-export interface UserSelectionProps {
-    userId: string;
+}
+export interface UserSelectionProps { userId: string;
     userName?: string;
     nodeIds: string[];
     color?: string;
     opacity?: number;
     showLabel?: boolean;
 
-export declare const UserSelection: React.FC<UserSelectionProps>;
-
+export declare const UserSelection: React.FC<UserSelectionProps> }
 }
-export interface TypingIndicatorProps {
-    users: Array<{
+}
+export interface TypingIndicatorProps { users: Array<{
         userId: string;
         userName?: string;
-        nodeId?: string;
+        nodeId?: string }
 }
     }>;
     className?: string;

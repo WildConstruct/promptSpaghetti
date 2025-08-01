@@ -29,14 +29,14 @@ export var ValidationRuleType;
         WARNING = 'warning',
         ERROR = 'error',
         CRITICAL = 'critical';
-    ;
-    overallScore: number;
-    qualityDimensions: QualityDimensionScore;
-    violations: DataQualityViolation;
-    trends: QualityTrend;
-    recommendations: QualityRecommendation;
-    dataSourceMetrics: DataSourceQuality;
 }
+;
+overallScore: number;
+qualityDimensions: QualityDimensionScore;
+violations: DataQualityViolation;
+trends: QualityTrend;
+recommendations: QualityRecommendation;
+dataSourceMetrics: DataSourceQuality;
 export var QualityDimension;
 (function (QualityDimension) {
     QualityDimension["COMPLETENESS"] = "completeness";
@@ -425,8 +425,9 @@ record.confidence;
 ;
 return violations;
 async;
-validateDuplicates(rule, ValidationRule);
-record: any,
+validateDuplicates(rule, ValidationRule),
+    record;
+any,
     context;
 ValidationContext;
 Promise < DataQualityViolation > {
@@ -443,8 +444,9 @@ Promise < DataQualityViolation > {
         violations.push(this.createViolation(), rule, QualityDimension.UNIQUENESS, context, `Potential duplicate record detected`, keyFields.join(','), 'unique', compositeKey);
         ;
         return violations;
-        validateStatisticalOutliers(rule, ValidationRule);
-        record: any,
+        validateStatisticalOutliers(rule, ValidationRule),
+            record;
+        any,
             context;
         ValidationContext;
         DataQualityViolation;
@@ -465,8 +467,9 @@ Promise < DataQualityViolation > {
                     record[field];
                 ;
                 return violations;
-                validateTemporalConsistency(rule, ValidationRule);
-                record: any,
+                validateTemporalConsistency(rule, ValidationRule),
+                    record;
+                any,
                     context;
                 ValidationContext;
                 DataQualityViolation;
@@ -711,7 +714,7 @@ Promise < DataQualityViolation > {
         targetDimensions;
     [dimension.dimension],
         implementationSteps;
-    [,
+    [
         'Review violation patterns',
         'Implement targeted validation rules',
         'Set up automated monitoring',
@@ -738,7 +741,7 @@ expectedImpact: 'Reduce violations by 60-70%',
     targetDimensions;
 Object.values(QualityDimension),
     implementationSteps;
-[,
+[
     'Identify root causes',
     'Implement source-level fixes',
     'Enhance validation rules',
@@ -784,8 +787,9 @@ Promise < DataSourceQuality > {
     }
 };
 ;
-createViolation(rule, ValidationRule);
-dimension: QualityDimension,
+createViolation(rule, ValidationRule),
+    dimension;
+QualityDimension,
     context;
 ValidationContext,
     description;

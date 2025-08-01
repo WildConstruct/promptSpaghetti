@@ -5,8 +5,7 @@
  * Simplified reporting categories for deployment readiness
  */
 
-export enum Epic16ReportCategory {
-  CREATOR_PERFORMANCE = 'creator_performance',
+export enum Epic16ReportCategory { CREATOR_PERFORMANCE = 'creator_performance',
   MARKETPLACE_OVERVIEW = 'marketplace_overview',
   REVENUE_ANALYTICS = 'revenue_analytics',
   COMMUNITY_METRICS = 'community_metrics'
@@ -16,44 +15,38 @@ export enum Epic16ReportCategory {
   ANALYSTS = 'analysts'
   export enum ReportFormat {
   DASHBOARD = 'dashboard',
-  PDF = 'pdf',
+  PDF = 'pdf' }
   CSV = 'csv'
-  export interface ReportCategoryDefinition {
-  id: Epic16ReportCategory;
+  export interface ReportCategoryDefinition { id: Epic16ReportCategory;
   name: string;
   description: string;
   audience: ReportAudience;
-  format: ReportFormat;
-}
-}
-export const EPIC16_REPORT_CATEGORIES: Record<Epic16ReportCategory, ReportCategoryDefinition> = {
-  [Epic16ReportCategory.CREATOR_PERFORMANCE]: {
-  id: Epic16ReportCategory.CREATOR_PERFORMANCE,
-  name: 'Creator Performance',
-  description: 'Analytics for creator success metrics and template performance',
-  audience: [ReportAudience.CREATORS, ReportAudience.ADMINS],
-  format: [ReportFormat.DASHBOARD, ReportFormat.PDF],
-}
-  [Epic16ReportCategory.MARKETPLACE_OVERVIEW]: {
-  id: Epic16ReportCategory.MARKETPLACE_OVERVIEW,
-  name: 'Marketplace Overview',
-  description: 'High-level marketplace health metrics and KPIs',
-  audience: [ReportAudience.ADMINS, ReportAudience.ANALYSTS],
-  format: [ReportFormat.DASHBOARD, ReportFormat.PDF],
-}
-  [Epic16ReportCategory.REVENUE_ANALYTICS]: {
-  id: Epic16ReportCategory.REVENUE_ANALYTICS,
-  name: 'Revenue Analytics',
-  description: 'Revenue performance and forecasting analytics',
-  audience: [ReportAudience.ADMINS, ReportAudience.ANALYSTS],
-  format: [ReportFormat.DASHBOARD, ReportFormat.CSV],
-}
-  [Epic16ReportCategory.COMMUNITY_METRICS]: {
-  id: Epic16ReportCategory.COMMUNITY_METRICS,
-  name: 'Community Metrics',
-  description: 'Community engagement and growth analytics',
-  audience: [ReportAudience.ADMINS, ReportAudience.CREATORS],
-  format: [ReportFormat.DASHBOARD],
+  format: ReportFormat }
+
+export const EPIC16_REPORT_CATEGORIES: Record<Epic16ReportCategory, ReportCategoryDefinition> = { [Epic16ReportCategory.CREATOR_PERFORMANCE]: {
+  id: Epic16ReportCategory.CREATOR_PERFORMANCE
+  name: 'Creator Performance'
+  description: 'Analytics for creator success metrics and template performance'
+  audience: [ReportAudience.CREATORS, ReportAudience.ADMINS]
+  format: [ReportFormat.DASHBOARD, ReportFormat.PDF] }
+
+  [Epic16ReportCategory.MARKETPLACE_OVERVIEW]: { id: Epic16ReportCategory.MARKETPLACE_OVERVIEW
+  name: 'Marketplace Overview'
+  description: 'High-level marketplace health metrics and KPIs'
+  audience: [ReportAudience.ADMINS, ReportAudience.ANALYSTS]
+  format: [ReportFormat.DASHBOARD, ReportFormat.PDF] }
+
+  [Epic16ReportCategory.REVENUE_ANALYTICS]: { id: Epic16ReportCategory.REVENUE_ANALYTICS
+  name: 'Revenue Analytics'
+  description: 'Revenue performance and forecasting analytics'
+  audience: [ReportAudience.ADMINS, ReportAudience.ANALYSTS]
+  format: [ReportFormat.DASHBOARD, ReportFormat.CSV] }
+
+  [Epic16ReportCategory.COMMUNITY_METRICS]: { id: Epic16ReportCategory.COMMUNITY_METRICS
+  name: 'Community Metrics'
+  description: 'Community engagement and growth analytics'
+  audience: [ReportAudience.ADMINS, ReportAudience.CREATORS]
+  format: [ReportFormat.DASHBOARD] }
 };
 
 export class Epic16ReportCategoryService {

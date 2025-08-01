@@ -7,6 +7,7 @@
 import { EventEmitter } from 'events';
 import { AdminPerformanceMetric, AdminOperation, AdminCategory, BackstageComponent, ConfigurationArea, SystemIntegration, ImpactScope, ComplianceLevel, PerformanceImpact } from '../../server/src/monitoring/Epic17PerformanceMonitor';
 ;
+;
 // Epic 17 admin-specific metrics
 adminMetrics: {
     adminOperationMetrics: AdminPerformanceMetric;
@@ -41,9 +42,32 @@ correlations: {
 }
 ;
 ;
+// Epic 17 admin conditions
+adminConditions ?  : {
+    adminOperations: AdminOperation,
+    complianceThreshold: number,
+    integrationHealthThreshold: number
+};
+// Security conditions
+securityConditions ?  : {
+    threatLevelThreshold: number,
+    securityEventTypes: SecurityEvent['type'][],
+    falsePositiveThreshold: number
+};
+// Cross-system correlation conditions
+correlationConditions ?  : {
+    performanceSecurityCorrelation: number,
+    healthScoreThreshold: number,
+    multiSystemEventWindow: number
+};
+;
 // Actions that can span all systems
 actions: {
-    notifications: Array;
+    notifications: Array < {
+        type: 'email' | 'slack' | 'webhook' | 'admin_dashboard' | 'security_dashboard',
+        target: string,
+        priority: 'low' | 'normal' | 'high' | 'critical',
+    } > ;
     automaticMitigation ?  : {
         scaleResources: boolean,
         isolateComponents: boolean,
@@ -62,7 +86,8 @@ metadata: {
     createdAt: number;
     lastModified: number;
     category: 'performance' | 'security' | 'compliance' | 'operational';
-    riskLevel: 'low' | 'medium' | 'high' | 'critical';
+    riskLevel: 'low' | 'medium' | 'high' | 'critical',
+    ;
 }
 ;
 ;
@@ -83,8 +108,18 @@ performanceOverview: {
 // Admin operations overview (Epic 17)
 adminOverview: {
     activeAdminSessions: number;
-    recentOperations: Array;
-    integrationStatus: Array;
+    recentOperations: Array < {
+        operation: AdminOperation,
+        timestamp: number,
+        duration: number,
+        success: boolean,
+        adminUser: string
+    } > ;
+    integrationStatus: Array < {
+        integration: SystemIntegration,
+        status: 'healthy' | 'degraded' | 'unhealthy',
+        responseTime: number
+    } > ;
     complianceScore: number;
 }
 ;
@@ -92,17 +127,43 @@ adminOverview: {
 securityOverview: {
     threatLevel: number;
     activeSecurityAlerts: number;
-    securitySystemsHealth: Array;
-    recentSecurityEvents: Array;
+    securitySystemsHealth: Array < {
+        systemId: string,
+        healthScore: number,
+        status: 'healthy' | 'degraded' | 'critical' | 'offline',
+    } > ;
+    recentSecurityEvents: Array < {
+        type: SecurityEvent['type'],
+        severity: SecurityEvent['severity'],
+        timestamp: number,
+        source: string
+    } > ;
 }
 ;
 // Cross-system insights
 crossSystemInsights: {
-    correlatedEvents: Array;
-    recommendations: Array;
+    correlatedEvents: Array < {
+        type: 'performance_security' | 'admin_security' | 'performance_admin',
+        description: string,
+        confidence: number,
+        timestamp: number,
+        affectedSystems: string
+    } > ;
+    recommendations: Array < {
+        category: 'performance' | 'security' | 'admin' | 'compliance',
+        priority: 'low' | 'medium' | 'high' | 'critical',
+        title: string,
+        description: string,
+        estimatedImpact: string
+    } > ;
     riskAssessment: {
         overallRisk: 'low' | 'medium' | 'high' | 'critical';
-        riskFactors: Array;
+        riskFactors: Array < {
+            factor: string,
+            impact: number, // 0-10,
+            likelihood: number, // 0-10,
+            mitigation: string
+        } > ;
     }
     ;
 }
@@ -364,9 +425,14 @@ Promise < void  > {
                     correlationAnalysis: {
                         correlatedEvents: number,
                         riskFactors: (Array),
-                        predictiveInsights: string
-                    },
-                    recommendations: (Array)
+                        predictiveInsights: string },
+                    recommendations: Array < {
+                        category: string,
+                        priority: 'low' | 'medium' | 'high' | 'critical',
+                        recommendation: string,
+                        estimatedEffort: string,
+                        expectedBenefit: string
+                    } > 
                 } > {
                     const: reportId = `integrated_report_${Date.now()}`
                 };
@@ -529,283 +595,266 @@ Promise < void  > {
                                             // Security integration setup
                                             async setupDefaultAlertRules() {
                                                 // Create default integrated alert rules
-                                                const defaultRules = [];
-                                                {
-                                                    name: 'Critical Performance & Security Correlation',
-                                                        description;
-                                                    'Alert when performance degradation correlates with security events',
-                                                        enabled;
-                                                    true,
-                                                        conditions;
+                                                const defaultRules = [
                                                     {
-                                                        performanceConditions: {
-                                                            slowExecutionThreshold: 5000,
-                                                                errorRateThreshold;
-                                                            0.1,
-                                                                memoryThreshold;
-                                                            1024 * 1024 * 1024; // 1GB,
+                                                        name: 'Critical Performance & Security Correlation',
+                                                        description: 'Alert when performance degradation correlates with security events',
+                                                        enabled: true,
+                                                        conditions: {},
+                                                        performanceConditions: {},
+                                                        slowExecutionThreshold: 5000,
+                                                        errorRateThreshold: 0.1,
+                                                        memoryThreshold: 1024 * 1024 * 1024 // 1GB,
+                                                    },
+                                                    securityConditions, {},
+                                                    threatLevelThreshold, 7,
+                                                    securityEventTypes, ['security_breach', 'suspicious_activity'],
+                                                    falsePositiveThreshold, 0.2,
+                                                ];
+                                            },
+                                            correlationConditions: {
+                                                performanceSecurityCorrelation: 0.7,
+                                                healthScoreThreshold: 70,
+                                                multiSystemEventWindow: 300000 // 5 minutes,
+                                            },
+                                            actions: {
+                                                notifications: [
+                                                    {
+                                                        type: 'email',
+                                                        target: 'security@company.com',
+                                                        priority: 'critical',
+                                                    },
+                                                    {
+                                                        type: 'slack',
+                                                        target: '#security-alerts',
+                                                        priority: 'critical'
+                                                    }
+                                                ],
+                                                automaticMitigation: {
+                                                    scaleResources: true,
+                                                    isolateComponents: false,
+                                                    escalateToAdmin: true,
+                                                    triggerIncidentResponse: true,
+                                                    for(, rule, of, defaultRules) {
+                                                        this.createIntegratedAlertRule(rule);
+                                                    },
+                                                    handleEpic1Event(data) {
+                                                        // Process Epic 1 events for correlation
+                                                        this.correlationEngine.addPerformanceEvent(data);
+                                                    },
+                                                    handleEpic1Alert(alert) {
+                                                        // Forward Epic 1 alerts to integrated alerting system
+                                                        this.emit('epic1_alert', alert);
+                                                    },
+                                                    handleEpic17Event(metric) {
+                                                        // Process Epic 17 events for correlation
+                                                        this.correlationEngine.addAdminEvent(metric);
+                                                    },
+                                                    handleSecurityEvent(data) {
+                                                        // Process security events for correlation
+                                                        this.correlationEngine.addSecurityEvent(data);
+                                                    },
+                                                    handleSecurityAlert(alert) {
+                                                        // Forward security alerts to integrated alerting system
+                                                        this.emit('security_alert', alert);
+                                                    },
+                                                    collectIntegratedMetrics() {
+                                                        // Collect and aggregate metrics from all systems
+                                                        const epic1Stats = this.epic1Monitor.getStatisticsSummary();
+                                                        const epic17Dashboard = this.epic17Monitor.getAdminPerformanceDashboard();
+                                                        const securityDashboard = this.securityMonitor.getSecurityDashboardData();
+                                                        // Update integrated metrics
+                                                        this.integratedMetrics.performanceMetrics.systemPerformance = {
+                                                            totalExecutions: epic1Stats.totalExecutions,
+                                                            averageExecutionTime: epic1Stats.averageExecutionTime,
+                                                            errorRate: epic1Stats.errorRate,
+                                                            memoryUsage: epic1Stats.memoryPressure,
+                                                        };
+                                                        this.integratedMetrics.correlations.integratedHealthScore = this.calculateIntegratedHealthScore();
+                                                        epic1Stats,
+                                                            epic17Dashboard,
+                                                            securityDashboard;
+                                                        ;
+                                                    },
+                                                    performCorrelationAnalysis() {
+                                                        // Analyze correlations between systems
+                                                        const correlations = this.correlationEngine.analyzeCorrelations();
+                                                        this.integratedMetrics.correlations = {
+                                                            ...this.integratedMetrics.correlations,
+                                                            ...correlations
+                                                        };
+                                                    },
+                                                    updateDashboardData() {
+                                                        // Update dashboard data and emit events
+                                                        this.emit('dashboard_data_updated', this.getIntegratedDashboardData());
+                                                    },
+                                                    checkIntegratedAlertRules(event, context) {
+                                                        // Check event against integrated alert rules
+                                                        for (const rule of this.alertRules.values()) {
+                                                            if (rule.enabled && this.evaluateIntegratedRule(rule, event, context)) {
+                                                                this.triggerIntegratedAlert(rule, event, context);
+                                                            }
                                                         }
-                                                        securityConditions: {
-                                                            threatLevelThreshold: 7,
-                                                                securityEventTypes;
-                                                            ['security_breach', 'suspicious_activity'],
-                                                                falsePositiveThreshold;
-                                                            0.2,
-                                                            ;
+                                                    },
+                                                    evaluateIntegratedRule(rule, event, context) {
+                                                        // Evaluate integrated rule conditions
+                                                        return true;
+                                                    } // Simplified for now
+                                                    , // Simplified for now
+                                                    triggerIntegratedAlert(rule, event, context) {
+                                                        // Trigger alert across all configured channels
+                                                        this.emit('integrated_alert_triggered', {});
+                                                        rule,
+                                                            event,
+                                                            context,
+                                                            timestamp;
+                                                        Date.now(),
+                                                        ;
+                                                    },
+                                                    calculateIntegratedHealthScore(epic1Stats, epic17Dashboard, securityDashboard) {
+                                                        // Calculate weighted health score across all systems
+                                                        const performanceScore = Math.max(0, 100 - (epic1Stats.errorRate * 100) - (epic1Stats.memoryPressure));
+                                                        const adminScore = epic17Dashboard.complianceMetrics.auditTrailCompleteness;
+                                                        const securityScore = securityDashboard.overallSecurityHealth;
+                                                        // Weighted average: Performance (30%), Admin (30%), Security (40%)
+                                                        return Math.round((performanceScore * 0.3) + (adminScore * 0.3) + (securityScore * 0.4));
+                                                    },
+                                                    getOperationalSystemsCount() {
+                                                        // Count operational systems across all monitors
+                                                        return 25;
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    getTotalSystemsCount() {
+                                                        return 30;
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    getCriticalAlertsCount() {
+                                                        // Count critical alerts across all systems
+                                                        return 3;
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    getActiveIncidentsCount() {
+                                                        return 1;
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    getMemoryTrend() {
+                                                        // Get memory trend data
+                                                        return [];
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    getRecentAdminOperations() {
+                                                        return [];
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    getRecentSecurityEvents() {
+                                                        return [];
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    generateIntegratedRecommendations() {
+                                                        return [];
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    performRiskAssessment() {
+                                                        return {
+                                                            overallRisk: 'medium',
+                                                            riskFactors: [],
+                                                        };
+                                                    },
+                                                    async collectEpic1Data(timeRange) {
+                                                        return {};
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    async collectEpic17Data(timeRange) {
+                                                        return {};
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    async collectSecurityData(timeRange) {
+                                                        return {};
+                                                    } // Placeholder
+                                                    , // Placeholder
+                                                    async performIntegratedAnalysis(...args) {
+                                                        return {
+                                                            overallHealthScore: 85,
+                                                            systemsAnalyzed: 30,
+                                                            criticalIssuesFound: 2,
+                                                            performanceAnalysis: {},
+                                                            adminAnalysis: {},
+                                                            securityAnalysis: {},
+                                                            correlationAnalysis: {},
+                                                            recommendations: []
+                                                        };
+                                                        /**
+                                                         * Correlation Engine for cross-system event analysis
+                                                         */
+                                                        class CorrelationEngine extends EventEmitter {
+                                                            config;
+                                                            eventBuffer;
+                                                            'performance';
                                                         }
-                                                        correlationConditions: {
-                                                            performanceSecurityCorrelation: 0.7,
-                                                                healthScoreThreshold;
-                                                            70,
-                                                                multiSystemEventWindow;
-                                                            300000; // 5 minutes,
-                                                        }
-                                                        actions: {
-                                                            notifications: [,
-                                                                {
-                                                                    type: 'email',
-                                                                    target: 'security@company.com',
-                                                                    priority: 'critical',
-                                                                },
-                                                                {
-                                                                    type: 'slack',
-                                                                    target: '#security-alerts',
-                                                                    priority: 'critical'
-                                                                }],
-                                                                automaticMitigation;
-                                                            {
-                                                                scaleResources: true,
-                                                                    isolateComponents;
-                                                                false,
-                                                                    escalateToAdmin;
-                                                                true,
-                                                                    triggerIncidentResponse;
-                                                                true;
-                                                                ;
-                                                                for (const rule of defaultRules) {
-                                                                    this.createIntegratedAlertRule(rule);
+                                                         | 'admin' | 'security';
+                                                        event: any;
+                                                        timestamp: number;
+                                                    } } > , []: ,
+                                                constructor(config) {
+                                                    super();
+                                                    this.config = config;
+                                                    addPerformanceEvent(event, any);
+                                                    void {
+                                                        this: .eventBuffer.push({}),
+                                                        type: 'performance',
+                                                        event,
+                                                        timestamp: Date.now(),
+                                                    };
+                                                    ;
+                                                    this.cleanupOldEvents();
+                                                    addAdminEvent(event, any);
+                                                    void {
+                                                        this: .eventBuffer.push({}),
+                                                        type: 'admin',
+                                                        event,
+                                                        timestamp: Date.now(),
+                                                    };
+                                                    ;
+                                                    this.cleanupOldEvents();
+                                                    addSecurityEvent(event, any);
+                                                    void {
+                                                        this: .eventBuffer.push({}),
+                                                        type: 'security',
+                                                        event,
+                                                        timestamp: Date.now(),
+                                                    };
+                                                    ;
+                                                    this.cleanupOldEvents();
+                                                    analyzeEvent(event, SecurityEvent, context, any);
+                                                    void {
+                                                        // Analyze single event for immediate correlations
+                                                        analyzeCorrelations() {
+                                                            // Analyze correlations between different event types
+                                                            return {
+                                                                performanceSecurityCorrelation: 0.6,
+                                                                adminOperationRisk: 0.3,
+                                                                systemHealthTrend: 'stable',
+                                                            };
+                                                            getRecentCorrelations();
+                                                            Array < any > {
+                                                                return: [], // Placeholder
+                                                                analyzeTimeRange(timeRange) {
+                                                                    return {};
+                                                                } // Placeholder
+                                                                , // Placeholder
+                                                                cleanupOldEvents() {
+                                                                    const cutoff = Date.now() - this.config.correlationWindow;
+                                                                    this.eventBuffer = this.eventBuffer.filter(event => event.timestamp > cutoff);
+                                                                    shutdown();
+                                                                    void {
+                                                                        this: .eventBuffer = [],
+                                                                        export: , default: Epic1Epic17SecurityIntegration
+                                                                    };
                                                                 }
-                                                            }
+                                                            };
                                                         }
-                                                    }
-                                                }
-                                            },
-                                            handleEpic1Event(data) {
-                                                // Process Epic 1 events for correlation
-                                                this.correlationEngine.addPerformanceEvent(data);
-                                            },
-                                            handleEpic1Alert(alert) {
-                                                // Forward Epic 1 alerts to integrated alerting system
-                                                this.emit('epic1_alert', alert);
-                                            },
-                                            handleEpic17Event(metric) {
-                                                // Process Epic 17 events for correlation
-                                                this.correlationEngine.addAdminEvent(metric);
-                                            },
-                                            handleSecurityEvent(data) {
-                                                // Process security events for correlation
-                                                this.correlationEngine.addSecurityEvent(data);
-                                            },
-                                            handleSecurityAlert(alert) {
-                                                // Forward security alerts to integrated alerting system
-                                                this.emit('security_alert', alert);
-                                            },
-                                            collectIntegratedMetrics() {
-                                                // Collect and aggregate metrics from all systems
-                                                const epic1Stats = this.epic1Monitor.getStatisticsSummary();
-                                                const epic17Dashboard = this.epic17Monitor.getAdminPerformanceDashboard();
-                                                const securityDashboard = this.securityMonitor.getSecurityDashboardData();
-                                                // Update integrated metrics
-                                                this.integratedMetrics.performanceMetrics.systemPerformance = {
-                                                    totalExecutions: epic1Stats.totalExecutions,
-                                                    averageExecutionTime: epic1Stats.averageExecutionTime,
-                                                    errorRate: epic1Stats.errorRate,
-                                                    memoryUsage: epic1Stats.memoryPressure,
-                                                };
-                                                this.integratedMetrics.correlations.integratedHealthScore = this.calculateIntegratedHealthScore();
-                                                epic1Stats,
-                                                    epic17Dashboard,
-                                                    securityDashboard;
-                                                ;
-                                            },
-                                            performCorrelationAnalysis() {
-                                                // Analyze correlations between systems
-                                                const correlations = this.correlationEngine.analyzeCorrelations();
-                                                this.integratedMetrics.correlations = {
-                                                    ...this.integratedMetrics.correlations,
-                                                    ...correlations
-                                                };
-                                            },
-                                            updateDashboardData() {
-                                                // Update dashboard data and emit events
-                                                this.emit('dashboard_data_updated', this.getIntegratedDashboardData());
-                                            },
-                                            checkIntegratedAlertRules(event, context) {
-                                                // Check event against integrated alert rules
-                                                for (const rule of this.alertRules.values()) {
-                                                    if (rule.enabled && this.evaluateIntegratedRule(rule, event, context)) {
-                                                        this.triggerIntegratedAlert(rule, event, context);
-                                                    }
-                                                }
-                                            },
-                                            evaluateIntegratedRule(rule, event, context) {
-                                                // Evaluate integrated rule conditions
-                                                return true;
-                                            } // Simplified for now
-                                            , // Simplified for now
-                                            triggerIntegratedAlert(rule, event, context) {
-                                                // Trigger alert across all configured channels
-                                                this.emit('integrated_alert_triggered', {});
-                                                rule,
-                                                    event,
-                                                    context,
-                                                    timestamp;
-                                                Date.now(),
-                                                ;
-                                            },
-                                            calculateIntegratedHealthScore(epic1Stats, epic17Dashboard, securityDashboard) {
-                                                // Calculate weighted health score across all systems
-                                                const performanceScore = Math.max(0, 100 - (epic1Stats.errorRate * 100) - (epic1Stats.memoryPressure));
-                                                const adminScore = epic17Dashboard.complianceMetrics.auditTrailCompleteness;
-                                                const securityScore = securityDashboard.overallSecurityHealth;
-                                                // Weighted average: Performance (30%), Admin (30%), Security (40%)
-                                                return Math.round((performanceScore * 0.3) + (adminScore * 0.3) + (securityScore * 0.4));
-                                            },
-                                            getOperationalSystemsCount() {
-                                                // Count operational systems across all monitors
-                                                return 25;
-                                            } // Placeholder
-                                            , // Placeholder
-                                            getTotalSystemsCount() {
-                                                return 30;
-                                            } // Placeholder
-                                            , // Placeholder
-                                            getCriticalAlertsCount() {
-                                                // Count critical alerts across all systems
-                                                return 3;
-                                            } // Placeholder
-                                            , // Placeholder
-                                            getActiveIncidentsCount() {
-                                                return 1;
-                                            } // Placeholder
-                                            , // Placeholder
-                                            getMemoryTrend() {
-                                                // Get memory trend data
-                                                return [];
-                                            } // Placeholder
-                                            , // Placeholder
-                                            getRecentAdminOperations() {
-                                                return [];
-                                            } // Placeholder
-                                            , // Placeholder
-                                            getRecentSecurityEvents() {
-                                                return [];
-                                            } // Placeholder
-                                            , // Placeholder
-                                            generateIntegratedRecommendations() {
-                                                return [];
-                                            } // Placeholder
-                                            , // Placeholder
-                                            performRiskAssessment() {
-                                                return {
-                                                    overallRisk: 'medium',
-                                                    riskFactors: [],
-                                                };
-                                            },
-                                            async collectEpic1Data(timeRange) {
-                                                return {};
-                                            } // Placeholder
-                                            , // Placeholder
-                                            async collectEpic17Data(timeRange) {
-                                                return {};
-                                            } // Placeholder
-                                            , // Placeholder
-                                            async collectSecurityData(timeRange) {
-                                                return {};
-                                            } // Placeholder
-                                            , // Placeholder
-                                            async performIntegratedAnalysis(...args) {
-                                                return {
-                                                    overallHealthScore: 85,
-                                                    systemsAnalyzed: 30,
-                                                    criticalIssuesFound: 2,
-                                                    performanceAnalysis: {},
-                                                    adminAnalysis: {},
-                                                    securityAnalysis: {},
-                                                    correlationAnalysis: {},
-                                                    recommendations: []
-                                                };
-                                                /**
-                                                 * Correlation Engine for cross-system event analysis
-                                                 */
-                                                class CorrelationEngine extends EventEmitter {
-                                                    config;
-                                                    eventBuffer = [];
-                                                    constructor(config) {
-                                                        super();
-                                                        this.config = config;
-                                                        addPerformanceEvent(event, any);
-                                                        void {
-                                                            this: .eventBuffer.push({}),
-                                                            type: 'performance',
-                                                            event,
-                                                            timestamp: Date.now(),
-                                                        };
-                                                        ;
-                                                        this.cleanupOldEvents();
-                                                        addAdminEvent(event, any);
-                                                        void {
-                                                            this: .eventBuffer.push({}),
-                                                            type: 'admin',
-                                                            event,
-                                                            timestamp: Date.now(),
-                                                        };
-                                                        ;
-                                                        this.cleanupOldEvents();
-                                                        addSecurityEvent(event, any);
-                                                        void {
-                                                            this: .eventBuffer.push({}),
-                                                            type: 'security',
-                                                            event,
-                                                            timestamp: Date.now(),
-                                                        };
-                                                        ;
-                                                        this.cleanupOldEvents();
-                                                        analyzeEvent(event, SecurityEvent, context, any);
-                                                        void {
-                                                            // Analyze single event for immediate correlations
-                                                            analyzeCorrelations() {
-                                                                // Analyze correlations between different event types
-                                                                return {
-                                                                    performanceSecurityCorrelation: 0.6,
-                                                                    adminOperationRisk: 0.3,
-                                                                    systemHealthTrend: 'stable',
-                                                                };
-                                                                getRecentCorrelations();
-                                                                Array < any > {
-                                                                    return: [], // Placeholder
-                                                                    analyzeTimeRange(timeRange) {
-                                                                        return {};
-                                                                    } // Placeholder
-                                                                    , // Placeholder
-                                                                    cleanupOldEvents() {
-                                                                        const cutoff = Date.now() - this.config.correlationWindow;
-                                                                        this.eventBuffer = this.eventBuffer.filter(event => event.timestamp > cutoff);
-                                                                        shutdown();
-                                                                        void {
-                                                                            this: .eventBuffer = [],
-                                                                            export: , default: Epic1Epic17SecurityIntegration
-                                                                        };
-                                                                    }
-                                                                };
-                                                            }
-                                                        };
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                                    };
+                                                } } } } }
                             };
                         }
                     }

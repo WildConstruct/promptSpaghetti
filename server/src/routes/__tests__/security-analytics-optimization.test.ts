@@ -27,7 +27,7 @@ describe('Security Analytics Optimization API Routes', () => {
         if (!request.headers.authorization) {
           reply.status(401).send({ error: 'Unauthorized' });
           return;
-        }
+
       });
     });
 
@@ -48,7 +48,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/status',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -79,7 +79,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/recommendations',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -96,7 +96,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/recommendations?includeHistory=true&includeCacheMetrics=true&includeStatus=true',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -127,11 +127,11 @@ describe('Security Analytics Optimization API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           recommendationId: 'test_recommendation_id',
           autoImplement: true
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -150,11 +150,11 @@ describe('Security Analytics Optimization API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {
           optimizationType: 'performance',
           autoImplement: true
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -171,7 +171,7 @@ describe('Security Analytics Optimization API Routes', () => {
         headers: {
           authorization: authToken,
           'content-type': 'application/json'
-  }
+
         payload: {} // Missing required fields
       });
 
@@ -188,7 +188,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/implement',
         payload: {
           recommendationId: 'test'
-        }
+
       });
 
       expect(response.statusCode).toBe(401);
@@ -202,7 +202,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/history',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -237,7 +237,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/cache/metrics',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -271,7 +271,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/cache/clear',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -300,7 +300,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/diagnostics',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -337,7 +337,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/auto-optimize',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -356,7 +356,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/auto-optimize',
         headers: {
           authorization: authToken
-        }
+
       });
 
       expect(response.statusCode).toBe(200);
@@ -385,7 +385,7 @@ describe('Security Analytics Optimization API Routes', () => {
         url: '/api/security-analytics/optimization/status',
         headers: {
           authorization: authToken
-        }
+
       });
 
       // Even if internal errors occur, the API should return structured responses
@@ -413,7 +413,7 @@ describe('Security Analytics Optimization API Routes', () => {
           url: endpoint,
           headers: {
             authorization: authToken
-          }
+
         });
 
         expect(response.statusCode).toBe(200);
@@ -427,10 +427,10 @@ describe('Security Analytics Optimization API Routes', () => {
         
         if (data.success) {
           expect(data).toHaveProperty('data');
-        } else {
+ else {
           expect(data).toHaveProperty('error');
-        }
-      }
+
+
     });
   });
 });

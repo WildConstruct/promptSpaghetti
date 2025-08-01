@@ -25,7 +25,7 @@ interface TestTemplate {
   created_at: Date;
   updated_at: Date;
   [key: string]: unknown;
-}
+
 
 interface TestUser {
   id: number;
@@ -39,7 +39,7 @@ interface TestUser {
   createdAt: Date;
   updatedAt: Date;
   [key: string]: unknown;
-}
+
 
 interface TestGraphNode {
   id: string;
@@ -51,7 +51,7 @@ interface TestGraphNode {
     config: Record<string, unknown>;
   };
   [key: string]: unknown;
-}
+
 
 interface TestGraphEdge {
   id: string;
@@ -60,7 +60,7 @@ interface TestGraphEdge {
   type: string;
   animated: boolean;
   [key: string]: unknown;
-}
+
 
 interface TestApiError {
   error: string;
@@ -69,7 +69,7 @@ interface TestApiError {
   timestamp: string;
   path: string;
   [key: string]: unknown;
-}
+
 
 // Test data generators
 export const TestDataGenerators = {
@@ -93,7 +93,7 @@ export const TestDataGenerators = {
           type: faker.helpers.arrayElement(['input', 'output', 'process', 'ai']),
           position: { x: faker.number.int({ min: 0, max: 500 }), y: faker.number.int({ min: 0, max: 500 }) },
           data: { label: faker.lorem.words(2) }
-        }
+
       ],
       edges: []
     },
@@ -142,7 +142,7 @@ export const TestDataGenerators = {
         param1: faker.datatype.boolean(),
         param2: faker.number.int({ min: 1, max: 100 }),
         param3: faker.lorem.word()
-      }
+
     },
     ...overrides
   }),
@@ -181,7 +181,7 @@ export const TestDataGenerators = {
         name: `Template ${index + 1} - ${faker.lorem.words(2)}`
       })
     );
-  }
+
 };
 
 // Custom test wrapper for React components
@@ -189,7 +189,7 @@ interface TestWrapperProps {
   children: ReactNode;
   initialEntries?: string[];
   queryClient?: QueryClient;
-}
+
 
 const TestWrapper = ({ children, initialEntries = ['/'], queryClient }: TestWrapperProps) => {
   const client = queryClient || new QueryClient({
@@ -200,8 +200,8 @@ const TestWrapper = ({ children, initialEntries = ['/'], queryClient }: TestWrap
       },
       mutations: { 
         retry: false 
-      }
-    }
+
+
   });
 
   return (
@@ -211,7 +211,7 @@ const TestWrapper = ({ children, initialEntries = ['/'], queryClient }: TestWrap
       </BrowserRouter>
     </QueryClientProvider>
   );
-};
+;
 
 // Enhanced render function with common providers
 export function renderWithProviders(
@@ -219,7 +219,7 @@ export function renderWithProviders(
   options: RenderOptions & {
     initialEntries?: string[];
     queryClient?: QueryClient;
-  } = {}
+ = {}
 ): RenderResult {
   const { initialEntries, queryClient, ...renderOptions } = options;
   
@@ -234,7 +234,7 @@ export function renderWithProviders(
     ),
     ...renderOptions
   });
-}
+
 
 // Test utilities for async operations
 export const AsyncTestUtils = {
@@ -249,7 +249,7 @@ export const AsyncTestUtils = {
       const element = getElement();
       if (element) return element;
       await new Promise(resolve => setTimeout(resolve, 100));
-    }
+
     
     throw new Error(`Element not found within ${timeout}ms`);
   },
@@ -263,7 +263,7 @@ export const AsyncTestUtils = {
     while (Date.now() - start < timeout) {
       if (condition()) return;
       await new Promise(resolve => setTimeout(resolve, 100));
-    }
+
     
     throw new Error(`Condition not met within ${timeout}ms`);
   },
@@ -286,18 +286,18 @@ export const AsyncTestUtils = {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         return await operation();
-      } catch (error) {
+ catch (error) {
         lastError = error as Error;
         
         if (attempt < maxRetries) {
           const delay = baseDelay * Math.pow(2, attempt);
           await AsyncTestUtils.delay(delay);
-        }
-      }
-    }
+
+
+
     
     throw lastError!;
-  }
+
 };
 
 // Performance testing utilities
@@ -330,7 +330,7 @@ export const PerformanceTestUtils = {
     median: number;
     results: T[];
     durations: number[];
-  }> => {
+> => {
     const durations: number[] = [];
     const results: T[] = [];
 
@@ -338,7 +338,7 @@ export const PerformanceTestUtils = {
       const { result, duration } = await PerformanceTestUtils.measureTime(operation);
       durations.push(duration);
       results.push(result);
-    }
+
 
     const sortedDurations = [...durations].sort((a, b) => a - b);
     
@@ -358,11 +358,11 @@ export const PerformanceTestUtils = {
   getMemoryUsage: () => {
     if (typeof window !== 'undefined' && 'memory' in performance) {
       return (performance as unknown as { memory: Record<string, unknown> }).memory;
-    }
+
     
     if (typeof process !== 'undefined' && process.memoryUsage) {
       return process.memoryUsage();
-    }
+
     
     return null;
   },
@@ -376,26 +376,26 @@ export const PerformanceTestUtils = {
     if (!initialMemory) {
       console.warn('Memory usage tracking not available');
       return;
-    }
+
 
     // Force garbage collection if available
     if (global.gc) {
       global.gc();
-    }
+
 
     await operation();
 
     // Force garbage collection again
     if (global.gc) {
       global.gc();
-    }
+
 
     const finalMemory = PerformanceTestUtils.getMemoryUsage();
     const memoryDiff = finalMemory.heapUsed - initialMemory.heapUsed;
 
     if (memoryDiff > threshold) {
       console.warn(`Potential memory leak detected: ${memoryDiff} bytes`);
-    }
+
 
     return {
       initialMemory,
@@ -403,7 +403,7 @@ export const PerformanceTestUtils = {
       difference: memoryDiff,
       leaked: memoryDiff > threshold
     };
-  }
+
 };
 
 // Custom Jest matchers
@@ -483,9 +483,9 @@ export const TestEnvironmentUtils = {
   skipInCI: (testFn: () => void, reason?: string) => {
     if (TestEnvironmentUtils.isCI()) {
       it.skip(`skipped in CI${reason ? `: ${reason}` : ''}`, testFn);
-    } else {
+ else {
       testFn();
-    }
+
   },
 
   /**
@@ -494,10 +494,10 @@ export const TestEnvironmentUtils = {
   runOnlyInEnv: (env: string, testFn: () => void) => {
     if (process.env.NODE_ENV === env) {
       testFn();
-    } else {
+ else {
       it.skip(`skipped (not in ${env} environment)`, testFn);
-    }
-  }
+
+
 };
 
 // Test data persistence utilities
@@ -513,7 +513,7 @@ export const TestDataUtils = {
     const tempDir = path.join(__dirname, '../temp');
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true });
-    }
+
     
     const filepath = path.join(tempDir, `${filename}.json`);
     fs.writeFileSync(filepath, JSON.stringify(data, null, 2));
@@ -532,7 +532,7 @@ export const TestDataUtils = {
     
     if (fs.existsSync(filepath)) {
       return JSON.parse(fs.readFileSync(filepath, 'utf8'));
-    }
+
     
     return null;
   },
@@ -543,7 +543,7 @@ export const TestDataUtils = {
   generateAndSave: (generator: () => unknown, count: number, filename: string) => {
     const data = Array.from({ length: count }, generator);
     return TestDataUtils.saveTestData(data, filename);
-  }
+
 };
 
 // Export everything
@@ -559,9 +559,9 @@ declare global {
       toHaveClass(className: string): R;
       toMatchAPIResponse(expected: Record<string, unknown>): R;
       toCompleteWithin(maxTime: number): R;
-    }
-  }
-}
+
+
+
 
 // Export test categories for organization
 export 

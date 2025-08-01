@@ -4,123 +4,106 @@
  */
 import { ComplianceBaseline, ComplianceMeasurement, BaselineTrend } from './ComplianceBaselineTracker';
 
-}
-export interface HistoricalDataPoint {
-  timestamp: Date;
+
+export interface HistoricalDataPoint { timestamp: Date;
   value: number;
   baseline: number;
   deviation: number;
-  status: 'compliant' | 'warning' | 'non_compliant';
+  status: 'compliant' | 'warning' | 'non_compliant' }
   framework: string;
   category: string;
   metric: string;
-}
-}
-}
-export interface ComplianceTrendReport {
-  reportId: string;
+
+
+
+
+export interface ComplianceTrendReport { reportId: string;
   generatedAt: Date;
-  period: {
+  period: { }
   startDate: Date;
   endDate: Date;
   duration: string;
-}
+
+
 };
   framework: string;
-  summary: {;
+  summary: { ;
   totalDataPoints: number;
   averageCompliance: number;
   bestPerformingMetric: string;
   worstPerformingMetric: string;
-  improvementTrend: 'positive' | 'negative' | 'stable';
+  improvementTrend: 'positive' | 'negative' | 'stable' }
   criticalIncidents: number;
 };
-  metrics: {
+  metrics: { ,
   name: string;
   currentValue: number;
   historicalAverage: number;
-  trendDirection: 'up' | 'down' | 'stable';
+  trendDirection: 'up' | 'down' | 'stable';,
   volatility: number; // 0-100 scale,
-  complianceRate: number; // percentage of time in compliance,
+  complianceRate: number; // percentage of time in compliance }
   recommendations: string;
-}[];
-  keyEvents: {
+[];
+  keyEvents: { ,
   date: Date;
   event: string;
   impact: 'positive' | 'negative' | 'neutral';
-  description: string;
-}[];
-  periodicComparison: {
+  description: string }[];
+  periodicComparison: { ,
   currentPeriod: number;
   previousPeriod: number;
   change: number;
-  changeType: 'improvement' | 'degradation' | 'stable'
-  };
-}
-}
-export interface ComplianceForecasting {
-  baselineId: string;
-  forecastHorizon: number; // days,
-  predictedValues: {
+  changeType: 'improvement' | 'degradation' | 'stable' }
+};
+
+
+export interface ComplianceForecasting { baselineId: string;
+  forecastHorizon: number; // days;
+  predictedValues: {;
   date: Date;
   predictedValue: number;
-  confidenceInterval: {
+  confidenceInterval: { }
   lower: number;
   upper: number;
-}
+
+
 };
-    riskLevel: 'low' | 'medium' | 'high'
-  }[];
+    riskLevel: 'low' | 'medium' | 'high';
+[];
   forecastAccuracy: number; // 0-100,
   assumptions: string;
-  riskFactors: {
+  riskFactors: { ;
   factor: string;
   impact: 'high' | 'medium' | 'low';
-  likelihood: number; // 0-100,
-}[];
-}
-}
-export interface ComplianceAuditTrail {
-  auditId: string;
-  auditPeriod: {
+  likelihood: number; // 0-100 }
+[];
+
+
+export interface ComplianceAuditTrail { auditId: string;
+  auditPeriod: { }
   startDate: Date;
   endDate: Date;
-}
+
+
 };
   framework: string;
   auditType: 'internal' | 'external' | 'certification';
-  findings: {
+  findings: { ,
   category: 'strength' | 'weakness' | 'non_compliance' | 'improvement_opportunity';
   description: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
   remediation?: string;
   dueDate?: Date;
-  status: 'open' | 'in_progress' | 'completed' | 'deferred'
-  }[];
+  status: 'open' | 'in_progress' | 'completed' | 'deferred' }
+[];
   overallRating: 'excellent' | 'satisfactory' | 'needs_improvement' | 'non_compliant';
   certificationStatus?: 'certified' | 'conditionally_certified' | 'not_certified';
   nextAuditDue: Date;
-}
-export class ComplianceHistoricalAnalyzer {
-  private historicalData: Map<string, HistoricalDataPoint> = new Map();
-  private trendReports: ComplianceTrendReport = [];
-  private auditTrails: ComplianceAuditTrail = [];
-  constructor() {
-  this.initializeHistoricalData();
-  /**
-  * Initialize with sample historical data for demonstration
-  */
-  private initializeHistoricalData(): void {,
-  const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
-  const metrics = {
-  'GDPR': ['Data Protection Score', 'Consent Coverage', 'Retention Compliance'],
-  'SOC2': ['Security Controls', 'Access Control', 'Audit Logging'],
-  'MPA': ['Content Encryption', 'Access Audit', 'Unauthorized Access'],
-  'INTERNAL': ['SSL Health', 'Patch Compliance', 'Vulnerability Response'],
-};
+
+export class ComplianceHistoricalAnalyzer {};
     // Generate 90 days of historical data
     const startDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
-    frameworks.forEach(framework => {)
+    frameworks.forEach(framework => { )
   metrics[framework as keyof typeof metrics].forEach(metric => {)
   const dataPoints: HistoricalDataPoint = [];
   const baselineValue = this.getBaselineForMetric(framework, metric);
@@ -136,7 +119,7 @@ export class ComplianceHistoricalAnalyzer {
   deviation: Math.round(deviation * 100) / 100,
   status: this.determineComplianceStatus(value, baselineValue),
   framework,
-  category: this.getCategoryForMetric(metric),
+  category: this.getCategoryForMetric(metric) }
   metric
 });
         this.historicalData.set(`${framework}_${metric}`, dataPoints);}
@@ -146,14 +129,13 @@ export class ComplianceHistoricalAnalyzer {
   /**
    * Generate comprehensive trend report for a specific framework
    */
-  async generateTrendReport(framework: string, )
-    startDate: Date, 
-    endDate: Date): Promise<ComplianceTrendReport> {,
+  async generateTrendReport(framework: string);
+  startDate: Date, 
+    endDate: Date): Promise<ComplianceTrendReport> {
     const reportId = `report_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-    const period = {
-  startDate,
-  endDate,
-  duration: this.calculateDuration(startDate, endDate),
+    const period = { startDate
+  endDate
+  duration: this.calculateDuration(startDate, endDate) }
 };
     // Collect relevant data points
     const allDataPoints: HistoricalDataPoint = [];
@@ -171,9 +153,9 @@ export class ComplianceHistoricalAnalyzer {
     const criticalIncidents = allDataPoints.filter(dp => dp.status === 'non_compliant').length;
     // Find best and worst performing metrics
     const metricGroups = this.groupDataPointsByMetric(allDataPoints);
-    const metricAverages = Object.entries(metricGroups).map(([metric, points]) => ({)
+    const metricAverages = Object.entries(metricGroups).map(([metric, points]) => ({ )
   metric,
-  average: points.reduce((sum, p) => sum + p.value, 0) / points.length,
+  average: points.reduce((sum, p) => sum + p.value, 0) / points.length }
 }));
     const bestPerformingMetric = metricAverages.reduce((best, current) => ;
       current.average > best.average ? current : best
@@ -194,8 +176,7 @@ export class ComplianceHistoricalAnalyzer {
     const improvementTrend: 'positive' | 'negative' | 'stable' = 
       improvement > 2 ? 'positive' : improvement < -2 ? 'negative' : 'stable';
     // Generate metric analysis
-    const metrics = Object.entries(metricGroups).map(([metric, points]) => {
-  const currentValue = points[points.length - 1]?.value || 0;
+    const metrics = Object.entries(metricGroups).map(([metric, points]) => { const currentValue = points[points.length - 1]?.value || 0;
   const historicalAverage = points.reduce((sum, p) => sum + p.value, 0) / points.length;
   const volatility = this.calculateVolatility(points.map(p => p.value));
   const complianceRate = (points.filter(p => p.status === 'compliant').length / points.length) * 100;
@@ -212,7 +193,7 @@ export class ComplianceHistoricalAnalyzer {
   metric,
   currentValue,
   historicalAverage,
-  trendDirection,
+  trendDirection }
   complianceRate
 };
     });
@@ -231,25 +212,24 @@ export class ComplianceHistoricalAnalyzer {
     const change = currentPeriodAvg - previousPeriodAvg;
     const changeType: 'improvement' | 'degradation' | 'stable' = 
       change > 1 ? 'improvement' : change < -1 ? 'degradation' : 'stable';
-    const report: ComplianceTrendReport = {
-  reportId,
+    const report: ComplianceTrendReport = { reportId,
   generatedAt: new Date(),
   period,
   framework,
-  summary: {
+  summary: {,
   totalDataPoints,
   averageCompliance: Math.round(averageCompliance * 100) / 100,
   bestPerformingMetric,
   worstPerformingMetric,
-  improvementTrend,
+  improvementTrend }
   criticalIncidents
-}
+
       metrics,
       keyEvents,
-      periodicComparison: {
+      periodicComparison: { ,
   currentPeriod: Math.round(currentPeriodAvg * 100) / 100,
   previousPeriod: Math.round(previousPeriodAvg * 100) / 100,
-  change: Math.round(change * 100) / 100,
+  change: Math.round(change * 100) / 100 }
   changeType
 };
     this.trendReports.push(report);
@@ -260,9 +240,7 @@ export class ComplianceHistoricalAnalyzer {
   async generateForecast(((
     baselineId: string,
     forecastHorizon: number = 30
-  ): Promise<ComplianceForecasting> {
-
-  // Get historical data for the baseline
+  ): Promise<ComplianceForecasting> { // Get historical data for the baseline
   const historicalKey = this.findHistoricalKeyForBaseline(baselineId);
   const historicalData = this.historicalData.get(historicalKey) || [];
   if (historicalData.length < 7) {
@@ -284,26 +262,25 @@ export class ComplianceHistoricalAnalyzer {
   predictedValues.push({)
   date,
   predictedValue: Math.round(predictedValue * 100) / 100,
-  confidenceInterval: {
+  confidenceInterval: {,
   lower: Math.round((predictedValue - margin) * 100) / 100,
-  upper: Math.round((predictedValue + margin) * 100) / 100,
+  upper: Math.round((predictedValue + margin) * 100) / 100 }
 },
-  riskLevel: predictedValue < 70 ? 'high' : predictedValue < 85 ? 'medium' : 'low'
+  riskLevel: predictedValue < 70 ? 'high' : predictedValue < 85 ? 'medium' : 'low';
   });
     // Calculate forecast accuracy based on recent predictions vs actual
     const forecastAccuracy = this.calculateForecastAccuracy(historicalData);
-    return {
-      baselineId,
+    return { baselineId,
       forecastHorizon,
       predictedValues,
       forecastAccuracy,
-      assumptions: [,
+      assumptions: [
         'Historical trends continue',
         'No major system changes',
         'Seasonal patterns remain consistent',
         'External factors remain stable'
-      ],
-      riskFactors: [,
+      ] }
+      riskFactors: [
         { factor: 'Regulatory changes', impact: 'high', likelihood: 20 },
         { factor: 'System updates', impact: 'medium', likelihood: 40 },
         { factor: 'Staff changes', impact: 'medium', likelihood: 30 },
@@ -313,10 +290,8 @@ export class ComplianceHistoricalAnalyzer {
   /**
    * Create audit trail entry
    */
-  async createAuditTrail(auditData: Omit<ComplianceAuditTrail, 'auditId'>): Promise<ComplianceAuditTrail> {
-
-    const auditTrail: ComplianceAuditTrail = {
-      ...auditData,
+  async createAuditTrail(auditData: Omit<ComplianceAuditTrail, 'auditId'>): Promise<ComplianceAuditTrail> { const auditTrail: ComplianceAuditTrail = {
+      ...auditData }
       auditId: `audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
     };
     this.auditTrails.push(auditTrail);
@@ -326,53 +301,48 @@ export class ComplianceHistoricalAnalyzer {
    * Get compliance history for a specific metric
    */
   getMetricHistory();
-    framework: string, 
-    metric: string, 
-    startDate?: Date, 
+    framework: string
+    metric: string
+    startDate?: Date
     endDate?: Date
   ): HistoricalDataPoint {
     const key = `${framework}_${metric}`;}
     const data = this.historicalData.get(key) || [];
-    if (!startDate && !endDate) {
-      return data;
+    if (!startDate && !endDate) { return data;
     return data.filter(point => {)
   if (startDate && point.timestamp < startDate) return false;
       if (endDate && point.timestamp > endDate) return false;
-      return true;
-    });
+      return true });
   /**
    * Export historical data for external analysis
    */
-  exportHistoricalData(framework?: string): {
-  metadata: {
+  exportHistoricalData(framework?: string): { metadata: {,
   exportDate: Date;
   framework?: string;
   totalDataPoints: number;
-  dateRange: {
+  dateRange: { }
   earliest: Date;
   latest: Date;
 };
     };
     data: HistoricalDataPoint;
     const allData: HistoricalDataPoint = [];
-    for (const [key, dataPoints] of this.historicalData.entries()) {
-  if (!framework || key.startsWith(framework)) {
+    for (const [key, dataPoints] of this.historicalData.entries()) { if (!framework || key.startsWith(framework)) {
   allData.push(...dataPoints);
   allData.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
   return {
-  metadata: {
+  metadata: {,
   exportDate: new Date(),
   framework,
   totalDataPoints: allData.length,
-  dateRange: {
+  dateRange: {,
   earliest: allData[0]?.timestamp || new Date(),
-  latest: allData[allData.length - 1]?.timestamp || new Date(),
+  latest: allData[allData.length - 1]?.timestamp || new Date() }
 },
   data: allData;
   };
   // Private helper methods
-  private getBaselineForMetric(framework: string, metric: string): number {
-  const baselines = {
+  private getBaselineForMetric(framework: string, metric: string): number { const baselines = {
   'GDPR_Data Protection Score': 95,
   'GDPR_Consent Coverage': 100,
   'GDPR_Retention Compliance': 98,
@@ -384,7 +354,7 @@ export class ComplianceHistoricalAnalyzer {
   'MPA_Unauthorized Access': 0,
   'INTERNAL_SSL Health': 100,
   'INTERNAL_Patch Compliance': 95,
-  'INTERNAL_Vulnerability Response': 7,
+  'INTERNAL_Vulnerability Response': 7 }
 };
     return baselines[`${framework}_${metric}` as keyof typeof baselines] || 90;}
   private getCategoryForMetric(metric: string): string {
@@ -403,15 +373,12 @@ export class ComplianceHistoricalAnalyzer {
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) !== 1 ? 's' : ''}`;}
     if (diffDays < 365) return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) !== 1 ? 's' : ''}`;}
     return `${Math.floor(diffDays / 365)} year${Math.floor(diffDays / 365) !== 1 ? 's' : ''}`;}
-  private groupDataPointsByMetric(dataPoints: HistoricalDataPoint): Record<string, HistoricalDataPoint> {
-    return dataPoints.reduce((groups, point) => {
+  private groupDataPointsByMetric(dataPoints: HistoricalDataPoint): Record<string, HistoricalDataPoint> { return dataPoints.reduce((groups, point) => {
       if (!groups[point.metric]) {
         groups[point.metric] = [];
       groups[point.metric].push(point);
-      return groups;
-    }, {} as Record<string, HistoricalDataPoint>);
-  private calculateVolatility(values: number): number {
-    if (values.length < 2) return 0;
+      return groups }, {} as Record<string, HistoricalDataPoint>);
+  private calculateVolatility(values: number): number { if (values.length < 2) return 0;
     const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
     const variance = values.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / (values.length - 1);
     return Math.sqrt(variance);
@@ -428,11 +395,11 @@ export class ComplianceHistoricalAnalyzer {
     const sumXY = values.reduce((sum, v, i) => sum + i * v, 0);
     const sumX2 = (n * (n - 1) * (2 * n - 1)) / 6;
     return (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-  private generateMetricRecommendations(metric: string, )
-    current: number, 
+  private generateMetricRecommendations(metric: string);
+  current: number, 
     historical: number, 
     trend: 'up' | 'down' | 'stable',
-    complianceRate: number): string {,
+    complianceRate: number): string { }
     const recommendations: string = [];
     if (current < historical * 0.9) {
       recommendations.push(`Current ${metric} performance is below historical average - investigate recent changes`);}
@@ -440,11 +407,10 @@ export class ComplianceHistoricalAnalyzer {
       recommendations.push('Declining trend detected - implement corrective measures immediately');
     if (complianceRate < 95) {
       recommendations.push(`Compliance rate is ${Math.round(complianceRate)}% - target 95%+ through process improvements`);}
-    if (trend === 'up') {
-      recommendations.push('Positive trend detected - document and replicate successful practices');
+    if (trend === 'up') { recommendations.push('Positive trend detected - document and replicate successful practices');
     return recommendations.slice(0, 3);
-  private identifyKeyEvents(dataPoints: HistoricalDataPoint, )
-    startDate: Date, 
+  private identifyKeyEvents(dataPoints: HistoricalDataPoint);
+  startDate: Date, 
     endDate: Date): ComplianceTrendReport['keyEvents'] {,
     const events: ComplianceTrendReport['keyEvents'] = [];
     // Find significant value changes
@@ -455,15 +421,14 @@ export class ComplianceHistoricalAnalyzer {
       const change = Math.abs(current.value - prev.value);
       if (change > 10) { // Significant change threshold
         events.push({)
-  date: current.timestamp,
+  date: current.timestamp }
           event: `Significant ${change > 0 ? 'improvement' : 'degradation'} in ${current.metric}`}
 },
   impact: current.value > prev.value ? 'positive' : 'negative',
           description: `${current.metric} changed from ${prev.value}% to ${current.value}% (${Math.round(change * 100) / 100}% change)`}
         });
     return events.slice(0, 5); // Top 5 most significant events
-  private calculateForecastAccuracy(historicalData: HistoricalDataPoint): number {
-  // Simple accuracy calculation - in practice, this would compare past forecasts to actual values
+  private calculateForecastAccuracy(historicalData: HistoricalDataPoint): number { // Simple accuracy calculation - in practice, this would compare past forecasts to actual values
   if (historicalData.length < 14) return 75;
   const recentValues = historicalData.slice(-14).map(d => d.value);
   const volatility = this.calculateVolatility(recentValues);
@@ -477,7 +442,7 @@ export class ComplianceHistoricalAnalyzer {
   'gdpr_data_retention_compliance': 'GDPR_Retention Compliance',
   'soc2_security_score': 'SOC2_Security Controls',
   'soc2_access_control_effectiveness': 'SOC2_Access Control',
-  'soc2_audit_log_completeness': 'SOC2_Audit Logging',
+  'soc2_audit_log_completeness': 'SOC2_Audit Logging' }
 };
     return mapping[baselineId as keyof typeof mapping] || 'INTERNAL_SSL Health';
 

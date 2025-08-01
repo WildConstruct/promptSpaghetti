@@ -82,7 +82,7 @@ describe('KeyManagementService Access Control Integration', () => {
       additionalContext: {
         requestSource: 'api',
         dataClassification: 'confidential'
-      }
+
     };
 
     it('should allow key access when access control grants permission', async () => {
@@ -104,7 +104,7 @@ describe('KeyManagementService Access Control Integration', () => {
           authentication_tag: Buffer.from('test-tag'),
           is_active: true,
           expires_at: null
-        }]
+]
       });
 
       // Mock the key decryption (would normally decrypt)
@@ -154,7 +154,7 @@ describe('KeyManagementService Access Control Integration', () => {
         conditionalAccess: [{
           type: 'mfa',
           description: 'Multi-factor authentication required for this operation'
-        }]
+]
       };
 
       mockAccessControlManager.evaluateAccess.mockResolvedValueOnce(mockAccessDecision);
@@ -210,7 +210,7 @@ describe('KeyManagementService Access Control Integration', () => {
             authentication_tag: Buffer.from('test-tag'),
             is_active: true,
             expires_at: null
-          }]
+]
         });
 
       jest.spyOn(keyManagementService as any, 'decryptKeyMaterial')
@@ -242,7 +242,7 @@ describe('KeyManagementService Access Control Integration', () => {
           authentication_tag: Buffer.from('test-tag'),
           is_active: true,
           expires_at: null
-        }]
+]
       });
 
       jest.spyOn(keyManagementService as any, 'decryptKeyMaterial')
@@ -266,7 +266,7 @@ describe('KeyManagementService Access Control Integration', () => {
           JSON.stringify({
             riskLevel: 'medium',
             monitoringRequired: true
-  }
+
         ])
       );
     });
@@ -283,7 +283,7 @@ describe('KeyManagementService Access Control Integration', () => {
         additionalContext: {
           requestId: 'req-123',
           serviceVersion: '1.2.3'
-        }
+
       };
 
       const mockAccessDecision: AccessDecision = {
@@ -296,9 +296,9 @@ describe('KeyManagementService Access Control Integration', () => {
 
       try {
         await keyManagementService.getKeyMaterial('test-key', keyContext);
-      } catch (error) {
+ catch (error) {
         // Expected to fail, we're testing the context building
-      }
+
 
       expect(mockAccessControlManager.evaluateAccess).toHaveBeenCalledWith(
         'test-key',
@@ -312,7 +312,7 @@ describe('KeyManagementService Access Control Integration', () => {
           additionalContext: {
             requestId: 'req-123',
             serviceVersion: '1.2.3'
-          }
+
   }
       );
     });
@@ -420,7 +420,7 @@ describe('KeyManagementService Access Control Integration', () => {
           authentication_tag: Buffer.from('test-tag'),
           is_active: true,
           expires_at: null
-        }]
+]
       });
 
       jest.spyOn(keyManagementService as any, 'decryptKeyMaterial')
@@ -469,7 +469,7 @@ describe('KeyManagementService Access Control Integration', () => {
           authentication_tag: Buffer.from('test-tag'),
           is_active: true,
           expires_at: null
-        }]
+]
       });
 
       jest.spyOn(keyManagementService as any, 'decryptKeyMaterial')
@@ -489,7 +489,7 @@ describe('KeyManagementService Access Control Integration', () => {
           riskLevel: 'critical',
           monitoringRequired: true
         });
-      }
+
     });
   });
 
@@ -552,7 +552,7 @@ describe('KeyManagementService Access Control Integration', () => {
           endTime: '17:00',
           daysOfWeek: [1, 2, 3, 4, 5], // Weekdays
           timezone: 'UTC'
-        }]
+]
       };
 
       mockAccessControlManager.evaluateAccess.mockResolvedValueOnce(timeRestrictedDecision);
@@ -564,7 +564,7 @@ describe('KeyManagementService Access Control Integration', () => {
           authentication_tag: Buffer.from('test-tag'),
           is_active: true,
           expires_at: null
-        }]
+]
       });
 
       jest.spyOn(keyManagementService as any, 'decryptKeyMaterial')

@@ -2,7 +2,13 @@ import { useState, useCallback, useRef } from 'react';
 import { ExecutionPathAnalyzer } from './execution/ExecutionTracker';
 import { varianceAnalysisService } from './services/VarianceAnalysisService';
 executionPath ?  : { steps: unknown, randomizationPoints: unknown };
-weightChoices ?  : Array;
+weightChoices ?  : Array < {
+    nodeId: string,
+    selectedOption: unknown,
+    availableOptions: unknown,
+    weights: number,
+    selectionProbability: number
+} > ;
 // Epic 8.5 Task 3: Individual result management
 locked ?  : boolean;
 lockedAt ?  : number;
@@ -12,7 +18,10 @@ export function usePreviewSeeds() {
     const [error, setError] = useState(null);
     const [results, setResults] = useState([]);
     const [aggregateError, setAggregateError] = useState(null);
-    const [performanceStats, setPerformanceStats] = useState(null);
+    const [performanceStats, setPerformanceStats] = useState < {
+        totalTime: number,
+        averageTime: number
+    } | null > (null);
     // Epic 8.5 Task 3: Individual result management state
     const [lockedResults, setLockedResults] = useState([]);
     const [regeneratingResults, setRegeneratingResults] = useState([]);
@@ -75,7 +84,7 @@ export function usePreviewSeeds() {
                         output: result.output?.startsWith('Error:') ? undefined : result.output,
                         error: result.output?.startsWith('Error:') ? result.output : undefined,
                         executionTimeMs: result.executionTimeMs,
-                        // Epic 8.5 Task 2: Capture execution path data from server
+                        // Epic 8.5 Task 2: Capture execution path data from server;
                         executionPath: result.executionPath,
                         weightChoices: result.weightChoices || [],
                         // Extract node/edge tracking from execution path
@@ -85,7 +94,7 @@ export function usePreviewSeeds() {
                             (result.output && !result.output.startsWith('Error:') ? [`edge_${result.seed}`] : []),
                         // Generate debug info for visualization
                         debugInfo: result.executionPath ? generateDebugInfo(result.executionPath) : undefined,
-                        // Epic 8.5 Task 3: Preserve locked state during regeneration
+                        // Epic 8.5 Task 3: Preserve locked state during regeneration;
                         locked: results[index]?.locked || false,
                         lockedAt: results[index]?.lockedAt,
                         lockedNote: results[index]?.lockedNote
@@ -152,7 +161,7 @@ catch (err) {
                     body: JSON.stringify({
                         graph,
                         runs: 1,
-                        seedStart: Math.floor(Math.random() * 10000) // Use new random seed
+                        seedStart: Math.floor(Math.random() * 10000) // Use new random seed,
                     }),
                     signal: controller.signal
                 });
@@ -265,6 +274,6 @@ function generateDebugInfo(executionPath) {
         nodeExecutionOrder: executionPath.nodeExecutionOrder,
         randomChoices: executionPath.randomizationPoints,
         performanceBreakdown: debugInfo.performanceBreakdown,
-        memoryUsage: undefined // Could be added in future
+        memoryUsage: undefined // Could be added in future,
     };
 }

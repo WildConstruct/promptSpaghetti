@@ -1,8 +1,8 @@
 import { PoolClient, QueryResult } from 'pg';
 
 }
-export interface DatabaseConfig {
-    host: string;
+}
+export interface DatabaseConfig { host: string;
     port: number;
     database: string;
     user: string;
@@ -26,22 +26,17 @@ export declare class DatabaseConnection {
         connections: {
             total: number;
             idle: number;
-            waiting: number;
+            waiting: number }
 }
         };
     }>;
     get isHealthy(): boolean;
-    get poolStats(): {
-        totalCount: any;
+    get poolStats(): { totalCount: any;
         idleCount: any;
-        waitingCount: any;
-    };
+        waitingCount: any };
 
-export declare const ValidationHelpers: {
-    isValidUUID(id: string): boolean;
-};
-export declare class QueryBuilder {
-    private query;
+export declare const ValidationHelpers: { isValidUUID(id: string): boolean };
+export declare class QueryBuilder { private query;
     private params;
     private paramCount;
     constructor(baseQuery?: string);
@@ -53,8 +48,7 @@ export declare class QueryBuilder {
     param(value: any): string;
     build(): {
         query: string;
-        params: any[];
-    };
+        params: any[] };
     static select(columns?: string[] | string): QueryBuilder;
     static insert(table: string): QueryBuilder;
     static update(table: string): QueryBuilder;

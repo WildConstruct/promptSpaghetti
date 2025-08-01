@@ -2,45 +2,39 @@ import React from 'react';
 import { Edge, EdgeProps } from 'reactflow';
 
 }
-export interface AnnotatedEdge extends Edge {
-    label?: string;
+}
+export interface AnnotatedEdge extends Edge { label?: string;
     labelStyle?: {
         fontSize?: number;
         color?: string;
         backgroundColor?: string;
         padding?: number;
         borderRadius?: number;
-        border?: string;
-    };
+        border?: string };
     labelPosition?: 'center' | 'start' | 'end' | number;
-    labelOffset?: {
-        x: number;
-        y: number;
-    };
+    labelOffset?: { x: number;
+        y: number };
     showLabel?: boolean;
     interactive?: boolean;
 
 }
-interface ConnectionLabelProps {
-    edge: AnnotatedEdge;
+}
+interface ConnectionLabelProps { edge: AnnotatedEdge;
     x: number;
     y: number;
     onLabelChange?: (edgeId: string, newLabel: string) => void;
     onLabelStyleChange?: (edgeId: string, newStyle: AnnotatedEdge['labelStyle']) => void;
 
-export declare const ConnectionLabel: React.FC<ConnectionLabelProps>;
-
+export declare const ConnectionLabel: React.FC<ConnectionLabelProps> }
 }
-interface AnnotatedEdgeComponentProps extends EdgeProps {
-    data?: AnnotatedEdge;
+}
+interface AnnotatedEdgeComponentProps extends EdgeProps { data?: AnnotatedEdge;
     onLabelChange?: (edgeId: string, newLabel: string) => void;
     onLabelStyleChange?: (edgeId: string, newStyle: AnnotatedEdge['labelStyle']) => void;
 
-export declare const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps>;
-
+export declare const AnnotatedEdgeComponent: React.FC<AnnotatedEdgeComponentProps> }
 }
-interface ConnectionLabelEditorProps {
-    edge: AnnotatedEdge | null;
+interface ConnectionLabelEditorProps { edge: AnnotatedEdge | null;
     onUpdateEdge: (edgeId: string, updates: Partial<AnnotatedEdge>) => void;
     onClose: () => void;
 
@@ -50,7 +44,7 @@ export declare const updateEdgeLabel: (edges: AnnotatedEdge[], edgeId: string, u
 export declare const toggleEdgeLabel: (edges: AnnotatedEdge[], edgeId: string) => AnnotatedEdge[];
 export declare const getEdgeCenter: (_____edge: Edge) => {
     x: number;
-    y: number;
+    y: number }
 }
 };
 export declare const optimizeLabelPositions: (edges: AnnotatedEdge[]) => AnnotatedEdge[];

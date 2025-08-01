@@ -101,9 +101,8 @@ export var VerificationStep;
             timeZoneManipulation: boolean;
         }
     }
-    ;
-    // Device challenge
 }
+;
 ;
 // Response data
 responseData ?  : {
@@ -593,8 +592,7 @@ export class DeviceVerificationService extends EventEmitter {
                             recipient: challenge.challengeData.deliveryAddress,
                             subject: 'Device Verification Code',
                             content: {
-                                text: `Your device verification code is: ${codeResult.code}`
-                            } }, html;
+                                text: `Your device verification code is: ${codeResult.code}` } }, html;
                     }
                 }
                 metadata: {
@@ -769,8 +767,9 @@ export class DeviceVerificationService extends EventEmitter {
                                         }
                                         else {
                                             return RiskLevel.LOW;
-                                            addAttempt(session, VerificationSession);
-                                            step: VerificationStep,
+                                            addAttempt(session, VerificationSession),
+                                                step;
+                                            VerificationStep,
                                                 success;
                                             boolean,
                                                 challengeId ?  : string,

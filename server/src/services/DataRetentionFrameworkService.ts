@@ -11,10 +11,10 @@ import {
   getRetentionPeriod,
   calculateDeletionDate,
   STANDARD_RETENTION_PERIODS
-} from '../types/DataRetentionPeriods';
+ from '../types/DataRetentionPeriods';
 
-}
-}
+
+
 export interface RetentionRecord {
   recordId: string;
   dataId: string;
@@ -30,9 +30,10 @@ export interface RetentionRecord {
   exceptions: string[];
   lastReviewed?: Date;
   reviewedBy?: string;
-}
-}
-}
+
+
+
+
 
 export enum RetentionStatus {
   ACTIVE = 'ACTIVE',
@@ -41,10 +42,10 @@ export enum RetentionStatus {
   DELETED = 'DELETED',
   ON_HOLD = 'ON_HOLD',
   UNDER_REVIEW = 'UNDER_REVIEW'
-}
 
-}
-}
+
+
+
 export interface RetentionPolicy {
   policyId: string;
   name: string;
@@ -55,20 +56,22 @@ export interface RetentionPolicy {
   createdAt: Date;
   updatedAt: Date;
   rules: RetentionRule[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RetentionRule {
   ruleId: string;
   condition: string;
   action: RetentionAction;
   priority: number;
-}
-}
-}
+
+
+
+
 
 export enum RetentionAction {
   DELETE = 'DELETE',
@@ -76,10 +79,10 @@ export enum RetentionAction {
   EXTEND = 'EXTEND',
   REVIEW = 'REVIEW',
   HOLD = 'HOLD'
-}
 
-}
-}
+
+
+
 export interface RetentionJob {
   jobId: string;
   jobType: RetentionJobType;
@@ -91,16 +94,17 @@ export interface RetentionJob {
   recordsDeleted: number;
   recordsArchived: number;
   errors: string[];
-}
-}
-}
+
+
+
+
 
 export enum RetentionJobType {
   SCHEDULED_CLEANUP = 'SCHEDULED_CLEANUP',
   MANUAL_CLEANUP = 'MANUAL_CLEANUP',
   ARCHIVE_OLD_DATA = 'ARCHIVE_OLD_DATA',
   COMPLIANCE_REVIEW = 'COMPLIANCE_REVIEW'
-}
+
 
 export enum JobStatus {
   PENDING = 'PENDING',
@@ -108,7 +112,7 @@ export enum JobStatus {
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
   CANCELLED = 'CANCELLED'
-}
+
 
 export class DataRetentionFrameworkService {
   private db: DatabaseService;
@@ -117,7 +121,7 @@ export class DataRetentionFrameworkService {
   constructor(db: DatabaseService, auditService: AuditService) {
     this.db = db;
     this.auditService = auditService;
-  }
+
 
   async registerDataForRetention(
     dataId: string,
@@ -131,7 +135,7 @@ export class DataRetentionFrameworkService {
     const retentionPeriod = this.determineRetentionPeriod(category, subcategory, jurisdiction);
     if (!retentionPeriod) {
       throw new Error(`No retention period found for category: ${category}`);
-    }
+
 
     const recordId = `retention_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const createdAt = new Date();
@@ -155,7 +159,7 @@ export class DataRetentionFrameworkService {
     await this.logRetentionEvent('DATA_REGISTERED', record);
 
     return record;
-  }
+
 
   async scheduleRetentionJob(jobType: RetentionJobType, scheduledAt?: Date): Promise<RetentionJob> {
 
@@ -173,14 +177,14 @@ export class DataRetentionFrameworkService {
 
     await this.saveRetentionJob(job);
     return job;
-  }
+
 
   async executeRetentionJob(jobId: string): Promise<RetentionJob> {
 
     const job = await this.getRetentionJob(jobId);
     if (!job) {
       throw new Error(`Retention job not found: ${jobId}`);
-    }
+
 
     job.status = JobStatus.RUNNING;
     job.startedAt = new Date();
@@ -197,18 +201,18 @@ export class DataRetentionFrameworkService {
       case RetentionJobType.COMPLIANCE_REVIEW:
         await this.executeComplianceReview(job);
         break;
-      }
+
 
       job.status = JobStatus.COMPLETED;
       job.completedAt = new Date();
-    } catch (error) {
+ catch (error) {
       job.status = JobStatus.FAILED;
       job.errors.push(error.message);
-    }
+
 
     await this.updateRetentionJob(job);
     return job;
-  }
+
 
   private async executeScheduledCleanup(job: RetentionJob): Promise<void> {
 
@@ -220,7 +224,7 @@ export class DataRetentionFrameworkService {
           await this.archiveData(record);
           record.status = RetentionStatus.ARCHIVED;
           job.recordsArchived++;
-        }
+
         
         await this.deleteData(record);
         record.status = RetentionStatus.DELETED;
@@ -231,11 +235,11 @@ export class DataRetentionFrameworkService {
         job.recordsProcessed++;
         
         await this.logRetentionEvent('DATA_DELETED', record);
-      } catch (error) {
+ catch (error) {
         job.errors.push(`Failed to process record ${record.recordId}: ${error.message}`);
-      }
-    }
-  }
+
+
+
 
   private async executeArchiving(job: RetentionJob): Promise<void> {
 
@@ -251,11 +255,11 @@ export class DataRetentionFrameworkService {
         job.recordsProcessed++;
         
         await this.logRetentionEvent('DATA_ARCHIVED', record);
-      } catch (error) {
+ catch (error) {
         job.errors.push(`Failed to archive record ${record.recordId}: ${error.message}`);
-      }
-    }
-  }
+
+
+
 
   private async executeComplianceReview(job: RetentionJob): Promise<void> {
 
@@ -269,15 +273,15 @@ export class DataRetentionFrameworkService {
       job.recordsProcessed++;
       
       await this.logRetentionEvent('COMPLIANCE_REVIEW', record);
-    }
-  }
+
+
 
   async addRetentionException(recordId: string, exception: string, approvedBy: string): Promise<void> {
 
     const record = await this.getRetentionRecord(recordId);
     if (!record) {
       throw new Error(`Retention record not found: ${recordId}`);
-    }
+
 
     record.exceptions.push(exception);
     
@@ -290,7 +294,7 @@ export class DataRetentionFrameworkService {
 
     await this.updateRetentionRecord(record);
     await this.logRetentionEvent('EXCEPTION_ADDED', record, { exception, approvedBy });
-  }
+
 
   async getRetentionStatus(dataId: string): Promise<RetentionRecord | null> {
 
@@ -303,7 +307,7 @@ export class DataRetentionFrameworkService {
     
     const result = await this.db.query(query, [dataId]);
     return result.rows[0] || null;
-  }
+
 
   async getUpcomingDeletions(days: number = 30): Promise<RetentionRecord[]> {
 
@@ -319,7 +323,7 @@ export class DataRetentionFrameworkService {
     
     const result = await this.db.query(query, [futureDate]);
     return result.rows;
-  }
+
 
   private determineRetentionPeriod(
     category: DataCategory,
@@ -332,15 +336,15 @@ export class DataRetentionFrameworkService {
     // Fallback to category match without subcategory
     if (!period) {
       period = getRetentionPeriod(category, undefined, jurisdictions?.[0]);
-    }
+
     
     // Fallback to global jurisdiction
     if (!period) {
       period = getRetentionPeriod(category, subcategory, Jurisdiction.GLOBAL);
-    }
+
     
     return period;
-  }
+
 
   private async getExpiredRecords(): Promise<RetentionRecord[]> {
 
@@ -352,7 +356,7 @@ export class DataRetentionFrameworkService {
     
     const result = await this.db.query(query);
     return result.rows;
-  }
+
 
   private async getRecordsForArchiving(): Promise<RetentionRecord[]> {
 
@@ -368,7 +372,7 @@ export class DataRetentionFrameworkService {
     
     const result = await this.db.query(query, [archiveDate]);
     return result.rows;
-  }
+
 
   private async getRecordsForReview(): Promise<RetentionRecord[]> {
 
@@ -381,21 +385,21 @@ export class DataRetentionFrameworkService {
     
     const result = await this.db.query(query);
     return result.rows;
-  }
+
 
   private async archiveData(record: RetentionRecord): Promise<void> {
 
     // Implementation would move data to archive storage
     // This is a placeholder for the actual archiving logic
     console.log(`Archiving data for record: ${record.recordId}`);
-  }
+
 
   private async deleteData(record: RetentionRecord): Promise<void> {
 
     // Implementation would perform actual data deletion
     // This is a placeholder for the actual deletion logic
     console.log(`Deleting data for record: ${record.recordId}`);
-  }
+
 
   private async saveRetentionRecord(record: RetentionRecord): Promise<void> {
 
@@ -419,7 +423,7 @@ export class DataRetentionFrameworkService {
       record.status,
       JSON.stringify(record.exceptions)
     ]);
-  }
+
 
   private async updateRetentionRecord(record: RetentionRecord): Promise<void> {
 
@@ -439,14 +443,14 @@ export class DataRetentionFrameworkService {
       record.reviewedBy,
       record.recordId
     ]);
-  }
+
 
   private async getRetentionRecord(recordId: string): Promise<RetentionRecord | null> {
 
     const query = 'SELECT * FROM data_retention_records WHERE record_id = $1';
     const result = await this.db.query(query, [recordId]);
     return result.rows[0] || null;
-  }
+
 
   private async saveRetentionJob(job: RetentionJob): Promise<void> {
 
@@ -467,7 +471,7 @@ export class DataRetentionFrameworkService {
       job.recordsArchived,
       JSON.stringify(job.errors)
     ]);
-  }
+
 
   private async updateRetentionJob(job: RetentionJob): Promise<void> {
 
@@ -489,14 +493,14 @@ export class DataRetentionFrameworkService {
       JSON.stringify(job.errors),
       job.jobId
     ]);
-  }
+
 
   private async getRetentionJob(jobId: string): Promise<RetentionJob | null> {
 
     const query = 'SELECT * FROM retention_jobs WHERE job_id = $1';
     const result = await this.db.query(query, [jobId]);
     return result.rows[0] || null;
-  }
+
 
   private async logRetentionEvent(
     eventType: string,
@@ -513,8 +517,7 @@ export class DataRetentionFrameworkService {
         category: record.category,
         status: record.status,
         ...additionalData
-  }
+
       timestamp: new Date()
     });
-  }
-}
+

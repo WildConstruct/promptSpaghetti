@@ -13,15 +13,15 @@ import {
   SecurityEvent,
   SecurityEventType,
   SecurityEventSeverity
-} from './SecurityIntelligenceDataPipeline';
+ from './SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
 import { PerformanceMonitoringService } from '../analytics/PerformanceMonitoringService';
 import { DiagnosticService } from '../admin/DiagnosticService';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 
-}
-}
+
+
 export interface SecurityIntelligenceDashboardConfig {
   dashboard: {
     enabled: boolean;
@@ -31,8 +31,9 @@ export interface SecurityIntelligenceDashboardConfig {
     historical_data_retention_days: number;
     cache_ttl_seconds: number;
     max_concurrent_dashboards: number;
-}
-}
+
+
+
   };
   analytics: {
     enabled: boolean;
@@ -76,10 +77,10 @@ export interface SecurityIntelligenceDashboardConfig {
     unified_navigation: boolean;
     shared_authentication: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface DashboardWidget {
   id: string;
   type: DashboardWidgetType;
@@ -95,9 +96,10 @@ export interface DashboardWidget {
   permissions: string[];
   created_at: number;
   updated_at: number;
-}
-}
-}
+
+
+
+
 
 export enum DashboardWidgetType {
   THREAT_OVERVIEW = 'threat_overview',
@@ -112,20 +114,21 @@ export enum DashboardWidgetType {
   USER_BEHAVIOR_ANALYTICS = 'user_behavior_analytics',
   NETWORK_SECURITY_OVERVIEW = 'network_security_overview',
   MALWARE_ANALYSIS = 'malware_analysis'
-}
 
-}
-}
+
+
+
 export interface WidgetPosition {
   x: number;
   y: number;
   z_index: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface WidgetSize {
   width: number;
   height: number;
@@ -133,12 +136,13 @@ export interface WidgetSize {
   min_height: number;
   max_width: number;
   max_height: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VisualizationConfig {
   chart_type: ChartType;
   color_scheme: string;
@@ -147,9 +151,10 @@ export interface VisualizationConfig {
   axis_configuration: AxisConfiguration;
   legend_configuration: LegendConfiguration;
   tooltip_configuration: TooltipConfiguration;
-}
-}
-}
+
+
+
+
 
 export enum ChartType {
   LINE_CHART = 'line_chart',
@@ -162,10 +167,10 @@ export enum ChartType {
   SANKEY_DIAGRAM = 'sankey_diagram',
   TREEMAP = 'treemap',
   RADAR_CHART = 'radar_chart'
-}
 
-}
-}
+
+
+
 export interface DashboardFilter {
   id: string;
   name: string;
@@ -174,9 +179,10 @@ export interface DashboardFilter {
   operator: FilterOperator;
   value: unknown;
   enabled: boolean;
-}
-}
-}
+
+
+
+
 
 export enum FilterType {
   DATE_RANGE = 'date_range',
@@ -185,7 +191,7 @@ export enum FilterType {
   TEXT_INPUT = 'text_input',
   NUMERIC_RANGE = 'numeric_range',
   BOOLEAN = 'boolean'
-}
+
 
 export enum FilterOperator {
   EQUALS = 'equals',
@@ -196,10 +202,10 @@ export enum FilterOperator {
   IN = 'in',
   NOT_IN = 'not_in',
   BETWEEN = 'between'
-}
 
-}
-}
+
+
+
 export interface SecurityAnalytics {
   threat_metrics: ThreatMetrics;
   security_metrics: SecurityMetrics;
@@ -207,12 +213,13 @@ export interface SecurityAnalytics {
   compliance_metrics: ComplianceMetrics;
   risk_metrics: RiskMetrics;
   operational_metrics: OperationalMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatMetrics {
   total_threats_detected: number;
   threats_by_severity: Record<SecurityEventSeverity, number>;
@@ -222,12 +229,13 @@ export interface ThreatMetrics {
   threat_intelligence_matches: number;
   false_positive_rate: number;
   mean_time_to_detection: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityMetrics {
   security_events_per_hour: number;
   incident_response_times: ResponseTimeMetrics;
@@ -236,24 +244,26 @@ export interface SecurityMetrics {
   compliance_score: number;
   risk_exposure_level: RiskLevel;
   security_awareness_score: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatTrend {
   timestamp: number;
   threat_count: number;
   severity_distribution: Record<SecurityEventSeverity, number>;
   prediction: number;
   confidence: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ThreatSource {
   source_ip: string;
   country: string;
@@ -261,23 +271,25 @@ export interface ThreatSource {
   threat_types: string[];
   risk_score: number;
   last_seen: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResponseTimeMetrics {
   mean_time_to_detection: number;
   mean_time_to_response: number;
   mean_time_to_containment: number;
   mean_time_to_resolution: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface VulnerabilityMetrics {
   total_vulnerabilities: number;
   critical_vulnerabilities: number;
@@ -286,19 +298,20 @@ export interface VulnerabilityMetrics {
   low_vulnerabilities: number;
   patch_compliance_rate: number;
   vulnerability_age_distribution: Record<string, number>;
-}
-}
-}
+
+
+
+
 
 export enum RiskLevel {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
   CRITICAL = 'critical'
-}
 
-}
-}
+
+
+
 export interface DashboardMetrics {
   active_dashboards: number;
   total_widgets: number;
@@ -306,55 +319,60 @@ export interface DashboardMetrics {
   query_performance: QueryPerformanceMetrics;
   user_engagement: UserEngagementMetrics;
   system_resource_usage: ResourceUsageMetrics;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface QueryPerformanceMetrics {
   average_query_time_ms: number;
   slow_queries_count: number;
   cache_hit_rate: number;
   data_freshness_ms: number;
   concurrent_queries: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface UserEngagementMetrics {
   active_users: number;
   session_duration_avg: number;
   dashboard_views: number;
   widget_interactions: number;
   export_requests: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ResourceUsageMetrics {
   cpu_utilization_percent: number;
   memory_utilization_percent: number;
   network_bandwidth_mbps: number;
   storage_usage_gb: number;
   database_connections: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface InteractiveFeature {
   type: InteractionType;
   enabled: boolean;
   configuration: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export enum InteractionType {
   DRILL_DOWN = 'drill_down',
@@ -364,19 +382,20 @@ export enum InteractionType {
   HIGHLIGHT = 'highlight',
   TOOLTIP = 'tooltip',
   CLICK_TO_INVESTIGATE = 'click_to_investigate'
-}
 
-}
-}
+
+
+
 export interface AxisConfiguration {
   x_axis: AxisSettings;
   y_axis: AxisSettings;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AxisSettings {
   label: string;
   scale_type: ScaleType;
@@ -384,50 +403,53 @@ export interface AxisSettings {
   max_value?: number;
   format: string;
   grid_lines: boolean;
-}
-}
-}
+
+
+
+
 
 export enum ScaleType {
   LINEAR = 'linear',
   LOGARITHMIC = 'logarithmic',
   TIME = 'time',
   CATEGORICAL = 'categorical'
-}
 
-}
-}
+
+
+
 export interface LegendConfiguration {
   enabled: boolean;
   position: LegendPosition;
   orientation: LegendOrientation;
   max_items: number;
-}
-}
-}
+
+
+
+
 
 export enum LegendPosition {
   TOP = 'top',
   BOTTOM = 'bottom',
   LEFT = 'left',
   RIGHT = 'right'
-}
+
 
 export enum LegendOrientation {
   HORIZONTAL = 'horizontal',
   VERTICAL = 'vertical'
-}
 
-}
-}
+
+
+
 export interface TooltipConfiguration {
   enabled: boolean;
   format: string;
   fields: string[];
   delay_ms: number;
-}
-}
-}
+
+
+
+
 
 export class SecurityIntelligenceDashboard extends EventEmitter {
   private config: SecurityIntelligenceDashboardConfig;
@@ -465,7 +487,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     this.performanceMonitoringService = performanceMonitoringService;
     this.diagnosticService = diagnosticService;
     this.healthCheckFramework = healthCheckFramework;
-  }
+
 
   async initialize(): Promise<void> {
 
@@ -475,12 +497,12 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       // Initialize Epic 1 Analytics Integration
       if (this.config.epic_integration.epic1_analytics_enabled) {
         await this.initializeEpic1Integration();
-      }
+
 
       // Initialize Epic 17 Admin Integration
       if (this.config.epic_integration.epic17_admin_enabled) {
         await this.initializeEpic17Integration();
-      }
+
 
       // Initialize dashboard services
       await this.initializeDashboardServices();
@@ -488,7 +510,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       // Start real-time data subscriptions
       if (this.config.dashboard.real_time_updates) {
         await this.startRealTimeSubscriptions();
-      }
+
 
       // Initialize health checks
       await this.initializeHealthChecks();
@@ -496,12 +518,11 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       this.isInitialized = true;
       this.emit('dashboard_initialized');
       console.log('Security Intelligence Dashboard initialized successfully');
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to initialize Security Intelligence Dashboard:', error);
       throw error;
-    }
-  }
+
+
 
   private async initializeEpic1Integration(): Promise<void> {
 
@@ -513,7 +534,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         dashboard_version: '1.0.0',
         integration_type: 'epic1_analytics',
         timestamp: Date.now()
-      }
+
     });
 
     // Initialize performance monitoring
@@ -524,9 +545,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       tags: {
         component: 'security_intelligence_dashboard',
         integration: 'epic1'
-      }
+
     });
-  }
+
 
   private async initializeEpic17Integration(): Promise<void> {
 
@@ -541,7 +562,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           healthy: status.overall_health === 'healthy',
           details: status
         };
-  }
+
       interval_ms: 30000,
       timeout_ms: 5000,
       critical: true
@@ -554,10 +575,10 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       category: 'security_intelligence',
       collector: async () => {
         return await this.collectDiagnostics();
-  }
+
       schedule: '*/5 * * * *'
     });
-  }
+
 
   private async initializeDashboardServices(): Promise<void> {
 
@@ -570,7 +591,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     setInterval(async () => {
       await this.collectDashboardMetrics();
     }, this.config.dashboard.refresh_interval_ms);
-  }
+
 
   private async startRealTimeSubscriptions(): Promise<void> {
 
@@ -583,7 +604,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     this.dataPipeline.on('threat_intelligence_updated', (intelligence: unknown) => {
       this.handleThreatIntelligenceUpdate(intelligence);
     });
-  }
+
 
   private async initializeHealthChecks(): Promise<void> {
 
@@ -592,9 +613,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       const health = await this.performHealthCheck();
       if (health.overall_health !== 'healthy') {
         this.emit('dashboard_health_warning', health);
-      }
+
     }, 30000);
-  }
+
 
   async createDashboard(userId: string, name: string, widgets: DashboardWidget[]): Promise<string> {
 
@@ -604,7 +625,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       // Validate widgets
       for (const widget of widgets) {
         await this.validateWidget(widget);
-      }
+
 
       // Store dashboard configuration
       this.dashboardCache.set(dashboardId, widgets);
@@ -620,27 +641,26 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
             dashboard_name: name,
             widget_count: widgets.length,
             timestamp: Date.now()
-          }
+
         });
-      }
+
 
       this.emit('dashboard_created', { dashboardId, userId, name, widgets });
       return dashboardId;
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to create dashboard:', error);
       throw error;
-    }
-  }
+
+
 
   async getDashboard(dashboardId: string): Promise<DashboardWidget[]> {
 
     const widgets = this.dashboardCache.get(dashboardId);
     if (!widgets) {
       throw new Error(`Dashboard not found: ${dashboardId}`);
-    }
+
     return widgets;
-  }
+
 
   async updateDashboard(dashboardId: string, widgets: DashboardWidget[]): Promise<void> {
 
@@ -648,18 +668,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       // Validate widgets
       for (const widget of widgets) {
         await this.validateWidget(widget);
-      }
+
 
       // Update dashboard configuration
       this.dashboardCache.set(dashboardId, widgets);
 
       this.emit('dashboard_updated', { dashboardId, widgets });
-
-    } catch (error) {
+ catch (error) {
       console.error('Failed to update dashboard:', error);
       throw error;
-    }
-  }
+
+
 
   async deleteDashboard(dashboardId: string): Promise<void> {
 
@@ -670,10 +689,10 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     if (subscription) {
       clearInterval(subscription);
       this.activeSubscriptions.delete(dashboardId);
-    }
+
 
     this.emit('dashboard_deleted', { dashboardId });
-  }
+
 
   async getWidgetData(widgetId: string, widget: DashboardWidget, filters: DashboardFilter[] = []): Promise<unknown> {
 
@@ -683,7 +702,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     const cached = this.queryCache.get(cacheKey);
     if (cached && (Date.now() - cached.timestamp) < (this.config.dashboard.cache_ttl_seconds * 1000)) {
       return cached.data;
-    }
+
 
     try {
       const startTime = Date.now();
@@ -729,7 +748,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           break;
         default:
           throw new Error(`Unsupported widget type: ${widget.type}`);
-      }
+
 
       // Cache the result
       this.queryCache.set(cacheKey, { data, timestamp: Date.now() });
@@ -744,17 +763,16 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           tags: {
             widget_type: widget.type,
             widget_id: widgetId
-          }
+
         });
-      }
+
 
       return data;
-
-    } catch (error) {
+ catch (error) {
       console.error(`Failed to get widget data for ${widgetId}:`, error);
       throw error;
-    }
-  }
+
+
 
   private async getThreatOverviewData(filters: DashboardFilter[]): Promise<ThreatMetrics> {
 
@@ -766,7 +784,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         [SecurityEventSeverity.HIGH]: 156,
         [SecurityEventSeverity.MEDIUM]: 489,
         [SecurityEventSeverity.LOW]: 579
-  }
+
       threats_by_type: {
         [SecurityEventType.NETWORK_INTRUSION]: 234,
         [SecurityEventType.MALWARE_DETECTION]: 198,
@@ -780,7 +798,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         [SecurityEventType.PRIVILEGE_ESCALATION]: 0,
         [SecurityEventType.SUSPICIOUS_ACTIVITY]: 0,
         [SecurityEventType.THREAT_INTELLIGENCE_MATCH]: 0
-  }
+
       threat_trends: [
         { timestamp: Date.now() - 86400000, threat_count: 1156, severity_distribution: { [SecurityEventSeverity.CRITICAL]: 19, [SecurityEventSeverity.HIGH]: 142, [SecurityEventSeverity.MEDIUM]: 465, [SecurityEventSeverity.LOW]: 530 }, prediction: 1200, confidence: 0.85 },
         { timestamp: Date.now() - 43200000, threat_count: 1201, severity_distribution: { [SecurityEventSeverity.CRITICAL]: 21, [SecurityEventSeverity.HIGH]: 149, [SecurityEventSeverity.MEDIUM]: 477, [SecurityEventSeverity.LOW]: 554 }, prediction: 1250, confidence: 0.87 },
@@ -794,7 +812,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       false_positive_rate: 0.034,
       mean_time_to_detection: 127000
     };
-  }
+
 
   private async getSecurityEventsTimelineData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -810,9 +828,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         medium_events: Math.floor(Math.random() * 30) + 15,
         low_events: Math.floor(Math.random() * 50) + 25
       });
-    }
+
     return events.reverse();
-  }
+
 
   private async getThreatIntelligenceMapData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -834,7 +852,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         { vector: 'Other', count: 147, percentage: 11.8 }
       ]
     };
-  }
+
 
   private async getIncidentStatusBoardData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -853,9 +871,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         low_incidents: 5,
         average_resolution_time: 14400000,
         incidents_resolved_today: 5
-      }
+
     };
-  }
+
 
   private async getRiskAssessmentMatrixData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -874,7 +892,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         { asset: 'Email Server', risk_type: 'Phishing Attack', risk_score: 8.1, mitigation_status: 'completed' }
       ]
     };
-  }
+
 
   private async getComplianceDashboardData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -892,7 +910,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         { control: 'Audit Logging', violation_count: 12, severity: 'low', last_violation: Date.now() - 259200000 }
       ]
     };
-  }
+
 
   private async getPerformanceMetricsData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -903,15 +921,15 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         memory_utilization: 72.1,
         disk_utilization: 45.8,
         network_throughput: 156.7
-  }
+
       security_performance: {
         events_processed_per_second: 8947,
         average_processing_latency: 127,
         threat_detection_accuracy: 94.8,
         false_positive_rate: 3.4
-      }
+
     };
-  }
+
 
   private async getAlertManagementData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -925,14 +943,14 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         low_alerts: 121,
         acknowledged_alerts: 234,
         resolved_alerts: 189
-  }
+
       recent_alerts: [
         { id: 'ALT-001', title: 'Suspicious Login Activity', severity: 'high', timestamp: Date.now() - 1800000, status: 'new' },
         { id: 'ALT-002', title: 'Malware Signature Match', severity: 'critical', timestamp: Date.now() - 3600000, status: 'acknowledged' },
         { id: 'ALT-003', title: 'Unusual Data Transfer', severity: 'medium', timestamp: Date.now() - 5400000, status: 'investigating' }
       ]
     };
-  }
+
 
   private async getAssetSecurityStatusData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -949,9 +967,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         patch_compliance: 94.1,
         configuration_compliance: 89.7,
         vulnerability_score: 82.5
-      }
+
     };
-  }
+
 
   private async getUserBehaviorAnalyticsData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -967,9 +985,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         medium_risk_users: 89,
         high_risk_users: 23,
         critical_risk_users: 4
-      }
+
     };
-  }
+
 
   private async getNetworkSecurityOverviewData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -986,9 +1004,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         suspicious_traffic_gb: 12.3,
         blocked_connections: 234,
         allowed_connections: 15678
-      }
+
     };
-  }
+
 
   private async getMalwareAnalysisData(filters: DashboardFilter[]): Promise<unknown> {
 
@@ -1005,30 +1023,30 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         suspicious_samples: 156,
         clean_samples: 844,
         analysis_success_rate: 98.9
-      }
+
     };
-  }
+
 
   private async validateWidget(widget: DashboardWidget): Promise<void> {
 
     // Validate widget configuration
     if (!widget.id || !widget.type || !widget.title) {
       throw new Error('Widget must have id, type, and title');
-    }
+
 
     if (!Object.values(DashboardWidgetType).includes(widget.type)) {
       throw new Error(`Invalid widget type: ${widget.type}`);
-    }
+
 
     // Validate position and size
     if (widget.position.x < 0 || widget.position.y < 0) {
       throw new Error('Widget position must be non-negative');
-    }
+
 
     if (widget.size.width <= 0 || widget.size.height <= 0) {
       throw new Error('Widget size must be positive');
-    }
-  }
+
+
 
   private handleRealTimeSecurityEvent(event: SecurityEvent): void {
     // Broadcast real-time security event to connected dashboards
@@ -1042,7 +1060,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
 
     // Invalidate relevant cache entries
     this.invalidateCache(['threat_overview', 'security_events_timeline', 'alert_management']);
-  }
+
 
   private handleThreatIntelligenceUpdate(intelligence: unknown): void {
     // Broadcast threat intelligence update to connected dashboards
@@ -1050,17 +1068,17 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
 
     // Invalidate relevant cache entries
     this.invalidateCache(['threat_intelligence_map', 'threat_overview']);
-  }
+
 
   private invalidateCache(widgetTypes: string[]): void {
     const keysToDelete: string[] = [];
     for (const [key] of this.queryCache) {
       if (widgetTypes.some(type => key.includes(type))) {
         keysToDelete.push(key);
-      }
-    }
+
+
     keysToDelete.forEach(key => this.queryCache.delete(key));
-  }
+
 
   private cleanupCache(): void {
     const now = Date.now();
@@ -1069,9 +1087,9 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     for (const [key, value] of this.queryCache) {
       if (now - value.timestamp > ttl) {
         this.queryCache.delete(key);
-      }
-    }
-  }
+
+
+
 
   private async collectDashboardMetrics(): Promise<void> {
 
@@ -1085,21 +1103,21 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         cache_hit_rate: 0.78,
         data_freshness_ms: 2345,
         concurrent_queries: 23
-  }
+
       user_engagement: {
         active_users: 45,
         session_duration_avg: 1234567,
         dashboard_views: 234,
         widget_interactions: 1567,
         export_requests: 23
-  }
+
       system_resource_usage: {
         cpu_utilization_percent: 67.5,
         memory_utilization_percent: 72.1,
         network_bandwidth_mbps: 156.7,
         storage_usage_gb: 2345.6,
         database_connections: 23
-      }
+
     };
 
     // Send metrics to Epic 1 Analytics
@@ -1109,10 +1127,10 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         category: 'security_intelligence',
         metadata: metrics
       });
-    }
+
 
     this.emit('dashboard_metrics_collected', metrics);
-  }
+
 
   async getSecurityAnalytics(timeRange: { start: number; end: number }): Promise<SecurityAnalytics> {
 
@@ -1126,7 +1144,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           mean_time_to_response: 456000,
           mean_time_to_containment: 1234000,
           mean_time_to_resolution: 3456000
-  }
+
         security_control_effectiveness: 94.8,
         vulnerability_metrics: {
           total_vulnerabilities: 234,
@@ -1140,12 +1158,12 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
             '31-90_days': 45,
             '91-180_days': 23,
             '180+_days': 10
-          }
-  }
+
+
         compliance_score: 89.7,
         risk_exposure_level: RiskLevel.MEDIUM,
         security_awareness_score: 87.3
-  }
+
       performance_metrics: {
         query_performance: {
           average_query_time_ms: 156.7,
@@ -1153,22 +1171,22 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           cache_hit_rate: 0.78,
           data_freshness_ms: 2345,
           concurrent_queries: 23
-  }
+
         user_engagement: {
           active_users: 45,
           session_duration_avg: 1234567,
           dashboard_views: 234,
           widget_interactions: 1567,
           export_requests: 23
-  }
+
         system_resource_usage: {
           cpu_utilization_percent: 67.5,
           memory_utilization_percent: 72.1,
           network_bandwidth_mbps: 156.7,
           storage_usage_gb: 2345.6,
           database_connections: 23
-        }
-  }
+
+
       compliance_metrics: {
         overall_compliance_score: 89.7,
         framework_scores: {
@@ -1176,10 +1194,10 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           'GDPR': 89.2,
           'HIPAA': 96.8,
           'PCI_DSS': 87.1
-  }
+
         violation_count: 19,
         remediation_progress: 0.76
-  }
+
       risk_metrics: {
         overall_risk_score: 6.8,
         risk_distribution: {
@@ -1187,18 +1205,18 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
           [RiskLevel.HIGH]: 23,
           [RiskLevel.MEDIUM]: 89,
           [RiskLevel.LOW]: 234
-  }
+
         trend: 'decreasing',
         mitigation_effectiveness: 0.84
-  }
+
       operational_metrics: {
         uptime_percentage: 99.97,
         performance_score: 94.2,
         availability_score: 99.8,
         reliability_score: 96.5
-      }
+
     };
-  }
+
 
   async exportDashboard(dashboardId: string, format: string = 'json'): Promise<string> {
 
@@ -1213,8 +1231,8 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         return csvData;
       default:
         throw new Error(`Unsupported export format: ${format}`);
-    }
-  }
+
+
 
   private convertDashboardToCSV(widgets: DashboardWidget[]): string {
     const headers = ['Widget ID', 'Type', 'Title', 'Position X', 'Position Y', 'Width', 'Height', 'Created At'];
@@ -1230,7 +1248,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     ]);
     
     return [headers, ...rows].map(row => row.join(',')).join('\n');
-  }
+
 
   private async performHealthCheck(): Promise<{ overall_health: string; details: Record<string, unknown> }> {
     const health = {
@@ -1248,11 +1266,11 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       overall_health: overallHealth,
       details: health
     };
-  }
+
 
   async getHealthStatus(): Promise<Record<string, unknown>> {
     return await this.performHealthCheck();
-  }
+
 
   private async collectDiagnostics(): Promise<Record<string, unknown>> {
     return {
@@ -1261,10 +1279,10 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         dashboard_cache_size: this.dashboardCache.size,
         query_cache_size: this.queryCache.size,
         active_subscriptions: this.activeSubscriptions.size
-  }
+
       performance_metrics: await this.getDashboardMetrics(),
       health_status: await this.performHealthCheck(};
-  }
+
 
   async getDashboardMetrics(): Promise<DashboardMetrics> {
 
@@ -1278,23 +1296,23 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
         cache_hit_rate: 0.78,
         data_freshness_ms: 2345,
         concurrent_queries: 23
-  }
+
       user_engagement: {
         active_users: 45,
         session_duration_avg: 1234567,
         dashboard_views: 234,
         widget_interactions: 1567,
         export_requests: 23
-  }
+
       system_resource_usage: {
         cpu_utilization_percent: 67.5,
         memory_utilization_percent: 72.1,
         network_bandwidth_mbps: 156.7,
         storage_usage_gb: 2345.6,
         database_connections: 23
-      }
+
     };
-  }
+
 
   getStatus(): Record<string, unknown> {
     return {
@@ -1304,7 +1322,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
       active_subscriptions: this.activeSubscriptions.size,
       configuration: this.config
     };
-  }
+
 
   async shutdown(): Promise<void> {
 
@@ -1313,7 +1331,7 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     // Clear all intervals and subscriptions
     for (const [, subscription] of this.activeSubscriptions) {
       clearInterval(subscription);
-    }
+
     this.activeSubscriptions.clear();
 
     // Clear caches
@@ -1326,5 +1344,4 @@ export class SecurityIntelligenceDashboard extends EventEmitter {
     this.isInitialized = false;
     this.emit('dashboard_shutdown');
     console.log('Security Intelligence Dashboard shutdown complete');
-  }
-}
+

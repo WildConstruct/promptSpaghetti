@@ -13,8 +13,8 @@ import { AuditService } from '../auth/services/AuditService';
 // User Status Types
 export type UserStatus = 'active' | 'suspended' | 'deleted' | 'locked' | 'pending_activation';
 
-}
-}
+
+
 export interface UserStatusInfo {
   userId: string;
   email: string;
@@ -29,12 +29,13 @@ export interface UserStatusInfo {
   lastLogin?: string;
   createdAt: string;
   roles: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StatusChangeRequest {
   userId: string;
   newStatus: UserStatus;
@@ -46,12 +47,13 @@ export interface StatusChangeRequest {
   bulkOperation?: boolean;
   ipAddress?: string;
   userAgent?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StatusChangeResult {
   success: boolean;
   userId: string;
@@ -61,12 +63,13 @@ export interface StatusChangeResult {
   expiresAt?: string;
   auditLogId?: string;
   error?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StatusChangeAuditLog {
   id: string;
   userId: string;
@@ -80,12 +83,13 @@ export interface StatusChangeAuditLog {
   ipAddress?: string;
   userAgent?: string;
   bulkOperationId?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface StatusStatistics {
   totalUsers: number;
   byStatus: Record<UserStatus, number>;
@@ -93,18 +97,19 @@ export interface StatusStatistics {
     last24Hours: number;
     last7Days: number;
     last30Days: number;
-}
-}
+
+
+
   };
   topChangeReasons: Array<{
     reason: string;
     count: number;
-  }>;
+>;
   automatedVsManual: {
     automated: number;
     manual: number;
   };
-}
+
 
 export class UserStatusService {
   private database: DatabaseService;
@@ -113,7 +118,7 @@ export class UserStatusService {
   constructor(database: DatabaseService, auditService: AuditService) {
     this.database = database;
     this.auditService = auditService;
-  }
+
 
   // Get user status information
   async getUserStatus(userId: string): Promise<UserStatusInfo | null> {
@@ -147,7 +152,7 @@ export class UserStatusService {
       
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       const row = result.rows[0];
       return {
@@ -165,17 +170,17 @@ export class UserStatusService {
         createdAt: row.createdat,
         roles: row.roles || []
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting user status:', error);
       throw new Error('Failed to retrieve user status');
-    }
-  }
+
+
 
   // Get multiple users' status information
   async getUsersStatus(userIds?: string[], limit = 100, offset = 0): Promise<{
     users: UserStatusInfo[];
     totalCount: number;
-  }> {
+> {
 
     try {
       let whereClause = '';
@@ -184,7 +189,7 @@ export class UserStatusService {
       if (userIds && userIds.length > 0) {
         whereClause = 'WHERE u.id = ANY($3)';
         queryParams.push(userIds);
-      }
+
 
       const countQuery = `
         SELECT COUNT(*) as total
@@ -243,11 +248,11 @@ export class UserStatusService {
         users,
         totalCount: parseInt(countResult.rows[0].total)
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting users status:', error);
       throw new Error('Failed to retrieve users status');
-    }
-  }
+
+
 
   // Change user status
   async changeUserStatus(request: StatusChangeRequest): Promise<StatusChangeResult> {
@@ -263,7 +268,7 @@ export class UserStatusService {
       
       if (currentStatusResult.rows.length === 0) {
         throw new Error('User not found');
-      }
+
 
       const oldStatus = currentStatusResult.rows[0].status;
       
@@ -329,7 +334,7 @@ export class UserStatusService {
           expiresAt: request.expiresAt,
           bulkOperation: request.bulkOperation,
           auditLogId
-  }
+
         ipAddress: request.ipAddress,
         userAgent: request.userAgent,
         severity: this.getStatusChangeSeverity(oldStatus, request.newStatus)
@@ -345,7 +350,7 @@ export class UserStatusService {
           expiresAt: request.expiresAt,
           changedBy: request.changedBy
         });
-      }
+
 
       await client.query('COMMIT');
 
@@ -358,8 +363,7 @@ export class UserStatusService {
         expiresAt: request.expiresAt,
         auditLogId
       };
-
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       console.error('Error changing user status:', error);
       
@@ -371,10 +375,10 @@ export class UserStatusService {
         effectiveAt: new Date().toISOString(),
         error: error instanceof Error ? error.message : 'Unknown error'
       };
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Bulk status change
   async bulkChangeUserStatus(requests: StatusChangeRequest[]): Promise<StatusChangeResult[]> {
@@ -391,7 +395,7 @@ export class UserStatusService {
 
       const result = await this.changeUserStatus(bulkRequest);
       results.push(result);
-    }
+
 
     // Log bulk operation summary
     const successCount = results.filter(r => r.success).length;
@@ -413,12 +417,12 @@ export class UserStatusService {
           newStatus: r.newStatus,
           error: r.error
         }))
-  }
+
       severity: failureCount > 0 ? 'warning' : 'info'
     });
 
     return results;
-  }
+
 
   // Get status change history for a user
   async getUserStatusHistory(userId: string, limit = 50): Promise<StatusChangeAuditLog[]> {
@@ -460,11 +464,11 @@ export class UserStatusService {
         userAgent: row.useragent,
         bulkOperationId: row.bulkoperationid
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting user status history:', error);
       throw new Error('Failed to retrieve status history');
-    }
-  }
+
+
 
   // Get status statistics
   async getStatusStatistics(): Promise<StatusStatistics> {
@@ -542,18 +546,18 @@ export class UserStatusService {
           last24Hours: parseInt(recentChanges.last24hours),
           last7Days: parseInt(recentChanges.last7days),
           last30Days: parseInt(recentChanges.last30days)
-  }
+
         topChangeReasons,
         automatedVsManual: {
           automated: parseInt(automation.automated),
           manual: parseInt(automation.manual)
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting status statistics:', error);
       throw new Error('Failed to retrieve status statistics');
-    }
-  }
+
+
 
   // Process expired status locks/suspensions
   async processExpiredStatuses(): Promise<{ processed: number; errors: number }> {
@@ -589,27 +593,27 @@ export class UserStatusService {
 
           if (statusChangeResult.success) {
             processed++;
-          } else {
+ else {
             errors++;
             console.error(`Failed to restore user ${user.id}:`, statusChangeResult.error);
-          }
-        } catch (error) {
+
+ catch (error) {
           errors++;
           console.error(`Error processing expired status for user ${user.id}:`, error);
-        }
-      }
+
+
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       console.error('Error processing expired statuses:', error);
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
+
 
     return { processed, errors };
-  }
+
 
   // Private helper methods
   private async validateStatusChange(
@@ -621,22 +625,22 @@ export class UserStatusService {
     // Super admins can make any status change
     if (changedByRole === 'super_admin') {
       return;
-    }
+
 
     // Regular admins have restrictions
     if (changedByRole === 'admin') {
       if (newStatus === 'deleted') {
         throw new Error('Admins cannot permanently delete users');
-      }
+
       if (oldStatus === 'deleted') {
         throw new Error('Admins cannot restore deleted users');
-      }
+
       return;
-    }
+
 
     // Other roles cannot make status changes
     throw new Error('Insufficient permissions for status change');
-  }
+
 
   private async createStatusChangeAuditLog(log: Omit<StatusChangeAuditLog, 'id'>): Promise<string> {
 
@@ -656,21 +660,21 @@ export class UserStatusService {
 
     const result = await this.database.query(query, params);
     return result.rows[0].id;
-  }
+
 
   private getStatusChangeSeverity(oldStatus: UserStatus, newStatus: UserStatus): 'info' | 'warning' | 'critical' {
     if (newStatus === 'deleted') return 'critical';
     if (newStatus === 'locked' || newStatus === 'suspended') return 'warning';
     if (oldStatus === 'locked' || oldStatus === 'suspended') return 'info';
     return 'info';
-  }
+
 
   private async scheduleUserNotification(userId: string, notification: any): Promise<void> {
 
     // Implementation would integrate with notification service
     // For now, just log the notification intent
     console.log(`Scheduled notification for user ${userId}:`, notification);
-  }
-}
+
+
 
 export default UserStatusService;

@@ -10,7 +10,7 @@ import {
   LegalBasisType,
   WithdrawalType,
   WithdrawalScope
-} from '../services/PolicyAcceptanceTrackingService';
+ from '../services/PolicyAcceptanceTrackingService';
 import { z } from 'zod';
 
 // Request schemas
@@ -51,7 +51,7 @@ const RecordAcceptanceSchema = z.object({
       documentsViewed: z.array(z.string()).default([]),
       viewDuration: z.number().min(0),
       hesitationTime: z.number().min(0)
-  }
+
   }),
   consentData: z.object({
     consentId: z.string(),
@@ -191,24 +191,24 @@ interface AuthenticatedRequest extends FastifyRequest {
     email: string;
     roles: string[];
   };
-}
+
 
 interface RecordAcceptanceRequest extends AuthenticatedRequest {
   Body: z.infer<typeof RecordAcceptanceSchema>;
-}
+
 
 interface WithdrawConsentRequest extends AuthenticatedRequest {
   Body: z.infer<typeof WithdrawConsentSchema>;
-}
+
 
 interface ExportUserDataRequest extends AuthenticatedRequest {
   Params: { userId: string };
   Querystring: z.infer<typeof ExportUserDataSchema>;
-}
+
 
 interface UserConsentStatusRequest extends AuthenticatedRequest {
   Params: { userId: string };
-}
+
 
 export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
   // Get the policy acceptance tracking service from the DI container
@@ -223,7 +223,7 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Valid authentication token required'
         });
-      }
+
 
       const token = authHeader.slice(7);
       const user = await fastify.jwt.verify(token) as any;
@@ -233,15 +233,15 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           error: 'Unauthorized',
           message: 'Invalid authentication token'
         });
-      }
+
 
       request.user = user;
-    } catch (error) {
+ catch (error) {
       return reply.code(401).send({
         error: 'Unauthorized',
         message: 'Authentication failed'
       });
-    }
+
   };
 
   // Rate limiting configuration
@@ -266,12 +266,12 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           policyType: { 
             type: 'string',
             enum: ['PRIVACY_POLICY', 'TERMS_OF_SERVICE', 'COOKIE_POLICY', 'DATA_PROCESSING', 'MARKETING_CONSENT', 'RESEARCH_CONSENT']
-  }
+
           acceptanceType: { type: 'string', enum: ['INITIAL', 'RENEWAL', 'UPDATE', 'RECONFIRMATION'], default: 'INITIAL' },
           acceptanceMethod: { 
             type: 'string',
             enum: ['CLICK_THROUGH', 'ELECTRONIC_SIGNATURE', 'OPT_IN_CHECKBOX', 'DIGITAL_SIGNATURE', 'BIOMETRIC', 'TWO_FACTOR']
-  }
+
           acceptanceContext: {
             type: 'object',
             properties: {
@@ -290,12 +290,12 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                   documentsViewed: { type: 'array', items: { type: 'string' }, default: [] },
                   viewDuration: { type: 'number', minimum: 0 },
                   hesitationTime: { type: 'number', minimum: 0 }
-  }
+
                 required: ['timeOnPage', 'scrollPercentage', 'clicksBeforeAcceptance', 'viewDuration', 'hesitationTime']
-              }
-  }
+
+
             required: ['ipAddress', 'userAgent', 'sessionId', 'pageUrl', 'deviceFingerprint', 'interactionMetrics']
-  }
+
           consentData: {
             type: 'object',
             properties: {
@@ -312,10 +312,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                     required: { type: 'boolean' },
                     granted: { type: 'boolean' },
                     grantedAt: { type: 'string', format: 'date-time' }
-  }
+
                   required: ['consentId', 'purpose', 'dataTypes', 'required', 'granted']
-                }
-  }
+
+
               legalBasis: {
                 type: 'array',
                 items: {
@@ -326,10 +326,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                     regulation: { type: 'string' },
                     article: { type: 'string' },
                     justification: { type: 'string' }
-  }
+
                   required: ['basisType', 'description', 'regulation', 'justification']
-                }
-  }
+
+
               processingPurposes: { type: 'array', items: { type: 'object' } },
               dataCategories: { type: 'array', items: { type: 'string' } },
               retentionPeriod: { type: 'number', minimum: 1, default: 365 },
@@ -338,23 +338,23 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
               marketingConsent: { type: 'object' },
               cookieConsent: { type: 'object' },
               dataTransfers: { type: 'array', items: { type: 'object' }, default: [] }
-  }
+
             required: ['consentId', 'granularConsents', 'legalBasis', 'processingPurposes', 'dataCategories']
-  }
+
           metadata: { type: 'object', default: {} }
-  }
+
         required: ['policyId', 'policyVersion', 'policyType', 'acceptanceMethod', 'acceptanceContext', 'consentData']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             acceptanceId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: RecordAcceptanceRequest, reply: FastifyReply) => {
     try {
       const validatedBody = RecordAcceptanceSchema.parse(request.body);
@@ -374,22 +374,21 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
         acceptanceId: result.acceptanceId,
         message: 'Policy acceptance recorded successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error recording policy acceptance:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to record policy acceptance'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -418,24 +417,24 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                 scheduledAt: { type: 'string', format: 'date-time' },
                 status: { type: 'string', enum: ['SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'FAILED', 'SKIPPED'], default: 'SCHEDULED' },
                 evidence: { type: 'array', items: { type: 'string' }, default: [] }
-  }
+
               required: ['actionId', 'actionType', 'targetData', 'scheduledAt']
-  }
+
             default: []
-          }
-  }
+
+
         required: ['acceptanceId', 'withdrawalType', 'withdrawalScope', 'reason']
-  }
+
       response: {
         200: {
           type: 'object',
           properties: {
             withdrawalId: { type: 'string' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: WithdrawConsentRequest, reply: FastifyReply) => {
     try {
       const validatedBody = WithdrawConsentSchema.parse(request.body);
@@ -451,22 +450,21 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
         withdrawalId: result.withdrawalId,
         message: 'Consent withdrawal processed successfully'
       });
-
-    } catch (error) {
+ catch (error) {
       if (error instanceof z.ZodError) {
         reply.code(400).send({
           error: 'Validation Error',
           message: 'Invalid request data',
           details: error.errors
         });
-      } else {
+ else {
         fastify.log.error('Error processing consent withdrawal:', error);
         reply.code(500).send({
           error: 'Internal Server Error',
           message: 'Failed to process consent withdrawal'
         });
-      }
-    }
+
+
   });
 
   /**
@@ -481,9 +479,9 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-  }
+
         required: ['userId']
-  }
+
       response: {
         200: {
           type: 'object',
@@ -500,9 +498,9 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                   acceptanceType: { type: 'string' },
                   acceptedAt: { type: 'string', format: 'date-time' },
                   status: { type: 'string' }
-                }
-              }
-  }
+
+
+
             complianceFlags: {
               type: 'array',
               items: {
@@ -513,9 +511,9 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                   severity: { type: 'string' },
                   description: { type: 'string' },
                   raisedAt: { type: 'string', format: 'date-time' }
-                }
-              }
-  }
+
+
+
             riskScore: { type: 'number' },
             renewalRequests: {
               type: 'array',
@@ -526,13 +524,13 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
                   originalAcceptanceId: { type: 'string' },
                   scheduledDate: { type: 'string', format: 'date-time' },
                   renewalTrigger: { type: 'string' }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+
+
+
+
+
+
+
   }, async (request: UserConsentStatusRequest, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -543,7 +541,7 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Insufficient permissions to view this user\'s consent status'
         });
-      }
+
 
       const consentStatus = await policyAcceptanceService.getUserConsentStatus(userId);
       
@@ -572,14 +570,13 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           renewalTrigger: renewal.renewalTrigger
         }))
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting user consent status:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get user consent status'
       });
-    }
+
   });
 
   /**
@@ -594,15 +591,15 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
         type: 'object',
         properties: {
           userId: { type: 'string' }
-  }
+
         required: ['userId']
-  }
+
       querystring: {
         type: 'object',
         properties: {
           format: { type: 'string', enum: ['JSON', 'CSV', 'XML'], default: 'JSON' }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -611,10 +608,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
             acceptances: { type: 'array' },
             consents: { type: 'array' },
             withdrawals: { type: 'array' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: ExportUserDataRequest, reply: FastifyReply) => {
     try {
       const { userId } = request.params;
@@ -626,19 +623,18 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Insufficient permissions to export this user\'s data'
         });
-      }
+
 
       const exportData = await policyAcceptanceService.exportUserData(userId, format);
       
       reply.send(exportData);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error exporting user data:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to export user data'
       });
-    }
+
   });
 
   /**
@@ -656,10 +652,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
             processedRenewals: { type: 'number' },
             notificationsSent: { type: 'number' },
             message: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       // Check if user has admin role
@@ -668,7 +664,7 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Admin role required'
         });
-      }
+
 
       const result = await policyAcceptanceService.processConsentRenewals();
       
@@ -677,14 +673,13 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
         notificationsSent: result.notificationsSent,
         message: `Processed ${result.processedRenewals} renewals, sent ${result.notificationsSent} notifications`
       });
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error processing consent renewals:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to process consent renewals'
       });
-    }
+
   });
 
   /**
@@ -702,8 +697,8 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           endDate: { type: 'string', format: 'date-time' },
           policyTypes: { type: 'array', items: { type: 'string' } },
           flagTypes: { type: 'array', items: { type: 'string' } }
-        }
-  }
+
+
       response: {
         200: {
           type: 'object',
@@ -712,10 +707,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
             complianceMetrics: { type: 'object' },
             riskAnalysis: { type: 'object' },
             renewalMetrics: { type: 'object' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: AuthenticatedRequest, reply: FastifyReply) => {
     try {
       // Check if user has admin role
@@ -724,7 +719,7 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
           error: 'Forbidden',
           message: 'Admin role required'
         });
-      }
+
 
       const filters = request.query as any;
       if (filters.startDate) filters.dateRange = { start: new Date(filters.startDate), end: new Date(filters.endDate || Date.now()) };
@@ -732,14 +727,13 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
       const dashboard = await policyAcceptanceService.getComplianceDashboard(filters);
       
       reply.send(dashboard);
-
-    } catch (error) {
+ catch (error) {
       fastify.log.error('Error getting compliance dashboard:', error);
       reply.code(500).send({
         error: 'Internal Server Error',
         message: 'Failed to get compliance dashboard'
       });
-    }
+
   });
 
   /**
@@ -756,10 +750,10 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
             status: { type: 'string' },
             timestamp: { type: 'string', format: 'date-time' },
             version: { type: 'string' }
-          }
-        }
-      }
-    }
+
+
+
+
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     reply.send({
       status: 'healthy',
@@ -767,9 +761,8 @@ export async function policyAcceptanceTrackingRoutes(fastify: FastifyInstance) {
       version: '1.0.0'
     });
   });
-}
+
 
 // Register the plugin
 export default async function (fastify: FastifyInstance) {
   await fastify.register(policyAcceptanceTrackingRoutes, { prefix: '/api/policy-acceptance-tracking' });
-}

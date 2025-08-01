@@ -19,8 +19,8 @@
 import { EventEmitter } from 'events';
 
 }
-export interface CheckpointMetadata {
-    id: string;
+}
+export interface CheckpointMetadata { id: string;
     name: string;
     description?: string;
     timestamp: Date;
@@ -35,44 +35,40 @@ export interface CheckpointMetadata {
         nodeId: string;
         stepNumber: number;
         totalSteps: number;
-        elapsedTime: number;
+        elapsedTime: number }
 }
     };
 
 }
-export interface CheckpointData {
-    metadata: CheckpointMetadata;
+}
+export interface CheckpointData { metadata: CheckpointMetadata;
     state: {
         graphState: any;
         variables: Record<string, any>;
         executionHistory: any[];
         nodeStates: Record<string, any>;
-        settings: Record<string, any>;
+        settings: Record<string, any> }
 }
     };
-    validation: {
-        checksum: string;
+    validation: { checksum: string;
         stateHash: string;
         integrityScore: number;
         isValid: boolean;
-        validationErrors: string[];
-    };
+        validationErrors: string[] };
 
 }
-export interface CheckpointPolicy {
-    autoSave: {
+}
+export interface CheckpointPolicy { autoSave: {
         enabled: boolean;
         interval: number;
         maxAutoSaves: number;
-        triggerEvents: ('node_complete' | 'variable_change' | 'error' | 'manual')[];
+        triggerEvents: ('node_complete' | 'variable_change' | 'error' | 'manual')[] }
 }
     };
-    retention: {
-        maxCheckpoints: number;
+    retention: { maxCheckpoints: number;
         maxAge: number;
         compressionThreshold: number;
-        archiveAfter: number;
-    };
+        archiveAfter: number };
     recovery: {
         autoRecovery: boolean;
         recoveryTimeout: number;
@@ -81,36 +77,33 @@ export interface CheckpointPolicy {
   };
 
 }
-export interface CheckpointDiff {
-    checkpointId: string;
+}
+export interface CheckpointDiff { checkpointId: string;
     previousCheckpointId: string | null;
     changes: {
         type: 'added' | 'modified' | 'deleted';
         path: string;
         oldValue?: any;
         newValue?: any;
-        size: number;
+        size: number }
 }
     }[];
-    summary: {
-        additions: number;
+    summary: { additions: number;
         modifications: number;
         deletions: number;
         totalChanges: number;
-        impactScore: number;
-    };
+        impactScore: number };
 
 }
-export interface RecoveryOptions {
-    checkpointId: string;
+}
+export interface RecoveryOptions { checkpointId: string;
     preserveCurrentState: boolean;
     createBackup: boolean;
     validateBeforeRestore: boolean;
-    progressCallback?: (progress: number, step: string) => void;
-
+    progressCallback?: (progress: number, step: string) => void }
 }
-export interface CheckpointCompressionResult {
-    originalSize: number;
+}
+export interface CheckpointCompressionResult { originalSize: number;
     compressedSize: number;
     compressionRatio: number;
     algorithm: string;
@@ -126,29 +119,26 @@ export declare class CheckpointSystem extends EventEmitter {
     constructor(policy?: Partial<CheckpointPolicy>);
     createCheckpoint(state: any, metadata?: Partial<CheckpointMetadata>, options?: {)
         compress?: boolean;
-        validate?: boolean;
+        validate?: boolean }
 }
     }): Promise<string>;
     restoreCheckpoint(checkpointId: string, options?: Partial<RecoveryOptions>): Promise<any>;
     generateDiff(currentCheckpointId: string, previousCheckpointId?: string): Promise<CheckpointDiff>;
-    listCheckpoints(filters?: {)
+    listCheckpoints(filters?: { )
         tags?: string[];
         dateRange?: {
             start: Date;
-            end: Date;
-        };
+            end: Date };
         creator?: string;
         isAutomated?: boolean;
     }): CheckpointMetadata[];
     deleteCheckpoint(checkpointId: string, force?: boolean): Promise<boolean>;
-    getPerformanceMetrics(): {
-        totalCheckpoints: number;
+    getPerformanceMetrics(): { totalCheckpoints: number;
         totalStorageUsed: number;
         averageCompressionRatio: number;
         averageCreateTime: number;
         averageRestoreTime: number;
-        compressionSavings: number;
-    };
+        compressionSavings: number };
     setAutoSave(enabled: boolean, interval?: number): void;
     updatePolicy(policy: Partial<CheckpointPolicy>): void;
     destroy(): void;
@@ -176,8 +166,7 @@ export declare class CheckpointSystem extends EventEmitter {
     private generateChecksum;
     private generateHash;
 
-export declare class CheckpointManager {
-    private checkpointSystem;
+export declare class CheckpointManager { private checkpointSystem;
     private currentSessionId;
     constructor(policy?: Partial<CheckpointPolicy>);
     saveProgress(name?: string): Promise<string>;
@@ -187,7 +176,6 @@ export declare class CheckpointManager {
     private getCurrentState;
 declare const _default: {
     CheckpointSystem: typeof CheckpointSystem;
-    CheckpointManager: typeof CheckpointManager;
-};
+    CheckpointManager: typeof CheckpointManager };
 export default _default;
 //# sourceMappingURL=CheckpointSystem.d.ts.map

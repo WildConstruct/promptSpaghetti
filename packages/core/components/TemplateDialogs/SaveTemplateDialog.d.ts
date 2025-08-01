@@ -1,12 +1,13 @@
 import React from 'react';
 import { TemplateSaveData } from '../../types/TemplateTypes';
 }
-interface SaveTemplateDialogProps {
-    isOpen: boolean;
+}
+interface SaveTemplateDialogProps { isOpen: boolean;
     onClose: () => void;
-    onSave: (templateData: TemplateSaveData) => Promise<{,
+    onSave: (templateData: TemplateSaveData) => Promise<{ }
         success: boolean;
         error?: string;
+}
 }
     }>;
     initialData?: Partial<TemplateSaveData>;

@@ -1,7 +1,8 @@
 // Epic 16 Marketplace - Category Navigation Component
 import React from 'react';
 import './CategoryNav.css';
-}
+
+
 interface Category {
   id: string;,
   name: string;
@@ -11,19 +12,20 @@ interface Category {
   parent_id?: string;
   interface CategoryNavProps {
   categories: Category;,
-  selectedCategory: string | null;
+  selectedCategory: string | null;,
   onCategorySelect: (categoryId: string | null) => void;
   showIcons?: boolean;
   variant?: 'sidebar' | 'horizontal' | 'dropdown';
   className?: string;
-  export const CategoryNav: React.FC<CategoryNavProps> = ({,)
+  export const CategoryNav: React.FC<CategoryNavProps> = ({),
   categories,
   selectedCategory,
   onCategorySelect,
   showIcons = true,
   variant = 'sidebar',
   className = ''
-}
+
+
 }) => {
   // Group categories by parent
   const rootCategories = categories.filter(cat => !cat.parent_id);

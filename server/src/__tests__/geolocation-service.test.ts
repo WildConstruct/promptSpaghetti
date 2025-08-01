@@ -16,7 +16,7 @@ class MockDatabaseService {
     // Mock database operations for testing
     if (sql.includes('CREATE TABLE')) {
       return { rows: [] };
-    }
+
     
     if (sql.includes('INSERT INTO user_location_history')) {
       const [userId, locationKey, locationData] = params;
@@ -30,7 +30,7 @@ class MockDatabaseService {
         last_seen: new Date()
       });
       return { rows: [] };
-    }
+
 
     if (sql.includes('SELECT') && sql.includes('user_location_history')) {
       const userId = params[0];
@@ -46,7 +46,7 @@ class MockDatabaseService {
           is_typical: record.is_typical
         }))
       };
-    }
+
 
     if (sql.includes('UPDATE user_location_history')) {
       const [userId, locationKey, newFrequency, isTypical] = params;
@@ -57,22 +57,22 @@ class MockDatabaseService {
         record.frequency = newFrequency;
         record.is_typical = isTypical;
         record.last_seen = new Date();
-      }
+
       return { rows: [] };
-    }
+
 
     return { rows: [] };
-  }
+
 
   // Helper methods for testing
   setMockData(data: unknown) {
     this.mockData = data;
-  }
+
 
   getMockData() {
     return this.mockData;
-  }
-}
+
+
 
 class MockRedisService {
   private cache: Map<string, string> = new Map();
@@ -80,26 +80,26 @@ class MockRedisService {
   async setex(key: string, expiry: number, value: string): Promise<void> {
 
     this.cache.set(key, value);
-  }
+
 
   async get(key: string): Promise<string | null> {
 
     return this.cache.get(key) || null;
-  }
+
 
   // Helper methods for testing
   clearCache() {
     this.cache.clear();
-  }
+
 
   setCacheValue(key: string, value: string) {
     this.cache.set(key, value);
-  }
+
 
   getCacheSize() {
     return this.cache.size;
-  }
-}
+
+
 
 describe('GeolocationService', () => {
   let geolocationService: GeolocationService;
@@ -119,7 +119,7 @@ describe('GeolocationService', () => {
         requireMinimumConfidence: 0.7,
         newLocationThresholdKm: 100,
         typicalLocationUpdateThreshold: 5
-      }
+
     );
 
     // Mock fetch for testing
@@ -280,7 +280,7 @@ describe('GeolocationService', () => {
           is_typical: true,
           first_seen: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
           last_seen: new Date(Date.now() - 24 * 60 * 60 * 1000) // 1 day ago
-        }]
+]
       });
 
       // Second login - should be recognized
@@ -391,7 +391,7 @@ describe('GeolocationService', () => {
           is_typical: true,
           first_seen: new Date('2024-01-01'),
           last_seen: new Date('2024-01-15')
-        }]
+]
       });
 
       const result = await geolocationService.getUserLocationHistory(userId);
@@ -434,7 +434,7 @@ describe('GeolocationService', () => {
           is_typical: true,
           first_seen: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
           last_seen: new Date(Date.now() - 24 * 60 * 60 * 1000)
-        }]
+]
       });
 
       // Second location: Los Angeles (about 380 miles away)
@@ -515,7 +515,7 @@ describe('GeolocationService', () => {
           status: 'success',
           country: 'United States',
           countryCode: 'US'
-  }
+
       });
 
       // Valid IPv4

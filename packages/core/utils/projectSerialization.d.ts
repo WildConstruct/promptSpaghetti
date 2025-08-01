@@ -8,8 +8,8 @@ import { Node, Edge } from 'reactflow';
 import { PsgFile, ProjectMetadata, ProjectSettings, CollaborationData } from '../schemas/psgSchema';
 
 }
-export interface GraphState {
-    nodes: Node[];
+}
+export interface GraphState { nodes: Node[];
     edges: Edge[];
     annotations?: {
         stickyNotes?: Array<{
@@ -17,49 +17,44 @@ export interface GraphState {
             text: string;
             position: {
                 x: number;
-                y: number;
+                y: number }
 }
             };
         }>;
         nodeLabels?: Record<string, string>;
-        regionGroups?: Array<{
-            id: string;
+        regionGroups?: Array<{ id: string;
             name: string;
-            nodeIds: string[];
-        }>;
+            nodeIds: string[] }>;
         connectionLabels?: Record<string, string>;
         [key: string]: unknown;
     };
 
 }
-export interface SerializationOptions {
-    includeMetadata?: boolean;
+}
+export interface SerializationOptions { includeMetadata?: boolean;
     includeSettings?: boolean;
     includeCollaboration?: boolean;
     compress?: boolean;
-    validateOutput?: boolean;
-
+    validateOutput?: boolean }
 }
-export interface DeserializationOptions {
-    skipValidation?: boolean;
+}
+export interface DeserializationOptions { skipValidation?: boolean;
     autoMigrate?: boolean;
-    preserveIds?: boolean;
-
+    preserveIds?: boolean }
 }
-export interface SerializationResult {
-    success: boolean;
+}
+export interface SerializationResult { success: boolean;
     data?: string;
     error?: string;
-    warnings?: string[];
-
+    warnings?: string[] }
 }
-export interface DeserializationResult {
-    success: boolean;
+}
+export interface DeserializationResult { success: boolean;
     data?: {
         graph: GraphState;
         metadata: ProjectMetadata;
         settings: ProjectSettings;
-        collaboration?: CollaborationData;
+        collaboration?: CollaborationData }
 }
     };
     error?: string;
@@ -69,8 +64,8 @@ export interface DeserializationResult {
  * Serializes graph state to .psg format
  */
 export declare function serializeProject(graphState: GraphState)
-  metadata: ProjectMetadata,
-  settings: ProjectSettings,
+  metadata: ProjectMetadata
+  settings: ProjectSettings
   options?: SerializationOptions
 ): SerializationResult;
 /**

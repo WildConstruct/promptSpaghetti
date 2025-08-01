@@ -13,12 +13,12 @@ import {
   SOC2EvidenceType,
   SOC2Evidence,
   SOC2Finding
-} from '../SOC2ComplianceRuleset';
+ from '../SOC2ComplianceRuleset';
 import {
   ComplianceRuleEngine,
   RuleEvaluationContext,
   RuleEngineConfiguration
-} from '../ComplianceRuleEngine';
+ from '../ComplianceRuleEngine';
 import { AuditService } from '../../auth/services/AuditService';
 
 // Mock dependencies
@@ -59,7 +59,7 @@ describe('SOC2ComplianceRuleset', () => {
       registered: true, 
       ruleId: 'test-rule', 
       conflicts: [] 
-    } as unknown as unknown as unknown);
+ as unknown as unknown as unknown);
     mockRuleEngine.evaluateRules = jest.fn<unknown[], unknown>().mockResolvedValue([] as unknown as unknown as unknown);
 
     // Create SOC2 ruleset instance
@@ -82,7 +82,7 @@ describe('SOC2ComplianceRuleset', () => {
           details: expect.objectContaining({
             framework: 'SOC2',
             trustServiceCategories: Object.values(SOC2TrustServiceCategory)
-  }
+
   }
       );
 
@@ -101,7 +101,7 @@ describe('SOC2ComplianceRuleset', () => {
           framework: 'SOC_2',
           category: 'GOVERNANCE',
           subcategory: SOC2TrustServiceCriteria.CC1_CONTROL_ENVIRONMENT
-  }
+
       );
 
       expect(mockRuleEngine.registerRule).toHaveBeenCalledWith(
@@ -111,7 +111,7 @@ describe('SOC2ComplianceRuleset', () => {
           framework: 'SOC_2',
           category: 'ACCESS',
           subcategory: SOC2TrustServiceCriteria.CC6_LOGICAL_PHYSICAL_ACCESS
-  }
+
       );
 
       expect(mockRuleEngine.registerRule).toHaveBeenCalledWith(
@@ -121,7 +121,7 @@ describe('SOC2ComplianceRuleset', () => {
           framework: 'SOC_2',
           category: 'SECURITY',
           subcategory: SOC2TrustServiceCriteria.CC7_SYSTEM_OPERATIONS
-  }
+
       );
     });
 
@@ -147,7 +147,7 @@ describe('SOC2ComplianceRuleset', () => {
           name: 'Data Processing Completeness Validation',
           framework: 'SOC_2',
           subcategory: SOC2TrustServiceCriteria.PI1_PROCESSING_COMPLETENESS
-  }
+
       );
     });
 
@@ -173,7 +173,7 @@ describe('SOC2ComplianceRuleset', () => {
           name: 'Privacy Notice and Communication Requirements',
           framework: 'SOC_2',
           subcategory: SOC2TrustServiceCriteria.P1_NOTICE_COMMUNICATION
-  }
+
       );
 
       expect(mockRuleEngine.registerRule).toHaveBeenCalledWith(
@@ -280,7 +280,7 @@ describe('SOC2ComplianceRuleset', () => {
             assessmentId: assessment.assessmentId,
             trustServiceCategory: SOC2TrustServiceCategory.SECURITY,
             reportingPeriod
-  }
+
   }
       );
     });
@@ -356,7 +356,7 @@ describe('SOC2ComplianceRuleset', () => {
             evidenceId: evidence.evidenceId,
             evidenceType: evidence.type,
             criteria: evidence.criteria
-  }
+
   }
       );
     });
@@ -424,7 +424,7 @@ describe('SOC2ComplianceRuleset', () => {
             criteria: finding.criteria
           }),
           riskLevel: 'MEDIUM' // SIGNIFICANT_DEFICIENCY maps to MEDIUM risk
-  }
+
       );
     });
 
@@ -480,7 +480,7 @@ describe('SOC2ComplianceRuleset', () => {
           warnings: [],
           actions: [],
           audit: { evaluatedAt: new Date(), evaluatedBy: 'system', version: '1.0', environment: 'test' }
-        }
+
       ];
 
       mockRuleEngine.evaluateRules.mockResolvedValue(mockResults as unknown as unknown as unknown);
@@ -508,7 +508,7 @@ describe('SOC2ComplianceRuleset', () => {
             rulesEvaluated: 1,
             compliantRules: 1,
             nonCompliantRules: 0
-  }
+
   }
       );
     });
@@ -563,7 +563,7 @@ describe('SOC2ComplianceRuleset', () => {
           details: expect.objectContaining({
             assessmentId: assessment.assessmentId,
             overallRating: report.overallRating
-  }
+
   }
       );
     });
@@ -615,7 +615,7 @@ describe('SOC2ComplianceRuleset', () => {
             frameworks: ['SOC2'],
             requirements: expect.arrayContaining(['assessment_management']),
             evidenceLevel: 'ENHANCED'
-  }
+
   }
       );
     });
@@ -647,7 +647,7 @@ describe('SOC2ComplianceRuleset', () => {
           compliance: expect.objectContaining({
             frameworks: ['SOC2'],
             requirements: expect.arrayContaining(['evidence_management'])
-  }
+
   }
       );
     });
@@ -714,19 +714,18 @@ expect.extend({
         message: () => `expected ${received} not to be one of ${validOptions.join(', ')}`,
         pass: true
       };
-    } else {
+ else {
       return {
         message: () => `expected ${received} to be one of ${validOptions.join(', ')}`,
         pass: false
       };
-    }
-  }
+
+
 });
 
 declare global {
   namespace jest {
     interface Matchers<R> {
       toBeOneOf(validOptions: any[]): R;
-    }
-  }
-}
+
+

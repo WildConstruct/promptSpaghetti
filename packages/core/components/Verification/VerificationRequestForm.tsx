@@ -6,60 +6,58 @@
  */
 import React, { useState, useCallback } from 'react';
 import { IdentityValidationType, IdentityValidationData } from '../../auth/IdentityValidation';
-}
-interface VerificationRequestFormProps {
-  userId: string;
-  onSubmit: (),
-    type: IdentityValidationType,
-}
-    data: Partial<IdentityValidationData>) => Promise<{ requestId: string; status: string }>;
+
+
+interface VerificationRequestFormProps { userId: string;
+  onSubmit: ();
+  type: IdentityValidationType }
+
+},
+  data: Partial<IdentityValidationData>) => Promise<{ requestId: string; status: string }>;
   onCancel?: () => void;
-}
-interface FormStep {
-  id: string;
+
+
+interface FormStep { id: string;
   title: string;
   description: string;
   verificationType: IdentityValidationType;
   required: boolean;
   const VERIFICATION_STEPS: FormStep = [
   {
-  id: 'email',
-  title: 'Email Verification',
-  description: 'Verify your email address to establish basic identity',
-  verificationType: 'email_verification',
-  required: true,
-}
-}
-  {
-  id: 'phone',
+  id: 'email';
+  title: 'Email Verification';
+  description: 'Verify your email address to establish basic identity';
+  verificationType: 'email_verification';
+  required: true }
+
+
+
+  { id: 'phone',
   title: 'Phone Verification',
   description: 'Verify your phone number for additional security',
   verificationType: 'phone_verification',
-  required: false,
-}
-  {
-  id: 'identity',
+  required: false }
+
+  { id: 'identity',
   title: 'Government ID',
   description: 'Upload government-issued identification for identity verification',
   verificationType: 'government_id',
-  required: false,
-}
-  {
-  id: 'professional',
+  required: false }
+
+  { id: 'professional',
   title: 'Professional Credentials',
   description: 'Submit your professional credentials and portfolio',
   verificationType: 'professional_credentials',
-  required: false,
-}
-  {
-  id: 'social',
+  required: false }
+
+  { id: 'social',
   title: 'Social Media',
   description: 'Link and verify your professional social media profiles',
   verificationType: 'social_media_verification',
   required: false];
-  export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = ({,)
-  userId,
-  onSubmit,
+  export const VerificationRequestForm: React.FC<VerificationRequestFormProps> = ({)
+  userId
+  onSubmit }
   onCancel
 }) => {
   const [currentStep, setCurrentStep] = useState<string>('email');
@@ -76,17 +74,11 @@ interface FormStep {
       setFormData(prev => ({ ...prev, ...stepData }));
       // Move to next step or complete
       const currentIndex = VERIFICATION_STEPS.findIndex(step => step.id === currentStep);
-      if (currentIndex < VERIFICATION_STEPS.length - 1) {
-        setCurrentStep(VERIFICATION_STEPS[currentIndex + 1].id);
-    } catch (error) {
+      if (currentIndex < VERIFICATION_STEPS.length - 1) { setCurrentStep(VERIFICATION_STEPS[currentIndex + 1].id) } catch (error) {
       setSubmitErrors([`Failed to submit ${currentStepData.title}: ${error.message}`]);}
-    } finally {
-      setIsSubmitting(false);
-  }, [currentStep, currentStepData, onSubmit]);
-  const handleStepSelect = useCallback((stepId: string) => {
-    setCurrentStep(stepId);
-    setSubmitErrors([]);
-  }, []);
+ finally { setIsSubmitting(false) }, [currentStep, currentStepData, onSubmit]);
+  const handleStepSelect = useCallback((stepId: string) => { setCurrentStep(stepId);
+    setSubmitErrors([]) }, []);
   if (!currentStepData) {
     return <div className="verification-error">Invalid verification step</div>;
   return;
@@ -102,7 +94,7 @@ interface FormStep {
             key={step.id}
             className={`step ${step.id === currentStep ? 'active' : ''} ${}
               VERIFICATION_STEPS.findIndex(s => s.id === currentStep) > index ? 'completed' : ''
-            }`}
+`}
             onClick={() => handleStepSelect(step.id)}
           >
             <div className="step-number">{index + 1}</div>
@@ -149,7 +141,7 @@ interface FormStep {
           Step {VERIFICATION_STEPS.findIndex(s => s.id === currentStep) + 1} of {VERIFICATION_STEPS.length}
         </div>
       </div>
-      <style>{`
+      <style>{ `
         .verification-request-form {
           max-width: 800px;
   margin: 0 auto;
@@ -185,16 +177,16 @@ interface FormStep {
         .step:hover {
           background-color: #f3f4f6;
         .step.active {
-          background-color: #dbeafe;
+          background-color: #dbeafe
   border: 2px solid #3b82f6;
         .step.completed .step-number {
-          background-color: #10b981;
+          background-color: #10b981
   color: white;
         .step-number {
           width: 32px;
   height: 32px;
           border-radius: 50%;
-          background-color: #e5e7eb;
+          background-color: #e5e7eb
   color: #6b7280;
           display: flex;
           align-items: center;
@@ -203,7 +195,7 @@ interface FormStep {
           margin-right: 12px;
           flex-shrink: 0;
         .step.active .step-number {
-          background-color: #3b82f6;
+          background-color: #3b82f6
   color: white;
         .step-info {
           flex: 1;
@@ -213,7 +205,7 @@ interface FormStep {
           font-size: 14px;
           margin-bottom: 2px;
         .required {
-          background-color: #fef2f2;
+          background-color: #fef2f2
   color: #dc2626;
           font-size: 11px;
   padding: 2px 6px;
@@ -235,7 +227,7 @@ interface FormStep {
         .error-messages {
           margin-bottom: 20px;
         .error-message {
-          background-color: #fef2f2;
+          background-color: #fef2f2
   color: #dc2626;
           padding: 12px;
           border-radius: 6px;
@@ -259,13 +251,13 @@ interface FormStep {
           border: none;
   transition: all 0.2s;
         .btn-secondary {
-          background-color: #f3f4f6;
+          background-color: #f3f4f6
   color: #374151;
         .btn-secondary:hover:not(:disabled) {
           background-color: #e5e7eb;
-        .btn:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .btn:disabled {
+  opacity: 0.5 }
+  cursor: not-allowed;
         .verification-error {
           text-align: center;
   color: #dc2626;
@@ -284,21 +276,21 @@ interface FormStep {
 };
 
 // Step Content Component
-}
-interface VerificationStepContentProps {
-  step: FormStep;
+
+
+interface VerificationStepContentProps { step: FormStep;
   data: Partial<IdentityValidationData>;
-  onSubmit: (data: Partial<IdentityValidationData>) => Promise<void>;
+  onSubmit: (data: Partial<IdentityValidationData>) => Promise<void>
   isSubmitting: boolean;
-  const VerificationStepContent: React.FC<VerificationStepContentProps> = ({,)
-  step,
-  data,
-  onSubmit,
+  const VerificationStepContent: React.FC<VerificationStepContentProps> = ({);
+  step;
+  data;
+  onSubmit }
   isSubmitting
-}
-}) => {
-  const [stepData, setStepData] = useState<Partial<IdentityValidationData>>(data);
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {,
+
+
+}) => { const [stepData, setStepData] = useState<Partial<IdentityValidationData>>(data);
+  const handleSubmit = useCallback(async (e: React.FormEvent) => { }
   e.preventDefault();
   await onSubmit(stepData);
 }, [stepData, onSubmit]);
@@ -356,12 +348,12 @@ interface VerificationStepContentProps {
 };
 
 // Individual Step Components (simplified for now - will be expanded)
-const EmailVerificationStep: React.FC<{,
-  data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;
-  onSubmit: (e: React.FormEvent) => Promise<void>;
+const EmailVerificationStep: React.FC<{ ,
+  data: Partial<IdentityValidationData>
+  onUpdate: (data: Partial<IdentityValidationData>) => void
+  onSubmit: (e: React.FormEvent) => Promise<void> }
   isSubmitting: boolean;
-}> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
+> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
   return;
     <form onSubmit={onSubmit}>
       <div className="form-group">
@@ -381,7 +373,7 @@ const EmailVerificationStep: React.FC<{,
       <button type="submit" className="btn btn-primary" disabled={isSubmitting || !data.email}>
         {isSubmitting ? 'Sending...' : 'Send Verification Email'}
       </button>
-      <style>{`
+      <style>{ `
         .form-group {
           margin-bottom: 20px;
         label {
@@ -390,7 +382,7 @@ const EmailVerificationStep: React.FC<{,
   color: #374151;
           margin-bottom: 6px;
         input {
-          width: 100%;
+          width: 100%
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -404,7 +396,7 @@ const EmailVerificationStep: React.FC<{,
   color: #6b7280;
           margin-top: 4px;
         .btn-primary {
-          background-color: #3b82f6;
+          background-color: #3b82f6 }
   color: white;
         .btn-primary:hover:not(:disabled) {
           background-color: #2563eb;
@@ -412,12 +404,12 @@ const EmailVerificationStep: React.FC<{,
     </form>
   );
 };
-const PhoneVerificationStep: React.FC<{,
-  data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;
-  onSubmit: (e: React.FormEvent) => Promise<void>;
+const PhoneVerificationStep: React.FC<{ ,
+  data: Partial<IdentityValidationData>
+  onUpdate: (data: Partial<IdentityValidationData>) => void
+  onSubmit: (e: React.FormEvent) => Promise<void> }
   isSubmitting: boolean;
-}> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
+> = ({ data, onUpdate, onSubmit, isSubmitting }) => {
   return;
     <form onSubmit={onSubmit}>
       <div className="form-group">
@@ -438,7 +430,7 @@ const PhoneVerificationStep: React.FC<{,
       <button type="submit" className="btn btn-primary" disabled={isSubmitting || !data.phoneNumber}>
         {isSubmitting ? 'Sending...' : 'Send Verification SMS'}
       </button>
-      <style>{`
+      <style>{ `
         .form-group {
           margin-bottom: 20px;
         label {
@@ -447,7 +439,7 @@ const PhoneVerificationStep: React.FC<{,
   color: #374151;
           margin-bottom: 6px;
         input {
-          width: 100%;
+          width: 100%
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
@@ -461,30 +453,30 @@ const PhoneVerificationStep: React.FC<{,
   color: #6b7280;
           margin-top: 4px;
         .btn-primary {
-          background-color: #3b82f6;
+          background-color: #3b82f6
   color: white;
-          padding: 10px 20px;
+          padding: 10px 20px
   border: none;
           border-radius: 6px;
           font-weight: 500;
   cursor: pointer;
         .btn-primary:hover:not(:disabled) {
           background-color: #2563eb;
-        .btn-primary:disabled {,
-  opacity: 0.5;
-          cursor: not-allowed;
+        .btn-primary:disabled {
+  opacity: 0.5 }
+  cursor: not-allowed;
       `}</style>
     </form>
   );
 };
 
 // Placeholder components for other steps
-const GovernmentIdStep: React.FC<{,
-  data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;
-  onSubmit: (e: React.FormEvent) => Promise<void>;
+const GovernmentIdStep: React.FC<{ ,
+  data: Partial<IdentityValidationData>
+  onUpdate: (data: Partial<IdentityValidationData>) => void
+  onSubmit: (e: React.FormEvent) => Promise<void> }
   isSubmitting: boolean;
-}> = ({ onSubmit, isSubmitting }) => ()
+> = ({ onSubmit, isSubmitting }) => ()
   <div>
     <p>Government ID verification will be implemented in the next iteration.</p>
     <button type="button" onClick={(e) => onSubmit(e as any)} disabled={isSubmitting}>
@@ -492,12 +484,12 @@ const GovernmentIdStep: React.FC<{,
     </button>
   </div>
 );
-const ProfessionalCredentialsStep: React.FC<{,
-  data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;
-  onSubmit: (e: React.FormEvent) => Promise<void>;
+const ProfessionalCredentialsStep: React.FC<{ ,
+  data: Partial<IdentityValidationData>
+  onUpdate: (data: Partial<IdentityValidationData>) => void
+  onSubmit: (e: React.FormEvent) => Promise<void> }
   isSubmitting: boolean;
-}> = ({ onSubmit, isSubmitting }) => ()
+> = ({ onSubmit, isSubmitting }) => ()
   <div>
     <p>Professional credentials verification will be implemented in the next iteration.</p>
     <button type="button" onClick={(e) => onSubmit(e as any)} disabled={isSubmitting}>
@@ -505,12 +497,12 @@ const ProfessionalCredentialsStep: React.FC<{,
     </button>
   </div>
 );
-const SocialMediaStep: React.FC<{,
-  data: Partial<IdentityValidationData>;
-  onUpdate: (data: Partial<IdentityValidationData>) => void;
-  onSubmit: (e: React.FormEvent) => Promise<void>;
+const SocialMediaStep: React.FC<{ ,
+  data: Partial<IdentityValidationData>
+  onUpdate: (data: Partial<IdentityValidationData>) => void
+  onSubmit: (e: React.FormEvent) => Promise<void> }
   isSubmitting: boolean;
-}> = ({ onSubmit, isSubmitting }) => ()
+> = ({ onSubmit, isSubmitting }) => ()
   <div>
     <p>Social media verification will be implemented in the next iteration.</p>
     <button type="button" onClick={(e) => onSubmit(e as any)} disabled={isSubmitting}>

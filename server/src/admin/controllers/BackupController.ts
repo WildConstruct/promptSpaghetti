@@ -13,8 +13,9 @@ import { PointInTimeRecoveryService } from '../../services/data-retention/PointI
 import { RestoreFunctionalityService } from '../../services/data-retention/RestoreFunctionalityService';
 
 // Admin backup configuration types
-}
-}
+
+
+
 export interface AdminBackupConfiguration {
   config_id: string;
   name: string;
@@ -28,8 +29,9 @@ export interface AdminBackupConfiguration {
     days_of_week?: number[];
     day_of_month?: number;
     timezone: string;
-}
-}
+
+
+
   };
   
   data_scope: {
@@ -73,10 +75,10 @@ export interface AdminBackupConfiguration {
   updated_at: Date;
   last_run_at?: Date;
   next_run_at?: Date;
-}
 
-}
-}
+
+
+
 export interface BackupExecution {
   execution_id: string;
   config_id: string;
@@ -97,8 +99,9 @@ export interface BackupExecution {
     total_steps: number;
     percentage: number;
     estimated_remaining_seconds?: number;
-}
-}
+
+
+
   };
   
   error_details?: {
@@ -114,7 +117,7 @@ export interface BackupExecution {
     schema_valid: boolean;
     integrity_score: number;
   };
-}
+
 
 export class BackupController {
   constructor(
@@ -135,10 +138,10 @@ export class BackupController {
         if (!user.permissions?.includes('admin:backup:manage')) {
           reply.code(403).send({ error: 'Insufficient permissions for backup management' });
           return;
-        }
-      } catch (err) {
+
+ catch (err) {
         reply.code(401).send({ error: 'Unauthorized' });
-      }
+
     };
 
     // Get all backup configurations
@@ -151,12 +154,12 @@ export class BackupController {
             enabled: { type: 'boolean' },
             page: { type: 'integer', minimum: 1, default: 1 },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 50 }
-          }
-        }
-      }
+
+
+
     }, async (request: FastifyRequest<{
       Querystring: { enabled?: boolean; page?: number; limit?: number }
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const { enabled, page = 1, limit = 50 } = request.query;
         const offset = (page - 1) * limit;
@@ -177,7 +180,7 @@ export class BackupController {
           query += ` AND bc.enabled = $${paramIndex}`;
           params.push(enabled);
           paramIndex++;
-        }
+
 
         query += `
           GROUP BY bc.config_id
@@ -190,10 +193,10 @@ export class BackupController {
         const configurations = result.rows.map(row => this.mapRowToConfiguration(row));
 
         reply.send(configurations);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to fetch backup configurations' });
-      }
+
     });
 
     // Get specific backup configuration
@@ -204,13 +207,13 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-  }
+
           required: ['id']
-        }
-      }
+
+
     }, async (request: FastifyRequest<{
       Params: { id: string }
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const query = `
           SELECT bc.*, 
@@ -228,14 +231,14 @@ export class BackupController {
         if (result.rows.length === 0) {
           reply.code(404).send({ error: 'Backup configuration not found' });
           return;
-        }
+
 
         const configuration = this.mapRowToConfiguration(result.rows[0]);
         reply.send(configuration);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to fetch backup configuration' });
-      }
+
     });
 
     // Create new backup configuration
@@ -259,8 +262,8 @@ export class BackupController {
                 days_of_week: { type: 'array', items: { type: 'integer', minimum: 0, maximum: 6 } },
                 day_of_month: { type: 'integer', minimum: 1, maximum: 31 },
                 timezone: { type: 'string' }
-              }
-  }
+
+
             data_scope: {
               type: 'object',
               properties: {
@@ -271,8 +274,8 @@ export class BackupController {
                 include_marketplace_data: { type: 'boolean', default: false },
                 custom_tables: { type: 'array', items: { type: 'string' } },
                 exclude_tables: { type: 'array', items: { type: 'string' } }
-              }
-  }
+
+
             retention_policy: {
               type: 'object',
               required: ['keep_hourly', 'keep_daily', 'keep_weekly', 'keep_monthly'],
@@ -283,8 +286,8 @@ export class BackupController {
                 keep_monthly: { type: 'integer', minimum: 0, maximum: 60 },
                 compliance_hold_days: { type: 'integer', minimum: 1 },
                 archive_after_days: { type: 'integer', minimum: 1 }
-              }
-  }
+
+
             storage: {
               type: 'object',
               required: ['provider', 'location', 'encryption_enabled', 'compression_enabled'],
@@ -294,8 +297,8 @@ export class BackupController {
                 encryption_enabled: { type: 'boolean' },
                 compression_enabled: { type: 'boolean' },
                 storage_class: { type: 'string' }
-              }
-  }
+
+
             notifications: {
               type: 'object',
               properties: {
@@ -305,14 +308,14 @@ export class BackupController {
                 recipients: { type: 'array', items: { type: 'string', format: 'email' } },
                 slack_webhook: { type: 'string', format: 'url' },
                 email_template: { type: 'string' }
-              }
-            }
-          }
-        }
-      }
+
+
+
+
+
     }, async (request: FastifyRequest<{
       Body: Partial<AdminBackupConfiguration>
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const user = request.user as any;
         const configId = uuidv4();
@@ -325,7 +328,7 @@ export class BackupController {
           created_at: now,
           updated_at: now,
           next_run_at: this.calculateNextRun(request.body.schedule!, now)
-        } as AdminBackupConfiguration;
+ as AdminBackupConfiguration;
 
         // Validate configuration
         await this.validateBackupConfiguration(configuration);
@@ -336,7 +339,7 @@ export class BackupController {
         // Create initial schedule if enabled
         if (configuration.enabled) {
           await this.scheduleNextBackup(configuration);
-        }
+
 
         // Audit log
         await this.auditService.logEvent({
@@ -347,16 +350,16 @@ export class BackupController {
             name: configuration.name,
             backup_type: configuration.backup_type,
             enabled: configuration.enabled
-          }
+
         });
 
         reply.code(201).send(configuration);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(400).send({ 
           error: error instanceof Error ? error.message : 'Failed to create backup configuration' 
         });
-      }
+
     });
 
     // Update backup configuration
@@ -367,14 +370,14 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-  }
+
           required: ['id']
-        }
-      }
+
+
     }, async (request: FastifyRequest<{
       Params: { id: string };
       Body: Partial<AdminBackupConfiguration>
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const user = request.user as any;
         const configId = request.params.id;
@@ -384,7 +387,7 @@ export class BackupController {
         if (!existing) {
           reply.code(404).send({ error: 'Backup configuration not found' });
           return;
-        }
+
 
         // Update configuration
         const updated: AdminBackupConfiguration = {
@@ -396,7 +399,7 @@ export class BackupController {
         // Recalculate next run if schedule changed
         if (request.body.schedule) {
           updated.next_run_at = this.calculateNextRun(updated.schedule, new Date());
-        }
+
 
         // Validate updated configuration
         await this.validateBackupConfiguration(updated);
@@ -408,10 +411,10 @@ export class BackupController {
         if (updated.enabled !== existing.enabled || request.body.schedule) {
           if (updated.enabled) {
             await this.scheduleNextBackup(updated);
-          } else {
+ else {
             await this.unscheduleBackup(configId);
-          }
-        }
+
+
 
         // Audit log
         await this.auditService.logEvent({
@@ -422,12 +425,12 @@ export class BackupController {
         });
 
         reply.send(updated);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(400).send({ 
           error: error instanceof Error ? error.message : 'Failed to update backup configuration' 
         });
-      }
+
     });
 
     // Delete backup configuration
@@ -438,13 +441,13 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-  }
+
           required: ['id']
-        }
-      }
+
+
     }, async (request: FastifyRequest<{
       Params: { id: string }
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const user = request.user as any;
         const configId = request.params.id;
@@ -454,7 +457,7 @@ export class BackupController {
         if (!existing) {
           reply.code(404).send({ error: 'Backup configuration not found' });
           return;
-        }
+
 
         // Check for active executions
         const activeExecutions = await this.getActiveExecutions(configId);
@@ -463,7 +466,7 @@ export class BackupController {
             error: 'Cannot delete configuration with active backup executions' 
           });
           return;
-        }
+
 
         // Unschedule backup
         await this.unscheduleBackup(configId);
@@ -479,14 +482,14 @@ export class BackupController {
           metadata: {
             name: existing.name,
             backup_type: existing.backup_type
-          }
+
         });
 
         reply.code(204).send();
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to delete backup configuration' });
-      }
+
     });
 
     // Execute backup immediately
@@ -497,13 +500,13 @@ export class BackupController {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' }
-  }
+
           required: ['id']
-        }
-      }
+
+
     }, async (request: FastifyRequest<{
       Params: { id: string }
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const user = request.user as any;
         const configId = request.params.id;
@@ -512,12 +515,12 @@ export class BackupController {
         if (!configuration) {
           reply.code(404).send({ error: 'Backup configuration not found' });
           return;
-        }
+
 
         if (!configuration.enabled) {
           reply.code(400).send({ error: 'Cannot run disabled backup configuration' });
           return;
-        }
+
 
         // Execute backup
         const execution = await this.executeBackup(configuration, user.id);
@@ -529,14 +532,14 @@ export class BackupController {
           resource: `backup_config:${configId}`,
           metadata: {
             execution_id: execution.execution_id
-          }
+
         });
 
         reply.code(201).send(execution);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to execute backup' });
-      }
+
     });
 
     // Get backup executions
@@ -549,12 +552,12 @@ export class BackupController {
             config_id: { type: 'string', format: 'uuid' },
             status: { type: 'string', enum: ['pending', 'running', 'completed', 'failed', 'cancelled'] },
             limit: { type: 'integer', minimum: 1, maximum: 200, default: 50 }
-          }
-        }
-      }
+
+
+
     }, async (request: FastifyRequest<{
       Querystring: { config_id?: string; status?: string; limit?: number }
-    }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
       try {
         const { config_id, status, limit = 50 } = request.query;
 
@@ -572,13 +575,13 @@ export class BackupController {
           query += ` AND be.config_id = $${paramIndex}`;
           params.push(config_id);
           paramIndex++;
-        }
+
 
         if (status) {
           query += ` AND be.status = $${paramIndex}`;
           params.push(status);
           paramIndex++;
-        }
+
 
         query += `
           ORDER BY be.started_at DESC
@@ -590,10 +593,10 @@ export class BackupController {
         const executions = result.rows.map(row => this.mapRowToExecution(row));
 
         reply.send(executions);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to fetch backup executions' });
-      }
+
     });
 
     // Get backup metrics
@@ -603,10 +606,10 @@ export class BackupController {
       try {
         const metrics = await this.getBackupMetrics();
         reply.send(metrics);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to fetch backup metrics' });
-      }
+
     });
 
     // Get recovery points for restore
@@ -623,12 +626,12 @@ export class BackupController {
         });
 
         reply.send(recoveryPoints);
-      } catch (error) {
+ catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to fetch recovery points' });
-      }
+
     });
-  }
+
 
   // Private helper methods
 
@@ -637,11 +640,11 @@ export class BackupController {
     // Validate schedule configuration
     if (config.schedule.frequency === 'weekly' && !config.schedule.days_of_week?.length) {
       throw new Error('Weekly backups must specify days of the week');
-    }
+
 
     if (config.schedule.frequency === 'monthly' && !config.schedule.day_of_month) {
       throw new Error('Monthly backups must specify day of the month');
-    }
+
 
     // Validate data scope
     const hasDataSelection = Object.values(config.data_scope).some(value => 
@@ -650,13 +653,13 @@ export class BackupController {
 
     if (!hasDataSelection) {
       throw new Error('Backup configuration must include at least one data type');
-    }
+
 
     // Validate storage configuration
     if (config.storage.provider !== 'local' && !config.storage.location) {
       throw new Error('Cloud storage provider requires location configuration');
-    }
-  }
+
+
 
   private async storeBackupConfiguration(config: AdminBackupConfiguration): Promise<void> {
 
@@ -696,7 +699,7 @@ export class BackupController {
       config.updated_at,
       config.next_run_at
     ]);
-  }
+
 
   private async getBackupConfiguration(configId: string): Promise<AdminBackupConfiguration | null> {
 
@@ -704,7 +707,7 @@ export class BackupController {
     const result = await this.pool.query(query, [configId]);
     
     return result.rows.length > 0 ? this.mapRowToConfiguration(result.rows[0]) : null;
-  }
+
 
   private calculateNextRun(schedule: AdminBackupConfiguration['schedule'], fromDate: Date): Date {
     const next = new Date(fromDate);
@@ -726,25 +729,25 @@ export class BackupController {
       next.setMonth(next.getMonth() + 1);
       if (schedule.day_of_month) {
         next.setDate(schedule.day_of_month);
-      }
+
       break;
-    }
+
 
     return next;
-  }
+
 
   private async scheduleNextBackup(config: AdminBackupConfiguration): Promise<void> {
 
     // Implementation would integrate with job scheduler (e.g., node-cron, Bull Queue)
     // For now, we'll just update the next_run_at timestamp
     console.log(`Scheduling next backup for config ${config.config_id} at ${config.next_run_at}`);
-  }
+
 
   private async unscheduleBackup(configId: string): Promise<void> {
 
     // Implementation would remove from job scheduler
     console.log(`Unscheduling backup for config ${configId}`);
-  }
+
 
   private async executeBackup(config: AdminBackupConfiguration, triggeredBy: string): Promise<BackupExecution> {
 
@@ -762,7 +765,7 @@ export class BackupController {
         steps_completed: 0,
         total_steps: 10,
         percentage: 0
-      }
+
     };
 
     // Store execution record
@@ -774,7 +777,7 @@ export class BackupController {
     });
 
     return execution;
-  }
+
 
   private async processBackupAsync(
     config: AdminBackupConfiguration, 
@@ -823,16 +826,15 @@ export class BackupController {
           schema_valid: true,
           integrity_score: 100
         };
-      }
+
 
       await this.storeBackupExecution(execution);
 
       // Send notifications if configured
       if (config.notifications.on_success && config.notifications.recipients.length > 0) {
         await this.sendBackupNotification(config, execution, 'success');
-      }
 
-    } catch (error) {
+ catch (error) {
       execution.status = 'failed';
       execution.error_details = {
         error_code: 'BACKUP_EXECUTION_FAILED',
@@ -850,40 +852,40 @@ export class BackupController {
       // Send failure notification
       if (config.notifications.on_failure && config.notifications.recipients.length > 0) {
         await this.sendBackupNotification(config, execution, 'failure');
-      }
+
 
       throw error;
-    }
-  }
+
+
 
   private getIncludedTables(dataScope: AdminBackupConfiguration['data_scope']): string[] {
     const tables: string[] = [];
 
     if (dataScope.include_admin_configs) {
       tables.push('admin_permission_groups', 'admin_user_group_assignments', 'admin_control_settings');
-    }
+
 
     if (dataScope.include_user_permissions) {
       tables.push('users', 'user_roles', 'role_permissions');
-    }
+
 
     if (dataScope.include_system_settings) {
       tables.push('system_settings', 'feature_flags', 'application_config');
-    }
+
 
     if (dataScope.include_audit_logs) {
       tables.push('admin_activity_log', 'audit_events');
-    }
+
 
     if (dataScope.include_marketplace_data) {
       tables.push('marketplace_templates', 'marketplace_transactions', 'template_reviews');
-    }
+
 
     // Add custom tables
     tables.push(...dataScope.custom_tables);
 
     return tables;
-  }
+
 
   private async storeBackupExecution(execution: BackupExecution): Promise<void> {
 
@@ -921,7 +923,7 @@ export class BackupController {
       execution.error_details ? JSON.stringify(execution.error_details) : null,
       execution.validation_results ? JSON.stringify(execution.validation_results) : null
     ]);
-  }
+
 
   private async getActiveExecutions(configId?: string): Promise<BackupExecution[]> {
 
@@ -935,13 +937,13 @@ export class BackupController {
     if (configId) {
       query += ' AND config_id = $1';
       params.push(configId);
-    }
+
     
     query += ' ORDER BY started_at DESC';
 
     const result = await this.pool.query(query, params);
     return result.rows.map(row => this.mapRowToExecution(row));
-  }
+
 
   private async getBackupMetrics(): Promise<any> {
 
@@ -981,14 +983,14 @@ export class BackupController {
         average_duration_minutes: Math.round((parseInt(executionsResult.rows[0].avg_duration) || 0) / 60),
         last_24h_count: (parseInt(executionsResult.rows[0].successful_24h) || 0) + 
                         (parseInt(executionsResult.rows[0].failed_24h) || 0)
-  }
+
       health_status: {
         overall_status: 'healthy', // Could be calculated based on recent failures
         issues: [],
         recommendations: []
-      }
+
     };
-  }
+
 
   private async sendBackupNotification(
     config: AdminBackupConfiguration, 
@@ -998,7 +1000,7 @@ export class BackupController {
 
     // Implementation would send actual notifications via email/Slack
     console.log(`Sending ${type} notification for backup ${execution.execution_id}`);
-  }
+
 
   private mapRowToConfiguration(row: any): AdminBackupConfiguration {
     return {
@@ -1018,7 +1020,7 @@ export class BackupController {
       last_run_at: row.last_run_at ? new Date(row.last_run_at) : undefined,
       next_run_at: row.next_run_at ? new Date(row.next_run_at) : undefined
     };
-  }
+
 
   private mapRowToExecution(row: any): BackupExecution {
     return {
@@ -1036,5 +1038,4 @@ export class BackupController {
       error_details: row.error_details ? JSON.parse(row.error_details) : undefined,
       validation_results: row.validation_results ? JSON.parse(row.validation_results) : undefined
     };
-  }
-}
+

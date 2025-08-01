@@ -10,17 +10,12 @@ import { VerificationRequestForm } from '../VerificationRequestForm';
 // Mock the onSubmit function
 const mockOnSubmit = jest.fn<unknown, unknown>();
 const mockOnCancel = jest.fn<unknown, unknown>();
-const defaultProps = {
-  userId: 'test-user-123',
-  onSubmit: mockOnSubmit,
-  onCancel: mockOnCancel,
-};
-describe('VerificationRequestForm', () => {
-  beforeEach(() => {
+const defaultProps = {};
+describe('VerificationRequestForm', () => { beforeEach(() => {
     mockOnSubmit.mockClear();
     mockOnCancel.mockClear();
     mockOnSubmit.mockResolvedValue()
-      { requestId: 'req_123',
+      { requestId: 'req_123' }
       status: 'pending' } as unknown as unknown);
   });
   describe('Form Rendering', () => {
@@ -76,9 +71,8 @@ describe('VerificationRequestForm', () => {
       await user.type(emailInput, 'test@example.com');
       const submitButton = screen.getByText('Send Verification Email');
       fireEvent.click(submitButton);
-      await waitFor(() => {
-  expect(mockOnSubmit).toHaveBeenCalledWith('email_verification', {)
-  email: 'test@example.com',
+      await waitFor(() => { expect(mockOnSubmit).toHaveBeenCalledWith('email_verification', {)
+  email: 'test@example.com' }
 });
       });
     });
@@ -103,24 +97,18 @@ describe('VerificationRequestForm', () => {
       await user.type(emailInput, 'test@example.com');
       const submitButton = screen.getByText('Send Verification Email');
       fireEvent.click(submitButton);
-      await waitFor(() => {
-        expect(screen.getByText('Phone Verification')).toBeInTheDocument();
-        expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText('Phone Verification')).toBeInTheDocument();
+        expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument() });
     });
-    test('renders phone verification form', async () => {
-      expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument();
+    test('renders phone verification form', async () => { expect(screen.getByLabelText(/phone number/i)).toBeInTheDocument();
       expect(screen.getByText('Send Verification SMS')).toBeInTheDocument();
-      expect(screen.getByText('Include country code. We\'ll send a verification SMS')).toBeInTheDocument();
-    });
-    test('requires phone number for submission', async () => {
-      const submitButton = screen.getByText('Send Verification SMS');
+      expect(screen.getByText('Include country code. We\'ll send a verification SMS')).toBeInTheDocument() });
+    test('requires phone number for submission', async () => { const submitButton = screen.getByText('Send Verification SMS');
       expect(submitButton).toBeDisabled();
       const user = userEvent.setup();
       const phoneInput = screen.getByLabelText(/phone number/i);
       await user.type(phoneInput, '+1234567890');
-      expect(submitButton).not.toBeDisabled();
-    });
+      expect(submitButton).not.toBeDisabled() });
   });
   describe('Step Navigation', () => {
     test('allows clicking on step headers to navigate', async () => {
@@ -148,9 +136,7 @@ describe('VerificationRequestForm', () => {
       await user.type(emailInput, 'test@example.com');
       const submitButton = screen.getByText('Send Verification Email');
       fireEvent.click(submitButton);
-      await waitFor(() => {
-  expect(screen.getByText(/Failed to submit Email Verification: Network error occurred/)).toBeInTheDocument();
-});
+      await waitFor(() => { expect(screen.getByText(/Failed to submit Email Verification: Network error occurred/)).toBeInTheDocument() });
     });
     test('clears errors when switching steps', async () => {
       const user = userEvent.setup();
@@ -160,9 +146,7 @@ describe('VerificationRequestForm', () => {
       await user.type(emailInput, 'test@example.com');
       const submitButton = screen.getByText('Send Verification Email');
       fireEvent.click(submitButton);
-      await waitFor(() => {
-        expect(screen.getByText(/Failed to submit/)).toBeInTheDocument();
-      });
+      await waitFor(() => { expect(screen.getByText(/Failed to submit/)).toBeInTheDocument() });
       // Switch to phone step
       const phoneStepHeader = screen.getByText('Phone Verification');
       fireEvent.click(phoneStepHeader);
@@ -214,13 +198,12 @@ describe('VerificationRequestForm', () => {
       expect(screen.queryByText('Cancel')).not.toBeInTheDocument();
     });
   });
-  describe('Responsive Design', () => {
-  test('renders properly on mobile viewport', () => {
+  describe('Responsive Design', () => { test('renders properly on mobile viewport', () => {
   // Mock mobile viewport
   Object.defineProperty(window, 'innerWidth', {)
-  writable: true,
-  configurable: true,
-  value: 375,
+  writable: true
+  configurable: true
+  value: 375 }
 });
       render(<VerificationRequestForm {...defaultProps} />);
       // Form should still be functional

@@ -4,11 +4,11 @@ import { GraphSerializer } from '../serialization/serializer';
 import { validateFormat } from '../serialization/validator';
 // Example: Simple greeting generator
 const simpleGraph = {
-    nodes: [,
+    nodes: [
         {
             id: 'greeting_choice',
             type: 'WeightedChoice',
-            choices: [,
+            choices: [
                 { value: 'Hello', weight: 0.4 },
                 { value: 'Hi', weight: 0.3 },
                 { value: 'Greetings', weight: 0.3 }
@@ -28,7 +28,8 @@ const simpleGraph = {
             id: 'final_output',
             type: 'Output',
             inputs: ['greeting_concat']
-        }]
+        }
+    ]
 };
 // Serialize the graph
 const serialized = GraphSerializer.serialize(simpleGraph, {});

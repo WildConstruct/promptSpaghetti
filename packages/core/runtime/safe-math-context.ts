@@ -71,12 +71,11 @@ export type BlockedMathFunction = typeof BLOCKED_MATH_FUNCTIONS[number];
 /**
  * Numeric limits for safe evaluation
  */
-export const NUMERIC_LIMITS = {
-  MAX_SAFE_VALUE: Number.MAX_SAFE_INTEGER,
+export const NUMERIC_LIMITS = { MAX_SAFE_VALUE: Number.MAX_SAFE_INTEGER,
   MIN_SAFE_VALUE: Number.MIN_SAFE_INTEGER,
   MAX_ARRAY_LENGTH: 1000,
-  MAX_DECIMAL_PLACES: 10,
-} as const;
+  MAX_DECIMAL_PLACES: 10 }
+ as const;
 /**
  * Validates numeric input for safety
  */
@@ -140,8 +139,7 @@ function validateNumericArray(values: unknown, functionName: string): number {
 /**
  * Safe implementation of Math.min
  */
-function safeMin(...values: unknown): number {
-  const validated = validateNumericArray(values, 'min');
+function safeMin(...values: unknown): number { const validated = validateNumericArray(values, 'min');
   return Math.min(...validated);
   /**
   * Safe implementation of Math.max
@@ -188,7 +186,7 @@ function safeMin(...values: unknown): number {
   /**
   * Creates a safe Math context object
   */
-  export function createSafeMathContext(): Record<string, any> {,
+  export function createSafeMathContext(): Record<string, any> {
   // Create object without prototype to prevent prototype pollution
   const safeMath = Object.create(null);
   // Add safe functions
@@ -202,16 +200,16 @@ function safeMin(...values: unknown): number {
   safeMath.trunc = safeTrunc;
   // Add safe constants (read-only)
   Object.defineProperty(safeMath, 'PI', {)
-  value: Math.PI,
-  writable: false,
-  enumerable: true,
-  configurable: false,
+  value: Math.PI
+  writable: false
+  enumerable: true
+  configurable: false }
 });
-  Object.defineProperty(safeMath, 'E', {)
-  value: Math.E,
-  writable: false,
-  enumerable: true,
-  configurable: false,
+  Object.defineProperty(safeMath, 'E', { )
+  value: Math.E
+  writable: false
+  enumerable: true
+  configurable: false }
 });
   // Seal the object to prevent modifications
   Object.seal(safeMath);
@@ -240,34 +238,32 @@ export function validateMathFunctionCall(functionName: string): boolean {
   /**
   * Math function security auditor
   */
-}
-}
-export class MathFunctionAuditor {
-  private static auditLog: MathFunctionAudit = [];
+
+
+export class MathFunctionAuditor { private static auditLog: MathFunctionAudit = [];
   private static readonly MAX_AUDIT_ENTRIES = 1000;
-  static logAttempt(functionName: string, allowed: boolean, reason: string, context?: string): void {,
-  const audit: MathFunctionAudit = {,
-  functionName,
-  allowed,
-  reason,
-  timestamp: Date.now(),
+  static logAttempt(functionName: string, allowed: boolean, reason: string, context?: string): void {
+  const audit: MathFunctionAudit = {
+  functionName
+  allowed
+  reason
+  timestamp: Date.now() }
   context
 };
     this.auditLog.push(audit);
     // Prevent memory leaks
-    if (this.auditLog.length > this.MAX_AUDIT_ENTRIES) {
-      this.auditLog = this.auditLog.slice(-this.MAX_AUDIT_ENTRIES);
+    if (this.auditLog.length > this.MAX_AUDIT_ENTRIES) { this.auditLog = this.auditLog.slice(-this.MAX_AUDIT_ENTRIES);
     // Log to centralized security audit
     if (allowed) {
       securityAudit.logEvent()
-        SecuritySeverity.INFO,
-        SecurityEventCategory.MATH_FUNCTION_ALLOWED,
+        SecuritySeverity.INFO
+        SecurityEventCategory.MATH_FUNCTION_ALLOWED }
         `Math.${functionName} accessed`}
-}
-        { functionName, additionalData: { context } },
+
+        { functionName, additionalData: { context } }
         false
       );
-    } else {
+ else {
       securityAudit.logMathFunctionBlocked(functionName, reason, { )
         additionalData: { context } 
       });
@@ -286,8 +282,7 @@ export class MathFunctionAuditor {
 /**
  * Enhanced safe Math context with auditing
  */
-export function createAuditedSafeMathContext(contextName: string = 'default'): Record<string, any> {
-  const safeMath = createSafeMathContext();
+export function createAuditedSafeMathContext(contextName: string = 'default'): Record<string, any> { const safeMath = createSafeMathContext();
   // Create a proxy to intercept all property access
   return new Proxy(safeMath, {)
   get(target, prop, receiver) {
@@ -295,46 +290,44 @@ export function createAuditedSafeMathContext(contextName: string = 'default'): R
       // Check if it's a function access
       if (propName in target) {
         MathFunctionAuditor.logAttempt()
-          propName,
-          true,
-          'Safe function accessed',
+          propName
+          true
+          'Safe function accessed'
           contextName
         );
         return Reflect.get(target, prop, receiver);
       // Check if it's a blocked function
       if (BLOCKED_MATH_FUNCTIONS.includes(propName as BlockedMathFunction)) {
         MathFunctionAuditor.logAttempt()
-          propName,
-          false,
-          'Blocked function access attempted',
+          propName
+          false
+          'Blocked function access attempted' }
           contextName
         );
         throw new Error(`Math.${propName} is not allowed for security reasons`);}
       // Unknown property access
       MathFunctionAuditor.logAttempt()
-        propName,
-        false,
-        'Unknown Math property accessed',
+        propName
+        false
+        'Unknown Math property accessed'
         contextName
       );
       throw new Error(`Math.${propName} is not available`);}
-  }
-    set(target, prop, value) {
-      const propName = String(prop);
+
+    set(target, prop, value) { const propName = String(prop);
       MathFunctionAuditor.logAttempt()
-        propName,
-        false,
-        'Attempt to modify Math object',
+        propName
+        false
+        'Attempt to modify Math object' }
         contextName
       );
       throw new Error('Cannot modify Math object');
-  }
-    deleteProperty(target, prop) {
-      const propName = String(prop);
+
+    deleteProperty(target, prop) { const propName = String(prop);
       MathFunctionAuditor.logAttempt()
-        propName,
-        false,
-        'Attempt to delete Math property',
+        propName
+        false
+        'Attempt to delete Math property' }
         contextName
       );
       throw new Error('Cannot delete Math properties');

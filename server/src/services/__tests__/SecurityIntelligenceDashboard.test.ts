@@ -11,7 +11,7 @@ import {
   DashboardFilter,
   FilterType,
   FilterOperator
-} from '../SecurityIntelligenceDashboard';
+ from '../SecurityIntelligenceDashboard';
 import { SecurityIntelligenceDataPipeline } from '../SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../../database/analytics-dao';
@@ -87,7 +87,7 @@ describe('SecurityIntelligenceDashboard', () => {
         historical_data_retention_days: 90,
         cache_ttl_seconds: 300,
         max_concurrent_dashboards: 100
-  }
+
       analytics: {
         enabled: true,
         aggregation_intervals: [300, 3600, 86400],
@@ -96,7 +96,7 @@ describe('SecurityIntelligenceDashboard', () => {
         predictive_analytics_enabled: true,
         correlation_analysis_enabled: true,
         risk_scoring_enabled: true
-  }
+
       visualization: {
         enabled: true,
         chart_types: ['line', 'bar', 'pie', 'heatmap', 'geo'],
@@ -105,7 +105,7 @@ describe('SecurityIntelligenceDashboard', () => {
         export_formats: ['png', 'pdf', 'csv', 'json'],
         real_time_charts: true,
         geo_mapping_enabled: true
-  }
+
       alerts: {
         enabled: true,
         threshold_based_alerts: true,
@@ -114,7 +114,7 @@ describe('SecurityIntelligenceDashboard', () => {
         alert_channels: ['email', 'sms', 'webhook'],
         escalation_rules: true,
         auto_acknowledgment: false
-  }
+
       performance: {
         query_timeout_ms: 30000,
         max_data_points: 10000,
@@ -122,14 +122,14 @@ describe('SecurityIntelligenceDashboard', () => {
         cache_optimization: true,
         lazy_loading: true,
         compression_enabled: true
-  }
+
       epic_integration: {
         epic1_analytics_enabled: true,
         epic17_admin_enabled: true,
         cross_epic_dashboards: true,
         unified_navigation: true,
         shared_authentication: true
-      }
+
     };
 
     dashboard = new SecurityIntelligenceDashboard(
@@ -157,7 +157,7 @@ describe('SecurityIntelligenceDashboard', () => {
         metadata: expect.objectContaining({
           dashboard_version: '1.0.0',
           integration_type: 'epic1_analytics'
-  }
+
       });
 
       expect(mockPerformanceMonitoringService.recordMetric).toHaveBeenCalledWith({
@@ -167,7 +167,7 @@ describe('SecurityIntelligenceDashboard', () => {
         tags: {
           component: 'security_intelligence_dashboard',
           integration: 'epic1'
-        }
+
       });
 
       expect(mockHealthCheckFramework.registerHealthCheck).toHaveBeenCalledWith({
@@ -198,7 +198,7 @@ describe('SecurityIntelligenceDashboard', () => {
           cross_epic_dashboards: false,
           unified_navigation: false,
           shared_authentication: false
-        }
+
       };
 
       const dashboardWithoutEpic = new SecurityIntelligenceDashboard(
@@ -249,16 +249,16 @@ describe('SecurityIntelligenceDashboard', () => {
             axis_configuration: {
               x_axis: { label: 'Time', scale_type: 'time' as any, format: 'datetime', grid_lines: true },
               y_axis: { label: 'Count', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
             legend_configuration: { enabled: true, position: 'right' as any, orientation: 'vertical' as any, max_items: 10 },
             tooltip_configuration: { enabled: true, format: 'default', fields: ['timestamp', 'count'], delay_ms: 500 }
-  }
+
           refresh_rate_ms: 30000,
           filters: [],
           permissions: ['read'],
           created_at: Date.now(),
           updated_at: Date.now()
-        }
+
       ];
 
       const dashboardId = await dashboard.createDashboard('user_1', 'Test Dashboard', widgets);
@@ -273,7 +273,7 @@ describe('SecurityIntelligenceDashboard', () => {
           dashboard_name: 'Test Dashboard',
           widget_count: 1,
           timestamp: expect.any(Number)
-        }
+
       });
     });
 
@@ -296,16 +296,16 @@ describe('SecurityIntelligenceDashboard', () => {
             axis_configuration: {
               x_axis: { label: 'Time', scale_type: 'time' as any, format: 'datetime', grid_lines: true },
               y_axis: { label: 'Events', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
             legend_configuration: { enabled: true, position: 'bottom' as any, orientation: 'horizontal' as any, max_items: 5 },
             tooltip_configuration: { enabled: true, format: 'default', fields: ['timestamp', 'event_count'], delay_ms: 300 }
-  }
+
           refresh_rate_ms: 15000,
           filters: [],
           permissions: ['read', 'write'],
           created_at: Date.now(),
           updated_at: Date.now()
-        }
+
       ];
 
       const dashboardId = await dashboard.createDashboard('user_1', 'Timeline Dashboard', widgets);
@@ -333,16 +333,16 @@ describe('SecurityIntelligenceDashboard', () => {
             axis_configuration: {
               x_axis: { label: 'Category', scale_type: 'categorical' as any, format: 'string', grid_lines: false },
               y_axis: { label: 'Count', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
             legend_configuration: { enabled: true, position: 'right' as any, orientation: 'vertical' as any, max_items: 10 },
             tooltip_configuration: { enabled: true, format: 'percentage', fields: ['category', 'percentage'], delay_ms: 200 }
-  }
+
           refresh_rate_ms: 60000,
           filters: [],
           permissions: ['read'],
           created_at: Date.now(),
           updated_at: Date.now()
-        }
+
       ];
 
       const updatedWidgets: DashboardWidget[] = [
@@ -350,7 +350,7 @@ describe('SecurityIntelligenceDashboard', () => {
           ...initialWidgets[0],
           title: 'Updated Widget',
           description: 'Updated description'
-        }
+
       ];
 
       const dashboardId = await dashboard.createDashboard('user_1', 'Test Dashboard', initialWidgets);
@@ -388,10 +388,10 @@ describe('SecurityIntelligenceDashboard', () => {
           axis_configuration: {
             x_axis: { label: 'Time', scale_type: 'time' as any, format: 'datetime', grid_lines: true },
             y_axis: { label: 'Count', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
           legend_configuration: { enabled: true, position: 'right' as any, orientation: 'vertical' as any, max_items: 10 },
           tooltip_configuration: { enabled: true, format: 'default', fields: ['timestamp', 'count'], delay_ms: 500 }
-  }
+
         refresh_rate_ms: 30000,
         filters: [],
         permissions: ['read'],
@@ -427,10 +427,10 @@ describe('SecurityIntelligenceDashboard', () => {
           axis_configuration: {
             x_axis: { label: 'Threat Type', scale_type: 'categorical' as any, format: 'string', grid_lines: false },
             y_axis: { label: 'Count', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
           legend_configuration: { enabled: false, position: 'top' as any, orientation: 'horizontal' as any, max_items: 0 },
           tooltip_configuration: { enabled: true, format: 'default', fields: ['threat_type', 'count'], delay_ms: 400 }
-  }
+
         refresh_rate_ms: 30000,
         filters: [],
         permissions: ['read'],
@@ -465,10 +465,10 @@ describe('SecurityIntelligenceDashboard', () => {
           axis_configuration: {
             x_axis: { label: 'Time', scale_type: 'time' as any, format: 'datetime', grid_lines: true },
             y_axis: { label: 'Event Count', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
           legend_configuration: { enabled: true, position: 'bottom' as any, orientation: 'horizontal' as any, max_items: 8 },
           tooltip_configuration: { enabled: true, format: 'datetime_count', fields: ['timestamp', 'event_count'], delay_ms: 250 }
-  }
+
         refresh_rate_ms: 15000,
         filters: [],
         permissions: ['read'],
@@ -502,10 +502,10 @@ describe('SecurityIntelligenceDashboard', () => {
           axis_configuration: {
             x_axis: { label: 'Category', scale_type: 'categorical' as any, format: 'string', grid_lines: false },
             y_axis: { label: 'Value', scale_type: 'linear' as any, format: 'number', grid_lines: false }
-  }
+
           legend_configuration: { enabled: true, position: 'left' as any, orientation: 'vertical' as any, max_items: 12 },
           tooltip_configuration: { enabled: true, format: 'percentage', fields: ['category', 'value', 'percentage'], delay_ms: 150 }
-  }
+
         refresh_rate_ms: 60000,
         filters: [],
         permissions: ['read'],
@@ -540,10 +540,10 @@ describe('SecurityIntelligenceDashboard', () => {
           axis_configuration: {
             x_axis: { label: 'Time', scale_type: 'time' as any, format: 'datetime', grid_lines: true },
             y_axis: { label: 'Severity', scale_type: 'categorical' as any, format: 'string', grid_lines: true }
-  }
+
           legend_configuration: { enabled: true, position: 'top' as any, orientation: 'horizontal' as any, max_items: 6 },
           tooltip_configuration: { enabled: true, format: 'custom', fields: ['timestamp', 'severity', 'event_type'], delay_ms: 350 }
-  }
+
         refresh_rate_ms: 30000,
         filters: [],
         permissions: ['read'],
@@ -560,7 +560,7 @@ describe('SecurityIntelligenceDashboard', () => {
           operator: FilterOperator.IN,
           value: ['high', 'critical'],
           enabled: true
-        }
+
       ];
 
       const data = await dashboard.getWidgetData('filtered_widget', widget, filters);
@@ -585,10 +585,10 @@ describe('SecurityIntelligenceDashboard', () => {
           axis_configuration: {
             x_axis: { label: 'Time', scale_type: 'time' as any, format: 'datetime', grid_lines: true },
             y_axis: { label: 'Metric', scale_type: 'categorical' as any, format: 'string', grid_lines: false }
-  }
+
           legend_configuration: { enabled: true, position: 'right' as any, orientation: 'vertical' as any, max_items: 15 },
           tooltip_configuration: { enabled: true, format: 'metric_value', fields: ['metric', 'value', 'unit'], delay_ms: 100 }
-  }
+
         refresh_rate_ms: 10000,
         filters: [],
         permissions: ['read'],
@@ -605,7 +605,7 @@ describe('SecurityIntelligenceDashboard', () => {
         tags: {
           widget_type: DashboardWidgetType.PERFORMANCE_METRICS,
           widget_id: 'perf_widget'
-        }
+
       });
     });
 
@@ -627,10 +627,10 @@ describe('SecurityIntelligenceDashboard', () => {
           axis_configuration: {
             x_axis: { label: 'X', scale_type: 'linear' as any, format: 'number', grid_lines: true },
             y_axis: { label: 'Y', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
           legend_configuration: { enabled: false, position: 'bottom' as any, orientation: 'horizontal' as any, max_items: 0 },
           tooltip_configuration: { enabled: false, format: 'default', fields: [], delay_ms: 0 }
-  }
+
         refresh_rate_ms: 30000,
         filters: [],
         permissions: ['read'],
@@ -702,16 +702,16 @@ describe('SecurityIntelligenceDashboard', () => {
             axis_configuration: {
               x_axis: { label: 'Category', scale_type: 'categorical' as any, format: 'string', grid_lines: false },
               y_axis: { label: 'Size', scale_type: 'linear' as any, format: 'number', grid_lines: false }
-  }
+
             legend_configuration: { enabled: true, position: 'bottom' as any, orientation: 'horizontal' as any, max_items: 20 },
             tooltip_configuration: { enabled: true, format: 'size_percentage', fields: ['category', 'size', 'percentage'], delay_ms: 300 }
-  }
+
           refresh_rate_ms: 45000,
           filters: [],
           permissions: ['read', 'export'],
           created_at: Date.now(),
           updated_at: Date.now()
-        }
+
       ];
 
       const dashboardId = await dashboard.createDashboard('user_1', 'Export Test', widgets);
@@ -743,16 +743,16 @@ describe('SecurityIntelligenceDashboard', () => {
             axis_configuration: {
               x_axis: { label: 'Dimension', scale_type: 'categorical' as any, format: 'string', grid_lines: true },
               y_axis: { label: 'Value', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
             legend_configuration: { enabled: true, position: 'left' as any, orientation: 'vertical' as any, max_items: 10 },
             tooltip_configuration: { enabled: true, format: 'dimension_value', fields: ['dimension', 'value'], delay_ms: 200 }
-  }
+
           refresh_rate_ms: 20000,
           filters: [],
           permissions: ['read', 'export'],
           created_at: 1234567890000,
           updated_at: 1234567890000
-        }
+
       ];
 
       const dashboardId = await dashboard.createDashboard('user_1', 'CSV Test', widgets);
@@ -919,16 +919,16 @@ describe('SecurityIntelligenceDashboard', () => {
             axis_configuration: {
               x_axis: { label: 'X', scale_type: 'linear' as any, format: 'number', grid_lines: true },
               y_axis: { label: 'Y', scale_type: 'linear' as any, format: 'number', grid_lines: true }
-  }
+
             legend_configuration: { enabled: false, position: 'bottom' as any, orientation: 'horizontal' as any, max_items: 0 },
             tooltip_configuration: { enabled: false, format: 'default', fields: [], delay_ms: 0 }
-  }
+
           refresh_rate_ms: 30000,
           filters: [],
           permissions: ['read'],
           created_at: Date.now(),
           updated_at: Date.now()
-        }
+
       ];
 
       await expect(dashboard.createDashboard('user_1', 'Invalid Dashboard', invalidWidgets))

@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
-}
+
+
 interface CollaborationUser {
   id: string;,
-  name: string;
+  name: string;,
   email: string;,
-  status: 'online' | 'offline' | 'away';
+  status: 'online' | 'offline' | 'away';,
   role: 'owner' | 'editor' | 'viewer';
   lastActive?: Date;
   interface CollaborationActivity {
   id: string;,
-  userId: string;
+  userId: string;,
   userName: string;,
-  action: string;
+  action: string;,
   timestamp: Date;
   details?: string;
   interface CollaborationPanelProps {
   projectId: string;,
-  currentUserId: string;
+  currentUserId: string;,
   users: CollaborationUser;,
   activities: CollaborationActivity;
   onInviteUser?: (email: string, role: 'editor' | 'viewer') => void;
   onChangeUserRole?: (userId: string, role: 'owner' | 'editor' | 'viewer') => void;
   onRemoveUser?: (userId: string) => void;
-  export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({,)
+  export const CollaborationPanel: React.FC<CollaborationPanelProps> = ({),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   projectId: _,
   currentUserId,
@@ -31,7 +32,8 @@ interface CollaborationUser {
   onInviteUser,
   onChangeUserRole,
   onRemoveUser
-}
+
+
 }) => {
   const [activeTab, setActiveTab] = useState<'users' | 'activity'>('users');
   const [inviteEmail, setInviteEmail] = useState('');

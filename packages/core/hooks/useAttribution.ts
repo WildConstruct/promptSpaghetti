@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
-import { 
-  CreateAttributionRequest,
+import { CreateAttributionRequest,
   AttributionFilter,
   AttributionStatsRequest,
   UpdatePrivacySettingsRequest,
@@ -9,66 +8,58 @@ import {
   AttributionTimelineResponse,
   ContributorStatsResponse,
   AttributionPrivacySettings,
-  AttributionSession,
+  AttributionSession }
   AttributionContext
-} from '../types/attribution';
-}
-interface UseAttributionReturn {
-  // State
+ from '../types/attribution';
+
+
+interface UseAttributionReturn { // State
   loading: boolean;
   error: string | null;
   // Actions
-  recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>;
-  getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse>;
+  recordAttribution: (request: CreateAttributionRequest) => Promise<ChangeAttribution>
+  getAttributionStats: (request: AttributionStatsRequest) => Promise<AttributionStatsResponse> }
   getAttributionTimeline: (projectId: string, filter: AttributionFilter) => Promise<AttributionTimelineResponse>;
-}
+
+
   getContributorStats: (projectId: string, dateRange?: { start: Date; end: Date }) => Promise<ContributorStatsResponse>;
-  listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution>;
+  listAttributions: (filter: AttributionFilter) => Promise<ChangeAttribution>
   startSession: (projectId: string, sessionId?: string) => Promise<AttributionSession>;
-  endSession: (sessionId: string) => Promise<void>;
-  updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>;
-  getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>;
-  cleanupOldData: (projectId: string) => Promise<void>;
-  getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution>;
+  endSession: (sessionId: string) => Promise<void>
+  updatePrivacySettings: (request: UpdatePrivacySettingsRequest) => Promise<AttributionPrivacySettings>
+  getPrivacySettings: (projectId: string) => Promise<AttributionPrivacySettings | null>
+  cleanupOldData: (projectId: string) => Promise<void>
+  getResourceAttribution: (projectId: string, resourceType: string, resourceId: string) => Promise<ChangeAttribution>
   getAuthorAttribution: (projectId: string, authorId: string, dateRange?: { start: Date; end: Date }) => Promise<ChangeAttribution>;
   recordBatchAttributions: (projectId: string, attributions: any, batchId?: string) => Promise<ChangeAttribution>;
   // Utility
   clearError: () => void;
 
-export const useAttribution = (): UseAttributionReturn => {
-  const [loading, setLoading] = useState(false);
+export const useAttribution = (): UseAttributionReturn => { const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const apiCall = useCallback(async <T>(;);
-    url: string,
+    url: string }
     options: RequestInit = {}
-  ): Promise<T> => {
-  try {
+  ): Promise<T> => { try {
   setLoading(true);
   setError(null);
   const response = await fetch(url, {)
-  ...options,
+  ...options
   headers: {
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/json' }
   ...options.headers
 });
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);}
       const data = await response.json();
-      if (!data.success) {
-        throw new Error(data.error || 'Request failed');
-      return data.data;
-    } catch (err) {
-  const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      if (!data.success) { throw new Error(data.error || 'Request failed');
+      return data.data } catch (err) { const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
   setError(errorMessage);
-  throw err;
-} finally {
-      setLoading(false);
-  }, []);
-  const recordAttribution = useCallback(async (request: CreateAttributionRequest): Promise<ChangeAttribution> => {
-  return apiCall<ChangeAttribution>('/api/attribution/record', {)
-  method: 'POST',
-  body: JSON.stringify(request),
+  throw err } finally { setLoading(false) }, []);
+  const recordAttribution = useCallback(async (request: CreateAttributionRequest): Promise<ChangeAttribution> => { return apiCall<ChangeAttribution>('/api/attribution/record', {)
+  method: 'POST'
+  body: JSON.stringify(request) }
 });
   }, [apiCall]);
   const getAttributionStats = useCallback(async (request: AttributionStatsRequest): Promise<AttributionStatsResponse> => {
@@ -126,22 +117,20 @@ export const useAttribution = (): UseAttributionReturn => {
     if (filter.sortOrder) params.append('sortOrder', filter.sortOrder);
     return apiCall<ChangeAttribution>(`/api/attribution/list?${params.toString()}`);}
   }, [apiCall]);
-  const startSession = useCallback(async (projectId: string, sessionId?: string): Promise<AttributionSession> => {
-    return apiCall<AttributionSession>('/api/attribution/session/start', {)
-  method: 'POST',
+  const startSession = useCallback(async (projectId: string, sessionId?: string): Promise<AttributionSession> => { return apiCall<AttributionSession>('/api/attribution/session/start', {)
+  method: 'POST' }
       body: JSON.stringify({ projectId, sessionId })
     });
   }, [apiCall]);
-  const endSession = useCallback(async (sessionId: string): Promise<void> => {
-    return apiCall<void>('/api/attribution/session/end', {)
-  method: 'POST',
+  const endSession = useCallback(async (sessionId: string): Promise<void> => { return apiCall<void>('/api/attribution/session/end', {)
+  method: 'POST' }
       body: JSON.stringify({ sessionId })
     });
   }, [apiCall]);
   const updatePrivacySettings = useCallback(async (request: UpdatePrivacySettingsRequest): Promise<AttributionPrivacySettings> => {
     return apiCall<AttributionPrivacySettings>(`/api/attribution/privacy/${request.projectId}`, {)}
-  },
-  method: 'PUT',
+
+  method: 'PUT'
       body: JSON.stringify(request);
   });
   }, [apiCall]);
@@ -150,8 +139,8 @@ export const useAttribution = (): UseAttributionReturn => {
   }, [apiCall]);
   const cleanupOldData = useCallback(async (projectId: string): Promise<void> => {
     return apiCall<void>(`/api/attribution/cleanup/${projectId}`, {)}
-  },
-  method: 'POST'
+
+  method: 'POST';
   });
   }, [apiCall]);
   const getResourceAttribution = useCallback(async (projectId: string, resourceType: string, resourceId: string): Promise<ChangeAttribution> => {
@@ -163,31 +152,27 @@ export const useAttribution = (): UseAttributionReturn => {
     if (dateRange?.end) params.append('dateTo', dateRange.end.toISOString());
     return apiCall<ChangeAttribution>(`/api/attribution/author/${projectId}/${authorId}?${params.toString()}`);}
   }, [apiCall]);
-  const recordBatchAttributions = useCallback(async (projectId: string, attributions: any, batchId?: string): Promise<ChangeAttribution> => {
-    return apiCall<ChangeAttribution>('/api/attribution/batch', {)
-  method: 'POST',
+  const recordBatchAttributions = useCallback(async (projectId: string, attributions: any, batchId?: string): Promise<ChangeAttribution> => { return apiCall<ChangeAttribution>('/api/attribution/batch', {)
+  method: 'POST' }
       body: JSON.stringify({ projectId, attributions, batchId })
     });
   }, [apiCall]);
-  const clearError = useCallback(() => {
-    setError(null);
-  }, []);
-  return {
-    loading,
-    error,
-    recordAttribution,
-    getAttributionStats,
-    getAttributionTimeline,
-    getContributorStats,
-    listAttributions,
-    startSession,
-    endSession,
-    updatePrivacySettings,
-    getPrivacySettings,
-    cleanupOldData,
-    getResourceAttribution,
-    getAuthorAttribution,
-    recordBatchAttributions,
+  const clearError = useCallback(() => { setError(null) }, []);
+  return { loading
+    error
+    recordAttribution
+    getAttributionStats
+    getAttributionTimeline
+    getContributorStats
+    listAttributions
+    startSession
+    endSession
+    updatePrivacySettings
+    getPrivacySettings
+    cleanupOldData
+    getResourceAttribution
+    getAuthorAttribution
+    recordBatchAttributions }
     clearError
   };
 };

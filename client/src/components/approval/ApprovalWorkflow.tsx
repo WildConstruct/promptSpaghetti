@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-}
+
 export interface ApprovalRequest {
   id: string;,
-  type: 'content' | 'user_access' | 'template' | 'deletion' | 'policy_change';
+  type: 'content' | 'user_access' | 'template' | 'deletion' | 'policy_change';,
   title: string;,
-  description: string;
+  description: string;,
   requestedBy: string;,
-  requestedAt: Date;
+  requestedAt: Date;,
   priority: 'low' | 'medium' | 'high' | 'critical';,
   status: 'pending' | 'approved' | 'rejected' | 'escalated';
   approvedBy?: string;
@@ -20,14 +20,15 @@ export interface ApprovalRequest {
   currentApprovals?: string;
   interface ApprovalWorkflowProps {
   requests: ApprovalRequest;,
-  currentUserId: string;
+  currentUserId: string;,
   userRole: 'admin' | 'moderator' | 'reviewer';
   onApprove?: (requestId: string, reason: string) => void;
   onReject?: (requestId: string, reason: string) => void;
   onEscalate?: (requestId: string, reason: string) => void;
   onRequestDetails?: (requestId: string) => void;
-}
-}
+
+
+
 export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({)
   requests,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

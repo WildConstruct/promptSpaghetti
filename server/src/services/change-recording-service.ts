@@ -17,10 +17,10 @@ import {
   AuditSeverity,
   AuditContext,
   CreateAuditEventRequest
-} from '../database/audit-models';
+ from '../database/audit-models';
 
-}
-}
+
+
 export interface ChangeRecord {
   id: string;
   resourceType: string;
@@ -63,12 +63,13 @@ export interface ChangeRecord {
   
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface FieldChange {
   fieldPath: string; // Dot notation path (e.g., 'user.profile.email')
   fieldType: FieldType;
@@ -88,12 +89,13 @@ export interface FieldChange {
   
   // Metadata
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeContext {
   actorId?: string;
   actorType: 'user' | 'system' | 'service' | 'automation';
@@ -116,12 +118,13 @@ export interface ChangeContext {
   changeRequest?: string;
   approvalRequired: boolean;
   approvedBy?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeMetadata {
   // Change classification
   category: ChangeCategory;
@@ -146,12 +149,13 @@ export interface ChangeMetadata {
   // Additional metadata
   tags: string[];
   customAttributes: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeAnalysis {
   // Change complexity
   complexity: 'simple' | 'moderate' | 'complex' | 'critical';
@@ -174,12 +178,13 @@ export interface ChangeAnalysis {
   // Risk analysis
   riskFactors: RiskFactor[];
   mitigationActions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ImpactAssessment {
   // Impact scope
   scope: ImpactScope;
@@ -198,12 +203,13 @@ export interface ImpactAssessment {
   recoveryTime?: number; // Estimated minutes to recover
   rollbackPlan?: string;
   rollbackComplexity: 'simple' | 'moderate' | 'complex' | 'impossible';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceRelevance {
   isComplianceRelevant: boolean;
   relevantStandards: string[];
@@ -226,47 +232,51 @@ export interface ComplianceRelevance {
   // Export restrictions
   requiresExportControl: boolean;
   exportClassification?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ValidationResult {
   validator: string;
   status: 'passed' | 'failed' | 'warning';
   message: string;
   severity: ValidationSeverity;
   remediation?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangePattern {
   patternType: 'bulk_change' | 'cascading_change' | 'rollback' | 'configuration_drift' | 'data_migration';
   confidence: number;
   description: string;
   relatedChanges: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeAnomaly {
   anomalyType: 'unusual_timing' | 'unexpected_actor' | 'suspicious_pattern' | 'high_volume' | 'privilege_escalation';
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   riskScore: number;
   recommendedAction: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RiskFactor {
   factor: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -274,24 +284,26 @@ export interface RiskFactor {
   likelihood: number; // 0-100%
   impact: number; // 0-100
   mitigations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AffectedEntity {
   entityType: string;
   entityId: string;
   entityName?: string;
   impactLevel: 'minimal' | 'moderate' | 'significant' | 'severe';
   impactDescription: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BusinessImpact {
   severity: ImpactSeverity;
   description: string;
@@ -299,12 +311,13 @@ export interface BusinessImpact {
   estimatedCost?: number;
   revenueImpact?: number;
   customerImpact: CustomerImpact;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface TechnicalImpact {
   severity: ImpactSeverity;
   description: string;
@@ -312,36 +325,39 @@ export interface TechnicalImpact {
   performanceImpact?: PerformanceImpact;
   availabilityImpact?: AvailabilityImpact;
   dataIntegrityImpact?: DataIntegrityImpact;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityImpact {
   severity: ImpactSeverity;
   description: string;
   securityRisks: SecurityRisk[];
   privilegeChanges: PrivilegeChange[];
   accessChanges: AccessChange[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceImpact {
   severity: ImpactSeverity;
   description: string;
   affectedStandards: string[];
   violations: ComplianceViolation[];
   requiredActions: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeHistory {
   resourceType: string;
   resourceId: string;
@@ -362,12 +378,13 @@ export interface ChangeHistory {
   
   createdAt: Date;
   updatedAt: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeStatistics {
   totalChanges: number;
   changesByType: Record<ChangeType, number>;
@@ -385,25 +402,27 @@ export interface ChangeStatistics {
     gdprRelevantChanges: number;
     approvedChanges: number;
     auditedChanges: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ChangeTrend {
   period: 'daily' | 'weekly' | 'monthly';
   metric: string;
   values: Array<{
     timestamp: Date;
     value: number;
-}
-}
-  }>;
+
+
+
+>;
   trend: 'increasing' | 'decreasing' | 'stable' | 'volatile';
   changePercent: number;
-}
+
 
 // Enums
 export type ChangeType = 
@@ -510,94 +529,102 @@ export type ValidationSeverity =
   | 'error'
   | 'critical';
 
-}
-}
+
+
 export interface CustomerImpact {
   affectedCustomers: number;
   severity: ImpactSeverity;
   communicationRequired: boolean;
   compensationRequired: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PerformanceImpact {
   responseTimeChange: number; // percentage
   throughputChange: number; // percentage
   resourceUtilizationChange: number; // percentage
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AvailabilityImpact {
   downtime: number; // minutes
   affectedServices: string[];
   userImpact: number; // affected users
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface DataIntegrityImpact {
   dataConsistencyRisk: RiskLevel;
   backupRequired: boolean;
   validationRequired: boolean;
   description: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityRisk {
   riskType: string;
   severity: ImpactSeverity;
   description: string;
   mitigations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface PrivilegeChange {
   type: 'grant' | 'revoke' | 'modify';
   privilege: string;
   target: string;
   justification: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface AccessChange {
   type: 'grant' | 'revoke' | 'modify';
   resource: string;
   permissions: string[];
   target: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ComplianceViolation {
   standard: string;
   violationType: string;
   severity: ImpactSeverity;
   description: string;
   remediation: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * Change Recording Service
@@ -613,7 +640,7 @@ export class ChangeRecordingService extends EventEmitter {
   constructor(auditService: AuditService) {
     super();
     this.auditService = auditService;
-  }
+
 
   /**
    * Record a comprehensive change with full analysis
@@ -641,7 +668,7 @@ export class ChangeRecordingService extends EventEmitter {
     // Check for duplicate changes (within last 5 minutes)
     if (await this.isDuplicateChange(changeHash, options.deduplicationWindow || 300000)) {
       return this.getChangeByHash(changeHash)!;
-    }
+
     
     // Analyze the change
     const changeAnalysis = await this.analyzeChange(
@@ -722,13 +749,13 @@ export class ChangeRecordingService extends EventEmitter {
     // Link to parent change if specified
     if (options.parentChangeId) {
       await this.linkToParentChange(options.parentChangeId, changeId);
-    }
+
     
     // Create audit event
     if (options.createAuditEvent !== false) {
       const auditEvent = await this.createAuditEvent(changeRecord, context);
       changeRecord.auditEventId = auditEvent;
-    }
+
     
     // Emit change event
     this.emit('changeRecorded', {
@@ -738,11 +765,11 @@ export class ChangeRecordingService extends EventEmitter {
         complexity: changeAnalysis.complexity,
         riskLevel: changeMetadata.riskLevel,
         complianceRelevant: complianceRelevance.isComplianceRelevant
-      }
+
     });
     
     return changeRecord;
-  }
+
 
   /**
    * Record a bulk change operation
@@ -753,7 +780,7 @@ export class ChangeRecordingService extends EventEmitter {
       resourceId: string;
       beforeState: Record<string, any>;
       afterState: Record<string, any>;
-    }>,
+>,
     context: ChangeContext,
     options: BulkChangeRecordingOptions = {}
   ): Promise<ChangeRecord[]> {
@@ -770,7 +797,7 @@ export class ChangeRecordingService extends EventEmitter {
         ...context.triggerDetails,
         bulkOperation: true,
         totalChanges: changes.length
-      }
+
     };
     
     // Process each change
@@ -789,8 +816,8 @@ export class ChangeRecordingService extends EventEmitter {
               ...bulkContext.triggerDetails,
               bulkIndex: i,
               bulkTotal: changes.length
-            }
-  }
+
+
           {
             ...options,
             parentChangeId: bulkChangeId,
@@ -799,8 +826,7 @@ export class ChangeRecordingService extends EventEmitter {
         );
         
         changeRecords.push(changeRecord);
-        
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to record change ${i}:`, error);
         
         // Create failed change record
@@ -829,7 +855,7 @@ export class ChangeRecordingService extends EventEmitter {
             containsSensitiveData: false,
             tags: ['bulk_change', 'failed'],
             customAttributes: {}
-  }
+
           changeAnalysis: {
             complexity: 'simple',
             changeScore: 0,
@@ -842,7 +868,7 @@ export class ChangeRecordingService extends EventEmitter {
             conflictingChanges: [],
             riskFactors: [],
             mitigationActions: []
-  }
+
           impactAssessment: {
             scope: 'single_resource',
             severity: 'negligible',
@@ -856,29 +882,29 @@ export class ChangeRecordingService extends EventEmitter {
                 severity: 'negligible',
                 communicationRequired: false,
                 compensationRequired: false
-              }
-  }
+
+
             technicalImpact: {
               severity: 'negligible',
               description: 'No technical impact',
               affectedSystems: []
-  }
+
             securityImpact: {
               severity: 'negligible',
               description: 'No security impact',
               securityRisks: [],
               privilegeChanges: [],
               accessChanges: []
-  }
+
             complianceImpact: {
               severity: 'negligible',
               description: 'No compliance impact',
               affectedStandards: [],
               violations: [],
               requiredActions: []
-  }
+
             rollbackComplexity: 'impossible'
-  }
+
           complianceRelevance: {
             isComplianceRelevant: false,
             relevantStandards: [],
@@ -889,7 +915,7 @@ export class ChangeRecordingService extends EventEmitter {
             hasLegalImplications: false,
             legalReviewRequired: false,
             requiresExportControl: false
-  }
+
           timestamp: new Date(),
           parentChangeId: bulkChangeId,
           childChangeIds: [],
@@ -899,11 +925,11 @@ export class ChangeRecordingService extends EventEmitter {
         };
         
         changeRecords.push(failedRecord);
-      }
-    }
+
+
     
     return changeRecords;
-  }
+
 
   /**
    * Get change history for a resource
@@ -925,19 +951,19 @@ export class ChangeRecordingService extends EventEmitter {
       
       if (records.length === 0) {
         return null;
-      }
+
       
       history = await this.buildChangeHistory(resourceType, resourceId, records);
       this.changeHistories.set(historyKey, history);
-    }
+
     
     // Apply filters if specified
     if (options.startDate || options.endDate || options.changeTypes || options.actors) {
       history = this.filterChangeHistory(history, options);
-    }
+
     
     return history;
-  }
+
 
   /**
    * Get change records with filtering and pagination
@@ -949,39 +975,39 @@ export class ChangeRecordingService extends EventEmitter {
     // Apply filters
     if (filter.resourceTypes?.length) {
       records = records.filter(r => filter.resourceTypes!.includes(r.resourceType));
-    }
+
     
     if (filter.resourceIds?.length) {
       records = records.filter(r => filter.resourceIds!.includes(r.resourceId));
-    }
+
     
     if (filter.changeTypes?.length) {
       records = records.filter(r => filter.changeTypes!.includes(r.changeType));
-    }
+
     
     if (filter.actors?.length) {
       records = records.filter(r => 
         r.changeContext.actorId && filter.actors!.includes(r.changeContext.actorId)
       );
-    }
+
     
     if (filter.startDate) {
       records = records.filter(r => r.timestamp >= filter.startDate!);
-    }
+
     
     if (filter.endDate) {
       records = records.filter(r => r.timestamp <= filter.endDate!);
-    }
+
     
     if (filter.riskLevels?.length) {
       records = records.filter(r => filter.riskLevels!.includes(r.changeMetadata.riskLevel));
-    }
+
     
     if (filter.complianceRelevant !== undefined) {
       records = records.filter(r => 
         r.complianceRelevance.isComplianceRelevant === filter.complianceRelevant
       );
-    }
+
     
     if (filter.searchTerm) {
       const term = filter.searchTerm.toLowerCase();
@@ -990,7 +1016,7 @@ export class ChangeRecordingService extends EventEmitter {
         r.changeContext.businessReason?.toLowerCase().includes(term) ||
         r.fieldChanges.some(fc => fc.fieldPath.toLowerCase().includes(term))
       );
-    }
+
     
     // Sort records
     const sortBy = filter.sortBy || 'timestamp';
@@ -1014,13 +1040,13 @@ export class ChangeRecordingService extends EventEmitter {
         break;
       default:
         aVal = bVal = 0;
-      }
+
       
       if (sortOrder === 'asc') {
         return aVal - bVal;
-      } else {
+ else {
         return bVal - aVal;
-      }
+
     });
     
     // Apply pagination
@@ -1038,16 +1064,16 @@ export class ChangeRecordingService extends EventEmitter {
         limit,
         total: records.length,
         totalPages: Math.ceil(records.length / limit)
-  }
+
       summary: {
         totalChanges: records.length,
         changesByType: this.groupBy(records, r => r.changeType),
         changesByRisk: this.groupBy(records, r => r.changeMetadata.riskLevel),
         complianceRelevantChanges: records.filter(r => r.complianceRelevance.isComplianceRelevant).length,
         highRiskChanges: records.filter(r => ['high', 'very_high'].includes(r.changeMetadata.riskLevel)).length
-      }
+
     };
-  }
+
 
   // Private helper methods
   
@@ -1083,11 +1109,11 @@ export class ChangeRecordingService extends EventEmitter {
           validationStatus: 'valid',
           validationMessages: []
         });
-      }
-    }
+
+
     
     return changes;
-  }
+
 
   private async analyzeChange(
     resourceType: string,
@@ -1132,7 +1158,7 @@ export class ChangeRecordingService extends EventEmitter {
       riskFactors,
       mitigationActions: riskFactors.flatMap(rf => rf.mitigations)
     };
-  }
+
 
   private async assessImpact(
     resourceType: string,
@@ -1170,7 +1196,7 @@ export class ChangeRecordingService extends EventEmitter {
       complianceImpact,
       rollbackComplexity
     };
-  }
+
 
   private async assessComplianceRelevance(
     resourceType: string,
@@ -1205,7 +1231,7 @@ export class ChangeRecordingService extends EventEmitter {
       legalReviewRequired: impact.complianceImpact.violations.some(v => v.severity === 'severe'),
       requiresExportControl: this.requiresExportControl(fieldChanges, context)
     };
-  }
+
 
   private createChangeMetadata(
     resourceType: string,
@@ -1233,7 +1259,7 @@ export class ChangeRecordingService extends EventEmitter {
       tags: this.generateTags(resourceType, fieldChanges, impact, compliance),
       customAttributes: {}
     };
-  }
+
 
   private async createAuditEvent(
     changeRecord: ChangeRecord,
@@ -1260,7 +1286,7 @@ export class ChangeRecordingService extends EventEmitter {
         complianceRelevant: changeRecord.complianceRelevance.isComplianceRelevant,
         patterns: changeRecord.changeAnalysis.patterns.map(p => p.patternType),
         anomalies: changeRecord.changeAnalysis.anomalies.map(a => a.anomalyType)
-  }
+
       complianceStandards: changeRecord.complianceRelevance.relevantStandards.map(s => s as any)
     };
 
@@ -1278,13 +1304,13 @@ export class ChangeRecordingService extends EventEmitter {
     });
 
     return changeRecord.id; // Return change record ID as audit reference
-  }
+
 
   // Additional helper methods would continue here...
   
   private generateChangeId(): string {
     return `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private generateChangeHash(
     resourceType: string, 
@@ -1301,9 +1327,9 @@ export class ChangeRecordingService extends EventEmitter {
       const char = hashInput.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash; // Convert to 32-bit integer
-    }
+
     return hash.toString(36);
-  }
+
 
   private async isDuplicateChange(changeHash: string, windowMs: number): Promise<boolean> {
 
@@ -1311,13 +1337,13 @@ export class ChangeRecordingService extends EventEmitter {
     return Array.from(this.changeRecords.values()).some(record => 
       record.changeHash === changeHash && record.timestamp >= cutoff
     );
-  }
+
 
   private getChangeByHash(changeHash: string): ChangeRecord | undefined {
     return Array.from(this.changeRecords.values()).find(record => 
       record.changeHash === changeHash
     );
-  }
+
 
   private getNestedKeys(obj: unknown, prefix = ''): string[] {
     const keys: string[] = [];
@@ -1329,20 +1355,20 @@ export class ChangeRecordingService extends EventEmitter {
         
         if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
           keys.push(...this.getNestedKeys(obj[key], fullKey));
-        }
-      }
-    }
+
+
+
     
     return keys;
-  }
+
 
   private getNestedValue(obj: unknown, path: string): unknown {
     return path.split('.').reduce((current, key) => current?.[key], obj);
-  }
+
 
   private isEqual(a: unknown, b: unknown): boolean {
     return JSON.stringify(a) === JSON.stringify(b);
-  }
+
 
   private determineOperation(oldValue: Error, newValue: Error): ChangeOperation {
     if (oldValue === undefined && newValue !== undefined) return 'set';
@@ -1350,16 +1376,16 @@ export class ChangeRecordingService extends EventEmitter {
     if (Array.isArray(oldValue) && Array.isArray(newValue)) {
       if (newValue.length > oldValue.length) return 'add';
       if (newValue.length < oldValue.length) return 'remove';
-    }
+
     return 'update';
-  }
+
 
   private determineFieldType(value: Error): FieldType {
     if (value === null || value === undefined) return 'primitive';
     if (Array.isArray(value)) return 'array';
     if (typeof value === 'object') return 'object';
     return 'primitive';
-  }
+
 
   private assessFieldSignificance(
     fieldPath: string, 
@@ -1380,7 +1406,7 @@ export class ChangeRecordingService extends EventEmitter {
     if (typeof newValue === 'object') return 'moderate';
     
     return 'minor';
-  }
+
 
   private isSecurityRelevantField(fieldPath: string): boolean {
     const securityFields = [
@@ -1392,7 +1418,7 @@ export class ChangeRecordingService extends EventEmitter {
     return securityFields.some(field => 
       fieldPath.toLowerCase().includes(field)
     );
-  }
+
 
   private isComplianceRelevantField(fieldPath: string): boolean {
     const complianceFields = [
@@ -1404,7 +1430,7 @@ export class ChangeRecordingService extends EventEmitter {
     return complianceFields.some(field => 
       fieldPath.toLowerCase().includes(field)
     );
-  }
+
 
   // More helper methods would continue...
   
@@ -1421,7 +1447,7 @@ export class ChangeRecordingService extends EventEmitter {
     if (objectChanges > 5 || changeCount > 20) return 'complex';
     if (changeCount > 5) return 'moderate';
     return 'simple';
-  }
+
 
   private calculateChangeScore(
     fieldChanges: FieldChange[],
@@ -1435,7 +1461,7 @@ export class ChangeRecordingService extends EventEmitter {
       'moderate': 1.5,
       'complex': 2,
       'critical': 3
-    }[complexity] || 1;
+[complexity] || 1;
     
     score *= complexityMultiplier;
     
@@ -1447,13 +1473,13 @@ export class ChangeRecordingService extends EventEmitter {
         'moderate': 3,
         'major': 5,
         'critical': 10
-      }[fc.changeSignificance] || 0;
+[fc.changeSignificance] || 0;
       
       score += significanceBonus;
     });
     
     return Math.min(score, 100); // Cap at 100
-  }
+
 
   private async detectPatterns(
     resourceType: string,
@@ -1476,11 +1502,11 @@ export class ChangeRecordingService extends EventEmitter {
           description: `Part of bulk operation with ${relatedChanges.length} changes`,
           relatedChanges: relatedChanges.map(r => r.id)
         });
-      }
-    }
+
+
     
     return patterns;
-  }
+
 
   private async detectAnomalies(
     _____resourceType: string,
@@ -1501,10 +1527,10 @@ export class ChangeRecordingService extends EventEmitter {
         riskScore: 30,
         recommendedAction: 'Review change authorization'
       });
-    }
+
     
     return anomalies;
-  }
+
 
   private async analyzeFrequency(
     resourceType: string,
@@ -1514,7 +1540,7 @@ export class ChangeRecordingService extends EventEmitter {
     isFrequentChange: boolean;
     changeFrequency: number;
     lastSimilarChange?: Date;
-  }> {
+> {
 
     const recentChanges = Array.from(this.changeRecords.values())
       .filter(r => 
@@ -1529,7 +1555,7 @@ export class ChangeRecordingService extends EventEmitter {
       lastSimilarChange: recentChanges.length > 0 ? 
         recentChanges[recentChanges.length - 1].timestamp : undefined
     };
-  }
+
 
   private async findRelatedChanges(
     resourceType: string,
@@ -1547,7 +1573,7 @@ export class ChangeRecordingService extends EventEmitter {
         r.timestamp >= cutoff
 
       .map(r => r.id);
-  }
+
 
   private assessRiskFactors(
     fieldChanges: FieldChange[],
@@ -1568,7 +1594,7 @@ export class ChangeRecordingService extends EventEmitter {
         impact: 90,
         mitigations: ['Review access logs', 'Verify authorization', 'Monitor for suspicious activity']
       });
-    }
+
     
     // Anomaly-based risks
     anomalies.forEach(anomaly => {
@@ -1583,7 +1609,7 @@ export class ChangeRecordingService extends EventEmitter {
     });
     
     return factors;
-  }
+
 
   // More implementation would continue...
   
@@ -1593,7 +1619,7 @@ export class ChangeRecordingService extends EventEmitter {
       acc[key] = (acc[key] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
-  }
+
 
   private getRiskLevelScore(riskLevel: RiskLevel): number {
     const scores = {
@@ -1604,7 +1630,7 @@ export class ChangeRecordingService extends EventEmitter {
       'very_high': 5
     };
     return scores[riskLevel] || 0;
-  }
+
 
   private getComplexityScore(complexity: string): number {
     const scores = {
@@ -1614,14 +1640,14 @@ export class ChangeRecordingService extends EventEmitter {
       'critical': 4
     };
     return scores[complexity] || 0;
-  }
+
 
   // Stub implementations for remaining methods
   private determineChangeType(beforeState: Error, afterState: Error, _____context: ChangeContext): ChangeType {
     if (!beforeState || Object.keys(beforeState).length === 0) return 'create';
     if (!afterState || Object.keys(afterState).length === 0) return 'delete';
     return 'update';
-  }
+
 
   private async updateChangeHistory(
     resourceType: string, 
@@ -1659,13 +1685,13 @@ export class ChangeRecordingService extends EventEmitter {
             gdprRelevantChanges: 0,
             approvedChanges: 0,
             auditedChanges: 0
-          }
-  }
+
+
         trends: [],
         createdAt: new Date(),
         updatedAt: new Date()
       };
-    }
+
     
     // Add the change record
     history.changeRecords.push(changeRecord);
@@ -1677,7 +1703,7 @@ export class ChangeRecordingService extends EventEmitter {
     this.updateHistoryStatistics(history);
     
     this.changeHistories.set(historyKey, history);
-  }
+
 
   private updateHistoryStatistics(history: ChangeHistory): void {
     const records = history.changeRecords;
@@ -1699,7 +1725,7 @@ export class ChangeRecordingService extends EventEmitter {
     
     history.statistics.complianceMetrics.complianceRelevantChanges = 
       records.filter(r => r.complianceRelevance.isComplianceRelevant).length;
-  }
+
 
   private async linkToParentChange(parentChangeId: string, childChangeId: string): Promise<void> {
 
@@ -1708,8 +1734,8 @@ export class ChangeRecordingService extends EventEmitter {
       parentChange.childChangeIds.push(childChangeId);
       parentChange.updatedAt = new Date();
       this.changeRecords.set(parentChangeId, parentChange);
-    }
-  }
+
+
 
   private async buildChangeHistory(
     resourceType: string,
@@ -1743,8 +1769,8 @@ export class ChangeRecordingService extends EventEmitter {
           gdprRelevantChanges: 0,
           approvedChanges: 0,
           auditedChanges: 0
-        }
-  }
+
+
       trends: [],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -1752,7 +1778,7 @@ export class ChangeRecordingService extends EventEmitter {
 
     this.updateHistoryStatistics(history);
     return history;
-  }
+
 
   private filterChangeHistory(
     history: ChangeHistory,
@@ -1762,28 +1788,28 @@ export class ChangeRecordingService extends EventEmitter {
 
     if (options.startDate) {
       filteredRecords = filteredRecords.filter(r => r.timestamp >= options.startDate!);
-    }
+
 
     if (options.endDate) {
       filteredRecords = filteredRecords.filter(r => r.timestamp <= options.endDate!);
-    }
+
 
     if (options.changeTypes?.length) {
       filteredRecords = filteredRecords.filter(r => options.changeTypes!.includes(r.changeType));
-    }
+
 
     if (options.actors?.length) {
       filteredRecords = filteredRecords.filter(r => 
         r.changeContext.actorId && options.actors!.includes(r.changeContext.actorId)
       );
-    }
+
 
     return {
       ...history,
       changeRecords: filteredRecords,
       totalChanges: filteredRecords.length
     };
-  }
+
 
   // Remaining stub implementations...
   private determineImpactScope(): ImpactScope { return 'single_resource'; }
@@ -1799,16 +1825,16 @@ export class ChangeRecordingService extends EventEmitter {
         severity: 'negligible',
         communicationRequired: false,
         compensationRequired: false
-      }
+
     };
-  }
+
   private assessTechnicalImpact(): TechnicalImpact { 
     return {
       severity: 'minor',
       description: 'Minimal technical impact',
       affectedSystems: []
     };
-  }
+
   private assessSecurityImpact(): SecurityImpact { 
     return {
       severity: 'minor',
@@ -1817,7 +1843,7 @@ export class ChangeRecordingService extends EventEmitter {
       privilegeChanges: [],
       accessChanges: []
     };
-  }
+
   private assessComplianceImpact(): ComplianceImpact { 
     return {
       severity: 'minor',
@@ -1826,10 +1852,10 @@ export class ChangeRecordingService extends EventEmitter {
       violations: [],
       requiredActions: []
     };
-  }
+
   private assessRollbackComplexity(): 'simple' | 'moderate' | 'complex' | 'impossible' { 
     return 'simple'; 
-  }
+
   private determineRelevantStandards(): string[] { return []; }
   private affectsDataSubjectRights(): boolean { return false; }
   private async getAffectedDataSubjects(): Promise<string[]> { return []; }
@@ -1846,33 +1872,35 @@ export class ChangeRecordingService extends EventEmitter {
   private mapToAuditSeverity(): AuditSeverity { return AuditSeverity.MEDIUM; }
   private generateChangeDescription(record: ChangeRecord): string {
     return `Changed ${record.fieldChanges.length} fields in ${record.resourceType} ${record.resourceId}`;
-  }
+
   private async validateChange(): Promise<ValidationResult[]> { return []; }
-}
+
 
 // Supporting interfaces
-}
-}
+
+
+
 export interface ChangeRecordingOptions {
   parentChangeId?: string;
   deduplicationWindow?: number; // milliseconds
   createAuditEvent?: boolean;
   skipValidation?: boolean;
   customMetadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface BulkChangeRecordingOptions extends ChangeRecordingOptions {
   auditEachChange?: boolean;
   continueOnError?: boolean;
   batchSize?: number;
-}
 
-}
-}
+
+
+
 export interface ChangeHistoryOptions {
   startDate?: Date;
   endDate?: Date;
@@ -1880,12 +1908,13 @@ export interface ChangeHistoryOptions {
   actors?: string[];
   includeStatistics?: boolean;
   includeTrends?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeRecordFilter {
   resourceTypes?: string[];
   resourceIds?: string[];
@@ -1900,12 +1929,13 @@ export interface ChangeRecordFilter {
   limit?: number;
   sortBy?: 'timestamp' | 'riskLevel' | 'complexity';
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChangeRecordResponse {
   records: ChangeRecord[];
   pagination: {
@@ -1913,8 +1943,9 @@ export interface ChangeRecordResponse {
     limit: number;
     total: number;
     totalPages: number;
-}
-}
+
+
+
   };
   summary: {
     totalChanges: number;
@@ -1923,6 +1954,6 @@ export interface ChangeRecordResponse {
     complianceRelevantChanges: number;
     highRiskChanges: number;
   };
-}
+
 
 export default ChangeRecordingService;

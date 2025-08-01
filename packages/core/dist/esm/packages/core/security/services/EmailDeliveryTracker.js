@@ -95,9 +95,9 @@ export var DeliveryStatus;
                 ganalytics: boolean
             };
         }
-        ;
-        // Email delivery record
     }
+    ;
+    // Email delivery record
 }
 ;
 // Tracking data
@@ -109,6 +109,7 @@ tracking: {
 ;
 // Provider-specific data
 providerData: Record;
+;
 ;
 // By provider
 statisticsByProvider: {
@@ -124,7 +125,12 @@ statisticsByProvider: {
 // Time-based metrics
 averageDeliveryTime: number;
 averageOpenTime: number;
-peakSendTimes: Array;
+peakSendTimes: Array < {
+    hour: number,
+    count: number,
+    deliveryRate: number
+} > ;
+;
 ;
 ;
 metadata: EmailMetadata;
@@ -532,8 +538,9 @@ void {
                                 providerData: event.providerData,
                             };
                             ;
-                            updateStatistics(previousStatus, DeliveryStatus);
-                            newStatus: DeliveryStatus,
+                            updateStatistics(previousStatus, DeliveryStatus),
+                                newStatus;
+                            DeliveryStatus,
                                 emailType;
                             EmailType,
                                 provider;

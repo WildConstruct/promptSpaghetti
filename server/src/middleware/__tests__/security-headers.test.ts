@@ -13,7 +13,7 @@ import {
   handleCSPViolation,
   SecurityHeadersConfig,
   SecurityAuditResult
-} from '../security-headers';
+ from '../security-headers';
 
 describe('Security Headers Middleware', () => {
 
@@ -23,10 +23,10 @@ describe('Security Headers Middleware', () => {
     protocol: 'https',
     headers: {
       'user-agent': 'Test Browser'
-  }
+
     body: {},
     ...overrides
-  } as FastifyRequest);
+ as FastifyRequest);
 
   const createMockReply = (): jest.Mocked<FastifyReply> => {
     const headers: Record<string, string> = {};
@@ -39,7 +39,7 @@ describe('Security Headers Middleware', () => {
       send: jest.fn(() => reply),
       getHeaders: jest.fn(() => headers),
       _headers: headers
-    } as unknown as jest.Mocked<FastifyReply>;
+ as unknown as jest.Mocked<FastifyReply>;
     
     return reply;
   };
@@ -140,8 +140,8 @@ describe('Security Headers Middleware', () => {
             'default-src': ['\'self\''],
             'script-src': ['\'self\'', 'https://trusted.com'],
             'style-src': ['\'self\'', '\'unsafe-inline\'']
-          }
-        }
+
+
       };
       
       const request = createMockRequest();
@@ -162,9 +162,9 @@ describe('Security Headers Middleware', () => {
           enabled: true,
           directives: {
             'default-src': ['\'self\'']
-  }
+
           reportOnly: true
-        }
+
       };
       
       const request = createMockRequest();
@@ -185,9 +185,9 @@ describe('Security Headers Middleware', () => {
           enabled: true,
           directives: {
             'default-src': ['\'self\'']
-  }
+
           reportUri: '/csp-violation'
-        }
+
       };
       
       const request = createMockRequest();
@@ -207,7 +207,7 @@ describe('Security Headers Middleware', () => {
         contentSecurityPolicy: {
           enabled: false,
           directives: {}
-        }
+
       };
       
       const request = createMockRequest();
@@ -229,7 +229,7 @@ describe('Security Headers Middleware', () => {
         frameOptions: {
           enabled: true,
           directive: 'DENY'
-        }
+
       };
       
       const request = createMockRequest();
@@ -246,7 +246,7 @@ describe('Security Headers Middleware', () => {
         frameOptions: {
           enabled: true,
           directive: 'SAMEORIGIN'
-        }
+
       };
       
       const request = createMockRequest();
@@ -264,7 +264,7 @@ describe('Security Headers Middleware', () => {
           enabled: true,
           directive: 'ALLOW-FROM',
           allowFromUri: 'https://trusted.com'
-        }
+
       };
       
       const request = createMockRequest();
@@ -281,7 +281,7 @@ describe('Security Headers Middleware', () => {
         frameOptions: {
           enabled: false,
           directive: 'DENY'
-        }
+
       };
       
       const request = createMockRequest();
@@ -306,7 +306,7 @@ describe('Security Headers Middleware', () => {
           maxAge: 31536000,
           includeSubDomains: true,
           preload: true
-        }
+
       };
       
       const request = createMockRequest();
@@ -328,7 +328,7 @@ describe('Security Headers Middleware', () => {
           maxAge: 86400,
           includeSubDomains: false,
           preload: false
-        }
+
       };
       
       const request = createMockRequest();
@@ -348,7 +348,7 @@ describe('Security Headers Middleware', () => {
         strictTransportSecurity: {
           enabled: true,
           maxAge: 31536000
-        }
+
       };
       
       const request = createMockRequest({ protocol: 'http' });
@@ -374,8 +374,8 @@ describe('Security Headers Middleware', () => {
             'microphone': [],
             'geolocation': ['self'],
             'payment': ['self', 'https://trusted.com']
-          }
-        }
+
+
       };
       
       const request = createMockRequest();
@@ -397,8 +397,8 @@ describe('Security Headers Middleware', () => {
           directives: {
             'camera': [],
             'fullscreen': ['*']
-          }
-        }
+
+
       };
       
       const request = createMockRequest();
@@ -420,7 +420,7 @@ describe('Security Headers Middleware', () => {
         crossOriginEmbedderPolicy: {
           enabled: true,
           directive: 'require-corp'
-        }
+
       };
       
       const request = createMockRequest();
@@ -437,7 +437,7 @@ describe('Security Headers Middleware', () => {
         crossOriginOpenerPolicy: {
           enabled: true,
           directive: 'same-origin'
-        }
+
       };
       
       const request = createMockRequest();
@@ -454,7 +454,7 @@ describe('Security Headers Middleware', () => {
         crossOriginResourcePolicy: {
           enabled: true,
           directive: 'cross-origin'
-        }
+
       };
       
       const request = createMockRequest();
@@ -474,12 +474,12 @@ describe('Security Headers Middleware', () => {
           enabled: true,
           directives: {
             'default-src': ['\'self\'']
-          }
-  }
+
+
         frameOptions: {
           enabled: false,
           directive: 'DENY'
-        }
+
       };
       
       const request = createMockRequest();
@@ -496,7 +496,7 @@ describe('Security Headers Middleware', () => {
       const config: SecurityHeadersConfig = {
         contentTypeOptions: {
           enabled: false
-        }
+
       };
       
       const request = createMockRequest();
@@ -605,8 +605,8 @@ describe('Security Headers Middleware', () => {
             'source-file': 'https://example.com/page',
             'line-number': 42,
             'column-number': 15
-          }
-        }
+
+
       });
       const reply = createMockReply();
 
@@ -655,11 +655,11 @@ describe('Security Headers Middleware', () => {
             'source-file': '',
             'line-number': 0,
             'column-number': 0
-          }
-  }
+
+
         headers: {
           'user-agent': 'Mozilla/5.0 Test Browser'
-  }
+
         ip: '192.168.1.100'
       });
       const reply = createMockReply();
@@ -695,7 +695,7 @@ describe('Security Headers Middleware', () => {
         contentSecurityPolicy: {
           enabled: true,
           directives: {}
-        }
+
       };
       
       const request = createMockRequest();
@@ -733,7 +733,7 @@ describe('Security Headers Middleware', () => {
       for (let i = 0; i < 100; i++) {
         const reply = createMockReply();
         await middleware(request, reply);
-      }
+
       
       const endTime = performance.now();
       const executionTime = endTime - startTime;
@@ -749,8 +749,8 @@ describe('Security Headers Middleware', () => {
           directives: {
             'default-src': ['\'self\''],
             'script-src': ['\'self\'', 'https://cdn.example.com']
-          }
-        }
+
+
       };
       
       const middleware = securityHeadersMiddleware(config);
@@ -765,7 +765,7 @@ describe('Security Headers Middleware', () => {
           'Content-Security-Policy',
           'default-src \'self\'; script-src \'self\' https://cdn.example.com'
         );
-      }
+
     });
   });
 });

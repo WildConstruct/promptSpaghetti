@@ -11,22 +11,23 @@ import {
   ChatBubbleLeftRightIcon,
   // PhotoIcon,
   ExclamationTriangleIcon
-} from '@heroicons/react/24/outline';
+ from '@heroicons/react/24/outline';
 import { 
   HandThumbUpIcon as HandThumbUpSolidIcon,
   HandThumbDownIcon as HandThumbDownSolidIcon
-} from '@heroicons/react/24/solid';
+ from '@heroicons/react/24/solid';
 import { RatingStars, RatingSummary } from './RatingStars';
 import { Badge } from './Badge';
 import { Modal } from './Modal';
 import './ReviewSystem.css';
 
 // Types
-}
+
+
 interface Review {
-  id: string;,
+  id: string;
   template_id: string;
-  buyer_id: string;,
+  buyer_id: string;
   stars: number;
   title?: string;
   comment?: string;
@@ -34,52 +35,57 @@ interface Review {
   cons?: string;
   use_case?: string;
   difficulty_rating?: number;
-  would_recommend: boolean;,
+  would_recommend: boolean;
   verified_purchase: boolean;
-  created_at: Date;,
+  created_at: Date;
   updated_at: Date;
   buyer?: {
-  id: string;,
+    
+  id: string;
   name: string;
   avatar_url?: string;
-  verified: boolean;,
+  verified: boolean;
   total_reviews: number;
-}
+
+
 };
   helpfulness_votes: {
+    
   helpful: number;
   not_helpful: number;
   user_vote?: 'helpful' | 'not_helpful';
 };
   creator_response?: {
-  id: string;,
+  id: string;
   creator_id: string;
-  response: string;,
+  response: string;
   created_at: Date;
 };
   attachments?: Array<{
-  id: string;,
+  id: string;
   type: 'image' | 'video' | 'file';
   url: string;
   thumbnail_url?: string;
   filename: string;
-}>;
-}
+>;
+
+
 interface ReviewSystemProps {
-  templateId: string;,
+  templateId: string;
   templateTitle: string;
   templateOwnerId: string;
   currentUserId?: string;
   isOwner?: boolean;
   userHasPurchased?: boolean;
-  export const ReviewSystem: React.FC<ReviewSystemProps> = ({,)
+  export const ReviewSystem: React.FC<ReviewSystemProps> = ({),
   templateId,
   templateTitle,
   // templateOwnerId, // Commented out unused prop
   currentUserId,
   isOwner = false,
   userHasPurchased = false
-}
+
+
 }) => {
   const [reviews, setReviews] = useState<Review>([]);
   const [metrics, setMetrics] = useState<unknown>(null);
@@ -98,17 +104,17 @@ interface ReviewSystemProps {
   setLoading(true);
   const params = new URLSearchParams({)
   page: currentPage.toString(),
-  sort_by: sortBy,
-  filter_by: filterBy,
+  sort_by: sortBy;
+  filter_by: filterBy;
 });
       const response = await fetch(`/api/marketplace/templates/${templateId}/reviews?${params}`);}
       const data = await response.json();
       setReviews(data.reviews);
       setMetrics(data.metrics);
       setTotalPages(Math.ceil(data.total / 20));
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load reviews:', error);
-} finally {
+ finally {
       setLoading(false);
   }, [templateId, currentPage, sortBy, filterBy]);
   const handleReviewSubmit = async (reviewData: unknown) => {
@@ -116,17 +122,18 @@ interface ReviewSystemProps {
   const response = await fetch('/api/marketplace/reviews', {)
   method: 'POST',
   headers: {
-  'Content-Type': 'application/json',
-},
+    
+  'Content-Type': 'application/json'
+  },
   body: JSON.stringify({),
   ...reviewData,
-  template_id: templateId,
-}
+  template_id: templateId;
+
       });
       if (response.ok) {
         setShowReviewModal(false);
         loadReviews();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to submit review:', error);
 };
   const handleHelpfulnessVote = async (reviewId: string, vote: 'helpful' | 'not_helpful') => {
@@ -134,16 +141,17 @@ interface ReviewSystemProps {
   const response = await fetch('/api/marketplace/reviews/helpfulness', {)
   method: 'POST',
   headers: {
-  'Content-Type': 'application/json',
-},
-  body: JSON.stringify({,)
-  review_id: reviewId,
+    
+  'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({);
+  review_id: reviewId;
   vote
-}
+
       });
       if (response.ok) {
         loadReviews();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to vote on helpfulness:', error);
 };
   const handleReviewFlag = async (reviewId: string, flagType: string, reason?: string) => {
@@ -151,17 +159,18 @@ interface ReviewSystemProps {
   const response = await fetch('/api/marketplace/reviews/flag', {)
   method: 'POST',
   headers: {
-  'Content-Type': 'application/json',
-},
-  body: JSON.stringify({,)
-  review_id: reviewId,
-  flag_type: flagType,
+    
+  'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({);
+  review_id: reviewId;
+  flag_type: flagType;
   reason
-}
+
       });
       if (response.ok) {
         loadReviews();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to flag review:', error);
 };
   const handleCreatorResponse = async (reviewId: string, response: string) => {
@@ -169,21 +178,22 @@ interface ReviewSystemProps {
   const responseData = await fetch('/api/marketplace/reviews/response', {)
   method: 'POST',
   headers: {
-  'Content-Type': 'application/json',
-},
-  body: JSON.stringify({,)
-  review_id: reviewId,
+    
+  'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({);
+  review_id: reviewId;
   response
-}
+
       });
       if (responseData.ok) {
         loadReviews();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to submit creator response:', error);
 };
   if (loading) {
     return <div className="reviews-loading">Loading reviews...</div>;
-  return;
+  return (
     <div className="review-system">
       {/* Review Summary */}
       {metrics && ()
@@ -291,7 +301,7 @@ interface ReviewSystemProps {
           onClose={() => {
             setShowReviewModal(false);
             setEditingReview(null);
-          }}
+}
         />
       )}
     </div>
@@ -299,16 +309,17 @@ interface ReviewSystemProps {
 };
 
 // Review Card Component
-}
+
+
 interface ReviewCardProps {
   review: Review;
   currentUserId?: string;
   isOwner?: boolean;
-  onHelpfulnessVote: (reviewId: string, vote: 'helpful' | 'not_helpful') => void;,
+  onHelpfulnessVote: (reviewId: string, vote: 'helpful' | 'not_helpful') => void;
   onFlag: (reviewId: string, flagType: string, reason?: string) => void;
-  onCreatorResponse: (reviewId: string, response: string) => void;,
+  onCreatorResponse: (reviewId: string, response: string) => void;
   onEdit: () => void;
-  const ReviewCard: React.FC<ReviewCardProps> = ({,)
+  const ReviewCard: React.FC<ReviewCardProps> = ({),
   review,
   currentUserId,
   isOwner,
@@ -316,19 +327,21 @@ interface ReviewCardProps {
   onFlag,
   onCreatorResponse,
   onEdit
-}
+
+
 }) => {
   const [showResponseForm, setShowResponseForm] = useState(false);
   const [responseText, setResponseText] = useState('');
   const [showFlagModal, setShowFlagModal] = useState(false);
   const isOwnReview = currentUserId === review.buyer_id;
   const canRespond = isOwner && !review.creator_response;
-  const formatDate = (date: Date) => {,
+  const formatDate = (date: Date) => {
+    
   return new Intl.DateTimeFormat('en-US', {)
   year: 'numeric',
   month: 'long',
-  day: 'numeric',
-}).format(new Date(date));
+  day: 'numeric'
+  }).format(new Date(date));
   };
   const handleResponseSubmit = () => {
     if (responseText.trim()) {
@@ -336,7 +349,7 @@ interface ReviewCardProps {
       setResponseText('');
       setShowResponseForm(false);
   };
-  return;
+  return (
     <div className="review-card">
       <div className="review-header">
         <div className="reviewer-info">
@@ -505,20 +518,22 @@ interface ReviewCardProps {
 };
 
 // Review Modal Component
-}
+
+
 interface ReviewModalProps {
-  templateId: string;,
+  templateId: string;
   templateTitle: string;
   editingReview?: Review | null;
-  onSubmit: (reviewData: unknown) => void;,
+  onSubmit: (reviewData: unknown) => void;
   onClose: () => void;
-  const ReviewModal: React.FC<ReviewModalProps> = ({,)
+  const ReviewModal: React.FC<ReviewModalProps> = ({),
   // templateId, // Commented out unused prop
   templateTitle,
   editingReview,
   onSubmit,
   onClose
-}
+
+
 }) => {
   const [formData, setFormData] = useState({)
   stars: editingReview?.stars || 5,
@@ -528,8 +543,8 @@ interface ReviewModalProps {
   cons: editingReview?.cons || [],
   use_case: editingReview?.use_case || '',
   difficulty_rating: editingReview?.difficulty_rating || 3,
-  would_recommend: editingReview?.would_recommend ?? true,
-});
+  would_recommend: editingReview?.would_recommend ?? true
+  });
   const [newPro, setNewPro] = useState('');
   const [newCon, setNewCon] = useState('');
   const handleSubmit = (e: React.FormEvent) => {
@@ -540,31 +555,31 @@ interface ReviewModalProps {
   if (newPro.trim()) {
   setFormData(prev => ({)
   ...prev,
-  pros: [...prev.pros, newPro.trim()],
-}));
+  pros: [...prev.pros, newPro.trim()]
+  }));
       setNewPro('');
   };
   const addCon = () => {
   if (newCon.trim()) {
   setFormData(prev => ({)
   ...prev,
-  cons: [...prev.cons, newCon.trim()],
-}));
+  cons: [...prev.cons, newCon.trim()]
+  }));
       setNewCon('');
   };
   const removePro = (index: number) => {
   setFormData(prev => ({)
   ...prev,
-  pros: prev.pros.filter((_, i) => i !== index),
-}));
+  pros: prev.pros.filter((_, i) => i !== index)
+  }));
   };
   const removeCon = (index: number) => {
   setFormData(prev => ({)
   ...prev,
-  cons: prev.cons.filter((_, i) => i !== index),
-}));
+  cons: prev.cons.filter((_, i) => i !== index)
+  }));
   };
-  return;
+  return (
     <Modal onClose={onClose} className="review-modal">
       <div className="modal-header">
         <h2>{editingReview ? 'Edit Review' : 'Write a Review'}</h2>
@@ -702,21 +717,24 @@ interface ReviewModalProps {
 };
 
 // Flag Modal Component
-}
+
+
 interface FlagModalProps {
-  reviewId: string;,
+  reviewId: string;
   onFlag: (reviewId: string, flagType: string, reason?: string) => void;
   onClose: () => void;
-}
+
+
 const FlagModal: React.FC<FlagModalProps> = ({ reviewId, onFlag, onClose }) => {
   const [flagType, setFlagType] = useState('inappropriate');
   const [reason, setReason] = useState('');
-  const handleSubmit = (e: React.FormEvent) => {,
+  const handleSubmit = (e: React.FormEvent) => {
+    
   e.preventDefault();
   onFlag(reviewId, flagType, reason);
   onClose();
 };
-  return;
+  return (
     <Modal onClose={onClose} className="flag-modal">
       <div className="modal-header">
         <ExclamationTriangleIcon className="w-6 h-6 text-red-500" />
@@ -763,3 +781,36 @@ const FlagModal: React.FC<FlagModalProps> = ({ reviewId, onFlag, onClose }) => {
     </Modal>
   );
 };
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}

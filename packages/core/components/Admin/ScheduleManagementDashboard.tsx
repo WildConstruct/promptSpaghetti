@@ -14,8 +14,7 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
-import { 
-  Calendar,
+import { Calendar,
   Clock,
   PlayCircle,
   PauseCircle,
@@ -40,19 +39,18 @@ import {
   Zap,
   Target,
   Globe,
-  Archive,
+  Archive }
   Trash2
-} from 'lucide-react';
+ from 'lucide-react';
 
 // Import scheduling services
-import {
-  contentSchedulingService,
-  ContentItem,
+import { contentSchedulingService,
+  ContentItem }
   SchedulingStats as ContentStats
-} from '../../services/ContentSchedulingService';
-}
-interface ScheduleItem {
-  id: string;
+ from '../../services/ContentSchedulingService';
+
+
+interface ScheduleItem { id: string;
   name: string;
   type: 'feature_toggle' | 'content';
   status: 'pending' | 'active' | 'completed' | 'failed' | 'cancelled';
@@ -80,29 +78,31 @@ interface ScheduleItem {
   featureToggleSchedules: number;
   contentSchedules: number;
   // Recent executions
-  recentExecutions: Array<{
+  recentExecutions: Array<{ }
   id: string;
   name: string;
   type: string;
   status: 'success' | 'failed';
   executedAt: Date;
   duration: number;
-}
-}>;
+
+
+>;
   // Upcoming schedules
-  upcomingSchedules: Array<{
+  upcomingSchedules: Array<{ ,
   id: string;
   name: string;
   type: string;
-  nextExecution: Date;
-}>;
-}
+  nextExecution: Date }>;
+
+
 interface ScheduleManagementDashboardProps {
   className?: string;
   userId?: string;
   userRole?: string;
-const STATUS_CONFIG = {
-}
+  const STATUS_CONFIG = {
+
+},
   pending: { color: 'text-yellow-600 bg-yellow-100', icon: Clock },
   active: { color: 'text-blue-600 bg-blue-100', icon: PlayCircle },
   completed: { color: 'text-green-600 bg-green-100', icon: CheckCircle },
@@ -114,12 +114,11 @@ const TYPE_CONFIG = {
   content: { color: 'text-green-600 bg-green-100', icon: FileText, label: 'Content' }
 };
 
-export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardProps> = ({)
-  className = '',
-  userId,
+export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardProps> = ({ )
+  className = ''
+  userId }
   userRole
-}) => {
-  const [activeTab, setActiveTab] = useState('overview');
+}) => { const [activeTab, setActiveTab] = useState('overview');
   const [schedules, setSchedules] = useState<ScheduleItem>([]);
   const [analytics, setAnalytics] = useState<ScheduleAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -129,114 +128,104 @@ export const ScheduleManagementDashboard: React.FC<ScheduleManagementDashboardPr
   // Mock data - in real implementation, this would fetch from APIs
   const mockSchedules: ScheduleItem = [
   {
-  id: 'schedule-1',
-  name: 'Weekly Maintenance Window',
-  type: 'feature_toggle',
-  status: 'active',
-  toggleId: 'maintenance-mode',
-  action: 'enable',
-  nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-  lastExecution: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-  createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-  createdBy: 'admin',
-}
-    {
-  id: 'schedule-2',
-  name: 'Blog Post Publication',
-  type: 'content',
-  status: 'pending',
-  contentId: 'post-123',
-  contentType: 'blog_post',
-  operation: 'publish',
-  nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000),
-  createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-  createdBy: 'editor',
-}
-    {
-  id: 'schedule-3',
-  name: 'Feature Rollout - 50%',
-  type: 'feature_toggle',
-  status: 'completed',
-  toggleId: 'new-dashboard',
-  action: 'update_percentage',
-  lastExecution: new Date(Date.now() - 4 * 60 * 60 * 1000),
-  createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+  id: 'schedule-1'
+  name: 'Weekly Maintenance Window'
+  type: 'feature_toggle'
+  status: 'active'
+  toggleId: 'maintenance-mode'
+  action: 'enable'
+  nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)
+  lastExecution: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+  createdBy: 'admin' }
+
+    { id: 'schedule-2'
+  name: 'Blog Post Publication'
+  type: 'content'
+  status: 'pending'
+  contentId: 'post-123'
+  contentType: 'blog_post'
+  operation: 'publish'
+  nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000)
+  createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+  createdBy: 'editor' }
+
+    { id: 'schedule-3'
+  name: 'Feature Rollout - 50%'
+  type: 'feature_toggle'
+  status: 'completed'
+  toggleId: 'new-dashboard'
+  action: 'update_percentage'
+  lastExecution: new Date(Date.now() - 4 * 60 * 60 * 1000)
+  createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
   createdBy: 'devops'];
-  const mockAnalytics: ScheduleAnalytics = {,
-  totalSchedules: 45,
-  activeSchedules: 12,
-  completedToday: 8,
-  failedToday: 2,
-  upcomingIn24h: 5,
-  successRate: 94.2,
-  averageExecutionTime: 1.8,
-  featureToggleSchedules: 28,
-  contentSchedules: 17,
-  recentExecutions: [,
+  const mockAnalytics: ScheduleAnalytics = {
+  totalSchedules: 45
+  activeSchedules: 12
+  completedToday: 8
+  failedToday: 2
+  upcomingIn24h: 5
+  successRate: 94.2
+  averageExecutionTime: 1.8
+  featureToggleSchedules: 28
+  contentSchedules: 17
+  recentExecutions: [
   {
-  id: 'exec-1',
-  name: 'Feature Rollout - 50%',
-  type: 'Feature Toggle',
-  status: 'success',
-  executedAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
-  duration: 1.2,
-}
-      {
-  id: 'exec-2',
-  name: 'Newsletter Send',
-  type: 'Content',
-  status: 'success',
-  executedAt: new Date(Date.now() - 6 * 60 * 60 * 1000),
-  duration: 2.5,
-}
-      {
-  id: 'exec-3',
-  name: 'Database Maintenance',
-  type: 'Feature Toggle',
-  status: 'failed',
-  executedAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
-  duration: 0.3],
-  upcomingSchedules: [,
+  id: 'exec-1'
+  name: 'Feature Rollout - 50%'
+  type: 'Feature Toggle'
+  status: 'success'
+  executedAt: new Date(Date.now() - 4 * 60 * 60 * 1000)
+  duration: 1.2 }
+
+      { id: 'exec-2'
+  name: 'Newsletter Send'
+  type: 'Content'
+  status: 'success'
+  executedAt: new Date(Date.now() - 6 * 60 * 60 * 1000)
+  duration: 2.5 }
+
+      { id: 'exec-3'
+  name: 'Database Maintenance'
+  type: 'Feature Toggle'
+  status: 'failed'
+  executedAt: new Date(Date.now() - 8 * 60 * 60 * 1000)
+  duration: 0.3]
+  upcomingSchedules: [
   {
-  id: 'upcoming-1',
-  name: 'Blog Post Publication',
-  type: 'Content',
-  nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000),
-}
-      {
-  id: 'upcoming-2',
-  name: 'Weekly Maintenance',
-  type: 'Feature Toggle',
+  id: 'upcoming-1'
+  name: 'Blog Post Publication'
+  type: 'Content'
+  nextExecution: new Date(Date.now() + 6 * 60 * 60 * 1000) }
+
+      { id: 'upcoming-2'
+  name: 'Weekly Maintenance'
+  type: 'Feature Toggle' }
   nextExecution: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000)];
-  };
-  useEffect(() => {
-    // Simulate loading schedules and analytics
+};
+  useEffect(() => { // Simulate loading schedules and analytics
     const loadData = async () => {
       setLoading(true);
       await new Promise(resolve => setTimeout(resolve, 1000));
       setSchedules(mockSchedules);
       setAnalytics(mockAnalytics);
-      setLoading(false);
-    };
+      setLoading(false) };
     loadData();
   }, []);
   // Filter schedules based on search and filters
-  const filteredSchedules = useMemo(() => {
-    return schedules.filter(schedule => {)
+  const filteredSchedules = useMemo(() => { return schedules.filter(schedule => {)
   const matchesSearch = searchQuery === '' || ;
         schedule.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         schedule.createdBy.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === 'all' || schedule.status === statusFilter;
       const matchesType = typeFilter === 'all' || schedule.type === typeFilter;
-      return matchesSearch && matchesStatus && matchesType;
-    });
+      return matchesSearch && matchesStatus && matchesType });
   }, [schedules, searchQuery, statusFilter, typeFilter]);
-  const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat('en-US', {)
-  month: 'short',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
+  const formatDate = (date: Date) => { return new Intl.DateTimeFormat('en-US', {)
+  month: 'short'
+  day: 'numeric'
+  hour: '2-digit'
+  minute: '2-digit' }
 }).format(date);
   };
   const formatDuration = (seconds: number) => {

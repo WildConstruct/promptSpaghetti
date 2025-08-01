@@ -72,58 +72,63 @@ type ValidationResult = z.infer<typeof ValidationResultSchema>;
 type ClinicalWorkflow = z.infer<typeof ClinicalWorkflowSchema>;
 type WorkflowTemplate = z.infer<typeof WorkflowTemplateSchema>;
 
-}
-}
+
+
 interface MedicalTextProcessingOptions {
   deidentify?: boolean;
   mapTerminology?: boolean;
   extractEntities?: boolean;
   validateCodes?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ProcessedMedicalText {
   original: string;
   deidentified?: string;
   entities: MedicalEntity[];
   terminologyMappings: TerminologyMapping[];
   validationResults: ValidationResult[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface HealthcareDataValidationOptions {
   version?: string;
   strict?: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface HealthcareDataValidationResult {
   isValid: boolean;
   errors: string[];
   warnings: string[];
   validatedFields: string[];
   detectedVersion?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ClinicalWorkflowOptions {
   templateId?: string;
   customizations?: Record<string, unknown>;
-}
-}
-}
+
+
+
+
 
 export class HealthcareService {
   private medicalTermService: MedicalTerminologyService;
@@ -134,7 +139,7 @@ export class HealthcareService {
     this.medicalTermService = new MedicalTerminologyService();
     this.hipaaService = new HIPAAComplianceService();
     this.workflowTemplates = this.initializeWorkflowTemplates();
-  }
+
 
   /**
    * Process medical text with optional de-identification, entity extraction, and terminology mapping
@@ -149,7 +154,7 @@ export class HealthcareService {
       mapTerminology = true,
       extractEntities = true,
       validateCodes = true
-    } = options;
+ = options;
 
     let processedText = text;
     const entities: MedicalEntity[] = [];
@@ -161,7 +166,7 @@ export class HealthcareService {
       if (extractEntities) {
         const extractedEntities = await this.extractMedicalEntities(text);
         entities.push(...extractedEntities);
-      }
+
 
       // Step 2: De-identify PHI if requested
       if (deidentify) {
@@ -170,19 +175,19 @@ export class HealthcareService {
           preserveStructure: true
         });
         processedText = deidentificationResult.content;
-      }
+
 
       // Step 3: Map medical terminology
       if (mapTerminology) {
         const mappings = await this.mapMedicalTerminology(text);
         terminologyMappings.push(...mappings);
-      }
+
 
       // Step 4: Validate medical codes
       if (validateCodes) {
         const validation = await this.validateMedicalCodes(text);
         validationResults.push(...validation);
-      }
+
 
       return {
         original: text,
@@ -191,11 +196,10 @@ export class HealthcareService {
         terminologyMappings,
         validationResults
       };
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Medical text processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Validate healthcare data against standard formats (FHIR, HL7, etc.)
@@ -225,16 +229,16 @@ export class HealthcareService {
         return await this.validateDICOMData(data, { version, strict });
       default:
         throw new Error(`Unsupported healthcare data format: ${format}`);
-      }
-    } catch (error) {
+
+ catch (error) {
       return {
         isValid: false,
         errors: [`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings,
         validatedFields
       };
-    }
-  }
+
+
 
   /**
    * Generate clinical workflow content based on patient data and templates
@@ -255,13 +259,13 @@ export class HealthcareService {
 
       if (!template) {
         throw new Error(`No template found for workflow type: ${workflowType}`);
-      }
+
 
       // Validate required fields
       const missingFields = template.requiredFields.filter(field => !(field in patientData));
       if (missingFields.length > 0) {
         throw new Error(`Missing required patient data fields: ${missingFields.join(', ')}`);
-      }
+
 
       // Generate workflow content
       const workflowContent = await this.generateWorkflowContent(template, patientData, customizations);
@@ -284,15 +288,14 @@ export class HealthcareService {
           templateVersion: template.version,
           customizations,
           complianceScore: hipaaAssessment.score
-        }
+
       };
 
       return workflow;
-
-    } catch (error) {
+ catch (error) {
       throw new Error(`Clinical workflow generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get available workflow templates
@@ -300,7 +303,7 @@ export class HealthcareService {
   async getWorkflowTemplates(): Promise<WorkflowTemplate[]> {
 
     return this.workflowTemplates;
-  }
+
 
   /**
    * Get health status of the healthcare service
@@ -318,17 +321,17 @@ export class HealthcareService {
           terminologyService: medicalTermServiceHealth,
           hipaaService: hipaaServiceHealth,
           templatesLoaded: this.workflowTemplates.length
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         details: {
           error: error instanceof Error ? error.message : 'Unknown error'
-        }
+
       };
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -341,11 +344,11 @@ export class HealthcareService {
     const patterns = [
       { pattern: /\b\d{3}-\d{2}-\d{4}\b/g, label: 'SSN' as const },
       { pattern: /\b\d{10
-}\b/g, label: 'MEDICAL_RECORD_NUMBER' as const },
+\b/g, label: 'MEDICAL_RECORD_NUMBER' as const },
       { pattern: /\b\d{1,2}\/\d{1,2}\/\d{4}\b/g, label: 'DATE' as const },
       { pattern: /\b\d{3}-\d{3}-\d{4}\b/g, label: 'PHONE' as const },
       { pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2
-}\b/g, label: 'EMAIL' as const }
+\b/g, label: 'EMAIL' as const }
     ];
 
     patterns.forEach(({ pattern, label }) => {
@@ -358,11 +361,11 @@ export class HealthcareService {
           end: match.index + match[0].length,
           confidence: 0.9 // Mock confidence
         });
-      }
+
     });
 
     return entities;
-  }
+
 
   private async mapMedicalTerminology(text: string): Promise<TerminologyMapping[]> {
 
@@ -385,11 +388,11 @@ export class HealthcareService {
           vocabularySource: vocabulary,
           confidence: 0.85
         });
-      }
+
     });
 
     return mappings;
-  }
+
 
   private async validateMedicalCodes(text: string): Promise<ValidationResult[]> {
 
@@ -407,12 +410,12 @@ export class HealthcareService {
     });
 
     return results;
-  }
+
 
   private isValidICD10Code(code: string): boolean {
     // Simplified ICD-10 validation - in production would use official code sets
     return /^[A-TV-Z][0-9][A-Z0-9](\.[A-Z0-9]{1,4})?$/.test(code);
-  }
+
 
   private async validateFHIRData(
     data: Record<string, unknown>,
@@ -426,15 +429,15 @@ export class HealthcareService {
     // Mock FHIR validation
     if (!data.resourceType) {
       errors.push('Missing required field: resourceType');
-    } else {
+ else {
       validatedFields.push('resourceType');
-    }
+
 
     if (!data.id) {
       warnings.push('Recommended field missing: id');
-    } else {
+ else {
       validatedFields.push('id');
-    }
+
 
     return {
       isValid: errors.length === 0,
@@ -443,7 +446,7 @@ export class HealthcareService {
       validatedFields,
       detectedVersion: '4.0.1'
     };
-  }
+
 
   private async validateHL7v2Data(
     data: Record<string, unknown>,
@@ -458,7 +461,7 @@ export class HealthcareService {
       validatedFields: Object.keys(data),
       detectedVersion: '2.5.1'
     };
-  }
+
 
   private async validateHL7v3Data(
     data: Record<string, unknown>,
@@ -473,7 +476,7 @@ export class HealthcareService {
       validatedFields: Object.keys(data),
       detectedVersion: '3.0'
     };
-  }
+
 
   private async validateCDAData(
     data: Record<string, unknown>,
@@ -488,7 +491,7 @@ export class HealthcareService {
       validatedFields: Object.keys(data),
       detectedVersion: 'R2'
     };
-  }
+
 
   private async validateDICOMData(
     data: Record<string, unknown>,
@@ -503,7 +506,7 @@ export class HealthcareService {
       validatedFields: Object.keys(data),
       detectedVersion: '3.0'
     };
-  }
+
 
   private async generateWorkflowContent(
     template: WorkflowTemplate,
@@ -526,7 +529,7 @@ export class HealthcareService {
     });
 
     return content;
-  }
+
 
   private initializeWorkflowTemplates(): WorkflowTemplate[] {
     return [
@@ -552,7 +555,7 @@ Assessment and Plan:
 Provider: {{providerName}}
 Date: {{documentDate}}`,
         version: '1.0'
-  }
+
       {
         id: 'discharge_summary_standard',
         name: 'Standard Discharge Summary',
@@ -579,7 +582,6 @@ Follow-up: {{followUpInstructions}}
 
 Attending Physician: {{attendingPhysician}}`,
         version: '1.0'
-      }
+
     ];
-  }
-}
+

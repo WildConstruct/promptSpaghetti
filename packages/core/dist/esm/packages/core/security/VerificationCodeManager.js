@@ -56,22 +56,22 @@ export var VerificationCodeType;
             VOICE = 'voice',
             PUSH = 'push',
             IN_APP = 'in_app';
-        ;
-        expirationTimes: {
-            [key in VerificationCodeType];
-            number;
-        }
-        ;
-        retryLimits: {
-            [key in VerificationCodeType];
-            number;
-        }
-        ;
-        enableSecurityLogging: boolean;
-        antiEnumerationDelay: number; // Delay to prevent enumeration attacks
-        requireSecureDelivery: boolean; // Require secure delivery channels
-        // Verification Code Data
     }
+    ;
+    expirationTimes: {
+        [key in VerificationCodeType];
+        number;
+    }
+    ;
+    retryLimits: {
+        [key in VerificationCodeType];
+        number;
+    }
+    ;
+    enableSecurityLogging: boolean;
+    antiEnumerationDelay: number; // Delay to prevent enumeration attacks
+    requireSecureDelivery: boolean; // Require secure delivery channels
+    // Verification Code Data
 }
 ;
 securityFlags: {
@@ -177,8 +177,7 @@ export class VerificationCodeManager extends EventEmitter {
                 ipAddress: request.ipAddress,
                 userAgent: request.userAgent,
                 metadata: {
-                    purpose: `${request.type}_verification`
-                }
+                    purpose: `${request.type}_verification` }
             }, requestSource, deliveryAttempts, deliveryStatus;
             request.metadata;
         }
@@ -768,8 +767,9 @@ Promise < ValidationResult > {
                 return: new Promise(resolve => { }),
                 : .config.antiEnumerationDelay };
             ;
-            logSecurityEvent(event, SecurityEvent);
-            details: (Record),
+            logSecurityEvent(event, SecurityEvent),
+                details;
+            (Record),
                 ipAddress;
             string = 'system',
                 userAgent;

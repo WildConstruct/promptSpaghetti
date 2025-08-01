@@ -3,7 +3,8 @@ import { useState, useCallback, useRef } from 'react';
 import { API_URL } from '../config/environment';
 
 // Types
-}
+
+
 interface SearchFilters {
   query?: string;
   categories?: string;
@@ -21,29 +22,33 @@ interface SearchFilters {
   title: string;
   description?: string;
   tags: string;,
-  price_cents: number;
+  price_cents: number;,
   avg_rating: number;,
-  total_reviews: number;
+  total_reviews: number;,
   total_purchases: number;
   categories?: string;
-  owner?: {
+  owner?: {,
   id: string;,
-  name: string;
+  name: string;,
   verified: boolean;
-}
+
+
 };
   featured_at?: string;
   created_at: string;
   is_ai_generated?: boolean;
   claude_compat: string;
-}
+
+
 interface SearchResult {
   templates: Template;,
-  total: number;
+  total: number;,
   page: number;,
-  limit: number;
+  limit: number;,
   has_more: boolean;
-}
+
+
+
 interface Category {
   id: string;,
   name: string;
@@ -51,22 +56,27 @@ interface Category {
   icon?: string;
   sort_order: number;
   parent_id?: string;
-}
+
+
+
 interface MarketplaceState {
   templates: SearchResult;,
-  categories: Category;
+  categories: Category;,
   featuredTemplates: Template;,
-  loading: boolean;
+  loading: boolean;,
   error: string | null;
-}
+
+
+
 interface MarketplaceActions {
   searchTemplates: (filters: SearchFilters, append?: boolean) => Promise<void>;
   loadCategories: () => Promise<void>;,
-  loadFeaturedTemplates: () => Promise<void>;
+  loadFeaturedTemplates: () => Promise<void>;,
   getTemplate: (id: string) => Promise<Template | null>;,
   previewTemplate: (),
-    id: string,
-}
+  id: string,
+
+
     options?: { format?: string; version?: string }
   ) => Promise<{ success: boolean; preview?: string; error?: string }>;
   purchaseTemplate: (),
@@ -74,7 +84,7 @@ interface MarketplaceActions {
     options?: { paymentMethod?: string; coupon?: string }
   ) => Promise<{ success: boolean; transactionId?: string; error?: string }>;
   getSearchSuggestions: (query: string) => Promise<string>;,
-  clearError: () => void;
+  clearError: () => void;,
   reset: () => void;
 const API_BASE_URL = `${API_URL}/api/marketplace`;}
 
@@ -93,22 +103,13 @@ const handleApiResponse = async (response: Response) => {
     let errorData = { error: 'Unknown error' };
     try {
       errorData = await response.json();
-    } catch {
+ catch {
       // Use default error data if JSON parsing fails
     throw new Error(errorData.error ?? `HTTP ${response.status}: ${response.statusText}`);}
   return response.json();
 };
 
-export const useMarketplace = () => {
-  const [state, setState] = useState<MarketplaceState>({)
-  templates: { all: [], featured: [] },
-    categories: [],
-    featuredTemplates: [],
-    searchResults: null,
-    loading: false,
-    error: null,
-    filters: { limit: 20, page: 1 }
-  });
+export const useMarketplace = () => { return null; });
   // Keep track of ongoing requests to prevent race conditions
   const requestIdRef = useRef(0);
   const setLoading = useCallback((loading: boolean) => {
@@ -122,7 +123,7 @@ export const useMarketplace = () => {
   }, [setError]);
   const reset = useCallback(() => {
   setState({)
-  templates: {
+  templates: {,
   templates: [],
   total: 0,
   page: 1,
@@ -145,7 +146,7 @@ export const useMarketplace = () => {
         if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
             searchParams.append(key, value.join(','));
-          } else {
+ else {
             searchParams.append(key, value.toString());
       });
       const response = await fetch(`${API_BASE_URL}/templates/search?${searchParams}`, {)}
@@ -160,10 +161,10 @@ export const useMarketplace = () => {
   templates: append ? {,
   ...data,
   templates: [...prev.templates.templates, ...data.templates],
-} : data,
+ : data,
           loading: false;
   }));
-    } catch (error) {
+ catch (error) {
   if (requestId === requestIdRef.current) {
   setError(error instanceof Error ? error.message : 'Failed to search templates');
 }, [setLoading, clearError, setError]);
@@ -178,9 +179,9 @@ export const useMarketplace = () => {
   ...prev,
   categories: categories.sort((a: Category, b: Category) => a.sort_order - b.sort_order),
 }));
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to load categories:', {,)
+  console.error('Failed to load categories:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -197,9 +198,9 @@ export const useMarketplace = () => {
   ...prev,
   featuredTemplates: data.templates || [],
 }));
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to load featured templates:', {,)
+  console.error('Failed to load featured templates:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -212,9 +213,9 @@ export const useMarketplace = () => {
   headers: getAuthHeaders();
   });
       return await handleApiResponse(response);
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get template:', {,)
+  console.error('Failed to get template:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -229,16 +230,16 @@ export const useMarketplace = () => {
         body: JSON.stringify(options);
   });
       return await handleApiResponse(response);
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to preview template:', {,)
+  console.error('Failed to preview template:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
       throw error;
   }, []);
   const purchaseTemplate = useCallback(;);
-    async (id: string);
+    async (id: string);,
   options: { paymentMethod?: string; coupon?: string } = {}
   ) => {
     try {
@@ -246,15 +247,15 @@ export const useMarketplace = () => {
   },
   method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({,)
+        body: JSON.stringify({);
   template_id: id,
   ...options
-}
+
       });
       return await handleApiResponse(response);
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to purchase template:', {,)
+  console.error('Failed to purchase template:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -269,9 +270,9 @@ export const useMarketplace = () => {
   });
       const data = await handleApiResponse(response);
       return data.templates || [];
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get personalized recommendations:', {,)
+  console.error('Failed to get personalized recommendations:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -285,9 +286,9 @@ export const useMarketplace = () => {
   });
       const data = await handleApiResponse(response);
       return data.templates || [];
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get trending templates:', {,)
+  console.error('Failed to get trending templates:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -301,9 +302,9 @@ export const useMarketplace = () => {
   });
       const data = await handleApiResponse(response);
       return data.templates || [];
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get similar templates:', {,)
+  console.error('Failed to get similar templates:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -317,16 +318,16 @@ export const useMarketplace = () => {
   });
       const data = await handleApiResponse(response);
       return data.templates || [];
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get new user recommendations:', {,)
+  console.error('Failed to get new user recommendations:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
       return [];
   }, []);
   const getCategoryRecommendations = useCallback(;);
-    async (categoryId: string);
+    async (categoryId: string);,
   limit: number = 10,
     exclude: string = []) => {,
     try {
@@ -337,9 +338,9 @@ export const useMarketplace = () => {
   });
       const data = await handleApiResponse(response);
       return data.templates || [];
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get category recommendations:', {,)
+  console.error('Failed to get category recommendations:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -349,14 +350,14 @@ export const useMarketplace = () => {
     if (!query.trim() || query.length < 2) {
       return [];
     try {
-      const response = await fetch(`${API_BASE_URL}/search/suggestions?q=${encodeURIComponent(query)}`, {},}
+      const response = await fetch(`${API_BASE_URL}/search/suggestions?q=${encodeURIComponent(query)}`, {},},
   headers: getAuthHeaders();
   });
       const data = await handleApiResponse(response);
       return data.suggestions || [];
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get search suggestions:', {,)
+  console.error('Failed to get search suggestions:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });
@@ -370,9 +371,9 @@ export const useMarketplace = () => {
   });
       const data = await handleApiResponse(response);
       return data.templates || [];
-    } catch (error) {
+ catch (error) {
   const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-  console.error('Failed to get search-based recommendations:', {,)
+  console.error('Failed to get search-based recommendations:', {),
   error: errorMessage,
   timestamp: new Date().toISOString(),
 });

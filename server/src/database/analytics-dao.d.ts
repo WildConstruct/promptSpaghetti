@@ -5,6 +5,7 @@ import { AnalyticsEvent, AnalyticsEventType } from '../analytics/AnalyticsCollec
  */
 }
 }
+}
 export interface AnalyticsSession {
     id: number;
     sessionId: string;
@@ -24,9 +25,11 @@ export interface AnalyticsSession {
 }
 }
 }
+}
 /**
  * Project execution statistics for health monitoring
  */
+}
 }
 }
 export interface ProjectExecutionStats {
@@ -36,6 +39,8 @@ export interface ProjectExecutionStats {
     failed: number;
     averageExecutionTime: number;
     lastExecution?: number;
+}
+}
 }
 }
 }
@@ -65,6 +70,8 @@ export interface GraphExecution {
 }
 }
 }
+}
+}
 export interface NodeExecution {
     id: number;
     executionId: string;
@@ -80,6 +87,8 @@ export interface NodeExecution {
     errorMessage?: string;
     memoryDeltaMb?: number;
     createdAt: number;
+}
+}
 }
 }
 }
@@ -111,6 +120,8 @@ export interface TokenUsage {
 }
 }
 }
+}
+}
 export interface UserInteraction {
     id: number;
     interactionId: string;
@@ -128,6 +139,8 @@ export interface UserInteraction {
     viewportY?: number;
     metadata: string;
     createdAt: number;
+}
+}
 }
 }
 }
@@ -152,9 +165,11 @@ export interface AnalyticsAggregation {
 }
 }
 }
+}
 /**
  * Analytics query filters
  */
+}
 }
 }
 export interface AnalyticsFilters {
@@ -173,9 +188,11 @@ export interface AnalyticsFilters {
 }
 }
 }
+}
 /**
  * Analytics summary data
  */
+}
 }
 }
 export interface AnalyticsSummary {
@@ -191,6 +208,7 @@ export interface AnalyticsSummary {
     topGraphTypes: Array<{
         type: string;
         count: number;
+}
 }
 }
     }>;

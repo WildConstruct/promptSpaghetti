@@ -18,36 +18,36 @@ import { VarianceVisualization } from '../VarianceAnalysis/VarianceVisualization
 
 // Enhanced result interface for film industry use
 
-}
-export interface EnhancedPreviewResult {
-  seed: number;
+
+export interface EnhancedPreviewResult { seed: number;
   output?: string;
   error?: string;
   executionTimeMs?: number;
   usedNodeIds?: string;
   usedEdgeIds?: string;
   // Film industry metadata
-  metadata?: {
+  metadata?: {;
   createdAt: Date;
   wordCount?: number;
   characterCount?: number;
   estimatedReadingTime?: number;
   contentType?: 'dialogue' | 'action' | 'description' | 'mixed';
   tags?: string;
-  rating?: 1 | 2 | 3 | 4 | 5; // Professional rating,
+  rating?: 1 | 2 | 3 | 4 | 5; // Professional rating }
   notes?: string;
-}
+
+
 };
   // Management state
   id: string;
   selected?: boolean;
   saved?: boolean;
   exported?: boolean;
-}
-interface EnhancedPreviewModalProps {
-  open: boolean;
+
+
+interface EnhancedPreviewModalProps { open: boolean;
   loading: boolean;
-  error: string | null;
+  error: string | null }
   results: EnhancedPreviewResult;
   varianceAnalysis?: VarianceAnalysis | null;
   onClose: () => void;
@@ -66,15 +66,14 @@ interface EnhancedPreviewModalProps {
   enableNotes?: boolean;
   enableExport?: boolean;
   maxResults?: number;
-}
-}
+
+
 export const [expandedResult, setExpandedResult] = useState<string | null>(null);
   const [ratingInProgress, setRatingInProgress] = useState<string | null>(null);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [tempNote, setTempNote] = useState('');
   // Enhanced result statistics
-  const resultStats = useMemo(() => {
-  if (!results.length) return null;
+  const resultStats = useMemo(() => { if (!results.length) return null;
   const validResults = results.filter(r => !r.error);
   const totalWords = validResults.reduce((sum, r) => sum + (r.metadata?.wordCount || 0), 0);
   const avgReadingTime = validResults.reduce(;);
@@ -83,62 +82,45 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
   ) => sum + (r.metadata?.estimatedReadingTime || 0), 0) / validResults.length;
   const avgRating = validResults.reduce((sum, r) => sum + (r.metadata?.rating || 0), 0) / validResults.length;
   return {
-  totalResults: results.length,
-  validResults: validResults.length,
-  errorResults: results.length - validResults.length,
-  totalWords,
-  avgReadingTime: Math.round(avgReadingTime * 10) / 10,
-  avgRating: Math.round(avgRating * 10) / 10,
-  selectedCount: selectedResults.size,
-  savedCount: results.filter(r => r.saved).length,
+  totalResults: results.length
+  validResults: validResults.length
+  errorResults: results.length - validResults.length
+  totalWords
+  avgReadingTime: Math.round(avgReadingTime * 10) / 10
+  avgRating: Math.round(avgRating * 10) / 10
+  selectedCount: selectedResults.size
+  savedCount: results.filter(r => r.saved).length }
 };
   }, [results, selectedResults.size]);
-  const handleResultSelect = useCallback((resultId: string, selected: boolean) => {
-    const newSelected = new Set(selectedResults);
+  const handleResultSelect = useCallback((resultId: string, selected: boolean) => { const newSelected = new Set(selectedResults);
     if (selected) {
-      newSelected.add(resultId);
-    } else {
-      newSelected.delete(resultId);
+      newSelected.add(resultId) } else { newSelected.delete(resultId);
     setSelectedResults(newSelected);
-    onResultSelect?.(resultId, selected);
-  }, [selectedResults, onResultSelect]);
-  const handleSelectAll = useCallback(() => {
-    const allResultIds = new Set(results.map(r => r.id));
+    onResultSelect?.(resultId, selected) }, [selectedResults, onResultSelect]);
+  const handleSelectAll = useCallback(() => { const allResultIds = new Set(results.map(r => r.id));
     setSelectedResults(allResultIds);
-    results.forEach(r => onResultSelect?.(r.id, true));
-  }, [results, onResultSelect]);
-  const handleClearSelection = useCallback(() => {
-    selectedResults.forEach(id => onResultSelect?.(id, false));
-    setSelectedResults(new Set());
-  }, [selectedResults, onResultSelect]);
-  const handleBatchExport = useCallback(async () => {
-    if (selectedResults.size === 0) return;
+    results.forEach(r => onResultSelect?.(r.id, true)) }, [results, onResultSelect]);
+  const handleClearSelection = useCallback(() => { selectedResults.forEach(id => onResultSelect?.(id, false));
+    setSelectedResults(new Set()) }, [selectedResults, onResultSelect]);
+  const handleBatchExport = useCallback(async () => { if (selectedResults.size === 0) return;
     try {
-      await onResultExport?.(Array.from(selectedResults));
-    } catch (error) {
-      throw ErrorFactory.createGraphExecutionError()
-        'Failed to export selected results',
-        error as Error,
+      await onResultExport?.(Array.from(selectedResults)) } catch (error) { throw ErrorFactory.createGraphExecutionError()
+        'Failed to export selected results'
+        error as Error }
         { operation: 'batch_export' }
       );
   }, [selectedResults, onResultExport]);
-  const handleRating = useCallback((resultId: string, rating: number) => {
-    setRatingInProgress(resultId);
+  const handleRating = useCallback((resultId: string, rating: number) => { setRatingInProgress(resultId);
     onResultRate?.(resultId, rating);
-    setTimeout(() => setRatingInProgress(null), 500);
-  }, [onResultRate]);
-  const handleNoteSave = useCallback((resultId: string) => {
-    onResultNote?.(resultId, tempNote);
+    setTimeout(() => setRatingInProgress(null), 500) }, [onResultRate]);
+  const handleNoteSave = useCallback((resultId: string) => { onResultNote?.(resultId, tempNote);
     setNoteEditing(null);
-    setTempNote('');
-  }, [tempNote, onResultNote]);
-  const getContentTypeIcon = (contentType?: string) => {
-  switch (contentType) {
+    setTempNote('') }, [tempNote, onResultNote]);
+  const getContentTypeIcon = (contentType?: string) => { switch (contentType) {
   case 'dialogue': return '💬';
   case 'action': return '🎬';
   case 'description': return '📝';
-  default: return '📄';
-};
+  default: return '📄' };
   const formatExecutionTime = (timeMs?: number) => {
     if (!timeMs) return 'N/A';
     return timeMs < 1000 ? `${timeMs}ms` : `${(timeMs / 1000).toFixed(1)}s`;}
@@ -149,57 +131,57 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
       role="dialog" 
       aria-modal="true" 
       className="preview-modal-backdrop"
-      style={{
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100vw',
-  height: '100vh',
-  background: 'rgba(0, 0, 0, 0.6)',
-  zIndex: 1000,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  backdropFilter: 'blur(4px)',
-}}
+      style={ {
+  position: 'fixed'
+  top: 0
+  left: 0
+  width: '100vw'
+  height: '100vh'
+  background: 'rgba(0, 0, 0, 0.6)'
+  zIndex: 1000
+  display: 'flex'
+  alignItems: 'center'
+  justifyContent: 'center'
+  backdropFilter: 'blur(4px)' }
+
     >
       <div 
         className="preview-modal-content"
-        style={{
-  background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-  borderRadius: 16,
-  padding: 32,
-  minWidth: 900,
-  maxWidth: 1200,
-  maxHeight: '90vh',
-  overflow: 'hidden',
-  display: 'flex',
-  flexDirection: 'column',
-  color: '#ffffff',
-  boxShadow: '0 24px 48px rgba(0, 0, 0, 0.4)',
-}}
+        style={ {
+  background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)'
+  borderRadius: 16
+  padding: 32
+  minWidth: 900
+  maxWidth: 1200
+  maxHeight: '90vh'
+  overflow: 'hidden'
+  display: 'flex'
+  flexDirection: 'column'
+  color: '#ffffff'
+  boxShadow: '0 24px 48px rgba(0, 0, 0, 0.4)' }
+
       >
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
           <div>
-            <h2 style={{
-  margin: 0,
-  fontSize: 24,
-  fontWeight: 600,
-  background: 'linear-gradient(135deg, #ffffff 0%, #b0b0b0 100%)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-}}>
+            <h2 style={ {
+  margin: 0
+  fontSize: 24
+  fontWeight: 600
+  background: 'linear-gradient(135deg, #ffffff 0%, #b0b0b0 100%)'
+  WebkitBackgroundClip: 'text'
+  WebkitTextFillColor: 'transparent' }
+}>
               🎬 Preview Results
             </h2>
-            {resultStats && ()
+            { resultStats && ()
               <div style={{
-  marginTop: 8,
-  fontSize: 14,
-  color: '#b0b0b0',
-  display: 'flex',
-  gap: 16,
-}}>
+  marginTop: 8
+  fontSize: 14
+  color: '#b0b0b0'
+  display: 'flex'
+  gap: 16 }
+}>
                 <span>📊 {resultStats.validResults}/{resultStats.totalResults} results</span>
                 <span>⏱️ Avg: {resultStats.avgReadingTime}s read time</span>
                 {resultStats.avgRating > 0 && <span>⭐ {resultStats.avgRating}/5</span>}
@@ -209,110 +191,110 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
           </div>
           <button
             onClick={onClose}
-            style={{
-  background: 'transparent',
-  border: '2px solid #666',
-  color: '#ffffff',
-  padding: '8px 16px',
-  borderRadius: 8,
-  cursor: 'pointer',
-  fontSize: 14,
-  fontWeight: 500,
-  transition: 'all 0.2s',
+            style={ {
+  background: 'transparent'
+  border: '2px solid #666'
+  color: '#ffffff'
+  padding: '8px 16px'
+  borderRadius: 8
+  cursor: 'pointer'
+  fontSize: 14
+  fontWeight: 500
+  transition: 'all 0.2s'
   ':hover': {
-  borderColor: '#ffffff',
-  background: 'rgba(255, 255, 255, 0.1)',
-}}
+  borderColor: '#ffffff'
+  background: 'rgba(255, 255, 255, 0.1)' }
+
           >
             ✕ Close
           </button>
         </div>
         {/* Tab Navigation */}
-        <div style={{
-  display: 'flex',
-  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-  marginBottom: 20,
-}}>
+        <div style={ {
+  display: 'flex'
+  borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+  marginBottom: 20 }
+}>
           {[
-            { id: 'results', label: '📋 Results', icon: '📋' },
-            { id: 'analysis', label: '📊 Creative Analysis', icon: '📊' },
+            { id: 'results', label: '📋 Results', icon: '📋' }
+            { id: 'analysis', label: '📊 Creative Analysis', icon: '📊' }
             { id: 'visualization', label: '📈 Visualization', icon: '📈' }
           ].map(tab => ()
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              style={{
-  flex: 1,
-  padding: '12px 16px',
-  border: 'none',
-  background: activeTab === tab.id ,
+              style={ {
+  flex: 1
+  padding: '12px 16px'
+  border: 'none'
+  background: activeTab === tab.id 
   ? 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'
-  : 'transparent',
-  color: activeTab === tab.id ? '#ffffff' : '#b0b0b0',
-  fontSize: 14,
-  fontWeight: 500,
-  cursor: 'pointer',
-  borderRadius: '8px 8px 0 0',
-  transition: 'all 0.2s',
-  position: 'relative',
-}}
+  : 'transparent'
+  color: activeTab === tab.id ? '#ffffff' : '#b0b0b0'
+  fontSize: 14
+  fontWeight: 500
+  cursor: 'pointer'
+  borderRadius: '8px 8px 0 0'
+  transition: 'all 0.2s'
+  position: 'relative' }
+
             >
               {tab.label}
-              {activeTab === tab.id && ()
+              { activeTab === tab.id && ()
                 <div style={{
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  height: 2,
-  background: 'linear-gradient(90deg, #4f46e5, #7c3aed)',
-  borderRadius: '2px 2px 0 0',
-}} />
+  position: 'absolute'
+  bottom: 0
+  left: 0
+  right: 0
+  height: 2
+  background: 'linear-gradient(90deg, #4f46e5, #7c3aed)'
+  borderRadius: '2px 2px 0 0' }
+} />
               )}
             </button>
           ))}
         </div>
         {/* Toolbar */}
-        {enableSelection && ()
+        { enableSelection && ()
           <div style={{
-  display: 'flex',
-  gap: 12,
-  marginBottom: 20,
-  padding: 16,
-  background: 'rgba(255, 255, 255, 0.05)',
-  borderRadius: 8,
-  border: '1px solid rgba(255, 255, 255, 0.1)',
-}}>
+  display: 'flex'
+  gap: 12
+  marginBottom: 20
+  padding: 16
+  background: 'rgba(255, 255, 255, 0.05)'
+  borderRadius: 8
+  border: '1px solid rgba(255, 255, 255, 0.1)' }
+}>
             <button
               onClick={handleSelectAll}
-              style={{
-  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-  border: 'none',
-  color: '#ffffff',
-  padding: '8px 16px',
-  borderRadius: 6,
-  cursor: 'pointer',
-  fontSize: 13,
-  fontWeight: 500,
-  transition: 'transform 0.2s',
-}}
+              style={ {
+  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'
+  border: 'none'
+  color: '#ffffff'
+  padding: '8px 16px'
+  borderRadius: 6
+  cursor: 'pointer'
+  fontSize: 13
+  fontWeight: 500
+  transition: 'transform 0.2s' }
+
             >
               Select All
             </button>
             <button
               onClick={handleClearSelection}
               disabled={selectedResults.size === 0}
-              style={{
-  background: selectedResults.size === 0 ? '#666' : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
-  border: 'none',
-  color: '#ffffff',
-  padding: '8px 16px',
-  borderRadius: 6,
-  cursor: selectedResults.size === 0 ? 'not-allowed' : 'pointer',
-  fontSize: 13,
-  fontWeight: 500,
-  opacity: selectedResults.size === 0 ? 0.5 : 1,
-}}
+              style={ {
+  background: selectedResults.size === 0 ? '#666' : 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)'
+  border: 'none'
+  color: '#ffffff'
+  padding: '8px 16px'
+  borderRadius: 6
+  cursor: selectedResults.size === 0 ? 'not-allowed' : 'pointer'
+  fontSize: 13
+  fontWeight: 500
+  opacity: selectedResults.size === 0 ? 0.5 : 1 }
+
             >
               Clear ({selectedResults.size})
             </button>
@@ -320,17 +302,17 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
               <button
                 onClick={handleBatchExport}
                 disabled={selectedResults.size === 0}
-                style={{
-  background: selectedResults.size === 0 ? '#666' : 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-  border: 'none',
-  color: '#ffffff',
-  padding: '8px 16px',
-  borderRadius: 6,
-  cursor: selectedResults.size === 0 ? 'not-allowed' : 'pointer',
-  fontSize: 13,
-  fontWeight: 500,
-  opacity: selectedResults.size === 0 ? 0.5 : 1,
-}}
+                style={ {
+  background: selectedResults.size === 0 ? '#666' : 'linear-gradient(135deg, #059669 0%, #047857 100%)'
+  border: 'none'
+  color: '#ffffff'
+  padding: '8px 16px'
+  borderRadius: 6
+  cursor: selectedResults.size === 0 ? 'not-allowed' : 'pointer'
+  fontSize: 13
+  fontWeight: 500
+  opacity: selectedResults.size === 0 ? 0.5 : 1 }
+
               >
                 📤 Export Selected
               </button>
@@ -341,71 +323,70 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
         {activeTab === 'results' && ()
           <>
             {/* Loading/Error States */}
-            {loading && ()
+            { loading && ()
               <div style={{
-  textAlign: 'center',
-  padding: 40,
-  color: '#b0b0b0',
-  fontSize: 16,
-}}>
+  textAlign: 'center'
+  padding: 40
+  color: '#b0b0b0'
+  fontSize: 16 }
+}>
                 <div style={{ marginBottom: 12 }}>⚡ Generating professional results...</div>
-                <div style={{
-  width: 200,
-  height: 4,
-  background: '#333',
-  borderRadius: 2,
-  margin: '0 auto',
-  overflow: 'hidden',
-}}>
-                  <div style={{
-  width: '100%',
-  height: '100%',
-  background: 'linear-gradient(90deg, #4f46e5, #7c3aed, #4f46e5)',
-  animation: 'loading 2s linear infinite',
-  backgroundSize: '200% 100%',
-}} />
+                <div style={ {
+  width: 200
+  height: 4
+  background: '#333'
+  borderRadius: 2
+  margin: '0 auto'
+  overflow: 'hidden' }
+}>
+                  <div style={ {
+  width: '100%'
+  height: '100%'
+  background: 'linear-gradient(90deg, #4f46e5, #7c3aed, #4f46e5)'
+  animation: 'loading 2s linear infinite'
+  backgroundSize: '200% 100%' }
+} />
                 </div>
               </div>
             )}
-            {error && ()
+            { error && ()
               <div style={{
-  color: '#ef4444',
-  background: 'rgba(239, 68, 68, 0.1)',
-  border: '1px solid rgba(239, 68, 68, 0.2)',
-  padding: 16,
-  borderRadius: 8,
-  marginBottom: 20,
-}}>
+  color: '#ef4444'
+  background: 'rgba(239, 68, 68, 0.1)'
+  border: '1px solid rgba(239, 68, 68, 0.2)'
+  padding: 16
+  borderRadius: 8
+  marginBottom: 20 }
+}>
                 ⚠️ Error: {error}
               </div>
             )}
             {/* Results List */}
-            {!loading && !error && ()
+            { !loading && !error && ()
               <div style={{
-  flex: 1,
-  overflowY: 'auto',
-  paddingRight: 8,
-}}>
+  flex: 1
+  overflowY: 'auto'
+  paddingRight: 8 }
+}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   {results.slice(0, maxResults).map((result, index) => ()
                     <div
                       key={result.id}
                       onMouseEnter={() => onResultHover?.(index)}
-                      style={{
-                        background: selectedResults.has(result.id) ,
+                      style={ {
+                        background: selectedResults.has(result.id) 
                           ? 'linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%)'
-                          : 'rgba(255, 255, 255, 0.05)',
+                          : 'rgba(255, 255, 255, 0.05)' }
                         border: `1px solid ${selectedResults.has(result.id) ? '#4f46e5' : 'rgba(255, 255, 255, 0.1)'}`}
-},
-  borderRadius: 12,
-                        padding: 20,
-                        position: 'relative',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        ':hover': {
-  background: 'rgba(255, 255, 255, 0.08)',
-  borderColor: 'rgba(255, 255, 255, 0.2)',
-}}
+
+  borderRadius: 12
+                        padding: 20
+                        position: 'relative'
+                        cursor: 'pointer'
+                        transition: 'all 0.2s'
+                        ':hover': { background: 'rgba(255, 255, 255, 0.08)'
+  borderColor: 'rgba(255, 255, 255, 0.2)' }
+
                     >
                       {/* Result Header */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
@@ -415,23 +396,23 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                               type="checkbox"
                               checked={selectedResults.has(result.id)}
                               onChange={(e) => handleResultSelect(result.id, e.target.checked)}
-                              style={{
-  width: 16,
-  height: 16,
-  accentColor: '#4f46e5',
-}}
+                              style={ {
+  width: 16
+  height: 16
+  accentColor: '#4f46e5' }
+
                             />
                           )}
-                          <span style={{
-  background: result.error ? ,
-  'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)' :,
-  'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
-  color: '#fff',
-  fontSize: 11,
-  padding: '4px 10px',
-  borderRadius: 12,
-  fontWeight: 600,
-}}>
+                          <span style={ {
+  background: result.error ? 
+  'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)' :
+  'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)'
+  color: '#fff'
+  fontSize: 11
+  padding: '4px 10px'
+  borderRadius: 12
+  fontWeight: 600 }
+}>
                         🎲 {result.seed}
                           </span>
                           {result.metadata?.contentType && ()
@@ -454,40 +435,40 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                           {result.error}
                         </div>
                       ) : ()
-                        <div style={{
-  fontFamily: '\'Georgia\', \'Times New Roman\', serif',
-  fontSize: 15,
-  lineHeight: 1.6,
-  whiteSpace: 'pre-wrap',
-  color: '#e5e5e5',
-  maxHeight: expandedResult === result.id ? 'none' : 150,
-  overflow: 'hidden',
-  position: 'relative',
-}}>
+                        <div style={ {
+  fontFamily: '\'Georgia\', \'Times New Roman\', serif'
+  fontSize: 15
+  lineHeight: 1.6
+  whiteSpace: 'pre-wrap'
+  color: '#e5e5e5'
+  maxHeight: expandedResult === result.id ? 'none' : 150
+  overflow: 'hidden'
+  position: 'relative' }
+}>
                           {result.output}
-                          {result.output && result.output.length > 300 && expandedResult !== result.id && ()
+                          { result.output && result.output.length > 300 && expandedResult !== result.id && ()
                             <div style={{
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  height: 40,
-  background: 'linear-gradient(transparent, rgba(45, 45, 45, 0.9))',
-  display: 'flex',
-  alignItems: 'end',
-  justifyContent: 'center',
-}}>
+  position: 'absolute'
+  bottom: 0
+  left: 0
+  right: 0
+  height: 40
+  background: 'linear-gradient(transparent, rgba(45, 45, 45, 0.9))'
+  display: 'flex'
+  alignItems: 'end'
+  justifyContent: 'center' }
+}>
                               <button
                                 onClick={() => setExpandedResult(result.id)}
-                                style={{
-  background: 'transparent',
-  border: '1px solid #666',
-  color: '#b0b0b0',
-  padding: '4px 12px',
-  borderRadius: 4,
-  cursor: 'pointer',
-  fontSize: 12,
-}}
+                                style={ {
+  background: 'transparent'
+  border: '1px solid #666'
+  color: '#b0b0b0'
+  padding: '4px 12px'
+  borderRadius: 4
+  cursor: 'pointer'
+  fontSize: 12 }
+
                               >
                             Show More
                               </button>
@@ -496,16 +477,16 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                           {expandedResult === result.id && ()
                             <button
                               onClick={() => setExpandedResult(null)}
-                              style={{
-  background: 'transparent',
-  border: '1px solid #666',
-  color: '#b0b0b0',
-  padding: '4px 12px',
-  borderRadius: 4,
-  cursor: 'pointer',
-  fontSize: 12,
-  marginTop: 12,
-}}
+                              style={ {
+  background: 'transparent'
+  border: '1px solid #666'
+  color: '#b0b0b0'
+  padding: '4px 12px'
+  borderRadius: 4
+  cursor: 'pointer'
+  fontSize: 12
+  marginTop: 12 }
+}
                             >
                           Show Less
                             </button>
@@ -513,14 +494,14 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                         </div>
                       )}
                       {/* Metadata */}
-                      {result.metadata && ()
+                      { result.metadata && ()
                         <div style={{
-  marginTop: 16,
-  display: 'flex',
-  gap: 16,
-  fontSize: 12,
-  color: '#999',
-}}>
+  marginTop: 16
+  display: 'flex'
+  gap: 16
+  fontSize: 12
+  color: '#999' }
+}>
                           {result.metadata.wordCount && ()
                             <span>📝 {result.metadata.wordCount} words</span>
                           )}
@@ -540,14 +521,14 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                             <button
                               key={star}
                               onClick={() => handleRating(result.id, star)}
-                              style={{
-  background: 'transparent',
-  border: 'none',
-  color: (result.metadata?.rating || 0) >= star ? '#fbbf24' : '#666',
-  cursor: 'pointer',
-  fontSize: 16,
-  padding: 2,
-}}
+                              style={ {
+  background: 'transparent'
+  border: 'none'
+  color: (result.metadata?.rating || 0) >= star ? '#fbbf24' : '#666'
+  cursor: 'pointer'
+  fontSize: 16
+  padding: 2 }
+}
                             >
                           ⭐
                             </button>
@@ -567,45 +548,44 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                                 value={tempNote}
                                 onChange={(e) => setTempNote(e.target.value)}
                                 placeholder="Add a note..."
-                                style={{
-  flex: 1,
-  background: 'rgba(255, 255, 255, 0.1)',
-  border: '1px solid rgba(255, 255, 255, 0.2)',
-  color: '#ffffff',
-  padding: '6px 12px',
-  borderRadius: 4,
-  fontSize: 12,
-}}
+                                style={ {
+  flex: 1
+  background: 'rgba(255, 255, 255, 0.1)'
+  border: '1px solid rgba(255, 255, 255, 0.2)'
+  color: '#ffffff'
+  padding: '6px 12px'
+  borderRadius: 4
+  fontSize: 12 }
+}
                                 autoFocus
                               />
                               <button
                                 onClick={() => handleNoteSave(result.id)}
-                                style={{
-  background: '#4f46e5',
-  border: 'none',
-  color: '#ffffff',
-  padding: '6px 12px',
-  borderRadius: 4,
-  cursor: 'pointer',
-  fontSize: 12,
-}}
+                                style={ {
+  background: '#4f46e5'
+  border: 'none'
+  color: '#ffffff'
+  padding: '6px 12px'
+  borderRadius: 4
+  cursor: 'pointer'
+  fontSize: 12 }
+
                               >
                             Save
                               </button>
                               <button
-                                onClick={() => {
+                                onClick={ () => {
                                   setNoteEditing(null);
-                                  setTempNote('');
-                                }}
-                                style={{
-  background: '#666',
-  border: 'none',
-  color: '#ffffff',
-  padding: '6px 12px',
-  borderRadius: 4,
-  cursor: 'pointer',
-  fontSize: 12,
-}}
+                                  setTempNote('') }}
+                                style={ {
+  background: '#666'
+  border: 'none'
+  color: '#ffffff'
+  padding: '6px 12px'
+  borderRadius: 4
+  cursor: 'pointer'
+  fontSize: 12 }
+
                               >
                             Cancel
                               </button>
@@ -616,19 +596,18 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
                                 {result.metadata?.notes || 'No notes'}
                               </div>
                               <button
-                                onClick={() => {
+                                onClick={ () => {
                                   setNoteEditing(result.id);
-                                  setTempNote(result.metadata?.notes || '');
-                                }}
-                                style={{
-  background: 'transparent',
-  border: '1px solid #666',
-  color: '#b0b0b0',
-  padding: '4px 8px',
-  borderRadius: 4,
-  cursor: 'pointer',
-  fontSize: 11,
-}}
+                                  setTempNote(result.metadata?.notes || '') }}
+                                style={ {
+  background: 'transparent'
+  border: '1px solid #666'
+  color: '#b0b0b0'
+  padding: '4px 8px'
+  borderRadius: 4
+  cursor: 'pointer'
+  fontSize: 11 }
+
                               >
                             📝 {result.metadata?.notes ? 'Edit' : 'Add'} Note
                               </button>
@@ -644,12 +623,12 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
           </>
         )}
         {/* Creative Analysis Tab */}
-        {activeTab === 'analysis' && ()
+        { activeTab === 'analysis' && ()
           <div style={{
-  flex: 1,
-  overflowY: 'auto',
-  paddingRight: 8,
-}}>
+  flex: 1
+  overflowY: 'auto'
+  paddingRight: 8 }
+}>
             <CreativeVarianceAnalyzer
               results={results}
               varianceAnalysis={varianceAnalysis}
@@ -658,12 +637,12 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
           </div>
         )}
         {/* Visualization Tab */}
-        {activeTab === 'visualization' && ()
+        { activeTab === 'visualization' && ()
           <div style={{
-  flex: 1,
-  overflowY: 'auto',
-  paddingRight: 8,
-}}>
+  flex: 1
+  overflowY: 'auto'
+  paddingRight: 8 }
+}>
             <VarianceVisualization
               results={results}
               varianceAnalysis={varianceAnalysis}
@@ -673,10 +652,10 @@ export const [expandedResult, setExpandedResult] = useState<string | null>(null)
         )}
       </div>
       <style>
-        {`
+        { `
           @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
+            0% { background-position: 200% 0 }
+            100% { background-position: -200% 0 }
         `}
       </style>
     </div>

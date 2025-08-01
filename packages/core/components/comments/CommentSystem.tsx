@@ -7,9 +7,9 @@ import { CreateComment, UpdateComment } from '../../types/workspace';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useComments } from '../../hooks/useComments';
-}
-interface CommentSystemProps {
-  workspaceId: string;
+
+
+interface CommentSystemProps { workspaceId: string;
   targetType: string;
   targetId: string;
   userId: string;
@@ -17,18 +17,18 @@ interface CommentSystemProps {
   projectId?: string;
   className?: string;
   compact?: boolean;
-  export const CommentSystem: React.FC<CommentSystemProps> = ({,)
-  workspaceId,
-  targetType,
-  targetId,
-  userId,
-  resourceId,
-  projectId,
-  className = '',
+  export const CommentSystem: React.FC<CommentSystemProps> = ({);
+  workspaceId;
+  targetType;
+  targetId;
+  userId;
+  resourceId;
+  projectId;
+  className = '' }
   compact = false
-}
-}) => {
-  const [showCommentForm, setShowCommentForm] = useState(false);
+
+
+}) => { const [showCommentForm, setShowCommentForm] = useState(false);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const {
     comments,
@@ -38,17 +38,16 @@ interface CommentSystemProps {
     updateComment,
     deleteComment,
     loadMore,
-    hasMore,
+    hasMore }
     refresh
-  } = useComments({)
+ = useComments({ )
   workspaceId,
     targetType,
     targetId,
-    userId,
+    userId }
     sortOrder
   });
-  const handleCreateComment = async (content: string, parentCommentId?: string) => {
-    const commentData: CreateComment = {,
+  const handleCreateComment = async (content: string, parentCommentId?: string) => { const commentData: CreateComment = {,
   workspace_id: workspaceId,
       project_id: projectId,
       resource_id: resourceId,
@@ -56,49 +55,30 @@ interface CommentSystemProps {
       content,
       parent_comment_id: parentCommentId,
       target_type: targetType,
-      target_id: targetId,
+      target_id: targetId }
       metadata: {}
     };
-    try {
-      await createComment(commentData);
+    try { await createComment(commentData);
       if (!parentCommentId) {
-        setShowCommentForm(false);
-    } catch (error) {
-  console.error('Failed to create comment:', error);
-};
+        setShowCommentForm(false) } catch (error) { console.error('Failed to create comment:', error) };
   const handleUpdateComment = async (commentId: string, content: string, metadata?: Record<string, unknown>) => {
     const updates: UpdateComment = { content };
-    if (metadata) {
-      updates.metadata = metadata;
+    if (metadata) { updates.metadata = metadata;
     try {
-      await updateComment(commentId, updates);
-    } catch (error) {
-  console.error('Failed to update comment:', error);
-};
-  const handleDeleteComment = async (commentId: string) => {
-    try {
-      await deleteComment(commentId);
-    } catch (error) {
-  console.error('Failed to delete comment:', error);
-};
-  const handleResolveComment = async (commentId: string, resolved: boolean) => {
-  const comment = comments.find(c => c.id === commentId);
+      await updateComment(commentId, updates) } catch (error) { console.error('Failed to update comment:', error) };
+  const handleDeleteComment = async (commentId: string) => { try {
+      await deleteComment(commentId) } catch (error) { console.error('Failed to delete comment:', error) };
+  const handleResolveComment = async (commentId: string, resolved: boolean) => { const comment = comments.find(c => c.id === commentId);
   if (!comment) return;
-  const updates: UpdateComment = {,
+  const updates: UpdateComment = {
   metadata: {
-  ...comment.metadata,
-  resolved,
-  resolved_by: resolved ? userId : undefined,
-  resolved_at: resolved ? new Date().toISOString() : undefined,
+  ...comment.metadata
+  resolved
+  resolved_by: resolved ? userId : undefined
+  resolved_at: resolved ? new Date().toISOString() : undefined }
 };
-    try {
-      await updateComment(commentId, updates);
-    } catch (error) {
-  console.error('Failed to resolve comment:', error);
-};
-  const totalComments = comments.reduce((total, comment) => {
-    return total + 1 + (comment.reply_count || 0);
-  }, 0);
+    try { await updateComment(commentId, updates) } catch (error) { console.error('Failed to resolve comment:', error) };
+  const totalComments = comments.reduce((total, comment) => { return total + 1 + (comment.reply_count || 0) }, 0);
   if (loading && comments.length === 0) {
     return;
       <div className={`comment-system comment-system--loading ${className}`}>}

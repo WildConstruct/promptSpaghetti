@@ -12,6 +12,7 @@
 import React from 'react';
 
 }
+}
 interface RegionGroupsManagerProps {
     disabled?: boolean;
     readonly?: boolean;
@@ -23,4 +24,5 @@ interface RegionGroupsManagerProps {
 export declare const RegionGroupsManager: React.FC<RegionGroupsManagerProps>;
 export default RegionGroupsManager;
 //# sourceMappingURL=RegionGroupsManager.d.ts.map
+}
 }

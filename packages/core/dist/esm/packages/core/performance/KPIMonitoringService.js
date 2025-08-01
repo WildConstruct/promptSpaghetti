@@ -503,7 +503,15 @@ KPITrendAnalysis;
                                 averageScore: number;
                             }
                             ;
-                            kpiStatus: Array;
+                            kpiStatus: Array < {
+                                kpiId: string,
+                                name: string,
+                                category: string,
+                                status: string,
+                                value: number,
+                                target: number,
+                                trend: string
+                            } > ;
                             alerts: KPIAlert;
                             trends: KPITrendAnalysis;
                             recommendations: string;

@@ -8,8 +8,8 @@ import { NodeType } from '../types/NodeTypes';
  * Compressed storage format for large graphs
  */
 }
-interface CompressedGraphData {
-    format_version: '2.0.0';
+}
+interface CompressedGraphData { format_version: '2.0.0';
     compressed: true;
     node_data: Uint8Array;
     edge_data: Uint8Array;
@@ -17,14 +17,13 @@ interface CompressedGraphData {
         node_count: number;
         edge_count: number;
         compression_ratio: number;
-        original_size: number;
+        original_size: number }
 }
     };
 /**
  * Optimized graph storage with hybrid Map/Array architecture
  */
-export declare class OptimizedGraphStorage {
-    private nodeMap;
+export declare class OptimizedGraphStorage { private nodeMap;
     private edgeMap;
     private indexes;
     private dirty;
@@ -92,20 +91,15 @@ export declare class OptimizedGraphStorage {
             leafNodes: number;
             rootNodes: number;
             isolatedNodes: number;
-            averageConnections: number;
-        };
-        memoryUsage: {
-            estimatedBytes: number;
-            cacheHitRatio?: number;
-        };
+            averageConnections: number };
+        memoryUsage: { estimatedBytes: number;
+            cacheHitRatio?: number };
     };
     /**
      * Serialize to compressed format for storage
      */
-    toCompressedFormat(): CompressedGraphData | {
-        nodes: Node[];
-        edges: Edge[];
-    };
+    toCompressedFormat(): CompressedGraphData | { nodes: Node[];
+        edges: Edge[] };
     /**
      * Load from regular or compressed format
      */

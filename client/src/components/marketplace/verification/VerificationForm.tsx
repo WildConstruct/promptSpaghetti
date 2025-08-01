@@ -1,7 +1,7 @@
 // Epic 17.5.5 - Verification Information Form Component
 import React, { useState, useCallback } from 'react';
 import { VerificationLevel, VerificationInformation } from './types';
-}
+
 interface VerificationFormProps {
   onSubmit?: (data: { requested_level: VerificationLevel; information: VerificationInformation }) => void;
   onError?: (error: string) => void;
@@ -12,22 +12,22 @@ const VERIFICATION_LEVELS: Array<{ value: VerificationLevel; label: string; desc
   value: 'basic',
   label: 'Basic Verification',
   description: 'Email and basic personal information verification',
-}
+
   {
   value: 'intermediate',
   label: 'Intermediate Verification',
   description: 'Professional credentials and portfolio verification',
-}
+
   {
   value: 'advanced',
   label: 'Advanced Verification',
   description: 'Business entity verification with documentation',
-}
+
   {
     value: 'premium',
     label: 'Premium Verification',
     description: 'Enhanced verification with manual review'];
-const COUNTRIES = [;
+const COUNTRIES = [
   { code: 'US', name: 'United States' },
   { code: 'CA', name: 'Canada' },
   { code: 'UK', name: 'United Kingdom' },
@@ -38,7 +38,7 @@ const COUNTRIES = [;
 ];
 
 export const [formData, setFormData] = useState<VerificationInformation>({)
-  personal_info: {
+  personal_info: {,
   full_name: initialData?.personal_info?.full_name || '',
   email: initialData?.personal_info?.email || '',
   phone: initialData?.personal_info?.phone || '',
@@ -50,7 +50,7 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
   address_line_1: initialData?.personal_info?.address_line_1 || '',
   address_line_2: initialData?.personal_info?.address_line_2 || '',
 },
-  professional_info: {
+  professional_info: {,
   job_title: initialData?.professional_info?.job_title || '',
   company: initialData?.professional_info?.company || '',
   industry: initialData?.professional_info?.industry || '',
@@ -59,12 +59,12 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
   website_url: initialData?.professional_info?.website_url || '',
   portfolio_url: initialData?.professional_info?.portfolio_url || '',
 },
-  business_info: {
+  business_info: {,
   business_name: initialData?.business_info?.business_name || '',
   business_type: initialData?.business_info?.business_type || '',
   registration_number: initialData?.business_info?.registration_number || '',
   tax_id: initialData?.business_info?.tax_id || '',
-  business_address: {
+  business_address: {,
   country: initialData?.business_info?.business_address?.country || 'US',
   state_province: initialData?.business_info?.business_address?.state_province || '',
   city: initialData?.business_info?.business_address?.city || '',
@@ -82,15 +82,15 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
   const addressField = field.replace('business_address.', '');
   return {
   ...prev,
-  business_info: {
+  business_info: {,
   ...prev.business_info!,
-  business_address: {
+  business_address: {,
   ...prev.business_info!.business_address!,
   [addressField]: value,
 };
       return {
   ...prev,
-  [section]: {
+  [section]: {,
   ...prev[section],
   [field]: value,
 };
@@ -111,9 +111,9 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
   requested_level: requestedLevel,
   information: formData,
 });
-    } catch (error) {
+ catch (error) {
   onError?.(error instanceof Error ? error.message : 'Submission failed');
-} finally {
+ finally {
       setIsSubmitting(false);
   }, [formData, requestedLevel, onSubmit, onError]);
   return;
@@ -354,8 +354,8 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
       <style>{`
         .verification-form {
           max-width: 800px;,
-  margin: 0 auto;
-          padding: 24px;
+  margin: 0 auto;,
+  padding: 24px;
           background-color: #fff;
           border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -380,16 +380,16 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
         .level-option {
           border: 1px solid #ddd;
           border-radius: 6px;,
-  padding: 16px;
-          transition: all 0.2s;
+  padding: 16px;,
+  transition: all 0.2s;
         .level-option:has(input:checked) {
           border-color: #007bff;
           background-color: #f8f9fa;
         .level-option label {
           display: flex;
           align-items: flex-start;,
-  gap: 12px;
-          cursor: pointer;
+  gap: 12px;,
+  cursor: pointer;
         .level-option input[type="radio"] {
           margin-top: 2px;
         .level-info strong {
@@ -440,13 +440,13 @@ export const [formData, setFormData] = useState<VerificationInformation>({)
         .submit-button {
           padding: 12px 32px;
           background-color: #007bff;,
-  color: white;
-          border: none;
+  color: white;,
+  border: none;
           border-radius: 6px;
           font-size: 16px;
           font-weight: 600;,
-  cursor: pointer;
-          transition: background-color 0.2s;
+  cursor: pointer;,
+  transition: background-color 0.2s;
           min-width: 200px;
         .submit-button:hover:not(:disabled) {
           background-color: #0056b3;

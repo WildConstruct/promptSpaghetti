@@ -13,13 +13,13 @@ import {
   PlaybookCategory,
   AutomationExecution,
   ExecutionStatus
-} from '../SecurityIntelligenceAutomation';
+ from '../SecurityIntelligenceAutomation';
 import { 
   SecurityIntelligenceDataPipeline,
   SecurityEvent,
   SecurityEventType,
   SecurityEventSeverity
-} from '../SecurityIntelligenceDataPipeline';
+ from '../SecurityIntelligenceDataPipeline';
 import { AnalyticsCollector } from '../../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../../database/analytics-dao';
 import { PerformanceMonitoringService } from '../../analytics/PerformanceMonitoringService';
@@ -94,7 +94,7 @@ describe('SecurityIntelligenceAutomation', () => {
         retry_delay_ms: 1000,
         failure_escalation: true,
         success_rate_threshold: 0.95
-  }
+
       threat_detection: {
         enabled: true,
         real_time_detection: true,
@@ -103,7 +103,7 @@ describe('SecurityIntelligenceAutomation', () => {
         anomaly_detection_threshold: 0.8,
         threat_scoring_enabled: true,
         auto_classification: true
-  }
+
       incident_response: {
         enabled: true,
         automated_containment: true,
@@ -112,7 +112,7 @@ describe('SecurityIntelligenceAutomation', () => {
         escalation_rules: true,
         notification_channels: ['email', 'slack', 'webhook'],
         response_time_sla_ms: 300000
-  }
+
       playbook_automation: {
         enabled: true,
         max_concurrent_playbooks: 50,
@@ -121,7 +121,7 @@ describe('SecurityIntelligenceAutomation', () => {
         parallel_execution: true,
         rollback_on_failure: true,
         audit_execution: true
-  }
+
       security_orchestration: {
         enabled: true,
         tool_integration: true,
@@ -130,7 +130,7 @@ describe('SecurityIntelligenceAutomation', () => {
         approval_workflows: true,
         compliance_automation: true,
         reporting_automation: true
-  }
+
       machine_learning: {
         enabled: true,
         threat_prediction: true,
@@ -139,14 +139,14 @@ describe('SecurityIntelligenceAutomation', () => {
         risk_scoring: true,
         pattern_recognition: true,
         adaptive_learning: true
-  }
+
       epic_integration: {
         epic1_analytics_enabled: true,
         epic17_admin_enabled: true,
         performance_monitoring: true,
         unified_logging: true,
         cross_epic_automation: true
-      }
+
     };
 
     automation = new SecurityIntelligenceAutomation(
@@ -174,7 +174,7 @@ describe('SecurityIntelligenceAutomation', () => {
         metadata: expect.objectContaining({
           automation_version: '1.0.0',
           integration_type: 'epic1_analytics'
-  }
+
       });
 
       expect(mockPerformanceMonitoringService.recordMetric).toHaveBeenCalledWith({
@@ -184,7 +184,7 @@ describe('SecurityIntelligenceAutomation', () => {
         tags: {
           component: 'security_intelligence_automation',
           integration: 'epic1'
-        }
+
       });
 
       expect(mockHealthCheckFramework.registerHealthCheck).toHaveBeenCalledWith({
@@ -215,7 +215,7 @@ describe('SecurityIntelligenceAutomation', () => {
           performance_monitoring: false,
           unified_logging: false,
           cross_epic_automation: false
-        }
+
       };
 
       const automationWithoutEpic = new SecurityIntelligenceAutomation(
@@ -411,7 +411,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (!criticalThreatRule) {
         throw new Error('Critical threat rule not found');
-      }
+
 
       const mockEvent: SecurityEvent = {
         id: 'test_event_1',
@@ -437,7 +437,7 @@ describe('SecurityIntelligenceAutomation', () => {
           rule_name: criticalThreatRule.name,
           execution_id: executionId,
           success: true
-  }
+
       });
     });
 
@@ -455,7 +455,7 @@ describe('SecurityIntelligenceAutomation', () => {
           timeout_ms: 10000,
           retry_attempts: 0,
           on_failure: 'stop' as any
-        }],
+],
         priority: AutomationPriority.LOW,
         enabled: true,
         created_by: 'test',
@@ -467,7 +467,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (!failingRule) {
         throw new Error('Failing rule not found');
-      }
+
 
       const mockEvent: SecurityEvent = {
         id: 'test_event_1',
@@ -524,7 +524,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (!phishingPlaybook) {
         throw new Error('Phishing playbook not found');
-      }
+
 
       const mockEvent: SecurityEvent = {
         id: 'test_event_1',
@@ -556,7 +556,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (!dataBreachPlaybook) {
         throw new Error('Data breach playbook not found');
-      }
+
 
       const mockEvent: SecurityEvent = {
         id: 'test_event_1',
@@ -591,7 +591,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (!dataBreachPlaybook) {
         throw new Error('Data breach playbook not found');
-      }
+
 
       const mockEvent: SecurityEvent = {
         id: 'test_event_1',
@@ -622,7 +622,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (!dataBreachPlaybook) {
         throw new Error('Data breach playbook not found');
-      }
+
 
       const mockEvent: SecurityEvent = {
         id: 'test_event_1',
@@ -677,7 +677,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (eventHandler) {
         await eventHandler(mockEvent);
-      }
+
 
       // Should trigger critical threat response rule
       expect(ruleExecutionSpy).toHaveBeenCalled();
@@ -706,7 +706,7 @@ describe('SecurityIntelligenceAutomation', () => {
       
       if (eventHandler) {
         await eventHandler(mockEvent);
-      }
+
 
       // Should trigger data breach response playbook (which requires approval)
       expect(playbookExecutionSpy).toHaveBeenCalled();
@@ -751,7 +751,7 @@ describe('SecurityIntelligenceAutomation', () => {
         metadata: expect.objectContaining({
           total_automations: expect.any(Number),
           success_rate: expect.any(Number)
-  }
+
       });
     });
   });
@@ -931,7 +931,7 @@ describe('SecurityIntelligenceAutomation', () => {
           recipients: ['test@example.com'], 
           subject: 'Test Email',
           template: 'alert_template'
-  }
+
         timeout_ms: 30000,
         retry_attempts: 2,
         on_failure: 'continue' as any
@@ -1008,9 +1008,9 @@ describe('SecurityIntelligenceAutomation', () => {
       // Force an error by accessing a private method incorrectly
       try {
         await (automation as any).handleSecurityEventForAutomation(mockEvent);
-      } catch (error) {
+ catch (error) {
         // Expected to handle errors gracefully
-      }
+
 
       // The error should be emitted as an event
       // expect(errorSpy).toHaveBeenCalled();
@@ -1044,7 +1044,7 @@ describe('SecurityIntelligenceAutomation', () => {
           field: 'severity',
           operator: 'equals' as any,
           value: SecurityEventSeverity.HIGH
-        }],
+],
         actions: [{
           id: 'create_alert',
           type: 'alert_creation' as any,
@@ -1052,7 +1052,7 @@ describe('SecurityIntelligenceAutomation', () => {
           timeout_ms: 30000,
           retry_attempts: 2,
           on_failure: 'continue' as any
-        }],
+],
         priority: AutomationPriority.HIGH,
         enabled: true,
         created_by: 'test_user',

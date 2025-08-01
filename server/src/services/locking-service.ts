@@ -5,8 +5,8 @@ import { WorkflowDAO } from '../database/workflow-dao';
 import { Database } from '../database/connection';
 import { WorkflowLock } from '../database/workflow-models';
 
-}
-}
+
+
 export interface LockRequest {
   resource_id: string;
   user_id: string;
@@ -16,12 +16,13 @@ export interface LockRequest {
   duration_minutes?: number;
   force?: boolean;
   metadata?: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockPolicy {
   id: string;
   workspace_id: string;
@@ -50,12 +51,13 @@ export interface LockPolicy {
   
   created_at: Date;
   updated_at: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockConflict {
   id: string;
   resource_id: string;
@@ -67,12 +69,13 @@ export interface LockConflict {
   created_at: Date;
   resolved_at?: Date;
   resolution_action?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockQueue {
   id: string;
   resource_id: string;
@@ -82,12 +85,13 @@ export interface LockQueue {
   queued_at: Date;
   estimated_wait_time?: number;
   notification_sent: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockNotification {
   id: string;
   user_id: string;
@@ -100,12 +104,13 @@ export interface LockNotification {
   sent_at: Date;
   read_at?: Date;
   metadata: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface LockingStatistics {
   total_locks: number;
   active_locks: number;
@@ -119,10 +124,11 @@ export interface LockingStatistics {
     resource_id: string;
     conflict_count: number;
     avg_wait_time: number;
-}
-}
-  }>;
-}
+
+
+
+>;
+
 
 export class LockingService {
   private dao: WorkflowDAO;
@@ -131,7 +137,7 @@ export class LockingService {
   constructor(db: Database) {
     this.db = db;
     this.dao = new WorkflowDAO(db);
-  }
+
 
   // =============================================================================
   // LOCK POLICY MANAGEMENT
@@ -170,7 +176,7 @@ export class LockingService {
       ...result.rows[0],
       lock_breaking_roles: JSON.parse(result.rows[0].lock_breaking_roles || '[]')
     };
-  }
+
 
   async getLockPolicy(workspaceId: string): Promise<LockPolicy | null> {
 
@@ -187,7 +193,7 @@ export class LockingService {
       ...result.rows[0],
       lock_breaking_roles: JSON.parse(result.rows[0].lock_breaking_roles || '[]')
     };
-  }
+
 
   // =============================================================================
   // ENHANCED LOCK ACQUISITION
@@ -199,7 +205,7 @@ export class LockingService {
     conflict?: LockConflict;
     queue_position?: number;
     error?: string;
-  }> {
+> {
 
     return this.db.transaction(async (client) => {
       // Get lock policy
@@ -209,7 +215,7 @@ export class LockingService {
       const userLocks = await this.getUserLocks(request.user_id);
       if (policy && userLocks.length >= policy.max_locks_per_user) {
         return { success: false, error: 'Maximum locks per user exceeded' };
-      }
+
 
       // Check resource locks
       const resourceLocks = await this.getResourceLocks(request.resource_id);
@@ -221,7 +227,7 @@ export class LockingService {
         // Handle conflict based on policy
         const conflict = await this.handleLockConflict(conflictingLock, request, policy);
         return { success: false, conflict };
-      }
+
 
       // Acquire the lock
       const duration = request.duration_minutes || policy?.default_duration_minutes || 60;
@@ -256,7 +262,7 @@ export class LockingService {
 
       return { success: true, lock };
     });
-  }
+
 
   private findConflictingLock(existingLocks: WorkflowLock[], request: LockRequest): WorkflowLock | null {
     // Define lock compatibility matrix
@@ -274,7 +280,7 @@ export class LockingService {
       conflictingTypes.includes(lock.lock_type) && 
       lock.locked_by !== request.user_id
     ) || null;
-  }
+
 
   private async handleLockConflict(
     conflictingLock: WorkflowLock,
@@ -305,10 +311,10 @@ export class LockingService {
     default:
       // Already handled by returning conflict
       break;
-    }
+
 
     return conflict;
-  }
+
 
   private async createLockConflict(
     resourceId: string,
@@ -326,7 +332,7 @@ export class LockingService {
     `, [resourceId, requestingUserId, blockingLockId, strategy]);
 
     return result.rows[0];
-  }
+
 
   // =============================================================================
   // LOCK BREAKING
@@ -341,7 +347,7 @@ export class LockingService {
     success: boolean;
     error?: string;
     notification_sent?: boolean;
-  }> {
+> {
 
     return this.db.transaction(async (client) => {
       // Get the lock
@@ -352,31 +358,31 @@ export class LockingService {
 
       if (lockResult.rows.length === 0) {
         return { success: false, error: 'Lock not found' };
-      }
+
 
       const lock = lockResult.rows[0];
 
       // Check if user can break the lock
       if (!force && lock.locked_by === breakerUserId) {
         return { success: false, error: 'Cannot break your own lock' };
-      }
+
 
       // Get lock policy
       const policy = await this.getLockPolicy(lock.workspace_id);
       
       if (!force && policy && !policy.allow_lock_breaking) {
         return { success: false, error: 'Lock breaking is not allowed' };
-      }
+
 
       // Check user permissions
       if (!force && policy && !await this.canBreakLock(breakerUserId, lock, policy)) {
         return { success: false, error: 'Insufficient permissions to break lock' };
-      }
+
 
       // Validate justification if required
       if (policy?.require_justification && !justification) {
         return { success: false, error: 'Justification is required to break lock' };
-      }
+
 
       // Break the lock
       await client.query('DELETE FROM workflow_locks WHERE id = $1', [lockId]);
@@ -395,7 +401,7 @@ export class LockingService {
 
       return { success: true, notification_sent: true };
     });
-  }
+
 
   private async canBreakLock(userId: string, lock: WorkflowLock, policy: LockPolicy): Promise<boolean> {
 
@@ -404,7 +410,7 @@ export class LockingService {
     const hasRequiredRole = policy.lock_breaking_roles.some(role => userRoles.includes(role));
     
     return hasRequiredRole;
-  }
+
 
   private async getUserRoles(userId: string, workspaceId: string): Promise<string[]> {
 
@@ -416,7 +422,7 @@ export class LockingService {
     `, [userId, workspaceId]);
 
     return result.rows.map(row => row.role_name);
-  }
+
 
   // =============================================================================
   // LOCK QUEUE MANAGEMENT
@@ -445,7 +451,7 @@ export class LockingService {
     await this.sendQueueNotification(request.user_id, queueEntry);
 
     return queueEntry;
-  }
+
 
   private calculateQueuePriority(request: LockRequest): number {
     // Higher priority for certain lock types
@@ -458,7 +464,7 @@ export class LockingService {
     };
 
     return priorityMap[request.lock_type] || 5;
-  }
+
 
   private async estimateWaitTime(resourceId: string): Promise<number> {
 
@@ -473,12 +479,12 @@ export class LockingService {
       if (lock.expires_at) {
         const remaining = Math.max(0, new Date(lock.expires_at).getTime() - now.getTime());
         return sum + remaining;
-      }
+
       return sum + (60 * 60 * 1000); // Default 1 hour
     }, 0) / locks.length;
 
     return Math.round(avgRemainingTime / (60 * 1000)); // Convert to minutes
-  }
+
 
   private async processLockQueue(resourceId: string): Promise<void> {
 
@@ -513,8 +519,8 @@ export class LockingService {
       await this.sendLockNotification(queueEntry.user_id, result.lock!, 'acquired', {
         from_queue: true
       });
-    }
-  }
+
+
 
   // =============================================================================
   // NOTIFICATION SYSTEM
@@ -554,7 +560,7 @@ export class LockingService {
       messages[type],
       JSON.stringify(metadata)
     ]);
-  }
+
 
   private async sendQueueNotification(userId: string, queueEntry: LockQueue): Promise<void> {
 
@@ -571,7 +577,7 @@ export class LockingService {
       `You are #${position} in the queue for a ${queueEntry.lock_type} lock. Estimated wait time: ${queueEntry.estimated_wait_time || 0} minutes.`,
       JSON.stringify({ queue_position: position, estimated_wait_time: queueEntry.estimated_wait_time })
     ]);
-  }
+
 
   private async getQueuePosition(queueEntryId: string): Promise<number> {
 
@@ -584,7 +590,7 @@ export class LockingService {
     `, [queueEntryId]);
 
     return parseInt(result.rows[0].position);
-  }
+
 
   // =============================================================================
   // MAINTENANCE AND CLEANUP
@@ -605,10 +611,10 @@ export class LockingService {
 
     for (const row of expiredLocks.rows) {
       await this.processLockQueue(row.resource_id);
-    }
+
 
     return result.rowCount;
-  }
+
 
   async sendExpirationWarnings(): Promise<number> {
 
@@ -626,10 +632,10 @@ export class LockingService {
 
     for (const lock of result.rows) {
       await this.sendLockNotification(lock.locked_by, lock, 'expiring');
-    }
+
 
     return result.rowCount;
-  }
+
 
   // =============================================================================
   // STATISTICS AND REPORTING
@@ -690,7 +696,7 @@ export class LockingService {
         avg_wait_time: parseFloat(row.avg_wait_time) || 0
       }))
     };
-  }
+
 
   // =============================================================================
   // HELPER METHODS
@@ -705,7 +711,7 @@ export class LockingService {
     `, [userId]);
 
     return result.rows;
-  }
+
 
   private async getResourceLocks(resourceId: string): Promise<WorkflowLock[]> {
 
@@ -716,7 +722,7 @@ export class LockingService {
     `, [resourceId]);
 
     return result.rows;
-  }
+
 
   private async logLockAction(
     lockId: string,
@@ -729,7 +735,7 @@ export class LockingService {
       INSERT INTO lock_actions (lock_id, user_id, action_type, reason)
       VALUES ($1, $2, $3, $4)
     `, [lockId, userId, actionType, reason]);
-  }
+
 
   private async notifyLockOwner(lock: WorkflowLock, request: LockRequest): Promise<void> {
 
@@ -745,13 +751,13 @@ export class LockingService {
       `User ${request.user_id} is requesting a ${request.lock_type} lock on resource ${request.resource_id}`,
       JSON.stringify({ requesting_user: request.user_id, requested_type: request.lock_type })
     ]);
-  }
+
 
   private async escalateLockConflict(_____conflict: LockConflict, _____policy: LockPolicy | null): Promise<void> {
 
     // Implementation would escalate to administrators or managers
     // This is a placeholder for escalation logic
-  }
+
 
   // =============================================================================
   // ADDITIONAL METHODS FOR API INTEGRATION
@@ -760,7 +766,7 @@ export class LockingService {
   async releaseLock(lockId: string, userId: string): Promise<{
     success: boolean;
     error?: string;
-  }> {
+> {
 
     return this.db.transaction(async (client) => {
       // Get the lock
@@ -771,14 +777,14 @@ export class LockingService {
 
       if (lockResult.rows.length === 0) {
         return { success: false, error: 'Lock not found' };
-      }
+
 
       const lock = lockResult.rows[0];
 
       // Check if user owns the lock
       if (lock.locked_by !== userId) {
         return { success: false, error: 'You can only release your own locks' };
-      }
+
 
       // Release the lock
       await client.query('DELETE FROM workflow_locks WHERE id = $1', [lockId]);
@@ -794,7 +800,7 @@ export class LockingService {
 
       return { success: true };
     });
-  }
+
 
   async updateLockPolicy(workspaceId: string, data: Omit<LockPolicy, 'id' | 'created_at' | 'updated_at'>): Promise<LockPolicy> {
 
@@ -839,7 +845,7 @@ export class LockingService {
       ...result.rows[0],
       lock_breaking_roles: JSON.parse(result.rows[0].lock_breaking_roles || '[]')
     };
-  }
+
 
   async getLockQueue(resourceId: string): Promise<LockQueue[]> {
 
@@ -850,12 +856,12 @@ export class LockingService {
     `, [resourceId]);
 
     return result.rows;
-  }
+
 
   async removeFromQueue(queueId: string, userId: string): Promise<{
     success: boolean;
     error?: string;
-  }> {
+> {
 
     const result = await this.db.query(`
       DELETE FROM lock_queue
@@ -864,10 +870,10 @@ export class LockingService {
 
     if (result.rowCount === 0) {
       return { success: false, error: 'Queue entry not found or access denied' };
-    }
+
 
     return { success: true };
-  }
+
 
   async getLockConflicts(workspaceId: string, status?: string): Promise<LockConflict[]> {
 
@@ -884,18 +890,18 @@ export class LockingService {
     if (status) {
       query += ' AND lc.status = $2';
       params.push(status);
-    }
+
 
     query += ' ORDER BY lc.created_at DESC';
 
     const result = await this.db.query(query, params);
     return result.rows;
-  }
+
 
   async resolveLockConflict(conflictId: string, resolution: string, userId: string): Promise<{
     success: boolean;
     error?: string;
-  }> {
+> {
 
     return this.db.transaction(async (client) => {
       // Get the conflict
@@ -906,7 +912,7 @@ export class LockingService {
 
       if (conflictResult.rows.length === 0) {
         return { success: false, error: 'Conflict not found' };
-      }
+
 
       const conflict = conflictResult.rows[0];
 
@@ -929,14 +935,14 @@ export class LockingService {
         };
 
         await this.acquireLock(lockRequest);
-      }
+
 
       // Log the resolution
       await this.logLockAction(conflict.blocking_lock_id, userId, 'conflict_resolved', `Resolution: ${resolution}`);
 
       return { success: true };
     });
-  }
+
 
   async getLockNotifications(userId: string, unreadOnly: boolean = false): Promise<LockNotification[]> {
 
@@ -947,18 +953,18 @@ export class LockingService {
 
     if (unreadOnly) {
       query += ' AND read_at IS NULL';
-    }
+
 
     query += ' ORDER BY sent_at DESC';
 
     const result = await this.db.query(query, [userId]);
     return result.rows;
-  }
+
 
   async markNotificationAsRead(notificationId: string): Promise<{
     success: boolean;
     error?: string;
-  }> {
+> {
 
     const result = await this.db.query(`
       UPDATE lock_notifications 
@@ -968,8 +974,7 @@ export class LockingService {
 
     if (result.rowCount === 0) {
       return { success: false, error: 'Notification not found' };
-    }
+
 
     return { success: true };
-  }
-}
+

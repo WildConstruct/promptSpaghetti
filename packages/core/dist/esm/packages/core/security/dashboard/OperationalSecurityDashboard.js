@@ -256,7 +256,7 @@ borderRadius: '6px',
                                 fontSize: '10px',
                                 padding: '2px 6px',
                                 background: `${getSeverityColor(alert.severity)}20`
-                            } }), ", color: getSeverityColor(alert.severity), borderRadius: '4px', fontWeight: 600, textTransform: 'uppercase' }}>", alert.severity] }), _jsx("span", { style: {
+                            } }), ", color: getSeverityColor(alert.severity), borderRadius: '4px', fontWeight: 600, textTransform: 'uppercase'; }}>", alert.severity] }), _jsx("span", { style: {
                         fontSize: '11px',
                         color: themeStyles.textSecondary,
                     }, children: alert.timestamp.toLocaleTimeString() })] });
@@ -339,7 +339,7 @@ _jsxs("div", { style: {
                     }, children: [_jsx("div", { style: {
                                 background: themeStyles.surface,
                                 border: `1px solid ${themeStyles.border}`
-                            } }), ", borderRadius: '8px', padding: '20px', display: 'flex', flexDirection: 'column' }}>", _jsxs("div", { style: {
+                            } }), ", borderRadius: '8px', padding: '20px', display: 'flex', flexDirection: 'column'; }}>", _jsxs("div", { style: {
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
@@ -355,7 +355,7 @@ _jsxs("div", { style: {
                                             background: selectedFilter === filter ? themeStyles.primary : 'transparent',
                                             color: selectedFilter === filter ? themeStyles.background : themeStyles.textSecondary,
                                             border: `1px solid ${selectedFilter === filter ? themeStyles.primary : themeStyles.border}`
-                                        }, ", borderRadius: '4px', fontSize: '12px', fontWeight: 500, cursor: 'pointer', textTransform: 'capitalize' }} >", filter] }), "))}"] })] }), _jsxs("div", { style: {
+                                        }, ", borderRadius: '4px', fontSize: '12px', fontWeight: 500, cursor: 'pointer', textTransform: 'capitalize'; }} >", filter] }), "))}"] })] }), _jsxs("div", { style: {
                         flex: 1,
                         overflowY: 'auto',
                         paddingRight: '8px',

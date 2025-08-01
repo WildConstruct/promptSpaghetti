@@ -27,8 +27,8 @@ export const ExtensionManagerConstants = {
 // Extension Manager Hooks and Utilities
 export const ExtensionManagerUtils = {
     /**
-     * Get extension type icon
-     */
+    * Get extension type icon
+    */
     getExtensionIcon(type) {
         switch (type) {
             case 'node':

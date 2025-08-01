@@ -69,14 +69,14 @@ describe('OAuthPolicyService', () => {
       policyType: 'OAUTH_TOKEN_LIFECYCLE',
       title: 'OAuth Token Lifecycle Policy',
       version: '1.0'
-    } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
     mockPolicyAcceptanceService.recordPolicyAcceptance = jest.fn<unknown[], unknown>().mockResolvedValue('consent-123' as unknown as unknown as unknown as unknown as unknown as unknown);
     mockComplianceReportingService.generateReport = jest.fn<unknown[], unknown>().mockResolvedValue('report-123' as unknown as unknown as unknown as unknown as unknown as unknown);
     mockRuleEvaluationEngine.evaluateRules = jest.fn<unknown[], unknown>().mockResolvedValue({
       passed: true,
       evaluationId: 'eval-123',
       policyId: 'policy-123'
-    } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
     mockRuleEvaluationEngine.loadRulesByCategory = jest.fn<unknown[], unknown>().mockResolvedValue([
       { ruleId: 'oauth-rule-001', expression: 'clientType === "CONFIDENTIAL"' }
     ] as unknown as unknown as unknown as unknown as unknown as unknown);
@@ -112,7 +112,7 @@ describe('OAuthPolicyService', () => {
         description: 'Policy for web app client registration',
         frameworks: ['OAuth2.1', 'GDPR'],
         template: { approvalRequired: false }
-      } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
 
       const policyId = await oauthPolicyService.createOAuthPolicyFromTemplate(
         templateId,
@@ -142,7 +142,7 @@ describe('OAuthPolicyService', () => {
           policyType: 'OAUTH_CLIENT_REGISTRATION',
           frameworks: ['OAuth2.1', 'GDPR'],
           customizations: ['environment', 'securityLevel']
-  }
+
         userId,
         severity: 'MEDIUM'
       });
@@ -165,7 +165,7 @@ describe('OAuthPolicyService', () => {
           templateId,
           error: 'Template not found',
           customizations: []
-  }
+
         userId,
         severity: 'HIGH'
       });
@@ -190,7 +190,7 @@ describe('OAuthPolicyService', () => {
         passed: true,
         evaluationId: 'eval-123',
         policyId: 'client-reg-policy-123'
-      } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
 
       jest.spyOn(
         oauthPolicyService as any,
@@ -226,7 +226,7 @@ describe('OAuthPolicyService', () => {
           compliant: true,
           violationCount: 0,
           enforcementActions: 0
-  }
+
         userId,
         severity: 'LOW'
       });
@@ -259,7 +259,7 @@ describe('OAuthPolicyService', () => {
             actualValue: ['http://localhost/callback'],
             expectedValue: ['https://...'],
             remediationSuggestion: 'Update redirect URIs to use HTTPS'
-  }
+
           {
             ruleId: 'PKCE-REQUIRED-PUBLIC',
             title: 'PKCE Required for Public Clients',
@@ -269,9 +269,9 @@ describe('OAuthPolicyService', () => {
             actualValue: false,
             expectedValue: true,
             remediationSuggestion: 'Enable PKCE for public client'
-          }
+
         ]
-      } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
 
       const result = await oauthPolicyService.enforceClientRegistrationPolicy(oauthConfig, userId);
 
@@ -286,7 +286,7 @@ describe('OAuthPolicyService', () => {
           compliant: false,
           violationCount: 2,
           enforcementActions: expect.any(Number)
-  }
+
         userId,
         severity: 'HIGH'
       });
@@ -319,7 +319,7 @@ describe('OAuthPolicyService', () => {
           clientId: oauthConfig.clientId,
           policyType: 'CLIENT_REGISTRATION',
           error: 'Failed to load rules'
-  }
+
         userId,
         severity: 'HIGH'
       });
@@ -344,7 +344,7 @@ describe('OAuthPolicyService', () => {
         isCompliant: true,
         violations: [],
         recommendations: []
-      } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
 
       jest.spyOn(
         oauthPolicyService as any,
@@ -369,7 +369,7 @@ describe('OAuthPolicyService', () => {
           compliant: true,
           tokenTtl: tokenConfig.accessTokenTtl,
           rotationRequired: tokenConfig.rotationRequired
-  }
+
         userId,
         severity: 'LOW'
       });
@@ -401,7 +401,7 @@ describe('OAuthPolicyService', () => {
             actualValue: 7200,
             expectedValue: 3600,
             remediationSuggestion: 'Reduce access token TTL to maximum 1 hour'
-          }
+
         ],
         recommendations: [
           {
@@ -412,9 +412,9 @@ describe('OAuthPolicyService', () => {
             category: 'SECURITY',
             implementationGuide: 'Enable refresh token rotation',
             estimatedEffort: '1 hour'
-          }
+
         ]
-      } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
 
       const result = await oauthPolicyService.enforceTokenLifecyclePolicy(tokenConfig, clientId, userId);
 
@@ -430,7 +430,7 @@ describe('OAuthPolicyService', () => {
           compliant: false,
           tokenTtl: tokenConfig.accessTokenTtl,
           rotationRequired: tokenConfig.rotationRequired
-  }
+
         userId,
         severity: 'MEDIUM'
       });
@@ -482,7 +482,7 @@ describe('OAuthPolicyService', () => {
               required: true,
               granted: true,
               timestamp: expect.any(Date)
-  }
+
             {
               consentId: 'oauth-profile',
               purpose: 'profile',
@@ -490,7 +490,7 @@ describe('OAuthPolicyService', () => {
               required: false,
               granted: true,
               timestamp: expect.any(Date)
-  }
+
             {
               consentId: 'oauth-email',
               purpose: 'email',
@@ -498,16 +498,16 @@ describe('OAuthPolicyService', () => {
               required: false,
               granted: true,
               timestamp: expect.any(Date)
-            }
+
           ]
-  }
+
         acceptanceContext: {
           clientId,
           grantType: 'authorization_code',
           scopes,
           timestamp: expect.any(Date),
           metadata: consentMetadata
-        }
+
       });
 
       expect(mockAuditService.logEvent).toHaveBeenCalledWith({
@@ -518,7 +518,7 @@ describe('OAuthPolicyService', () => {
           clientId,
           scopes,
           acceptanceMethod: 'OAUTH_FLOW'
-  }
+
         userId,
         severity: 'LOW'
       });
@@ -567,7 +567,7 @@ describe('OAuthPolicyService', () => {
           includedSystems: ['oauth_service', 'oauth_guidance_service', 'oauth_policy_service'],
           includedPolicies: scope.includePolicies,
           additionalFilters: { clientIds: scope.clientIds }
-  }
+
         recipients: [`${userId}@company.com`],
         format: 'PDF',
         includeExecutiveSummary: true,
@@ -584,8 +584,8 @@ describe('OAuthPolicyService', () => {
             dateRange: '2024-01-01T00:00:00.000Z - 2024-12-31T00:00:00.000Z',
             clientCount: 2,
             policyTypes: 2
-          }
-  }
+
+
         userId,
         severity: 'LOW'
       });
@@ -624,7 +624,7 @@ describe('OAuthPolicyService', () => {
       ] as unknown as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(oauthPolicyService as any, 'getDefaultReportingSchedule').mockReturnValue({
         monthly: ['OAuth Security Assessment']
-      } as unknown as unknown as unknown as unknown as unknown as unknown);
+ as unknown as unknown as unknown as unknown as unknown as unknown);
       jest.spyOn(oauthPolicyService as any, 'getComplianceRequirements').mockReturnValue([
         { frameworkId: 'OAuth2.1', requirementId: 'OAUTH-REQ-001' }
       ] as unknown as unknown as unknown as unknown as unknown as unknown);
@@ -665,7 +665,7 @@ describe('OAuthPolicyService', () => {
           complianceFrameworks,
           policyCount: 1,
           enforcementMechanismCount: 1
-  }
+
         userId,
         severity: 'MEDIUM'
       });

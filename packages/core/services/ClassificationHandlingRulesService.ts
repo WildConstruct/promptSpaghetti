@@ -6,8 +6,7 @@
  * 
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel, 
+import { DataClassificationLevel, 
   HandlingRequirements,
   StorageRequirements,
   TransmissionRequirements,
@@ -15,28 +14,27 @@ import {
   AccessRequirements,
   MonitoringRequirements,
   CachingRestrictions,
-  OperationContext,
+  OperationContext }
   ValidationResult
-} from '../types/DataClassification';
+ from '../types/DataClassification';
 
-}
-export interface HandlingRule {
-  id: string;
+
+export interface HandlingRule { id: string;
   name: string;
   description: string;
   classification: DataClassificationLevel;
-  ruleType: 'STORAGE' | 'TRANSMISSION' | 'PROCESSING' | 'ACCESS' | 'MONITORING' | 'RETENTION';
+  ruleType: 'STORAGE' | 'TRANSMISSION' | 'PROCESSING' | 'ACCESS' | 'MONITORING' | 'RETENTION' }
   requirements: Record<string, any>;
   mandatory: boolean;
   priority: number;
   effectiveDate: Date;
   expirationDate?: Date;
   complianceFramework: string;
-}
-}
-}
-export interface HandlingRuleViolation {
-  id: string;
+
+
+
+
+export interface HandlingRuleViolation { id: string;
   ruleId: string;
   ruleName: string;
   classification: DataClassificationLevel;
@@ -47,22 +45,20 @@ export interface HandlingRuleViolation {
   context: OperationContext;
   evidence: Record<string, any>;
   remediation: string;
-  status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK'
-}
-  }
-}
-export interface ComplianceCheck {
-  ruleId: string;
+  status: 'OPEN' | 'INVESTIGATING' | 'REMEDIATED' | 'ACCEPTED_RISK' }
+
+
+
+
+export interface ComplianceCheck { ruleId: string;
   dataElement: string;
   classification: DataClassificationLevel;
   checkType: string;
   passed: boolean;
   details: Record<string, any>;
-  timestamp: Date;
-}
-}
-export class ClassificationHandlingRulesService {
-  private handlingRequirements: Map<DataClassificationLevel, HandlingRequirements> = new Map();
+  timestamp: Date }
+
+export class ClassificationHandlingRulesService { private handlingRequirements: Map<DataClassificationLevel, HandlingRequirements> = new Map();
   private handlingRules: Map<string, HandlingRule> = new Map();
   private violations: HandlingRuleViolation = [];
   private complianceChecks: ComplianceCheck = [];
@@ -72,317 +68,308 @@ export class ClassificationHandlingRulesService {
   /**
   * Initialize default handling requirements for each classification level
   */
-  private initializeDefaultHandlingRequirements(): void {,
-  const requirements: Record<DataClassificationLevel, HandlingRequirements> = {,
+  private initializeDefaultHandlingRequirements(): void {
+  const requirements: Record<DataClassificationLevel, HandlingRequirements> = {
   PUBLIC: {
   storage: {
-  encryptionRequired: false,
-  encryptionAlgorithm: 'none',
-  keyRotationDays: 0,
-  accessControls: ['read'],
-  backupEncryption: false,
-  retentionDays: 365,
-  approvedLocations: ['any'],
-  redundancyLevel: 'NONE',
-},
-  transmission: {
-  tlsVersion: 'TLS1.2',
-  certificatePinning: false,
-  networkRestrictions: [],
-  loggingLevel: 'STANDARD',
-  compressionAllowed: true,
-  endToEndEncryption: false,
-},
-  processing: {
-  approvedEnvironments: ['dev', 'staging', 'production'],
-  loggingRequired: false,
+  encryptionRequired: false
+  encryptionAlgorithm: 'none'
+  keyRotationDays: 0
+  accessControls: ['read']
+  backupEncryption: false
+  retentionDays: 365
+  approvedLocations: ['any']
+  redundancyLevel: 'NONE' }
+
+  transmission: { 
+  tlsVersion: 'TLS1.2'
+  certificatePinning: false
+  networkRestrictions: []
+  loggingLevel: 'STANDARD'
+  compressionAllowed: true
+  endToEndEncryption: false }
+
+  processing: { 
+  approvedEnvironments: ['dev', 'staging', 'production']
+  loggingRequired: false
   cachingRestrictions: {
-  allowed: true,
-  encryptionRequired: false,
-  maxTtlSeconds: 3600,
-  purgeOnAccess: false,
-  secureEviction: false,
-},
-  thirdPartyProcessing: true,
-          isolationRequired: false,
-          auditTrailRequired: false;
-  },
-  access: {
-  authenticationLevel: 'STANDARD',
-  authorizationRequired: false,
-  approvalWorkflow: false,
-  timeRestrictions: false,
-  purposeLimitation: false,
-  auditLogging: 'STANDARD',
-  exportRestrictions: false,
-},
-  monitoring: {
-  alertingEnabled: false,
-  anomalyDetection: false,
-  alertThreshold: 'LOW',
-  realtimeMonitoring: false,
-  complianceChecks: false,
-  incidentResponse: false,
-},
-  INTERNAL: {
+  allowed: true
+  encryptionRequired: false
+  maxTtlSeconds: 3600
+  purgeOnAccess: false
+  secureEviction: false }
+
+  thirdPartyProcessing: true
+          isolationRequired: false
+          auditTrailRequired: false
+
+  access: { 
+  authenticationLevel: 'STANDARD'
+  authorizationRequired: false
+  approvalWorkflow: false
+  timeRestrictions: false
+  purposeLimitation: false
+  auditLogging: 'STANDARD'
+  exportRestrictions: false }
+
+  monitoring: { 
+  alertingEnabled: false
+  anomalyDetection: false
+  alertThreshold: 'LOW'
+  realtimeMonitoring: false
+  complianceChecks: false
+  incidentResponse: false }
+
+  INTERNAL: { 
   storage: {
-  encryptionRequired: true,
-  encryptionAlgorithm: 'AES-256',
-  keyRotationDays: 90,
-  accessControls: ['authenticated_read', 'authenticated_write'],
-  backupEncryption: true,
-  retentionDays: 2555, // 7 years,
-  approvedLocations: ['internal_datacenter', 'approved_cloud'],
-  redundancyLevel: 'STANDARD',
-},
-  transmission: {
-  tlsVersion: 'TLS1.3',
-  certificatePinning: true,
-  networkRestrictions: ['internal_network'],
-  loggingLevel: 'ENHANCED',
-  compressionAllowed: false,
-  endToEndEncryption: true,
-},
-  processing: {
-  approvedEnvironments: ['production', 'staging'],
-  loggingRequired: true,
+  encryptionRequired: true
+  encryptionAlgorithm: 'AES-256'
+  keyRotationDays: 90
+  accessControls: ['authenticated_read', 'authenticated_write']
+  backupEncryption: true
+  retentionDays: 2555, // 7 years
+  approvedLocations: ['internal_datacenter', 'approved_cloud']
+  redundancyLevel: 'STANDARD' }
+
+  transmission: { 
+  tlsVersion: 'TLS1.3'
+  certificatePinning: true
+  networkRestrictions: ['internal_network']
+  loggingLevel: 'ENHANCED'
+  compressionAllowed: false
+  endToEndEncryption: true }
+
+  processing: { 
+  approvedEnvironments: ['production', 'staging']
+  loggingRequired: true
   cachingRestrictions: {
-  allowed: true,
-  encryptionRequired: true,
-  maxTtlSeconds: 1800,
-  purgeOnAccess: true,
-  secureEviction: true,
-},
-  thirdPartyProcessing: false,
-          isolationRequired: true,
-          auditTrailRequired: true;
-  },
-  access: {
-  authenticationLevel: 'STANDARD',
-  authorizationRequired: true,
-  approvalWorkflow: false,
-  timeRestrictions: false,
-  purposeLimitation: true,
-  auditLogging: 'ENHANCED',
-  exportRestrictions: true,
-},
-  monitoring: {
-  alertingEnabled: true,
-  anomalyDetection: true,
-  alertThreshold: 'MEDIUM',
-  realtimeMonitoring: false,
-  complianceChecks: true,
-  incidentResponse: true,
-},
-  CONFIDENTIAL: {
+  allowed: true
+  encryptionRequired: true
+  maxTtlSeconds: 1800
+  purgeOnAccess: true
+  secureEviction: true }
+
+  thirdPartyProcessing: false
+          isolationRequired: true
+          auditTrailRequired: true
+
+  access: { 
+  authenticationLevel: 'STANDARD'
+  authorizationRequired: true
+  approvalWorkflow: false
+  timeRestrictions: false
+  purposeLimitation: true
+  auditLogging: 'ENHANCED'
+  exportRestrictions: true }
+
+  monitoring: { 
+  alertingEnabled: true
+  anomalyDetection: true
+  alertThreshold: 'MEDIUM'
+  realtimeMonitoring: false
+  complianceChecks: true
+  incidentResponse: true }
+
+  CONFIDENTIAL: { 
   storage: {
-  encryptionRequired: true,
-  encryptionAlgorithm: 'AES-256-GCM',
-  keyRotationDays: 30,
-  accessControls: ['mfa_authenticated_read', 'mfa_authenticated_write', 'approval_required'],
-  backupEncryption: true,
-  retentionDays: 2555, // 7 years,
-  approvedLocations: ['secure_datacenter'],
-  redundancyLevel: 'HIGH',
-},
-  transmission: {
-  tlsVersion: 'TLS1.3',
-  certificatePinning: true,
-  networkRestrictions: ['secure_network', 'vpn_required'],
-  loggingLevel: 'COMPREHENSIVE',
-  compressionAllowed: false,
-  endToEndEncryption: true,
-},
-  processing: {
-  approvedEnvironments: ['production'],
-  loggingRequired: true,
+  encryptionRequired: true
+  encryptionAlgorithm: 'AES-256-GCM'
+  keyRotationDays: 30
+  accessControls: ['mfa_authenticated_read', 'mfa_authenticated_write', 'approval_required']
+  backupEncryption: true
+  retentionDays: 2555, // 7 years
+  approvedLocations: ['secure_datacenter']
+  redundancyLevel: 'HIGH' }
+
+  transmission: { 
+  tlsVersion: 'TLS1.3'
+  certificatePinning: true
+  networkRestrictions: ['secure_network', 'vpn_required']
+  loggingLevel: 'COMPREHENSIVE'
+  compressionAllowed: false
+  endToEndEncryption: true }
+
+  processing: { 
+  approvedEnvironments: ['production']
+  loggingRequired: true
   cachingRestrictions: {
-  allowed: false,
-  encryptionRequired: true,
-  maxTtlSeconds: 300,
-  purgeOnAccess: true,
-  secureEviction: true,
-},
-  thirdPartyProcessing: false,
-          isolationRequired: true,
-          auditTrailRequired: true;
-  },
-  access: {
-  authenticationLevel: 'MFA',
-  authorizationRequired: true,
-  approvalWorkflow: true,
-  timeRestrictions: true,
-  purposeLimitation: true,
-  auditLogging: 'ENHANCED',
-  exportRestrictions: true,
-},
-  monitoring: {
-  alertingEnabled: true,
-  anomalyDetection: true,
-  alertThreshold: 'HIGH',
-  realtimeMonitoring: true,
-  complianceChecks: true,
-  incidentResponse: true,
-},
-  RESTRICTED: {
+  allowed: false
+  encryptionRequired: true
+  maxTtlSeconds: 300
+  purgeOnAccess: true
+  secureEviction: true }
+
+  thirdPartyProcessing: false
+          isolationRequired: true
+          auditTrailRequired: true
+
+  access: { 
+  authenticationLevel: 'MFA'
+  authorizationRequired: true
+  approvalWorkflow: true
+  timeRestrictions: true
+  purposeLimitation: true
+  auditLogging: 'ENHANCED'
+  exportRestrictions: true }
+
+  monitoring: { 
+  alertingEnabled: true
+  anomalyDetection: true
+  alertThreshold: 'HIGH'
+  realtimeMonitoring: true
+  complianceChecks: true
+  incidentResponse: true }
+
+  RESTRICTED: { 
   storage: {
-  encryptionRequired: true,
-  encryptionAlgorithm: 'AES-256-GCM',
-  keyRotationDays: 7,
-  accessControls: ['strong_mfa_authenticated_read', 'strong_mfa_authenticated_write', 'dual_approval_required'],
-  backupEncryption: true,
-  retentionDays: 2555, // 7 years,
-  approvedLocations: ['air_gapped_datacenter'],
-  redundancyLevel: 'CRITICAL',
-},
-  transmission: {
-  tlsVersion: 'TLS1.3',
-  certificatePinning: true,
-  networkRestrictions: ['air_gapped_network', 'dedicated_channel'],
-  loggingLevel: 'COMPREHENSIVE',
-  compressionAllowed: false,
-  endToEndEncryption: true,
-},
-  processing: {
-  approvedEnvironments: ['isolated_production'],
-  loggingRequired: true,
+  encryptionRequired: true
+  encryptionAlgorithm: 'AES-256-GCM'
+  keyRotationDays: 7
+  accessControls: ['strong_mfa_authenticated_read', 'strong_mfa_authenticated_write', 'dual_approval_required']
+  backupEncryption: true
+  retentionDays: 2555, // 7 years
+  approvedLocations: ['air_gapped_datacenter']
+  redundancyLevel: 'CRITICAL' }
+
+  transmission: { 
+  tlsVersion: 'TLS1.3'
+  certificatePinning: true
+  networkRestrictions: ['air_gapped_network', 'dedicated_channel']
+  loggingLevel: 'COMPREHENSIVE'
+  compressionAllowed: false
+  endToEndEncryption: true }
+
+  processing: { 
+  approvedEnvironments: ['isolated_production']
+  loggingRequired: true
   cachingRestrictions: {
-  allowed: false,
-  encryptionRequired: true,
-  maxTtlSeconds: 0,
-  purgeOnAccess: true,
-  secureEviction: true,
-},
-  thirdPartyProcessing: false,
-          isolationRequired: true,
-          auditTrailRequired: true;
-  },
-  access: {
-  authenticationLevel: 'STRONG_MFA',
-  authorizationRequired: true,
-  approvalWorkflow: true,
-  timeRestrictions: true,
-  purposeLimitation: true,
-  auditLogging: 'REALTIME',
-  exportRestrictions: true,
-},
-  monitoring: {
-  alertingEnabled: true,
-  anomalyDetection: true,
-  alertThreshold: 'CRITICAL',
-  realtimeMonitoring: true,
-  complianceChecks: true,
-  incidentResponse: true,
+  allowed: false
+  encryptionRequired: true
+  maxTtlSeconds: 0
+  purgeOnAccess: true
+  secureEviction: true }
+
+  thirdPartyProcessing: false
+          isolationRequired: true
+          auditTrailRequired: true
+
+  access: { 
+  authenticationLevel: 'STRONG_MFA'
+  authorizationRequired: true
+  approvalWorkflow: true
+  timeRestrictions: true
+  purposeLimitation: true
+  auditLogging: 'REALTIME'
+  exportRestrictions: true }
+
+  monitoring: { 
+  alertingEnabled: true
+  anomalyDetection: true
+  alertThreshold: 'CRITICAL'
+  realtimeMonitoring: true
+  complianceChecks: true
+  incidentResponse: true }
 };
-    Object.entries(requirements).forEach(([level, req]) => {
-      this.handlingRequirements.set(level as DataClassificationLevel, req);
-    });
+    Object.entries(requirements).forEach(([level, req]) => { this.handlingRequirements.set(level as DataClassificationLevel, req) });
   /**
    * Initialize default handling rules
    */
-  private initializeDefaultHandlingRules(): void {
-  const rules: HandlingRule = [
+  private initializeDefaultHandlingRules(): void { const rules: HandlingRule = [
   {
-  id: 'rule-storage-encryption-internal',
-  name: 'Internal Data Storage Encryption',
-  description: 'All internal data must be encrypted at rest using AES-256',
-  classification: 'INTERNAL',
-  ruleType: 'STORAGE',
+  id: 'rule-storage-encryption-internal'
+  name: 'Internal Data Storage Encryption'
+  description: 'All internal data must be encrypted at rest using AES-256'
+  classification: 'INTERNAL'
+  ruleType: 'STORAGE'
   requirements: {
-  encryptionRequired: true,
-  encryptionAlgorithm: 'AES-256',
-  keyManagement: 'enterprise_kms',
-},
-  mandatory: true,
-        priority: 1,
-        effectiveDate: new Date('2024-01-01'),
+  encryptionRequired: true
+  encryptionAlgorithm: 'AES-256'
+  keyManagement: 'enterprise_kms' }
+
+  mandatory: true
+        priority: 1
+        effectiveDate: new Date('2024-01-01')
         complianceFramework: ['SOC2', 'ISO27001']
-  }
-      {
-  id: 'rule-transmission-tls-confidential',
-  name: 'Confidential Data Transmission Security',
-  description: 'Confidential data must use TLS 1.3 with certificate pinning',
-  classification: 'CONFIDENTIAL',
-  ruleType: 'TRANSMISSION',
+
+      { id: 'rule-transmission-tls-confidential'
+  name: 'Confidential Data Transmission Security'
+  description: 'Confidential data must use TLS 1.3 with certificate pinning'
+  classification: 'CONFIDENTIAL'
+  ruleType: 'TRANSMISSION'
   requirements: {
-  tlsVersion: 'TLS1.3',
-  certificatePinning: true,
-  endToEndEncryption: true,
-},
-  mandatory: true,
-        priority: 1,
-        effectiveDate: new Date('2024-01-01'),
+  tlsVersion: 'TLS1.3'
+  certificatePinning: true
+  endToEndEncryption: true }
+
+  mandatory: true
+        priority: 1
+        effectiveDate: new Date('2024-01-01')
         complianceFramework: ['GDPR', 'HIPAA']
-  }
-      {
-  id: 'rule-processing-isolation-restricted',
-  name: 'Restricted Data Processing Isolation',
-  description: 'Restricted data must be processed in isolated environments',
-  classification: 'RESTRICTED',
-  ruleType: 'PROCESSING',
+
+      { id: 'rule-processing-isolation-restricted'
+  name: 'Restricted Data Processing Isolation'
+  description: 'Restricted data must be processed in isolated environments'
+  classification: 'RESTRICTED'
+  ruleType: 'PROCESSING'
   requirements: {
-  isolationRequired: true,
-  approvedEnvironments: ['isolated_production'],
-  thirdPartyProcessing: false,
-},
-  mandatory: true,
-        priority: 1,
-        effectiveDate: new Date('2024-01-01'),
+  isolationRequired: true
+  approvedEnvironments: ['isolated_production']
+  thirdPartyProcessing: false }
+
+  mandatory: true
+        priority: 1
+        effectiveDate: new Date('2024-01-01')
         complianceFramework: ['FedRAMP', 'FISMA']
-  }
-      {
-  id: 'rule-access-mfa-confidential',
-  name: 'Confidential Data MFA Requirement',
-  description: 'Access to confidential data requires multi-factor authentication',
-  classification: 'CONFIDENTIAL',
-  ruleType: 'ACCESS',
+
+      { id: 'rule-access-mfa-confidential'
+  name: 'Confidential Data MFA Requirement'
+  description: 'Access to confidential data requires multi-factor authentication'
+  classification: 'CONFIDENTIAL'
+  ruleType: 'ACCESS'
   requirements: {
-  authenticationLevel: 'MFA',
-  approvalWorkflow: true,
-},
-  mandatory: true,
-        priority: 1,
-        effectiveDate: new Date('2024-01-01'),
+  authenticationLevel: 'MFA'
+  approvalWorkflow: true }
+
+  mandatory: true
+        priority: 1
+        effectiveDate: new Date('2024-01-01')
         complianceFramework: ['SOC2', 'GDPR']
-  }
-      {
-  id: 'rule-monitoring-realtime-restricted',
-  name: 'Restricted Data Real-time Monitoring',
-  description: 'Access to restricted data must be monitored in real-time',
-  classification: 'RESTRICTED',
-  ruleType: 'MONITORING',
+
+      { id: 'rule-monitoring-realtime-restricted'
+  name: 'Restricted Data Real-time Monitoring'
+  description: 'Access to restricted data must be monitored in real-time'
+  classification: 'RESTRICTED'
+  ruleType: 'MONITORING'
   requirements: {
-  realtimeMonitoring: true,
-  alertThreshold: 'CRITICAL',
-  incidentResponse: true,
-},
-  mandatory: true,
-        priority: 1,
-        effectiveDate: new Date('2024-01-01'),
+  realtimeMonitoring: true
+  alertThreshold: 'CRITICAL'
+  incidentResponse: true }
+
+  mandatory: true
+        priority: 1
+        effectiveDate: new Date('2024-01-01')
         complianceFramework: ['FedRAMP', 'FISMA']
     ];
-    rules.forEach(rule => {)
-  this.handlingRules.set(rule.id, rule);
-    });
+    rules.forEach(rule => { )
+  this.handlingRules.set(rule.id, rule) });
   /**
    * Get handling requirements for a classification level
    */
-  getHandlingRequirements(classification: DataClassificationLevel): HandlingRequirements | undefined {
-    return this.handlingRequirements.get(classification);
+  getHandlingRequirements(classification: DataClassificationLevel): HandlingRequirements | undefined { return this.handlingRequirements.get(classification);
   /**
    * Validate data handling against requirements
    */
   async validateDataHandling(dataId: string)
-    classification: DataClassificationLevel,
-    operation: string,
-    context: OperationContext): Promise<ValidationResult> {,
+  classification: DataClassificationLevel
+    operation: string
+    context: OperationContext): Promise<ValidationResult> {
     const requirements = this.handlingRequirements.get(classification);
     if (!requirements) {
       return {
-        valid: false,
+        valid: false }
         errors: [`No handling requirements found for classification: ${classification}`]}
-},
-  warnings: [],
+
+  warnings: []
         recommendations: [];
   };
     const errors: string = [];
@@ -405,24 +392,23 @@ export class ClassificationHandlingRulesService {
     errors.push(...monitoringValidation.errors);
     warnings.push(...monitoringValidation.warnings);
     // Record compliance check
-    const complianceCheck: ComplianceCheck = {,
+    const complianceCheck: ComplianceCheck = {
   ruleId: `validation-${classification}`}
-},
-  dataElement: dataId,
-      classification,
-      checkType: operation,
-      passed: errors.length === 0,
-      details: { errors, warnings, context },
+
+  dataElement: dataId
+      classification
+      checkType: operation
+      passed: errors.length === 0
+      details: { errors, warnings, context }
       timestamp: new Date();
   };
     this.complianceChecks.push(complianceCheck);
     // Generate violations if there are errors
-    if (errors.length > 0) {
-  await this.recordViolations(dataId, classification, errors, context);
+    if (errors.length > 0) { await this.recordViolations(dataId, classification, errors, context);
   return {
-  valid: errors.length === 0,
-  errors,
-  warnings,
+  valid: errors.length === 0
+  errors
+  warnings }
   recommendations
 };
   /**
@@ -451,7 +437,7 @@ export class ClassificationHandlingRulesService {
    * Validate transmission requirements
    */
   private validateTransmissionRequirements(((
-    requirements: TransmissionRequirements,
+    requirements: TransmissionRequirements
     context: OperationContext
   ): ValidationResult {
     const errors: string = [];
@@ -480,7 +466,7 @@ export class ClassificationHandlingRulesService {
    * Validate processing requirements
    */
   private validateProcessingRequirements(((
-    requirements: ProcessingRequirements,
+    requirements: ProcessingRequirements
     context: OperationContext
   ): ValidationResult {
     const errors: string = [];
@@ -508,7 +494,7 @@ export class ClassificationHandlingRulesService {
    * Validate monitoring requirements
    */
   private validateMonitoringRequirements(((
-    requirements: MonitoringRequirements,
+    requirements: MonitoringRequirements
     context: OperationContext
   ): ValidationResult {
     const errors: string = [];
@@ -528,63 +514,59 @@ export class ClassificationHandlingRulesService {
    * Record handling rule violations
    */
   private async recordViolations(dataId: string)
-    classification: DataClassificationLevel,
-    errors: string,
-    context: OperationContext): Promise<void> {,
+  classification: DataClassificationLevel
+    errors: string
+    context: OperationContext): Promise<void> { 
     for (const error of errors) {
-      const violation: HandlingRuleViolation = {,
+      const violation: HandlingRuleViolation = { }
   id: `violation-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`}
-},
+
   ruleId: `handling-${classification}`}
-},
+
   ruleName: `${classification} Data Handling Requirements`}
-}
-        classification,
-        violationType: 'HANDLING_REQUIREMENT_VIOLATION',
-        severity: this.getSeverityForClassification(classification),
-        description: error,
-        detectedAt: new Date(),
-        context,
-        evidence: {
-  dataId,
-  operation: context.operation,
-  environment: context.environment,
-},
-  remediation: this.getRemediationSteps(error),
-        status: 'OPEN'
+        classification
+        violationType: 'HANDLING_REQUIREMENT_VIOLATION'
+        severity: this.getSeverityForClassification(classification)
+        description: error
+        detectedAt: new Date()
+        context
+        evidence: { dataId
+  operation: context.operation
+  environment: context.environment }
+
+  remediation: this.getRemediationSteps(error)
+        status: 'OPEN';
   };
       this.violations.push(violation);
   /**
    * Get severity level based on classification
    */
-  private getSeverityForClassification(classification: DataClassificationLevel): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
-  const severityMap: Record<DataClassificationLevel, 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'> = {,
-  PUBLIC: 'LOW',
-  INTERNAL: 'MEDIUM',
-  CONFIDENTIAL: 'HIGH',
-  RESTRICTED: 'CRITICAL',
+  private getSeverityForClassification(classification: DataClassificationLevel): 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' { const severityMap: Record<DataClassificationLevel, 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'> = {
+  PUBLIC: 'LOW'
+  INTERNAL: 'MEDIUM'
+  CONFIDENTIAL: 'HIGH'
+  RESTRICTED: 'CRITICAL' }
 };
     return severityMap[classification];
   /**
    * Get remediation steps for error
    */
-  private getRemediationSteps(error: string): string {
-    if (error.includes('encryption')) {
+  private getRemediationSteps(error: string): string { if (error.includes('encryption')) {
       return [
-        'Enable encryption for data at rest',
-        'Configure proper key management',
+        'Enable encryption for data at rest'
+        'Configure proper key management'
         'Verify encryption algorithms meet requirements'
       ];
     if (error.includes('TLS') || error.includes('transmission')) {
       return [
-        'Upgrade to required TLS version',
-        'Enable certificate pinning',
+        'Upgrade to required TLS version'
+        'Enable certificate pinning'
         'Configure end-to-end encryption'
       ];
     if (error.includes('environment') || error.includes('processing')) {
       return [
-        'Move processing to approved environment',
-        'Enable environment isolation',
+        'Move processing to approved environment'
+        'Enable environment isolation' }
         'Disable third-party processing'
       ];
     return ['Review compliance requirements and update configuration'];

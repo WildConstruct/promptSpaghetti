@@ -5,8 +5,7 @@
  * including templates, versions, purchases, reviews, forum posts, and analytics.
  */
 import { z } from 'zod';
-export declare enum TemplateStatus {
-    DRAFT = "draft",
+export declare enum TemplateStatus { DRAFT = "draft",
     LISTED = "listed",
     BLOCKED = "blocked",
     ARCHIVED = "archived",
@@ -79,27 +78,22 @@ export declare const UserProfileSchema: z.ZodObject<{
     helpfulVotes: z.ZodDefault<z.ZodNumber>;
     reputation: z.ZodDefault<z.ZodNumber>;
     badges: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    preferences: z.ZodOptional<z.ZodObject<{,
+    preferences: z.ZodOptional<z.ZodObject<{ }
         emailNotifications: z.ZodDefault<z.ZodBoolean>;
         marketingEmails: z.ZodDefault<z.ZodBoolean>;
         publicProfile: z.ZodDefault<z.ZodBoolean>;
         showPurchases: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        emailNotifications: boolean;
+    }, "strip", z.ZodTypeAny, { emailNotifications: boolean;
         marketingEmails: boolean;
         publicProfile: boolean;
-        showPurchases: boolean;
-    }, {
-        emailNotifications?: boolean | undefined;
+        showPurchases: boolean }, { emailNotifications?: boolean | undefined;
         marketingEmails?: boolean | undefined;
         publicProfile?: boolean | undefined;
-        showPurchases?: boolean | undefined;
-    }>>;
+        showPurchases?: boolean | undefined }>>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     lastActive: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
@@ -119,16 +113,14 @@ export declare const UserProfileSchema: z.ZodObject<{
         emailNotifications: boolean;
         marketingEmails: boolean;
         publicProfile: boolean;
-        showPurchases: boolean;
-    } | undefined;
+        showPurchases: boolean } | undefined;
     website?: string | undefined;
     avatar?: string | undefined;
     bio?: string | undefined;
     socialLinks?: Record<string, string> | undefined;
     creatorTier?: "expert" | "pro" | "starter" | undefined;
     lastActive?: Date | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     userId: string;
@@ -139,8 +131,7 @@ export declare const UserProfileSchema: z.ZodObject<{
         emailNotifications?: boolean | undefined;
         marketingEmails?: boolean | undefined;
         publicProfile?: boolean | undefined;
-        showPurchases?: boolean | undefined;
-    } | undefined;
+        showPurchases?: boolean | undefined } | undefined;
     website?: string | undefined;
     helpfulVotes?: number | undefined;
     avatar?: string | undefined;
@@ -158,8 +149,7 @@ export declare const UserProfileSchema: z.ZodObject<{
     lastActive?: Date | undefined;
 }>;
 export type UserProfile = z.infer<typeof UserProfileSchema>;
-export declare const TemplateSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const TemplateSchema: z.ZodObject<{ id: z.ZodString;
     ownerId: z.ZodString;
     title: z.ZodString;
     description: z.ZodString;
@@ -179,7 +169,7 @@ export declare const TemplateSchema: z.ZodObject<{
     status: z.ZodNativeEnum<typeof TemplateStatus>;
     featured: z.ZodDefault<z.ZodBoolean>;
     promoted: z.ZodDefault<z.ZodBoolean>;
-    stats: z.ZodObject<{,
+    stats: z.ZodObject<{ }
         views: z.ZodDefault<z.ZodNumber>;
         downloads: z.ZodDefault<z.ZodNumber>;
         purchases: z.ZodDefault<z.ZodNumber>;
@@ -187,23 +177,19 @@ export declare const TemplateSchema: z.ZodObject<{
         forks: z.ZodDefault<z.ZodNumber>;
         avgRating: z.ZodOptional<z.ZodNumber>;
         ratingCount: z.ZodDefault<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        views: number;
+    }, "strip", z.ZodTypeAny, { views: number;
         downloads: number;
         likes: number;
         purchases: number;
         forks: number;
         ratingCount: number;
-        avgRating?: number | undefined;
-    }, {
-        views?: number | undefined;
+        avgRating?: number | undefined }, { views?: number | undefined;
         downloads?: number | undefined;
         likes?: number | undefined;
         avgRating?: number | undefined;
         purchases?: number | undefined;
         forks?: number | undefined;
-        ratingCount?: number | undefined;
-    }>;
+        ratingCount?: number | undefined }>;
     seoKeywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     metaDescription: z.ZodOptional<z.ZodString>;
     currentVersionId: z.ZodOptional<z.ZodString>;
@@ -212,8 +198,7 @@ export declare const TemplateSchema: z.ZodObject<{
     updatedAt: z.ZodDate;
     publishedAt: z.ZodOptional<z.ZodDate>;
     featuredAt: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -230,8 +215,7 @@ export declare const TemplateSchema: z.ZodObject<{
         purchases: number;
         forks: number;
         ratingCount: number;
-        avgRating?: number | undefined;
-    };
+        avgRating?: number | undefined };
     currency: string;
     isAiGenerated: boolean;
     ownerId: string;
@@ -250,8 +234,7 @@ export declare const TemplateSchema: z.ZodObject<{
     shortDescription?: string | undefined;
     estimatedTokens?: number | undefined;
     demoVideo?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -267,8 +250,7 @@ export declare const TemplateSchema: z.ZodObject<{
         avgRating?: number | undefined;
         purchases?: number | undefined;
         forks?: number | undefined;
-        ratingCount?: number | undefined;
-    };
+        ratingCount?: number | undefined };
     ownerId: string;
     priceCents: number;
     claudeCompatibility: string[];
@@ -290,8 +272,7 @@ export declare const TemplateSchema: z.ZodObject<{
     versionCount?: number | undefined;
 }>;
 export type Template = z.infer<typeof TemplateSchema>;
-export declare const TemplateVersionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const TemplateVersionSchema: z.ZodObject<{ id: z.ZodString;
     templateId: z.ZodString;
     versionNumber: z.ZodString;
     versionName: z.ZodOptional<z.ZodString>;
@@ -300,72 +281,54 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     promptYaml: z.ZodOptional<z.ZodString>;
     changelog: z.ZodOptional<z.ZodString>;
     documentation: z.ZodOptional<z.ZodString>;
-    examples: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    examples: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         title: z.ZodString;
         input: z.ZodString;
         expectedOutput: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        input: string;
+    }, "strip", z.ZodTypeAny, { input: string;
         title: string;
-        expectedOutput: string;
-    }, {
-        input: string;
+        expectedOutput: string }, { input: string;
         title: string;
-        expectedOutput: string;
-    }>, "many">>;
+        expectedOutput: string }>, "many">>;
     hash: z.ZodString;
     tokenPerRunEstimate: z.ZodNumber;
     safetyScore: z.ZodNumber;
-    testResults: z.ZodOptional<z.ZodObject<{,
+    testResults: z.ZodOptional<z.ZodObject<{ 
         passed: z.ZodNumber;
         failed: z.ZodNumber;
-        coverage: z.ZodOptional<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        failed: number;
+        coverage: z.ZodOptional<z.ZodNumber> }, "strip", z.ZodTypeAny, { failed: number;
         passed: number;
-        coverage?: number | undefined;
-    }, {
-        failed: number;
+        coverage?: number | undefined }, { failed: number;
         passed: number;
-        coverage?: number | undefined;
-    }>>;
+        coverage?: number | undefined }>>;
     avgExecutionTime: z.ZodOptional<z.ZodNumber>;
     successRate: z.ZodOptional<z.ZodNumber>;
     isPublic: z.ZodDefault<z.ZodBoolean>;
     releaseNotes: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         name: z.ZodString;
         url: z.ZodString;
         size: z.ZodNumber;
-        type: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
+        type: z.ZodString }, "strip", z.ZodTypeAny, { name: string;
         type: string;
         size: number;
-        url: string;
-    }, {
-        name: string;
+        url: string }, { name: string;
         type: string;
         size: number;
-        url: string;
-    }>, "many">>;
+        url: string }>, "many">>;
     createdAt: z.ZodDate;
     publishedAt: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     hash: string;
     examples: {
         input: string;
         title: string;
-        expectedOutput: string;
-    }[];
-    assets: {
-        name: string;
+        expectedOutput: string }[];
+    assets: { name: string;
         type: string;
         size: number;
-        url: string;
-    }[];
+        url: string }[];
     isPublic: boolean;
     templateId: string;
     safetyScore: number;
@@ -376,18 +339,15 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     successRate?: number | undefined;
     documentation?: string | undefined;
     changelog?: string | undefined;
-    testResults?: {
-        failed: number;
+    testResults?: { failed: number;
         passed: number;
-        coverage?: number | undefined;
-    } | undefined;
+        coverage?: number | undefined } | undefined;
     publishedAt?: Date | undefined;
     promptYaml?: string | undefined;
     versionName?: string | undefined;
     avgExecutionTime?: number | undefined;
     releaseNotes?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     hash: string;
     templateId: string;
@@ -400,22 +360,17 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     examples?: {
         input: string;
         title: string;
-        expectedOutput: string;
-    }[] | undefined;
+        expectedOutput: string }[] | undefined;
     documentation?: string | undefined;
-    assets?: {
-        name: string;
+    assets?: { name: string;
         type: string;
         size: number;
-        url: string;
-    }[] | undefined;
+        url: string }[] | undefined;
     changelog?: string | undefined;
     isPublic?: boolean | undefined;
-    testResults?: {
-        failed: number;
+    testResults?: { failed: number;
         passed: number;
-        coverage?: number | undefined;
-    } | undefined;
+        coverage?: number | undefined } | undefined;
     publishedAt?: Date | undefined;
     promptYaml?: string | undefined;
     versionName?: string | undefined;
@@ -423,8 +378,7 @@ export declare const TemplateVersionSchema: z.ZodObject<{
     releaseNotes?: string | undefined;
 }>;
 export type TemplateVersion = z.infer<typeof TemplateVersionSchema>;
-export declare const PurchaseSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const PurchaseSchema: z.ZodObject<{ id: z.ZodString;
     buyerId: z.ZodString;
     templateId: z.ZodString;
     versionId: z.ZodString;
@@ -445,9 +399,7 @@ export declare const PurchaseSchema: z.ZodObject<{
     satisfactionFeedback: z.ZodOptional<z.ZodString>;
     createdAt: z.ZodDate;
     completedAt: z.ZodOptional<z.ZodDate>;
-    refundedAt: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    refundedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     status: PurchaseStatus;
     amount: number;
@@ -468,9 +420,7 @@ export declare const PurchaseSchema: z.ZodObject<{
     supportTicketId?: string | undefined;
     satisfactionRating?: number | undefined;
     satisfactionFeedback?: string | undefined;
-    refundedAt?: Date | undefined;
-}, {
-    id: string;
+    refundedAt?: Date | undefined }, { id: string;
     createdAt: Date;
     status: PurchaseStatus;
     amount: number;
@@ -491,36 +441,30 @@ export declare const PurchaseSchema: z.ZodObject<{
     supportTicketId?: string | undefined;
     satisfactionRating?: number | undefined;
     satisfactionFeedback?: string | undefined;
-    refundedAt?: Date | undefined;
-}>;
+    refundedAt?: Date | undefined }>;
 export type Purchase = z.infer<typeof PurchaseSchema>;
-export declare const ReviewSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ReviewSchema: z.ZodObject<{ id: z.ZodString;
     templateId: z.ZodString;
     buyerId: z.ZodString;
     purchaseId: z.ZodOptional<z.ZodString>;
     rating: z.ZodNumber;
     title: z.ZodOptional<z.ZodString>;
     comment: z.ZodString;
-    aspects: z.ZodOptional<z.ZodObject<{,
+    aspects: z.ZodOptional<z.ZodObject<{ }
         easeOfUse: z.ZodOptional<z.ZodNumber>;
         documentation: z.ZodOptional<z.ZodNumber>;
         valueForMoney: z.ZodOptional<z.ZodNumber>;
         performance: z.ZodOptional<z.ZodNumber>;
         support: z.ZodOptional<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        performance?: number | undefined;
+    }, "strip", z.ZodTypeAny, { performance?: number | undefined;
         documentation?: number | undefined;
         support?: number | undefined;
         easeOfUse?: number | undefined;
-        valueForMoney?: number | undefined;
-    }, {
-        performance?: number | undefined;
+        valueForMoney?: number | undefined }, { performance?: number | undefined;
         documentation?: number | undefined;
         support?: number | undefined;
         easeOfUse?: number | undefined;
-        valueForMoney?: number | undefined;
-    }>>;
+        valueForMoney?: number | undefined }>>;
     sentimentAi: z.ZodOptional<z.ZodEnum<["positive", "neutral", "negative"]>>;
     helpfulnessScore: z.ZodOptional<z.ZodNumber>;
     verifiedPurchase: z.ZodDefault<z.ZodBoolean>;
@@ -534,8 +478,7 @@ export declare const ReviewSchema: z.ZodObject<{
     moderatedAt: z.ZodOptional<z.ZodDate>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     rating: number;
@@ -554,16 +497,14 @@ export declare const ReviewSchema: z.ZodObject<{
         documentation?: number | undefined;
         support?: number | undefined;
         easeOfUse?: number | undefined;
-        valueForMoney?: number | undefined;
-    } | undefined;
+        valueForMoney?: number | undefined } | undefined;
     sentimentAi?: "positive" | "neutral" | "negative" | undefined;
     creatorResponse?: string | undefined;
     creatorResponseAt?: Date | undefined;
     flagReason?: string | undefined;
     moderatedBy?: string | undefined;
     moderatedAt?: Date | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     rating: number;
@@ -580,8 +521,7 @@ export declare const ReviewSchema: z.ZodObject<{
         documentation?: number | undefined;
         support?: number | undefined;
         easeOfUse?: number | undefined;
-        valueForMoney?: number | undefined;
-    } | undefined;
+        valueForMoney?: number | undefined } | undefined;
     sentimentAi?: "positive" | "neutral" | "negative" | undefined;
     verifiedPurchase?: boolean | undefined;
     unhelpfulVotes?: number | undefined;
@@ -592,8 +532,7 @@ export declare const ReviewSchema: z.ZodObject<{
     moderatedAt?: Date | undefined;
 }>;
 export type Review = z.infer<typeof ReviewSchema>;
-export declare const ForumPostSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ForumPostSchema: z.ZodObject<{ id: z.ZodString;
     authorId: z.ZodString;
     type: z.ZodNativeEnum<typeof ForumPostType>;
     title: z.ZodString;
@@ -619,25 +558,21 @@ export declare const ForumPostSchema: z.ZodObject<{
     excerpt: z.ZodOptional<z.ZodString>;
     relatedTemplateIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     relatedPostIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         name: z.ZodString;
         url: z.ZodString;
         size: z.ZodNumber;
         mimeType: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         name: string;
         size: number;
         url: string;
-        mimeType: string;
-    }, {
-        id: string;
+        mimeType: string }, { id: string;
         name: string;
         size: number;
         url: string;
-        mimeType: string;
-    }>, "many">>;
+        mimeType: string }>, "many">>;
     parentId: z.ZodOptional<z.ZodString>;
     threadId: z.ZodOptional<z.ZodString>;
     replyCount: z.ZodDefault<z.ZodNumber>;
@@ -646,8 +581,7 @@ export declare const ForumPostSchema: z.ZodObject<{
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     lastActivity: z.ZodDate;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: PostStatus;
@@ -671,8 +605,7 @@ export declare const ForumPostSchema: z.ZodObject<{
         name: string;
         size: number;
         url: string;
-        mimeType: string;
-    }[];
+        mimeType: string }[];
     replyCount: number;
     lastActivity: Date;
     isFeatured: boolean;
@@ -688,8 +621,7 @@ export declare const ForumPostSchema: z.ZodObject<{
     moderationReason?: string | undefined;
     lastReplyAt?: Date | undefined;
     lastReplyBy?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: PostStatus;
@@ -716,8 +648,7 @@ export declare const ForumPostSchema: z.ZodObject<{
         name: string;
         size: number;
         url: string;
-        mimeType: string;
-    }[] | undefined;
+        mimeType: string }[] | undefined;
     excerpt?: string | undefined;
     replyCount?: number | undefined;
     moderatedBy?: string | undefined;
@@ -732,8 +663,7 @@ export declare const ForumPostSchema: z.ZodObject<{
     lastReplyBy?: string | undefined;
 }>;
 export type ForumPost = z.infer<typeof ForumPostSchema>;
-export declare const KnowledgeArticleSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const KnowledgeArticleSchema: z.ZodObject<{ id: z.ZodString;
     authorId: z.ZodString;
     title: z.ZodString;
     content: z.ZodString;
@@ -743,22 +673,18 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
     subcategory: z.ZodOptional<z.ZodString>;
     tags: z.ZodArray<z.ZodString, "many">;
     difficulty: z.ZodEnum<["beginner", "intermediate", "advanced"]>;
-    tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{,
+    tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{ }
         id: z.ZodString;
         title: z.ZodString;
         level: z.ZodNumber;
         anchor: z.ZodString;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         anchor: string;
         title: string;
-        level: number;
-    }, {
-        id: string;
+        level: number }, { id: string;
         anchor: string;
         title: string;
-        level: number;
-    }>, "many">>;
+        level: number }>, "many">>;
     slug: z.ZodString;
     metaDescription: z.ZodOptional<z.ZodString>;
     keywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -776,8 +702,7 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
     updatedAt: z.ZodDate;
     publishedAt: z.ZodOptional<z.ZodDate>;
     lastReviewed: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: "draft" | "published" | "archived" | "under_review";
@@ -806,12 +731,10 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
         id: string;
         anchor: string;
         title: string;
-        level: number;
-    }[] | undefined;
+        level: number }[] | undefined;
     previousVersionId?: string | undefined;
     lastReviewed?: Date | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     status: "draft" | "published" | "archived" | "under_review";
@@ -839,59 +762,49 @@ export declare const KnowledgeArticleSchema: z.ZodObject<{
         id: string;
         anchor: string;
         title: string;
-        level: number;
-    }[] | undefined;
+        level: number }[] | undefined;
     previousVersionId?: string | undefined;
     relatedArticleIds?: string[] | undefined;
     lastReviewed?: Date | undefined;
 }>;
 export type KnowledgeArticle = z.infer<typeof KnowledgeArticleSchema>;
-export declare const TutorialSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const TutorialSchema: z.ZodObject<{ id: z.ZodString;
     authorId: z.ZodString;
     title: z.ZodString;
     description: z.ZodString;
     shortDescription: z.ZodOptional<z.ZodString>;
-    steps: z.ZodArray<z.ZodObject<{,
+    steps: z.ZodArray<z.ZodObject<{
         id: z.ZodString;
         title: z.ZodString;
         content: z.ZodString;
         order: z.ZodNumber;
         estimatedDuration: z.ZodOptional<z.ZodNumber>;
-        resources: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        resources: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             name: z.ZodString;
             url: z.ZodString;
             type: z.ZodEnum<["video", "article", "template", "download", "external"]>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+        }, "strip", z.ZodTypeAny, { name: string;
             type: "external" | "template" | "article" | "video" | "download";
-            url: string;
-        }, {
-            name: string;
+            url: string }, { name: string;
             type: "external" | "template" | "article" | "video" | "download";
-            url: string;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+            url: string }>, "many">>;
+    }, "strip", z.ZodTypeAny, { id: string;
         content: string;
         title: string;
         resources: {
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
-            url: string;
-        }[];
+            url: string }[];
         order: number;
         estimatedDuration?: number | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         content: string;
         title: string;
         order: number;
         resources?: {
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
-            url: string;
-        }[] | undefined;
+            url: string }[] | undefined;
         estimatedDuration?: number | undefined;
     }>, "many">;
     category: z.ZodString;
@@ -901,19 +814,14 @@ export declare const TutorialSchema: z.ZodObject<{
     learningOutcomes: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
     thumbnailUrl: z.ZodOptional<z.ZodString>;
     videoUrl: z.ZodOptional<z.ZodString>;
-    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         name: z.ZodString;
         url: z.ZodString;
-        description: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        name: string;
+        description: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { name: string;
         url: string;
-        description?: string | undefined;
-    }, {
-        name: string;
+        description?: string | undefined }, { name: string;
         url: string;
-        description?: string | undefined;
-    }>, "many">>;
+        description?: string | undefined }>, "many">>;
     hasQuiz: z.ZodDefault<z.ZodBoolean>;
     hasExercises: z.ZodDefault<z.ZodBoolean>;
     hasCertificate: z.ZodDefault<z.ZodBoolean>;
@@ -926,8 +834,7 @@ export declare const TutorialSchema: z.ZodObject<{
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
     publishedAt: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -941,18 +848,15 @@ export declare const TutorialSchema: z.ZodObject<{
         resources: {
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
-            url: string;
-        }[];
+            url: string }[];
         order: number;
         estimatedDuration?: number | undefined;
     }[];
     difficulty: "advanced" | "intermediate" | "beginner";
     authorId: string;
-    assets: {
-        name: string;
+    assets: { name: string;
         url: string;
-        description?: string | undefined;
-    }[];
+        description?: string | undefined }[];
     featured: boolean;
     views: number;
     prerequisites: string[];
@@ -968,8 +872,7 @@ export declare const TutorialSchema: z.ZodObject<{
     publishedAt?: Date | undefined;
     thumbnailUrl?: string | undefined;
     shortDescription?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     description: string;
@@ -984,18 +887,15 @@ export declare const TutorialSchema: z.ZodObject<{
         resources?: {
             name: string;
             type: "external" | "template" | "article" | "video" | "download";
-            url: string;
-        }[] | undefined;
+            url: string }[] | undefined;
         estimatedDuration?: number | undefined;
     }[];
     difficulty: "advanced" | "intermediate" | "beginner";
     authorId: string;
     estimatedDuration: number;
-    assets?: {
-        name: string;
+    assets?: { name: string;
         url: string;
-        description?: string | undefined;
-    }[] | undefined;
+        description?: string | undefined }[] | undefined;
     featured?: boolean | undefined;
     averageRating?: number | undefined;
     views?: number | undefined;
@@ -1012,8 +912,7 @@ export declare const TutorialSchema: z.ZodObject<{
     completions?: number | undefined;
 }>;
 export type Tutorial = z.infer<typeof TutorialSchema>;
-export declare const UserAnalyticsSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const UserAnalyticsSchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodString;
     date: z.ZodDate;
     sessionsCount: z.ZodDefault<z.ZodNumber>;
@@ -1033,9 +932,7 @@ export declare const UserAnalyticsSchema: z.ZodObject<{
     templatesCreated: z.ZodDefault<z.ZodNumber>;
     templatesUpdated: z.ZodDefault<z.ZodNumber>;
     salesGenerated: z.ZodDefault<z.ZodNumber>;
-    reviewsReceived: z.ZodDefault<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    reviewsReceived: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { id: string;
     date: Date;
     userId: string;
     pageViews: number;
@@ -1055,9 +952,7 @@ export declare const UserAnalyticsSchema: z.ZodObject<{
     articlesRead: number;
     templatesUpdated: number;
     salesGenerated: number;
-    reviewsReceived: number;
-}, {
-    id: string;
+    reviewsReceived: number }, { id: string;
     date: Date;
     userId: string;
     pageViews?: number | undefined;
@@ -1077,11 +972,9 @@ export declare const UserAnalyticsSchema: z.ZodObject<{
     articlesRead?: number | undefined;
     templatesUpdated?: number | undefined;
     salesGenerated?: number | undefined;
-    reviewsReceived?: number | undefined;
-}>;
+    reviewsReceived?: number | undefined }>;
 export type UserAnalytics = z.infer<typeof UserAnalyticsSchema>;
-export declare const ContentAnalyticsSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const ContentAnalyticsSchema: z.ZodObject<{ id: z.ZodString;
     contentId: z.ZodString;
     contentType: z.ZodNativeEnum<typeof ContentType>;
     date: z.ZodDate;
@@ -1101,9 +994,7 @@ export declare const ContentAnalyticsSchema: z.ZodObject<{
     topCities: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
     deviceTypes: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
     referralSources: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
-    searchKeywords: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    searchKeywords: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>> }, "strip", z.ZodTypeAny, { id: string;
     date: Date;
     bookmarks: number;
     comments: number;
@@ -1123,9 +1014,7 @@ export declare const ContentAnalyticsSchema: z.ZodObject<{
     topCities?: Record<string, number> | undefined;
     deviceTypes?: Record<string, number> | undefined;
     referralSources?: Record<string, number> | undefined;
-    searchKeywords?: Record<string, number> | undefined;
-}, {
-    id: string;
+    searchKeywords?: Record<string, number> | undefined }, { id: string;
     date: Date;
     contentType: ContentType;
     contentId: string;
@@ -1145,40 +1034,33 @@ export declare const ContentAnalyticsSchema: z.ZodObject<{
     topCities?: Record<string, number> | undefined;
     deviceTypes?: Record<string, number> | undefined;
     referralSources?: Record<string, number> | undefined;
-    searchKeywords?: Record<string, number> | undefined;
-}>;
+    searchKeywords?: Record<string, number> | undefined }>;
 export type ContentAnalytics = z.infer<typeof ContentAnalyticsSchema>;
-export declare const SearchQuerySchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const SearchQuerySchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodOptional<z.ZodString>;
     query: z.ZodString;
     normalizedQuery: z.ZodString;
     filters: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     resultsCount: z.ZodNumber;
-    clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         contentId: z.ZodString;
         contentType: z.ZodNativeEnum<typeof ContentType>;
         position: z.ZodNumber;
         clickedAt: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        position: number;
+    }, "strip", z.ZodTypeAny, { position: number;
         contentType: ContentType;
         contentId: string;
-        clickedAt: Date;
-    }, {
-        position: number;
+        clickedAt: Date }, { position: number;
         contentType: ContentType;
         contentId: string;
-        clickedAt: Date;
-    }>, "many">>;
+        clickedAt: Date }>, "many">>;
     sessionId: z.ZodOptional<z.ZodString>;
     referrer: z.ZodOptional<z.ZodString>;
     userAgent: z.ZodOptional<z.ZodString>;
     responseTime: z.ZodOptional<z.ZodNumber>;
     source: z.ZodDefault<z.ZodEnum<["web", "mobile", "api"]>>;
     createdAt: z.ZodDate;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     source: "mobile" | "web" | "api";
     query: string;
@@ -1188,16 +1070,14 @@ export declare const SearchQuerySchema: z.ZodObject<{
         position: number;
         contentType: ContentType;
         contentId: string;
-        clickedAt: Date;
-    }[];
+        clickedAt: Date }[];
     userId?: string | undefined;
     sessionId?: string | undefined;
     filters?: Record<string, any> | undefined;
     userAgent?: string | undefined;
     referrer?: string | undefined;
     responseTime?: number | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     query: string;
     normalizedQuery: string;
@@ -1213,12 +1093,10 @@ export declare const SearchQuerySchema: z.ZodObject<{
         position: number;
         contentType: ContentType;
         contentId: string;
-        clickedAt: Date;
-    }[] | undefined;
+        clickedAt: Date }[] | undefined;
 }>;
 export type SearchQuery = z.infer<typeof SearchQuerySchema>;
-export declare const CollectionSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const CollectionSchema: z.ZodObject<{ id: z.ZodString;
     ownerId: z.ZodString;
     name: z.ZodString;
     description: z.ZodOptional<z.ZodString>;
@@ -1226,47 +1104,37 @@ export declare const CollectionSchema: z.ZodObject<{
     isPublic: z.ZodDefault<z.ZodBoolean>;
     isFeatured: z.ZodDefault<z.ZodBoolean>;
     allowCollaborators: z.ZodDefault<z.ZodBoolean>;
-    items: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    items: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
         contentId: z.ZodString;
         contentType: z.ZodNativeEnum<typeof ContentType>;
         addedAt: z.ZodDate;
         order: z.ZodNumber;
         note: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        order: number;
+    }, "strip", z.ZodTypeAny, { order: number;
         contentType: ContentType;
         contentId: string;
         addedAt: Date;
-        note?: string | undefined;
-    }, {
-        order: number;
+        note?: string | undefined }, { order: number;
         contentType: ContentType;
         contentId: string;
         addedAt: Date;
-        note?: string | undefined;
-    }>, "many">>;
+        note?: string | undefined }>, "many">>;
     category: z.ZodOptional<z.ZodString>;
     tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-    collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+    collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
         userId: z.ZodString;
         role: z.ZodEnum<["viewer", "editor", "admin"]>;
-        addedAt: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        userId: string;
+        addedAt: z.ZodDate }, "strip", z.ZodTypeAny, { userId: string;
         role: "admin" | "editor" | "viewer";
-        addedAt: Date;
-    }, {
-        userId: string;
+        addedAt: Date }, { userId: string;
         role: "admin" | "editor" | "viewer";
-        addedAt: Date;
-    }>, "many">>;
+        addedAt: Date }>, "many">>;
     followers: z.ZodDefault<z.ZodNumber>;
     likes: z.ZodDefault<z.ZodNumber>;
     views: z.ZodDefault<z.ZodNumber>;
     createdAt: z.ZodDate;
     updatedAt: z.ZodDate;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+}, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     updatedAt: Date;
     name: string;
@@ -1276,16 +1144,13 @@ export declare const CollectionSchema: z.ZodObject<{
         contentType: ContentType;
         contentId: string;
         addedAt: Date;
-        note?: string | undefined;
-    }[];
+        note?: string | undefined }[];
     isPublic: boolean;
     views: number;
     likes: number;
-    collaborators: {
-        userId: string;
+    collaborators: { userId: string;
         role: "admin" | "editor" | "viewer";
-        addedAt: Date;
-    }[];
+        addedAt: Date }[];
     ownerId: string;
     isFeatured: boolean;
     allowCollaborators: boolean;
@@ -1293,8 +1158,7 @@ export declare const CollectionSchema: z.ZodObject<{
     description?: string | undefined;
     category?: string | undefined;
     thumbnailUrl?: string | undefined;
-}, {
-    id: string;
+}, { id: string;
     createdAt: Date;
     updatedAt: Date;
     name: string;
@@ -1307,24 +1171,20 @@ export declare const CollectionSchema: z.ZodObject<{
         contentType: ContentType;
         contentId: string;
         addedAt: Date;
-        note?: string | undefined;
-    }[] | undefined;
+        note?: string | undefined }[] | undefined;
     isPublic?: boolean | undefined;
     views?: number | undefined;
     likes?: number | undefined;
-    collaborators?: {
-        userId: string;
+    collaborators?: { userId: string;
         role: "admin" | "editor" | "viewer";
-        addedAt: Date;
-    }[] | undefined;
+        addedAt: Date }[] | undefined;
     thumbnailUrl?: string | undefined;
     isFeatured?: boolean | undefined;
     allowCollaborators?: boolean | undefined;
     followers?: number | undefined;
 }>;
 export type Collection = z.infer<typeof CollectionSchema>;
-export declare const NotificationSchema: z.ZodObject<{
-    id: z.ZodString;
+export declare const NotificationSchema: z.ZodObject<{ id: z.ZodString;
     userId: z.ZodString;
     type: z.ZodEnum<["template_published", "template_purchased", "template_reviewed", "post_replied", "post_liked", "comment_replied", "follower_added", "collection_shared", "system_announcement", "moderation_action"]>;
     title: z.ZodString;
@@ -1338,9 +1198,7 @@ export declare const NotificationSchema: z.ZodObject<{
     priority: z.ZodDefault<z.ZodEnum<["low", "normal", "high", "urgent"]>>;
     scheduledFor: z.ZodOptional<z.ZodDate>;
     createdAt: z.ZodDate;
-    sentAt: z.ZodOptional<z.ZodDate>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    sentAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
     createdAt: Date;
     priority: "low" | "high" | "normal" | "urgent";
     message: string;
@@ -1354,9 +1212,7 @@ export declare const NotificationSchema: z.ZodObject<{
     readAt?: Date | undefined;
     actionUrl?: string | undefined;
     deliveryStatus?: Record<string, "pending" | "failed" | "sent" | "delivered"> | undefined;
-    scheduledFor?: Date | undefined;
-}, {
-    id: string;
+    scheduledFor?: Date | undefined }, { id: string;
     createdAt: Date;
     message: string;
     type: "template_purchased" | "template_published" | "template_reviewed" | "post_replied" | "post_liked" | "comment_replied" | "follower_added" | "collection_shared" | "system_announcement" | "moderation_action";
@@ -1370,13 +1226,11 @@ export declare const NotificationSchema: z.ZodObject<{
     readAt?: Date | undefined;
     actionUrl?: string | undefined;
     deliveryStatus?: Record<string, "pending" | "failed" | "sent" | "delivered"> | undefined;
-    scheduledFor?: Date | undefined;
-}>;
+    scheduledFor?: Date | undefined }>;
 export type Notification = z.infer<typeof NotificationSchema>;
 
 }
-export type Epic16ContentModel = {
-    UserProfile: UserProfile;
+export type Epic16ContentModel = { UserProfile: UserProfile;
     Template: Template;
     TemplateVersion: TemplateVersion;
     Purchase: Purchase;
@@ -1388,10 +1242,8 @@ export type Epic16ContentModel = {
     ContentAnalytics: ContentAnalytics;
     SearchQuery: SearchQuery;
     Collection: Collection;
-    Notification: Notification;
-};
-export declare const Epic16ContentSchemas: {
-    UserProfile: z.ZodObject<{,
+    Notification: Notification };
+export declare const Epic16ContentSchemas: { UserProfile: z.ZodObject<{,
         id: z.ZodString;
         userId: z.ZodString;
         displayName: z.ZodString;
@@ -1411,27 +1263,22 @@ export declare const Epic16ContentSchemas: {
         helpfulVotes: z.ZodDefault<z.ZodNumber>;
         reputation: z.ZodDefault<z.ZodNumber>;
         badges: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        preferences: z.ZodOptional<z.ZodObject<{,
+        preferences: z.ZodOptional<z.ZodObject<{ }
             emailNotifications: z.ZodDefault<z.ZodBoolean>;
             marketingEmails: z.ZodDefault<z.ZodBoolean>;
             publicProfile: z.ZodDefault<z.ZodBoolean>;
             showPurchases: z.ZodDefault<z.ZodBoolean>;
-        }, "strip", z.ZodTypeAny, {
-            emailNotifications: boolean;
+        }, "strip", z.ZodTypeAny, { emailNotifications: boolean;
             marketingEmails: boolean;
             publicProfile: boolean;
-            showPurchases: boolean;
-        }, {
-            emailNotifications?: boolean | undefined;
+            showPurchases: boolean }, { emailNotifications?: boolean | undefined;
             marketingEmails?: boolean | undefined;
             publicProfile?: boolean | undefined;
-            showPurchases?: boolean | undefined;
-        }>>;
+            showPurchases?: boolean | undefined }>>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         lastActive: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
@@ -1451,16 +1298,14 @@ export declare const Epic16ContentSchemas: {
             emailNotifications: boolean;
             marketingEmails: boolean;
             publicProfile: boolean;
-            showPurchases: boolean;
-        } | undefined;
+            showPurchases: boolean } | undefined;
         website?: string | undefined;
         avatar?: string | undefined;
         bio?: string | undefined;
         socialLinks?: Record<string, string> | undefined;
         creatorTier?: "expert" | "pro" | "starter" | undefined;
         lastActive?: Date | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         userId: string;
@@ -1471,8 +1316,7 @@ export declare const Epic16ContentSchemas: {
             emailNotifications?: boolean | undefined;
             marketingEmails?: boolean | undefined;
             publicProfile?: boolean | undefined;
-            showPurchases?: boolean | undefined;
-        } | undefined;
+            showPurchases?: boolean | undefined } | undefined;
         website?: string | undefined;
         helpfulVotes?: number | undefined;
         avatar?: string | undefined;
@@ -1489,7 +1333,7 @@ export declare const Epic16ContentSchemas: {
         reputation?: number | undefined;
         lastActive?: Date | undefined;
     }>;
-    Template: z.ZodObject<{,
+    Template: z.ZodObject<{ ,
         id: z.ZodString;
         ownerId: z.ZodString;
         title: z.ZodString;
@@ -1510,7 +1354,7 @@ export declare const Epic16ContentSchemas: {
         status: z.ZodNativeEnum<typeof TemplateStatus>;
         featured: z.ZodDefault<z.ZodBoolean>;
         promoted: z.ZodDefault<z.ZodBoolean>;
-        stats: z.ZodObject<{,
+        stats: z.ZodObject<{ }
             views: z.ZodDefault<z.ZodNumber>;
             downloads: z.ZodDefault<z.ZodNumber>;
             purchases: z.ZodDefault<z.ZodNumber>;
@@ -1518,23 +1362,19 @@ export declare const Epic16ContentSchemas: {
             forks: z.ZodDefault<z.ZodNumber>;
             avgRating: z.ZodOptional<z.ZodNumber>;
             ratingCount: z.ZodDefault<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            views: number;
+        }, "strip", z.ZodTypeAny, { views: number;
             downloads: number;
             likes: number;
             purchases: number;
             forks: number;
             ratingCount: number;
-            avgRating?: number | undefined;
-        }, {
-            views?: number | undefined;
+            avgRating?: number | undefined }, { views?: number | undefined;
             downloads?: number | undefined;
             likes?: number | undefined;
             avgRating?: number | undefined;
             purchases?: number | undefined;
             forks?: number | undefined;
-            ratingCount?: number | undefined;
-        }>;
+            ratingCount?: number | undefined }>;
         seoKeywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         metaDescription: z.ZodOptional<z.ZodString>;
         currentVersionId: z.ZodOptional<z.ZodString>;
@@ -1543,8 +1383,7 @@ export declare const Epic16ContentSchemas: {
         updatedAt: z.ZodDate;
         publishedAt: z.ZodOptional<z.ZodDate>;
         featuredAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string;
@@ -1561,8 +1400,7 @@ export declare const Epic16ContentSchemas: {
             purchases: number;
             forks: number;
             ratingCount: number;
-            avgRating?: number | undefined;
-        };
+            avgRating?: number | undefined };
         currency: string;
         isAiGenerated: boolean;
         ownerId: string;
@@ -1581,8 +1419,7 @@ export declare const Epic16ContentSchemas: {
         shortDescription?: string | undefined;
         estimatedTokens?: number | undefined;
         demoVideo?: string | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string;
@@ -1598,8 +1435,7 @@ export declare const Epic16ContentSchemas: {
             avgRating?: number | undefined;
             purchases?: number | undefined;
             forks?: number | undefined;
-            ratingCount?: number | undefined;
-        };
+            ratingCount?: number | undefined };
         ownerId: string;
         priceCents: number;
         claudeCompatibility: string[];
@@ -1620,7 +1456,7 @@ export declare const Epic16ContentSchemas: {
         seoKeywords?: string[] | undefined;
         versionCount?: number | undefined;
     }>;
-    TemplateVersion: z.ZodObject<{,
+    TemplateVersion: z.ZodObject<{ ,
         id: z.ZodString;
         templateId: z.ZodString;
         versionNumber: z.ZodString;
@@ -1630,72 +1466,54 @@ export declare const Epic16ContentSchemas: {
         promptYaml: z.ZodOptional<z.ZodString>;
         changelog: z.ZodOptional<z.ZodString>;
         documentation: z.ZodOptional<z.ZodString>;
-        examples: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        examples: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             title: z.ZodString;
             input: z.ZodString;
             expectedOutput: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            input: string;
+        }, "strip", z.ZodTypeAny, { input: string;
             title: string;
-            expectedOutput: string;
-        }, {
-            input: string;
+            expectedOutput: string }, { input: string;
             title: string;
-            expectedOutput: string;
-        }>, "many">>;
+            expectedOutput: string }>, "many">>;
         hash: z.ZodString;
         tokenPerRunEstimate: z.ZodNumber;
         safetyScore: z.ZodNumber;
-        testResults: z.ZodOptional<z.ZodObject<{,
+        testResults: z.ZodOptional<z.ZodObject<{ 
             passed: z.ZodNumber;
             failed: z.ZodNumber;
-            coverage: z.ZodOptional<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            failed: number;
+            coverage: z.ZodOptional<z.ZodNumber> }, "strip", z.ZodTypeAny, { failed: number;
             passed: number;
-            coverage?: number | undefined;
-        }, {
-            failed: number;
+            coverage?: number | undefined }, { failed: number;
             passed: number;
-            coverage?: number | undefined;
-        }>>;
+            coverage?: number | undefined }>>;
         avgExecutionTime: z.ZodOptional<z.ZodNumber>;
         successRate: z.ZodOptional<z.ZodNumber>;
         isPublic: z.ZodDefault<z.ZodBoolean>;
         releaseNotes: z.ZodOptional<z.ZodString>;
-        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             name: z.ZodString;
             url: z.ZodString;
             size: z.ZodNumber;
-            type: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+            type: z.ZodString }, "strip", z.ZodTypeAny, { name: string;
             type: string;
             size: number;
-            url: string;
-        }, {
-            name: string;
+            url: string }, { name: string;
             type: string;
             size: number;
-            url: string;
-        }>, "many">>;
+            url: string }>, "many">>;
         createdAt: z.ZodDate;
         publishedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         hash: string;
         examples: {
             input: string;
             title: string;
-            expectedOutput: string;
-        }[];
-        assets: {
-            name: string;
+            expectedOutput: string }[];
+        assets: { name: string;
             type: string;
             size: number;
-            url: string;
-        }[];
+            url: string }[];
         isPublic: boolean;
         templateId: string;
         safetyScore: number;
@@ -1706,18 +1524,15 @@ export declare const Epic16ContentSchemas: {
         successRate?: number | undefined;
         documentation?: string | undefined;
         changelog?: string | undefined;
-        testResults?: {
-            failed: number;
+        testResults?: { failed: number;
             passed: number;
-            coverage?: number | undefined;
-        } | undefined;
+            coverage?: number | undefined } | undefined;
         publishedAt?: Date | undefined;
         promptYaml?: string | undefined;
         versionName?: string | undefined;
         avgExecutionTime?: number | undefined;
         releaseNotes?: string | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         hash: string;
         templateId: string;
@@ -1730,29 +1545,24 @@ export declare const Epic16ContentSchemas: {
         examples?: {
             input: string;
             title: string;
-            expectedOutput: string;
-        }[] | undefined;
+            expectedOutput: string }[] | undefined;
         documentation?: string | undefined;
-        assets?: {
-            name: string;
+        assets?: { name: string;
             type: string;
             size: number;
-            url: string;
-        }[] | undefined;
+            url: string }[] | undefined;
         changelog?: string | undefined;
         isPublic?: boolean | undefined;
-        testResults?: {
-            failed: number;
+        testResults?: { failed: number;
             passed: number;
-            coverage?: number | undefined;
-        } | undefined;
+            coverage?: number | undefined } | undefined;
         publishedAt?: Date | undefined;
         promptYaml?: string | undefined;
         versionName?: string | undefined;
         avgExecutionTime?: number | undefined;
         releaseNotes?: string | undefined;
     }>;
-    Purchase: z.ZodObject<{,
+    Purchase: z.ZodObject<{ ,
         id: z.ZodString;
         buyerId: z.ZodString;
         templateId: z.ZodString;
@@ -1774,9 +1584,7 @@ export declare const Epic16ContentSchemas: {
         satisfactionFeedback: z.ZodOptional<z.ZodString>;
         createdAt: z.ZodDate;
         completedAt: z.ZodOptional<z.ZodDate>;
-        refundedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        refundedAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         status: PurchaseStatus;
         amount: number;
@@ -1797,9 +1605,7 @@ export declare const Epic16ContentSchemas: {
         supportTicketId?: string | undefined;
         satisfactionRating?: number | undefined;
         satisfactionFeedback?: string | undefined;
-        refundedAt?: Date | undefined;
-    }, {
-        id: string;
+        refundedAt?: Date | undefined }, { id: string;
         createdAt: Date;
         status: PurchaseStatus;
         amount: number;
@@ -1820,9 +1626,8 @@ export declare const Epic16ContentSchemas: {
         supportTicketId?: string | undefined;
         satisfactionRating?: number | undefined;
         satisfactionFeedback?: string | undefined;
-        refundedAt?: Date | undefined;
-    }>;
-    Review: z.ZodObject<{,
+        refundedAt?: Date | undefined }>;
+    Review: z.ZodObject<{ ,
         id: z.ZodString;
         templateId: z.ZodString;
         buyerId: z.ZodString;
@@ -1830,25 +1635,21 @@ export declare const Epic16ContentSchemas: {
         rating: z.ZodNumber;
         title: z.ZodOptional<z.ZodString>;
         comment: z.ZodString;
-        aspects: z.ZodOptional<z.ZodObject<{,
+        aspects: z.ZodOptional<z.ZodObject<{ }
             easeOfUse: z.ZodOptional<z.ZodNumber>;
             documentation: z.ZodOptional<z.ZodNumber>;
             valueForMoney: z.ZodOptional<z.ZodNumber>;
             performance: z.ZodOptional<z.ZodNumber>;
             support: z.ZodOptional<z.ZodNumber>;
-        }, "strip", z.ZodTypeAny, {
-            performance?: number | undefined;
+        }, "strip", z.ZodTypeAny, { performance?: number | undefined;
             documentation?: number | undefined;
             support?: number | undefined;
             easeOfUse?: number | undefined;
-            valueForMoney?: number | undefined;
-        }, {
-            performance?: number | undefined;
+            valueForMoney?: number | undefined }, { performance?: number | undefined;
             documentation?: number | undefined;
             support?: number | undefined;
             easeOfUse?: number | undefined;
-            valueForMoney?: number | undefined;
-        }>>;
+            valueForMoney?: number | undefined }>>;
         sentimentAi: z.ZodOptional<z.ZodEnum<["positive", "neutral", "negative"]>>;
         helpfulnessScore: z.ZodOptional<z.ZodNumber>;
         verifiedPurchase: z.ZodDefault<z.ZodBoolean>;
@@ -1862,8 +1663,7 @@ export declare const Epic16ContentSchemas: {
         moderatedAt: z.ZodOptional<z.ZodDate>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         rating: number;
@@ -1882,16 +1682,14 @@ export declare const Epic16ContentSchemas: {
             documentation?: number | undefined;
             support?: number | undefined;
             easeOfUse?: number | undefined;
-            valueForMoney?: number | undefined;
-        } | undefined;
+            valueForMoney?: number | undefined } | undefined;
         sentimentAi?: "positive" | "neutral" | "negative" | undefined;
         creatorResponse?: string | undefined;
         creatorResponseAt?: Date | undefined;
         flagReason?: string | undefined;
         moderatedBy?: string | undefined;
         moderatedAt?: Date | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         rating: number;
@@ -1908,8 +1706,7 @@ export declare const Epic16ContentSchemas: {
             documentation?: number | undefined;
             support?: number | undefined;
             easeOfUse?: number | undefined;
-            valueForMoney?: number | undefined;
-        } | undefined;
+            valueForMoney?: number | undefined } | undefined;
         sentimentAi?: "positive" | "neutral" | "negative" | undefined;
         verifiedPurchase?: boolean | undefined;
         unhelpfulVotes?: number | undefined;
@@ -1919,7 +1716,7 @@ export declare const Epic16ContentSchemas: {
         moderatedBy?: string | undefined;
         moderatedAt?: Date | undefined;
     }>;
-    ForumPost: z.ZodObject<{,
+    ForumPost: z.ZodObject<{ ,
         id: z.ZodString;
         authorId: z.ZodString;
         type: z.ZodNativeEnum<typeof ForumPostType>;
@@ -1946,25 +1743,21 @@ export declare const Epic16ContentSchemas: {
         excerpt: z.ZodOptional<z.ZodString>;
         relatedTemplateIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         relatedPostIds: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        attachments: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             id: z.ZodString;
             name: z.ZodString;
             url: z.ZodString;
             size: z.ZodNumber;
             mimeType: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+        }, "strip", z.ZodTypeAny, { id: string;
             name: string;
             size: number;
             url: string;
-            mimeType: string;
-        }, {
-            id: string;
+            mimeType: string }, { id: string;
             name: string;
             size: number;
             url: string;
-            mimeType: string;
-        }>, "many">>;
+            mimeType: string }>, "many">>;
         parentId: z.ZodOptional<z.ZodString>;
         threadId: z.ZodOptional<z.ZodString>;
         replyCount: z.ZodDefault<z.ZodNumber>;
@@ -1973,8 +1766,7 @@ export declare const Epic16ContentSchemas: {
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         lastActivity: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: PostStatus;
@@ -1998,8 +1790,7 @@ export declare const Epic16ContentSchemas: {
             name: string;
             size: number;
             url: string;
-            mimeType: string;
-        }[];
+            mimeType: string }[];
         replyCount: number;
         lastActivity: Date;
         isFeatured: boolean;
@@ -2015,8 +1806,7 @@ export declare const Epic16ContentSchemas: {
         moderationReason?: string | undefined;
         lastReplyAt?: Date | undefined;
         lastReplyBy?: string | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: PostStatus;
@@ -2043,8 +1833,7 @@ export declare const Epic16ContentSchemas: {
             name: string;
             size: number;
             url: string;
-            mimeType: string;
-        }[] | undefined;
+            mimeType: string }[] | undefined;
         excerpt?: string | undefined;
         replyCount?: number | undefined;
         moderatedBy?: string | undefined;
@@ -2058,7 +1847,7 @@ export declare const Epic16ContentSchemas: {
         lastReplyAt?: Date | undefined;
         lastReplyBy?: string | undefined;
     }>;
-    KnowledgeArticle: z.ZodObject<{,
+    KnowledgeArticle: z.ZodObject<{ ,
         id: z.ZodString;
         authorId: z.ZodString;
         title: z.ZodString;
@@ -2069,22 +1858,18 @@ export declare const Epic16ContentSchemas: {
         subcategory: z.ZodOptional<z.ZodString>;
         tags: z.ZodArray<z.ZodString, "many">;
         difficulty: z.ZodEnum<["beginner", "intermediate", "advanced"]>;
-        tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{,
+        tableOfContents: z.ZodOptional<z.ZodArray<z.ZodObject<{ }
             id: z.ZodString;
             title: z.ZodString;
             level: z.ZodNumber;
             anchor: z.ZodString;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+        }, "strip", z.ZodTypeAny, { id: string;
             anchor: string;
             title: string;
-            level: number;
-        }, {
-            id: string;
+            level: number }, { id: string;
             anchor: string;
             title: string;
-            level: number;
-        }>, "many">>;
+            level: number }>, "many">>;
         slug: z.ZodString;
         metaDescription: z.ZodOptional<z.ZodString>;
         keywords: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
@@ -2102,8 +1887,7 @@ export declare const Epic16ContentSchemas: {
         updatedAt: z.ZodDate;
         publishedAt: z.ZodOptional<z.ZodDate>;
         lastReviewed: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: "draft" | "published" | "archived" | "under_review";
@@ -2132,12 +1916,10 @@ export declare const Epic16ContentSchemas: {
             id: string;
             anchor: string;
             title: string;
-            level: number;
-        }[] | undefined;
+            level: number }[] | undefined;
         previousVersionId?: string | undefined;
         lastReviewed?: Date | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         status: "draft" | "published" | "archived" | "under_review";
@@ -2165,58 +1947,49 @@ export declare const Epic16ContentSchemas: {
             id: string;
             anchor: string;
             title: string;
-            level: number;
-        }[] | undefined;
+            level: number }[] | undefined;
         previousVersionId?: string | undefined;
         relatedArticleIds?: string[] | undefined;
         lastReviewed?: Date | undefined;
     }>;
-    Tutorial: z.ZodObject<{,
+    Tutorial: z.ZodObject<{ ,
         id: z.ZodString;
         authorId: z.ZodString;
         title: z.ZodString;
         description: z.ZodString;
         shortDescription: z.ZodOptional<z.ZodString>;
-        steps: z.ZodArray<z.ZodObject<{,
+        steps: z.ZodArray<z.ZodObject<{
             id: z.ZodString;
             title: z.ZodString;
             content: z.ZodString;
             order: z.ZodNumber;
             estimatedDuration: z.ZodOptional<z.ZodNumber>;
-            resources: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+            resources: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
                 name: z.ZodString;
                 url: z.ZodString;
                 type: z.ZodEnum<["video", "article", "template", "download", "external"]>;
-            }, "strip", z.ZodTypeAny, {
-                name: string;
+            }, "strip", z.ZodTypeAny, { name: string;
                 type: "external" | "template" | "article" | "video" | "download";
-                url: string;
-            }, {
-                name: string;
+                url: string }, { name: string;
                 type: "external" | "template" | "article" | "video" | "download";
-                url: string;
-            }>, "many">>;
-        }, "strip", z.ZodTypeAny, {
-            id: string;
+                url: string }>, "many">>;
+        }, "strip", z.ZodTypeAny, { id: string;
             content: string;
             title: string;
             resources: {
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
-                url: string;
-            }[];
+                url: string }[];
             order: number;
             estimatedDuration?: number | undefined;
-        }, {
-            id: string;
+        }, { id: string;
             content: string;
             title: string;
             order: number;
             resources?: {
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
-                url: string;
-            }[] | undefined;
+                url: string }[] | undefined;
             estimatedDuration?: number | undefined;
         }>, "many">;
         category: z.ZodString;
@@ -2226,19 +1999,14 @@ export declare const Epic16ContentSchemas: {
         learningOutcomes: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
         thumbnailUrl: z.ZodOptional<z.ZodString>;
         videoUrl: z.ZodOptional<z.ZodString>;
-        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        assets: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             name: z.ZodString;
             url: z.ZodString;
-            description: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            name: string;
+            description: z.ZodOptional<z.ZodString> }, "strip", z.ZodTypeAny, { name: string;
             url: string;
-            description?: string | undefined;
-        }, {
-            name: string;
+            description?: string | undefined }, { name: string;
             url: string;
-            description?: string | undefined;
-        }>, "many">>;
+            description?: string | undefined }>, "many">>;
         hasQuiz: z.ZodDefault<z.ZodBoolean>;
         hasExercises: z.ZodDefault<z.ZodBoolean>;
         hasCertificate: z.ZodDefault<z.ZodBoolean>;
@@ -2251,8 +2019,7 @@ export declare const Epic16ContentSchemas: {
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
         publishedAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string;
@@ -2266,18 +2033,15 @@ export declare const Epic16ContentSchemas: {
             resources: {
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
-                url: string;
-            }[];
+                url: string }[];
             order: number;
             estimatedDuration?: number | undefined;
         }[];
         difficulty: "advanced" | "intermediate" | "beginner";
         authorId: string;
-        assets: {
-            name: string;
+        assets: { name: string;
             url: string;
-            description?: string | undefined;
-        }[];
+            description?: string | undefined }[];
         featured: boolean;
         views: number;
         prerequisites: string[];
@@ -2293,8 +2057,7 @@ export declare const Epic16ContentSchemas: {
         publishedAt?: Date | undefined;
         thumbnailUrl?: string | undefined;
         shortDescription?: string | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         description: string;
@@ -2309,18 +2072,15 @@ export declare const Epic16ContentSchemas: {
             resources?: {
                 name: string;
                 type: "external" | "template" | "article" | "video" | "download";
-                url: string;
-            }[] | undefined;
+                url: string }[] | undefined;
             estimatedDuration?: number | undefined;
         }[];
         difficulty: "advanced" | "intermediate" | "beginner";
         authorId: string;
         estimatedDuration: number;
-        assets?: {
-            name: string;
+        assets?: { name: string;
             url: string;
-            description?: string | undefined;
-        }[] | undefined;
+            description?: string | undefined }[] | undefined;
         featured?: boolean | undefined;
         averageRating?: number | undefined;
         views?: number | undefined;
@@ -2336,7 +2096,7 @@ export declare const Epic16ContentSchemas: {
         hasCertificate?: boolean | undefined;
         completions?: number | undefined;
     }>;
-    UserAnalytics: z.ZodObject<{,
+    UserAnalytics: z.ZodObject<{ ,
         id: z.ZodString;
         userId: z.ZodString;
         date: z.ZodDate;
@@ -2357,9 +2117,7 @@ export declare const Epic16ContentSchemas: {
         templatesCreated: z.ZodDefault<z.ZodNumber>;
         templatesUpdated: z.ZodDefault<z.ZodNumber>;
         salesGenerated: z.ZodDefault<z.ZodNumber>;
-        reviewsReceived: z.ZodDefault<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        reviewsReceived: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { id: string;
         date: Date;
         userId: string;
         pageViews: number;
@@ -2379,9 +2137,7 @@ export declare const Epic16ContentSchemas: {
         articlesRead: number;
         templatesUpdated: number;
         salesGenerated: number;
-        reviewsReceived: number;
-    }, {
-        id: string;
+        reviewsReceived: number }, { id: string;
         date: Date;
         userId: string;
         pageViews?: number | undefined;
@@ -2401,9 +2157,8 @@ export declare const Epic16ContentSchemas: {
         articlesRead?: number | undefined;
         templatesUpdated?: number | undefined;
         salesGenerated?: number | undefined;
-        reviewsReceived?: number | undefined;
-    }>;
-    ContentAnalytics: z.ZodObject<{,
+        reviewsReceived?: number | undefined }>;
+    ContentAnalytics: z.ZodObject<{ ,
         id: z.ZodString;
         contentId: z.ZodString;
         contentType: z.ZodNativeEnum<typeof ContentType>;
@@ -2424,9 +2179,7 @@ export declare const Epic16ContentSchemas: {
         topCities: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         deviceTypes: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
         referralSources: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
-        searchKeywords: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        searchKeywords: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodNumber>> }, "strip", z.ZodTypeAny, { id: string;
         date: Date;
         bookmarks: number;
         comments: number;
@@ -2446,9 +2199,7 @@ export declare const Epic16ContentSchemas: {
         topCities?: Record<string, number> | undefined;
         deviceTypes?: Record<string, number> | undefined;
         referralSources?: Record<string, number> | undefined;
-        searchKeywords?: Record<string, number> | undefined;
-    }, {
-        id: string;
+        searchKeywords?: Record<string, number> | undefined }, { id: string;
         date: Date;
         contentType: ContentType;
         contentId: string;
@@ -2468,39 +2219,33 @@ export declare const Epic16ContentSchemas: {
         topCities?: Record<string, number> | undefined;
         deviceTypes?: Record<string, number> | undefined;
         referralSources?: Record<string, number> | undefined;
-        searchKeywords?: Record<string, number> | undefined;
-    }>;
-    SearchQuery: z.ZodObject<{,
+        searchKeywords?: Record<string, number> | undefined }>;
+    SearchQuery: z.ZodObject<{ ,
         id: z.ZodString;
         userId: z.ZodOptional<z.ZodString>;
         query: z.ZodString;
         normalizedQuery: z.ZodString;
         filters: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
         resultsCount: z.ZodNumber;
-        clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        clickedResults: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             contentId: z.ZodString;
             contentType: z.ZodNativeEnum<typeof ContentType>;
             position: z.ZodNumber;
             clickedAt: z.ZodDate;
-        }, "strip", z.ZodTypeAny, {
-            position: number;
+        }, "strip", z.ZodTypeAny, { position: number;
             contentType: ContentType;
             contentId: string;
-            clickedAt: Date;
-        }, {
-            position: number;
+            clickedAt: Date }, { position: number;
             contentType: ContentType;
             contentId: string;
-            clickedAt: Date;
-        }>, "many">>;
+            clickedAt: Date }>, "many">>;
         sessionId: z.ZodOptional<z.ZodString>;
         referrer: z.ZodOptional<z.ZodString>;
         userAgent: z.ZodOptional<z.ZodString>;
         responseTime: z.ZodOptional<z.ZodNumber>;
         source: z.ZodDefault<z.ZodEnum<["web", "mobile", "api"]>>;
         createdAt: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         source: "mobile" | "web" | "api";
         query: string;
@@ -2510,16 +2255,14 @@ export declare const Epic16ContentSchemas: {
             position: number;
             contentType: ContentType;
             contentId: string;
-            clickedAt: Date;
-        }[];
+            clickedAt: Date }[];
         userId?: string | undefined;
         sessionId?: string | undefined;
         filters?: Record<string, any> | undefined;
         userAgent?: string | undefined;
         referrer?: string | undefined;
         responseTime?: number | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         query: string;
         normalizedQuery: string;
@@ -2535,10 +2278,9 @@ export declare const Epic16ContentSchemas: {
             position: number;
             contentType: ContentType;
             contentId: string;
-            clickedAt: Date;
-        }[] | undefined;
+            clickedAt: Date }[] | undefined;
     }>;
-    Collection: z.ZodObject<{,
+    Collection: z.ZodObject<{ ,
         id: z.ZodString;
         ownerId: z.ZodString;
         name: z.ZodString;
@@ -2547,47 +2289,37 @@ export declare const Epic16ContentSchemas: {
         isPublic: z.ZodDefault<z.ZodBoolean>;
         isFeatured: z.ZodDefault<z.ZodBoolean>;
         allowCollaborators: z.ZodDefault<z.ZodBoolean>;
-        items: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        items: z.ZodDefault<z.ZodArray<z.ZodObject<{ }
             contentId: z.ZodString;
             contentType: z.ZodNativeEnum<typeof ContentType>;
             addedAt: z.ZodDate;
             order: z.ZodNumber;
             note: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            order: number;
+        }, "strip", z.ZodTypeAny, { order: number;
             contentType: ContentType;
             contentId: string;
             addedAt: Date;
-            note?: string | undefined;
-        }, {
-            order: number;
+            note?: string | undefined }, { order: number;
             contentType: ContentType;
             contentId: string;
             addedAt: Date;
-            note?: string | undefined;
-        }>, "many">>;
+            note?: string | undefined }>, "many">>;
         category: z.ZodOptional<z.ZodString>;
         tags: z.ZodDefault<z.ZodArray<z.ZodString, "many">>;
-        collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{,
+        collaborators: z.ZodDefault<z.ZodArray<z.ZodObject<{ 
             userId: z.ZodString;
             role: z.ZodEnum<["viewer", "editor", "admin"]>;
-            addedAt: z.ZodDate;
-        }, "strip", z.ZodTypeAny, {
-            userId: string;
+            addedAt: z.ZodDate }, "strip", z.ZodTypeAny, { userId: string;
             role: "admin" | "editor" | "viewer";
-            addedAt: Date;
-        }, {
-            userId: string;
+            addedAt: Date }, { userId: string;
             role: "admin" | "editor" | "viewer";
-            addedAt: Date;
-        }>, "many">>;
+            addedAt: Date }>, "many">>;
         followers: z.ZodDefault<z.ZodNumber>;
         likes: z.ZodDefault<z.ZodNumber>;
         views: z.ZodDefault<z.ZodNumber>;
         createdAt: z.ZodDate;
         updatedAt: z.ZodDate;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -2597,16 +2329,13 @@ export declare const Epic16ContentSchemas: {
             contentType: ContentType;
             contentId: string;
             addedAt: Date;
-            note?: string | undefined;
-        }[];
+            note?: string | undefined }[];
         isPublic: boolean;
         views: number;
         likes: number;
-        collaborators: {
-            userId: string;
+        collaborators: { userId: string;
             role: "admin" | "editor" | "viewer";
-            addedAt: Date;
-        }[];
+            addedAt: Date }[];
         ownerId: string;
         isFeatured: boolean;
         allowCollaborators: boolean;
@@ -2614,8 +2343,7 @@ export declare const Epic16ContentSchemas: {
         description?: string | undefined;
         category?: string | undefined;
         thumbnailUrl?: string | undefined;
-    }, {
-        id: string;
+    }, { id: string;
         createdAt: Date;
         updatedAt: Date;
         name: string;
@@ -2628,22 +2356,19 @@ export declare const Epic16ContentSchemas: {
             contentType: ContentType;
             contentId: string;
             addedAt: Date;
-            note?: string | undefined;
-        }[] | undefined;
+            note?: string | undefined }[] | undefined;
         isPublic?: boolean | undefined;
         views?: number | undefined;
         likes?: number | undefined;
-        collaborators?: {
-            userId: string;
+        collaborators?: { userId: string;
             role: "admin" | "editor" | "viewer";
-            addedAt: Date;
-        }[] | undefined;
+            addedAt: Date }[] | undefined;
         thumbnailUrl?: string | undefined;
         isFeatured?: boolean | undefined;
         allowCollaborators?: boolean | undefined;
         followers?: number | undefined;
     }>;
-    Notification: z.ZodObject<{,
+    Notification: z.ZodObject<{ ,
         id: z.ZodString;
         userId: z.ZodString;
         type: z.ZodEnum<["template_published", "template_purchased", "template_reviewed", "post_replied", "post_liked", "comment_replied", "follower_added", "collection_shared", "system_announcement", "moderation_action"]>;
@@ -2658,9 +2383,7 @@ export declare const Epic16ContentSchemas: {
         priority: z.ZodDefault<z.ZodEnum<["low", "normal", "high", "urgent"]>>;
         scheduledFor: z.ZodOptional<z.ZodDate>;
         createdAt: z.ZodDate;
-        sentAt: z.ZodOptional<z.ZodDate>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        sentAt: z.ZodOptional<z.ZodDate> }, "strip", z.ZodTypeAny, { id: string;
         createdAt: Date;
         priority: "low" | "high" | "normal" | "urgent";
         message: string;
@@ -2674,9 +2397,7 @@ export declare const Epic16ContentSchemas: {
         readAt?: Date | undefined;
         actionUrl?: string | undefined;
         deliveryStatus?: Record<string, "pending" | "failed" | "sent" | "delivered"> | undefined;
-        scheduledFor?: Date | undefined;
-    }, {
-        id: string;
+        scheduledFor?: Date | undefined }, { id: string;
         createdAt: Date;
         message: string;
         type: "template_purchased" | "template_published" | "template_reviewed" | "post_replied" | "post_liked" | "comment_replied" | "follower_added" | "collection_shared" | "system_announcement" | "moderation_action";
@@ -2690,19 +2411,17 @@ export declare const Epic16ContentSchemas: {
         readAt?: Date | undefined;
         actionUrl?: string | undefined;
         deliveryStatus?: Record<string, "pending" | "failed" | "sent" | "delivered"> | undefined;
-        scheduledFor?: Date | undefined;
-    }>;
+        scheduledFor?: Date | undefined }>;
 };
 export declare function validateContentModel<T extends keyof Epic16ContentModel>(((
-    type: T,
+    type: T
     data: unknown
   ): Epic16ContentModel[T];
 export declare function isValidContentModel<T extends keyof Epic16ContentModel>(((
-    type: T,
+    type: T
     data: unknown
   ): data is Epic16ContentModel[T];
-export declare const Epic16Relationships: {
-    readonly userToTemplates: "one-to-many";
+export declare const Epic16Relationships: { readonly userToTemplates: "one-to-many";
     readonly templateToVersions: "one-to-many";
     readonly templateToPurchases: "one-to-many";
     readonly templateToReviews: "one-to-many";
@@ -2713,7 +2432,6 @@ export declare const Epic16Relationships: {
     readonly userToNotifications: "one-to-many";
     readonly forumPostToReplies: "one-to-many";
     readonly templateToAnalytics: "one-to-many";
-    readonly userToAnalytics: "one-to-many";
-};
+    readonly userToAnalytics: "one-to-many" };
 export default Epic16ContentModel;
 //# sourceMappingURL=Epic16ContentDataModel.d.ts.map

@@ -7,7 +7,8 @@ import { MetricSelector } from './MetricSelector';
 import { TemplateSelector } from './TemplateSelector';
 import { analyticsService } from '../../../services/analyticsService';
 import './DetailedAnalytics.css';
-}
+
+
 interface DetailedAnalyticsProps {
   creatorId: string;,
   timeRange: TimeRange;
@@ -15,15 +16,16 @@ interface DetailedAnalyticsProps {
   endDate?: Date;
   interface Template {
   id: string;,
-  title: string;
+  title: string;,
   status: string;,
   created_at: Date;
-  export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({,)
+  export const DetailedAnalytics: React.FC<DetailedAnalyticsProps> = ({),
   creatorId,
   timeRange,
   startDate,
   endDate
-}
+
+
 }) => {
   const [templates, setTemplates] = useState<Template>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>('');
@@ -42,7 +44,7 @@ interface DetailedAnalyticsProps {
       setTemplates(templatesData);
       if (templatesData.length > 0 && !selectedTemplateId) {
         setSelectedTemplateId(templatesData[0].id);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to load templates:', err);
 }, [creatorId, selectedTemplateId]);
   // Load template metrics
@@ -58,10 +60,10 @@ interface DetailedAnalyticsProps {
         endDate
       );
       setTemplateMetrics(metrics);
-    } catch (err) {
+ catch (err) {
   console.error('Failed to load template metrics:', err);
   setError(err instanceof Error ? err.message : 'Failed to load template metrics');
-} finally {
+ finally {
       setLoading(false);
   }, [timeRange, startDate, endDate]);
   // Load data on mount and when dependencies change
@@ -285,9 +287,9 @@ interface DetailedAnalyticsProps {
                     <div className="insight-content">
                       <strong>Top Market:</strong> {
                         templateMetrics.demographics.top_countries[0]?.country || 'Unknown'
-                      } ({)
+ ({)
   templateMetrics.demographics.top_countries[0]?.percentage.toFixed(1) || '0'
-                      }%)
+%)
                     </div>
                   </div>
                   <div className="insight-item">
@@ -295,9 +297,9 @@ interface DetailedAnalyticsProps {
                     <div className="insight-content">
                       <strong>Primary Device:</strong> {
                         templateMetrics.demographics.device_breakdown[0]?.device || 'Unknown'
-                      } ({)
+ ({)
   templateMetrics.demographics.device_breakdown[0]?.percentage.toFixed(1) || '0'
-                      }%)
+%)
                     </div>
                   </div>
                   <div className="insight-item">
@@ -305,7 +307,7 @@ interface DetailedAnalyticsProps {
                     <div className="insight-content">
                       <strong>User Diversity:</strong> {
                         templateMetrics.demographics.top_countries.length
-                      } countries represented
+ countries represented
                     </div>
                   </div>
                 </div>

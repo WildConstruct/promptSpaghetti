@@ -9,8 +9,8 @@
 import { Database } from '../database/connection';
 import { RetryUtils, retryableDatabase } from '../utils/RetryUtils';
 
-}
-}
+
+
 export interface EmergencyKillSwitchConfig {
   id: string;
   name: string;
@@ -24,12 +24,13 @@ export interface EmergencyKillSwitchConfig {
   lastActivated?: Date;
   lastActivatedBy?: string;
   activationCount: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface KillSwitchActivation {
   id: string;
   killSwitchId: string;
@@ -40,12 +41,13 @@ export interface KillSwitchActivation {
   rollbackData: Record<string, any>;
   status: 'ACTIVE' | 'ROLLED_BACK' | 'EXPIRED';
   autoRollbackAt?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface EmergencyKillSwitchMetrics {
   totalKillSwitches: number;
   activeKillSwitches: number;
@@ -53,9 +55,10 @@ export interface EmergencyKillSwitchMetrics {
   avgActivationTime: number;
   togglesCurrentlyDisabled: number;
   lastActivation?: Date;
-}
-}
-}
+
+
+
+
 
 export class EmergencyKillSwitchService {
   private db: Database;
@@ -78,7 +81,7 @@ export class EmergencyKillSwitchService {
   constructor(db: Database) {
     this.db = db;
     this.initializeDefaultKillSwitches();
-  }
+
 
   // ==========================================
   // KILL SWITCH MANAGEMENT
@@ -117,7 +120,7 @@ export class EmergencyKillSwitchService {
     });
 
     return killSwitchId;
-  }
+
 
   async listKillSwitches(): Promise<EmergencyKillSwitchConfig[]> {
 
@@ -140,7 +143,7 @@ export class EmergencyKillSwitchService {
       lastActivatedBy: row.last_activated_by,
       activationCount: row.activation_count
     }));
-  }
+
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 400 })
   async updateKillSwitch(id: string, updates: Partial<EmergencyKillSwitchConfig>, updatedBy: string): Promise<void> {
@@ -152,27 +155,27 @@ export class EmergencyKillSwitchService {
     if (updates.name !== undefined) {
       updateFields.push(`name = $${paramIndex++}`);
       updateValues.push(updates.name);
-    }
+
 
     if (updates.description !== undefined) {
       updateFields.push(`description = $${paramIndex++}`);
       updateValues.push(updates.description);
-    }
+
 
     if (updates.enabled !== undefined) {
       updateFields.push(`enabled = $${paramIndex++}`);
       updateValues.push(updates.enabled);
-    }
+
 
     if (updates.targetToggles !== undefined) {
       updateFields.push(`target_toggles = $${paramIndex++}`);
       updateValues.push(JSON.stringify(updates.targetToggles));
-    }
+
 
     if (updates.claudeImpactLevels !== undefined) {
       updateFields.push(`claude_impact_levels = $${paramIndex++}`);
       updateValues.push(JSON.stringify(updates.claudeImpactLevels));
-    }
+
 
     if (updateFields.length === 0) return;
 
@@ -188,7 +191,7 @@ export class EmergencyKillSwitchService {
     `, updateValues);
 
     await this.auditKillSwitchAction('UPDATED', id, updatedBy, updates);
-  }
+
 
   // ==========================================
   // EMERGENCY ACTIVATION
@@ -205,11 +208,11 @@ export class EmergencyKillSwitchService {
     const killSwitch = await this.getKillSwitchById(killSwitchId);
     if (!killSwitch) {
       throw new Error(`Kill switch not found: ${killSwitchId}`);
-    }
+
 
     if (!killSwitch.enabled) {
       throw new Error(`Kill switch is disabled: ${killSwitch.name}`);
-    }
+
 
     // Get toggles to disable based on kill switch scope
     const affectedToggles = await this.getAffectedToggles(killSwitch);
@@ -265,11 +268,10 @@ export class EmergencyKillSwitchService {
       `, [now, activatedBy, killSwitchId]);
 
       await this.db.query('COMMIT');
-
-    } catch (error) {
+ catch (error) {
       await this.db.query('ROLLBACK');
       throw error;
-    }
+
 
     // Store in memory for quick access
     this.activeKillSwitches.set(activationId, activation);
@@ -277,7 +279,7 @@ export class EmergencyKillSwitchService {
     // Schedule auto-rollback if specified
     if (autoRollbackAt) {
       this.scheduleAutoRollback(activationId, autoRollbackAt);
-    }
+
 
     // Send emergency notifications
     await this.sendEmergencyNotification(killSwitch, activation);
@@ -294,7 +296,7 @@ export class EmergencyKillSwitchService {
     console.warn(`   Activated by: ${activatedBy}`);
 
     return activation;
-  }
+
 
   @retryableDatabase({ maxAttempts: 3, baseDelay: 300 })
   async rollbackKillSwitch(activationId: string, rolledBackBy: string, reason?: string): Promise<void> {
@@ -302,11 +304,11 @@ export class EmergencyKillSwitchService {
     const activation = await this.getActivationById(activationId);
     if (!activation) {
       throw new Error(`Kill switch activation not found: ${activationId}`);
-    }
+
 
     if (activation.status !== 'ACTIVE') {
       throw new Error(`Kill switch activation is not active: ${activation.status}`);
-    }
+
 
     await this.db.query('BEGIN');
 
@@ -326,11 +328,10 @@ export class EmergencyKillSwitchService {
       `, [new Date(), rolledBackBy, reason || 'Manual rollback', activationId]);
 
       await this.db.query('COMMIT');
-
-    } catch (error) {
+ catch (error) {
       await this.db.query('ROLLBACK');
       throw error;
-    }
+
 
     // Remove from active list
     this.activeKillSwitches.delete(activationId);
@@ -342,7 +343,7 @@ export class EmergencyKillSwitchService {
     });
 
     console.log(`✅ Kill switch activation rolled back: ${activationId}`);
-  }
+
 
   // ==========================================
   // QUICK EMERGENCY ACTIONS
@@ -363,10 +364,10 @@ export class EmergencyKillSwitchService {
         createdBy: activatedBy
       });
       allKillSwitch = await this.getKillSwitchById(killSwitchId);
-    }
+
 
     return await this.activateKillSwitch(allKillSwitch!.id, activatedBy, reason);
-  }
+
 
   async emergencyDisableClaudeImpactToggles(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
 
@@ -384,10 +385,10 @@ export class EmergencyKillSwitchService {
         createdBy: activatedBy
       });
       claudeKillSwitch = await this.getKillSwitchById(killSwitchId);
-    }
+
 
     return await this.activateKillSwitch(claudeKillSwitch!.id, activatedBy, reason);
-  }
+
 
   async emergencyDisableCriticalFeatures(activatedBy: string, reason: string): Promise<KillSwitchActivation> {
 
@@ -404,10 +405,10 @@ export class EmergencyKillSwitchService {
         createdBy: activatedBy
       });
       criticalKillSwitch = await this.getKillSwitchById(killSwitchId);
-    }
+
 
     return await this.activateKillSwitch(criticalKillSwitch!.id, activatedBy, reason);
-  }
+
 
   // ==========================================
   // MONITORING & METRICS
@@ -447,7 +448,7 @@ export class EmergencyKillSwitchService {
       togglesCurrentlyDisabled: parseInt(disabledTogglesResult.rows[0].disabled_toggles),
       lastActivation: result.rows[0].last_activation
     };
-  }
+
 
   async getActiveActivations(): Promise<KillSwitchActivation[]> {
 
@@ -468,7 +469,7 @@ export class EmergencyKillSwitchService {
       status: row.status,
       autoRollbackAt: row.auto_rollback_at
     }));
-  }
+
 
   // ==========================================
   // HELPER METHODS
@@ -498,7 +499,7 @@ export class EmergencyKillSwitchService {
       lastActivatedBy: row.last_activated_by,
       activationCount: row.activation_count
     };
-  }
+
 
   private async getKillSwitchByScope(scope: string): Promise<EmergencyKillSwitchConfig | null> {
 
@@ -524,14 +525,14 @@ export class EmergencyKillSwitchService {
       lastActivatedBy: row.last_activated_by,
       activationCount: row.activation_count
     };
-  }
+
 
   private async getActivationById(id: string): Promise<KillSwitchActivation | null> {
 
     // Check memory first
     if (this.activeKillSwitches.has(id)) {
       return this.activeKillSwitches.get(id)!;
-    }
+
 
     // Check database
     const result = await this.db.query(
@@ -553,7 +554,7 @@ export class EmergencyKillSwitchService {
       status: row.status,
       autoRollbackAt: row.auto_rollback_at
     };
-  }
+
 
   private async getAffectedToggles(killSwitch: EmergencyKillSwitchConfig): Promise<string[]> {
 
@@ -569,7 +570,7 @@ export class EmergencyKillSwitchService {
       if (killSwitch.claudeImpactLevels && killSwitch.claudeImpactLevels.length > 0) {
         query += ' AND claude_impact = ANY($1)';
         queryParams.push(killSwitch.claudeImpactLevels);
-      }
+
       break;
 
     case 'CRITICAL_FEATURES':
@@ -581,13 +582,13 @@ export class EmergencyKillSwitchService {
       if (killSwitch.targetToggles && killSwitch.targetToggles.length > 0) {
         query += ' AND key = ANY($1)';
         queryParams.push(killSwitch.targetToggles);
-      }
+
       break;
-    }
+
 
     const result = await this.db.query(query, queryParams);
     return result.rows.map(row => row.key);
-  }
+
 
   private async captureToggleStates(toggleKeys: string[]): Promise<Record<string, any>> {
     if (toggleKeys.length === 0) return {};
@@ -606,7 +607,7 @@ export class EmergencyKillSwitchService {
     });
 
     return states;
-  }
+
 
   private async disableToggles(toggleKeys: string[], disabledBy: string, reason: string): Promise<void> {
 
@@ -621,7 +622,7 @@ export class EmergencyKillSwitchService {
        WHERE key = ANY($3) AND enabled = true`,
       [`EMERGENCY_KILL_SWITCH_${disabledBy}`, reason, toggleKeys]
     );
-  }
+
 
   private async restoreToggleStates(rollbackData: Record<string, any>, restoredBy: string): Promise<void> {
 
@@ -636,8 +637,8 @@ export class EmergencyKillSwitchService {
          WHERE key = $4`,
         [state.enabled, state.value, `ROLLBACK_${restoredBy}`, toggleKey]
       );
-    }
-  }
+
+
 
   private scheduleAutoRollback(activationId: string, rollbackAt: Date): void {
     const delay = rollbackAt.getTime() - Date.now();
@@ -646,11 +647,11 @@ export class EmergencyKillSwitchService {
     setTimeout(async () => {
       try {
         await this.rollbackKillSwitch(activationId, 'SYSTEM_AUTO_ROLLBACK', 'Automatic rollback timeout reached');
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to auto-rollback kill switch activation ${activationId}:`, error);
-      }
+
     }, delay);
-  }
+
 
   private async sendEmergencyNotification(
     killSwitch: EmergencyKillSwitchConfig,
@@ -663,7 +664,7 @@ export class EmergencyKillSwitchService {
     console.warn(`   Reason: ${activation.reason}`);
     console.warn(`   Affected Toggles: ${activation.affectedToggles.length}`);
     console.warn(`   Activated By: ${activation.activatedBy}`);
-  }
+
 
   private async auditKillSwitchAction(
     action: string,
@@ -684,11 +685,10 @@ export class EmergencyKillSwitchService {
       JSON.stringify(details),
       action === 'ACTIVATED' ? 'critical' : 'warn'
     ]);
-  }
+
 
   private async initializeDefaultKillSwitches(): Promise<void> {
 
     // This would be called during service startup to ensure default kill switches exist
     // Implementation would check for and create default kill switches if they don't exist
-  }
-}
+

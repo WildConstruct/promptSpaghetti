@@ -13,7 +13,7 @@ import {
   SignatureAlgorithm,
   EvidenceLevel,
   DataClassification
-} from '../CryptographicEvidenceSigningService';
+ from '../CryptographicEvidenceSigningService';
 import { KeyManagementService } from '../KeyManagementService';
 import AuditEvidenceMapper from '../AuditEvidenceMapper';
 import { AuditService } from '../../auth/services/AuditService';
@@ -27,8 +27,8 @@ class MockKeyManagementService {
       keyLength: 2048,
       isActive: true,
       isPrimary: true
-    }];
-  }
+];
+
 
   async generateMasterKey() {
     return {
@@ -38,7 +38,7 @@ class MockKeyManagementService {
       isActive: true,
       isPrimary: true
     };
-  }
+
 
   async getKeyMaterial() {
     return `-----BEGIN PRIVATE KEY-----
@@ -49,7 +49,7 @@ KqQAWBgWfIQW8X9hHrHaHtTfDHh6tPFJtIq+Ue5Wp5pRt5oHBKsK5s/HG7H+2c6P
 W+kPTbX9zGsZ3F7x3c2Q7a5z9g4Z2Pk4p+vU5cHn9J7s4N6O8K7E8h3xZ6N5g2z7
 TEST_KEY_FOR_TESTING_ONLY
 -----END PRIVATE KEY-----`;
-  }
+
 
   async getKeyInfo() {
     return {
@@ -57,30 +57,30 @@ TEST_KEY_FOR_TESTING_ONLY
       isActive: true,
       expirationDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year from now
     };
-  }
+
 
   async healthCheck() {
     return true;
-  }
-}
+
+
 
 class MockAuditEvidenceMapper {
   recordEvidenceCollection() {
     return 'test-trail-123';
-  }
+
 
   generateEvidenceMappingReport() {
     return {
       frameworks: [{ id: 'ISO27001', name: 'ISO 27001:2022' }]
     };
-  }
-}
+
+
 
 class MockAuditService {
   async logEvent() {
     return true;
-  }
-}
+
+
 
 describe('CryptographicEvidenceSigningService', () => {
   let signingService: CryptographicEvidenceSigningService;
@@ -190,14 +190,14 @@ describe('CryptographicEvidenceSigningService', () => {
           evidenceData: { content: 'document 1' },
           collectorId: 'batch-collector',
           signingPurpose: SigningPurpose.COMPLIANCE_EVIDENCE
-  }
+
         {
           evidenceId: 'batch-item-2',
           evidenceType: 'log',
           evidenceData: { content: 'log entry 2' },
           collectorId: 'batch-collector',
           signingPurpose: SigningPurpose.AUDIT_TRAIL
-        }
+
       ];
 
       const batch = await signingService.signEvidenceBatch(evidenceItems);
@@ -341,19 +341,19 @@ describe('CryptographicEvidenceSigningService', () => {
           evidenceData: { document: 'shared evidence' },
           collectorId: 'user-1',
           signingPurpose: SigningPurpose.COMPLIANCE_EVIDENCE
-  }
+
         {
           evidenceId,
           evidenceType: 'multi_sign_doc',
           evidenceData: { document: 'shared evidence' },
           collectorId: 'user-2',
           signingPurpose: SigningPurpose.AUDIT_TRAIL
-        }
+
       ];
 
       for (const request of requests) {
         await signingService.signEvidence(request);
-      }
+
 
       const signatures = signingService.getEvidenceSignatures(evidenceId);
 

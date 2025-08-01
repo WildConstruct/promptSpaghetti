@@ -12,7 +12,7 @@ import {
   SecurityEvent,
   PasswordResetToken,
   PasswordResetAttempt
-} from '../types';
+ from '../types';
 
 const PASSWORD_RESET_REQUEST_SCHEMA = z.object({
   email: z.string().email(),
@@ -21,7 +21,7 @@ const PASSWORD_RESET_REQUEST_SCHEMA = z.object({
     userAgent: z.string(),
     ipAddress: z.string(),
     fingerprint: z.string().optional()
-  }
+
 });
 
 const PASSWORD_RESET_CONFIRM_SCHEMA = z.object({
@@ -32,7 +32,7 @@ const PASSWORD_RESET_CONFIRM_SCHEMA = z.object({
     userAgent: z.string(),
     ipAddress: z.string(),
     fingerprint: z.string().optional()
-  }
+
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: 'Passwords don\'t match',
   path: ['confirmPassword']
@@ -85,7 +85,7 @@ export class PasswordResetService {
           metadata: { reason: 'User not found' }
         });
         return response;
-      }
+
 
       // Check if account is locked or suspended
       if (user.status !== 'active') {
@@ -99,7 +99,7 @@ export class PasswordResetService {
           metadata: { accountStatus: user.status }
         });
         return response;
-      }
+
 
       // Check existing tokens and clean up expired ones
       await this.cleanupExpiredTokens(user.id);
@@ -108,7 +108,7 @@ export class PasswordResetService {
       if (activeTokens.length >= this.MAX_TOKENS_PER_USER) {
         // Revoke oldest token
         await this.revokeToken(activeTokens[0].hashedToken);
-      }
+
 
       // Generate secure token
       const token = await this.generateSecureToken();
@@ -140,7 +140,7 @@ export class PasswordResetService {
       });
 
       return response;
-    } catch (error) {
+ catch (error) {
       await this.audit.logSecurityEvent({
         type: 'PASSWORD_RESET_ERROR',
         userId: undefined,
@@ -151,8 +151,8 @@ export class PasswordResetService {
         metadata: { error: error instanceof Error ? error.message : 'Unknown error' }
       });
       throw error;
-    }
-  }
+
+
 
   async validatePasswordResetToken(token: string): Promise<PasswordResetValidation> {
 
@@ -166,7 +166,7 @@ export class PasswordResetService {
           error: 'Invalid or expired reset token',
           canRetry: false
         };
-      }
+
 
       if (new Date() > tokenRecord.expiresAt) {
         await this.revokeToken(token);
@@ -175,7 +175,7 @@ export class PasswordResetService {
           error: 'Reset token has expired',
           canRetry: true
         };
-      }
+
 
       const user = await this.db.findUserById(tokenRecord.userId);
       if (!user || user.status !== 'active') {
@@ -184,7 +184,7 @@ export class PasswordResetService {
           error: 'Account is not available for password reset',
           canRetry: false
         };
-      }
+
 
       return {
         valid: true,
@@ -192,14 +192,14 @@ export class PasswordResetService {
         email: user.email,
         tokenExpiresAt: tokenRecord.expiresAt
       };
-    } catch (error) {
+ catch (error) {
       return {
         valid: false,
         error: 'Failed to validate reset token',
         canRetry: true
       };
-    }
-  }
+
+
 
   async confirmPasswordReset(
     confirmation: PasswordResetConfirmation
@@ -210,7 +210,7 @@ export class PasswordResetService {
       let validatedConfirmation;
       try {
         validatedConfirmation = PASSWORD_RESET_CONFIRM_SCHEMA.parse(confirmation);
-      } catch (error) {
+ catch (error) {
         if (error instanceof ZodError) {
           // Convert Zod validation errors to user-friendly messages
           const firstError = error.errors[0];
@@ -218,7 +218,7 @@ export class PasswordResetService {
           // Check for password mismatch (refine validation)
           if (firstError.path.includes('confirmPassword') && firstError.message === 'Passwords don\'t match') {
             throw new Error('Passwords don\'t match');
-          }
+
           
           // Check for password length issues
           const passwordErrors = error.errors.filter(e => 
@@ -226,13 +226,13 @@ export class PasswordResetService {
           );
           if (passwordErrors.length > 0 && firstError.message.includes('least')) {
             throw new Error('Password must be at least 8 characters long');
-          }
+
           
           // Handle other validation errors
           throw new Error(firstError.message);
-        }
+
         throw error;
-      }
+
       const { token, newPassword, clientInfo } = validatedConfirmation;
 
       // Validate token first
@@ -249,19 +249,19 @@ export class PasswordResetService {
         });
         
         throw new Error(validation.error || 'Invalid reset token');
-      }
+
 
       // Get user and validate
       const user = await this.db.findUserById(validation.userId);
       if (!user) {
         throw new Error('User not found');
-      }
+
 
       // Check password strength
       const passwordValidation = await this.validatePasswordStrength(newPassword, user);
       if (!passwordValidation.valid) {
         throw new Error(passwordValidation.message);
-      }
+
 
       // Rate limiting for password reset confirmation
       await this.rateLimit.checkLimit(
@@ -298,14 +298,14 @@ export class PasswordResetService {
         metadata: { 
           sessionsInvalidated: true,
           passwordStrengthScore: passwordValidation.score 
-        }
+
       });
 
       return {
         success: true,
         message: 'Password has been reset successfully. Please log in with your new password.'
       };
-    } catch (error) {
+ catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
       await this.audit.logSecurityEvent({
@@ -319,8 +319,8 @@ export class PasswordResetService {
       });
 
       throw new Error(errorMessage);
-    }
-  }
+
+
 
   async revokePasswordResetToken(token: string, userId: string): Promise<void> {
 
@@ -329,7 +329,7 @@ export class PasswordResetService {
       'UPDATE password_reset_tokens SET revoked_at = NOW() WHERE hashed_token = $1 AND user_id = $2',
       [hashedToken, userId]
     );
-  }
+
 
   async getPasswordResetAttempts(userId: string, hours: number = 24): Promise<PasswordResetAttempt[]> {
 
@@ -353,7 +353,7 @@ export class PasswordResetService {
       completed: row.completed,
       revoked: row.revoked
     }));
-  }
+
 
   private async checkRateLimits(email: string, ipAddress: string): Promise<void> {
 
@@ -370,16 +370,16 @@ export class PasswordResetService {
       this.MAX_ATTEMPTS_PER_HOUR,
       3600
     );
-  }
+
 
   private async generateSecureToken(): Promise<string> {
 
     return randomBytes(this.TOKEN_LENGTH).toString('hex');
-  }
+
 
   private hashToken(token: string): string {
     return createHash('sha256').update(token).digest('hex');
-  }
+
 
   private async storePasswordResetToken(tokenData: {
     userId: string;
@@ -402,7 +402,7 @@ export class PasswordResetService {
       tokenData.userAgent,
       tokenData.fingerprint
     ]);
-  }
+
 
   private async getTokenRecord(hashedToken: string): Promise<PasswordResetToken | null> {
 
@@ -414,7 +414,7 @@ export class PasswordResetService {
 
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     const row = result.rows[0];
     return {
@@ -425,7 +425,7 @@ export class PasswordResetService {
       revokedAt: row.revoked_at,
       createdAt: row.created_at
     };
-  }
+
 
   private async getActiveTokens(userId: string): Promise<PasswordResetToken[]> {
 
@@ -447,7 +447,7 @@ export class PasswordResetService {
       revokedAt: row.revoked_at,
       createdAt: row.created_at
     }));
-  }
+
 
   private async cleanupExpiredTokens(userId: string): Promise<void> {
 
@@ -455,7 +455,7 @@ export class PasswordResetService {
       DELETE FROM password_reset_tokens
       WHERE user_id = $1 AND expires_at < NOW()
     `, [userId]);
-  }
+
 
   private async revokeToken(token: string): Promise<void> {
 
@@ -464,22 +464,22 @@ export class PasswordResetService {
       'UPDATE password_reset_tokens SET revoked_at = NOW() WHERE hashed_token = $1',
       [hashedToken]
     );
-  }
+
 
   private async validatePasswordStrength(password: string, user: any): Promise<{
     valid: boolean;
     message: string;
     score: number;
-  }> {
+> {
 
     // Basic password requirements
     if (password.length < 8) {
       return { valid: false, message: 'Password must be at least 8 characters long', score: 0 };
-    }
+
 
     if (password.length > 128) {
       return { valid: false, message: 'Password must be less than 128 characters', score: 0 };
-    }
+
 
     // Check for common weak passwords
     const commonPasswords = [
@@ -489,12 +489,12 @@ export class PasswordResetService {
 
     if (commonPasswords.includes(password.toLowerCase())) {
       return { valid: false, message: 'Password is too common. Please choose a stronger password.', score: 1 };
-    }
+
 
     // Check if password contains user information
     if (user.email && password.toLowerCase().includes(user.email.split('@')[0].toLowerCase())) {
       return { valid: false, message: 'Password cannot contain your email address', score: 1 };
-    }
+
 
     // Calculate password strength score (1-5)
     let score = 1;
@@ -515,10 +515,10 @@ export class PasswordResetService {
         message: 'Password must contain uppercase, lowercase, numbers, and be at least 12 characters long',
         score
       };
-    }
+
 
     return { valid: true, message: 'Password strength is acceptable', score };
-  }
+
 
   private async hashPassword(password: string): Promise<string> {
 
@@ -529,7 +529,7 @@ export class PasswordResetService {
       timeCost: 3,
       parallelism: 1
     });
-  }
+
 
   private async updatePasswordAndMarkTokenUsed(
     userId: string,
@@ -557,13 +557,13 @@ export class PasswordResetService {
       );
 
       await client.query('COMMIT');
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   private async invalidateAllUserSessions(userId: string): Promise<void> {
 
@@ -575,7 +575,7 @@ export class PasswordResetService {
 
     // Also remove from Redis cache if using Redis for sessions
     // This would be implemented based on your session storage strategy
-  }
+
 
   private async sendPasswordResetEmail(
     user: any,
@@ -593,7 +593,7 @@ export class PasswordResetService {
       ipAddress: clientInfo.ipAddress,
       userAgent: clientInfo.userAgent
     });
-  }
+
 
   private async sendPasswordResetConfirmationEmail(
     user: any,
@@ -607,5 +607,4 @@ export class PasswordResetService {
       ipAddress: clientInfo.ipAddress,
       userAgent: clientInfo.userAgent
     });
-  }
-}
+

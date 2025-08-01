@@ -101,11 +101,11 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
       body: MedicalTextProcessingSchema,
       response: {
         200: ProcessedMedicalTextSchema
-      }
-    }
+
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof MedicalTextProcessingSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const startTime = Date.now();
       const { text, options } = request.body;
@@ -113,7 +113,7 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
       // HIPAA compliance check
       if (options.deidentify) {
         await hipaaService.validateSafeProcessing(text);
-      }
+
 
       const result = await healthcareService.processMedicalText(text, options);
       const processingTime = Date.now() - startTime;
@@ -122,23 +122,23 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
         ...result,
         processingTime
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Medical text processing failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Healthcare data validation endpoint  
   fastify.post('/api/healthcare/validate-data', {
     schema: {
       body: HealthcareDataValidationSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof HealthcareDataValidationSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { data, format, version, strict } = request.body;
 
@@ -156,23 +156,23 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
         format,
         version: validationResult.detectedVersion || version
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Healthcare data validation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Clinical workflow generation endpoint
   fastify.post('/api/healthcare/generate-workflow', {
     schema: {
       body: ClinicalWorkflowSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof ClinicalWorkflowSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { workflowType, patientData, templateId, customizations } = request.body;
 
@@ -193,23 +193,23 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
         complianceStatus: workflow.hipaaCompliant,
         generatedAt: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Clinical workflow generation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Medical terminology search endpoint
   fastify.get('/api/healthcare/terminology/search', {
     schema: {
       querystring: MedicalTermSearchSchema
-    }
+
   }, async (request: FastifyRequest<{
     Querystring: z.infer<typeof MedicalTermSearchSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { query, vocabularies, limit, includeDefinitions, includeSynonyms } = request.query;
 
@@ -227,23 +227,23 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
         vocabulariesSearched: vocabularies,
         searchTime: searchResults.searchTime
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'Medical terminology search failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // HIPAA compliance assessment endpoint
   fastify.post('/api/healthcare/hipaa/assess', {
     schema: {
       body: HIPAAAssessmentSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof HIPAAAssessmentSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { documentType, content, checkLevel } = request.body;
 
@@ -262,23 +262,23 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
         assessmentLevel: checkLevel,
         assessedAt: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'HIPAA compliance assessment failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // PHI de-identification endpoint
   fastify.post('/api/healthcare/deidentify', {
     schema: {
       body: PHIDeidentificationSchema
-    }
+
   }, async (request: FastifyRequest<{
     Body: z.infer<typeof PHIDeidentificationSchema>
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { content, method, preserveStructure, customRules } = request.body;
 
@@ -297,13 +297,13 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
         warnings: deidentificationResult.warnings,
         processedAt: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       reply.code(400);
       return {
         error: 'PHI de-identification failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Healthcare workflow templates endpoint
@@ -322,13 +322,13 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
           version: template.version
         }))
       };
-    } catch (error) {
+ catch (error) {
       reply.code(500);
       return {
         error: 'Failed to fetch healthcare templates',
         details: error instanceof Error ? error.message : 'Unknown error'
       };
-    }
+
   });
 
   // Health check endpoint for healthcare services
@@ -346,16 +346,15 @@ export async function healthcareRoutes(fastify: FastifyInstance) {
           healthcareService: healthStatus[0],
           medicalTerminology: healthStatus[1],
           hipaaCompliance: healthStatus[2]
-  }
+
         checkedAt: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       reply.code(503);
       return {
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
         checkedAt: new Date().toISOString()
       };
-    }
+
   });
-}

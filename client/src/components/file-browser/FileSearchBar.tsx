@@ -9,16 +9,18 @@
  */
 import React, { useState, useEffect, useMemo } from 'react';
 
-}
+
 export interface FileSearchOptions {
   includeContents: boolean;,
-  caseSensitive: boolean;
+  caseSensitive: boolean;,
   useRegex: boolean;,
-  includeFolders: boolean;
+  includeFolders: boolean;,
   fileTypes: string;
-}
-}
-}
+
+
+
+
+
 export interface FileSearchBarProps {
   value: string;,
   onChange: (value: string) => void;
@@ -28,8 +30,9 @@ export interface FileSearchBarProps {
   onAdvancedSearch?: (options: FileSearchOptions) => void;
   onTagFilter?: (tag: string) => void;
   className?: string;
-}
-}
+
+
+
 export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   value,
   onChange,
@@ -98,7 +101,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   alignItems: 'center',
   flex: 1,
   maxWidth: '400px',
-}}
+}
     >
       {/* Main search input */}
       <div
@@ -112,7 +115,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   borderRadius: '4px',
           backgroundColor: '#fff',
           transition: 'border-color 0.2s ease';
-  }}
+
       >
         {/* Search icon */}
         <div
@@ -121,7 +124,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   color: '#666',
   fontSize: '16px',
   pointerEvents: 'none',
-}}
+}
         >
           🔍
         </div>
@@ -141,7 +144,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   outline: 'none',
   fontSize: '14px',
   backgroundColor: 'transparent',
-}}
+}
         />
         {/* Clear button */}
         {localValue && ()
@@ -157,13 +160,13 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}}
+
             onMouseEnter={(e) => {
               (e.target as HTMLElement).style.backgroundColor = '#f0f0f0';
-            }}
+}
             onMouseLeave={(e) => {
               (e.target as HTMLElement).style.backgroundColor = 'transparent';
-            }}
+}
             title="Clear search"
           >
             ✕
@@ -183,7 +186,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   cursor: 'pointer',
   fontSize: '12px',
   color: showAdvancedOptions ? '#1976d2' : '#666',
-}}
+
           title="Advanced search options"
         >
           ⚙️
@@ -204,7 +207,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
   padding: '12px',
   zIndex: 100,
   marginTop: '4px',
-}}
+
         >
           <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>
             Search Options
@@ -273,7 +276,7 @@ export const FileSearchBar: React.FC<FileSearchBarProps> = ({)
 
 // Debounce utility function
 function debounce<T extends (...args: unknown) => unknown>((;(
-    func: T,
+  func: T,
     wait: number
   ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;

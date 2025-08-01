@@ -6,9 +6,8 @@ import React, { useState } from 'react';
 import { ExtensionManifest } from '../../extensions/ExtensionManifest';
 import { ExtensionStatus } from './ExtensionManagerStore';
 
-}
-export interface ExtensionDetailViewProps {
-  extension: ExtensionManifest;
+
+export interface ExtensionDetailViewProps { extension: ExtensionManifest;
   status: ExtensionStatus;
   viewMode: 'installed' | 'marketplace';
   onToggle?: () => void;
@@ -16,30 +15,26 @@ export interface ExtensionDetailViewProps {
   onUpdate?: () => void;
   onConfigure?: () => void;
   onInstall?: () => void;
-  onClose: () => void;
-}
-}
+  onClose: () => void }
 
-export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
-  extension,
-  status,
-  viewMode,
-  onToggle,
-  onUninstall,
-  onUpdate,
-  onConfigure,
-  onInstall,
+
+
+export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({ extension
+  status
+  viewMode
+  onToggle
+  onUninstall
+  onUpdate
+  onConfigure
+  onInstall }
   onClose
-}) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'permissions' | 'dependencies' | 'configuration'>('overview');
-  const getExtensionIcon = (type: string): string => {
-  switch (type) {
-  case 'node': return '🔧';
+}) => { const [activeTab, setActiveTab] = useState<'overview' | 'permissions' | 'dependencies' | 'configuration'>('overview');
+  const getExtensionIcon = (type: string): string => { }
+  switch (type) { case 'node': return '🔧';
   case 'ui': return '🎨';
   case 'transform': return '⚡';
   case 'storage': return '💾';
-  default: return '📦';
-};
+  default: return '📦' };
   const formatFileSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -392,16 +387,15 @@ export const ExtensionDetailView: React.FC<ExtensionDetailViewProps> = ({
 };
 
 // Helper function to get permission descriptions
-function getPermissionDescription(permission: string): string {
-  const descriptions: Record<string, string> = {,
-  'data-processing': 'Access and process data within the application',
-  'file-system-read': 'Read files from the local file system',
-  'file-system-write': 'Write files to the local file system',
-  'network': 'Make network requests to external services',
-  'ui-components': 'Add or modify user interface components',
-  'extensions-api': 'Interact with other extensions',
-  'system-info': 'Access system information and statistics',
-  'data-storage': 'Store and retrieve persistent data',
+function getPermissionDescription(permission: string): string { const descriptions: Record<string, string> = {
+  'data-processing': 'Access and process data within the application'
+  'file-system-read': 'Read files from the local file system'
+  'file-system-write': 'Write files to the local file system'
+  'network': 'Make network requests to external services'
+  'ui-components': 'Add or modify user interface components'
+  'extensions-api': 'Interact with other extensions'
+  'system-info': 'Access system information and statistics'
+  'data-storage': 'Store and retrieve persistent data' }
 };
   return descriptions[permission] || 'Access to system functionality';
 

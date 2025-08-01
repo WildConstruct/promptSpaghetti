@@ -38,19 +38,19 @@ describe('ConflictResolutionEngine', () => {
           expires_at: new Date(Date.now() + 3600000),
           client_id: 'client1',
           user_agent: 'test-browser'
-  }
+
         editing_state: {
           editing_mode: 'edit',
           is_active: true,
           has_unsaved_changes: false
-  }
+
         collaboration_metadata: {
           priority_level: 1,
           edit_permissions: [],
           can_force_save: false,
           auto_save_interval: 5000
-        }
-      }];
+
+];
 
       const conflicts = await engine.detectConflicts('resource1', sessions);
       expect(conflicts).toHaveLength(0);
@@ -78,20 +78,20 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client1',
             user_agent: 'test-browser'
-  }
+
           editing_state: {
             current_cursor_position: cursorPosition,
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-  }
+
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
-          }
-  }
+
+
         {
           id: 'session2',
           resource_id: 'resource1',
@@ -103,24 +103,24 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client2',
             user_agent: 'test-browser'
-  }
+
           editing_state: {
             current_cursor_position: {
               ...cursorPosition,
               user_id: 'user2',
               timestamp: new Date(now.getTime() + 2000) // Same position, different timestamp
-  }
+
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-  }
+
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
-          }
-        }
+
+
       ];
 
       const conflicts = await engine.detectConflicts('resource1', sessions);
@@ -150,20 +150,20 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client1',
             user_agent: 'test-browser'
-  }
+
           editing_state: {
             current_selection: selectionRange,
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-  }
+
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
-          }
-  }
+
+
         {
           id: 'session2',
           resource_id: 'resource1',
@@ -175,23 +175,23 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client2',
             user_agent: 'test-browser'
-  }
+
           editing_state: {
             current_selection: {
               ...selectionRange,
               user_id: 'user2' // Overlapping selection
-  }
+
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: false
-  }
+
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
-          }
-        }
+
+
       ];
 
       const conflicts = await engine.detectConflicts('resource1', sessions);
@@ -216,12 +216,12 @@ describe('ConflictResolutionEngine', () => {
             id: 'session1',
             user_id: 'user1',
             session_info: { last_activity_at: new Date(2023, 0, 1, 10, 0) }
-  }
+
           {
             id: 'session2',
             user_id: 'user2',
             session_info: { last_activity_at: new Date(2023, 0, 1, 10, 5) }
-          }
+
         ],
         base_version: { content: 'base content' },
         local_version: { content: 'local changes' },
@@ -324,7 +324,7 @@ describe('ConflictResolutionEngine', () => {
           user_id: 'user1',
           timestamp: new Date(2023, 0, 1, 10, 0),
           session_id: 'session1'
-  }
+
         {
           id: 'op2',
           type: 'insert' as const,
@@ -334,7 +334,7 @@ describe('ConflictResolutionEngine', () => {
           user_id: 'user2',
           timestamp: new Date(2023, 0, 1, 10, 1),
           session_id: 'session2'
-        }
+
       ];
 
       const transform = await (engine as any).applyOperationalTransform(operations);
@@ -355,7 +355,7 @@ describe('ConflictResolutionEngine', () => {
           user_id: 'user1',
           timestamp: new Date(2023, 0, 1, 10, 0),
           session_id: 'session1'
-  }
+
         {
           id: 'op2',
           type: 'replace' as const,
@@ -365,7 +365,7 @@ describe('ConflictResolutionEngine', () => {
           user_id: 'user2',
           timestamp: new Date(2023, 0, 1, 10, 0, 500), // Very close timestamp
           session_id: 'session2'
-        }
+
       ];
 
       const transform = await (engine as any).applyOperationalTransform(operations);
@@ -421,7 +421,7 @@ describe('ConflictResolutionEngine', () => {
       // Create more than the maximum (10) rollback points
       for (let i = 1; i <= 15; i++) {
         engine.createRollbackPoint('resource1', { data: `content ${i}` });
-      }
+
 
       const rollbackPoints = engine.getRollbackPoints('resource1');
       expect(rollbackPoints).toHaveLength(10);
@@ -450,7 +450,7 @@ describe('ConflictResolutionEngine', () => {
           id: 'session1',
           user_id: 'user1',
           session_info: { last_activity_at: new Date() }
-        }],
+],
         base_version: null,
         local_version: null,
         remote_version: null,
@@ -601,19 +601,19 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client1',
             user_agent: 'test-browser'
-  }
+
           editing_state: {
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: true
-  }
+
           collaboration_metadata: {
             priority_level: 1,
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
-          }
-  }
+
+
         {
           id: 'session2',
           resource_id: 'resource1',
@@ -625,19 +625,19 @@ describe('ConflictResolutionEngine', () => {
             expires_at: new Date(Date.now() + 3600000),
             client_id: 'client2',
             user_agent: 'test-browser'
-  }
+
           editing_state: {
             editing_mode: 'edit',
             is_active: true,
             has_unsaved_changes: true
-  }
+
           collaboration_metadata: {
             priority_level: 2, // Higher priority
             edit_permissions: [],
             can_force_save: false,
             auto_save_interval: 5000
-          }
-        }
+
+
       ];
 
       // 1. Create rollback point
@@ -666,7 +666,7 @@ describe('ConflictResolutionEngine', () => {
 
         const resolution = await engine.resolveConflicts('resource1', ResolutionStrategy.AUTO_MERGE);
         expect(resolution.success).toBe(true);
-      }
+
 
       // 4. Verify statistics
       const stats = engine.getConflictStatistics('resource1');
@@ -687,7 +687,7 @@ describe('ConflictResolutionEngine', () => {
         
         if (eventsReceived === expectedEvents.length) {
           done();
-        }
+
       };
 
       engine.on('conflicts_detected', () => eventHandler('conflicts_detected'));
@@ -742,7 +742,7 @@ describe('ConflictResolutionEngine', () => {
 
         (engine as any).activeConflicts.set(`resource${i}`, context);
         promises.push(engine.resolveConflicts(`resource${i}`, ResolutionStrategy.LAST_WRITER_WINS));
-      }
+
 
       const results = await Promise.all(promises);
       const endTime = Date.now();
@@ -760,7 +760,7 @@ describe('ConflictResolutionEngine', () => {
       // Create many rollback points quickly
       for (let i = 1; i <= 100; i++) {
         engine.createRollbackPoint('resource1', { data: `content ${i}` });
-      }
+
 
       const endTime = Date.now();
 

@@ -5,49 +5,48 @@ import { AnnotatedEdge } from '../components/Annotations/ConnectionAnnotations';
 
 // Comprehensive shared graph format
 
-}
-export interface SharedGraphFormat {
-  // Core metadata
-  metadata: {
+
+export interface SharedGraphFormat { // Core metadata
+  metadata: {;
   exportId: string;
   version: string;
   timestamp: string;
   title: string;
   description?: string;
   // Author and collaboration info
-  author: {
+  author: { }
   id: string;
   name: string;
   email?: string;
-}
+
+
 };
     // Version control
-    versionControl: {
+    versionControl: { ,
   version: number;
   previousVersion?: string;
   changes: string;
   tags: string;
-  branch?: string;
-};
+  branch?: string };
     // Sharing settings
-    sharing: {
+    sharing: { ,
   permissions: 'private' | 'read_only' | 'collaborative' | 'public';
-  collaborators: Array<{
+  collaborators: Array<{,
   userId: string;
   name: string;
-  role: 'viewer' | 'editor' | 'admin';
+  role: 'viewer' | 'editor' | 'admin' }
   addedAt: string;
-}>;
+>;
       shareUrl?: string;
       expiresAt?: string;
     };
   };
   // Complete graph structure
-  graph: {
+  graph: { ,
   nodes: Node;
     edges: AnnotatedEdge;
     // Graph-level settings
-    settings: {
+    settings: { }
   canvasPosition: { x: number; y: number; zoom: number };
       theme?: string;
       gridVisible?: boolean;
@@ -56,17 +55,16 @@ export interface SharedGraphFormat {
     };
   };
   // All annotation types
-  annotations: {
-  // Connection labels (already handled in AnnotatedEdge)
-  connectionLabels: Array<{
+  annotations: { // Connection labels (already handled in AnnotatedEdge)
+  connectionLabels: Array<{ }
   edgeId: string;
   label: string;
   style?: any;
   position?: any;
   visible: boolean;
-}>;
+>;
     // Sticky notes
-    stickyNotes: Array<{
+    stickyNotes: Array<{,
   id: string;
       position: { x: number; y: number };
       size: { width: number; height: number };
@@ -77,18 +75,17 @@ export interface SharedGraphFormat {
       createdAt: string;
   updatedAt: string;
       visible: boolean;
-    }>;
+>;
     // Node labels/annotations
-    nodeLabels: Array<{
+    nodeLabels: Array<{ ,
   nodeId: string;
   label?: string;
   description?: string;
   tags: string;
   color?: string;
-  notes?: string;
-}>;
+  notes?: string }>;
     // Region grouping/areas
-    regions: Array<{
+    regions: Array<{,
   id: string;
       name: string;
   bounds: { x: number; y: number; width: number; height: number };
@@ -97,9 +94,9 @@ export interface SharedGraphFormat {
       nodeIds: string;
       description?: string;
       collapsed: boolean;
-    }>;
+>;
     // Comments and discussions
-    comments: Array<{
+    comments: Array<{,
   id: string;
       content: string;
   author: string;
@@ -108,17 +105,16 @@ export interface SharedGraphFormat {
       targetType: 'node' | 'edge' | 'region' | 'canvas';
       targetId?: string;
       resolved: boolean;
-  replies: Array<{;
+  replies: Array<{ ;
   id: string;
   content: string;
   author: string;
-  timestamp: string;
-}>;
-    }>;
+  timestamp: string }>;
+>;
   };
   // Collaboration metadata
-  collaboration: {
-  changeHistory: Array<{
+  collaboration: { ,
+  changeHistory: Array<{ }
   id: string;
   timestamp: string;
   author: string;
@@ -127,32 +123,30 @@ export interface SharedGraphFormat {
   before?: any;
   after?: any;
   description: string;
-}>;
-    conflicts: Array<{
+>;
+    conflicts: Array<{ ,
   id: string;
   timestamp: string;
   type: 'merge' | 'edit' | 'delete';
-  targetType: 'node' | 'edge' | 'annotation';
+  targetType: 'node' | 'edge' | 'annotation' }
   targetId: string;
   authors: string;
   resolved: boolean;
   resolution?: any;
-}>;
+>;
     lastSync: string;
-  syncStatus: 'synced' | 'pending' | 'conflict' | 'offline'
+  syncStatus: 'synced' | 'pending' | 'conflict' | 'offline';
   };
   // Compatibility and validation
-  compatibility: {
+  compatibility: { ,
   minVersion: string;
   features: string;
   warnings: string;
-  errors: string;
-};
+  errors: string };
 
 // Graph sharing service
-}
-export class GraphSharingService {
-  private static instance: GraphSharingService;
+
+export class GraphSharingService { private static instance: GraphSharingService;
   private sharedGraphs: Map<string, SharedGraphFormat> = new Map();
   static getInstance(): GraphSharingService {
     if (!GraphSharingService.instance) {
@@ -162,83 +156,80 @@ export class GraphSharingService {
    * Export graph with all annotations for sharing
    */
   async exportForSharing(nodes: Node)
-    edges: AnnotatedEdge,
-    annotations: any = {},
-    metadata: Partial<SharedGraphFormat['metadata']> = {},
+  edges: AnnotatedEdge }
+    annotations: any = {}
+    metadata: Partial<SharedGraphFormat['metadata']> = {}
     options: {
       includeHistory?: boolean;
       includeComments?: boolean;
       permissions?: SharedGraphFormat['metadata']['sharing']['permissions'];
-      author: { id: string; name: string; email?: string }): Promise<SharedGraphFormat> {
-
-  const exportId = this.generateExportId();
+      author: { id: string; name: string; email?: string }): Promise<SharedGraphFormat> { const exportId = this.generateExportId();
   const timestamp = new Date().toISOString();
   // Extract connection labels from annotated edges
   const connectionLabels = edges;
   .filter(edge => edge.label && edge.label.trim().length > 0)
   .map(edge => ({)
-  edgeId: edge.id,
-  label: edge.label!,
-  style: edge.labelStyle,
+  edgeId: edge.id
+  label: edge.label!
+  style: edge.labelStyle
   position: {
-  type: edge.labelPosition,
-  offset: edge.labelOffset,
-},
+  type: edge.labelPosition
+  offset: edge.labelOffset }
+
   visible: edge.showLabel ?? true;
   }));
-    const sharedGraph: SharedGraphFormat = {,
+    const sharedGraph: SharedGraphFormat = { 
   metadata: {
-  exportId,
-  version: '1.0.0',
-  timestamp,
-  title: metadata.title || 'Untitled Graph',
-  description: metadata.description,
-  author: options.author,
+  exportId
+  version: '1.0.0'
+  timestamp
+  title: metadata.title || 'Untitled Graph'
+  description: metadata.description
+  author: options.author
   versionControl: {
-  version: 1,
-  changes: ['Initial share'],
-  tags: metadata.versionControl?.tags || [],
-  branch: metadata.versionControl?.branch || 'main',
-},
-  sharing: {
-  permissions: options.permissions || 'read_only',
-  collaborators: [],
-  shareUrl: this.generateShareUrl(exportId),
-},
-  graph: {
-  nodes: this.sanitizeNodes(nodes),
-        edges: this.sanitizeEdges(edges),
-        settings: {
-  canvasPosition: { x: 0, y: 0, zoom: 1 },
-          gridVisible: true,
-          snapToGrid: false,
+  version: 1
+  changes: ['Initial share']
+  tags: metadata.versionControl?.tags || []
+  branch: metadata.versionControl?.branch || 'main' }
+
+  sharing: { 
+  permissions: options.permissions || 'read_only'
+  collaborators: []
+  shareUrl: this.generateShareUrl(exportId) }
+
+  graph: { 
+  nodes: this.sanitizeNodes(nodes)
+        edges: this.sanitizeEdges(edges)
+        settings: { }
+  canvasPosition: { x: 0, y: 0, zoom: 1 }
+          gridVisible: true
+          snapToGrid: false
           readonly: options.permissions === 'read_only'
-  },
-  annotations: {
-  connectionLabels,
-  stickyNotes: annotations.stickyNotes || [],
-  nodeLabels: this.extractNodeLabels(nodes),
-  regions: annotations.regions || [],
-  comments: options.includeComments ? (annotations.comments || []) : [],
-},
-  collaboration: {
-  changeHistory: options.includeHistory ? [] : [],
-  conflicts: [],
-  lastSync: timestamp,
-  syncStatus: 'synced',
-},
-  compatibility: {
-  minVersion: '1.0.0',
-  features: [,
-  'connection-labels',
-  'sticky-notes',
-  'node-annotations',
-  'region-grouping',
-  'collaboration',
+
+  annotations: { connectionLabels
+  stickyNotes: annotations.stickyNotes || []
+  nodeLabels: this.extractNodeLabels(nodes)
+  regions: annotations.regions || []
+  comments: options.includeComments ? (annotations.comments || []) : [] }
+
+  collaboration: { 
+  changeHistory: options.includeHistory ? [] : []
+  conflicts: []
+  lastSync: timestamp
+  syncStatus: 'synced' }
+
+  compatibility: { 
+  minVersion: '1.0.0'
+  features: [
+  'connection-labels'
+  'sticky-notes'
+  'node-annotations'
+  'region-grouping'
+  'collaboration'
   'version-control'
-  ],
-  warnings: [],
-  errors: [],
+  ]
+  warnings: []
+  errors: [] }
 };
     // Store for later retrieval
     this.sharedGraphs.set(exportId, sharedGraph);
@@ -247,20 +238,16 @@ export class GraphSharingService {
    * Import shared graph with validation
    */
   async importSharedGraph(sharedGraph: SharedGraphFormat)
-    options: {
-  validateIntegrity?: boolean;
+  options: { validateIntegrity?: boolean;
   mergeConflicts?: 'overwrite' | 'merge' | 'ask';
-  preserveAnnotations?: boolean;
-} = {}
+  preserveAnnotations?: boolean } = {}
   ): Promise<{
     success: boolean;
     graph?: { nodes: Node; edges: AnnotatedEdge };
     annotations?: SharedGraphFormat['annotations'];
     errors?: string;
     warnings?: string;
-  }> {
-
-  const errors: string = [];
+> { const errors: string = [];
   const warnings: string = [];
   try {
   // Validate format version compatibility
@@ -279,24 +266,22 @@ export class GraphSharingService {
   stickyNotes: [],
   nodeLabels: [],
   regions: [],
-  comments: [],
+  comments: [] }
 };
-      return {
-        success: errors.length === 0,
+      return { success: errors.length === 0 }
         graph: { nodes, edges },
         annotations,
         errors: errors.length > 0 ? errors : undefined,
         warnings: warnings.length > 0 ? warnings : undefined;
   };
-    } catch (error) {
-  return {
+ catch (error) { return {
   success: false,
-  errors: [error instanceof Error ? error.message : 'Unknown import error'],
+  errors: [error instanceof Error ? error.message : 'Unknown import error'] }
 };
   /**
    * Validate shared graph format and integrity
    */
-  private validateSharedGraph(sharedGraph: SharedGraphFormat): {
+  private validateSharedGraph(sharedGraph: SharedGraphFormat): {,
   valid: boolean;
     errors: string;
   warnings: string;
@@ -333,60 +318,53 @@ export class GraphSharingService {
     const [major, minor] = version.split('.').map(Number);
     if (major > 1) {
       errors.push(`Unsupported major version: ${version}`);}
-    } else if (major === 1 && minor > 0) {
+ else if (major === 1 && minor > 0) {
       warnings.push(`Newer minor version detected: ${version}. Some features may not be available.`);}
-    return {
-  valid: errors.length === 0,
-  errors,
+    return { valid: errors.length === 0,
+  errors }
   warnings
 };
   /**
    * Create a new version of a shared graph
    */
-  async createVersion(baseGraph: SharedGraphFormat)
-    changes: {
-      nodes?: Node;
+  async createVersion(baseGraph: SharedGraphFormat),
+  changes: { nodes?: Node;
       edges?: AnnotatedEdge;
       annotations?: Partial<SharedGraphFormat['annotations']>;
       changeDescription: string;
-  author: { id: string; name: string; }): Promise<SharedGraphFormat> {
-
-  const newVersion: SharedGraphFormat = {,
-  ...baseGraph,
+  author: { id: string; name: string }): Promise<SharedGraphFormat> { const newVersion: SharedGraphFormat = {
+  ...baseGraph
   metadata: {
-  ...baseGraph.metadata,
-  exportId: this.generateExportId(),
-  timestamp: new Date().toISOString(),
+  ...baseGraph.metadata
+  exportId: this.generateExportId()
+  timestamp: new Date().toISOString()
   versionControl: {
-  ...baseGraph.metadata.versionControl,
-  version: baseGraph.metadata.versionControl.version + 1,
-  previousVersion: baseGraph.metadata.exportId,
-  changes: [,
-  ...baseGraph.metadata.versionControl.changes,
+  ...baseGraph.metadata.versionControl
+  version: baseGraph.metadata.versionControl.version + 1
+  previousVersion: baseGraph.metadata.exportId
+  changes: [
+  ...baseGraph.metadata.versionControl.changes }
   changes.changeDescription
   ]
-},
-  graph: {
-  ...baseGraph.graph,
-  nodes: changes.nodes || baseGraph.graph.nodes,
-  edges: changes.edges || baseGraph.graph.edges,
-},
-  annotations: {
-        ...baseGraph.annotations,
+
+  graph: { ...baseGraph.graph
+  nodes: changes.nodes || baseGraph.graph.nodes
+  edges: changes.edges || baseGraph.graph.edges }
+
+  annotations: { ...baseGraph.annotations }
         ...changes.annotations
-  },
-  collaboration: {
-  ...baseGraph.collaboration,
-  changeHistory: [,
-  ...baseGraph.collaboration.changeHistory,
+
+  collaboration: { ...baseGraph.collaboration
+  changeHistory: [
+  ...baseGraph.collaboration.changeHistory
   {
-  id: this.generateChangeId(),
-  timestamp: new Date().toISOString(),
-  author: changes.author.name,
-  operation: 'version_update',
-  target: 'graph',
-  description: changes.changeDescription],
-  lastSync: new Date().toISOString(),
+  id: this.generateChangeId()
+  timestamp: new Date().toISOString()
+  author: changes.author.name
+  operation: 'version_update'
+  target: 'graph'
+  description: changes.changeDescription]
+  lastSync: new Date().toISOString() }
 };
     // Store new version
     this.sharedGraphs.set(newVersion.metadata.exportId, newVersion);
@@ -400,56 +378,51 @@ export class GraphSharingService {
   /**
    * Sanitize nodes for sharing (remove sensitive data)
    */
-  private sanitizeNodes(nodes: Node): Node {
-  return nodes.map(node => ({)
-  ...node,
+  private sanitizeNodes(nodes: Node): Node { return nodes.map(node => ({)
+  ...node
   data: {
-  ...node.data,
+  ...node.data
   // Remove any sensitive or internal data
-  _internal: undefined,
-  _private: undefined,
+  _internal: undefined
+  _private: undefined }
 }));
   /**
    * Sanitize edges for sharing
    */
-  private sanitizeEdges(edges: AnnotatedEdge): AnnotatedEdge {
-  return edges.map(edge => ({)
-  ...edge,
+  private sanitizeEdges(edges: AnnotatedEdge): AnnotatedEdge { return edges.map(edge => ({)
+  ...edge
   // Ensure all annotation data is preserved
-  label: edge.label,
-  labelStyle: edge.labelStyle,
-  labelPosition: edge.labelPosition,
-  labelOffset: edge.labelOffset,
-  showLabel: edge.showLabel,
-  interactive: edge.interactive,
+  label: edge.label
+  labelStyle: edge.labelStyle
+  labelPosition: edge.labelPosition
+  labelOffset: edge.labelOffset
+  showLabel: edge.showLabel
+  interactive: edge.interactive }
 }));
   /**
    * Extract node labels from node data
    */
-  private extractNodeLabels(nodes: Node): SharedGraphFormat['annotations']['nodeLabels'] {
-  return nodes.map(node => ({)
-  nodeId: node.id,
-  label: node.data?.label as string,
-  description: node.data?.description as string,
-  tags: Array.isArray(node.data?.tags) ? node.data.tags : [],
-  color: node.data?.color as string,
-  notes: node.data?.notes as string,
+  private extractNodeLabels(nodes: Node): SharedGraphFormat['annotations']['nodeLabels'] { return nodes.map(node => ({)
+  nodeId: node.id
+  label: node.data?.label as string
+  description: node.data?.description as string
+  tags: Array.isArray(node.data?.tags) ? node.data.tags : []
+  color: node.data?.color as string
+  notes: node.data?.notes as string }
 })).filter(label => )
       label.label || label.description || label.tags.length > 0 || label.notes
     );
   /**
    * Import nodes with annotation restoration
    */
-  private async importNodes(nodes: Node): Promise<Node> {
-
-  // In a real implementation, this might involve validation,
+  private async importNodes(nodes: Node): Promise<Node> { // In a real implementation, this might involve validation
   // ID remapping, or other import-specific processing
   return nodes;
   /**
   * Import edges with label restoration
   */
-  private async importEdges((edges: AnnotatedEdge,
-  connectionLabels: SharedGraphFormat['annotations']['connectionLabels']): Promise<AnnotatedEdge> {,
+  private async importEdges((edges: AnnotatedEdge
+  connectionLabels: SharedGraphFormat['annotations']['connectionLabels']): Promise<AnnotatedEdge> {
   // Create a map for quick label lookup
   const labelMap = new Map(connectionLabels.map(label => [label.edgeId, label]));
   // Restore connection labels
@@ -457,13 +430,13 @@ export class GraphSharingService {
   const labelData = labelMap.get(edge.id);
   if (labelData && !edge.label) {
   return {
-  ...edge,
-  label: labelData.label,
-  labelStyle: labelData.style,
-  labelPosition: labelData.position?.type,
-  labelOffset: labelData.position?.offset,
-  showLabel: labelData.visible,
-  interactive: true,
+  ...edge
+  label: labelData.label
+  labelStyle: labelData.style
+  labelPosition: labelData.position?.type
+  labelOffset: labelData.position?.offset
+  showLabel: labelData.visible
+  interactive: true }
 };
       return edge;
     });
@@ -477,8 +450,7 @@ export class GraphSharingService {
   /**
    * Get shared graph by ID
    */
-  getSharedGraph(exportId: string): SharedGraphFormat | null {
-    return this.sharedGraphs.get(exportId) || null;
+  getSharedGraph(exportId: string): SharedGraphFormat | null { return this.sharedGraphs.get(exportId) || null;
   /**
    * List all shared graphs for a user
    */
@@ -491,8 +463,8 @@ export class GraphSharingService {
    * Update sharing permissions
    */
   updateSharingPermissions();
-    exportId: string,
-    permissions: SharedGraphFormat['metadata']['sharing']['permissions'],
+    exportId: string
+    permissions: SharedGraphFormat['metadata']['sharing']['permissions']
     collaborators?: SharedGraphFormat['metadata']['sharing']['collaborators']
   ): boolean {
     const graph = this.sharedGraphs.get(exportId);
@@ -506,20 +478,18 @@ export class GraphSharingService {
 export const graphSharingService = GraphSharingService.getInstance();
 
 export const exportGraphForSharing = ()
-  nodes: Node,
-  edges: AnnotatedEdge,
+  nodes: Node
+  edges: AnnotatedEdge }
   options: any = {}
 ) => graphSharingService.exportForSharing(nodes, edges, {}, {}, options);
 
 export const importSharedGraph = (sharedGraph: SharedGraphFormat, options: any = {}) =>
   graphSharingService.importSharedGraph(sharedGraph, options);
 
-export const validateSharedGraphFormat = (sharedGraph: any): boolean => {
-  // Basic validation - in production would use Zod schema
+export const validateSharedGraphFormat = (sharedGraph: any): boolean => { // Basic validation - in production would use Zod schema
   return Boolean()
     sharedGraph?.metadata?.exportId &&
     sharedGraph?.graph?.nodes &&
     sharedGraph?.graph?.edges &&
     sharedGraph?.annotations
-  );
-};
+  ) };

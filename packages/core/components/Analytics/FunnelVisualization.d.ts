@@ -13,21 +13,20 @@
  * - Export and sharing capabilities
  */
 import React from 'react';
-import { 
-  ConversionFunnelDefinition,
+import { ConversionFunnelDefinition,
   ConversionStep,
-  UserSegment,
+  UserSegment }
   ConversionCohort
 } from '../../analytics/ConversionDataModel';
 import { ConversionAnalyticsInfrastructure } from '../../analytics/ConversionAnalyticsInfrastructure';
 
 }
-export interface FunnelVisualizationProps {
-    funnelDefinition: ConversionFunnelDefinition;
+}
+export interface FunnelVisualizationProps { funnelDefinition: ConversionFunnelDefinition;
     analyticsInfrastructure: ConversionAnalyticsInfrastructure;
     timeRange: {
         start: number;
-        end: number;
+        end: number }
 }
     };
     segments?: UserSegment[];
@@ -38,8 +37,8 @@ export interface FunnelVisualizationProps {
     onConfigChange?: (config: FunnelConfiguration) => void;
 
 }
-export interface StepMetrics {
-    stepId: string;
+}
+export interface StepMetrics { stepId: string;
     name: string;
     order: number;
     totalUsers: number;
@@ -49,18 +48,16 @@ export interface StepMetrics {
     averageTimeSpent: number;
     previousStepConversionRate?: number;
     valueGenerated: number;
-    topExitReasons: ExitReason[];
-
+    topExitReasons: ExitReason[] }
 }
-export interface ExitReason {
-    reason: string;
+}
+export interface ExitReason { reason: string;
     percentage: number;
     count: number;
-    category: 'user_action' | 'technical_issue' | 'design_friction' | 'external_factor';
-
+    category: 'user_action' | 'technical_issue' | 'design_friction' | 'external_factor' }
 }
-export interface FunnelConfiguration {
-    displayMode: 'standard' | 'horizontal' | 'sankey' | 'waterfall';
+}
+export interface FunnelConfiguration { displayMode: 'standard' | 'horizontal' | 'sankey' | 'waterfall';
     colorScheme: 'default' | 'conversion_focused' | 'drop_off_focused' | 'value_focused';
     showMetrics: MetricDisplay[];
     filterCriteria: FunnelFilter[];
@@ -68,37 +65,33 @@ export interface FunnelConfiguration {
     refreshInterval: number;
     animations: boolean;
 
-export type MetricDisplay = 'conversion_rate' | 'drop_off_rate' | 'user_count' | 'value_generated' | 'time_spent' | 'exit_reasons';
-
+export type MetricDisplay = 'conversion_rate' | 'drop_off_rate' | 'user_count' | 'value_generated' | 'time_spent' | 'exit_reasons' }
 }
-export interface FunnelFilter {
-    type: 'segment' | 'cohort' | 'time_range' | 'device' | 'location' | 'source';
+}
+export interface FunnelFilter { type: 'segment' | 'cohort' | 'time_range' | 'device' | 'location' | 'source';
     value: string | number;
-    operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than';
-
+    operator: 'equals' | 'in' | 'between' | 'greater_than' | 'less_than' }
 }
-export interface FunnelGrouping {
-    dimension: 'none' | 'segment' | 'cohort' | 'device' | 'source' | 'time_period';
-    interval?: 'hour' | 'day' | 'week' | 'month';
-
 }
-export interface FunnelComparisonData {
-    baseline: FunnelMetrics;
+export interface FunnelGrouping { dimension: 'none' | 'segment' | 'cohort' | 'device' | 'source' | 'time_period';
+    interval?: 'hour' | 'day' | 'week' | 'month' }
+}
+}
+export interface FunnelComparisonData { baseline: FunnelMetrics;
     comparison: FunnelMetrics;
     type: 'time_period' | 'segment' | 'ab_test';
     significance: number;
-    insights: ComparisonInsight[];
-
+    insights: ComparisonInsight[] }
 }
-export interface FunnelMetrics {
-    funnelId: string;
+}
+export interface FunnelMetrics { funnelId: string;
     totalEntries: number;
     totalConversions: number;
     overallConversionRate: number;
     averageTimeToConvert: number;
     totalValue: number;
-    stepMetrics: StepMetrics[];
-
+    stepMetrics: StepMetrics[] }
+}
 }
 export interface ComparisonInsight {
     type: 'improvement' | 'decline' | 'neutral';
@@ -114,4 +107,5 @@ export interface ComparisonInsight {
 export declare const FunnelVisualization: React.FC<FunnelVisualizationProps>;
 export default FunnelVisualization;
 //# sourceMappingURL=FunnelVisualization.d.ts.map
+}
 }

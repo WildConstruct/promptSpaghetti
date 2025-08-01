@@ -9,9 +9,8 @@ import { EventEmitter } from 'events';
 
 // Core help request interfaces
 
-}
-export interface HelpRequest {
-  id: string;
+
+export interface HelpRequest { id: string;
   type: HelpRequestType;
   category: HelpCategory;
   subcategory: string;
@@ -31,7 +30,7 @@ export interface HelpRequest {
   escalationLevel: number;
   // Knowledge base integration
   suggestedArticles: KnowledgeBaseArticle;
-  autoResolvedBy?: string; // Article ID that resolved the request,
+  autoResolvedBy?: string; // Article ID that resolved the request }
   // Communication
   responses: HelpResponse;
   satisfactionRating?: number;
@@ -50,10 +49,9 @@ export interface HelpRequest {
   sla: HelpSLA;
   // Analytics
   analytics: HelpAnalytics;
-}
-}
-export enum HelpRequestType {
-  QUESTION = 'question',
+
+
+export enum HelpRequestType { QUESTION = 'question',
   TECHNICAL_ISSUE = 'technical_issue',
   ACCOUNT_ISSUE = 'account_issue',
   BILLING_INQUIRY = 'billing_inquiry',
@@ -96,11 +94,12 @@ export enum HelpRequestType {
   // User context
   userAgent: string;
   ipAddress: string;
-  location: {
+  location: { }
   country: string;
   region: string;
   timezone: string;
-}
+
+
 };
   // Session context
   sessionId: string;
@@ -113,11 +112,10 @@ export enum HelpRequestType {
   templateId?: string;
   marketplaceListingId?: string;
   // Technical context
-  browserInfo: {
+  browserInfo: { ,
   name: string;
   version: string;
-  platform: string;
-};
+  platform: string };
   screenResolution: string;
   errorLogs?: string;
   // Business context
@@ -125,32 +123,31 @@ export enum HelpRequestType {
   accountAge: number; // days
   previousTickets: number;
   successfulTransactions: number;
-}
-}
-export interface RoutingDecision {
-  strategy: 'auto_resolve' | 'knowledge_base' | 'community' | 'support_agent' | 'specialist';
+
+
+export interface RoutingDecision { strategy: 'auto_resolve' | 'knowledge_base' | 'community' | 'support_agent' | 'specialist';
   confidence: number;
   reasoning: string;
-  estimatedResolutionTime: number; // minutes,
+  estimatedResolutionTime: number; // minutes }
   recommendedAgent?: string;
   fallbackStrategy?: string;
-}
-}
-}
-export interface HelpResponse {
-  id: string;
+
+
+
+
+export interface HelpResponse { id: string;
   type: 'auto' | 'agent' | 'system' | 'knowledge_base';
   content: string;
   author: string;
-  visibility: 'public' | 'internal';
+  visibility: 'public' | 'internal' }
   helpful: boolean | null;
   attachments: string;
   timestamp: Date;
-}
-}
-}
-export interface HelpAttachment {
-  id: string;
+
+
+
+
+export interface HelpAttachment { id: string;
   filename: string;
   contentType: string;
   size: number;
@@ -158,46 +155,46 @@ export interface HelpAttachment {
   uploadedBy: string;
   uploadedAt: Date;
   processed: boolean;
-  metadata: {
+  metadata: { }
   isScreenshot: boolean;
   containsPersonalInfo: boolean;
   category: string;
-}
+
+
 };
-}
-}
-export interface HelpSLA {
-  responseTime: {
-  target: number; // minutes,
+
+
+export interface HelpSLA { responseTime: {;
+  target: number; // minutes }
   actual?: number;
   deadline: Date;
   breached: boolean;
-}
+
+
 };
-  resolutionTime: {
-  target: number; // minutes,
+  resolutionTime: { ,
+  target: number; // minutes }
   actual?: number;
   deadline: Date;
   breached: boolean;
 };
   escalationThreshold: number; // minutes
-}
-}
-export interface HelpAnalytics {
-  viewCount: number;
+
+
+export interface HelpAnalytics { viewCount: number;
   interactionCount: number;
-  timeToFirstResponse?: number; // minutes,
-  totalResolutionTime?: number; // minutes,
+  timeToFirstResponse?: number; // minutes;
+  totalResolutionTime?: number; // minutes;
   userSatisfactionScore?: number;
   agentEfficiencyScore?: number;
-  deflectionScore?: number; // How well auto-suggestions worked,
+  deflectionScore?: number; // How well auto-suggestions worked }
   resolutionSource: 'self_service' | 'knowledge_base' | 'community' | 'agent' | 'escalation';
   // Knowledge base integration
-}
-}
-}
-export interface KnowledgeBaseArticle {
-  id: string;
+
+
+
+
+export interface KnowledgeBaseArticle { id: string;
   title: string;
   summary: string;
   content: string;
@@ -207,153 +204,144 @@ export interface KnowledgeBaseArticle {
   helpfulnessRating: number;
   viewCount: number;
   lastUpdated: Date;
-  url: string;
-}
-}
-}
-export interface KnowledgeBaseSearch {
-  query: string;
+  url: string }
+
+
+
+export interface KnowledgeBaseSearch { query: string;
   categories?: HelpCategory;
-  filters?: {
+  filters?: { }
   minRating?: number;
   language?: string;
   userType?: string;
-}
+
+
 };
   limit?: number;
 
 // Smart routing interfaces
-}
-}
-export interface RoutingRule {
-  id: string;
+
+
+export interface RoutingRule { id: string;
   name: string;
   description: string;
   conditions: RoutingCondition;
   action: RoutingAction;
   priority: number;
-  active: boolean;
-}
-}
-}
-export interface RoutingCondition {
-  field: string;
+  active: boolean }
+
+
+
+export interface RoutingCondition { field: string;
   operator: 'equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: any;
-  weight: number;
-}
-}
-}
-export interface RoutingAction {
-  type: 'assign_to_queue' | 'assign_to_agent' | 'escalate' | 'auto_resolve' | 'suggest_articles';
+  weight: number }
+
+
+
+export interface RoutingAction { type: 'assign_to_queue' | 'assign_to_agent' | 'escalate' | 'auto_resolve' | 'suggest_articles' }
   target: string;
   parameters: Record<string, any>;
   // Service configuration
-}
-}
-}
-export interface HelpRequestConfig {
-  autoResolution: {
+
+
+
+
+export interface HelpRequestConfig { autoResolution: { }
   enabled: boolean;
   confidenceThreshold: number;
   maxAttempts: number;
-}
+
+
 };
-  knowledgeBase: {
+  knowledgeBase: { 
   enabled: boolean;
   searchEndpoint: string;
   minRelevanceScore: number;
-  maxSuggestions: number;
-};
-  routing: {
+  maxSuggestions: number };
+  routing: { 
   enableSmartRouting: boolean;
   defaultQueue: string;
-  escalationRules: EscalationRule;
-};
-  sla: {
-  responseTargets: Record<HelpPriority, number>; // minutes,
-  resolutionTargets: Record<HelpPriority, number>; // minutes,
+  escalationRules: EscalationRule };
+  sla: { 
+  responseTargets: Record<HelpPriority, number>; // minutes
+  resolutionTargets: Record<HelpPriority, number>; // minutes }
   businessHoursOnly: boolean;
 };
-  analytics: {
+  analytics: { ,
   trackUserJourney: boolean;
   enableSentimentAnalysis: boolean;
-  collectFeedback: boolean;
-};
-  integrations: {
+  collectFeedback: boolean };
+  integrations: { ,
   ticketSystem: boolean;
   communityForum: boolean;
   chatbot: boolean;
-  emailSupport: boolean;
-};
-}
-}
-export interface EscalationRule {
-  trigger: 'time_based' | 'priority_based' | 'satisfaction_based' | 'complexity_based';
+  emailSupport: boolean };
+
+
+export interface EscalationRule { trigger: 'time_based' | 'priority_based' | 'satisfaction_based' | 'complexity_based';
   condition: string;
   escalateTo: string;
   delayMinutes: number;
   /**
   * Epic 16 Help Request Service
   *
-  * Intelligent help request management system with AI-powered routing,
+  * Intelligent help request management system with AI-powered routing }
   * knowledge base integration, and comprehensive analytics.
   */
-}
-}
+
+
 export class Epic16HelpRequestService extends EventEmitter {
   private requests: Map<string, HelpRequest> = new Map();
   private knowledgeBase: Map<string, KnowledgeBaseArticle> = new Map();
   private routingRules: RoutingRule = [];
   private config: HelpRequestConfig;
   private analytics: Map<string, any> = new Map();
-  constructor(config: Partial<HelpRequestConfig> = {}) {
-  super();
+  constructor(config: Partial<HelpRequestConfig> = {}) { super();
   this.config = {
   autoResolution: {
-  enabled: true,
-  confidenceThreshold: 0.85,
-  maxAttempts: 3,
-},
-  knowledgeBase: {
-  enabled: true,
-  searchEndpoint: '/api/knowledge-base/search',
-  minRelevanceScore: 0.7,
-  maxSuggestions: 5,
-},
-  routing: {
-  enableSmartRouting: true,
-  defaultQueue: 'general_support',
-  escalationRules: [],
-},
-  sla: {
+  enabled: true
+  confidenceThreshold: 0.85
+  maxAttempts: 3 }
+
+  knowledgeBase: { 
+  enabled: true
+  searchEndpoint: '/api/knowledge-base/search'
+  minRelevanceScore: 0.7
+  maxSuggestions: 5 }
+
+  routing: { 
+  enableSmartRouting: true
+  defaultQueue: 'general_support'
+  escalationRules: [] }
+
+  sla: { 
   responseTargets: {
-  [HelpPriority.CRITICAL]: 15,   // 15 minutes,
-  [HelpPriority.URGENT]: 30,     // 30 minutes,
-  [HelpPriority.HIGH]: 60,       // 1 hour,
-  [HelpPriority.MEDIUM]: 240,    // 4 hours,
-  [HelpPriority.LOW]: 480        // 8 hours,
-},
-  resolutionTargets: {
-  [HelpPriority.CRITICAL]: 240,  // 4 hours,
-  [HelpPriority.URGENT]: 480,    // 8 hours,
-  [HelpPriority.HIGH]: 1440,     // 24 hours,
-  [HelpPriority.MEDIUM]: 4320,   // 72 hours,
-  [HelpPriority.LOW]: 10080      // 7 days,
-},
-  businessHoursOnly: true;
-  },
-  analytics: {
-  trackUserJourney: true,
-  enableSentimentAnalysis: true,
-  collectFeedback: true,
-},
-  integrations: {
-  ticketSystem: true,
-  communityForum: true,
-  chatbot: true,
-  emailSupport: true,
-}
+  [HelpPriority.CRITICAL]: 15,   // 15 minutes
+  [HelpPriority.URGENT]: 30,     // 30 minutes
+  [HelpPriority.HIGH]: 60,       // 1 hour
+  [HelpPriority.MEDIUM]: 240,    // 4 hours
+  [HelpPriority.LOW]: 480        // 8 hours }
+
+  resolutionTargets: { [HelpPriority.CRITICAL]: 240,  // 4 hours
+  [HelpPriority.URGENT]: 480,    // 8 hours
+  [HelpPriority.HIGH]: 1440,     // 24 hours
+  [HelpPriority.MEDIUM]: 4320,   // 72 hours
+  [HelpPriority.LOW]: 10080      // 7 days }
+
+  businessHoursOnly: true
+
+  analytics: { 
+  trackUserJourney: true
+  enableSentimentAnalysis: true
+  collectFeedback: true }
+
+  integrations: { 
+  ticketSystem: true
+  communityForum: true
+  chatbot: true
+  emailSupport: true }
+
       ...config
     };
     this.initializeKnowledgeBase();
@@ -361,28 +349,26 @@ export class Epic16HelpRequestService extends EventEmitter {
   /**
    * Submit a new help request
    */
-  async submitHelpRequest(requestData: Omit<HelpRequest, 'id' | 'createdAt' | 'updatedAt' | 'sla' | 'analytics' | 'responses' | 'suggestedArticles' | 'routingDecision'>): Promise<HelpRequest> {
-
-  const requestId = this.generateRequestId();
+  async submitHelpRequest(requestData: Omit<HelpRequest, 'id' | 'createdAt' | 'updatedAt' | 'sla' | 'analytics' | 'responses' | 'suggestedArticles' | 'routingDecision'>): Promise<HelpRequest> { const requestId = this.generateRequestId();
   const now = new Date();
-  const helpRequest: HelpRequest = {,
-  ...requestData,
-  id: requestId,
-  createdAt: now,
-  updatedAt: now,
-  responses: [],
-  suggestedArticles: [],
-  sla: this.calculateSLA(requestData.priority),
+  const helpRequest: HelpRequest = {
+  ...requestData
+  id: requestId
+  createdAt: now
+  updatedAt: now
+  responses: []
+  suggestedArticles: []
+  sla: this.calculateSLA(requestData.priority)
   analytics: {
-  viewCount: 1,
-  interactionCount: 0,
-  resolutionSource: 'agent',
-},
-  routingDecision: {
-  strategy: 'support_agent',
-  confidence: 0.5,
-  reasoning: 'Initial submission - pending triage',
-  estimatedResolutionTime: this.config.sla.resolutionTargets[requestData.priority],
+  viewCount: 1
+  interactionCount: 0
+  resolutionSource: 'agent' }
+
+  routingDecision: { 
+  strategy: 'support_agent'
+  confidence: 0.5
+  reasoning: 'Initial submission - pending triage'
+  estimatedResolutionTime: this.config.sla.resolutionTargets[requestData.priority] }
 };
     this.requests.set(requestId, helpRequest);
     // Immediate processing pipeline
@@ -414,49 +400,45 @@ export class Epic16HelpRequestService extends EventEmitter {
   private async suggestKnowledgeBaseArticles(request: HelpRequest): Promise<void> {
 
     const searchQuery = `${request.title} ${request.description}`;}
-    const suggestions = await this.searchKnowledgeBase({)
-  query: searchQuery,
-  categories: [request.category],
-  limit: this.config.knowledgeBase.maxSuggestions,
+    const suggestions = await this.searchKnowledgeBase({ )
+  query: searchQuery
+  categories: [request.category]
+  limit: this.config.knowledgeBase.maxSuggestions }
 });
     request.suggestedArticles = suggestions.filter()
       article => article.relevanceScore >= this.config.knowledgeBase.minRelevanceScore
     );
-    if (request.suggestedArticles.length > 0) {
-  request.status = HelpRequestStatus.AUTO_SUGGESTED;
+    if (request.suggestedArticles.length > 0) { request.status = HelpRequestStatus.AUTO_SUGGESTED;
   // Add auto-suggestion response
   request.responses.push({)
-  id: this.generateResponseId(),
-  type: 'auto',
-  content: this.generateAutoSuggestionMessage(request.suggestedArticles),
-  author: 'system',
-  visibility: 'public',
-  helpful: null,
-  attachments: [],
-  timestamp: new Date(),
+  id: this.generateResponseId()
+  type: 'auto'
+  content: this.generateAutoSuggestionMessage(request.suggestedArticles)
+  author: 'system'
+  visibility: 'public'
+  helpful: null
+  attachments: []
+  timestamp: new Date() }
 });
   /**
    * Make intelligent routing decision
    */
-  private async makeRoutingDecision(request: HelpRequest): Promise<void> {
-
-  let bestRoute: RoutingDecision = {,
-  strategy: 'support_agent',
-  confidence: 0.5,
-  reasoning: 'Default routing',
-  estimatedResolutionTime: this.config.sla.resolutionTargets[request.priority],
+  private async makeRoutingDecision(request: HelpRequest): Promise<void> { let bestRoute: RoutingDecision = {
+  strategy: 'support_agent'
+  confidence: 0.5
+  reasoning: 'Default routing'
+  estimatedResolutionTime: this.config.sla.resolutionTargets[request.priority] }
 };
     // Check routing rules
-    for (const rule of this.routingRules) {
-      if (!rule.active) continue;
+    for (const rule of this.routingRules) { if (!rule.active) continue;
       const matchScore = this.evaluateRoutingRule(rule, request);
       if (matchScore > bestRoute.confidence) {
         bestRoute = {
-          strategy: rule.action.type as any,
-          confidence: matchScore,
+          strategy: rule.action.type as any
+          confidence: matchScore }
           reasoning: `Matched rule: ${rule.name}`}
-},
-  estimatedResolutionTime: rule.action.parameters.estimatedTime || bestRoute.estimatedResolutionTime,
+
+  estimatedResolutionTime: rule.action.parameters.estimatedTime || bestRoute.estimatedResolutionTime
           recommendedAgent: rule.action.target;
   };
     // Context-based routing improvements
@@ -465,9 +447,7 @@ export class Epic16HelpRequestService extends EventEmitter {
   /**
    * Attempt auto-resolution using knowledge base
    */
-  private async attemptAutoResolution(request: HelpRequest): Promise<void> {
-
-    if (request.suggestedArticles.length === 0) return;
+  private async attemptAutoResolution(request: HelpRequest): Promise<void> { if (request.suggestedArticles.length === 0) return;
     const bestArticle = request.suggestedArticles[0];
     if (bestArticle.relevanceScore >= this.config.autoResolution.confidenceThreshold) {
       // High confidence auto-resolution
@@ -476,14 +456,14 @@ export class Epic16HelpRequestService extends EventEmitter {
       request.resolvedAt = new Date();
       request.analytics.resolutionSource = 'knowledge_base';
       request.responses.push({)
-  id: this.generateResponseId(),
-        type: 'auto',
+  id: this.generateResponseId()
+        type: 'auto' }
         content: `This request has been automatically resolved using our knowledge base. Please review the suggested article: "${bestArticle.title}". If this doesn't resolve your issue, the request will be routed to our support team.`}
-},
-  author: 'system',
-        visibility: 'public',
-        helpful: null,
-        attachments: [],
+
+  author: 'system'
+        visibility: 'public'
+        helpful: null
+        attachments: []
         timestamp: new Date();
   });
       this.emit('help_request_auto_resolved', { request, article: bestArticle });
@@ -523,8 +503,7 @@ export class Epic16HelpRequestService extends EventEmitter {
       // Calculate relevance score
       let relevanceScore = 0;
       const contentText = `${article.title} ${article.summary} ${article.content}`.toLowerCase();}
-      for (const term of searchTerms) {
-        if (contentText.includes(term)) {
+      for (const term of searchTerms) { if (contentText.includes(term)) {
           relevanceScore += 0.1;
           // Boost for title matches
           if (article.title.toLowerCase().includes(term)) {
@@ -536,27 +515,23 @@ export class Epic16HelpRequestService extends EventEmitter {
       relevanceScore = Math.min(1.0, relevanceScore / searchTerms.length);
       if (relevanceScore > 0) {
         results.push({)
-  ...article,
+  ...article }
           relevanceScore
         });
     // Sort by relevance and rating
-    results.sort((a, b) => {
-      const scoreA = a.relevanceScore * 0.7 + (a.helpfulnessRating / 5) * 0.3;
+    results.sort((a, b) => { const scoreA = a.relevanceScore * 0.7 + (a.helpfulnessRating / 5) * 0.3;
       const scoreB = b.relevanceScore * 0.7 + (b.helpfulnessRating / 5) * 0.3;
-      return scoreB - scoreA;
-    });
+      return scoreB - scoreA });
     return results.slice(0, search.limit || 10);
   /**
    * Add response to help request
    */
-  async addResponse(requestId: string, responseData: Omit<HelpResponse, 'id' | 'timestamp'>): Promise<HelpResponse | null> {
-
-  const request = this.requests.get(requestId);
+  async addResponse(requestId: string, responseData: Omit<HelpResponse, 'id' | 'timestamp'>): Promise<HelpResponse | null> { const request = this.requests.get(requestId);
   if (!request) return null;
-  const response: HelpResponse = {,
-  ...responseData,
-  id: this.generateResponseId(),
-  timestamp: new Date(),
+  const response: HelpResponse = {
+  ...responseData
+  id: this.generateResponseId()
+  timestamp: new Date() }
 };
     request.responses.push(response);
     request.updatedAt = new Date();
@@ -591,9 +566,7 @@ export class Epic16HelpRequestService extends EventEmitter {
   /**
    * Escalate help request
    */
-  async escalateRequest(requestId: string, reason: string, escalatedBy: string): Promise<HelpRequest | null> {
-
-    const request = this.requests.get(requestId);
+  async escalateRequest(requestId: string, reason: string, escalatedBy: string): Promise<HelpRequest | null> { const request = this.requests.get(requestId);
     if (!request) return null;
     request.status = HelpRequestStatus.ESCALATED;
     request.escalationLevel += 1;
@@ -601,12 +574,12 @@ export class Epic16HelpRequestService extends EventEmitter {
     request.updatedAt = new Date();
     // Add escalation response
     await this.addResponse(requestId, {)
-  type: 'system',
+  type: 'system' }
       content: `Request escalated to level ${request.escalationLevel}. Reason: ${reason}`}
-},
-  author: escalatedBy,
-      visibility: 'internal',
-      helpful: null,
+
+  author: escalatedBy
+      visibility: 'internal'
+      helpful: null
       attachments: [];
   });
     this.emit('help_request_escalated', { request, reason, escalatedBy });
@@ -623,13 +596,9 @@ export class Epic16HelpRequestService extends EventEmitter {
     dateRange?: { start: Date; end: Date };
     limit?: number;
     offset?: number;
-  } = {}): Promise<{
-  requests: HelpRequest;
+ = {}): Promise<{ requests: HelpRequest;
   total: number;
-  hasMore: boolean;
-}> {
-
-  let filtered = Array.from(this.requests.values());
+  hasMore: boolean }> { let filtered = Array.from(this.requests.values());
   // Apply filters
   if (filters.status) {
   filtered = filtered.filter(r => filters.status!.includes(r.status));
@@ -656,13 +625,12 @@ export class Epic16HelpRequestService extends EventEmitter {
   return {
   requests,
   total,
-  hasMore: offset + limit < total,
+  hasMore: offset + limit < total }
 };
   /**
    * Get help request analytics
    */
-  async getAnalytics(timeRange: { start: Date; end: Date }): Promise<{
-  totalRequests: number;
+  async getAnalytics(timeRange: { start: Date; end: Date }): Promise<{ totalRequests: number;
   requestsByStatus: Record<HelpRequestStatus, number>;
   requestsByCategory: Record<HelpCategory, number>;
   averageResponseTime: number;
@@ -670,20 +638,15 @@ export class Epic16HelpRequestService extends EventEmitter {
   slaBreachRate: number;
   autoResolutionRate: number;
   customerSatisfaction: number;
-  deflectionRate: number;
-}> {
-    const requests = Array.from(this.requests.values()).filter(r =>;);
+  deflectionRate: number }> { const requests = Array.from(this.requests.values()).filter(r =>;);
       r.createdAt >= timeRange.start && r.createdAt <= timeRange.end
     );
     const totalRequests = requests.length;
     const requestsByStatus = requests.reduce((acc, request) => {
       acc[request.status] = (acc[request.status] || 0) + 1;
-      return acc;
-    }, {} as Record<HelpRequestStatus, number>);
-    const requestsByCategory = requests.reduce((acc, request) => {
-      acc[request.category] = (acc[request.category] || 0) + 1;
-      return acc;
-    }, {} as Record<HelpCategory, number>);
+      return acc }, {} as Record<HelpRequestStatus, number>);
+    const requestsByCategory = requests.reduce((acc, request) => { acc[request.category] = (acc[request.category] || 0) + 1;
+      return acc }, {} as Record<HelpCategory, number>);
     const responseTimes = requests;
       .filter(r => r.sla.responseTime.actual)
       .map(r => r.sla.responseTime.actual!);
@@ -699,136 +662,127 @@ export class Epic16HelpRequestService extends EventEmitter {
     const satisfaction = requests;
       .filter(r => r.satisfactionRating)
       .map(r => r.satisfactionRating!);
-    return {
-  totalRequests,
-  requestsByStatus,
-  requestsByCategory,
-  averageResponseTime: responseTimes.length > 0 ,
+    return { totalRequests
+  requestsByStatus
+  requestsByCategory
+  averageResponseTime: responseTimes.length > 0 
   ? responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length
-  : 0,
-  averageResolutionTime: resolutionTimes.length > 0 ,
+  : 0
+  averageResolutionTime: resolutionTimes.length > 0 
   ? resolutionTimes.reduce((sum, time) => sum + time, 0) / resolutionTimes.length
-  : 0,
-  slaBreachRate: totalRequests > 0 ? (slaBreached / totalRequests) * 100 : 0,
-  autoResolutionRate: totalRequests > 0 ? (autoResolved / totalRequests) * 100 : 0,
-  customerSatisfaction: satisfaction.length > 0 ,
+  : 0
+  slaBreachRate: totalRequests > 0 ? (slaBreached / totalRequests) * 100 : 0
+  autoResolutionRate: totalRequests > 0 ? (autoResolved / totalRequests) * 100 : 0
+  customerSatisfaction: satisfaction.length > 0 
   ? satisfaction.reduce((sum, rating) => sum + rating, 0) / satisfaction.length
-  : 0,
-  deflectionRate: totalRequests > 0 ? (autoResolved / totalRequests) * 100 : 0,
+  : 0
+  deflectionRate: totalRequests > 0 ? (autoResolved / totalRequests) * 100 : 0 }
 };
   // Private helper methods
   private generateRequestId(): string {
     return `HELP-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;}
   private generateResponseId(): string {
     return `resp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;}
-  private calculateSLA(priority: HelpPriority): HelpSLA {
-  const now = new Date();
+  private calculateSLA(priority: HelpPriority): HelpSLA { const now = new Date();
   const responseTarget = this.config.sla.responseTargets[priority];
   const resolutionTarget = this.config.sla.resolutionTargets[priority];
   return {
   responseTime: {
-  target: responseTarget,
-  deadline: new Date(now.getTime() + responseTarget * 60000),
-  breached: false,
-},
-  resolutionTime: {
-  target: resolutionTarget,
-  deadline: new Date(now.getTime() + resolutionTarget * 60000),
-  breached: false,
-},
+  target: responseTarget
+  deadline: new Date(now.getTime() + responseTarget * 60000)
+  breached: false }
+
+  resolutionTime: { 
+  target: resolutionTarget
+  deadline: new Date(now.getTime() + resolutionTarget * 60000)
+  breached: false }
+
   escalationThreshold: Math.floor(resolutionTarget * 0.7);
   };
-  private initializeKnowledgeBase(): void {
-  // Sample knowledge base articles
+  private initializeKnowledgeBase(): void { // Sample knowledge base articles
   const sampleArticles: KnowledgeBaseArticle = [
   {
-  id: 'kb-001',
-  title: 'Getting Started with Template Marketplace',
-  summary: 'Learn how to browse, purchase, and use templates from our marketplace',
-  content: 'Our template marketplace offers thousands of professional templates...',
-  category: HelpCategory.GETTING_STARTED,
-  tags: ['templates', 'marketplace', 'getting-started'],
-  relevanceScore: 0,
-  helpfulnessRating: 4.8,
-  viewCount: 1250,
-  lastUpdated: new Date(),
-  url: '/help/getting-started-templates',
-}
-      {
-  id: 'kb-002',
-  title: 'How to Submit Your Own Templates',
-  summary: 'Step-by-step guide to becoming a template seller',
-  content: 'To become a template seller, you need to follow these steps...',
-  category: HelpCategory.TEMPLATES,
-  tags: ['templates', 'selling', 'submission'],
-  relevanceScore: 0,
-  helpfulnessRating: 4.6,
-  viewCount: 890,
-  lastUpdated: new Date(),
-  url: '/help/template-submission',
-}
-      {
-  id: 'kb-003',
-  title: 'Billing and Payment Issues',
-  summary: 'Common billing questions and troubleshooting steps',
-  content: 'If you are experiencing billing issues...',
-  category: HelpCategory.BILLING,
-  tags: ['billing', 'payment', 'troubleshooting'],
-  relevanceScore: 0,
-  helpfulnessRating: 4.2,
-  viewCount: 650,
-  lastUpdated: new Date(),
+  id: 'kb-001'
+  title: 'Getting Started with Template Marketplace'
+  summary: 'Learn how to browse, purchase, and use templates from our marketplace'
+  content: 'Our template marketplace offers thousands of professional templates...'
+  category: HelpCategory.GETTING_STARTED
+  tags: ['templates', 'marketplace', 'getting-started']
+  relevanceScore: 0
+  helpfulnessRating: 4.8
+  viewCount: 1250
+  lastUpdated: new Date()
+  url: '/help/getting-started-templates' }
+
+      { id: 'kb-002'
+  title: 'How to Submit Your Own Templates'
+  summary: 'Step-by-step guide to becoming a template seller'
+  content: 'To become a template seller, you need to follow these steps...'
+  category: HelpCategory.TEMPLATES
+  tags: ['templates', 'selling', 'submission']
+  relevanceScore: 0
+  helpfulnessRating: 4.6
+  viewCount: 890
+  lastUpdated: new Date()
+  url: '/help/template-submission' }
+
+      { id: 'kb-003'
+  title: 'Billing and Payment Issues'
+  summary: 'Common billing questions and troubleshooting steps'
+  content: 'If you are experiencing billing issues...'
+  category: HelpCategory.BILLING
+  tags: ['billing', 'payment', 'troubleshooting']
+  relevanceScore: 0
+  helpfulnessRating: 4.2
+  viewCount: 650
+  lastUpdated: new Date() }
   url: '/help/billing-issues'];
-  sampleArticles.forEach(article => {)
-  this.knowledgeBase.set(article.id, article);
-});
-  private initializeRoutingRules(): void {
-    // Sample routing rules
+  sampleArticles.forEach(article => { )
+  this.knowledgeBase.set(article.id, article) });
+  private initializeRoutingRules(): void { // Sample routing rules
     this.routingRules = [
       {
-        id: 'rule-001',
-        name: 'High Value Customer Priority',
-        description: 'Route premium/enterprise customers to senior agents',
-        conditions: [,
+        id: 'rule-001'
+        name: 'High Value Customer Priority'
+        description: 'Route premium/enterprise customers to senior agents' }
+        conditions: [
           { field: 'userTier', operator: 'in', value: ['premium', 'enterprise'], weight: 1.0 }
-        ],
-        action: {
-  type: 'assign_to_agent',
-          target: 'senior_agent_queue',
+        ]
+        action: { 
+  type: 'assign_to_agent'
+          target: 'senior_agent_queue' }
           parameters: { estimatedTime: 30 }
-  },
-  priority: 100,
+
+  priority: 100
         active: true;
-  }
-      {
-        id: 'rule-002',
-        name: 'Technical Issues to Specialists',
-        description: 'Route technical issues to technical specialists',
-        conditions: [,
-          { field: 'category', operator: 'equals', value: HelpCategory.TECHNICAL, weight: 0.8 },
+
+      { id: 'rule-002'
+        name: 'Technical Issues to Specialists'
+        description: 'Route technical issues to technical specialists' }
+        conditions: [
+          { field: 'category', operator: 'equals', value: HelpCategory.TECHNICAL, weight: 0.8 }
           { field: 'type', operator: 'equals', value: HelpRequestType.TECHNICAL_ISSUE, weight: 0.9 }
-        ],
-        action: {
-  type: 'assign_to_agent',
-          target: 'technical_specialist',
+        ]
+        action: { 
+  type: 'assign_to_agent'
+          target: 'technical_specialist' }
           parameters: { estimatedTime: 45 }
-  },
-  priority: 80,
+
+  priority: 80
         active: true;
-  }
-      {
-        id: 'rule-003',
-        name: 'Billing to Finance Team',
-        description: 'Route billing inquiries to finance specialists',
-        conditions: [,
+
+      { id: 'rule-003'
+        name: 'Billing to Finance Team'
+        description: 'Route billing inquiries to finance specialists' }
+        conditions: [
           { field: 'category', operator: 'equals', value: HelpCategory.BILLING, weight: 1.0 }
-        ],
-        action: {
-  type: 'assign_to_agent',
-          target: 'finance_team',
+        ]
+        action: { 
+  type: 'assign_to_agent'
+          target: 'finance_team' }
           parameters: { estimatedTime: 60 }
-  },
-  priority: 90,
+
+  priority: 90
         active: true];
   private evaluateRoutingRule(rule: RoutingRule, request: HelpRequest): number {
     let totalScore = 0;
@@ -879,18 +833,16 @@ export class Epic16HelpRequestService extends EventEmitter {
     return `I found some helpful articles that might resolve your issue:
 ${articleList}
 Please review these resources. If they don't help, I'll connect you with our support team.`;
-  private async assignToAvailableAgent(request: HelpRequest): Promise<string> {
-
-  // Simplified agent assignment - in real implementation would check availability
+  private async assignToAvailableAgent(request: HelpRequest): Promise<string> { // Simplified agent assignment - in real implementation would check availability
   const agents = ['agent-1', 'agent-2', 'agent-3', 'agent-4'];
   return agents[request.id.length % agents.length];
-  private async assignToSpecialist(request: HelpRequest): Promise<string> {,
+  private async assignToSpecialist(request: HelpRequest): Promise<string> {
   // Route to appropriate specialist based on category
   const specialists = {
-  [HelpCategory.TECHNICAL]: 'tech-specialist-1',
-  [HelpCategory.BILLING]: 'billing-specialist-1',
-  [HelpCategory.TEMPLATES]: 'template-specialist-1',
-  [HelpCategory.MARKETPLACE]: 'marketplace-specialist-1',
+  [HelpCategory.TECHNICAL]: 'tech-specialist-1'
+  [HelpCategory.BILLING]: 'billing-specialist-1'
+  [HelpCategory.TEMPLATES]: 'template-specialist-1'
+  [HelpCategory.MARKETPLACE]: 'marketplace-specialist-1' }
 };
     return specialists[request.category] || 'general-specialist-1';
   private async routeToCommunity(request: HelpRequest): Promise<void> {

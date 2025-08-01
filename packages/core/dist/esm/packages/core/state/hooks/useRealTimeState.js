@@ -68,15 +68,19 @@ UseRealTimeStateReturn;
         disconnect,
         error
     };
-    (filters = [], options = {}) => {
-        const [data, setData] = useState(null);
-        const [isLoading, setIsLoading] = useState(true);
-        const [error, setError] = useState(null);
-        const [lastUpdated, setLastUpdated] = useState(null);
-        const [subscription, setSubscription] = useState(null);
-        const manager = useRef(globalRealTimeManager);
-        const { enabled = true, ...subscriptionOptions } = options;
-        const callback = useCallback((change, metadata) => {
+    ();
+    filters: SubscriptionFilter = [],
+        options;
+    UseStateSubscriptionOptions = {};
+    UseStateSubscriptionReturn < T > {
+        const: [data, setData] = useState(null),
+        const: [isLoading, setIsLoading] = useState(true),
+        const: [error, setError] = useState(null),
+        const: [lastUpdated, setLastUpdated] = useState(null),
+        const: [subscription, setSubscription] = useState(null),
+        const: manager = useRef(globalRealTimeManager),
+        const: { enabled = true, ...subscriptionOptions } = options,
+        const: callback = useCallback((change, metadata) => {
             try {
                 // Update data based on the change
                 setData(prevData => { });
@@ -86,10 +90,8 @@ UseRealTimeStateReturn;
                 }
             }
             finally { }
-        });
-        setLastUpdated(metadata.timestamp);
-        setIsLoading(false);
-        setError(null);
+        }),
+        setLastUpdated(metadata) { }, : .timestamp
     };
     try { }
     catch (err) {

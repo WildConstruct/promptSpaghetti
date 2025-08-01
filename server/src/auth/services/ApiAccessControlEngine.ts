@@ -16,8 +16,8 @@ import { EventEmitter } from 'events';
 // API Access Control Types
 // =============================================================================
 
-}
-}
+
+
 export interface ApiAccessRequest {
   requestId: string;
   userId: string;
@@ -38,8 +38,9 @@ export interface ApiAccessRequest {
     current: number;
     limit: number;
     period: string;
-}
-}
+
+
+
   };
   
   // Security context
@@ -58,10 +59,10 @@ export interface ApiAccessRequest {
   
   // Custom attributes for extensibility
   customAttributes?: Record<string, any>;
-}
 
-}
-}
+
+
+
 export interface ApiAccessDecision {
   requestId: string;
   allowed: boolean;
@@ -79,8 +80,9 @@ export interface ApiAccessDecision {
     remainingRequests: number;
     resetTime: Date;
     bucketName: string;
-}
-}
+
+
+
   };
   
   // Usage control decisions
@@ -109,10 +111,10 @@ export interface ApiAccessDecision {
   // Audit and compliance
   auditRequired: boolean;
   complianceFlags: string[];
-}
 
-}
-}
+
+
+
 export interface ApiAccessPolicy {
   policyId: string;
   name: string;
@@ -128,8 +130,9 @@ export interface ApiAccessPolicy {
     resources?: string[];
     userGroups?: string[];
     organizations?: string[];
-}
-}
+
+
+
   };
   
   // Policy conditions
@@ -146,31 +149,33 @@ export interface ApiAccessPolicy {
     version: number;
     tags: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ApiPolicyCondition {
   type: 'user' | 'role' | 'permission' | 'time' | 'location' | 'rate_limit' | 'usage_quota' | 'risk_score' | 'device' | 'custom';
   field: string;
   operator: 'eq' | 'ne' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'nin' | 'contains' | 'regex' | 'exists' | 'between';
   value: any;
   logicalOperator?: 'AND' | 'OR' | 'NOT';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApiPolicyAction {
   type: 'allow' | 'deny' | 'rate_limit' | 'usage_control' | 'require_mfa' | 'require_approval' | 'log' | 'alert' | 'transform' | 'redirect';
   parameters: Record<string, any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ApiAccessEngineConfig {
   // Core settings
   enabled: boolean;
@@ -206,9 +211,10 @@ export interface ApiAccessEngineConfig {
   permissionServiceEnabled: boolean;
   rbacIntegrationEnabled: boolean;
   externalPolicyProvidersEnabled: boolean;
-}
-}
-}
+
+
+
+
 
 // =============================================================================
 // API Access Control Engine Implementation
@@ -252,7 +258,7 @@ export class ApiAccessControlEngine extends EventEmitter {
     };
 
     this.initializeEngine();
-  }
+
 
   /**
    * Main access control decision method
@@ -263,7 +269,7 @@ export class ApiAccessControlEngine extends EventEmitter {
     
     if (!this.config.enabled) {
       return this.createAllowDecision(request.requestId, 'Access control disabled', startTime);
-    }
+
 
     try {
       // Check cache first
@@ -271,8 +277,8 @@ export class ApiAccessControlEngine extends EventEmitter {
         const cached = this.getCachedDecision(request);
         if (cached) {
           return { ...cached, cached: true, decisionTime: Date.now() - startTime };
-        }
-      }
+
+
 
       // Execute access control evaluation pipeline
       const decision = await this.evaluateAccessRequest(request, startTime);
@@ -280,7 +286,7 @@ export class ApiAccessControlEngine extends EventEmitter {
       // Cache the decision
       if (this.config.cacheEnabled && decision.allowed) {
         this.cacheDecision(request, decision);
-      }
+
       
       // Emit events for monitoring
       this.emit('access_decision', { request, decision });
@@ -288,19 +294,18 @@ export class ApiAccessControlEngine extends EventEmitter {
       // Audit if required
       if (this.shouldAuditDecision(decision)) {
         await this.auditAccessDecision(request, decision);
-      }
+
       
       return decision;
-      
-    } catch (error) {
+ catch (error) {
       const errorDecision = this.createErrorDecision(request.requestId, error as Error, startTime);
       
       // Always audit errors
       await this.auditAccessDecision(request, errorDecision);
       
       return errorDecision;
-    }
-  }
+
+
 
   /**
    * Core access evaluation pipeline
@@ -316,8 +321,8 @@ export class ApiAccessControlEngine extends EventEmitter {
       
       if (!permissionResult.allowed) {
         return decisionBuilder.buildDenyDecision(`Permission denied: ${permissionResult.reason}`);
-      }
-    }
+
+
     
     // 2. Policy-based access control
     const policyResults = await this.evaluatePolicies(request);
@@ -327,7 +332,7 @@ export class ApiAccessControlEngine extends EventEmitter {
     const denyPolicies = policyResults.filter(p => p.decision === 'deny');
     if (denyPolicies.length > 0) {
       return decisionBuilder.buildDenyDecision(`Policy denied: ${denyPolicies[0].reason}`);
-    }
+
     
     // 3. Rate limiting evaluation
     if (this.config.rateLimitingEnabled) {
@@ -336,8 +341,8 @@ export class ApiAccessControlEngine extends EventEmitter {
       
       if (!rateLimitResult.allowed) {
         return decisionBuilder.buildDenyDecision(`Rate limit exceeded: ${rateLimitResult.bucketName}`);
-      }
-    }
+
+
     
     // 4. Usage control evaluation
     if (this.config.usageControlEnabled && request.usageQuota) {
@@ -346,8 +351,8 @@ export class ApiAccessControlEngine extends EventEmitter {
       
       if (!usageResult.allowed) {
         return decisionBuilder.buildDenyDecision('Usage quota exceeded');
-      }
-    }
+
+
     
     // 5. Risk assessment
     if (this.config.riskAssessmentEnabled) {
@@ -356,12 +361,12 @@ export class ApiAccessControlEngine extends EventEmitter {
       
       if (riskResult.score > 80) { // High risk threshold
         return decisionBuilder.buildDenyDecision(`High risk score: ${riskResult.score}`);
-      }
-    }
+
+
     
     // If we get here, access is allowed
     return decisionBuilder.buildAllowDecision('Access granted');
-  }
+
 
   /**
    * Evaluate permissions using the permission assignment service
@@ -382,12 +387,12 @@ export class ApiAccessControlEngine extends EventEmitter {
           method: request.method,
           ip: request.ip,
           userAgent: request.userAgent
-        }
-      }
+
+
     };
     
     return await this.permissionService.checkPermission(permissionCheck);
-  }
+
 
   /**
    * Evaluate all applicable policies
@@ -407,11 +412,11 @@ export class ApiAccessControlEngine extends EventEmitter {
       // If this is a deny policy and it matches, we can short-circuit
       if (result.decision === 'deny' && result.conditionsMet) {
         break;
-      }
-    }
+
+
     
     return results;
-  }
+
 
   /**
    * Evaluate rate limits
@@ -425,14 +430,14 @@ export class ApiAccessControlEngine extends EventEmitter {
     if (new Date() > bucket.resetTime) {
       bucket.count = 0;
       bucket.resetTime = new Date(Date.now() + 60000); // 1 minute window
-    }
+
     
     const allowed = bucket.count < this.config.globalRateLimit;
     
     if (allowed) {
       bucket.count++;
       this.rateLimitBuckets.set(bucketName, bucket);
-    }
+
     
     return {
       allowed,
@@ -440,7 +445,7 @@ export class ApiAccessControlEngine extends EventEmitter {
       resetTime: bucket.resetTime,
       bucketName
     };
-  }
+
 
   /**
    * Evaluate usage quotas
@@ -449,7 +454,7 @@ export class ApiAccessControlEngine extends EventEmitter {
 
     if (!request.usageQuota) {
       return { allowed: true, remainingQuota: -1, quotaPeriod: 'none', quotaResetTime: new Date() };
-    }
+
     
     const allowed = request.usageQuota.current < request.usageQuota.limit;
     
@@ -459,7 +464,7 @@ export class ApiAccessControlEngine extends EventEmitter {
       quotaPeriod: request.usageQuota.period,
       quotaResetTime: new Date(Date.now() + 86400000) // Next day
     };
-  }
+
 
   /**
    * Evaluate risk score
@@ -474,31 +479,31 @@ export class ApiAccessControlEngine extends EventEmitter {
     if (request.riskScore) {
       score += request.riskScore;
       factors.push('provided_risk_score');
-    }
+
     
     // IP-based risk
     if (this.isHighRiskIP(request.ip)) {
       score += 30;
       factors.push('high_risk_ip');
       recommendations.push('Consider requiring MFA for this IP');
-    }
+
     
     // Time-based risk (outside business hours)
     const hour = new Date().getHours();
     if (hour < 6 || hour > 22) {
       score += 10;
       factors.push('off_hours_access');
-    }
+
     
     // Device risk
     if (!request.deviceFingerprint) {
       score += 15;
       factors.push('unknown_device');
       recommendations.push('Device fingerprinting recommended');
-    }
+
     
     return { score, factors, recommendations };
-  }
+
 
   // =============================================================================
   // Helper Methods
@@ -509,7 +514,7 @@ export class ApiAccessControlEngine extends EventEmitter {
     this.startCacheCleanup();
     
     console.log('✅ API Access Control Engine initialized');
-  }
+
 
   private loadSystemPolicies(): void {
     // Load default system policies
@@ -526,7 +531,7 @@ export class ApiAccessControlEngine extends EventEmitter {
         actions: [
           { type: 'allow', parameters: {} }
         ]
-  }
+
       {
         name: 'Block High Risk IPs',
         description: 'Block access from known high-risk IP addresses',
@@ -539,7 +544,7 @@ export class ApiAccessControlEngine extends EventEmitter {
         actions: [
           { type: 'deny', parameters: { reason: 'High risk IP address' } }
         ]
-      }
+
     ];
     
     for (const policyData of defaultPolicies) {
@@ -552,12 +557,12 @@ export class ApiAccessControlEngine extends EventEmitter {
           lastModified: new Date(),
           version: 1,
           tags: ['system', 'built-in']
-        }
+
       };
       
       this.policies.set(policy.policyId, policy);
-    }
-  }
+
+
 
   private getCachedDecision(request: ApiAccessRequest): ApiAccessDecision | null {
     const cacheKey = this.generateCacheKey(request);
@@ -565,14 +570,14 @@ export class ApiAccessControlEngine extends EventEmitter {
     
     if (cached && cached.expiry > new Date()) {
       return cached.decision;
-    }
+
     
     if (cached) {
       this.decisionCache.delete(cacheKey);
-    }
+
     
     return null;
-  }
+
 
   private cacheDecision(request: ApiAccessRequest, decision: ApiAccessDecision): void {
     const cacheKey = this.generateCacheKey(request);
@@ -584,12 +589,12 @@ export class ApiAccessControlEngine extends EventEmitter {
     if (this.decisionCache.size > this.config.maxCacheEntries) {
       const oldestKey = this.decisionCache.keys().next().value;
       this.decisionCache.delete(oldestKey);
-    }
-  }
+
+
 
   private generateCacheKey(request: ApiAccessRequest): string {
     return `${request.userId}:${request.endpoint}:${request.method}:${request.operation}`;
-  }
+
 
   private findApplicablePolicies(request: ApiAccessRequest): ApiAccessPolicy[] {
     const applicable: ApiAccessPolicy[] = [];
@@ -599,11 +604,11 @@ export class ApiAccessControlEngine extends EventEmitter {
       
       if (this.policyAppliesToRequest(policy, request)) {
         applicable.push(policy);
-      }
-    }
+
+
     
     return applicable;
-  }
+
 
   private policyAppliesToRequest(policy: ApiAccessPolicy, request: ApiAccessRequest): boolean {
     const scope = policy.scope;
@@ -611,20 +616,20 @@ export class ApiAccessControlEngine extends EventEmitter {
     // Check endpoint patterns
     if (scope.endpoints && !this.matchesPatterns(request.endpoint, scope.endpoints)) {
       return false;
-    }
+
     
     // Check methods
     if (scope.methods && !scope.methods.includes(request.method)) {
       return false;
-    }
+
     
     // Check operations
     if (scope.operations && !scope.operations.includes(request.operation)) {
       return false;
-    }
+
     
     return true;
-  }
+
 
   private async evaluatePolicy(policy: ApiAccessPolicy, request: ApiAccessRequest): Promise<PolicyEvaluationResult> {
 
@@ -637,10 +642,10 @@ export class ApiAccessControlEngine extends EventEmitter {
       
       if (denyActions.length > 0) {
         decision = 'deny';
-      } else if (allowActions.length > 0) {
+ else if (allowActions.length > 0) {
         decision = 'allow';
-      }
-    }
+
+
     
     return {
       policyId: policy.policyId,
@@ -649,7 +654,7 @@ export class ApiAccessControlEngine extends EventEmitter {
       conditionsMet,
       reason: conditionsMet ? 'Policy conditions met' : 'Policy conditions not met'
     };
-  }
+
 
   private async evaluateConditions(conditions: ApiPolicyCondition[], request: ApiAccessRequest): Promise<boolean> {
 
@@ -659,10 +664,10 @@ export class ApiAccessControlEngine extends EventEmitter {
     for (const condition of conditions) {
       const result = await this.evaluateCondition(condition, request);
       if (!result) return false;
-    }
+
     
     return true;
-  }
+
 
   private async evaluateCondition(condition: ApiPolicyCondition, request: ApiAccessRequest): Promise<boolean> {
 
@@ -676,8 +681,8 @@ export class ApiAccessControlEngine extends EventEmitter {
       return this.evaluateCustomCondition(condition, request);
     default:
       return true;
-    }
-  }
+
+
 
   private evaluateTimeCondition(condition: ApiPolicyCondition): boolean {
     const now = new Date();
@@ -685,24 +690,24 @@ export class ApiAccessControlEngine extends EventEmitter {
     
     if (condition.field === 'business_hours') {
       return hour >= 9 && hour <= 17;
-    }
+
     
     return true;
-  }
+
 
   private evaluateCustomCondition(condition: ApiPolicyCondition, request: ApiAccessRequest): boolean {
     if (condition.field === 'high_risk_ip') {
       return this.isHighRiskIP(request.ip);
-    }
+
     
     return false;
-  }
+
 
   private isHighRiskIP(ip: string): boolean {
     // Placeholder high-risk IP detection
     const highRiskRanges = ['192.168.1.', '10.0.0.'];
     return highRiskRanges.some(range => ip.startsWith(range));
-  }
+
 
   private matchesPatterns(value: string, patterns: string[]): boolean {
     return patterns.some(pattern => {
@@ -711,7 +716,7 @@ export class ApiAccessControlEngine extends EventEmitter {
       const regex = new RegExp(pattern.replace(/\*/g, '.*'));
       return regex.test(value);
     });
-  }
+
 
   private mapEndpointToPermissionType(endpoint: string): any {
     // Map API endpoints to permission types
@@ -720,7 +725,7 @@ export class ApiAccessControlEngine extends EventEmitter {
     if (endpoint.includes('/usage/')) return 'usage_control';
     if (endpoint.includes('/monitor/')) return 'monitoring';
     return 'endpoint_access';
-  }
+
 
   private mapOperationToPermissionAction(operation: string): any {
     const actionMap: Record<string, string> = {
@@ -737,7 +742,7 @@ export class ApiAccessControlEngine extends EventEmitter {
     };
     
     return actionMap[operation.toLowerCase()] || 'read';
-  }
+
 
   private createAllowDecision(requestId: string, reason: string, startTime: number): ApiAccessDecision {
     return {
@@ -751,7 +756,7 @@ export class ApiAccessControlEngine extends EventEmitter {
       auditRequired: false,
       complianceFlags: []
     };
-  }
+
 
   private createErrorDecision(requestId: string, error: Error, startTime: number): ApiAccessDecision {
     const decision = this.config.policyEvaluationMode === 'fail_open';
@@ -768,14 +773,14 @@ export class ApiAccessControlEngine extends EventEmitter {
       auditRequired: true,
       complianceFlags: ['error_occurred']
     };
-  }
+
 
   private shouldAuditDecision(decision: ApiAccessDecision): boolean {
     if (this.config.auditAllDecisions) return true;
     if (this.config.auditDeniedOnly && !decision.allowed) return true;
     if (this.config.auditHighRiskOnly && decision.riskAssessment && decision.riskAssessment.score > 60) return true;
     return decision.auditRequired;
-  }
+
 
   private async auditAccessDecision(request: ApiAccessRequest, decision: ApiAccessDecision): Promise<void> {
 
@@ -792,9 +797,9 @@ export class ApiAccessControlEngine extends EventEmitter {
         decisionTime: decision.decisionTime,
         ip: request.ip,
         userAgent: request.userAgent
-      }
+
     });
-  }
+
 
   private startCacheCleanup(): void {
     setInterval(() => {
@@ -802,10 +807,10 @@ export class ApiAccessControlEngine extends EventEmitter {
       for (const [key, cached] of this.decisionCache.entries()) {
         if (cached.expiry <= now) {
           this.decisionCache.delete(key);
-        }
-      }
+
+
     }, 60000); // Clean up every minute
-  }
+
 
   // Public management methods
   async addPolicy(policy: Omit<ApiAccessPolicy, 'policyId' | 'metadata'>): Promise<string> {
@@ -820,22 +825,22 @@ export class ApiAccessControlEngine extends EventEmitter {
         lastModified: new Date(),
         version: 1,
         tags: []
-      }
+
     };
     
     this.policies.set(policyId, fullPolicy);
     return policyId;
-  }
+
 
   async removePolicy(policyId: string): Promise<boolean> {
 
     return this.policies.delete(policyId);
-  }
+
 
   async clearCache(): Promise<void> {
 
     this.decisionCache.clear();
-  }
+
 
   getEngineStats(): any {
     return {
@@ -844,8 +849,8 @@ export class ApiAccessControlEngine extends EventEmitter {
       rateLimitBuckets: this.rateLimitBuckets.size,
       config: this.config
     };
-  }
-}
+
+
 
 // =============================================================================
 // Helper Classes and Types
@@ -864,23 +869,23 @@ class AccessDecisionBuilder {
       auditRequired: false,
       complianceFlags: []
     };
-  }
+
   
   addPermissionResult(result: PermissionCheckResult): void {
     this.decision.matchedPermissions = result.matchingPermissions.map(p => p.permissionId);
-  }
+
   
   addPolicyResults(results: PolicyEvaluationResult[]): void {
     this.decision.evaluatedPolicies = results.map(r => r.policyId);
-  }
+
   
   addRateLimitResult(result: RateLimitResult): void {
     this.decision.rateLimitDecision = result;
-  }
+
   
   addUsageControlResult(result: UsageControlResult): void {
     this.decision.usageControlDecision = result;
-  }
+
   
   addRiskAssessment(result: RiskAssessmentResult): void {
     this.decision.riskAssessment = result;
@@ -888,8 +893,8 @@ class AccessDecisionBuilder {
       this.decision.securityFlags = this.decision.securityFlags || [];
       this.decision.securityFlags.push('high_risk_score');
       this.decision.auditRequired = true;
-    }
-  }
+
+
   
   buildAllowDecision(reason: string): ApiAccessDecision {
     return {
@@ -897,8 +902,8 @@ class AccessDecisionBuilder {
       allowed: true,
       reason,
       decisionTime: Date.now() - (this.decision.decisionTime || 0)
-    } as ApiAccessDecision;
-  }
+ as ApiAccessDecision;
+
   
   buildDenyDecision(reason: string): ApiAccessDecision {
     return {
@@ -907,52 +912,56 @@ class AccessDecisionBuilder {
       reason,
       auditRequired: true,
       decisionTime: Date.now() - (this.decision.decisionTime || 0)
-    } as ApiAccessDecision;
-  }
-}
+ as ApiAccessDecision;
 
-}
-}
+
+
+
+
 interface PolicyEvaluationResult {
   policyId: string;
   policyName: string;
   decision: 'allow' | 'deny' | 'conditional';
   conditionsMet: boolean;
   reason: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RateLimitResult {
   allowed: boolean;
   remainingRequests: number;
   resetTime: Date;
   bucketName: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UsageControlResult {
   allowed: boolean;
   remainingQuota: number;
   quotaPeriod: string;
   quotaResetTime: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface RiskAssessmentResult {
   score: number;
   factors: string[];
   recommendations: string[];
-}
-}
-}
+
+
+
+
 
 export default ApiAccessControlEngine;

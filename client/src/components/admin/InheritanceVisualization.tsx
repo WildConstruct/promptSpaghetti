@@ -12,9 +12,10 @@ import {
   AssignmentTargetType,
   InheritanceType,
   AssignmentStatus
-} from '../../types/PolicyAssignmentTypes';
+ from '../../types/PolicyAssignmentTypes';
 import './InheritanceVisualization.css';
-}
+
+
 interface InheritanceVisualizationProps {
   assignments: PolicyAssignment;
   interface InheritanceNode {
@@ -37,11 +38,12 @@ interface InheritanceVisualizationProps {
   filterByTargetType: AssignmentTargetType | '';,
   maxDepth: number,
   layout: 'tree' | 'radial' | 'force';
-  }
+
+
 
 export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> = ({
   assignments
-}
+
 }) => {
   const [inheritanceTree, setInheritanceTree] = useState<InheritanceNode[]>([]);
   const [selectedNode, setSelectedNode] = useState<InheritanceNode | null>(null);
@@ -117,7 +119,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
         node.parent = parent;
         parent.children.push(node);
         node.level = parent.level + 1;
-      } else {
+ else {
         rootNodes.push(node);
     });
     // Filter by max depth
@@ -147,7 +149,7 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
   };
   const getSpecificityScore = (node: InheritanceNode, target: InheritanceNode): number => {
     // Higher score = more specific relationship
-    const typeHierarchy = [;
+    const typeHierarchy = [
       AssignmentTargetType.SYSTEM,
       AssignmentTargetType.ORG_UNIT,
       AssignmentTargetType.DEPARTMENT,
@@ -162,9 +164,9 @@ export const InheritanceVisualization: React.FC<InheritanceVisualizationProps> =
   const calculateLayout = useCallback((nodes: InheritanceNode) => {
     if (options.layout === 'tree') {
       calculateTreeLayout(nodes);
-    } else if (options.layout === 'radial') {
+ else if (options.layout === 'radial') {
       calculateRadialLayout(nodes);
-    } else {
+ else {
       calculateForceLayout(nodes);
   }, [options.layout, calculateTreeLayout, calculateRadialLayout, calculateForceLayout]);
   const calculateTreeLayout = useCallback((nodes: InheritanceNode) => {

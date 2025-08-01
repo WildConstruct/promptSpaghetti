@@ -7,30 +7,26 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { NodeRenderer } from '../components/NodeRenderer';
-const mockGetNodeMeta = jest.fn((nodeType: string) => ({,)
+const mockGetNodeMeta = jest.fn((nodeType: string) => ({ );
   label: nodeType,
   category: 'general',
-  icon: '🔧',
+  icon: '🔧' }
 }));
-const mockGetCategoryColor = jest.fn((category: string) => {
-  const colors = {
+const mockGetCategoryColor = jest.fn((category: string) => { const colors = {
   general: '#3182ce',
   input: '#38a169',
   output: '#d69e2e',
-  processing: '#805ad5',
+  processing: '#805ad5' }
 };
   return colors[category as keyof typeof colors] || '#718096';
 });
 const mockOnSelect = jest.fn();
-describe('NodeRenderer', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  const defaultProps = {
-  id: 'node-1',
-  data: {
+describe('NodeRenderer', () => { beforeEach(() => {
+    jest.clearAllMocks() });
+  const defaultProps = { id: 'node-1',
+  data: {,
   label: 'Test Node',
-  nodeType: 'WeightedChoice',
+  nodeType: 'WeightedChoice' }
 },
   onSelect: mockOnSelect,
     getNodeMeta: mockGetNodeMeta,
@@ -45,15 +41,15 @@ describe('NodeRenderer', () => {
   it('displays node with selected state styling', () => {
     render(<NodeRenderer {...defaultProps} selected={true} />);
     const nodeElement = screen.getByTestId('node-node-1');
-    expect(nodeElement).toHaveStyle({)
-  border: '2px solid #3182ce',
+    expect(nodeElement).toHaveStyle({ )
+  border: '2px solid #3182ce' }
 });
   });
   it('displays node with unselected state styling', () => {
     render(<NodeRenderer {...defaultProps} selected={false} />);
     const nodeElement = screen.getByTestId('node-node-1');
-    expect(nodeElement).toHaveStyle({)
-  border: '1px solid #4a5568',
+    expect(nodeElement).toHaveStyle({ )
+  border: '1px solid #4a5568' }
 });
   });
   it('calls onSelect when clicked', async () => {
@@ -74,12 +70,11 @@ describe('NodeRenderer', () => {
     fireEvent.keyDown(nodeElement, { key: ' ' });
     expect(mockOnSelect).toHaveBeenCalledWith('node-1');
   });
-  it('displays variations count badge when variations exist', () => {
-  const propsWithVariations = {
-  ...defaultProps,
+  it('displays variations count badge when variations exist', () => { const propsWithVariations = {
+  ...defaultProps
   data: {
-  ...defaultProps.data,
-  variations: ['var1', 'var2', 'var3'],
+  ...defaultProps.data
+  variations: ['var1', 'var2', 'var3'] }
 };
     render(<NodeRenderer {...propsWithVariations} />);
     const badge = screen.getByText('3');
@@ -90,16 +85,15 @@ describe('NodeRenderer', () => {
     render(<NodeRenderer {...defaultProps} />);
     expect(screen.queryByText('0')).not.toBeInTheDocument();
   });
-  it('displays node properties (max 3)', () => {
-  const propsWithProperties = {
-  ...defaultProps,
+  it('displays node properties (max 3)', () => { const propsWithProperties = {
+  ...defaultProps
   data: {
-  label: 'Test Node',
-  nodeType: 'WeightedChoice',
-  property1: 'value1',
-  property2: 'value2',
-  property3: 'value3',
-  property4: 'value4' // Should be filtered out,
+  label: 'Test Node'
+  nodeType: 'WeightedChoice'
+  property1: 'value1'
+  property2: 'value2'
+  property3: 'value3'
+  property4: 'value4' // Should be filtered out }
 };
     render(<NodeRenderer {...propsWithProperties} />);
     // The code filters out 'label', 'variations', 'type' and shows max 3 properties
@@ -113,65 +107,59 @@ describe('NodeRenderer', () => {
     expect(screen.queryByText('property3:')).not.toBeInTheDocument();
     expect(screen.queryByText('property4:')).not.toBeInTheDocument();
   });
-  it('truncates long property values', () => {
-  const longValue = 'This is a very long property value that should be truncated';
+  it('truncates long property values', () => { const longValue = 'This is a very long property value that should be truncated';
   const propsWithLongValue = {
-  ...defaultProps,
+  ...defaultProps
   data: {
-  ...defaultProps.data,
-  longProperty: longValue,
+  ...defaultProps.data
+  longProperty: longValue }
 };
     render(<NodeRenderer {...propsWithLongValue} />);
     expect(screen.getByText('This is a very long ...')).toBeInTheDocument();
     expect(screen.queryByText(longValue)).not.toBeInTheDocument();
   });
-  it('uses category-specific colors', () => {
-  mockGetNodeMeta.mockReturnValue({)
-  label: 'Output Node',
-  category: 'output',
-  icon: '📤',
+  it('uses category-specific colors', () => { mockGetNodeMeta.mockReturnValue({)
+  label: 'Output Node'
+  category: 'output'
+  icon: '📤' }
 });
     render(<NodeRenderer {...defaultProps} />);
     expect(mockGetCategoryColor).toHaveBeenCalledWith('output');
   });
-  it('renders with icon from node meta', () => {
-  mockGetNodeMeta.mockReturnValue({)
-  label: 'Custom Node',
-  category: 'processing',
-  icon: '⚙️',
+  it('renders with icon from node meta', () => { mockGetNodeMeta.mockReturnValue({)
+  label: 'Custom Node'
+  category: 'processing'
+  icon: '⚙️' }
 });
     render(<NodeRenderer {...defaultProps} />);
     expect(screen.getByText('⚙️')).toBeInTheDocument();
   });
-  it('handles missing data gracefully', () => {
-    const propsWithMinimalData = {
-      ...defaultProps,
+  it('handles missing data gracefully', () => { const propsWithMinimalData = {
+      ...defaultProps }
       data: {}
     };
     render(<NodeRenderer {...propsWithMinimalData} />);
     // Should still render without crashing
     expect(screen.getByTestId('node-node-1')).toBeInTheDocument();
   });
-  it('generates accessible aria-label', () => {
-  const propsWithProperties = {
-  ...defaultProps,
+  it('generates accessible aria-label', () => { const propsWithProperties = {
+  ...defaultProps
   data: {
-  label: 'My Node',
-  property1: 'value1',
-  property2: 'value2',
+  label: 'My Node'
+  property1: 'value1'
+  property2: 'value2' }
 };
     render(<NodeRenderer {...propsWithProperties} />);
     const nodeElement = screen.getByTestId('node-node-1');
     expect(nodeElement).toHaveAttribute()
-      'aria-label',
+      'aria-label'
       'My Node. property1: value1, property2: value2'
     );
   });
-  it('handles error state gracefully', () => {
-    // Force an error by passing a getNodeMeta that throws
+  it('handles error state gracefully', () => { // Force an error by passing a getNodeMeta that throws
     const errorProps = {
-      ...defaultProps,
-      getNodeMeta: () => { throw new Error('Mock error'); }
+      ...defaultProps }
+      getNodeMeta: () => { throw new Error('Mock error') }
     };
     render(<NodeRenderer {...errorProps} />);
     expect(screen.getByText(/Error:/)).toBeInTheDocument();
@@ -181,13 +169,13 @@ describe('NodeRenderer', () => {
     const nodeElement = screen.getByTestId('node-node-1');
     // Mouse enter should apply hover effect
     fireEvent.mouseEnter(nodeElement);
-    expect(nodeElement).toHaveStyle({)
-  transform: 'translateY(-2px) translateZ(0)',
+    expect(nodeElement).toHaveStyle({ )
+  transform: 'translateY(-2px) translateZ(0)' }
 });
     // Mouse leave should remove hover effect
     fireEvent.mouseLeave(nodeElement);
-    expect(nodeElement).toHaveStyle({)
-  transform: 'translateY(0) translateZ(0)',
+    expect(nodeElement).toHaveStyle({ )
+  transform: 'translateY(0) translateZ(0)' }
 });
   });
   it('does not apply hover effects when selected', () => {
@@ -195,18 +183,17 @@ describe('NodeRenderer', () => {
     const nodeElement = screen.getByTestId('node-node-1');
     fireEvent.mouseEnter(nodeElement);
     // Transform should not change when selected
-    expect(nodeElement).toHaveStyle({)
-  transform: 'translateZ(0)',
+    expect(nodeElement).toHaveStyle({ )
+  transform: 'translateZ(0)' }
 });
   });
-  it('filters out internal properties from display', () => {
-  const propsWithInternalData = {
-  ...defaultProps,
+  it('filters out internal properties from display', () => { const propsWithInternalData = {
+  ...defaultProps
   data: {
-  label: 'Test Node',
-  variations: ['var1'],
-  type: 'SomeType',
-  actualProperty: 'shouldShow',
+  label: 'Test Node'
+  variations: ['var1']
+  type: 'SomeType'
+  actualProperty: 'shouldShow' }
 };
     render(<NodeRenderer {...propsWithInternalData} />);
     expect(screen.getByText('actualProperty:')).toBeInTheDocument();

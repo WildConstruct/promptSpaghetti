@@ -78,21 +78,20 @@ export var LogLevel;
             longitude: number
         };
     }
-    ;
-    deviceInfo ?  : {
-        deviceId: string,
-        deviceType: string,
-        platform: string,
-        browser: string
-    };
-    threatContext ?  : {
-        riskScore: number,
-        threatLevel: string,
-        attackVector: string,
-        indicators: string
-    };
-    // Security Log Entry
 }
+;
+deviceInfo ?  : {
+    deviceId: string,
+    deviceType: string,
+    platform: string,
+    browser: string
+};
+threatContext ?  : {
+    riskScore: number,
+    threatLevel: string,
+    attackVector: string,
+    indicators: string
+};
 ;
 target ?  : {
     type: 'user' | 'account' | 'lockout' | 'system',
@@ -257,8 +256,9 @@ metadata: {
         correlationId;
     context.requestId,
         checksum;
-    this.calculateChecksum({});
-    eventType: SecurityEventType.ACCOUNT_LOCKED,
+    this.calculateChecksum({}),
+        eventType;
+    SecurityEventType.ACCOUNT_LOCKED,
         timestamp;
     new Date(),
         userId;
@@ -269,8 +269,9 @@ metadata: {
 }
 ;
 return this.storeLogEntry(logEntry);
-logAccountUnlocked(lockout, AccountLockout);
-method: UnlockMethod,
+logAccountUnlocked(lockout, AccountLockout),
+    method;
+UnlockMethod,
     adminId ?  : string,
     context;
 LogContext = {};
@@ -345,8 +346,9 @@ metadata: {
         correlationId;
     context.requestId,
         checksum;
-    this.calculateChecksum({});
-    eventType: SecurityEventType.ACCOUNT_UNLOCKED,
+    this.calculateChecksum({}),
+        eventType;
+    SecurityEventType.ACCOUNT_UNLOCKED,
         timestamp;
     new Date(),
         userId;
@@ -356,8 +358,9 @@ metadata: {
 }
 ;
 return this.storeLogEntry(logEntry);
-logUnlockAttempt(lockoutId, string);
-adminId: string,
+logUnlockAttempt(lockoutId, string),
+    adminId;
+string,
     reason;
 string,
     outcome;
@@ -421,8 +424,9 @@ metadata: {
         correlationId;
     context.requestId,
         checksum;
-    this.calculateChecksum({});
-    eventType: SecurityEventType.UNLOCK_ATTEMPT,
+    this.calculateChecksum({}),
+        eventType;
+    SecurityEventType.UNLOCK_ATTEMPT,
         timestamp;
     new Date(),
         adminId,
@@ -431,8 +435,9 @@ metadata: {
 }
 ;
 return this.storeLogEntry(logEntry);
-logEmergencyUnlock(lockoutId, string);
-adminId: string,
+logEmergencyUnlock(lockoutId, string),
+    adminId;
+string,
     emergencyCode;
 string,
     justification;
@@ -480,7 +485,7 @@ outcome: 'success',
 'critical',
     compliance;
 {
-    frameworks: [,
+    frameworks: [
         ComplianceFramework.SOX,
         ComplianceFramework.ISO_27001,
         ComplianceFramework.NIST
@@ -502,8 +507,9 @@ metadata: {
         correlationId;
     context.requestId,
         checksum;
-    this.calculateChecksum({});
-    eventType: SecurityEventType.EMERGENCY_UNLOCK,
+    this.calculateChecksum({}),
+        eventType;
+    SecurityEventType.EMERGENCY_UNLOCK,
         timestamp;
     new Date(),
         adminId,
@@ -512,8 +518,9 @@ metadata: {
 }
 ;
 return this.storeLogEntry(logEntry);
-logSecurityAlert(alertType, string);
-severity: 'low' | 'medium' | 'high' | 'critical',
+logSecurityAlert(alertType, string),
+    severity;
+'low' | 'medium' | 'high' | 'critical',
     details;
 (Record),
     context;
@@ -544,7 +551,7 @@ outcome: 'unknown',
     severity,
     compliance;
 {
-    frameworks: [,
+    frameworks: [
         ComplianceFramework.ISO_27001,
         ComplianceFramework.NIST,
         ComplianceFramework.GDPR
@@ -566,8 +573,9 @@ metadata: {
         correlationId;
     context.requestId,
         checksum;
-    this.calculateChecksum({});
-    eventType: SecurityEventType.SECURITY_ALERT,
+    this.calculateChecksum({}),
+        eventType;
+    SecurityEventType.SECURITY_ALERT,
         timestamp;
     new Date(),
         alertType,
@@ -575,8 +583,9 @@ metadata: {
 }
 ;
 return this.storeLogEntry(logEntry);
-createAuditTrail(operation, string);
-resource: string,
+createAuditTrail(operation, string),
+    resource;
+string,
     resourceId;
 string,
     actorType;
@@ -603,8 +612,7 @@ string;
         actor: {
             type: actorType,
             id: actorId,
-            email: actorType !== 'system' ? `${actorId}@company.com` : undefined
-        }
+            email: actorType !== 'system' ? `${actorId}@company.com` : undefined }
     };
     changes,
         reason,
@@ -704,8 +712,9 @@ queryLogs(query, LogQuery);
                                             if (!this.metrics || this.shouldUpdateMetrics()) {
                                                 this.updateMetrics(startTime, endTime);
                                                 return this.metrics;
-                                                exportLogsForCompliance(framework, ComplianceFramework);
-                                                startTime: Date,
+                                                exportLogsForCompliance(framework, ComplianceFramework),
+                                                    startTime;
+                                                Date,
                                                     endTime;
                                                 Date,
                                                     format;
@@ -1017,10 +1026,10 @@ queryLogs(query, LogQuery);
                                                                                                                                                 .filter(([_, count]) => count === maxCount)
                                                                                                                                                 .map(([day, _]) => day),
                                                                                                                                             convertToCSV(logs) {
-                                                                                                                                                const headers = [];
-                                                                                                                                                'ID', 'Timestamp', 'Level', 'Event Type', 'Message', 'Actor Type', 'Actor ID',
-                                                                                                                                                    'Target Type', 'Target ID', 'Outcome', 'Severity', 'IP Address', 'User Agent';
-                                                                                                                                                ;
+                                                                                                                                                const headers = [
+                                                                                                                                                    'ID', 'Timestamp', 'Level', 'Event Type', 'Message', 'Actor Type', 'Actor ID',
+                                                                                                                                                    'Target Type', 'Target ID', 'Outcome', 'Severity', 'IP Address', 'User Agent'
+                                                                                                                                                ];
                                                                                                                                                 const rows = logs.map(log => []);
                                                                                                                                                 log.id,
                                                                                                                                                     log.timestamp.toISOString(),

@@ -3,8 +3,8 @@
 
 import { Pool, PoolClient } from 'pg';
 
-}
-}
+
+
 export interface CommunityUser {
   id: string;
   display_name: string;
@@ -15,12 +15,13 @@ export interface CommunityUser {
   following_count: number;
   templates_count: number;
   total_revenue: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CommunityPost {
   id: string;
   author: CommunityUser;
@@ -32,8 +33,9 @@ export interface CommunityPost {
     title: string;
     description: string;
     price_cents: number;
-}
-}
+
+
+
   };
   type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';
   likes_count: number;
@@ -44,10 +46,10 @@ export interface CommunityPost {
   created_at: string;
   updated_at: string;
   tags: string[];
-}
 
-}
-}
+
+
+
 export interface CommunityDiscussion {
   id: string;
   title: string;
@@ -61,12 +63,13 @@ export interface CommunityDiscussion {
   is_pinned: boolean;
   is_solved: boolean;
   created_at: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CommunityEvent {
   id: string;
   title: string;
@@ -79,35 +82,38 @@ export interface CommunityEvent {
   is_attending: boolean;
   organizer: CommunityUser;
   tags: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreatePostRequest {
   content: string;
   images?: string[];
   template_id?: string;
   type: 'text' | 'template_showcase' | 'tutorial' | 'question' | 'announcement';
   tags?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreateDiscussionRequest {
   title: string;
   content: string;
   category: string;
   tags?: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface CreateEventRequest {
   title: string;
   description: string;
@@ -116,9 +122,10 @@ export interface CreateEventRequest {
   end_date: string;
   max_attendees?: number;
   tags?: string[];
-}
-}
-}
+
+
+
+
 
 export class CommunityService {
   constructor(private db: Pool) {}
@@ -152,13 +159,13 @@ export class CommunityService {
 
       await client.query('COMMIT');
       return post;
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getFeedPosts(
     userId: string,
@@ -189,21 +196,21 @@ export class CommunityService {
 
     if (filter === 'following') {
       query += ` JOIN user_follows f ON p.author_id = f.following_id AND f.follower_id = $1`;
-    } else if (filter === 'trending') {
+ else if (filter === 'trending') {
       query += ` WHERE p.created_at > NOW() - INTERVAL '7 days'`;
-    }
+
 
     query += ` ORDER BY `;
     if (filter === 'trending') {
       query += `(p.likes_count * 2 + p.comments_count * 3 + p.shares_count * 5) DESC, `;
-    }
+
     query += `p.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
 
     params.push(limit, offset);
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapRowToPost);
-  }
+
 
   async likePost(userId: string, postId: string): Promise<{ success: boolean; likes_count: number }> {
 
@@ -227,7 +234,7 @@ export class CommunityService {
           'UPDATE community_posts SET likes_count = likes_count - 1 WHERE id = $1',
           [postId]
         );
-      } else {
+ else {
         // Like
         await client.query(
           'INSERT INTO post_likes (user_id, post_id) VALUES ($1, $2)',
@@ -237,7 +244,7 @@ export class CommunityService {
           'UPDATE community_posts SET likes_count = likes_count + 1 WHERE id = $1',
           [postId]
         );
-      }
+
 
       // Get updated like count
       const countResult = await client.query(
@@ -250,13 +257,13 @@ export class CommunityService {
         success: true,
         likes_count: countResult.rows[0].likes_count
       };
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Discussion management
   async createDiscussion(userId: string, discussionData: CreateDiscussionRequest): Promise<CommunityDiscussion> {
@@ -276,7 +283,7 @@ export class CommunityService {
 
     const discussionId = result.rows[0].id;
     return this.getDiscussionById(discussionId);
-  }
+
 
   async getDiscussions(category?: string, limit = 20, offset = 0): Promise<CommunityDiscussion[]> {
 
@@ -297,14 +304,14 @@ export class CommunityService {
     if (category) {
       query += ` WHERE d.category = $1`;
       params.push(category);
-    }
+
 
     query += ` ORDER BY d.is_pinned DESC, d.last_activity_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(limit, offset);
 
     const result = await this.db.query(query, params);
     return result.rows.map(this.mapRowToDiscussion);
-  }
+
 
   // Event management
   async createEvent(userId: string, eventData: CreateEventRequest): Promise<CommunityEvent> {
@@ -327,7 +334,7 @@ export class CommunityService {
 
     const eventId = result.rows[0].id;
     return this.getEventById(eventId, userId);
-  }
+
 
   async getUpcomingEvents(userId: string, limit = 20): Promise<CommunityEvent[]> {
 
@@ -349,7 +356,7 @@ export class CommunityService {
 
     const result = await this.db.query(query, [userId, limit]);
     return result.rows.map(this.mapRowToEvent);
-  }
+
 
   async attendEvent(userId: string, eventId: string): Promise<{ success: boolean; attendees_count: number }> {
 
@@ -373,7 +380,7 @@ export class CommunityService {
           'UPDATE community_events SET attendees_count = attendees_count - 1 WHERE id = $1',
           [eventId]
         );
-      } else {
+ else {
         // Add attendance
         await client.query(
           'INSERT INTO event_attendees (user_id, event_id) VALUES ($1, $2)',
@@ -383,7 +390,7 @@ export class CommunityService {
           'UPDATE community_events SET attendees_count = attendees_count + 1 WHERE id = $1',
           [eventId]
         );
-      }
+
 
       // Get updated attendee count
       const countResult = await client.query(
@@ -396,13 +403,13 @@ export class CommunityService {
         success: true,
         attendees_count: countResult.rows[0].attendees_count
       };
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // User management
   async followUser(followerId: string, followingId: string): Promise<{ success: boolean }> {
@@ -431,7 +438,7 @@ export class CommunityService {
           'UPDATE users SET following_count = following_count - 1 WHERE id = $1',
           [followerId]
         );
-      } else {
+ else {
         // Follow
         await client.query(
           'INSERT INTO user_follows (follower_id, following_id) VALUES ($1, $2)',
@@ -445,17 +452,17 @@ export class CommunityService {
           'UPDATE users SET following_count = following_count + 1 WHERE id = $1',
           [followerId]
         );
-      }
+
 
       await client.query('COMMIT');
       return { success: true };
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       throw error;
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   async getTopCreators(userId: string, limit = 10): Promise<CommunityUser[]> {
 
@@ -491,7 +498,7 @@ export class CommunityService {
       templates_count: row.templates_count,
       total_revenue: row.total_revenue
     }));
-  }
+
 
   // Private helper methods
   private async getPostById(postId: string, userId?: string): Promise<CommunityPost> {
@@ -516,7 +523,7 @@ export class CommunityService {
     `, [postId, userId]);
 
     return this.mapRowToPost(result.rows[0]);
-  }
+
 
   private async getDiscussionById(discussionId: string): Promise<CommunityDiscussion> {
 
@@ -534,7 +541,7 @@ export class CommunityService {
     `, [discussionId]);
 
     return this.mapRowToDiscussion(result.rows[0]);
-  }
+
 
   private async getEventById(eventId: string, userId?: string): Promise<CommunityEvent> {
 
@@ -553,7 +560,7 @@ export class CommunityService {
     `, [eventId, userId]);
 
     return this.mapRowToEvent(result.rows[0]);
-  }
+
 
   private mapRowToPost(row: Record<string, unknown>): CommunityPost {
     return {
@@ -568,7 +575,7 @@ export class CommunityService {
         following_count: row.following_count,
         templates_count: row.templates_count,
         total_revenue: row.total_revenue
-  }
+
       content: row.content,
       images: row.images ? JSON.parse(row.images) : undefined,
       template_id: row.template_id,
@@ -577,7 +584,7 @@ export class CommunityService {
         title: row.template_title,
         description: row.template_description,
         price_cents: row.template_price
-      } : undefined,
+ : undefined,
       type: row.type,
       likes_count: row.likes_count,
       comments_count: row.comments_count,
@@ -588,7 +595,7 @@ export class CommunityService {
       updated_at: row.updated_at,
       tags: row.tags ? JSON.parse(row.tags) : []
     };
-  }
+
 
   private mapRowToDiscussion(row: Record<string, unknown>): CommunityDiscussion {
     return {
@@ -605,7 +612,7 @@ export class CommunityService {
         following_count: row.following_count,
         templates_count: row.templates_count,
         total_revenue: row.total_revenue
-  }
+
       category: row.category,
       tags: row.tags ? JSON.parse(row.tags) : [],
       replies_count: row.replies_count,
@@ -615,7 +622,7 @@ export class CommunityService {
       is_solved: row.is_solved,
       created_at: row.created_at
     };
-  }
+
 
   private mapRowToEvent(row: Record<string, unknown>): CommunityEvent {
     return {
@@ -638,8 +645,7 @@ export class CommunityService {
         following_count: row.following_count,
         templates_count: row.templates_count,
         total_revenue: row.total_revenue
-  }
+
       tags: row.tags ? JSON.parse(row.tags) : []
     };
-  }
-}
+

@@ -4,22 +4,22 @@
  */
 import React from 'react';
 import { ActivityEventWithActorInfo } from '../../types/workspace';
-}
-interface ActivityItemProps {
-  activity: ActivityEventWithActorInfo;
+
+
+interface ActivityItemProps { activity: ActivityEventWithActorInfo;
   onClick?: () => void;
   compact?: boolean;
   showProject?: boolean;
   isLast?: boolean;
-  export const ActivityItem: React.FC<ActivityItemProps> = ({,)
-  activity,
-  onClick,
-  compact = false,
-  showProject = true,
+  export const ActivityItem: React.FC<ActivityItemProps> = ({);
+  activity;
+  onClick;
+  compact = false;
+  showProject = true }
   isLast = false
-}
-}) => {
-  const getActivityIcon = (eventType: string) => {,
+
+
+}) => { const getActivityIcon = (eventType: string) => { }
   if (eventType.includes('created')) return '✨';
   if (eventType.includes('updated')) return '✏️';
   if (eventType.includes('deleted')) return '🗑️';
@@ -61,7 +61,7 @@ interface ActivityItemProps {
     case 'user.joined':
       return `${actorDisplay} joined the workspace`;}
     case 'user.left':
-      return `${actorDisplay} left the workspace`;},}
+      return `${actorDisplay} left the workspace`;},},
   default:
       return `${actorDisplay} performed ${event_type.replace(/[._]/g, ' ')}`;}
   };
@@ -78,13 +78,11 @@ interface ActivityItemProps {
     case 'resource.created':
       return `Created new ${event_data.resource_type} in the project`;}
     case 'comment.created':
-      if (event_data.target_type === 'node') {
-        return 'Commented on a graph node';
-      } else if (event_data.target_type === 'region') {
+      if (event_data.target_type === 'node') { return 'Commented on a graph node' } else if (event_data.target_type === 'region') {
         return 'Commented on a graph region';
       return 'Added a comment to the resource';
     case 'user.invited':
-      return `Invited with ${event_data.role} permissions`;},}
+      return `Invited with ${event_data.role} permissions`;},},
   default:
       return null;
   };

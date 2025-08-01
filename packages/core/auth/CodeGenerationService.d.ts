@@ -3,12 +3,11 @@
  * Task: T-1752989143997-705 - Create code generation and validation system
  * Epic 19: Authentication Enhancement & Security Hardening
  */
-export declare enum CodeType {
-    EMAIL_VERIFICATION = "email_verification",
+export declare enum CodeType { EMAIL_VERIFICATION = "email_verification",
     SMS_VERIFICATION = "sms_verification",
     TOTP_SECRET = "totp_secret",
     BACKUP_CODE = "backup_code",
-    RECOVERY_TOKEN = "recovery_token",
+    RECOVERY_TOKEN = "recovery_token" }
     API_TOKEN = "api_token"
 
 export declare enum CodeFormat {
@@ -20,15 +19,15 @@ export declare enum CodeFormat {
     UUID = "uuid"
 
 }
-export interface CodeGenerationOptions {
-    type: CodeType;
+}
+export interface CodeGenerationOptions { type: CodeType;
     format: CodeFormat;
     length: number;
     expiryMinutes?: number;
     userContext?: {
         userId: string;
         ipAddress: string;
-        userAgent: string;
+        userAgent: string }
 }
     };
     customCharset?: string;
@@ -36,8 +35,8 @@ export interface CodeGenerationOptions {
     enforceComplexity?: boolean;
 
 }
-export interface GeneratedCode {
-    code: string;
+}
+export interface GeneratedCode { code: string;
     hashedCode: string;
     salt: string;
     type: CodeType;
@@ -48,25 +47,25 @@ export interface GeneratedCode {
         userId?: string;
         ipAddress?: string;
         entropy: number;
-        algorithm: string;
+        algorithm: string }
 }
     };
 
 }
-export interface CodeValidationResult {
-    valid: boolean;
+}
+export interface CodeValidationResult { valid: boolean;
     reason?: 'expired' | 'invalid' | 'rate_limited' | 'used' | 'format_mismatch';
     remainingAttempts?: number;
     metadata?: {
         validatedAt: Date;
         timingAttackSafe: boolean;
-        processingTimeMs: number;
+        processingTimeMs: number }
 }
     };
 
 }
-export interface CodeValidationOptions {
-    allowExpired?: boolean;
+}
+export interface CodeValidationOptions { allowExpired?: boolean;
     constantTimeValidation?: boolean;
     rateLimitingEnabled?: boolean;
     maxAttempts?: number;
@@ -84,18 +83,17 @@ export declare class CodeGenerationService {
      * Validate a code against stored hash
      */
     validateCode();
-      inputCode: string,
-      storedData: GeneratedCode,
+      inputCode: string;
+      storedData: GeneratedCode }
       options?: CodeValidationOptions
     ): Promise<CodeValidationResult>;
     /**
      * Generate TOTP secret with proper formatting
      */
-    generateTOTPSecret(userId: string): Promise<{
-        secret: string;
+    generateTOTPSecret(userId: string): Promise<{ secret: string;
         qrCodeData: string;
         manualEntryKey: string;
-        backupCodes: string[];
+        backupCodes: string[] }
 }
     }>;
     /**
@@ -109,12 +107,10 @@ export declare class CodeGenerationService {
     /**
      * Get rate limit information for a user and code type
      */
-    getRateLimitInfo(userId: string, codeType: CodeType): {
-        currentAttempts: number;
+    getRateLimitInfo(userId: string, codeType: CodeType): { currentAttempts: number;
         maxAttempts: number;
         windowMinutes: number;
-        timeUntilReset?: number;
-    };
+        timeUntilReset?: number };
     /**
      * Reset rate limit for a user and code type
      */
@@ -126,8 +122,7 @@ export declare class CodeGenerationService {
     private constantTimeCompare;
     private validateCodeFormat;
 
-export declare class CodeGenerationUtils {
-    /**
+export declare class CodeGenerationUtils { /**
      * Analyze the strength of a generated code
      */
     static analyzeCodeStrength(generatedCode: GeneratedCode): {
@@ -136,8 +131,7 @@ export declare class CodeGenerationUtils {
         crackTime: {
             averageTime: number;
             worstCase: number;
-            unit: string;
-        };
+            unit: string };
         recommendations: string[];
     };
     /**

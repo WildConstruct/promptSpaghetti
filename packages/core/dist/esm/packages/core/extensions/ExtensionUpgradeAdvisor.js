@@ -60,8 +60,9 @@ export class ExtensionUpgradeAdvisor {
                     recommendations,
                     strategy
                 };
-                analyzeUpgradePath(currentExtension, ExtensionManifest);
-                targetVersion: string,
+                analyzeUpgradePath(currentExtension, ExtensionManifest),
+                    targetVersion;
+                string,
                     availableVersions;
                 string,
                     context;
@@ -95,8 +96,9 @@ export class ExtensionUpgradeAdvisor {
                             estimatedEffort: this.estimateUpgradeEffort(migrationTasks, risks),
                             timeline: this.generateUpgradeTimeline(upgradePath, migrationTasks),
                         };
-                        generateMigrationPlan(currentExtension, ExtensionManifest);
-                        targetVersion: string,
+                        generateMigrationPlan(currentExtension, ExtensionManifest),
+                            targetVersion;
+                        string,
                             context;
                         UpgradeContext;
                         MigrationPlan;
@@ -126,8 +128,9 @@ export class ExtensionUpgradeAdvisor {
                                     riskLevel: analysis.path.totalRisk || 'medium',
                                     prerequisites: this.identifyPrerequisites(currentExtension, targetVersion, context),
                                 };
-                                checkBreakingChanges(extensionId, string);
-                                fromVersion: string,
+                                checkBreakingChanges(extensionId, string),
+                                    fromVersion;
+                                string,
                                     toVersion;
                                 string;
                                 BreakingChangeAnalysis;
@@ -147,8 +150,9 @@ export class ExtensionUpgradeAdvisor {
                                     migrationRequired: applicableChanges.some(c => c.migrationRequired),
                                     automatedMigration: applicableChanges.every(c => c.automatedMigration),
                                 };
-                                validateUpgradeCompatibility(currentExtension, ExtensionManifest);
-                                targetExtension: ExtensionManifest,
+                                validateUpgradeCompatibility(currentExtension, ExtensionManifest),
+                                    targetExtension;
+                                ExtensionManifest,
                                     context;
                                 UpgradeContext;
                                 UpgradeCompatibilityResult;
@@ -192,8 +196,9 @@ export class ExtensionUpgradeAdvisor {
                                                     if (context.featurePriority) {
                                                         return 'aggressive';
                                                         return 'moderate';
-                                                        getConservativeRecommendations(currentVersion, SemanticVersion);
-                                                        availableVersions: SemanticVersion,
+                                                        getConservativeRecommendations(currentVersion, SemanticVersion),
+                                                            availableVersions;
+                                                        SemanticVersion,
                                                             context;
                                                         UpgradeContext;
                                                         VersionRecommendation;
@@ -240,8 +245,9 @@ export class ExtensionUpgradeAdvisor {
                                                             }
                                                             ;
                                                             return recommendations;
-                                                            getModerateRecommendations(currentVersion, SemanticVersion);
-                                                            availableVersions: SemanticVersion,
+                                                            getModerateRecommendations(currentVersion, SemanticVersion),
+                                                                availableVersions;
+                                                            SemanticVersion,
                                                                 context;
                                                             UpgradeContext;
                                                             VersionRecommendation;
@@ -270,8 +276,9 @@ export class ExtensionUpgradeAdvisor {
                                                                 }
                                                                 ;
                                                                 return recommendations;
-                                                                getAggressiveRecommendations(currentVersion, SemanticVersion);
-                                                                availableVersions: SemanticVersion,
+                                                                getAggressiveRecommendations(currentVersion, SemanticVersion),
+                                                                    availableVersions;
+                                                                SemanticVersion,
                                                                     context;
                                                                 UpgradeContext;
                                                                 VersionRecommendation;
@@ -298,8 +305,9 @@ export class ExtensionUpgradeAdvisor {
                                                                     }
                                                                     ;
                                                                     return recommendations;
-                                                                    getSecurityRecommendations(currentVersion, SemanticVersion);
-                                                                    availableVersions: SemanticVersion,
+                                                                    getSecurityRecommendations(currentVersion, SemanticVersion),
+                                                                        availableVersions;
+                                                                    SemanticVersion,
                                                                         context;
                                                                     UpgradeContext;
                                                                     VersionRecommendation;
@@ -328,8 +336,9 @@ export class ExtensionUpgradeAdvisor {
                                                                     }
                                                                     ;
                                                                     return recommendations;
-                                                                    generateMigrationTasks(currentExtension, ExtensionManifest);
-                                                                    targetVersion: string,
+                                                                    generateMigrationTasks(currentExtension, ExtensionManifest),
+                                                                        targetVersion;
+                                                                    string,
                                                                         upgradePath;
                                                                     UpgradePath;
                                                                     MigrationTask;
@@ -376,8 +385,9 @@ export class ExtensionUpgradeAdvisor {
                                                                     if (rule.appliesTo(currentExtension.version, targetVersion)) {
                                                                         tasks.push(...rule.generateTasks(currentExtension, targetVersion));
                                                                         return tasks;
-                                                                        assessUpgradeRisks(currentExtension, ExtensionManifest);
-                                                                        targetVersion: string,
+                                                                        assessUpgradeRisks(currentExtension, ExtensionManifest),
+                                                                            targetVersion;
+                                                                        string,
                                                                             upgradePath;
                                                                         UpgradePath,
                                                                             context;
@@ -436,8 +446,9 @@ export class ExtensionUpgradeAdvisor {
                                                                 }
                                                                 ;
                                                                 return risks;
-                                                                identifyUpgradeBenefits(currentExtension, ExtensionManifest);
-                                                                targetVersion: string,
+                                                                identifyUpgradeBenefits(currentExtension, ExtensionManifest),
+                                                                    targetVersion;
+                                                                string,
                                                                     context;
                                                                 UpgradeContext;
                                                                 UpgradeBenefit;
@@ -539,8 +550,9 @@ export class ExtensionUpgradeAdvisor {
                                                             if (changes.length > 3)
                                                                 return 'high';
                                                             return 'medium';
-                                                            checkDependencyConflicts(currentExtension, ExtensionManifest);
-                                                            targetExtension: ExtensionManifest,
+                                                            checkDependencyConflicts(currentExtension, ExtensionManifest),
+                                                                targetExtension;
+                                                            ExtensionManifest,
                                                                 context;
                                                             UpgradeContext;
                                                             DependencyConflict;
@@ -574,7 +586,7 @@ export class ExtensionUpgradeAdvisor {
                                                                     },
                                                                     generateUpgradeTimeline(path, tasks) {
                                                                         return {
-                                                                            phases: [,
+                                                                            phases: [
                                                                                 { name: 'Preparation', duration: '15 minutes', tasks: tasks.filter(t => t.type === 'preparation') },
                                                                                 { name: 'Validation', duration: '10 minutes', tasks: tasks.filter(t => t.type === 'validation') },
                                                                                 { name: 'Migration', duration: '30 minutes', tasks: tasks.filter(t => t.type === 'migration') },
@@ -607,7 +619,7 @@ export class ExtensionUpgradeAdvisor {
                                                                     },
                                                                     generateRollbackPlan(currentExtension, targetVersion) {
                                                                         return {
-                                                                            steps: [,
+                                                                            steps: [
                                                                                 'Stop the upgraded extension',
                                                                                 'Restore extension files from backup',
                                                                                 'Restore extension data from backup',
@@ -620,18 +632,18 @@ export class ExtensionUpgradeAdvisor {
                                                                     },
                                                                     generateTestingPlan(currentExtension, targetVersion) {
                                                                         return {
-                                                                            preUpgradeTests: [,
+                                                                            preUpgradeTests: [
                                                                                 'Verify current functionality',
                                                                                 'Test critical workflows',
                                                                                 'Validate data integrity'
                                                                             ],
-                                                                            postUpgradeTests: [,
+                                                                            postUpgradeTests: [
                                                                                 'Verify upgrade success',
                                                                                 'Test all functionality',
                                                                                 'Validate data migration',
                                                                                 'Check performance'
                                                                             ],
-                                                                            rollbackTests: [,
+                                                                            rollbackTests: [
                                                                                 'Verify rollback success',
                                                                                 'Test restored functionality',
                                                                                 'Validate data restoration'
@@ -653,16 +665,16 @@ export class ExtensionUpgradeAdvisor {
                                                 }
                                             }
                                         }
-                                         > ;
-                                        totalDuration: string;
                                     }
-                                    // Export singleton
                                 }
                             }
-                            export const extensionUpgradeAdvisor = ExtensionUpgradeAdvisor.getInstance();
                         }
                     }
                 }
+                 > ;
+                totalDuration: string;
         }
     }
+    // Export singleton
 }
+export const extensionUpgradeAdvisor = ExtensionUpgradeAdvisor.getInstance();

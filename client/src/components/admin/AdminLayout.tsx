@@ -18,78 +18,80 @@ import {
   Key,
   ArrowLeft,
   ScrollText
-} from 'lucide-react';
+ from 'lucide-react';
 import { 
   AlertIndicatorBadge, 
   AlertStatusIndicator, 
   createEmptyAlertCount,
   AlertCount
-} from './AlertIndicators';
-}
+ from './AlertIndicators';
+
+
 interface AdminLayoutProps {
   children: React.ReactNode;,
   currentSection: string,
   onSectionChange: (section: string) => void;
-  }
 
-const adminSections = [;
+
+
+const adminSections = [
   {
   id: 'feature-toggles',
   label: 'Feature Toggles',
   icon: ToggleLeft,
   description: 'Manage feature flags and rollouts',
   requiredRoles: ['admin', 'administrator', 'feature-admin']
-}
-}
+
+
   {
   id: 'users',
   label: 'User Management',
   icon: Users,
   description: 'Manage users and permissions',
   requiredRoles: ['admin', 'administrator', 'user-admin']
-}
+
   {
   id: 'content',
   label: 'Content Management',
   icon: FileText,
   description: 'Moderate and manage content',
   requiredRoles: ['admin', 'administrator', 'content-moderator']
-}
+
   {
   id: 'api-management',
   label: 'API Management',
   icon: Key,
   description: 'Manage API keys and access control',
   requiredRoles: ['admin', 'administrator', 'api-admin']
-}
+
   {
   id: 'marketplace',
   label: 'Marketplace Admin',
   icon: ShoppingCart,
   description: 'Review templates and transactions',
   requiredRoles: ['admin', 'administrator', 'marketplace-admin']
-}
+
   {
   id: 'analytics',
   label: 'Analytics & Monitoring',
   icon: BarChart3,
   description: 'View system metrics and health',
   requiredRoles: ['admin', 'administrator', 'analyst']
-}
+
   {
   id: 'system',
   label: 'System Configuration',
   icon: Settings,
   description: 'Configure system settings',
   requiredRoles: ['admin', 'administrator']
-}
+
   {
   id: 'audit-logs',
   label: 'Audit Logs',
   icon: ScrollText,
   description: 'View system audit trail and security logs',
   requiredRoles: ['admin', 'administrator', 'security-admin']
-}
+
   {
     id: 'data-protection',
     label: 'Data Protection',
@@ -232,7 +234,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center'
-}}
+
           >
             <ArrowLeft size={18} aria-hidden="true" />
           </button>
@@ -262,7 +264,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
                 onClick={() => {
                   onSectionChange(section.id);
                   setSidebarOpen(false);
-                }}
+}
                 aria-current={isActive ? 'page' : undefined}
                 aria-describedby={`${section.id}-description`}
               >
@@ -302,7 +304,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
   backgroundColor: '#3b82f6',
   color: 'white',
   fontWeight: '600'
-}}
+}
             >
               {userInitials.toUpperCase()}
             </div>
@@ -333,7 +335,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentSection, onS
           onKeyDown={(e) => {
             if (e.key === 'Escape') {
               setSidebarOpen(false);
-          }}
+}
           aria-hidden="true"
           role="presentation"
         />

@@ -12,373 +12,395 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 // Quality Metrics Types (matching backend service)
 // =============================================================================
 
-}
+
 export interface QualityMetrics {
   timestamp: Date;,
-  overall: OverallQualityScore;
+  overall: OverallQualityScore;,
   testCoverage: TestCoverageMetrics;,
-  codeQuality: CodeQualityMetrics;
+  codeQuality: CodeQualityMetrics;,
   performance: PerformanceQualityMetrics;,
-  security: SecurityQualityMetrics;
+  security: SecurityQualityMetrics;,
   documentation: DocumentationQualityMetrics;,
-  buildHealth: BuildHealthMetrics;
+  buildHealth: BuildHealthMetrics;,
   trends: QualityTrends;,
-  recommendations: QualityRecommendation;
+  recommendations: QualityRecommendation;,
   alerts: QualityAlert;,
-  metadata: {
+  metadata: {,
   collectionDuration: number;,
-  dataSourcesActive: string;
+  dataSourcesActive: string;,
   lastUpdated: Date;,
   version: string;
-}
+
+
 };
-}
-}
+
+
+
 export interface OverallQualityScore {
   score: number;,
-  grade: 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';
+  grade: 'A+' | 'A' | 'B+' | 'B' | 'C+' | 'C' | 'D' | 'F';,
   status: 'excellent' | 'good' | 'fair' | 'poor' | 'critical';,
-  improvement: number;
-  componentScores: {
+  improvement: number;,
+  componentScores: {,
   testCoverage: number;,
-  codeQuality: number;
+  codeQuality: number;,
   performance: number;,
-  security: number;
+  security: number;,
   documentation: number;,
   buildHealth: number;
-}
+
+
 };
-  weights: {
+  weights: {,
   testCoverage: number;
   codeQuality: number;,
-  performance: number;
+  performance: number;,
   security: number;,
-  documentation: number;
+  documentation: number;,
   buildHealth: number;
 };
-}
-}
+
+
+
 export interface TestCoverageMetrics {
-  overall: {
+  overall: {,
   percentage: number;,
-  linesTotal: number;
+  linesTotal: number;,
   linesCovered: number;,
-  branchesTotal: number;
+  branchesTotal: number;,
   branchesCovered: number;,
-  functionsTotal: number;
+  functionsTotal: number;,
   functionsCovered: number;
-}
+
+
 };
-  byPackage: Array<{
+  byPackage: Array<{,
   name: string;
   percentage: number;,
-  linesTotal: number;
+  linesTotal: number;,
   linesCovered: number;
-}>;
-  byComponent: Array<{
+>;
+  byComponent: Array<{,
   name: string;
   type: 'component' | 'service' | 'utility';,
-  percentage: number;
+  percentage: number;,
   criticalPaths: number;,
   uncoveredPaths: number;
-}>;
-  trends: {
+>;
+  trends: {,
   last7Days: number;
   last30Days: number;,
-  changeFromLastWeek: number;
+  changeFromLastWeek: number;,
   changeFromLastMonth: number;
 };
   uncoveredCriticalPaths: string;,
-  coverageHotspots: Array<{;
+  coverageHotspots: Array<{;,
   file: string;,
-  function: string;
+  function: string;,
   coverage: number;,
-  importance: 'low' | 'medium' | 'high' | 'critical';
+  importance: 'low' | 'medium' | 'high' | 'critical';,
   reason: string;
-}>;
-}
-}
+>;
+
+
+
 export interface CodeQualityMetrics {
-  complexity: {
+  complexity: {,
   average: number;,
-  maximum: number;
-  distribution: {
+  maximum: number;,
+  distribution: {,
   '1-5': number;
   '6-10': number;
   '11-20': number;
   '21-50': number;
   '50+': number;
-}
+
+
 };
     highComplexityFiles: string;
   };
-  duplication: {
+  duplication: {,
   percentage: number;
   duplicatedLines: number;,
-  totalLines: number;
-  duplicatedBlocks: Array<{
+  totalLines: number;,
+  duplicatedBlocks: Array<{,
   lines: number;,
-  files: string;
+  files: string;,
   similarity: number;
-}>;
+>;
   };
-  maintainability: {
+  maintainability: {,
   index: number;
-  byFile: Array<{
+  byFile: Array<{,
   file: string;,
-  index: number;
+  index: number;,
   complexity: number;,
-  size: number;
+  size: number;,
   issues: string;
-}>;
+>;
     trends: number;
   };
-  linting: {
+  linting: {,
   totalIssues: number;
   errorCount: number;,
-  warningCount: number;
-  ruleBreakdowns: Array<{
+  warningCount: number;,
+  ruleBreakdowns: Array<{,
   rule: string;,
-  count: number;
+  count: number;,
   severity: 'error' | 'warning';,
   trend: 'increasing' | 'stable' | 'decreasing';
-}>;
+>;
     trends: number;
   };
-  technicalDebt: {
+  technicalDebt: {,
   totalMinutes: number;
-  breakdown: Array<{
+  breakdown: Array<{,
   category: string;,
-  minutes: number;
+  minutes: number;,
   files: string;,
   priority: 'low' | 'medium' | 'high' | 'critical';
-}>;
+>;
     priority: 'low' | 'medium' | 'high' | 'critical';
   };
-}
-}
+
+
+
 export interface PerformanceQualityMetrics {
-  responseTime: {
+  responseTime: {,
   average: number;,
-  p50: number;
+  p50: number;,
   p90: number;,
-  p95: number;
+  p95: number;,
   p99: number;
-}
+
+
 };
-  throughput: {
+  throughput: {,
   requestsPerSecond: number;
   peakRps: number;,
   trends: number;
 };
-  resourceUtilization: {
-  cpu: {
+  resourceUtilization: {,
+  cpu: {,
   average: number;,
-  peak: number;
+  peak: number;,
   trends: number;
 };
-    memory: {
+    memory: {,
   average: number;
   peak: number;,
   trends: number;
 };
-    disk: {
+    disk: {,
   usage: number;
   iops: number;
 };
   };
-  errorRates: {
+  errorRates: {,
   overall: number;
   by4xx: number;,
-  by5xx: number;
+  by5xx: number;,
   trends: number;
 };
-  loadTestResults: Array<{
+  loadTestResults: Array<{,
   timestamp: Date;
   duration: number;,
-  virtualUsers: number;
+  virtualUsers: number;,
   requestsPerSecond: number;,
-  averageResponseTime: number;
+  averageResponseTime: number;,
   errorRate: number;,
   passed: boolean;
-}>;
-}
-}
+>;
+
+
+
 export interface SecurityQualityMetrics {
-  vulnerabilities: {
+  vulnerabilities: {,
   total: number;,
-  critical: number;
+  critical: number;,
   high: number;,
-  medium: number;
+  medium: number;,
   low: number;,
   trends: number;
-}
+
+
 };
-  dependencies: {
+  dependencies: {,
   total: number;
   outdated: number;,
-  vulnerable: number;
-  licenses: Array<{
+  vulnerable: number;,
+  licenses: Array<{,
   license: string;,
-  count: number;
+  count: number;,
   compatible: boolean;,
   risk: 'low' | 'medium' | 'high';
-}>;
+>;
   };
-  codeSecurityIssues: {
+  codeSecurityIssues: {,
   total: number;
-  byCategory: Array<{
+  byCategory: Array<{,
   category: string;,
-  count: number;
+  count: number;,
   severity: 'low' | 'medium' | 'high' | 'critical';
-}>;
+>;
     highRiskFiles: string;
   };
-  compliance: {
-  frameworks: Array<{
+  compliance: {,
+  frameworks: Array<{,
   framework: string;,
-  score: number;
+  score: number;,
   status: 'compliant' | 'non_compliant' | 'partial';,
   lastAssessed: Date;
-}>;
+>;
     overallScore: number;,
-  gaps: Array<{;
+  gaps: Array<{;,
   framework: string;,
-  requirement: string;
+  requirement: string;,
   status: 'missing' | 'partial' | 'outdated';,
   priority: 'low' | 'medium' | 'high' | 'critical';
-}>;
+>;
   };
-  accessControl: {
+  accessControl: {,
   privilegedAccounts: number;
   dormantAccounts: number;,
   lastSecurityReview: Date;
 };
-}
-}
+
+
+
 export interface DocumentationQualityMetrics {
-  coverage: {
+  coverage: {,
   apiDocumentation: number;,
-  codeDocumentation: number;
+  codeDocumentation: number;,
   userGuides: number;,
   overall: number;
-}
+
+
 };
-  accuracy: {
+  accuracy: {,
   validCodeExamples: number;
   validApiExamples: number;,
-  brokenLinks: number;
+  brokenLinks: number;,
   outdatedSections: string;
 };
-  completeness: {
+  completeness: {,
   missingApiDocs: string;
   missingUserGuides: string;,
   incompleteSections: string;
 };
-  maintenance: {
+  maintenance: {,
   lastUpdated: Date;
   staleSections: string;,
   maintenanceScore: number;
 };
-}
-}
+
+
+
 export interface BuildHealthMetrics {
-  builds: {
+  builds: {,
   successRate: number;,
-  averageDuration: number;
-  failureReasons: Array<{
+  averageDuration: number;,
+  failureReasons: Array<{,
   reason: string;,
-  count: number;
+  count: number;,
   percentage: number;,
   trend: 'increasing' | 'stable' | 'decreasing';
-}
-}>;
+
+
+>;
     trends: number;
   };
-  tests: {
+  tests: {,
   passRate: number;
   totalTests: number;,
-  flakyTests: string;
-  slowTests: Array<{
+  flakyTests: string;,
+  slowTests: Array<{,
   name: string;,
-  duration: number;
+  duration: number;,
   file: string;,
   trend: 'improving' | 'stable' | 'degrading';
-}>;
+>;
     trends: number;
   };
-  deployments: {
+  deployments: {,
   successRate: number;
   frequency: number;,
-  rollbackRate: number;
+  rollbackRate: number;,
   averageDeployTime: number;
 };
-  pipeline: {
-  stages: Array<{
+  pipeline: {,
+  stages: Array<{,
   name: string;,
-  averageDuration: number;
+  averageDuration: number;,
   successRate: number;,
   bottleneck: boolean;
-}>;
+>;
     bottlenecks: string;,
   healthScore: number;
   };
-}
-}
+
+
+
 export interface QualityTrends {
   overall: TrendData;,
-  testCoverage: TrendData;
+  testCoverage: TrendData;,
   codeQuality: TrendData;,
-  performance: TrendData;
+  performance: TrendData;,
   security: TrendData;,
-  documentation: TrendData;
+  documentation: TrendData;,
   buildHealth: TrendData;
-}
-}
-}
+
+
+
+
+
 export interface TrendData {
   daily: number;,
-  weekly: number;
+  weekly: number;,
   monthly: number;,
-  direction: 'improving' | 'stable' | 'degrading';
+  direction: 'improving' | 'stable' | 'degrading';,
   velocity: number;,
   projection: number;
-}
-}
-}
+
+
+
+
+
 export interface QualityRecommendation {
   id: string;,
-  category: 'testCoverage' | 'codeQuality' | 'performance' | 'security' | 'documentation' | 'buildHealth';
+  category: 'testCoverage' | 'codeQuality' | 'performance' | 'security' | 'documentation' | 'buildHealth';,
   priority: 'low' | 'medium' | 'high' | 'critical';,
-  title: string;
+  title: string;,
   description: string;,
-  impact: 'low' | 'medium' | 'high';
+  impact: 'low' | 'medium' | 'high';,
   effort: 'low' | 'medium' | 'high';,
-  actions: Array<{
+  actions: Array<{,
   description: string;,
-  type: 'code_change' | 'configuration' | 'process' | 'tooling';
+  type: 'code_change' | 'configuration' | 'process' | 'tooling';,
   effort: 'low' | 'medium' | 'high';,
   automated: boolean;
-}
-}>;
-  expectedImprovement: {
+
+
+>;
+  expectedImprovement: {,
   metric: string;
   currentValue: number;,
-  projectedValue: number;
+  projectedValue: number;,
   confidence: number;
 };
   relatedFiles: string;,
-  relatedComponents: string;
+  relatedComponents: string;,
   status: 'new' | 'acknowledged' | 'in_progress' | 'completed' | 'dismissed';,
-  createdAt: Date;
+  createdAt: Date;,
   updatedAt: Date;
-}
-}
+
+
+
 export interface QualityAlert {
   id: string;,
-  type: 'threshold_breach' | 'quality_degradation' | 'build_failure' | 'security_issue';
+  type: 'threshold_breach' | 'quality_degradation' | 'build_failure' | 'security_issue';,
   severity: 'info' | 'warning' | 'error' | 'critical';,
-  message: string;
+  message: string;,
   metric: string;,
   currentValue: number;
   thresholdValue?: number;
@@ -393,39 +415,44 @@ export interface QualityAlert {
   // =============================================================================
   // Hook Configuration
   // =============================================================================
-}
-}
-}
+
+
+
+
+
 export interface UseQualityMetricsOptions {
   refreshInterval?: number; // milliseconds, 0 to disable auto-refresh,
   enableCache?: boolean;
   cacheTimeout?: number; // milliseconds,
   onError?: (error: Error) => void;
   onMetricsUpdate?: (metrics: QualityMetrics) => void;
-}
-}
-}
+
+
+
+
+
 export interface UseQualityMetricsReturn {
   // Data
   metrics: QualityMetrics | null;,
-  trends: QualityTrends | null;
+  trends: QualityTrends | null;,
   alerts: QualityAlert;,
   recommendations: QualityRecommendation;
   // State
   isLoading: boolean;,
-  error: string | null;
+  error: string | null;,
   lastUpdated: Date | null;
   // Actions
   refreshMetrics: () => Promise<void>;,
   acknowledgeAlert: (alertId: string) => Promise<void>;,
   updateRecommendation: (recommendationId: string, status: string) => Promise<void>;,
-  getTrends: (timeframe?: 'week' | 'month' | 'quarter') => Promise<QualityTrends | null>;
+  getTrends: (timeframe?: 'week' | 'month' | 'quarter') => Promise<QualityTrends | null>;,
   getHistoricalMetrics: (startDate: Date, endDate: Date) => Promise<QualityMetrics>;
   // =============================================================================
   // Quality Metrics Hook Implementation
   // =============================================================================
-}
-}
+
+
+
 export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQualityMetricsReturn {
   const {
     refreshInterval = 60000, // 1 minute default
@@ -433,7 +460,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
     cacheTimeout = 300000, // 5 minutes
     onError,
     onMetricsUpdate
-  } = options;
+ = options;
   // State
   const [metrics, setMetrics] = useState<QualityMetrics | null>(null);
   const [trends, setTrends] = useState<QualityTrends | null>(null);
@@ -447,7 +474,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
   const cacheRef = useRef<{
   metrics: QualityMetrics | null;,
   timestamp: number;
-}>({ metrics: null, timestamp: 0 });
+>({ metrics: null, timestamp: 0 });
   // API Base URL
   const API_BASE = '/api/quality';
   // Fetch quality metrics from API
@@ -461,7 +488,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       const transformedMetrics: QualityMetrics = {
   ...data,
   timestamp: new Date(data.timestamp),
-  metadata: {
+  metadata: {,
   ...data.metadata,
   lastUpdated: new Date(data.metadata.lastUpdated),
 },
@@ -478,7 +505,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
 }))
       };
       return transformedMetrics;
-    } catch (err) {
+ catch (err) {
   console.error('Error fetching quality metrics:', err);
   throw err;
 }, []);
@@ -489,7 +516,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
       if (!response.ok) {
         throw new Error(`Failed to fetch trends: ${response.status} ${response.statusText}`);}
       return await response.json();
-    } catch (err) {
+ catch (err) {
   console.error('Error fetching quality trends:', err);
   return null;
 }, []);
@@ -528,12 +555,12 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
           onMetricsUpdate(metricsData);
       if (trendsData) {
         setTrends(trendsData);
-    } catch (err) {
+ catch (err) {
   const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
   setError(errorMessage);
   if (onError) {
   onError(err instanceof Error ? err : new Error(errorMessage));
-} finally {
+ finally {
       setIsLoading(false);
   }, [fetchMetrics, fetchTrends, enableCache, cacheTimeout, onError, onMetricsUpdate]);
   // Acknowledge alert
@@ -554,7 +581,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
             ? { ...alert, status: 'acknowledged', acknowledgedAt: new Date() }
             : alert
       );
-    } catch (err) {
+ catch (err) {
   console.error('Error acknowledging alert:', err);
   throw err;
 }, []);
@@ -578,7 +605,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
             ? { ...rec, status: status as any, updatedAt: new Date() }
             : rec
       );
-    } catch (err) {
+ catch (err) {
   console.error('Error updating recommendation:', err);
   throw err;
 }, []);
@@ -603,7 +630,7 @@ export function useQualityMetrics(options: UseQualityMetricsOptions = {}): UseQu
   ...metrics.metadata,
   lastUpdated: new Date(metrics.metadata.lastUpdated),
 }));
-    } catch (err) {
+ catch (err) {
   console.error('Error fetching historical metrics:', err);
   return [];
 }, []);

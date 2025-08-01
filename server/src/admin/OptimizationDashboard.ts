@@ -15,8 +15,8 @@ import { DatabaseService } from '../auth/database/DatabaseService';
 import { RedisService } from '../auth/database/RedisService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface OptimizationDashboardAPI {
   // Dashboard Data
   getDashboard(): Promise<any>;
@@ -37,26 +37,28 @@ export interface OptimizationDashboardAPI {
   executeOptimization(optimizationId: string, options: any): Promise<any>;
   getOptimizationStatus(executionId: string): Promise<any>;
   cancelOptimization(executionId: string, userId: string): Promise<any>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface RecommendationFilters {
   category?: string[];
   priority?: string[];
   status?: string[];
-}
-}
+
+
+
   dateRange?: { start: Date; end: Date };
   search?: string;
   limit?: number;
   offset?: number;
-}
 
-}
-}
+
+
+
 export interface PolicyFilters {
   category?: string[];
   enabled?: boolean;
@@ -64,12 +66,13 @@ export interface PolicyFilters {
   search?: string;
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface OptimizationRequest {
   type: 'recommendation' | 'policy' | 'manual';
   id: string;
@@ -81,14 +84,15 @@ export interface OptimizationRequest {
       email?: boolean;
       slack?: boolean;
       webhook?: string;
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 export interface OptimizationResponse {
   success: boolean;
   executionId?: string;
@@ -97,9 +101,10 @@ export interface OptimizationResponse {
   risksIdentified?: string[];
   approvalRequired?: boolean;
   nextSteps?: string[];
-}
-}
-}
+
+
+
+
 
 /**
  * Administrative Optimization Dashboard
@@ -124,7 +129,7 @@ export class OptimizationDashboard {
     this.databaseService = dependencies.databaseService;
     this.redisService = dependencies.redisService;
     this.auditService = dependencies.auditService;
-  }
+
 
   /**
    * Register optimization dashboard routes with Fastify
@@ -166,7 +171,7 @@ export class OptimizationDashboard {
     // System health and status
     server.get('/api/admin/optimization/health', this.handleGetSystemHealth.bind(this));
     server.get('/api/admin/optimization/status', this.handleGetOptimizationStatus.bind(this));
-  }
+
 
   /**
    * Get optimization dashboard data
@@ -181,13 +186,13 @@ export class OptimizationDashboard {
         data: dashboardData,
         timestamp: new Date()
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get optimization recommendations with filtering
@@ -210,7 +215,7 @@ export class OptimizationDashboard {
           start: new Date(query.startDate),
           end: new Date(query.endDate)
         };
-      }
+
       
       const recommendations = await this.getFilteredRecommendations(filters);
       const totalCount = await this.getRecommendationsCount(filters);
@@ -223,15 +228,15 @@ export class OptimizationDashboard {
           limit: filters.limit,
           offset: filters.offset,
           hasMore: (filters.offset || 0) + recommendations.length < totalCount
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Apply optimization recommendation
@@ -257,13 +262,13 @@ export class OptimizationDashboard {
         data: result,
         message: result.success ? 'Optimization applied successfully' : 'Optimization completed with issues'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Create optimization policy
@@ -287,13 +292,13 @@ export class OptimizationDashboard {
         data: policy,
         message: 'Optimization policy created successfully'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(400).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Execute optimization (recommendation, policy, or manual)
@@ -321,25 +326,25 @@ export class OptimizationDashboard {
         break;
       default:
         throw new Error(`Unknown optimization type: ${optimizationRequest.type}`);
-      }
+
       
       // Send notifications if configured
       if (optimizationRequest.options.notificationSettings) {
         await this.sendOptimizationNotification(response, optimizationRequest.options.notificationSettings);
-      }
+
       
       return reply.code(200).send({
         success: response.success,
         data: response,
         message: response.message
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get system optimization analytics
@@ -360,13 +365,13 @@ export class OptimizationDashboard {
         data: analytics,
         timeRange
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get available quick actions
@@ -381,13 +386,13 @@ export class OptimizationDashboard {
         success: true,
         data: quickActions
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   /**
    * Get system health status
@@ -402,13 +407,13 @@ export class OptimizationDashboard {
         data: healthStatus,
         timestamp: new Date()
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error.message
       });
-    }
-  }
+
+
 
   // Private helper methods
 
@@ -423,27 +428,27 @@ export class OptimizationDashboard {
     if (filters.category && filters.category.length > 0) {
       query += ` AND category IN (${filters.category.map(() => '?').join(',')})`;
       params.push(...filters.category);
-    }
+
     
     if (filters.priority && filters.priority.length > 0) {
       query += ` AND priority IN (${filters.priority.map(() => '?').join(',')})`;
       params.push(...filters.priority);
-    }
+
     
     if (filters.status && filters.status.length > 0) {
       query += ` AND status IN (${filters.status.map(() => '?').join(',')})`;
       params.push(...filters.status);
-    }
+
     
     if (filters.search) {
       query += ' AND (title LIKE ? OR description LIKE ?)';
       params.push(`%${filters.search}%`, `%${filters.search}%`);
-    }
+
     
     if (filters.dateRange) {
       query += ' AND created_at BETWEEN ? AND ?';
       params.push(filters.dateRange.start.toISOString(), filters.dateRange.end.toISOString());
-    }
+
     
     query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
     params.push(filters.limit || 50, filters.offset || 0);
@@ -451,7 +456,7 @@ export class OptimizationDashboard {
     const rows = await this.databaseService.query(query, params);
     
     return rows.map(row => this.mapRowToRecommendation(row));
-  }
+
 
   /**
    * Execute recommendation optimization
@@ -477,13 +482,13 @@ export class OptimizationDashboard {
         risksIdentified: result.issues || [],
         nextSteps: result.nextRecommendedAction ? [result.nextRecommendedAction] : []
       };
-    } catch (error) {
+ catch (error) {
       return {
         success: false,
         message: `Failed to execute recommendation optimization: ${error.message}`
       };
-    }
-  }
+
+
 
   /**
    * Execute policy optimization
@@ -500,7 +505,7 @@ export class OptimizationDashboard {
       message: 'Policy optimization initiated',
       estimatedCompletion: new Date(Date.now() + 30 * 60 * 1000) // 30 minutes
     };
-  }
+
 
   /**
    * Execute manual optimization
@@ -517,7 +522,7 @@ export class OptimizationDashboard {
       message: 'Manual optimization initiated',
       approvalRequired: true
     };
-  }
+
 
   /**
    * Generate optimization analytics
@@ -555,17 +560,17 @@ export class OptimizationDashboard {
         byPriority: this.groupByPriority(recommendations),
         byStatus: this.groupByStatus(recommendations),
         successRate: this.calculateAverageSuccessRate(recommendations)
-  }
+
       policies: {
         total: policies.length,
         enabled: policies.filter(p => p.enabled).length,
         autoApply: policies.filter(p => p.auto_apply).length,
         byCategory: this.groupByCategory(policies)
-  }
+
       performance: await this.getPerformanceMetrics(timeRange),
       trends: await this.getOptimizationTrends(timeRange)
     };
-  }
+
 
   /**
    * Get available quick actions for user
@@ -583,7 +588,7 @@ export class OptimizationDashboard {
         icon: 'cache-clear',
         requiredPermission: 'clear_cache',
         estimatedTime: '2 minutes'
-  }
+
       {
         actionId: 'restart_services',
         title: 'Restart Critical Services',
@@ -592,7 +597,7 @@ export class OptimizationDashboard {
         icon: 'restart',
         requiredPermission: 'restart_services',
         estimatedTime: '5 minutes'
-  }
+
       {
         actionId: 'optimize_database',
         title: 'Optimize Database',
@@ -601,7 +606,7 @@ export class OptimizationDashboard {
         icon: 'database-optimize',
         requiredPermission: 'optimize_database',
         estimatedTime: '10 minutes'
-  }
+
       {
         actionId: 'update_performance_thresholds',
         title: 'Update Performance Thresholds',
@@ -610,11 +615,11 @@ export class OptimizationDashboard {
         icon: 'threshold-adjust',
         requiredPermission: 'configure_monitoring',
         estimatedTime: '3 minutes'
-      }
+
     ];
     
     return quickActions.filter(action => permissions.includes(action.requiredPermission));
-  }
+
 
   /**
    * Get system health status
@@ -640,39 +645,39 @@ export class OptimizationDashboard {
         score: healthScore,
         status: this.getHealthStatus(healthScore),
         lastChecked: new Date()
-  }
+
       components: {
         cpu: {
           usage: cpuUsage,
           status: this.getComponentStatus(cpuUsage, { warning: 70, critical: 90 }),
           trend: 'stable'
-  }
+
         memory: {
           usage: memoryUsage,
           status: this.getComponentStatus(memoryUsage, { warning: 75, critical: 90 }),
           trend: 'improving'
-  }
+
         disk: {
           usage: diskUsage,
           status: this.getComponentStatus(diskUsage, { warning: 80, critical: 95 }),
           trend: 'stable'
-  }
+
         network: {
           usage: networkUsage,
           status: this.getComponentStatus(networkUsage, { warning: 80, critical: 95 }),
           trend: 'stable'
-        }
-  }
+
+
       recommendations: await this.getHealthRecommendations(healthScore)
     };
-  }
+
 
   // Utility methods
 
   private extractUserId(request: FastifyRequest): string {
     // Extract user ID from request (implementation depends on auth system)
     return (request as any).user?.id || 'anonymous';
-  }
+
 
   private async validateAdminPermissions(userId: string, action: string): Promise<void> {
 
@@ -680,16 +685,16 @@ export class OptimizationDashboard {
     const permissions = await this.getUserPermissions(userId);
     if (!permissions.includes(action) && !permissions.includes('admin_all')) {
       throw new Error(`Insufficient permissions for action: ${action}`);
-    }
-  }
+
+
 
   private validatePolicyData(policyData: any): void {
     if (!policyData.name) throw new Error('Policy name is required');
     if (!policyData.category) throw new Error('Policy category is required');
     if (!policyData.rules || !Array.isArray(policyData.rules)) {
       throw new Error('Policy rules must be an array');
-    }
-  }
+
+
 
   private mapRowToRecommendation(row: any): OptimizationRecommendation {
     return {
@@ -711,13 +716,13 @@ export class OptimizationDashboard {
       updatedAt: new Date(row.updated_at),
       expiresAt: row.expires_at ? new Date(row.expires_at) : undefined
     };
-  }
+
 
   private async getUserPermissions(userId: string): Promise<string[]> {
 
     // Mock implementation - would integrate with actual auth system
     return ['apply_optimization', 'create_policy', 'execute_optimization', 'clear_cache', 'admin_all'];
-  }
+
 
   private calculateHealthScore(metrics: any): number {
     // Simple health score calculation
@@ -736,20 +741,20 @@ export class OptimizationDashboard {
       scores.disk * weights.disk +
       scores.network * weights.network
     );
-  }
+
 
   private getHealthStatus(score: number): string {
     if (score >= 90) return 'excellent';
     if (score >= 75) return 'good';
     if (score >= 60) return 'warning';
     return 'critical';
-  }
+
 
   private getComponentStatus(usage: number, thresholds: { warning: number; critical: number }): string {
     if (usage >= thresholds.critical) return 'critical';
     if (usage >= thresholds.warning) return 'warning';
     return 'good';
-  }
+
 
   // Mock system metrics methods - would integrate with actual monitoring
   private async getCurrentCPUUsage(): Promise<number> { return Math.random() * 100; }
@@ -767,4 +772,3 @@ export class OptimizationDashboard {
   private async getHealthRecommendations(score: number): Promise<any[]> { return []; }
   private async sendOptimizationNotification(response: any, settings: any): Promise<void> {}
   private async getRecommendationsCount(filters: any): Promise<number> { return 0; }
-}

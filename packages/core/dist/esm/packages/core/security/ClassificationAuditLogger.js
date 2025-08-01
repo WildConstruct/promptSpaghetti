@@ -101,7 +101,13 @@ dataProcessing: {
     deleted: number;
 }
 ;
-violationDetails: Array;
+violationDetails: Array < {
+    timestamp: Date,
+    eventId: string,
+    description: string,
+    severity: 'low' | 'medium' | 'high' | 'critical',
+    remediation: string
+} > ;
 recommendations: string;
 generatedAt: Date;
 generatedBy: string;
@@ -841,11 +847,11 @@ context: {
                                     exportAsCSV(logs, AuditLogEntry);
                                     string;
                                     {
-                                        const headers = [];
-                                        'id', 'timestamp', 'eventType', 'userId', 'ipAddress',
+                                        const headers = [
+                                            'id', 'timestamp', 'eventType', 'userId', 'ipAddress',
                                             'resourceType', 'resourceId', 'operation', 'result',
-                                            'classificationLevel', 'framework', 'hash';
-                                        ;
+                                            'classificationLevel', 'framework', 'hash'
+                                        ];
                                         const rows = logs.map(log => []);
                                         log.id,
                                             log.timestamp.toISOString(),
@@ -876,15 +882,16 @@ context: {
                                     string;
                                     {
                                         return logs.map(log => { });
-                                        const cef = [];
-                                        'CEF:0',
+                                        const cef = [
+                                            'CEF:0',
                                             'SecurityAudit',
                                             'ClassificationSystem',
                                             '1.0',
                                             log.eventType,
                                             log.action.reason || log.eventType,
                                             this.mapToSeverity(log),
-                                            `src=${log.actor.ipAddress}`;
+                                            `src=${log.actor.ipAddress}`
+                                        ];
                                     }
                                 }
                                 `duser=${log.actor.userId || 'system'}`;
@@ -906,13 +913,14 @@ context: {
     string;
     {
         return logs.map(log => { });
-        const leef = [];
-        'LEEF:2.0',
+        const leef = [
+            'LEEF:2.0',
             'SecurityAudit',
             'ClassificationSystem',
             '1.0',
             log.eventType,
-            `devTime=${log.timestamp.getTime()}`;
+            `devTime=${log.timestamp.getTime()}`
+        ];
     }
 }
 `src=${log.actor.ipAddress}`;

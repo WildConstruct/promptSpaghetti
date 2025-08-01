@@ -16,8 +16,9 @@ import { TrustScoreService } from '../services/trust/TrustScoreService';
 import { Database } from '../database';
 
 // Request/Response type definitions
-}
-}
+
+
+
 interface DetectFraudRequest {
   Body: {
     type: 'payment' | 'account' | 'transaction' | 'login' | 'registration';
@@ -33,14 +34,15 @@ interface DetectFraudRequest {
       userAgent: string;
       source: string;
       environment: 'web' | 'mobile' | 'api';
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 interface PaymentFraudRequest {
   Body: {
     transactionId: string;
@@ -51,8 +53,9 @@ interface PaymentFraudRequest {
       cardLast4?: string;
       cardBin?: string;
       billing?: Record<string, unknown>;
-}
-}
+
+
+
     };
     context: {
       ipAddress: string;
@@ -61,10 +64,10 @@ interface PaymentFraudRequest {
       environment: 'web' | 'mobile' | 'api';
     };
   };
-}
 
-}
-}
+
+
+
 interface AccountFraudRequest {
   Body: {
     userId: string;
@@ -73,14 +76,15 @@ interface AccountFraudRequest {
       userAgent: string;
       source: string;
       environment: 'web' | 'mobile' | 'api';
-}
-}
+
+
+
     };
   };
-}
 
-}
-}
+
+
+
 interface CreateReviewCaseRequest {
   Body: {
     entityType: 'user' | 'transaction' | 'account';
@@ -89,13 +93,14 @@ interface CreateReviewCaseRequest {
     reason: string;
     priority?: 'low' | 'medium' | 'high' | 'urgent';
     evidence?: Array<Record<string, unknown>>;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ReviewDecisionRequest {
   Body: {
     decision: 'approve' | 'reject' | 'escalate' | 'modify';
@@ -103,13 +108,14 @@ interface ReviewDecisionRequest {
     confidence: number;
     actions?: string[];
     modifiedFraudScore?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface CreateAlertRequest {
   Body: {
     severity: 'info' | 'warning' | 'critical' | 'urgent';
@@ -122,13 +128,14 @@ interface CreateAlertRequest {
     detectionMethod?: string;
     expiresAt?: string;
     tags?: string[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface FraudRuleRequest {
   Body: {
     name: string;
@@ -140,23 +147,25 @@ interface FraudRuleRequest {
     actions: Array<Record<string, unknown>>;
     thresholds: Array<Record<string, unknown>>;
     tags?: string[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface AnalyticsRequest {
   Querystring: {
     startDate: string;
     endDate: string;
     format?: 'json' | 'csv';
     includeInsights?: boolean;
-}
-}
+
+
+
   };
-}
+
 
 export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
   const fraudEngine = new FraudDetectionEngine(
@@ -210,10 +219,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
                 userAgent: { type: 'string' },
                 source: { type: 'string' },
                 environment: { type: 'string', enum: ['web', 'mobile', 'api'] }
-              }
-            }
-          }
-  }
+
+
+
+
         response: {
           200: {
             type: 'object',
@@ -228,14 +237,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
                   recommendations: { type: 'array' },
                   requiresReview: { type: 'boolean' },
                   autoBlocked: { type: 'boolean' }
-                }
-  }
+
+
               processingTime: { type: 'number' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<DetectFraudRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -244,7 +253,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         // Check permissions for fraud detection
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:detect');
@@ -253,7 +262,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const detectionRequest: FraudDetectionRequest = {
           ...request.body,
@@ -261,7 +270,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             ...request.body.context,
             timestamp: new Date(),
             requestId: request.id || `req-${Date.now()}`
-          }
+
         };
 
         const startTime = Date.now();
@@ -279,19 +288,17 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             autoBlocked: result.autoBlocked,
             riskFactors: result.riskFactors,
             detectionMethod: result.detectionMethod
-  }
+
           processingTime
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Fraud detection error:', error);
         reply.code(500).send({
           success: false,
           error: 'Fraud detection failed',
           message: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -320,8 +327,8 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
                 cardLast4: { type: 'string' },
                 cardBin: { type: 'string' },
                 billing: { type: 'object' }
-              }
-  }
+
+
             context: {
               type: 'object',
               required: ['ipAddress', 'userAgent', 'source', 'environment'],
@@ -330,12 +337,12 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
                 userAgent: { type: 'string' },
                 source: { type: 'string' },
                 environment: { type: 'string', enum: ['web', 'mobile', 'api'] }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     async (request: FastifyRequest<PaymentFraudRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -344,7 +351,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:payment_detect');
         if (!hasAccess) {
@@ -352,7 +359,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const { transactionId, paymentData, context } = request.body;
         const fraudContext = {
@@ -368,16 +375,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           assessment: result,
           timestamp: new Date()
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Payment fraud detection error:', error);
         reply.code(500).send({
           success: false,
           error: 'Payment fraud detection failed',
           message: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -404,12 +409,12 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
                 userAgent: { type: 'string' },
                 source: { type: 'string' },
                 environment: { type: 'string', enum: ['web', 'mobile', 'api'] }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
     async (request: FastifyRequest<AccountFraudRequest>, reply: FastifyReply) => {
       try {
         const currentUserId = request.user?.id;
@@ -418,7 +423,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(currentUserId, 'fraud:account_detect');
         if (!hasAccess) {
@@ -426,7 +431,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const { userId, context } = request.body;
         const fraudContext = {
@@ -442,16 +447,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           assessment: result,
           timestamp: new Date()
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Account fraud detection error:', error);
         reply.code(500).send({
           success: false,
           error: 'Account fraud detection failed',
           message: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -479,10 +482,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             reason: { type: 'string', minLength: 10 },
             priority: { type: 'string', enum: ['low', 'medium', 'high', 'urgent'], default: 'medium' },
             evidence: { type: 'array', items: { type: 'object' } }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request: FastifyRequest<CreateReviewCaseRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -491,7 +494,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:review_create');
         if (!hasAccess) {
@@ -499,7 +502,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         // Create a mock detection result for manual cases
         const mockDetectionResult = {
@@ -516,13 +519,13 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             description: request.body.reason,
             evidence: ['Manual review request'],
             mitigationActions: ['manual_investigation']
-          }],
+],
           recommendations: [],
           detectionMethod: {
             primary: 'manual_review' as const,
             secondary: [],
             processingTime: 0
-  }
+
           timestamp: new Date(),
           requiresReview: true,
           autoBlocked: false
@@ -540,16 +543,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           case: reviewCase,
           message: 'Review case created successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error creating review case:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to create review case',
           message: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -564,7 +565,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
       limit?: number;
       offset?: number;
     };
-  }>(
+>(
     '/fraud-review/cases',
     {
       schema: {
@@ -581,10 +582,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             assignedTo: { type: 'string' },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -593,7 +594,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:review_read');
         if (!hasAccess) {
@@ -601,7 +602,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         // For now, return mock data - would implement actual database query
         const cases = [];
@@ -615,16 +616,15 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             limit: request.query.limit || 20,
             offset: request.query.offset || 0,
             hasMore: false
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         console.error('Error retrieving review cases:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to retrieve review cases'
         });
-      }
+
     }
   );
 
@@ -644,17 +644,17 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           required: ['caseId'],
           properties: {
             caseId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['analystId'],
           properties: {
             analystId: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -663,7 +663,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:review_assign');
         if (!hasAccess) {
@@ -671,7 +671,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const reviewCase = await fraudMonitoring.assignReviewCase(
           request.params.caseId,
@@ -683,16 +683,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           case: reviewCase,
           message: 'Case assigned successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error assigning review case:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to assign review case',
           message: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -711,8 +709,8 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           required: ['caseId'],
           properties: {
             caseId: { type: 'string' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['decision', 'reason', 'confidence'],
@@ -722,10 +720,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             confidence: { type: 'number', minimum: 0, maximum: 100 },
             actions: { type: 'array', items: { type: 'string' } },
             modifiedFraudScore: { type: 'number', minimum: 0, maximum: 100 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -734,7 +732,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:review_decide');
         if (!hasAccess) {
@@ -742,7 +740,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const reviewCase = await fraudMonitoring.makeReviewDecision(
           request.params.caseId,
@@ -755,16 +753,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           case: reviewCase,
           message: 'Decision recorded successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error making review decision:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to record decision',
           message: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -790,7 +786,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             type: { 
               type: 'string', 
               enum: ['high_fraud_score', 'new_fraud_pattern', 'system_anomaly', 'manual_review_required'] 
-  }
+
             title: { type: 'string', minLength: 5 },
             description: { type: 'string', minLength: 10 },
             fraudScore: { type: 'number', minimum: 0, maximum: 100 },
@@ -799,10 +795,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             detectionMethod: { type: 'string' },
             expiresAt: { type: 'string', format: 'date-time' },
             tags: { type: 'array', items: { type: 'string' } }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request: FastifyRequest<CreateAlertRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -811,7 +807,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:alert_create');
         if (!hasAccess) {
@@ -819,7 +815,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const options = {
           fraudScore: request.body.fraudScore,
@@ -843,16 +839,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           alert,
           message: 'Alert created successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error creating fraud alert:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to create alert',
           message: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -866,7 +860,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
       limit?: number;
       offset?: number;
     };
-  }>(
+>(
     '/fraud-alerts',
     {
       schema: {
@@ -882,10 +876,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             status: { type: 'string', enum: ['active', 'acknowledged', 'resolved', 'dismissed'] },
             limit: { type: 'integer', minimum: 1, maximum: 100, default: 20 },
             offset: { type: 'integer', minimum: 0, default: 0 }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -894,7 +888,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:alert_read');
         if (!hasAccess) {
@@ -902,7 +896,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         // For now, return mock data - would implement actual database query
         const alerts = [];
@@ -916,17 +910,15 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             limit: request.query.limit || 20,
             offset: request.query.offset || 0,
             hasMore: false
-          }
-        });
 
-      } catch (error) {
+        });
+ catch (error) {
         console.error('Error retrieving fraud alerts:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to retrieve alerts'
         });
-      }
-    }
+
   );
 
   /**
@@ -945,10 +937,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           required: ['alertId'],
           properties: {
             alertId: { type: 'string' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -957,7 +949,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:alert_acknowledge');
         if (!hasAccess) {
@@ -965,7 +957,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const alert = await fraudMonitoring.acknowledgeAlert(request.params.alertId, userId);
 
@@ -974,16 +966,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           alert,
           message: 'Alert acknowledged successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error acknowledging alert:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to acknowledge alert',
           message: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -1009,10 +999,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             endDate: { type: 'string', format: 'date' },
             format: { type: 'string', enum: ['json', 'csv'], default: 'json' },
             includeInsights: { type: 'boolean', default: true }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request: FastifyRequest<AnalyticsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -1021,7 +1011,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:analytics_read');
         if (!hasAccess) {
@@ -1029,7 +1019,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const timeRange = {
           startDate: new Date(request.query.startDate),
@@ -1042,23 +1032,21 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           // TODO: Implement CSV export
           reply.type('text/csv');
           reply.send('CSV export not yet implemented');
-        } else {
+ else {
           reply.send({
             success: true,
             analytics,
             generatedAt: new Date()
           });
-        }
 
-      } catch (error) {
+ catch (error) {
         console.error('Error generating fraud analytics:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to generate analytics',
           message: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -1072,8 +1060,8 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
         summary: 'Get fraud dashboard',
         description: 'Retrieve real-time fraud monitoring dashboard data',
         security: [{ bearerAuth: [] }]
-      }
-  }
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -1082,7 +1070,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:dashboard_read');
         if (!hasAccess) {
@@ -1090,7 +1078,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const dashboard = await fraudMonitoring.getFraudDashboard();
 
@@ -1099,14 +1087,13 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           dashboard,
           lastUpdated: new Date()
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error generating fraud dashboard:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to generate dashboard'
         });
-      }
+
     }
   );
 
@@ -1118,7 +1105,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
       startDate: string;
       endDate: string;
     };
-  }>(
+>(
     '/fraud-stats',
     {
       schema: {
@@ -1132,10 +1119,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           properties: {
             startDate: { type: 'string', format: 'date' },
             endDate: { type: 'string', format: 'date' }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request, reply) => {
       try {
         const userId = request.user?.id;
@@ -1144,7 +1131,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:stats_read');
         if (!hasAccess) {
@@ -1152,7 +1139,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const timeRange = {
           startDate: new Date(request.query.startDate),
@@ -1167,14 +1154,13 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           period: timeRange,
           generatedAt: new Date()
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error generating fraud stats:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to generate statistics'
         });
-      }
+
     }
   );
 
@@ -1206,10 +1192,10 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             actions: { type: 'array', items: { type: 'object' } },
             thresholds: { type: 'array', items: { type: 'object' } },
             tags: { type: 'array', items: { type: 'string' } }
-          }
-        }
-      }
-  }
+
+
+
+
     async (request: FastifyRequest<FraudRuleRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.id;
@@ -1218,7 +1204,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Authentication required'
           });
-        }
+
 
         const hasAccess = await fastify.authService.hasPermission(userId, 'fraud:rules_manage');
         if (!hasAccess) {
@@ -1226,7 +1212,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             success: false,
             error: 'Insufficient permissions'
           });
-        }
+
 
         const ruleData = {
           ...request.body,
@@ -1234,7 +1220,7 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             createdBy: userId,
             createdAt: new Date(),
             tags: request.body.tags || []
-          }
+
         };
 
         const rule = await fraudMonitoring.upsertFraudRule(ruleData);
@@ -1244,16 +1230,14 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
           rule,
           message: 'Fraud rule created successfully'
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error creating fraud rule:', error);
         reply.code(500).send({
           success: false,
           error: 'Failed to create fraud rule',
           message: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -1266,8 +1250,8 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
         tags: ['System'],
         summary: 'Fraud system health',
         description: 'Check health status of fraud monitoring system'
-      }
-  }
+
+
     async (request, reply) => {
       try {
         const health = {
@@ -1279,35 +1263,32 @@ export async function fraudMonitoringRoutes(fastify: FastifyInstance) {
             database: 'operational',
             mlModels: 'disabled',
             rulesEngine: 'operational'
-  }
+
           metrics: {
             avgProcessingTime: 150,
             successRate: 99.5,
             errorRate: 0.5,
             alertsActive: 0,
             reviewQueueSize: 0
-  }
+
           configuration: {
             realTimeMonitoring: true,
             mlModelsEnabled: false,
             rulesEngineEnabled: true,
             autoActionsEnabled: true
-          }
+
         };
 
         reply.send({
           success: true,
           health
         });
-
-      } catch (error) {
+ catch (error) {
         console.error('Error checking fraud system health:', error);
         reply.code(500).send({
           success: false,
           error: 'Health check failed',
           status: 'unhealthy'
         });
-      }
-    }
+
   );
-}

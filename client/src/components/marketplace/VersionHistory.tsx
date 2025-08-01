@@ -2,16 +2,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import './VersionHistory.css';
-}
+
+
 interface EnhancedTemplateVersion {
   id: string;,
-  template_id: string;
+  template_id: string;,
   version_number: string;,
-  major_version: number;
+  major_version: number;,
   minor_version: number;,
-  patch_version: number;
+  patch_version: number;,
   status: 'draft' | 'published' | 'deprecated' | 'archived';,
-  visibility: 'public' | 'private' | 'beta';
+  visibility: 'public' | 'private' | 'beta';,
   claude_model: string;,
   graph_json: Record<string, unknown>;
   prompt_yaml?: string;
@@ -19,32 +20,33 @@ interface EnhancedTemplateVersion {
   compatibility_level: 'breaking' | 'major' | 'minor' | 'patch';
   migration_guide?: string;
   deprecated_features: string;,
-  new_features: string;
+  new_features: string;,
   breaking_changes: string;,
-  bug_fixes: string;
+  bug_fixes: string;,
   known_issues: string;
   min_claude_version?: string;
   max_claude_version?: string;
   required_features: string;,
-  optional_features: string;
+  optional_features: string;,
   created_by: string;
   published_at?: string;
   deprecated_at?: string;
   download_count: number;,
-  created_at: string;
+  created_at: string;,
   updated_at: string;
   interface VersionComparison {
   from_version: EnhancedTemplateVersion;,
-  to_version: EnhancedTemplateVersion;
+  to_version: EnhancedTemplateVersion;,
   differences: unknown;,
-  compatibility_impact: {
+  compatibility_impact: {,
   is_breaking: boolean;,
-  affected_components: string;
+  affected_components: string;,
   required_updates: string;,
-  optional_updates: string;
+  optional_updates: string;,
   deprecation_warnings: string;,
   risk_level: 'low' | 'medium' | 'high';
-}
+
+
 };
   migration_complexity: 'simple' | 'moderate' | 'complex';,
   estimated_migration_time: number;
@@ -61,32 +63,7 @@ const COMPATIBILITY_COLORS = {
   patch: '#3b82f6',
 };
 
-export const VersionHistory: React.FC = () => {
-  const { templateId } = useParams<{ templateId: string }>();
-  const [versions, setVersions] = useState<EnhancedTemplateVersion>([]);
-  const [selectedVersions, setSelectedVersions] = useState<string>([]);
-  const [comparison, setComparison] = useState<VersionComparison | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState({)
-  status: '',
-  visibility: '',
-  compatibility: '',
-});
-  const [showComparison, setShowComparison] = useState(false);
-  useEffect(() => {
-    if (templateId) {
-      fetchVersions();
-  }, [templateId, filter, fetchVersions]);
-  const fetchVersions = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const params = new URLSearchParams();
-      if (filter.status) params.append('status', filter.status);
-      if (filter.visibility) params.append('visibility', filter.visibility);
-      params.append('include_private', 'true');
-      const response = await fetch(`/api/marketplace/templates/${templateId}/versions?${params}`, {)}
-  },
+export const VersionHistory = () => { return null; },
   headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
       });
@@ -99,17 +76,17 @@ export const VersionHistory: React.FC = () => {
   v.compatibility_level === filter.compatibility
   );
   setVersions(filteredVersions);
-} catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to fetch versions');
-} finally {
+ finally {
       setIsLoading(false);
   }, [templateId, filter]);
   const handleVersionSelect = (versionId: string) => {
     if (selectedVersions.includes(versionId)) {
       setSelectedVersions(selectedVersions.filter(id => id !== versionId));
-    } else if (selectedVersions.length < 2) {
+ else if (selectedVersions.length < 2) {
       setSelectedVersions([...selectedVersions, versionId]);
-    } else {
+ else {
       // Replace the first selection with the new one
       setSelectedVersions([selectedVersions[1], versionId]);
   };
@@ -123,21 +100,21 @@ export const VersionHistory: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   from_version_id: selectedVersions[0],
   to_version_id: selectedVersions[1],
   include_content_diff: true,
   include_metadata_diff: true,
-}
+
       });
       if (!response.ok) {
         throw new Error('Failed to compare versions');
       const comparisonData = await response.json();
       setComparison(comparisonData);
       setShowComparison(true);
-    } catch (err) {
+ catch (err) {
   setError(err instanceof Error ? err.message : 'Failed to compare versions');
-} finally {
+ finally {
       setIsLoading(false);
   };
   const handleDeployVersion = async (versionId: string) => {
@@ -150,16 +127,16 @@ export const VersionHistory: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`}
   },
-  body: JSON.stringify({,)
+  body: JSON.stringify({);
   deployment_type: 'immediate',
   rollout_percentage: 100,
-}
+
       });
       if (!response.ok) {
         throw new Error('Failed to deploy version');
       alert('Version deployed successfully!');
       fetchVersions();
-    } catch (err) {
+ catch (err) {
       alert(`Deployment failed: ${err instanceof Error ? err.message : 'Unknown error'}`);}
   };
   const formatDate = (dateString: string) => {
@@ -313,7 +290,7 @@ export const VersionHistory: React.FC = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDeployVersion(version.id);
-                      }}
+}
                     >
                       Deploy
                     </button>

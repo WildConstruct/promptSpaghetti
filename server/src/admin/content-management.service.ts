@@ -15,8 +15,8 @@ export type ContentType = 'template' | 'documentation' | 'user_content' | 'syste
 export type ContentStatus = 'draft' | 'published' | 'archived' | 'under_review' | 'rejected' | 'featured';
 export type ContentVisibility = 'public' | 'private' | 'organization' | 'admin_only';
 
-}
-}
+
+
 export interface ContentItem {
   id: string;
   title: string;
@@ -38,17 +38,18 @@ export interface ContentItem {
     expiresAt?: string;
     publishedAt?: string;
     customFields: Record<string, any>;
-}
-}
+
+
+
   };
   organizationId?: string;
   parentId?: string; // For content hierarchies
   createdAt: string;
   updatedAt: string;
-}
 
-}
-}
+
+
+
 export interface ContentFilter {
   type?: ContentType;
   status?: ContentStatus;
@@ -62,13 +63,14 @@ export interface ContentFilter {
   dateRange?: {
     start: string;
     end: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface ContentCreateRequest {
   title: string;
   description?: string;
@@ -82,16 +84,17 @@ export interface ContentCreateRequest {
     priority?: number;
     expiresAt?: string;
     customFields?: Record<string, any>;
-}
-}
+
+
+
   };
   organizationId?: string;
   parentId?: string;
   publishImmediately?: boolean;
-}
 
-}
-}
+
+
+
 export interface ContentUpdateRequest {
   title?: string;
   description?: string;
@@ -105,14 +108,15 @@ export interface ContentUpdateRequest {
     priority?: number;
     expiresAt?: string;
     customFields?: Record<string, any>;
-}
-}
+
+
+
   };
   publishImmediately?: boolean;
-}
 
-}
-}
+
+
+
 export interface ContentStatistics {
   totalItems: number;
   byType: Record<ContentType, number>;
@@ -123,22 +127,23 @@ export interface ContentStatistics {
     created24h: number;
     updated24h: number;
     published24h: number;
-}
-}
+
+
+
   };
   topCategories: Array<{
     category: string;
     count: number;
-  }>;
+>;
   topAuthors: Array<{
     authorId: string;
     authorName: string;
     count: number;
-  }>;
-}
+>;
 
-}
-}
+
+
+
 export interface ContentRevision {
   id: string;
   contentId: string;
@@ -151,53 +156,12 @@ export interface ContentRevision {
   authorId: string;
   createdAt: string;
   comment?: string;
-}
-}
-}
 
-export class ContentManagementService {
-  private database: DatabaseService;
-  private auditService: AuditService;
 
-  constructor(database: DatabaseService, auditService: AuditService) {
-    this.database = database;
-    this.auditService = auditService;
-  }
 
-  // Create new content item
-  async createContent(request: ContentCreateRequest, userId: string, userRole: string): Promise<ContentItem> {
 
-    const client = await this.database.getClient();
-    
-    try {
-      await client.query('BEGIN');
 
-      // Validate permissions
-      await this.validateContentPermissions(userId, userRole, 'create', request.type);
-
-      const contentId = this.generateContentId();
-      const initialStatus = request.publishImmediately ? 'published' : 'draft';
-      const publishedAt = request.publishImmediately ? new Date().toISOString() : null;
-
-      // Insert content item
-      const insertQuery = `
-        INSERT INTO content_items (
-          id, title, description, type, status, visibility, content, metadata, 
-          organization_id, parent_id, created_at, updated_at
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW(), NOW())
-        RETURNING *
-      `;
-
-      const metadata = {
-        ...request.metadata,
-        version: 1,
-        author: await this.getUserName(userId),
-        authorId: userId,
-        featured: request.metadata.featured || false,
-        priority: request.metadata.priority || 0,
-        publishedAt,
-        customFields: request.metadata.customFields || {}
-      };
+export class ContentManagementService {};
 
       const insertParams = [
         contentId,
@@ -229,21 +193,20 @@ export class ContentManagementService {
           type: request.type,
           status: initialStatus,
           visibility: request.visibility
-  }
+
         severity: 'info'
       });
 
       await client.query('COMMIT');
       return contentItem;
-
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       console.error('Error creating content:', error);
       throw new Error('Failed to create content item');
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Update existing content item
   async updateContent(
@@ -262,7 +225,7 @@ export class ContentManagementService {
       const existingContent = await this.getContentById(contentId);
       if (!existingContent) {
         throw new Error('Content item not found');
-      }
+
 
       // Validate permissions
       await this.validateContentPermissions(userId, userRole, 'update', existingContent.type, existingContent);
@@ -275,27 +238,27 @@ export class ContentManagementService {
       if (request.title !== undefined) {
         updateFields.push(`title = $${paramIndex++}`);
         updateParams.push(request.title);
-      }
+
 
       if (request.description !== undefined) {
         updateFields.push(`description = $${paramIndex++}`);
         updateParams.push(request.description);
-      }
+
 
       if (request.status !== undefined) {
         updateFields.push(`status = $${paramIndex++}`);
         updateParams.push(request.status);
-      }
+
 
       if (request.visibility !== undefined) {
         updateFields.push(`visibility = $${paramIndex++}`);
         updateParams.push(request.visibility);
-      }
+
 
       if (request.content !== undefined) {
         updateFields.push(`content = $${paramIndex++}`);
         updateParams.push(JSON.stringify(request.content));
-      }
+
 
       if (request.metadata !== undefined) {
         const updatedMetadata = {
@@ -308,15 +271,15 @@ export class ContentManagementService {
 
         if (request.publishImmediately && existingContent.status !== 'published') {
           updatedMetadata.publishedAt = new Date().toISOString();
-        }
+
 
         updateFields.push(`metadata = $${paramIndex++}`);
         updateParams.push(JSON.stringify(updatedMetadata));
-      }
+
 
       if (updateFields.length === 0) {
         return existingContent;
-      }
+
 
       updateFields.push(`updated_at = NOW()`);
       updateParams.push(contentId);
@@ -345,21 +308,20 @@ export class ContentManagementService {
           type: updatedContent.type,
           status: updatedContent.status,
           changes: Object.keys(request)
-  }
+
         severity: 'info'
       });
 
       await client.query('COMMIT');
       return updatedContent;
-
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       console.error('Error updating content:', error);
       throw new Error('Failed to update content item');
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get content by ID
   async getContentById(contentId: string): Promise<ContentItem | null> {
@@ -370,14 +332,14 @@ export class ContentManagementService {
       
       if (result.rows.length === 0) {
         return null;
-      }
+
 
       return this.mapContentItem(result.rows[0]);
-    } catch (error) {
+ catch (error) {
       console.error('Error getting content by ID:', error);
       throw new Error('Failed to retrieve content item');
-    }
-  }
+
+
 
   // Search and filter content
   async searchContent(
@@ -397,48 +359,48 @@ export class ContentManagementService {
       if (userRole !== 'admin' && userRole !== 'super_admin') {
         whereConditions.push(`(visibility = 'public' OR (visibility = 'organization' AND organization_id = $${paramIndex++}))`);
         queryParams.push(await this.getUserOrganizationId(userId));
-      }
+
 
       // Apply filters
       if (filter.type) {
         whereConditions.push(`type = $${paramIndex++}`);
         queryParams.push(filter.type);
-      }
+
 
       if (filter.status) {
         whereConditions.push(`status = $${paramIndex++}`);
         queryParams.push(filter.status);
-      }
+
 
       if (filter.visibility) {
         whereConditions.push(`visibility = $${paramIndex++}`);
         queryParams.push(filter.visibility);
-      }
+
 
       if (filter.author) {
         whereConditions.push(`metadata->>'authorId' = $${paramIndex++}`);
         queryParams.push(filter.author);
-      }
+
 
       if (filter.organizationId) {
         whereConditions.push(`organization_id = $${paramIndex++}`);
         queryParams.push(filter.organizationId);
-      }
+
 
       if (filter.category) {
         whereConditions.push(`metadata->>'category' = $${paramIndex++}`);
         queryParams.push(filter.category);
-      }
+
 
       if (filter.featured !== undefined) {
         whereConditions.push(`(metadata->>'featured')::boolean = $${paramIndex++}`);
         queryParams.push(filter.featured);
-      }
+
 
       if (filter.tags && filter.tags.length > 0) {
         whereConditions.push(`metadata->'tags' ?| $${paramIndex++}`);
         queryParams.push(filter.tags);
-      }
+
 
       if (filter.search) {
         whereConditions.push(`(
@@ -448,12 +410,12 @@ export class ContentManagementService {
         )`);
         queryParams.push(`%${filter.search}%`);
         paramIndex++;
-      }
+
 
       if (filter.dateRange) {
         whereConditions.push(`created_at BETWEEN $${paramIndex++} AND $${paramIndex++}`);
         queryParams.push(filter.dateRange.start, filter.dateRange.end);
-      }
+
 
       const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
 
@@ -479,11 +441,11 @@ export class ContentManagementService {
       const items = dataResult.rows.map(row => this.mapContentItem(row));
 
       return { items, totalCount };
-    } catch (error) {
+ catch (error) {
       console.error('Error searching content:', error);
       throw new Error('Failed to search content items');
-    }
-  }
+
+
 
   // Delete content item
   async deleteContent(contentId: string, userId: string, userRole: string): Promise<void> {
@@ -497,7 +459,7 @@ export class ContentManagementService {
       const existingContent = await this.getContentById(contentId);
       if (!existingContent) {
         throw new Error('Content item not found');
-      }
+
 
       // Validate permissions
       await this.validateContentPermissions(userId, userRole, 'delete', existingContent.type, existingContent);
@@ -520,20 +482,19 @@ export class ContentManagementService {
         details: {
           title: existingContent.title,
           type: existingContent.type
-  }
+
         severity: 'warning'
       });
 
       await client.query('COMMIT');
-
-    } catch (error) {
+ catch (error) {
       await client.query('ROLLBACK');
       console.error('Error deleting content:', error);
       throw new Error('Failed to delete content item');
-    } finally {
+ finally {
       client.release();
-    }
-  }
+
+
 
   // Get content statistics
   async getContentStatistics(): Promise<ContentStatistics> {
@@ -661,7 +622,7 @@ export class ContentManagementService {
           created24h: parseInt(recentActivity.created24h),
           updated24h: parseInt(recentActivity.updated24h),
           published24h: parseInt(recentActivity.published24h)
-  }
+
         topCategories: categoriesResult.rows.map(row => ({
           category: row.category,
           count: parseInt(row.count)
@@ -672,11 +633,11 @@ export class ContentManagementService {
           count: parseInt(row.count)
         }))
       };
-    } catch (error) {
+ catch (error) {
       console.error('Error getting content statistics:', error);
       throw new Error('Failed to retrieve content statistics');
-    }
-  }
+
+
 
   // Get content revisions
   async getContentRevisions(contentId: string, limit = 20): Promise<ContentRevision[]> {
@@ -704,11 +665,11 @@ export class ContentManagementService {
         createdAt: row.created_at,
         comment: row.comment
       }));
-    } catch (error) {
+ catch (error) {
       console.error('Error getting content revisions:', error);
       throw new Error('Failed to retrieve content revisions');
-    }
-  }
+
+
 
   // Bulk operations
   async bulkUpdateStatus(
@@ -725,11 +686,11 @@ export class ContentManagementService {
       try {
         await this.updateContent(contentId, { status: newStatus }, userId, userRole);
         success++;
-      } catch (error) {
+ catch (error) {
         console.error(`Failed to update content ${contentId}:`, error);
         failed++;
-      }
-    }
+
+
 
     // Log bulk operation
     await this.auditService.logEvent({
@@ -742,12 +703,12 @@ export class ContentManagementService {
         newStatus,
         success,
         failed
-  }
+
       severity: failed > 0 ? 'warning' : 'info'
     });
 
     return { success, failed };
-  }
+
 
   // Private helper methods
   private async validateContentPermissions(
@@ -761,32 +722,32 @@ export class ContentManagementService {
     // Super admins can do everything
     if (userRole === 'super_admin') {
       return;
-    }
+
 
     // Admins can manage most content
     if (userRole === 'admin') {
       if (['system_content'].includes(contentType) && action === 'delete') {
         throw new Error('Admins cannot delete system content');
-      }
+
       return;
-    }
+
 
     // Content creators can manage their own content
     if (userRole === 'content_creator' || userRole === 'creator') {
       if (action === 'create') {
         if (['system_content', 'announcement'].includes(contentType)) {
           throw new Error('Insufficient permissions to create this content type');
-        }
+
         return;
-      }
+
 
       if (existingContent && existingContent.metadata.authorId === userId) {
         return;
-      }
-    }
+
+
 
     throw new Error('Insufficient permissions for this operation');
-  }
+
 
   private async createContentRevision(
     contentId: string, 
@@ -813,7 +774,7 @@ export class ContentManagementService {
       content.metadata.authorId,
       comment
     ]);
-  }
+
 
   private mapContentItem(row: any): ContentItem {
     return {
@@ -830,11 +791,11 @@ export class ContentManagementService {
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
-  }
+
 
   private generateContentId(): string {
     return `content_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
 
   private async getUserName(userId: string): Promise<string> {
 
@@ -844,10 +805,10 @@ export class ContentManagementService {
         [userId]
       );
       return result.rows[0]?.name || 'Unknown User';
-    } catch (error) {
+ catch (error) {
       return 'Unknown User';
-    }
-  }
+
+
 
   private async getUserOrganizationId(userId: string): Promise<string | null> {
 
@@ -857,10 +818,10 @@ export class ContentManagementService {
         [userId]
       );
       return result.rows[0]?.organization_id || null;  
-    } catch (error) {
+ catch (error) {
       return null;
-    }
-  }
-}
+
+
+
 
 export default ContentManagementService;

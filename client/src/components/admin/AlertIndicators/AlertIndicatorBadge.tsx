@@ -12,7 +12,7 @@ import { AlertTriangle, AlertCircle, Info, Zap } from 'lucide-react';
 
 export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
-}
+
 export interface AlertCount {
   critical: number;,
   high: number,
@@ -25,7 +25,8 @@ export interface AlertCount {
   maxDisplayCount?: number; // Max number to display before showing "99+",
   showIcon?: boolean;
   size?: 'sm' | 'md' | 'lg';
-  }
+
+
 
 className?: string;
   onClick?: () => void;
@@ -39,7 +40,7 @@ className?: string;
   className = '',
   onClick,
   animate = false
-}
+
 }) => {
   // Calculate total count or specific severity count
   const getDisplayCount = (): number => {
@@ -98,7 +99,7 @@ className?: string;
   };
   // Get size configuration
   const getSizeConfig = (sz: string) => {
-    const configs: Record<string, { container: string, icon: string; text: string }> = {
+    const configs: Record<string, { container: string, icon: string, text: string }> = {
   sm: {
   container: 'px-1.5 py-0.5 text-xs min-w-[20px] h-5',
   icon: 'w-3 h-3',
@@ -125,7 +126,7 @@ className?: string;
     return null;
   const formattedCount = displayCount > maxDisplayCount ? `${maxDisplayCount}+` : displayCount.toString();}
   const Icon = severityConfig.icon;
-  const badgeClasses = [;
+  const badgeClasses = [
     'inline-flex items-center justify-center gap-1 rounded-full font-medium',
     'transition-all duration-200 ease-in-out',
     severityConfig.bgColor,
@@ -135,7 +136,7 @@ className?: string;
     onClick ? 'cursor-pointer hover:scale-105 hover:shadow-lg' : '',
     animate ? 'animate-pulse' : '',
     animate ? `ring-2 ${severityConfig.ringColor}` : ''}
-}
+
     className
   ].filter(Boolean).join(' ');
   return;
@@ -148,7 +149,7 @@ className?: string;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           onClick();
-      } : undefined}
+ : undefined}
       aria-label={`${displayCount} ${severity || 'total'} alerts`}
       title={`${displayCount} ${severity || 'total'} alerts`}
     >
@@ -157,5 +158,5 @@ className?: string;
     </span>
   );
 };
-}
+
 export default AlertIndicatorBadge;

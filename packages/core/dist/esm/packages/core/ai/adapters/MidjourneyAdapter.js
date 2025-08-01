@@ -353,8 +353,7 @@ export class MidjourneyAdapter extends BaseAIModel {
                 originalPrompt: string,
                 processedPrompt: string,
                 options: MidjourneyRequestOptions,
-                generationTime: number = 0, MidjourneyGenerationResult
-            } }, { const: images = [] };
+                generationTime: number = 0, MidjourneyGenerationResult } }, { const: images = [] };
         if (status.imageUrl) {
             images.push({});
             url: status.imageUrl,

@@ -7,7 +7,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearch } from './SearchContext';
 import { searchApiService } from '../../services/searchApiService';
-}
+
+
 interface EnhancedSearchBarProps {
   placeholder?: string;
   showHistory?: boolean;
@@ -16,7 +17,7 @@ interface EnhancedSearchBarProps {
   showSavedSearches?: boolean;
   onSearch?: (searchText: string) => void;
   className?: string;
-  export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({,)
+  export const EnhancedSearchBar: React.FC<EnhancedSearchBarProps> = ({),
   placeholder = "Search templates...",
   showHistory = true,
   showSuggestions = true,
@@ -24,7 +25,8 @@ interface EnhancedSearchBarProps {
   showSavedSearches = true,
   onSearch,
   className = ''
-}
+
+
 }) => {
   const {
     query,
@@ -33,7 +35,7 @@ interface EnhancedSearchBarProps {
     savedSearches,
     loadSavedSearch,
     saveSearch
-  } = useSearch();
+ = useSearch();
   // Local state
   const [inputValue, setInputValue] = useState(query.text);
   const [suggestions, setSuggestions] = useState<string>([]);
@@ -54,9 +56,9 @@ interface EnhancedSearchBarProps {
         setIsLoading(true);
         const suggestions = await searchApiService.getAutocompleteSuggestions(inputValue.trim(), 8);
         setSuggestions(suggestions);
-      } catch (error) {
+ catch (error) {
   console.warn('Failed to get autocomplete suggestions:', error);
-} finally {
+ finally {
         setIsLoading(false);
     }, 300);
     return () => clearTimeout(timeoutId);
@@ -106,7 +108,7 @@ interface EnhancedSearchBarProps {
   const handleFormSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     // If an item is selected, use it
-    const allItems = [;
+    const allItems = [
       ...suggestions,
       ...searchHistory.map(h => h.text).filter(t => t.toLowerCase().includes(inputValue.toLowerCase())),
       ...trendingSearches.map(t => t.query),
@@ -114,13 +116,13 @@ interface EnhancedSearchBarProps {
     ];
     if (selectedIndex >= 0 && selectedIndex < allItems.length) {
       handleSubmit(allItems[selectedIndex]);
-    } else {
+ else {
       handleSubmit();
   }, [suggestions, searchHistory, trendingSearches, savedSearches, selectedIndex, inputValue, handleSubmit]);
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
   if (!isDropdownOpen) return;
-  const allItems = [;
+  const allItems = [
   ...suggestions,
   ...searchHistory.map(h => h.text).filter(t => t.toLowerCase().includes(inputValue.toLowerCase())),
   ...trendingSearches.map(t => t.query),
@@ -152,7 +154,7 @@ interface EnhancedSearchBarProps {
       const savedSearch = savedSearches.find(s => s.name === item);
       if (savedSearch) {
         loadSavedSearch(savedSearch);
-    } else {
+ else {
       handleSubmit(item);
   }, [savedSearches, loadSavedSearch, handleSubmit]);
   // Handle save search
@@ -182,7 +184,7 @@ interface EnhancedSearchBarProps {
   fontSize: '14px',
   backgroundColor: selectedIndex === itemIndex ? '#edf2f7' : 'transparent',
   color: '#4a5568',
-}}
+}
           onMouseEnter={() => setSelectedIndex(itemIndex)}
           onClick={() => handleItemClick(suggestion, 'suggestion')}
         >
@@ -213,7 +215,7 @@ interface EnhancedSearchBarProps {
   fontSize: '14px',
   backgroundColor: selectedIndex === itemIndex ? '#edf2f7' : 'transparent',
   color: '#4a5568',
-}}
+}
             onMouseEnter={() => setSelectedIndex(itemIndex)}
             onClick={() => handleItemClick(historyItem, 'history')}
           >
@@ -242,7 +244,7 @@ interface EnhancedSearchBarProps {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-}}
+
           onMouseEnter={() => setSelectedIndex(itemIndex)}
           onClick={() => handleItemClick(trending.query, 'trending')}
         >
@@ -271,7 +273,7 @@ interface EnhancedSearchBarProps {
   fontSize: '14px',
   backgroundColor: selectedIndex === itemIndex ? '#edf2f7' : 'transparent',
   color: '#4a5568',
-}}
+}
           onMouseEnter={() => setSelectedIndex(itemIndex)}
           onClick={() => handleItemClick(saved.name, 'saved')}
         >
@@ -300,15 +302,15 @@ interface EnhancedSearchBarProps {
   outline: 'none',
   transition: 'border-color 0.2s ease',
   backgroundColor: '#ffffff',
-}}
+
             onFocus={(e) => {
               e.target.style.borderColor = '#3182ce';
               handleInputFocus();
-            }}
+}
             onBlur={(e) => {
               e.target.style.borderColor = '#e2e8f0';
               handleInputBlur(e);
-            }}
+}
           />
           {/* Search button */}
           <button
@@ -324,7 +326,7 @@ interface EnhancedSearchBarProps {
   cursor: 'pointer',
   color: '#718096',
   fontSize: '16px',
-}}
+
           >
             {isLoading ? '⏳' : '🔍'}
           </button>
@@ -346,7 +348,7 @@ interface EnhancedSearchBarProps {
   maxHeight: '400px',
   overflowY: 'auto',
   marginTop: '4px',
-}}
+
           >
             {dropdownItems}
             {/* Save search option */}
@@ -362,7 +364,7 @@ interface EnhancedSearchBarProps {
   fontSize: '12px',
   color: '#3182ce',
   textDecoration: 'underline',
-}}
+}
                 >
                   💾 Save this search
                 </button>

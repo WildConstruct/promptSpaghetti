@@ -8,14 +8,13 @@ import React from 'react';
 import { Node, Edge } from 'reactflow';
 
 }
-export interface GraphState {
-    nodes: Node[];
+}
+export interface GraphState { nodes: Node[];
     edges: Edge[];
     timestamp: number;
     description: string;
-    id: string;
-
-
+    id: string }
+}
 }
 export interface UndoRedoManagerProps {
     onStateChange: (state: GraphState) => void;
@@ -43,4 +42,5 @@ export declare class UndoRedoSystem {
 export declare const UndoRedoManager: React.FC<UndoRedoManagerProps>;
 export default UndoRedoManager;
 //# sourceMappingURL=UndoRedoManager.d.ts.map
+}
 }

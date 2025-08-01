@@ -11,7 +11,8 @@ size: {
 content: {
     text: string;
     markdown ?  : string;
-    format: 'plain' | 'markdown' | 'rich';
+    format: 'plain' | 'markdown' | 'rich',
+    ;
 }
 ;
 appearance: {

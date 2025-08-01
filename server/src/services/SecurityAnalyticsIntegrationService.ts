@@ -10,15 +10,15 @@ import { EventEmitter } from 'events';
 import { 
   SecurityAnalyticsPerformanceMonitor,
   AnalyticsPerformanceProfile
-} from '../../../packages/core/security/SecurityAnalyticsPerformanceMonitor';
+ from '../../../packages/core/security/SecurityAnalyticsPerformanceMonitor';
 import { AnalyticsCollector, AnalyticsEvent, PerformanceMetricEvent } from '../analytics/AnalyticsCollector';
 import { AnalyticsDAO } from '../database/analytics-dao';
 import { AdminAuthGuard } from '../admin/guards/AdminAuthGuard';
 import { HealthCheckFramework } from '../admin/HealthCheckFramework';
 import { DiagnosticService } from '../admin/DiagnosticService';
 
-}
-}
+
+
 export interface SecurityAnalyticsIntegrationConfig {
   epic1_analytics_integration: {
     enabled: boolean;
@@ -27,8 +27,9 @@ export interface SecurityAnalyticsIntegrationConfig {
     performance_event_forwarding: boolean;
     batch_size: number;
     flush_interval_ms: number;
-}
-}
+
+
+
   };
   
   epic17_admin_integration: {
@@ -56,10 +57,10 @@ export interface SecurityAnalyticsIntegrationConfig {
     predictive_analytics_enabled: boolean;
     automated_response_enabled: boolean;
   };
-}
 
-}
-}
+
+
+
 export interface SecurityPerformanceMetrics {
   timestamp: number;
   performance_score: number;
@@ -71,12 +72,13 @@ export interface SecurityPerformanceMetrics {
   security_events_processed: number;
   compliance_violations: number;
   system_availability_percent: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SecurityAnalyticsAlert {
   id: string;
   severity: 'low' | 'medium' | 'high' | 'critical';
@@ -89,9 +91,10 @@ export interface SecurityAnalyticsAlert {
   created_at: number;
   resolved_at?: number;
   resolved_by?: string;
-}
-}
-}
+
+
+
+
 
 export class SecurityAnalyticsIntegrationService extends EventEmitter {
   private performanceMonitor: SecurityAnalyticsPerformanceMonitor;
@@ -112,11 +115,11 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         performance_degradation: config.performance_monitoring.performance_threshold_ms,
         memory_usage: config.performance_monitoring.memory_threshold_mb,
         cpu_usage: config.performance_monitoring.cpu_threshold_percent
-      }
+
     });
 
     this.setupEventHandlers();
-  }
+
 
   /**
    * Initialize the integration service with Epic 1 and Epic 17 systems
@@ -130,24 +133,24 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
       // Register with Epic 1 Analytics Foundation
       if (this.config.epic1_analytics_integration.enabled) {
         await this.initializeEpic1Integration();
-      }
+
 
       // Register with Epic 17 Admin/Auth Systems
       if (this.config.epic17_admin_integration.enabled) {
         await this.initializeEpic17Integration();
-      }
+
 
       // Start monitoring if configured
       if (this.config.performance_monitoring.real_time_monitoring_enabled) {
         this.startRealTimeMonitoring();
-      }
+
 
       this.emit('initialized', { timestamp: Date.now() });
-    } catch (error) {
+ catch (error) {
       this.emit('error', { error, context: 'initialization' });
       throw error;
-    }
-  }
+
+
 
   /**
    * Epic 1 Analytics Foundation Integration
@@ -171,13 +174,13 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
           security_events_processed: metrics.events_processed,
           threat_detection_accuracy: metrics.threat_detection_accuracy,
           compliance_score: metrics.compliance_score
-        }
+
       };
 
       // Forward to Epic 1 analytics system
       if (this.config.epic1_analytics_integration.performance_event_forwarding) {
         analytics_collector.track(performanceEvent);
-      }
+
 
       // Store in analytics database
       this.storeSecurityMetrics(metrics);
@@ -197,12 +200,12 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
           threat_type: event.threat_type,
           affected_resources: event.affected_resources,
           mitigation_applied: event.mitigation_applied
-        }
+
       };
 
       analytics_collector.track(analyticsEvent);
     });
-  }
+
 
   /**
    * Epic 17 Admin/Auth Systems Integration
@@ -228,9 +231,9 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
             performance_score: metrics.performance_score,
             availability: metrics.system_availability_percent,
             active_threats: metrics.active_threats_detected
-          }
+
         };
-  }
+
       interval_ms: 30000, // Check every 30 seconds
       timeout_ms: 5000
     });
@@ -242,16 +245,16 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
       description: 'Comprehensive security analytics system diagnostics',
       execute: async () => {
         return await this.performDeepDiagnostics();
-      }
+
     });
 
     // Security alert integration
     this.on('security_alert', async (alert: SecurityAnalyticsAlert) => {
       if (alert.severity === 'critical' || alert.severity === 'high') {
         await this.notifyAdminSystems(alert);
-      }
+
     });
-  }
+
 
   /**
    * Start real-time monitoring
@@ -275,14 +278,14 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         // Flush buffers if needed
         if (this.metricsBuffer.length >= this.config.epic1_analytics_integration.batch_size) {
           await this.flushMetricsBuffer();
-        }
+
 
         this.emit('metrics_collected', metrics);
-      } catch (error) {
+ catch (error) {
         this.emit('error', { error, context: 'real_time_monitoring' });
-      }
+
     }, this.config.epic1_analytics_integration.flush_interval_ms);
-  }
+
 
   /**
    * Collect current security analytics performance metrics
@@ -305,7 +308,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
       compliance_violations: securityMetrics.compliance_violations || 0,
       system_availability_percent: systemMetrics.availability_percent || 100
     };
-  }
+
 
   /**
    * Analyze metrics for potential alerts
@@ -331,7 +334,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         ],
         created_at: Date.now()
       });
-    }
+
 
     // High threat detection alert
     if (metrics.active_threats_detected > this.config.epic17_admin_integration.security_alert_threshold) {
@@ -350,7 +353,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         ],
         created_at: Date.now()
       });
-    }
+
 
     // System availability alert
     if (metrics.system_availability_percent < 99.0) {
@@ -369,10 +372,10 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         ],
         created_at: Date.now()
       });
-    }
+
 
     return alerts;
-  }
+
 
   /**
    * Store security metrics in Epic 1 analytics database
@@ -394,12 +397,12 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
           performance_score: metrics.performance_score,
           threats_detected: metrics.active_threats_detected,
           system_availability: metrics.system_availability_percent
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       this.emit('error', { error, context: 'store_security_metrics' });
-    }
-  }
+
+
 
   /**
    * Notify Epic 17 admin systems of security alerts
@@ -422,14 +425,13 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
           affected_components: alert.affected_components,
           recommended_actions: alert.recommended_actions,
           performance_metrics: alert.metrics
-  }
+
         created_at: alert.created_at
       });
-
-    } catch (error) {
+ catch (error) {
       this.emit('error', { error, context: 'notify_admin_systems' });
-    }
-  }
+
+
 
   /**
    * Perform deep diagnostics for Epic 17 integration
@@ -442,7 +444,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         epic1_analytics: this.config.epic1_analytics_integration.enabled,
         epic17_admin: this.config.epic17_admin_integration.enabled,
         real_time_monitoring: this.isMonitoring
-  }
+
       current_metrics: await this.getCurrentPerformanceMetrics(),
       performance_history: this.metricsBuffer.slice(-10), // Last 10 metrics
       recent_alerts: this.alertsBuffer.slice(-5), // Last 5 alerts
@@ -450,13 +452,13 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
         buffer_sizes: {
           metrics: this.metricsBuffer.length,
           alerts: this.alertsBuffer.length
-  }
+
         monitoring_active: this.isMonitoring,
         last_flush: this.getLastFlushTime(}
     };
 
     return diagnostics;
-  }
+
 
   /**
    * Get current performance metrics
@@ -464,7 +466,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
   private async getCurrentPerformanceMetrics(): Promise<SecurityPerformanceMetrics> {
 
     return await this.collectCurrentMetrics();
-  }
+
 
   /**
    * Flush metrics buffer to Epic 1 analytics
@@ -480,13 +482,13 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
       // Batch store metrics
       for (const metrics of metricsToFlush) {
         await this.storeSecurityMetrics(metrics);
-      }
+
 
       this.emit('metrics_flushed', { count: metricsToFlush.length });
-    } catch (error) {
+ catch (error) {
       this.emit('error', { error, context: 'flush_metrics_buffer' });
-    }
-  }
+
+
 
   /**
    * Setup event handlers
@@ -504,7 +506,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
     this.performanceMonitor.on('security_anomaly', (data) => {
       this.emit('security_anomaly', data);
     });
-  }
+
 
   /**
    * Get last flush time
@@ -512,7 +514,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
   private getLastFlushTime(): number {
     // Implementation would track actual flush times
     return Date.now();
-  }
+
 
   /**
    * Stop monitoring and cleanup
@@ -523,7 +525,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
     
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
-    }
+
 
     // Flush remaining metrics
     await this.flushMetricsBuffer();
@@ -532,7 +534,7 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
     await this.performanceMonitor.shutdown();
 
     this.emit('shutdown', { timestamp: Date.now() });
-  }
+
 
   /**
    * Get integration status
@@ -545,5 +547,4 @@ export class SecurityAnalyticsIntegrationService extends EventEmitter {
       metrics_buffer_size: this.metricsBuffer.length,
       alerts_buffer_size: this.alertsBuffer.length
     };
-  }
-}
+

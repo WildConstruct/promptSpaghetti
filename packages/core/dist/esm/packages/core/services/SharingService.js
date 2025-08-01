@@ -6,7 +6,7 @@
  *
  * Task: E16-1753114247020-65B7A3 - Design sharing system
  */
-import { validateCreateShareRequest, validateShareAnalyticsEvent } from '../types/sharingTypes';
+import { validateCreateShareRequest } from '../types/sharingTypes';
 import { v4 as uuidv4 } from 'uuid';
 export class SharingService {
     baseUrl;
@@ -90,8 +90,7 @@ Promise < ShareResponse > {
     twitter: {
         card: 'summary_large_image',
         title: config.title,
-        description: config.description || `Interactive ${config.resourceType} template`
-    }
+        description: config.description || `Interactive ${config.resourceType} template` }
 },
     image;
 config.thumbnailUrl;
@@ -193,33 +192,34 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
          * Track sharing analytics event
          */
         async;
-        trackAnalyticsEvent(shareLinkId, string(eventType, ShareAnalyticsEvent['eventType'], contextData, (Partial) = {}), Promise < void  > {
-            : .analyticsEnabled
-        });
-        return;
-        const event = {
-            id: uuidv4(),
-            shareLinkId,
-            eventType,
-            timestamp: new Date(),
-            sessionId: contextData.sessionId,
-            userId: contextData.userId,
-            ipAddress: contextData.ipAddress,
-            userAgent: contextData.userAgent,
-            referer: contextData.referer,
-            platform: contextData.platform,
-            geolocation: contextData.geolocation,
-            deviceInfo: contextData.deviceInfo,
-            contextData: contextData.contextData || {}
-        };
-        validateShareAnalyticsEvent(event);
-        // TODO: Store in analytics database
-        console.log('Analytics event tracked:', event);
-        /**
-         * Get sharing metrics for a resource
-         */
-        async;
-        getShareMetrics(((shareLinkId, timeRange) => {
+        trackAnalyticsEvent(shareLinkId, string());
+        eventType: ShareAnalyticsEvent['eventType'],
+            contextData;
+        (Partial) = {};
+        Promise < void  > {
+            : .analyticsEnabled, return: ,
+            const: event, ShareAnalyticsEvent = {
+                id: uuidv4(),
+                shareLinkId,
+                eventType,
+                timestamp: new Date(),
+                sessionId: contextData.sessionId,
+                userId: contextData.userId,
+                ipAddress: contextData.ipAddress,
+                userAgent: contextData.userAgent,
+                referer: contextData.referer,
+                platform: contextData.platform,
+                geolocation: contextData.geolocation,
+                deviceInfo: contextData.deviceInfo,
+                contextData: contextData.contextData || {}
+            },
+            // TODO: Store in analytics database
+            console, : .log('Analytics event tracked:', event),
+            /**
+             * Get sharing metrics for a resource
+             */
+            async getShareMetrics() { }
+        }((shareLinkId, timeRange) => {
             // TODO: Implement actual metrics aggregation from analytics data,
             const mockMetrics = {
                 shareLinkId,
@@ -263,9 +263,9 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
                     return: mockMetrics,
                     description: string,
                     resourceIds: string,
-                    shareConfig: (Partial)
-                } };
-        }), Promise < ShareCollection > {
+                    shareConfig: (Partial) } };
+        });
+        Promise < ShareCollection > {
             const: collection, ShareCollection = {
                 id: uuidv4(),
                 name,
@@ -300,8 +300,7 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
                         /**
                          * Update share permissions
                          */
-                        async updateSharePermissions() { }
-                    }((shareConfigId, permissions) => {
+                        async updateSharePermissions() { } }((shareConfigId, permissions) => {
                         // TODO: Implement actual database update,
                         throw new Error('Not implemented');
                         /**
@@ -314,7 +313,12 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
                             throw: new Error('Not implemented'),
                             number,
                             totalViews: number,
-                            topPerformers: (Array),
+                            topPerformers: Array < {
+                                resourceId: string,
+                                title: string,
+                                views: number,
+                                shares: number
+                            } > ,
                             recentActivity: ShareAnalyticsEvent } > {
                             // TODO: Implement dashboard data aggregation,
                             return: {
@@ -357,8 +361,7 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
                     }, private, buildLinkedInShareUrl(title, string, url, string, description ?  : string), string, {
                         const: summary = description ? `&summary=${encodeURIComponent(description)}` : ''
                     }),
-                    return: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}${summary}`
-                },
+                    return: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}${summary}` },
                 buildSlackShareUrl(message, url) {
                     return `slack://channel?team=&id=&message=${encodeURIComponent(`${message} ${url}`)}`;
                 },
@@ -366,6 +369,6 @@ if (config.shareFormat === 'embed' || config.permissions.canEmbed) {
                     const subject = encodeURIComponent(`Check out: ${title}`);
                 },
                 const: body = encodeURIComponent(`I thought you might be interested in this:\n\n${title}\n${description || ''}\n\n${url}`) },
-            return: `mailto:?subject=${subject}&body=${body}` });
+            return: `mailto:?subject=${subject}&body=${body}` };
     }
 }

@@ -8,7 +8,7 @@ import {
   usePerformanceTracking,
   withPerformanceTracking,
   performanceUtils
-} from '../performanceMonitor';
+ from '../performanceMonitor';
 import { renderHook } from '@testing-library/react';
 import React from 'react';
 
@@ -247,7 +247,7 @@ describe('Performance Monitor', () => {
       );
     });
     it('should merge with existing metrics', () => {
-      const existingMetrics = [;
+      const existingMetrics = [
         { name: 'existing', duration: 50, type: 'custom', timestamp: 1000 }
       ];
       mockSessionStorage.getItem.mockReturnValue(JSON.stringify(existingMetrics as unknown as unknown));

@@ -18,8 +18,9 @@ import { AuditService } from '../auth/services/AuditService';
 import { Database } from '../database';
 
 // Request/Response type definitions
-}
-}
+
+
+
 interface CreateReviewRequest {
   Body: {
     reviewType: string;
@@ -32,24 +33,26 @@ interface CreateReviewRequest {
     dueDate?: string;
     assignToReviewer?: string;
     metadata?: any;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface AssignReviewRequest {
   Body: {
     reviewerId: string;
     assignmentType?: 'manual' | 'automatic';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface SubmitDecisionRequest {
   Body: {
     decision: 'approve' | 'approve_with_conditions' | 'reject' | 'return_for_revision' | 'escalate' | 'defer' | 'request_more_info';
@@ -60,38 +63,41 @@ interface SubmitDecisionRequest {
       score: number;
       passed: boolean;
       notes?: string;
-}
-}
-    }>;
+
+
+
+>;
     recommendedActions?: string[];
   };
-}
 
-}
-}
+
+
+
 interface AddNoteRequest {
   Body: {
     noteType: 'observation' | 'question' | 'concern' | 'recommendation' | 'clarification';
     content: string;
     visibility: 'reviewers_only' | 'internal' | 'public' | 'submitter_visible';
     replyTo?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface EscalateReviewRequest {
   Body: {
     reason: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetReviewsRequest {
   Querystring: {
     status?: string;
@@ -103,45 +109,49 @@ interface GetReviewsRequest {
     page?: number;
     limit?: number;
     search?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface GetAnalyticsRequest {
   Querystring: {
     startDate: string;
     endDate: string;
     reviewType?: string;
     granularity?: 'day' | 'week' | 'month';
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface ReassignReviewRequest {
   Body: {
     newReviewerId: string;
     reason: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface RebalanceWorkloadRequest {
   Body: {
     reviewType?: string;
     targetUtilization?: number;
-}
-}
+
+
+
   };
-}
+
 
 export default async function reviewToolsRoutes(fastify: FastifyInstance) {
   // Initialize services
@@ -200,7 +210,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
                 'enforcement_appeal', 'bulk_operation', 'emergency_action', 'compliance_audit'
               ],
               description: 'Type of review to create'
-  }
+
             sourceSystem: {
               type: 'string',
               enum: [
@@ -209,7 +219,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
                 'compliance_system'
               ],
               description: 'Source system that triggered the review'
-  }
+
             sourceId: { type: 'string', description: 'ID of the item being reviewed in the source system' },
             title: { type: 'string', description: 'Review title' },
             description: { type: 'string', description: 'Review description' },
@@ -218,12 +228,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['low', 'medium', 'high', 'urgent', 'emergency'],
               description: 'Review priority level'
-  }
+
             dueDate: { type: 'string', format: 'date-time', description: 'Review due date' },
             assignToReviewer: { type: 'string', description: 'Specific reviewer to assign to' },
             metadata: { type: 'object', description: 'Additional review metadata' }
-          }
-  }
+
+
         response: {
           201: {
             type: 'object',
@@ -231,24 +241,24 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               success: { type: 'boolean' },
               reviewId: { type: 'string' },
               review: { type: 'object' }
-            }
-  }
+
+
           400: {
             type: 'object',
             properties: {
               error: { type: 'string' },
               details: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<CreateReviewRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const review = await orchestrationService.createReview(
           request.body.reviewType as any,
@@ -262,7 +272,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
             dueDate: request.body.dueDate ? new Date(request.body.dueDate) : undefined,
             assignToReviewer: request.body.assignToReviewer,
             metadata: request.body.metadata
-          }
+
         );
 
         reply.status(201).send({
@@ -270,13 +280,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           reviewId: review.reviewId,
           review
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(400).send({
           error: 'Failed to create review',
           details: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -302,8 +311,8 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
             page: { type: 'number', minimum: 1, default: 1, description: 'Page number' },
             limit: { type: 'number', minimum: 1, maximum: 100, default: 20, description: 'Items per page' },
             search: { type: 'string', description: 'Search query' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
@@ -317,19 +326,19 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
                   limit: { type: 'number' },
                   total: { type: 'number' },
                   pages: { type: 'number' }
-                }
-              }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
+
+
     async (request: FastifyRequest<GetReviewsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         // Build filters from query parameters
         const filters = {
@@ -340,7 +349,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           dateRange: (request.query.startDate && request.query.endDate) ? {
             startDate: new Date(request.query.startDate),
             endDate: new Date(request.query.endDate)
-          } : undefined,
+ : undefined,
           search: request.query.search
         };
 
@@ -363,15 +372,14 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
             limit: pagination.limit,
             total: result.total,
             pages: Math.ceil(result.total / pagination.limit)
-          }
+
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(500).send({
           error: 'Failed to retrieve reviews',
           details: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -390,31 +398,31 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           required: ['reviewId'],
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               review: { type: 'object' }
-            }
-  }
+
+
           404: {
             type: 'object',
             properties: {
               error: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<{ Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         // Get review details (placeholder implementation)
         const review = null; // await orchestrationService.getReview(request.params.reviewId);
@@ -423,19 +431,18 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           return reply.status(404).send({
             error: 'Review not found'
           });
-        }
+
 
         reply.send({
           success: true,
           review
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(500).send({
           error: 'Failed to retrieve review',
           details: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -458,8 +465,8 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           required: ['reviewId'],
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['reviewerId'],
@@ -470,33 +477,33 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               enum: ['manual', 'automatic'],
               default: 'manual',
               description: 'Type of assignment'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               assignment: { type: 'object' }
-            }
-  }
+
+
           400: {
             type: 'object',
             properties: {
               error: { type: 'string' },
               details: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<AssignReviewRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const assignment = await orchestrationService.assignReview(
           request.params.reviewId,
@@ -509,13 +516,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           assignment
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(400).send({
           error: 'Failed to assign review',
           details: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -534,31 +540,31 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           required: ['reviewId'],
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
-          }
-  }
+
+
         querystring: {
           type: 'object',
           properties: {
             excludeReviewers: { type: 'string', description: 'Comma-separated list of reviewer IDs to exclude' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               recommendation: { type: 'object' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<{ Params: { reviewId: string }; Querystring: { excludeReviewers?: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const excludeReviewers = request.query.excludeReviewers 
           ? request.query.excludeReviewers.split(',') 
@@ -568,7 +574,7 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
         const review = null; // await orchestrationService.getReview(request.params.reviewId);
         if (!review) {
           return reply.status(404).send({ error: 'Review not found' });
-        }
+
 
         const recommendation = await assignmentService.findBestReviewer(review, excludeReviewers);
 
@@ -576,13 +582,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           recommendation
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(500).send({
           error: 'Failed to get recommendations',
           details: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -605,8 +610,8 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           required: ['reviewId'],
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['decision', 'confidence', 'reasoning', 'criteriaEvaluations'],
@@ -615,13 +620,13 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['approve', 'approve_with_conditions', 'reject', 'return_for_revision', 'escalate', 'defer', 'request_more_info'],
               description: 'Review decision'
-  }
+
             confidence: {
               type: 'number',
               minimum: 0,
               maximum: 100,
               description: 'Confidence in decision (0-100)'
-  }
+
             reasoning: { type: 'string', description: 'Reasoning for the decision' },
             criteriaEvaluations: {
               type: 'array',
@@ -633,34 +638,34 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
                   score: { type: 'number' },
                   passed: { type: 'boolean' },
                   notes: { type: 'string' }
-                }
-  }
+
+
               description: 'Evaluation of review criteria'
-  }
+
             recommendedActions: {
               type: 'array',
               items: { type: 'string' },
               description: 'Recommended actions to take'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               decision: { type: 'object' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<SubmitDecisionRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const decision = await orchestrationService.submitDecision(
           request.params.reviewId,
@@ -672,13 +677,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           decision
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(400).send({
           error: 'Failed to submit decision',
           details: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -697,8 +701,8 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           required: ['reviewId'],
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['noteType', 'content', 'visibility'],
@@ -707,33 +711,33 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               type: 'string',
               enum: ['observation', 'question', 'concern', 'recommendation', 'clarification'],
               description: 'Type of note'
-  }
+
             content: { type: 'string', description: 'Note content' },
             visibility: {
               type: 'string',
               enum: ['reviewers_only', 'internal', 'public', 'submitter_visible'],
               description: 'Note visibility level'
-  }
+
             replyTo: { type: 'string', description: 'ID of note being replied to' }
-          }
-  }
+
+
         response: {
           201: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               note: { type: 'object' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<AddNoteRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const note = await orchestrationService.addReviewNote(
           request.params.reviewId,
@@ -745,12 +749,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           note
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(400).send({
           error: 'Failed to add note',
           details: error.message
         });
-      }
+
     }
   );
 
@@ -770,32 +774,32 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           required: ['reviewId'],
           properties: {
             reviewId: { type: 'string', description: 'Review ID' }
-          }
-  }
+
+
         body: {
           type: 'object',
           required: ['reason'],
           properties: {
             reason: { type: 'string', description: 'Reason for escalation' }
-          }
-  }
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               message: { type: 'string' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<EscalateReviewRequest & { Params: { reviewId: string } }>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         await orchestrationService.escalateReview(
           request.params.reviewId,
@@ -807,13 +811,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           message: 'Review escalated successfully'
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(400).send({
           error: 'Failed to escalate review',
           details: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -843,26 +846,26 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               enum: ['day', 'week', 'month'],
               default: 'day',
               description: 'Data granularity'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               analytics: { type: 'object' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<GetAnalyticsRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const analytics = await orchestrationService.generateAnalytics({
           startDate: new Date(request.query.startDate),
@@ -873,13 +876,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           analytics
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(500).send({
           error: 'Failed to generate analytics',
           details: error.message
         });
-      }
-    }
+
   );
 
   /**
@@ -899,17 +901,17 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
             properties: {
               success: { type: 'boolean' },
               dashboard: { type: 'object' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const dashboard = await orchestrationService.getReviewDashboard();
 
@@ -917,13 +919,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           dashboard
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(500).send({
           error: 'Failed to load dashboard',
           details: error.message
         });
-      }
-    }
+
   );
 
   // =============================================================================
@@ -951,26 +952,26 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
               maximum: 100,
               default: 80,
               description: 'Target utilization percentage'
-            }
-          }
-  }
+
+
+
         response: {
           200: {
             type: 'object',
             properties: {
               success: { type: 'boolean' },
               result: { type: 'object' }
-            }
-          }
-        }
-      }
-  }
+
+
+
+
+
     async (request: FastifyRequest<RebalanceWorkloadRequest>, reply: FastifyReply) => {
       try {
         const userId = request.user?.userId;
         if (!userId) {
           return reply.status(401).send({ error: 'Authentication required' });
-        }
+
 
         const result = await assignmentService.rebalanceWorkload(
           request.body.reviewType as any,
@@ -981,14 +982,12 @@ export default async function reviewToolsRoutes(fastify: FastifyInstance) {
           success: true,
           result
         });
-      } catch (error: any) {
+ catch (error: any) {
         reply.status(500).send({
           error: 'Failed to rebalance workload',
           details: error.message
         });
-      }
-    }
+
   );
 
   console.log('✅ Review Tools API routes registered');
-}

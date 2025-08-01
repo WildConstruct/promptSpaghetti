@@ -30,9 +30,22 @@ version: number;
 facets ?  : Record;
 executionTime: number;
  > ;
-topSources: Array;
-topActions: Array;
-topUsers: Array;
+topSources: Array < {
+    source: string,
+    count: number,
+    percentage: number
+} > ;
+topActions: Array < {
+    action: string,
+    count: number,
+    percentage: number
+} > ;
+topUsers: Array < {
+    userId: string,
+    userEmail: string,
+    count: number,
+    percentage: number
+} > ;
 errorRate: number;
 averageDuration: number;
 performanceMetrics: {

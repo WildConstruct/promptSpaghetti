@@ -10,8 +10,8 @@
 import React from 'react';
 
 }
-interface DemoReadyModeProps {
-    children: React.ReactNode;
+}
+interface DemoReadyModeProps { children: React.ReactNode;
     enabled?: boolean;
     onToggle?: (enabled: boolean) => void;
 
@@ -20,7 +20,7 @@ export declare const useDemoMode: () => {
     enabled: boolean;
     toggle: () => void;
     enable: () => void;
-    disable: () => void;
+    disable: () => void }
 }
 };
 export default DemoReadyMode;

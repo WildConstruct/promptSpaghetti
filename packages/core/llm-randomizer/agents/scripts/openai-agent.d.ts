@@ -1,27 +1,24 @@
-export interface OpenAIAgentConfig {
-    apiKey: string;
+export interface OpenAIAgentConfig { apiKey: string;
     model: string;
     temperature: number;
     maxTokens: number;
     seed?: number;
     useJsonMode: boolean;
     maxRetries: number;
-    retryTemperatureReduction: number;
-
+    retryTemperatureReduction: number }
 }
-export interface GraphGenerationRequest {
-    purpose: string;
+}
+export interface GraphGenerationRequest { purpose: string;
     complexity: 'simple' | 'moderate' | 'complex';
     nodeCount: number;
     nodeTypes: string[];
     specificRequirements?: string[];
     focusAreas?: string[];
     style?: 'creative' | 'logical' | 'balanced';
-    domain?: string;
-
+    domain?: string }
 }
-export interface GenerationResult {
-    success: boolean;
+}
+export interface GenerationResult { success: boolean;
     graph?: string;
     errors?: string[];
     warnings?: string[];
@@ -30,7 +27,7 @@ export interface GenerationResult {
         model: string;
         temperature: number;
         tokenCount: number;
-        generationTime: number;
+        generationTime: number }
 }
     };
 

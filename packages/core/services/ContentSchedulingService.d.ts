@@ -9,8 +9,8 @@
  */
 
 }
-export interface ContentItem {
-    id: string;
+}
+export interface ContentItem { id: string;
     title: string;
     type: ContentType;
     status: ContentStatus;
@@ -21,29 +21,27 @@ export interface ContentItem {
     createdAt: Date;
     updatedAt: Date;
     createdBy: string;
-    lastModifiedBy?: string;
-
+    lastModifiedBy?: string }
 }
-export interface ContentData {
-    body?: string;
+}
+export interface ContentData { body?: string;
     description?: string;
     excerpt?: string;
     images?: MediaAsset[];
     videos?: MediaAsset[];
     documents?: MediaAsset[];
     fields?: Record<string, any>;
-    customData?: Record<string, any>;
-
+    customData?: Record<string, any> }
 }
-export interface MediaAsset {
-    id: string;
+}
+export interface MediaAsset { id: string;
     filename: string;
     url: string;
     type: 'image' | 'video' | 'document' | 'audio';
     size: number;
     dimensions?: {
         width: number;
-        height: number;
+        height: number }
 }
     };
     duration?: number;
@@ -51,8 +49,8 @@ export interface MediaAsset {
     caption?: string;
 
 }
-export interface ContentMetadata {
-    seoTitle?: string;
+}
+export interface ContentMetadata { seoTitle?: string;
     seoDescription?: string;
     keywords?: string[];
     canonicalUrl?: string;
@@ -71,21 +69,20 @@ export interface ContentMetadata {
         approver?: string;
         deadline?: Date;
         priority: 'low' | 'medium' | 'high' | 'urgent';
-        notes?: WorkflowNote[];
+        notes?: WorkflowNote[] }
 }
     };
 
 }
-export interface WorkflowNote {
-    id: string;
+}
+export interface WorkflowNote { id: string;
     author: string;
     message: string;
     type: 'comment' | 'review' | 'approval' | 'rejection';
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface ContentScheduling {
-    publishAt?: Date;
+}
+export interface ContentScheduling { publishAt?: Date;
     unpublishAt?: Date;
     timezone: string;
     recurrence?: RecurrencePattern;
@@ -94,22 +91,20 @@ export interface ContentScheduling {
     deleteAt?: Date;
     conditions?: ScheduleCondition[];
     prerequisites?: string[];
-    blocks?: string[];
-
+    blocks?: string[] }
 }
-export interface RecurrencePattern {
-    type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
+}
+export interface RecurrencePattern { type: 'daily' | 'weekly' | 'monthly' | 'yearly' | 'custom';
     interval: number;
     daysOfWeek?: number[];
     daysOfMonth?: number[];
     monthsOfYear?: number[];
     endDate?: Date;
     occurrences?: number;
-    customPattern?: string;
-
+    customPattern?: string }
 }
-export interface PromotionSchedule {
-    id: string;
+}
+export interface PromotionSchedule { id: string;
     type: 'homepage' | 'category' | 'search' | 'social' | 'email';
     location: string;
     startDate: Date;
@@ -119,19 +114,18 @@ export interface PromotionSchedule {
         audience?: string[];
         demographics?: Record<string, any>;
         behavioral?: Record<string, any>;
-        geographic?: string[];
+        geographic?: string[] }
 }
     };
 
 }
-export interface ScheduleCondition {
-    type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';
-    parameters: Record<string, any>;
-    description: string;
-
 }
-export interface ContentPerformance {
-    views: number;
+export interface ScheduleCondition { type: 'content_published' | 'date_range' | 'performance_threshold' | 'approval_received' | 'custom';
+    parameters: Record<string, any>;
+    description: string }
+}
+}
+export interface ContentPerformance { views: number;
     engagement: number;
     shares: number;
     likes: number;
@@ -142,22 +136,20 @@ export interface ContentPerformance {
         timestamp: Date;
         views: number;
         engagement: number;
-        shares: number;
+        shares: number }
 }
     }>;
-    variants?: Array<{
-        id: string;
+    variants?: Array<{ id: string;
         name: string;
         traffic: number;
-        performance: ContentPerformance;
-    }>;
+        performance: ContentPerformance }>;
 
 export type ContentType = 'article' | 'blog_post' | 'page' | 'product' | 'event' | 'announcement' | 'promotion' | 'newsletter' | 'social_post' | 'video' | 'podcast' | 'gallery' | 'document';
 export type ContentStatus = 'draft' | 'scheduled' | 'published' | 'unpublished' | 'archived' | 'deleted' | 'error';
 
 }
-export interface ContentFilter {
-    types?: ContentType[];
+}
+export interface ContentFilter { types?: ContentType[];
     statuses?: ContentStatus[];
     categories?: string[];
     tags?: string[];
@@ -165,21 +157,19 @@ export interface ContentFilter {
     authors?: string[];
     dateRange?: {
         start?: Date;
-        end?: Date;
+        end?: Date }
 }
     };
     searchQuery?: string;
     hasSchedule?: boolean;
-    scheduledBetween?: {
-        start: Date;
-        end: Date;
-    };
+    scheduledBetween?: { start: Date;
+        end: Date };
     language?: string;
     workflowStage?: string[];
 
 }
-export interface ScheduleBatch {
-    id: string;
+}
+export interface ScheduleBatch { id: string;
     name: string;
     description?: string;
     contentIds: string[];
@@ -190,7 +180,7 @@ export interface ScheduleBatch {
         total: number;
         completed: number;
         failed: number;
-        errors: BatchError[];
+        errors: BatchError[] }
 }
     };
     createdAt: Date;
@@ -199,30 +189,28 @@ export interface ScheduleBatch {
     completedAt?: Date;
 
 }
-export interface BatchOperation {
-    type: 'publish' | 'unpublish' | 'schedule' | 'promote' | 'archive' | 'delete' | 'update_metadata';
-    parameters?: Record<string, any>;
-
 }
-export interface BatchSchedule {
-    executeAt?: Date;
+export interface BatchOperation { type: 'publish' | 'unpublish' | 'schedule' | 'promote' | 'archive' | 'delete' | 'update_metadata';
+    parameters?: Record<string, any> }
+}
+}
+export interface BatchSchedule { executeAt?: Date;
     timezone: string;
     staggering?: {
         enabled: boolean;
         interval: number;
-        randomization?: boolean;
+        randomization?: boolean }
 }
     };
 
 }
-export interface BatchError {
-    contentId: string;
-    error: string;
-    timestamp: Date;
-
 }
-export interface SchedulingStats {
-    totalContent: number;
+export interface BatchError { contentId: string;
+    error: string;
+    timestamp: Date }
+}
+}
+export interface SchedulingStats { totalContent: number;
     scheduledContent: number;
     publishedToday: number;
     unpublishedToday: number;
@@ -233,29 +221,24 @@ export interface SchedulingStats {
             id: string;
             title: string;
             type: ContentType;
-            operation: string;
+            operation: string }
 }
         }>;
     }>;
-    performanceMetrics: {
-        averageViewsPerPost: number;
+    performanceMetrics: { averageViewsPerPost: number;
         topPerformingContent: Array<{
             id: string;
             title: string;
             views: number;
-            engagement: number;
-        }>;
-        contentTypePerformance: Record<ContentType, {
-            count: number;
+            engagement: number }>;
+        contentTypePerformance: Record<ContentType, { count: number;
             averageViews: number;
-            averageEngagement: number;
-        }>;
+            averageEngagement: number }>;
     };
 /**
  * Content Scheduling Service
  */
-export declare class ContentSchedulingService {
-    private static instance;
+export declare class ContentSchedulingService { private static instance;
     private content;
     private batches;
     private listeners;
@@ -298,8 +281,7 @@ export declare class ContentSchedulingService {
     private notifyListeners;
     private generateContentId;
     private generateBatchId;
-    private sleep;
-
+    private sleep }
 }
 export interface SchedulingEvent {
     type: string;
@@ -313,4 +295,5 @@ export declare const publishContent: (contentId: string, publishedBy: string) =>
 export declare const getContent: (filter?: ContentFilter) => ContentItem[];
 export declare const getSchedulingStats: () => SchedulingStats;
 //# sourceMappingURL=ContentSchedulingService.d.ts.map
+}
 }

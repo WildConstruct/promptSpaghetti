@@ -6,8 +6,7 @@ export type SettingsChangeListener = (event: SettingsChangeEvent) => void;
 /**
  * Singleton settings manager class
  */
-export declare class SettingsManager {
-    private static instance;
+export declare class SettingsManager { private static instance;
     private settings;
     private listeners;
     private autoSaveEnabled;
@@ -29,14 +28,14 @@ export declare class SettingsManager {
      * Update settings with validation
      */
     updateSettings();
-      newSettings: Partial<AdvancedSettings>,
+      newSettings: Partial<AdvancedSettings>
       source?: 'user' | 'system' | 'import'
     ): SettingsValidationResult;
     /**
      * Update specific setting
      */
     updateSetting<K extends keyof AdvancedSettings>(key: K)
-      value: AdvancedSettings[K],
+      value: AdvancedSettings[K] }
       source?: 'user' | 'system' | 'import'): SettingsValidationResult;
     /**
      * Reset settings to defaults
@@ -85,8 +84,7 @@ export declare class SettingsManager {
     /**
      * Get settings for executor integration
      */
-    getExecutorSettings(): {
-        seed: number | undefined;
+    getExecutorSettings(): { seed: number | undefined;
         temperature: number | undefined;
         runCount: number;
         batchSize: number;
@@ -97,18 +95,15 @@ export declare class SettingsManager {
         outputFormat: "json" | "csv" | "individual" | "combined";
         includeMetadata: boolean;
         autoDownload: boolean;
-        namingPattern: string;
-    };
+        namingPattern: string };
     /**
      * Get UI-specific settings for interface customization
      */
-    getUISettings(): {
-        theme: "auto" | "light" | "dark";
+    getUISettings(): { theme: "auto" | "light" | "dark";
         showTooltips: boolean;
         enableKeyboardShortcuts: boolean;
         reduceAnimations: boolean;
-        highContrast: boolean;
-    };
+        highContrast: boolean };
     /**
      * Check if performance monitoring is enabled
      */
@@ -116,13 +111,11 @@ export declare class SettingsManager {
     /**
      * Get performance monitoring configuration
      */
-    getPerformanceConfig(): {
-        monitoring: boolean;
+    getPerformanceConfig(): { monitoring: boolean;
         executionTimes: boolean;
         memoryUsage: boolean;
         detailedLogging: boolean;
-        caching: boolean;
-    };
+        caching: boolean };
     /**
      * Add seed to history
      */

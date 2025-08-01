@@ -7,7 +7,7 @@ import {
   User,
   AuthConfig,
   UserSession
-} from '../types';
+ from '../types';
 import { UserService } from './UserService';
 import { TokenService } from './TokenService';
 import { AuditService } from './AuditService';
@@ -19,8 +19,8 @@ import { RedisService } from '../database/RedisService';
 import { AUDIT_EVENTS, RATE_LIMIT_RULES } from '../config';
 import { GeolocationService, GeolocationData } from './GeolocationService';
 
-}
-}
+
+
 export interface LoginAttempt {
   userId?: string;
   email: string;
@@ -36,13 +36,14 @@ export interface LoginAttempt {
     isTypicalLocation: boolean;
     distanceFromNearestKm?: number;
     suspiciousIndicators: string[];
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 export interface LoginAnalytics {
   totalAttempts: number;
   successfulLogins: number;
@@ -52,24 +53,25 @@ export interface LoginAnalytics {
     reason: string;
     count: number;
     percentage: number;
-}
-}
-  }>;
+
+
+
+>;
   suspiciousActivity: Array<{
     type: string;
     description: string;
     count: number;
     severity: 'low' | 'medium' | 'high';
-  }>;
+>;
   deviceAnalysis: {
     newDevices: number;
     returningDevices: number;
     suspiciousDevices: number;
   };
-}
 
-}
-}
+
+
+
 export interface DeviceInfo {
   browser?: string;
   os?: string;
@@ -77,9 +79,10 @@ export interface DeviceInfo {
   userAgent: string;
   fingerprint?: string;
   trusted?: boolean;
-}
-}
-}
+
+
+
+
 
 export class LoginService {
   private userService: UserService;
@@ -115,7 +118,7 @@ export class LoginService {
     this.geolocationService = geolocationService;
     this.db = db;
     this.redis = redis;
-  }
+
 
   /**
    * Get comprehensive geolocation data for login context
@@ -142,16 +145,16 @@ export class LoginService {
         confidence: 0.1,
         source: 'fallback'
       };
-    }
+
 
     // Extract headers from context.geoLocation if available
     const headers = context.geoLocation ? {
       'cf-ipcountry': context.geoLocation.country,
       'cf-timezone': context.geoLocation.timezone
-    } : undefined;
+ : undefined;
 
     return await this.geolocationService.getGeolocationData(context.ipAddress, headers);
-  }
+
 
   async login(
     request: LoginRequest,
@@ -181,7 +184,7 @@ export class LoginService {
           ? `Account is locked until ${lockoutStatus.lockedUntil.toLocaleString()}`
           : 'Account is currently locked';
         throw new Error(lockoutError);
-      }
+
 
       // Get user and validate credentials
       user = await this.validateCredentials(request.email, request.password);
@@ -242,7 +245,7 @@ export class LoginService {
         expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
         sessionId: session.id
       };
-    } catch (error) {
+ catch (error) {
       // Get geolocation data for failed attempts too
       const geolocationData = await this.getLocationData(context);
       
@@ -282,8 +285,8 @@ export class LoginService {
       await this.trackLoginMetrics(user, context, Date.now() - startTime, 'failure', error.message);
 
       throw error;
-    }
-  }
+
+
 
   async logout(
     userId: string,
@@ -298,7 +301,7 @@ export class LoginService {
       // Update session
       if (sessionId) {
         await this.revokeSession(sessionId);
-      }
+
 
       // Log logout
       await this.auditService.logEvent({
@@ -310,11 +313,11 @@ export class LoginService {
         sessionId,
         severity: 'info'
       });
-    } catch (error) {
+ catch (error) {
       console.error('Logout error:', error);
       // Don't throw - logout should always succeed
-    }
-  }
+
+
 
   async refreshSession(
     refreshToken: string,
@@ -338,7 +341,7 @@ export class LoginService {
       });
 
       return tokens;
-    } catch (error) {
+ catch (error) {
       // Log failed token refresh
       await this.auditService.logEvent({
         action: 'token_refresh_failed',
@@ -349,8 +352,8 @@ export class LoginService {
       });
       
       throw error;
-    }
-  }
+
+
 
   async validateTwoFactorAuth(
     userId: string,
@@ -382,13 +385,13 @@ export class LoginService {
             token,
             context.ipAddress
           );
-        } else {
+ else {
           result = await totpService.authenticateUser(
             userId,
             token,
             context.ipAddress
           );
-        }
+
 
         if (result.success) {
           await this.auditService.logEvent({
@@ -398,13 +401,13 @@ export class LoginService {
               method, 
               isBackupCode,
               remainingBackupCodes: result.remainingCodes 
-  }
+
             ipAddress: context.ipAddress,
             userAgent: context.userAgent,
             severity: 'info'
           });
           return true;
-        } else {
+ else {
           await this.auditService.logEvent({
             userId,
             action: '2fa_failed',
@@ -412,30 +415,30 @@ export class LoginService {
               method, 
               isBackupCode,
               reason: result.message 
-  }
+
             ipAddress: context.ipAddress,
             userAgent: context.userAgent,
             severity: 'warning'
           });
           return false;
-        }
-      }
+
+
 
       // TODO: Implement SMS and email 2FA methods
       if (method === 'sms') {
         // Placeholder for SMS OTP validation
         console.log('SMS 2FA not yet implemented');
         return false;
-      }
+
 
       if (method === 'email') {
         // Placeholder for email OTP validation
         console.log('Email 2FA not yet implemented');
         return false;
-      }
+
 
       return false;
-    } catch (error) {
+ catch (error) {
       console.error('2FA validation error:', error);
       await this.auditService.logEvent({
         userId,
@@ -443,14 +446,14 @@ export class LoginService {
         details: { 
           method, 
           error: error.message 
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'error'
       });
       return false;
-    }
-  }
+
+
 
   async unlockAccount(
     email: string,
@@ -462,11 +465,11 @@ export class LoginService {
     const success = await this.lockoutService.verifyUnlockToken(email, unlockToken);
     if (!success) {
       throw new Error('Invalid or expired unlock token');
-    }
+
 
     // Account has been unlocked by the lockout service
     // Additional logging is handled by the lockout service
-  }
+
 
   async getLoginAnalytics(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<LoginAnalytics> {
 
@@ -563,13 +566,13 @@ export class LoginService {
           newDevices: parseInt(deviceAnalysis.rows[0]?.new_devices || '0'),
           returningDevices: parseInt(deviceAnalysis.rows[0]?.returning_devices || '0'),
           suspiciousDevices: parseInt(deviceAnalysis.rows[0]?.suspicious_devices || '0')
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       console.error('Failed to get login analytics:', error);
       throw error;
-    }
-  }
+
+
 
   private async performSecurityChecks(
     email: string,
@@ -590,18 +593,18 @@ export class LoginService {
           email: this.hashEmail(email),
           ipAddress: context.ipAddress,
           rateLimitExceeded: true
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
       
       throw new Error('Too many login attempts. Please try again later.');
-    }
+
 
     // Check for suspicious patterns
     await this.detectSuspiciousActivity(email, context);
-  }
+
 
   private async validateCredentials(email: string, password: string): Promise<User> {
 
@@ -609,40 +612,40 @@ export class LoginService {
     
     if (!user) {
       throw new Error('Invalid email or password');
-    }
+
 
     const isPasswordValid = await this.userService.verifyPassword(user, password);
     
     if (!isPasswordValid) {
       throw new Error('Invalid email or password');
-    }
+
 
     return user;
-  }
+
 
   private async validateUserAccount(user: User, context: any): Promise<void> {
 
     // Check account status
     if (user.status !== 'active') {
       throw new Error('Account is not active. Please contact support.');
-    }
+
 
     // Check if account is locked
     if (user.accountLocked && user.lockedUntil && user.lockedUntil > new Date()) {
       const unlockTime = user.lockedUntil.toLocaleString();
       throw new Error(`Account is locked until ${unlockTime}. Please try again later or reset your password.`);
-    }
+
 
     // Check if email is verified (optional - depends on requirements)
     if (!user.emailVerified && this.config.security.requireEmailVerification) {
       throw new Error('Please verify your email address before logging in.');
-    }
-  }
+
+
 
   private async generateTokens(user: User): Promise<{
     accessToken: string;
     refreshToken: string;
-  }> {
+> {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenService.generateAccessToken(user),
@@ -650,7 +653,7 @@ export class LoginService {
     ]);
 
     return { accessToken, refreshToken };
-  }
+
 
   private async createSession(
     user: User,
@@ -683,7 +686,7 @@ export class LoginService {
     ]);
 
     return this.mapDatabaseSession(session.rows[0]);
-  }
+
 
   private async updateLoginData(user: User, context: any): Promise<void> {
 
@@ -693,7 +696,7 @@ export class LoginService {
       accountLocked: false,
       lockedUntil: undefined
     });
-  }
+
 
   private async handleSecurityNotifications(
     user: User,
@@ -735,14 +738,14 @@ export class LoginService {
           reason: isNewDevice ? 'new_device' : 'unusual_location',
           deviceFingerprint: context.deviceFingerprint,
           location: context.geoLocation
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         sessionId: session.id,
         severity: 'warning'
       });
-    }
-  }
+
+
 
   private async detectSuspiciousActivity(email: string, context: any): Promise<void> {
 
@@ -755,12 +758,12 @@ export class LoginService {
           type: 'rapid_attempts',
           ipAddress: context.ipAddress,
           email: this.hashEmail(email)
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
-    }
+
 
     // Check for multiple email attempts from same IP
     const emailAttemptsKey = `email_attempts:${context.ipAddress}`;
@@ -771,13 +774,13 @@ export class LoginService {
         details: {
           type: 'multiple_emails',
           ipAddress: context.ipAddress
-  }
+
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
         severity: 'warning'
       });
-    }
-  }
+
+
 
   private async logLoginAttempt(attempt: LoginAttempt): Promise<void> {
 
@@ -791,12 +794,12 @@ export class LoginService {
         success: attempt.success,
         failureReason: attempt.failureReason,
         deviceFingerprint: attempt.deviceFingerprint
-  }
+
       ipAddress: attempt.ipAddress,
       userAgent: attempt.userAgent,
       severity: attempt.success ? 'info' : 'warning'
     });
-  }
+
 
   private async trackLoginMetrics(
     user: User | null,
@@ -816,7 +819,7 @@ export class LoginService {
     };
 
     await this.redis.setex(metricsKey, 86400, JSON.stringify(metrics)); // 24 hour TTL
-  }
+
 
   private async isNewDevice(userId: string, deviceFingerprint?: string): Promise<boolean> {
 
@@ -831,7 +834,7 @@ export class LoginService {
     `, [userId, deviceFingerprint]);
 
     return parseInt(result.rows[0]?.count || '0') === 0;
-  }
+
 
   private async isUnusualLocation(userId: string, geoLocation?: any): Promise<boolean> {
 
@@ -847,7 +850,7 @@ export class LoginService {
     `, [userId, geoLocation.country]);
 
     return parseInt(result.rows[0]?.count || '0') === 0;
-  }
+
 
   private async revokeSession(sessionId: string): Promise<void> {
 
@@ -856,7 +859,7 @@ export class LoginService {
       SET revoked = true, revoked_at = NOW() 
       WHERE id = $1
     `, [sessionId]);
-  }
+
 
   private async updateSessionActivity(userId: string, context: any): Promise<void> {
 
@@ -865,18 +868,18 @@ export class LoginService {
       SET last_accessed_at = NOW() 
       WHERE user_id = $1 AND revoked = false
     `, [userId]);
-  }
+
 
   private verifyUnlockToken(user: User, token: string): boolean {
     // Implementation would verify a secure unlock token
     // For now, this is a placeholder
     return token === `unlock_${user.id}_${user.email}`;
-  }
+
 
   private parseDeviceInfo(userAgent?: string): DeviceInfo {
     if (!userAgent) {
       return { userAgent: 'unknown' };
-    }
+
 
     // Basic user agent parsing (in production, use a proper library)
     const browser = this.extractBrowser(userAgent);
@@ -889,7 +892,7 @@ export class LoginService {
       device,
       userAgent
     };
-  }
+
 
   private extractBrowser(userAgent: string): string {
     if (userAgent.includes('Chrome')) return 'Chrome';
@@ -897,7 +900,7 @@ export class LoginService {
     if (userAgent.includes('Safari')) return 'Safari';
     if (userAgent.includes('Edge')) return 'Edge';
     return 'Unknown';
-  }
+
 
   private extractOS(userAgent: string): string {
     if (userAgent.includes('Windows')) return 'Windows';
@@ -906,18 +909,18 @@ export class LoginService {
     if (userAgent.includes('Android')) return 'Android';
     if (userAgent.includes('iOS')) return 'iOS';
     return 'Unknown';
-  }
+
 
   private extractDevice(userAgent: string): string {
     if (userAgent.includes('Mobile')) return 'Mobile';
     if (userAgent.includes('Tablet')) return 'Tablet';
     return 'Desktop';
-  }
+
 
   private formatDeviceInfo(context: any): string {
     const deviceInfo = this.parseDeviceInfo(context.userAgent);
     return `${deviceInfo.browser} on ${deviceInfo.os} (${deviceInfo.device})`;
-  }
+
 
   private getActivityDescription(activityType: string): string {
     const descriptions = {
@@ -929,7 +932,7 @@ export class LoginService {
     };
 
     return descriptions[activityType] || 'Suspicious activity detected';
-  }
+
 
   private async toPublicUser(user: User): Promise<any> {
 
@@ -943,7 +946,7 @@ export class LoginService {
       roles: ['user'], // Would fetch actual roles
       permissions: ['graphs:create:own'] // Would fetch actual permissions
     };
-  }
+
 
   private mapDatabaseSession(row: any): UserSession {
     return {
@@ -960,10 +963,9 @@ export class LoginService {
       revoked: row.revoked,
       revokedAt: row.revoked_at
     };
-  }
+
 
   private hashEmail(email: string): string {
     const crypto = require('crypto');
     return crypto.createHash('sha256').update(email.toLowerCase()).digest('hex');
-  }
-}
+

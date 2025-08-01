@@ -127,22 +127,22 @@ return {
         advocacy: { stage: 'advocacy', count: Math.floor(totalConversions * 0.2), percentage: 1, dropOffRate: 80, averageTime: 600 }
     },
     demographicInsights: {
-        topAgeGroups: [,
+        topAgeGroups: [
             { group: '25-34', percentage: 45, engagement: 8.2 },
             { group: '35-44', percentage: 30, engagement: 7.8 },
             { group: '18-24', percentage: 25, engagement: 9.1 }
         ],
-        topLocations: [,
+        topLocations: [
             { location: 'United States', shares: Math.floor(shares.length * 0.6), revenue: totalRevenue * 0.65 },
             { location: 'United Kingdom', shares: Math.floor(shares.length * 0.15), revenue: totalRevenue * 0.18 },
             { location: 'Canada', shares: Math.floor(shares.length * 0.1), revenue: totalRevenue * 0.12 }
         ],
-        topInterests: [,
+        topInterests: [
             { interest: 'AI & Technology', affinity: 9.2, conversion: 12.5 },
             { interest: 'Productivity', affinity: 8.7, conversion: 10.8 },
             { interest: 'Business Tools', affinity: 8.1, conversion: 9.2 }
         ],
-        devicePreferences: [,
+        devicePreferences: [
             { device: 'Desktop', usage: 60, performance: 8.5 },
             { device: 'Mobile', usage: 35, performance: 7.2 },
             { device: 'Tablet', usage: 5, performance: 6.8 }
@@ -397,7 +397,7 @@ div >
                             < div, key = { stage, : .stage }, className = "relative mb-4" >
                             _jsx("div", { className: "flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg", style: {
                                     width: `${Math.max(stage.percentage, 10)}%`
-                                } }), minWidth), ": '200px' }} >", _jsxs("div", { children: [_jsx("div", { className: "font-semibold capitalize", children: stage.stage }), _jsxs("div", { className: "text-sm opacity-90", children: [stage.count.toLocaleString(), " users"] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "font-semibold", children: [stage.percentage.toFixed(1), "%"] }), index > 0 && ()
+                                } }), minWidth), ": '200px'; }} >", _jsxs("div", { children: [_jsx("div", { className: "font-semibold capitalize", children: stage.stage }), _jsxs("div", { className: "text-sm opacity-90", children: [stage.count.toLocaleString(), " users"] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "font-semibold", children: [stage.percentage.toFixed(1), "%"] }), index > 0 && ()
                                     < div, " className=\"text-xs opacity-75\">-", stage.dropOffRate, "% drop"] }), ")}"] }));
     div >
         _jsxs("div", { className: "mt-2 ml-4 text-xs text-gray-500", children: ["Avg. time: ", Math.floor(stage.averageTime / 60), "m ", stage.averageTime % 60, "s"] });

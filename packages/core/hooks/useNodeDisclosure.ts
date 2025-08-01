@@ -6,17 +6,14 @@ import { useUISettingsStore } from '../stores/uiSettingsStore';
  * @param nodeId - The unique ID of the node
  * @param nodeType - The type of node (e.g., 'weighted-choice', 'output', etc.)
  */
-export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
-  const nodePrefs = getEffectiveNodePreferences(nodeId, nodeType);
+export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => { const nodePrefs = getEffectiveNodePreferences(nodeId, nodeType);
   // Set disclosure level for this specific node
-  const setDisclosureLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {,
+  const setDisclosureLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => { }
   setNodeDisclosureLevel(nodeId, level);
 }, [nodeId, setNodeDisclosureLevel]);
 
   // Toggle whether to use global default
-  const setUseGlobalDefault = useCallback((useGlobal: boolean) => {
-    setNodeUseGlobalDefault(nodeId, useGlobal);
-  }, [nodeId, setNodeUseGlobalDefault]);
+  const setUseGlobalDefault = useCallback((useGlobal: boolean) => { setNodeUseGlobalDefault(nodeId, useGlobal) }, [nodeId, setNodeUseGlobalDefault]);
 
   // Check if a section should be shown at current disclosure level
   const shouldShowSection = useCallback((sectionLevel: 'basic' | 'advanced' | 'debug') => {
@@ -40,17 +37,14 @@ export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
       
       if (technicalPatterns.some(pattern => lowerName.includes(pattern))) {
         fieldLevel = 'debug'
-  } else if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
+ else if (advancedPatterns.some(pattern => lowerName.includes(pattern))) {
         fieldLevel = 'advanced'
-  } else {
-        fieldLevel = 'basic';
+ else { fieldLevel = 'basic';
 
 
-    return shouldShowSection(fieldLevel);
-  }, [shouldShowSection]);
+    return shouldShowSection(fieldLevel) }, [shouldShowSection]);
 
-  return {
-    // Current state
+  return { // Current state
     disclosureLevel,
     nodePrefs,
     isBasicMode,
@@ -66,7 +60,7 @@ export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
     setUseGlobalDefault,
     
     // Utility functions
-    shouldShowSection,
+    shouldShowSection }
     shouldShowField
   };
 };
@@ -74,20 +68,16 @@ export const useNodeDisclosureControl = (nodeId: string, nodeType: string) => {
 /**
  * Hook for components that need to render progressive disclosure sections
  */
-export const useDisclosurePreferences = () => {
-  const [preferenceInheritance, setPreferenceInheritance] = useState<'global' | 'nodeType' | 'individual'>('global');
-  const setGlobalLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => {,
+export const useDisclosurePreferences = () => { const [preferenceInheritance, setPreferenceInheritance] = useState<'global' | 'nodeType' | 'individual'>('global');
+  const setGlobalLevel = useCallback((level: 'basic' | 'advanced' | 'debug') => { }
   setGlobalDisclosureLevel(level);
 }, [setGlobalDisclosureLevel]);
 
-  const setInheritance = useCallback((inheritance: 'global' | 'nodeType' | 'individual') => {
-    setPreferenceInheritance(inheritance);
-  }, [setPreferenceInheritance]);
+  const setInheritance = useCallback((inheritance: 'global' | 'nodeType' | 'individual') => { setPreferenceInheritance(inheritance) }, [setPreferenceInheritance]);
 
-  return {
-    globalDisclosureLevel,
+  return { globalDisclosureLevel,
     preferenceInheritance,
-    setGlobalLevel,
+    setGlobalLevel }
     setInheritance
   };
 };

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  Send, 
+import { Send, 
   X, 
   Bold, 
   Italic, 
@@ -10,15 +9,14 @@ import {
   AtSign, 
   Paperclip,
   Smile,
-  Eye,
+  Eye }
   Edit3
-} from 'lucide-react';
+ from 'lucide-react';
 import { CommentMentions } from './CommentMentions';
 
-}
-interface CommentEditorProps {
-  initialContent?: string;
-  onSave: (content: string, mentions: string) => void;
+
+interface CommentEditorProps { initialContent?: string;
+  onSave: (content: string, mentions: string) => void }
   onCancel: () => void;
   placeholder?: string;
   submitLabel?: string;
@@ -28,22 +26,19 @@ interface CommentEditorProps {
   allowFormatting?: boolean;
   allowMentions?: boolean;
   allowAttachments?: boolean;
-
-export const [isPreview, setIsPreview] = useState(false);
+  export const [isPreview, setIsPreview] = useState(false);
   const [mentions, setMentions] = useState<string>([]);
   const [showMentions, setShowMentions] = useState(false);
   const [mentionQuery, setMentionQuery] = useState('');
   const [cursorPosition, setCursorPosition] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-}
-  const mentionPositionRef = useRef({ start: 0, end: 0 });
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-      textareaRef.current.setSelectionRange(content.length, content.length);
 
-  }, []);
+
+  const mentionPositionRef = useRef({ start: 0, end: 0 });
+  useEffect(() => { if (textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.setSelectionRange(content.length, content.length) }, []);
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
@@ -52,8 +47,7 @@ export const [isPreview, setIsPreview] = useState(false);
 
   }, [content]);
   // Handle mention detection
-  useEffect(() => {
-  if (!allowMentions) return;
+  useEffect(() => { if (!allowMentions) return;
   const textarea = textareaRef.current;
   if (!textarea) return;
   const handleTextChange = () => {
@@ -71,27 +65,19 @@ export const [isPreview, setIsPreview] = useState(false);
   setMentionQuery(textAfterAt);
   setShowMentions(true);
   mentionPositionRef.current = {
-  start: lastAtIndex,
-  end: cursorPos,
+  start: lastAtIndex
+  end: cursorPos }
 };
-      } else {
-        setShowMentions(false);
-
-    };
+ else { setShowMentions(false) };
     textarea.addEventListener('input', handleTextChange);
     textarea.addEventListener('selectionchange', handleTextChange);
-    return () => {
-      textarea.removeEventListener('input', handleTextChange);
-      textarea.removeEventListener('selectionchange', handleTextChange);
-    };
+    return () => { textarea.removeEventListener('input', handleTextChange);
+      textarea.removeEventListener('selectionchange', handleTextChange) };
   }, [allowMentions]);
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newContent = e.target.value;
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => { const newContent = e.target.value;
     if (newContent.length <= maxLength) {
       setContent(newContent);
-      setCursorPosition(e.target.selectionStart);
-
-  };
+      setCursorPosition(e.target.selectionStart) };
   const handleMentionSelect = (userId: string, userName: string) => {
     const { start, end } = mentionPositionRef.current;
     const beforeMention = content.substring(0, start);
@@ -101,16 +87,12 @@ export const [isPreview, setIsPreview] = useState(false);
     setMentions(prev => [...prev.filter(id => id !== userId), userId]);
     setShowMentions(false);
     // Focus back to textarea
-    setTimeout(() => {
-      if (textareaRef.current) {
+    setTimeout(() => { if (textareaRef.current) {
         const newCursorPos = start + userName.length + 2;
         textareaRef.current.focus();
-        textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
-
-    }, 0);
+        textareaRef.current.setSelectionRange(newCursorPos, newCursorPos) }, 0);
   };
-  const insertFormatting = (before: string, after: string = '') => {
-    if (!textareaRef.current) return;
+  const insertFormatting = (before: string, after: string = '') => { if (!textareaRef.current) return;
     const textarea = textareaRef.current;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
@@ -124,29 +106,18 @@ export const [isPreview, setIsPreview] = useState(false);
     setTimeout(() => {
       const newCursorPos = start + before.length + selectedText.length + after.length;
       textarea.focus();
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
-    }, 0);
+      textarea.setSelectionRange(newCursorPos, newCursorPos) }, 0);
   };
-  const handleSubmit = async () => {
-    if (!content.trim() || isSubmitting) return;
+  const handleSubmit = async () => { if (!content.trim() || isSubmitting) return;
     setIsSubmitting(true);
     try {
-      await onSave(content.trim(), mentions);
-    } catch (err) {
-  console.error('Failed to save comment:', err);
-} finally {
-      setIsSubmitting(false);
-
-  };
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      await onSave(content.trim(), mentions) } catch (err) { console.error('Failed to save comment:', err) } finally { setIsSubmitting(false) };
+  const handleKeyDown = (e: React.KeyboardEvent) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       handleSubmit();
 
     if (e.key === 'Escape') {
-      onCancel();
-
-  };
+      onCancel() };
   const renderPreview = () => {
     // Simple markdown-like rendering for preview
     const previewContent = content;
@@ -208,7 +179,7 @@ export const [isPreview, setIsPreview] = useState(false);
             >
               <List className="w-4 h-4" />
             </button>
-            {allowMentions && ()
+            { allowMentions && ()
               <button
                 type="button"
                 onClick={() => {
@@ -218,10 +189,8 @@ export const [isPreview, setIsPreview] = useState(false);
                   setTimeout(() => {
                     if (textareaRef.current) {
                       textareaRef.current.focus();
-                      textareaRef.current.setSelectionRange(cursorPos + 1, cursorPos + 1);
-
-                  }, 0);
-                }}
+                      textareaRef.current.setSelectionRange(cursorPos + 1, cursorPos + 1) }, 0);
+}
                 className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-200 rounded transition-colors"
                 title="Mention"
               >
@@ -243,11 +212,11 @@ export const [isPreview, setIsPreview] = useState(false);
               <button
                 type="button"
                 onClick={() => setIsPreview(!isPreview)}
-                className={`p-1 rounded transition-colors ${
+                className={ `p-1 rounded transition-colors ${
   isPreview
   ? 'text-blue-600 bg-blue-100'
-  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200',
-}`}
+  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200' }
+`}
                 title={isPreview ? 'Edit' : 'Preview'}
               >
                 {isPreview ? <Edit3 className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -267,9 +236,9 @@ export const [isPreview, setIsPreview] = useState(false);
             onChange={handleContentChange}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className={`w-full min-h-[100px] p-3 border border-gray-300 ${
-  allowFormatting ? 'rounded-b-md rounded-t-none' : 'rounded-md',
-},
+            className={ `w-full min-h-[100px] p-3 border border-gray-300 ${
+  allowFormatting ? 'rounded-b-md rounded-t-none' : 'rounded-md' }
+
   focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none`}
             style={{ maxHeight: '300px' }}
           />

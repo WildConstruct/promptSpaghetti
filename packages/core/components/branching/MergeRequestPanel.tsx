@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
+import { Card, 
   List, 
   Button, 
   Modal, 
@@ -16,11 +15,10 @@ import {
   Divider,
   Timeline,
   Badge,
-  Dropdown,
+  Dropdown }
   Menu
-} from 'antd';
-import {
-  MergeOutlined,
+ from 'antd';
+import { MergeOutlined,
   PlusOutlined,
   CheckOutlined,
   CloseOutlined,
@@ -30,38 +28,37 @@ import {
   MoreOutlined,
   EditOutlined,
   DeleteOutlined,
-  EyeOutlined,
+  EyeOutlined }
   BranchesOutlined
-} from '@ant-design/icons';
-import { 
-  BranchMergeRequest,
+ from '@ant-design/icons';
+import { BranchMergeRequest,
   ProjectBranch,
   CreateMergeRequestRequest,
-  MergeRequestStatus,
+  MergeRequestStatus }
   ReviewStatus
-} from '../../types/branching';
+ from '../../types/branching';
 import { useBranching } from '../../hooks/useBranching';
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
-}
-interface MergeRequestPanelProps {
-  projectId: string;
+
+
+interface MergeRequestPanelProps { projectId: string;
   visible: boolean;
   onClose: () => void;
   interface MergeRequestItemProps {
   mergeRequest: BranchMergeRequest;
-  onView: (mergeRequest: BranchMergeRequest) => void;
-  onMerge: (mergeRequest: BranchMergeRequest) => void;
+  onView: (mergeRequest: BranchMergeRequest) => void
+  onMerge: (mergeRequest: BranchMergeRequest) => void
   onClose: (mergeRequest: BranchMergeRequest) => void;
-  const MergeRequestItem: React.FC<MergeRequestItemProps> = ({ ),
-  mergeRequest,
-  onView,
-  onMerge,
+  const MergeRequestItem: React.FC<MergeRequestItemProps> = ({ );
+  mergeRequest;
+  onView;
+  onMerge }
   onClose
-}
-}) => {
-  const getStatusColor = (status: MergeRequestStatus) => {,
+
+
+}) => { const getStatusColor = (status: MergeRequestStatus) => {,
   switch (status) {
   case 'open':,
   return 'success';
@@ -71,12 +68,10 @@ interface MergeRequestPanelProps {
   return 'default';
   case 'draft':,
   return 'warning';
-  default:,
+  default: }
   return 'default'
-  };
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString();
-  };
+};
+  const formatDate = (date: Date) => { return new Date(date).toLocaleDateString() };
   const menu = (;);
     <Menu>
       <Menu.Item key="view" icon={<EyeOutlined />} onClick={() => onView(mergeRequest)}>
@@ -152,27 +147,24 @@ interface MergeRequestPanelProps {
   );
 };
 
-export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({)
-  projectId,
-  visible,
+export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({ )
+  projectId
+  visible }
   onClose
-}) => {
-  const [mergeRequests, _____setMergeRequests] = useState<BranchMergeRequest>([]);
+}) => { const [mergeRequests, _____setMergeRequests] = useState<BranchMergeRequest>([]);
   const [branches, setBranches] = useState<ProjectBranch>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedMergeRequest, setSelectedMergeRequest] = useState<BranchMergeRequest | null>(null);
   const [form] = Form.useForm();
   const { 
-    listBranches,
-    createMergeRequest,
-    mergeBranch,
-    loading,
+    listBranches
+    createMergeRequest
+    mergeBranch
+    loading }
     error
-  } = useBranching();
-  useEffect(() => {
-    if (visible) {
-      loadData();
-  }, [visible, projectId]);
+ = useBranching();
+  useEffect(() => { if (visible) {
+      loadData() }, [visible, projectId]);
   const loadData = async () => {
     try {
       const [branchesData] = await Promise.all([)
@@ -181,49 +173,37 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({)
       ]);
       setBranches(branchesData);
       // setMergeRequests(mergeRequestsData);
-    } catch (error) {
-  console.error('Failed to load data:', error);
-};
-  const handleCreateMergeRequest = async (values: unknown) => {
-  try {
-  const request: CreateMergeRequestRequest = {,
-  projectId,
-  sourceBranchId: values.sourceBranchId,
-  targetBranchId: values.targetBranchId,
-  title: values.title,
-  description: values.description,
-  reviewers: values.reviewers || [],
-  assignedTo: values.assignedTo,
-  allowSquashMerge: values.allowSquashMerge !== false,
-  allowMergeCommit: values.allowMergeCommit !== false,
-  allowRebaseMerge: values.allowRebaseMerge || false,
-  deleteSourceBranch: values.deleteSourceBranch || false,
+ catch (error) { console.error('Failed to load data:', error) };
+  const handleCreateMergeRequest = async (values: unknown) => { try {
+  const request: CreateMergeRequestRequest = {
+  projectId
+  sourceBranchId: values.sourceBranchId
+  targetBranchId: values.targetBranchId
+  title: values.title
+  description: values.description
+  reviewers: values.reviewers || []
+  assignedTo: values.assignedTo
+  allowSquashMerge: values.allowSquashMerge !== false
+  allowMergeCommit: values.allowMergeCommit !== false
+  allowRebaseMerge: values.allowRebaseMerge || false
+  deleteSourceBranch: values.deleteSourceBranch || false }
 };
       await createMergeRequest(request);
       setShowCreateModal(false);
       form.resetFields();
       loadData();
-    } catch (error) {
-  console.error('Failed to create merge request:', error);
-};
-  const handleMergeBranch = async (mergeRequest: BranchMergeRequest) => {
-  try {
+ catch (error) { console.error('Failed to create merge request:', error) };
+  const handleMergeBranch = async (mergeRequest: BranchMergeRequest) => { try {
   await mergeBranch({)
-  mergeRequestId: mergeRequest.id,
-  mergeStrategy: 'merge',
-  deleteSourceBranch: mergeRequest.deleteSourceBranch,
+  mergeRequestId: mergeRequest.id
+  mergeStrategy: 'merge'
+  deleteSourceBranch: mergeRequest.deleteSourceBranch }
 });
       loadData();
-    } catch (error) {
-  console.error('Failed to merge branch:', error);
-};
-  const handleCloseMergeRequest = async (mergeRequest: BranchMergeRequest) => {
-  // Would implement close functionality
-  console.log('Closing merge request:', mergeRequest.id);
-};
-  const handleViewMergeRequest = (mergeRequest: BranchMergeRequest) => {
-    setSelectedMergeRequest(mergeRequest);
-  };
+ catch (error) { console.error('Failed to merge branch:', error) };
+  const handleCloseMergeRequest = async (mergeRequest: BranchMergeRequest) => { // Would implement close functionality
+  console.log('Closing merge request:', mergeRequest.id) };
+  const handleViewMergeRequest = (mergeRequest: BranchMergeRequest) => { setSelectedMergeRequest(mergeRequest) };
   return;
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
@@ -268,10 +248,9 @@ export const MergeRequestPanel: React.FC<MergeRequestPanelProps> = ({)
       <Modal
         title="Create Merge Request"
         visible={showCreateModal}
-        onCancel={() => {
+        onCancel={ () => {
           setShowCreateModal(false);
-          form.resetFields();
-        }}
+          form.resetFields() }}
         footer={null}
         width={600}
       >

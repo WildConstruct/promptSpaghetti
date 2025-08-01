@@ -8,6 +8,7 @@ import React from 'react';
 import { LearningPath, Epic16LearningPathService } from '../../services/Epic16LearningPathService';
 
 }
+}
 interface LearningPathDashboardProps {
     learningService: Epic16LearningPathService;
     userId: string;
@@ -17,4 +18,5 @@ interface LearningPathDashboardProps {
 export declare const LearningPathDashboard: React.FC<LearningPathDashboardProps>;
 export default LearningPathDashboard;
 //# sourceMappingURL=LearningPathDashboard.d.ts.map
+}
 }

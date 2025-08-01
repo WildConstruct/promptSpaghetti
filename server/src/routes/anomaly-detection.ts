@@ -4,37 +4,40 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { AnomalyDetectionService } from '../services/AnomalyDetectionService';
 
-}
-}
+
+
 interface AnomalyFilters {
   severity?: 'low' | 'medium' | 'high' | 'critical';
   resolved?: boolean;
   patternId?: string;
   limit?: number;
   offset?: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ResolveAnomalyRequest {
   resolvedBy: string;
   falsePositive?: boolean;
   notes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdatePatternRequest {
   enabled?: boolean;
   threshold?: number;
   severity?: 'low' | 'medium' | 'high' | 'critical';
-}
-}
-}
+
+
+
+
 
 export async function anomalyDetectionRoutes(
   fastify: FastifyInstance,
@@ -43,18 +46,18 @@ export async function anomalyDetectionRoutes(
   // Get all anomaly events with filtering
   fastify.get<{
     Querystring: AnomalyFilters;
-  }>('/anomalies', {
+>('/anomalies', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       // Require security or admin role
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'ops'].includes(role))) {
         reply.code(403).send({ error: 'Security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Querystring: AnomalyFilters;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const filters = request.query;
       const anomalies = await anomalyService.getAnomalyEvents(filters);
@@ -65,29 +68,29 @@ export async function anomalyDetectionRoutes(
         filters: filters,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get anomalies:', error);
       reply.code(500).send({
         error: 'Failed to retrieve anomalies',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get specific anomaly by ID
   fastify.get<{
     Params: { id: string };
-  }>('/anomalies/:id', {
+>('/anomalies/:id', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'ops'].includes(role))) {
         reply.code(403).send({ error: 'Security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Params: { id: string };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const anomalies = await anomalyService.getAnomalyEvents({ limit: 1 });
@@ -96,37 +99,37 @@ export async function anomalyDetectionRoutes(
       if (!anomaly) {
         reply.code(404).send({ error: 'Anomaly not found' });
         return;
-      }
+
 
       return {
         anomaly,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get anomaly:', error);
       reply.code(500).send({
         error: 'Failed to retrieve anomaly',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Resolve an anomaly
   fastify.post<{
     Params: { id: string };
     Body: ResolveAnomalyRequest;
-  }>('/anomalies/:id/resolve', {
+>('/anomalies/:id/resolve', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Params: { id: string };
     Body: ResolveAnomalyRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { id } = request.params;
       const { resolvedBy, falsePositive = false } = request.body;
@@ -134,7 +137,7 @@ export async function anomalyDetectionRoutes(
       if (!resolvedBy) {
         reply.code(400).send({ error: 'resolvedBy is required' });
         return;
-      }
+
 
       await anomalyService.resolveAnomaly(id, resolvedBy, falsePositive);
 
@@ -145,13 +148,13 @@ export async function anomalyDetectionRoutes(
         falsePositive,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to resolve anomaly:', error);
       reply.code(500).send({
         error: 'Failed to resolve anomaly',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get anomaly detection statistics
@@ -161,8 +164,8 @@ export async function anomalyDetectionRoutes(
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'ops'].includes(role))) {
         reply.code(403).send({ error: 'Security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const statistics = await anomalyService.getAnomalyStatistics();
@@ -172,13 +175,13 @@ export async function anomalyDetectionRoutes(
         timestamp: new Date().toISOString(),
         description: 'Anomaly detection system statistics'
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get anomaly statistics:', error);
       reply.code(500).send({
         error: 'Failed to retrieve statistics',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get all anomaly patterns
@@ -188,8 +191,8 @@ export async function anomalyDetectionRoutes(
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const patterns = await (anomalyService as any).getEnabledPatterns();
@@ -199,31 +202,31 @@ export async function anomalyDetectionRoutes(
         count: patterns.length,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get patterns:', error);
       reply.code(500).send({
         error: 'Failed to retrieve patterns',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Update anomaly pattern
   fastify.patch<{
     Params: { patternId: string };
     Body: UpdatePatternRequest;
-  }>('/anomalies/patterns/:patternId', {
+>('/anomalies/patterns/:patternId', {
     preHandler: [fastify.jwtAuth, async (request: FastifyRequest, reply: FastifyReply) => {
       const user = request.user as any;
       if (!user?.roles?.includes('admin')) {
         reply.code(403).send({ error: 'Admin role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest<{
     Params: { patternId: string };
     Body: UpdatePatternRequest;
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { patternId } = request.params;
       const updates = request.body;
@@ -237,24 +240,24 @@ export async function anomalyDetectionRoutes(
         updateFields.push(`enabled = $${paramIndex}`);
         params.push(updates.enabled);
         paramIndex++;
-      }
+
 
       if (updates.threshold !== undefined) {
         updateFields.push(`threshold = $${paramIndex}`);
         params.push(updates.threshold);
         paramIndex++;
-      }
+
 
       if (updates.severity) {
         updateFields.push(`severity = $${paramIndex}`);
         params.push(updates.severity);
         paramIndex++;
-      }
+
 
       if (updateFields.length === 0) {
         reply.code(400).send({ error: 'No valid update fields provided' });
         return;
-      }
+
 
       updateFields.push('updated_at = NOW()');
 
@@ -270,7 +273,7 @@ export async function anomalyDetectionRoutes(
       if (result.rows.length === 0) {
         reply.code(404).send({ error: 'Pattern not found' });
         return;
-      }
+
 
       return {
         success: true,
@@ -278,13 +281,13 @@ export async function anomalyDetectionRoutes(
         message: `Pattern ${patternId} updated successfully`,
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to update pattern:', error);
       reply.code(500).send({
         error: 'Failed to update pattern',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Force anomaly check (manual trigger)
@@ -294,8 +297,8 @@ export async function anomalyDetectionRoutes(
       if (!user?.roles?.some((role: string) => ['admin', 'security'].includes(role))) {
         reply.code(403).send({ error: 'Admin or security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Trigger manual anomaly check
@@ -306,13 +309,13 @@ export async function anomalyDetectionRoutes(
         message: 'Manual anomaly check completed',
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to perform manual check:', error);
       reply.code(500).send({
         error: 'Failed to perform anomaly check',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Get recent anomaly detection events (for dashboard)
@@ -322,8 +325,8 @@ export async function anomalyDetectionRoutes(
       if (!user?.roles?.some((role: string) => ['admin', 'security', 'ops'].includes(role))) {
         reply.code(403).send({ error: 'Security role required' });
         return;
-      }
-    }]
+
+]
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       // Get recent anomalies (last 24 hours)
@@ -343,16 +346,16 @@ export async function anomalyDetectionRoutes(
           critical: recentAnomalies.filter(a => a.severity === 'critical').length,
           high: recentAnomalies.filter(a => a.severity === 'high').length,
           unresolved: recentAnomalies.filter(a => !a.resolved).length
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Failed to get recent anomalies:', error);
       reply.code(500).send({
         error: 'Failed to retrieve recent anomalies',
         message: error instanceof Error ? error.message : 'Unknown error'
       });
-    }
+
   });
 
   // Health check for anomaly detection service
@@ -367,22 +370,22 @@ export async function anomalyDetectionRoutes(
           running: isRunning,
           checkInterval: (anomalyService as any).config.checkIntervalSeconds,
           patternsEnabled: (anomalyService as any).config.patterns.filter((p: any) => p.enabled).length
-  }
+
         statistics: {
           totalAnomalies: stats.total_anomalies,
           recentAnomalies: stats.anomalies_24h,
           criticalCount: stats.critical_anomalies
-  }
+
         timestamp: new Date().toISOString()
       };
-    } catch (error) {
+ catch (error) {
       request.log.error('Anomaly service health check failed:', error);
       reply.code(503).send({
         status: 'unhealthy',
         error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       });
-    }
+
   });
 
   // Documentation endpoint
@@ -403,23 +406,23 @@ export async function anomalyDetectionRoutes(
         {
           name: 'Brute Force Login Detection',
           description: 'Detects multiple failed login attempts from the same IP'
-  }
+
         {
           name: 'Credential Stuffing Detection',
           description: 'Detects login attempts across multiple accounts from same IP'
-  }
+
         {
           name: 'Privilege Escalation Detection',
           description: 'Detects rapid role changes or permission escalations'
-  }
+
         {
           name: 'Data Access Anomalies',
           description: 'Detects unusual data access patterns or bulk retrieval'
-  }
+
         {
           name: 'Geographic Anomalies',
           description: 'Detects login from unusual geographic locations'
-        }
+
       ],
       responseActions: [
         'IP Address Blocking',
@@ -434,50 +437,49 @@ export async function anomalyDetectionRoutes(
           method: 'GET',
           description: 'Get all anomaly events with filtering',
           auth: 'security role required'
-  }
+
         {
           path: '/anomalies/:id',
           method: 'GET',
           description: 'Get specific anomaly by ID',
           auth: 'security role required'
-  }
+
         {
           path: '/anomalies/:id/resolve',
           method: 'POST',
           description: 'Resolve an anomaly (mark as handled)',
           auth: 'admin or security role required'
-  }
+
         {
           path: '/anomalies/statistics',
           method: 'GET',
           description: 'Get anomaly detection statistics',
           auth: 'security role required'
-  }
+
         {
           path: '/anomalies/patterns',
           method: 'GET',
           description: 'Get all detection patterns',
           auth: 'admin or security role required'
-  }
+
         {
           path: '/anomalies/patterns/:id',
           method: 'PATCH',
           description: 'Update detection pattern configuration',
           auth: 'admin role required'
-  }
+
         {
           path: '/anomalies/check',
           method: 'POST',
           description: 'Trigger manual anomaly check',
           auth: 'admin or security role required'
-        }
+
       ],
       integrations: {
         auditSystem: 'Reads from audit_logs table for pattern analysis',
         authSystem: 'Integrates with authentication and authorization',
         notificationSystem: 'Sends alerts via webhooks, email, and Slack',
         incidentManagement: 'Creates security incidents for escalation'
-      }
+
     };
   });
-}

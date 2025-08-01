@@ -10,30 +10,30 @@ export interface ActionEditorProps extends Omit<BaseNodeEditorProps, 'children'>
   // Action specific props can be added here
 
 const VERB_TENSES: SelectOption = [
-  { value: 'present', label: 'Present (walk, walks)' },
-  { value: 'past', label: 'Past (walked)' },
-  { value: 'future', label: 'Future (will walk)' },
-  { value: 'present_continuous', label: 'Present Continuous (walking)' },
-  { value: 'past_continuous', label: 'Past Continuous (was walking)' },
-  { value: 'present_perfect', label: 'Present Perfect (has walked)' },
+  { value: 'present', label: 'Present (walk, walks)' }
+  { value: 'past', label: 'Past (walked)' }
+  { value: 'future', label: 'Future (will walk)' }
+  { value: 'present_continuous', label: 'Present Continuous (walking)' }
+  { value: 'past_continuous', label: 'Past Continuous (was walking)' }
+  { value: 'present_perfect', label: 'Present Perfect (has walked)' }
   { value: 'any', label: 'Any tense' }
 ];
 const VERB_MOODS: SelectOption = [
-  { value: 'indicative', label: 'Indicative (statement)' },
-  { value: 'imperative', label: 'Imperative (command)' },
-  { value: 'subjunctive', label: 'Subjunctive (wish/hypothetical)' },
-  { value: 'conditional', label: 'Conditional (would/could)' },
+  { value: 'indicative', label: 'Indicative (statement)' }
+  { value: 'imperative', label: 'Imperative (command)' }
+  { value: 'subjunctive', label: 'Subjunctive (wish/hypothetical)' }
+  { value: 'conditional', label: 'Conditional (would/could)' }
   { value: 'any', label: 'Any mood' }
 ];
 const ACTION_TYPES: SelectOption = [
-  { value: 'physical', label: 'Physical Action', group: 'Action Types' },
-  { value: 'mental', label: 'Mental Action', group: 'Action Types' },
-  { value: 'verbal', label: 'Verbal Action', group: 'Action Types' },
-  { value: 'emotional', label: 'Emotional Action', group: 'Action Types' },
-  { value: 'social', label: 'Social Action', group: 'Action Types' },
-  { value: 'creative', label: 'Creative Action', group: 'Action Types' },
-  { value: 'transitive', label: 'Transitive (requires object)', group: 'Grammar' },
-  { value: 'intransitive', label: 'Intransitive (no object)', group: 'Grammar' },
+  { value: 'physical', label: 'Physical Action', group: 'Action Types' }
+  { value: 'mental', label: 'Mental Action', group: 'Action Types' }
+  { value: 'verbal', label: 'Verbal Action', group: 'Action Types' }
+  { value: 'emotional', label: 'Emotional Action', group: 'Action Types' }
+  { value: 'social', label: 'Social Action', group: 'Action Types' }
+  { value: 'creative', label: 'Creative Action', group: 'Action Types' }
+  { value: 'transitive', label: 'Transitive (requires object)', group: 'Grammar' }
+  { value: 'intransitive', label: 'Intransitive (no object)', group: 'Grammar' }
   { value: 'linking', label: 'Linking Verb (is, seems)', group: 'Grammar' }
 ];
 
@@ -54,36 +54,26 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
   const handleFieldChange = (field: string, value: unknown) => {
     onChange({ [field]: value });
   };
-  const handleVariationsChange = (newVariations: string) => {
-    handleFieldChange('variations', newVariations);
-  };
-  const handleAdverbVariationsChange = (newAdverbs: string) => {
-    handleFieldChange('adverbVariations', newAdverbs);
-  };
-  const handleContextHintsChange = (newHints: string) => {
-    handleFieldChange('contextHints', newHints);
-  };
+  const handleVariationsChange = (newVariations: string) => { handleFieldChange('variations', newVariations) };
+  const handleAdverbVariationsChange = (newAdverbs: string) => { handleFieldChange('adverbVariations', newAdverbs) };
+  const handleContextHintsChange = (newHints: string) => { handleFieldChange('contextHints', newHints) };
   // Auto-generate verb forms based on base form
-  const generateVerbForms = () => {
-  if (!baseForm.trim()) return;
+  const generateVerbForms = () => { if (!baseForm.trim()) return;
   const base = baseForm.trim().toLowerCase();
   const generated = [base];
   // Add basic conjugations (simplified)
   if (base.endsWith('e')) {
-  generated.push(base + 'd'); // past: love -> loved,
-  generated.push(base.slice(0, -1) + 'ing'); // present continuous: love -> loving,
-} else if (base.endsWith('y') && base.length > 1) {
-  const consonantY = !'aeiou'.includes(base[base.length - 2]);
+  generated.push(base + 'd'); // past: love -> loved
+  generated.push(base.slice(0, -1) + 'ing'); // present continuous: love -> loving }
+ else if (base.endsWith('y') && base.length > 1) { const consonantY = !'aeiou'.includes(base[base.length - 2]);
   if (consonantY) {
-  generated.push(base.slice(0, -1) + 'ied'); // past: cry -> cried,
-  generated.push(base.slice(0, -1) + 'ies'); // 3rd person: cry -> cries,
-} else {
-  generated.push(base + 'ed'); // past: play -> played,
+  generated.push(base.slice(0, -1) + 'ied'); // past: cry -> cried
+  generated.push(base.slice(0, -1) + 'ies'); // 3rd person: cry -> cries }
+ else { generated.push(base + 'ed'); // past: play -> played }
   generated.push(base + 'ing'); // present continuous
-} else {
-  generated.push(base + 'ed'); // past: walk -> walked,
-  generated.push(base + 's'); // 3rd person: walk -> walks,
-  generated.push(base + 'ing'); // present continuous: walk -> walking,
+ else { generated.push(base + 'ed'); // past: walk -> walked
+  generated.push(base + 's'); // 3rd person: walk -> walks
+  generated.push(base + 'ing'); // present continuous: walk -> walking }
   // Remove duplicates and update variations
   handleVariationsChange([...new Set([...variations, ...generated])]);
 };
@@ -120,17 +110,17 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           <button
             onClick={generateVerbForms}
             disabled={!baseForm.trim()}
-            style={{
-  padding: '8px 12px',
-  fontSize: 11,
-  background: baseForm.trim() ? '#4299e1' : '#4a5568',
-  border: 'none',
-  borderRadius: 4,
-  color: 'white',
-  cursor: baseForm.trim() ? 'pointer' : 'not-allowed',
-  marginBottom: 16,
-  whiteSpace: 'nowrap',
-}}
+            style={ {
+  padding: '8px 12px'
+  fontSize: 11
+  background: baseForm.trim() ? '#4299e1' : '#4a5568'
+  border: 'none'
+  borderRadius: 4
+  color: 'white'
+  cursor: baseForm.trim() ? 'pointer' : 'not-allowed'
+  marginBottom: 16
+  whiteSpace: 'nowrap' }
+
           >
             Generate Forms
           </button>
@@ -154,34 +144,33 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
         fieldName="template"
       >
         <div style={{ marginBottom: 16 }}>
-          <label style={{
-  display: 'block',
-  fontSize: 12,
-  fontWeight: 500,
-  color: '#e2e8f0',
-  marginBottom: 6,
-}}>
+          <label style={ {
+  display: 'block'
+  fontSize: 12
+  fontWeight: 500
+  color: '#e2e8f0'
+  marginBottom: 6 }
+}>
             Action Template (optional)
           </label>
           <TemplateEditor
             value={template}
             onChange={(value) => handleFieldChange('template', value)}
-            onVariablesChange={(variables, extractedVariables) => {
+            onVariablesChange={ (variables, extractedVariables) => {
               // Store extracted variables for potential use in graph execution
-              handleFieldChange('extractedVariables', extractedVariables || []);
-            }}
+              handleFieldChange('extractedVariables', extractedVariables || []) }}
             placeholder="Enter action template like '{verb} {adverb} through the {location}' or use the verb forms below..."
             showPreview={true}
             showRealTimePreview={false}
             autoComplete={true}
             nodeType="action"
           />
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 4,
-  lineHeight: 1.4,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 4
+  lineHeight: 1.4 }
+}>
             Use {'{variable}'} syntax for dynamic actions. Variables will appear as connection ports.
             <br />
             Examples: "{verb} {adverb}", "{character} {action} {object}", "suddenly {movement}"
@@ -198,44 +187,41 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
         fieldName="variations"
       >
         <div style={{ marginBottom: 12 }}>
-          <label style={{
-  display: 'block',
-  fontWeight: 500,
-  marginBottom: 8,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}>
+          <label style={ {
+  display: 'block'
+  fontWeight: 500
+  marginBottom: 8
+  color: '#e2e8f0'
+  fontSize: 12 }
+}>
             Verb Variations
           </label>
           <VariationList
             nodeId={nodeData.id as string}
             variations={variations}
             onAdd={(variation) => handleVariationsChange([...variations, variation])}
-            onRemove={(index) => {
+            onRemove={ (index) => {
               const newVariations = variations.filter((_, i) => i !== index);
-              handleVariationsChange(newVariations);
-            }}
-            onUpdate={(index, newValue) => {
+              handleVariationsChange(newVariations) }}
+            onUpdate={ (index, newValue) => {
               const newVariations = [...variations];
               newVariations[index] = newValue;
-              handleVariationsChange(newVariations);
-            }}
-            onReorder={(fromIndex, toIndex) => {
+              handleVariationsChange(newVariations) }}
+            onReorder={ (fromIndex, toIndex) => {
               const newVariations = [...variations];
               const [movedItem] = newVariations.splice(fromIndex, 1);
               newVariations.splice(toIndex, 0, movedItem);
-              handleVariationsChange(newVariations);
-            }}
+              handleVariationsChange(newVariations) }}
             placeholder="Enter verb form (e.g., 'walks', 'walked', 'walking')..."
             maxVariations={25}
             allowQuickEntry={true}
           />
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 4,
-  lineHeight: 1.4,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 4
+  lineHeight: 1.4 }
+}>
             Include different tenses, persons, and numbers: walk, walks, walked, walking, etc.
           </div>
         </div>
@@ -266,32 +252,32 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           onChange={(value) => handleFieldChange('mood', value)}
         />
         <div style={{ marginBottom: 16 }}>
-          <label style={{
-  display: 'flex',
-  alignItems: 'center',
-  gap: 8,
-  fontSize: 12,
-  color: '#e2e8f0',
-  cursor: 'pointer',
-}}>
+          <label style={ {
+  display: 'flex'
+  alignItems: 'center'
+  gap: 8
+  fontSize: 12
+  color: '#e2e8f0'
+  cursor: 'pointer' }
+}>
             <input
               type="checkbox"
               checked={requiresObject}
               onChange={(e) => handleFieldChange('requiresObject', e.target.checked)}
-              style={{
-  width: 14,
-  height: 14,
-  cursor: 'pointer',
-}}
+              style={ {
+  width: 14
+  height: 14
+  cursor: 'pointer' }
+}
             />
             Requires direct object (transitive)
           </label>
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 2,
-  marginLeft: 22,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 2
+  marginLeft: 22 }
+}>
             E.g., "eat" requires an object ("eat food"), while "sleep" doesn't
           </div>
         </div>
@@ -306,13 +292,13 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
         fieldName="intensity"
       >
         <div style={{ marginBottom: 16 }}>
-          <label style={{
-  display: 'block',
-  fontWeight: 500,
-  marginBottom: 8,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}>
+          <label style={ {
+  display: 'block'
+  fontWeight: 500
+  marginBottom: 8
+  color: '#e2e8f0'
+  fontSize: 12 }
+}>
             Intensity Level: {intensity}/10
           </label>
           <input
@@ -321,61 +307,58 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
             max="10"
             value={intensity}
             onChange={(e) => handleFieldChange('intensity', parseInt(e.target.value))}
-            style={{
-  width: '100%',
-  marginBottom: 4,
-}}
+            style={ {
+  width: '100%'
+  marginBottom: 4 }
+}
           />
-          <div style={{
-  display: 'flex',
-  justifyContent: 'space-between',
-  fontSize: 10,
-  color: '#a0aec0',
-}}>
+          <div style={ {
+  display: 'flex'
+  justifyContent: 'space-between'
+  fontSize: 10
+  color: '#a0aec0' }
+}>
             <span>Gentle</span>
             <span>Moderate</span>
             <span>Intense</span>
           </div>
         </div>
         <div style={{ marginBottom: 12 }}>
-          <label style={{
-  display: 'block',
-  fontWeight: 500,
-  marginBottom: 8,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}>
+          <label style={ {
+  display: 'block'
+  fontWeight: 500
+  marginBottom: 8
+  color: '#e2e8f0'
+  fontSize: 12 }
+}>
             Adverb Modifiers
           </label>
           <VariationList
             nodeId={`${nodeData.id as string}-adverbs`}
             variations={adverbVariations}
             onAdd={(adverb) => handleAdverbVariationsChange([...adverbVariations, adverb])}
-            onRemove={(index) => {
+            onRemove={ (index) => {
               const newAdverbs = adverbVariations.filter((_, i) => i !== index);
-              handleAdverbVariationsChange(newAdverbs);
-            }}
-            onUpdate={(index, newValue) => {
+              handleAdverbVariationsChange(newAdverbs) }}
+            onUpdate={ (index, newValue) => {
               const newAdverbs = [...adverbVariations];
               newAdverbs[index] = newValue;
-              handleAdverbVariationsChange(newAdverbs);
-            }}
-            onReorder={(fromIndex, toIndex) => {
+              handleAdverbVariationsChange(newAdverbs) }}
+            onReorder={ (fromIndex, toIndex) => {
               const newAdverbs = [...adverbVariations];
               const [movedItem] = newAdverbs.splice(fromIndex, 1);
               newAdverbs.splice(toIndex, 0, movedItem);
-              handleAdverbVariationsChange(newAdverbs);
-            }}
+              handleAdverbVariationsChange(newAdverbs) }}
             placeholder="Enter adverb (e.g., 'quickly', 'carefully', 'loudly')..."
             maxVariations={20}
             allowQuickEntry={true}
           />
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 4,
-  lineHeight: 1.4,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 4
+  lineHeight: 1.4 }
+}>
             Adverbs that can be randomly selected to modify this action
           </div>
         </div>
@@ -390,44 +373,41 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
         fieldName="contextHints"
       >
         <div style={{ marginBottom: 12 }}>
-          <label style={{
-  display: 'block',
-  fontWeight: 500,
-  marginBottom: 8,
-  color: '#e2e8f0',
-  fontSize: 12,
-}}>
+          <label style={ {
+  display: 'block'
+  fontWeight: 500
+  marginBottom: 8
+  color: '#e2e8f0'
+  fontSize: 12 }
+}>
             Context Hints
           </label>
           <VariationList
             nodeId={`${nodeData.id as string}-context`}
             variations={contextHints}
             onAdd={(hint) => handleContextHintsChange([...contextHints, hint])}
-            onRemove={(index) => {
+            onRemove={ (index) => {
               const newHints = contextHints.filter((_, i) => i !== index);
-              handleContextHintsChange(newHints);
-            }}
-            onUpdate={(index, newValue) => {
+              handleContextHintsChange(newHints) }}
+            onUpdate={ (index, newValue) => {
               const newHints = [...contextHints];
               newHints[index] = newValue;
-              handleContextHintsChange(newHints);
-            }}
-            onReorder={(fromIndex, toIndex) => {
+              handleContextHintsChange(newHints) }}
+            onReorder={ (fromIndex, toIndex) => {
               const newHints = [...contextHints];
               const [movedItem] = newHints.splice(fromIndex, 1);
               newHints.splice(toIndex, 0, movedItem);
-              handleContextHintsChange(newHints);
-            }}
+              handleContextHintsChange(newHints) }}
             placeholder="Enter context hint (e.g., 'outdoor', 'requires skill', 'quiet')..."
             maxVariations={15}
             allowQuickEntry={true}
           />
-          <div style={{
-  fontSize: 10,
-  color: '#a0aec0',
-  marginTop: 4,
-  lineHeight: 1.4,
-}}>
+          <div style={ {
+  fontSize: 10
+  color: '#a0aec0'
+  marginTop: 4
+  lineHeight: 1.4 }
+}>
             Hints help other nodes understand the context and requirements of this action
           </div>
         </div>
@@ -441,14 +421,14 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
         priority="standard"
         fieldName="preview"
       >
-        <div style={{
-  background: '#1a202c',
-  border: '1px solid #4a5568',
-  borderRadius: 4,
-  padding: 12,
-  fontSize: 12,
-  color: '#e2e8f0',
-}}>
+        <div style={ {
+  background: '#1a202c'
+  border: '1px solid #4a5568'
+  borderRadius: 4
+  padding: 12
+  fontSize: 12
+  color: '#e2e8f0' }
+}>
           <div style={{ marginBottom: 8, fontWeight: 500 }}>
             Action Configuration:
           </div>
@@ -467,13 +447,13 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
           <div style={{ marginBottom: 4 }}>
             <span style={{ color: '#a0aec0' }}>Requires Object:</span> {requiresObject ? 'Yes' : 'No'}
           </div>
-          {variations.length > 0 && ()
+          { variations.length > 0 && ()
             <div style={{
-  marginTop: 8,
-  padding: 8,
-  background: 'rgba(66, 153, 225, 0.1)',
-  borderRadius: 2,
-}}>
+  marginTop: 8
+  padding: 8
+  background: 'rgba(66, 153, 225, 0.1)'
+  borderRadius: 2 }
+}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Verb forms ({variations.length}):
               </div>
@@ -492,13 +472,13 @@ export const ActionEditor: React.FC<ActionEditorProps> = ({ _____nodeId, nodeDat
               </div>
             </div>
           )}
-          {adverbVariations.length > 0 && ()
+          { adverbVariations.length > 0 && ()
             <div style={{
-  marginTop: 8,
-  padding: 8,
-  background: 'rgba(34, 197, 94, 0.1)',
-  borderRadius: 2,
-}}>
+  marginTop: 8
+  padding: 8
+  background: 'rgba(34, 197, 94, 0.1)'
+  borderRadius: 2 }
+}>
               <div style={{ color: '#a0aec0', fontSize: 10, marginBottom: 4 }}>
                 Available adverbs:
               </div>

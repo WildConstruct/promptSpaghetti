@@ -10,8 +10,8 @@
 import { ModerationCategory, ModerationPriority, ContentType } from './ModerationStatesService';
 
 }
-export interface ModerationWorkflow {
-    id: string;
+}
+export interface ModerationWorkflow { id: string;
     name: string;
     description: string;
     version: string;
@@ -31,11 +31,10 @@ export interface ModerationWorkflow {
     createdAt: Date;
     updatedAt: Date;
     createdBy: string;
-    lastModifiedBy?: string;
-
+    lastModifiedBy?: string }
 }
-export interface WorkflowExecution {
-    id: string;
+}
+export interface WorkflowExecution { id: string;
     workflowId: string;
     itemId: string;
     status: ExecutionStatus;
@@ -51,11 +50,10 @@ export interface WorkflowExecution {
     errors: ExecutionError[];
     retryCount: number;
     context: WorkflowContext;
-    variables: WorkflowVariables;
-
+    variables: WorkflowVariables }
 }
-export interface WorkflowStep {
-    id: string;
+}
+export interface WorkflowStep { id: string;
     name: string;
     type: StepType;
     description: string;
@@ -73,11 +71,10 @@ export interface WorkflowStep {
     validation: StepValidation;
     canRunInParallel: boolean;
     parallelGroup?: string;
-    retryPolicy: RetryPolicy;
-
+    retryPolicy: RetryPolicy }
 }
-export interface StepExecution {
-    id: string;
+}
+export interface StepExecution { id: string;
     stepId: string;
     status: StepExecutionStatus;
     startedAt: Date;
@@ -88,486 +85,416 @@ export interface StepExecution {
     output?: Record<string, any>;
     duration: number;
     retryCount: number;
-    context: Record<string, any>;
-
+    context: Record<string, any> }
 }
-export interface WorkflowTrigger {
-    type: 'content_reported' | 'auto_detection' | 'manual_review' | 'scheduled' | 'api_trigger' | 'state_change';
+}
+export interface WorkflowTrigger { type: 'content_reported' | 'auto_detection' | 'manual_review' | 'scheduled' | 'api_trigger' | 'state_change';
     conditions: TriggerCondition[];
     filters: TriggerFilter[];
     priority: number;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface WorkflowCondition {
-    type: 'content_type' | 'severity_level' | 'category' | 'user_role' | 'time_based' | 'custom';
+}
+export interface WorkflowCondition { type: 'content_type' | 'severity_level' | 'category' | 'user_role' | 'time_based' | 'custom';
     field: string;
     operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'matches';
     value: any;
-    description: string;
-
+    description: string }
 }
-export interface WorkflowRouting {
-    strategy: 'sequential' | 'parallel' | 'conditional' | 'priority_based' | 'load_balanced';
+}
+export interface WorkflowRouting { strategy: 'sequential' | 'parallel' | 'conditional' | 'priority_based' | 'load_balanced';
     rules: RoutingRule[];
     loadBalancing?: LoadBalancingConfig;
-    failover: FailoverConfig;
-
+    failover: FailoverConfig }
 }
-export interface ProcessingConfig {
-    maxConcurrentExecutions: number;
+}
+export interface ProcessingConfig { maxConcurrentExecutions: number;
     queueStrategy: 'fifo' | 'lifo' | 'priority' | 'fair_share';
     batchProcessing?: BatchProcessingConfig;
-    resourceLimits: ResourceLimits;
-
+    resourceLimits: ResourceLimits }
 }
-export interface EscalationConfig {
-    enabled: boolean;
+}
+export interface EscalationConfig { enabled: boolean;
     triggers: EscalationTrigger[];
     levels: EscalationLevel[];
     timeouts: EscalationTimeout[];
-    notifications: NotificationConfig[];
-
+    notifications: NotificationConfig[] }
 }
-export interface AutomationConfig {
-    aiAssistance: AIAssistanceConfig;
+}
+export interface AutomationConfig { aiAssistance: AIAssistanceConfig;
     autoApproval: AutoApprovalConfig;
     smartRouting: SmartRoutingConfig;
-    predictiveAnalytics: PredictiveConfig;
-
+    predictiveAnalytics: PredictiveConfig }
 }
-export interface ValidationConfig {
-    inputValidation: ValidationRule[];
+}
+export interface ValidationConfig { inputValidation: ValidationRule[];
     outputValidation: ValidationRule[];
     businessRules: BusinessRule[];
-    complianceChecks: ComplianceRule[];
-
+    complianceChecks: ComplianceRule[] }
 }
-export interface MonitoringConfig {
-    metricsCollection: MetricsConfig;
+}
+export interface MonitoringConfig { metricsCollection: MetricsConfig;
     alerting: AlertConfig;
     logging: LoggingConfig;
     reporting: ReportingConfig;
 
 export type ExecutionStatus = 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled' | 'timed_out';
 export type StepType = 'review' | 'automation' | 'validation' | 'approval' | 'notification' | 'transformation' | 'integration' | 'decision' | 'wait' | 'parallel' | 'custom';
-export type StepExecutionStatus = 'waiting' | 'assigned' | 'in_progress' | 'completed' | 'failed' | 'skipped' | 'timed_out' | 'cancelled';
-
+export type StepExecutionStatus = 'waiting' | 'assigned' | 'in_progress' | 'completed' | 'failed' | 'skipped' | 'timed_out' | 'cancelled' }
 }
-export interface StepConfig {
-    parameters: Record<string, any>;
+}
+export interface StepConfig { parameters: Record<string, any>;
     templates: Record<string, string>;
     integrations: IntegrationConfig[];
-    ui: UIConfig;
-
+    ui: UIConfig }
 }
-export interface StepCondition {
-    type: 'data_condition' | 'time_condition' | 'user_condition' | 'system_condition';
+}
+export interface StepCondition { type: 'data_condition' | 'time_condition' | 'user_condition' | 'system_condition';
     expression: string;
-    description: string;
-
+    description: string }
 }
-export interface StepAction {
-    type: 'state_change' | 'notification' | 'data_update' | 'integration_call' | 'variable_set';
+}
+export interface StepAction { type: 'state_change' | 'notification' | 'data_update' | 'integration_call' | 'variable_set';
     parameters: Record<string, any>;
-    condition?: string;
-
+    condition?: string }
 }
-export interface NextStep {
-    stepId: string;
+}
+export interface NextStep { stepId: string;
     condition?: string;
     probability?: number;
-    weight?: number;
-
+    weight?: number }
 }
-export interface AssignmentRule {
-    type: 'round_robin' | 'load_based' | 'skill_based' | 'availability' | 'priority' | 'random';
+}
+export interface AssignmentRule { type: 'round_robin' | 'load_based' | 'skill_based' | 'availability' | 'priority' | 'random';
     criteria: AssignmentCriteria[];
-    fallback?: AssignmentRule;
-
+    fallback?: AssignmentRule }
 }
-export interface AssignmentCriteria {
-    field: string;
+}
+export interface AssignmentCriteria { field: string;
     value: any;
     weight: number;
-    mandatory: boolean;
-
+    mandatory: boolean }
 }
-export interface StepValidation {
-    required: string[];
+}
+export interface StepValidation { required: string[];
     rules: ValidationRule[];
-    customValidators: CustomValidator[];
-
+    customValidators: CustomValidator[] }
 }
-export interface RetryPolicy {
-    enabled: boolean;
+}
+export interface RetryPolicy { enabled: boolean;
     maxAttempts: number;
     backoffStrategy: 'fixed' | 'linear' | 'exponential';
     baseDelay: number;
     maxDelay: number;
-    retryableErrors: string[];
-
+    retryableErrors: string[] }
 }
-export interface StepResult {
-    status: 'success' | 'failure' | 'partial';
+}
+export interface StepResult { status: 'success' | 'failure' | 'partial';
     data: Record<string, any>;
     errors: string[];
     warnings: string[];
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface TriggerCondition {
-    type: 'field_match' | 'time_range' | 'user_action' | 'system_event';
+}
+export interface TriggerCondition { type: 'field_match' | 'time_range' | 'user_action' | 'system_event';
     parameters: Record<string, any>;
-    description: string;
-
+    description: string }
 }
-export interface TriggerFilter {
-    field: string;
+}
+export interface TriggerFilter { field: string;
     operator: string;
     value: any;
-    negate: boolean;
-
+    negate: boolean }
 }
-export interface RoutingRule {
-    name: string;
+}
+export interface RoutingRule { name: string;
     condition: string;
     target: string;
     priority: number;
-    weight?: number;
-
+    weight?: number }
 }
-export interface LoadBalancingConfig {
-    algorithm: 'round_robin' | 'least_connections' | 'weighted' | 'resource_based';
+}
+export interface LoadBalancingConfig { algorithm: 'round_robin' | 'least_connections' | 'weighted' | 'resource_based';
     healthCheck: HealthCheckConfig;
-    fallbackStrategy: string;
-
+    fallbackStrategy: string }
 }
-export interface FailoverConfig {
-    enabled: boolean;
+}
+export interface FailoverConfig { enabled: boolean;
     maxFailures: number;
     fallbackWorkflow?: string;
-    recoveryStrategy: 'manual' | 'automatic' | 'hybrid';
-
+    recoveryStrategy: 'manual' | 'automatic' | 'hybrid' }
 }
-export interface BatchProcessingConfig {
-    enabled: boolean;
+}
+export interface BatchProcessingConfig { enabled: boolean;
     batchSize: number;
     timeout: number;
-    aggregationRules: AggregationRule[];
-
+    aggregationRules: AggregationRule[] }
 }
-export interface ResourceLimits {
-    maxMemory: number;
+}
+export interface ResourceLimits { maxMemory: number;
     maxCpuTime: number;
     maxExecutionTime: number;
-    maxFileSize: number;
-
+    maxFileSize: number }
 }
-export interface EscalationTrigger {
-    type: 'time_based' | 'failure_count' | 'complexity_score' | 'manual';
+}
+export interface EscalationTrigger { type: 'time_based' | 'failure_count' | 'complexity_score' | 'manual';
     threshold: number;
-    condition: string;
-
+    condition: string }
 }
-export interface EscalationLevel {
-    level: number;
+}
+export interface EscalationLevel { level: number;
     name: string;
     assignees: string[];
     timeout: number;
-    actions: EscalationAction[];
-
+    actions: EscalationAction[] }
 }
-export interface EscalationTimeout {
-    level: number;
+}
+export interface EscalationTimeout { level: number;
     timeout: number;
-    action: 'escalate' | 'auto_resolve' | 'assign_default';
-
+    action: 'escalate' | 'auto_resolve' | 'assign_default' }
 }
-export interface NotificationConfig {
-    type: 'email' | 'sms' | 'push' | 'webhook' | 'internal';
+}
+export interface NotificationConfig { type: 'email' | 'sms' | 'push' | 'webhook' | 'internal';
     template: string;
     recipients: string[];
-    conditions: string[];
-
+    conditions: string[] }
 }
-export interface AIAssistanceConfig {
-    enabled: boolean;
+}
+export interface AIAssistanceConfig { enabled: boolean;
     models: AIModelConfig[];
     confidenceThreshold: number;
-    fallbackToHuman: boolean;
-
+    fallbackToHuman: boolean }
 }
-export interface AutoApprovalConfig {
-    enabled: boolean;
+}
+export interface AutoApprovalConfig { enabled: boolean;
     rules: AutoApprovalRule[];
     safetyLimits: SafetyLimits;
-    auditTrail: boolean;
-
+    auditTrail: boolean }
 }
-export interface SmartRoutingConfig {
-    enabled: boolean;
+}
+export interface SmartRoutingConfig { enabled: boolean;
     algorithm: 'ml_based' | 'rule_based' | 'hybrid';
     learningEnabled: boolean;
-    feedbackLoop: boolean;
-
+    feedbackLoop: boolean }
 }
-export interface PredictiveConfig {
-    enabled: boolean;
+}
+export interface PredictiveConfig { enabled: boolean;
     features: string[];
     models: PredictiveModel[];
-    confidenceThreshold: number;
-
+    confidenceThreshold: number }
 }
-export interface ValidationRule {
-    field: string;
+}
+export interface ValidationRule { field: string;
     type: 'required' | 'format' | 'range' | 'custom';
     parameters: Record<string, any>;
-    message: string;
-
+    message: string }
 }
-export interface BusinessRule {
-    name: string;
+}
+export interface BusinessRule { name: string;
     condition: string;
     action: string;
-    priority: number;
-
+    priority: number }
 }
-export interface ComplianceRule {
-    regulation: string;
+}
+export interface ComplianceRule { regulation: string;
     requirement: string;
     validator: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
-
+    severity: 'low' | 'medium' | 'high' | 'critical' }
 }
-export interface MetricsConfig {
-    enabled: boolean;
+}
+export interface MetricsConfig { enabled: boolean;
     metrics: string[];
     aggregation: AggregationConfig;
-    retention: RetentionConfig;
-
+    retention: RetentionConfig }
 }
-export interface AlertConfig {
-    enabled: boolean;
+}
+export interface AlertConfig { enabled: boolean;
     rules: AlertRule[];
     channels: AlertChannel[];
-    escalation: AlertEscalation[];
-
+    escalation: AlertEscalation[] }
 }
-export interface LoggingConfig {
-    level: 'debug' | 'info' | 'warn' | 'error';
+}
+export interface LoggingConfig { level: 'debug' | 'info' | 'warn' | 'error';
     format: 'json' | 'text';
     destinations: LogDestination[];
-    retention: number;
-
+    retention: number }
 }
-export interface ReportingConfig {
-    enabled: boolean;
+}
+export interface ReportingConfig { enabled: boolean;
     schedules: ReportSchedule[];
     templates: ReportTemplate[];
-    distribution: DistributionConfig[];
-
+    distribution: DistributionConfig[] }
 }
-export interface ExecutionResult {
-    stepId: string;
+}
+export interface ExecutionResult { stepId: string;
     status: 'success' | 'failure' | 'warning';
     data: Record<string, any>;
-    timestamp: Date;
-
+    timestamp: Date }
 }
-export interface ExecutionMetrics {
-    totalDuration: number;
+}
+export interface ExecutionMetrics { totalDuration: number;
     stepCount: number;
     automatedSteps: number;
     manualSteps: number;
     failedSteps: number;
     retryCount: number;
-    resourceUsage: ResourceUsage;
-
+    resourceUsage: ResourceUsage }
 }
-export interface ExecutionError {
-    stepId: string;
+}
+export interface ExecutionError { stepId: string;
     error: string;
     timestamp: Date;
     context: Record<string, any>;
-    retryable: boolean;
-
+    retryable: boolean }
 }
-export interface WorkflowContext {
-    itemId: string;
+}
+export interface WorkflowContext { itemId: string;
     workflowId: string;
     executionId: string;
     user: string;
     timestamp: Date;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface WorkflowVariables {
-    [key: string]: any;
-
 }
-export interface IntegrationConfig {
-    type: string;
+export interface WorkflowVariables { [key: string]: any }
+}
+}
+export interface IntegrationConfig { type: string;
     endpoint: string;
     authentication: AuthConfig;
     timeout: number;
-    retryPolicy: RetryPolicy;
-
+    retryPolicy: RetryPolicy }
 }
-export interface UIConfig {
-    layout: string;
+}
+export interface UIConfig { layout: string;
     fields: UIField[];
     actions: UIAction[];
-    validation: UIValidation[];
-
+    validation: UIValidation[] }
 }
-export interface CustomValidator {
-    name: string;
+}
+export interface CustomValidator { name: string;
     function: string;
     parameters: Record<string, any>;
-    message: string;
-
+    message: string }
 }
-export interface HealthCheckConfig {
-    enabled: boolean;
+}
+export interface HealthCheckConfig { enabled: boolean;
     interval: number;
     timeout: number;
     healthyThreshold: number;
-    unhealthyThreshold: number;
-
+    unhealthyThreshold: number }
 }
-export interface AggregationRule {
-    field: string;
+}
+export interface AggregationRule { field: string;
     operation: 'sum' | 'avg' | 'min' | 'max' | 'count';
-    groupBy: string[];
-
+    groupBy: string[] }
 }
-export interface EscalationAction {
-    type: 'notify' | 'reassign' | 'escalate' | 'auto_resolve';
-    parameters: Record<string, any>;
-
 }
-export interface AIModelConfig {
-    name: string;
+export interface EscalationAction { type: 'notify' | 'reassign' | 'escalate' | 'auto_resolve';
+    parameters: Record<string, any> }
+}
+}
+export interface AIModelConfig { name: string;
     version: string;
     endpoint: string;
-    capabilities: string[];
-
+    capabilities: string[] }
 }
-export interface AutoApprovalRule {
-    condition: string;
+}
+export interface AutoApprovalRule { condition: string;
     confidence: number;
-    limitations: string[];
-
+    limitations: string[] }
 }
-export interface SafetyLimits {
-    maxAutoApprovals: number;
+}
+export interface SafetyLimits { maxAutoApprovals: number;
     timeWindow: number;
-    categories: string[];
-
+    categories: string[] }
 }
-export interface PredictiveModel {
-    name: string;
+}
+export interface PredictiveModel { name: string;
     type: string;
     accuracy: number;
-    features: string[];
-
+    features: string[] }
 }
-export interface AggregationConfig {
-    intervals: string[];
-    functions: string[];
-
 }
-export interface RetentionConfig {
-    shortTerm: number;
+export interface AggregationConfig { intervals: string[];
+    functions: string[] }
+}
+}
+export interface RetentionConfig { shortTerm: number;
     longTerm: number;
-    archival: number;
-
+    archival: number }
 }
-export interface AlertRule {
-    name: string;
+}
+export interface AlertRule { name: string;
     condition: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    cooldown: number;
-
+    cooldown: number }
 }
-export interface AlertChannel {
-    type: 'email' | 'slack' | 'webhook' | 'sms';
-    config: Record<string, any>;
-
 }
-export interface AlertEscalation {
-    delay: number;
+export interface AlertChannel { type: 'email' | 'slack' | 'webhook' | 'sms';
+    config: Record<string, any> }
+}
+}
+export interface AlertEscalation { delay: number;
     channels: string[];
-    recipients: string[];
-
+    recipients: string[] }
 }
-export interface LogDestination {
-    type: 'file' | 'database' | 'external';
-    config: Record<string, any>;
-
 }
-export interface ReportSchedule {
-    name: string;
+export interface LogDestination { type: 'file' | 'database' | 'external';
+    config: Record<string, any> }
+}
+}
+export interface ReportSchedule { name: string;
     frequency: 'hourly' | 'daily' | 'weekly' | 'monthly';
     time: string;
-    enabled: boolean;
-
+    enabled: boolean }
 }
-export interface ReportTemplate {
-    name: string;
+}
+export interface ReportTemplate { name: string;
     format: 'pdf' | 'excel' | 'json' | 'csv';
-    sections: ReportSection[];
-
+    sections: ReportSection[] }
 }
-export interface DistributionConfig {
-    recipients: string[];
+}
+export interface DistributionConfig { recipients: string[];
     channels: string[];
-    conditions: string[];
-
+    conditions: string[] }
 }
-export interface ResourceUsage {
-    memory: number;
+}
+export interface ResourceUsage { memory: number;
     cpu: number;
     network: number;
-    storage: number;
-
+    storage: number }
 }
-export interface AuthConfig {
-    type: 'bearer' | 'basic' | 'oauth' | 'api_key';
-    credentials: Record<string, any>;
-
 }
-export interface UIField {
-    name: string;
+export interface AuthConfig { type: 'bearer' | 'basic' | 'oauth' | 'api_key';
+    credentials: Record<string, any> }
+}
+}
+export interface UIField { name: string;
     type: string;
     label: string;
     required: boolean;
-    validation: string[];
-
+    validation: string[] }
 }
-export interface UIAction {
-    name: string;
+}
+export interface UIAction { name: string;
     label: string;
     type: 'button' | 'link' | 'dropdown';
-    condition?: string;
-
+    condition?: string }
 }
-export interface UIValidation {
-    field: string;
+}
+export interface UIValidation { field: string;
     rules: string[];
-    message: string;
-
+    message: string }
 }
-export interface ReportSection {
-    name: string;
+}
+export interface ReportSection { name: string;
     type: 'chart' | 'table' | 'text' | 'metric';
     data: string;
-    config: Record<string, any>;
-
+    config: Record<string, any> }
 }
-export interface WorkflowStats {
-    totalWorkflows: number;
+}
+export interface WorkflowStats { totalWorkflows: number;
     activeWorkflows: number;
     totalExecutions: number;
     runningExecutions: number;
@@ -578,31 +505,27 @@ export interface WorkflowStats {
         averageStepsPerWorkflow: number;
         automationRate: number;
         successRate: number;
-        throughput: number;
+        throughput: number }
 }
     };
-    utilization: {
-        processingCapacity: number;
+    utilization: { processingCapacity: number;
         queueDepth: number;
         resourceUtilization: number;
-        bottlenecks: string[];
-    };
-    quality: {
-        slaCompliance: number;
+        bottlenecks: string[] };
+    quality: { slaCompliance: number;
         errorRate: number;
         escalationRate: number;
-        retryRate: number;
-    };
+        retryRate: number };
 
 }
-export interface WorkflowFilter {
-    categories?: ModerationCategory[];
+}
+export interface WorkflowFilter { categories?: ModerationCategory[];
     contentTypes?: ContentType[];
     status?: ExecutionStatus[];
     assignees?: string[];
     dateRange?: {
         start?: Date;
-        end?: Date;
+        end?: Date }
 }
     };
     tags?: string[];
@@ -611,11 +534,10 @@ export interface WorkflowFilter {
 /**
  * Moderation Workflow Service
  *
- * Orchestrates complex moderation workflows with intelligent routing,
+ * Orchestrates complex moderation workflows with intelligent routing
  * parallel processing, and comprehensive monitoring.
  */
-export declare class ModerationWorkflowService {
-    private static instance;
+export declare class ModerationWorkflowService { private static instance;
     private workflows;
     private executions;
     private executionQueue;
@@ -645,8 +567,7 @@ export declare class ModerationWorkflowService {
      */
     getWorkflows(filter?: {)
         category?: ModerationCategory;
-        active?: boolean;
-    }): ModerationWorkflow[];
+        active?: boolean }): ModerationWorkflow[];
     getExecutions(filter?: WorkflowFilter): WorkflowExecution[];
     getWorkflowStats(): WorkflowStats;
     /**
@@ -674,8 +595,8 @@ export declare class ModerationWorkflowService {
     private sleep;
 
 }
-export interface WorkflowEvent {
-    type: string;
+}
+export interface WorkflowEvent { type: string;
     data: any;
     timestamp: Date;
 
@@ -684,7 +605,7 @@ export declare const createWorkflow: (workflowData: Omit<ModerationWorkflow, "id
 export declare const executeWorkflow: (workflowId: string, itemId: string, triggeredBy: string) => Promise<WorkflowExecution>;
 export declare const getWorkflows: (filter?: {)
     category?: ModerationCategory;
-    active?: boolean;
+    active?: boolean }
 }
 }) => ModerationWorkflow[];
 export declare const getWorkflowStats: () => WorkflowStats;

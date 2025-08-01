@@ -6,8 +6,7 @@
  * security validation, and learning path enforcement.
  */
 import { z } from 'zod';
-declare const prerequisiteSchema: z.ZodObject<{
-    id: z.ZodString;
+declare const prerequisiteSchema: z.ZodObject<{ id: z.ZodString;
     name: z.ZodString;
     description: z.ZodString;
     type: z.ZodEnum<["tutorial", "skill", "certificate", "assessment", "experience"]>;
@@ -15,9 +14,7 @@ declare const prerequisiteSchema: z.ZodObject<{
     requiredTime: z.ZodOptional<z.ZodNumber>;
     validityPeriod: z.ZodOptional<z.ZodNumber>;
     category: z.ZodString;
-    isActive: z.ZodDefault<z.ZodBoolean>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    isActive: z.ZodDefault<z.ZodBoolean> }, "strip", z.ZodTypeAny, { id: string;
     name: string;
     description: string;
     isActive: boolean;
@@ -25,9 +22,7 @@ declare const prerequisiteSchema: z.ZodObject<{
     category: string;
     validityPeriod?: number | undefined;
     requiredScore?: number | undefined;
-    requiredTime?: number | undefined;
-}, {
-    id: string;
+    requiredTime?: number | undefined }, { id: string;
     name: string;
     description: string;
     type: "tutorial" | "assessment" | "experience" | "certificate" | "skill";
@@ -35,59 +30,46 @@ declare const prerequisiteSchema: z.ZodObject<{
     isActive?: boolean | undefined;
     validityPeriod?: number | undefined;
     requiredScore?: number | undefined;
-    requiredTime?: number | undefined;
-}>;
-declare const prerequisiteGroupSchema: z.ZodObject<{
-    id: z.ZodString;
+    requiredTime?: number | undefined }>;
+declare const prerequisiteGroupSchema: z.ZodObject<{ id: z.ZodString;
     name: z.ZodString;
     description: z.ZodString;
     prerequisites: z.ZodArray<z.ZodString, "many">;
     operator: z.ZodDefault<z.ZodEnum<["AND", "OR", "XOR"]>>;
     minimumRequired: z.ZodOptional<z.ZodNumber>;
-    weight: z.ZodDefault<z.ZodNumber>;
-}, "strip", z.ZodTypeAny, {
-    id: string;
+    weight: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { id: string;
     name: string;
     description: string;
     weight: number;
     operator: "AND" | "OR" | "XOR";
     prerequisites: string[];
-    minimumRequired?: number | undefined;
-}, {
-    id: string;
+    minimumRequired?: number | undefined }, { id: string;
     name: string;
     description: string;
     prerequisites: string[];
     weight?: number | undefined;
     operator?: "AND" | "OR" | "XOR" | undefined;
-    minimumRequired?: number | undefined;
-}>;
-declare const userProgressSchema: z.ZodObject<{
-    userId: z.ZodString;
+    minimumRequired?: number | undefined }>;
+declare const userProgressSchema: z.ZodObject<{ userId: z.ZodString;
     prerequisiteId: z.ZodString;
     status: z.ZodEnum<["not_started", "in_progress", "completed", "expired", "failed"]>;
     score: z.ZodOptional<z.ZodNumber>;
     completedAt: z.ZodOptional<z.ZodDate>;
     expiresAt: z.ZodOptional<z.ZodDate>;
     attempts: z.ZodDefault<z.ZodNumber>;
-    evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{,
+    evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{ }
         type: z.ZodEnum<["completion", "score", "time", "peer_review", "instructor_approval"]>;
         value: z.ZodString;
         timestamp: z.ZodDate;
         verifiedBy: z.ZodOptional<z.ZodString>;
-    }, "strip", z.ZodTypeAny, {
-        value: string;
+    }, "strip", z.ZodTypeAny, { value: string;
         type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
         timestamp: Date;
-        verifiedBy?: string | undefined;
-    }, {
-        value: string;
+        verifiedBy?: string | undefined }, { value: string;
         type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
         timestamp: Date;
-        verifiedBy?: string | undefined;
-    }>, "many">>;
-}, "strip", z.ZodTypeAny, {
-    status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
+        verifiedBy?: string | undefined }>, "many">>;
+}, "strip", z.ZodTypeAny, { status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
     userId: string;
     attempts: number;
     prerequisiteId: string;
@@ -97,11 +79,9 @@ declare const userProgressSchema: z.ZodObject<{
         value: string;
         type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
         timestamp: Date;
-        verifiedBy?: string | undefined;
-    }[] | undefined;
+        verifiedBy?: string | undefined }[] | undefined;
     completedAt?: Date | undefined;
-}, {
-    status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
+}, { status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
     userId: string;
     prerequisiteId: string;
     score?: number | undefined;
@@ -111,21 +91,18 @@ declare const userProgressSchema: z.ZodObject<{
         value: string;
         type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
         timestamp: Date;
-        verifiedBy?: string | undefined;
-    }[] | undefined;
+        verifiedBy?: string | undefined }[] | undefined;
     completedAt?: Date | undefined;
 }>;
 export type Prerequisite = z.infer<typeof prerequisiteSchema>;
 export type PrerequisiteGroup = z.infer<typeof prerequisiteGroupSchema>;
 export type UserProgress = z.infer<typeof userProgressSchema>;
-export declare class PrerequisiteSecurity {
-    /**
+export declare class PrerequisiteSecurity { /**
      * Validates prerequisite input for security threats
      */
     static validatePrerequisiteInput(input: string): {
         isValid: boolean;
-        errors: string[];
-    };
+        errors: string[] };
     /**
      * Sanitizes user input to prevent XSS
      */
@@ -135,8 +112,7 @@ export declare class PrerequisiteSecurity {
      */
     static validateUserPermissions(userId: string, action: string, resourceId?: string): boolean;
 
-export declare class DependencyResolver {
-    private prerequisites;
+export declare class DependencyResolver { private prerequisites;
     private groups;
     private userProgress;
     /**
@@ -144,24 +120,19 @@ export declare class DependencyResolver {
      */
     addPrerequisite(prerequisite: Prerequisite): {
         success: boolean;
-        errors?: string[];
-    };
+        errors?: string[] };
     /**
      * Adds prerequisite group with dependency validation
      */
-    addPrerequisiteGroup(group: PrerequisiteGroup): {
-        success: boolean;
-        errors?: string[];
-    };
+    addPrerequisiteGroup(group: PrerequisiteGroup): { success: boolean;
+        errors?: string[] };
     /**
      * Resolves prerequisites for a user with comprehensive checking
      */
-    resolvePrerequisitesForUser(userId: string, targetPrerequisites: string[]): {
-        canProceed: boolean;
+    resolvePrerequisitesForUser(userId: string, targetPrerequisites: string[]): { canProceed: boolean;
         missingPrerequisites: string[];
         satisfiedPrerequisites: string[];
-        recommendations: string[];
-    };
+        recommendations: string[] };
     /**
      * Checks if a prerequisite is satisfied for a user
      */
@@ -177,24 +148,19 @@ export declare class DependencyResolver {
     /**
      * Updates user progress with security validation
      */
-    updateUserProgress(userId: string, prerequisiteId: string, progress: Partial<UserProgress>): {
-        success: boolean;
-        errors?: string[];
-    };
+    updateUserProgress(userId: string, prerequisiteId: string, progress: Partial<UserProgress>): { success: boolean;
+        errors?: string[] };
     /**
      * Gets learning path suggestions based on user progress
      */
-    generateLearningPath(userId: string, targetGoal: string): {
-        path: Array<{
+    generateLearningPath(userId: string, targetGoal: string): { path: Array<{
             prerequisiteId: string;
             name: string;
-            estimatedTime: number;
-        }>;
+            estimatedTime: number }>;
         totalEstimatedTime: number;
     };
 
-export declare class PrerequisiteSystemService {
-    private resolver;
+export declare class PrerequisiteSystemService { private resolver;
     constructor();
     /**
      * Creates a new prerequisite with comprehensive validation
@@ -202,33 +168,25 @@ export declare class PrerequisiteSystemService {
     createPrerequisite(prerequisiteData: Prerequisite, userId: string): Promise<{
         success: boolean;
         prerequisiteId?: string;
-        errors?: string[];
-    }>;
+        errors?: string[] }>;
     /**
      * Evaluates prerequisites for a learning objective
      */
-    evaluatePrerequisites(userId: string, targetPrerequisites: string[]): Promise<{
-        canProceed: boolean;
+    evaluatePrerequisites(userId: string, targetPrerequisites: string[]): Promise<{ canProceed: boolean;
         evaluation: any;
-        recommendations: string[];
-    }>;
+        recommendations: string[] }>;
     /**
      * Updates user progress with validation
      */
-    updateProgress(userId: string, prerequisiteId: string, progressData: Partial<UserProgress>): Promise<{
-        success: boolean;
-        errors?: string[];
-    }>;
+    updateProgress(userId: string, prerequisiteId: string, progressData: Partial<UserProgress>): Promise<{ success: boolean;
+        errors?: string[] }>;
     /**
      * Generates personalized learning recommendations
      */
-    generateRecommendations(userId: string, targetGoal: string): Promise<{
-        learningPath: any;
-        estimatedTime: number;
-    }>;
+    generateRecommendations(userId: string, targetGoal: string): Promise<{ learningPath: any;
+        estimatedTime: number }>;
 
-export declare const schemas: {
-    prerequisite: z.ZodObject<{,
+export declare const schemas: { prerequisite: z.ZodObject<{ }
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
@@ -238,8 +196,7 @@ export declare const schemas: {
         validityPeriod: z.ZodOptional<z.ZodNumber>;
         category: z.ZodString;
         isActive: z.ZodDefault<z.ZodBoolean>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+    }, "strip", z.ZodTypeAny, { id: string;
         name: string;
         description: string;
         isActive: boolean;
@@ -247,9 +204,7 @@ export declare const schemas: {
         category: string;
         validityPeriod?: number | undefined;
         requiredScore?: number | undefined;
-        requiredTime?: number | undefined;
-    }, {
-        id: string;
+        requiredTime?: number | undefined }, { id: string;
         name: string;
         description: string;
         type: "tutorial" | "assessment" | "experience" | "certificate" | "skill";
@@ -257,34 +212,28 @@ export declare const schemas: {
         isActive?: boolean | undefined;
         validityPeriod?: number | undefined;
         requiredScore?: number | undefined;
-        requiredTime?: number | undefined;
-    }>;
-    prerequisiteGroup: z.ZodObject<{,
+        requiredTime?: number | undefined }>;
+    prerequisiteGroup: z.ZodObject<{ ,
         id: z.ZodString;
         name: z.ZodString;
         description: z.ZodString;
         prerequisites: z.ZodArray<z.ZodString, "many">;
         operator: z.ZodDefault<z.ZodEnum<["AND", "OR", "XOR"]>>;
         minimumRequired: z.ZodOptional<z.ZodNumber>;
-        weight: z.ZodDefault<z.ZodNumber>;
-    }, "strip", z.ZodTypeAny, {
-        id: string;
+        weight: z.ZodDefault<z.ZodNumber> }, "strip", z.ZodTypeAny, { id: string;
         name: string;
         description: string;
         weight: number;
         operator: "AND" | "OR" | "XOR";
         prerequisites: string[];
-        minimumRequired?: number | undefined;
-    }, {
-        id: string;
+        minimumRequired?: number | undefined }, { id: string;
         name: string;
         description: string;
         prerequisites: string[];
         weight?: number | undefined;
         operator?: "AND" | "OR" | "XOR" | undefined;
-        minimumRequired?: number | undefined;
-    }>;
-    userProgress: z.ZodObject<{,
+        minimumRequired?: number | undefined }>;
+    userProgress: z.ZodObject<{ ,
         userId: z.ZodString;
         prerequisiteId: z.ZodString;
         status: z.ZodEnum<["not_started", "in_progress", "completed", "expired", "failed"]>;
@@ -292,24 +241,19 @@ export declare const schemas: {
         completedAt: z.ZodOptional<z.ZodDate>;
         expiresAt: z.ZodOptional<z.ZodDate>;
         attempts: z.ZodDefault<z.ZodNumber>;
-        evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{,
+        evidence: z.ZodOptional<z.ZodArray<z.ZodObject<{ }
             type: z.ZodEnum<["completion", "score", "time", "peer_review", "instructor_approval"]>;
             value: z.ZodString;
             timestamp: z.ZodDate;
             verifiedBy: z.ZodOptional<z.ZodString>;
-        }, "strip", z.ZodTypeAny, {
-            value: string;
+        }, "strip", z.ZodTypeAny, { value: string;
             type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
             timestamp: Date;
-            verifiedBy?: string | undefined;
-        }, {
-            value: string;
+            verifiedBy?: string | undefined }, { value: string;
             type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
             timestamp: Date;
-            verifiedBy?: string | undefined;
-        }>, "many">>;
-    }, "strip", z.ZodTypeAny, {
-        status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
+            verifiedBy?: string | undefined }>, "many">>;
+    }, "strip", z.ZodTypeAny, { status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
         userId: string;
         attempts: number;
         prerequisiteId: string;
@@ -319,11 +263,9 @@ export declare const schemas: {
             value: string;
             type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
             timestamp: Date;
-            verifiedBy?: string | undefined;
-        }[] | undefined;
+            verifiedBy?: string | undefined }[] | undefined;
         completedAt?: Date | undefined;
-    }, {
-        status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
+    }, { status: "expired" | "completed" | "failed" | "in_progress" | "not_started";
         userId: string;
         prerequisiteId: string;
         score?: number | undefined;
@@ -333,8 +275,7 @@ export declare const schemas: {
             value: string;
             type: "time" | "score" | "completion" | "peer_review" | "instructor_approval";
             timestamp: Date;
-            verifiedBy?: string | undefined;
-        }[] | undefined;
+            verifiedBy?: string | undefined }[] | undefined;
         completedAt?: Date | undefined;
     }>;
 };

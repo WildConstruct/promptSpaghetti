@@ -124,8 +124,8 @@ type QualityAssessment = z.infer<typeof QualityAssessmentSchema>;
 type DatasetVersion = z.infer<typeof DatasetVersionSchema>;
 type ExportJob = z.infer<typeof ExportJobSchema>;
 
-}
-}
+
+
 interface DatasetCreateRequest {
   name: string;
   description?: string;
@@ -134,12 +134,13 @@ interface DatasetCreateRequest {
   metadata?: Record<string, unknown>;
   labels?: string[];
   source?: 'upload' | 'api' | 'synthetic' | 'augmented';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DatasetImportRequest {
   name: string;
   source_url?: string;
@@ -149,14 +150,15 @@ interface DatasetImportRequest {
     field: string;
     rule_type: 'required' | 'type' | 'range' | 'regex' | 'custom';
     parameters?: Record<string, unknown>;
-}
-}
-  }>;
-  auto_labeling?: boolean;
-}
 
-}
-}
+
+
+>;
+  auto_labeling?: boolean;
+
+
+
+
 interface LabelingTaskRequest {
   dataset_id: string;
   task_name: string;
@@ -168,36 +170,39 @@ interface LabelingTaskRequest {
     consensus_threshold?: number;
     minimum_annotators?: number;
     expert_review_percentage?: number;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface DataAugmentationRequest {
   dataset_id: string;
   augmentation_techniques: string[];
   augmentation_factor: number;
   preserve_labels: boolean;
   quality_threshold: number;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface QualityAssessmentRequest {
   dataset_id: string;
   assessment_type: QualityAssessment['type'];
   parameters?: Record<string, unknown>;
   generate_report: boolean;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DatasetVersionRequest {
   dataset_id: string;
   version_name: string;
@@ -206,25 +211,27 @@ interface DatasetVersionRequest {
     type: 'added' | 'modified' | 'deleted' | 'relabeled';
     count: number;
     description?: string;
-}
-}
-  }>;
-  parent_version_id?: string;
-}
 
-}
-}
+
+
+>;
+  parent_version_id?: string;
+
+
+
+
 interface ExportRequest {
   format: string;
   includeMetadata: boolean;
   versionId?: string;
   filter?: Record<string, unknown>;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface DatasetListOptions {
   page: number;
   limit: number;
@@ -232,13 +239,14 @@ interface DatasetListOptions {
     type?: string;
     status?: string;
     search?: string;
-}
-}
-  };
-}
 
-}
-}
+
+
+  };
+
+
+
+
 interface DatasetStatistics {
   totalSamples: number;
   labelDistribution: Record<string, number>;
@@ -247,8 +255,9 @@ interface DatasetStatistics {
     consistency: number;
     bias: number;
     duplication: number;
-}
-}
+
+
+
   };
   sizeMetrics: {
     totalSizeBytes: number;
@@ -261,7 +270,7 @@ interface DatasetStatistics {
     labelingRate: Record<string, number>;
   };
   generatedAt: string;
-}
+
 
 export class TrainingDataService {
   private datasets: Map<string, Dataset>;
@@ -279,7 +288,7 @@ export class TrainingDataService {
     this.exportJobs = new Map();
     this.datasetVersions = new Map();
     this.initializeSampleData();
-  }
+
 
   /**
    * Create a new training dataset
@@ -317,14 +326,14 @@ export class TrainingDataService {
             duplicationRate: Math.random() * 5
           };
           this.datasets.set(dataset.id, updatedDataset);
-        }
+
       }, 2000);
 
       return dataset;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Dataset creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Import dataset from external source
@@ -346,10 +355,10 @@ export class TrainingDataService {
       this.simulateImportJob(importJob.id, request);
 
       return importJob;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Dataset import failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get dataset by ID
@@ -357,7 +366,7 @@ export class TrainingDataService {
   async getDataset(id: string): Promise<Dataset | null> {
 
     return this.datasets.get(id) || null;
-  }
+
 
   /**
    * List datasets with filtering and pagination
@@ -365,7 +374,7 @@ export class TrainingDataService {
   async listDatasets(options: DatasetListOptions): Promise<{
     datasets: Dataset[];
     total: number;
-  }> {
+> {
 
     let datasets = Array.from(this.datasets.values());
 
@@ -375,11 +384,11 @@ export class TrainingDataService {
       
       if (type) {
         datasets = datasets.filter(d => d.type === type);
-      }
+
       
       if (status) {
         datasets = datasets.filter(d => d.status === status);
-      }
+
       
       if (search) {
         const searchLower = search.toLowerCase();
@@ -387,8 +396,8 @@ export class TrainingDataService {
           d.name.toLowerCase().includes(searchLower) ||
           (d.description && d.description.toLowerCase().includes(searchLower))
         );
-      }
-    }
+
+
 
     const total = datasets.length;
     const startIndex = (options.page - 1) * options.limit;
@@ -398,7 +407,7 @@ export class TrainingDataService {
       datasets: paginatedDatasets,
       total
     };
-  }
+
 
   /**
    * Create labeling task
@@ -409,7 +418,7 @@ export class TrainingDataService {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
         throw new Error('Dataset not found');
-      }
+
 
       const labelingTask: LabelingTask = {
         id: this.generateUUID(),
@@ -423,7 +432,7 @@ export class TrainingDataService {
           totalSamples: dataset.size,
           completedSamples: 0,
           consensusAchieved: 0
-  }
+
         createdAt: new Date().toISOString(),
         assignmentStrategy: request.assignment_strategy || 'round_robin'
       };
@@ -434,10 +443,10 @@ export class TrainingDataService {
       this.simulateLabelingProgress(labelingTask.id);
 
       return labelingTask;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Labeling task creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get labeling task by ID
@@ -445,7 +454,7 @@ export class TrainingDataService {
   async getLabelingTask(id: string): Promise<LabelingTask | null> {
 
     return this.labelingTasks.get(id) || null;
-  }
+
 
   /**
    * Augment dataset with various techniques
@@ -456,7 +465,7 @@ export class TrainingDataService {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
         throw new Error('Dataset not found');
-      }
+
 
       const augmentationJob: AugmentationJob = {
         id: this.generateUUID(),
@@ -474,10 +483,10 @@ export class TrainingDataService {
       this.simulateAugmentationJob(augmentationJob.id);
 
       return augmentationJob;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Data augmentation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Assess dataset quality
@@ -488,15 +497,15 @@ export class TrainingDataService {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
         throw new Error('Dataset not found');
-      }
+
 
       // Simulate quality assessment based on type
       const assessment = await this.performQualityAssessment(request);
       return assessment;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Quality assessment failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Create dataset version
@@ -507,7 +516,7 @@ export class TrainingDataService {
       const dataset = await this.getDataset(request.dataset_id);
       if (!dataset) {
         throw new Error('Dataset not found');
-      }
+
 
       const version: DatasetVersion = {
         id: this.generateUUID(),
@@ -528,10 +537,10 @@ export class TrainingDataService {
       this.datasetVersions.set(request.dataset_id, existingVersions);
 
       return version;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Dataset version creation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Get dataset versions
@@ -539,7 +548,7 @@ export class TrainingDataService {
   async getDatasetVersions(datasetId: string): Promise<DatasetVersion[]> {
 
     return this.datasetVersions.get(datasetId) || [];
-  }
+
 
   /**
    * Export dataset
@@ -550,7 +559,7 @@ export class TrainingDataService {
       const dataset = await this.getDataset(datasetId);
       if (!dataset) {
         throw new Error('Dataset not found');
-      }
+
 
       const exportJob: ExportJob = {
         id: this.generateUUID(),
@@ -567,10 +576,10 @@ export class TrainingDataService {
       this.simulateExportJob(exportJob.id);
 
       return exportJob;
-    } catch (error) {
+ catch (error) {
       throw new Error(`Dataset export failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
-  }
+
+
 
   /**
    * Delete dataset
@@ -580,7 +589,7 @@ export class TrainingDataService {
     const dataset = await this.getDataset(id);
     if (!dataset) {
       throw new Error('Dataset not found');
-    }
+
 
     // Remove dataset and related data
     this.datasets.delete(id);
@@ -590,7 +599,7 @@ export class TrainingDataService {
     const relatedTasks = Array.from(this.labelingTasks.values())
       .filter(task => task.datasetId === id);
     relatedTasks.forEach(task => this.labelingTasks.delete(task.id));
-  }
+
 
   /**
    * Get job status (generic for all job types)
@@ -601,7 +610,7 @@ export class TrainingDataService {
            this.augmentationJobs.get(jobId) || 
            this.exportJobs.get(jobId) || 
            null;
-  }
+
 
   /**
    * Get service health status
@@ -620,17 +629,17 @@ export class TrainingDataService {
                         .filter(job => job.status === 'processing').length +
                       Array.from(this.exportJobs.values())
                         .filter(job => job.status === 'processing').length
-        }
+
       };
-    } catch (error) {
+ catch (error) {
       return {
         status: 'unhealthy',
         details: {
           error: error instanceof Error ? error.message : 'Unknown error'
-        }
+
       };
-    }
-  }
+
+
 
   /**
    * Get dataset statistics
@@ -640,7 +649,7 @@ export class TrainingDataService {
     const dataset = await this.getDataset(datasetId);
     if (!dataset) {
       throw new Error('Dataset not found');
-    }
+
 
     // Generate mock statistics
     const statistics: DatasetStatistics = {
@@ -651,21 +660,21 @@ export class TrainingDataService {
         consistency: dataset.qualityMetrics?.consistencyScore || 90,
         bias: dataset.qualityMetrics?.biasScore || 75,
         duplication: dataset.qualityMetrics?.duplicationRate || 3
-  }
+
       sizeMetrics: {
         totalSizeBytes: dataset.size * 1024, // Approximate
         averageSampleSize: 1024,
         minSampleSize: 256,
         maxSampleSize: 4096
-  }
+
       temporalMetrics: {
         creationRate: this.generateTemporalMetrics('creation'),
         labelingRate: this.generateTemporalMetrics('labeling')
-  }
+
       generatedAt: new Date().toISOString(};
 
     return statistics;
-  }
+
 
   // Private helper methods
 
@@ -675,7 +684,7 @@ export class TrainingDataService {
       const v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
-  }
+
 
   private async simulateImportJob(jobId: string, request: DatasetImportRequest): Promise<void> {
 
@@ -694,7 +703,7 @@ export class TrainingDataService {
         
         if (currentInterval < intervals.length) {
           setTimeout(updateProgress, 1000);
-        } else {
+ else {
           // Complete the import
           job.status = 'completed';
           job.completedAt = new Date().toISOString();
@@ -711,14 +720,14 @@ export class TrainingDataService {
             format: request.format,
             source: 'api'
           });
-        }
+
         
         this.importJobs.set(jobId, job);
-      }
+
     };
 
     updateProgress();
-  }
+
 
   private simulateLabelingProgress(taskId: string): void {
     const updateProgress = () => {
@@ -733,15 +742,15 @@ export class TrainingDataService {
         if (task.progress.completedSamples >= task.progress.totalSamples) {
           task.status = 'completed';
           task.progress.qualityScore = Math.random() * 20 + 80;
-        }
+
         
         this.labelingTasks.set(taskId, task);
         setTimeout(updateProgress, 2000);
-      }
+
     };
 
     setTimeout(updateProgress, 1000);
-  }
+
 
   private simulateAugmentationJob(jobId: string): void {
     const job = this.augmentationJobs.get(jobId);
@@ -759,18 +768,18 @@ export class TrainingDataService {
         if (currentInterval >= intervals.length) {
           job.status = 'completed';
           job.qualityScore = Math.random() * 20 + 75;
-        }
+
         
         this.augmentationJobs.set(jobId, job);
         
         if (currentInterval < intervals.length) {
           setTimeout(updateProgress, 1500);
-        }
-      }
+
+
     };
 
     updateProgress();
-  }
+
 
   private simulateExportJob(jobId: string): void {
     const job = this.exportJobs.get(jobId);
@@ -788,18 +797,18 @@ export class TrainingDataService {
         if (currentInterval >= intervals.length) {
           job.status = 'completed';
           job.downloadUrl = `https://api.example.com/downloads/${jobId}.${job.format}`;
-        }
+
         
         this.exportJobs.set(jobId, job);
         
         if (currentInterval < intervals.length) {
           setTimeout(updateProgress, 2000);
-        }
-      }
+
+
     };
 
     updateProgress();
-  }
+
 
   private async performQualityAssessment(request: QualityAssessmentRequest): Promise<QualityAssessment> {
 
@@ -814,7 +823,7 @@ export class TrainingDataService {
       if (assessmentResults.missingFields > 0) {
         recommendations.push('Fill in missing required fields');
         score -= assessmentResults.missingFields * 5;
-      }
+
       break;
 
     case 'consistency':
@@ -823,7 +832,7 @@ export class TrainingDataService {
       if (assessmentResults.inconsistentLabels > 0) {
         recommendations.push('Review and standardize label consistency');
         score -= assessmentResults.inconsistentLabels * 8;
-      }
+
       break;
 
     case 'bias_detection':
@@ -833,7 +842,7 @@ export class TrainingDataService {
       if (assessmentResults.genderBias > 0.15) {
         recommendations.push('Address potential gender bias in dataset');
         score -= 15;
-      }
+
       break;
 
     case 'duplication_check':
@@ -842,9 +851,9 @@ export class TrainingDataService {
       if (assessmentResults.exactDuplicates > 0) {
         recommendations.push('Remove exact duplicate entries');
         score -= assessmentResults.exactDuplicates;
-      }
+
       break;
-    }
+
 
     return {
       id: this.generateUUID(),
@@ -855,7 +864,7 @@ export class TrainingDataService {
       recommendations,
       reportUrl: request.generate_report ? `https://api.example.com/reports/quality-${this.generateUUID()}.pdf` : undefined,
       completedAt: new Date().toISOString(};
-  }
+
 
   private estimateExportSize(dataset: Dataset, options: ExportRequest): string {
     const baseSize = dataset.size * 1024; // Approximate bytes per sample
@@ -867,26 +876,26 @@ export class TrainingDataService {
     
     if (estimatedBytes < 1024 * 1024) {
       return `${Math.round(estimatedBytes / 1024)}KB`;
-    } else if (estimatedBytes < 1024 * 1024 * 1024) {
+ else if (estimatedBytes < 1024 * 1024 * 1024) {
       return `${Math.round(estimatedBytes / (1024 * 1024))}MB`;
-    } else {
+ else {
       return `${Math.round(estimatedBytes / (1024 * 1024 * 1024))}GB`;
-    }
-  }
+
+
 
   private generateLabelDistribution(labels: string[]): Record<string, number> {
     const distribution: Record<string, number> = {};
     
     if (labels.length === 0) {
       return { 'unlabeled': 100 };
-    }
+
     
     labels.forEach(label => {
       distribution[label] = Math.floor(Math.random() * 30) + 10;
     });
     
     return distribution;
-  }
+
 
   private generateTemporalMetrics(_____type: 'creation' | 'labeling'): Record<string, number> {
     const metrics: Record<string, number> = {};
@@ -897,10 +906,10 @@ export class TrainingDataService {
       date.setDate(date.getDate() - i);
       const dateKey = date.toISOString().split('T')[0];
       metrics[dateKey] = Math.floor(Math.random() * 100) + 10;
-    }
+
     
     return metrics;
-  }
+
 
   private initializeSampleData(): void {
     // Create sample datasets for demonstration
@@ -923,8 +932,8 @@ export class TrainingDataService {
           consistencyScore: 88,
           biasScore: 78,
           duplicationRate: 2.1
-        }
-  }
+
+
       {
         id: this.generateUUID(),
         name: 'Medical NER Dataset',
@@ -943,12 +952,11 @@ export class TrainingDataService {
           consistencyScore: 91,
           biasScore: 85,
           duplicationRate: 1.3
-        }
-      }
+
+
     ];
 
     sampleDatasets.forEach(dataset => {
       this.datasets.set(dataset.id, dataset);
     });
-  }
-}
+

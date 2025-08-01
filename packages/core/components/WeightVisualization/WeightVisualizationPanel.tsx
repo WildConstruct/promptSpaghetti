@@ -9,9 +9,8 @@ import { WeightDistributionChart, ChartType } from './WeightDistributionChart';
 import { WeightControlOption } from '../Inspector/WeightControlSlider';
 import { CollapsibleSection } from '../Inspector/CollapsibleSection';
 
-}
-export interface WeightVisualizationPanelProps {
-  options: WeightControlOption;
+
+export interface WeightVisualizationPanelProps { options: WeightControlOption;
   title?: string;
   defaultChartType?: ChartType;
   showChartControls?: boolean;
@@ -21,23 +20,21 @@ export interface WeightVisualizationPanelProps {
   onOptionHover?: (option: WeightControlOption | null) => void;
   onOptionClick?: (option: WeightControlOption) => void;
   className?: string;
-  style?: React.CSSProperties;
-}
-}
-export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> = ({)
-  options,
-  title = 'Weight Distribution',
-  defaultChartType = 'pie',
-  showChartControls = true,
-  showStatistics = true,
-  collapsed = false,
-  onCollapseChange,
-  onOptionHover,
-  onOptionClick,
-  className,
+  style?: React.CSSProperties }
+
+export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> = ({ )
+  options
+  title = 'Weight Distribution'
+  defaultChartType = 'pie'
+  showChartControls = true
+  showStatistics = true
+  collapsed = false
+  onCollapseChange
+  onOptionHover
+  onOptionClick
+  className }
   style
-}) => {
-  const [chartType, setChartType] = useState<ChartType>(defaultChartType);
+}) => { const [chartType, setChartType] = useState<ChartType>(defaultChartType);
   const [colorScheme, setColorScheme] = useState<'professional' | 'cinema4d' | 'warm' | 'cool'>('cinema4d');
   const [showLabels, setShowLabels] = useState(true);
   const [showPercentages, setShowPercentages] = useState(true);
@@ -65,44 +62,42 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
   dominantOption,
   dominancePercentage,
   isBalanced: evenness > 0.8, // Consider balanced if entropy > 80% of max,
-  optionCount: options.length,
+  optionCount: options.length }
 };
   }, [options]);
   // Chart type controls
   const ChartTypeSelector = () => (;);
     <div style={{ display: 'flex', gap: 4, marginBottom: 12 }}>
       {[
-        { type: 'pie' as ChartType, icon: '◯', label: 'Pie' },
-        { type: 'donut' as ChartType, icon: '○', label: 'Donut' },
+        { type: 'pie' as ChartType, icon: '◯', label: 'Pie' }
+        { type: 'donut' as ChartType, icon: '○', label: 'Donut' }
         { type: 'bar' as ChartType, icon: '▬', label: 'Bar' }
       ].map(({ type, icon, label }) => ()
         <button
           key={type}
           onClick={() => setChartType(type)}
-          style={{
-  padding: '6px 10px',
-  fontSize: 11,
-  fontWeight: 500,
-  border: '1px solid rgba(55, 65, 81, 0.6)',
-  borderRadius: 4,
-  background: chartType === type ? '#ff7c00' : 'rgba(31, 41, 55, 0.5)',
-  color: chartType === type ? '#fff' : '#e5e7eb',
-  cursor: 'pointer',
-  transition: 'all 0.2s ease',
-  display: 'flex',
-  alignItems: 'center',
-  gap: 4,
-}}
-          onMouseEnter={(e) => {
+          style={ {
+  padding: '6px 10px'
+  fontSize: 11
+  fontWeight: 500
+  border: '1px solid rgba(55, 65, 81, 0.6)'
+  borderRadius: 4
+  background: chartType === type ? '#ff7c00' : 'rgba(31, 41, 55, 0.5)'
+  color: chartType === type ? '#fff' : '#e5e7eb'
+  cursor: 'pointer'
+  transition: 'all 0.2s ease'
+  display: 'flex'
+  alignItems: 'center'
+  gap: 4 }
+
+          onMouseEnter={ (e) => {
             if (chartType !== type) {
               e.currentTarget.style.background = 'rgba(255, 124, 0, 0.1)';
-              e.currentTarget.style.borderColor = '#ff7c00';
-          }}
-          onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#ff7c00' }}
+          onMouseLeave={ (e) => {
             if (chartType !== type) {
               e.currentTarget.style.background = 'rgba(31, 41, 55, 0.5)';
-              e.currentTarget.style.borderColor = 'rgba(55, 65, 81, 0.6)';
-          }}
+              e.currentTarget.style.borderColor = 'rgba(55, 65, 81, 0.6)' }}
         >
           <span style={{ fontSize: 12 }}>{icon}</span>
           <span>{label}</span>
@@ -119,16 +114,16 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
       <select
         value={colorScheme}
         onChange={(e) => setColorScheme(e.target.value as any)}
-        style={{
-  width: '100%',
-  padding: '6px 8px',
-  fontSize: 11,
-  background: 'rgba(31, 41, 55, 0.8)',
-  border: '1px solid rgba(55, 65, 81, 0.6)',
-  borderRadius: 4,
-  color: '#e5e7eb',
-  cursor: 'pointer',
-}}
+        style={ {
+  width: '100%'
+  padding: '6px 8px'
+  fontSize: 11
+  background: 'rgba(31, 41, 55, 0.8)'
+  border: '1px solid rgba(55, 65, 81, 0.6)'
+  borderRadius: 4
+  color: '#e5e7eb'
+  cursor: 'pointer' }
+}
       >
         <option value="cinema4d">Cinema 4D Orange</option>
         <option value="professional">Professional Blue</option>
@@ -166,26 +161,25 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
     </div>
   );
   // Statistics display
-  const StatisticsDisplay = () => {
-  if (!statistics || !showStatistics) return null;
+  const StatisticsDisplay = () => { if (!statistics || !showStatistics) return null;
   return;
   <div
   style={{
-  marginTop: 16,
-  padding: 12,
-  background: 'rgba(31, 41, 55, 0.3)',
-  borderRadius: 6,
-  border: '1px solid rgba(55, 65, 81, 0.4)',
-}}
+  marginTop: 16
+  padding: 12
+  background: 'rgba(31, 41, 55, 0.3)'
+  borderRadius: 6
+  border: '1px solid rgba(55, 65, 81, 0.4)' }
+}
       >
-        <h4 style={{
-  fontSize: 11,
-  fontWeight: 600,
-  color: '#e5e7eb',
-  marginBottom: 8,
-  textTransform: 'uppercase',
-  letterSpacing: '0.5px',
-}}>
+        <h4 style={ {
+  fontSize: 11
+  fontWeight: 600
+  color: '#e5e7eb'
+  marginBottom: 8
+  textTransform: 'uppercase'
+  letterSpacing: '0.5px' }
+}>
           Distribution Statistics
         </h4>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 10 }}>
@@ -207,10 +201,10 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
             </span>
           </div>
           <div style={{ fontSize: 10, color: '#9ca3af' }}>
-            Balance Score: <span style={{,
-  color: statistics.isBalanced ? '#10b981' : '#f59e0b',
-  fontWeight: 500,
-}}>
+            Balance Score: <span style={ {
+  color: statistics.isBalanced ? '#10b981' : '#f59e0b'
+  fontWeight: 500 }
+}>
               {(statistics.evenness * 100).toFixed(0)}%
             </span>
             <span style={{ marginLeft: 4, fontSize: 9 }}>
@@ -253,20 +247,20 @@ export const WeightVisualizationPanel: React.FC<WeightVisualizationPanelProps> =
   if (!onCollapseChange) {
     return;
       <div className={className} style={style}>
-        <div style={{
-  marginBottom: 12,
-  paddingBottom: 8,
-  borderBottom: '1px solid rgba(55, 65, 81, 0.4)',
-}}>
-          <h3 style={{
-  fontSize: 13,
-  fontWeight: 600,
-  color: '#e5e7eb',
-  margin: 0,
-  display: 'flex',
-  alignItems: 'center',
-  gap: 6,
-}}>
+        <div style={ {
+  marginBottom: 12
+  paddingBottom: 8
+  borderBottom: '1px solid rgba(55, 65, 81, 0.4)' }
+}>
+          <h3 style={ {
+  fontSize: 13
+  fontWeight: 600
+  color: '#e5e7eb'
+  margin: 0
+  display: 'flex'
+  alignItems: 'center'
+  gap: 6 }
+}>
             📊 {title}
           </h3>
         </div>

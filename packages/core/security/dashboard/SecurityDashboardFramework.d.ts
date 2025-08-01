@@ -38,8 +38,7 @@
  */
 import { EventEmitter } from 'events';
 import { DataClassificationLevel } from '../DataClassificationAccessControl';
-export declare enum DashboardType {
-    EXECUTIVE = "executive",// High-level overview for executives
+export declare enum DashboardType { EXECUTIVE = "executive",// High-level overview for executives
     OPERATIONAL = "operational",// Day-to-day security operations
     INCIDENT_RESPONSE = "incident",// Incident response and investigation
     COMPLIANCE = "compliance",// Regulatory compliance tracking
@@ -62,7 +61,7 @@ export declare enum SecurityRole {
     SOC_ANALYST = "soc_analyst",
     INCIDENT_RESPONDER = "incident_responder",
     COMPLIANCE_OFFICER = "compliance_officer",
-    AUDITOR = "auditor",
+    AUDITOR = "auditor" }
     VIEWER = "viewer"
 
 export declare enum WidgetCategory {
@@ -76,8 +75,8 @@ export declare enum WidgetCategory {
     STATUS = "status"
 
 }
-export interface DashboardConfig {
-    id: string;
+}
+export interface DashboardConfig { id: string;
     type: DashboardType;
     title: string;
     description: string;
@@ -89,38 +88,34 @@ export interface DashboardConfig {
     theme: DashboardTheme;
     customStyles?: Record<string, any>;
     metadata: DashboardMetadata;
-    dataClassification: DataClassificationLevel;
-
+    dataClassification: DataClassificationLevel }
 }
-export interface DashboardLayout {
-    type: 'grid' | 'masonry' | 'custom';
+}
+export interface DashboardLayout { type: 'grid' | 'masonry' | 'custom';
     columns: number;
     rows?: number;
     gap: number;
     responsive: boolean;
     breakpoints?: LayoutBreakpoint[];
-    regions?: LayoutRegion[];
-
+    regions?: LayoutRegion[] }
 }
-export interface LayoutBreakpoint {
-    name: string;
+}
+export interface LayoutBreakpoint { name: string;
     minWidth: number;
     columns: number;
-    gap?: number;
-
+    gap?: number }
 }
-export interface LayoutRegion {
-    id: string;
+}
+export interface LayoutRegion { id: string;
     name: string;
     gridArea?: string;
     minHeight?: number;
     maxHeight?: number;
     resizable?: boolean;
-    collapsible?: boolean;
-
+    collapsible?: boolean }
 }
-export interface WidgetConfiguration {
-    id: string;
+}
+export interface WidgetConfiguration { id: string;
     type: string;
     category: WidgetCategory;
     title: string;
@@ -131,81 +126,71 @@ export interface WidgetConfiguration {
     permissions: WidgetPermissions;
     refreshInterval?: number;
     autoRefresh?: boolean;
-    customStyles?: Record<string, any>;
-
+    customStyles?: Record<string, any> }
 }
-export interface WidgetPosition {
-    x: number;
+}
+export interface WidgetPosition { x: number;
     y: number;
     order?: number;
-    region?: string;
-
+    region?: string }
 }
-export interface WidgetSize {
-    width: number;
+}
+export interface WidgetSize { width: number;
     height: number;
     minWidth?: number;
     minHeight?: number;
     maxWidth?: number;
     maxHeight?: number;
-    resizable?: boolean;
-
+    resizable?: boolean }
 }
-export interface DataSourceConfig {
-    type: 'realtime' | 'batch' | 'static';
+}
+export interface DataSourceConfig { type: 'realtime' | 'batch' | 'static';
     source: string;
     endpoint?: string;
     query?: string;
     filters?: Record<string, any>;
     aggregation?: AggregationConfig;
     caching?: CachingConfig;
-    authentication?: AuthenticationConfig;
-
+    authentication?: AuthenticationConfig }
 }
-export interface AggregationConfig {
-    groupBy: string[];
+}
+export interface AggregationConfig { groupBy: string[];
     timeWindow: string;
-    functions: AggregationFunction[];
-
+    functions: AggregationFunction[] }
 }
-export interface AggregationFunction {
-    field: string;
+}
+export interface AggregationFunction { field: string;
     function: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'distinct';
-    alias?: string;
-
+    alias?: string }
 }
-export interface CachingConfig {
-    enabled: boolean;
+}
+export interface CachingConfig { enabled: boolean;
     ttl: number;
-    invalidationRules?: string[];
-
+    invalidationRules?: string[] }
 }
-export interface AuthenticationConfig {
-    required: boolean;
+}
+export interface AuthenticationConfig { required: boolean;
     method: 'oauth' | 'apikey' | 'certificate' | 'none';
-    credentials?: Record<string, string>;
-
+    credentials?: Record<string, string> }
 }
-export interface DashboardPermissions {
-    view: SecurityRole[];
+}
+export interface DashboardPermissions { view: SecurityRole[];
     edit: SecurityRole[];
     delete: SecurityRole[];
     export: SecurityRole[];
     share: SecurityRole[];
     adminOnly: boolean;
-    dataClassificationRequirement?: DataClassificationLevel;
-
+    dataClassificationRequirement?: DataClassificationLevel }
 }
-export interface WidgetPermissions {
-    view: SecurityRole[];
+}
+export interface WidgetPermissions { view: SecurityRole[];
     configure: SecurityRole[];
     export: SecurityRole[];
     drillDown: SecurityRole[];
-    dataAccess: DataClassificationLevel[];
-
+    dataAccess: DataClassificationLevel[] }
 }
-export interface DashboardMetadata {
-    version: string;
+}
+export interface DashboardMetadata { version: string;
     createdAt: Date;
     updatedAt: Date;
     createdBy: string;
@@ -214,27 +199,24 @@ export interface DashboardMetadata {
     category: string;
     organization: string;
     compliance: ComplianceMetadata;
-    usage: UsageMetadata;
-
+    usage: UsageMetadata }
 }
-export interface ComplianceMetadata {
-    frameworks: string[];
+}
+export interface ComplianceMetadata { frameworks: string[];
     requirements: string[];
     auditRequired: boolean;
     retentionPeriod: number;
-    dataResidency: string[];
-
+    dataResidency: string[] }
 }
-export interface UsageMetadata {
-    viewCount: number;
+}
+export interface UsageMetadata { viewCount: number;
     lastViewed: Date;
     popularWidgets: string[];
     averageSessionDuration: number;
-    peakUsageHours: number[];
-
+    peakUsageHours: number[] }
 }
-export interface WidgetDefinition {
-    type: string;
+}
+export interface WidgetDefinition { type: string;
     name: string;
     category: WidgetCategory;
     description: string;
@@ -247,26 +229,23 @@ export interface WidgetDefinition {
     defaultConfig: Record<string, any>;
     permissions: WidgetPermissions;
     tags: string[];
-    version: string;
-
+    version: string }
 }
-export interface DataRequirement {
-    field: string;
+}
+export interface DataRequirement { field: string;
     type: 'number' | 'string' | 'boolean' | 'date' | 'object';
     required: boolean;
     description: string;
     format?: string;
-    validation?: ValidationRule[];
-
+    validation?: ValidationRule[] }
 }
-export interface ValidationRule {
-    type: 'range' | 'pattern' | 'enum' | 'custom';
+}
+export interface ValidationRule { type: 'range' | 'pattern' | 'enum' | 'custom';
     params: Record<string, any>;
-    message: string;
-
+    message: string }
 }
-export interface ThemeConfig {
-    name: DashboardTheme;
+}
+export interface ThemeConfig { name: DashboardTheme;
     displayName: string;
     colors: ColorPalette;
     typography: TypographyConfig;
@@ -274,11 +253,10 @@ export interface ThemeConfig {
     shadows: ShadowConfig;
     borders: BorderConfig;
     animations: AnimationConfig;
-    accessibility: AccessibilityConfig;
-
+    accessibility: AccessibilityConfig }
 }
-export interface ColorPalette {
-    primary: string;
+}
+export interface ColorPalette { primary: string;
     secondary: string;
     accent: string;
     background: string;
@@ -292,11 +270,10 @@ export interface ColorPalette {
     critical: string;
     info: string;
     border: string;
-    shadow: string;
-
+    shadow: string }
 }
-export interface TypographyConfig {
-    fontFamily: string;
+}
+export interface TypographyConfig { fontFamily: string;
     fontSize: {
         xs: string;
         sm: string;
@@ -304,84 +281,74 @@ export interface TypographyConfig {
         lg: string;
         xl: string;
         '2xl': string;
-        '3xl': string;
+        '3xl': string }
 }
     };
-    fontWeight: {
-        light: number;
+    fontWeight: { light: number;
         normal: number;
         medium: number;
         semibold: number;
-        bold: number;
-    };
-    lineHeight: {
-        tight: number;
+        bold: number };
+    lineHeight: { tight: number;
         normal: number;
-        relaxed: number;
-    };
+        relaxed: number };
 
 }
-export interface SpacingConfig {
-    xs: string;
+}
+export interface SpacingConfig { xs: string;
     sm: string;
     md: string;
     lg: string;
     xl: string;
     '2xl': string;
-    '3xl': string;
-
+    '3xl': string }
 }
-export interface ShadowConfig {
-    sm: string;
+}
+export interface ShadowConfig { sm: string;
     md: string;
     lg: string;
-    xl: string;
-
+    xl: string }
 }
-export interface BorderConfig {
-    width: {
+}
+export interface BorderConfig { width: {
         thin: string;
         normal: string;
-        thick: string;
+        thick: string }
 }
     };
-    radius: {
-        sm: string;
+    radius: { sm: string;
         md: string;
         lg: string;
-        full: string;
-    };
+        full: string };
 
 }
-export interface AnimationConfig {
-    duration: {
+}
+export interface AnimationConfig { duration: {
         fast: string;
         normal: string;
-        slow: string;
+        slow: string }
 }
     };
-    easing: {
-        linear: string;
+    easing: { linear: string;
         easeIn: string;
         easeOut: string;
-        easeInOut: string;
-    };
+        easeInOut: string };
 
 }
-export interface AccessibilityConfig {
-    focusRing: string;
+}
+export interface AccessibilityConfig { focusRing: string;
     screenReaderOnly: string;
     highContrast: boolean;
     reducedMotion: boolean;
     fontSize: {
         min: string;
-        max: string;
+        max: string }
 }
     };
 
 }
-export interface DashboardFrameworkEvents {
-    'dashboard:loaded': (dashboard: DashboardConfig) => void;
+}
+export interface DashboardFrameworkEvents { 'dashboard:loaded': (dashboard: DashboardConfig) => void;
     'dashboard:error': (error: Error, dashboardId: string) => void;
     'widget:loaded': (widget: WidgetConfiguration) => void;
     'widget:error': (error: Error, widgetId: string) => void;
@@ -390,25 +357,23 @@ export interface DashboardFrameworkEvents {
     'user:interaction': (event: UserInteractionEvent) => void;
     'permission:denied': (event: PermissionDeniedEvent) => void;
     'theme:changed': (theme: DashboardTheme) => void;
-    'layout:changed': (layout: DashboardLayout) => void;
-
+    'layout:changed': (layout: DashboardLayout) => void }
 }
-export interface UserInteractionEvent {
-    userId: string;
+}
+export interface UserInteractionEvent { userId: string;
     action: string;
     target: string;
     timestamp: Date;
-    metadata: Record<string, any>;
-
+    metadata: Record<string, any> }
 }
-export interface PermissionDeniedEvent {
-    userId: string;
+}
+export interface PermissionDeniedEvent { userId: string;
     requiredRole: SecurityRole;
     userRoles: SecurityRole[];
     resource: string;
     action: string;
-    timestamp: Date;
-
+    timestamp: Date }
+}
 }
 export interface SecurityDashboardFrameworkOptions {
     enableAuditLogging: boolean;
@@ -502,4 +467,5 @@ export declare class SecurityDashboardFramework extends EventEmitter {
 
 export default SecurityDashboardFramework;
 //# sourceMappingURL=SecurityDashboardFramework.d.ts.map
+}
 }

@@ -17,8 +17,8 @@ import { MetricsCollector } from '../performance/MetricsCollector';
 // Core Interfaces and Types
 // ============================================================================
 
-}
-}
+
+
 export interface IntelligentThrottlingConfig {
   // Analytics-based throttling configuration
   analytics_integration: {
@@ -27,8 +27,9 @@ export interface IntelligentThrottlingConfig {
     pattern_detection_sensitivity: number;
     adaptive_learning_rate: number;
     real_time_adjustment_enabled: boolean;
-}
-}
+
+
+
   };
   
   // Intelligent throttling strategies
@@ -109,18 +110,19 @@ export interface IntelligentThrottlingConfig {
     };
     notification_channels: string[];
   };
-}
 
-}
-}
+
+
+
 export interface UsageAnalytics {
   user_id: string;
   analysis_period: {
     start_time: number;
     end_time: number;
     duration_minutes: number;
-}
-}
+
+
+
   };
   usage_patterns: {
     request_rate: {
@@ -140,7 +142,7 @@ export interface UsageAnalytics {
       request_count: number;
       average_response_time: number;
       error_rate: number;
-    }[];
+[];
     resource_consumption: {
       cpu_usage: number;
       memory_usage: number;
@@ -160,10 +162,10 @@ export interface UsageAnalytics {
     throttling_effectiveness: number;
     user_satisfaction_impact: number;
   };
-}
 
-}
-}
+
+
+
 export interface ThrottlingDecision {
   decision_id: string;
   timestamp: number;
@@ -175,8 +177,9 @@ export interface ThrottlingDecision {
     requests_per_minute: number;
     burst_capacity: number;
     current_usage: number;
-}
-}
+
+
+
   };
   decision_rationale: {
     primary_factor: string;
@@ -197,17 +200,18 @@ export interface ThrottlingDecision {
     progressive_penalty_applied: boolean;
     bypass_conditions: string[];
   };
-}
 
-}
-}
+
+
+
 export interface ThrottlingEffectivenessMetrics {
   measurement_period: {
     start_time: number;
     end_time: number;
     duration_hours: number;
-}
-}
+
+
+
   };
   throttling_statistics: {
     total_requests_processed: number;
@@ -234,7 +238,7 @@ export interface ThrottlingEffectivenessMetrics {
     capacity_optimization: number;
     revenue_protection: number;
   };
-}
+
 
 // ============================================================================
 // Usage Analytics Engine
@@ -250,7 +254,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
     super();
     this.config = config;
     this.initializePatternRecognition();
-  }
+
   
   /**
    * Analyze user usage patterns and generate analytics
@@ -282,7 +286,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
           start_time: startTime,
           end_time: endTime,
           duration_minutes: timeWindowMinutes
-  }
+
         usage_patterns: usagePatterns,
         behavior_indicators: behaviorIndicators,
         throttling_history: throttlingHistory
@@ -303,8 +307,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       });
       
       return analytics;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('usage-analytics-error', {
         user_id: userId,
         error: error.message,
@@ -312,8 +315,8 @@ export class UsageAnalyticsEngine extends EventEmitter {
       });
       
       throw new Error(`Failed to analyze user usage: ${error.message}`);
-    }
-  }
+
+
   
   /**
    * Detect usage anomalies and suspicious patterns
@@ -322,12 +325,12 @@ export class UsageAnalyticsEngine extends EventEmitter {
     anomalies: unknown[];
     risk_score: number;
     recommended_actions: string[];
-  }> {
+> {
 
     const analytics = this.userAnalytics.get(userId);
     if (!analytics) {
       throw new Error(`No analytics data available for user: ${userId}`);
-    }
+
     
     const anomalies = [];
     let riskScore = 0;
@@ -343,7 +346,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       });
       riskScore += 30;
       recommendedActions.push('Apply aggressive throttling');
-    }
+
     
     // Detect behavioral anomalies
     if (analytics.behavior_indicators.abuse_likelihood > 0.7) {
@@ -355,7 +358,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       });
       riskScore += 40;
       recommendedActions.push('Implement strict rate limiting');
-    }
+
     
     // Detect automation patterns
     if (analytics.behavior_indicators.automation_probability > 0.8) {
@@ -367,7 +370,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       });
       riskScore += 20;
       recommendedActions.push('Verify user authenticity');
-    }
+
     
     // Detect resource consumption anomalies
     if (analytics.usage_patterns.resource_consumption.cpu_usage > 80) {
@@ -379,7 +382,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       });
       riskScore += 25;
       recommendedActions.push('Limit resource-intensive operations');
-    }
+
     
     this.emit('anomalies-detected', {
       user_id: userId,
@@ -393,14 +396,14 @@ export class UsageAnalyticsEngine extends EventEmitter {
       risk_score: Math.min(riskScore, 100),
       recommended_actions: recommendedActions
     };
-  }
+
   
   /**
    * Get usage analytics for a user
    */
   getUserAnalytics(userId: string): UsageAnalytics | null {
     return this.userAnalytics.get(userId) || null;
-  }
+
   
   /**
    * Update usage data with new request information
@@ -415,7 +418,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
     // Update usage history
     if (!this.usageHistory.has(userId)) {
       this.usageHistory.set(userId, []);
-    }
+
     
     const userHistory = this.usageHistory.get(userId)!;
     userHistory.push({
@@ -427,14 +430,14 @@ export class UsageAnalyticsEngine extends EventEmitter {
     const maxHistorySize = 10000;
     if (userHistory.length > maxHistorySize) {
       userHistory.splice(0, userHistory.length - maxHistorySize);
-    }
+
     
     this.emit('usage-data-updated', {
       user_id: userId,
       endpoint: requestData.endpoint,
       timestamp: Date.now()
     });
-  }
+
   
   // Private helper methods
   private initializePatternRecognition(): void {
@@ -442,8 +445,8 @@ export class UsageAnalyticsEngine extends EventEmitter {
       this.config.usage_pattern_analysis.pattern_recognition_algorithms.forEach(algorithm => {
         this.patternModels.set(algorithm, this.createPatternModel(algorithm));
       });
-    }
-  }
+
+
   
   private createPatternModel(algorithm: string): unknown {
     // Initialize pattern recognition model based on algorithm type
@@ -458,8 +461,8 @@ export class UsageAnalyticsEngine extends EventEmitter {
         return { type: 'anomaly_detection', model: {} };
       default:
         return { type: 'default', model: {} };
-    }
-  }
+
+
   
   private async collectUserUsageData(userId: string, startTime: number, endTime: number): Promise<any[]> {
 
@@ -467,13 +470,13 @@ export class UsageAnalyticsEngine extends EventEmitter {
     return userHistory.filter(entry => 
       entry.timestamp >= startTime && entry.timestamp <= endTime
     );
-  }
+
   
   private async analyzeUsagePatterns(usageData: unknown[]): Promise<unknown> {
 
     if (usageData.length === 0) {
       return this.getDefaultUsagePatterns();
-    }
+
     
     // Calculate request rate statistics
     const requestCount = usageData.length;
@@ -508,12 +511,12 @@ export class UsageAnalyticsEngine extends EventEmitter {
         peak_per_minute: peakPerMinute,
         standard_deviation: standardDeviation,
         trend: this.determineTrend(requestsByMinute)
-  }
+
       temporal_patterns: temporalPatterns,
       endpoint_usage: endpointUsage,
       resource_consumption: resourceConsumption
     };
-  }
+
   
   private async analyzeBehaviorIndicators(userId: string, usageData: unknown[]): Promise<unknown> {
 
@@ -523,7 +526,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       usage_legitimacy_score: this.calculateLegitimacyScore(usageData),
       anomaly_detection_flags: this.detectAnomalyFlags(usageData)
     };
-  }
+
   
   private async getThrottlingHistory(userId: string, startTime: number, endTime: number): Promise<unknown> {
 
@@ -534,7 +537,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       throttling_effectiveness: Math.random(),
       user_satisfaction_impact: Math.random() * 20
     };
-  }
+
   
   private async updatePatternModels(userId: string, analytics: UsageAnalytics): Promise<void> {
 
@@ -543,7 +546,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       user_id: userId,
       timestamp: Date.now()
     });
-  }
+
   
   private getDefaultUsagePatterns(): unknown {
     return {
@@ -552,22 +555,22 @@ export class UsageAnalyticsEngine extends EventEmitter {
         peak_per_minute: 0,
         standard_deviation: 0,
         trend: 'stable' as const
-  }
+
       temporal_patterns: {
         peak_hours: [],
         low_activity_hours: [],
         weekly_pattern: {},
         seasonal_adjustments: 0
-  }
+
       endpoint_usage: [],
       resource_consumption: {
         cpu_usage: 0,
         memory_usage: 0,
         bandwidth_usage: 0,
         storage_usage: 0
-      }
+
     };
-  }
+
   
   private groupRequestsByMinute(usageData: unknown[]): Record<number, number> {
     const groupedByMinute: Record<number, number> = {};
@@ -578,7 +581,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
     });
     
     return groupedByMinute;
-  }
+
   
   private determineTrend(requestsByMinute: Record<number, number>): 'increasing' | 'decreasing' | 'stable' {
     const minutes = Object.keys(requestsByMinute).map(Number).sort();
@@ -595,7 +598,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
     if (changePercent > 0.1) return 'increasing';
     if (changePercent < -0.1) return 'decreasing';
     return 'stable';
-  }
+
   
   private analyzeTemporalPatterns(usageData: unknown[]): unknown {
     const hourlyActivity: Record<number, number> = {};
@@ -615,7 +618,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       weekly_pattern: hourlyActivity,
       seasonal_adjustments: 0
     };
-  }
+
   
   private analyzeEndpointUsage(usageData: unknown[]): unknown[] {
     const endpointStats: Record<string, any> = {};
@@ -629,13 +632,13 @@ export class UsageAnalyticsEngine extends EventEmitter {
           total_response_time: 0,
           error_count: 0
         };
-      }
+
       
       endpointStats[endpoint].request_count++;
       endpointStats[endpoint].total_response_time += entry.response_time || 0;
       if (entry.status_code >= 400) {
         endpointStats[endpoint].error_count++;
-      }
+
     });
     
     return Object.values(endpointStats).map((stats: unknown) => ({
@@ -644,7 +647,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       average_response_time: stats.total_response_time / stats.request_count,
       error_rate: stats.error_count / stats.request_count
     }));
-  }
+
   
   private calculateResourceConsumption(usageData: unknown[]): unknown {
     const totalUsage = usageData.reduce((acc, entry) => {
@@ -664,7 +667,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       bandwidth_usage: totalUsage.bandwidth_usage / count,
       storage_usage: totalUsage.storage_usage / count
     };
-  }
+
   
   private calculateAbuseLikelihood(usageData: unknown[]): number {
     let abuseFactor = 0;
@@ -684,7 +687,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
     if (endpoints.size === 1 && usageData.length > 100) abuseFactor += 0.2;
     
     return Math.min(abuseFactor, 1.0);
-  }
+
   
   private calculateAutomationProbability(usageData: unknown[]): number {
     let automationFactor = 0;
@@ -700,7 +703,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
       
       // Low variance in timing suggests automation
       if (variance < avgTiming * 0.1) automationFactor += 0.4;
-    }
+
     
     // High request volume suggests automation
     if (usageData.length > 1000) automationFactor += 0.3;
@@ -710,7 +713,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
     if (userAgents.size === 1) automationFactor += 0.3;
     
     return Math.min(automationFactor, 1.0);
-  }
+
   
   private calculateLegitimacyScore(usageData: unknown[]): number {
     let legitimacyScore = 1.0;
@@ -728,7 +731,7 @@ export class UsageAnalyticsEngine extends EventEmitter {
     if (endpoints.size > 5) legitimacyScore += 0.1;
     
     return Math.max(0, Math.min(legitimacyScore, 1.0));
-  }
+
   
   private detectAnomalyFlags(usageData: unknown[]): string[] {
     const flags = [];
@@ -742,8 +745,8 @@ export class UsageAnalyticsEngine extends EventEmitter {
     if (endpoints.size === 1 && usageData.length > 100) flags.push('single_endpoint_focus');
     
     return flags;
-  }
-}
+
+
 
 // ============================================================================
 // Main Intelligent Throttling Manager
@@ -773,7 +776,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
     this.usageAnalyticsEngine = new UsageAnalyticsEngine(config);
     
     this.setupEventListeners();
-  }
+
   
   /**
    * Initialize the intelligent throttling system
@@ -787,12 +790,12 @@ export class IntelligentThrottlingManager extends EventEmitter {
       // Start analytics-based monitoring
       if (this.config.analytics_integration.enabled) {
         await this.startAnalyticsMonitoring();
-      }
+
       
       // Start adaptive adjustment cycle
       if (this.config.throttling_strategies.adaptive_throttling.enabled) {
         await this.startAdaptiveAdjustments();
-      }
+
       
       this.emit('intelligent-throttling-initialized', {
         timestamp: Date.now(),
@@ -801,17 +804,16 @@ export class IntelligentThrottlingManager extends EventEmitter {
           adaptive_throttling: this.config.throttling_strategies.adaptive_throttling.enabled,
           predictive_throttling: this.config.throttling_strategies.predictive_throttling.enabled,
           user_behavior_analysis: this.config.throttling_strategies.user_behavior_throttling.enabled
-        }
+
       });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('initialization-error', {
         error: error.message,
         timestamp: Date.now()
       });
       throw error;
-    }
-  }
+
+
   
   /**
    * Make intelligent throttling decision for a request
@@ -829,7 +831,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       let userAnalytics = this.usageAnalyticsEngine.getUserAnalytics(userId);
       if (!userAnalytics) {
         userAnalytics = await this.usageAnalyticsEngine.analyzeUserUsage(userId);
-      }
+
       
       // Get current system metrics
       const systemMetrics = await this.performanceMonitor.getSystemMetrics();
@@ -839,7 +841,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       if (this.predictiveLoadManager && this.config.throttling_strategies.predictive_throttling.enabled) {
         const predictionStatus = this.predictiveLoadManager.getCurrentPredictionStatus();
         loadPrediction = predictionStatus.current_prediction;
-      }
+
       
       // Apply different throttling strategies
       const strategyResults = await this.applyThrottlingStrategies(
@@ -875,8 +877,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       });
       
       return finalDecision;
-      
-    } catch (error) {
+ catch (error) {
       this.emit('throttling-decision-error', {
         user_id: userId,
         endpoint,
@@ -886,8 +887,8 @@ export class IntelligentThrottlingManager extends EventEmitter {
       
       // Fallback to standard rate limiting
       return this.createFallbackDecision(userId, endpoint);
-    }
-  }
+
+
   
   /**
    * Get throttling effectiveness metrics
@@ -921,19 +922,19 @@ export class IntelligentThrottlingManager extends EventEmitter {
         start_time: startTime,
         end_time: endTime,
         duration_hours: timeWindowHours
-  }
+
       throttling_statistics: {
         total_requests_processed: totalRequests,
         requests_throttled: throttledRequests,
         requests_blocked: blockedRequests,
         throttling_rate: totalRequests > 0 ? (throttledRequests + blockedRequests) / totalRequests : 0,
         false_positive_rate: this.calculateFalsePositiveRate(allDecisions)
-  }
+
       performance_impact: performanceImpact,
       user_impact_analysis: userImpact,
       business_metrics: businessMetrics
     };
-  }
+
   
   /**
    * Update dynamic rate limits based on analytics
@@ -952,7 +953,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       if (this.predictiveLoadManager) {
         const analytics = await this.predictiveLoadManager.getPredictiveAnalytics();
         predictiveAdjustment = this.calculatePredictiveAdjustment(analytics);
-      }
+
       
       // Update rate limits for each user tier
       const baseLimits = this.config.dynamic_rate_limits.base_rate_limits;
@@ -997,14 +998,13 @@ export class IntelligentThrottlingManager extends EventEmitter {
         updated_tiers: Object.keys(tierMultipliers),
         timestamp: Date.now()
       });
-      
-    } catch (error) {
+ catch (error) {
       this.emit('rate-limit-update-error', {
         error: error.message,
         timestamp: Date.now()
       });
-    }
-  }
+
+
   
   /**
    * Get current throttling status
@@ -1014,7 +1014,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
     active_throttling_decisions: number;
     recent_analytics: unknown;
     dynamic_limits: unknown;
-  } {
+ {
     const recentDecisions = Array.from(this.throttlingDecisions.values())
       .flat()
       .filter(decision => Date.now() - decision.timestamp < 3600000) // Last hour
@@ -1026,15 +1026,15 @@ export class IntelligentThrottlingManager extends EventEmitter {
         adaptive_throttling_active: this.config.throttling_strategies.adaptive_throttling.enabled,
         predictive_throttling_active: this.config.throttling_strategies.predictive_throttling.enabled,
         monitoring_active: this.monitoringInterval !== null
-  }
+
       active_throttling_decisions: recentDecisions,
       recent_analytics: {
         users_analyzed: this.usageAnalyticsEngine.userAnalytics.size,
         pattern_models_active: this.usageAnalyticsEngine.patternModels.size
-  }
+
       dynamic_limits: Object.fromEntries(this.dynamicRateLimits.entries())
     };
-  }
+
   
   // Private helper methods
   private setupEventListeners(): void {
@@ -1046,7 +1046,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
     this.usageAnalyticsEngine.on('anomalies-detected', (event) => {
       this.emit('usage-anomalies-detected', event);
     });
-  }
+
   
   private async initializeBaseRateLimits(): Promise<void> {
 
@@ -1060,7 +1060,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
         concurrent_requests: Math.floor(baseLimits.concurrent_requests * multiplier)
       });
     });
-  }
+
   
   private async startAnalyticsMonitoring(): Promise<void> {
 
@@ -1075,18 +1075,18 @@ export class IntelligentThrottlingManager extends EventEmitter {
         for (const userId of activeUsers.slice(0, 100)) { // Limit to top 100 active users
           try {
             await this.usageAnalyticsEngine.analyzeUserUsage(userId);
-          } catch (error) {
+ catch (error) {
             // Continue with other users if one fails
-          }
-        }
-      } catch (error) {
+
+
+ catch (error) {
         this.emit('monitoring-cycle-error', {
           error: error.message,
           timestamp: Date.now()
         });
-      }
+
     }, intervalMs);
-  }
+
   
   private async startAdaptiveAdjustments(): Promise<void> {
 
@@ -1095,14 +1095,14 @@ export class IntelligentThrottlingManager extends EventEmitter {
     setInterval(async () => {
       try {
         await this.performAdaptiveAdjustments();
-      } catch (error) {
+ catch (error) {
         this.emit('adaptive-adjustment-error', {
           error: error.message,
           timestamp: Date.now()
         });
-      }
+
     }, intervalMs);
-  }
+
   
   private async performAdaptiveAdjustments(): Promise<void> {
 
@@ -1120,20 +1120,20 @@ export class IntelligentThrottlingManager extends EventEmitter {
     if (currentResponseTime > targetResponseTime) {
       // Slow response times - reduce limits
       adjustmentFactor = Math.max(0.8, targetResponseTime / currentResponseTime);
-    } else if (currentResponseTime < targetResponseTime * 0.7) {
+ else if (currentResponseTime < targetResponseTime * 0.7) {
       // Fast response times - potentially increase limits
       adjustmentFactor = Math.min(1.2, 1.0 + (targetResponseTime - currentResponseTime) / targetResponseTime * 0.3);
-    }
+
     
     if (currentErrorRate > errorRateThreshold) {
       // High error rate - reduce limits more aggressively
       adjustmentFactor *= Math.max(0.5, 1.0 - currentErrorRate);
-    }
+
     
     // Apply adjustments if significant
     if (Math.abs(adjustmentFactor - 1.0) > 0.05) {
       await this.applyAdaptiveAdjustment(adjustmentFactor);
-    }
+
     
     this.emit('adaptive-adjustment-performed', {
       adjustment_factor: adjustmentFactor,
@@ -1142,7 +1142,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       current_error_rate: currentErrorRate,
       timestamp: Date.now()
     });
-  }
+
   
   private async applyAdaptiveAdjustment(adjustmentFactor: number): Promise<void> {
 
@@ -1155,8 +1155,8 @@ export class IntelligentThrottlingManager extends EventEmitter {
       };
       
       this.dynamicRateLimits.set(tier, adjustedLimits);
-    }
-  }
+
+
   
   private async applyThrottlingStrategies(
     userId: string,
@@ -1173,28 +1173,28 @@ export class IntelligentThrottlingManager extends EventEmitter {
     if (this.config.throttling_strategies.usage_based_throttling.enabled) {
       const usageResult = await this.applyUsageBasedThrottling(userAnalytics, endpoint);
       strategyResults.push(usageResult);
-    }
+
     
     // Predictive throttling strategy
     if (this.config.throttling_strategies.predictive_throttling.enabled && loadPrediction) {
       const predictiveResult = await this.applyPredictiveThrottling(loadPrediction, userId, endpoint);
       strategyResults.push(predictiveResult);
-    }
+
     
     // Adaptive throttling strategy
     if (this.config.throttling_strategies.adaptive_throttling.enabled) {
       const adaptiveResult = await this.applyAdaptiveThrottling(systemMetrics, userAnalytics);
       strategyResults.push(adaptiveResult);
-    }
+
     
     // User behavior throttling strategy
     if (this.config.throttling_strategies.user_behavior_throttling.enabled) {
       const behaviorResult = await this.applyUserBehaviorThrottling(userAnalytics, userId);
       strategyResults.push(behaviorResult);
-    }
+
     
     return strategyResults;
-  }
+
   
   private async applyUsageBasedThrottling(userAnalytics: UsageAnalytics, endpoint: string): Promise<unknown> {
 
@@ -1210,7 +1210,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
     if (requestRate > thresholdRate * (config.usage_threshold_percentile / 100)) {
       decision = 'throttle';
       rateLimitAdjustment = config.throttle_reduction_factor;
-    }
+
     
     return {
       strategy: 'usage_based',
@@ -1219,7 +1219,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       rate_limit_adjustment: rateLimitAdjustment,
       rationale: `Request rate: ${requestRate}/min, threshold: ${thresholdRate}/min`
     };
-  }
+
   
   private async applyPredictiveThrottling(
     loadPrediction: LoadPrediction,
@@ -1238,11 +1238,11 @@ export class IntelligentThrottlingManager extends EventEmitter {
       if (loadPrediction.risk_assessment.overload_probability > 0.7 && config.preemptive_throttling_enabled) {
         decision = 'throttle';
         rateLimitAdjustment = 0.7;
-      } else if (loadPrediction.risk_assessment.performance_degradation_risk > 0.6 && config.load_spike_protection) {
+ else if (loadPrediction.risk_assessment.performance_degradation_risk > 0.6 && config.load_spike_protection) {
         decision = 'throttle';
         rateLimitAdjustment = 0.8;
-      }
-    }
+
+
     
     return {
       strategy: 'predictive',
@@ -1251,7 +1251,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       rate_limit_adjustment: rateLimitAdjustment,
       rationale: `Predicted load: ${predictedLoad}, overload risk: ${loadPrediction.risk_assessment.overload_probability}`
     };
-  }
+
   
   private async applyAdaptiveThrottling(systemMetrics: SystemMetrics, userAnalytics: UsageAnalytics): Promise<unknown> {
 
@@ -1265,12 +1265,12 @@ export class IntelligentThrottlingManager extends EventEmitter {
     if (currentResponseTime > config.performance_target_response_time_ms) {
       decision = 'throttle';
       rateLimitAdjustment = Math.max(0.5, config.performance_target_response_time_ms / currentResponseTime);
-    }
+
     
     if (currentErrorRate > config.error_rate_threshold) {
       decision = 'throttle';
       rateLimitAdjustment = Math.min(rateLimitAdjustment, Math.max(0.3, 1.0 - currentErrorRate));
-    }
+
     
     return {
       strategy: 'adaptive',
@@ -1279,7 +1279,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       rate_limit_adjustment: rateLimitAdjustment,
       rationale: `Response time: ${currentResponseTime}ms, error rate: ${(currentErrorRate * 100).toFixed(2)}%`
     };
-  }
+
   
   private async applyUserBehaviorThrottling(userAnalytics: UsageAnalytics, userId: string): Promise<unknown> {
 
@@ -1293,10 +1293,10 @@ export class IntelligentThrottlingManager extends EventEmitter {
     if (config.suspicious_activity_detection && abuseLikelihood > 0.7) {
       decision = 'block';
       rateLimitAdjustment = 0.1;
-    } else if (config.progressive_throttling && legitimacyScore < 0.5) {
+ else if (config.progressive_throttling && legitimacyScore < 0.5) {
       decision = 'throttle';
       rateLimitAdjustment = legitimacyScore;
-    }
+
     
     return {
       strategy: 'user_behavior',
@@ -1305,7 +1305,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       rate_limit_adjustment: rateLimitAdjustment,
       rationale: `Abuse likelihood: ${abuseLikelihood}, legitimacy: ${legitimacyScore}`
     };
-  }
+
   
   private combineStrategyResults(strategyResults: unknown[], userId: string, endpoint: string): ThrottlingDecision {
     // Weight and combine strategy results
@@ -1355,28 +1355,28 @@ export class IntelligentThrottlingManager extends EventEmitter {
         requests_per_minute: Math.floor(rateLimitApplied.requests_per_minute * combinedRateLimitAdjustment),
         burst_capacity: Math.floor(rateLimitApplied.burst_capacity * combinedRateLimitAdjustment),
         current_usage: 0 // Would be calculated from actual usage
-  }
+
       decision_rationale: {
         primary_factor: strategyResults[0]?.strategy || 'default',
         contributing_factors: contributingFactors,
         confidence_score: combinedConfidence,
         usage_analytics_weight: weights.usage_based + weights.user_behavior,
         predictive_analytics_weight: weights.predictive + weights.adaptive
-  }
+
       impact_assessment: {
         performance_impact: finalDecision === 'allow' ? 0 : combinedRateLimitAdjustment * 10,
         user_experience_impact: finalDecision === 'block' ? 100 : finalDecision === 'throttle' ? 30 : 0,
         system_resource_savings: finalDecision === 'allow' ? 0 : (1 - combinedRateLimitAdjustment) * 100,
         business_impact: finalDecision === 'block' ? -50 : finalDecision === 'throttle' ? -10 : 0
-  }
+
       enforcement_details: {
         throttle_duration_seconds: finalDecision === 'throttle' ? 60 : 0,
         retry_after_seconds: finalDecision === 'block' ? 300 : finalDecision === 'throttle' ? 60 : 0,
         progressive_penalty_applied: false,
         bypass_conditions: []
-      }
+
     };
-  }
+
   
   private createFallbackDecision(userId: string, endpoint: string): ThrottlingDecision {
     const userTier = this.getUserTier(userId);
@@ -1393,33 +1393,33 @@ export class IntelligentThrottlingManager extends EventEmitter {
         requests_per_minute: rateLimitApplied.requests_per_minute,
         burst_capacity: rateLimitApplied.burst_capacity,
         current_usage: 0
-  }
+
       decision_rationale: {
         primary_factor: 'fallback',
         contributing_factors: ['Error in throttling analysis'],
         confidence_score: 0.5,
         usage_analytics_weight: 0,
         predictive_analytics_weight: 0
-  }
+
       impact_assessment: {
         performance_impact: 0,
         user_experience_impact: 0,
         system_resource_savings: 0,
         business_impact: 0
-  }
+
       enforcement_details: {
         throttle_duration_seconds: 0,
         retry_after_seconds: 0,
         progressive_penalty_applied: false,
         bypass_conditions: []
-      }
+
     };
-  }
+
   
   private storeThrottlingDecision(userId: string, decision: ThrottlingDecision): void {
     if (!this.throttlingDecisions.has(userId)) {
       this.throttlingDecisions.set(userId, []);
-    }
+
     
     const userDecisions = this.throttlingDecisions.get(userId)!;
     userDecisions.push(decision);
@@ -1428,8 +1428,8 @@ export class IntelligentThrottlingManager extends EventEmitter {
     const maxDecisions = 1000;
     if (userDecisions.length > maxDecisions) {
       userDecisions.shift();
-    }
-  }
+
+
   
   private calculateSystemLoadFactor(systemMetrics: SystemMetrics): number {
     const cpuUtilization = systemMetrics.infrastructure.cpuUtilization.value / 100;
@@ -1438,12 +1438,12 @@ export class IntelligentThrottlingManager extends EventEmitter {
     // Higher utilization = lower rate limits (inverse relationship)
     const avgUtilization = (cpuUtilization + memoryUtilization) / 2;
     return Math.max(0.3, 1.0 - avgUtilization * 0.7);
-  }
+
   
   private calculatePredictiveAdjustment(analytics: unknown): number {
     // Mock implementation - would use actual predictive analytics
     return 0.9; // Slightly reduce limits based on predictions
-  }
+
   
   private async calculatePerformanceImpact(startTime: number, endTime: number): Promise<unknown> {
 
@@ -1454,7 +1454,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       error_rate_reduction: 8,
       resource_utilization_optimization: 18
     };
-  }
+
   
   private async calculateUserImpact(decisions: ThrottlingDecision[]): Promise<unknown> {
 
@@ -1470,7 +1470,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       user_satisfaction_score: 85, // Mock score
       retention_impact: -2 // Mock percentage
     };
-  }
+
   
   private async calculateBusinessMetrics(performanceImpact: unknown, userImpact: unknown): Promise<unknown> {
 
@@ -1480,7 +1480,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
       capacity_optimization: performanceImpact.resource_utilization_optimization,
       revenue_protection: Math.max(0, userImpact.user_satisfaction_score - 80) * 100
     };
-  }
+
   
   private calculateFalsePositiveRate(decisions: ThrottlingDecision[]): number {
     // Mock implementation - would analyze actual false positives
@@ -1488,7 +1488,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
     const falsePositives = throttledOrBlocked.filter(d => d.decision_rationale.confidence_score < 0.7);
     
     return throttledOrBlocked.length > 0 ? falsePositives.length / throttledOrBlocked.length : 0;
-  }
+
   
   private getUserTier(userId: string): string {
     // Mock implementation - would lookup actual user tier
@@ -1496,7 +1496,7 @@ export class IntelligentThrottlingManager extends EventEmitter {
     if (hash % 10 < 2) return 'enterprise_tier';
     if (hash % 10 < 5) return 'premium_tier';
     return 'free_tier';
-  }
+
   
   /**
    * Shutdown the intelligent throttling system
@@ -1506,12 +1506,12 @@ export class IntelligentThrottlingManager extends EventEmitter {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
-    }
+
     
     this.emit('intelligent-throttling-shutdown', {
       timestamp: Date.now()
     });
-  }
-}
+
+
 
 export default IntelligentThrottlingManager;

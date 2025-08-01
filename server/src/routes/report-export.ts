@@ -15,7 +15,7 @@ import {
   ReportData, 
   ExportConfig, 
   ScheduledExport 
-} from '../services/ReportExportService';
+ from '../services/ReportExportService';
 
 // Initialize the export service
 const exportService = new ReportExportService('./exports');
@@ -23,17 +23,19 @@ const exportService = new ReportExportService('./exports');
 /**
  * Request/Response schemas
  */
-}
-}
+
+
+
 interface ExportRequestBody {
   reportData: ReportData;
   config: ExportConfig;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ScheduleExportBody {
   name: string;
   description: string;
@@ -45,28 +47,30 @@ interface ScheduleExportBody {
     dayOfWeek?: number;
     dayOfMonth?: number;
     cron?: string;
-}
-}
+
+
+
   };
   enabled?: boolean;
-}
 
-}
-}
+
+
+
 interface BulkExportBody {
   reports: Array<{
     name: string;
     reportData: ReportData;
     config: ExportConfig;
-}
-}
-  }>;
+
+
+
+>;
   options?: {
     parallel?: boolean;
     maxConcurrency?: number;
     failFast?: boolean;
   };
-}
+
 
 /**
  * Register report export routes
@@ -78,7 +82,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: ExportRequestBody;
-  }>('/api/reports/export', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/export', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { reportData, config } = request.body as ExportRequestBody;
       
@@ -88,7 +92,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'reportData and config are required'
         });
-      }
+
 
       // Add user context to metadata
       reportData.metadata.generatedBy = (request.user as any)?.email || 'anonymous';
@@ -99,12 +103,12 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         success: true,
         data: result
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Export failed'
       });
-    }
+
   });
 
   /**
@@ -112,7 +116,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: BulkExportBody;
-  }>('/api/reports/bulk-export', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/bulk-export', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { reports, options = {} } = request.body as BulkExportBody;
       
@@ -121,7 +125,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'reports array is required and must not be empty'
         });
-      }
+
 
       const results: any[] = [];
       const errors: any[] = [];
@@ -134,7 +138,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         
         for (let i = 0; i < reports.length; i += maxConcurrency) {
           chunks.push(reports.slice(i, i + maxConcurrency));
-        }
+
 
         for (const chunk of chunks) {
           const chunkPromises = chunk.map(async (report) => {
@@ -142,7 +146,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
               report.reportData.metadata.generatedBy = userEmail;
               const result = await exportService.exportReport(report.reportData, report.config);
               return { name: report.name, result, success: true };
-            } catch (error) {
+ catch (error) {
               const errorResult = {
                 name: report.name,
                 error: error instanceof Error ? error.message : 'Export failed',
@@ -151,10 +155,10 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
               
               if (options.failFast) {
                 throw errorResult;
-              }
+
               
               return errorResult;
-            }
+
           });
 
           const chunkResults = await Promise.allSettled(chunkPromises);
@@ -163,25 +167,25 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
             if (result.status === 'fulfilled') {
               if (result.value.success) {
                 results.push(result.value);
-              } else {
+ else {
                 errors.push(result.value);
-              }
-            } else {
+
+ else {
               errors.push({
                 error: result.reason,
                 success: false
               });
-            }
+
           });
-        }
-      } else {
+
+ else {
         // Sequential execution
         for (const report of reports) {
           try {
             report.reportData.metadata.generatedBy = userEmail;
             const result = await exportService.exportReport(report.reportData, report.config);
             results.push({ name: report.name, result, success: true });
-          } catch (error) {
+ catch (error) {
             const errorResult = {
               name: report.name,
               error: error instanceof Error ? error.message : 'Export failed',
@@ -191,10 +195,10 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
             
             if (options.failFast) {
               break;
-            }
-          }
-        }
-      }
+
+
+
+
 
       return reply.code(200).send({
         success: errors.length === 0,
@@ -204,14 +208,14 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           totalExports: reports.length,
           results,
           errors: errors.length > 0 ? errors : undefined
-        }
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Bulk export failed'
       });
-    }
+
   });
 
   /**
@@ -219,7 +223,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: ScheduleExportBody;
-  }>('/api/reports/schedule', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/schedule', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const scheduleData = request.body as ScheduleExportBody;
       
@@ -240,12 +244,12 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         success: true,
         data: scheduledExport
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to schedule export'
       });
-    }
+
   });
 
   /**
@@ -259,12 +263,12 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         success: true,
         data: scheduledExports
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get scheduled exports'
       });
-    }
+
   });
 
   /**
@@ -272,7 +276,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.delete<{
     Params: { scheduleId: string };
-  }>('/api/reports/schedules/:scheduleId', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/schedules/:scheduleId', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { scheduleId } = request.params as { scheduleId: string };
       
@@ -283,18 +287,18 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'Scheduled export not found'
         });
-      }
+
       
       return reply.code(200).send({
         success: true,
         message: 'Scheduled export cancelled'
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to cancel scheduled export'
       });
-    }
+
   });
 
   /**
@@ -302,7 +306,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Querystring: { limit?: number; format?: string; delivery?: string };
-  }>('/api/reports/history', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/history', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { limit = 50, format, delivery } = request.query as any;
       
@@ -311,23 +315,23 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
       // Filter by format if specified
       if (format && Object.values(ExportFormat).includes(format as ExportFormat)) {
         history = history.filter(h => h.format === format);
-      }
+
       
       // Filter by delivery method if specified
       if (delivery && Object.values(DeliveryMethod).includes(delivery as DeliveryMethod)) {
         history = history.filter(h => h.delivery === delivery);
-      }
+
       
       return reply.code(200).send({
         success: true,
         data: history
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get export history'
       });
-    }
+
   });
 
   /**
@@ -341,12 +345,12 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         success: true,
         data: stats
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get export statistics'
       });
-    }
+
   });
 
   /**
@@ -354,7 +358,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.get<{
     Params: { exportId: string };
-  }>('/api/reports/download/:exportId', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/download/:exportId', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { exportId } = request.params as { exportId: string };
       
@@ -369,12 +373,12 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         message: 'File download would be initiated here',
         exportId
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Download failed'
       });
-    }
+
   });
 
   /**
@@ -396,15 +400,15 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
             charts: false, // Would be true with proper chart library
             email: true,
             webhooks: true
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Failed to get export options'
       });
-    }
+
   });
 
   /**
@@ -412,7 +416,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: { format: ExportFormat; delivery?: DeliveryMethod };
-  }>('/api/reports/test-export', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/test-export', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { format, delivery = DeliveryMethod.FILE } = request.body as any;
       
@@ -424,13 +428,13 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           generatedAt: new Date(),
           generatedBy: (request.user as any)?.email || 'test-user',
           version: '1.0.0'
-  }
+
         summary: {
           totalRecords: 100,
           averageValue: 75.5,
           successRate: 95.2,
           errorCount: 5
-  }
+
         data: [
           { id: 1, name: 'Sample Item 1', value: 100, category: 'A', status: 'active' },
           { id: 2, name: 'Sample Item 2', value: 75, category: 'B', status: 'inactive' },
@@ -448,7 +452,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           includeCharts: false,
           includeRawData: true,
           compression: false
-        }
+
       };
 
       const result = await exportService.exportReport(sampleData, exportConfig);
@@ -458,12 +462,12 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         message: 'Test export completed successfully',
         data: result
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Test export failed'
       });
-    }
+
   });
 
   /**
@@ -471,7 +475,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
    */
   fastify.post<{
     Body: { reportData: ReportData; format: ExportFormat };
-  }>('/api/reports/preview', async (request: FastifyRequest, reply: FastifyReply) => {
+>('/api/reports/preview', async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { reportData, format } = request.body as any;
       
@@ -480,7 +484,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
           success: false,
           error: 'reportData is required'
         });
-      }
+
 
       // Generate preview based on format
       let preview: string;
@@ -501,7 +505,7 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
         break;
       default:
         preview = 'Preview not available for this format';
-      }
+
       
       return reply.code(200).send({
         success: true,
@@ -512,15 +516,15 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
             recordCount: reportData.data?.length || 0,
             estimatedSize: Buffer.byteLength(preview),
             previewTruncated: preview.length > 5000
-          }
-        }
+
+
       });
-    } catch (error) {
+ catch (error) {
       return reply.code(500).send({
         success: false,
         error: error instanceof Error ? error.message : 'Preview generation failed'
       });
-    }
+
   });
 
   // Set up event listeners for export service
@@ -545,4 +549,3 @@ export async function registerReportExportRoutes(fastify: FastifyInstance) {
   });
 
   console.log('Report export routes registered successfully');
-}

@@ -25,16 +25,14 @@ export { ExtensionMarketplace } from './ExtensionMarketplace';
 export type { ExtensionMarketplaceProps } from './ExtensionMarketplace';
 
 export { useExtensionManagerStore } from './ExtensionManagerStore';
-export type {
-  ExtensionManagerState,
+export type { ExtensionManagerState,
   ExtensionStatus,
   ExtensionInstallation,
-  ExtensionManagerStore,
-} from './ExtensionManagerStore';
+  ExtensionManagerStore }
+ from './ExtensionManagerStore';
 
 // Component utilities and constants
-export const ExtensionManagerConstants = {
-  // View modes
+export const ExtensionManagerConstants = { // View modes
   VIEW_MODES: ['installed', 'marketplace', 'settings'] as const,
   // Extension statuses
   EXTENSION_STATUSES: ['enabled', 'disabled', 'error', 'loading'] as const,
@@ -44,7 +42,7 @@ export const ExtensionManagerConstants = {
   // Install methods
   INSTALL_METHODS: ['file', 'url', 'dev'] as const,
   // Configuration tabs
-  CONFIG_TABS: ['general', 'advanced', 'security'] as const,
+  CONFIG_TABS: ['general', 'advanced', 'security'] as const }
 };
 
 // Type utilities
@@ -56,44 +54,39 @@ export type InstallMethod = (typeof ExtensionManagerConstants.INSTALL_METHODS)[n
 export type ConfigTab = (typeof ExtensionManagerConstants.CONFIG_TABS)[number];
 
 // Extension Manager Hooks and Utilities
-export const ExtensionManagerUtils = {
-  /**
-   * Get extension type icon
-   */
-  getExtensionIcon(type: string): string {
-    switch (type) {
-      case 'node':
-        return '🔧';
-      case 'ui':
-        return '🎨';
-      case 'transform':
-        return '⚡';
-      case 'storage':
-        return '💾';
-      default:
-        return '📦';
-    }
+export const ExtensionManagerUtils = { /**
+  * Get extension type icon
+  */
+  getExtensionIcon(type: string): string {,
+  switch (type) {
+  case 'node':,
+  return '🔧',
+  case 'ui':,
+  return '🎨',
+  case 'transform':,
+  return '⚡',
+  case 'storage':,
+  return '💾',
+  default: }
+  return '📦';
+
   },
 
   /**
    * Get status icon for extension
    */
-  getStatusIcon(status: ExtensionStatus): string {
-    if (status.hasErrors) return '❌';
+  getStatusIcon(status: ExtensionStatus): string { if (status.hasErrors) return '❌';
     if (!status.loaded) return '⏸️';
     if (status.enabled) return '✅';
-    return '⭕';
-  },
+    return '⭕' },
 
   /**
    * Get human-readable status text
    */
-  getStatusText(status: ExtensionStatus): string {
-    if (status.hasErrors) return 'Error';
+  getStatusText(status: ExtensionStatus): string { if (status.hasErrors) return 'Error';
     if (!status.loaded) return 'Not Loaded';
     if (status.enabled) return 'Enabled';
-    return 'Disabled';
-  },
+    return 'Disabled' },
 
   /**
    * Format download count for display
@@ -101,8 +94,7 @@ export const ExtensionManagerUtils = {
   formatDownloads(downloads: number): string {
     if (downloads < 1000) return downloads.toString();
     if (downloads < 1000000) return `${(downloads / 1000).toFixed(1)}K`;
-    return `${(downloads / 1000000).toFixed(1)}M`;
-  },
+    return `${(downloads / 1000000).toFixed(1)}M`
 
   /**
    * Format file size for display
@@ -110,76 +102,68 @@ export const ExtensionManagerUtils = {
   formatFileSize(bytes: number): string {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  },
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 
   /**
    * Validate extension name for development
    */
-  validateExtensionName(name: string): boolean {
-    return /^[a-z0-9-]+$/.test(name) && name.length >= 3 && name.length <= 50;
-  },
+  validateExtensionName(name: string): boolean { return /^[a-z0-9-]+$/.test(name) && name.length >= 3 && name.length <= 50 },
 
   /**
    * Get permission description
    */
-  getPermissionDescription(permission: string): string {
-    const descriptions: Record<string, string> = {
-      'data-processing': 'Access and process data within the application',
-      'file-system-read': 'Read files from the local file system',
-      'file-system-write': 'Write files to the local file system',
-      network: 'Make network requests to external services',
-      'ui-components': 'Add or modify user interface components',
-      'extensions-api': 'Interact with other extensions',
-      'system-info': 'Access system information and statistics',
-      'data-storage': 'Store and retrieve persistent data',
-    };
-    return descriptions[permission] || 'Access to system functionality';
-  },
+  getPermissionDescription(permission: string): string { const descriptions: Record<string, string> = {
+  'data-processing': 'Access and process data within the application'
+  'file-system-read': 'Read files from the local file system'
+  'file-system-write': 'Write files to the local file system'
+  network: 'Make network requests to external services'
+  'ui-components': 'Add or modify user interface components'
+  'extensions-api': 'Interact with other extensions'
+  'system-info': 'Access system information and statistics'
+  'data-storage': 'Store and retrieve persistent data' }
+};
+    return descriptions[permission] || 'Access to system functionality'
+
   /**
    * Check if permission is dangerous
    */
-  isDangerousPermission(permission: string): boolean {
-    const dangerousPermissions = ['file-system-write', 'network', 'process-spawn', 'system-info', 'extensions-api'];
-    return dangerousPermissions.includes(permission);
-  },
+  isDangerousPermission(permission: string): boolean { const dangerousPermissions = ['file-system-write', 'network', 'process-spawn', 'system-info', 'extensions-api'];
+    return dangerousPermissions.includes(permission) }
 };
 
 // Default extension manager configuration
-export const DefaultExtensionManagerConfig = {
-  // UI settings
-  defaultView: 'installed' as ViewMode,
-  defaultViewMode: 'list' as 'grid' | 'list',
-  extensionsPerPage: 20,
+export const DefaultExtensionManagerConfig = { // UI settings
+  defaultView: 'installed' as ViewMode
+  defaultViewMode: 'list' as 'grid' | 'list'
+  extensionsPerPage: 20
   // Search and filter settings
-  searchDebounceMs: 300,
-  defaultSortBy: 'name' as SortOption,
-  showCategories: true,
+  searchDebounceMs: 300
+  defaultSortBy: 'name' as SortOption
+  showCategories: true
   // Installation settings
-  allowDevExtensions: false,
-  requireManualApproval: true,
-  autoCheckUpdates: true,
+  allowDevExtensions: false
+  requireManualApproval: true
+  autoCheckUpdates: true
   // Security settings
-  enableSandboxing: true,
-  validateManifests: true,
-  checkCompatibility: true,
+  enableSandboxing: true
+  validateManifests: true
+  checkCompatibility: true
   // Performance settings
-  maxConcurrentInstalls: 3,
-  installTimeout: 30000,
-  updateCheckInterval: 3600000, // 1 hour,
+  maxConcurrentInstalls: 3
+  installTimeout: 30000
+  updateCheckInterval: 3600000, // 1 hour }
 };
 
 // Extension manager event types
-export const ExtensionManagerEvents = {
-  EXTENSION_INSTALLED: 'extension-installed',
-  EXTENSION_UNINSTALLED: 'extension-uninstalled',
-  EXTENSION_ENABLED: 'extension-enabled',
-  EXTENSION_DISABLED: 'extension-disabled',
-  EXTENSION_UPDATED: 'extension-updated',
-  EXTENSION_CONFIGURED: 'extension-configured',
-  MARKETPLACE_LOADED: 'marketplace-loaded',
-  SEARCH_PERFORMED: 'search-performed',
-  FILTER_CHANGED: 'filter-changed',
-} as const;
+export const ExtensionManagerEvents = { EXTENSION_INSTALLED: 'extension-installed'
+  EXTENSION_UNINSTALLED: 'extension-uninstalled'
+  EXTENSION_ENABLED: 'extension-enabled'
+  EXTENSION_DISABLED: 'extension-disabled'
+  EXTENSION_UPDATED: 'extension-updated'
+  EXTENSION_CONFIGURED: 'extension-configured'
+  MARKETPLACE_LOADED: 'marketplace-loaded'
+  SEARCH_PERFORMED: 'search-performed'
+  FILTER_CHANGED: 'filter-changed' }
+ as const;
 
 export type ExtensionManagerEventType = (typeof ExtensionManagerEvents)[keyof typeof ExtensionManagerEvents];

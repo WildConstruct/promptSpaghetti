@@ -147,8 +147,15 @@ export const useInlineEditor = () => {
     };
 };
 // Context for sharing editor state across components
-export const InlineEditorContext = React.createContext(null);
-export const InlineEditorProvider = ({ children }) => {
+export const InlineEditorContext = React.createContext < {
+    activeNodeId: string | null,
+    activateEditor: (nodeId) => void ,
+    deactivateEditor: () => void ,
+    isNodeBeingEdited: (nodeId) => boolean
+} | null > (null);
+export const InlineEditorProvider, React, ReactNode;
+ > ;
+({ children }) => {
     const editorState = useInlineEditor();
     return (_jsx(InlineEditorContext.Provider, { value: editorState, children: children }));
 };

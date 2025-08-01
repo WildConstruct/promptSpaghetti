@@ -18,8 +18,7 @@
 /**
  * Security event severity levels
  */
-export declare enum SecuritySeverity {
-    INFO = "INFO",// Informational events (safe operations)
+export declare enum SecuritySeverity { INFO = "INFO",// Informational events (safe operations)
     WARNING = "WARNING",// Potentially suspicious but allowed
     ERROR = "ERROR",// Blocked operations
     CRITICAL = "CRITICAL"
@@ -41,12 +40,13 @@ export declare enum SecurityEventCategory {
     UNSAFE_FUNCTION_CALL = "UNSAFE_FUNCTION_CALL",
     RESERVED_KEYWORD_BLOCKED = "RESERVED_KEYWORD_BLOCKED",
     VARIABLE_VALIDATION_FAILED = "VARIABLE_VALIDATION_FAILED",
-    SECURITY_POLICY_VIOLATION = "SECURITY_POLICY_VIOLATION",
+    SECURITY_POLICY_VIOLATION = "SECURITY_POLICY_VIOLATION" }
     AUDIT_LOG_OVERFLOW = "AUDIT_LOG_OVERFLOW"
 /**
  * Security event context information
  */
 
+}
 }
 export interface SecurityEventContext {
     nodeId?: string;
@@ -69,6 +69,8 @@ export interface SecurityEventContext {
  */
 
 }
+}
+}
 export interface SecurityAuditEvent {
     id: string;
     timestamp: number;
@@ -82,15 +84,16 @@ export interface SecurityAuditEvent {
  */
 
 }
-export interface SecurityEventStats {
-    totalEvents: number;
+}
+}
+export interface SecurityEventStats { totalEvents: number;
     eventsByCategory: Record<SecurityEventCategory, number>;
     eventsBySeverity: Record<SecuritySeverity, number>;
     blockedOperations: number;
     uniqueExpressions: number;
     topBlockedPatterns: Array<{
         pattern: string;
-        count: number;
+        count: number }
 }
     }>;
     recentCriticalEvents: SecurityAuditEvent[];
@@ -99,8 +102,8 @@ export interface SecurityEventStats {
  */
 
 }
-export interface SecurityAuditConfig {
-    maxEvents: number;
+}
+export interface SecurityAuditConfig { maxEvents: number;
     enableConsoleLogging: boolean;
     enableStackTraces: boolean;
     eventRetentionMs: number;
@@ -125,10 +128,10 @@ export declare class SecurityAuditLogger {
      * Log a security event
      */
     logEvent();
-      severity: SecuritySeverity,
-      category: SecurityEventCategory,
-      message: string,
-      context?: SecurityEventContext,
+      severity: SecuritySeverity;
+      category: SecurityEventCategory;
+      message: string;
+      context?: SecurityEventContext }
       blocked?: boolean
     ): string;
     /**
@@ -142,12 +145,12 @@ export declare class SecurityAuditLogger {
     /**
      * Get all events
      */
-    getEvents(filter?: {)
+    getEvents(filter?: { )
         severity?: SecuritySeverity;
         category?: SecurityEventCategory;
         startTime?: number;
         endTime?: number;
-        blocked?: boolean;
+        blocked?: boolean }
 }
     }): SecurityAuditEvent[];
     /**

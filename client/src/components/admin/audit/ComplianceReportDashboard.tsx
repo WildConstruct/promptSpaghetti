@@ -34,7 +34,7 @@ import {
   ListItemText,
   Badge,
   Divider
-} from '@mui/material';
+ from '@mui/material';
 import {
   Assessment as AssessmentIcon,
   GetApp as GetAppIcon,
@@ -48,64 +48,70 @@ import {
   Refresh as RefreshIcon,
   Timeline as TimelineIcon,
   Verified as VerifiedIcon
-} from '@mui/icons-material';
+ from '@mui/icons-material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 // Types
-}
+
+
 interface ComplianceReport {
   id: string;,
-  reportType: 'access_report' | 'change_report' | 'security_report' | 'retention_report';
+  reportType: 'access_report' | 'change_report' | 'security_report' | 'retention_report';,
   standard: 'soc2' | 'iso27001' | 'gdpr' | 'hipaa' | 'pci_dss' | 'ccpa' | 'sox';,
-  startDate: Date;
+  startDate: Date;,
   endDate: Date;,
-  summary: {
+  summary: {,
   totalEvents: number;,
-  uniqueUsers: number;
+  uniqueUsers: number;,
   criticalEvents: number;,
-  securityIncidents: number;
+  securityIncidents: number;,
   complianceViolations: number;
-}
+
+
 };
-  violations: Array<{
+  violations: Array<{,
   eventId: string;
   violationType: string;,
-  description: string;
+  description: string;,
   severity: 'low' | 'medium' | 'high' | 'critical';
   remediation?: string;
-}>;
+>;
   generatedBy: string;,
-  generatedAt: Date;
+  generatedAt: Date;,
   format: 'json' | 'pdf' | 'csv' | 'xml';,
   status: 'pending' | 'generating' | 'completed' | 'failed';
-}
+
+
 interface ReportTemplate {
   id: string;,
-  name: string;
+  name: string;,
   description: string;,
-  standard: string;
+  standard: string;,
   reportType: string;,
   defaultScope: Record<string, unknown>;
-  schedule?: {
+  schedule?: {,
   frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly';,
   enabled: boolean;
-}
+
+
 };
-}
+
+
 interface ComplianceMetrics {
   complianceScore: number;,
-  totalReports: number;
+  totalReports: number;,
   violationsThisMonth: number;,
-  averageResolutionTime: number;
+  averageResolutionTime: number;,
   byStandard: Record<string, {,
   score: number;,
-  violations: number;
+  violations: number;,
   lastReport: Date;
-}
-}>;
-const COMPLIANCE_STANDARDS = [;
+
+
+>;
+const COMPLIANCE_STANDARDS = [
   { value: 'soc2', label: 'SOC 2', description: 'Service Organization Control 2' },
   { value: 'iso27001', label: 'ISO 27001', description: 'Information Security Management' },
   { value: 'gdpr', label: 'GDPR', description: 'General Data Protection Regulation' },
@@ -114,7 +120,7 @@ const COMPLIANCE_STANDARDS = [;
   { value: 'ccpa', label: 'CCPA', description: 'California Consumer Privacy Act' },
   { value: 'sox', label: 'SOX', description: 'Sarbanes-Oxley Act' }
 ];
-const REPORT_TYPES = [;
+const REPORT_TYPES = [
   { value: 'access_report', label: 'Access Report', description: 'User access and authorization events' },
   { value: 'change_report', label: 'Change Report', description: 'Data modification and configuration changes' },
   { value: 'security_report', label: 'Security Report', description: 'Security incidents and authentication events' },
@@ -127,23 +133,7 @@ const VIOLATION_SEVERITIES = {
   critical: { color: 'error', icon: SecurityIcon }
 };
 
-export const ComplianceReportDashboard: React.FC = () => {
-  const [reports, setReports] = useState<ComplianceReport>([]);
-  const [templates, setTemplates] = useState<ReportTemplate>([]);
-  const [metrics, setMetrics] = useState<ComplianceMetrics | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  // Report Generation
-  const [generateDialogOpen, setGenerateDialogOpen] = useState(false);
-  const [newReport, setNewReport] = useState({)
-  reportType: 'access_report',
-    standard: 'soc2',
-    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
-    endDate: new Date(),
-    format: 'pdf',
-    scope: {}
-  });
+export const ComplianceReportDashboard = () => { return null; });
   // Report Details
   const [selectedReport, setSelectedReport] = useState<ComplianceReport | null>(null);
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
@@ -158,21 +148,21 @@ export const ComplianceReportDashboard: React.FC = () => {
   standard: 'soc2',
   startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
   endDate: new Date(),
-  summary: {
+  summary: {,
   totalEvents: 1543,
   uniqueUsers: 45,
   criticalEvents: 12,
   securityIncidents: 3,
   complianceViolations: 5,
 },
-  violations: [,
+  violations: [
             {
   eventId: 'audit_123',
   violationType: 'unauthorized_access',
   description: 'User attempted to access restricted resource without proper authorization',
   severity: 'high',
   remediation: 'Review user permissions and access controls',
-}
+
             {
   eventId: 'audit_456',
   violationType: 'failed_authentication',
@@ -183,21 +173,21 @@ export const ComplianceReportDashboard: React.FC = () => {
   generatedAt: new Date(Date.now() - 60 * 60 * 1000),
   format: 'pdf',
   status: 'completed',
-}
+
         {
   id: 'report_2',
   reportType: 'change_report',
   standard: 'gdpr',
   startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
   endDate: new Date(),
-  summary: {
+  summary: {,
   totalEvents: 234,
   uniqueUsers: 18,
   criticalEvents: 2,
   securityIncidents: 0,
   complianceViolations: 1,
 },
-  violations: [,
+  violations: [
             {
   eventId: 'audit_789',
   violationType: 'data_retention_violation',
@@ -209,9 +199,9 @@ export const ComplianceReportDashboard: React.FC = () => {
   format: 'pdf',
   status: 'completed'];
   setReports(mockReports);
-} catch (error) {
+ catch (error) {
   console.error('Failed to load reports:', error);
-} finally {
+ finally {
       setLoading(false);
   }, []);
   const loadTemplates = useCallback(async () => {
@@ -224,27 +214,27 @@ export const ComplianceReportDashboard: React.FC = () => {
   description: 'Comprehensive security assessment for SOC 2 compliance',
   standard: 'soc2',
   reportType: 'security_report',
-  defaultScope: {
+  defaultScope: {,
   eventTypes: ['login_failed', 'unauthorized_access', 'security_breach_detected'],
 },
-  schedule: {
+  schedule: {,
   frequency: 'monthly',
   enabled: true,
-}
+
         {
   id: 'template_2',
   name: 'Weekly GDPR Data Changes',
   description: 'Data modification tracking for GDPR compliance',
   standard: 'gdpr',
   reportType: 'change_report',
-  defaultScope: {
+  defaultScope: {,
   eventTypes: ['data_exported', 'data_purged', 'user_created', 'user_deleted'],
 },
-  schedule: {
+  schedule: {,
   frequency: 'weekly',
   enabled: true];
   setTemplates(mockTemplates);
-} catch (error) {
+ catch (error) {
   console.error('Failed to load templates:', error);
 }, []);
   const loadMetrics = useCallback(async () => {
@@ -255,13 +245,13 @@ export const ComplianceReportDashboard: React.FC = () => {
         totalReports: 42,
         violationsThisMonth: 8,
         averageResolutionTime: 2.5, // days
-        byStandard: {
+        byStandard: {,
   soc2: { score: 92, violations: 3, lastReport: new Date(Date.now() - 24 * 60 * 60 * 1000) },
           gdpr: { score: 89, violations: 2, lastReport: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) },
           iso27001: { score: 85, violations: 3, lastReport: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) }
       };
       setMetrics(mockMetrics);
-    } catch (error) {
+ catch (error) {
   console.error('Failed to load metrics:', error);
 }, []);
   const handleGenerateReport = useCallback(async () => {
@@ -271,9 +261,9 @@ export const ComplianceReportDashboard: React.FC = () => {
       // Close dialog and refresh reports
       setGenerateDialogOpen(false);
       await loadReports();
-    } catch (error) {
+ catch (error) {
   console.error('Failed to generate report:', error);
-} finally {
+ finally {
       setLoading(false);
   }, [loadReports]);
   const handleViewReport = useCallback((report: ComplianceReport) => {
@@ -284,7 +274,7 @@ export const ComplianceReportDashboard: React.FC = () => {
   const handleDownloadReport = useCallback(async (_reportId: string, _format: string) => {
     try {
       // Mock download
-    } catch (error) {
+ catch (error) {
   console.error('Download failed:', error);
 }, []);
   const getComplianceScoreColor = useCallback((score: number): string => {
@@ -496,7 +486,7 @@ export const ComplianceReportDashboard: React.FC = () => {
         onRowsPerPageChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setRowsPerPage(parseInt(e.target.value, 10));
           setPage(0);
-        }}
+}
       />
     </Paper>
   );
@@ -560,7 +550,7 @@ export const ComplianceReportDashboard: React.FC = () => {
                 onChange={(date) => setNewReport(prev => ({ ...prev, startDate: date || new Date() }))}
                 slotProps={{
                   textField: { fullWidth: true }
-                }}
+}
               />
             </LocalizationProvider>
           </Grid>
@@ -572,7 +562,7 @@ export const ComplianceReportDashboard: React.FC = () => {
                 onChange={(date) => setNewReport(prev => ({ ...prev, endDate: date || new Date() }))}
                 slotProps={{
                   textField: { fullWidth: true }
-                }}
+}
               />
             </LocalizationProvider>
           </Grid>
@@ -706,7 +696,7 @@ export const ComplianceReportDashboard: React.FC = () => {
             onClick={() => {
               loadReports();
               loadMetrics();
-            }}
+}
           >
             Refresh
           </Button>

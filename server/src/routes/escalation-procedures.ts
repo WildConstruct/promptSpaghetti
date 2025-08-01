@@ -10,8 +10,9 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { EscalationProcedureService, EscalationRule, EscalationCase, EscalationPriority, EscalationCategory, EscalationStatus } from '../services/escalation/EscalationProcedureService';
 
 // Request/Response Types
-}
-}
+
+
+
 interface CreateRuleRequest {
   name: string;
   description?: string;
@@ -26,12 +27,13 @@ interface CreateRuleRequest {
   businessHoursOnly?: boolean;
   allowWeekends?: boolean;
   timeZone?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface UpdateRuleRequest {
   name?: string;
   description?: string;
@@ -45,41 +47,45 @@ interface UpdateRuleRequest {
   businessHoursOnly?: boolean;
   allowWeekends?: boolean;
   timeZone?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface CreateCaseRequest {
   sourceType: string;
   sourceId: string;
   sourceData: Record<string, any>;
   ruleId?: string;
   priority?: EscalationPriority;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface ResolveCaseRequest {
   resolutionType: 'resolved' | 'cancelled' | 'transferred' | 'merged';
   resolutionNotes?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface EscalateCaseRequest {
   reason?: string;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GetCasesQuery {
   status?: EscalationStatus;
   priority?: EscalationPriority;
@@ -89,20 +95,22 @@ interface GetCasesQuery {
   limit?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 interface GetRulesQuery {
   category?: EscalationCategory;
   enabled?: boolean;
   page?: number;
   limit?: number;
-}
-}
-}
+
+
+
+
 
 /**
  * Register escalation procedure routes
@@ -112,7 +120,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
 
   if (!escalationService) {
     throw new Error('EscalationProcedureService not registered with Fastify instance');
-  }
+
 
   // =============================================================================
   // Rule Management Routes
@@ -130,9 +138,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           enabled: { type: 'boolean' },
           page: { type: 'number', default: 1 },
           limit: { type: 'number', default: 20, maximum: 100 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: GetRulesQuery }>, reply: FastifyReply) => {
     try {
       const { category, enabled, page = 1, limit = 20 } = request.query;
@@ -156,16 +164,16 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
             limit,
             total: totalCount,
             pages: Math.ceil(totalCount / limit)
-          }
-        }
+
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch escalation rules'
       };
-    }
+
   });
 
   /**
@@ -178,9 +186,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         required: ['ruleId'],
         properties: {
           ruleId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { ruleId: string } }>, reply: FastifyReply) => {
     try {
       const { ruleId } = request.params;
@@ -192,19 +200,19 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           success: false,
           error: `Escalation rule ${ruleId} not found`
         };
-      }
+
 
       return {
         success: true,
         data: rule
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch escalation rule'
       };
-    }
+
   });
 
   /**
@@ -229,9 +237,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           businessHoursOnly: { type: 'boolean' },
           allowWeekends: { type: 'boolean' },
           timeZone: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: CreateRuleRequest }>, reply: FastifyReply) => {
     try {
       // Get user info from request context
@@ -245,13 +253,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         data: rule,
         message: 'Escalation rule created successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create escalation rule'
       };
-    }
+
   });
 
   /**
@@ -264,8 +272,8 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         required: ['ruleId'],
         properties: {
           ruleId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
@@ -281,9 +289,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           businessHoursOnly: { type: 'boolean' },
           allowWeekends: { type: 'boolean' },
           timeZone: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { ruleId: string }; Body: UpdateRuleRequest }>, reply: FastifyReply) => {
     try {
       const { ruleId } = request.params;
@@ -296,13 +304,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         data: updatedRule,
         message: 'Escalation rule updated successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to update escalation rule'
       };
-    }
+
   });
 
   /**
@@ -315,9 +323,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         required: ['ruleId'],
         properties: {
           ruleId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { ruleId: string } }>, reply: FastifyReply) => {
     try {
       const { ruleId } = request.params;
@@ -329,13 +337,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         success: true,
         message: 'Escalation rule deleted successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to delete escalation rule'
       };
-    }
+
   });
 
   // =============================================================================
@@ -358,9 +366,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           limit: { type: 'number', default: 20, maximum: 100 },
           sortBy: { type: 'string', default: 'createdAt' },
           sortOrder: { type: 'string', enum: ['asc', 'desc'], default: 'desc' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Querystring: GetCasesQuery }>, reply: FastifyReply) => {
     try {
       const {
@@ -372,7 +380,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         limit = 20,
         sortBy = 'createdAt',
         sortOrder = 'desc'
-      } = request.query;
+ = request.query;
 
       const cases = await escalationService.getEscalationCases({
         status,
@@ -401,16 +409,16 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
             limit,
             total: totalCount,
             pages: Math.ceil(totalCount / limit)
-          }
-        }
+
+
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch escalation cases'
       };
-    }
+
   });
 
   /**
@@ -423,9 +431,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         required: ['caseId'],
         properties: {
           caseId: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
     try {
       const { caseId } = request.params;
@@ -437,19 +445,19 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           success: false,
           error: `Escalation case ${caseId} not found`
         };
-      }
+
 
       return {
         success: true,
         data: escalationCase
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch escalation case'
       };
-    }
+
   });
 
   /**
@@ -466,9 +474,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           sourceData: { type: 'object' },
           ruleId: { type: 'string' },
           priority: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Body: CreateCaseRequest }>, reply: FastifyReply) => {
     try {
       const { sourceType, sourceId, sourceData, ruleId, priority } = request.body;
@@ -487,13 +495,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         data: escalationCase,
         message: 'Escalation case created successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to create escalation case'
       };
-    }
+
   });
 
   /**
@@ -506,15 +514,15 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         required: ['caseId'],
         properties: {
           caseId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         properties: {
           reason: { type: 'string', maxLength: 1000 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { caseId: string }; Body: EscalateCaseRequest }>, reply: FastifyReply) => {
     try {
       const { caseId } = request.params;
@@ -527,13 +535,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         data: escalationCase,
         message: `Case escalated to level ${escalationCase.currentLevel}`
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to escalate case'
       };
-    }
+
   });
 
   /**
@@ -546,8 +554,8 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         required: ['caseId'],
         properties: {
           caseId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['resolutionType'],
@@ -555,11 +563,11 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           resolutionType: {
             type: 'string',
             enum: ['resolved', 'cancelled', 'transferred', 'merged']
-  }
+
           resolutionNotes: { type: 'string', maxLength: 2000 }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{ Params: { caseId: string }; Body: ResolveCaseRequest }>, reply: FastifyReply) => {
     try {
       const { caseId } = request.params;
@@ -578,13 +586,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         data: resolvedCase,
         message: 'Escalation case resolved successfully'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to resolve escalation case'
       };
-    }
+
   });
 
   // =============================================================================
@@ -602,13 +610,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         success: true,
         data: dashboard
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch escalation dashboard'
       };
-    }
+
   });
 
   /**
@@ -623,21 +631,21 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
             type: 'string',
             enum: ['hourly', 'daily', 'weekly', 'monthly'],
             default: 'daily'
-  }
+
           startDate: { type: 'string', format: 'date' },
           endDate: { type: 'string', format: 'date' },
           category: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       period?: string;
       startDate?: string;
       endDate?: string;
       category?: EscalationCategory;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { period = 'daily', startDate, endDate, category } = request.query;
       
@@ -652,13 +660,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         success: true,
         data: metrics
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch escalation metrics'
       };
-    }
+
   });
 
   /**
@@ -671,15 +679,15 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         properties: {
           period: { type: 'string', enum: ['week', 'month', 'quarter', 'year'], default: 'month' },
           groupBy: { type: 'string', enum: ['category', 'priority', 'assignee', 'level'], default: 'category' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       period?: string;
       groupBy?: string;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { period = 'month', groupBy = 'category' } = request.query;
       
@@ -692,13 +700,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         success: true,
         data: analytics
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch escalation analytics'
       };
-    }
+
   });
 
   // =============================================================================
@@ -715,21 +723,21 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         required: ['ruleId'],
         properties: {
           ruleId: { type: 'string' }
-        }
-  }
+
+
       body: {
         type: 'object',
         required: ['testData'],
         properties: {
           testData: { type: 'object' },
           dryRun: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Params: { ruleId: string };
     Body: { testData: Record<string, any>; dryRun?: boolean };
-  }>, reply: FastifyReply) => {
+>, reply: FastifyReply) => {
     try {
       const { ruleId } = request.params;
       const { testData, dryRun = true } = request.body;
@@ -741,13 +749,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         data: testResult,
         message: 'Escalation rule test completed'
       };
-    } catch (error) {
+ catch (error) {
       reply.status(400);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to test escalation rule'
       };
-    }
+
   });
 
   /**
@@ -761,16 +769,16 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           startDate: { type: 'string', format: 'date' },
           endDate: { type: 'string', format: 'date' },
           assignee: { type: 'string' }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       startDate?: string;
       endDate?: string;
       assignee?: string;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const { startDate, endDate, assignee } = request.query;
       
@@ -784,13 +792,13 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         success: true,
         data: performance
       };
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to fetch assignee performance'
       };
-    }
+
   });
 
   /**
@@ -806,9 +814,9 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
           endDate: { type: 'string', format: 'date' },
           category: { type: 'string' },
           includeResolved: { type: 'boolean', default: true }
-        }
-      }
-    }
+
+
+
   }, async (request: FastifyRequest<{
     Querystring: {
       format?: string;
@@ -816,8 +824,8 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
       endDate?: string;
       category?: EscalationCategory;
       includeResolved?: boolean;
-    }
-  }>, reply: FastifyReply) => {
+
+>, reply: FastifyReply) => {
     try {
       const {
         format = 'json',
@@ -825,7 +833,7 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
         endDate,
         category,
         includeResolved = true
-      } = request.query;
+ = request.query;
       
       const exportData = await escalationService.exportEscalationData({
         format,
@@ -848,20 +856,19 @@ export async function escalationProceduresRoutes(fastify: FastifyInstance) {
       default:
         reply.header('content-type', 'application/json');
         break;
-      }
+
       
       return exportData;
-      
-    } catch (error) {
+ catch (error) {
       reply.status(500);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Failed to export escalation data'
       };
-    }
+
   });
 
   console.log('📈 Escalation Procedures API routes registered successfully');
-}
+
 
 export default escalationProceduresRoutes;

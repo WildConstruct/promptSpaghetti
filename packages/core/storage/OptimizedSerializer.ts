@@ -10,87 +10,78 @@ import { OptimizedGraphStorage } from './OptimizedGraphStorage';
  * Serialization format options
  */
 
-}
-export interface SerializationOptions {
-  format: 'json' | 'binary' | 'compressed';
+
+export interface SerializationOptions { format: 'json' | 'binary' | 'compressed';
   compression?: 'gzip' | 'lz4' | 'brotli';
-  prettyPrint?: boolean; // Default: false,
-  incremental?: boolean; // Only serialize changed data,
-  splitLargeGraphs?: boolean; // Split into chunks for >10MB graphs,
-  includeMetadata?: boolean; // Default: true,
+  prettyPrint?: boolean; // Default: false;
+  incremental?: boolean; // Only serialize changed data;
+  splitLargeGraphs?: boolean; // Split into chunks for >10MB graphs;
+  includeMetadata?: boolean; // Default: true }
   /**
   * Serialization result with performance metrics
   */
-}
-}
-}
-export interface SerializationResult {
-  data: string | ArrayBuffer;
+
+
+
+
+export interface SerializationResult { data: string | ArrayBuffer;
   format: string;
   size: number;
   compressionRatio?: number;
   serializationTime: number;
-  chunks?: number; // For split serialization,
+  chunks?: number; // For split serialization;
   /**
   * Incremental serialization state
   */
   interface IncrementalState {
-  lastSerialized: number; // timestamp,
-  dirtyNodes: Set<string>;
+  lastSerialized: number; // timestamp;
+  dirtyNodes: Set<string> }
   baselineChecksum: string;
   version: number;
   /**
   * Performance-optimized serialization system
   */
-}
-}
-export class OptimizedSerializer {
-  private static readonly LARGE_GRAPH_THRESHOLD = 10 * 1024 * 1024; // 10MB
+
+
+export class OptimizedSerializer { private static readonly LARGE_GRAPH_THRESHOLD = 10 * 1024 * 1024; // 10MB
   private static readonly COMPRESSION_THRESHOLD = 1024; // 1KB
   private incrementalState = new Map<string, IncrementalState>();
   /**
    * Serialize project with optimal format selection
    */
   async serialize(((
-    projectData: PSGFile,
+    projectData: PSGFile }
     options: SerializationOptions = { format: 'json' }
-  ): Promise<SerializationResult> {
-
-  const startTime = performance.now();
+  ): Promise<SerializationResult> { const startTime = performance.now();
   try {
   // Auto-detect optimal format for large graphs
   const estimatedSize = this.estimateSize(projectData);
   const finalOptions = this.optimizeOptions(options, estimatedSize);
   let result: SerializationResult;
   switch (finalOptions.format) {
-  case 'binary':,
+  case 'binary':
   result = await this.serializeToBinary(projectData, finalOptions);
   break;
-  case 'compressed':,
+  case 'compressed':
   result = await this.serializeCompressed(projectData, finalOptions);
   break;
-  default:,
+  default: }
   result = await this.serializeToJSON(projectData, finalOptions);
   result.serializationTime = performance.now() - startTime;
   return result;
-} catch (error) {
+ catch (error) {
       console.error('Serialization failed:', error);
       throw new Error(`Serialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   /**
    * Deserialize with automatic format detection
    */
-  async deserialize(data: string | ArrayBuffer): Promise<PSGFile> {
-
-  const startTime = performance.now();
+  async deserialize(data: string | ArrayBuffer): Promise<PSGFile> { const startTime = performance.now();
   try {
   let parsedData: any;
   if (typeof data === 'string') {
   // Try JSON first
   if (data.trim().startsWith('{')) {
-  parsedData = JSON.parse(data);
-} else {
-          throw new Error('Unsupported string format');
-      } else {
+  parsedData = JSON.parse(data) } else { throw new Error('Unsupported string format') } else {
         // Binary format
         parsedData = await this.deserializeBinary(data);
       // Handle compressed data
@@ -101,33 +92,30 @@ export class OptimizedSerializer {
         parsedData = await this.reassembleChunks(parsedData);
       console.log(`Deserialization took ${performance.now() - startTime}ms`);}
       return parsedData;
-    } catch (error) {
+ catch (error) {
       console.error('Deserialization failed:', error);
       throw new Error(`Deserialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`);}
   /**
    * Incremental serialization - only serialize changes
    */
   async serializeIncremental(projectData: PSGFile)
-    projectId: string,
+  projectId: string
     options: SerializationOptions = { format: 'json', incremental: true }
-  ): Promise<SerializationResult & { isIncremental: boolean; deltaSize: number }> {
-
-  const state = this.incrementalState.get(projectId);
+  ): Promise<SerializationResult & { isIncremental: boolean; deltaSize: number }> { const state = this.incrementalState.get(projectId);
   const currentTime = Date.now();
   if (!state || !options.incremental) {
   // Full serialization for first time or when incremental is disabled
   const result = await this.serialize(projectData, options);
   // Store state for future incremental updates
   this.incrementalState.set(projectId, {)
-  lastSerialized: currentTime,
-  dirtyNodes: new Set(),
-  baselineChecksum: await this.calculateChecksum(result.data),
-  version: 1,
+  lastSerialized: currentTime
+  dirtyNodes: new Set()
+  baselineChecksum: await this.calculateChecksum(result.data)
+  version: 1 }
 });
-      return {
-  ...result,
-  isIncremental: false,
-  deltaSize: result.size,
+      return { ...result
+  isIncremental: false
+  deltaSize: result.size }
 };
     // Create incremental delta
     const delta = await this.createDelta(projectData, state);
@@ -135,28 +123,25 @@ export class OptimizedSerializer {
     // Update state
     state.lastSerialized = currentTime;
     state.version++;
-    return {
-  ...deltaResult,
-  isIncremental: true,
-  deltaSize: deltaResult.size,
+    return { ...deltaResult
+  isIncremental: true
+  deltaSize: deltaResult.size }
 };
   /**
    * Get serialization performance metrics
    */
-  getMetrics(): {
-  averageSerializationTime: number;
+  getMetrics(): { averageSerializationTime: number;
   totalSerializations: number;
-  compressionStats: {
+  compressionStats: { }
   averageRatio: number;
   timeSaved: number;
 };
     // Implementation would track these metrics
-    return {
-  averageSerializationTime: 0,
-  totalSerializations: 0,
+    return { averageSerializationTime: 0
+  totalSerializations: 0
   compressionStats: {
-  averageRatio: 0,
-  timeSaved: 0,
+  averageRatio: 0
+  timeSaved: 0 }
 };
   // Private methods
   private optimizeOptions(options: SerializationOptions, estimatedSize: number): SerializationOptions {
@@ -166,8 +151,7 @@ export class OptimizedSerializer {
       optimized.format = 'compressed';
       console.log(`Large graph detected (${Math.round(estimatedSize / 1024 / 1024)}MB), using compressed format`);}
     // Enable compression for medium-sized graphs
-    if (estimatedSize > this.COMPRESSION_THRESHOLD && !optimized.compression) {
-  optimized.compression = 'gzip';
+    if (estimatedSize > this.COMPRESSION_THRESHOLD && !optimized.compression) { optimized.compression = 'gzip';
   // Split very large graphs
   if (estimatedSize > this.LARGE_GRAPH_THRESHOLD * 5) {
   optimized.splitLargeGraphs = true;
@@ -175,52 +159,47 @@ export class OptimizedSerializer {
   if (optimized.prettyPrint === undefined) {
   optimized.prettyPrint = false;
   return optimized;
-  private estimateSize(projectData: PSGFile): number {,
+  private estimateSize(projectData: PSGFile): number {
   try {
   // Quick size estimation without full serialization
   const nodeCount = projectData.graph.nodes?.length || 0;
   const edgeCount = (projectData.graph as any).edges?.length || 0;
-  // Rough estimation: ~200 bytes per node, ~100 bytes per edge, plus metadata,
+  // Rough estimation: ~200 bytes per node, ~100 bytes per edge, plus metadata }
   const estimatedSize = (nodeCount * 200) + (edgeCount * 100) + 1024;
   return estimatedSize;
-} catch (error) {
-  return 0;
-  private async serializeToJSON((projectData: PSGFile,
-  options: SerializationOptions): Promise<SerializationResult> {,
+ catch (error) { return 0;
+  private async serializeToJSON((projectData: PSGFile
+  options: SerializationOptions): Promise<SerializationResult> {
   const optimizedGraph = OptimizedGraphStorage.fromStorageFormat(projectData.graph);
   const serializedData = optimizedGraph.toCompressedFormat();
   const finalData = {
-  ...projectData,
-  graph: serializedData,
+  ...projectData
+  graph: serializedData }
 };
     // Use compact JSON by default (no pretty-printing)
     const jsonString = JSON.stringify(finalData, null, options.prettyPrint ? 2 : undefined);
     const originalSize = new Blob([jsonString]).size;
-    if (options.compression && jsonString.length > this.COMPRESSION_THRESHOLD) {
-      const compressed = await this.compressString(jsonString, options.compression);
+    if (options.compression && jsonString.length > this.COMPRESSION_THRESHOLD) { const compressed = await this.compressString(jsonString, options.compression);
       return {
-        data: compressed,
+        data: compressed }
         format: `json+${options.compression}`}
-},
-  size: compressed.byteLength,
+
+  size: compressed.byteLength
         compressionRatio: compressed.byteLength / originalSize;
   };
-    return {
-  data: jsonString,
-  format: 'json',
-  size: originalSize,
+    return { data: jsonString
+  format: 'json'
+  size: originalSize }
 };
   private async serializeToBinary(((
-    projectData: PSGFile,
+    projectData: PSGFile
     options: SerializationOptions
-  ): Promise<SerializationResult> {
-
-  // Binary serialization for maximum efficiency
+  ): Promise<SerializationResult> { // Binary serialization for maximum efficiency
   const encoder = new TextEncoder();
   // Create binary format with headers
   const jsonString = JSON.stringify(projectData);
   const jsonBytes = encoder.encode(jsonString);
-  // Binary format: [4-byte header][4-byte size][data],
+  // Binary format: [4-byte header][4-byte size][data]
   const header = new Uint32Array([0x50534742]); // "PSGB" magic number;
   const size = new Uint32Array([jsonBytes.length]);
   const result = new Uint8Array(8 + jsonBytes.length);
@@ -228,30 +207,27 @@ export class OptimizedSerializer {
   result.set(new Uint8Array(size.buffer), 4);
   result.set(jsonBytes, 8);
   return {
-  data: result.buffer,
-  format: 'binary',
-  size: result.length,
+  data: result.buffer
+  format: 'binary'
+  size: result.length }
 };
   private async serializeCompressed(((
-    projectData: PSGFile,
+    projectData: PSGFile
     options: SerializationOptions
-  ): Promise<SerializationResult> {
-
-  // Use optimized graph storage first
+  ): Promise<SerializationResult> { // Use optimized graph storage first
   const jsonResult = await this.serializeToJSON(projectData, { )
-  ...options,
-  format: 'json',
-  compression: undefined,
+  ...options
+  format: 'json'
+  compression: undefined }
 });
     const compressed = await this.compressString(;);
-      jsonResult.data as string, 
+      jsonResult.data as string
       options.compression || 'gzip'
     );
-    return {
-      data: compressed,
+    return { data: compressed }
       format: `compressed+${options.compression || 'gzip'}`}
-},
-  size: compressed.byteLength,
+
+  size: compressed.byteLength
       compressionRatio: compressed.byteLength / jsonResult.size;
   };
   private async deserializeBinary(data: ArrayBuffer): Promise<any> {
@@ -282,8 +258,7 @@ export class OptimizedSerializer {
       const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
       const result = new Uint8Array(totalLength);
       let offset = 0;
-      for (const chunk of chunks) {
-        result.set(chunk, offset);
+      for (const chunk of chunks) { result.set(chunk, offset);
         offset += chunk.length;
       return result.buffer;
     // Fallback: simple LZ-style compression
@@ -300,13 +275,13 @@ export class OptimizedSerializer {
     // Create incremental delta - only changed nodes
     return {
       metadata: {
-        ...projectData.metadata,
+        ...projectData.metadata }
         version: `${projectData.metadata.version}+delta.${state.version}`}
-  },
-  graph: {
-  nodes: [], // Only dirty nodes would be included,
-  seed: projectData.graph.seed,
-} as any
+
+  graph: { 
+  nodes: [], // Only dirty nodes would be included
+  seed: projectData.graph.seed }
+ as any
     };
   private async calculateChecksum(data: string | ArrayBuffer): Promise<string> {
 

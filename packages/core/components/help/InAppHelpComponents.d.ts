@@ -18,8 +18,8 @@
 import React, { ReactNode } from 'react';
 
 }
-export interface HelpContentItem {
-    id: string;
+}
+export interface HelpContentItem { id: string;
     title: string;
     description: string;
     content: string;
@@ -33,13 +33,13 @@ export interface HelpContentItem {
     lastUpdated: Date;
     helpfulness: {
         helpful: number;
-        unhelpful: number;
+        unhelpful: number }
 }
     };
 
 }
-export interface TourStep {
-    id: string;
+}
+export interface TourStep { id: string;
     title: string;
     content: string;
     target: string;
@@ -50,11 +50,10 @@ export interface TourStep {
     skippable?: boolean;
     optional?: boolean;
     highlight?: boolean;
-    delay?: number;
-
+    delay?: number }
 }
-export interface HelpTour {
-    id: string;
+}
+export interface HelpTour { id: string;
     name: string;
     description: string;
     category: string;
@@ -64,11 +63,10 @@ export interface HelpTour {
     repeatable?: boolean;
     prerequisites?: string[];
     estimatedDuration: number;
-    difficulty: 'beginner' | 'intermediate' | 'advanced';
-
+    difficulty: 'beginner' | 'intermediate' | 'advanced' }
 }
-export interface HelpContext {
-    currentPage: string;
+}
+export interface HelpContext { currentPage: string;
     userRole?: string;
     userExperience?: 'beginner' | 'intermediate' | 'advanced';
     completedTours?: string[];
@@ -77,13 +75,13 @@ export interface HelpContext {
         showTooltips: boolean;
         showTours: boolean;
         preferredHelpType: 'text' | 'video' | 'interactive';
-        autoplayVideos: boolean;
+        autoplayVideos: boolean }
 }
     };
 
 }
-export interface HelpTooltipProps {
-    content: string | ReactNode;
+}
+export interface HelpTooltipProps { content: string | ReactNode;
     title?: string;
     position?: 'top' | 'bottom' | 'left' | 'right';
     trigger?: 'hover' | 'click' | 'focus';
@@ -97,11 +95,10 @@ export interface HelpTooltipProps {
     onShow?: () => void;
     onHide?: () => void;
 
-export declare const HelpTooltip: React.FC<HelpTooltipProps>;
-
+export declare const HelpTooltip: React.FC<HelpTooltipProps> }
 }
-export interface ContextualHelpPanelProps {
-    title: string;
+}
+export interface ContextualHelpPanelProps { title: string;
     content: HelpContentItem[];
     context: HelpContext;
     position?: 'right' | 'left' | 'bottom';
@@ -113,33 +110,30 @@ export interface ContextualHelpPanelProps {
     onContentSelect?: (content: HelpContentItem) => void;
     onFeedback?: (contentId: string, helpful: boolean) => void;
 
-export declare const ContextualHelpPanel: React.FC<ContextualHelpPanelProps>;
-
+export declare const ContextualHelpPanel: React.FC<ContextualHelpPanelProps> }
 }
-export interface GuidedTourProps {
-    tour: HelpTour;
+}
+export interface GuidedTourProps { tour: HelpTour;
     isActive: boolean;
     onComplete?: () => void;
     onSkip?: () => void;
     onStepChange?: (stepIndex: number) => void;
     className?: string;
 
-export declare const GuidedTour: React.FC<GuidedTourProps>;
-
+export declare const GuidedTour: React.FC<GuidedTourProps> }
 }
-export interface HelpHubProps {
-    tours: HelpTour[];
+}
+export interface HelpHubProps { tours: HelpTour[];
     content: HelpContentItem[];
     context: HelpContext;
     onTourStart?: (tourId: string) => void;
     onContentView?: (contentId: string) => void;
     className?: string;
 
-export declare const HelpHub: React.FC<HelpHubProps>;
-
+export declare const HelpHub: React.FC<HelpHubProps> }
 }
-export interface QuickHelpProps {
-    helpContent: HelpContentItem[];
+}
+export interface QuickHelpProps { helpContent: HelpContentItem[];
     onHelpRequest?: () => void;
     className?: string;
 
@@ -149,7 +143,7 @@ declare const _default: {
     ContextualHelpPanel: React.FC<ContextualHelpPanelProps>;
     GuidedTour: React.FC<GuidedTourProps>;
     HelpHub: React.FC<HelpHubProps>;
-    QuickHelp: React.FC<QuickHelpProps>;
+    QuickHelp: React.FC<QuickHelpProps> }
 }
 };
 export default _default;

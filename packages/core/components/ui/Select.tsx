@@ -1,13 +1,11 @@
 import React from 'react';
 
-}
-interface SelectProps {
-  children?: React.ReactNode;
+
+interface SelectProps { children?: React.ReactNode;
   onValueChange?: (value: string) => void;
   value?: string;
-  defaultValue?: string;
+  defaultValue?: string }
 
-}
 export const Select: React.FC<SelectProps> = ({ children, ...props }) => ()
   <div className="select" {...props}>{children}</div>
 );
@@ -25,9 +23,9 @@ export const SelectContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
 );
 
 export const SelectItem: React.FC<React.HTMLAttributes<HTMLDivElement> & { value: string }> = ({ )
-  children, 
-  className, 
-  value,
+  children
+  className
+  value }
   ...props 
 }) => ()
   <div className={`select-item ${className || ''}`} data-value={value} {...props}>}

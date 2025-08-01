@@ -10,8 +10,7 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/Dialog';
-import { 
-  Play, 
+import { Play, 
   Pause, 
   SkipForward, 
   SkipBack, 
@@ -37,74 +36,72 @@ import {
   Star,
   Timer,
   Users,
-  Award,
+  Award }
   Zap
-} from 'lucide-react';
+ from 'lucide-react';
 // Epic 16 theme imports removed
 
-}
-export interface TutorialStep {
-  id: string;
+
+export interface TutorialStep { id: string;
   title: string;
   description: string;
   content: string;
   type: 'introduction' | 'demonstration' | 'interaction' | 'practice' | 'quiz' | 'completion';
-  duration?: number; // in seconds,
+  duration?: number; // in seconds;
   videoUrl?: string;
   imageUrl?: string;
-  highlightElements?: string; // CSS selectors for UI highlighting,
+  highlightElements?: string; // CSS selectors for UI highlighting }
   requirements?: string;
   tips?: string;
   actions?: TutorialAction;
-}
-}
-}
-export interface TutorialAction {
-  id: string;
+
+
+
+
+export interface TutorialAction { id: string;
   type: 'click' | 'hover' | 'input' | 'scroll' | 'wait';
   selector?: string;
   value?: string;
   message?: string;
-  completed: boolean;
-}
-}
-}
-export interface Tutorial {
-  id: string;
+  completed: boolean }
+
+
+
+export interface Tutorial { id: string;
   title: string;
   description: string;
   category: 'getting-started' | 'template-creation' | 'marketplace' | 'collaboration' | 'advanced';
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTime: number; // in minutes,
+  estimatedTime: number; // in minutes;
   prerequisites?: string;
   steps: TutorialStep;
-  completionRewards: {
+  completionRewards: { }
   xp: number;
   badge?: string;
   certificate?: string;
-}
+
+
 };
   tags: string;
   rating: number;
   completionCount: number;
   createdAt: Date;
   updatedAt: Date;
-}
-}
-export interface TutorialProgress {
-  tutorialId: string;
+
+
+export interface TutorialProgress { tutorialId: string;
   currentStepIndex: number;
   completed: boolean;
   startedAt: Date;
   completedAt?: Date;
-  timeSpent: number; // in seconds,
+  timeSpent: number; // in seconds }
   stepsCompleted: string;
   score?: number;
-}
-}
-}
-export interface TutorialPlayerProps {
-  tutorial?: Tutorial;
+
+
+
+
+export interface TutorialPlayerProps { tutorial?: Tutorial;
   isOpen: boolean;
   onClose: () => void;
   onComplete?: (tutorial: Tutorial, progress: TutorialProgress) => void;
@@ -112,21 +109,19 @@ export interface TutorialPlayerProps {
   autoPlay?: boolean;
   showTranscript?: boolean;
   enableInteractions?: boolean;
-  className?: string;
-}
-}
-export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
-  tutorial,
-  isOpen,
-  onClose,
-  onComplete,
-  onStepComplete,
-  autoPlay = false,
-  showTranscript = false,
-  enableInteractions = true,
+  className?: string }
+
+export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({ )
+  tutorial
+  isOpen
+  onClose
+  onComplete
+  onStepComplete
+  autoPlay = false
+  showTranscript = false
+  enableInteractions = true }
   className = ''
-}) => {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+}) => { const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -140,38 +135,33 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
   if (tutorial && isOpen) {
-  const newProgress: TutorialProgress = {,
-  tutorialId: tutorial.id,
-  currentStepIndex: 0,
-  completed: false,
-  startedAt: new Date(),
-  timeSpent: 0,
-  stepsCompleted: [],
+  const newProgress: TutorialProgress = {
+  tutorialId: tutorial.id
+  currentStepIndex: 0
+  completed: false
+  startedAt: new Date()
+  timeSpent: 0
+  stepsCompleted: [] }
 };
       setProgress(newProgress);
       setCurrentStepIndex(0);
       setTimeSpent(0);
       setCompletedActions(new Set());
   }, [tutorial, isOpen]);
-  useEffect(() => {
-    if (isOpen && isPlaying) {
+  useEffect(() => { if (isOpen && isPlaying) {
       timerRef.current = setInterval(() => {
-        setTimeSpent(prev => prev + 1);
-      }, 1000);
-    } else {
-      if (timerRef.current) {
+        setTimeSpent(prev => prev + 1) }, 1000);
+ else { if (timerRef.current) {
         clearInterval(timerRef.current);
     return () => {
       if (timerRef.current) {
-        clearInterval(timerRef.current);
-    };
+        clearInterval(timerRef.current) };
   }, [isOpen, isPlaying]);
   if (!tutorial) return null;
   const currentStep = tutorial.steps[currentStepIndex];
   const totalSteps = tutorial.steps.length;
   const progressPercentage = ((currentStepIndex + 1) / totalSteps) * 100;
-  const handleNext = () => {
-  if (currentStepIndex < totalSteps - 1) {
+  const handleNext = () => { if (currentStepIndex < totalSteps - 1) {
   const newIndex = currentStepIndex + 1;
   setCurrentStepIndex(newIndex);
   onStepComplete?.(currentStep.id, tutorial);
@@ -179,58 +169,45 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
   const updatedProgress = {
   ...progress,
   currentStepIndex: newIndex,
-  stepsCompleted: [...progress.stepsCompleted, currentStep.id],
+  stepsCompleted: [...progress.stepsCompleted, currentStep.id] }
   timeSpent
 };
         setProgress(updatedProgress);
-    } else {
-      handleComplete();
-  };
-  const handlePrevious = () => {
-    if (currentStepIndex > 0) {
-      setCurrentStepIndex(currentStepIndex - 1);
-  };
-  const handleComplete = () => {
-  if (progress) {
+ else { handleComplete() };
+  const handlePrevious = () => { if (currentStepIndex > 0) {
+      setCurrentStepIndex(currentStepIndex - 1) };
+  const handleComplete = () => { if (progress) {
   const completedProgress = {
   ...progress,
   completed: true,
   completedAt: new Date(),
   timeSpent,
-  score: Math.round((completedActions.size / getTotalActions()) * 100),
+  score: Math.round((completedActions.size / getTotalActions()) * 100) }
 };
       setProgress(completedProgress);
       onComplete?.(tutorial, completedProgress);
   };
-  const handleActionComplete = (actionId: string) => {
-    setCompletedActions(prev => new Set(prev).add(actionId));
-  };
-  const getTotalActions = () => {
-    return tutorial.steps.reduce((total, step) => {
-      return total + (step.actions?.length || 0);
-    }, 0);
+  const handleActionComplete = (actionId: string) => { setCompletedActions(prev => new Set(prev).add(actionId)) };
+  const getTotalActions = () => { return tutorial.steps.reduce((total, step) => {
+      return total + (step.actions?.length || 0) }, 0);
   };
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;}
   };
-  const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
+  const getDifficultyColor = (difficulty: string) => { switch (difficulty) {
   case 'beginner': return 'bg-green-100 text-green-800';
   case 'intermediate': return 'bg-yellow-100 text-yellow-800';
   case 'advanced': return 'bg-red-100 text-red-800';
-  default: return 'bg-gray-100 text-gray-800';
-};
-  const getCategoryIcon = (category: string) => {
-  switch (category) {
+  default: return 'bg-gray-100 text-gray-800' };
+  const getCategoryIcon = (category: string) => { switch (category) {
   case 'getting-started': return <BookOpen className="w-4 h-4" />;
   case 'template-creation': return <Target className="w-4 h-4" />;
   case 'marketplace': return <Download className="w-4 h-4" />;
   case 'collaboration': return <Users className="w-4 h-4" />;
   case 'advanced': return <Zap className="w-4 h-4" />;
-  default: return <BookOpen className="w-4 h-4" />;
-};
+  default: return <BookOpen className="w-4 h-4" /> };
   const renderStepContent = () => {
     switch (currentStep.type) {
     case 'introduction':
@@ -293,11 +270,11 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
               {currentStep.actions.map((action, index) => ()
                 <div
                   key={action.id}
-                  className={`flex items-center gap-3 p-3 rounded-lg border ${
+                  className={ `flex items-center gap-3 p-3 rounded-lg border ${
   completedActions.has(action.id)
   ? 'bg-green-50 border-green-200'
-  : 'bg-gray-50 border-gray-200',
-}`}
+  : 'bg-gray-50 border-gray-200' }
+`}
                 >
                   {completedActions.has(action.id) ? ()
                     <CheckCircle className="w-5 h-5 text-green-600" />
@@ -406,13 +383,13 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
       {tutorial.steps.map((step, index) => ()
         <div
           key={step.id}
-          className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
+          className={ `flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
   index === currentStepIndex
   ? 'bg-blue-100 text-blue-800'
-  : index < currentStepIndex,
+  : index < currentStepIndex
   ? 'bg-green-50 text-green-700'
-  : 'bg-gray-50 text-gray-600 hover:bg-gray-100',
-}`}
+  : 'bg-gray-50 text-gray-600 hover:bg-gray-100' }
+`}
           onClick={() => setCurrentStepIndex(index)}
         >
           {index < currentStepIndex ? ()
@@ -614,23 +591,21 @@ export const TutorialPlayer: React.FC<TutorialPlayerProps> = ({)
 
 // Tutorial Browser Component
 
-}
-export interface TutorialBrowserProps {
-  tutorials: Tutorial;
+
+export interface TutorialBrowserProps { tutorials: Tutorial;
   onSelectTutorial: (tutorial: Tutorial) => void;
-  onStartTutorial?: (tutorial: Tutorial) => void;
-}
+  onStartTutorial?: (tutorial: Tutorial) => void }
+
   userProgress?: { [tutorialId: string]: TutorialProgress };
   className?: string;
-}
-export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
-  tutorials,
-  onSelectTutorial,
-  onStartTutorial,
-  userProgress = {},
+
+export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({ )
+  tutorials
+  onSelectTutorial
+  onStartTutorial }
+  userProgress = {}
   className = ''
-}) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+}) => { const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const getFilteredTutorials = () => {
@@ -639,25 +614,20 @@ export const TutorialBrowser: React.FC<TutorialBrowserProps> = ({)
       const matchesDifficulty = selectedDifficulty === 'all' || tutorial.difficulty === selectedDifficulty;
       const matchesSearch = tutorial.title.toLowerCase().includes(searchTerm.toLowerCase()) ||;
                            tutorial.description.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesCategory && matchesDifficulty && matchesSearch;
-    });
+      return matchesCategory && matchesDifficulty && matchesSearch });
   };
-  const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
+  const getDifficultyColor = (difficulty: string) => { switch (difficulty) {
   case 'beginner': return 'bg-green-100 text-green-800';
   case 'intermediate': return 'bg-yellow-100 text-yellow-800';
   case 'advanced': return 'bg-red-100 text-red-800';
-  default: return 'bg-gray-100 text-gray-800';
-};
-  const getCategoryIcon = (category: string) => {
-  switch (category) {
+  default: return 'bg-gray-100 text-gray-800' };
+  const getCategoryIcon = (category: string) => { switch (category) {
   case 'getting-started': return <BookOpen className="w-4 h-4" />;
   case 'template-creation': return <Target className="w-4 h-4" />;
   case 'marketplace': return <Download className="w-4 h-4" />;
   case 'collaboration': return <Users className="w-4 h-4" />;
   case 'advanced': return <Zap className="w-4 h-4" />;
-  default: return <BookOpen className="w-4 h-4" />;
-};
+  default: return <BookOpen className="w-4 h-4" /> };
   return;
     <div className={`max-w-6xl mx-auto p-6 ${className}`}>}
       <div className="mb-6">

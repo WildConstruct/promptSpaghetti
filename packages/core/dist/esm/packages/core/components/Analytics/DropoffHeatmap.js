@@ -77,7 +77,7 @@ export const DropoffHeatmap = ({
                 funnelId: funnelDefinition.id,
                 startDate: timeRange.start,
                 endDate: timeRange.end,
-                metrics: [,
+                metrics: [
                     'drop_off_rate',
                     'exit_behavior',
                     'user_journey',
@@ -86,8 +86,9 @@ export const DropoffHeatmap = ({
                     'recovery_opportunities'
                 ],
                 groupBy: ['funnel_step', 'hour', 'user_segment'],
-                filters: [,
-                    ...segments.map(segment => ({}), field, 'userContext.segmentIds', operator, 'contains', value, segment.id)]
+                filters: [
+                    ...segments.map(segment => ({}), field, 'userContext.segmentIds', operator, 'contains', value, segment.id)
+                ]
             };
         }
         finally { }
@@ -263,25 +264,16 @@ colorScale: {
 const HeatmapLegend = ({ heatmapMode, colorScale }) => {
     if (!colorScale)
         return null;
-    const gradientStops = [];
-    {
-        offset: '0%', color;
-        '#10b981';
-    }
-    {
-        offset: '50%', color;
-        '#f59e0b';
-    }
-    {
-        offset: '100%', color;
-        '#ef4444';
-    }
-}; // Red (high drop-off)
-;
-return;
-_jsxs("div", { className: "heatmap-legend", children: [_jsxs("div", { className: "legend-title", children: [heatmapMode.replace('_', ' ').toUpperCase(), " Scale"] }), _jsxs("div", { className: "legend-gradient", children: [_jsxs("svg", { width: "200", height: "20", children: [_jsx("defs", { children: _jsxs("linearGradient", { id: "heatmap-gradient", x1: "0%", y1: "0%", x2: "100%", y2: "0%", children: [gradientStops.map(stop => ()
-                                        < stop, key = { stop, : .offset }, offset = { stop, : .offset }, stopColor = { stop, : .color } /  >
-                                    ), ")}"] }) }), _jsx("rect", { x: "0", y: "0", width: "200", height: "20", fill: "url(#heatmap-gradient)" })] }), _jsxs("div", { className: "legend-labels", children: [_jsx("span", { children: colorScale.min.toFixed(1) }), _jsx("span", { children: ((colorScale.min + colorScale.max) / 2).toFixed(1) }), _jsx("span", { children: colorScale.max.toFixed(1) })] })] })] });
+    const gradientStops = [
+        { offset: '0%', color: '#10b981' }, // Green (low drop-off)
+        { offset: '50%', color: '#f59e0b' }, // Yellow (medium drop-off)
+        { offset: '100%', color: '#ef4444' } // Red (high drop-off)
+    ];
+    return;
+    _jsxs("div", { className: "heatmap-legend", children: [_jsxs("div", { className: "legend-title", children: [heatmapMode.replace('_', ' ').toUpperCase(), " Scale"] }), _jsxs("div", { className: "legend-gradient", children: [_jsxs("svg", { width: "200", height: "20", children: [_jsx("defs", { children: _jsxs("linearGradient", { id: "heatmap-gradient", x1: "0%", y1: "0%", x2: "100%", y2: "0%", children: [gradientStops.map(stop => ()
+                                            < stop, key = { stop, : .offset }, offset = { stop, : .offset }, stopColor = { stop, : .color } /  >
+                                        ), ")}"] }) }), _jsx("rect", { x: "0", y: "0", width: "200", height: "20", fill: "url(#heatmap-gradient)" })] }), _jsxs("div", { className: "legend-labels", children: [_jsx("span", { children: colorScale.min.toFixed(1) }), _jsx("span", { children: ((colorScale.min + colorScale.max) / 2).toFixed(1) }), _jsx("span", { children: colorScale.max.toFixed(1) })] })] })] });
+};
 ;
 ;
 const StepDetailPanel = ({ stepId, analysisData, onClose }) => {
@@ -474,44 +466,47 @@ function getSeverityScore(severity) {
                     improvementPotential: 5 + (Math.random() * 15),
                 }, userBehaviorAnalysis, {
                     averageTimeOnStep: 60000 + (index * 30000),
-                    interactionPatterns: [,
+                    interactionPatterns: [
                         {
                             pattern: 'Multiple form attempts',
                             frequency: 45,
                             conversionImpact: -12,
                             description: 'Users attempt to fill form multiple times before abandoning'
-                        }],
-                    exitBehaviors: [,
+                        }
+                    ],
+                    exitBehaviors: [
                         {
                             behavior: 'Direct page close',
                             percentage: 35,
                             description: 'Users close tab/browser directly',
                             preventable: false
-                        }],
+                        }
+                    ],
                     recoveryAttempts: 2.3,
                 }, technicalAnalysis, {
                     pageLoadTime: 2000 + (index * 500),
                     errorRate: Math.random() * 5,
                     performanceScore: 70 + (Math.random() * 25),
-                    accessibilityIssues: [,
+                    accessibilityIssues: [
                         {
                             type: 'Missing alt text',
                             severity: 'medium',
                             description: 'Images missing alternative text',
                             impact: 'Screen reader accessibility',
                             fixComplexity: 'low'
-                        }],
+                        }
+                    ],
                     mobileCompatibility: 85 + (Math.random() * 10),
                 }, contentAnalysis, {
                     clarityScore: 60 + (Math.random() * 30),
                     complexityScore: 40 + (Math.random() * 40),
                     engagementScore: 70 + (Math.random() * 20),
                     completionRate: 80 - (index * 10),
-                    commonConfusionPoints: [,
+                    commonConfusionPoints: [
                         'Form field labels unclear',
                         'Next step instructions missing'
                     ],
-                    improvementSuggestions: [,
+                    improvementSuggestions: [
                         'Simplify form fields',
                         'Add progress indicators',
                         'Improve error messaging'
@@ -519,24 +514,26 @@ function getSeverityScore(severity) {
                 }, recoveryPotential, 60 + (Math.random() * 30))
             };
             ;
-            const rootCauseAnalysis = stepAnalysis.map(step => ({}), stepId, step.stepId, stepName, step.stepName, primaryCauses, [,
+            const rootCauseAnalysis = stepAnalysis.map(step => ({}), stepId, step.stepId, stepName, step.stepName, primaryCauses, [
                 {
                     category: 'user_experience',
                     subcategory: 'form_complexity',
                     description: 'Complex form fields causing user confusion and abandonment',
                     impact: 35,
                     confidence: 0.85,
-                    evidence: [,
+                    evidence: [
                         {
                             type: 'user_feedback',
                             description: '23% of exit surveys mention form difficulty',
                             strength: 'strong',
                             source: 'Exit survey analysis',
                             timestamp: Date.now() - 86400000
-                        }],
+                        }
+                    ],
                     mitigationComplexity: 'medium',
                     expectedImprovement: 15
-                }], contributingFactors, [,
+                }
+            ], contributingFactors, [
                 {
                     factor: 'Page load time',
                     weight: 0.3,
@@ -544,20 +541,21 @@ function getSeverityScore(severity) {
                     measurable: true,
                     currentValue: step.technicalAnalysis.pageLoadTime,
                     targetValue: 1500
-                }], confidence, 0.8, evidenceQuality, 'high', recommendations, [,
+                }
+            ], confidence, 0.8, evidenceQuality, 'high', recommendations, [
                 {
                     title: 'Simplify form fields',
                     description: 'Reduce required fields and improve field labels',
                     priority: 'high',
                     effort: 'medium',
                     expectedImpact: 15,
-                    implementationSteps: [,
+                    implementationSteps: [
                         'Audit current form fields',
                         'Identify non-essential fields',
                         'Redesign form layout',
                         'Test with users'
                     ],
-                    successMetrics: [,
+                    successMetrics: [
                         'Form completion rate increase',
                         'Time to complete reduction',
                         'User satisfaction score improvement'
@@ -567,7 +565,7 @@ function getSeverityScore(severity) {
     }
     ;
     const recoveryOpportunities = stepAnalysis.map(step => ({}), stepId, step.stepId, stepName, step.stepName, recoveryPotential, step.recoveryPotential, recoveryValue, step.dropOffCount * 25, // $25 per recovered user,
-    quickWins, [,
+    quickWins, [
         {
             title: 'Improve error messaging',
             description: 'Provide clearer, more helpful error messages',
@@ -575,7 +573,8 @@ function getSeverityScore(severity) {
             expectedImpact: 8,
             implementationTime: 16,
             requirements: ['UX review', 'Copy updates', 'Frontend changes']
-        }], strategicInitiatives, [,
+        }
+    ], strategicInitiatives, [
         {
             title: 'Redesign step flow',
             description: 'Complete redesign of the step user experience',
@@ -584,7 +583,8 @@ function getSeverityScore(severity) {
             implementationTime: 14,
             dependencies: ['User research', 'Design system updates'],
             successMetrics: ['Conversion rate improvement', 'User satisfaction']
-        }], timeToImpact, 7, confidenceLevel, 0.75);
+        }
+    ], timeToImpact, 7, confidenceLevel, 0.75);
 }
 ;
 const overallInsights = [
@@ -596,7 +596,7 @@ const overallInsights = [
         affectedSteps: ['step-2'],
         impact: 35,
         confidence: 0.9,
-        recommendations: [,
+        recommendations: [
             'Implement progressive disclosure for template options',
             'Add filtering and search capabilities',
             'Reduce cognitive load with better categorization'

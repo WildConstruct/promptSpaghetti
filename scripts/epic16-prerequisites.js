@@ -54,7 +54,7 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.categories = nextArg.split(',').map(c => c.trim());
         i++;
-      }
+
       break;
 
     case '--skip':
@@ -62,7 +62,7 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.skipChecks = nextArg.split(',').map(c => c.trim());
         i++;
-      }
+
       break;
 
     case '--only':
@@ -70,7 +70,7 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.onlyChecks = nextArg.split(',').map(c => c.trim());
         i++;
-      }
+
       break;
 
     case '--auto-fix':
@@ -83,14 +83,14 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.timeout = parseInt(nextArg, 10) * 1000; // Convert to milliseconds
         i++;
-      }
+
       break;
 
     case '--concurrency':
       if (nextArg && !nextArg.startsWith('--')) {
         options.concurrency = parseInt(nextArg, 10);
         i++;
-      }
+
       break;
 
     case '--format':
@@ -98,7 +98,7 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.format = nextArg;
         i++;
-      }
+
       break;
 
     case '--output':
@@ -106,7 +106,7 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.outputFile = nextArg;
         i++;
-      }
+
       break;
 
     case '--verbose':
@@ -122,7 +122,7 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.configFile = nextArg;
         i++;
-      }
+
       break;
 
     case '--env':
@@ -130,19 +130,19 @@ function parseArguments(): any {
       if (nextArg && !nextArg.startsWith('--')) {
         options.environment = nextArg;
         i++;
-      }
+
       break;
 
     default:
       if (arg.startsWith('--')) {
         console.warn(`⚠️  Unknown option: ${arg}`);
-      }
+
       break;
-    }
-  }
+
+
 
   return options;
-}
+
 
 // =============================================================================
 // Help Documentation
@@ -221,7 +221,7 @@ For more information, see: docs/epic16details.md
 `;
   
   console.log(helpText);
-}
+
 
 // =============================================================================
 // Configuration Management
@@ -234,16 +234,16 @@ function loadEnvironmentDefaults(): any {
   // Auto-detect environment based on NODE_ENV
   if (process.env.NODE_ENV) {
     defaults.environment = process.env.NODE_ENV;
-  }
+
   
   // Auto-detect verbose mode in CI
   if (process.env.CI || process.env.GITHUB_ACTIONS) {
     defaults.verbose = true;
     defaults.colors = false;
-  }
+
   
   return defaults;
-}
+
 
 function validateOptions(options: any): void {
   const errors = [];
@@ -252,39 +252,39 @@ function validateOptions(options: any): void {
   const validFormats = ['console', 'json', 'html', 'markdown'];
   if (!validFormats.includes(options.format)) {
     errors.push(`Invalid format: ${options.format}. Must be one of: ${validFormats.join(', ')}`);
-  }
+
   
   // Validate environment
   const validEnvironments = ['development', 'staging', 'production'];
   if (!validEnvironments.includes(options.environment)) {
     errors.push(`Invalid environment: ${options.environment}. Must be one of: ${validEnvironments.join(', ')}`);
-  }
+
   
   // Validate timeout
   if (options.timeout < 1000 || options.timeout > 300000) {
     errors.push('Timeout must be between 1 and 300 seconds');
-  }
+
   
   // Validate concurrency
   if (options.concurrency < 1 || options.concurrency > 20) {
     errors.push('Concurrency must be between 1 and 20');
-  }
+
   
   // Validate config file exists
   if (options.configFile && !fs.existsSync(options.configFile)) {
     errors.push(`Configuration file not found: ${options.configFile}`);
-  }
+
   
   // Validate output file directory exists
   if (options.outputFile) {
     const outputDir = path.dirname(options.outputFile);
     if (!fs.existsSync(outputDir)) {
       errors.push(`Output directory does not exist: ${outputDir}`);
-    }
-  }
+
+
   
   return errors;
-}
+
 
 // =============================================================================
 // Main Execution
@@ -299,13 +299,13 @@ async function main(): Promise<void> {
     if (rawOptions.help) {
       displayHelp();
       process.exit(0);
-    }
+
     
     // Handle health check
     if (rawOptions.healthCheck) {
       const exitCode = await checkEpic16Health();
       process.exit(exitCode);
-    }
+
     
     // Load environment defaults
     const envDefaults = loadEnvironmentDefaults();
@@ -317,7 +317,7 @@ async function main(): Promise<void> {
       console.error('❌ Configuration errors:');
       validationErrors.forEach(error => console.error(`   ${error}`));
       process.exit(1);
-    }
+
     
     // Create and run prerequisite runner
     console.log('🚀 Starting Epic 16 prerequisite checks...');
@@ -332,16 +332,16 @@ async function main(): Promise<void> {
       
       if (options.categories.length > 0) {
         console.log(`   Categories: ${options.categories.join(', ')}`);
-      }
+
       
       if (options.skipChecks.length > 0) {
         console.log(`   Skipping: ${options.skipChecks.join(', ')}`);
-      }
+
       
       if (options.onlyChecks.length > 0) {
         console.log(`   Only: ${options.onlyChecks.join(', ')}`);
-      }
-    }
+
+
     
     const runner = createEpic16PrerequisiteRunner(options);
     const result = await runner.run();
@@ -350,28 +350,27 @@ async function main(): Promise<void> {
     if (result.success) {
       console.log('\n🎉 All Epic 16 prerequisites satisfied!');
       process.exit(0);
-    } else {
+ else {
       const criticalFailures = result.report.overall.criticalFailures;
       if (criticalFailures > 0) {
         console.log(`\n❌ ${criticalFailures} critical prerequisite(s) failed. Epic 16 deployment is blocked.`);
         process.exit(2);
-      } else {
+ else {
         console.log('\n⚠️  Some prerequisites failed, but no critical issues detected.');
         process.exit(1);
-      }
-    }
-    
-  } catch (error) {
+
+
+ catch (error) {
     console.error(`\n💥 Unexpected error: ${error.message}`);
     
     if (process.env.DEBUG || rawOptions?.verbose) {
       console.error('\nStack trace:');
       console.error(error.stack);
-    }
+
     
     process.exit(3);
-  }
-}
+
+
 
 // =============================================================================
 // Package.json Integration Helper
@@ -386,7 +385,7 @@ if (require.main === module) {
     console.error(`Fatal error: ${error.message}`);
     process.exit(3);
   });
-} else {
+ else {
   // Required as module
   module.exports = {
     runPrerequisiteCheck: main,
@@ -394,7 +393,7 @@ if (require.main === module) {
     displayHelp,
     validateOptions
   };
-}
+
 
 // Handle process signals gracefully
 process.on('SIGINT', () => {

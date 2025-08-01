@@ -30,7 +30,7 @@ import {
   DEFAULT_REVISION_REQUEST_CONFIG,
   EvidenceAnnotation,
   ReviewerPerformance
-} from '../../../../packages/core/types/RevisionRequestTypes';
+ from '../../../../packages/core/types/RevisionRequestTypes';
 
 export class RevisionRequestService {
   private config: RevisionRequestConfig;
@@ -40,7 +40,7 @@ export class RevisionRequestService {
     config?: Partial<RevisionRequestConfig>
   ) {
     this.config = { ...DEFAULT_REVISION_REQUEST_CONFIG, ...config };
-  }
+
 
   // ============================================================================
   // Core CRUD Operations
@@ -88,10 +88,10 @@ export class RevisionRequestService {
     // Auto-assign reviewer if enabled
     if (this.config.enableAutoAssignment) {
       await this.autoAssignReviewer(revisionRequest);
-    }
+
 
     return revisionRequest;
-  }
+
 
   async getRevisionRequest(requestId: string): Promise<RevisionRequest | null> {
 
@@ -104,10 +104,10 @@ export class RevisionRequestService {
     
     if (result.rows.length === 0) {
       return null;
-    }
+
 
     return this.mapRowToRevisionRequest(result.rows[0]);
-  }
+
 
   async updateRevisionRequest(
     requestId: string,
@@ -126,12 +126,12 @@ export class RevisionRequestService {
         const dbField = this.camelToSnakeCase(key);
         updateFields.push(`${dbField} = $${paramIndex++}`);
         values.push(value);
-      }
+
     });
 
     if (updateFields.length === 0) {
       throw new Error('No valid fields to update');
-    }
+
 
     values.push(requestId);
     const query = `
@@ -145,7 +145,7 @@ export class RevisionRequestService {
     
     if (result.rows.length === 0) {
       throw new Error(`Revision request ${requestId} not found`);
-    }
+
 
     // Create timeline event for the update
     await this.createTimelineEvent(
@@ -157,7 +157,7 @@ export class RevisionRequestService {
     );
 
     return this.mapRowToRevisionRequest(result.rows[0]);
-  }
+
 
   async deleteRevisionRequest(requestId: string, actorId: string, actorName: string): Promise<void> {
 
@@ -169,7 +169,7 @@ export class RevisionRequestService {
       actorName,
       'Request cancelled and removed'
     );
-  }
+
 
   // ============================================================================
   // Status and Workflow Management
@@ -194,7 +194,7 @@ export class RevisionRequestService {
     };
 
     return this.updateRevisionRequest(requestId, updates, actorId, actorName);
-  }
+
 
   async assignReviewer(
     requestId: string,
@@ -220,7 +220,7 @@ export class RevisionRequestService {
     );
 
     return this.updateRevisionRequest(requestId, updates, actorId, actorName);
-  }
+
 
   async submitRevisionRequest(
     requestId: string,
@@ -235,7 +235,7 @@ export class RevisionRequestService {
       actorName,
       'Request submitted for review'
     );
-  }
+
 
   async reviewRevisionRequest(
     requestId: string,
@@ -266,7 +266,7 @@ export class RevisionRequestService {
       break;
     default:
       throw new Error(`Invalid review decision: ${reviewData.decision}`);
-    }
+
 
     const updates = {
       status: newStatus,
@@ -275,7 +275,7 @@ export class RevisionRequestService {
       approvalNotes: reviewData.approvalNotes,
       ...(newStatus === RevisionRequestStatus.APPROVED || newStatus === RevisionRequestStatus.REJECTED ? {
         completedAt: new Date()
-      } : {})
+ : {})
     };
 
     await this.createTimelineEvent(
@@ -287,7 +287,7 @@ export class RevisionRequestService {
     );
 
     return this.updateRevisionRequest(requestId, updates, reviewerId, reviewerName);
-  }
+
 
   // ============================================================================
   // Search and Filtering
@@ -300,7 +300,7 @@ export class RevisionRequestService {
       pageSize = 50,
       sortBy = 'created_at',
       sortOrder = 'desc'
-    } = query;
+ = query;
 
     const offset = (page - 1) * pageSize;
 
@@ -336,11 +336,11 @@ export class RevisionRequestService {
         pageSize,
         total: parseInt(total),
         totalPages: Math.ceil(total / pageSize)
-  }
+
       aggregations,
       filters: this.buildAppliedFilters(query)
     };
-  }
+
 
   async getRevisionRequestsByRequester(requesterId: string): Promise<RevisionRequest[]> {
 
@@ -352,7 +352,7 @@ export class RevisionRequestService {
 
     const result = await this.db.query(query, [requesterId]);
     return result.rows.map(row => this.mapRowToRevisionRequest(row));
-  }
+
 
   async getRevisionRequestsByReviewer(reviewerId: string): Promise<RevisionRequest[]> {
 
@@ -364,7 +364,7 @@ export class RevisionRequestService {
 
     const result = await this.db.query(query, [reviewerId]);
     return result.rows.map(row => this.mapRowToRevisionRequest(row));
-  }
+
 
   async getPendingRevisionRequests(): Promise<RevisionRequest[]> {
 
@@ -381,7 +381,7 @@ export class RevisionRequestService {
     ]);
 
     return result.rows.map(row => this.mapRowToRevisionRequest(row));
-  }
+
 
   // ============================================================================
   // Evidence Management
@@ -424,7 +424,7 @@ export class RevisionRequestService {
     );
 
     return this.mapRowToRevisionEvidence(result.rows[0]);
-  }
+
 
   async getRevisionEvidence(requestId: string): Promise<RevisionEvidence[]> {
 
@@ -436,7 +436,7 @@ export class RevisionRequestService {
 
     const result = await this.db.query(query, [requestId]);
     return result.rows.map(row => this.mapRowToRevisionEvidence(row));
-  }
+
 
   async removeEvidence(evidenceId: string, actorId: string, actorName: string): Promise<void> {
 
@@ -446,7 +446,7 @@ export class RevisionRequestService {
     
     if (evidenceResult.rows.length === 0) {
       throw new Error(`Evidence ${evidenceId} not found`);
-    }
+
 
     const evidence = evidenceResult.rows[0];
 
@@ -462,7 +462,7 @@ export class RevisionRequestService {
       actorName,
       `Evidence removed: ${evidence.title}`
     );
-  }
+
 
   // ============================================================================
   // Annotations Management
@@ -494,7 +494,7 @@ export class RevisionRequestService {
     ]);
 
     return this.mapRowToEvidenceAnnotation(result.rows[0]);
-  }
+
 
   async getEvidenceAnnotations(evidenceId: string): Promise<EvidenceAnnotation[]> {
 
@@ -506,7 +506,7 @@ export class RevisionRequestService {
 
     const result = await this.db.query(query, [evidenceId]);
     return result.rows.map(row => this.mapRowToEvidenceAnnotation(row));
-  }
+
 
   async resolveAnnotation(
     annotationId: string,
@@ -524,10 +524,10 @@ export class RevisionRequestService {
     
     if (result.rows.length === 0) {
       throw new Error(`Annotation ${annotationId} not found`);
-    }
+
 
     return this.mapRowToEvidenceAnnotation(result.rows[0]);
-  }
+
 
   // ============================================================================
   // Comments and Discussions
@@ -568,7 +568,7 @@ export class RevisionRequestService {
     );
 
     return this.mapRowToRevisionComment(result.rows[0]);
-  }
+
 
   async getComments(requestId: string, includeInternal: boolean = false): Promise<RevisionComment[]> {
 
@@ -581,7 +581,7 @@ export class RevisionRequestService {
 
     const result = await this.db.query(query, [requestId]);
     return result.rows.map(row => this.mapRowToRevisionComment(row));
-  }
+
 
   // ============================================================================
   // Timeline Management
@@ -597,7 +597,7 @@ export class RevisionRequestService {
 
     const result = await this.db.query(query, [requestId]);
     return result.rows.map(row => this.mapRowToRevisionTimelineEvent(row));
-  }
+
 
   private async createTimelineEvent(
     requestId: string,
@@ -626,7 +626,7 @@ export class RevisionRequestService {
     ]);
 
     return this.mapRowToRevisionTimelineEvent(result.rows[0]);
-  }
+
 
   // ============================================================================
   // Analytics and Reporting
@@ -648,14 +648,14 @@ export class RevisionRequestService {
         startDate,
         endDate,
         timeRange: 'custom'
-  }
+
       overview,
       performance,
       trends,
       insights: await this.generateInsights(startDate, endDate),
       recommendations: await this.generateRecommendations(startDate, endDate)
     };
-  }
+
 
   async getReviewerPerformance(reviewerId?: string): Promise<ReviewerPerformance[]> {
 
@@ -690,7 +690,7 @@ export class RevisionRequestService {
       satisfactionRating: 4.2, // Would come from separate satisfaction tracking
       workloadBalance: 0.8 // Would be calculated based on current assignments
     }));
-  }
+
 
   // ============================================================================
   // Export Functionality
@@ -713,8 +713,8 @@ export class RevisionRequestService {
       return this.generateExcel(searchResults.requests, request.fields);
     default:
       throw new Error(`Unsupported export format: ${request.format}`);
-    }
-  }
+
+
 
   // ============================================================================
   // Auto-assignment and Workflow Automation
@@ -724,7 +724,7 @@ export class RevisionRequestService {
 
     if (!this.config.enableAutoAssignment) {
       return;
-    }
+
 
     const assignmentQuery = `
       SELECT reviewer_id, reviewer_name, skill_level, workload_capacity
@@ -753,8 +753,8 @@ export class RevisionRequestService {
         'system',
         'Auto-assignment System'
       );
-    }
-  }
+
+
 
   private calculateUrgencyScore(priority: RevisionRequestPriority, dueDate?: Date): number {
     let baseScore = 0;
@@ -765,17 +765,17 @@ export class RevisionRequestService {
     case RevisionRequestPriority.HIGH: baseScore = 60; break;
     case RevisionRequestPriority.MEDIUM: baseScore = 40; break;
     case RevisionRequestPriority.LOW: baseScore = 20; break;
-    }
+
 
     if (dueDate) {
       const daysUntilDue = (dueDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24);
       if (daysUntilDue < 1) baseScore += 20;
       else if (daysUntilDue < 3) baseScore += 10;
       else if (daysUntilDue < 7) baseScore += 5;
-    }
+
 
     return Math.min(100, Math.max(0, baseScore));
-  }
+
 
   private calculateComplexityScore(type: RevisionRequestType, estimatedHours?: number): number {
     let baseScore = 0;
@@ -788,17 +788,17 @@ export class RevisionRequestService {
     case RevisionRequestType.FEATURE_ENHANCEMENT: baseScore = 70; break;
     case RevisionRequestType.SECURITY_UPDATE: baseScore = 80; break;
     case RevisionRequestType.COMPLIANCE_UPDATE: baseScore = 90; break;
-    }
+
 
     if (estimatedHours) {
       if (estimatedHours > 40) baseScore += 30;
       else if (estimatedHours > 20) baseScore += 20;
       else if (estimatedHours > 10) baseScore += 10;
       else if (estimatedHours > 5) baseScore += 5;
-    }
+
 
     return Math.min(100, Math.max(0, baseScore));
-  }
+
 
   // ============================================================================
   // Helper Methods and Data Mapping
@@ -812,56 +812,56 @@ export class RevisionRequestService {
     if (query.status && query.status.length > 0) {
       conditions.push(`rr.status = ANY($${paramIndex++})`);
       params.push(query.status);
-    }
+
 
     if (query.priority && query.priority.length > 0) {
       conditions.push(`rr.priority = ANY($${paramIndex++})`);
       params.push(query.priority);
-    }
+
 
     if (query.contentType && query.contentType.length > 0) {
       conditions.push(`rr.content_type = ANY($${paramIndex++})`);
       params.push(query.contentType);
-    }
+
 
     if (query.type && query.type.length > 0) {
       conditions.push(`rr.type = ANY($${paramIndex++})`);
       params.push(query.type);
-    }
+
 
     if (query.requesterId) {
       conditions.push(`rr.requester_id = $${paramIndex++}`);
       params.push(query.requesterId);
-    }
+
 
     if (query.reviewerId) {
       conditions.push(`rr.reviewer_id = $${paramIndex++}`);
       params.push(query.reviewerId);
-    }
+
 
     if (query.unassigned) {
       conditions.push('rr.reviewer_id IS NULL');
-    }
+
 
     if (query.dateRange) {
       conditions.push(`rr.created_at BETWEEN $${paramIndex++} AND $${paramIndex++}`);
       params.push(query.dateRange.start, query.dateRange.end);
-    }
+
 
     if (query.dueDateRange) {
       conditions.push(`rr.due_date BETWEEN $${paramIndex++} AND $${paramIndex++}`);
       params.push(query.dueDateRange.start, query.dueDateRange.end);
-    }
+
 
     if (query.contentId) {
       conditions.push(`rr.content_id = $${paramIndex++}`);
       params.push(query.contentId);
-    }
+
 
     if (query.tags && query.tags.length > 0) {
       conditions.push(`rr.tags && $${paramIndex++}`);
       params.push(query.tags);
-    }
+
 
     if (query.search) {
       conditions.push(`(
@@ -872,11 +872,11 @@ export class RevisionRequestService {
       )`);
       params.push(`%${query.search}%`);
       paramIndex++;
-    }
+
 
     const whereClause = conditions.length > 1 ? `WHERE ${conditions.join(' AND ')}` : '';
     return { whereClause, params };
-  }
+
 
   private buildOrderClause(sortBy: string, sortOrder: string): string {
     const columnMap: Record<string, string> = {
@@ -895,7 +895,7 @@ export class RevisionRequestService {
     const order = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
     
     return `ORDER BY ${column} ${order}`;
-  }
+
 
   private async getRevisionRequestAggregations(query: RevisionRequestSearchQuery): Promise<RevisionRequestAggregations> {
 
@@ -941,12 +941,12 @@ export class RevisionRequestService {
         overdue: 0,
         dueToday: 0,
         dueThisWeek: 0
-  }
+
       averageCompletionTime: 24,
       topRequesters: [],
       topReviewers: []
     };
-  }
+
 
   private buildAppliedFilters(query: RevisionRequestSearchQuery): unknown {
     const filters = [];
@@ -958,7 +958,7 @@ export class RevisionRequestService {
         value: query.status,
         displayName: `Status: ${query.status.join(', ')}`
       });
-    }
+
 
     if (query.priority && query.priority.length > 0) {
       filters.push({
@@ -967,10 +967,10 @@ export class RevisionRequestService {
         value: query.priority,
         displayName: `Priority: ${query.priority.join(', ')}`
       });
-    }
+
 
     return { count: filters.length, filters };
-  }
+
 
   private mapRowToRevisionRequest(row: unknown): RevisionRequest {
     return {
@@ -1010,7 +1010,7 @@ export class RevisionRequestService {
       complexityScore: row.complexity_score,
       impactScore: row.impact_score
     };
-  }
+
 
   private mapRowToRevisionEvidence(row: unknown): RevisionEvidence {
     return {
@@ -1028,7 +1028,7 @@ export class RevisionRequestService {
       annotations: [], // Would be loaded separately
       metadata: row.metadata || {}
     };
-  }
+
 
   private mapRowToEvidenceAnnotation(row: unknown): EvidenceAnnotation {
     return {
@@ -1040,7 +1040,7 @@ export class RevisionRequestService {
         y: row.coordinates_y,
         width: row.coordinates_width,
         height: row.coordinates_height
-  }
+
       content: row.content,
       createdBy: row.created_by,
       createdAt: new Date(row.created_at),
@@ -1048,7 +1048,7 @@ export class RevisionRequestService {
       resolvedBy: row.resolved_by,
       resolvedAt: row.resolved_at ? new Date(row.resolved_at) : undefined
     };
-  }
+
 
   private mapRowToRevisionTimelineEvent(row: Event): RevisionTimelineEvent {
     return {
@@ -1063,7 +1063,7 @@ export class RevisionRequestService {
       timestamp: new Date(row.timestamp),
       metadata: row.metadata || {}
     };
-  }
+
 
   private mapRowToRevisionComment(row: unknown): RevisionComment {
     return {
@@ -1080,11 +1080,11 @@ export class RevisionRequestService {
       mentions: row.mentions || [],
       attachments: row.attachments || []
     };
-  }
+
 
   private camelToSnakeCase(str: string): string {
     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-  }
+
 
   private generateCSV(requests: RevisionRequest[], fields?: string[]): string {
     const headers = fields || ['id', 'title', 'status', 'priority', 'requester_name', 'created_at'];
@@ -1096,10 +1096,10 @@ export class RevisionRequestService {
         return typeof value === 'string' ? `"${value}"` : String(value || '');
       });
       csvRows.push(row.join(','));
-    }
+
     
     return csvRows.join('\n');
-  }
+
 
   private generateJSON(requests: RevisionRequest[], _____request: RevisionRequestExportRequest): string {
     return JSON.stringify({
@@ -1107,11 +1107,11 @@ export class RevisionRequestService {
       total_records: requests.length,
       revision_requests: requests
     }, null, 2);
-  }
+
 
   private generateExcel(_____requests: RevisionRequest[], fields?: string[]): string {
     throw new Error('Excel export not yet implemented');
-  }
+
 
   // Placeholder methods for analytics
   private async getAnalyticsOverview(_____startDate: Date, _____endDate: Date): Promise<unknown> {
@@ -1128,9 +1128,9 @@ export class RevisionRequestService {
         requestGrowth: 0,
         completionGrowth: 0,
         averageTimeImprovement: 0
-      }
+
     };
-  }
+
 
   private async getAnalyticsPerformance(_____startDate: Date, _____endDate: Date): Promise<unknown> {
 
@@ -1142,9 +1142,9 @@ export class RevisionRequestService {
         onTimeCompletionRate: 0,
         averageResponseTime: 0,
         escalationRate: 0
-      }
+
     };
-  }
+
 
   private async getAnalyticsTrends(_____startDate: Date, _____endDate: Date): Promise<unknown> {
 
@@ -1153,15 +1153,14 @@ export class RevisionRequestService {
       completionTrends: [],
       contentTypeTrends: []
     };
-  }
+
 
   private async generateInsights(_____startDate: Date, _____endDate: Date): Promise<any[]> {
 
     return [];
-  }
+
 
   private async generateRecommendations(_____startDate: Date, _____endDate: Date): Promise<any[]> {
 
     return [];
-  }
-}
+

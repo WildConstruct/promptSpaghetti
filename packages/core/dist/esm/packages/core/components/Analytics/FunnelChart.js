@@ -35,7 +35,12 @@ benchmark: {
     industry: string;
 }
 ;
-segments: Array;
+segments: Array < {
+    segmentId: string,
+    segmentName: string,
+    conversionRate: number,
+    performance: 'above_average' | 'below_average' | 'average',
+} > ;
  > ;
 insights: string;
 ;
@@ -93,7 +98,7 @@ const loadChartData = useCallback(async () => {
             funnelId: funnelDefinition.id,
             startDate: timeRange.start,
             endDate: timeRange.end,
-            metrics: [,
+            metrics: [
                 'conversion_rate',
                 'user_count',
                 'revenue',
@@ -102,8 +107,9 @@ const loadChartData = useCallback(async () => {
                 'step_completion_rate'
             ],
             groupBy: ['funnel_step', 'date'],
-            filters: [,
-                ...segments.map(segment => ({}), field, 'userContext.segmentIds', operator, 'contains', value, segment.id)]
+            filters: [
+                ...segments.map(segment => ({}), field, 'userContext.segmentIds', operator, 'contains', value, segment.id)
+            ]
         };
     }
     finally { }
@@ -495,7 +501,7 @@ function generateStepInsights(step) {
                 };
                 const dropoffAnalysis = steps
                     .filter(step => step.dropOffRate > 10)
-                    .map(step => ({}), stepId, step.stepId, stepName, step.stepName, dropOffCount, step.dropOffCount, dropOffRate, step.dropOffRate, dropOffReasons, [,
+                    .map(step => ({}), stepId, step.stepId, stepName, step.stepName, dropOffCount, step.dropOffCount, dropOffRate, step.dropOffRate, dropOffReasons, [
                     {
                         reason: 'Complex form fields',
                         category: 'user_experience',
@@ -509,7 +515,8 @@ function generateStepInsights(step) {
                         percentage: 25,
                         count: Math.floor(step.dropOffCount * 0.25),
                         confidence: 0.78
-                    }], recoveryOpportunity, 45, recommendedActions, [,
+                    }
+                ], recoveryOpportunity, 45, recommendedActions, [
                     'Simplify form fields and reduce required information',
                     'Optimize page loading performance',
                     'Add progress indicators to improve user experience'
@@ -518,8 +525,9 @@ function generateStepInsights(step) {
             ;
             const segmentComparisons = segments.map(segment => ({}), segmentId, segment.id, segmentName, segment.name, overallConversionRate, segment.performance.averageConversionRate, stepPerformance, steps.map(step => ({}), stepId, step.stepId, conversionRate, step.conversionRate * (0.8 + Math.random() * 0.4), relativePerformance, (Math.random() - 0.5) * 40));
         }
-        insights: [,
-            `${segment.name} shows ${Math.random() > 0.5 ? 'above' : 'below'} average performance`];
+        insights: [
+            `${segment.name} shows ${Math.random() > 0.5 ? 'above' : 'below'} average performance`
+        ];
     }
 }
 `Strongest performance in step ${steps[Math.floor(Math.random() * steps.length)].stepName}`;

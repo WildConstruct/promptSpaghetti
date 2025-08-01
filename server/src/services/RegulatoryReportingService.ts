@@ -5,8 +5,8 @@
 import { DatabaseService } from '../database/DatabaseService';
 import { AuditService } from '../auth/services/AuditService';
 
-}
-}
+
+
 export interface RegulatoryReport {
   reportId: string;
   regulation: ComplianceRegulation;
@@ -18,9 +18,10 @@ export interface RegulatoryReport {
   summary: ReportSummary;
   sections: ReportSection[];
   metadata: ReportMetadata;
-}
-}
-}
+
+
+
+
 
 export enum ComplianceRegulation {
   GDPR = 'GDPR',
@@ -29,7 +30,7 @@ export enum ComplianceRegulation {
   SOX = 'SOX',
   HIPAA = 'HIPAA',
   PCI_DSS = 'PCI_DSS'
-}
+
 
 export enum ReportType {
   COMPLIANCE_STATUS = 'COMPLIANCE_STATUS',
@@ -38,10 +39,10 @@ export enum ReportType {
   BREACH_REPORT = 'BREACH_REPORT',
   AUDIT_TRAIL = 'AUDIT_TRAIL',
   PRIVACY_IMPACT = 'PRIVACY_IMPACT'
-}
 
-}
-}
+
+
+
 export interface ReportSummary {
   totalDataSubjects: number;
   totalConsentRecords: number;
@@ -49,72 +50,78 @@ export interface ReportSummary {
   complianceScore: number;
   keyFindings: string[];
   recommendations: string[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportSection {
   sectionId: string;
   title: string;
   data: ReportData[];
   charts?: ChartData[];
   compliance: SectionCompliance;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportData {
   category: string;
   metrics: Record<string, any>;
   details: unknown[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ChartData {
   type: 'bar' | 'line' | 'pie' | 'table';
   title: string;
   data: Record<string, unknown>[];
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface SectionCompliance {
   status: ComplianceStatus;
   score: number;
   issues: ComplianceIssue[];
-}
-}
-}
+
+
+
+
 
 export enum ComplianceStatus {
   COMPLIANT = 'COMPLIANT',
   NON_COMPLIANT = 'NON_COMPLIANT',
   PARTIALLY_COMPLIANT = 'PARTIALLY_COMPLIANT',
   UNDER_REVIEW = 'UNDER_REVIEW'
-}
 
-}
-}
+
+
+
 export interface ComplianceIssue {
   severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   description: string;
   recommendation: string;
   dueDate?: Date;
-}
-}
-}
 
-}
-}
+
+
+
+
+
+
 export interface ReportMetadata {
   version: string;
   dataSource: string;
@@ -122,9 +129,10 @@ export interface ReportMetadata {
   nextReviewDate: Date;
   approvalRequired: boolean;
   confidentiality: 'PUBLIC' | 'INTERNAL' | 'CONFIDENTIAL' | 'RESTRICTED';
-}
-}
-}
+
+
+
+
 
 export class RegulatoryReportingService {
   private db: DatabaseService;
@@ -133,7 +141,7 @@ export class RegulatoryReportingService {
   constructor(db: DatabaseService, auditService: AuditService) {
     this.db = db;
     this.auditService = auditService;
-  }
+
 
   async generateReport(
     regulation: ComplianceRegulation,
@@ -165,14 +173,14 @@ export class RegulatoryReportingService {
         nextReviewDate: this.calculateNextReviewDate(regulation),
         approvalRequired: this.requiresApproval(regulation, reportType),
         confidentiality: 'CONFIDENTIAL'
-      }
+
     };
 
     await this.saveReport(report);
     await this.logReportGeneration(report);
 
     return report;
-  }
+
 
   private async generateReportSummary(
     regulation: ComplianceRegulation,
@@ -199,7 +207,7 @@ export class RegulatoryReportingService {
       keyFindings,
       recommendations
     };
-  }
+
 
   private async generateReportSections(
     regulation: ComplianceRegulation,
@@ -220,10 +228,10 @@ export class RegulatoryReportingService {
     case ComplianceRegulation.HIPAA:
       sections.push(...await this.generateHIPAASections(reportType, periodStart, periodEnd));
       break;
-    }
+
 
     return sections;
-  }
+
 
   private async generateGDPRSections(
     reportType: ReportType,
@@ -245,9 +253,9 @@ export class RegulatoryReportingService {
           validConsents: consentData.valid,
           expiredConsents: consentData.expired,
           withdrawnConsents: consentData.withdrawn
-  }
+
         details: consentData.details
-      }],
+],
       compliance: await this.assessGDPRConsentCompliance(consentData)
     });
 
@@ -263,14 +271,14 @@ export class RegulatoryReportingService {
           deletionRequests: rightsData.deletion,
           portabilityRequests: rightsData.portability,
           averageResponseTime: rightsData.avgResponseTime
-  }
+
         details: rightsData.details
-      }],
+],
       compliance: await this.assessRightsCompliance(rightsData)
     });
 
     return sections;
-  }
+
 
   private async generateCCPASections(
     reportType: ReportType,
@@ -289,12 +297,12 @@ export class RegulatoryReportingService {
         category: 'Consumer Requests',
         metrics: consumerRights.metrics,
         details: consumerRights.details
-      }],
+],
       compliance: await this.assessCCPACompliance(consumerRights)
     });
 
     return sections;
-  }
+
 
   private async generateHIPAASections(
     reportType: ReportType,
@@ -313,12 +321,12 @@ export class RegulatoryReportingService {
         category: 'PHI Access',
         metrics: phiAccess.metrics,
         details: phiAccess.details
-      }],
+],
       compliance: await this.assessHIPAACompliance(phiAccess)
     });
 
     return sections;
-  }
+
 
   private async getTotalDataSubjects(periodStart: Date, periodEnd: Date): Promise<number> {
 
@@ -329,7 +337,7 @@ export class RegulatoryReportingService {
     `;
     const result = await this.db.query(query, [periodStart, periodEnd]);
     return parseInt(result.rows[0]?.total || '0');
-  }
+
 
   private async getTotalConsentRecords(periodStart: Date, periodEnd: Date): Promise<number> {
 
@@ -340,7 +348,7 @@ export class RegulatoryReportingService {
     `;
     const result = await this.db.query(query, [periodStart, periodEnd]);
     return parseInt(result.rows[0]?.total || '0');
-  }
+
 
   private async getActiveViolations(periodStart: Date, periodEnd: Date): Promise<number> {
 
@@ -352,7 +360,7 @@ export class RegulatoryReportingService {
     `;
     const result = await this.db.query(query, [periodStart, periodEnd]);
     return parseInt(result.rows[0]?.total || '0');
-  }
+
 
   private calculateComplianceScore(
     regulation: ComplianceRegulation,
@@ -367,7 +375,7 @@ export class RegulatoryReportingService {
     // Adjust based on regulation strictness
     const regulationWeight = this.getRegulationWeight(regulation);
     return Math.round(baseScore * regulationWeight);
-  }
+
 
   private getRegulationWeight(regulation: ComplianceRegulation): number {
     const weights = {
@@ -379,7 +387,7 @@ export class RegulatoryReportingService {
       [ComplianceRegulation.PIPEDA]: 0.88
     };
     return weights[regulation] || 0.90;
-  }
+
 
   private async generateKeyFindings(
     regulation: ComplianceRegulation,
@@ -400,10 +408,10 @@ export class RegulatoryReportingService {
       findings.push('Consumer rights requests processed');
       findings.push('Data sale opt-out mechanisms verified');
       break;
-    }
+
     
     return findings;
-  }
+
 
   private generateRecommendations(
     regulation: ComplianceRegulation,
@@ -414,17 +422,17 @@ export class RegulatoryReportingService {
     
     if (complianceScore < 85) {
       recommendations.push('Implement additional compliance controls');
-    }
+
     
     if (violations > 0) {
       recommendations.push('Address active compliance violations');
-    }
+
     
     recommendations.push('Conduct regular compliance training');
     recommendations.push('Review and update privacy policies');
     
     return recommendations;
-  }
+
 
   private calculateNextReviewDate(regulation: ComplianceRegulation): Date {
     const nextReview = new Date();
@@ -441,10 +449,10 @@ export class RegulatoryReportingService {
       break;
     default:
       nextReview.setMonth(nextReview.getMonth() + 6); // Semi-annually
-    }
+
     
     return nextReview;
-  }
+
 
   private requiresApproval(regulation: ComplianceRegulation, reportType: ReportType): boolean {
     // High-stakes regulations and external reports require approval
@@ -460,7 +468,7 @@ export class RegulatoryReportingService {
     ];
     
     return criticalRegulations.includes(regulation) || externalReports.includes(reportType);
-  }
+
 
   private async saveReport(report: RegulatoryReport): Promise<void> {
 
@@ -481,7 +489,7 @@ export class RegulatoryReportingService {
       report.generatedBy,
       JSON.stringify(report)
     ]);
-  }
+
 
   private async logReportGeneration(report: RegulatoryReport): Promise<void> {
 
@@ -493,35 +501,35 @@ export class RegulatoryReportingService {
         regulation: report.regulation,
         reportType: report.reportType,
         complianceScore: report.summary.complianceScore
-  }
+
       timestamp: report.generatedAt
     });
-  }
+
 
   // Placeholder methods for specific data retrieval
   private async getConsentData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
 
     // Implementation would retrieve actual consent data
     return { total: 0, valid: 0, expired: 0, withdrawn: 0, details: [] };
-  }
+
 
   private async getDataSubjectRightsData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
 
     // Implementation would retrieve data subject rights request data
     return { access: 0, deletion: 0, portability: 0, avgResponseTime: 0, details: [] };
-  }
+
 
   private async getCCPAConsumerRightsData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
 
     // Implementation would retrieve CCPA-specific data
     return { metrics: {}, details: [] };
-  }
+
 
   private async getPHIAccessData(_____periodStart: Date, _____periodEnd: Date): Promise<unknown> {
 
     // Implementation would retrieve HIPAA PHI access data
     return { metrics: {}, details: [] };
-  }
+
 
   private async assessGDPRConsentCompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
 
@@ -530,7 +538,7 @@ export class RegulatoryReportingService {
       score: 95,
       issues: []
     };
-  }
+
 
   private async assessRightsCompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
 
@@ -539,7 +547,7 @@ export class RegulatoryReportingService {
       score: 90,
       issues: []
     };
-  }
+
 
   private async assessCCPACompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
 
@@ -548,7 +556,7 @@ export class RegulatoryReportingService {
       score: 88,
       issues: []
     };
-  }
+
 
   private async assessHIPAACompliance(_____data: Record<string, unknown>): Promise<SectionCompliance> {
 
@@ -557,5 +565,4 @@ export class RegulatoryReportingService {
       score: 92,
       issues: []
     };
-  }
-}
+

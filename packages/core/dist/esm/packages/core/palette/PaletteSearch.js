@@ -146,23 +146,11 @@ export class PaletteSearch {
         const matchedFields = [];
         let totalRelevance = 0;
         // Define searchable fields with weights
-        const searchFields = [];
-        {
-            field: 'label', content;
-            node.label, weight;
-            3;
-        }
-        {
-            field: 'id', content;
-            node.id, weight;
-            2;
-        }
-        {
-            field: 'tooltip', content;
-            node.tooltip, weight;
-            1.5;
-        }
-        ;
+        const searchFields = [
+            { field: 'label', content: node.label, weight: 3 },
+            { field: 'id', content: node.id, weight: 2 },
+            { field: 'tooltip', content: node.tooltip, weight: 1.5 }
+        ];
         // Add category information if enabled
         if (options.includeCategories) {
             categories.forEach(catId => { });
@@ -330,12 +318,12 @@ export class PaletteSearch {
         for (const node of nodes) {
             const categories = getNodeCategories(node.id);
             // Index searchable content
-            const searchableContent = [];
-            node.label,
+            const searchableContent = [
+                node.label,
                 node.id,
                 node.tooltip,
-            ;
-            categories.map(catId => { });
+                ...categories.map(catId => { })
+            ];
             const cat = getCategoryById(catId);
             return cat ? [cat.name, cat.description, ...(cat.metadata?.keywords || [])] : [];
         }
@@ -355,26 +343,26 @@ export class PaletteSearch {
                      * Search index structure
                      */
                 }
-                /**
-                 * Utility function to highlight search terms in text
-                 */
-                export function highlightSearchTerms(text, searchTerms) {
-                    if (!searchTerms.length)
-                        return text;
-                    let highlighted = text;
-                    for (const term of searchTerms) {
-                    }
-                    const regex = new RegExp(`(${term})`, 'gi');
-                }
-                highlighted = highlighted.replace(regex, '<mark>$1</mark>');
-                return highlighted;
-                /**
-                 * Create search engine instance
-                 */
-                export function createPaletteSearch(nodes) {
-                    return new PaletteSearch(nodes);
-                }
             }
         }
     }
+}
+/**
+* Utility function to highlight search terms in text
+*/
+export function highlightSearchTerms(text, searchTerms) {
+    if (!searchTerms.length)
+        return text;
+    let highlighted = text;
+    for (const term of searchTerms) {
+    }
+}
+const regex = new RegExp(`(${term})`, 'gi');
+highlighted = highlighted.replace(regex, '<mark>$1</mark>');
+return highlighted;
+/**
+ * Create search engine instance
+ */
+export function createPaletteSearch(nodes) {
+    return new PaletteSearch(nodes);
 }

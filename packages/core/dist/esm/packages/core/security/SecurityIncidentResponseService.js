@@ -7,6 +7,8 @@
  * troubleshooting workflows, and integration with monitoring systems.
  */
 import { EventEmitter } from 'events';
+import { CrossSystemAlertingSystem } from './AlertingSystem';
+import { SecurityAnalyticsMonitor } from '../monitoring/SecurityAnalyticsMonitor';
 ;
 // Response tracking
 timeline: IncidentTimelineEntry;
@@ -115,7 +117,8 @@ integrations: {
     chatOps: {
         enabled: boolean;
         channels: string;
-        platform: 'slack' | 'teams' | 'discord';
+        platform: 'slack' | 'teams' | 'discord',
+        ;
     }
     ;
 }
@@ -138,13 +141,31 @@ export class SecurityIncidentResponseService extends EventEmitter {
     workflows = new Map();
     solutions = new Map();
     // Automation and orchestration
-    automationQueue = [];
-    // Performance tracking
-    responseMetrics;
-    config;
-    alertingSystem;
-    securityMonitor;
+    automationQueue;
+    string;
+    actionId;
+    timestamp;
+    approved;
 }
+ > ;
+[];
+responseMetrics: {
+    totalIncidents: number;
+    averageDetectionTime: number;
+    averageResponseTime: number;
+    averageResolutionTime: number;
+    escalationRate: number;
+    falsePositiveRate: number;
+    procedureEffectiveness: Map;
+}
+;
+constructor();
+config: IncidentResponseConfig,
+    alertingSystem;
+CrossSystemAlertingSystem,
+    securityMonitor;
+SecurityAnalyticsMonitor,
+    super();
 this.config = config;
 this.alertingSystem = alertingSystem;
 this.securityMonitor = securityMonitor;
@@ -157,8 +178,9 @@ this.startAutomationProcessing();
  * Create a new security incident from security events
  */
 async;
-createIncident(events, SecurityEvent);
-severity: SecurityIncident['severity'],
+createIncident(events, SecurityEvent),
+    severity;
+SecurityIncident['severity'],
     category;
 SecurityIncident['category'],
     assignedTo ?  : string;
@@ -217,8 +239,9 @@ return incidentId;
  * Update incident status and trigger appropriate workflows
  */
 async;
-updateIncidentStatus(incidentId, string);
-newStatus: SecurityIncident['status'],
+updateIncidentStatus(incidentId, string),
+    newStatus;
+SecurityIncident['status'],
     updatedBy;
 string,
     notes ?  : string;
@@ -270,8 +293,9 @@ switch (newStatus) {
          * Add action to incident
          */
         async;
-        addIncidentAction(incidentId, string);
-        action: (Omit),
+        addIncidentAction(incidentId, string),
+            action;
+        (Omit),
             createdBy;
         string;
         Promise < string > {
@@ -306,8 +330,9 @@ return actionId;
  * Complete an incident action
  */
 async;
-completeIncidentAction(incidentId, string);
-actionId: string,
+completeIncidentAction(incidentId, string),
+    actionId;
+string,
     result;
 string,
     completedBy;
@@ -339,8 +364,9 @@ return true;
  * Add evidence to incident
  */
 async;
-addEvidence(incidentId, string);
-evidence: (Omit),
+addEvidence(incidentId, string),
+    evidence;
+(Omit),
     collectedBy;
 string;
 Promise < string > {
@@ -379,8 +405,9 @@ return evidenceId;
  * Execute troubleshooting workflow
  */
 async;
-executeTroubleshootingWorkflow(incidentId, string);
-workflowId: string,
+executeTroubleshootingWorkflow(incidentId, string),
+    workflowId;
+string,
     executedBy;
 string;
 Promise < {
@@ -885,8 +912,9 @@ SecurityIncident;
                             for (const phase of procedure.phases.sort((a, b) => a.order - b.order)) {
                                 await this.executePhase(incident, procedure, phase);
                                 async;
-                                executePhase(incident, SecurityIncident);
-                                procedure: IncidentResponseProcedure,
+                                executePhase(incident, SecurityIncident),
+                                    procedure;
+                                IncidentResponseProcedure,
                                     phase;
                                 IncidentResponsePhase;
                                 Promise < void  > {
@@ -934,8 +962,9 @@ SecurityIncident;
                                                         case 'low':
                                                             return 'low';
                                                             async;
-                                                            executeAutomatedStep(incident, SecurityIncident);
-                                                            step: ResponseStep,
+                                                            executeAutomatedStep(incident, SecurityIncident),
+                                                                step;
+                                                            ResponseStep,
                                                                 actionId;
                                                             string;
                                                             Promise < void  > {
@@ -1085,12 +1114,12 @@ SecurityIncident;
                             }
                         }), private, createNotificationMessage(((incident, eventType) => {
                             return `
-Security Incident ${eventType.toUpperCase()}: ${incident.id},}
-  Title: ${incident.title},}
-  Severity: ${incident.severity.toUpperCase()},}
-  Category: ${incident.category},}
+Security Incident ${eventType.toUpperCase()}: ${incident.id},},
+  Title: ${incident.title},},
+  Severity: ${incident.severity.toUpperCase()},},
+  Category: ${incident.category},},
   Status: ${incident.status}
-Assigned To: ${incident.assignedTo || 'Unassigned'},}
+Assigned To: ${incident.assignedTo || 'Unassigned'},},
   Description:
 ${incident.description}
 Affected Systems: ${incident.affectedSystems.join(', ')}
@@ -1292,8 +1321,9 @@ Incident Dashboard: /incidents/${incident.id}
                                                 // Simple decision condition evaluation
                                                 return true; // Simplified for demo
                                                 async;
-                                                applySolution(incident, SecurityIncident);
-                                                solution: Solution,
+                                                applySolution(incident, SecurityIncident),
+                                                    solution;
+                                                Solution,
                                                     appliedBy;
                                                 string;
                                                 Promise < boolean > {
@@ -1357,8 +1387,9 @@ Incident Dashboard: /incidents/${incident.id}
                         }
                         ;
                         return false;
-                        generateTroubleshootingRecommendations(incident, SecurityIncident);
-                        workflow: TroubleshootingWorkflow,
+                        generateTroubleshootingRecommendations(incident, SecurityIncident),
+                            workflow;
+                        TroubleshootingWorkflow,
                             diagnosticResults;
                         (Map),
                             decisionResults;
@@ -1500,14 +1531,14 @@ Incident Dashboard: /incidents/${incident.id}
                                                                                                                     severityThreshold: 'medium',
                                                                                                                     customRules: [],
                                                                                                                 },
-                                                                                                                phases: [,
+                                                                                                                phases: [
                                                                                                                     {
                                                                                                                         id: 'phase-1',
                                                                                                                         name: 'Initial Response',
                                                                                                                         description: 'Immediate response to data breach',
                                                                                                                         order: 1,
                                                                                                                         parallelizable: false,
-                                                                                                                        steps: [,
+                                                                                                                        steps: [
                                                                                                                             {
                                                                                                                                 id: 'step-1',
                                                                                                                                 title: 'Confirm breach occurrence',
@@ -1527,7 +1558,7 @@ Incident Dashboard: /incidents/${incident.id}
                                                                                                                         ],
                                                                                                                         automatedActions: [],
                                                                                                                         communicationTemplates: [],
-                                                                                                                        complianceRequirements: [,
+                                                                                                                        complianceRequirements: [
                                                                                                                             {
                                                                                                                                 framework: 'GDPR',
                                                                                                                                 reportingTimeline: 72 * 60 * 60 * 1000, // 72 hours
@@ -1539,7 +1570,8 @@ Incident Dashboard: /incidents/${incident.id}
                                                                                                                         version: '1.0',
                                                                                                                         approved: true,
                                                                                                                         approvedBy: 'security_team'
-                                                                                                                    }],
+                                                                                                                    }
+                                                                                                                ],
                                                                                                                 defaultProcedures, : .forEach(procedure => { }),
                                                                                                                 const: id = `proc-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`
                                                                                                             }]: this.procedures.set(id, {}),
@@ -1559,7 +1591,7 @@ Incident Dashboard: /incidents/${incident.id}
                                                                                                             description: 'Workflow for investigating system performance issues',
                                                                                                             category: 'performance',
                                                                                                             applicableIncidentTypes: ['system_compromise', 'operational'],
-                                                                                                            diagnosticSteps: [,
+                                                                                                            diagnosticSteps: [
                                                                                                                 {
                                                                                                                     id: 'diag-1',
                                                                                                                     title: 'Check system resources',
@@ -1569,22 +1601,24 @@ Incident Dashboard: /incidents/${incident.id}
                                                                                                                     instructions: 'Use monitoring tools to check resource utilization',
                                                                                                                     expectedResults: ['CPU < 80%', 'Memory < 90%', 'Disk < 85%'],
                                                                                                                     tools: ['System monitor', 'Performance dashboard'],
-                                                                                                                    nextSteps: [,
+                                                                                                                    nextSteps: [
                                                                                                                         {
                                                                                                                             condition: 'high_resource_usage',
                                                                                                                             nextStepId: 'diag-2',
                                                                                                                             confidence: 0.8
-                                                                                                                        }],
+                                                                                                                        }
+                                                                                                                    ],
                                                                                                                     successIndicators: ['Normal resource usage'],
                                                                                                                     failureIndicators: ['Resource usage above thresholds'],
                                                                                                                     timeoutSeconds: 300
-                                                                                                                }],
-                                                                                                            decisionTree: [,
+                                                                                                                }
+                                                                                                            ],
+                                                                                                            decisionTree: [
                                                                                                                 {
                                                                                                                     id: 'decision-1',
                                                                                                                     question: 'Are system resources within normal limits?',
                                                                                                                     type: 'boolean',
-                                                                                                                    routes: [,
+                                                                                                                    routes: [
                                                                                                                         {
                                                                                                                             condition: 'yes',
                                                                                                                             solutionId: 'sol-1',
@@ -1592,7 +1626,8 @@ Incident Dashboard: /incidents/${incident.id}
                                                                                                                         {
                                                                                                                             condition: 'no',
                                                                                                                             nextNodeId: 'decision-2'
-                                                                                                                        }],
+                                                                                                                        }
+                                                                                                                    ]
                                                                                                                 }
                                                                                                             ],
                                                                                                             relatedKnowledgeArticles: [],

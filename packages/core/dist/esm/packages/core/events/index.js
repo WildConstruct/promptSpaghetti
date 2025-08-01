@@ -23,13 +23,14 @@ export { createLoggingMiddleware, createValidationMiddleware, createRateLimitMid
 // Environment-specific configurations
 export const EventSystemConfigs = {
     production: {
-        middleware: [,
+        middleware: [
             createValidationMiddleware({ strictMode: false }),
             createSecurityMiddleware(),
             createRateLimitMiddleware({}),
             maxEventsPerSecond, 100,
             maxEventsPerMinute, 2000,
-            strategy, 'drop',]
+            strategy, 'drop',
+        ]
     },
     sampleRate: 0.1,
     slowEventThreshold: 500,
@@ -45,12 +46,13 @@ eventBusOptions: {
     ;
 }
 development: {
-    middleware: [,
+    middleware: [
         createValidationMiddleware({ strictMode: true }),
         createPerformanceMiddleware({}),
         sampleRate, 1.0,
         slowEventThreshold, 100,
-        trackMemoryUsage, true,];
+        trackMemoryUsage, true,
+    ];
 }
 createLoggingMiddleware({});
 logLevel: 'debug',
@@ -64,7 +66,7 @@ eventBusOptions: {
     ;
 }
 testing: {
-    middleware: [,
+    middleware: [
         createValidationMiddleware({ strictMode: true }),
         createLoggingMiddleware({ logLevel: 'error' })
     ],

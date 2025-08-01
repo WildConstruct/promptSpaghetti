@@ -56,100 +56,30 @@ const PRIORITY_CONFIG = {
     high: { color: '#ef4444', label: 'High' },
     critical: { color: '#dc2626', label: 'Critical' }
 };
-const VFX_CATEGORIES = [];
-{
-    value: 'pre_production', label;
-    'Pre-Production', icon;
-    FileText;
-}
-{
-    value: 'asset_creation', label;
-    'Asset Creation', icon;
-    Palette;
-}
-{
-    value: 'animation', label;
-    'Animation', icon;
-    Film;
-}
-{
-    value: 'fx', label;
-    'VFX', icon;
-    Zap;
-}
-{
-    value: 'lighting', label;
-    'Lighting', icon;
-    Camera;
-}
-{
-    value: 'compositing', label;
-    'Compositing', icon;
-    Palette;
-}
-{
-    value: 'rendering', label;
-    'Rendering', icon;
-    BarChart3;
-}
-{
-    value: 'post_production', label;
-    'Post-Production', icon;
-    Edit3;
-}
-{
-    value: 'review', label;
-    'Review', icon;
-    Eye;
-}
-{
-    value: 'delivery', label;
-    'Delivery', icon;
-    CheckCircle;
-}
-;
-const VFX_PRODUCTION_PHASES = [];
-{
-    value: 'concept', label;
-    'Concept';
-}
-{
-    value: 'previs', label;
-    'Previz';
-}
-{
-    value: 'asset_build', label;
-    'Asset Build';
-}
-{
-    value: 'animation', label;
-    'Animation';
-}
-{
-    value: 'fx', label;
-    'FX';
-}
-{
-    value: 'lighting', label;
-    'Lighting';
-}
-{
-    value: 'comp', label;
-    'Compositing';
-}
-{
-    value: 'render', label;
-    'Render';
-}
-{
-    value: 'review', label;
-    'Review';
-}
-{
-    value: 'final', label;
-    'Final';
-}
-;
+const VFX_CATEGORIES = [
+    { value: 'pre_production', label: 'Pre-Production', icon: FileText },
+    { value: 'asset_creation', label: 'Asset Creation', icon: Palette },
+    { value: 'animation', label: 'Animation', icon: Film },
+    { value: 'fx', label: 'VFX', icon: Zap },
+    { value: 'lighting', label: 'Lighting', icon: Camera },
+    { value: 'compositing', label: 'Compositing', icon: Palette },
+    { value: 'rendering', label: 'Rendering', icon: BarChart3 },
+    { value: 'post_production', label: 'Post-Production', icon: Edit3 },
+    { value: 'review', label: 'Review', icon: Eye },
+    { value: 'delivery', label: 'Delivery', icon: CheckCircle }
+];
+const VFX_PRODUCTION_PHASES = [
+    { value: 'concept', label: 'Concept' },
+    { value: 'previs', label: 'Previz' },
+    { value: 'asset_build', label: 'Asset Build' },
+    { value: 'animation', label: 'Animation' },
+    { value: 'fx', label: 'FX' },
+    { value: 'lighting', label: 'Lighting' },
+    { value: 'comp', label: 'Compositing' },
+    { value: 'render', label: 'Render' },
+    { value: 'review', label: 'Review' },
+    { value: 'final', label: 'Final' }
+];
 export const VFXChecklistSystem = ({
     checklist,
     currentUser,

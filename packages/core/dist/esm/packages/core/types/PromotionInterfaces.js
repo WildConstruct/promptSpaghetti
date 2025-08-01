@@ -91,50 +91,50 @@ export var PromotionType;
                 REPEAT_PURCHASE = 'repeat_purchase';
         }
     }
-        | PromotionType.PERCENTAGE_DISCOUNT
-        | PromotionType.FIXED_AMOUNT_DISCOUNT
-        | PromotionType.BULK_DISCOUNT
-        | PromotionType.BUY_ONE_GET_ONE;
-    // Discount configuration
-    discount_config: DiscountConfiguration;
-    // Application scope
-    application_scope: DiscountApplicationScope;
-    applicable_items ?  : ApplicableItemsFilter;
-    // Minimum requirements
-    minimum_purchase_amount ?  : number;
-    minimum_item_count ?  : number;
-    required_items ?  : string; // Item IDs that must be in cart,
-    // Maximum discount limits
-    max_discount_amount ?  : number;
-    max_discount_per_user ?  : number;
-        | PromotionType.FEATURED_CONTENT
-        | PromotionType.CATEGORY_SPOTLIGHT
-        | PromotionType.TRENDING_CAROUSEL
-        | PromotionType.EDITOR_CHOICE
-        | PromotionType.NEW_ARRIVALS
-        | PromotionType.CREATOR_SPOTLIGHT;
-    // Content selection
-    content_selection_strategy: ContentSelectionStrategy;
-    content_criteria: ContentSelectionCriteria;
-    selected_content_ids: string;
-    // Display configuration
-    display_config: ContentDisplayConfiguration;
-    // Rotation and scheduling
-    rotation_config ?  : ContentRotationConfig;
-    // Performance tracking
-    content_performance: ContentPromotionMetrics;
-        | PromotionType.CROSS_SELL
-        | PromotionType.UPSELL
-        | PromotionType.BUNDLE_DEAL;
-    // Bundle configuration
-    bundle_config: BundleConfiguration;
-    bundle_items: BundleItem;
-    // Discount for bundle
-    bundle_discount: DiscountConfiguration;
-    // Display and recommendations
-    recommendation_strategy: BundleRecommendationStrategy;
-    display_triggers: BundleTrigger;
 }
+    | PromotionType.PERCENTAGE_DISCOUNT
+    | PromotionType.FIXED_AMOUNT_DISCOUNT
+    | PromotionType.BULK_DISCOUNT
+    | PromotionType.BUY_ONE_GET_ONE;
+// Discount configuration
+discount_config: DiscountConfiguration;
+// Application scope
+application_scope: DiscountApplicationScope;
+applicable_items ?  : ApplicableItemsFilter;
+// Minimum requirements
+minimum_purchase_amount ?  : number;
+minimum_item_count ?  : number;
+required_items ?  : string; // Item IDs that must be in cart,
+// Maximum discount limits
+max_discount_amount ?  : number;
+max_discount_per_user ?  : number;
+    | PromotionType.FEATURED_CONTENT
+    | PromotionType.CATEGORY_SPOTLIGHT
+    | PromotionType.TRENDING_CAROUSEL
+    | PromotionType.EDITOR_CHOICE
+    | PromotionType.NEW_ARRIVALS
+    | PromotionType.CREATOR_SPOTLIGHT;
+// Content selection
+content_selection_strategy: ContentSelectionStrategy;
+content_criteria: ContentSelectionCriteria;
+selected_content_ids: string;
+// Display configuration
+display_config: ContentDisplayConfiguration;
+// Rotation and scheduling
+rotation_config ?  : ContentRotationConfig;
+// Performance tracking
+content_performance: ContentPromotionMetrics;
+    | PromotionType.CROSS_SELL
+    | PromotionType.UPSELL
+    | PromotionType.BUNDLE_DEAL;
+// Bundle configuration
+bundle_config: BundleConfiguration;
+bundle_items: BundleItem;
+// Discount for bundle
+bundle_discount: DiscountConfiguration;
+// Display and recommendations
+recommendation_strategy: BundleRecommendationStrategy;
+display_triggers: BundleTrigger;
 ;
 // Weighted rotation
 weight_factors ?  : {
@@ -157,9 +157,20 @@ lift_vs_baseline ?  : number; // Percentage improvement vs. no promotion
 metrics_updated_at: Date;
  > ;
 // Promotion breakdown
-promotion_performance: Array;
+promotion_performance: Array < {
+    promotion_id: string,
+    promotion_name: string,
+    contribution_to_revenue: number,
+    usage_count: number
+} > ;
 // Time series data
-daily_metrics: Array;
+daily_metrics: Array < {
+    date: string,
+    impressions: number,
+    clicks: number,
+    conversions: number,
+    spend_cents: number
+} > ;
 options ?  : { value: any, label: string }[]; // For select fields
 ;
 // Stacking information

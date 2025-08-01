@@ -6,67 +6,57 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { 
-  DataClassificationLevel,
+import { DataClassificationLevel,
   AccessRequirements,
   OperationContext,
-  ClassificationAuditEvent,
+  ClassificationAuditEvent }
   ValidationResult
 } from '../types/DataClassification';
 
 }
-export interface AccessControlPolicy {
-    id: string;
+}
+export interface AccessControlPolicy { id: string;
     name: string;
     description: string;
     classification: DataClassificationLevel;
     requirements: AccessRequirements;
     created: Date;
     lastModified: Date;
-    version: string;
-
-
+    version: string }
 }
-export interface AccessRequest {
-    userId: string;
+}
+export interface AccessRequest { userId: string;
     dataId: string;
     classification: DataClassificationLevel;
     operation: 'read' | 'write' | 'update' | 'delete' | 'export' | 'share';
     purpose: string;
     context: OperationContext;
-    requestedAt: Date;
-
-
+    requestedAt: Date }
 }
-export interface AccessDecision {
-    granted: boolean;
+}
+export interface AccessDecision { granted: boolean;
     reason: string;
     conditions: AccessCondition[];
     expiresAt?: Date;
     auditRequired: boolean;
-    monitoringLevel: 'STANDARD' | 'ENHANCED' | 'REALTIME';
-
-
+    monitoringLevel: 'STANDARD' | 'ENHANCED' | 'REALTIME' }
 }
-export interface AccessCondition {
-    type: 'TIME_RESTRICTION' | 'PURPOSE_LIMITATION' | 'APPROVAL_REQUIRED' | 'AUDIT_LOGGING' | 'EXPORT_RESTRICTED';
+}
+export interface AccessCondition { type: 'TIME_RESTRICTION' | 'PURPOSE_LIMITATION' | 'APPROVAL_REQUIRED' | 'AUDIT_LOGGING' | 'EXPORT_RESTRICTED';
     description: string;
     parameters: Record<string, any>;
-    mandatory: boolean;
-
-
+    mandatory: boolean }
 }
-export interface UserAccessProfile {
-    userId: string;
+}
+export interface UserAccessProfile { userId: string;
     roles: string[];
     clearanceLevel: DataClassificationLevel;
     permissions: string[];
     restrictions: AccessRestriction[];
     mfaVerified: boolean;
     lastAuthenticationAt: Date;
-    authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC';
-
-
+    authenticationLevel: 'STANDARD' | 'MFA' | 'STRONG_MFA' | 'BIOMETRIC' }
+}
 }
 export interface AccessRestriction {
     type: 'TIME_BASED' | 'IP_BASED' | 'DEVICE_BASED' | 'PURPOSE_BASED';
@@ -155,4 +145,5 @@ export declare class ClassificationAccessControlService {
 
 export default ClassificationAccessControlService;
 //# sourceMappingURL=ClassificationAccessControlService.d.ts.map
+}
 }

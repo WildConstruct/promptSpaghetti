@@ -26,6 +26,7 @@ export class FeatureToggleDAO {
   // Feature Toggle CRUD Operations
 
   async createToggle(request: CreateToggleRequest, createdBy?: string): Promise<FeatureToggle> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -56,6 +57,7 @@ export class FeatureToggleDAO {
   }
 
   async getToggleById(id: string): Promise<FeatureToggle | null> {
+
     const client = await this.pool.connect();
     try {
       const query = 'SELECT * FROM feature_toggle WHERE id = $1 AND archived = false';
@@ -72,6 +74,7 @@ export class FeatureToggleDAO {
   }
 
   async getToggleByKey(key: string, orgId?: string): Promise<FeatureToggle | null> {
+
     const client = await this.pool.connect();
     try {
       let query = 'SELECT * FROM feature_toggle WHERE key = $1 AND archived = false';
@@ -107,6 +110,7 @@ export class FeatureToggleDAO {
       offset?: number;
     } = {}
   ): Promise<{ toggles: FeatureToggle[]; total: number }> {
+
     const client = await this.pool.connect();
     try {
       const whereConditions = ['archived = false'];
@@ -177,6 +181,7 @@ export class FeatureToggleDAO {
   }
 
   async updateToggle(request: UpdateToggleRequest, updatedBy?: string): Promise<FeatureToggle> {
+
     const client = await this.pool.connect();
     try {
       const setClause: string[] = [];
@@ -251,6 +256,7 @@ export class FeatureToggleDAO {
   }
 
   async archiveToggle(id: string, archivedBy?: string): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -272,6 +278,7 @@ export class FeatureToggleDAO {
   // Toggle Scope Operations
 
   async createToggleScope(request: CreateToggleScopeRequest): Promise<ToggleScope> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -290,6 +297,7 @@ export class FeatureToggleDAO {
   }
 
   async getToggleScopes(toggleId: string): Promise<ToggleScope[]> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -306,6 +314,7 @@ export class FeatureToggleDAO {
   }
 
   async deleteToggleScope(id: string): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       const query = 'DELETE FROM toggle_scope WHERE id = $1';
@@ -322,6 +331,7 @@ export class FeatureToggleDAO {
   // Audit Operations
 
   async createAuditEntry(entry: Partial<ToggleAudit>): Promise<ToggleAudit> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -352,6 +362,7 @@ export class FeatureToggleDAO {
   }
 
   async getToggleAuditHistory(toggleId: string, limit = 100): Promise<ToggleAudit[]> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -371,6 +382,7 @@ export class FeatureToggleDAO {
   // Emergency Override
 
   async createEmergencyOverride(request: EmergencyOverrideRequest, actorId: string): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
@@ -423,6 +435,7 @@ export class FeatureToggleDAO {
   // Cache Operations
 
   async getCachedEvaluation(toggleId: string, cacheKey: string): Promise<any | null> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -443,6 +456,7 @@ export class FeatureToggleDAO {
     result: Record<string, unknown>,
     ttlSeconds = 300
   ): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       const expiresAt = new Date(Date.now() + ttlSeconds * 1000);
@@ -461,6 +475,7 @@ export class FeatureToggleDAO {
   }
 
   async clearCacheForToggle(toggleId: string): Promise<void> {
+
     const client = await this.pool.connect();
     try {
       await client.query('DELETE FROM toggle_evaluation_cache WHERE toggle_id = $1', [toggleId]);
@@ -472,6 +487,7 @@ export class FeatureToggleDAO {
   // Dependencies
 
   async createDependency(parentToggleId: string, childToggleId: string, type: string): Promise<ToggleDependency> {
+
     const client = await this.pool.connect();
     try {
       const query = `
@@ -488,6 +504,7 @@ export class FeatureToggleDAO {
   }
 
   async getDependencyAnalysis(toggleId: string): Promise<DependencyAnalysis> {
+
     const client = await this.pool.connect();
     try {
       // Get dependencies (what this toggle depends on)

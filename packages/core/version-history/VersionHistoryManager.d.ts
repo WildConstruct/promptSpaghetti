@@ -4,8 +4,8 @@
  */
 
 }
-export interface VersionSnapshot {
-    id: string;
+}
+export interface VersionSnapshot { id: string;
     project_id: string;
     branch_name: string;
     version_number: number;
@@ -26,11 +26,10 @@ export interface VersionSnapshot {
     edge_count: number;
     complexity_score?: number;
     workflow_state: string;
-    approval_status?: string;
-
+    approval_status?: string }
 }
-export interface VersionDiff {
-    id: string;
+}
+export interface VersionDiff { id: string;
     from_snapshot_id: string;
     to_snapshot_id: string;
     diff_type: 'incremental' | 'full' | 'structural';
@@ -41,15 +40,15 @@ export interface VersionDiff {
         added: number;
         removed: number;
         modified: number;
-        complexity: number;
+        complexity: number }
 }
     };
     similarity_score: number;
     created_at: string;
 
 }
-export interface Branch {
-    id: string;
+}
+export interface Branch { id: string;
     project_id: string;
     name: string;
     description?: string;
@@ -63,11 +62,10 @@ export interface Branch {
     created_at: string;
     updated_at: string;
     visibility: 'private' | 'workspace' | 'public';
-    total_commits: number;
-
+    total_commits: number }
 }
-export interface ChangeEvent {
-    id: string;
+}
+export interface ChangeEvent { id: string;
     project_id: string;
     snapshot_id?: string;
     event_type: string;
@@ -84,11 +82,10 @@ export interface ChangeEvent {
     affected_properties: string[];
     change_magnitude: number;
     workflow_state?: string;
-    approval_required: boolean;
-
+    approval_required: boolean }
 }
-export interface VersionAnnotation {
-    id: string;
+}
+export interface VersionAnnotation { id: string;
     snapshot_id: string;
     annotation_type: 'comment' | 'review' | 'approval' | 'flag';
     title?: string;
@@ -102,7 +99,7 @@ export interface VersionAnnotation {
     target_element_id?: string;
     target_coordinates?: {
         x: number;
-        y: number;
+        y: number }
 }
     };
     resolved_by?: string;
@@ -110,19 +107,18 @@ export interface VersionAnnotation {
     resolution_note?: string;
 
 }
-export interface VersionHistoryFilter {
-    branch_name?: string;
+}
+export interface VersionHistoryFilter { branch_name?: string;
     author_id?: string;
     start_date?: string;
     end_date?: string;
     snapshot_type?: string;
     limit?: number;
     offset?: number;
-    include_annotations?: boolean;
-
+    include_annotations?: boolean }
 }
-export interface SnapshotCreationOptions {
-    title?: string;
+}
+export interface SnapshotCreationOptions { title?: string;
     description?: string;
     changelog?: string;
     snapshot_type?: 'manual' | 'auto' | 'milestone' | 'backup';
@@ -143,7 +139,7 @@ export declare class VersionHistoryManager {
     createSnapshot(graphData: any, options?: SnapshotCreationOptions): Promise<VersionSnapshot>;
     getSnapshots(filter?: VersionHistoryFilter): Promise<{
         snapshots: VersionSnapshot[];
-        total: number;
+        total: number }
 }
     }>;
     getSnapshot(snapshotId: string): Promise<VersionSnapshot>;
@@ -161,31 +157,26 @@ export declare class VersionHistoryManager {
   }): Promise<Branch>;
     getBranches(): Promise<Branch[]>;
     switchBranch(branchName: string): Promise<Branch>;
-    mergeBranch(sourceBranchId: string, targetBranchId: string, options?: {)
+    mergeBranch(sourceBranchId: string, targetBranchId: string, options?: { )
         merge_message?: string;
         strategy?: 'merge' | 'squash' | 'rebase';
-        delete_source?: boolean;
-    }): Promise<VersionSnapshot>;
-    recordChangeEvent(event: {)
+        delete_source?: boolean }): Promise<VersionSnapshot>;
+    recordChangeEvent(event: { )
         event_type: string;
         event_data: any;
         affected_nodes: string[];
         change_magnitude: number;
         workflow_state?: string;
-        approval_required?: boolean;
-    }): Promise<ChangeEvent>;
-    getChangeEvents(filter?: {)
+        approval_required?: boolean }): Promise<ChangeEvent>;
+    getChangeEvents(filter?: { )
         start_date?: string;
         end_date?: string;
         author_id?: string;
         event_types?: string[];
         limit?: number;
-        offset?: number;
-    }): Promise<{
-        events: ChangeEvent[];
-        total: number;
-    }>;
-    addAnnotation(snapshotId: string, annotation: {)
+        offset?: number }): Promise<{ events: ChangeEvent[];
+        total: number }>;
+    addAnnotation(snapshotId: string, annotation: { )
         annotation_type?: 'comment' | 'review' | 'approval' | 'flag';
         title?: string;
         content_markdown: string;
@@ -193,39 +184,29 @@ export declare class VersionHistoryManager {
         target_element_id?: string;
         target_coordinates?: {
             x: number;
-            y: number;
-        };
+            y: number };
     }): Promise<VersionAnnotation>;
     getAnnotations(snapshotId: string): Promise<VersionAnnotation[]>;
     resolveAnnotation(annotationId: string, resolutionNote?: string): Promise<VersionAnnotation>;
     private extractNodeIds;
     private extractAffectedProperties;
     private calculateChangeMagnitude;
-    getVersionStatistics(): Promise<{
-        total_snapshots: number;
+    getVersionStatistics(): Promise<{ total_snapshots: number;
         total_branches: number;
         total_changes: number;
         most_active_authors: Array<{
             author_id: string;
-            change_count: number;
-        }>;
-        change_frequency: Array<{
-            date: string;
-            count: number;
-        }>;
-        branch_activity: Array<{
-            branch_name: string;
-            snapshot_count: number;
-        }>;
+            change_count: number }>;
+        change_frequency: Array<{ date: string;
+            count: number }>;
+        branch_activity: Array<{ branch_name: string;
+            snapshot_count: number }>;
     }>;
     startNewSession(): void;
-    cleanupOldData(options?: {)
+    cleanupOldData(options?: { )
         days_old?: number;
         keep_milestones?: boolean;
-        keep_tagged_versions?: boolean;
-    }): Promise<{
-        deleted_snapshots: number;
-        deleted_diffs: number;
-    }>;
+        keep_tagged_versions?: boolean }): Promise<{ deleted_snapshots: number;
+        deleted_diffs: number }>;
 
 //# sourceMappingURL=VersionHistoryManager.d.ts.map

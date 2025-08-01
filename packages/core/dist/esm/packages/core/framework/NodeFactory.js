@@ -4,18 +4,29 @@
  *
  * Factory for creating and managing framework nodes with built-in validation and optimization
  */
-import { FrameworkNode } from './NodeFramework';
+import { FrameworkNode, NodeFramework } from './NodeFramework';
+import { NodeValidationService } from '../validation';
 export class NodeFactory {
     framework;
     validationService;
     config;
     templates = new Map();
     nodeCache = new Map();
-    creationHistory = [];
-    framework;
-    validationService;
-    config = {};
+    creationHistory;
+    number;
+    nodeType;
+    nodeId;
+    success;
+    error;
 }
+ > ;
+[];
+constructor();
+framework: NodeFramework,
+    validationService;
+NodeValidationService,
+    config;
+(Partial) = {};
 this.framework = framework;
 this.validationService = validationService;
 this.config = {
@@ -30,8 +41,9 @@ this.config = {
  * Create a new node with optional validation and optimization
  */
 async;
-createNode(type, string);
-id: string,
+createNode(type, string),
+    id;
+string,
     config;
 AdvancedNodeConfig,
     data;
@@ -79,8 +91,9 @@ Promise < FrameworkNode > {
                         * Create node from template
                         */
                         async;
-                        createFromTemplate(templateId, string);
-                        nodeId: string,
+                        createFromTemplate(templateId, string),
+                            nodeId;
+                        string,
                             overrides;
                         {
                             config ?  : Partial;
@@ -104,8 +117,9 @@ Promise < FrameworkNode > {
                          * Bulk create multiple nodes
                          */
                         async;
-                        createNodeBatch(specs, Array < {});
-                        type: string;
+                        createNodeBatch(specs, Array < {}),
+                            type;
+                        string;
                         id: string;
                         config: AdvancedNodeConfig;
                         data: any;
@@ -214,8 +228,9 @@ Promise < FrameworkNode > {
                                          * Create node with best practices applied
                                          */
                                         async;
-                                        createOptimizedNode(type, string);
-                                        id: string,
+                                        createOptimizedNode(type, string),
+                                            id;
+                                        string,
                                             config;
                                         AdvancedNodeConfig,
                                             data;

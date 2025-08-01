@@ -22,166 +22,100 @@ import {
   CheckCircle,
   RefreshCw,
   BarChart3
-} from 'lucide-react';
+ from 'lucide-react';
 import { Badge } from '../common/Badge';
 import { LoadingSpinner } from '../common/LoadingSpinner';
 import './ToggleStatusSummary.css';
-}
-interface ToggleSummaryMetrics {
+
+
+interface ToggleSummaryMetrics {}
+
+
   // System Overview
   totalToggles: number;,
-  activeToggles: number;
+  activeToggles: number;,
   inactiveToggles: number;,
   archivedToggles: number;
   // Toggle Types Distribution
   typeBreakdown: {
   boolean: number;,
-  percentage_rollout: number;
+  percentage_rollout: number;,
   multivariate: number;,
-  scheduled: number;
+  scheduled: number;,
   segmentation: number;
-}
+
+
 };
   // Claude Impact Analysis
   claudeImpact: {
-  NONE: number;
+  NONE: number,
   PROMPT_COST: number;,
-  MODEL_VERSION: number;
+  MODEL_VERSION: number;,
   OUTPUT_QUALITY: number;,
   HALLUCINATION_RISK: number;
 };
   // Health & Performance
   healthScore: number; // 0-100,
-  alertsActive: number;
+  alertsActive: number;,
   performanceIssues: number;,
   averageResponseTime: number;
   // Recent Activity
   recentChanges: number; // Last 24h,
-  rolloutSuccess: number; // Percentage
+  rolloutSuccess: number; // Percentage,
   errorRate: number; // Percentage
   // Usage Statistics
   evaluationsToday: number;,
-  topPerformingToggles: Array<{;
+  topPerformingToggles: Array<{;,
   id: string;,
-  name: string;
+  name: string;,
   evaluations: number;,
   successRate: number;
-}>;
+>;
   // Organization Insights
   organizationCoverage: number; // Percentage of orgs using toggles,
   averageTogglesPerOrg: number;
   // Trends
   growthRate: number; // Percentage change from last period,
   lastUpdated: string;
-}
+
+
 interface StatusCard {
   title: string;,
   value: string | number;
   change?: number;
-  changeLabel?: string;
+  changeLabel?: string,
   icon: React.ReactNode;,
   variant: 'success' | 'warning' | 'danger' | 'info';
   description?: string;
-}
-  details?: Array<{ label: string; value: string | number }>;
 
-export const ToggleStatusSummary: React.FC = () => {
-  const [metrics, setMetrics] = useState<ToggleSummaryMetrics | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-  const [autoRefresh, setAutoRefresh] = useState(true);
-  // Fetch metrics from API
-  const fetchMetrics = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      // In a real implementation, this would fetch from actual API endpoints
-      // For now, we'll simulate realistic toggle metrics
-      const response = await simulateMetricsAPI();
-      setMetrics(response);
-      setLastRefresh(new Date());
-    } catch (err) {
-  setError(err instanceof Error ? err.message : 'Failed to fetch metrics');
-} finally {
-      setLoading(false);
-  };
-  // Auto-refresh functionality
-  useEffect(() => {
-    fetchMetrics();
-    if (autoRefresh) {
-      const interval = setInterval(fetchMetrics, 30000); // Refresh every 30 seconds;
-      return () => clearInterval(interval);
-  }, [autoRefresh]);
-  const handleRefresh = () => {
-    fetchMetrics();
-  };
-  const toggleAutoRefresh = () => {
-    setAutoRefresh(!autoRefresh);
-  };
-  if (loading && !metrics) {
-    return;
-      <div className="toggle-status-summary loading">
-        <LoadingSpinner size="small" />
-        <span>Loading system status...</span>
-      </div>
-    );
-  if (error) {
-    return;
-      <div className="toggle-status-summary error">
-        <AlertTriangle className="error-icon" />
-        <span>Failed to load system status: {error}</span>
-        <button onClick={handleRefresh} className="retry-btn">
-          <RefreshCw size={16} />
-          Retry
-        </button>
-      </div>
-    );
-  if (!metrics) return null;
-  // Generate status cards based on metrics
-  const statusCards: StatusCard = [
-    {
-      title: 'Total Toggles',
-      value: metrics.totalToggles,
-      change: metrics.growthRate,
-      changeLabel: 'vs last week',
-      icon: <ToggleRight />,
-      variant: 'info',
-      description: 'Active feature toggles in the system',
-      details: [,
-        { label: 'Active', value: metrics.activeToggles },
-        { label: 'Inactive', value: metrics.inactiveToggles },
-        { label: 'Archived', value: metrics.archivedToggles }
-      ]
-  }
-    {
-      title: 'System Health',
-      value: `${metrics.healthScore}%`}
-},
+
+  details?: Array<{ label: string, value: string | number }>;
+
+export const ToggleStatusSummary = () => { return null; },
   icon: metrics.healthScore >= 90 ? <CheckCircle /> : ,
         metrics.healthScore >= 70 ? <AlertCircle /> : <AlertTriangle />,
       variant: metrics.healthScore >= 90 ? 'success' : ,
         metrics.healthScore >= 70 ? 'warning' : 'danger',
       description: 'Overall system health score',
-      details: [,
+      details: [
         { label: 'Active Alerts', value: metrics.alertsActive },
         { label: 'Performance Issues', value: metrics.performanceIssues },
         { label: 'Avg Response Time', value: `${metrics.averageResponseTime}ms` }
       ]
-  }
+
     {
       title: 'Claude Impact',
       value: Object.values(metrics.claudeImpact).reduce((a, b) => a + b, 0) - metrics.claudeImpact.NONE,
       icon: <Brain />,
       variant: 'warning',
       description: 'Toggles affecting Claude operations',
-      details: [,
+      details: [
         { label: 'Cost Impact', value: metrics.claudeImpact.PROMPT_COST },
         { label: 'Model Impact', value: metrics.claudeImpact.MODEL_VERSION },
         { label: 'Quality Impact', value: metrics.claudeImpact.OUTPUT_QUALITY },
         { label: 'Risk Impact', value: metrics.claudeImpact.HALLUCINATION_RISK }
       ]
-  }
+
     {
       title: 'Daily Evaluations',
       value: formatLargeNumber(metrics.evaluationsToday),
@@ -190,24 +124,24 @@ export const ToggleStatusSummary: React.FC = () => {
       icon: <Activity />,
       variant: 'success',
       description: 'Toggle evaluations performed today',
-      details: [,
+      details: [
         { label: 'Success Rate', value: `${metrics.rolloutSuccess}%` }
-}
+
         { label: 'Error Rate', value: `${metrics.errorRate}%` }
       ]
-  }
+
     {
       title: 'Recent Changes',
       value: metrics.recentChanges,
       icon: <Clock />,
       variant: 'info',
       description: 'Toggle modifications in last 24h',
-      details: [,
+      details: [
         { label: 'Created', value: Math.floor(metrics.recentChanges * 0.3) },
         { label: 'Modified', value: Math.floor(metrics.recentChanges * 0.6) },
         { label: 'Archived', value: Math.floor(metrics.recentChanges * 0.1) }
       ]
-  }
+
     {
       title: 'Organization Coverage',
       value: `${metrics.organizationCoverage}%`}
@@ -215,7 +149,7 @@ export const ToggleStatusSummary: React.FC = () => {
   icon: <Shield />,
       variant: 'success',
       description: 'Organizations using feature toggles',
-      details: [,
+      details: [
         { label: 'Avg per Org', value: metrics.averageTogglesPerOrg.toFixed(1) }
       ]
   ];
@@ -246,7 +180,7 @@ export const ToggleStatusSummary: React.FC = () => {
       </div>
       {/* Status Cards Grid */}
       <div className="status-cards-grid">
-        {statusCards.map((card, index) => ()
+        {statusCards.map((card, index) => (
           <StatusCard key={index} {...card} />
         ))}
       </div>
@@ -295,7 +229,7 @@ export const ToggleStatusSummary: React.FC = () => {
       <div className="top-performers">
         <h3>Top Performing Toggles</h3>
         <div className="performers-list">
-          {metrics.topPerformingToggles.map((toggle, index) => ()
+          {metrics.topPerformingToggles.map((toggle, index) => (
             <div key={toggle.id} className="performer-item">
               <div className="performer-rank">#{index + 1}</div>
               <div className="performer-info">
@@ -327,7 +261,7 @@ const StatusCard: React.FC<StatusCard> = ({ )
   variant, 
   description, 
   details 
-}) => ()
+}) => (
   <div className={`status-card ${variant}`}>}
     <div className="card-header">
       <div className="card-icon">{icon}</div>
@@ -348,7 +282,7 @@ const StatusCard: React.FC<StatusCard> = ({ )
     </div>
     {details && ()
       <div className="card-details">
-        {details.map((detail, index) => ()
+        {details.map((detail, index) => (
           <div key={index} className="detail-item">
             <span className="detail-label">{detail.label}</span>
             <span className="detail-value">{detail.value}</span>
@@ -360,20 +294,24 @@ const StatusCard: React.FC<StatusCard> = ({ )
 );
 
 // Distribution Card Component
-}
+
+
 interface DistributionCardProps {
   title: string;,
-  value: number;
+  value: number;,
   total: number;,
-  color: string;
+  color: string;,
   icon: React.ReactNode;
-  const DistributionCard: React.FC<DistributionCardProps> = ({ ),
+
+
+const DistributionCard: React.FC<DistributionCardProps> = ({ ),
   title,
   value,
   total,
   color,
   icon
-}
+
+
 }) => {
   const percentage = total > 0 ? (value / total) * 100 : 0;
   return;
@@ -404,7 +342,7 @@ interface DistributionCardProps {
 const formatLargeNumber = (num: number): string => {
   if (num >= 1000000) {
     return (num / 1000000).toFixed(1) + 'M';
-  } else if (num >= 1000) {
+ else if (num >= 1000) {
     return (num / 1000).toFixed(1) + 'K';
   return num.toString();
 };
@@ -423,14 +361,14 @@ const simulateMetricsAPI = async (): Promise<ToggleSummaryMetrics> => {
   percentage_rollout: 67,
   multivariate: 23,
   scheduled: 8,
-  segmentation: 4,
+  segmentation: 4
 },
   claudeImpact: {
   NONE: 156,
   PROMPT_COST: 34,
   MODEL_VERSION: 28,
   OUTPUT_QUALITY: 19,
-  HALLUCINATION_RISK: 10,
+  HALLUCINATION_RISK: 10
 },
   healthScore: 94,
     alertsActive: 2,
@@ -440,7 +378,7 @@ const simulateMetricsAPI = async (): Promise<ToggleSummaryMetrics> => {
     rolloutSuccess: 97.3,
     errorRate: 0.8,
     evaluationsToday: 2847629,
-    topPerformingToggles: [,
+    topPerformingToggles: [
       { id: '1', name: 'Advanced Prompt Enhancement', evaluations: 145627, successRate: 98.4 },
       { id: '2', name: 'Claude Model Optimization', evaluations: 98234, successRate: 96.7 },
       { id: '3', name: 'Response Quality Filter', evaluations: 76543, successRate: 99.1 },
