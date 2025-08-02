@@ -1,6 +1,7 @@
 // Enhanced data model reflecting actual editor usage patterns
 
-export interface BaseNodeData { // Core identification
+export interface BaseNodeData {
+  // Core identification
   id: string;
   label: string;
   // Common properties used across editors
@@ -16,33 +17,41 @@ export interface BaseNodeData { // Core identification
 
 // Extended UI-only node types (rich text generation)
 
-export interface SubjectNodeData extends BaseNodeData { type: 'Subject';
+export interface SubjectNodeData extends BaseNodeData {
+  type: 'Subject';
   grammaticalNumber?: 'singular' | 'plural' | 'both';
   grammaticalPerson?: 'first' | 'second' | 'third';
   allowPronouns?: boolean;
-  pronouns?: string;
-  baseForm?: string }
+  pronouns?: string[];
+  baseForm?: string;
+}
 
-export interface ConnectorNodeData extends BaseNodeData { type: 'Connector' }
-  connectors: string;
+export interface ConnectorNodeData extends BaseNodeData {
+  type: 'Connector';
+  connectors: string[];
   grammarType?: 'coordinating' | 'subordinating' | 'correlative';
   position?: 'before' | 'after' | 'between';
+}
 
 
-export interface AttributeNodeData extends BaseNodeData { type: 'Attribute' }
-  attributes: string;
+export interface AttributeNodeData extends BaseNodeData {
+  type: 'Attribute';
+  attributes: string[];
   targetNoun?: string;
   adjectiveType?: 'descriptive' | 'quantitative' | 'demonstrative';
   position?: 'before' | 'after';
+}
 
 
-export interface ActionNodeData extends BaseNodeData { type: 'Action';
+export interface ActionNodeData extends BaseNodeData {
+  type: 'Action';
   actionType?: 'verb' | 'verb_phrase' | 'gerund';
   tense?: 'present' | 'past' | 'future' | 'conditional';
   mood?: 'indicative' | 'imperative' | 'subjunctive';
   requiresObject?: boolean;
   intensity?: 'low' | 'medium' | 'high';
-  adverbVariations?: string }
+  adverbVariations?: string[];
+}
 
 // Core runtime-compatible node types (match graphSchema.ts)
 
@@ -51,7 +60,8 @@ export interface WeightedChoiceNodeData extends BaseNodeData { type: 'WeightedCh
   weights: number;
 
 
-export interface ConcatNodeData extends BaseNodeData { type: 'Concat';
+export interface ConcatNodeData extends BaseNodeData {
+  type: 'Concat';
   separator?: string;
   customSeparator?: string;
   joinMode?: 'space' | 'newline' | 'custom';
@@ -59,21 +69,27 @@ export interface ConcatNodeData extends BaseNodeData { type: 'Concat';
   suffix?: string;
   trimInputs?: boolean;
   preserveOrder?: boolean;
-  limitCount?: number }
+  limitCount?: number;
+}
 
-export interface OutputNodeData extends BaseNodeData { type: 'Output';
+export interface OutputNodeData extends BaseNodeData {
+  type: 'Output';
   template?: string;
   format?: 'text' | 'markdown' | 'json';
-  destination?: 'stdout' | 'file' | 'variable' }
+  destination?: 'stdout' | 'file' | 'variable';
+}
 
-export interface IncludeNodeData extends BaseNodeData { type: 'Include';,
-  name: string; // matches graphSchema }
+export interface IncludeNodeData extends BaseNodeData {
+  type: 'Include';
+  name: string; // matches graphSchema
   includeType?: 'bundle' | 'template' | 'component';
+}
 
-
-export interface SetVariableNodeData extends BaseNodeData { type: 'SetVariable' }
+export interface SetVariableNodeData extends BaseNodeData {
+  type: 'SetVariable';
   variableName: string;
   value: string;
+}
   variableType?: 'string' | 'number' | 'boolean' | 'object' | 'auto';
   scope?: 'global' | 'local' | 'session';
   persistent?: boolean;
@@ -240,10 +256,12 @@ export function createNodeData(type: NodeType, id: string, label?: string): Node
 
 // Serialization utilities for runtime compatibility
 
-export interface RuntimeNodeData { id: string;
+export interface RuntimeNodeData {
+  id: string;
   type: RuntimeNodeType;
   inputs?: string;
-  [key: string]: any }
+  [key: string]: any;
+}
 
 
 // Convert UI node data to runtime-compatible format
@@ -361,35 +379,42 @@ export function validateNodeData(nodeData: Partial<NodeData>): string { const er
     const data = nodeData as Partial<SetVariableNodeData | GetVariableNodeData>;
     if (!data.variableName) {
       errors.push(`${nodeData.type} nodes must have a variable name`);
-
-
+    }
+  }
 
   return errors;
+}
 
 
-export interface NodeOperations { addVariation: (nodeId: string, variation: string) => void
-  removeVariation: (nodeId: string, variationIndex: number) => void
-  updateVariation: (nodeId: string, variationIndex: number, newValue: string) => void
-  reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void
-  updateNodeData: (nodeId: string, updates: Partial<NodeData>) => void
-  duplicateNode: (nodeId: string) => void }
+export interface NodeOperations {
+  addVariation: (nodeId: string, variation: string) => void;
+  removeVariation: (nodeId: string, variationIndex: number) => void;
+  updateVariation: (nodeId: string, variationIndex: number, newValue: string) => void;
+  reorderVariations: (nodeId: string, fromIndex: number, toIndex: number) => void;
+  updateNodeData: (nodeId: string, updates: Partial<NodeData>) => void;
+  duplicateNode: (nodeId: string) => void;
   deleteNode: (nodeId: string) => void;
+}
 
 
 
-export interface VariationConfig { id: string;
+export interface VariationConfig {
+  id: string;
   text: string;
   weight?: number;
   enabled?: boolean;
-  tags?: string;
-  metadata?: Record<string, any> }
+  tags?: string[];
+  metadata?: Record<string, any>;
+}
 
 
-export interface NodeTemplate { id: string;
+export interface NodeTemplate {
+  id: string;
   name: string;
   description: string;
   nodeType: NodeType;
-  defaultData: Partial<NodeData> }
+  defaultData: Partial<NodeData>;
   category: string;
-  tags: string;
+  tags: string[];
+}
 

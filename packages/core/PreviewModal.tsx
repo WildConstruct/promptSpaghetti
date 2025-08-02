@@ -8,54 +8,63 @@ import { professionalColors } from './styles/professional-design-system';
 
 // Individual result management for Epic 8.5 Task 3
 
-interface ResultAction { type: 'regenerate' | 'lock' | 'unlock' | 'compare' | 'export' }
+interface ResultAction {
+  type: 'regenerate' | 'lock' | 'unlock' | 'compare' | 'export';
   resultIndex: number;
   data?: Record<string, unknown>;
+}
 
 
 
-interface LockedResult { index: number;
+interface LockedResult {
+  index: number;
   seed: number;
   lockedAt: number;
-  note?: string }
+  note?: string;
+}
 
 
 // Legacy interface for backward compatibility
 
-interface PreviewResult { seed: number;
+interface PreviewResult {
+  seed: number;
   output?: string;
-  error?: string }
+  error?: string;
+}
 
 
-export interface PreviewModalProps { open: boolean;
+export interface PreviewModalProps {
+  open: boolean;
   loading: boolean;
   error: string | null;
-  results: PreviewResult | PreviewResultWithPath;
+  results: PreviewResult[] | PreviewResultWithPath[];
   onClose: () => void;
   onCancel?: () => void;
   onResultHover?: (index: number) => void;
-  onNodeHighlight?: (nodeIds: string) => void;
-  // Epic 8.5 Task 3: Individual result management;
+  onNodeHighlight?: (nodeIds: string[]) => void;
+  // Epic 8.5 Task 3: Individual result management
   onResultAction?: (action: ResultAction) => void;
-  lockedResults?: LockedResult;
-  regeneratingResults?: number;
-  // Epic 8.5 Task 5: Creative variance analysis }
+  lockedResults?: LockedResult[];
+  regeneratingResults?: number[];
+  // Epic 8.5 Task 5: Creative variance analysis
   onVarianceSuggestion?: (suggestion: VarianceSuggestion) => void;
+}
 
 
 
-export const PreviewModal: React.FC<PreviewModalProps> = ({ open
-  loading
-  error
-  results
-  onClose
-  onCancel
-  onResultHover
-  onNodeHighlight
-  onResultAction
-  lockedResults = []
-  regeneratingResults = []
-  onVarianceSuggestion }
+export const PreviewModal: React.FC<PreviewModalProps> = ({
+  open,
+  loading,
+  error,
+  results,
+  onClose,
+  onCancel,
+  onResultHover,
+  onNodeHighlight,
+  onResultAction,
+  lockedResults = [],
+  regeneratingResults = [],
+  onVarianceSuggestion
 }) => { const [showExecutionPaths, setShowExecutionPaths] = useState(false);
   const [showVarianceAnalysis, setShowVarianceAnalysis] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
@@ -63,56 +72,71 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
   const [exportDialog, setExportDialog] = useState<{
   open: boolean;
   type: 'individual' | 'batch' | 'comparison';
-  individualIndex?: number }>({ open: false, type: 'individual' });
+  individualIndex?: number;
+}>({ open: false, type: 'individual' });
   // Check if results have execution path data
   const hasExecutionPaths = results.length > 0 && results.some(r => 'executionPath' in r && r.executionPath);
   // Helper functions for result management
   const isResultLocked = (index: number) => lockedResults.some(locked => locked.index === index);
   const isResultRegenerating = (index: number) => regeneratingResults.includes(index);
   const isResultSelected = (index: number) => selectedForComparison.includes(index);
-  const handleResultAction = (type: ResultAction['type'], index: number, data?: Record<string, unknown>) => { if (type === 'export') {
-  setExportDialog({
-  open: true
-  type: 'individual'
-  individualIndex: index }
-});
+  const handleResultAction = (type: ResultAction['type'], index: number, data?: Record<string, unknown>) => {
+    if (type === 'export') {
+      setExportDialog({
+        open: true,
+        type: 'individual',
+        individualIndex: index
+      });
       return;
 
 
     onResultAction?.({ type, resultIndex: index, data });
   };
-  const toggleComparisonSelection = (index: number) => { if (isResultSelected(index)) {
-      setSelectedForComparison(prev => prev.filter(i => i !== index)) } else if (selectedForComparison.length < 3) { // Limit to 3 results for comparison
-      setSelectedForComparison(prev => [...prev, index]) }
+  const toggleComparisonSelection = (index: number) => {
+    if (isResultSelected(index)) {
+      setSelectedForComparison(prev => prev.filter(i => i !== index));
+    } else if (selectedForComparison.length < 3) { // Limit to 3 results for comparison
+      setSelectedForComparison(prev => [...prev, index]);
+    }
   };
-  const clearComparison = () => { setSelectedForComparison([]);
-    setCompareMode(false) };
-  const handleExport = async (format: ExportFormat, options: ResultExportOptions) => { try {
+  const clearComparison = () => {
+    setSelectedForComparison([]);
+    setCompareMode(false);
+  };
+  const handleExport = async (format: ExportFormat, options: ResultExportOptions) => {
+    try {
       let exportResult;
       if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
         const result = results[exportDialog.individualIndex] as PreviewResultWithPath;
         exportResult = await resultExportService.exportIndividualResult(
           result,
           exportDialog.individualIndex,
-          results.length }
+          results.length,
           options
         );
- else if (exportDialog.type === 'batch') { exportResult = await resultExportService.exportBatchResults(
-          results as PreviewResultWithPath,
-          selectedForComparison }
+      } else if (exportDialog.type === 'batch') {
+        exportResult = await resultExportService.exportBatchResults(
+          results as PreviewResultWithPath[],
+          selectedForComparison,
           options
         );
- else { exportResult = await resultExportService.exportComparison(
-          results as PreviewResultWithPath,
-          selectedForComparison }
+      } else {
+        exportResult = await resultExportService.exportComparison(
+          results as PreviewResultWithPath[],
+          selectedForComparison,
           options
         );
 
 
       // Handle the export result
-      if (exportResult.shouldDownload) { downloadExportResult(exportResult, format) }
- catch (error) { console.error('Export failed:', error);
-  throw error }
+      if (exportResult.shouldDownload) {
+        downloadExportResult(exportResult, format);
+      }
+    }
+    catch (error) {
+      console.error('Export failed:', error);
+      throw error;
+    }
   };
   const downloadExportResult = (exportResult: { data: string; mimeType: string }, format: ExportFormat) => {
     const blob = new Blob([exportResult.data], { type: exportResult.mimeType });
@@ -126,34 +150,34 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
     if (exportDialog.type === 'individual' && typeof exportDialog.individualIndex === 'number') {
       const seed = results[exportDialog.individualIndex].seed;
       filename = `promptscape-result-seed${seed}-${timestamp}.${extension}`;
- else if (exportDialog.type === 'batch') {
+    } else if (exportDialog.type === 'batch') {
       filename = `promptscape-batch-${selectedForComparison.length}results-${timestamp}.${extension}`;
-
-
+    }
     link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
-  const getFileExtension = (format: ExportFormat): string => { const extensions: Record<ExportFormat, string> = {
-  'plain-text': 'txt'
-  'json-simple': 'json'
-  'json-complete': 'json'
-  'csv-analysis': 'csv'
-  'fountain-script': 'fountain'
-  'final-draft': 'fdx'
-  'controlnet-json': 'json'
-  'stable-diffusion': 'zip'
-  'professional-report': 'pdf'
-  'creative-brief': 'docx'
-  'mars-framework': 'json'
-  'zada-natural': 'md'
-  'hybrid-prompting': 'json'
-  'execution-timeline': 'json'
-  'variance-report': 'json'
-  'batch-summary': 'json' }
-};
+  const getFileExtension = (format: ExportFormat): string => {
+    const extensions: Record<ExportFormat, string> = {
+      'plain-text': 'txt',
+      'json-simple': 'json',
+      'json-complete': 'json',
+      'csv-analysis': 'csv',
+      'fountain-script': 'fountain',
+      'final-draft': 'fdx',
+      'controlnet-json': 'json',
+      'stable-diffusion': 'zip',
+      'professional-report': 'pdf',
+      'creative-brief': 'docx',
+      'mars-framework': 'json',
+      'zada-natural': 'md',
+      'hybrid-prompting': 'json',
+      'execution-timeline': 'json',
+      'variance-report': 'json',
+      'batch-summary': 'json'
+    };
     return extensions[format] || 'json';
   };
   if (!open) return null;
@@ -259,10 +283,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
               <button
                 onClick={() =>
                   setExportDialog({
-  open: true,
-  type: 'batch'
+                    open: true,
+                    type: 'batch'
                   })
-
+                }
                 style={{
   background: '#8b5cf6',
   color: '#fff',
@@ -282,10 +306,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
               <button
                 onClick={() =>
                   setExportDialog({
-  open: true,
-  type: 'comparison'
+                    open: true,
+                    type: 'comparison'
                   })
-
+                }
                 style={{
   background: '#6b7280',
   color: '#fff',
@@ -384,9 +408,9 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
                         { 'executionTimeMs' in result && (
                           <div
                             style={{
-  fontSize: 10,
-  color: '#6b7280',
-  marginTop: 4
+                            fontSize: 10,
+                            color: '#6b7280',
+                            marginTop: 4
                           }}
                           >
                             {result.executionTimeMs}ms
@@ -518,10 +542,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
                       )}
                       {/* Lock/Unlock button */}
                       <button
-                        onClick={ e => {
-  e.stopPropagation();
-  handleResultAction(locked ? 'unlock' : 'lock', i);
-                        }}
+                        onClick={e => {
+                        e.stopPropagation();
+                        handleResultAction(locked ? 'unlock' : 'lock', i);
+                      }}
                         style={{
   width: 20,
   height: 20,
@@ -540,7 +564,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
                       </button>
                       {/* Regenerate button */}
                       <button
-                        onClick={ e => {
+                        onClick={e => {
                           e.stopPropagation();
                           if (!regenerating && !locked) {
                             handleResultAction('regenerate', i);
@@ -565,7 +589,7 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
                       </button>
                       {/* Export button */}
                       <button
-                        onClick={ e => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleResultAction('export', i);
                         }}
@@ -740,10 +764,10 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
                                 padding: '4px 6px',
                                 background: 'rgba(255, 255, 255, 0.6)',
                                 borderRadius: 3,
-                                border: `1px solid ${isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280'}`
+                                border: `1px solid ${isHighProbability ? '#10b981' : isMediumProbability ? '#f59e0b' : '#6b7280'}`,
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center',
+                                alignItems: 'center'
 
                             >
                               <div>
@@ -779,19 +803,19 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
                                             ? '#f59e0b'
                                             : '#6b7280',
                                         transition: 'width 0.3s ease'
-
+                                      }}
                                     />
                                   </div>
                                   <span
                                     style={{
-  color: isHighProbability,
-  ? '#065f46'
-  : isMediumProbability,
-  ? '#92400e'
-  : '#4b5563',
-  fontWeight: 600,
-  fontSize: 9,
-        }}
+                                      color: isHighProbability
+                                        ? '#065f46'
+                                        : isMediumProbability
+                                        ? '#92400e'
+                                        : '#4b5563',
+                                      fontWeight: 600,
+                                      fontSize: 9
+                                    }}
                                   >
                                     {probabilityPercent}%
                                   </span>
@@ -802,11 +826,11 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
                         })}
                         <div
                           style={{
-  marginTop: 6,
-  fontSize: 9,
-  color: '#6b7280',
-  fontStyle: 'italic' },
-
+                            marginTop: 6,
+                            fontSize: 9,
+                            color: '#6b7280',
+                            fontStyle: 'italic'
+                          }}
                         >
                           Real-time weight impact from Story 8.3 controls
                         </div>
@@ -823,13 +847,15 @@ export const PreviewModal: React.FC<PreviewModalProps> = ({ open
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  marginTop: 20,
-  paddingTop: 16,
-  borderTop: '1px solid #e5e7eb' },
-
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 20,
+            paddingTop: 16,
+            borderTop: '1px solid #e5e7eb'
+          }}
         >
-          <div style={{ fontSize: 12, color: '#6b7280' }},
-        }}>
+          <div style={{ fontSize: 12, color: '#6b7280' }}>
             {lockedResults.length > 0 && (
               <span style={{ marginRight: 16 }}>
                 🔒 {lockedResults.length} locked result{lockedResults.length !== 1 ? 's' : ''}
