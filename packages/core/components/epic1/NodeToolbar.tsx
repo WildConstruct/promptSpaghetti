@@ -1,9 +1,10 @@
 /**
  * Node Toolbar for Epic 1
- * Simple draggable node palette
+ * Draggable node palette using React DnD for compatibility with DroppableCanvas
  */
 
 import React from 'react';
+import { useDrag } from 'react-dnd';
 import './NodeToolbar.css';
 
 interface NodeTypeInfo {
@@ -21,21 +22,26 @@ const nodeTypes: NodeTypeInfo[] = [
   { type: 'output', label: 'Output', icon: '📤', color: '#f15656' }
 ];
 
-// Draggable node button
+// Draggable node button using React DnD
 const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
-  const onDragStart = (event: React.DragEvent) => {
-    event.dataTransfer.setData('application/reactflow', nodeInfo.type);
-    event.dataTransfer.effectAllowed = 'move';
-    console.log('NodeToolbar drag start:', nodeInfo.type);
-  };
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: 'new-node',
+    item: { nodeType: nodeInfo.type },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }), [nodeInfo.type]);
 
   return (
     <button
-      className="node-button"
-      style={{ '--node-color': nodeInfo.color } as React.CSSProperties}
+      ref={drag}
+      className={`node-button ${isDragging ? 'dragging' : ''}`}
+      style={{ 
+        '--node-color': nodeInfo.color,
+        opacity: isDragging ? 0.5 : 1,
+        cursor: isDragging ? 'grabbing' : 'grab'
+      } as React.CSSProperties}
       title={`Drag to add ${nodeInfo.label} node`}
-      draggable={true}
-      onDragStart={onDragStart}
     >
       <span className="node-icon">{nodeInfo.icon}</span>
       <span className="node-label">{nodeInfo.label}</span>

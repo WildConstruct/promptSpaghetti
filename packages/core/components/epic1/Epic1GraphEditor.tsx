@@ -21,6 +21,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
+import { DroppableCanvas } from './DroppableCanvas';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
@@ -428,30 +429,31 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Wrap with DndProvider if using droppable nodes
   const content = (
     <div className="epic1-graph-editor" style={editorStyle}>
-      <ReactFlow
-          nodes={enhancedNodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onPaneClick={handlePaneClick}
-          onInit={onInit}
-          nodeTypes={nodeTypes}
-          isValidConnection={isValidConnection}
-          connectionMode={ConnectionMode.Loose}
-          fitView
-          attributionPosition="bottom-left"
-          panOnScroll={false}
-          zoomOnScroll={true}
-          zoomOnPinch={true}
-          panOnDrag={true}
-          selectionOnDrag={false}
-          nodesDraggable={true}
-          nodesConnectable={true}
-          elementsSelectable={true}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-        >
+      <DroppableCanvas onDrop={handleNodeDrop} reactFlowInstance={reactFlowInstance}>
+        <ReactFlow
+            nodes={enhancedNodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            onPaneClick={handlePaneClick}
+            onInit={onInit}
+            nodeTypes={nodeTypes}
+            isValidConnection={isValidConnection}
+            connectionMode={ConnectionMode.Loose}
+            fitView
+            attributionPosition="bottom-left"
+            panOnScroll={false}
+            zoomOnScroll={true}
+            zoomOnPinch={true}
+            panOnDrag={true}
+            selectionOnDrag={false}
+            nodesDraggable={true}
+            nodesConnectable={true}
+            elementsSelectable={true}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+          >
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
           <MiniMap 
@@ -530,6 +532,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             onDismiss={() => dismissToast(toast.id)}
           />
         ))}
+      </DroppableCanvas>
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />

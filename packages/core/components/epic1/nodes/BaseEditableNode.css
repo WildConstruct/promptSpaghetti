@@ -11,6 +11,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   color: #e0e0e0;
+  /* Ensure handles are positioned relative to this container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Dragging state */
@@ -60,8 +64,10 @@
   background: #5b9eff;
   border: 2px solid #1a1a1a;
   transition: all 0.2s ease;
-  top: 50%;
-  transform: translateY(-50%);
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 10;
 }
 
 .epic1-handle:hover {
@@ -74,20 +80,20 @@
 }
 
 .epic1-handle.target {
-  left: -6px;
+  left: -6px !important;
 }
 
 .epic1-handle.source {
-  right: -6px;
+  right: -6px !important;
 }
 
 /* Adjust position on hover to keep handles centered */
 .epic1-handle.target:hover {
-  left: -7px;
+  left: -7px !important;
 }
 
 .epic1-handle.source:hover {
-  right: -7px;
+  right: -7px !important;
 }
 
 /* Visual indicators */
