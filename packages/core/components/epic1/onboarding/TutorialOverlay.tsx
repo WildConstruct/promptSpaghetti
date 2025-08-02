@@ -17,9 +17,34 @@ export const TutorialOverlay: React.FC = () => {
   } = useTutorial();
 
   const [targetElement, setTargetElement] = useState<HTMLElement | null>(null);
+  const [showSkipHint, setShowSkipHint] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const skipHintTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const step = tutorialSteps[currentStep];
+
+  // Show skip hint after a delay for interactive steps
+  useEffect(() => {
+    setShowSkipHint(false);
+    
+    if (step.action !== 'observe') {
+      // Clear any existing timer
+      if (skipHintTimerRef.current) {
+        clearTimeout(skipHintTimerRef.current);
+      }
+      
+      // Set timer to show skip hint after 5 seconds
+      skipHintTimerRef.current = setTimeout(() => {
+        setShowSkipHint(true);
+      }, 5000);
+    }
+    
+    return () => {
+      if (skipHintTimerRef.current) {
+        clearTimeout(skipHintTimerRef.current);
+      }
+    };
+  }, [currentStep, step.action]);
 
   // Find target element
   useEffect(() => {
@@ -91,6 +116,15 @@ export const TutorialOverlay: React.FC = () => {
 
   if (!isActive) return null;
 
+  // Add pulse animation style
+  const pulseKeyframes = `
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+  `;
+
   const getSpotlightStyle = () => {
     if (!step.spotlight || !targetElement) return {};
 
@@ -154,15 +188,19 @@ export const TutorialOverlay: React.FC = () => {
   };
 
   return (
-    <div
-      ref={overlayRef}
-      className="tutorial-overlay"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+    <>
+      {/* Inject pulse animation */}
+      <style>{pulseKeyframes}</style>
+      
+      <div
+        ref={overlayRef}
+        className="tutorial-overlay"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
         zIndex: 9999,
         pointerEvents: step.spotlight ? 'none' : 'auto',
       }}
@@ -319,23 +357,29 @@ export const TutorialOverlay: React.FC = () => {
               </button>
             )}
 
-            {step.action === 'observe' && (
-              <button
-                onClick={nextStep}
-                style={{
-                  backgroundColor: '#6366f1',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '8px 20px',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  fontWeight: 500,
-                }}
-              >
-                {currentStep === tutorialSteps.length - 1 ? 'Finish' : 'Continue'}
-              </button>
-            )}
+            {/* Always show continue button for all steps */}
+            <button
+              onClick={nextStep}
+              style={{
+                backgroundColor: step.action === 'observe' ? '#6366f1' : 
+                                showSkipHint ? '#f59e0b' : '#4b5563',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '8px 20px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                fontWeight: 500,
+                opacity: step.action === 'observe' ? 1 : 0.8,
+                transition: 'all 0.3s ease',
+                animation: showSkipHint ? 'pulse 1.5s infinite' : 'none',
+              }}
+              title={step.action !== 'observe' ? 'Skip this step' : ''}
+            >
+              {currentStep === tutorialSteps.length - 1 ? 'Finish' : 
+               step.action === 'observe' ? 'Continue' : 
+               showSkipHint ? 'Skip (Press to continue)' : 'Skip'}
+            </button>
           </div>
         </div>
       </div>
@@ -375,6 +419,7 @@ export const TutorialOverlay: React.FC = () => {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </>
   );
 };

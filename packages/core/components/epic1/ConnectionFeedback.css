@@ -106,16 +106,22 @@
 
 /* Valid target handles - highlight */
 .epic1-valid-target .react-flow__handle-left {
-  transform: scale(1.5);
+  width: 18px;
+  height: 18px;
   background: #10b981;
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  /* Adjust position to keep centered */
+  left: -9px;
 }
 
 /* Source handle being dragged from */
 .epic1-connecting-source .react-flow__handle-right {
-  transform: scale(1.3);
+  width: 16px;
+  height: 16px;
   background: #4a9eff;
   box-shadow: 0 0 10px rgba(74, 158, 255, 0.6);
+  /* Adjust position to keep centered */
+  right: -8px;
 }
 
 /* Connection line styling */

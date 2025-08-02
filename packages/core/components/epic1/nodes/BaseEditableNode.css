@@ -13,14 +13,17 @@
   color: #e0e0e0;
 }
 
-/* Editing state - glow effect and expansion */
+/* Editing state - glow effect */
 .epic1-editable-node.editing {
-  box-shadow: 0 0 20px rgba(91, 158, 255, 0.7);
-  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(91, 158, 255, 0.7), 0 0 40px rgba(91, 158, 255, 0.3);
   border-color: #5b9eff;
+  border-width: 3px;
   cursor: default;
   z-index: 100;
   background: #252525;
+  /* Add subtle outline instead of transform for visual feedback */
+  outline: 2px solid rgba(91, 158, 255, 0.2);
+  outline-offset: 4px;
 }
 
 /* Selected state - subtle highlight */
@@ -48,9 +51,12 @@
 }
 
 .epic1-handle:hover {
-  transform: scale(1.2);
   background: #4a8ee6;
   border-color: #0f0f0f;
+  box-shadow: 0 0 8px rgba(91, 158, 255, 0.6);
+  /* Use width/height instead of transform to avoid positioning issues */
+  width: 14px;
+  height: 14px;
 }
 
 .epic1-handle.target {
@@ -59,6 +65,15 @@
 
 .epic1-handle.source {
   right: -6px;
+}
+
+/* Adjust position on hover to keep handles centered */
+.epic1-handle.target:hover {
+  left: -7px;
+}
+
+.epic1-handle.source:hover {
+  right: -7px;
 }
 
 /* Visual indicators */
