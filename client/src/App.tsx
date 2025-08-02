@@ -1,5 +1,5 @@
 import React, { useCallback, lazy, Suspense } from 'react';
-import { SafeEpic1Wrapper } from './SafeEpic1Wrapper';
+import { Epic1EditorContainer } from './Epic1EditorContainer';
 import ReactFlow, { 
   Node, 
   Edge, 
@@ -334,7 +334,7 @@ function App() {
         >
           Back to Simple Version
         </button>
-        <SafeEpic1Wrapper 
+        <Epic1EditorContainer 
           showPreview={true}
           showAssetLibrary={true}
         />
