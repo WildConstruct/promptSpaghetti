@@ -1,4 +1,5 @@
 import React, { useCallback, lazy, Suspense } from 'react';
+import { SafeEpic1Wrapper } from './SafeEpic1Wrapper';
 import ReactFlow, { 
   Node, 
   Edge, 
@@ -300,81 +301,45 @@ function App() {
     setShowPreview(true);
   };
 
-  // Dynamic loading of Epic1GraphEditor
-  const loadRealEditor = async () => {
-    try {
-      setLoadError('');
-      console.log('Attempting to load Epic1GraphEditor...');
-      
-      // First try to load just the nodes to debug
-      try {
-        const nodesModule = await import('@promptscape/core/components/epic1/nodes');
-        console.log('Nodes module loaded:', nodesModule);
-        console.log('TextBlockNode:', nodesModule.TextBlockNode);
-        console.log('epic1NodeTypes:', nodesModule.epic1NodeTypes);
-      } catch (nodeError) {
-        console.error('Failed to load nodes module:', nodeError);
-      }
-      
-      const module = await import('@promptscape/core/components/epic1');
-      console.log('Module loaded:', module);
-      console.log('Available exports:', Object.keys(module));
-      
-      if (module.Epic1GraphEditorWithProvider) {
-        setRealEditor(() => module.Epic1GraphEditorWithProvider);
-        setUseRealEditor(true);
-      } else {
-        throw new Error('Epic1GraphEditorWithProvider not found in module');
-      }
-    } catch (error) {
-      console.error('Failed to load Epic1GraphEditor:', error);
-      setLoadError(error.message || 'Failed to load editor');
-      setUseRealEditor(false);
-    }
+  // Simplified loading function - SafeEpic1Wrapper handles the actual loading
+  const loadRealEditor = () => {
+    setUseRealEditor(true);
   };
 
   console.log('App component rendering with Epic 1 MVP nodes...');
   
   // Try to render the real Epic1GraphEditor
-  if (useRealEditor && RealEditor) {
-    try {
-      return (
-        <div className="App" style={{ width: '100vw', height: '100vh' }}>
-          <button
-            onClick={() => {
-              setUseRealEditor(false);
-              setRealEditor(null);
-              setLoadError('');
-            }}
-            style={{
-              position: 'absolute',
-              top: 10,
-              left: 10,
-              zIndex: 1000,
-              padding: '10px 20px',
-              background: '#e53e3e',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              fontSize: '14px',
-              cursor: 'pointer'
-            }}
-          >
-            Back to Simple Version
-          </button>
-          <React.Suspense fallback={<div>Loading Epic1 Editor...</div>}>
-            <RealEditor 
-              showPreview={true}
-              showAssetLibrary={true}
-            />
-          </React.Suspense>
-        </div>
-      );
-    } catch (renderError) {
-      console.error('Error rendering Epic1GraphEditor:', renderError);
-      setLoadError('Error rendering editor: ' + renderError.message);
-      setUseRealEditor(false);
-    }
+  if (useRealEditor) {
+    return (
+      <div className="App" style={{ width: '100vw', height: '100vh' }}>
+        <button
+          onClick={() => {
+            setUseRealEditor(false);
+            setRealEditor(null);
+            setLoadError('');
+          }}
+          style={{
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            zIndex: 1000,
+            padding: '10px 20px',
+            background: '#e53e3e',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '14px',
+            cursor: 'pointer'
+          }}
+        >
+          Back to Simple Version
+        </button>
+        <SafeEpic1Wrapper 
+          showPreview={true}
+          showAssetLibrary={true}
+        />
+      </div>
+    );
   }
   
   return (
