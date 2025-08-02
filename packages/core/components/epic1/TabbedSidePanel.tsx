@@ -67,9 +67,8 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         {activeTab === 'preview' && previewEngine && (
           <div className="preview-container">
             <PreviewPanel
-              engine={previewEngine}
-              position="embedded"
-              showHeader={false}
+              previewEngine={previewEngine}
+              className="embedded-preview"
             />
           </div>
         )}

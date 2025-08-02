@@ -45,6 +45,17 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   const [changeSet, setChangeSet] = useState<ChangeSet | null>(null);
   const previousResults = useRef<string[]>([]);
 
+  // Early return if no preview engine
+  if (!previewEngine) {
+    return (
+      <div className={`preview-panel ${className}`}>
+        <div className="preview-error">
+          <p>Preview engine not initialized</p>
+        </div>
+      </div>
+    );
+  }
+
   // Subscribe to preview engine updates
   useEffect(() => {
     const unsubscribe = previewEngine.subscribe((update) => {
@@ -301,7 +312,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
 
       {/* Worker indicator */}
       <WorkerIndicator
-        enabled={previewEngine.isWebWorkerEnabled()}
+        enabled={previewEngine?.isWebWorkerEnabled?.() || false}
         totalWorkers={previewUpdate?.workerStats?.totalWorkers}
         busyWorkers={previewUpdate?.workerStats?.busyWorkers}
         queuedTasks={previewUpdate?.workerStats?.queuedTasks}
