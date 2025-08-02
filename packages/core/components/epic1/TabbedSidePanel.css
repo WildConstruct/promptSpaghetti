@@ -1,0 +1,226 @@
+/**
+ * Tabbed Side Panel Styles
+ */
+
+.tabbed-side-panel {
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+}
+
+/* Position variants */
+.tabbed-side-panel.right {
+  right: 0;
+  flex-direction: row-reverse;
+  border-radius: 8px 0 0 8px;
+}
+
+.tabbed-side-panel.left {
+  left: 0;
+  flex-direction: row;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Expanded/Collapsed states */
+.tabbed-side-panel.expanded {
+  width: 400px;
+}
+
+.tabbed-side-panel.collapsed {
+  width: 48px;
+}
+
+/* Tab buttons container */
+.tab-buttons {
+  width: 48px;
+  background: #252525;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  gap: 4px;
+}
+
+.tabbed-side-panel.right .tab-buttons {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tabbed-side-panel.left .tab-buttons {
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Tab button */
+.tab-button {
+  width: 40px;
+  height: 40px;
+  margin: 0 4px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 4px;
+  transition: all 0.2s ease;
+  color: #999;
+  position: relative;
+}
+
+.tab-button:hover {
+  background: #333;
+  color: #e0e0e0;
+}
+
+.tab-button.active {
+  background: #2196F3;
+  color: #fff;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 100%;
+  background: #2196F3;
+}
+
+.tabbed-side-panel.right .tab-button.active::after {
+  right: -4px;
+  top: 0;
+}
+
+.tabbed-side-panel.left .tab-button.active::after {
+  left: -4px;
+  top: 0;
+}
+
+/* Tab icon and label */
+.tab-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tab-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Panel content */
+.panel-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: #1a1a1a;
+}
+
+.tabbed-side-panel.collapsed .panel-content {
+  width: 0;
+  opacity: 0;
+}
+
+.tabbed-side-panel.expanded .panel-content {
+  width: 352px; /* 400px - 48px for tabs */
+  opacity: 1;
+}
+
+/* Preview container */
+.preview-container {
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* Assets container */
+.assets-container {
+  height: 100%;
+  position: relative;
+}
+
+/* Embedded AssetLibraryV2 adjustments */
+.assets-container .asset-library-v2 {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.assets-container .library-header-v2 {
+  display: none; /* Hide the library header when embedded */
+}
+
+.assets-container .library-body-v2 {
+  height: 100%;
+}
+
+/* Panel hint arrow */
+.panel-hint {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.tabbed-side-panel.right .panel-hint {
+  left: 8px;
+}
+
+.tabbed-side-panel.left .panel-hint {
+  right: 8px;
+}
+
+.hint-arrow {
+  animation: pulse-arrow 2s infinite;
+}
+
+@keyframes pulse-arrow {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50% { opacity: 0.8; transform: translateX(-2px); }
+}
+
+/* Scrollbar styling */
+.preview-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.preview-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.preview-container::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.preview-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tabbed-side-panel.expanded {
+    width: 320px;
+  }
+  
+  .tabbed-side-panel.expanded .panel-content {
+    width: 272px;
+  }
+}

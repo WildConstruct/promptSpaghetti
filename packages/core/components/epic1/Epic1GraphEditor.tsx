@@ -30,6 +30,8 @@ import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
 import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
+import { TabbedSidePanel } from './TabbedSidePanel';
+import { NodeToolbar } from './NodeToolbar';
 import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
@@ -314,22 +316,12 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   }, []);
 
   const editorStyle = useMemo(() => {
-    if (!isPreviewVisible) return {};
-    
-    if (previewPosition === 'right') {
-      return {
-        display: 'grid',
-        gridTemplateColumns: `1fr ${previewWidth}`,
-        height: '100%'
-      };
-    } else {
-      return {
-        display: 'grid',
-        gridTemplateRows: `1fr ${previewWidth}`,
-        height: '100%'
-      };
-    }
-  }, [isPreviewVisible, previewPosition, previewWidth]);
+    // Simple full height container - tabbed panel handles its own positioning
+    return {
+      height: '100%',
+      position: 'relative'
+    };
+  }, []);
 
   // Context menu handlers
   const handleSaveAsPreset = useCallback(() => {
@@ -360,22 +352,7 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="epic1-graph-editor" style={editorStyle}>
-        <div style={{ position: 'relative', height: '100%' }}>
-          {/* Asset Library V2 - Enhanced multi-column browser */}
-          {showAssetLibrary && (
-            <AssetLibraryV2
-              position="bottom"
-              onPresetDrag={(preset) => {
-                console.log('Preset dragged:', preset);
-                // TODO: Implement preset application to nodes
-              }}
-              onPresetSelect={(preset) => {
-                console.log('Preset selected:', preset);
-              }}
-            />
-          )}
-          
-          <ReactFlow
+        <ReactFlow
           nodes={enhancedNodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -387,6 +364,11 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           connectionMode={ConnectionMode.Loose}
           fitView
           attributionPosition="bottom-left"
+          panOnScroll={false}
+          zoomOnScroll={true}
+          zoomOnPinch={true}
+          panOnDrag={[1, 2]}
+          selectionOnDrag={false}
         >
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
@@ -464,16 +446,24 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
             onDismiss={() => dismissToast(toast.id)}
           />
         ))}
-      </div>
-
-      {/* Preview Panel */}
-      {isPreviewVisible && previewEngineRef.current && (
-        <PreviewPanel
+      </ReactFlow>
+      
+      {/* Node Toolbar */}
+      <NodeToolbar position="top" />
+      
+      {/* Tabbed Side Panel - combines Preview and Asset Browser */}
+      <TabbedSidePanel
           previewEngine={previewEngineRef.current}
-          onSeedChange={handlePreviewSeedChange}
-          onClose={handleTogglePreview}
+          onPresetDrag={(preset) => {
+            console.log('Preset dragged:', preset);
+            // TODO: Implement preset application to nodes
+          }}
+          onPresetSelect={(preset) => {
+            console.log('Preset selected:', preset);
+          }}
+          position="right"
+          defaultTab={isPreviewVisible ? 'preview' : null}
         />
-      )}
       
       {/* Context Menu */}
       <NodeContextMenu

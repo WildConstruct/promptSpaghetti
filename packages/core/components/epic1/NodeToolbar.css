@@ -1,0 +1,147 @@
+/**
+ * Node Toolbar Styles
+ */
+
+.node-toolbar {
+  position: fixed;
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Position variants */
+.node-toolbar.top {
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: row;
+}
+
+.node-toolbar.bottom {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: row;
+}
+
+.node-toolbar.left {
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+
+.node-toolbar.right {
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+}
+
+/* Toolbar title */
+.toolbar-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #999;
+  letter-spacing: 0.5px;
+  padding: 0 4px;
+}
+
+/* Toolbar buttons container */
+.toolbar-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.node-toolbar.left .toolbar-buttons,
+.node-toolbar.right .toolbar-buttons {
+  flex-direction: column;
+}
+
+/* Node button */
+.node-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #252525;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #e0e0e0;
+  cursor: move;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.node-button:hover {
+  background: #2a2a2a;
+  border-color: var(--node-color, #5b9eff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.node-button.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+/* Color indicator */
+.node-button::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--node-color, #5b9eff);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.node-button:hover::before {
+  opacity: 1;
+}
+
+/* Node icon */
+.node-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Node label */
+.node-label {
+  font-weight: 500;
+}
+
+/* Vertical orientation adjustments */
+.node-toolbar.left .node-button,
+.node-toolbar.right .node-button {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .node-toolbar.top,
+  .node-toolbar.bottom {
+    left: 20px;
+    right: 20px;
+    transform: none;
+    width: auto;
+    overflow-x: auto;
+  }
+  
+  .toolbar-buttons {
+    flex-wrap: nowrap;
+  }
+}
