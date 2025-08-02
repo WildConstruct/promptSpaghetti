@@ -16,8 +16,8 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import './App.css';
 
-// Import the Epic1GraphEditor and its provider
-import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1/Epic1GraphEditor';
+// Import the Epic1GraphEditor and its provider directly from epic1 folder
+import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1';
 
 // Custom node with better styling and draggability
 const CustomNode = ({ data }: NodeProps) => {
