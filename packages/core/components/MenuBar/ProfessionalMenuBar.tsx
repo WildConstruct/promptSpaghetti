@@ -87,6 +87,10 @@ const professionalColors = {
     borderActive: '#ff7c00',
     hover: '#2d2d2d',
     selection: '#ff7c0040'
+  },
+  background: {
+    primary: '#1a1a1a',
+    secondary: '#242424'
   }
 };
 const MenuItem: React.FC<MenuItemProps> = ({ label,
@@ -122,18 +126,19 @@ const MenuItem: React.FC<MenuItemProps> = ({ label,
   return (
     <div
       ref={itemRef}
-      style={ {
-  position: 'relative'
-  display: 'flex'
-  alignItems: 'center'
-  justifyContent: 'space-between'
-  padding: '8px 16px'
-  cursor: disabled ? 'default' : 'pointer'
-  color: disabled ? professionalColors.text.secondary : professionalColors.text.primary
-  backgroundColor: showSubmenu ? professionalColors.ui.hover : 'transparent'
-  transition: 'background-color 0.15s ease'
-  fontSize: '13px'
-  fontWeight: 400 }
+      style={{
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '8px 16px',
+        cursor: disabled ? 'default' : 'pointer',
+        color: disabled ? professionalColors.text.secondary : professionalColors.text.primary,
+        backgroundColor: showSubmenu ? professionalColors.ui.hover : 'transparent',
+        transition: 'background-color 0.15s ease',
+        fontSize: '13px',
+        fontWeight: 400
+      }}
 
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
@@ -152,9 +157,10 @@ const MenuItem: React.FC<MenuItemProps> = ({ label,
         { shortcut && (
           <span
             style={{
-  fontSize: '11px'
-  color: professionalColors.text.secondary
-  fontFamily: 'SF Mono, Monaco, Inconsolata, Roboto Mono, monospace' }
+              fontSize: '11px',
+              color: professionalColors.text.secondary,
+              fontFamily: 'SF Mono, Monaco, Inconsolata, Roboto Mono, monospace'
+            }}
 
           >
             {shortcut}
@@ -163,8 +169,9 @@ const MenuItem: React.FC<MenuItemProps> = ({ label,
         { submenu && (
           <span
             style={{
-  fontSize: '10px'
-  color: professionalColors.text.secondary }
+              fontSize: '10px',
+              color: professionalColors.text.secondary
+            }}
 
           >
             ▶
@@ -175,16 +182,17 @@ const MenuItem: React.FC<MenuItemProps> = ({ label,
       { submenu && showSubmenu && (
         <div
           style={{
-            position: 'absolute'
-            top: 0
-            left: '100%'
-            minWidth: '200px'
-            backgroundColor: professionalColors.background.secondary }
-            border: `1px solid ${professionalColors.ui.border}`
-            borderRadius: '4px'
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-            zIndex: 1002
+            position: 'absolute',
+            top: 0,
+            left: '100%',
+            minWidth: '200px',
+            backgroundColor: professionalColors.background.secondary,
+            border: `1px solid ${professionalColors.ui.border}`,
+            borderRadius: '4px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            zIndex: 1002,
             padding: '4px 0'
+          }}
 
         >
           {submenu.map((item, index) => (
@@ -207,24 +215,29 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
     <div ref={menuRef} style={{ position: 'relative' }}>
       <button
         onClick={onToggle}
-        style={ {
-  background: isOpen ? professionalColors.ui.hover : 'transparent'
-  border: 'none'
-  color: professionalColors.text.primary
-  padding: '8px 16px'
-  cursor: 'pointer'
-  fontSize: '13px'
-  fontWeight: 500
-  transition: 'background-color 0.15s ease'
-  borderRadius: '2px' }
+        style={{
+          background: isOpen ? professionalColors.ui.hover : 'transparent',
+          border: 'none',
+          color: professionalColors.text.primary,
+          padding: '8px 16px',
+          cursor: 'pointer',
+          fontSize: '13px',
+          fontWeight: 500,
+          transition: 'background-color 0.15s ease',
+          borderRadius: '2px'
+        }}
 
-        onMouseOver={ e => {
+        onMouseOver={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.backgroundColor = professionalColors.ui.hover }
+            e.currentTarget.style.backgroundColor = professionalColors.ui.hover;
+          }
+        }}
 
-        onMouseOut={ e => {
+        onMouseOut={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.backgroundColor = 'transparent' }
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }
+        }}
 
       >
         {label}
@@ -232,16 +245,17 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
       { isOpen && (
         <div
           style={{
-            position: 'absolute'
-            top: '100%'
-            left: 0
-            minWidth: '220px'
-            backgroundColor: professionalColors.background.secondary }
-            border: `1px solid ${professionalColors.ui.border}`
-            borderRadius: '4px'
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-            zIndex: 1001
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            minWidth: '220px',
+            backgroundColor: professionalColors.background.secondary,
+            border: `1px solid ${professionalColors.ui.border}`,
+            borderRadius: '4px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+            zIndex: 1001,
             padding: '4px 0'
+          }}
 
         >
           {items.map((item, index) => (
@@ -305,137 +319,155 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({ // File operations
   recentFiles = [] }
 }) => { const [openMenu, setOpenMenu] = useState<string | null>(null);
   const handleMenuToggle = useCallback(
-  (menuName: string) => { }
-  setOpenMenu(openMenu === menuName ? null : menuName)
-
+    (menuName: string) => {
+      setOpenMenu(openMenu === menuName ? null : menuName);
+    },
     [openMenu]
   );
   const handleMenuClose = useCallback(() => { setOpenMenu(null) }, []);
   // File menu items
-  const fileMenuItems: MenuItemProps = [
-    { label: 'New', shortcut: '⌘N', onClick: onNew }
-    { label: 'Open...', shortcut: '⌘O', onClick: onOpen }
-    { divider: true }
-    { label: 'Save', shortcut: '⌘S', onClick: onSave }
-    { label: 'Save As...', shortcut: '⌘⇧S', onClick: onSaveAs }
-    { divider: true }
-    { label: 'Import...', shortcut: '⌘I', onClick: onImport }
-    { label: 'Export' }
+  const fileMenuItems: MenuItemProps[] = [
+    { label: 'New', shortcut: '⌘N', onClick: onNew },
+    { label: 'Open...', shortcut: '⌘O', onClick: onOpen },
+    { divider: true },
+    { label: 'Save', shortcut: '⌘S', onClick: onSave },
+    { label: 'Save As...', shortcut: '⌘⇧S', onClick: onSaveAs },
+    { divider: true },
+    { label: 'Import...', shortcut: '⌘I', onClick: onImport },
+    { 
+      label: 'Export',
       submenu: [
-        { label: 'Export as JSON', onClick: () => onExport?.('json') }
-        { label: 'Export as PNG', onClick: () => onExport?.('png') }
-        { label: 'Export as SVG', onClick: () => onExport?.('svg') }
-        { label: 'Export as PDF', onClick: () => onExport?.('pdf') }]
+        { label: 'Export as JSON', onClick: () => onExport?.('json') },
+        { label: 'Export as PNG', onClick: () => onExport?.('png') },
+        { label: 'Export as SVG', onClick: () => onExport?.('svg') },
+        { label: 'Export as PDF', onClick: () => onExport?.('pdf') }
+      ]
+    },
 
     ...(recentFiles.length > 0
       ? [
-          { divider: true }
-          { label: 'Recent Files' }
+          { divider: true },
+          { 
+            label: 'Recent Files',
             submenu: [
               ...recentFiles.slice(0, 10).map((file, index) => ({
-                label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`
+                label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,
                 onClick: () => onRecentFileLoad?.(file)
-}))
+              })),
               ...(recentFiles.length > 0
                 ? [
-                    { divider: true }
-                    { label: 'Clear Recent Files'
-  onClick: () => {
-  // TODO: Implement clear recent files }
-  console.log('Clear recent files')
-
+                    { divider: true },
+                    { 
+                      label: 'Clear Recent Files',
+                      onClick: () => {
+                        // TODO: Implement clear recent files
+                        console.log('Clear recent files');
+                      }
+                    }
+                : [])
+            ]
+          }
 ]
-                : [])]
-]
-      : [])
-    { divider: true }
-    { label: 'Quit', shortcut: '⌘Q', onClick: onQuit }];
+      : []),
+    { divider: true },
+    { label: 'Quit', shortcut: '⌘Q', onClick: onQuit }
+  ];
 
   // Edit menu items
-  const editMenuItems: MenuItemProps = [
-    { label: 'Undo', shortcut: '⌘Z', onClick: onUndo, disabled: !canUndo }
-    { label: 'Redo', shortcut: '⌘⇧Z', onClick: onRedo, disabled: !canRedo }
-    { divider: true }
-    { label: 'Cut', shortcut: '⌘X', onClick: onCut, disabled: !hasSelection }
-    { label: 'Copy', shortcut: '⌘C', onClick: onCopy, disabled: !hasSelection }
-    { label: 'Paste', shortcut: '⌘V', onClick: onPaste }
-    { divider: true }
-    { label: 'Select All', shortcut: '⌘A', onClick: onSelectAll }
-    { label: 'Find', shortcut: '⌘F', onClick: onFind }
-    { divider: true }
-    { label: 'Preferences...', shortcut: '⌘,', onClick: onPreferences }];
+  const editMenuItems: MenuItemProps[] = [
+    { label: 'Undo', shortcut: '⌘Z', onClick: onUndo, disabled: !canUndo },
+    { label: 'Redo', shortcut: '⌘⇧Z', onClick: onRedo, disabled: !canRedo },
+    { divider: true },
+    { label: 'Cut', shortcut: '⌘X', onClick: onCut, disabled: !hasSelection },
+    { label: 'Copy', shortcut: '⌘C', onClick: onCopy, disabled: !hasSelection },
+    { label: 'Paste', shortcut: '⌘V', onClick: onPaste },
+    { divider: true },
+    { label: 'Select All', shortcut: '⌘A', onClick: onSelectAll },
+    { label: 'Find', shortcut: '⌘F', onClick: onFind },
+    { divider: true },
+    { label: 'Preferences...', shortcut: '⌘,', onClick: onPreferences }
+  ];
 
   // View menu items
-  const viewMenuItems: MenuItemProps = [
-    { label: 'Zoom In', shortcut: '⌘+', onClick: onZoomIn }
-    { label: 'Zoom Out', shortcut: '⌘-', onClick: onZoomOut }
-    { label: 'Fit View', shortcut: '⌘0', onClick: onFitView }
-    { divider: true }
+  const viewMenuItems: MenuItemProps[] = [
+    { label: 'Zoom In', shortcut: '⌘+', onClick: onZoomIn },
+    { label: 'Zoom Out', shortcut: '⌘-', onClick: onZoomOut },
+    { label: 'Fit View', shortcut: '⌘0', onClick: onFitView },
+    { divider: true },
     {
-      label: `${gridVisible ? 'Hide' : 'Show'} Grid`
-      shortcut: '⌘G'
+      label: `${gridVisible ? 'Hide' : 'Show'} Grid`,
+      shortcut: '⌘G',
       onClick: onToggleGrid
-
+    },
     {
-      label: `${minimapVisible ? 'Hide' : 'Show'} Minimap`
-      shortcut: '⌘M'
+      label: `${minimapVisible ? 'Hide' : 'Show'} Minimap`,
+      shortcut: '⌘M',
       onClick: onToggleMinimap
-
+    },
     {
-      label: `${inspectorVisible ? 'Hide' : 'Show'} Inspector`
-      shortcut: '⌘⇧I'
+      label: `${inspectorVisible ? 'Hide' : 'Show'} Inspector`,
+      shortcut: '⌘⇧I',
       onClick: onToggleInspector
+    },
 
-    { divider: true }
-    { label: isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'
-  shortcut: 'Alt+F'
-  onClick: onToggleFullscreen }
-
-    { label: 'Theme' }
+    { divider: true },
+    { 
+      label: isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen',
+      shortcut: 'Alt+F',
+      onClick: onToggleFullscreen 
+    },
+    { 
+      label: 'Theme',
       submenu: [
-        { label: '🌙 Dark', onClick: () => onToggleTheme?.('dark') }
-        { label: '☀️ Light', onClick: () => onToggleTheme?.('light') }
-        { label: '🎬 Cinema 4D', onClick: () => onToggleTheme?.('cinema') }]
-];
+        { label: '🌙 Dark', onClick: () => onToggleTheme?.('dark') },
+        { label: '☀️ Light', onClick: () => onToggleTheme?.('light') },
+        { label: '🎬 Cinema 4D', onClick: () => onToggleTheme?.('cinema') }
+      ]
+    }
+  ];
   // Debug menu items
-  const debugMenuItems: MenuItemProps = [
-    { label: 'Open DevTools', shortcut: 'F12', onClick: onDevTools }
-    { label: 'Validate Graph', shortcut: '⌘⇧V', onClick: onValidateGraph }
-    { label: 'Performance Monitor', onClick: onPerformanceMonitor }
-    { label: 'Toggle Console', shortcut: '⌘⇧C', onClick: onConsoleToggle }];
+  const debugMenuItems: MenuItemProps[] = [
+    { label: 'Open DevTools', shortcut: 'F12', onClick: onDevTools },
+    { label: 'Validate Graph', shortcut: '⌘⇧V', onClick: onValidateGraph },
+    { label: 'Performance Monitor', onClick: onPerformanceMonitor },
+    { label: 'Toggle Console', shortcut: '⌘⇧C', onClick: onConsoleToggle }
+  ];
 
   // Help menu items
-  const helpMenuItems: MenuItemProps = [
-    { label: 'Documentation', shortcut: 'F1', onClick: onDocumentation }
-    { label: 'Keyboard Shortcuts', shortcut: '?', onClick: onKeyboardShortcuts }
-    { divider: true }
-    { label: 'Support', onClick: onSupport }
-    { label: 'Report Bug', onClick: onReportBug }
-    { divider: true }
-    { label: 'About', onClick: onAbout }];
+  const helpMenuItems: MenuItemProps[] = [
+    { label: 'Documentation', shortcut: 'F1', onClick: onDocumentation },
+    { label: 'Keyboard Shortcuts', shortcut: '?', onClick: onKeyboardShortcuts },
+    { divider: true },
+    { label: 'Support', onClick: onSupport },
+    { label: 'Report Bug', onClick: onReportBug },
+    { divider: true },
+    { label: 'About', onClick: onAbout }
+  ];
 
   return (
     <div
-      style={ {
-        display: 'flex'
-        alignItems: 'center'
-        height: '32px'
-        backgroundColor: professionalColors.background.secondary }
-        borderBottom: `1px solid ${professionalColors.ui.border}`
-        padding: '0 8px'
-        position: 'relative'
-        zIndex: 1000
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        height: '32px',
+        backgroundColor: professionalColors.background.secondary,
+        borderBottom: `1px solid ${professionalColors.ui.border}`,
+        padding: '0 8px',
+        position: 'relative',
+        zIndex: 1000,
         userSelect: 'none'
+      }}
 
     >
       {/* Application Title */}
       <div
-        style={ {
-  fontSize: '13px'
-  fontWeight: 600
-  color: professionalColors.text.primary
-  marginRight: '24px'
-  padding: '0 8px' }
+        style={{
+          fontSize: '13px',
+          fontWeight: 600,
+          color: professionalColors.text.primary,
+          marginRight: '24px',
+          padding: '0 8px'
+        }}
 
       >
         Prompt Spaghetti
@@ -480,14 +512,14 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({ // File operations
       </div>
       {/* Status Indicator */}
       <div
-        style={ {
-  marginLeft: 'auto'
-  display: 'flex'
-  alignItems: 'center'
-  gap: '16px'
-  fontSize: '11px'
-  color: professionalColors.text.secondary }
-}
+        style={{
+          marginLeft: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          fontSize: '11px',
+          color: professionalColors.text.secondary
+        }}
       >
         <span>
           {nodes.length} nodes, {edges.length} edges
@@ -496,6 +528,6 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({ // File operations
       </div>
     </div>
   );
-;
+};
 
 export default ProfessionalMenuBar;
