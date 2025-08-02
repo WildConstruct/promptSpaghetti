@@ -339,6 +339,9 @@ function App() {
         <Epic1EditorContainer 
           showPreview={true}
           showAssetLibrary={true}
+          assetLibraryPosition="right"
+          showMenuBar={true}
+          showOnboarding={true}
         />
       </div>
     );

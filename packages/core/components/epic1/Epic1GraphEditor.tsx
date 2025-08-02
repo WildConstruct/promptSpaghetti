@@ -281,6 +281,12 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     setNodes((nds) => nds.map(n => ({ ...n, selected: true })));
   }, [setNodes]);
 
+  // Handle canvas click to deselect all nodes
+  const handlePaneClick = useCallback(() => {
+    setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
+    setSelectedNodeId(null);
+  }, [setNodes]);
+
   // Toggle preview panel
   const handleTogglePreview = useCallback(() => {
     setIsPreviewVisible(prev => !prev);
@@ -370,6 +376,7 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          onPaneClick={handlePaneClick}
           nodeTypes={nodeTypes}
           isValidConnection={isValidConnection}
           connectionMode={ConnectionMode.Loose}

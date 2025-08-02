@@ -88,160 +88,265 @@ const characterOccupations: Preset[] = [
 // Character States
 const characterStates: Preset[] = [
   createPreset(
-    'char-state-weary',
-    'Weary',
+    'char-state-physical',
+    'Physical State',
     'character-states',
-    'textBlock',
-    { text: 'weary' },
-    ['character', 'state', 'tired'],
-    'Exhausted from travel'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'weary from travel', weight: 25 },
+        { text: 'battle-hardened', weight: 20 },
+        { text: 'wounded but determined', weight: 15 },
+        { text: 'vigorous and healthy', weight: 25 },
+        { text: 'aged but spry', weight: 15 }
+      ]
+    },
+    ['character', 'state', 'physical'],
+    'Physical condition variations'
   ),
   createPreset(
-    'char-state-noble',
-    'Noble',
+    'char-state-emotional',
+    'Emotional State',
     'character-states',
-    'textBlock',
-    { text: 'noble' },
-    ['character', 'state', 'status'],
-    'Of high birth and bearing'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'jovial and mirthful', weight: 20 },
+        { text: 'somber and thoughtful', weight: 25 },
+        { text: 'wary and suspicious', weight: 25 },
+        { text: 'eager and excited', weight: 20 },
+        { text: 'melancholic', weight: 10 }
+      ]
+    },
+    ['character', 'state', 'emotional'],
+    'Emotional state variations'
   ),
   createPreset(
-    'char-state-wounded',
-    'Wounded',
+    'char-state-social',
+    'Social Standing',
     'character-states',
-    'textBlock',
-    { text: 'wounded' },
-    ['character', 'state', 'injured'],
-    'Bearing injuries from battle'
-  ),
-  createPreset(
-    'char-state-jovial',
-    'Jovial',
-    'character-states',
-    'textBlock',
-    { text: 'jovial' },
-    ['character', 'state', 'mood'],
-    'In good spirits'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'noble-born', weight: 10 },
+        { text: 'merchant class', weight: 20 },
+        { text: 'common folk', weight: 50 },
+        { text: 'outcast', weight: 10 },
+        { text: 'foreign visitor', weight: 10 }
+      ]
+    },
+    ['character', 'state', 'social'],
+    'Social status variations'
   )
 ];
 
 // Clothing & Appearance
 const clothingAppearance: Preset[] = [
   createPreset(
-    'cloth-tattered-robes',
-    'Tattered Robes',
+    'cloth-varied',
+    'Varied Clothing',
     'clothing-appearance',
-    'textBlock',
-    { text: 'tattered robes' },
-    ['clothing', 'worn', 'poor'],
-    'Worn and threadbare garments'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'tattered robes', weight: 30 },
+        { text: 'simple woolen tunic', weight: 40 },
+        { text: 'leather jerkin', weight: 20 },
+        { text: 'traveler\'s cloak', weight: 10 }
+      ]
+    },
+    ['clothing', 'varied', 'common'],
+    'Common clothing variations'
   ),
   createPreset(
-    'cloth-armor',
-    'Plate Armor',
+    'cloth-armor-types',
+    'Armor Types',
     'clothing-appearance',
-    'textBlock',
-    { text: 'gleaming plate armor' },
-    ['clothing', 'armor', 'knight'],
-    'Polished metal protection'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'gleaming plate armor', weight: 15 },
+        { text: 'chainmail hauberk', weight: 35 },
+        { text: 'studded leather armor', weight: 30 },
+        { text: 'padded gambeson', weight: 20 }
+      ]
+    },
+    ['clothing', 'armor', 'protection'],
+    'Various types of armor'
   ),
   createPreset(
-    'cloth-tunic',
-    'Simple Tunic',
+    'cloth-noble-attire',
+    'Noble Attire',
     'clothing-appearance',
-    'textBlock',
-    { text: 'simple woolen tunic' },
-    ['clothing', 'common', 'basic'],
-    'Basic everyday wear'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'rich velvet robes adorned with gold', weight: 25 },
+        { text: 'silk doublet with silver embroidery', weight: 25 },
+        { text: 'ermine-trimmed cloak', weight: 25 },
+        { text: 'brocade gown with jeweled belt', weight: 25 }
+      ]
+    },
+    ['clothing', 'noble', 'luxury'],
+    'Fine clothing for nobility'
   ),
   createPreset(
-    'cloth-royal-garb',
-    'Royal Garments',
+    'cloth-condition',
+    'Clothing Condition',
     'clothing-appearance',
-    'textBlock',
-    { text: 'rich velvet robes adorned with gold' },
-    ['clothing', 'royal', 'expensive'],
-    'Clothing fit for nobility'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'pristine', weight: 15 },
+        { text: 'well-maintained', weight: 35 },
+        { text: 'worn but serviceable', weight: 35 },
+        { text: 'tattered and patched', weight: 15 }
+      ]
+    },
+    ['clothing', 'condition', 'modifier'],
+    'Condition of garments'
   )
 ];
 
 // Items & Props
 const itemsProps: Preset[] = [
   createPreset(
-    'item-scroll',
-    'Ancient Scroll',
+    'item-weapons',
+    'Weapon Types',
     'items-props',
-    'textBlock',
-    { text: 'ancient scroll' },
-    ['item', 'document', 'old'],
-    'A rolled parchment with writings'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'steel longsword', weight: 25 },
+        { text: 'battle-worn axe', weight: 20 },
+        { text: 'ornate dagger', weight: 20 },
+        { text: 'sturdy quarterstaff', weight: 20 },
+        { text: 'crossbow with quarrels', weight: 15 }
+      ]
+    },
+    ['item', 'weapon', 'combat'],
+    'Various medieval weapons'
   ),
   createPreset(
-    'item-sword',
-    'Longsword',
+    'item-documents',
+    'Documents & Scrolls',
     'items-props',
-    'textBlock',
-    { text: 'steel longsword' },
-    ['item', 'weapon', 'blade'],
-    'A knightly weapon'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'ancient scroll', weight: 20 },
+        { text: 'sealed letter', weight: 25 },
+        { text: 'merchant\'s ledger', weight: 20 },
+        { text: 'royal decree', weight: 15 },
+        { text: 'treasure map', weight: 20 }
+      ]
+    },
+    ['item', 'document', 'written'],
+    'Written items and documents'
   ),
   createPreset(
-    'item-potion',
-    'Healing Potion',
+    'item-magical',
+    'Magical Items',
     'items-props',
-    'textBlock',
-    { text: 'glowing red potion' },
-    ['item', 'consumable', 'magic'],
-    'A magical healing elixir'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'glowing red potion', weight: 25 },
+        { text: 'crystal amulet', weight: 20 },
+        { text: 'enchanted ring', weight: 15 },
+        { text: 'mystic orb', weight: 20 },
+        { text: 'spell component pouch', weight: 20 }
+      ]
+    },
+    ['item', 'magical', 'mystical'],
+    'Items of magical nature'
   ),
   createPreset(
-    'item-coin-purse',
-    'Coin Purse',
+    'item-mundane',
+    'Everyday Items',
     'items-props',
-    'textBlock',
-    { text: 'leather coin purse' },
-    ['item', 'money', 'container'],
-    'A small bag for currency'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'leather coin purse', weight: 25 },
+        { text: 'traveler\'s pack', weight: 20 },
+        { text: 'wineskin', weight: 20 },
+        { text: 'iron lantern', weight: 20 },
+        { text: 'worn boots', weight: 15 }
+      ]
+    },
+    ['item', 'mundane', 'common'],
+    'Common everyday items'
   )
 ];
 
 // Settings & Locations
 const settingsLocations: Preset[] = [
   createPreset(
-    'setting-marketplace',
-    'Marketplace',
+    'setting-urban',
+    'Urban Settings',
     'settings-locations',
-    'textBlock',
-    { text: 'bustling marketplace' },
-    ['setting', 'town', 'commerce'],
-    'A busy trading area'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'bustling marketplace', weight: 25 },
+        { text: 'narrow cobblestone alley', weight: 20 },
+        { text: 'grand cathedral square', weight: 15 },
+        { text: 'harbor district', weight: 20 },
+        { text: 'craftsman\'s quarter', weight: 20 }
+      ]
+    },
+    ['setting', 'urban', 'town'],
+    'Various town and city locations'
   ),
   createPreset(
-    'setting-castle',
-    'Castle',
+    'setting-noble',
+    'Noble Settings',
     'settings-locations',
-    'textBlock',
-    { text: 'towering stone castle' },
-    ['setting', 'fortress', 'noble'],
-    'A fortified noble residence'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'towering stone castle', weight: 30 },
+        { text: 'manor house gardens', weight: 25 },
+        { text: 'great hall', weight: 25 },
+        { text: 'tournament grounds', weight: 20 }
+      ]
+    },
+    ['setting', 'noble', 'fortress'],
+    'Noble and aristocratic locations'
   ),
   createPreset(
-    'setting-tavern',
-    'Tavern',
+    'setting-taverns',
+    'Taverns & Inns',
     'settings-locations',
-    'textBlock',
-    { text: 'dimly lit tavern' },
-    ['setting', 'inn', 'social'],
-    'A place for food and drink'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'dimly lit tavern', weight: 30 },
+        { text: 'roadside inn', weight: 25 },
+        { text: 'dockside alehouse', weight: 25 },
+        { text: 'upscale wine house', weight: 20 }
+      ]
+    },
+    ['setting', 'tavern', 'social'],
+    'Places for food, drink, and lodging'
   ),
   createPreset(
-    'setting-forest',
-    'Dark Forest',
+    'setting-wilderness',
+    'Wilderness Areas',
     'settings-locations',
-    'textBlock',
-    { text: 'dark, mysterious forest' },
-    ['setting', 'nature', 'wilderness'],
-    'A wooded wilderness area'
+    'weightedChoice',
+    {
+      options: [
+        { text: 'dark, mysterious forest', weight: 25 },
+        { text: 'windswept moor', weight: 20 },
+        { text: 'mountain pass', weight: 20 },
+        { text: 'ancient ruins', weight: 20 },
+        { text: 'riverside camp', weight: 15 }
+      ]
+    },
+    ['setting', 'wilderness', 'nature'],
+    'Natural and wild locations'
   )
 ];
 
