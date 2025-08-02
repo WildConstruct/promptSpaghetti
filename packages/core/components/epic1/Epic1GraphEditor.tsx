@@ -12,8 +12,9 @@ import ReactFlow, {
   useEdgesState,
   ConnectionMode,
   Panel,
+  useReactFlow,
 } from 'reactflow';
-import { DndProvider } from 'react-dnd';
+import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import 'reactflow/dist/style.css';
 import { epic1NodeTypes } from './nodes';
@@ -37,6 +38,7 @@ import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
+import { DroppableCanvas } from './DroppableCanvas';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -319,9 +321,46 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     // Simple full height container - tabbed panel handles its own positioning
     return {
       height: '100%',
-      position: 'relative'
+      position: 'relative' as const
     };
   }, []);
+
+  // Create unique ID for new nodes
+  const createNodeId = useCallback(() => {
+    return `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }, []);
+
+  // Handle node drop from toolbar
+  const handleNodeDrop = useCallback((nodeType: string, position: { x: number; y: number }) => {
+    const newNode: Node<EditableNodeData> = {
+      id: createNodeId(),
+      type: nodeType,
+      position,
+      data: {
+        // Default data based on node type
+        ...(nodeType === 'textBlock' && { value: 'New text block' }),
+        ...(nodeType === 'weightedChoice' && { 
+          value: JSON.stringify([
+            { text: 'Option 1', weight: 1 },
+            { text: 'Option 2', weight: 1 }
+          ], null, 2)
+        }),
+        ...(nodeType === 'concat' && { value: ' ' }),
+        ...(nodeType === 'variable' && { value: 'myVariable' }),
+        ...(nodeType === 'output' && { value: 'output' }),
+      },
+    };
+
+    setNodes((nds) => nds.concat(newNode));
+    
+    // Add bounce effect
+    if (addNodeWithBounce) {
+      addNodeWithBounce(newNode.id);
+    }
+    
+    // Show success toast
+    showToast('success', `Added ${nodeType} node`);
+  }, [createNodeId, setNodes, addNodeWithBounce, showToast]);
 
   // Context menu handlers
   const handleSaveAsPreset = useCallback(() => {
@@ -352,7 +391,8 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="epic1-graph-editor" style={editorStyle}>
-        <ReactFlow
+        <DroppableCanvas onDrop={handleNodeDrop}>
+          <ReactFlow
           nodes={enhancedNodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -373,6 +413,8 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
           <MiniMap 
+            position="top-left"
+            style={{ left: 10, top: 70 }}
             nodeColor={(node) => {
               switch (node.type) {
                 case 'textBlock': return '#7c7ff2';
@@ -420,7 +462,8 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           <SafeReactFlowWrapper>
             <PanZoomControls position="bottom-right" />
           </SafeReactFlowWrapper>
-        </ReactFlow>
+          </ReactFlow>
+        </DroppableCanvas>
 
         {/* Keyboard shortcuts handler */}
         <SafeReactFlowWrapper>
@@ -486,11 +529,24 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   );
 };
 
+// Inner component that has access to ReactFlow instance
+const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps & { handleNodeDrop: (type: string, position: { x: number; y: number }) => void }> = (props) => {
+  const { handleNodeDrop, ...editorProps } = props;
+  
+  return (
+    <DroppableCanvas onDrop={handleNodeDrop}>
+      <Epic1GraphEditor {...editorProps} />
+    </DroppableCanvas>
+  );
+};
+
 // Wrap with ReactFlowProvider
 export const Epic1GraphEditorWithProvider: React.FC<Epic1GraphEditorProps> = (props) => {
   return (
-    <ReactFlowProvider>
-      <Epic1GraphEditor {...props} />
-    </ReactFlowProvider>
+    <DndProvider backend={HTML5Backend}>
+      <ReactFlowProvider>
+        <Epic1GraphEditor {...props} />
+      </ReactFlowProvider>
+    </DndProvider>
   );
 };

@@ -79,6 +79,12 @@
   color: #e0e0e0;
 }
 
+.tab-button.hovered:not(.active) {
+  background: #2a2a2a;
+  transform: scale(1.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 .tab-button.active {
   background: #2196F3;
   color: #fff;

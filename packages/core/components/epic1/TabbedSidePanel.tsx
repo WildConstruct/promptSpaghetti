@@ -28,33 +28,35 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   defaultTab = null
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
-  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredTab, setHoveredTab] = useState<TabType>(null);
 
   const handleTabClick = useCallback((tab: TabType) => {
     setActiveTab(activeTab === tab ? null : tab);
   }, [activeTab]);
 
-  const isExpanded = activeTab !== null || isHovered;
+  const isExpanded = activeTab !== null;
 
   return (
     <div 
       className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Tab buttons */}
       <div className="tab-buttons">
         <button
-          className={`tab-button ${activeTab === 'preview' ? 'active' : ''}`}
+          className={`tab-button ${activeTab === 'preview' ? 'active' : ''} ${hoveredTab === 'preview' ? 'hovered' : ''}`}
           onClick={() => handleTabClick('preview')}
+          onMouseEnter={() => setHoveredTab('preview')}
+          onMouseLeave={() => setHoveredTab(null)}
           title="Preview"
         >
           <span className="tab-icon">👁️</span>
           <span className="tab-label">Preview</span>
         </button>
         <button
-          className={`tab-button ${activeTab === 'assets' ? 'active' : ''}`}
+          className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
           onClick={() => handleTabClick('assets')}
+          onMouseEnter={() => setHoveredTab('assets')}
+          onMouseLeave={() => setHoveredTab(null)}
           title="Asset Browser"
         >
           <span className="tab-icon">📚</span>
