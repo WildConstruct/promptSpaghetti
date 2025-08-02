@@ -55,7 +55,8 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
         // Only show drop indicator when actively dragging a new node
         background: isOver && canDrop ? 'rgba(33, 150, 243, 0.05)' : 'transparent',
         transition: 'background 0.2s ease',
-        pointerEvents: canDrop ? 'auto' : 'none', // Only capture events when dropping
+        // Remove pointer-events manipulation - let children handle their own events
+        // The drop zone will still work through react-dnd without blocking child interactions
       }}
     >
       {children}

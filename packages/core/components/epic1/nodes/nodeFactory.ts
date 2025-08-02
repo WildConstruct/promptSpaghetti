@@ -20,10 +20,8 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
   try {
     switch (type) {
       case 'textBlock': {
-        return new TextBlockNode({
-          id,
-          text: data.text || ''
-        });
+        // TextBlockNode constructor takes (id, text)
+        return new TextBlockNode(id, data.text || '');
       }
 
       case 'weightedChoice': {
@@ -46,20 +44,15 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
           }
         }
 
-        return new WeightedChoiceNode({
-          id,
-          options
-        });
+        // WeightedChoiceNode constructor takes (id, options)
+        return new WeightedChoiceNode(id, options);
       }
 
       case 'concat': {
-        return new ConcatNode({
-          id,
+        // ConcatNode constructor takes (id, config)
+        return new ConcatNode(id, {
           separator: data.separator || ' ',
-          configuration: {
-            separator: data.separator || ' ',
-            trimInputs: data.trimInputs !== false
-          }
+          trimInputs: data.trimInputs !== false
         });
       }
 
@@ -70,21 +63,19 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
           mode = data.mode as VariableMode;
         }
 
-        return new VariableNode({
+        // VariableNode constructor takes (id, name, defaultValue, config)
+        return new VariableNode(
           id,
-          name: data.variableName || data.name || 'myVar',
-          defaultValue: data.defaultValue || '',
-          configuration: {
-            mode
-          }
-        });
+          data.variableName || data.name || 'myVar',
+          data.defaultValue || '',
+          { mode }
+        );
       }
 
       case 'output': {
-        return new OutputNode({
-          id,
-          label: data.label || 'Output'
-        });
+        // OutputNode constructor takes (id, initialValue, config)
+        const node = new OutputNode(id, data.label || 'Output');
+        return node;
       }
 
       default:

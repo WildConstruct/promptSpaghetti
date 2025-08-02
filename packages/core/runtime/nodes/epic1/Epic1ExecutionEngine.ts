@@ -98,6 +98,7 @@ export class Epic1ExecutionEngine {
       const outputNodes = Array.from(this.graph.nodes.entries())
         .filter(([_, node]) => node.getNodeType() === Epic1NodeType.Output);
 
+
       if (outputNodes.length === 0) {
         throw new Error('No output node found in graph');
       }

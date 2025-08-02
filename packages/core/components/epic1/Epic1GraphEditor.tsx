@@ -183,12 +183,27 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     try {
       const runtimeNodes = new Map();
       
+      // Debug: Log nodes being converted
+      console.log('Converting nodes to runtime:', flowNodes.map(n => ({
+        id: n.id,
+        type: n.type,
+        data: n.data
+      })));
+      
       for (const node of flowNodes) {
         const runtimeNode = nodeDataToRuntimeNode(node);
         if (runtimeNode) {
           runtimeNodes.set(node.id, runtimeNode);
+        } else {
+          console.warn(`Failed to convert node ${node.id} of type ${node.type}`);
         }
       }
+
+      // Debug: Check for output nodes
+      const outputNodes = Array.from(runtimeNodes.entries()).filter(([id, node]) => 
+        node.getNodeType() === 'output'
+      );
+      console.log('Output nodes found:', outputNodes.length);
 
       return {
         nodes: runtimeNodes,
@@ -208,11 +223,18 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Update preview when graph changes
   useEffect(() => {
-    if (!isPreviewVisible || !previewEngineRef.current) return;
+    if (!isPreviewVisible || !previewEngineRef.current) {
+      console.log('Preview not visible or engine not ready');
+      return;
+    }
 
+    console.log('Updating preview with nodes:', enhancedNodes.length, 'edges:', edges.length);
     const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
     if (runtimeGraph) {
+      console.log('Runtime graph created, updating preview...');
       previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
+    } else {
+      console.error('Failed to create runtime graph');
     }
   }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph]);
 
@@ -345,17 +367,34 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       type: nodeType,
       position,
       data: {
-        // Default data based on node type
-        ...(nodeType === 'textBlock' && { value: 'New text block' }),
+        nodeType: nodeType, // CRITICAL: This is required for the runtime to identify the node type
+        // Default data based on node type - set both value AND the specific properties expected by nodeFactory
+        ...(nodeType === 'textBlock' && { 
+          value: 'New text block',
+          text: 'New text block' 
+        }),
         ...(nodeType === 'weightedChoice' && { 
           value: JSON.stringify([
             { text: 'Option 1', weight: 1 },
             { text: 'Option 2', weight: 1 }
-          ], null, 2)
+          ], null, 2),
+          options: [
+            { text: 'Option 1', weight: 1 },
+            { text: 'Option 2', weight: 1 }
+          ]
         }),
-        ...(nodeType === 'concat' && { value: ' ' }),
-        ...(nodeType === 'variable' && { value: 'myVariable' }),
-        ...(nodeType === 'output' && { value: 'output' }),
+        ...(nodeType === 'concat' && { 
+          value: ' ',
+          separator: ' ' 
+        }),
+        ...(nodeType === 'variable' && { 
+          value: 'myVariable',
+          variableName: 'myVariable' 
+        }),
+        ...(nodeType === 'output' && { 
+          value: 'output',
+          label: 'output' 
+        }),
       },
     };
 
@@ -408,10 +447,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       event.preventDefault();
 
       const nodeType = event.dataTransfer.getData('application/reactflow');
-      console.log('Drop event - nodeType:', nodeType, 'reactFlowInstance:', !!reactFlowInstance);
       
       if (!nodeType || !reactFlowInstance) {
-        console.warn('Drop failed - missing nodeType or reactFlowInstance');
         return;
       }
 
@@ -541,11 +578,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       <TabbedSidePanel
           previewEngine={previewEngineRef.current}
           onPresetDrag={(preset) => {
-            console.log('Preset dragged:', preset);
             // TODO: Implement preset application to nodes
           }}
           onPresetSelect={(preset) => {
-            console.log('Preset selected:', preset);
+            // TODO: Implement preset selection
           }}
           position="right"
           defaultTab={isPreviewVisible ? 'preview' : null}
