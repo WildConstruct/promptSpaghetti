@@ -10,8 +10,6 @@ import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineE
 import { PreviewCache } from './PreviewCache';
 import { WorkerPool } from './WorkerPool';
 import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';
-// Vite worker import - will be resolved at build time
-import ExecutionWorker from './execution.worker?worker';
 
 export enum PreviewState {
   IDLE = 'idle',
@@ -100,8 +98,20 @@ export class PreviewEngine {
       return;
     }
 
+    // Temporarily disable WebWorkers in production builds until we resolve the build issue
+    // The Vite worker import syntax is not compatible with all build environments
+    if (import.meta.env.PROD || process.env.NETLIFY) {
+      console.log('WebWorkers disabled in production build - using main thread execution');
+      this.webWorkerEnabled = false;
+      this.workerPoolInitialized = true;
+      return;
+    }
+
     try {
-      // Create worker pool with Vite worker constructor
+      // Only attempt worker import in development
+      const { default: ExecutionWorker } = await import('./execution.worker?worker');
+      
+      // Create worker pool with the worker constructor
       this.workerPool = new WorkerPool(
         ExecutionWorker,
         Math.min(2, this.workerPoolSize),
@@ -111,6 +121,7 @@ export class PreviewEngine {
       console.log('Epic1 PreviewEngine: WebWorker pool initialized successfully');
     } catch (error) {
       console.error('Failed to initialize WebWorker pool:', error);
+      console.log('Falling back to main thread execution');
       // Fall back to main thread execution
       this.webWorkerEnabled = false;
       this.workerPoolInitialized = true;
