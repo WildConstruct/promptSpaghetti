@@ -16,6 +16,8 @@ import ReactFlow, {
   ReactFlowInstance,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
@@ -420,7 +422,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     [reactFlowInstance, handleNodeDrop]
   );
 
-  return (
+  // Wrap with DndProvider if using droppable nodes
+  const content = (
     <div className="epic1-graph-editor" style={editorStyle}>
       <ReactFlow
           nodes={enhancedNodes}
@@ -561,6 +564,13 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       />
     </div>
   );
+  
+  // Conditionally wrap with DndProvider when using droppable nodes
+  if (showAssetLibrary) {
+    return <DndProvider backend={HTML5Backend}>{content}</DndProvider>;
+  }
+  
+  return content;
 };
 
 // Export the main component
