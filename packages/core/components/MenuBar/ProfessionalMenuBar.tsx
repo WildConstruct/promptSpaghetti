@@ -206,13 +206,18 @@ const MenuItem: React.FC<MenuItemProps> = ({ label,
     </div>
   );
 };
-const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) => { const menuRef = useRef<HTMLDivElement>(null);
+const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) => {
+  const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => { }
-  if (menuRef.current && !menuRef.current.contains(event.target as Node)) { onClose() }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        onClose();
+      }
     };
-    if (isOpen) { document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside) }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
   }, [isOpen, onClose]);
   return (
     <div ref={menuRef} style={{ position: 'relative' }}>
