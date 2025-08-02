@@ -12,3 +12,8 @@ export type { Epic1GraphEditorProps } from './Epic1GraphEditor';
 
 // Export all node types
 export * from './nodes';
+
+// Demo components
+export { MedievalDemoShowcase } from './demos/MedievalDemoShowcase';
+export { DemoRunner } from './demos/DemoRunner';
+export { medievalDemoGraphs } from './demos/medievalDemoGraphs';

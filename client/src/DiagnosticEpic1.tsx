@@ -47,8 +47,8 @@ export const DiagnosticEpic1: React.FC = () => {
       }
 
       try {
-        // Test 5: Check for medieval demo
-        const demoModule = await import('@promptscape/core/components/epic1/demo/MedievalDemoShowcase');
+        // Test 5: Check for medieval demo (correct path)
+        const demoModule = await import('@promptscape/core/components/epic1/demos/MedievalDemoShowcase');
         results.push('✅ Medieval Demo module loaded');
         results.push(`  - Has MedievalDemoShowcase: ${!!demoModule.MedievalDemoShowcase}`);
       } catch (error) {
