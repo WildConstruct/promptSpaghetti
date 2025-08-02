@@ -19,6 +19,9 @@ import './App.css';
 // Import the Epic1GraphEditor and its provider directly from epic1 folder
 import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1';
 
+// Import Epic1 CSS files
+import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
+
 // Custom node with better styling and draggability
 const CustomNode = ({ data }: NodeProps) => {
   return (
