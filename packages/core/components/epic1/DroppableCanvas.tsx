@@ -14,7 +14,7 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: 'new-node',
     drop: (item: { nodeType: string }, monitor) => {
       const clientOffset = monitor.getClientOffset();
@@ -35,8 +35,9 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
     }),
-  }));
+  }), [reactFlowInstance, onDrop]);
 
   // Combine refs
   const setRefs = (el: HTMLDivElement | null) => {
@@ -51,8 +52,10 @@ export const DroppableCanvas: React.FC<DroppableCanvasProps> = ({
         width: '100%', 
         height: '100%',
         position: 'relative',
-        background: isOver ? 'rgba(33, 150, 243, 0.05)' : 'transparent',
-        transition: 'background 0.2s ease'
+        // Only show drop indicator when actively dragging a new node
+        background: isOver && canDrop ? 'rgba(33, 150, 243, 0.05)' : 'transparent',
+        transition: 'background 0.2s ease',
+        pointerEvents: canDrop ? 'auto' : 'none', // Only capture events when dropping
       }}
     >
       {children}

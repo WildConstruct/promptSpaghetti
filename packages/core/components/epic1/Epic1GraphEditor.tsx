@@ -13,6 +13,7 @@ import ReactFlow, {
   ConnectionMode,
   Panel,
   useReactFlow,
+  ReactFlowInstance,
 } from 'reactflow';
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -61,7 +62,7 @@ export interface Epic1GraphEditorProps {
 /**
  * Epic 1 Graph Editor with inline editing capabilities
  */
-export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
+const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   initialNodes = [],
   initialEdges = [],
   onNodesChange: onNodesChangeProp,
@@ -81,6 +82,8 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const { project } = useReactFlow();
   
   // Context menu and save-as-preset state
   const [contextMenuPosition, setContextMenuPosition] = useState<ContextMenuPosition | null>(null);
@@ -330,6 +333,11 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     return `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }, []);
 
+  // Handle ReactFlow initialization
+  const onInit = useCallback((instance: ReactFlowInstance) => {
+    setReactFlowInstance(instance);
+  }, []);
+
   // Handle node drop from toolbar
   const handleNodeDrop = useCallback((nodeType: string, position: { x: number; y: number }) => {
     const newNode: Node<EditableNodeData> = {
@@ -389,16 +397,16 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
   }, [saveAsPresetNodeId, nodes]);
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="epic1-graph-editor" style={editorStyle}>
-        <DroppableCanvas onDrop={handleNodeDrop}>
-          <ReactFlow
+    <div className="epic1-graph-editor" style={editorStyle}>
+      <DroppableCanvas onDrop={handleNodeDrop} reactFlowInstance={reactFlowInstance}>
+        <ReactFlow
           nodes={enhancedNodes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onPaneClick={handlePaneClick}
+          onInit={onInit}
           nodeTypes={nodeTypes}
           isValidConnection={isValidConnection}
           connectionMode={ConnectionMode.Loose}
@@ -409,6 +417,9 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           zoomOnPinch={true}
           panOnDrag={[1, 2]}
           selectionOnDrag={false}
+          nodesDraggable={true}
+          nodesConnectable={true}
+          elementsSelectable={true}
         >
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
@@ -462,8 +473,8 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           <SafeReactFlowWrapper>
             <PanZoomControls position="bottom-right" />
           </SafeReactFlowWrapper>
-          </ReactFlow>
-        </DroppableCanvas>
+        </ReactFlow>
+      </DroppableCanvas>
 
         {/* Keyboard shortcuts handler */}
         <SafeReactFlowWrapper>
@@ -524,29 +535,20 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
         onClose={() => setSaveAsPresetNodeId(null)}
         onSave={handleSavePreset}
       />
-      </div>
-    </DndProvider>
+    </div>
   );
 };
 
-// Inner component that has access to ReactFlow instance
-const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps & { handleNodeDrop: (type: string, position: { x: number; y: number }) => void }> = (props) => {
-  const { handleNodeDrop, ...editorProps } = props;
-  
-  return (
-    <DroppableCanvas onDrop={handleNodeDrop}>
-      <Epic1GraphEditor {...editorProps} />
-    </DroppableCanvas>
-  );
-};
-
-// Wrap with ReactFlowProvider
-export const Epic1GraphEditorWithProvider: React.FC<Epic1GraphEditorProps> = (props) => {
+// Export the main component
+export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <ReactFlowProvider>
-        <Epic1GraphEditor {...props} />
+        <Epic1GraphEditorInner {...props} />
       </ReactFlowProvider>
     </DndProvider>
   );
 };
+
+// Also export with provider for compatibility
+export const Epic1GraphEditorWithProvider = Epic1GraphEditor;

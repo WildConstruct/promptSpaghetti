@@ -5,12 +5,24 @@
   border: 2px solid #333333;
   border-radius: 8px;
   padding: 12px;
-  cursor: pointer;
+  cursor: grab;
   position: relative;
   overflow: visible;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   color: #e0e0e0;
+}
+
+/* Dragging state */
+.epic1-editable-node.dragging {
+  cursor: grabbing;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+/* Hover state when not editing */
+.epic1-editable-node:hover:not(.editing):not(.dragging) {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* Editing state - glow effect */
@@ -18,7 +30,7 @@
   box-shadow: 0 0 20px rgba(91, 158, 255, 0.7), 0 0 40px rgba(91, 158, 255, 0.3);
   border-color: #5b9eff;
   border-width: 3px;
-  cursor: default;
+  cursor: text;
   z-index: 100;
   background: #252525;
   /* Add subtle outline instead of transform for visual feedback */
