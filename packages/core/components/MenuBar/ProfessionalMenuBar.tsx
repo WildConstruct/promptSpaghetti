@@ -8,7 +8,8 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PSGFile } from '../../projectManager';
 
-export interface MenuBarProps { // File operations
+export interface MenuBarProps {
+  // File operations
   onNew?: () => void;
   onOpen?: () => void;
   onSave?: () => void;
@@ -365,18 +366,14 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
                 label: `${index + 1}. ${file.metadata.title || file.name.replace('.psg', '')}`,
                 onClick: () => onRecentFileLoad?.(file)
               })),
-              ...(recentFiles.length > 0
-                ? [
-                    { divider: true },
-                    { 
-                      label: 'Clear Recent Files',
-                      onClick: () => {
-                        // TODO: Implement clear recent files
-                        console.log('Clear recent files');
-                      }
-                    }
-                  ]
-                : [])
+              { divider: true },
+              { 
+                label: 'Clear Recent Files',
+                onClick: () => {
+                  // TODO: Implement clear recent files
+                  console.log('Clear recent files');
+                }
+              }
             ]
           }
         ]
