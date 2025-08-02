@@ -425,17 +425,17 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
         {/* Keyboard shortcuts handler */}
         <SafeReactFlowWrapper>
           <KeyboardShortcuts
-          onSave={handleSave}
-          onLoad={handleLoad}
-          onExport={handleExport}
-          onDelete={handleDelete}
-          onDuplicate={handleDuplicate}
-          onSelectAll={handleSelectAll}
-          additionalHandlers={{
-            'p': handleTogglePreview,
-            'P': handleTogglePreview
-          }}
-        />
+            onSave={handleSave}
+            onLoad={handleLoad}
+            onExport={handleExport}
+            onDelete={handleDelete}
+            onDuplicate={handleDuplicate}
+            onSelectAll={handleSelectAll}
+            additionalHandlers={{
+              'p': handleTogglePreview,
+              'P': handleTogglePreview
+            }}
+          />
         </SafeReactFlowWrapper>
 
         {/* Toast notifications */}
@@ -446,7 +446,6 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
             onDismiss={() => dismissToast(toast.id)}
           />
         ))}
-      </ReactFlow>
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />
