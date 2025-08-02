@@ -139,6 +139,9 @@ export const BaseEditableNode = memo(({
     if (!isEditing) {
       e.stopPropagation();
       startEdit();
+    } else {
+      // When in editing mode, stop propagation to allow child elements to handle clicks
+      e.stopPropagation();
     }
   };
 
@@ -153,7 +156,7 @@ export const BaseEditableNode = memo(({
     <div
       ref={nodeRef}
       className={`epic1-editable-node ${className} ${isEditing ? 'editing' : ''} ${selected ? 'selected' : ''} ${animationClasses}`}
-      onClick={handleNodeClick}
+      onClick={!isEditing ? handleNodeClick : undefined}
       onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}
       style={{
