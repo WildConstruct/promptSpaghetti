@@ -407,7 +407,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       event.preventDefault();
 
       const nodeType = event.dataTransfer.getData('application/reactflow');
+      console.log('Drop event - nodeType:', nodeType, 'reactFlowInstance:', !!reactFlowInstance);
+      
       if (!nodeType || !reactFlowInstance) {
+        console.warn('Drop failed - missing nodeType or reactFlowInstance');
         return;
       }
 
@@ -441,7 +444,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           panOnScroll={false}
           zoomOnScroll={true}
           zoomOnPinch={true}
-          panOnDrag={[1, 2]}
+          panOnDrag={true}
           selectionOnDrag={false}
           nodesDraggable={true}
           nodesConnectable={true}

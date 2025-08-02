@@ -26,6 +26,7 @@ const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
   const onDragStart = (event: React.DragEvent) => {
     event.dataTransfer.setData('application/reactflow', nodeInfo.type);
     event.dataTransfer.effectAllowed = 'move';
+    console.log('NodeToolbar drag start:', nodeInfo.type);
   };
 
   return (
@@ -33,7 +34,7 @@ const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
       className="node-button"
       style={{ '--node-color': nodeInfo.color } as React.CSSProperties}
       title={`Drag to add ${nodeInfo.label} node`}
-      draggable
+      draggable={true}
       onDragStart={onDragStart}
     >
       <span className="node-icon">{nodeInfo.icon}</span>

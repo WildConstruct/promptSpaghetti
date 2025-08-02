@@ -202,7 +202,7 @@ export const AssetLibraryV2: React.FC<AssetLibraryV2Props> = ({
 
       {isExpanded && (
         <div className="library-body-v2">
-          {/* Navigation Columns */}
+          {/* Navigation Columns - Reduced for vertical layout */}
           <div className="navigation-section">
             <NavigationColumn
               title="Category"
@@ -215,20 +215,6 @@ export const AssetLibraryV2: React.FC<AssetLibraryV2Props> = ({
               items={subcategories}
               selectedId={navigation.subcategory}
               onSelect={(id) => setNavigation({ ...navigation, subcategory: id })}
-            />
-            <NavigationColumn
-              title="Genre"
-              items={genres}
-              selectedId={navigation.genre}
-              onSelect={(id) => setNavigation({ ...navigation, genre: id })}
-              highlightColor="#4CAF50"
-            />
-            <NavigationColumn
-              title="Timbre"
-              items={timbres}
-              selectedId={navigation.timbre}
-              onSelect={(id) => setNavigation({ ...navigation, timbre: id })}
-              highlightColor="#FF9800"
             />
           </div>
 

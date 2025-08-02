@@ -7,6 +7,12 @@
   background: #0f0f0f;
 }
 
+/* Ensure drag and drop works properly */
+.epic1-graph-editor .react-flow__renderer {
+  position: relative;
+  z-index: 1;
+}
+
 /* Override React Flow defaults for Epic 1 styling */
 .epic1-graph-editor .react-flow__node {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
