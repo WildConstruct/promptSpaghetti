@@ -15,6 +15,7 @@ export interface Preset {
     modified?: Date;
     usage: number;
     description?: string;
+    rating?: number; // 1-5 star rating
   };
 }
 

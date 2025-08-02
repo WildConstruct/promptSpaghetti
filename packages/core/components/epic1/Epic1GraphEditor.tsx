@@ -28,6 +28,7 @@ import { PreviewPanel } from './preview/PreviewPanel';
 import { Epic1Graph } from '../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
+import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
 import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
@@ -360,12 +361,16 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
     <DndProvider backend={HTML5Backend}>
       <div className="epic1-graph-editor" style={editorStyle}>
         <div style={{ position: 'relative', height: '100%' }}>
-          {/* Asset Library */}
+          {/* Asset Library V2 - Enhanced multi-column browser */}
           {showAssetLibrary && (
-            <AssetLibrary
-              position={assetLibraryPosition}
+            <AssetLibraryV2
+              position="bottom"
               onPresetDrag={(preset) => {
                 console.log('Preset dragged:', preset);
+                // TODO: Implement preset application to nodes
+              }}
+              onPresetSelect={(preset) => {
+                console.log('Preset selected:', preset);
               }}
             />
           )}
