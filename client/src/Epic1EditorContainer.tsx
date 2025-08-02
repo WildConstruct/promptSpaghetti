@@ -61,8 +61,12 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = (props)
 
         if (!mounted) return;
 
-        // Get just the editor component without provider
-        if (epic1Module.Epic1GraphEditor) {
+        // Get the editor component WITH provider to ensure ReactFlow context
+        if (epic1Module.Epic1GraphEditorWithProvider) {
+          setEditorComponent(() => epic1Module.Epic1GraphEditorWithProvider);
+        } else if (epic1Module.Epic1GraphEditor) {
+          // Fallback to basic editor if provider version not available
+          console.warn('Using Epic1GraphEditor without provider - this may cause issues');
           setEditorComponent(() => epic1Module.Epic1GraphEditor);
         } else {
           throw new Error('Epic1GraphEditor not found in module');
@@ -162,16 +166,14 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = (props)
     }
   ];
 
-  // Render with our own provider to ensure proper initialization
+  // Render the editor - it has its own provider
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <ReactFlowProvider>
-        <EditorComponent
-          initialNodes={initialNodes}
-          initialEdges={initialEdges}
-          {...props}
-        />
-      </ReactFlowProvider>
+      <EditorComponent
+        initialNodes={initialNodes}
+        initialEdges={initialEdges}
+        {...props}
+      />
     </div>
   );
 };
