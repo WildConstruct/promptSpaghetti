@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, lazy, Suspense } from 'react';
 import ReactFlow, { 
   Node, 
   Edge, 
@@ -16,8 +16,8 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import './App.css';
 
-// Comment out the import for now - it's causing issues
-// import { TextBlockNode } from '@promptscape/core/components/epic1/nodes';
+// Import the Epic1GraphEditor and its provider
+import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1/Epic1GraphEditor';
 
 // Custom node with better styling and draggability
 const CustomNode = ({ data }: NodeProps) => {
@@ -273,6 +273,7 @@ function App() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [showPreview, setShowPreview] = React.useState(false);
   const [previewResults, setPreviewResults] = React.useState<string[]>([]);
+  const [useRealEditor, setUseRealEditor] = React.useState(false);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -293,6 +294,36 @@ function App() {
   };
 
   console.log('App component rendering with Epic 1 MVP nodes...');
+  
+  // Try to render the real Epic1GraphEditor
+  if (useRealEditor) {
+    return (
+      <div className="App" style={{ width: '100vw', height: '100vh' }}>
+        <button
+          onClick={() => setUseRealEditor(false)}
+          style={{
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            zIndex: 1000,
+            padding: '10px 20px',
+            background: '#e53e3e',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '14px',
+            cursor: 'pointer'
+          }}
+        >
+          Back to Simple Version
+        </button>
+        <Epic1GraphEditorWithProvider 
+          showPreview={true}
+          showAssetLibrary={true}
+        />
+      </div>
+    );
+  }
   
   return (
     <div className="App" style={{ width: '100vw', height: '100vh', display: 'flex' }}>
@@ -351,6 +382,22 @@ function App() {
               }}
             >
               👁️ Preview
+            </button>
+            <button
+              onClick={() => setUseRealEditor(true)}
+              style={{
+                padding: '10px 20px',
+                background: '#805ad5',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+            >
+              🚀 Load Real Editor
             </button>
           </div>
         </div>
