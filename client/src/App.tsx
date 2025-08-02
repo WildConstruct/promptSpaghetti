@@ -18,7 +18,11 @@ import './App.css';
 
 // Comment out the direct import that's causing issues
 // import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1';
+// CSS imports for Epic1 nodes when loaded dynamically
 // import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
+// import '@promptscape/core/components/epic1/nodes/BaseEditableNode.css';
+// import '@promptscape/core/components/epic1/nodes/WeightedChoiceNode.css';
+// import '@promptscape/core/components/epic1/nodes/NodeStyles.css';
 
 // Custom node with better styling and draggability
 const CustomNode = ({ data }: NodeProps) => {

@@ -1,26 +1,37 @@
-// Epic 1 Custom React Flow Nodes
-export { BaseEditableNode } from './BaseEditableNode';
+// Epic 1 Custom React Flow Nodes - Fixed version with proper imports
+
+// First, import the components
+import { BaseEditableNode } from './BaseEditableNode';
+import { TextBlockNode } from './TextBlockNode';
+import { WeightedChoiceNode } from './WeightedChoiceNode';
+import { ConcatNode } from './ConcatNode';
+import { VariableNode } from './VariableNode';
+import { OutputNode } from './OutputNode';
+import { NodeContextMenu } from './NodeContextMenu';
+
+// Then export them
+export { BaseEditableNode };
 export type { BaseEditableNodeProps, EditableNodeData } from './BaseEditableNode';
 
-export { TextBlockNode } from './TextBlockNode';
+export { TextBlockNode };
 export type { TextBlockNodeData } from './TextBlockNode';
 
-export { WeightedChoiceNode } from './WeightedChoiceNode';
+export { WeightedChoiceNode };
 export type { WeightedChoiceNodeData, WeightedOption } from './WeightedChoiceNode';
 
-export { ConcatNode } from './ConcatNode';
+export { ConcatNode };
 export type { ConcatNodeData } from './ConcatNode';
 
-export { VariableNode } from './VariableNode';
+export { VariableNode };
 export type { VariableNodeData } from './VariableNode';
 
-export { OutputNode } from './OutputNode';
+export { OutputNode };
 export type { OutputNodeData } from './OutputNode';
 
-export { NodeContextMenu } from './NodeContextMenu';
+export { NodeContextMenu };
 export type { ContextMenuPosition } from './NodeContextMenu';
 
-// Node type mapping for React Flow
+// Now we can safely create the node type mapping
 export const epic1NodeTypes = {
   textBlock: TextBlockNode,
   weightedChoice: WeightedChoiceNode,
@@ -31,7 +42,5 @@ export const epic1NodeTypes = {
   output: OutputNode,
 };
 
-// CSS imports
-import './BaseEditableNode.css';
-import './WeightedChoiceNode.css';
-import './NodeStyles.css';
+// Note: CSS imports removed to avoid bundling issues
+// These should be imported in the component that uses them
