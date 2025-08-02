@@ -4,6 +4,8 @@
  */
 
 import React, { useState, useCallback } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { PreviewPanel } from './preview/PreviewPanel';
 import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
 import { PreviewEngine } from './preview/PreviewEngine';
@@ -77,12 +79,14 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         
         {activeTab === 'assets' && (
           <div className="assets-container">
-            <AssetLibraryV2
-              position="right"
-              onPresetDrag={onPresetDrag}
-              onPresetSelect={onPresetSelect}
-              defaultExpanded={true}
-            />
+            <DndProvider backend={HTML5Backend}>
+              <AssetLibraryV2
+                position="right"
+                onPresetDrag={onPresetDrag}
+                onPresetSelect={onPresetSelect}
+                defaultExpanded={true}
+              />
+            </DndProvider>
           </div>
         )}
         
