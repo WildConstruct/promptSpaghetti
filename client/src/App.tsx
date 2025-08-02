@@ -16,8 +16,8 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import './App.css';
 
-// Try importing a single node type from core
-import { TextBlockNode } from '@promptscape/core/components/epic1/nodes';
+// Comment out the import for now - it's causing issues
+// import { TextBlockNode } from '@promptscape/core/components/epic1/nodes';
 
 // Custom node with better styling and draggability
 const CustomNode = ({ data }: NodeProps) => {
@@ -60,9 +60,78 @@ const CustomNode = ({ data }: NodeProps) => {
   );
 };
 
+// Simple TextBlock node for testing
+const SimpleTextBlockNode = ({ data }: NodeProps) => {
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [text, setText] = React.useState(data.content || '');
+
+  return (
+    <div style={{
+      background: '#f7fafc',
+      border: '2px solid #cbd5e0',
+      borderRadius: '8px',
+      padding: '12px',
+      minWidth: '200px',
+      minHeight: '80px',
+      cursor: 'pointer'
+    }}
+    onDoubleClick={() => setIsEditing(true)}
+    >
+      <Handle 
+        type="target" 
+        position={Position.Top}
+        style={{
+          background: '#4a5568',
+          width: '12px',
+          height: '12px',
+          border: '2px solid #ffffff'
+        }}
+      />
+      {isEditing ? (
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onBlur={() => setIsEditing(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              setIsEditing(false);
+            }
+          }}
+          style={{
+            width: '100%',
+            minHeight: '60px',
+            border: 'none',
+            outline: 'none',
+            background: 'transparent',
+            resize: 'none',
+            fontSize: '14px',
+            fontFamily: 'inherit'
+          }}
+          autoFocus
+        />
+      ) : (
+        <div style={{ whiteSpace: 'pre-wrap' }}>
+          {text || 'Double-click to edit...'}
+        </div>
+      )}
+      <Handle 
+        type="source" 
+        position={Position.Bottom}
+        style={{
+          background: '#4a5568',
+          width: '12px',
+          height: '12px',
+          border: '2px solid #ffffff'
+        }}
+      />
+    </div>
+  );
+};
+
 const nodeTypes = {
   custom: CustomNode,
-  textBlock: TextBlockNode,
+  textBlock: SimpleTextBlockNode,
 };
 
 // Test nodes with better positioning
