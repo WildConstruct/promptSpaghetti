@@ -376,16 +376,16 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           fitView
           attributionPosition="bottom-left"
         >
-          <Background variant="dots" gap={12} size={1} />
+          <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
           <MiniMap 
             nodeColor={(node) => {
               switch (node.type) {
-                case 'textBlock': return '#6366f1';
-                case 'weightedChoice': return '#f59e0b';
-                case 'concat': return '#10b981';
-                case 'variable': return '#8b5cf6';
-                case 'output': return '#ef4444';
+                case 'textBlock': return '#7c7ff2';
+                case 'weightedChoice': return '#f6a723';
+                case 'concat': return '#22c493';
+                case 'variable': return '#9d70f7';
+                case 'output': return '#f15656';
                 default: return '#666';
               }
             }}

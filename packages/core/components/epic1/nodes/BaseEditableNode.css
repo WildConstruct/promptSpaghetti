@@ -1,30 +1,33 @@
-/* Epic 1 Base Editable Node Styles */
+/* Epic 1 Base Editable Node Styles - Dark Mode */
 
 .epic1-editable-node {
-  background: #ffffff;
-  border: 2px solid #e0e0e0;
+  background: #1a1a1a;
+  border: 2px solid #333333;
   border-radius: 8px;
   padding: 12px;
   cursor: pointer;
   position: relative;
   overflow: visible;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
+  color: #e0e0e0;
 }
 
 /* Editing state - glow effect and expansion */
 .epic1-editable-node.editing {
-  box-shadow: 0 0 20px rgba(100, 200, 255, 0.6);
+  box-shadow: 0 0 20px rgba(91, 158, 255, 0.7);
   transform: scale(1.05);
-  border-color: #4a9eff;
+  border-color: #5b9eff;
   cursor: default;
   z-index: 100;
+  background: #252525;
 }
 
 /* Selected state - subtle highlight */
 .epic1-editable-node.selected:not(.editing) {
-  border-color: #4a9eff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-color: #5b9eff;
+  box-shadow: 0 4px 8px rgba(91, 158, 255, 0.3);
+  background: #202020;
 }
 
 /* Node content container */
@@ -39,14 +42,15 @@
 .epic1-handle {
   width: 12px;
   height: 12px;
-  background: #4a9eff;
-  border: 2px solid #ffffff;
+  background: #5b9eff;
+  border: 2px solid #1a1a1a;
   transition: all 0.2s ease;
 }
 
 .epic1-handle:hover {
   transform: scale(1.2);
-  background: #357abd;
+  background: #4a8ee6;
+  border-color: #0f0f0f;
 }
 
 .epic1-handle.target {
@@ -64,7 +68,7 @@
   right: -8px;
   width: 16px;
   height: 16px;
-  background: #4a9eff;
+  background: #5b9eff;
   border-radius: 50%;
   animation: pulse 1.5s infinite;
 }
@@ -75,7 +79,7 @@
   right: -4px;
   width: 8px;
   height: 8px;
-  background: #4a9eff;
+  background: #5b9eff;
   border-radius: 50%;
 }
 
@@ -99,18 +103,19 @@
 .epic1-inline-input {
   width: 100%;
   padding: 8px;
-  border: 1px solid #4a9eff;
+  border: 1px solid #5b9eff;
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
   outline: none;
-  background: #f8f9fa;
+  background: #2a2a2a;
+  color: #e0e0e0;
   transition: all 0.2s ease;
 }
 
 .epic1-inline-input:focus {
-  background: #ffffff;
-  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+  background: #333333;
+  box-shadow: 0 0 0 2px rgba(91, 158, 255, 0.3);
 }
 
 /* Textarea styles for multiline editing */
@@ -118,58 +123,59 @@
   width: 100%;
   min-height: 60px;
   padding: 8px;
-  border: 1px solid #4a9eff;
+  border: 1px solid #5b9eff;
   border-radius: 4px;
   font-size: 14px;
   font-family: inherit;
   outline: none;
-  background: #f8f9fa;
+  background: #2a2a2a;
+  color: #e0e0e0;
   resize: vertical;
   transition: all 0.2s ease;
 }
 
 .epic1-inline-textarea:focus {
-  background: #ffffff;
-  box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
+  background: #333333;
+  box-shadow: 0 0 0 2px rgba(91, 158, 255, 0.3);
 }
 
 /* Node type specific colors */
 .epic1-editable-node.text-block {
-  border-color: #6366f1;
+  border-color: #7c7ff2;
 }
 
 .epic1-editable-node.text-block.editing {
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+  box-shadow: 0 0 20px rgba(124, 127, 242, 0.7);
 }
 
 .epic1-editable-node.weighted-choice {
-  border-color: #f59e0b;
+  border-color: #f6a723;
 }
 
 .epic1-editable-node.weighted-choice.editing {
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 20px rgba(246, 167, 35, 0.7);
 }
 
 .epic1-editable-node.concat {
-  border-color: #10b981;
+  border-color: #22c493;
 }
 
 .epic1-editable-node.concat.editing {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  box-shadow: 0 0 20px rgba(34, 196, 147, 0.7);
 }
 
 .epic1-editable-node.variable {
-  border-color: #8b5cf6;
+  border-color: #9d70f7;
 }
 
 .epic1-editable-node.variable.editing {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 20px rgba(157, 112, 247, 0.7);
 }
 
 .epic1-editable-node.output {
-  border-color: #ef4444;
+  border-color: #f15656;
 }
 
 .epic1-editable-node.output.editing {
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+  box-shadow: 0 0 20px rgba(241, 86, 86, 0.7);
 }

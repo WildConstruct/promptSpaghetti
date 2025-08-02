@@ -8,15 +8,16 @@
   align-items: center;
   gap: 12px;
   padding: 16px 20px;
-  background: white;
+  background: #252525;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   min-width: 300px;
   max-width: 500px;
   opacity: 0;
   transform: translateX(100%);
   transition: all 0.3s ease;
   z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .epic1-toast.visible {
@@ -26,15 +27,15 @@
 
 /* Toast types */
 .epic1-toast-error {
-  border-left: 4px solid #ef4444;
+  border-left: 4px solid #f15656;
 }
 
 .epic1-toast-warning {
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid #f6a723;
 }
 
 .epic1-toast-success {
-  border-left: 4px solid #10b981;
+  border-left: 4px solid #22c493;
 }
 
 /* Toast content */
@@ -47,7 +48,7 @@
   flex: 1;
   font-size: 14px;
   line-height: 1.5;
-  color: #374151;
+  color: #e0e0e0;
 }
 
 .epic1-toast-close {

@@ -12,9 +12,9 @@
   left: -8px;
   right: -8px;
   bottom: -8px;
-  border: 3px solid #10b981;
+  border: 3px solid #22c493;
   border-radius: 12px;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 20px rgba(34, 196, 147, 0.6);
   animation: epic1-pulse-valid 1.5s ease-in-out infinite;
   pointer-events: none;
   z-index: 10;
@@ -38,7 +38,7 @@
   left: -4px;
   right: -4px;
   bottom: -4px;
-  border: 2px solid #4a9eff;
+  border: 2px solid #5b9eff;
   border-radius: 10px;
   pointer-events: none;
   z-index: 10;
