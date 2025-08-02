@@ -328,7 +328,9 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
     },
     [openMenu]
   );
-  const handleMenuClose = useCallback(() => { setOpenMenu(null) }, []);
+  const handleMenuClose = useCallback(() => {
+    setOpenMenu(null);
+  }, []);
   // File menu items
   const fileMenuItems: MenuItemProps[] = [
     { label: 'New', shortcut: '⌘N', onClick: onNew },
@@ -368,10 +370,11 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
                         console.log('Clear recent files');
                       }
                     }
+                  ]
                 : [])
             ]
           }
-]
+        ]
       : []),
     { divider: true },
     { label: 'Quit', shortcut: '⌘Q', onClick: onQuit }
