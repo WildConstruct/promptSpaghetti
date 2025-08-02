@@ -276,6 +276,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           onSave={handleSave}
           onDocumentation={() => window.open('/docs', '_blank')}
           onKeyboardShortcuts={() => console.log('Show keyboard shortcuts')}
+          nodes={initialNodes}
+          edges={initialEdges}
         />
       )}
       

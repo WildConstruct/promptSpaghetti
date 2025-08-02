@@ -15,8 +15,6 @@ import ReactFlow, {
   useReactFlow,
   ReactFlowInstance,
 } from 'reactflow';
-import { DndProvider, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import 'reactflow/dist/style.css';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
@@ -39,7 +37,6 @@ import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
-import { DroppableCanvas } from './DroppableCanvas';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -62,6 +59,7 @@ export interface Epic1GraphEditorProps {
 /**
  * Epic 1 Graph Editor with inline editing capabilities
  */
+// Inner component with drag and drop support
 const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   initialNodes = [],
   initialEdges = [],
@@ -83,7 +81,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-  const { project } = useReactFlow();
   
   // Context menu and save-as-preset state
   const [contextMenuPosition, setContextMenuPosition] = useState<ContextMenuPosition | null>(null);
@@ -396,10 +393,36 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     return node ? { data: node.data, type: node.type || 'textBlock' } : null;
   }, [saveAsPresetNodeId, nodes]);
 
+  // Handle drag over for new nodes
+  const onDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  // Handle drop for new nodes
+  const onDrop = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+
+      const nodeType = event.dataTransfer.getData('application/reactflow');
+      if (!nodeType || !reactFlowInstance) {
+        return;
+      }
+
+      const bounds = event.currentTarget.getBoundingClientRect();
+      const position = reactFlowInstance.project({
+        x: event.clientX - bounds.left,
+        y: event.clientY - bounds.top,
+      });
+
+      handleNodeDrop(nodeType, position);
+    },
+    [reactFlowInstance, handleNodeDrop]
+  );
+
   return (
     <div className="epic1-graph-editor" style={editorStyle}>
-      <DroppableCanvas onDrop={handleNodeDrop} reactFlowInstance={reactFlowInstance}>
-        <ReactFlow
+      <ReactFlow
           nodes={enhancedNodes}
           edges={edges}
           onNodesChange={onNodesChange}
@@ -420,6 +443,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           nodesDraggable={true}
           nodesConnectable={true}
           elementsSelectable={true}
+          onDrop={onDrop}
+          onDragOver={onDragOver}
         >
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
@@ -474,7 +499,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             <PanZoomControls position="bottom-right" />
           </SafeReactFlowWrapper>
         </ReactFlow>
-      </DroppableCanvas>
 
         {/* Keyboard shortcuts handler */}
         <SafeReactFlowWrapper>
@@ -542,11 +566,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 // Export the main component
 export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <ReactFlowProvider>
-        <Epic1GraphEditorInner {...props} />
-      </ReactFlowProvider>
-    </DndProvider>
+    <ReactFlowProvider>
+      <Epic1GraphEditorInner {...props} />
+    </ReactFlowProvider>
   );
 };
 

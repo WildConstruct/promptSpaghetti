@@ -60,6 +60,8 @@
   background: #5b9eff;
   border: 2px solid #1a1a1a;
   transition: all 0.2s ease;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .epic1-handle:hover {

@@ -3,8 +3,7 @@
  * Simple draggable node palette
  */
 
-import React, { useCallback } from 'react';
-import { useDrag } from 'react-dnd';
+import React from 'react';
 import './NodeToolbar.css';
 
 interface NodeTypeInfo {
@@ -24,20 +23,18 @@ const nodeTypes: NodeTypeInfo[] = [
 
 // Draggable node button
 const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'new-node',
-    item: { nodeType: nodeInfo.type },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }), [nodeInfo.type]);
+  const onDragStart = (event: React.DragEvent) => {
+    event.dataTransfer.setData('application/reactflow', nodeInfo.type);
+    event.dataTransfer.effectAllowed = 'move';
+  };
 
   return (
     <button
-      ref={drag}
-      className={`node-button ${isDragging ? 'dragging' : ''}`}
+      className="node-button"
       style={{ '--node-color': nodeInfo.color } as React.CSSProperties}
       title={`Drag to add ${nodeInfo.label} node`}
+      draggable
+      onDragStart={onDragStart}
     >
       <span className="node-icon">{nodeInfo.icon}</span>
       <span className="node-label">{nodeInfo.label}</span>
