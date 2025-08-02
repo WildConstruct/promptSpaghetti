@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ReactFlow, { 
   Node, 
   Edge, 
@@ -6,27 +6,53 @@ import ReactFlow, {
   Background,
   ReactFlowProvider,
   Handle,
-  Position
+  Position,
+  useNodesState,
+  useEdgesState,
+  addEdge,
+  Connection,
+  NodeProps
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import './App.css';
 
-// Simple custom node component
-const CustomNode = ({ data }: { data: any }) => {
+// Custom node with better styling and draggability
+const CustomNode = ({ data }: NodeProps) => {
   return (
     <div style={{
       background: '#ffffff',
       border: '2px solid #4a5568',
       borderRadius: '8px',
-      padding: '10px 15px',
-      fontSize: '14px',
+      padding: '16px 24px',
+      fontSize: '16px',
+      fontWeight: '500',
       color: '#1a202c',
-      minWidth: '150px',
-      textAlign: 'center'
+      minWidth: '180px',
+      textAlign: 'center',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+      cursor: 'grab'
     }}>
-      <Handle type="target" position={Position.Top} />
+      <Handle 
+        type="target" 
+        position={Position.Top}
+        style={{
+          background: '#4a5568',
+          width: '12px',
+          height: '12px',
+          border: '2px solid #ffffff'
+        }}
+      />
       <div>{data.label}</div>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle 
+        type="source" 
+        position={Position.Bottom}
+        style={{
+          background: '#4a5568',
+          width: '12px',
+          height: '12px',
+          border: '2px solid #ffffff'
+        }}
+      />
     </div>
   );
 };
@@ -35,46 +61,58 @@ const nodeTypes = {
   custom: CustomNode,
 };
 
-// Test nodes
+// Test nodes with better positioning
 const initialNodes: Node[] = [
   {
     id: '1',
     type: 'custom',
-    position: { x: 250, y: 100 },
-    data: { label: '🍝 Test Node 1' },
+    position: { x: 250, y: 50 },
+    data: { label: '🍝 Prompt Spaghetti' },
   },
   {
     id: '2',
     type: 'custom',
-    position: { x: 100, y: 200 },
-    data: { label: '📝 Test Node 2' },
+    position: { x: 100, y: 150 },
+    data: { label: '📝 Text Block' },
   },
   {
     id: '3',
     type: 'custom',
-    position: { x: 400, y: 200 },
-    data: { label: '🎯 Test Node 3' },
+    position: { x: 400, y: 150 },
+    data: { label: '🎯 Output Node' },
   },
 ];
 
 const initialEdges: Edge[] = [
-  { id: 'e1-2', source: '1', target: '2' },
-  { id: 'e1-3', source: '1', target: '3' },
+  { id: 'e1-2', source: '1', target: '2', animated: true },
+  { id: 'e1-3', source: '1', target: '3', animated: true },
 ];
 
 function App() {
-  console.log('App component rendering with custom nodes...');
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const onConnect = useCallback(
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges],
+  );
+
+  console.log('App component rendering with draggable nodes...');
   
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <ReactFlowProvider>
         <ReactFlow
-          nodes={initialNodes}
-          edges={initialEdges}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
+          attributionPosition="bottom-right"
         >
-          <Background />
+          <Background color="#aaa" gap={16} />
           <Controls />
         </ReactFlow>
       </ReactFlowProvider>
