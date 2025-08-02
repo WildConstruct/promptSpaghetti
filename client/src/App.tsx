@@ -16,11 +16,9 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import './App.css';
 
-// Import the Epic1GraphEditor and its provider directly from epic1 folder
-import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1';
-
-// Import Epic1 CSS files
-import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
+// Comment out the direct import that's causing issues
+// import { Epic1GraphEditorWithProvider } from '@promptscape/core/components/epic1';
+// import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
 
 // Custom node with better styling and draggability
 const CustomNode = ({ data }: NodeProps) => {
@@ -277,6 +275,8 @@ function App() {
   const [showPreview, setShowPreview] = React.useState(false);
   const [previewResults, setPreviewResults] = React.useState<string[]>([]);
   const [useRealEditor, setUseRealEditor] = React.useState(false);
+  const [RealEditor, setRealEditor] = React.useState<any>(null);
+  const [loadError, setLoadError] = React.useState<string>('');
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -296,14 +296,39 @@ function App() {
     setShowPreview(true);
   };
 
+  // Dynamic loading of Epic1GraphEditor
+  const loadRealEditor = async () => {
+    try {
+      setLoadError('');
+      console.log('Attempting to load Epic1GraphEditor...');
+      
+      const module = await import('@promptscape/core/components/epic1');
+      console.log('Module loaded:', module);
+      
+      if (module.Epic1GraphEditorWithProvider) {
+        setRealEditor(() => module.Epic1GraphEditorWithProvider);
+        setUseRealEditor(true);
+      } else {
+        throw new Error('Epic1GraphEditorWithProvider not found in module');
+      }
+    } catch (error) {
+      console.error('Failed to load Epic1GraphEditor:', error);
+      setLoadError(error.message || 'Failed to load editor');
+      setUseRealEditor(false);
+    }
+  };
+
   console.log('App component rendering with Epic 1 MVP nodes...');
   
   // Try to render the real Epic1GraphEditor
-  if (useRealEditor) {
+  if (useRealEditor && RealEditor) {
     return (
       <div className="App" style={{ width: '100vw', height: '100vh' }}>
         <button
-          onClick={() => setUseRealEditor(false)}
+          onClick={() => {
+            setUseRealEditor(false);
+            setRealEditor(null);
+          }}
           style={{
             position: 'absolute',
             top: 10,
@@ -320,7 +345,7 @@ function App() {
         >
           Back to Simple Version
         </button>
-        <Epic1GraphEditorWithProvider 
+        <RealEditor 
           showPreview={true}
           showAssetLibrary={true}
         />
@@ -387,7 +412,7 @@ function App() {
               👁️ Preview
             </button>
             <button
-              onClick={() => setUseRealEditor(true)}
+              onClick={loadRealEditor}
               style={{
                 padding: '10px 20px',
                 background: '#805ad5',
@@ -404,6 +429,23 @@ function App() {
             </button>
           </div>
         </div>
+        
+        {/* Error message */}
+        {loadError && (
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#e53e3e',
+            color: 'white',
+            padding: '10px 20px',
+            borderRadius: '6px',
+            fontSize: '14px'
+          }}>
+            Error: {loadError}
+          </div>
+        )}
         
         {/* Preview panel */}
         {showPreview && (
