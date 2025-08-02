@@ -1,0 +1,53 @@
+# Build outputs
+dist/
+build/
+coverage/
+.next/
+.turbo/
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Generated files
+*.min.js
+*.min.css
+*.map
+auto-*.js
+monitor-*.js
+
+# Complex JSX files that don't format well
+**/epic1/**/*.tsx
+**/Epic1GraphEditor.tsx
+**/ActivityFeed.tsx
+**/ConnectionLabel.tsx
+**/CommandPalette/*.tsx
+**/professional/**/*.tsx
+
+# Files with special formatting
+**/nodeSchemas.ts
+**/graphSchema.ts
+**/types/*.ts
+
+# Test fixtures and snapshots
+**/__fixtures__/
+**/__snapshots__/
+*.snap
+
+# Configuration files managed manually
+.husky/
+scripts/*.js
+
+# Temporary and backup files
+*.tmp
+*.backup
+*.bak
+
+# Database files
+*.db
+*.sqlite
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

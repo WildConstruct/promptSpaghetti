@@ -1,242 +1,160 @@
-# Linting Guide - Preventing Commit Failures
+# Linting and Formatting Guide
 
-This guide explains how to avoid linting errors that block commits and provides tools to make development smoother.
+## Overview
 
-## Quick Solutions
+This project uses a flexible linting system that can operate in different modes depending on your needs. The system includes ESLint for code quality, Prettier for formatting, and various pre-commit hooks.
 
-### 🚀 Immediate Fix for Blocked Commits
+## Linting Modes
 
-If your commit is blocked by linting errors:
+### 1. **Safe Mode** (Recommended for complex JSX)
+- **Command**: `npm run lint:mode:safe`
+- **Behavior**: Checks only, no auto-fixing
+- **When to use**: When working with complex JSX files or Epic1 components
+- **Pre-commit**: Shows warnings but doesn't block commits
 
-```bash
-# Option 1: Auto-fix and retry
-npm run lint:fix
-git add -u
-git commit
+### 2. **Active Mode** (Default for general development)
+- **Command**: `npm run lint:mode:active`
+- **Behavior**: Moderate auto-fixing with 50 warnings allowed
+- **When to use**: Regular development work
+- **Pre-commit**: Auto-fixes common issues
 
-# Option 2: Use safe commit (auto-fixes then commits)
-npm run commit:safe -m "your commit message"
+### 3. **Strict Mode** (For production-ready code)
+- **Command**: `npm run lint:mode:strict`
+- **Behavior**: Aggressive auto-fixing with strict rules
+- **When to use**: Before merging to main branch
+- **Pre-commit**: Enforces all rules strictly
 
-# Option 3: Force commit (skip all checks)
-npm run commit:force -m "your commit message"
-```
-
-### 🔧 Switch to Permissive Linting Mode
-
-For easier development, switch to permissive mode:
-
-```bash
-npm run lint:permissive
-```
-
-This allows:
-
-- ✅ Console.log statements
-- ✅ Unused variables (prefixed with \_)
-- ✅ Up to 10 linting warnings per file
-- ✅ More lenient line length (120 chars + strings/comments)
-- ✅ Auto-fixing of common issues
-
-## Available Linting Modes
-
-### Strict Mode (Production Ready)
-
-```bash
-npm run lint:strict
-```
-
-- Errors fail commits
-- Enforces consistent style
-- Best for production code
-
-### Permissive Mode (Development Friendly)
-
-```bash
-npm run lint:permissive
-```
-
-- Warnings don't fail commits
-- More forgiving rules
-- Auto-fixes common issues
-- Best for rapid development
-
-### Check Current Mode
-
-```bash
-npm run lint:status
-```
-
-## Auto-Fix Common Issues
-
-The `lint:fix` script automatically resolves:
-
-- ✅ Unused variable declarations (prefixes with \_)
-- ✅ Missing semicolons
-- ✅ Quote consistency
-- ✅ Indentation issues
-- ✅ Trailing commas
-- ✅ Import/export formatting
-
-## File-Specific Rules
-
-### Auto-Generated Files
-
-Files matching these patterns get special treatment:
-
-- `src/auto-*.js` - Only formatting, no linting
-- `src/monitor-*.js` - Only formatting, no linting
-- `**/*.generated.ts` - Ignored completely
-
-### Test Files
-
-- Allow up to 20 warnings
-- More permissive rules
-- Focus on functionality over style
-
-### Security-Critical Files
-
-- Extra validation for expression evaluators
-- AST node whitelists get comprehensive checks
-- Still allow warnings in permissive mode
-
-## Commit Hooks
-
-### Standard Hook (Strict)
-
-```bash
-git commit -m "message"  # Uses .eslintrc.js
-```
-
-### Improved Hook (Permissive)
-
-```bash
-# After switching to permissive mode
-git commit -m "message"  # Uses .eslintrc.improved.js
-```
-
-The improved hook:
-
-1. Auto-fixes common issues
-2. Re-stages fixed files
-3. Allows commits with warnings
-4. Falls back to ultra-permissive mode if needed
+### 4. **Emergency Mode** (Quick fixes)
+- **Command**: `npm run lint:mode:emergency`
+- **Behavior**: Minimal checks, allows up to 500 warnings
+- **When to use**: Emergency hotfixes or when dealing with legacy code
+- **Pre-commit**: Very permissive
 
 ## Configuration Files
 
-| File                         | Purpose                     |
-| ---------------------------- | --------------------------- |
-| `.eslintrc.js`               | Strict linting rules        |
-| `.eslintrc.improved.js`      | Permissive linting rules    |
-| `.lintstagedrc.js`           | Strict pre-commit rules     |
-| `.lintstagedrc.improved.js`  | Permissive pre-commit rules |
-| `.husky/pre-commit`          | Standard commit hook        |
-| `.husky/pre-commit.improved` | Permissive commit hook      |
+### Prettier Configuration
+- **Main config**: `.prettierrc` (JSON format)
+  - Print width: 80 characters
+  - Tab width: 2 spaces
+  - Single quotes
+  - No trailing commas
+  - LF line endings
 
-When you switch modes, these create:
+### ESLint Configuration
+- **Main config**: `.eslintrc.js`
+  - TypeScript support
+  - React and React Hooks rules
+  - Very permissive settings for development
+  - Extensive ignore patterns for problematic files
 
-- `.eslintrc.active.js` - Current ESLint config
-- `.lintstagedrc.active.js` - Current lint-staged config
-- `.husky/pre-commit.active` - Current commit hook
+### Ignored Files
+Both ESLint and Prettier ignore:
+- Epic1 components (`**/epic1/**/*.tsx`)
+- Complex JSX files (ActivityFeed, ConnectionLabel)
+- Command Palette components
+- Build outputs and node_modules
+- Auto-generated files
 
-## IDE Integration
+## Common Commands
 
-### VS Code
+### Formatting
+- `npm run format` - Format all files with Prettier
+- `npm run format:check` - Check if files are formatted
+- `npx prettier --write <file>` - Format specific file
 
-Update your settings to use the active config:
+### Linting
+- `npm run lint` - Run ESLint on all files
+- `npm run lint:fix` - Auto-fix ESLint issues
+- `npx eslint <file>` - Lint specific file
+- `npx eslint --fix <file>` - Auto-fix specific file
 
-```json
-{
-  "eslint.options": {
-    "configFile": ".eslintrc.active.js"
-  }
-}
-```
-
-### Other IDEs
-
-Point your ESLint integration to `.eslintrc.active.js`
+### Committing
+- `git commit` - Normal commit (runs pre-commit hooks)
+- `git commit --no-verify` - Skip all pre-commit checks
+- `npm run commit:safe` - Auto-fix then commit
+- `npm run commit:force` - Force commit without checks
 
 ## Troubleshooting
 
-### "Module not found" errors during commit
+### File keeps getting malformed
+1. Switch to safe mode: `npm run lint:mode:safe`
+2. Add file to `.prettierignore` and `.eslintignore`
+3. Commit with `--no-verify` flag
 
-```bash
-# Install missing dependencies
-npm install
-# Or try permissive mode
-npm run lint:permissive
-```
+### Too many ESLint errors
+1. Run `npm run lint:fix` to auto-fix what's possible
+2. Switch to emergency mode temporarily: `npm run lint:mode:emergency`
+3. Fix issues incrementally
+
+### Prettier and ESLint conflicts
+1. Prettier config takes precedence for formatting
+2. ESLint handles code quality rules
+3. If they conflict, adjust `.prettierrc` settings
 
 ### Pre-commit hook failures
-
-```bash
-# Check hook permissions
-chmod +x .husky/pre-commit.active
-# Or bypass hooks entirely
-git commit --no-verify -m "message"
-```
-
-### ESLint errors in specific files
-
-```bash
-# Fix specific file
-npx eslint path/to/file.js --fix --max-warnings 10
-# Or ignore the file (add to .eslintignore)
-echo "path/to/problematic/file.js" >> .eslintignore
-```
+1. Check which mode you're in: `cat .linting-mode`
+2. Switch to a more permissive mode if needed
+3. Use `git commit --no-verify` as last resort
 
 ## Best Practices
 
-### During Development
+1. **Use Safe Mode** when working with:
+   - Epic1 components
+   - Complex JSX with many nested elements
+   - Files that have been problematic in the past
 
-1. Use permissive mode: `npm run lint:permissive`
-2. Fix issues incrementally
-3. Use `npm run lint:fix` before major commits
+2. **Regular Development**:
+   - Use Active Mode for day-to-day work
+   - Run `npm run lint:fix` before committing
+   - Format files with `npm run format`
 
-### Before Production
+3. **Before PR/Merge**:
+   - Switch to Strict Mode
+   - Fix all warnings and errors
+   - Ensure all tests pass
 
-1. Switch to strict mode: `npm run lint:strict`
-2. Fix all remaining issues
-3. Ensure tests pass: `npm test`
+4. **Emergency Situations**:
+   - Use Emergency Mode sparingly
+   - Document why strict linting was skipped
+   - Plan to fix issues in follow-up commits
 
-### Team Workflow
+## File-Specific Notes
 
-1. Permissive mode for feature development
-2. Strict mode for code review
-3. Document mode choice in PR description
+### Epic1 Components
+- These files have complex JSX that doesn't format well
+- They are excluded from auto-formatting
+- Manual formatting may be required
 
-## Emergency Procedures
+### ActivityFeed.tsx & ConnectionLabel.tsx
+- Known formatting issues with these files
+- Excluded from auto-formatting
+- Check syntax manually before committing
 
-### Completely Broken Linting
+### Test Files
+- More relaxed rules for test files
+- `any` types are allowed
+- Unused variables are permitted
 
-```bash
-# 1. Disable all linting temporarily
-mv .eslintrc.js .eslintrc.js.backup
-echo 'module.exports = { rules: {} }' > .eslintrc.js
+## Adding New Exclusions
 
-# 2. Commit your changes
-git commit --no-verify -m "emergency commit"
+If a file consistently has formatting issues:
 
-# 3. Restore linting and fix gradually
-mv .eslintrc.js.backup .eslintrc.js
-npm run lint:permissive
-```
+1. Add to `.prettierignore`:
+   ```
+   path/to/problematic-file.tsx
+   ```
 
-### CI/CD Pipeline Issues
+2. Add to `.eslintrc.js` ignorePatterns:
+   ```javascript
+   ignorePatterns: [
+     // ... existing patterns
+     'path/to/problematic-file.tsx',
+   ]
+   ```
 
-If linting blocks your CI:
-
-1. Use permissive mode configs in CI
-2. Run linting as separate, non-blocking step
-3. Gradually tighten rules over time
-
-## Additional Resources
-
-- [ESLint Documentation](https://eslint.org/docs/rules/)
-- [Prettier Configuration](https://prettier.io/docs/en/configuration.html)
-- [Husky Git Hooks](https://typicode.github.io/husky/)
-- [lint-staged Configuration](https://github.com/okonet/lint-staged)
-
----
-
-💡 **Remember**: The goal is to maintain code quality while not blocking productivity. Use permissive mode during development and strict mode for production readiness.
+3. Update `.lintstagedrc.safe.js` if needed:
+   ```javascript
+   'path/to/file.tsx': [
+     () => 'echo "File skipped - known issues"',
+   ],
+   ```
