@@ -143,13 +143,16 @@ const MenuItem: React.FC<MenuItemProps> = ({ label,
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      onMouseOver={ e => {
+      onMouseOver={e => {
         if (!disabled) {
-          e.currentTarget.style.backgroundColor = professionalColors.ui.hover }
-}
-      onMouseOut={ e => {
+          e.currentTarget.style.backgroundColor = professionalColors.ui.hover;
+        }
+      }}
+      onMouseOut={e => {
         if (!showSubmenu) {
-          e.currentTarget.style.backgroundColor = 'transparent' }
+          e.currentTarget.style.backgroundColor = 'transparent';
+        }
+      }}
 
     >
       <span>{label}</span>
@@ -267,56 +270,57 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
   );
 };
 
-export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({ // File operations
-  onNew
-  onOpen
-  onSave
-  onSaveAs
-  onImport
-  onExport
-  onRecentFileLoad
-  onQuit
+export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
+  // File operations
+  onNew,
+  onOpen,
+  onSave,
+  onSaveAs,
+  onImport,
+  onExport,
+  onRecentFileLoad,
+  onQuit,
   // Edit operations
-  onUndo
-  onRedo
-  onCut
-  onCopy
-  onPaste
-  onSelectAll
-  onFind
-  onPreferences
+  onUndo,
+  onRedo,
+  onCut,
+  onCopy,
+  onPaste,
+  onSelectAll,
+  onFind,
+  onPreferences,
   // View operations
-  onZoomIn
-  onZoomOut
-  onFitView
-  onToggleGrid
-  onToggleMinimap
-  onToggleInspector
-  onToggleFullscreen
-  onToggleTheme
+  onZoomIn,
+  onZoomOut,
+  onFitView,
+  onToggleGrid,
+  onToggleMinimap,
+  onToggleInspector,
+  onToggleFullscreen,
+  onToggleTheme,
   // Debug operations
-  onDevTools
-  onValidateGraph
-  onPerformanceMonitor
-  onConsoleToggle
+  onDevTools,
+  onValidateGraph,
+  onPerformanceMonitor,
+  onConsoleToggle,
   // Help operations
-  onDocumentation
-  onKeyboardShortcuts
-  onAbout
-  onSupport
-  onReportBug
+  onDocumentation,
+  onKeyboardShortcuts,
+  onAbout,
+  onSupport,
+  onReportBug,
   // Application state
-  canUndo = false
-  canRedo = false
-  hasSelection = false
-  nodes = []
-  edges = []
-  theme = 'cinema'
-  isFullscreen = false
-  gridVisible = true
-  minimapVisible = true
-  inspectorVisible = true
-  recentFiles = [] }
+  canUndo = false,
+  canRedo = false,
+  hasSelection = false,
+  nodes = [],
+  edges = [],
+  theme = 'cinema',
+  isFullscreen = false,
+  gridVisible = true,
+  minimapVisible = true,
+  inspectorVisible = true,
+  recentFiles = []
 }) => { const [openMenu, setOpenMenu] = useState<string | null>(null);
   const handleMenuToggle = useCallback(
     (menuName: string) => {
