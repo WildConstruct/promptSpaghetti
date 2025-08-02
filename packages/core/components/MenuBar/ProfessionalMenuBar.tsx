@@ -73,7 +73,8 @@ interface MenuProps { label: string;
   items: MenuItemProps;
   isOpen: boolean;
   onToggle: () => void;
-  onClose: () => void }
+  onClose: () => void;
+}
 
 
 const professionalColors = {
@@ -94,36 +95,46 @@ const professionalColors = {
     secondary: '#242424'
   }
 };
-const MenuItem: React.FC<MenuItemProps> = ({ label,
+const MenuItem: React.FC<MenuItemProps> = ({
+  label,
   shortcut,
   onClick,
   disabled = false,
   divider = false,
   submenu
-}) => { const [showSubmenu, setShowSubmenu] = useState(false);
+}) => {
+  const [showSubmenu, setShowSubmenu] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
+  
+  const handleClick = useCallback(() => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  }, [disabled, onClick]);
+  
+  const handleMouseEnter = useCallback(() => {
+    if (submenu) {
+      setShowSubmenu(true);
+    }
+  }, [submenu]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (submenu) {
+      setShowSubmenu(false);
+    }
+  }, [submenu]);
+  
   if (divider) {
-  return (
-  <div
-  style={{
-    height: '1px',
-    backgroundColor: professionalColors.ui.border,
-    margin: '4px 0'
-  }}
+    return (
+      <div
+        style={{
+          height: '1px',
+          backgroundColor: professionalColors.ui.border,
+          margin: '4px 0'
+        }}
       />
     );
-
-
-  const handleClick = useCallback(() => { if (!disabled && onClick) {
-      onClick() }
-  }, [disabled, onClick]);
-  const handleMouseEnter = useCallback(() => { if (submenu) {
-      setShowSubmenu(true) }
-  }, [submenu]);
-
-  const handleMouseLeave = useCallback(() => { if (submenu) {
-      setShowSubmenu(false) }
-  }, [submenu]);
+  }
   return (
     <div
       ref={itemRef}
@@ -321,7 +332,7 @@ export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
   hasSelection = false,
   nodes = [],
   edges = [],
-  theme = 'cinema',
+  // theme = 'cinema', // TODO: Implement theme switching
   isFullscreen = false,
   gridVisible = true,
   minimapVisible = true,
