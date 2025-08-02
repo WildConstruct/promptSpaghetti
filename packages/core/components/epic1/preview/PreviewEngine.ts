@@ -58,6 +58,9 @@ export class PreviewEngine {
   private seeds: (string | number)[];
   private cache: PreviewCache | null = null;
   private workerPool: WorkerPool | null = null;
+  private workerPoolInitialized = false;
+  private webWorkerEnabled: boolean;
+  private workerPoolSize: number;
   
   private debounceTimer: NodeJS.Timeout | null = null;
   private currentExecution: Promise<ExecutionResult[]> | null = null;
@@ -75,6 +78,8 @@ export class PreviewEngine {
     this.debounceDelay = options.debounceDelay ?? 300;
     this.maxExecutionTime = options.maxExecutionTime ?? 5000;
     this.seeds = options.seeds ?? [1234, 5678, 9012];
+    this.webWorkerEnabled = options.enableWebWorker !== false;
+    this.workerPoolSize = options.workerPoolSize ?? 4;
     
     // Initialize cache if enabled
     if (options.enableCache !== false) {
@@ -83,22 +88,21 @@ export class PreviewEngine {
         options.cacheMaxAgeMinutes ?? 30
       );
     }
+  }
 
-    // Initialize worker pool if enabled
-    if (options.enableWebWorker !== false && typeof Worker !== 'undefined') {
-      try {
-        // Worker script URL will be set by the build system
-        const workerUrl = new URL('./execution.worker.ts', import.meta.url).href;
-        this.workerPool = new WorkerPool(
-          workerUrl,
-          2, // min workers
-          options.workerPoolSize ?? 4 // max workers
-        );
-      } catch (error) {
-        console.warn('Failed to initialize WebWorker pool:', error);
-        // Fall back to main thread execution
-      }
+  /**
+   * Initialize worker pool lazily with proper Vite worker import
+   */
+  private async initializeWorkerPool(): Promise<void> {
+    if (this.workerPoolInitialized || !this.webWorkerEnabled || typeof Worker === 'undefined') {
+      return;
     }
+
+    // Temporarily disable WebWorkers due to Vite module loading issues
+    // TODO: Implement proper Vite worker loading with separate build entry
+    console.warn('WebWorkers temporarily disabled for Epic1 preview. Using main thread execution.');
+    this.webWorkerEnabled = false;
+    this.workerPoolInitialized = true;
   }
 
   /**
@@ -206,6 +210,11 @@ export class PreviewEngine {
 
     try {
       let results: ExecutionResult[];
+
+      // Initialize worker pool if needed
+      if (this.webWorkerEnabled && !this.workerPoolInitialized) {
+        await this.initializeWorkerPool();
+      }
 
       // Use worker pool if available
       if (this.workerPool && !this.workerPool.isTerminated()) {
@@ -447,16 +456,12 @@ export class PreviewEngine {
    * Enable or disable web workers
    */
   setWebWorkerEnabled(enabled: boolean): void {
-    if (enabled && !this.workerPool && typeof Worker !== 'undefined') {
-      try {
-        const workerUrl = new URL('./execution.worker.ts', import.meta.url).href;
-        this.workerPool = new WorkerPool(workerUrl, 2, 4);
-      } catch (error) {
-        console.warn('Failed to initialize WebWorker pool:', error);
-      }
-    } else if (!enabled && this.workerPool) {
+    this.webWorkerEnabled = enabled;
+    
+    if (!enabled && this.workerPool) {
       this.workerPool.terminate();
       this.workerPool = null;
+      this.workerPoolInitialized = false;
     }
   }
 
