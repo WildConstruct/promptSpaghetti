@@ -51,6 +51,46 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     return localStorage.getItem('epic1-onboarding-seen') === 'true';
   });
 
+  // Menu bar handlers - MUST be defined before any conditional returns
+  const handleNew = useCallback(() => {
+    if (window.confirm('Create a new graph? Any unsaved changes will be lost.')) {
+      window.location.reload();
+    }
+  }, []);
+
+  const handleOpen = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,.psg';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          try {
+            const data = JSON.parse(evt.target?.result as string);
+            // TODO: Load the graph data into the editor
+            console.log('Loaded graph:', data);
+          } catch (err) {
+            alert('Failed to load file: ' + err.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  }, []);
+
+  const handleSave = useCallback(() => {
+    // TODO: Get current graph state and save
+    console.log('Save graph');
+  }, []);
+
+  const handleOnboardingComplete = useCallback(() => {
+    setHasSeenOnboarding(true);
+    localStorage.setItem('epic1-onboarding-seen', 'true');
+  }, []);
+
   useEffect(() => {
     let mounted = true;
 
@@ -152,46 +192,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       </div>
     );
   }
-
-  // Menu bar handlers
-  const handleNew = useCallback(() => {
-    if (window.confirm('Create a new graph? Any unsaved changes will be lost.')) {
-      window.location.reload();
-    }
-  }, []);
-
-  const handleOpen = useCallback(() => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json,.psg';
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          try {
-            const data = JSON.parse(evt.target?.result as string);
-            // TODO: Load the graph data into the editor
-            console.log('Loaded graph:', data);
-          } catch (err) {
-            alert('Failed to load file: ' + err.message);
-          }
-        };
-        reader.readAsText(file);
-      }
-    };
-    input.click();
-  }, []);
-
-  const handleSave = useCallback(() => {
-    // TODO: Get current graph state and save
-    console.log('Save graph');
-  }, []);
-
-  const handleOnboardingComplete = useCallback(() => {
-    setHasSeenOnboarding(true);
-    localStorage.setItem('epic1-onboarding-seen', 'true');
-  }, []);
 
   // Medieval demo initial data
   const initialNodes = [
