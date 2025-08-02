@@ -302,8 +302,19 @@ function App() {
       setLoadError('');
       console.log('Attempting to load Epic1GraphEditor...');
       
+      // First try to load just the nodes to debug
+      try {
+        const nodesModule = await import('@promptscape/core/components/epic1/nodes');
+        console.log('Nodes module loaded:', nodesModule);
+        console.log('TextBlockNode:', nodesModule.TextBlockNode);
+        console.log('epic1NodeTypes:', nodesModule.epic1NodeTypes);
+      } catch (nodeError) {
+        console.error('Failed to load nodes module:', nodeError);
+      }
+      
       const module = await import('@promptscape/core/components/epic1');
       console.log('Module loaded:', module);
+      console.log('Available exports:', Object.keys(module));
       
       if (module.Epic1GraphEditorWithProvider) {
         setRealEditor(() => module.Epic1GraphEditorWithProvider);
@@ -322,35 +333,44 @@ function App() {
   
   // Try to render the real Epic1GraphEditor
   if (useRealEditor && RealEditor) {
-    return (
-      <div className="App" style={{ width: '100vw', height: '100vh' }}>
-        <button
-          onClick={() => {
-            setUseRealEditor(false);
-            setRealEditor(null);
-          }}
-          style={{
-            position: 'absolute',
-            top: 10,
-            left: 10,
-            zIndex: 1000,
-            padding: '10px 20px',
-            background: '#e53e3e',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            fontSize: '14px',
-            cursor: 'pointer'
-          }}
-        >
-          Back to Simple Version
-        </button>
-        <RealEditor 
-          showPreview={true}
-          showAssetLibrary={true}
-        />
-      </div>
-    );
+    try {
+      return (
+        <div className="App" style={{ width: '100vw', height: '100vh' }}>
+          <button
+            onClick={() => {
+              setUseRealEditor(false);
+              setRealEditor(null);
+              setLoadError('');
+            }}
+            style={{
+              position: 'absolute',
+              top: 10,
+              left: 10,
+              zIndex: 1000,
+              padding: '10px 20px',
+              background: '#e53e3e',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '14px',
+              cursor: 'pointer'
+            }}
+          >
+            Back to Simple Version
+          </button>
+          <React.Suspense fallback={<div>Loading Epic1 Editor...</div>}>
+            <RealEditor 
+              showPreview={true}
+              showAssetLibrary={true}
+            />
+          </React.Suspense>
+        </div>
+      );
+    } catch (renderError) {
+      console.error('Error rendering Epic1GraphEditor:', renderError);
+      setLoadError('Error rendering editor: ' + renderError.message);
+      setUseRealEditor(false);
+    }
   }
   
   return (
