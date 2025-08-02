@@ -1,5 +1,6 @@
 import React, { useCallback, lazy, Suspense } from 'react';
 import { Epic1EditorContainer } from './Epic1EditorContainer';
+import { DiagnosticEpic1 } from './DiagnosticEpic1';
 import ReactFlow, { 
   Node, 
   Edge, 
@@ -282,6 +283,7 @@ function App() {
   const [useRealEditor, setUseRealEditor] = React.useState(false);
   const [RealEditor, setRealEditor] = React.useState<any>(null);
   const [loadError, setLoadError] = React.useState<string>('');
+  const [showDiagnostics, setShowDiagnostics] = React.useState(false);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -416,6 +418,22 @@ function App() {
             >
               🚀 Load Real Editor
             </button>
+            <button
+              onClick={() => setShowDiagnostics(!showDiagnostics)}
+              style={{
+                padding: '10px 20px',
+                background: '#d69e2e',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '16px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}
+            >
+              🔧 Diagnostics
+            </button>
           </div>
         </div>
         
@@ -463,6 +481,26 @@ function App() {
             ) : (
               <p style={{ color: '#718096' }}>Click Execute to see results</p>
             )}
+          </div>
+        )}
+        
+        {/* Diagnostics panel */}
+        {showDiagnostics && (
+          <div style={{
+            position: 'absolute',
+            top: '80px',
+            right: '20px',
+            width: '400px',
+            maxHeight: '500px',
+            background: 'white',
+            border: '2px solid #e2e8f0',
+            borderRadius: '8px',
+            padding: '10px',
+            overflowY: 'auto',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            zIndex: 1000
+          }}>
+            <DiagnosticEpic1 />
           </div>
         )}
       </ReactFlowProvider>

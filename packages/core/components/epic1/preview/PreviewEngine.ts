@@ -98,34 +98,12 @@ export class PreviewEngine {
       return;
     }
 
-    // Temporarily disable WebWorkers in production builds until we resolve the build issue
-    // The Vite worker import syntax is not compatible with all build environments
-    if (import.meta.env.PROD || process.env.NETLIFY) {
-      console.log('WebWorkers disabled in production build - using main thread execution');
-      this.webWorkerEnabled = false;
-      this.workerPoolInitialized = true;
-      return;
-    }
-
-    try {
-      // Only attempt worker import in development
-      const { default: ExecutionWorker } = await import('./execution.worker?worker');
-      
-      // Create worker pool with the worker constructor
-      this.workerPool = new WorkerPool(
-        ExecutionWorker,
-        Math.min(2, this.workerPoolSize),
-        this.workerPoolSize
-      );
-      this.workerPoolInitialized = true;
-      console.log('Epic1 PreviewEngine: WebWorker pool initialized successfully');
-    } catch (error) {
-      console.error('Failed to initialize WebWorker pool:', error);
-      console.log('Falling back to main thread execution');
-      // Fall back to main thread execution
-      this.webWorkerEnabled = false;
-      this.workerPoolInitialized = true;
-    }
+    // Temporarily disable WebWorkers completely until we resolve the build issues
+    // The Vite worker import syntax is causing problems in multiple environments
+    console.log('WebWorkers temporarily disabled - using main thread execution');
+    this.webWorkerEnabled = false;
+    this.workerPoolInitialized = true;
+    return;
   }
 
   /**
