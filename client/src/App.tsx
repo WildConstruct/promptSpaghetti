@@ -16,6 +16,9 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import './App.css';
 
+// Try importing a single node type from core
+import { TextBlockNode } from '@promptscape/core/components/epic1/nodes';
+
 // Custom node with better styling and draggability
 const CustomNode = ({ data }: NodeProps) => {
   return (
@@ -59,6 +62,7 @@ const CustomNode = ({ data }: NodeProps) => {
 
 const nodeTypes = {
   custom: CustomNode,
+  textBlock: TextBlockNode,
 };
 
 // Test nodes with better positioning
@@ -71,9 +75,11 @@ const initialNodes: Node[] = [
   },
   {
     id: '2',
-    type: 'custom',
+    type: 'textBlock',
     position: { x: 100, y: 150 },
-    data: { label: '📝 Text Block' },
+    data: { 
+      content: 'This is a text block node from Epic 1' 
+    },
   },
   {
     id: '3',
