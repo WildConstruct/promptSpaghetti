@@ -33,6 +33,7 @@ import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
+import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -422,11 +423,14 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
           <ConnectionFeedback nodes={nodes} edges={edges} />
           
           {/* Pan/Zoom controls */}
-          <PanZoomControls position="bottom-right" />
+          <SafeReactFlowWrapper>
+            <PanZoomControls position="bottom-right" />
+          </SafeReactFlowWrapper>
         </ReactFlow>
 
         {/* Keyboard shortcuts handler */}
-        <KeyboardShortcuts
+        <SafeReactFlowWrapper>
+          <KeyboardShortcuts
           onSave={handleSave}
           onLoad={handleLoad}
           onExport={handleExport}
@@ -438,6 +442,7 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = ({
             'P': handleTogglePreview
           }}
         />
+        </SafeReactFlowWrapper>
 
         {/* Toast notifications */}
         {toasts.map((toast) => (

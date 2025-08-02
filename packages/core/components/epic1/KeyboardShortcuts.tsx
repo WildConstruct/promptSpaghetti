@@ -29,9 +29,9 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   const reactFlowInstance = useReactFlow();
   const [showHelp, setShowHelp] = useState(false);
   
-  // Get selected nodes from store
+  // Get selected nodes from store with safety check
   const selectedNodes = useStore((state) => 
-    state.nodes.filter(node => node.selected)
+    state?.nodes?.filter(node => node.selected) || []
   );
 
   // Pan shortcuts (Arrow keys)

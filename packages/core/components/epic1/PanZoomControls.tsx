@@ -20,16 +20,17 @@ export const PanZoomControls: React.FC<PanZoomControlsProps> = ({
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showZoomIndicator, setShowZoomIndicator] = useState(false);
   
-  // Get viewport from store
-  const viewport = useStore((state) => state.viewport);
+  // Get viewport from store with safety check
+  const viewport = useStore((state) => state?.viewport);
 
   // Update zoom level when viewport changes
   useEffect(() => {
+    if (!viewport?.zoom) return;
     setZoomLevel(Math.round(viewport.zoom * 100));
     setShowZoomIndicator(true);
     const timer = setTimeout(() => setShowZoomIndicator(false), 2000);
     return () => clearTimeout(timer);
-  }, [viewport.zoom]);
+  }, [viewport?.zoom]);
 
   // Pan handlers
   const handlePan = useCallback((direction: 'up' | 'down' | 'left' | 'right') => {
