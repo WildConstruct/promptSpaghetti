@@ -1,32 +1,49 @@
 import React from 'react';
+import ReactFlow, { 
+  Node, 
+  Edge, 
+  Controls, 
+  Background,
+  ReactFlowProvider 
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 import './App.css';
 
+// Test nodes
+const initialNodes: Node[] = [
+  {
+    id: '1',
+    type: 'default',
+    position: { x: 250, y: 100 },
+    data: { label: 'Test Node 1' },
+  },
+  {
+    id: '2',
+    type: 'default',
+    position: { x: 100, y: 200 },
+    data: { label: 'Test Node 2' },
+  },
+];
+
+const initialEdges: Edge[] = [
+  { id: 'e1-2', source: '1', target: '2' },
+];
+
 function App() {
-  console.log('App component rendering...');
+  console.log('App component rendering with ReactFlow...');
   
-  // Temporarily show a simple test UI to verify the app loads
   return (
-    <div className="App" style={{ 
-      width: '100vw', 
-      height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#f0f0f0'
-    }}>
-      <div style={{
-        padding: '40px',
-        background: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        textAlign: 'center'
-      }}>
-        <h1>🍝 Prompt Spaghetti - Epic 1 MVP</h1>
-        <p>Loading Epic 1 Graph Editor...</p>
-        <p style={{ marginTop: '20px', color: '#666' }}>
-          If you see this message, the React app is working.
-        </p>
-      </div>
+    <div className="App" style={{ width: '100vw', height: '100vh' }}>
+      <ReactFlowProvider>
+        <ReactFlow
+          nodes={initialNodes}
+          edges={initialEdges}
+          fitView
+        >
+          <Background />
+          <Controls />
+        </ReactFlow>
+      </ReactFlowProvider>
     </div>
   );
 }
