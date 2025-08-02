@@ -5,6 +5,14 @@ import path from 'path';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  worker: {
+    format: 'es',
+    rollupOptions: {
+      output: {
+        entryFileNames: '[name].js'
+      }
+    }
+  },
   build: {
     outDir: 'dist',
     sourcemap: true,

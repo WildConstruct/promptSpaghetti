@@ -28,15 +28,15 @@ export class WorkerPool {
   private taskQueue: WorkerTask[] = [];
   private maxWorkers: number;
   private minWorkers: number;
-  private workerScript: string;
+  private workerConstructor: new () => Worker;
   private terminated = false;
 
   constructor(
-    workerScript: string,
+    workerConstructor: new () => Worker,
     minWorkers: number = 2,
     maxWorkers: number = navigator.hardwareConcurrency || 4
   ) {
-    this.workerScript = workerScript;
+    this.workerConstructor = workerConstructor;
     this.minWorkers = Math.max(1, minWorkers);
     this.maxWorkers = Math.max(this.minWorkers, maxWorkers);
     
@@ -57,7 +57,7 @@ export class WorkerPool {
    * Create a new worker and add to pool
    */
   private createWorker(): PooledWorker {
-    const worker = new Worker(this.workerScript, { type: 'module' });
+    const worker = new this.workerConstructor();
     const pooledWorker: PooledWorker = {
       worker,
       busy: false

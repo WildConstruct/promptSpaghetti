@@ -10,6 +10,8 @@ import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineE
 import { PreviewCache } from './PreviewCache';
 import { WorkerPool } from './WorkerPool';
 import { Node as ReactFlowNode, Edge as ReactFlowEdge } from 'reactflow';
+// Vite worker import - will be resolved at build time
+import ExecutionWorker from './execution.worker?worker';
 
 export enum PreviewState {
   IDLE = 'idle',
@@ -98,11 +100,21 @@ export class PreviewEngine {
       return;
     }
 
-    // Temporarily disable WebWorkers due to Vite module loading issues
-    // TODO: Implement proper Vite worker loading with separate build entry
-    console.warn('WebWorkers temporarily disabled for Epic1 preview. Using main thread execution.');
-    this.webWorkerEnabled = false;
-    this.workerPoolInitialized = true;
+    try {
+      // Create worker pool with Vite worker constructor
+      this.workerPool = new WorkerPool(
+        ExecutionWorker,
+        Math.min(2, this.workerPoolSize),
+        this.workerPoolSize
+      );
+      this.workerPoolInitialized = true;
+      console.log('Epic1 PreviewEngine: WebWorker pool initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize WebWorker pool:', error);
+      // Fall back to main thread execution
+      this.webWorkerEnabled = false;
+      this.workerPoolInitialized = true;
+    }
   }
 
   /**
