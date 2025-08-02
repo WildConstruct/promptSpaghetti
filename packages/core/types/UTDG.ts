@@ -8,11 +8,11 @@
 
 // Core Era and Period Definitions
 
-export interface Era { name: string;
-  period: {;
-  start: number; // Year;
-  end: number;   // Year }
-
+export interface Era {
+  name: string;
+  period: {
+    start: number; // Year
+    end: number;   // Year
   };
   region: string;
   accuracy: 'high' | 'medium' | 'low';
