@@ -34,12 +34,12 @@
 /* Editing state - glow effect */
 .epic1-editable-node.editing {
   box-shadow: 
-    0 0 0 2px rgba(91, 158, 255, 0.4),  /* Inner ring */
-    0 0 0 4px rgba(91, 158, 255, 0.2),  /* Outer ring */
-    0 0 30px rgba(91, 158, 255, 1),     /* Inner glow - more saturated */
-    0 0 60px rgba(91, 158, 255, 0.6);   /* Outer glow - more saturated */
+    0 0 0 1px rgba(91, 158, 255, 0.6),  /* Thin inner ring */
+    0 0 12px rgba(91, 158, 255, 0.8),   /* Smaller, tighter glow */
+    0 0 24px rgba(91, 158, 255, 0.4);   /* Subtle outer glow */
   border-color: #5b9eff;
   border-width: 2px; /* Keep same border width to avoid layout shift */
+  border-radius: 12px; /* Ensure radius is maintained */
   cursor: text;
   z-index: 100;
   background: #252525;
@@ -178,26 +178,28 @@
 /* Node type specific colors */
 .epic1-editable-node.text-block {
   border-color: #7c7ff2;
+  border-radius: 12px; /* Maintain rounded corners */
 }
 
 .epic1-editable-node.text-block.editing {
   box-shadow: 
-    0 0 0 2px rgba(124, 127, 242, 0.5),  /* Inner ring */
-    0 0 0 4px rgba(124, 127, 242, 0.2),  /* Outer ring */
-    0 0 30px rgba(124, 127, 242, 1),     /* Inner glow - saturated purple */
-    0 0 60px rgba(124, 127, 242, 0.7);   /* Outer glow - saturated purple */
+    0 0 0 1px rgba(124, 127, 242, 0.6),
+    0 0 12px rgba(124, 127, 242, 0.8),
+    0 0 24px rgba(124, 127, 242, 0.4);
+  border-radius: 12px; /* Maintain rounded corners */
 }
 
 .epic1-editable-node.weighted-choice {
   border-color: #f6a723;
+  border-radius: 12px; /* Maintain rounded corners */
 }
 
 .epic1-editable-node.weighted-choice.editing {
   box-shadow: 
-    0 0 0 2px rgba(246, 167, 35, 0.5),  /* Inner ring */
-    0 0 0 4px rgba(246, 167, 35, 0.2),  /* Outer ring */
-    0 0 30px rgba(246, 167, 35, 1),     /* Inner glow - saturated orange */
-    0 0 60px rgba(246, 167, 35, 0.7);   /* Outer glow - saturated orange */
+    0 0 0 1px rgba(246, 167, 35, 0.6),
+    0 0 12px rgba(246, 167, 35, 0.8),
+    0 0 24px rgba(246, 167, 35, 0.4);
+  border-radius: 12px; /* Maintain rounded corners */
 }
 
 .epic1-editable-node.concat {
@@ -206,10 +208,9 @@
 
 .epic1-editable-node.concat.editing {
   box-shadow: 
-    0 0 0 2px rgba(34, 196, 147, 0.5),  /* Inner ring */
-    0 0 0 4px rgba(34, 196, 147, 0.2),  /* Outer ring */
-    0 0 30px rgba(34, 196, 147, 1),     /* Inner glow - saturated green */
-    0 0 60px rgba(34, 196, 147, 0.7);   /* Outer glow - saturated green */
+    0 0 0 1px rgba(34, 196, 147, 0.6),
+    0 0 12px rgba(34, 196, 147, 0.8),
+    0 0 24px rgba(34, 196, 147, 0.4);
 }
 
 .epic1-editable-node.variable {
@@ -218,10 +219,9 @@
 
 .epic1-editable-node.variable.editing {
   box-shadow: 
-    0 0 0 2px rgba(157, 112, 247, 0.5),  /* Inner ring */
-    0 0 0 4px rgba(157, 112, 247, 0.2),  /* Outer ring */
-    0 0 30px rgba(157, 112, 247, 1),     /* Inner glow - saturated violet */
-    0 0 60px rgba(157, 112, 247, 0.7);   /* Outer glow - saturated violet */
+    0 0 0 1px rgba(157, 112, 247, 0.6),
+    0 0 12px rgba(157, 112, 247, 0.8),
+    0 0 24px rgba(157, 112, 247, 0.4);
 }
 
 .epic1-editable-node.output {
@@ -230,8 +230,7 @@
 
 .epic1-editable-node.output.editing {
   box-shadow: 
-    0 0 0 2px rgba(241, 86, 86, 0.5),   /* Inner ring */
-    0 0 0 4px rgba(241, 86, 86, 0.2),   /* Outer ring */
-    0 0 30px rgba(241, 86, 86, 1),      /* Inner glow - saturated red */
-    0 0 60px rgba(241, 86, 86, 0.7);    /* Outer glow - saturated red */
+    0 0 0 1px rgba(241, 86, 86, 0.6),
+    0 0 12px rgba(241, 86, 86, 0.8),
+    0 0 24px rgba(241, 86, 86, 0.4);
 }
