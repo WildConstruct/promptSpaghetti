@@ -4,6 +4,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useTutorial } from './TutorialContext';
+import { PromptPasteDialog } from './PromptPasteDialog';
 
 export const TutorialOverlay: React.FC = () => {
   const {
@@ -18,6 +19,7 @@ export const TutorialOverlay: React.FC = () => {
 
   const [targetElement, setTargetElement] = useState<HTMLElement | null>(null);
   const [showSkipHint, setShowSkipHint] = useState(false);
+  const [showPasteDialog, setShowPasteDialog] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const skipHintTimerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -88,17 +90,27 @@ export const TutorialOverlay: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isActive, nextStep, previousStep, skipTutorial]);
 
-  // Handle paste action
+  // Handle paste action - show dialog for paste step
   useEffect(() => {
     if (!isActive || step.action !== 'paste') return;
-
-    const handlePaste = () => {
-      nextStep();
-    };
-
-    window.addEventListener('paste', handlePaste);
-    return () => window.removeEventListener('paste', handlePaste);
-  }, [isActive, step.action, nextStep]);
+    
+    // Show the paste dialog for the paste step
+    setShowPasteDialog(true);
+  }, [isActive, step.action]);
+  
+  // Handle prompt paste from dialog
+  const handlePromptPaste = (prompt: string) => {
+    console.log('Prompt pasted:', prompt);
+    // TODO: Parse the prompt and create nodes
+    // For now, just advance the tutorial
+    setShowPasteDialog(false);
+    nextStep();
+    
+    // Dispatch event for the main editor to handle
+    window.dispatchEvent(new CustomEvent('epic1:promptPasted', { 
+      detail: { prompt } 
+    }));
+  };
 
   // Handle click action
   useEffect(() => {
@@ -115,6 +127,21 @@ export const TutorialOverlay: React.FC = () => {
   }, [isActive, targetElement, step.action, nextStep]);
 
   if (!isActive) return null;
+  
+  // Show paste dialog if needed
+  if (showPasteDialog) {
+    return (
+      <PromptPasteDialog
+        isOpen={true}
+        onClose={() => {
+          setShowPasteDialog(false);
+          skipTutorial();
+        }}
+        onPaste={handlePromptPaste}
+        tutorialStep={step.id}
+      />
+    );
+  }
 
   // Add pulse animation style
   const pulseKeyframes = `

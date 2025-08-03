@@ -28,7 +28,7 @@
 
 .epic1-option-text-preview {
   font-size: 14px;
-  color: #333;
+  color: inherit; /* Use parent's text color for better contrast */
   font-weight: 500;
 }
 
@@ -57,7 +57,8 @@
   transform: translateY(-50%);
   font-size: 11px;
   font-weight: 600;
-  color: #666;
+  color: rgba(0, 0, 0, 0.7); /* Semi-transparent black for better contrast on colored backgrounds */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* Light shadow for dark backgrounds */
 }
 
 /* Edit mode styles */
@@ -254,7 +255,7 @@
 
 .epic1-text-content {
   font-size: 14px;
-  color: #333;
+  color: inherit; /* Use parent's text color for better contrast */
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;

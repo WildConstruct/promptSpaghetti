@@ -86,7 +86,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
           </div>
         )}
         
-        {!activeTab && !isHovered && (
+        {!activeTab && (
           <div className="panel-hint">
             <div className="hint-arrow">◀</div>
           </div>

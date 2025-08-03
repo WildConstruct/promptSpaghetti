@@ -76,7 +76,26 @@ const OnboardingContent: React.FC<OnboardingIntegrationProps> = ({
   );
 };
 
-export const OnboardingIntegration: React.FC<OnboardingIntegrationProps> = (props) => {
+// Updated to work as an overlay without wrapping children
+export const OnboardingIntegration: React.FC<{
+  onComplete?: () => void;
+  onSkip?: () => void;
+}> = ({ onComplete, onSkip }) => {
+  return (
+    <TutorialProvider>
+      <OnboardingContent 
+        showProgress={true}
+        onFirstEdit={() => {}}
+      >
+        {/* Empty children since this is an overlay */}
+        <div />
+      </OnboardingContent>
+    </TutorialProvider>
+  );
+};
+
+// Original component for backward compatibility
+export const OnboardingIntegrationWrapper: React.FC<OnboardingIntegrationProps> = (props) => {
   return (
     <TutorialProvider>
       <OnboardingContent {...props} />

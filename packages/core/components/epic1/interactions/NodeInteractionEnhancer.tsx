@@ -134,7 +134,19 @@ export function useNodeInteractions() {
   const { getNodes, addNodes, setNodes } = useReactFlow();
   const { trigger } = useMicroInteractions();
 
-  const addNodeWithBounce = useCallback((node: Node) => {
+  const addNodeWithBounce = useCallback((node: Node | string) => {
+    // Handle both node object and node ID
+    if (typeof node === 'string') {
+      // Just a node ID, skip bounce effect
+      return;
+    }
+    
+    // Ensure position exists
+    if (!node.position) {
+      console.warn('Cannot add bounce effect: node missing position');
+      return;
+    }
+    
     // Add node first
     addNodes(node);
     

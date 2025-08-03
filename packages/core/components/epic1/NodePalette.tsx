@@ -32,10 +32,17 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
   defaultCollapsed = false,
 }) => {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
+  
+  React.useEffect(() => {
+    console.log('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
+  }, [position, collapsed]);
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
+    console.log('[NodePalette] Drag started for node type:', nodeType);
+    // Use text/plain as primary for better compatibility
+    event.dataTransfer.setData('text/plain', nodeType);
     event.dataTransfer.setData('application/node-type', nodeType);
-    event.dataTransfer.setData('application/reactflow', nodeType); // Support both formats
+    event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'copy';
   };
 
@@ -58,8 +65,9 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
             <div
               key={node.type}
               className="node-item"
-              draggable
+              draggable="true"
               onDragStart={(e) => onDragStart(e, node.type)}
+              onDragEnd={() => console.log('[NodePalette] Drag ended for', node.type)}
               title={node.label}
             >
               <span className="node-icon">{node.icon}</span>

@@ -77,7 +77,8 @@ export class PreviewEngine {
   constructor(options: PreviewOptions = {}) {
     this.debounceDelay = options.debounceDelay ?? 300;
     this.maxExecutionTime = options.maxExecutionTime ?? 5000;
-    this.seeds = options.seeds ?? [1234, 5678, 9012];
+    // Use Pi-based seeds: pi digits starting at different positions
+    this.seeds = options.seeds ?? [3141, 5926, 5358, 9793];
     this.webWorkerEnabled = options.enableWebWorker !== false;
     this.workerPoolSize = options.workerPoolSize ?? 4;
     

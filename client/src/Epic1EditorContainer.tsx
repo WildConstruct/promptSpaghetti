@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import ReactFlow, { ReactFlowProvider, Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { ToastContainer, useToast } from './Toast';
 
 // Import CSS files needed for Epic1
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
@@ -50,11 +51,25 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(() => {
     return localStorage.getItem('epic1-onboarding-seen') === 'true';
   });
+  
+  // Graph state management
+  const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
+  const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
+  
+  // History for undo/redo - initialize with empty state
+  const [history, setHistory] = useState<{ nodes: Node[], edges: Edge[] }[]>([{ nodes: [], edges: [] }]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const [clipboard, setClipboard] = useState<{ nodes: Node[], edges: Edge[] } | null>(null);
 
   // Menu bar handlers - MUST be defined before any conditional returns
   const handleNew = useCallback(() => {
     if (window.confirm('Create a new graph? Any unsaved changes will be lost.')) {
-      window.location.reload();
+      // Reset to initial nodes and edges
+      setCurrentNodes(initialNodes);
+      setCurrentEdges(initialEdges);
+      // Clear localStorage
+      localStorage.removeItem('epic1-graph');
+      localStorage.removeItem('epic1-autosave');
     }
   }, []);
 
@@ -69,8 +84,16 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         reader.onload = (evt) => {
           try {
             const data = JSON.parse(evt.target?.result as string);
-            // TODO: Load the graph data into the editor
-            console.log('Loaded graph:', data);
+            // Load the graph data into the editor
+            if (data.nodes && data.edges) {
+              setCurrentNodes(data.nodes);
+              setCurrentEdges(data.edges);
+              // Also save to localStorage for persistence
+              localStorage.setItem('epic1-graph', JSON.stringify(data));
+              alert('Graph loaded successfully!');
+            } else {
+              alert('Invalid graph file format');
+            }
           } catch (err) {
             alert('Failed to load file: ' + err.message);
           }
@@ -82,15 +105,267 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   }, []);
 
   const handleSave = useCallback(() => {
-    // TODO: Get current graph state and save
-    console.log('Save graph');
-  }, []);
+    // Get current graph state and save
+    const graphData = {
+      nodes: currentNodes.length > 0 ? currentNodes : initialNodes,
+      edges: currentEdges.length > 0 ? currentEdges : initialEdges,
+      version: '1.0',
+      timestamp: new Date().toISOString()
+    };
+    
+    // Save to localStorage
+    localStorage.setItem('epic1-graph', JSON.stringify(graphData));
+    
+    // Create download
+    const blob = new Blob([JSON.stringify(graphData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `prompt-graph-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    alert('Graph saved successfully!');
+  }, [currentNodes, currentEdges]);
 
   const handleOnboardingComplete = useCallback(() => {
     setHasSeenOnboarding(true);
     localStorage.setItem('epic1-onboarding-seen', 'true');
   }, []);
+  
+  // Add to history when graph changes
+  const addToHistory = useCallback((nodes: Node[], edges: Edge[]) => {
+    console.log('[Epic1EditorContainer] Adding to history:', nodes.length, 'nodes,', edges.length, 'edges');
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push({ 
+      nodes: JSON.parse(JSON.stringify(nodes)), // Deep clone
+      edges: JSON.parse(JSON.stringify(edges))  // Deep clone
+    });
+    // Limit history to 50 items
+    if (newHistory.length > 50) {
+      newHistory.shift();
+    }
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  }, [history, historyIndex]);
+  
+  // Add state to force re-render of editor on undo/redo
+  const [editorKey, setEditorKey] = useState(0);
+  
+  // Toast notifications
+  const { toasts, showToast, dismissToast } = useToast();
+  
+  // Edit menu handlers
+  const handleUndo = useCallback(() => {
+    console.log('[Epic1EditorContainer] Undo requested. History:', history.length, 'items, index:', historyIndex);
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      const state = history[newIndex];
+      console.log('[Epic1EditorContainer] Restoring:', state.nodes.length, 'nodes,', state.edges.length, 'edges');
+      setCurrentNodes([...state.nodes]);
+      setCurrentEdges([...state.edges]);
+      setHistoryIndex(newIndex);
+      setEditorKey(prev => prev + 1); // Force editor re-render
+    } else {
+      console.log('[Epic1EditorContainer] Nothing to undo');
+    }
+  }, [history, historyIndex]);
+  
+  const handleRedo = useCallback(() => {
+    console.log('[Epic1EditorContainer] Redo requested. History:', history.length, 'items, index:', historyIndex);
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1;
+      const state = history[newIndex];
+      console.log('[Epic1EditorContainer] Restoring:', state.nodes.length, 'nodes,', state.edges.length, 'edges');
+      setCurrentNodes([...state.nodes]);
+      setCurrentEdges([...state.edges]);
+      setHistoryIndex(newIndex);
+      setEditorKey(prev => prev + 1); // Force editor re-render
+    } else {
+      console.log('[Epic1EditorContainer] Nothing to redo');
+    }
+  }, [history, historyIndex]);
+  
+  const handleCut = useCallback(() => {
+    const selectedNodes = currentNodes.filter(n => n.selected);
+    const selectedNodeIds = selectedNodes.map(n => n.id);
+    const selectedEdges = currentEdges.filter(e => 
+      selectedNodeIds.includes(e.source) || selectedNodeIds.includes(e.target)
+    );
+    
+    if (selectedNodes.length > 0) {
+      setClipboard({ nodes: selectedNodes, edges: selectedEdges });
+      // Remove cut nodes
+      const newNodes = currentNodes.filter(n => !n.selected);
+      const newEdges = currentEdges.filter(e => 
+        !selectedNodeIds.includes(e.source) && !selectedNodeIds.includes(e.target)
+      );
+      setCurrentNodes(newNodes);
+      setCurrentEdges(newEdges);
+      setEditorKey(prev => prev + 1); // Force re-render
+      // Add to history
+      setTimeout(() => {
+        addToHistory(newNodes, newEdges);
+      }, 100);
+      showToast(`Cut ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`, 'success');
+    } else {
+      console.log('[Epic1EditorContainer] No nodes selected to cut');
+      showToast('No nodes selected to cut', 'warning');
+    }
+  }, [currentNodes, currentEdges, addToHistory, showToast]);
+  
+  const handleCopy = useCallback(() => {
+    const selectedNodes = currentNodes.filter(n => n.selected);
+    const selectedNodeIds = selectedNodes.map(n => n.id);
+    const selectedEdges = currentEdges.filter(e => 
+      selectedNodeIds.includes(e.source) && selectedNodeIds.includes(e.target)
+    );
+    
+    if (selectedNodes.length > 0) {
+      console.log('[Epic1EditorContainer] Copying nodes:', selectedNodes.map(n => ({ id: n.id, type: n.type })));
+      setClipboard({ 
+        nodes: JSON.parse(JSON.stringify(selectedNodes)), 
+        edges: JSON.parse(JSON.stringify(selectedEdges))
+      });
+      showToast(`Copied ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`, 'success');
+    } else {
+      console.log('[Epic1EditorContainer] No nodes selected to copy');
+      showToast('No nodes selected to copy', 'warning');
+    }
+  }, [currentNodes, currentEdges]);
+  
+  const handlePaste = useCallback(() => {
+    if (!clipboard || !clipboard.nodes || clipboard.nodes.length === 0) {
+      console.log('[Epic1EditorContainer] Nothing in clipboard to paste');
+      showToast('Nothing to paste - copy some nodes first', 'warning');
+      return;
+    }
+    
+    const timestamp = Date.now();
+    const offset = 50;
+    
+    console.log('[Epic1EditorContainer] Pasting from clipboard:', clipboard.nodes.length, 'nodes');
+    
+    // Create new nodes with new IDs and offset positions
+    const idMap = new Map<string, string>();
+    const pastedNodes = clipboard.nodes.map(node => {
+      const newId = `${node.id}-paste-${timestamp}`;
+      idMap.set(node.id, newId);
+      return {
+        ...node,
+        id: newId,
+        position: {
+          x: (node.position?.x || 100) + offset,
+          y: (node.position?.y || 100) + offset
+        },
+        selected: true
+      };
+    });
+    
+    // Create new edges with updated IDs
+    const pastedEdges = clipboard.edges.map(edge => ({
+      ...edge,
+      id: `${edge.id}-paste-${timestamp}`,
+      source: idMap.get(edge.source) || edge.source,
+      target: idMap.get(edge.target) || edge.target
+    })).filter(edge => 
+      idMap.has(edge.source) && idMap.has(edge.target)
+    );
+    
+    // Deselect existing nodes and add new ones
+    const allNodes = [
+      ...currentNodes.map(n => ({ ...n, selected: false })),
+      ...pastedNodes
+    ];
+    const allEdges = [...currentEdges, ...pastedEdges];
+    
+    setCurrentNodes(allNodes);
+    setCurrentEdges(allEdges);
+    setEditorKey(prev => prev + 1); // Force re-render
+    
+    // Add to history
+    setTimeout(() => {
+      addToHistory(allNodes, allEdges);
+    }, 100);
+    
+    showToast(`Pasted ${pastedNodes.length} node${pastedNodes.length !== 1 ? 's' : ''}`, 'success');
+  }, [clipboard, currentNodes, currentEdges, addToHistory, showToast]);
+  
+  const handleSelectAll = useCallback(() => {
+    console.log('[Epic1EditorContainer] Selecting all nodes:', currentNodes.length);
+    const allSelected = currentNodes.map(n => ({ ...n, selected: true }));
+    setCurrentNodes(allSelected);
+    setEditorKey(prev => prev + 1); // Force re-render with selection
+    showToast(`Selected all ${currentNodes.length} node${currentNodes.length !== 1 ? 's' : ''}`, 'info');
+  }, [currentNodes, showToast]);
+  
+  const handleFind = useCallback(() => {
+    console.log('[Epic1EditorContainer] Find not yet implemented');
+    // TODO: Implement find functionality
+  }, []);
+  
+  const handlePreferences = useCallback(() => {
+    console.log('[Epic1EditorContainer] Preferences not yet implemented');
+    // TODO: Implement preferences dialog
+  }, []);
 
+  // Add keyboard shortcuts for Edit menu
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in inputs
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
+      
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const cmdKey = isMac ? event.metaKey : event.ctrlKey;
+      
+      if (cmdKey) {
+        switch(event.key.toLowerCase()) {
+          case 'z':
+            if (event.shiftKey) {
+              event.preventDefault();
+              handleRedo();
+            } else {
+              event.preventDefault();
+              handleUndo();
+            }
+            break;
+          case 'y':
+            event.preventDefault();
+            handleRedo();
+            break;
+          case 'x':
+            event.preventDefault();
+            handleCut();
+            break;
+          case 'c':
+            event.preventDefault();
+            handleCopy();
+            break;
+          case 'v':
+            event.preventDefault();
+            handlePaste();
+            break;
+          case 'a':
+            event.preventDefault();
+            handleSelectAll();
+            break;
+          case 'f':
+            event.preventDefault();
+            handleFind();
+            break;
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleUndo, handleRedo, handleCut, handleCopy, handlePaste, handleSelectAll, handleFind]);
+  
   useEffect(() => {
     let mounted = true;
 
@@ -271,24 +546,78 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       {/* Professional Menu Bar */}
       {showMenuBar && MenuBarComponent && (
         <MenuBarComponent
+          // File menu
           onNew={handleNew}
           onOpen={handleOpen}
           onSave={handleSave}
+          // Edit menu
+          onUndo={handleUndo}
+          onRedo={handleRedo}
+          onCut={handleCut}
+          onCopy={handleCopy}
+          onPaste={handlePaste}
+          onSelectAll={handleSelectAll}
+          onFind={handleFind}
+          onPreferences={handlePreferences}
+          // State indicators
+          canUndo={historyIndex > 0}
+          canRedo={historyIndex < history.length - 1}
+          hasSelection={currentNodes.some(n => n.selected)}
+          // Help menu
           onDocumentation={() => window.open('/docs', '_blank')}
           onKeyboardShortcuts={() => console.log('Show keyboard shortcuts')}
-          nodes={initialNodes}
-          edges={initialEdges}
+          // Graph data
+          nodes={currentNodes.length > 0 ? currentNodes : initialNodes}
+          edges={currentEdges.length > 0 ? currentEdges : initialEdges}
         />
       )}
       
       {/* Main Editor */}
       <div style={{ flex: 1, position: 'relative' }}>
         <EditorComponent
-          initialNodes={initialNodes}
-          initialEdges={initialEdges}
+          key={editorKey}
+          initialNodes={currentNodes.length > 0 ? currentNodes : initialNodes}
+          initialEdges={currentEdges.length > 0 ? currentEdges : initialEdges}
           showPreview={showPreview}
           showAssetLibrary={showAssetLibrary}
           assetLibraryPosition={assetLibraryPosition}
+          onNodesChange={(nodes) => {
+            const prevLength = currentNodes.length;
+            
+            // Don't update if nodes haven't actually changed (prevents loops)
+            if (JSON.stringify(nodes) === JSON.stringify(currentNodes)) {
+              return;
+            }
+            
+            setCurrentNodes(nodes);
+            
+            // Add to history when nodes are added or deleted (not just moved)
+            if (nodes.length !== prevLength) {
+              console.log('[Epic1EditorContainer] Node count changed from', prevLength, 'to', nodes.length);
+              // Small delay to batch changes
+              clearTimeout(window.historyTimeout);
+              window.historyTimeout = setTimeout(() => {
+                addToHistory(nodes, currentEdges);
+              }, 300);
+            }
+          }}
+          onEdgesChange={(edges) => {
+            // Don't update if edges haven't actually changed
+            if (JSON.stringify(edges) === JSON.stringify(currentEdges)) {
+              return;
+            }
+            
+            setCurrentEdges(edges);
+            
+            // Add to history when edges are added or deleted
+            if (edges.length !== currentEdges.length) {
+              console.log('[Epic1EditorContainer] Edge count changed from', currentEdges.length, 'to', edges.length);
+              clearTimeout(window.historyTimeout);
+              window.historyTimeout = setTimeout(() => {
+                addToHistory(currentNodes, edges);
+              }, 300);
+            }
+          }}
         />
         
         {/* Onboarding Overlay */}
@@ -299,6 +628,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           />
         )}
       </div>
+      
+      {/* Toast notifications */}
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
     </div>
   );
 };

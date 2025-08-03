@@ -1,10 +1,9 @@
 /**
  * Node Toolbar for Epic 1
- * Draggable node palette using React DnD for compatibility with DroppableCanvas
+ * Draggable node palette using native HTML5 drag-and-drop
  */
 
 import React from 'react';
-import { useDrag } from 'react-dnd';
 import './NodeToolbar.css';
 
 interface NodeTypeInfo {
@@ -22,19 +21,30 @@ const nodeTypes: NodeTypeInfo[] = [
   { type: 'output', label: 'Output', icon: '📤', color: '#f15656' }
 ];
 
-// Draggable node button using React DnD
+// Draggable node button using native HTML5 drag-and-drop
 const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'new-node',
-    item: { nodeType: nodeInfo.type },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }), [nodeInfo.type]);
+  const [isDragging, setIsDragging] = React.useState(false);
+
+  const handleDragStart = (e: React.DragEvent) => {
+    console.log('[NodeToolbar] Drag started for:', nodeInfo.type);
+    setIsDragging(true);
+    // Set multiple data formats for compatibility
+    e.dataTransfer.setData('text/plain', nodeInfo.type);
+    e.dataTransfer.setData('application/node-type', nodeInfo.type);
+    e.dataTransfer.setData('application/reactflow', nodeInfo.type);
+    e.dataTransfer.effectAllowed = 'copy';
+  };
+
+  const handleDragEnd = () => {
+    console.log('[NodeToolbar] Drag ended for:', nodeInfo.type);
+    setIsDragging(false);
+  };
 
   return (
     <button
-      ref={drag}
+      draggable="true"
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       className={`node-button ${isDragging ? 'dragging' : ''}`}
       style={{ 
         '--node-color': nodeInfo.color,
