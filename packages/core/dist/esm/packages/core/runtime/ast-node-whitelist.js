@@ -9,23 +9,15 @@ export var NodeSafetyLevel;
 (function (NodeSafetyLevel) {
     NodeSafetyLevel["SAFE"] = "SAFE";
     NodeSafetyLevel["RESTRICTED"] = "RESTRICTED";
-    NodeSafetyLevel["DANGEROUS"] = "DANGEROUS";
-    /**
-    * Interface for blocked node information
-    */
-    NodeSafetyLevel[NodeSafetyLevel["export"] = void 0] = "export";
-    NodeSafetyLevel[NodeSafetyLevel["interface"] = void 0] = "interface";
-    NodeSafetyLevel[NodeSafetyLevel["BlockedNodeInfo"] = void 0] = "BlockedNodeInfo";
 })(NodeSafetyLevel || (NodeSafetyLevel = {}));
-{
-    nodeType: string;
-    safetyLevel: NodeSafetyLevel;
-    reason: string;
-    position ?  : acorn.Position;
-    /**
-    * Filter result interface
-    */
-}
+DANGEROUS = 'DANGEROUS';
+restrictedNodeTypes: Set;
+dangerousNodeTypes: Set;
+maxDepth ?  : number;
+maxNodes ?  : number;
+/**
+* AST node whitelist filter for security validation
+*/
 export class ASTNodeWhitelistFilter {
     config;
     nodeCount = 0;
@@ -43,13 +35,11 @@ export class ASTNodeWhitelistFilter {
             const blockedNodes = [];
             this.validateNode(ast, blockedNodes);
             return {
-                allowed: blockedNodes.length === 0,
-                blockedNodes
+                allowed: blockedNodes.length === 0
             };
-            /**
-             * Recursively validate AST nodes
-             */
+            blockedNodes;
         }
+        ;
         /**
          * Recursively validate AST nodes
          */
@@ -65,12 +55,10 @@ export class ASTNodeWhitelistFilter {
             // Check node count limit
             if (this.config.maxNodes && this.nodeCount > this.config.maxNodes) {
                 blockedNodes.push({});
-                nodeType: node.type,
-                    safetyLevel;
-                NodeSafetyLevel.DANGEROUS,
-                    reason;
-                `Exceeded maximum node count of ${this.config.maxNodes}`;
+                nodeType: node.type;
+                safetyLevel: NodeSafetyLevel.DANGEROUS;
             }
+            reason: `Exceeded maximum node count of ${this.config.maxNodes}`;
         }
         position: node.loc?.start;
     }
@@ -80,53 +68,43 @@ export class ASTNodeWhitelistFilter {
  && this.currentDepth > this.config.maxDepth;
 {
     blockedNodes.push({});
-    nodeType: node.type,
-        safetyLevel;
-    NodeSafetyLevel.DANGEROUS,
-        reason;
-    `Exceeded maximum depth of ${this.config.maxDepth}`;
+    nodeType: node.type;
+    safetyLevel: NodeSafetyLevel.DANGEROUS;
 }
+reason: `Exceeded maximum depth of ${this.config.maxDepth}`;
 position: node.loc?.start;
 ;
 return;
 // Check node type safety
 if (this.config.dangerousNodeTypes.has(node.type)) {
     blockedNodes.push({});
-    nodeType: node.type,
-        safetyLevel;
-    NodeSafetyLevel.DANGEROUS,
-        reason;
-    `Node type '${node.type}' is marked as dangerous`;
+    nodeType: node.type;
+    safetyLevel: NodeSafetyLevel.DANGEROUS;
 }
+reason: `Node type '${node.type}' is marked as dangerous`;
 position: node.loc?.start;
 ;
 // Log to security audit
 securityAudit.logASTNodeBlocked(node.type, 'Dangerous node type', {});
-astDepth: this.currentDepth,
-    nodeCount;
-this.nodeCount,
-;
+astDepth: this.currentDepth;
+nodeCount: this.nodeCount;
 ;
 return;
 if (this.config.restrictedNodeTypes.has(node.type)) {
     blockedNodes.push({});
-    nodeType: node.type,
-        safetyLevel;
-    NodeSafetyLevel.RESTRICTED,
-        reason;
-    `Node type '${node.type}' is restricted in this context`;
+    nodeType: node.type;
+    safetyLevel: NodeSafetyLevel.RESTRICTED;
 }
+reason: `Node type '${node.type}' is restricted in this context`;
 position: node.loc?.start;
 ;
 return;
 if (!this.config.allowedNodeTypes.has(node.type)) {
     blockedNodes.push({});
-    nodeType: node.type,
-        safetyLevel;
-    NodeSafetyLevel.DANGEROUS,
-        reason;
-    `Node type '${node.type}' is not in the whitelist`;
+    nodeType: node.type;
+    safetyLevel: NodeSafetyLevel.DANGEROUS;
 }
+reason: `Node type '${node.type}' is not in the whitelist`;
 position: node.loc?.start;
 ;
 return;
@@ -153,36 +131,28 @@ void {
     this.validateLiteral(node, blockedNodes);
     break;
     validateIdentifier(node, acorn.Node & { name: string }, blockedNodes, BlockedNodeInfo);
-    void {
-        const: dangerousIdentifiers = [
+    void { const: dangerousIdentifiers = [
             'eval', 'Function', 'constructor', 'prototype', '__proto__',
             '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__',
             'window', 'global', 'globalThis', 'self', 'document', 'process',
             'require', 'import', 'export', 'arguments', 'caller', 'callee'
         ],
-        if(dangerousIdentifiers) { }, : .includes(node.name)
-    };
+        if(dangerousIdentifiers) { }, : .includes(node.name) };
     {
         blockedNodes.push({});
-        nodeType: node.type,
-            safetyLevel;
-        NodeSafetyLevel.DANGEROUS,
-            reason;
-        `Dangerous identifier '${node.name}' is not allowed`;
+        nodeType: node.type;
+        safetyLevel: NodeSafetyLevel.DANGEROUS;
     }
+    reason: `Dangerous identifier '${node.name}' is not allowed`;
 }
 position: node.loc?.start;
 ;
-validateMemberExpression(node, acorn.Node & {}),
-    object;
-acorn.Node,
-    property;
-acorn.Node,
-    computed;
-boolean;
+validateMemberExpression(node, acorn.Node & {});
+object: acorn.Node;
+property: acorn.Node;
+computed: boolean;
 blockedNodes: BlockedNodeInfo;
 void {
-    // Check for dangerous property names
     if(, node) { }, : .computed && node.property.type === 'Identifier'
 };
 {
@@ -193,24 +163,18 @@ void {
     ];
     if (dangerousProperties.includes(propertyName)) {
         blockedNodes.push({});
-        nodeType: node.type,
-            safetyLevel;
-        NodeSafetyLevel.DANGEROUS,
-            reason;
-        `Access to dangerous property '${propertyName}' is not allowed`;
+        nodeType: node.type;
+        safetyLevel: NodeSafetyLevel.DANGEROUS;
     }
+    reason: `Access to dangerous property '${propertyName}' is not allowed`;
 }
 position: node.loc?.start;
 ;
-validateCallExpression(node, acorn.Node & {}),
-    callee;
-acorn.Node,
-    arguments;
-acorn.Node,
-;
+validateCallExpression(node, acorn.Node & {});
+callee: acorn.Node;
+arguments: acorn.Node;
 blockedNodes: BlockedNodeInfo;
 void {
-    // Only allow calls to whitelisted functions in the evaluation context
     // The actual function validation happens during evaluation
     // Check for immediately dangerous call patterns
     if() { }
@@ -220,27 +184,24 @@ void {
     const dangerousFunctions = ['eval', 'Function', 'setTimeout', 'setInterval'];
     if (dangerousFunctions.includes(functionName)) {
         blockedNodes.push({});
-        nodeType: node.type,
-            safetyLevel;
-        NodeSafetyLevel.DANGEROUS,
-            reason;
-        `Call to dangerous function '${functionName}' is not allowed`;
+        nodeType: node.type;
+        safetyLevel: NodeSafetyLevel.DANGEROUS;
     }
+    reason: `Call to dangerous function '${functionName}' is not allowed`;
 }
 position: node.loc?.start;
 ;
 validateLiteral(node, acorn.Node & { value: Error, raw: string }, blockedNodes, BlockedNodeInfo);
 void {
-    // Check for dangerous string literals that might be used for code injection
     if(, node) { }, : .value === 'string'
 };
 {
     const dangerousPatterns = [
         /eval\s*\(/,
         /Function\s*\(/,
-        /constructor/,
-        /__proto__/,
-        /\<script/i,
+        /constructor/
+            / __proto__ /
+            /\<script/i,
         /javascript:/i
     ];
     for (const pattern of dangerousPatterns) {
@@ -248,18 +209,16 @@ void {
             blockedNodes.push({});
             nodeType: node.type,
                 safetyLevel;
-            NodeSafetyLevel.DANGEROUS,
-                reason;
-            `String literal contains dangerous pattern: ${pattern.source}`;
+            NodeSafetyLevel.DANGEROUS;
         }
+        reason: `String literal contains dangerous pattern: ${pattern.source}`;
     }
-    position: node.loc?.start;
 }
+position: node.loc?.start;
 ;
 break;
 validateChildNodes(node, acorn.Node, blockedNodes, BlockedNodeInfo);
 void {
-    // Walk through all properties that might contain child nodes
     for(, key, node) {
         if (key === 'type' || key === 'start' || key === 'end' || key === 'loc' || key === 'range') {
             continue;
@@ -330,50 +289,48 @@ void {
                                 'DebuggerStatement';
                             maxDepth: 20,
                                 maxNodes;
-                            100,
-                            ;
+                            100;
                         }
-                        ;
-                        return new ASTNodeWhitelistFilter(config);
-                        /**
-                         * Create a more permissive filter for general expression evaluation
-                         */
-                        export function createGeneralExpressionFilter() {
-                            const config = {
-                                allowedNodeTypes: new Set([]),
-                                'Literal': ,
-                                'Identifier': ,
-                                'BinaryExpression': ,
-                                'UnaryExpression': ,
-                                'LogicalExpression': ,
-                                'ConditionalExpression': ,
-                                'MemberExpression': ,
-                                'CallExpression': ,
-                                'ArrayExpression': ,
-                                'ObjectExpression': ,
-                                'Property': ,
-                                'Program': ,
-                                'ExpressionStatement':  };
-                            restrictedNodeTypes: new Set([]),
-                                dangerousNodeTypes;
-                            new Set([]),
-                                'FunctionExpression',
-                                'ArrowFunctionExpression',
-                                'FunctionDeclaration',
-                                'VariableDeclaration',
-                                'AssignmentExpression',
-                                'UpdateExpression',
-                                'NewExpression',
-                                'ThisExpression';
-                            maxDepth: 30,
-                                maxNodes;
-                            200,
-                            ;
-                        }
-                        ;
-                        return new ASTNodeWhitelistFilter(config);
+                    }
+                    ;
+                    return new ASTNodeWhitelistFilter(config);
+                    /**
+                     * Create a more permissive filter for general expression evaluation
+                     */
+                    export function createGeneralExpressionFilter() {
+                        const config = {
+                            allowedNodeTypes: new Set([]),
+                            'Literal': ,
+                            'Identifier': ,
+                            'BinaryExpression': ,
+                            'UnaryExpression': ,
+                            'LogicalExpression': ,
+                            'ConditionalExpression': ,
+                            'MemberExpression': ,
+                            'CallExpression': ,
+                            'ArrayExpression': ,
+                            'ObjectExpression': ,
+                            'Property': ,
+                            'Program': ,
+                            'ExpressionStatement':  };
+                        restrictedNodeTypes: new Set([]),
+                            dangerousNodeTypes;
+                        new Set([]),
+                            'FunctionExpression',
+                            'ArrowFunctionExpression',
+                            'FunctionDeclaration',
+                            'VariableDeclaration',
+                            'AssignmentExpression',
+                            'UpdateExpression',
+                            'NewExpression',
+                            'ThisExpression';
+                        maxDepth: 30,
+                            maxNodes;
+                        200;
                     }
                 }
+                ;
+                return new ASTNodeWhitelistFilter(config);
             }
         }
     }

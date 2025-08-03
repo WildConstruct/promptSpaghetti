@@ -1,8 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { parseTemplate, getVariableSuggestions, getPreviewWithSamples, setTemplateContext, trackVariableUsage, VARIABLE_CATEGORIES } from '../../utils/templateParser';
+import { parseTemplate, getVariableSuggestions, getPreviewWithSamples, setTemplateContext, trackVariableUsage } from VARIABLE_CATEGORIES;
+from;
+'../../utils/templateParser';
 import { useTemplatePreview } from '../../hooks/useTemplatePreview';
-export const [suggestionIndex, setSuggestionIndex] = useState(-1);
+-1;
+;
 const [cursorPosition, setCursorPosition] = useState(0);
 const [selectedCategory, setSelectedCategory] = useState('all');
 const inputRef = useRef(null);
@@ -19,7 +22,9 @@ useEffect(() => {
 const parseResult = useMemo(() => parseTemplate(value), [value]);
 const previewResult = useMemo(() => getPreviewWithSamples(value), [value]);
 // Real-time preview integration
-const { variants: realTimeVariants, isGenerating, error: previewError, extractedVariables, hasTemplateErrors, templateErrors, forcePreview, refreshVariant } = useTemplatePreview(value, variableValues, {});
+const { variants: realTimeVariants, isGenerating, error: previewError, extractedVariables, hasTemplateErrors, templateErrors, forcePreview };
+refreshVariant
+    = useTemplatePreview(value, variableValues, {});
 maxVariants: 3,
     debounceMs;
 200,
@@ -28,8 +33,7 @@ showRealTimePreview,
     showVariableSubstitution;
 true,
     errorOnUndefinedVariables;
-false,
-;
+false;
 ;
 // Get variable suggestions based on cursor position with enhanced filtering
 const suggestions = useMemo(() => {
@@ -78,27 +82,25 @@ const handleChange = (e) => {
 const scrollToSuggestion = (index) => {
     if (suggestionItemRefs.current[index]) {
         suggestionItemRefs.current[index]?.scrollIntoView({});
-        behavior: 'smooth',
-            block;
-        'nearest',
-        ;
+        behavior: 'smooth';
+        block: 'nearest';
     }
-    ;
 };
+;
 // Handle enhanced key navigation for suggestions
 const handleKeyDown = (e) => {
     if (showSuggestions && suggestions.length > 0) {
         switch (e.key) {
             case 'ArrowDown':
-                e.preventDefault();
-                setSuggestionIndex(prev => { });
-                const newIndex = prev < suggestions.length - 1 ? prev + 1 : 0;
-                scrollToSuggestion(newIndex);
-                return newIndex;
         }
-        ;
-        break;
+        e.preventDefault();
+        setSuggestionIndex(prev => { });
+        const newIndex = prev < suggestions.length - 1 ? prev + 1 : 0;
+        scrollToSuggestion(newIndex);
+        return newIndex;
     }
+    ;
+    break;
 };
 'ArrowUp';
 e.preventDefault();
@@ -164,74 +166,87 @@ if (suggestionIndex >= 0) {
             setSuggestionIndex(0);
             break;
             '0';
-            if (e.ctrlKey || e.metaKey) {
-                e.preventDefault();
-                setSelectedCategory('all');
-                setSuggestionIndex(0);
-                break;
+        }
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            setSelectedCategory('all');
+            setSuggestionIndex(0);
+            break;
+        }
+        ;
+        // Apply selected suggestion
+        const applySuggestion = (suggestion) => {
+            if (!inputRef.current)
+                return;
+            const beforeCursor = value.slice(0, cursorPosition);
+            const afterCursor = value.slice(cursorPosition);
+            const match = beforeCursor.match(/{([^{}]*)$/);
+            if (match) {
+                const variableStart = beforeCursor.lastIndexOf('{');
+                const newValue = ;
+                beforeCursor.slice(0, variableStart) +
+                    `{${suggestion.name}}` + ;
             }
-            ;
-            // Apply selected suggestion
-            const applySuggestion = (suggestion) => {
-                if (!inputRef.current)
-                    return;
-                const beforeCursor = value.slice(0, cursorPosition);
-                const afterCursor = value.slice(cursorPosition);
-                const match = beforeCursor.match(/{([^{}]*)$/);
-                if (match) {
-                    const variableStart = beforeCursor.lastIndexOf('{');
-                    const newValue = ;
-                    beforeCursor.slice(0, variableStart) +
-                        `{${suggestion.name}}` + ;
+            afterCursor;
+            onChange(newValue);
+            // Track variable usage for user history
+            trackVariableUsage(suggestion.name);
+            setShowSuggestions(false);
+            setSuggestionIndex(-1);
+            // Set cursor after the inserted variable
+            setTimeout(() => {
+                if (inputRef.current) {
+                    const newPosition = variableStart + suggestion.name.length + 2;
+                    inputRef.current.setSelectionRange(newPosition, newPosition);
+                    setCursorPosition(newPosition);
+                    inputRef.current.focus();
                 }
-                afterCursor;
-                onChange(newValue);
-                // Track variable usage for user history
-                trackVariableUsage(suggestion.name);
-                setShowSuggestions(false);
-                setSuggestionIndex(-1);
-                // Set cursor after the inserted variable
-                setTimeout(() => {
-                    if (inputRef.current) {
-                        const newPosition = variableStart + suggestion.name.length + 2;
-                        inputRef.current.setSelectionRange(newPosition, newPosition);
-                        setCursorPosition(newPosition);
-                        inputRef.current.focus();
-                    }
-                    0;
-                });
-            };
-            // Render highlighted text (for display purposes)
-            const renderHighlightedTemplate = () => {
-                if (!value)
-                    return placeholder;
-                let result = value;
-                let offset = 0;
-                // Add highlighting spans around variables
-                for (const variable of parseResult.variables) {
-                    const className = variable.isValid ? 'template-variable' : 'template-variable-error';
-                    const before = result.slice(0, variable.startIndex + offset);
-                    const after = result.slice(variable.endIndex + offset);
-                    const highlightedVar = `<span class="${className}">${variable.placeholder}</span>`;
-                }
-                result = before + highlightedVar + after;
-                offset += highlightedVar.length - variable.placeholder.length;
-                return result;
-            };
-            return;
-            _jsxs("div", { className: `template-editor ${className}`, style: { position: 'relative' }, children: ["}", _jsxs("div", { style: { position: 'relative' }, children: [_jsx("textarea", { ref: inputRef, value: value, onChange: handleChange, onKeyDown: handleKeyDown, onFocus: () => setIsFocused(true), onBlur: () => {
-                                    // Delay hiding suggestions to allow clicks
-                                    setTimeout(() => {
-                                        setIsFocused(false);
-                                        setShowSuggestions(false);
-                                    }, 100);
-                                }, onSelect: (e) => setCursorPosition(e.currentTarget.selectionStart), placeholder: placeholder, disabled: disabled, style: {
-                                    width: '100%',
-                                    minHeight: 80,
-                                    padding: 12,
-                                    border: parseResult.isValid ?  : ,
-                                }(isFocused ? '2px solid #4299e1' : '1px solid #4a5568') }), " :, '2px solid #e53e3e', borderRadius: 6, background: '#2d3748', color: '#e2e8f0', fontSize: 14, fontFamily: 'Monaco, Consolas, \"Courier New\", monospace', resize: 'vertical', outline: 'none', lineHeight: 1.4, }} />", parseResult.variables.length > 0 && ()
-                                < div, "style=", {
+                0;
+            });
+        };
+        // Render highlighted text (for display purposes)
+        const renderHighlightedTemplate = () => {
+            if (!value)
+                return placeholder;
+            let result = value;
+            let offset = 0;
+            // Add highlighting spans around variables
+            for (const variable of parseResult.variables) {
+                const className = variable.isValid ? 'template-variable' : 'template-variable-error';
+                const before = result.slice(0, variable.startIndex + offset);
+                const after = result.slice(variable.endIndex + offset);
+                const highlightedVar = `<span class="${className}">${variable.placeholder}</span>`;
+            }
+            result = before + highlightedVar + after;
+            offset += highlightedVar.length - variable.placeholder.length;
+            return result;
+        };
+        return;
+        _jsxs("div", { className: `template-editor ${className}`, style: { position: 'relative' }, children: ["}", _jsxs("div", { style: { position: 'relative' }, children: [_jsx("textarea", { ref: inputRef, value: value, onChange: handleChange, onKeyDown: handleKeyDown, onFocus: () => setIsFocused(true), onBlur: () => {
+                                // Delay hiding suggestions to allow clicks
+                                setTimeout(() => {
+                                    setIsFocused(false);
+                                    setShowSuggestions(false);
+                                }, 100);
+                            }, onSelect: (e) => setCursorPosition(e.currentTarget.selectionStart), placeholder: placeholder, disabled: disabled, style: {
+                                width: '100%',
+                                minHeight: 80,
+                                padding: 12,
+                                border: parseResult.isValid ?
+                                    (isFocused ? '2px solid #4299e1' : '1px solid #4a5568') :
+                                    '2px solid #e53e3e',
+                                borderRadius: 6,
+                                background: '#2d3748',
+                                color: '#e2e8f0',
+                                fontSize: 14,
+                                fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+                                resize: 'vertical',
+                                outline: 'none',
+                                lineHeight: 1.4
+                            }
+                                /  >
+                                { /* Variable highlighting overlay */}, ...parseResult.variables.length > 0 && ()
+                                < div, style: {
                                 position: 'absolute',
                                 top: 12,
                                 left: 12,
@@ -243,80 +258,82 @@ if (suggestionIndex >= 0) {
                                 fontFamily: 'Monaco, Consolas, "Courier New", monospace',
                                 lineHeight: 1.4,
                                 whiteSpace: 'pre-wrap',
-                                wordWrap: 'break-word',
-                            }, "dangerouslySetInnerHTML=", { __html: renderHighlightedTemplate() }, "/> )}"] }), showSuggestions && suggestions.length > 0 && ()
-                        < div, "ref=", suggestionsRef, "style=", {
-                        position: 'absolute',
-                        top: '100%',
-                        left: 0,
-                        right: 0,
-                        maxHeight: 200,
-                        overflowY: 'auto',
-                        background: '#2d3748',
-                        border: '1px solid #4a5568',
-                        borderRadius: 6,
+                                wordWrap: 'break-word'
+                            }, dangerouslySetInnerHTML: { __html: renderHighlightedTemplate() } }), ")}"] }), showSuggestions && suggestions.length > 0 && ()
+                    < div, "ref=", suggestionsRef, "style=", {
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    right: 0,
+                    maxHeight: 200,
+                    overflowY: 'auto',
+                    background: '#2d3748',
+                    border: '1px solid #4a5568',
+                    borderRadius: 6,
+                    marginTop: 4,
+                    zIndex: 1000,
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+                }
+                    >
+                        { suggestions, : .map((suggestion, index) => ()
+                                < div, key = { suggestion, : .name }, onClick = {}()) }, " => applySuggestion(suggestion)} style=", {
+                    padding: '8px 12px',
+                    cursor: 'pointer',
+                    background: index === suggestionIndex ? '#4a5568' : 'transparent',
+                    borderBottom: index < suggestions.length - 1 ? '1px solid #4a5568' : 'none'
+                }, "onMouseEnter=", () => setSuggestionIndex(index), ">", _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' }, children: [_jsxs("div", { children: [_jsx("div", { style: {
+                                        color: '#e2e8f0',
+                                        fontWeight: 500,
+                                        fontSize: 14,
+                                        fontFamily: 'Monaco, Consolas, monospace'
+                                    }, children: suggestion.name }), _jsx("div", { style: {
+                                        color: '#a0aec0',
+                                        fontSize: 12,
+                                        marginTop: 2
+                                    }, children: suggestion.description })] }), _jsx("div", { style: {
+                                background: getCategoryColor(suggestion.category),
+                                color: 'white',
+                                fontSize: 10,
+                                padding: '2px 6px',
+                                borderRadius: 3,
+                                fontWeight: 500
+                            }, children: suggestion.category })] }), _jsxs("div", { style: {
                         marginTop: 4,
-                        zIndex: 1000,
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                    }, ">", suggestions.map((suggestion, index) => ()
-                        < div, key = { suggestion, : .name }, onClick = {}()), " => applySuggestion(suggestion)} style=", {
-                        padding: '8px 12px',
-                        cursor: 'pointer',
-                        background: index === suggestionIndex ? '#4a5568' : 'transparent',
-                        borderBottom: index < suggestions.length - 1 ? '1px solid #4a5568' : 'none',
-                    }, "onMouseEnter=", () => setSuggestionIndex(index), ">", _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' }, children: [_jsxs("div", { children: [_jsx("div", { style: {
-                                            color: '#e2e8f0',
-                                            fontWeight: 500,
-                                            fontSize: 14,
-                                            fontFamily: 'Monaco, Consolas, monospace',
-                                        }, children: suggestion.name }), _jsx("div", { style: {
-                                            color: '#a0aec0',
-                                            fontSize: 12,
-                                            marginTop: 2,
-                                        }, children: suggestion.description })] }), _jsx("div", { style: {
-                                    background: getCategoryColor(suggestion.category),
-                                    color: 'white',
-                                    fontSize: 10,
-                                    padding: '2px 6px',
-                                    borderRadius: 3,
-                                    fontWeight: 500,
-                                }, children: suggestion.category })] }), _jsxs("div", { style: {
-                            marginTop: 4,
-                            fontSize: 11,
-                            color: '#6b7280',
-                            fontStyle: 'italic',
-                        }, children: ["e.g., ", suggestion.examples[0]] })] });
-        }
-        div >
-        ;
-    }
-    { /* Validation Errors */ }
-    {
-        parseResult.errors.length > 0 && ()
-            < div;
-        style = {};
-        {
-            marginTop: 8;
-        }
-    }
-     >
-        { parseResult, : .errors.map((error, index) => ()
-                < div, key = { index }, style = {}, {
-                color: error.severity === 'error' ? '#f56565' : '#ed8936',
-                fontSize: 12,
-                marginBottom: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-            }) }
-        >
-            _jsx("span", { children: error.severity === 'error' ? '❌' : '⚠️' });
-    {
-        error.message;
+                        fontSize: 11,
+                        color: '#6b7280',
+                        fontStyle: 'italic'
+                    }, children: ["e.g., ", suggestion.examples[0]] })] });
     }
     div >
     ;
 }
+{ /* Validation Errors */ }
+{
+    parseResult.errors.length > 0 && ()
+        < div;
+    style = {};
+    {
+        marginTop: 8;
+    }
+}
+ >
+    { parseResult, : .errors.map((error, index) => ()
+            < div, key = { index }, style = {}, {
+            color: error.severity === 'error' ? '#f56565' : '#ed8936',
+            fontSize: 12,
+            marginBottom: 4,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6
+        })
+    }
+    >
+        _jsx("span", { children: error.severity === 'error' ? '❌' : '⚠️' });
+{
+    error.message;
+}
+div >
+;
 div >
 ;
 { /* Live Preview */ }
@@ -325,16 +342,11 @@ div >
         < div;
     style = {};
     {
-        marginTop: 12,
-            padding;
-        12,
-            background;
-        '#1a202c',
-            border;
-        '1px solid #4a5568',
-            borderRadius;
-        6,
-        ;
+        marginTop: 12;
+        padding: 12;
+        background: '#1a202c';
+        border: '1px solid #4a5568';
+        borderRadius: 6;
     }
 }
  >
@@ -342,18 +354,17 @@ div >
             fontSize: 11,
             color: '#a0aec0',
             marginBottom: 6,
-            fontWeight: 500,
+            fontWeight: 500
         }, children: "Preview with sample values:" })
         ,
             _jsxs("div", { style: {
                     color: '#e2e8f0',
                     fontSize: 13,
                     fontStyle: 'italic',
-                    lineHeight: 1.4,
+                    lineHeight: 1.4
                 }, children: ["\"", previewResult.preview, "\""] }));
 { /* Variable values used */ }
-_jsxs("div", { style: { marginTop: 8, fontSize: 10, color: '#6b7280' }, children: ["Variables: ", (Object.entries(previewResult.usedSamples),
-                .map(([name, value]) => `{${name}} = "${value}"`)), ".join(', ')}"] });
+_jsxs("div", { style: { marginTop: 8, fontSize: 10, color: '#6b7280' }, children: ["Variables: ", Object.entries(previewResult.usedSamples), ".map(([name, value]) => `", $, name, "} = \"$", value, "\"`)} .join(', ')}"] });
 div >
 ;
 { /* Real-time Preview */ }
@@ -362,16 +373,11 @@ div >
         < div;
     style = {};
     {
-        marginTop: 12,
-            padding;
-        12,
-            background;
-        '#1a202c',
-            border;
-        hasTemplateErrors ? '1px solid #e53e3e' : '1px solid #4a5568',
-            borderRadius;
-        6,
-        ;
+        marginTop: 12;
+        padding: 12;
+        background: '#1a202c';
+        border: hasTemplateErrors ? '1px solid #e53e3e' : '1px solid #4a5568';
+        borderRadius: 6;
     }
 }
  >
@@ -379,11 +385,11 @@ div >
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: 8,
+            marginBottom: 8
         }, children: [_jsx("div", { style: {
                     fontSize: 11,
                     color: '#a0aec0',
-                    fontWeight: 500,
+                    fontWeight: 500
                 }, children: "Real-time Preview:" }), _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: 8 }, children: [isGenerating && ()
                         < div, " style=", {
                         width: 12,
@@ -391,7 +397,7 @@ div >
                         border: '2px solid #4a5568',
                         borderTop: '2px solid #4299e1',
                         borderRadius: '50%',
-                        animation: 'spin 1s linear infinite',
+                        animation: 'spin 1s linear infinite'
                     }, ">"] }), ")}", _jsx("button", { onClick: () => forcePreview(), disabled: isGenerating || hasTemplateErrors, style: {
                     fontSize: 10,
                     padding: '4px 8px',
@@ -400,8 +406,12 @@ div >
                     border: 'none',
                     borderRadius: 4,
                     cursor: isGenerating ? 'not-allowed' : 'pointer',
-                    opacity: isGenerating || hasTemplateErrors ? 0.5 : 1,
-                }, children: "Refresh" })] });
+                    opacity: isGenerating || hasTemplateErrors ? 0.5 : 1
+                }
+                    >
+                        Refresh })] });
+div >
+;
 div >
     { /* Template Errors */};
 {
@@ -420,8 +430,9 @@ div >
             marginBottom: 4,
             display: 'flex',
             alignItems: 'center',
-            gap: 6,
-        }) }
+            gap: 6
+        })
+    }
     >
         _jsx("span", { children: "\u274C" });
 {
@@ -437,20 +448,13 @@ div >
         < div;
     style = {};
     {
-        color: '#f56565',
-            fontSize;
-        11,
-            marginBottom;
-        8,
-            padding;
-        8,
-            background;
-        'rgba(245, 101, 101, 0.1)',
-            borderRadius;
-        4,
-            border;
-        '1px solid rgba(245, 101, 101, 0.3)',
-        ;
+        color: '#f56565';
+        fontSize: 11;
+        marginBottom: 8;
+        padding: 8;
+        background: 'rgba(245, 101, 101, 0.1)';
+        borderRadius: 4;
+        border: '1px solid rgba(245, 101, 101, 0.3)';
     }
 }
  >
@@ -477,18 +481,19 @@ div >
             padding: 8,
             background: '#2d3748',
             borderRadius: 4,
-            border: '1px solid #4a5568',
-        }) }
+            border: '1px solid #4a5568'
+        })
+    }
     >
         (_jsxs("div", { style: {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: 4,
+                marginBottom: 4
             }, children: [_jsxs("span", { style: {
                         fontSize: 10,
                         color: '#a0aec0',
-                        fontWeight: 500,
+                        fontWeight: 500
                     }, children: ["Variant ", index + 1] }), _jsx("button", { onClick: () => refreshVariant(variant.id), style: {
                         fontSize: 9,
                         padding: '2px 6px',
@@ -496,14 +501,14 @@ div >
                         color: '#a0aec0',
                         border: '1px solid #4a5568',
                         borderRadius: 3,
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }, title: "Generate new variation", children: "\uD83D\uDD04" })] })
             ,
                 _jsxs("div", { style: {
                         color: '#e2e8f0',
                         fontSize: 12,
                         lineHeight: 1.4,
-                        marginBottom: 6,
+                        marginBottom: 6
                     }, children: ["\"", variant.result, "\""] }));
 { /* Variable substitutions */ }
 {
@@ -511,16 +516,11 @@ div >
         < div;
     style = {};
     {
-        fontSize: 9,
-            color;
-        '#6b7280',
-            display;
-        'flex',
-            flexWrap;
-        'wrap',
-            gap;
-        6,
-        ;
+        fontSize: 9;
+        color: '#6b7280';
+        display: 'flex';
+        flexWrap: 'wrap';
+        gap: 6;
     }
 }
  >
@@ -530,8 +530,9 @@ div >
             color: '#63b3ed',
             padding: '2px 4px',
             borderRadius: 2,
-            fontSize: 9,
-        }) }
+            fontSize: 9
+        })
+    }
     >
         { name };
 "{value}";
@@ -549,16 +550,11 @@ div >
         < div;
     style = {};
     {
-        color: '#a0aec0',
-            fontSize;
-        11,
-            fontStyle;
-        'italic',
-            textAlign;
-        'center',
-            padding;
-        16,
-        ;
+        color: '#a0aec0';
+        fontSize: 11;
+        fontStyle: 'italic';
+        textAlign: 'center';
+        padding: 16;
     }
 }
  >
@@ -581,19 +577,18 @@ div >
 _jsx("style", { children: `
         .template-variable {
           background: rgba(66, 153, 225, 0.2);
-          color: #63b3ed;,
+          color: #63b3ed
   padding: 1px 2px;
           border-radius: 2px;
           font-weight: 500;
         .template-variable-error {
           background: rgba(245, 101, 101, 0.2);
-          color: #f56565;,
+          color: #f56565 }
   padding: 1px 2px;
           border-radius: 2px;
           font-weight: 500;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
       ` });
 div >
 ;
@@ -602,12 +597,12 @@ div >
 // Helper function to get category colors
 const getCategoryColor = (category) => {
     const colors = {
-        character: '#9f7aea', // purple,
-        setting: '#4fd1c7', // teal,
-        action: '#f6ad55', // orange,
-        mood: '#fc8181', // red,
-        object: '#68d391', // green,
-        custom: '#a0aec0' // gray,
+        character: '#9f7aea', // purple
+        setting: '#4fd1c7', // teal
+        action: '#f6ad55', // orange
+        mood: '#fc8181', // red
+        object: '#68d391', // green
+        custom: '#a0aec0' // gray }
     };
     return colors[category] || colors.custom;
 };

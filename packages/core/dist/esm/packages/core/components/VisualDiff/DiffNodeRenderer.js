@@ -15,52 +15,51 @@ export const DiffNodeRenderer = memo(({ data, selected }) => {
             fontSize: '14px',
             fontWeight: '500',
             transition: 'all 0.2s ease',
-            position: 'relative',
-        };
-        const stateStyles = {
-            added: {
-                borderColor: '#10b981',
-                backgroundColor: '#ecfdf5',
-                color: '#065f46',
-            },
-            removed: {
-                borderColor: '#ef4444',
-                backgroundColor: '#fef2f2',
-                color: '#991b1b',
-                opacity: 0.7,
-            },
-            modified: {
-                borderColor: '#f59e0b',
-                backgroundColor: '#fffbeb',
-                color: '#92400e',
-            },
-            unchanged: {
-                borderColor: '#6b7280',
-                backgroundColor: '#f9fafb',
-                color: '#374151',
-            },
-            return: {
-                ...baseStyle,
-                ...stateStyles[diffState],
-                ...(selected && {}),
-                boxShadow: '0 0 0 2px #3b82f6',
-                borderColor: '#3b82f6',
-            }
+            position: 'relative'
         };
     };
-    // Get badge content
-    const getBadge = () => {
-        const badges = {
-            added: { text: '+', color: '#10b981' },
-            removed: { text: '−', color: '#ef4444' },
-            modified: { text: '~', color: '#f59e0b' },
-            unchanged: { text: '=', color: '#6b7280' }
-        };
-        const badge = badges[diffState];
-        return;
-        _jsx("div", { className: "absolute -top-2 -right-2 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-white", style: { backgroundColor: badge.color }, children: badge.text });
+    const stateStyles = { added: {
+            borderColor: '#10b981',
+            backgroundColor: '#ecfdf5',
+            color: '#065f46'
+        },
+        removed: {
+            borderColor: '#ef4444',
+            backgroundColor: '#fef2f2',
+            color: '#991b1b',
+            opacity: 0.7
+        },
+        modified: {
+            borderColor: '#f59e0b',
+            backgroundColor: '#fffbeb',
+            color: '#92400e'
+        },
+        unchanged: {
+            borderColor: '#6b7280',
+            backgroundColor: '#f9fafb',
+            color: '#374151'
+        }
     };
+    return { ...baseStyle,
+        ...stateStyles[diffState],
+        ...(selected && {}),
+        boxShadow: '0 0 0 2px #3b82f6',
+        borderColor: '#3b82f6' };
 });
+;
+// Get badge content
+const getBadge = () => {
+    const badges = {
+        added: { text: '+', color: '#10b981' },
+        removed: { text: '−', color: '#ef4444' },
+        modified: { text: '~', color: '#f59e0b' },
+        unchanged: { text: '=', color: '#6b7280' }
+    };
+    const badge = badges[diffState];
+    return;
+    _jsx("div", { className: "absolute -top-2 -right-2 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-white", style: { backgroundColor: badge.color }, children: badge.text });
+};
+;
 ;
 // Format node label
 const getLabel = () => {
@@ -121,14 +120,10 @@ type = "target";
 position = { Position, : .Left };
 style = {};
 {
-    background: '#6b7280',
-        border;
-    'none',
-        width;
-    '8px',
-        height;
-    '8px',
-    ;
+    background: '#6b7280';
+    border: 'none';
+    width: '8px';
+    height: '8px';
 }
 />
     < Handle;
@@ -136,14 +131,10 @@ type = "source";
 position = { Position, : .Right };
 style = {};
 {
-    background: '#6b7280',
-        border;
-    'none',
-        width;
-    '8px',
-        height;
-    '8px',
-    ;
+    background: '#6b7280';
+    border: 'none';
+    width: '8px';
+    height: '8px';
 }
 />;
 div >

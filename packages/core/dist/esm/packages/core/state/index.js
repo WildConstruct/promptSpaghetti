@@ -21,6 +21,8 @@ export { useStateOrchestrator, useCrossDomainState } from './orchestration/State
 // Utility functions
 export { createStateSelector } from './containers/BaseStateContainer';
 export { createDefaultMiddleware, MiddlewareFactory } from './middleware/StateMiddleware';
+performanceMonitoring: boolean;
+securityRules: boolean;
 export const defaultStateConfig = {
     enableValidation: true,
     enableHistory: true,
@@ -30,8 +32,8 @@ export const defaultStateConfig = {
     enableCrossDomainSync: true,
     conflictResolutionStrategy: 'last_writer_wins',
     performanceMonitoring: true,
-    securityRules: true,
-};
+    securityRules: true };
+;
 // State system initialization
 export async function initializeStateSystem(config = {}) {
     const finalConfig = { ...defaultStateConfig, ...config };
@@ -42,7 +44,7 @@ export async function initializeStateSystem(config = {}) {
         orchestrator: globalStateOrchestrator.getHealthStatus(),
         conflictResolver: {
             activeConflicts: globalConflictResolver.getActiveConflicts().length,
-            resolutionHistory: globalConflictResolver.getResolutionHistory().length,
+            resolutionHistory: globalConflictResolver.getResolutionHistory().length
         },
         domains: globalStateOrchestrator.getRegisteredDomains(),
         status: 'healthy'

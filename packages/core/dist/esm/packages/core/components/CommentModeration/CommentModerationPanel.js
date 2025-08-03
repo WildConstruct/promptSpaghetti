@@ -18,39 +18,26 @@ export const CommentModerationPanel = ({
     config,
     onAction,
     onFiltersChange,
-    onStatsUpdate,
-    className = ''
-});
-{
-    // State management
+    onStatsUpdate });
+className = '';
+{ // State management
     const [comments, setComments] = useState([]);
     const [selectedComments, setSelectedComments] = useState([]);
     const [filters, setFilters] = useState({});
-    status: 'pending',
-        sortBy;
-    'newest',
-    ;
+    status: 'pending';
+    sortBy: 'newest';
 }
 ;
 const [stats, setStats] = useState({});
-total: 0,
-    pending;
-0,
-    approved;
-0,
-    rejected;
-0,
-    flagged;
-0,
-    autoHidden;
-0,
-    totalReports;
-0,
-    avgToxicity;
-0,
-    avgQuality;
-0,
-;
+total: 0;
+pending: 0;
+approved: 0;
+rejected: 0;
+flagged: 0;
+autoHidden: 0;
+totalReports: 0;
+avgToxicity: 0;
+avgQuality: 0;
 ;
 // UI state
 const [loading, setLoading] = useState(false);
@@ -76,16 +63,17 @@ const loadComments = useCallback(async () => {
             setError(`Failed to load comments: ${err.message}`);
         }
         console.error('Comment loading failed:', err);
+        try {
+        }
+        finally {
+            setLoading(false);
+        }
+        [filters, onStatsUpdate];
     }
-    finally {
-        setLoading(false);
-    }
-    [filters, onStatsUpdate];
+    finally { }
 });
 // Initialize and load data
-useEffect(() => {
-    loadComments();
-}, [loadComments]);
+useEffect(() => { loadComments(); }, [loadComments]);
 // Handle filter changes
 const handleFiltersChange = useCallback((newFilters) => {
     const updatedFilters = { ...filters, ...newFilters };
@@ -130,97 +118,74 @@ const handleModerationAction = async (action) => {
         await loadComments();
         console.log(`✅ Moderation action completed: ${action.type} on ${action.commentIds.length} comments`);
     }
+    catch (err) {
+        setError(`Moderation action failed: ${err.message}`);
+    }
+    console.error('Moderation action failed:', err);
+    try {
+    }
     finally {
+        setLoading(false);
     }
-};
-try { }
-catch (err) {
-    setError(`Moderation action failed: ${err.message}`);
-}
-console.error('Moderation action failed:', err);
-try { }
-finally {
-    setLoading(false);
-}
-;
-// Handle thread expansion
-const handleThreadToggle = useCallback((commentId) => {
-    setExpandedThreads(prev => { });
-    const newSet = new Set(prev);
-    if (newSet.has(commentId)) {
-        newSet.delete(commentId);
-    }
-    else {
-        newSet.add(commentId);
-        return newSet;
-    }
-});
-[];
-;
+    ;
+    // Handle thread expansion
+    const handleThreadToggle = useCallback((commentId) => {
+        setExpandedThreads(prev => { });
+        const newSet = new Set(prev);
+        if (newSet.has(commentId)) {
+            newSet.delete(commentId);
+        }
+        else {
+            newSet.add(commentId);
+            return newSet;
+        }
+    });
+}, [];
 // Computed values
-const hasPermission = useCallback((permission) => {
-    return config.permissions.includes(permission) || config.permissions.includes('moderation:admin');
-}, [config.permissions]);
+const hasPermission = useCallback((permission) => { return config.permissions.includes(permission) || config.permissions.includes('moderation:admin'); }, [config.permissions]);
 const selectedCount = selectedComments.length;
 const allSelected = selectedCount > 0 && selectedCount === comments.length;
 const someSelected = selectedCount > 0 && selectedCount < comments.length;
 // Quick action buttons data
 const quickActions = useMemo(() => [
-    {
-        type: 'approve',
+    { type: 'approve',
         label: '✅ Approve',
         color: '#059669',
         permission: 'moderation:approve',
-        show: selectedCount > 0,
-    },
-    {
-        type: 'reject',
+        show: selectedCount > 0 },
+    { type: 'reject',
         label: '❌ Reject',
         color: '#dc2626',
         permission: 'moderation:reject',
-        show: selectedCount > 0,
-    },
-    {
-        type: 'flag',
+        show: selectedCount > 0 },
+    { type: 'flag',
         label: '🚩 Flag',
         color: '#d97706',
         permission: 'moderation:flag',
-        show: selectedCount > 0,
-    },
-    {
-        type: 'hide',
+        show: selectedCount > 0 },
+    { type: 'hide',
         label: '👁️ Hide',
         color: '#6b7280',
-        permission: 'moderation:hide',
-        show: selectedCount > 0
-    }
+        permission: 'moderation:hide' },
+    show, selectedCount > 0
 ].filter(action => action.show && hasPermission(action.permission)), [selectedCount, hasPermission]);
 return;
 _jsx("div", { className: `comment-moderation-panel ${className}`, style: ({}, ), "backgroundColor:": true });
-'#ffffff',
-    border;
-'1px solid #e5e7eb',
-    borderRadius;
-'8px',
-    overflow;
-'hidden';
+'#ffffff';
+border: '1px solid #e5e7eb';
+borderRadius: '8px';
+overflow: 'hidden';
  >
     { /* Header */}
     < div;
 style = {};
 {
-    padding: '16px 20px',
-        backgroundColor;
-    '#f9fafb',
-        borderBottom;
-    '1px solid #e5e7eb',
-        display;
-    'flex',
-        justifyContent;
-    'space-between',
-        alignItems;
-    'center',
-    ;
+    padding: '16px 20px';
+    backgroundColor: '#f9fafb';
+    borderBottom: '1px solid #e5e7eb';
+    display: 'flex';
+    justifyContent: 'space-between';
+    alignItems: 'center';
 }
  >
     (_jsxs("div", { children: [_jsx("h2", { style: {
@@ -230,11 +195,11 @@ style = {};
                     color: '#111827',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '8px'
                 }, children: "\uD83D\uDCAC Comment Moderation" }), _jsxs("p", { style: {
                     margin: '4px 0 0 0',
                     fontSize: '13px',
-                    color: '#6b7280',
+                    color: '#6b7280'
                 }, children: [stats.pending, " pending \u2022 ", stats.total, " total \u2022 ", stats.totalReports, " reports"] })] })
         ,
             _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px' }, children: [hasPermission('moderation:auto') && ()
@@ -244,10 +209,10 @@ style = {};
                         gap: '6px',
                         fontSize: '12px',
                         color: '#6b7280',
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }, ">", _jsx("input", { type: "checkbox", defaultChecked: config.enableAutoModeration, style: { margin: 0 } }), "Auto-moderate"] }));
 { /* Refresh button */ }
-_jsxs("button", { onClick: loadComments, disabled: loading, style: {
+_jsx("button", { onClick: loadComments, disabled: loading, style: {
         padding: '6px 12px',
         backgroundColor: '#3b82f6',
         color: 'white',
@@ -256,70 +221,101 @@ _jsxs("button", { onClick: loadComments, disabled: loading, style: {
         fontSize: '12px',
         fontWeight: '500',
         cursor: loading ? 'not-allowed' : 'pointer',
-        opacity: loading ? 0.6 : 1,
-    }, children: [loading ? '🔄' : '↻', " Refresh"] });
-div >
-;
+        opacity: loading ? 0.6 : 1
+    }
+        >
+            { loading, '🔄': '↻' }, Refresh: true, button: true });
 div >
     { /* Filters */}
     < div;
 style = {};
 {
-    padding: '12px 20px',
-        backgroundColor;
-    '#f8fafc',
-        borderBottom;
-    '1px solid #e5e7eb',
-        display;
-    'flex',
-        flexWrap;
-    'wrap',
-        gap;
-    '10px',
-        alignItems;
-    'center',
-    ;
+    padding: '12px 20px';
+    backgroundColor: '#f8fafc';
+    borderBottom: '1px solid #e5e7eb';
+    display: 'flex';
+    flexWrap: 'wrap';
+    gap: '10px';
+    alignItems: 'center';
 }
  >
-    (_jsxs("select", { value: filters.status || '', onChange: (e) => handleFiltersChange({ status: e.target.value }), style: {
+    (_jsx("select", { value: filters.status || '', onChange: (e) => handleFiltersChange({ status: e.target.value }), style: {
             padding: '4px 8px',
             border: '1px solid #d1d5db',
             borderRadius: '4px',
             fontSize: '12px',
-            backgroundColor: 'white',
-        }, children: [_jsx("option", { value: "", children: "All Status" }), _jsx("option", { value: "pending", children: "Pending" }), _jsx("option", { value: "approved", children: "Approved" }), _jsx("option", { value: "rejected", children: "Rejected" }), _jsx("option", { value: "flagged", children: "Flagged" }), _jsx("option", { value: "auto_hidden", children: "Auto-hidden" })] })
+            backgroundColor: 'white'
+        }
+            >
+                (_jsx("option", { value: "", children: "All Status" })
+                    ,
+                        _jsx("option", { value: "pending", children: "Pending" })
+                            ,
+                                _jsx("option", { value: "approved", children: "Approved" })
+                                    ,
+                                        _jsx("option", { value: "rejected", children: "Rejected" })
+                                            ,
+                                                _jsx("option", { value: "flagged", children: "Flagged" })
+                                                    ,
+                                                        _jsx("option", { value: "auto_hidden", children: "Auto-hidden" })), select: true, children: _jsx("select", { value: filters.sentiment || '', onChange: (e) => handleFiltersChange({ sentiment: e.target.value }), style: {
+                padding: '4px 8px',
+                border: '1px solid #d1d5db',
+                borderRadius: '4px',
+                fontSize: '12px',
+                backgroundColor: 'white'
+            }
+                >
+                    (_jsx("option", { value: "", children: "All Sentiment" })
+                        ,
+                            _jsx("option", { value: "positive", children: "Positive" })
+                                ,
+                                    _jsx("option", { value: "neutral", children: "Neutral" })
+                                        ,
+                                            _jsx("option", { value: "negative", children: "Negative" })
+                                                ,
+                                                    _jsx("option", { value: "very_negative", children: "Very Negative" })) }) })
         ,
-            _jsxs("select", { value: filters.sentiment || '', onChange: (e) => handleFiltersChange({ sentiment: e.target.value }), style: {
+            _jsx("select", { value: filters.toxicity || '', onChange: (e) => handleFiltersChange({ toxicity: e.target.value }), style: {
                     padding: '4px 8px',
                     border: '1px solid #d1d5db',
                     borderRadius: '4px',
                     fontSize: '12px',
-                    backgroundColor: 'white',
-                }, children: [_jsx("option", { value: "", children: "All Sentiment" }), _jsx("option", { value: "positive", children: "Positive" }), _jsx("option", { value: "neutral", children: "Neutral" }), _jsx("option", { value: "negative", children: "Negative" }), _jsx("option", { value: "very_negative", children: "Very Negative" })] })
+                    backgroundColor: 'white'
+                }
+                    >
+                        (_jsx("option", { value: "", children: "All Toxicity" })
+                            ,
+                                _jsx("option", { value: "low", children: "Low" })
+                                    ,
+                                        _jsx("option", { value: "medium", children: "Medium" })
+                                            ,
+                                                _jsx("option", { value: "high", children: "High" })
+                                                    ,
+                                                        _jsx("option", { value: "critical", children: "Critical" })), select: true, children: _jsx("select", { value: filters.sortBy || 'newest', onChange: (e) => handleFiltersChange({ sortBy: e.target.value }), style: {
+                        padding: '4px 8px',
+                        border: '1px solid #d1d5db',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        backgroundColor: 'white'
+                    }
+                        >
+                            (_jsx("option", { value: "newest", children: "Newest First" })
+                                ,
+                                    _jsx("option", { value: "oldest", children: "Oldest First" })
+                                        ,
+                                            _jsx("option", { value: "most_reported", children: "Most Reported" })
+                                                ,
+                                                    _jsx("option", { value: "lowest_quality", children: "Lowest Quality" })
+                                                        ,
+                                                            _jsx("option", { value: "highest_toxicity", children: "Highest Toxicity" })) }) })
                 ,
-                    _jsxs("select", { value: filters.toxicity || '', onChange: (e) => handleFiltersChange({ toxicity: e.target.value }), style: {
+                    _jsx("input", { type: "text", placeholder: "Search keywords...", value: filters.keywords || '', onChange: (e) => handleFiltersChange({ keywords: e.target.value }), style: {
                             padding: '4px 8px',
                             border: '1px solid #d1d5db',
                             borderRadius: '4px',
                             fontSize: '12px',
-                            backgroundColor: 'white',
-                        }, children: [_jsx("option", { value: "", children: "All Toxicity" }), _jsx("option", { value: "low", children: "Low" }), _jsx("option", { value: "medium", children: "Medium" }), _jsx("option", { value: "high", children: "High" }), _jsx("option", { value: "critical", children: "Critical" })] })
-                        ,
-                            _jsxs("select", { value: filters.sortBy || 'newest', onChange: (e) => handleFiltersChange({ sortBy: e.target.value }), style: {
-                                    padding: '4px 8px',
-                                    border: '1px solid #d1d5db',
-                                    borderRadius: '4px',
-                                    fontSize: '12px',
-                                    backgroundColor: 'white',
-                                }, children: [_jsx("option", { value: "newest", children: "Newest First" }), _jsx("option", { value: "oldest", children: "Oldest First" }), _jsx("option", { value: "most_reported", children: "Most Reported" }), _jsx("option", { value: "lowest_quality", children: "Lowest Quality" }), _jsx("option", { value: "highest_toxicity", children: "Highest Toxicity" })] })
-                                ,
-                                    _jsx("input", { type: "text", placeholder: "Search keywords...", value: filters.keywords || '', onChange: (e) => handleFiltersChange({ keywords: e.target.value }), style: {
-                                            padding: '4px 8px',
-                                            border: '1px solid #d1d5db',
-                                            borderRadius: '4px',
-                                            fontSize: '12px',
-                                            minWidth: '150px',
-                                        } }));
+                            minWidth: '150px'
+                        } }));
 div >
     { /* Bulk Actions Bar */};
 {
@@ -327,36 +323,30 @@ div >
         < div;
     style = {};
     {
-        padding: '12px 20px',
-            backgroundColor;
-        '#eff6ff',
-            borderBottom;
-        '1px solid #bfdbfe',
-            display;
-        'flex',
-            justifyContent;
-        'space-between',
-            alignItems;
-        'center',
-        ;
+        padding: '12px 20px';
+        backgroundColor: '#eff6ff';
+        borderBottom: '1px solid #bfdbfe';
+        display: 'flex';
+        justifyContent: 'space-between';
+        alignItems: 'center';
     }
 }
  >
     (_jsxs("div", { style: {
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
+            gap: '12px'
         }, children: [_jsxs("span", { style: {
                     fontSize: '14px',
                     fontWeight: '500',
-                    color: '#1e40af',
+                    color: '#1e40af'
                 }, children: [selectedCount, " comment", selectedCount > 1 ? 's' : '', " selected"] }), _jsxs("label", { style: {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
                     fontSize: '12px',
                     color: '#6b7280',
-                    cursor: 'pointer',
+                    cursor: 'pointer'
                 }, children: [_jsx("input", { type: "checkbox", checked: allSelected, ref: (el) => {
                             if (el)
                                 el.indeterminate = someSelected;
@@ -364,9 +354,9 @@ div >
         ,
             _jsxs("div", { style: {
                     display: 'flex',
-                    gap: '6px',
+                    gap: '6px'
                 }, children: [quickActions.map(action => ()
-                        < button, key = { action, : .type }, onClick = {}()), " => handleModerationAction(", , ") type: action.type, commentIds: selectedComments, reason: `Bulk $", action.type, " action`} })} style=", {
+                        < button, key = { action, : .type }, onClick = {}()), " => handleModerationAction(", , ") type: action.type commentIds: selectedComments } reason: `Bulk $", action.type, " action`} })} style=", {
                         padding: '6px 12px',
                         backgroundColor: action.color,
                         color: 'white',
@@ -374,8 +364,10 @@ div >
                         borderRadius: '4px',
                         fontSize: '12px',
                         fontWeight: '500',
-                        cursor: 'pointer',
-                    }, ">", action.label] }));
+                        cursor: 'pointer'
+                    }
+                        >
+                            { action, : .label }] }));
 _jsx("button", { onClick: () => setSelectedComments([]), style: {
         padding: '6px 12px',
         backgroundColor: '#6b7280',
@@ -383,10 +375,10 @@ _jsx("button", { onClick: () => setSelectedComments([]), style: {
         border: 'none',
         borderRadius: '4px',
         fontSize: '12px',
-        cursor: 'pointer',
-    }, children: "Clear" });
-div >
-;
+        cursor: 'pointer'
+    }
+        >
+            Clear, button: true });
 div >
 ;
 { /* Error Display */ }
@@ -395,16 +387,11 @@ div >
         < div;
     style = {};
     {
-        padding: '12px 20px',
-            backgroundColor;
-        '#fef2f2',
-            borderBottom;
-        '1px solid #fecaca',
-            color;
-        '#dc2626',
-            fontSize;
-        '14px',
-        ;
+        padding: '12px 20px';
+        backgroundColor: '#fef2f2';
+        borderBottom: '1px solid #fecaca';
+        color: '#dc2626';
+        fontSize: '14px';
     }
 }
  >
@@ -417,23 +404,20 @@ div >
 { /* Comments List */ }
 _jsxs("div", { style: {
         maxHeight: '600px',
-        overflowY: 'auto',
+        overflowY: 'auto'
     }, children: [loading && comments.length === 0 ? ()
             < div : , " style=", {
             padding: '40px',
             textAlign: 'center',
-            color: '#6b7280',
+            color: '#6b7280'
         }, "> \uD83D\uDD04 Loading comments..."] });
 comments.length === 0 ? ()
     < div : ;
 style = {};
 {
-    padding: '40px',
-        textAlign;
-    'center',
-        color;
-    '#6b7280',
-    ;
+    padding: '40px';
+    textAlign: 'center';
+    color: '#6b7280';
 }
  >
 ;
@@ -456,10 +440,8 @@ style = {};
             < CommentModerationItem, key = { comment, : .commentId }, comment = { comment }, selected = { selectedComments, : .includes(comment.commentId) }, onSelectionChange = {}(selected), handleCommentSelection(comment.commentId, selected)) };
 onAction = {}(action);
 handleModerationAction({});
-action,
-    commentIds;
-[comment.commentId],
-;
+action;
+commentIds: [comment.commentId];
 onThreadToggle = {}();
 handleThreadToggle(comment.commentId);
 expanded = { expandedThreads, : .has(comment.commentId) };
@@ -477,22 +459,14 @@ div >
     < div;
 style = {};
 {
-    padding: '12px 20px',
-        backgroundColor;
-    '#f9fafb',
-        borderTop;
-    '1px solid #e5e7eb',
-        display;
-    'flex',
-        justifyContent;
-    'space-between',
-        alignItems;
-    'center',
-        fontSize;
-    '12px',
-        color;
-    '#6b7280',
-    ;
+    padding: '12px 20px';
+    backgroundColor: '#f9fafb';
+    borderTop: '1px solid #e5e7eb';
+    display: 'flex';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    fontSize: '12px';
+    color: '#6b7280';
 }
  >
     (_jsxs("div", { children: ["Showing ", comments.length, " of ", stats.total, " comments"] })
@@ -507,56 +481,45 @@ div >
 ;
 ;
 {
-    const hasPermission = (permission) => {
-        return moderatorPermissions.includes(permission) || moderatorPermissions.includes('moderation:admin');
-    };
-    // Mock moderation metadata
-    const moderationData = {
-        status: 'pending',
-        toxicity: Math.random() * 0.3, // 0-30% toxicity,
-        sentiment: 'neutral',
-        reports: Math.floor(Math.random() * 3),
-        autoFlag: Math.random() > 0.8,
-    };
-    const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' :
-        moderationData.toxicity > 0.1 ? '#d97706' : '#059669';
-    return;
-    _jsx("div", { style: {
-            border: `1px solid ${selected ? '#3b82f6' : '#e5e7eb'}`
-        }, "borderRadius:": true });
-    '8px',
-        backgroundColor;
-    selected ? '#eff6ff' : 'white',
-        overflow;
-    'hidden',
-    ;
-    style;
+    const hasPermission = (permission) => { };
+    return moderatorPermissions.includes(permission) || moderatorPermissions.includes('moderation:admin');
 }
+;
+// Mock moderation metadata
+const moderationData = { status: 'pending',
+    toxicity: Math.random() * 0.3, // 0-30% toxicity,
+    sentiment: 'neutral',
+    reports: Math.floor(Math.random() * 3),
+    autoFlag: Math.random() > 0.8 };
+;
+const toxicityColor = moderationData.toxicity > 0.2 ? '#dc2626' :
+    moderationData.toxicity > 0.1 ? '#d97706' : '#059669';
+return;
+_jsx("div", { style: {
+        border: `1px solid ${selected ? '#3b82f6' : '#e5e7eb'}`
+    }, "borderRadius:": true });
+'8px';
+backgroundColor: selected ? '#eff6ff' : 'white';
+overflow: 'hidden';
+style;
     >
         { /* Moderation Header */}
     < div;
 style = {};
 {
-    padding: '8px 12px',
-        backgroundColor;
-    '#f8fafc',
-        borderBottom;
-    '1px solid #e5e7eb',
-        display;
-    'flex',
-        justifyContent;
-    'space-between',
-        alignItems;
-    'center',
-        fontSize;
-    '11px',
-    ;
+    padding: '8px 12px';
+    backgroundColor: '#f8fafc';
+    borderBottom: '1px solid #e5e7eb';
+    display: 'flex';
+    justifyContent: 'space-between';
+    alignItems: 'center';
+    fontSize: '11px';
 }
  >
     _jsxs("div", { style: {
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '8px'
         }, children: [showCheckbox && ()
                 < input, "type=\"checkbox\" checked=", selected, "onChange=", (e) => onSelectionChange(e.target.checked), "style=", { margin: 0 }, "/> )}", _jsx("span", { style: {
                     padding: '2px 6px',
@@ -564,7 +527,7 @@ style = {};
                     color: 'white',
                     borderRadius: '4px',
                     fontSize: '10px',
-                    fontWeight: '600',
+                    fontWeight: '600'
                 }, children: moderationData.status.toUpperCase() }), _jsxs("span", { style: { color: '#6b7280' }, children: ["Toxicity: ", _jsxs("span", { style: { color: toxicityColor, fontWeight: '600' }, children: [(moderationData.toxicity * 100).toFixed(1), "%"] })] }), moderationData.reports > 0 && ()
                 < span, " style=", { color: '#dc2626' }, "> \uD83D\uDEA9 ", moderationData.reports, " report", moderationData.reports > 1 ? 's' : ''] });
 {
@@ -583,7 +546,7 @@ span >
 div >
     _jsxs("div", { style: {
             display: 'flex',
-            gap: '4px',
+            gap: '4px'
         }, children: [hasPermission('moderation:approve') && ()
                 < button, "onClick=", () => onAction({ type: 'approve', reason: 'Manual approval' }), "style=", {
                 padding: '2px 6px',
@@ -592,8 +555,10 @@ div >
                 border: 'none',
                 borderRadius: '3px',
                 fontSize: '10px',
-                cursor: 'pointer',
-            }, "> \u2705"] });
+                cursor: 'pointer'
+            }
+                >
+            , "\u2705"] });
 {
     hasPermission('moderation:reject') && ()
         < button;
@@ -602,20 +567,13 @@ div >
 }
 style = {};
 {
-    padding: '2px 6px',
-        backgroundColor;
-    '#dc2626',
-        color;
-    'white',
-        border;
-    'none',
-        borderRadius;
-    '3px',
-        fontSize;
-    '10px',
-        cursor;
-    'pointer',
-    ;
+    padding: '2px 6px';
+    backgroundColor: '#dc2626';
+    color: 'white';
+    border: 'none';
+    borderRadius: '3px';
+    fontSize: '10px';
+    cursor: 'pointer';
 }
     >
 ;
@@ -629,20 +587,13 @@ button >
 }
 style = {};
 {
-    padding: '2px 6px',
-        backgroundColor;
-    '#d97706',
-        color;
-    'white',
-        border;
-    'none',
-        borderRadius;
-    '3px',
-        fontSize;
-    '10px',
-        cursor;
-    'pointer',
-    ;
+    padding: '2px 6px';
+    backgroundColor: '#d97706';
+    color: 'white';
+    border: 'none';
+    borderRadius: '3px';
+    fontSize: '10px';
+    cursor: 'pointer';
 }
     >
 ;
@@ -654,20 +605,13 @@ button >
     onClick = { onThreadToggle };
     style = {};
     {
-        padding: '2px 6px',
-            backgroundColor;
-        '#6b7280',
-            color;
-        'white',
-            border;
-        'none',
-            borderRadius;
-        '3px',
-            fontSize;
-        '10px',
-            cursor;
-        'pointer',
-        ;
+        padding: '2px 6px';
+        backgroundColor: '#6b7280';
+        color: 'white';
+        border: 'none';
+        borderRadius: '3px';
+        fontSize: '10px';
+        cursor: 'pointer';
     }
 }
     >
@@ -761,34 +705,39 @@ function generateMockCommentContent() {
                 trendingScore: Math.random() * 100,
                 engagementScore: Math.random() * 100,
                 qualityScore: Math.random() * 100,
-                controversyScore: Math.random() * 100,
-            },
-            metrics: {
-                totalLikes: Math.floor(Math.random() * 50),
-                totalReplies: Math.floor(Math.random() * 20),
-                totalShares: Math.floor(Math.random() * 10),
-                totalHelpfulVotes: Math.floor(Math.random() * 15),
-                totalReports: Math.floor(Math.random() * 5),
-            },
-            trends: {
-                velocityTrend: 'steady',
-            },
-            function: calculateMockStats(comments, TrendingComment), CommentModerationStats
-        };
+                controversyScore: Math.random() * 100 }
+        },
+            metrics;
         {
-            return {
-                total: comments.length,
-                pending: Math.floor(comments.length * 0.6),
-                approved: Math.floor(comments.length * 0.3),
-                rejected: Math.floor(comments.length * 0.05),
-                flagged: Math.floor(comments.length * 0.03),
-                autoHidden: Math.floor(comments.length * 0.02),
-                totalReports: Math.floor(comments.length * 0.1),
-                avgToxicity: Math.random() * 0.2,
-                avgQuality: 70 + Math.random() * 20,
-                lastProcessed: new Date(),
-            };
-            export default CommentModerationPanel;
+            totalLikes: Math.floor(Math.random() * 50),
+                totalReplies;
+            Math.floor(Math.random() * 20),
+                totalShares;
+            Math.floor(Math.random() * 10),
+                totalHelpfulVotes;
+            Math.floor(Math.random() * 15),
+                totalReports;
+            Math.floor(Math.random() * 5);
         }
     }
+    trends: {
+        velocityTrend: 'steady';
+    }
 }
+;
+function calculateMockStats(comments) {
+    return {
+        total: comments.length,
+        pending: Math.floor(comments.length * 0.6),
+        approved: Math.floor(comments.length * 0.3),
+        rejected: Math.floor(comments.length * 0.05),
+        flagged: Math.floor(comments.length * 0.03),
+        autoHidden: Math.floor(comments.length * 0.02),
+        totalReports: Math.floor(comments.length * 0.1),
+        avgToxicity: Math.random() * 0.2,
+        avgQuality: 70 + Math.random() * 20,
+        lastProcessed: new Date()
+    };
+}
+;
+export default CommentModerationPanel;

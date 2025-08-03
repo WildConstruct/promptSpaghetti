@@ -7,18 +7,19 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * templates, knowledge articles, tutorials, case studies, and community content.
  */
 import { useState, useEffect, useCallback } from 'react';
+from;
+'../../types/contributions';
 import { ContributionCard } from './ContributionCard';
 import { ContributionSubmissionForm } from './ContributionSubmissionForm';
 import { ContributorProfileManager } from './ContributorProfileManager';
 export const ContributionDashboard = ({
     userId,
-    showCreateForm = true,
-    initialFilter = {},
-    onContributionClick,
-    onContributionEdit,
-    onContributionDelete,
-    className = ''
-});
+    showCreateForm = true });
+initialFilter = {};
+onContributionClick;
+onContributionEdit;
+onContributionDelete;
+className = '';
 {
     const [contributions, setContributions] = useState([]);
     const [contributorProfile, setContributorProfile] = useState(null);
@@ -72,28 +73,29 @@ export const ContributionDashboard = ({
     }
     const data = await response.json();
     setContributions(data.contributions || []);
-}
-try { }
-catch (err) {
-    setError(err instanceof Error ? err.message : 'Failed to load contributions');
-    setContributions([]);
-}
-finally {
-    setLoading(false);
-}
-[userId, activeTab, filter, searchQuery];
-;
-const loadContributorProfile = useCallback(async () => {
-    if (!userId)
-        return;
     try {
-        const response = await fetch(`/api/marketplace/contributors/${userId}`, {});
+    }
+    catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load contributions');
+        setContributions([]);
     }
     finally {
+        setLoading(false);
     }
-}, headers, {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-});
+    [userId, activeTab, filter, searchQuery];
+    ;
+    const loadContributorProfile = useCallback(async () => {
+        if (!userId)
+            return;
+        try {
+            const response = await fetch(`/api/marketplace/contributors/${userId}`, {});
+        }
+        finally {
+        }
+    }, headers, {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+}
 ;
 if (response.ok) {
     const profile = await response.json();
@@ -117,14 +119,16 @@ const handleContributionSubmit = async (data) => {
             headers;
         {
             'Content-Type';
-            'application/json',
-                'Authorization';
-            `Bearer ${localStorage.getItem('token')}`;
+            'application/json';
         }
+        'Authorization';
+        `Bearer ${localStorage.getItem('token')}`;
     }
-    finally { }
-    body: JSON.stringify(data);
-};
+    finally {
+    }
+}, body;
+(data);
+;
 if (!response.ok) {
     throw new Error('Failed to create contribution');
     const newContribution = await response.json();
@@ -173,19 +177,16 @@ const getFilteredContributions = () => {
         case 'under-review':
             return contributions.filter(c => ['submitted', 'under_review', 'revision_requested'].includes(c.status));
         default:
-            return contributions;
     }
-    ;
-    const filteredContributions = getFilteredContributions();
-    // Get stats for dashboard
-    const stats = {
-        total: contributions.length,
-        drafts: contributions.filter(c => c.status === 'draft').length,
-        published: contributions.filter(c => c.status === 'published').length,
-        underReview: contributions.filter(),
-        c
-    };
+    return contributions;
 };
+const filteredContributions = getFilteredContributions();
+// Get stats for dashboard
+const stats = { total: contributions.length,
+    drafts: contributions.filter(c => c.status === 'draft').length,
+    published: contributions.filter(c => c.status === 'published').length,
+    underReview: contributions.filter(),
+    c };
 ['submitted',
     'under_review',
     'revision_requested'].includes(c.status);
@@ -197,8 +198,7 @@ contributions.reduce((sum, c) => sum + c.likes, 0),
     avgQualityScore;
 contributions.length > 0,
         ? Math.round(contributions.reduce((sum, c) => sum + c.qualityScore, 0) / contributions.length)
-        : 0,
-;
+        : 0;
 ;
 return;
 _jsxs("div", { className: `contribution-dashboard ${className}`, children: ["}", _jsxs("div", { className: "dashboard-header", children: [_jsxs("div", { className: "header-main", children: [_jsx("h1", { children: "Contribution Dashboard" }), _jsx("p", { children: "Manage your templates, articles, tutorials, and community content" })] }), showCreateForm && ()
@@ -237,7 +237,7 @@ div >
     className = "dashboard-controls" >
         (_jsxs("div", { className: "search-input", children: [_jsxs("svg", { width: "16", height: "16", viewBox: "0 0 16 16", className: "search-icon", children: [_jsx("circle", { cx: "8", cy: "8", r: "3.5", stroke: "currentColor", strokeWidth: "1.5", fill: "none" }), _jsx("path", { d: "11.5 11.5L15 15", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round" })] }), _jsx("input", { type: "text", placeholder: "Search contributions...", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value) })] })
             ,
-                _jsx("select", { value: filter.type || '', onChange: (e) => setFilter(prev => ({}), ...prev, type, e.target.value ? e.target.value : undefined) }));
+                _jsx("select", { value: filter.type || '', onChange: (e) => setFilter(prev => ({}), ...prev), "type:e": true, target: true, value: true, e: true, target: true, value: true, as: true, "ContributionType:undefined": true }));
 }
 className = "filter-select"
     >
@@ -296,7 +296,7 @@ div >
 _jsx("style", { children: `
         .contribution-dashboard {
           padding: 24px;
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
         .dashboard-header {
           display: flex;
@@ -306,22 +306,22 @@ _jsx("style", { children: `
         .header-main h1 {
           margin: 0 0 8px 0;
           font-size: 32px;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .header-main p {
           margin: 0;
-          font-size: 16px;,
+          font-size: 16px;
   color: #6b7280;
         .create-btn {
-          background: #3b82f6;,
+          background: #3b82f6
   color: #ffffff;
-          border: none;,
+          border: none;
   padding: 12px 24px;
           border-radius: 8px;
-          font-weight: 600;,
+          font-weight: 600;
   cursor: pointer;
           transition: background 0.2s ease;
-        .create-btn:hover {,
+        .create-btn:hover {
   background: #2563eb;
         .stats-overview {
           display: grid;
@@ -329,18 +329,18 @@ _jsx("style", { children: `
           gap: 16px;
           margin-bottom: 32px;
         .stat-card {
-          background: #ffffff;,
+          background: #ffffff
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 20px;
           text-align: center;
         .stat-value {
           font-size: 28px;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
           margin-bottom: 4px;
         .stat-label {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           font-weight: 500;
         .dashboard-tabs {
@@ -349,47 +349,47 @@ _jsx("style", { children: `
           margin-bottom: 24px;
           overflow-x: auto;
         .tab-btn {
-          background: none;,
+          background: none;
   border: none;
-          padding: 12px 24px;,
+          padding: 12px 24px
   cursor: pointer;
-          font-weight: 500;,
+          font-weight: 500;
   color: #6b7280;
-          border-bottom: 3px solid transparent;,
+          border-bottom: 3px solid transparent
   transition: all 0.2s ease;
           white-space: nowrap;
-        .tab-btn:hover {,
+        .tab-btn:hover {
   color: #3b82f6;
         .tab-btn.active {
           color: #3b82f6;
           border-bottom-color: #3b82f6;
         .dashboard-controls {
-          display: flex;,
+          display: flex;
   gap: 16px;
           margin-bottom: 24px;
           flex-wrap: wrap;
         .search-input {
-          position: relative;,
+          position: relative;
   flex: 1;
           min-width: 300px;
         .search-icon {
-          position: absolute;,
+          position: absolute;
   left: 12px;
-          top: 50%;,
+          top: 50%
   transform: translateY(-50%);
           color: #9ca3af;
         .search-input input {
-          width: 100%;,
+          width: 100%
   padding: 10px 12px 10px 36px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
           font-size: 14px;
         .filter-select, .sort-select {
-          padding: 10px 12px;,
+          padding: 10px 12px
   border: 1px solid #d1d5db;
-          border-radius: 6px;,
+          border-radius: 6px;
   background: #ffffff;
-          font-size: 14px;,
+          font-size: 14px;
   cursor: pointer;
           min-width: 150px;
         .dashboard-content {
@@ -402,84 +402,82 @@ _jsx("style", { children: `
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   padding: 80px 20px;
           text-align: center;
         .loading-spinner {
-          width: 40px;,
+          width: 40px;
   height: 40px;
           border: 3px solid #e5e7eb;
           border-top: 3px solid #3b82f6;
-          border-radius: 50%;,
+          border-radius: 50% }
   animation: spin 1s linear infinite;
           margin-bottom: 16px;
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        .error-state h3, .empty-state h3 {
-          margin: 0 0 8px 0;,
+        @keyframes spin { 0% { transform: rotate(0deg) }
+          100% { transform: rotate(360deg) }
+        .error-state h3, .empty-state h3 { margin: 0 0 8px 0
   color: #1f2937;
         .error-state p, .empty-state p {
-          margin: 0 0 16px 0;,
+          margin: 0 0 16px 0
   color: #6b7280;
         .retry-button {
-          background: #3b82f6;,
+          background: #3b82f6
   color: #ffffff;
-          border: none;,
+          border: none;
   padding: 10px 20px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
           transition: background 0.2s ease;
-        .retry-button:hover {,
+        .retry-button:hover {
   background: #2563eb;
         .modal-overlay {
-          position: fixed;,
+          position: fixed;
   top: 0;
-          left: 0;,
+          left: 0;
   right: 0;
-          bottom: 0;,
+          bottom: 0;
   background: rgba(0, 0, 0, 0.5);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1000;,
+          z-index: 1000;
   padding: 20px;
         .modal-content {
           background: #ffffff;
-          border-radius: 12px;,
+          border-radius: 12px;
   width: 100%;
           max-width: 800px;
           max-height: 90vh;
-          overflow-y: auto;,
+          overflow-y: auto;
   position: relative;
         .modal-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;,
+          align-items: center;
   padding: 24px 24px 0 24px;
           border-bottom: 1px solid #e5e7eb;
           margin-bottom: 24px;
         .modal-header h2 {
           margin: 0;
           font-size: 24px;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .modal-close {
-          background: none;,
+          background: none;
   border: none;
-          font-size: 24px;,
+          font-size: 24px;
   cursor: pointer;
-          color: #6b7280;,
+          color: #6b7280
   padding: 4px;
           margin: -4px;
-        .modal-close:hover {,
+        .modal-close:hover { }
   color: #1f2937;
         @media (max-width: 768px) {
           .contribution-dashboard {
             padding: 16px;
           .dashboard-header {
             flex-direction: column;
-            align-items: stretch;,
+            align-items: stretch;
   gap: 16px;
           .stats-overview {
             grid-template-columns: repeat(2, 1fr);
@@ -489,11 +487,11 @@ _jsx("style", { children: `
           .search-input {
             min-width: auto;
           .contributions-grid {
-            grid-template-columns: 1fr;,
+            grid-template-columns: 1fr;
   gap: 16px;
           .modal-content {
             margin: 0;
-            border-radius: 0;,
+            border-radius: 0;
   height: 100vh;
             max-height: none;
       ` });

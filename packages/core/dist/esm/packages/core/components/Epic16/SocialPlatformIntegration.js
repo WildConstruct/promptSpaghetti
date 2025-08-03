@@ -7,7 +7,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * interface with analytics tracking.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { ShareIcon, LinkIcon, CheckIcon, XMarkIcon, ChartBarIcon, CalendarIcon, HashtagIcon, PhotoIcon, Cog6ToothIcon, RocketLaunchIcon } from '@heroicons/react/24/outline';
+import { ShareIcon, LinkIcon, CheckIcon, XMarkIcon, ChartBarIcon, CalendarIcon, HashtagIcon, PhotoIcon, Cog6ToothIcon } from RocketLaunchIcon;
+from;
+'@heroicons/react/24/outline';
 icon: ({ className }) => ()
     < svg;
 className = { className };
@@ -25,17 +27,16 @@ true,
 true,
     config;
 {
-    scopes: ['tweet.read', 'tweet.write', 'users.read'],
-        customFields;
-    {
-        includeThread: false;
-    }
-    rateLimit: {
-        requestsPerMinute: 300, requestsPerHour;
-        1500, burstLimit;
-        100, retryAfter;
-        900;
-    }
+    scopes: ['tweet.read', 'tweet.write', 'users.read'];
+}
+customFields: {
+    includeThread: false;
+}
+rateLimit: {
+    requestsPerMinute: 300, requestsPerHour;
+    1500, burstLimit;
+    100, retryAfter;
+    900;
 }
 features: {
     directPosting: true,
@@ -54,8 +55,7 @@ features: {
         analytics;
     true,
         engagement;
-    true,
-    ;
+    true;
 }
 limits: {
     maxTextLength: 280,
@@ -70,8 +70,7 @@ limits: {
         fileSize;
     5242880, // 5MB,
         videoLength;
-    140,
-    ;
+    140;
 }
 analytics: {
     impressions: 0,
@@ -84,373 +83,352 @@ analytics: {
         reach;
     0,
         lastUpdated;
-    new Date(),
-    ;
+    new Date();
 }
 {
     id: 'linkedin',
         name;
     'linkedin',
         displayName;
-    'LinkedIn',
-        icon;
-    ({ className }) => ()
-        < svg;
-    className = { className };
-    fill = "currentColor";
-    viewBox = "0 0 24 24" >
-        _jsx("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" });
-    svg >
-    ;
-    color: '#0A66C2',
-        description;
-    'Share professionally on LinkedIn',
-        enabled;
-    true,
-        requiresAuth;
-    true,
-        config;
-    {
-        scopes: ['r_liteprofile', 'w_member_social'],
-            customFields;
-        {
-            targetAudience: 'professional';
-        }
-        rateLimit: {
-            requestsPerMinute: 100, requestsPerHour;
-            500, burstLimit;
-            50, retryAfter;
-            3600;
-        }
-    }
-    features: {
-        directPosting: true,
-            scheduledPosting;
-        true,
-            mediaUpload;
-        true,
-            hashtags;
-        true,
-            mentions;
-        true,
-            geotagging;
-        false,
-            crossPosting;
-        true,
-            analytics;
-        true,
-            engagement;
-        true,
-        ;
-    }
-    limits: {
-        maxTextLength: 3000,
-            maxImages;
-        9,
-            maxVideos;
-        1,
-            maxHashtags;
-        5,
-            maxMentions;
-        5,
-            fileSize;
-        104857600, // 100MB,
-            videoLength;
-        600,
-        ;
-    }
-    analytics: {
-        impressions: 0,
-            engagements;
-        0,
-            clicks;
-        0,
-            shares;
-        0,
-            reach;
-        0,
-            lastUpdated;
-        new Date(),
-        ;
-    }
-    {
-        id: 'facebook',
-            name;
-        'facebook',
-            displayName;
-        'Facebook',
-            icon;
-        ({ className }) => ()
-            < svg;
-        className = { className };
-        fill = "currentColor";
-        viewBox = "0 0 24 24" >
-            _jsx("path", { d: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" });
-        svg >
-        ;
-        color: '#1877F2',
-            description;
-        'Share with Facebook communities',
-            enabled;
-        true,
-            requiresAuth;
-        true,
-            config;
-        {
-            scopes: ['pages_manage_posts', 'pages_read_engagement'],
-                customFields;
-            {
-                pageId: '', autoSchedule;
-                false;
-            }
-            rateLimit: {
-                requestsPerMinute: 200, requestsPerHour;
-                4800, burstLimit;
-                600, retryAfter;
-                300;
-            }
-        }
-        features: {
-            directPosting: true,
-                scheduledPosting;
-            true,
-                mediaUpload;
-            true,
-                hashtags;
-            false,
-                mentions;
-            true,
-                geotagging;
-            true,
-                crossPosting;
-            true,
-                analytics;
-            true,
-                engagement;
-            true,
-            ;
-        }
-        limits: {
-            maxTextLength: 63206,
-                maxImages;
-            10,
-                maxVideos;
-            1,
-                maxHashtags;
-            0,
-                maxMentions;
-            50,
-                fileSize;
-            104857600, // 100MB,
-                videoLength;
-            240,
-            ;
-        }
-        analytics: {
-            impressions: 0,
-                engagements;
-            0,
-                clicks;
-            0,
-                shares;
-            0,
-                reach;
-            0,
-                lastUpdated;
-            new Date(),
-            ;
-        }
-        {
-            id: 'reddit',
-                name;
-            'reddit',
-                displayName;
-            'Reddit',
-                icon;
-            ({ className }) => ()
-                < svg;
-            className = { className };
-            fill = "currentColor";
-            viewBox = "0 0 24 24" >
-                _jsx("path", { d: "M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" });
-            svg >
-            ;
-            color: '#FF4500',
-                description;
-            'Share in relevant Reddit communities',
-                enabled;
-            true,
-                requiresAuth;
-            true,
-                config;
-            {
-                scopes: ['identity', 'submit', 'read'],
-                    customFields;
-                {
-                    subreddit: 'promptengineering', flairId;
-                    '';
-                }
-                rateLimit: {
-                    requestsPerMinute: 60, requestsPerHour;
-                    600, burstLimit;
-                    10, retryAfter;
-                    600;
-                }
-            }
-            features: {
-                directPosting: true,
-                    scheduledPosting;
-                false,
-                    mediaUpload;
-                true,
-                    hashtags;
-                false,
-                    mentions;
-                false,
-                    geotagging;
-                false,
-                    crossPosting;
-                false,
-                    analytics;
-                true,
-                    engagement;
-                true,
-                ;
-            }
-            limits: {
-                maxTextLength: 40000,
-                    maxImages;
-                1,
-                    maxVideos;
-                1,
-                    maxHashtags;
-                0,
-                    maxMentions;
-                0,
-                    fileSize;
-                20971520, // 20MB,
-                    videoLength;
-                900,
-                ;
-            }
-            analytics: {
-                impressions: 0,
-                    engagements;
-                0,
-                    clicks;
-                0,
-                    shares;
-                0,
-                    reach;
-                0,
-                    lastUpdated;
-                new Date(),
-                ;
-            }
-            {
-                id: 'discord',
-                    name;
-                'discord',
-                    displayName;
-                'Discord',
-                    icon;
-                ({ className }) => ()
-                    < svg;
-                className = { className };
-                fill = "currentColor";
-                viewBox = "0 0 24 24" >
-                    _jsx("path", { d: "M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1568 2.4189Z" });
-                svg >
-                ;
-                color: '#5865F2',
-                    description;
-                'Share in Discord servers and communities',
-                    enabled;
-                true,
-                    requiresAuth;
-                true,
-                    config;
-                {
-                    scopes: ['bot', 'messages.read'],
-                        customFields;
-                    {
-                        webhookUrl: '', channelId;
-                        '', guildId;
-                        '';
-                    }
-                    rateLimit: {
-                        requestsPerMinute: 50, requestsPerHour;
-                        1000, burstLimit;
-                        5, retryAfter;
-                        1000;
-                    }
-                }
-                features: {
-                    directPosting: true,
-                        scheduledPosting;
-                    false,
-                        mediaUpload;
-                    true,
-                        hashtags;
-                    false,
-                        mentions;
-                    true,
-                        geotagging;
-                    false,
-                        crossPosting;
-                    false,
-                        analytics;
-                    false,
-                        engagement;
-                    true,
-                    ;
-                }
-                limits: {
-                    maxTextLength: 2000,
-                        maxImages;
-                    10,
-                        maxVideos;
-                    1,
-                        maxHashtags;
-                    0,
-                        maxMentions;
-                    100,
-                        fileSize;
-                    8388608, // 8MB,
-                        videoLength;
-                    600,
-                    ;
-                }
-                analytics: {
-                    impressions: 0,
-                        engagements;
-                    0,
-                        clicks;
-                    0,
-                        shares;
-                    0,
-                        reach;
-                    0,
-                        lastUpdated;
-                    new Date();
-                    ;
-                    // Share content generator
-                }
-                export const ShareContentGenerator = {
-                    generateTitle: (template, platform) => {
-                        const baseTitle = template.title;
-                        const platformSpecific = {
-                            twitter: `🚀 ${baseTitle}`
-                        };
-                    },
-                    linkedin: `Professional Template: ${baseTitle}`
-                };
-            }
-            facebook: `Check out this amazing template: ${baseTitle}`;
-        }
-    }
-    reddit: `[Template] ${baseTitle}`;
+    'LinkedIn';
 }
+icon: ({ className }) => ()
+    < svg;
+className = { className };
+fill = "currentColor";
+viewBox = "0 0 24 24" >
+    _jsx("path", { d: "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" });
+svg >
+;
+color: '#0A66C2',
+    description;
+'Share professionally on LinkedIn',
+    enabled;
+true,
+    requiresAuth;
+true,
+    config;
+{
+    scopes: ['r_liteprofile', 'w_member_social'];
+}
+customFields: {
+    targetAudience: 'professional';
+}
+rateLimit: {
+    requestsPerMinute: 100, requestsPerHour;
+    500, burstLimit;
+    50, retryAfter;
+    3600;
+}
+features: {
+    directPosting: true,
+        scheduledPosting;
+    true,
+        mediaUpload;
+    true,
+        hashtags;
+    true,
+        mentions;
+    true,
+        geotagging;
+    false,
+        crossPosting;
+    true,
+        analytics;
+    true,
+        engagement;
+    true;
+}
+limits: {
+    maxTextLength: 3000,
+        maxImages;
+    9,
+        maxVideos;
+    1,
+        maxHashtags;
+    5,
+        maxMentions;
+    5,
+        fileSize;
+    104857600, // 100MB,
+        videoLength;
+    600;
+}
+analytics: {
+    impressions: 0,
+        engagements;
+    0,
+        clicks;
+    0,
+        shares;
+    0,
+        reach;
+    0,
+        lastUpdated;
+    new Date();
+}
+{
+    id: 'facebook',
+        name;
+    'facebook',
+        displayName;
+    'Facebook';
+}
+icon: ({ className }) => ()
+    < svg;
+className = { className };
+fill = "currentColor";
+viewBox = "0 0 24 24" >
+    _jsx("path", { d: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" });
+svg >
+;
+color: '#1877F2',
+    description;
+'Share with Facebook communities',
+    enabled;
+true,
+    requiresAuth;
+true,
+    config;
+{
+    scopes: ['pages_manage_posts', 'pages_read_engagement'];
+}
+customFields: {
+    pageId: '', autoSchedule;
+    false;
+}
+rateLimit: {
+    requestsPerMinute: 200, requestsPerHour;
+    4800, burstLimit;
+    600, retryAfter;
+    300;
+}
+features: {
+    directPosting: true,
+        scheduledPosting;
+    true,
+        mediaUpload;
+    true,
+        hashtags;
+    false,
+        mentions;
+    true,
+        geotagging;
+    true,
+        crossPosting;
+    true,
+        analytics;
+    true,
+        engagement;
+    true;
+}
+limits: {
+    maxTextLength: 63206,
+        maxImages;
+    10,
+        maxVideos;
+    1,
+        maxHashtags;
+    0,
+        maxMentions;
+    50,
+        fileSize;
+    104857600, // 100MB,
+        videoLength;
+    240;
+}
+analytics: {
+    impressions: 0,
+        engagements;
+    0,
+        clicks;
+    0,
+        shares;
+    0,
+        reach;
+    0,
+        lastUpdated;
+    new Date();
+}
+{
+    id: 'reddit',
+        name;
+    'reddit',
+        displayName;
+    'Reddit';
+}
+icon: ({ className }) => ()
+    < svg;
+className = { className };
+fill = "currentColor";
+viewBox = "0 0 24 24" >
+    _jsx("path", { d: "M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" });
+svg >
+;
+color: '#FF4500',
+    description;
+'Share in relevant Reddit communities',
+    enabled;
+true,
+    requiresAuth;
+true,
+    config;
+{
+    scopes: ['identity', 'submit', 'read'];
+}
+customFields: {
+    subreddit: 'promptengineering', flairId;
+    '';
+}
+rateLimit: {
+    requestsPerMinute: 60, requestsPerHour;
+    600, burstLimit;
+    10, retryAfter;
+    600;
+}
+features: {
+    directPosting: true,
+        scheduledPosting;
+    false,
+        mediaUpload;
+    true,
+        hashtags;
+    false,
+        mentions;
+    false,
+        geotagging;
+    false,
+        crossPosting;
+    false,
+        analytics;
+    true,
+        engagement;
+    true;
+}
+limits: {
+    maxTextLength: 40000,
+        maxImages;
+    1,
+        maxVideos;
+    1,
+        maxHashtags;
+    0,
+        maxMentions;
+    0,
+        fileSize;
+    20971520, // 20MB,
+        videoLength;
+    900;
+}
+analytics: {
+    impressions: 0,
+        engagements;
+    0,
+        clicks;
+    0,
+        shares;
+    0,
+        reach;
+    0,
+        lastUpdated;
+    new Date();
+}
+{
+    id: 'discord',
+        name;
+    'discord',
+        displayName;
+    'Discord';
+}
+icon: ({ className }) => ()
+    < svg;
+className = { className };
+fill = "currentColor";
+viewBox = "0 0 24 24" >
+    _jsx("path", { d: "M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1568 2.4189Z" });
+svg >
+;
+color: '#5865F2',
+    description;
+'Share in Discord servers and communities',
+    enabled;
+true,
+    requiresAuth;
+true,
+    config;
+{
+    scopes: ['bot', 'messages.read'];
+}
+customFields: {
+    webhookUrl: '', channelId;
+    '', guildId;
+    '';
+}
+rateLimit: {
+    requestsPerMinute: 50, requestsPerHour;
+    1000, burstLimit;
+    5, retryAfter;
+    1000;
+}
+features: {
+    directPosting: true,
+        scheduledPosting;
+    false,
+        mediaUpload;
+    true,
+        hashtags;
+    false,
+        mentions;
+    true,
+        geotagging;
+    false,
+        crossPosting;
+    false,
+        analytics;
+    false,
+        engagement;
+    true;
+}
+limits: {
+    maxTextLength: 2000,
+        maxImages;
+    10,
+        maxVideos;
+    1,
+        maxHashtags;
+    0,
+        maxMentions;
+    100,
+        fileSize;
+    8388608, // 8MB,
+        videoLength;
+    600;
+}
+analytics: {
+    impressions: 0,
+        engagements;
+    0,
+        clicks;
+    0,
+        shares;
+    0,
+        reach;
+    0;
+}
+lastUpdated: new Date();
+;
+// Share content generator
+export const ShareContentGenerator = {
+    generateTitle: (template, platform) => {
+        const baseTitle = template.title;
+        const platformSpecific = {
+            twitter: `🚀 ${baseTitle}`
+        };
+    },
+    linkedin: `Professional Template: ${baseTitle}`
+};
+facebook: `Check out this amazing template: ${baseTitle}`;
+reddit: `[Template] ${baseTitle}`;
 discord: `**${baseTitle}** - New Template Alert!`;
 ;
 return platformSpecific[platform] || baseTitle;
@@ -474,7 +452,7 @@ generateHashtags: (template, platform) => {
         linkedin: [...baseTags, 'ArtificialIntelligence', 'Productivity', 'Innovation'].slice(0, 5),
         facebook: [], // Facebook doesn't use hashtags effectively,
         reddit: [], // Reddit uses subreddits instead,
-        discord: [] // Discord doesn't use hashtags,
+        discord: [] // Discord doesn't use hashtags }
     };
     return platformSpecific[platform] || [];
 };
@@ -493,8 +471,9 @@ export const SocialPlatformIntegration = ({
         trackingParameters: true,
         crossPlatformSync: false,
         schedulingEnabled: true,
-        analyticsIntegration: true,
-    } });
+        analyticsIntegration: true
+    }
+});
 {
     const [selectedPlatforms, setSelectedPlatforms] = useState([]);
     const [shareContent, setShareContent] = useState({});
@@ -502,46 +481,35 @@ export const SocialPlatformIntegration = ({
     const [shareResults, setShareResults] = useState({});
     const [showCustomization, setShowCustomization] = useState(false);
     const [analytics, setAnalytics] = useState({});
-    views: 0,
-        clicks;
-    0,
-        engagements;
-    0,
-        conversions;
-    0,
-        revenue;
-    0,
-        demographics;
-    {
-        ageGroups: { }
-        geoLocations: { }
-        interests: { }
-        devices: { }
-    }
+    views: 0;
+    clicks: 0;
+    engagements: 0;
+    conversions: 0;
+    revenue: 0;
+    demographics: { }
+    ageGroups: { }
+    geoLocations: { }
+    interests: { }
+    devices: { }
     performance: {
-        clickThroughRate: 0,
-            conversionRate;
-        0,
-            engagementRate;
-        0,
-            viralCoefficient;
-        0,
-            timeToConversion;
-        0,
-        ;
+        clickThroughRate: 0;
+        conversionRate: 0;
+        engagementRate: 0;
+        viralCoefficient: 0;
+        timeToConversion: 0;
     }
-    ;
-    // Initialize share content for all platforms
-    useEffect(() => {
-        const initialContent = {};
-        platforms.forEach(platform => { });
-        initialContent[platform.id] = {
-            title: ShareContentGenerator.generateTitle(template, platform.id),
-            description: ShareContentGenerator.generateDescription(template, platform.id),
-            url: `${window.location.origin}/templates/${template.id}`
-        };
-    }, imageUrl, template.thumbnailUrl, hashtags, ShareContentGenerator.generateHashtags(template, platform.id), mentions, [], customText, '');
 }
+;
+// Initialize share content for all platforms
+useEffect(() => {
+    const initialContent = {};
+    platforms.forEach(platform => { });
+    initialContent[platform.id] = {
+        title: ShareContentGenerator.generateTitle(template, platform.id),
+        description: ShareContentGenerator.generateDescription(template, platform.id)
+    };
+    url: `${window.location.origin}/templates/${template.id}`;
+}, imageUrl, template.thumbnailUrl, hashtags, ShareContentGenerator.generateHashtags(template, platform.id), mentions, [], customText, '');
 ;
 ;
 setShareContent(initialContent);
@@ -556,8 +524,9 @@ const handlePlatformToggle = useCallback((platformId) => {
 [];
 ;
 const handleContentChange = useCallback((platformId, updates) => {
-    setShareContent(prev => ({}), ...prev, [platformId], { ...prev[platformId], ...updates });
-});
+    setShareContent(prev => ({}), ...prev);
+}, [platformId], { ...prev[platformId], ...updates });
+;
 [];
 ;
 const performShare = useCallback(async (platformId) => {
@@ -569,100 +538,77 @@ const performShare = useCallback(async (platformId) => {
     // Simulate API call to social platform
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
     // Generate tracking parameters
-    const trackingParams = trackingEnabled ? {
-        utm_source: platformId,
-        utm_medium: 'social',
-        utm_campaign: `template_${template.id}`
-    }
+    const trackingParams = trackingEnabled ? { utm_source: platformId,
+        utm_medium: 'social' }
         :
     ;
+    utm_campaign: `template_${template.id}`;
 }, utm_content, 'share_button');
 { }
 ;
 const shareRecord = {
-    id: `share_${Date.now()}_${platformId}` };
-templateId: template.id,
-    platform;
-platformId,
-    shareType;
-'direct',
+    id: `share_${Date.now()}_${platformId}`
+};
+templateId: template.id;
+platform: platformId;
+shareType: 'direct';
+content: {
     content;
-{
-    content,
-        url;
-    content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : ''),
-    ;
+    url: content.url + (trackingEnabled ? '?' + new URLSearchParams(trackingParams).toString() : '');
 }
-timestamp: new Date(),
-    userId;
-'current_user', // Would come from auth context
+timestamp: new Date();
+userId: 'current_user', // Would come from auth context
     success;
 Math.random() > 0.1, // 90% success rate simulation
     analytics;
 {
-    views: Math.floor(Math.random() * 1000),
-        clicks;
-    Math.floor(Math.random() * 100),
-        engagements;
-    Math.floor(Math.random() * 50),
-        conversions;
-    Math.floor(Math.random() * 10),
-        revenue;
-    Math.floor(Math.random() * 1000) / 100,
-        demographics;
-    {
-        ageGroups: {
-            '18-24';
-            30, '25-34';
-            45, '35-44';
-            25;
-        }
-        geoLocations: {
-            'US';
-            60, 'EU';
-            25, 'Other';
-            15;
-        }
-        interests: {
-            'AI';
-            80, 'Tech';
-            70, 'Productivity';
-            60;
-        }
-        devices: {
-            'Desktop';
-            60, 'Mobile';
-            35, 'Tablet';
-            5;
-        }
+    views: Math.floor(Math.random() * 1000);
+    clicks: Math.floor(Math.random() * 100);
+    engagements: Math.floor(Math.random() * 50);
+    conversions: Math.floor(Math.random() * 10);
+    revenue: Math.floor(Math.random() * 1000) / 100;
+    demographics: { }
+    ageGroups: {
+        '18-24';
+        30, '25-34';
+        45, '35-44';
+        25;
+    }
+    geoLocations: {
+        'US';
+        60, 'EU';
+        25, 'Other';
+        15;
+    }
+    interests: {
+        'AI';
+        80, 'Tech';
+        70, 'Productivity';
+        60;
+    }
+    devices: {
+        'Desktop';
+        60, 'Mobile';
+        35, 'Tablet';
+        5;
     }
     performance: {
-        clickThroughRate: Math.random() * 10,
-            conversionRate;
-        Math.random() * 5,
-            engagementRate;
-        Math.random() * 15,
-            viralCoefficient;
-        Math.random() * 2,
-            timeToConversion;
-        Math.random() * 3600,
-        ;
+        clickThroughRate: Math.random() * 10;
+        conversionRate: Math.random() * 5;
+        engagementRate: Math.random() * 15;
+        viralCoefficient: Math.random() * 2;
+        timeToConversion: Math.random() * 3600;
     }
     metadata: {
-        userAgent: navigator.userAgent,
-            referrer;
-        document.referrer,
-            deviceType;
-        /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop',
-            source;
-        'template_page',
-            medium;
-        'social_share',
-        ;
+        userAgent: navigator.userAgent;
+        referrer: document.referrer;
+        deviceType: /Mobile/.test(navigator.userAgent) ? 'mobile' : 'desktop';
+        source: 'template_page';
+        medium: 'social_share';
     }
-    ;
-    return shareRecord;
 }
+;
+return shareRecord;
 [platforms, shareContent, template.id, trackingEnabled];
 ;
 const handleSingleShare = useCallback(async (platformId) => {
@@ -679,20 +625,23 @@ const handleSingleShare = useCallback(async (platformId) => {
                 clicks: analytics.clicks + shareRecord.analytics.clicks,
                 engagements: analytics.engagements + shareRecord.analytics.engagements,
                 conversions: analytics.conversions + shareRecord.analytics.conversions,
-                revenue: analytics.revenue + shareRecord.analytics.revenue,
+                revenue: analytics.revenue + shareRecord.analytics.revenue
             };
-            setAnalytics(updatedAnalytics);
-            onAnalyticsUpdate?.(updatedAnalytics);
         }
-        try { }
+        ;
+        setAnalytics(updatedAnalytics);
+        onAnalyticsUpdate?.(updatedAnalytics);
+        try {
+        }
         catch (error) {
             console.error(`Failed to share on ${platformId}:`, error);
         }
+        finally {
+            setIsSharing(prev => ({ ...prev, [platformId]: false }));
+        }
+        [performShare, onShareComplete, analytics, onAnalyticsUpdate, customizations.analyticsIntegration];
     }
-    finally {
-        setIsSharing(prev => ({ ...prev, [platformId]: false }));
-    }
-    [performShare, onShareComplete, analytics, onAnalyticsUpdate, customizations.analyticsIntegration];
+    finally { }
 });
 const handleBulkShare = useCallback(async () => {
     const sharePromises = selectedPlatforms.map(platformId => );
@@ -705,19 +654,21 @@ await Promise.all(sharePromises);
 const copyShareLink = useCallback(async () => {
     const shareUrl = `${window.location.origin}/templates/${template.id}${}
       trackingEnabled ? '?utm_source=direct&utm_medium=link&utm_campaign=template_share' : ''
-    }`;
+`;
     try {
         await navigator.clipboard.writeText(shareUrl);
         // Show success feedback
+        try {
+        }
+        catch (err) {
+            console.error('Failed to copy link:', err);
+        }
+        [template.id, trackingEnabled];
     }
-    catch (err) {
-        console.error('Failed to copy link:', err);
-    }
-    [template.id, trackingEnabled];
+    finally { }
 });
 const enabledPlatforms = useMemo(() => );
-platforms.filter(platform => platform.enabled),
-    [platforms];
+platforms.filter(platform => platform.enabled)[platforms];
 ;
 const totalAnalytics = useMemo(() => ({}), totalShares, Object.keys(shareResults).length, successfulShares, Object.values(shareResults).filter(r => r.success).length, totalReach, Object.values(shareResults).reduce((sum, r) => sum + r.analytics.views, 0), totalEngagements, Object.values(shareResults).reduce((sum, r) => sum + r.analytics.engagements, 0), averageCTR, Object.values(shareResults).reduce((sum, r) => sum + r.analytics.performance.clickThroughRate, 0) / Math.max(Object.keys(shareResults).length, 1));
 [shareResults];
@@ -731,8 +682,8 @@ _jsx("div", { className: "p-4", children: _jsxs("div", { className: "flex items-
     ,
         _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [enabledPlatforms.map(platform => { }), "const Icon = platform.icon; const isSelected = selectedPlatforms.includes(platform.id); const isSharing = isSharing[platform.id]; const shareResult = shareResults[platform.id]; return;", _jsxs("div", { className: `border rounded-lg p-4 cursor-pointer transition-all ${isSelected
                         ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50',
-                    }`, onClick: () => handlePlatformToggle(platform.id), children: [_jsxs("div", { className: "flex items-center justify-between mb-3", children: [_jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 rounded-lg", style: { backgroundColor: `${platform.color}10`, color: platform.color }, children: _jsx(Icon, { className: "h-5 w-5" }) }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: platform.displayName }), _jsx("div", { className: "text-xs text-gray-600", children: platform.description })] })] }), _jsx("input", { type: "checkbox", checked: isSelected, onChange: () => handlePlatformToggle(platform.id), className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded", onClick: (e) => e.stopPropagation() })] }), shareResult && ()
+                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
+`, onClick: () => handlePlatformToggle(platform.id), children: [_jsxs("div", { className: "flex items-center justify-between mb-3", children: [_jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 rounded-lg", style: { backgroundColor: `${platform.color}10`, color: platform.color }, children: _jsx(Icon, { className: "h-5 w-5" }) }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: platform.displayName }), _jsx("div", { className: "text-xs text-gray-600", children: platform.description })] })] }), _jsx("input", { type: "checkbox", checked: isSelected, onChange: () => handlePlatformToggle(platform.id), className: "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded", onClick: (e) => e.stopPropagation() })] }), shareResult && ()
                             < div, " className=\"mb-3 p-2 bg-gray-100 rounded text-xs\">", _jsxs("div", { className: "flex items-center gap-2", children: [shareResult.success ? ()
                                     < CheckIcon : , " className=\"h-3 w-3 text-green-600\" /> ) : ()", _jsx(XMarkIcon, { className: "h-3 w-3 text-red-600" }), ")}", _jsx("span", { className: shareResult.success ? 'text-green-600' : 'text-red-600', children: shareResult.success ? 'Shared successfully' : 'Share failed' })] }), shareResult.success && ()
                             < div, " className=\"mt-1 grid grid-cols-3 gap-1 text-gray-600\">", _jsxs("div", { children: [shareResult.analytics.views, " views"] }), _jsxs("div", { children: [shareResult.analytics.clicks, " clicks"] }), _jsxs("div", { children: [shareResult.analytics.engagements, " eng."] })] }, platform.id), ")}"] });

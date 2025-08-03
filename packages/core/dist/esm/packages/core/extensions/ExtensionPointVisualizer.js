@@ -165,40 +165,34 @@ string;
         const extensionPoints = registry.getAll();
         const nodes = extensionPoints.map(ep => ({}), id, ep.id, name, ep.name, category, ep.category, priority, ep.priority, lifecycle, ep.lifecycle, interfaces, ep.interfaces.map(i => i.name), dependencies, ep.dependencies || [], location, ep.location.file);
     }
-    ;
-    const edges = [];
-    // Add dependency edges
-    if (options.showDependencies !== false) {
-        extensionPoints.forEach(ep => { });
-        if (ep.dependencies && ep.dependencies.length > 0) {
-            ep.dependencies.forEach(dep => { });
-            edges.push({});
-            source: ep.id,
-                target;
-            dep,
-                type;
-            'dependency',
-                label;
-            'depends on',
-            ;
-        }
-        ;
-    }
-    ;
 }
+;
+const edges = [];
+// Add dependency edges
+if (options.showDependencies !== false) {
+    extensionPoints.forEach(ep => { });
+    if (ep.dependencies && ep.dependencies.length > 0) {
+        ep.dependencies.forEach(dep => { });
+        edges.push({});
+        source: ep.id;
+        target: dep;
+        type: 'dependency';
+        label: 'depends on';
+    }
+}
+;
+;
 ;
 // Add interface edges
 if (options.showInterfaces !== false) {
     extensionPoints.forEach(ep => { });
     ep.interfaces.forEach(iface => { });
     edges.push({});
-    source: ep.id,
-        target;
-    `${ep.id}.${iface.name}`;
+    source: ep.id;
 }
-type: 'interface',
-    label;
-'provides';
+target: `${ep.id}.${iface.name}`;
+type: 'interface';
+label: 'provides';
 ;
 ;
 ;
@@ -262,7 +256,7 @@ string;
     if (options.groupByCategory) {
         Object.entries(graph.categories).forEach(([category, nodes]) => {
             if (nodes.length > 0) {
-                dot += `    subgraph cluster_${category} {\n`;
+                dot += `    subgraph cluster_${category} { \n`;
             }
             dot += `        label="${category.toUpperCase()}";\n`;
         }, dot += '        style=filled;\n');
@@ -306,34 +300,35 @@ string;
         version: '1.0.0',
         generated: new Date().toISOString(),
         options: options,
-        graph: graph,
+        graph: graph
     };
-    return JSON.stringify(visualization, null, 2);
-    generateMermaidStyling(options, VisualizationOptions);
-    string;
-    {
-        let styling = '\n';
-        if (options.theme === 'dark') {
-            styling += '    classDef default fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#e2e8f0;\n';
-            styling += '    classDef critical fill:#dc3545,stroke:#c82333,stroke-width:2px,color:#fff;\n';
-            styling += '    classDef high fill:#fd7e14,stroke:#e8590c,stroke-width:2px,color:#fff;\n';
-            styling += '    classDef medium fill:#ffc107,stroke:#e0a800,stroke-width:2px,color:#000;\n';
-            styling += '    classDef low fill:#6c757d,stroke:#5a6268,stroke-width:2px,color:#fff;\n';
-        }
-        else {
-            styling += '    classDef default fill:#f8f9fa,stroke:#6c757d,stroke-width:2px,color:#495057;\n';
-            styling += '    classDef critical fill:#dc3545,stroke:#c82333,stroke-width:2px,color:#fff;\n';
-            styling += '    classDef high fill:#fd7e14,stroke:#e8590c,stroke-width:2px,color:#fff;\n';
-            styling += '    classDef medium fill:#ffc107,stroke:#e0a800,stroke-width:2px,color:#000;\n';
-            styling += '    classDef low fill:#6c757d,stroke:#5a6268,stroke-width:2px,color:#fff;\n';
-            return styling;
-            sanitizeId(id, string);
-            string;
-            {
-                return id.replace(/[^a-zA-Z0-9]/g, '_');
-                // Export singleton instance
-                export const extensionPointVisualizer = ExtensionPointVisualizer.getInstance();
-            }
+}
+;
+return JSON.stringify(visualization, null, 2);
+generateMermaidStyling(options, VisualizationOptions);
+string;
+{
+    let styling = '\n';
+    if (options.theme === 'dark') {
+        styling += '    classDef default fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#e2e8f0;\n';
+        styling += '    classDef critical fill:#dc3545,stroke:#c82333,stroke-width:2px,color:#fff;\n';
+        styling += '    classDef high fill:#fd7e14,stroke:#e8590c,stroke-width:2px,color:#fff;\n';
+        styling += '    classDef medium fill:#ffc107,stroke:#e0a800,stroke-width:2px,color:#000;\n';
+        styling += '    classDef low fill:#6c757d,stroke:#5a6268,stroke-width:2px,color:#fff;\n';
+    }
+    else {
+        styling += '    classDef default fill:#f8f9fa,stroke:#6c757d,stroke-width:2px,color:#495057;\n';
+        styling += '    classDef critical fill:#dc3545,stroke:#c82333,stroke-width:2px,color:#fff;\n';
+        styling += '    classDef high fill:#fd7e14,stroke:#e8590c,stroke-width:2px,color:#fff;\n';
+        styling += '    classDef medium fill:#ffc107,stroke:#e0a800,stroke-width:2px,color:#000;\n';
+        styling += '    classDef low fill:#6c757d,stroke:#5a6268,stroke-width:2px,color:#fff;\n';
+        return styling;
+        sanitizeId(id, string);
+        string;
+        {
+            return id.replace(/[^a-zA-Z0-9]/g, '_');
+            // Export singleton instance
+            export const extensionPointVisualizer = ExtensionPointVisualizer.getInstance();
         }
     }
 }

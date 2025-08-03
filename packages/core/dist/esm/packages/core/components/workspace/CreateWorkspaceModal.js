@@ -6,10 +6,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
 {
     const [formData, setFormData] = useState({});
-    name: '',
-        description;
-    '',
-    ;
+    name: '';
+    description: '';
 }
 ;
 const [errors, setErrors] = useState({});
@@ -39,15 +37,15 @@ const validateForm = () => {
                     await onSubmit({});
                     name: formData.name.trim(),
                         description;
-                    formData.description.trim() || undefined,
-                    ;
+                    formData.description.trim() || undefined;
                 }
-                finally { }
-                ;
+                finally {
+                }
             }
-            try { }
-            catch (error) {
-                // Handle error (could set form-level error state)
+            ;
+            try {
+            }
+            catch (error) { // Handle error (could set form-level error state)
                 console.error('Failed to create workspace:', error);
             }
             finally {

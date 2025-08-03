@@ -6,41 +6,30 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Supports real-time search, autocomplete, and intelligent result ranking.
  */
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { KnowledgeCategory, ArticleType, ReadingLevel, SuggestionType } from '../../services/Epic16KnowledgeBaseService';
-{
-    // State management
+import { KnowledgeCategory, ArticleType, ReadingLevel } from SuggestionType;
+from;
+'../../services/Epic16KnowledgeBaseService';
+className = '';
+{ // State management
     const [searchState, setSearchState] = useState({});
-    query: '',
-        filters;
-    {
-        categories: [],
-            types;
-        [],
-            tags;
-        [],
-            readingLevel;
-        [],
-            language;
-        [],
-            lastUpdated;
-        { }
-        minRating: 0,
-            hasVideo;
-        false,
-            hasCode;
-        false;
+    query: '';
+    filters: {
+        categories: [];
+        types: [];
+        tags: [];
+        readingLevel: [];
+        language: [];
     }
-    results: null,
-        suggestions;
-    [],
-        loading;
-    false,
-        error;
-    null,
-        showFilters;
-    false,
-        showSuggestions;
-    false;
+    lastUpdated: { }
+    minRating: 0;
+    hasVideo: false;
+    hasCode: false;
+    results: null;
+    suggestions: [];
+    loading: false;
+    error: null;
+    showFilters: false;
+    showSuggestions: false;
 }
 ;
 // Refs
@@ -69,11 +58,13 @@ const performSearch = useCallback(async (query, filters) => {
             const searchResults = await knowledgeService.searchArticles(query, filters, userId);
             setSearchState(prev => ({}), ...prev, results, searchResults, suggestions, searchResults.suggestions, loading, false);
         }
-        finally { }
+        finally {
+        }
     }
 });
 onSearchPerformed?.(query, searchResults.totalResults);
-try { }
+try {
+}
 catch (error) {
     setSearchState(prev => ({}), ...prev, error, error instanceof Error ? error.message : 'Search failed', loading, false);
 }
@@ -111,14 +102,13 @@ const handleFilterChange = useCallback((newFilters) => {
 const handleSuggestionSelect = useCallback((suggestion) => {
     setSearchState(prev => ({}), ...prev, query, suggestion.text, showSuggestions, false);
 });
+;
 performSearch(suggestion.text, searchState.filters);
 searchInputRef.current?.focus();
 [performSearch, searchState.filters];
 ;
 // Handle article selection
-const handleArticleSelect = useCallback((articleId) => {
-    onArticleSelect?.(articleId);
-}, [onArticleSelect]);
+const handleArticleSelect = useCallback((articleId) => { onArticleSelect?.(articleId); }, [onArticleSelect]);
 // Clear filters
 const clearFilters = useCallback(() => {
     const clearedFilters = {
@@ -126,14 +116,16 @@ const clearFilters = useCallback(() => {
         types: [],
         tags: [],
         readingLevel: [],
-        language: [],
-        lastUpdated: {},
-        minRating: 0,
-        hasVideo: false,
-        hasCode: false
+        language: []
     };
-    handleFilterChange(clearedFilters);
-}, [handleFilterChange]);
+    lastUpdated: { }
+    minRating: 0;
+    hasVideo: false;
+    hasCode: false;
+});
+handleFilterChange(clearedFilters);
+[handleFilterChange];
+;
 // Close suggestions when clicking outside
 useEffect(() => {
     const handleClickOutside = (event) => {
@@ -171,9 +163,7 @@ return text.replace(regex, '<mark class="bg-yellow-200">$1</mark>');
 [];
 ;
 // Format category name
-const formatCategoryName = useCallback((category) => {
-    return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-}, []);
+const formatCategoryName = useCallback((category) => { return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }, []);
 return;
 _jsxs("div", { className: `knowledge-base-search ${className}`, children: ["}", _jsxs("div", { className: "bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-8", children: [_jsxs("div", { className: "max-w-4xl mx-auto", children: [_jsx("h1", { className: "text-3xl font-bold mb-2", children: "How can we help you?" }), _jsx("p", { className: "text-blue-100 mb-6", children: "Search our knowledge base for answers to your questions" }), _jsxs("div", { className: "relative", children: [_jsxs("div", { className: "relative", children: [_jsx("input", { ref: searchInputRef, type: "text", value: searchState.query, onChange: (e) => handleSearchInput(e.target.value), onFocus: () => setSearchState(prev => ({ ...prev, showSuggestions: true })), placeholder: "Search for articles, guides, tutorials...", className: "w-full pl-12 pr-16 py-4 text-lg text-gray-900 bg-white rounded-lg shadow-lg focus:ring-2 focus:ring-blue-300 focus:border-transparent" }), _jsx("div", { className: "absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none", children: _jsx("svg", { className: "h-6 w-6 text-gray-400", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" }) }) }), searchState.loading && ()
                                             < div, " className=\"absolute inset-y-0 right-0 pr-4 flex items-center\">", _jsx("div", { className: "animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600" })] }), ")}"] }), searchState.showSuggestions && searchSuggestions.length > 0 && ()
@@ -181,7 +171,7 @@ _jsxs("div", { className: `knowledge-base-search ${className}`, children: ["}", 
                             < button, key = { index }, onClick = {}()), " => handleSuggestionSelect(suggestion)} className=\"w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 border-b border-gray-100 last:border-b-0\" >", _jsxs("div", { className: "flex-shrink-0", children: [suggestion.type === SuggestionType.POPULAR_SEARCH && ()
                                     < svg, " className=\"w-5 h-5 text-orange-500\" fill=\"currentColor\" viewBox=\"0 0 20 20\">", _jsx("path", { fillRule: "evenodd", d: "M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z", clipRule: "evenodd" })] }), ")}", suggestion.type === SuggestionType.QUERY_COMPLETION && ()
                             < svg, " className=\"w-5 h-5 text-blue-500\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">", _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" })] }), ")}"] }), _jsxs("div", { className: "flex-1", children: [_jsx("div", { className: "text-gray-900", dangerouslySetInnerHTML: {
-                        __html: highlightQuery(suggestion.text, searchState.query),
+                        __html: highlightQuery(suggestion.text, searchState.query)
                     } }), _jsx("div", { className: "text-xs text-gray-500", children: suggestion.type === SuggestionType.POPULAR_SEARCH ? 'Popular search' : 'Search suggestion' })] })] });
 div >
 ;
@@ -215,13 +205,13 @@ div >
                                                 const newCategories = e.target.checked;
                                             } })
                                         ? [...searchState.filters.categories, category]
-                                        : searchState.filters.categories.filter(c => c !== category)), "; handleFilterChange(", categories, ": newCategories }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: formatCategoryName(category) })] }), "))}"] }) }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Article Types" }), _jsxs("div", { className: "space-y-2 max-h-40 overflow-y-auto", children: [Object.values(ArticleType).map(type => ()
+                                        : searchState.filters.categories.filter(c => c !== category)), "; handleFilterChange(", categories, ": newCategories }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: formatCategoryName(category) })] }), "))}"] }) }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Article Types" }), _jsxs("div", { className: "space-y-2 max-h-40 overflow-y-auto", children: [Object.values(ArticleType).map(type => ()
                                     < label, key = { type }, className = "flex items-center" >
                                     _jsx("input", { type: "checkbox", checked: searchState.filters.types.includes(type), onChange: (e) => {
                                             const newTypes = e.target.checked;
                                         } })
                                     ? [...searchState.filters.types, type]
-                                    : searchState.filters.types.filter(t => t !== type)), "; handleFilterChange(", types, ": newTypes }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: formatCategoryName(type) })] }), "))}"] })] });
+                                    : searchState.filters.types.filter(t => t !== type)), "; handleFilterChange(", types, ": newTypes }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: formatCategoryName(type) })] }), "))}"] })] });
     { /* Reading Level */ }
     _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Reading Level" }), _jsxs("div", { className: "space-y-2", children: [Object.values(ReadingLevel).map(level => ()
                         < label, key = { level }, className = "flex items-center" >
@@ -229,7 +219,7 @@ div >
                                 const newLevels = e.target.checked;
                             } })
                         ? [...searchState.filters.readingLevel, level]
-                        : searchState.filters.readingLevel.filter(l => l !== level)), "; handleFilterChange(", readingLevel, ": newLevels }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: level })] }), "))}"] });
+                        : searchState.filters.readingLevel.filter(l => l !== level)), "; handleFilterChange(", readingLevel, ": newLevels }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: level })] }), "))}"] });
     div >
         { /* Additional Filters */}
         < div >
@@ -265,11 +255,11 @@ _jsxs("div", { className: "max-w-4xl mx-auto p-6", children: [searchState.error 
             _jsxs("div", { className: "flex items-start justify-between mb-3", children: [_jsxs("div", { className: "flex-1", children: [_jsx("h3", { className: "text-lg font-semibold text-blue-600 hover:text-blue-800 mb-1", children: result.article.title }), _jsxs("div", { className: "flex items-center space-x-4 text-sm text-gray-500 mb-2", children: [_jsx("span", { className: "bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs", children: formatCategoryName(result.article.category) }), _jsx("span", { className: "bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-xs", children: formatCategoryName(result.article.type) }), _jsxs("span", { children: [result.article.estimatedReadTime, " min read"] }), _jsxs("span", { children: [result.article.views, " views"] })] })] }), _jsxs("div", { className: "text-right text-sm text-gray-500", children: [_jsxs("div", { className: "flex items-center", children: [[...Array(5)].map((_, i) => ()
                                         < svg, key = { i }, className = {} `w-4 h-4 ${i < Math.round(result.article.ratings.reduce((sum, r) => sum + r.rating, 0) / result.article.ratings.length || 0)
                                         ? 'text-yellow-400'
-                                        : 'text-gray-300',
-                                    }`), "fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}", _jsxs("span", { className: "ml-1 text-xs", children: ["(", result.article.ratings.length, ")"] })] })] });
+                                        : 'text-gray-300'}
+`), "fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}", _jsxs("span", { className: "ml-1 text-xs", children: ["(", result.article.ratings.length, ")"] })] })] });
     div >
         _jsx("div", { className: "text-gray-600 mb-3", dangerouslySetInnerHTML: {
-                __html: result.highlightedContent,
+                __html: result.highlightedContent
             } });
     {
         result.relevanceReason.length > 0 && ()
@@ -293,7 +283,7 @@ _jsxs("div", { className: "max-w-4xl mx-auto p-6", children: [searchState.error 
                             (_jsx("span", { className: "font-medium text-gray-800", children: section.title })
                                 ,
                                     _jsx("div", { className: "text-gray-600 text-xs mt-1", dangerouslySetInnerHTML: {
-                                            __html: section.highlightedText,
+                                            __html: section.highlightedText
                                         } }))) }));
     }
     div >

@@ -13,19 +13,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Input } from '../ui/Input';
 import { usePolicyManagement } from '../../hooks/usePolicyManagement';
-import { PolicyDomain, PolicyStatus } from '../../services/PolicyManagement';
-import { Shield, FileText, Settings, AlertTriangle, CheckCircle, Clock, TrendingUp, Search, Plus, Edit, Trash2, Eye, AlertCircle, Activity, BarChart3, Users, Globe, Lock } from 'lucide-react';
+import { PolicyDomain, PolicyStatus } from PolicyViolation;
+from;
+'../../services/PolicyManagement';
+import { Shield, FileText, Settings, AlertTriangle, CheckCircle, Clock, TrendingUp, Search, Plus, Edit, Trash2, Eye, AlertCircle, Activity, BarChart3, Users, Globe } from Lock;
+from;
+'lucide-react';
 export const PolicyManagementDashboard = ({
     userId,
-    userRole,
-    className = ''
-});
+    userRole });
+className = '';
 {
-    const { policies, evaluationResults, violations, isLoading, error, createPolicy, updatePolicy, deletePolicy, evaluatePolicies, generateComplianceReport, getPolicyStatistics, getFilteredPolicies, getRecentEvaluations, getPolicyViolations, domains, types, statuses, frameworks } = usePolicyManagement({});
-    autoEvaluate: true,
-        enableRealTimeUpdates;
-    true,
-    ;
+    const { policies, evaluationResults, violations, isLoading, error, createPolicy, updatePolicy, deletePolicy, evaluatePolicies, generateComplianceReport, getPolicyStatistics, getFilteredPolicies, getRecentEvaluations, getPolicyViolations, domains, types, statuses };
+    frameworks
+        = usePolicyManagement({});
+    autoEvaluate: true;
+    enableRealTimeUpdates: true;
 }
 ;
 const [activeTab, setActiveTab] = useState('overview');
@@ -38,33 +41,27 @@ const [statusFilter, setStatusFilter] = useState('ALL');
 const statistics = useMemo(() => getPolicyStatistics(), [getPolicyStatistics]);
 const filteredPolicies = useMemo(() => {
     return getFilteredPolicies({});
-    domain: domainFilter !== 'ALL' ? domainFilter : undefined,
-        status;
-    statusFilter !== 'ALL' ? statusFilter : undefined,
-        search;
-    searchTerm,
-    ;
+    domain: domainFilter !== 'ALL' ? domainFilter : undefined;
+    status: statusFilter !== 'ALL' ? statusFilter : undefined;
+    search: searchTerm;
 });
+;
 [getFilteredPolicies, domainFilter, statusFilter, searchTerm];
 ;
 const recentEvaluations = useMemo(() => getRecentEvaluations(10), [getRecentEvaluations]);
 const recentViolations = useMemo(() => );
-getPolicyViolations({ resolved: false, limit: 10 }),
-    [getPolicyViolations];
+getPolicyViolations({ resolved: false, limit: 10 })[getPolicyViolations];
 ;
 const getDomainIcon = (domain) => {
     const iconMap = {
-        [PolicyDomain.SECURITY]: Shield,
-        [PolicyDomain.CONTENT]: FileText,
-        [PolicyDomain.QUALITY]: CheckCircle,
-        [PolicyDomain.COMPLIANCE]: Settings,
-        [PolicyDomain.VFX_PIPELINE]: Activity,
-        [PolicyDomain.DATA_PROTECTION]: Lock,
-        [PolicyDomain.ACCESS_CONTROL]: Users,
-        [PolicyDomain.MARKETPLACE]: Globe,
+        [PolicyDomain.SECURITY]: Shield[PolicyDomain.CONTENT], FileText,
+        [PolicyDomain.QUALITY]: CheckCircle[PolicyDomain.COMPLIANCE], Settings,
+        [PolicyDomain.VFX_PIPELINE]: Activity[PolicyDomain.DATA_PROTECTION], Lock,
+        [PolicyDomain.ACCESS_CONTROL]: Users[PolicyDomain.MARKETPLACE], Globe
     };
-    return iconMap[domain] || Settings;
 };
+return iconMap[domain] || Settings;
+;
 const getStatusColor = (status) => {
     switch (status) {
         case PolicyStatus.ACTIVE: return 'bg-green-100 text-green-800';
@@ -72,52 +69,54 @@ const getStatusColor = (status) => {
         case PolicyStatus.PENDING: return 'bg-yellow-100 text-yellow-800';
         case PolicyStatus.DEPRECATED: return 'bg-red-100 text-red-800';
         case PolicyStatus.EMERGENCY: return 'bg-red-100 text-red-800';
-        default: return 'bg-gray-100 text-gray-800';
+    }
+};
+return 'bg-gray-100 text-gray-800';
+;
+const getSeverityColor = (severity) => {
+    switch (severity) {
+        case 'CRITICAL': return 'text-red-600';
+        case 'HIGH': return 'text-orange-600';
+        case 'MEDIUM': return 'text-yellow-600';
+        case 'LOW': return 'text-green-600';
+        default: return 'text-gray-600';
     }
     ;
-    const getSeverityColor = (severity) => {
-        switch (severity) {
-            case 'CRITICAL': return 'text-red-600';
-            case 'HIGH': return 'text-orange-600';
-            case 'MEDIUM': return 'text-yellow-600';
-            case 'LOW': return 'text-green-600';
-            default: return 'text-gray-600';
-        }
-        ;
-    };
-    try { }
+    try {
+    }
     catch (err) {
         console.error('Failed to create policy:', err);
     }
     ;
     setSelectedPolicy(null);
-};
-try { }
-catch (err) {
-    console.error('Failed to update policy:', err);
-}
-;
-const handleDeletePolicy = async (policyId) => {
-    if (confirm('Are you sure you want to delete this policy?')) {
-        try {
-            await deletePolicy(policyId, userId);
-        }
-        catch (err) {
-            console.error('Failed to delete policy:', err);
-        }
-        ;
-        const renderOverview = () => ();
-        ;
-        _jsxs("div", { className: "policy-overview space-y-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", children: [_jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Total Policies" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: statistics.totalPolicies })] }), _jsx(Shield, { className: "w-8 h-8 text-blue-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Active Policies" }), _jsx("p", { className: "text-2xl font-bold text-green-600", children: statistics.activePolicies })] }), _jsx(CheckCircle, { className: "w-8 h-8 text-green-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Recent Evaluations" }), _jsx("p", { className: "text-2xl font-bold text-blue-600", children: statistics.evaluationMetrics.totalEvaluations })] }), _jsx(Activity, { className: "w-8 h-8 text-blue-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Avg Eval Time" }), _jsxs("p", { className: "text-2xl font-bold text-purple-600", children: [Math.round(statistics.evaluationMetrics.averageEvaluationTime), "ms"] })] }), _jsx(Clock, { className: "w-8 h-8 text-purple-600" })] }) }) })] }), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(BarChart3, { className: "w-5 h-5" }), "Policies by Domain"] }) }), _jsx(CardContent, { children: _jsxs("div", { className: "space-y-3", children: [Object.entries(statistics.byDomain).map(([domain, count]) => {
-                                                const Icon = getDomainIcon(domain);
-                                                return;
-                                                _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Icon, { className: "w-4 h-4 text-gray-600" }), _jsx("span", { className: "text-sm font-medium", children: domain })] }), _jsx(Badge, { variant: "secondary", children: count })] }, domain);
-                                            }), "; })}"] }) })] }), _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(AlertTriangle, { className: "w-5 h-5" }), "Recent Violations"] }) }), _jsxs(CardContent, { children: [_jsx("div", { className: "space-y-3", children: recentViolations.slice(0, 5).map((violation) => ()
-                                                < div, key = { violation, : .id }, className = "flex items-start justify-between p-3 bg-red-50 rounded-lg" >
-                                                (_jsxs("div", { className: "flex-1", children: [_jsx("p", { className: "text-sm font-medium text-red-900", children: violation.policyName }), _jsx("p", { className: "text-xs text-red-700 mt-1", children: violation.violation.description }), _jsx("p", { className: "text-xs text-red-600 mt-1", children: new Date(violation.metadata.detectedAt).toLocaleString() })] })
-                                                    ,
-                                                        _jsxs(Badge, { className: `text-xs ${getSeverityColor(violation.violation.severity)}`, children: ["}", violation.violation.severity] }))) }), "))}"] })] })] })] });
+    try {
     }
+    catch (err) {
+        console.error('Failed to update policy:', err);
+    }
+    ;
+    const handleDeletePolicy = async (policyId) => {
+        if (confirm('Are you sure you want to delete this policy?')) {
+            try {
+                await deletePolicy(policyId, userId);
+            }
+            catch (err) {
+                console.error('Failed to delete policy:', err);
+            }
+            ;
+            const renderOverview = () => ();
+            ;
+            _jsxs("div", { className: "policy-overview space-y-6", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", children: [_jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Total Policies" }), _jsx("p", { className: "text-2xl font-bold text-gray-900", children: statistics.totalPolicies })] }), _jsx(Shield, { className: "w-8 h-8 text-blue-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Active Policies" }), _jsx("p", { className: "text-2xl font-bold text-green-600", children: statistics.activePolicies })] }), _jsx(CheckCircle, { className: "w-8 h-8 text-green-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Recent Evaluations" }), _jsx("p", { className: "text-2xl font-bold text-blue-600", children: statistics.evaluationMetrics.totalEvaluations })] }), _jsx(Activity, { className: "w-8 h-8 text-blue-600" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-600", children: "Avg Eval Time" }), _jsxs("p", { className: "text-2xl font-bold text-purple-600", children: [Math.round(statistics.evaluationMetrics.averageEvaluationTime), "ms"] })] }), _jsx(Clock, { className: "w-8 h-8 text-purple-600" })] }) }) })] }), _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-2 gap-6", children: [_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(BarChart3, { className: "w-5 h-5" }), "Policies by Domain"] }) }), _jsx(CardContent, { children: _jsxs("div", { className: "space-y-3", children: [Object.entries(statistics.byDomain).map(([domain, count]) => {
+                                                    const Icon = getDomainIcon(domain);
+                                                    return;
+                                                    _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Icon, { className: "w-4 h-4 text-gray-600" }), _jsx("span", { className: "text-sm font-medium", children: domain })] }), _jsx(Badge, { variant: "secondary", children: count })] }, domain);
+                                                }), "; })}"] }) })] }), _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(AlertTriangle, { className: "w-5 h-5" }), "Recent Violations"] }) }), _jsxs(CardContent, { children: [_jsx("div", { className: "space-y-3", children: recentViolations.slice(0, 5).map((violation) => ()
+                                                    < div, key = { violation, : .id }, className = "flex items-start justify-between p-3 bg-red-50 rounded-lg" >
+                                                    (_jsxs("div", { className: "flex-1", children: [_jsx("p", { className: "text-sm font-medium text-red-900", children: violation.policyName }), _jsx("p", { className: "text-xs text-red-700 mt-1", children: violation.violation.description }), _jsx("p", { className: "text-xs text-red-600 mt-1", children: new Date(violation.metadata.detectedAt).toLocaleString() })] })
+                                                        ,
+                                                            _jsxs(Badge, { className: `text-xs ${getSeverityColor(violation.violation.severity)}`, children: ["}", violation.violation.severity] }))) }), "))}"] })] })] })] });
+        }
+    };
 };
 div >
 ;
@@ -223,19 +222,19 @@ if (error) {
 }
 _jsx("style", { children: `
         .policy-management-dashboard {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         .line-clamp-2 {
           display: -webkit-box;
           -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;,
+          -webkit-box-orient: vertical;
   overflow: hidden;
         .policy-overview .grid {
           gap: 1rem;
         .policy-list .policy-card {
           transition: all 0.2s ease;
-        .policy-list .policy-card:hover {,
+        .policy-list .policy-card:hover { }
   transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         @media (max-width: 768px) {

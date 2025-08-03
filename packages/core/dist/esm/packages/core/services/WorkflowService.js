@@ -1,3 +1,6 @@
+import { WorkflowConfig, WorkflowInstance, WorkflowStats, ApprovalRequest, ApprovalResponse, ResourceLock, LockRequest, AuditLogEntry, AuditFilter, WorkflowWebhook, ScheduledExecution } from ExecutionResult;
+from;
+'../types/WorkflowTypes';
 class WorkflowService {
     baseUrl;
     constructor(baseUrl = '/api') {
@@ -30,9 +33,8 @@ createWorkflowConfig(config, Omit < WorkflowConfig);
 Promise < WorkflowConfig > {
     const: response = await fetch(`${this.baseUrl}/workflows/configs`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -46,9 +48,8 @@ updateWorkflowConfig(configId, string, updates, (Partial));
 Promise < WorkflowConfig > {
     const: response = await fetch(`${this.baseUrl}/workflows/configs/${configId}`, {})
 };
-method: 'PUT',
-    headers;
-{
+method: 'PUT';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -69,11 +70,9 @@ if (!response.ok)
 // Workflow Instances
 async;
 getWorkflowInstance(resourceId, string, resourceType, string);
-Promise < WorkflowInstance | null > {
-    const: params = new URLSearchParams({}),
-    resourceId,
-    resourceType
-};
+Promise < WorkflowInstance | null > { const: params = new URLSearchParams({}),
+    resourceId };
+resourceType;
 ;
 const response = await fetch(`${this.baseUrl}/workflows/instances?${params}`);
 if (response.status === 404)
@@ -82,28 +81,23 @@ if (!response.ok)
     throw new Error(`Failed to fetch workflow instance: ${response.statusText}`);
 return response.json();
 async;
-createWorkflowInstance(resourceId, string),
-    resourceType;
-string,
-    configId;
-string,
-    metadata ?  : Record;
+createWorkflowInstance(resourceId, string);
+resourceType: string;
+configId: string;
+metadata ?  : Record;
 Promise < WorkflowInstance > {
     const: response = await fetch(`${this.baseUrl}/workflows/instances`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }
 body: JSON.stringify({});
-resource_id: resourceId,
-    resource_type;
-resourceType,
-    workflow_config_id;
-configId,
-    metadata;
+resource_id: resourceId;
+resource_type: resourceType;
+workflow_config_id: configId;
+metadata;
 ;
 if (!response.ok)
     throw new Error(`Failed to create workflow instance: ${response.statusText}`);
@@ -152,9 +146,8 @@ respondToApproval(requestId, string, response, ApprovalResponse);
 Promise < ApprovalRequest > {
     const: resp = await fetch(`${this.baseUrl}/workflows/approvals/${requestId}/respond`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -181,9 +174,8 @@ acquireLock(request, LockRequest);
 Promise < ResourceLock > {
     const: response = await fetch(`${this.baseUrl}/workflows/locks`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -206,9 +198,8 @@ breakLock(lockId, string, reason ?  : string);
 Promise < void  > {
     const: response = await fetch(`${this.baseUrl}/workflows/locks/${lockId}/break`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -219,8 +210,7 @@ if (!response.ok)
 // Audit Trail
 async;
 getAuditLogs(filter, AuditFilter = {});
-Promise < { entries: AuditLogEntry, total: number, has_more: boolean } > {
-    const: params = new URLSearchParams(),
+Promise < { entries: AuditLogEntry, total: number, has_more: boolean } > { const: params = new URLSearchParams(),
     Object, : .entries(filter).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
             if (Array.isArray(value)) {
@@ -231,8 +221,7 @@ Promise < { entries: AuditLogEntry, total: number, has_more: boolean } > {
             }
         }
     }),
-    const: response = await fetch(`${this.baseUrl}/workflows/audit?${params}`)
-};
+    const: response = await fetch(`${this.baseUrl}/workflows/audit?${params}`) };
 if (!response.ok)
     throw new Error(`Failed to fetch audit logs: ${response.statusText}`);
 return response.json();
@@ -241,9 +230,8 @@ createAuditEntry(entry, (Omit));
 Promise < AuditLogEntry > {
     const: response = await fetch(`${this.baseUrl}/workflows/audit`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -268,9 +256,8 @@ createWebhook(webhook, (Omit));
 Promise < WorkflowWebhook > {
     const: response = await fetch(`${this.baseUrl}/workflows/webhooks`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -284,9 +271,8 @@ updateWebhook(webhookId, string, updates, (Partial));
 Promise < WorkflowWebhook > {
     const: response = await fetch(`${this.baseUrl}/workflows/webhooks/${webhookId}`, {})
 };
-method: 'PUT',
-    headers;
-{
+method: 'PUT';
+headers: {
     'Content-Type';
     'application/json';
 }
@@ -321,9 +307,8 @@ createScheduledExecution(execution, (Omit));
 Promise < ScheduledExecution > {
     const: response = await fetch(`${this.baseUrl}/workflows/scheduled`, {})
 };
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
     'application/json';
 }

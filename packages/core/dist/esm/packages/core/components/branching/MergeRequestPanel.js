@@ -1,7 +1,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
-import { Card, List, Button, Modal, Form, Input, Select, Tag, Typography, Space, Alert, Divider, Badge, Dropdown, Menu } from 'antd';
-import { MergeOutlined, PlusOutlined, CloseOutlined, UserOutlined, ClockCircleOutlined, MoreOutlined, EyeOutlined, BranchesOutlined } from '@ant-design/icons';
+import { Card, List, Button, Modal, Form, Input, Select, Tag, Typography, Space, Alert, Divider, Badge, Dropdown } from Menu;
+from;
+'antd';
+import { MergeOutlined, PlusOutlined, CloseOutlined, UserOutlined, ClockCircleOutlined, MoreOutlined, EyeOutlined } from BranchesOutlined;
+from;
+'@ant-design/icons';
+from;
+'../../types/branching';
 import { useBranching } from '../../hooks/useBranching';
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -18,20 +24,17 @@ const { TextArea } = Input;
             case 'draft':
                 return 'warning';
             default:
-                return 'default';
         }
-        ;
-        const formatDate = (date) => {
-            return new Date(date).toLocaleDateString();
-        };
-        const menu = ();
-        ;
-        _jsxs(Menu, { children: [_jsx(Menu.Item, { icon: _jsx(EyeOutlined, {}), onClick: () => onView(mergeRequest), children: "View Details" }, "view"), mergeRequest.status === 'open' && ()
-                    <  >
-                    (_jsx(Menu.Item, { icon: _jsx(MergeOutlined, {}), onClick: () => onMerge(mergeRequest), children: "Merge" }, "merge")
-                        ,
-                            _jsx(Menu.Item, { icon: _jsx(CloseOutlined, {}), onClick: () => onClose(mergeRequest), children: "Close" }, "close"))] });
+        return 'default';
     };
+    const formatDate = (date) => { return new Date(date).toLocaleDateString(); };
+    const menu = ();
+    ;
+    _jsxs(Menu, { children: [_jsx(Menu.Item, { icon: _jsx(EyeOutlined, {}), onClick: () => onView(mergeRequest), children: "View Details" }, "view"), mergeRequest.status === 'open' && ()
+                <  >
+                (_jsx(Menu.Item, { icon: _jsx(MergeOutlined, {}), onClick: () => onMerge(mergeRequest), children: "Merge" }, "merge")
+                    ,
+                        _jsx(Menu.Item, { icon: _jsx(CloseOutlined, {}), onClick: () => onClose(mergeRequest), children: "Close" }, "close"))] });
 }
 Menu >
 ;
@@ -45,16 +48,17 @@ Card >
 ;
 export const MergeRequestPanel = ({
     projectId,
-    visible,
-    onClose
-});
+    visible });
+onClose;
 {
     const [mergeRequests, _____setMergeRequests] = useState([]);
     const [branches, setBranches] = useState([]);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [selectedMergeRequest, setSelectedMergeRequest] = useState(null);
     const [form] = Form.useForm();
-    const { listBranches, createMergeRequest, mergeBranch, loading, error } = useBranching();
+    const { listBranches, createMergeRequest, mergeBranch, loading };
+    error
+        = useBranching();
     useEffect(() => {
         if (visible) {
             loadData();
@@ -75,82 +79,82 @@ export const MergeRequestPanel = ({
     ;
     setBranches(branchesData);
     // setMergeRequests(mergeRequestsData);
-}
-try { }
-catch (error) {
-    console.error('Failed to load data:', error);
-}
-;
-const handleCreateMergeRequest = async (values) => {
     try {
-        const request = {
-            projectId,
-            sourceBranchId: values.sourceBranchId,
-            targetBranchId: values.targetBranchId,
-            title: values.title,
-            description: values.description,
-            reviewers: values.reviewers || [],
-            assignedTo: values.assignedTo,
-            allowSquashMerge: values.allowSquashMerge !== false,
-            allowMergeCommit: values.allowMergeCommit !== false,
-            allowRebaseMerge: values.allowRebaseMerge || false,
-            deleteSourceBranch: values.deleteSourceBranch || false,
-        };
+    }
+    catch (error) {
+        console.error('Failed to load data:', error);
+    }
+    ;
+    const handleCreateMergeRequest = async (values) => {
+        try {
+            const request = {
+                projectId,
+                sourceBranchId: values.sourceBranchId,
+                targetBranchId: values.targetBranchId,
+                title: values.title,
+                description: values.description,
+                reviewers: values.reviewers || [],
+                assignedTo: values.assignedTo,
+                allowSquashMerge: values.allowSquashMerge !== false,
+                allowMergeCommit: values.allowMergeCommit !== false,
+                allowRebaseMerge: values.allowRebaseMerge || false,
+                deleteSourceBranch: values.deleteSourceBranch || false
+            };
+        }
+        finally { }
+        ;
         await createMergeRequest(request);
         setShowCreateModal(false);
         form.resetFields();
         loadData();
-    }
-    catch (error) {
-        console.error('Failed to create merge request:', error);
-    }
-    ;
-    const handleMergeBranch = async (mergeRequest) => {
         try {
-            await mergeBranch({});
-            mergeRequestId: mergeRequest.id,
-                mergeStrategy;
-            'merge',
-                deleteSourceBranch;
-            mergeRequest.deleteSourceBranch,
-            ;
         }
-        finally { }
+        catch (error) {
+            console.error('Failed to create merge request:', error);
+        }
         ;
+        const handleMergeBranch = async (mergeRequest) => {
+            try {
+                await mergeBranch({});
+                mergeRequestId: mergeRequest.id;
+                mergeStrategy: 'merge';
+                deleteSourceBranch: mergeRequest.deleteSourceBranch;
+            }
+            finally {
+            }
+        };
         loadData();
+        try {
+        }
+        catch (error) {
+            console.error('Failed to merge branch:', error);
+        }
+        ;
+        const handleCloseMergeRequest = async (mergeRequest) => {
+            console.log('Closing merge request:', mergeRequest.id);
+        };
+        const handleViewMergeRequest = (mergeRequest) => { setSelectedMergeRequest(mergeRequest); };
+        return;
+        _jsxs("div", { children: [_jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }, children: [_jsx(Title, { level: 4, style: { margin: 0 }, children: "Merge Requests" }), _jsx(Button, { type: "primary", icon: _jsx(PlusOutlined, {}), onClick: () => setShowCreateModal(true), children: "Create Merge Request" })] }), error && ()
+                    < Alert, "message=\"Error\" description=", error, "type=\"error\" showIcon closable style=", { marginBottom: '16px' }, "/> )}", _jsxs("div", { style: { minHeight: '400px' }, children: [mergeRequests.length > 0 ? ()
+                            < List
+                            :
+                        , "dataSource=", mergeRequests, "renderItem=", (mergeRequest) => ()
+                            < MergeRequestItem, "key=", mergeRequest.id, "mergeRequest=", mergeRequest, "onView=", handleViewMergeRequest, "onMerge=", handleMergeBranch, "onClose=", handleCloseMergeRequest, "/> )} /> ) : ()", _jsx("div", { style: { textAlign: 'center', padding: '40px' }, children: _jsx(Text, { type: "secondary", children: "No merge requests found" }) }), ")}"] }), _jsxs(Modal, { title: "Create Merge Request", visible: showCreateModal, onCancel: () => {
+                        setShowCreateModal(false);
+                        form.resetFields();
+                    }, footer: null, width: 600, children: [_jsxs(Form, { form: form, layout: "vertical", onFinish: handleCreateMergeRequest, children: [_jsx(Form.Item, { name: "title", label: "Title", rules: [{ required: true, message: 'Please enter a title' }], children: _jsx(Input, { placeholder: "e.g., Add user authentication feature" }) }), _jsx(Form.Item, { name: "description", label: "Description", children: _jsx(TextArea, { rows: 3, placeholder: "Describe the changes in this merge request..." }) }), _jsxs(Form.Item, { name: "sourceBranchId", label: "Source Branch", rules: [{ required: true, message: 'Please select source branch' }], children: [_jsx(Select, { placeholder: "Select source branch", children: branches.map(branch => ()
+                                                < Option, key = { branch, : .id }, value = { branch, : .id } >
+                                                { branch, : .displayName || branch.name }) }), "))}"] })] }), _jsxs(Form.Item, { name: "targetBranchId", label: "Target Branch", rules: [{ required: true, message: 'Please select target branch' }], children: [_jsx(Select, { placeholder: "Select target branch", children: branches.map(branch => ()
+                                        < Option, key = { branch, : .id }, value = { branch, : .id } >
+                                        { branch, : .displayName || branch.name }) }), "))}"] })] }), _jsx(Form.Item, { name: "reviewers", label: "Reviewers", children: _jsx(Select, { mode: "multiple", placeholder: "Select reviewers" }) }), _jsx(Form.Item, { name: "assignedTo", label: "Assignee", children: _jsx(Select, { placeholder: "Select assignee" }) }), _jsx("div", { style: { textAlign: 'right', marginTop: '24px' }, children: _jsxs(Space, { children: [_jsx(Button, { onClick: () => setShowCreateModal(false), children: "Cancel" }), _jsx(Button, { type: "primary", htmlType: "submit", loading: loading, children: "Create Merge Request" })] }) })] });
     };
-    try { }
-    catch (error) {
-        console.error('Failed to merge branch:', error);
-    }
-    ;
-    const handleCloseMergeRequest = async (mergeRequest) => {
-        // Would implement close functionality
-        console.log('Closing merge request:', mergeRequest.id);
-    };
-    const handleViewMergeRequest = (mergeRequest) => {
-        setSelectedMergeRequest(mergeRequest);
-    };
-    return;
-    _jsxs("div", { children: [_jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }, children: [_jsx(Title, { level: 4, style: { margin: 0 }, children: "Merge Requests" }), _jsx(Button, { type: "primary", icon: _jsx(PlusOutlined, {}), onClick: () => setShowCreateModal(true), children: "Create Merge Request" })] }), error && ()
-                < Alert, "message=\"Error\" description=", error, "type=\"error\" showIcon closable style=", { marginBottom: '16px' }, "/> )}", _jsxs("div", { style: { minHeight: '400px' }, children: [mergeRequests.length > 0 ? ()
-                        < List
-                        :
-                    , "dataSource=", mergeRequests, "renderItem=", (mergeRequest) => ()
-                        < MergeRequestItem, "key=", mergeRequest.id, "mergeRequest=", mergeRequest, "onView=", handleViewMergeRequest, "onMerge=", handleMergeBranch, "onClose=", handleCloseMergeRequest, "/> )} /> ) : ()", _jsx("div", { style: { textAlign: 'center', padding: '40px' }, children: _jsx(Text, { type: "secondary", children: "No merge requests found" }) }), ")}"] }), _jsxs(Modal, { title: "Create Merge Request", visible: showCreateModal, onCancel: () => {
-                    setShowCreateModal(false);
-                    form.resetFields();
-                }, footer: null, width: 600, children: [_jsxs(Form, { form: form, layout: "vertical", onFinish: handleCreateMergeRequest, children: [_jsx(Form.Item, { name: "title", label: "Title", rules: [{ required: true, message: 'Please enter a title' }], children: _jsx(Input, { placeholder: "e.g., Add user authentication feature" }) }), _jsx(Form.Item, { name: "description", label: "Description", children: _jsx(TextArea, { rows: 3, placeholder: "Describe the changes in this merge request..." }) }), _jsxs(Form.Item, { name: "sourceBranchId", label: "Source Branch", rules: [{ required: true, message: 'Please select source branch' }], children: [_jsx(Select, { placeholder: "Select source branch", children: branches.map(branch => ()
-                                            < Option, key = { branch, : .id }, value = { branch, : .id } >
-                                            { branch, : .displayName || branch.name }) }), "))}"] })] }), _jsxs(Form.Item, { name: "targetBranchId", label: "Target Branch", rules: [{ required: true, message: 'Please select target branch' }], children: [_jsx(Select, { placeholder: "Select target branch", children: branches.map(branch => ()
-                                    < Option, key = { branch, : .id }, value = { branch, : .id } >
-                                    { branch, : .displayName || branch.name }) }), "))}"] })] }), _jsx(Form.Item, { name: "reviewers", label: "Reviewers", children: _jsx(Select, { mode: "multiple", placeholder: "Select reviewers" }) }), _jsx(Form.Item, { name: "assignedTo", label: "Assignee", children: _jsx(Select, { placeholder: "Select assignee" }) }), _jsx("div", { style: { textAlign: 'right', marginTop: '24px' }, children: _jsxs(Space, { children: [_jsx(Button, { onClick: () => setShowCreateModal(false), children: "Cancel" }), _jsx(Button, { type: "primary", htmlType: "submit", loading: loading, children: "Create Merge Request" })] }) })] });
-};
-Modal >
-    { /* Merge Request Details Modal */}
-    < Modal;
-title = "Merge Request Details";
-visible = { selectedMergeRequest } !== null;
+    Modal >
+        { /* Merge Request Details Modal */}
+        < Modal;
+    title = "Merge Request Details";
+    visible = { selectedMergeRequest } !== null;
+}
 onCancel = {}();
 setSelectedMergeRequest(null);
 footer = { null:  };

@@ -4,7 +4,7 @@
  */
 
 import { BaseInlineEditableNode } from './BaseInlineEditableNode';
-import { Epic1NodeType } from './index';
+import { Epic1NodeType } from './nodeTypes';
 
 /**
  * Validation error with context

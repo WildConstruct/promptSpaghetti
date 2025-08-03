@@ -4,12 +4,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Marketplace view for discovering and installing extensions
  */
 import { useState } from 'react';
+onInstallExtension: (extension) => void ;
 export const ExtensionMarketplace = ({
     extensions,
     selectedExtension,
-    onExtensionSelect,
-    onInstallExtension
-});
+    onExtensionSelect });
+onInstallExtension;
 {
     const [viewMode, setViewMode] = useState('grid');
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -19,65 +19,54 @@ export const ExtensionMarketplace = ({
             name: 'All Extensions',
             icon: '📦',
             description: 'Browse all available extensions',
-            count: extensions.length,
+            count: extensions.length
         },
-        {
-            id: 'featured',
+        { id: 'featured',
             name: 'Featured',
             icon: '⭐',
             description: 'Editor\'s choice and popular extensions',
-            count: Math.floor(extensions.length * 0.3),
-        },
-        {
-            id: 'node',
+            count: Math.floor(extensions.length * 0.3) },
+        { id: 'node',
             name: 'Node Extensions',
             icon: '🔧',
             description: 'Add new node types and functionality',
-            count: extensions.filter(ext => ext.extension_type === 'node').length,
-        },
-        {
-            id: 'ui',
+            count: extensions.filter(ext => ext.extension_type === 'node').length },
+        { id: 'ui',
             name: 'UI & Themes',
             icon: '🎨',
             description: 'Customize the interface and appearance',
-            count: extensions.filter(ext => ext.extension_type === 'ui').length,
-        },
-        {
-            id: 'transform',
+            count: extensions.filter(ext => ext.extension_type === 'ui').length },
+        { id: 'transform',
             name: 'Data Transforms',
             icon: '⚡',
             description: 'Process and transform your data',
-            count: extensions.filter(ext => ext.extension_type === 'transform').length,
-        },
-        {
-            id: 'storage',
+            count: extensions.filter(ext => ext.extension_type === 'transform').length },
+        { id: 'storage',
             name: 'Storage & Sync',
             icon: '💾',
             description: 'Connect to external storage and services',
-            count: extensions.filter(ext => ext.extension_type === 'storage').length
-        }
+            count: extensions.filter(ext => ext.extension_type === 'storage').length }
     ];
     const filteredExtensions = selectedCategory === 'all';
-    extensions: selectedCategory === 'featured',
-            ? extensions.slice(0, Math.floor(extensions.length * 0.3))
-            : extensions.filter(ext => ext.extension_type === selectedCategory);
-    const getExtensionIcon = (type) => {
-        switch (type) {
-            case 'node': return '🔧';
-            case 'ui': return '🎨';
-            case 'transform': return '⚡';
-            case 'storage': return '💾';
-            default: return '📦';
-        }
-        ;
-        const formatDownloads = (downloads) => {
-            if (downloads < 1000)
-                return downloads.toString();
-            if (downloads < 1000000)
-                return `${(downloads / 1000).toFixed(1)}K`;
-        };
-        return `${(downloads / 1000000).toFixed(1)}M`;
+    extensions: selectedCategory === 'featured'
+        ? extensions.slice(0, Math.floor(extensions.length * 0.3))
+        : extensions.filter(ext => ext.extension_type === selectedCategory);
+    const getExtensionIcon = (type) => { };
+    switch (type) {
+        case 'node': return '🔧';
+        case 'ui': return '🎨';
+        case 'transform': return '⚡';
+        case 'storage': return '💾';
+        default: return '📦';
+    }
+    ;
+    const formatDownloads = (downloads) => {
+        if (downloads < 1000)
+            return downloads.toString();
+        if (downloads < 1000000)
+            return `${(downloads / 1000).toFixed(1)}K`;
     };
+    return `${(downloads / 1000000).toFixed(1)}M`;
 }
 ;
 const renderExtensionGrid = () => ();

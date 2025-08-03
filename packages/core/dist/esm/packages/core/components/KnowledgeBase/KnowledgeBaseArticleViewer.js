@@ -6,30 +6,21 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * interactive elements, feedback system, and accessibility features.
  */
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { FeedbackType, SectionType } from '../../services/Epic16KnowledgeBaseService';
-{
-    // State management
+import { FeedbackType, SectionType } from AIRecommendation;
+from;
+'../../services/Epic16KnowledgeBaseService';
+{ // State management
     const [viewerState, setViewerState] = useState({});
-    loading: false,
-        error;
-    null,
-        showTableOfContents;
-    true,
-        activeSection;
-    '',
-        userRating;
-    0,
-        userFeedback;
-    '',
-        feedbackType;
-    FeedbackType.IMPROVEMENT,
-        showFeedbackForm;
-    false,
-        recommendations;
-    [],
-        readingProgress;
-    0,
-    ;
+    loading: false;
+    error: null;
+    showTableOfContents: true;
+    activeSection: '';
+    userRating: 0;
+    userFeedback: '';
+    feedbackType: FeedbackType.IMPROVEMENT;
+    showFeedbackForm: false;
+    recommendations: [];
+    readingProgress: 0;
 }
 ;
 // Refs
@@ -40,24 +31,20 @@ useEffect(() => {
     const loadRecommendations = async () => {
         try {
             const recommendations = await knowledgeService.getRecommendations({});
-            currentArticleId: article.id,
-                userSearchHistory;
-            [],
-                viewedArticles;
-            [article.id],
-                userRole;
-            'user',
-                userExperience;
-            'intermediate',
-                timestamp;
-            new Date(),
-            ;
+            currentArticleId: article.id;
+            userSearchHistory: [];
+            viewedArticles: [article.id];
+            userRole: 'user';
+            userExperience: 'intermediate';
+            timestamp: new Date();
         }
-        finally { }
+        finally {
+        }
     };
 });
 setViewerState(prev => ({ ...prev, recommendations }));
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to load recommendations:', error);
 }
@@ -102,9 +89,7 @@ const averageRating = useMemo(() => {
     return article.ratings.reduce((sum, rating) => sum + rating.rating, 0) / article.ratings.length;
 }, [article.ratings]);
 // Get user's existing rating
-const existingRating = useMemo(() => {
-    return article.ratings.find(rating => rating.userId === userId);
-}, [article.ratings, userId]);
+const existingRating = useMemo(() => { return article.ratings.find(rating => rating.userId === userId); }, [article.ratings, userId]);
 // Handle rating submission
 const handleRatingSubmit = useCallback(async (rating) => {
     try {
@@ -112,13 +97,14 @@ const handleRatingSubmit = useCallback(async (rating) => {
         userId,
             rating,
             helpful;
-        rating >= 4,
-        ;
+        rating >= 4;
     }
-    finally { }
+    finally {
+    }
 });
 setViewerState(prev => ({ ...prev, userRating: rating }));
-try { }
+try {
+}
 catch (error) {
     setViewerState(prev => ({}), ...prev, error, error instanceof Error ? error.message : 'Failed to submit rating');
 }
@@ -138,14 +124,15 @@ const handleFeedbackSubmit = useCallback(async () => {
             message;
         viewerState.userFeedback,
             status;
-        'new',
-        ;
+        'new';
     }
-    finally { }
+    finally {
+    }
 });
 setViewerState(prev => ({}), ...prev, loading, false, userFeedback, '', showFeedbackForm, false);
 ;
-try { }
+try {
+}
 catch (error) {
     setViewerState(prev => ({}), ...prev, loading, false, error, error instanceof Error ? error.message : 'Failed to submit feedback');
 }
@@ -166,15 +153,11 @@ const handleHelpfulVote = useCallback(async (helpful) => {
         // In a real implementation, this would call an API
         console.log(`Marked article as ${helpful ? 'helpful' : 'not helpful'}`);
     }
-    finally {
+    catch (error) {
+        console.error('Failed to submit helpful vote:', error);
     }
+    [];
 });
-try { }
-catch (error) {
-    console.error('Failed to submit helpful vote:', error);
-}
-[];
-;
 // Format date
 const formatDate = useCallback((date) => {
     return new Intl.DateTimeFormat('en-US', {});
@@ -182,28 +165,25 @@ const formatDate = useCallback((date) => {
         month;
     'long',
         day;
-    'numeric',
-    ;
-}).format(date);
+    'numeric';
+});
+format(date);
 [];
 ;
 // Format category name
-const formatCategoryName = useCallback((category) => {
-    return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-}, []);
+const formatCategoryName = useCallback((category) => { return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }, []);
 // Render section content
 const renderSectionContent = useCallback((section) => {
-    const setSectionRef = (element) => {
-        if (element) {
-            sectionsRef.current.set(section.id, element);
-        }
-        ;
-        switch (section.type) {
-            case SectionType.CODE:
-                return;
-                _jsxs("div", { ref: setSectionRef, id: section.anchor, className: "mb-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-3", children: section.title }), _jsx("pre", { className: "bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto", children: _jsx("code", { children: section.content }) })] });
-        }
-    };
+    const setSectionRef = (element) => { };
+    if (element) {
+        sectionsRef.current.set(section.id, element);
+    }
+    ;
+    switch (section.type) {
+        case SectionType.CODE:
+            return;
+            _jsxs("div", { ref: setSectionRef, id: section.anchor, className: "mb-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-3", children: section.title }), _jsx("pre", { className: "bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto", children: _jsx("code", { children: section.content }) })] });
+    }
 });
 SectionType.WARNING;
 return;
@@ -222,8 +202,8 @@ _jsxs("div", { ref: setSectionRef, id: section.anchor, className: "mb-6", childr
 const renderStars = useCallback((rating, interactive = false, onRate) => {
     return;
     _jsxs("div", { className: "flex items-center", children: [[1, 2, 3, 4, 5].map(star => ()
-                < button, key = { star }, onClick = {}()), " => interactive && onRate?.(star)} disabled=", !interactive, "className=", `${interactive ? 'cursor-pointer hover:scale-110' : 'cursor-default'} transition-transform`, ">", _jsx("svg", { className: `w-5 h-5 ${star <= rating ? 'text-yellow-400' : 'text-gray-300',
-                }`, fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" }) })] });
+                < button, key = { star }, onClick = {}()), " => interactive && onRate?.(star)} disabled=", !interactive, "className=", `${interactive ? 'cursor-pointer hover:scale-110' : 'cursor-default'} transition-transform`, ">", _jsx("svg", { className: `w-5 h-5 ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}
+`, fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" }) })] });
 });
 div >
 ;
@@ -235,8 +215,8 @@ _jsxs("div", { className: "knowledge-base-article-viewer h-full flex bg-gray-50"
             < div, " className=\"w-80 bg-white border-r border-gray-200 overflow-y-auto\">", _jsxs("div", { className: "p-6", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Contents" }), _jsx("button", { onClick: () => setViewerState(prev => ({ ...prev, showTableOfContents: false })), className: "p-1 text-gray-400 hover:text-gray-600", children: _jsx("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) }) })] }), _jsxs("nav", { className: "space-y-2", children: [article.sections.map((section, index) => ()
                             < button, key = { section, : .id }, onClick = {}()), " => scrollToSection(section.id)} className=", `w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${viewerState.activeSection === section.id
                             ? 'bg-blue-100 text-blue-700 border-l-2 border-blue-500'
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100',
-                        }`, ">", _jsxs("span", { className: "text-xs text-gray-400 mr-2", children: [index + 1, "."] }), section.title] }), "))}"] }), _jsx("div", { className: "mt-8 pt-6 border-t border-gray-200", children: _jsxs("div", { className: "space-y-3 text-sm", children: [_jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Category:" }), _jsx("span", { className: "ml-2 text-gray-600", children: formatCategoryName(article.category) })] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Reading Time:" }), _jsxs("span", { className: "ml-2 text-gray-600", children: [article.estimatedReadTime, " minutes"] })] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Last Updated:" }), _jsx("span", { className: "ml-2 text-gray-600", children: formatDate(article.lastUpdated) })] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Views:" }), _jsx("span", { className: "ml-2 text-gray-600", children: article.views.toLocaleString() })] })] }) })] });
+                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}
+`, ">", _jsxs("span", { className: "text-xs text-gray-400 mr-2", children: [index + 1, "."] }), section.title] }), "))}"] }), _jsx("div", { className: "mt-8 pt-6 border-t border-gray-200", children: _jsxs("div", { className: "space-y-3 text-sm", children: [_jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Category:" }), _jsx("span", { className: "ml-2 text-gray-600", children: formatCategoryName(article.category) })] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Reading Time:" }), _jsxs("span", { className: "ml-2 text-gray-600", children: [article.estimatedReadTime, " minutes"] })] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Last Updated:" }), _jsx("span", { className: "ml-2 text-gray-600", children: formatDate(article.lastUpdated) })] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium text-gray-700", children: "Views:" }), _jsx("span", { className: "ml-2 text-gray-600", children: article.views.toLocaleString() })] })] }) })] });
 div >
 ;
 { /* Main Content */ }

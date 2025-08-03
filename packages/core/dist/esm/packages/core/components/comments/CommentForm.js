@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Form for creating and editing comments
  */
 import { useState, useRef, useEffect } from 'react';
+autoFocus = true;
 {
     const [content, setContent] = useState(initialValue);
     const [submitting, setSubmitting] = useState(false);

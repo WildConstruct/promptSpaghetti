@@ -6,6 +6,8 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * methodologies, combining MARS framework, Zada patterns, and VFX integration.
  */
 import { useState, useCallback, useEffect } from 'react';
+from;
+'../../services/AdvancedPromptingCollaborationService';
 {
     const [currentSession, setCurrentSession] = useState(null);
     const [sessions, setSessions] = useState([]);
@@ -26,9 +28,7 @@ import { useState, useCallback, useEffect } from 'react';
         };
         loadData();
         // Set up event listeners
-        const handleSessionCreated = (session) => {
-            setSessions(prev => [...prev, session]);
-        };
+        const handleSessionCreated = (session) => { setSessions(prev => [...prev, session]); };
         const handleMARSRegionCreated = ({ region }) => {
             setMarsTemplates(prev => [...prev, region]);
             onMARSRegionCreate?.(region);
@@ -56,14 +56,15 @@ import { useState, useCallback, useEffect } from 'react';
         finally { }
     });
     newSessionTitle,
-        selectedMethodology,
-        currentUser.id;
-    ;
-    setCurrentSession(session);
-    setIsCreatingSession(false);
-    setNewSessionTitle('');
+        selectedMethodology;
 }
-try { }
+currentUser.id;
+;
+setCurrentSession(session);
+setIsCreatingSession(false);
+setNewSessionTitle('');
+try {
+}
 catch (error) {
     console.error('Failed to create session:', error);
 }
@@ -93,11 +94,12 @@ const handleVFXExport = useCallback(async () => {
     }
     finally { }
 });
-currentSession.sessionId,
-    currentUser.id;
+currentSession.sessionId;
+currentUser.id;
 ;
 onVFXExport?.(exportData);
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to generate VFX export:', error);
 }
@@ -112,16 +114,17 @@ const getRoleIcon = (role) => {
         vfx_artist: '🎨',
         cinematographer: '📹',
         producer: '💼',
-        script_supervisor: '📝',
+        script_supervisor: '📝'
     };
-    return icons[role] || '👤';
 };
+return icons[role] || '👤';
+;
 const getMethodologyColor = (methodology) => {
     const colors = {
         zada: '#10b981', // Green - Natural language,
         mars: '#3b82f6', // Blue - Technical,
         hybrid: '#8b5cf6', // Purple - Combined,
-        custom: '#f59e0b' // Orange - Custom,
+        custom: '#f59e0b' // Orange - Custom }
     };
     return colors[methodology];
 };
@@ -134,7 +137,7 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsxs("div", { style: {
                 padding: 16,
                 background: 'rgba(59, 130, 246, 0.05)',
                 borderRadius: 8,
-                border: '1px solid rgba(59, 130, 246, 0.2)',
+                border: '1px solid rgba(59, 130, 246, 0.2)'
             }, children: [_jsxs("h4", { style: { margin: '0 0 12px 0', color: '#1e293b', fontSize: 16 }, children: [getRoleIcon(currentUser.role), " Create New Collaboration Session"] }), !isCreatingSession ? ()
                     < button
                     :
@@ -146,23 +149,31 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsxs("div", { style: {
                     borderRadius: 8,
                     cursor: 'pointer',
                     fontSize: 14,
-                    fontWeight: 600,
+                    fontWeight: 600
                 }, "> + New Collaboration Session"] }), ") : ()", _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 12 }, children: [_jsx("input", { type: "text", placeholder: "Session title...", value: newSessionTitle, onChange: (e) => setNewSessionTitle(e.target.value), style: {
                         padding: '8px 12px',
                         border: '1px solid #d1d5db',
                         borderRadius: 6,
-                        fontSize: 14,
+                        fontSize: 14
                     } }), _jsxs("select", { value: selectedMethodology, onChange: (e) => setSelectedMethodology(e.target.value), style: {
                         padding: '8px 12px',
                         border: '1px solid #d1d5db',
                         borderRadius: 6,
-                        fontSize: 14,
-                    }, children: [_jsx("option", { value: "hybrid", children: "\uD83D\uDD04 Hybrid (MARS + Zada)" }), _jsx("option", { value: "zada", children: "\uD83D\uDCAC Zada Natural Language" }), _jsx("option", { value: "mars", children: "\uD83C\uDFF7\uFE0F MARS Framework" }), _jsx("option", { value: "custom", children: "\u2699\uFE0F Custom Methodology" })] }), _jsxs("div", { style: { display: 'flex', gap: 8 }, children: [_jsx("button", { onClick: handleCreateSession, disabled: !newSessionTitle.trim(), style: ({
-                                background: newSessionTitle.trim(),
-                            }
+                        fontSize: 14
+                    }, children: [_jsx("option", { value: "hybrid", children: "\uD83D\uDD04 Hybrid (MARS + Zada)" }), _jsx("option", { value: "zada", children: "\uD83D\uDCAC Zada Natural Language" }), _jsx("option", { value: "mars", children: "\uD83C\uDFF7\uFE0F MARS Framework" }), _jsx("option", { value: "custom", children: "\u2699\uFE0F Custom Methodology" })] }), _jsx("div", { style: { display: 'flex', gap: 8 }, children: _jsx("button", { onClick: handleCreateSession, disabled: !newSessionTitle.trim(), style: {
+                            background: newSessionTitle.trim()
                                 ? 'linear-gradient(135deg, #10b981, #047857)'
                                 : '#9ca3af',
-                                color) }), ": 'white', border: 'none', padding: '8px 16px', borderRadius: 6, cursor: newSessionTitle.trim() ? 'pointer' : 'not-allowed', fontSize: 13, fontWeight: 500, }} > Create Session"] }), _jsx("button", { onClick: () => {
+                            color: 'white',
+                            border: 'none',
+                            padding: '8px 16px',
+                            borderRadius: 6,
+                            cursor: newSessionTitle.trim() ? 'pointer' : 'not-allowed',
+                            fontSize: 13,
+                            fontWeight: 500
+                        }
+                            >
+                                Create, Session: true }) }), _jsx("button", { onClick: () => {
                         setIsCreatingSession(false);
                         setNewSessionTitle('');
                     }, style: {
@@ -172,8 +183,12 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsxs("div", { style: {
                         padding: '8px 16px',
                         borderRadius: 6,
                         cursor: 'pointer',
-                        fontSize: 13,
-                    }, children: "Cancel" })] })] });
+                        fontSize: 13
+                    }
+                        >
+                            Cancel })] })] });
+div >
+;
 div >
     { /* Active Sessions */}
     < div >
@@ -183,18 +198,12 @@ div >
         < div : ;
     style = {};
     {
-        padding: 24,
-            textAlign;
-        'center',
-            color;
-        '#6b7280',
-            background;
-        '#f9fafb',
-            borderRadius;
-        8,
-            border;
-        '1px dashed #d1d5db',
-        ;
+        padding: 24;
+        textAlign: 'center';
+        color: '#6b7280';
+        background: '#f9fafb';
+        borderRadius: 8;
+        border: '1px dashed #d1d5db';
     }
 }
  >
@@ -216,33 +225,28 @@ style = {};
  >
     { sessions, : .map(session => ()
             < div, key = { session, : .sessionId }, style = {}, {
-            background: currentSession?.sessionId === session.sessionId,
-            'rgba(59, 130, 246, 0.1)': 'white',
-            border: `1px solid ${currentSession?.sessionId === session.sessionId}
+            background: currentSession?.sessionId === session.sessionId
+                ? 'rgba(59, 130, 246, 0.1)'
+                : 'white'
+        }, border, `1px solid ${currentSession?.sessionId === session.sessionId}
                     ? '#3b82f6' 
-                    : '#e5e7eb'}`,
-            borderRadius: 8,
-            padding: 16,
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-        }) };
-onClick = {}();
-handleJoinSession(session.sessionId);
+                    : '#e5e7eb'}`, borderRadius, 8, padding, 16, cursor, 'pointer', transition, 'all 0.2s'),
+        onClick = {}(), handleJoinSession(session) { }, : .sessionId }
     >
         _jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' }, children: [_jsxs("div", { children: [_jsx("div", { style: {
                                 fontSize: 16,
                                 fontWeight: 600,
                                 color: '#1e293b',
-                                marginBottom: 4,
+                                marginBottom: 4
                             }, children: session.title }), _jsxs("div", { style: {
                                 fontSize: 12,
                                 color: '#6b7280',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: 8,
+                                gap: 8
                             }, children: [_jsx("span", { style: {
                                         color: getMethodologyColor(session.methodology),
-                                        fontWeight: 500,
+                                        fontWeight: 500
                                     }, children: session.methodology.toUpperCase() }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [session.participants.length, " participant", session.participants.length !== 1 ? 's' : ''] }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [session.collaborativeEdits.length, " edit", session.collaborativeEdits.length !== 1 ? 's' : ''] })] })] }), _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: 8 }, children: [session.participants.slice(0, 3).map(participant => ()
                             < div, key = { participant, : .id }, style = {}, {
                             width: 32,
@@ -254,9 +258,8 @@ handleJoinSession(session.sessionId);
                             justifyContent: 'center',
                             color: 'white',
                             fontSize: 12,
-                            fontWeight: 500,
-                            title: `${participant.name} (${participant.role})`
-                        }), "} >", getRoleIcon(participant.role)] }), "))}", session.participants.length > 3 && ()
+                            fontWeight: 500
+                        }, title), ": `$", participant.name, " ($", participant.role, ")`} >", getRoleIcon(participant.role)] }), "))}", session.participants.length > 3 && ()
                     < div, " style=", {
                     width: 32,
                     height: 32,
@@ -267,7 +270,7 @@ handleJoinSession(session.sessionId);
                     justifyContent: 'center',
                     fontSize: 10,
                     fontWeight: 600,
-                    color: '#6b7280',
+                    color: '#6b7280'
                 }, "> +", session.participants.length - 3] });
 div >
 ;
@@ -287,12 +290,11 @@ const MARSTab = () => ();
 _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: '0 0 16px 0', color: '#1e293b', fontSize: 16 }, children: "\uD83C\uDFF7\uFE0F MARS Region Templates" }), _jsxs("div", { style: {
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: 16,
+                gap: 16
             }, children: [marsTemplates.map(template => ()
                     < div, key = { template, : .id }, style = {}, {
-                    background: 'white',
-                    border: `2px solid ${template.color}20`
-                }), ", borderRadius: 8, padding: 16, position: 'relative'; }} >", _jsx("div", { style: {
+                    background: 'white'
+                }, border), ": `2px solid $", template.color, "20`} borderRadius: 8 padding: 16 position: 'relative'; >", _jsx("div", { style: {
                         position: 'absolute',
                         top: -1,
                         right: -1,
@@ -301,33 +303,33 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
                         padding: '4px 8px',
                         borderRadius: '0 6px 0 6px',
                         fontSize: 10,
-                        fontWeight: 600,
+                        fontWeight: 600
                     }, children: template.marsParameters.category }), _jsx("div", { style: {
                         fontSize: 16,
                         fontWeight: 600,
                         color: '#1e293b',
-                        marginBottom: 8,
+                        marginBottom: 8
                     }, children: template.title }), _jsx("div", { style: {
                         fontSize: 14,
                         color: '#6b7280',
                         marginBottom: 12,
-                        lineHeight: 1.4,
+                        lineHeight: 1.4
                     }, children: template.description }), _jsxs("div", { style: {
                         display: 'flex',
                         flexWrap: 'wrap',
                         gap: 4,
-                        marginBottom: 12,
+                        marginBottom: 12
                     }, children: [template.tags.map(tag => ()
                             < span, key = { tag }, style = {}, {
                             background: `${template.color}15`
-                        }), ", color: template.color, fontSize: 11, padding: '2px 6px', borderRadius: 4, fontWeight: 500; }} >", tag] }), "))}"] }), template.vfxCompatible && ()
+                        }, color), ": template.color fontSize: 11 padding: '2px 6px' borderRadius: 4 fontWeight: 500; >", tag] }), "))}"] }), template.vfxCompatible && ()
             < div, " style=", {
             display: 'flex',
             alignItems: 'center',
             gap: 4,
             fontSize: 12,
             color: '#10b981',
-            fontWeight: 500,
+            fontWeight: 500
         }, "> \u2705 VFX Pipeline Compatible"] });
 div >
 ;
@@ -344,60 +346,65 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
                     border: '1px solid #e5e7eb',
                     borderRadius: 8,
                     padding: 20,
-                    position: 'relative',
+                    position: 'relative'
                 }), ">", _jsxs("div", { style: {
                         position: 'absolute',
                         top: 12,
                         right: 12,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 8,
+                        gap: 8
                     }, children: [_jsx("span", { style: {
                                 background: getMethodologyColor(pattern.methodology),
                                 color: 'white',
                                 fontSize: 10,
                                 padding: '2px 6px',
                                 borderRadius: 4,
-                                fontWeight: 600,
+                                fontWeight: 600
                             }, children: pattern.methodology.toUpperCase() }), _jsx("span", { style: {
-                                background: pattern.complexity === 'simple' ? '#10b981' : ,
-                            } }), ": pattern.complexity === 'intermediate' ? '#f59e0b', : '#ef4444', color: 'white', fontSize: 10, padding: '2px 6px', borderRadius: 4, fontWeight: 500, }}>", pattern.complexity.toUpperCase()] })] }), _jsx("div", { style: {
-                fontSize: 18,
-                fontWeight: 600,
-                color: '#1e293b',
-                marginBottom: 8,
-            }, children: pattern.name }), _jsx("div", { style: {
-                fontSize: 14,
-                color: '#6b7280',
-                marginBottom: 12,
-                lineHeight: 1.4,
-            }, children: pattern.description }), _jsx("div", { style: {
-                background: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                borderRadius: 6,
-                padding: 12,
-                marginBottom: 12,
-                fontSize: 14,
-                lineHeight: 1.5,
-                fontFamily: 'monospace',
-                color: '#1e293b',
-            }, children: pattern.pattern }), _jsxs("div", { style: {
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                fontSize: 12,
-                color: '#6b7280',
-            }, children: [_jsxs("div", { style: { display: 'flex', gap: 16 }, children: [_jsxs("span", { children: ["Director Friendly: ", pattern.accessibility.directorFriendly ? '✅' : '❌'] }), _jsxs("span", { children: ["Technical Level: ", pattern.accessibility.technicalLevel, "/10"] }), _jsxs("span", { children: ["Readability: ", pattern.accessibility.humanReadableScore, "/10"] })] }), _jsxs("div", { style: { display: 'flex', gap: 4 }, children: [pattern.filmGenre.map(genre => ()
-                            < span, key = { genre }, style = {}, {
-                            background: '#e5e7eb',
-                            color: '#374151',
-                            padding: '2px 6px',
-                            borderRadius: 4,
-                            fontSize: 10,
-                            textTransform: 'capitalize',
-                        }), ">", genre] }), "))}"] })] });
-div >
-;
+                                background: pattern.complexity === 'simple' ? '#10b981'
+                                    : pattern.complexity === 'intermediate' ? '#f59e0b'
+                                        : '#ef4444',
+                                color: 'white',
+                                fontSize: 10,
+                                padding: '2px 6px',
+                                borderRadius: 4,
+                                fontWeight: 500
+                            }, children: pattern.complexity.toUpperCase() })] }), _jsx("div", { style: {
+                        fontSize: 18,
+                        fontWeight: 600,
+                        color: '#1e293b',
+                        marginBottom: 8
+                    }, children: pattern.name }), _jsx("div", { style: {
+                        fontSize: 14,
+                        color: '#6b7280',
+                        marginBottom: 12,
+                        lineHeight: 1.4
+                    }, children: pattern.description }), _jsx("div", { style: {
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: 6,
+                        padding: 12,
+                        marginBottom: 12,
+                        fontSize: 14,
+                        lineHeight: 1.5,
+                        fontFamily: 'monospace',
+                        color: '#1e293b'
+                    }, children: pattern.pattern }), _jsxs("div", { style: {
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        fontSize: 12,
+                        color: '#6b7280'
+                    }, children: [_jsxs("div", { style: { display: 'flex', gap: 16 }, children: [_jsxs("span", { children: ["Director Friendly: ", pattern.accessibility.directorFriendly ? '✅' : '❌'] }), _jsxs("span", { children: ["Technical Level: ", pattern.accessibility.technicalLevel, "/10"] }), _jsxs("span", { children: ["Readability: ", pattern.accessibility.humanReadableScore, "/10"] })] }), _jsxs("div", { style: { display: 'flex', gap: 4 }, children: [pattern.filmGenre.map(genre => ()
+                                    < span, key = { genre }, style = {}, {
+                                    background: '#e5e7eb',
+                                    color: '#374151',
+                                    padding: '2px 6px',
+                                    borderRadius: 4,
+                                    fontSize: 10,
+                                    textTransform: 'capitalize'
+                                }), ">", genre] }), "))}"] })] })] });
 div >
 ;
 div >
@@ -410,41 +417,41 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
                     background: 'white',
                     border: '1px solid #e5e7eb',
                     borderRadius: 8,
-                    padding: 20,
+                    padding: 20
                 }), ">", _jsxs("div", { style: {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        marginBottom: 12,
+                        marginBottom: 12
                     }, children: [_jsxs("div", { children: [_jsx("div", { style: {
                                         fontSize: 18,
                                         fontWeight: 600,
                                         color: '#1e293b',
-                                        marginBottom: 4,
+                                        marginBottom: 4
                                     }, children: workflow.name }), _jsx("div", { style: {
                                         fontSize: 14,
                                         color: '#6b7280',
-                                        lineHeight: 1.4,
+                                        lineHeight: 1.4
                                     }, children: workflow.description })] }), _jsxs("div", { style: {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'end',
-                                gap: 4,
+                                gap: 4
                             }, children: [_jsx("span", { style: {
                                         background: getMethodologyColor(workflow.methodology),
                                         color: 'white',
                                         fontSize: 12,
                                         padding: '4px 8px',
                                         borderRadius: 6,
-                                        fontWeight: 500,
+                                        fontWeight: 500
                                     }, children: workflow.methodology.toUpperCase() }), _jsxs("span", { style: {
                                         fontSize: 12,
-                                        color: '#6b7280',
+                                        color: '#6b7280'
                                     }, children: ["~", workflow.estimatedDuration, "min"] })] })] }), _jsxs("div", { style: {
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 8,
-                        marginTop: 16,
+                        marginTop: 16
                     }, children: [workflow.phases.map((phase, index) => ()
                             < div, key = { phase, : .id }, style = {}, {
                             display: 'flex',
@@ -453,7 +460,7 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
                             padding: 12,
                             background: '#f8fafc',
                             borderRadius: 6,
-                            border: '1px solid #e2e8f0',
+                            border: '1px solid #e2e8f0'
                         }), ">", _jsx("div", { style: {
                                 width: 24,
                                 height: 24,
@@ -464,29 +471,29 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 fontSize: 12,
-                                fontWeight: 600,
+                                fontWeight: 600
                             }, children: index + 1 }), _jsxs("div", { style: { flex: 1 }, children: [_jsx("div", { style: {
                                         fontSize: 14,
                                         fontWeight: 600,
-                                        color: '#1e293b',
+                                        color: '#1e293b'
                                     }, children: phase.name }), _jsx("div", { style: {
                                         fontSize: 12,
-                                        color: '#6b7280',
+                                        color: '#6b7280'
                                     }, children: phase.description })] }), _jsxs("div", { style: {
                                 display: 'flex',
-                                gap: 4,
+                                gap: 4
                             }, children: [phase.requiredRoles.map(role => ()
                                     < span, key = { role }, style = {}, {
                                     fontSize: 10,
                                     padding: '2px 6px',
                                     borderRadius: 4,
                                     background: '#e5e7eb',
-                                    color: '#374151',
+                                    color: '#374151'
                                 }), ">", getRoleIcon(role)] }), "))}"] }), _jsxs("div", { style: {
                         fontSize: 12,
                         color: '#6b7280',
                         minWidth: '50px',
-                        textAlign: 'right',
+                        textAlign: 'right'
                     }, children: [phase.duration, "min"] })] }), "))}"] });
 div >
 ;
@@ -504,7 +511,7 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
             color: '#6b7280',
             background: '#f9fafb',
             borderRadius: 8,
-            border: '1px dashed #d1d5db',
+            border: '1px dashed #d1d5db'
         }, ">", _jsx("div", { style: { fontSize: 24, marginBottom: 8 }, children: "\uD83E\uDD1D" }), _jsx("div", { children: "No active session" }), _jsx("div", { style: { fontSize: 12, marginTop: 4 }, children: "Join or create a collaboration session to enable VFX export" })] });
 ()
     < div >
@@ -513,29 +520,29 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
             border: '1px solid rgba(59, 130, 246, 0.2)',
             borderRadius: 8,
             padding: 16,
-            marginBottom: 20,
+            marginBottom: 20
         }, children: [_jsxs("h5", { style: { margin: '0 0 8px 0', color: '#1e293b' }, children: ["Active Session: ", currentSession.title] }), _jsxs("div", { style: {
                     display: 'flex',
                     gap: 16,
                     fontSize: 12,
-                    color: '#6b7280',
+                    color: '#6b7280'
                 }, children: [_jsxs("span", { children: ["Methodology: ", currentSession.methodology] }), _jsxs("span", { children: ["Participants: ", currentSession.participants.length] }), _jsxs("span", { children: ["MARS Regions: ", currentSession.marsRegions.length] }), _jsxs("span", { children: ["Edits: ", currentSession.collaborativeEdits.length] })] })] })
         ,
             _jsxs("div", { style: {
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                     gap: 16,
-                    marginBottom: 20,
+                    marginBottom: 20
                 }, children: [_jsxs("div", { style: {
                             background: 'white',
                             border: '1px solid #e5e7eb',
                             borderRadius: 8,
-                            padding: 16,
+                            padding: 16
                         }, children: [_jsx("h6", { style: { margin: '0 0 8px 0', color: '#1e293b' }, children: "Export Configuration" }), _jsxs("div", { style: { fontSize: 12, color: '#6b7280' }, children: [_jsxs("div", { children: ["Format: ", currentSession.vfxExportConfig.exportFormat] }), _jsxs("div", { children: ["Include MARS: ", currentSession.vfxExportConfig.includeMarsStructure ? '✅' : '❌'] }), _jsxs("div", { children: ["Include Zada: ", currentSession.vfxExportConfig.includeZadaPatterns ? '✅' : '❌'] }), _jsxs("div", { children: ["Include Annotations: ", currentSession.vfxExportConfig.includeAnnotations ? '✅' : '❌'] })] })] }), _jsxs("div", { style: {
                             background: 'white',
                             border: '1px solid #e5e7eb',
                             borderRadius: 8,
-                            padding: 16,
+                            padding: 16
                         }, children: [_jsx("h6", { style: { margin: '0 0 8px 0', color: '#1e293b' }, children: "Pipeline Integration" }), _jsxs("div", { style: { fontSize: 12, color: '#6b7280' }, children: [_jsxs("div", { children: ["Project: ", currentSession.vfxExportConfig.pipelineMetadata.project] }), _jsxs("div", { children: ["Sequence: ", currentSession.vfxExportConfig.pipelineMetadata.sequence] }), _jsxs("div", { children: ["Shot: ", currentSession.vfxExportConfig.pipelineMetadata.shot] }), _jsxs("div", { children: ["Version: ", currentSession.vfxExportConfig.pipelineMetadata.version] })] })] })] })
                 ,
                     _jsx("button", { onClick: handleVFXExport, style: {
@@ -549,33 +556,27 @@ _jsxs("div", { style: { padding: 20 }, children: [_jsx("h4", { style: { margin: 
                             fontWeight: 600,
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 8,
-                        }, children: "\uD83D\uDE80 Generate VFX Pipeline Export" }));
-div >
-;
+                            gap: 8
+                        }
+                            >
+                        , Generate: true, VFX: true, Pipeline: true, Export: true, button: true }));
 div >
 ;
 ;
 return;
 _jsx("div", { className: `advanced-prompting-collaboration-panel ${className}`, style: ({}, ), "background:": true });
-'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-    borderRadius;
-12,
-    border;
-'1px solid #e2e8f0',
-    overflow;
-'hidden';
+'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)';
+borderRadius: 12;
+border: '1px solid #e2e8f0';
+overflow: 'hidden';
  >
     { /* Header */}
     < div;
 style = {};
 {
-    padding: 20,
-        borderBottom;
-    '1px solid #e2e8f0',
-        background;
-    'rgba(255, 255, 255, 0.8)',
-    ;
+    padding: 20;
+    borderBottom: '1px solid #e2e8f0';
+    background: 'rgba(255, 255, 255, 0.8)';
 }
  >
     (_jsx("h3", { style: {
@@ -585,13 +586,13 @@ style = {};
             color: '#1e293b',
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            gap: 8
         }, children: "\uD83E\uDD1D Advanced Prompting Collaboration" })
         ,
             _jsxs("div", { style: {
                     fontSize: 14,
                     color: '#64748b',
-                    marginTop: 4,
+                    marginTop: 4
                 }, children: [getRoleIcon(currentUser.role), " ", currentUser.name, " (", currentUser.role.replace('_', ' '), ")", currentSession && ()
                         < span, " style=", { color: '#10b981', fontWeight: 500, marginLeft: 8 }, "> \u2022 Connected to \"", currentSession.title, "\""] }));
 div >
@@ -601,45 +602,42 @@ div >
     < div;
 style = {};
 {
-    display: 'flex',
-        borderBottom;
-    '1px solid #e2e8f0',
-        background;
-    'rgba(255, 255, 255, 0.6)',
-    ;
+    display: 'flex';
+    borderBottom: '1px solid #e2e8f0';
+    background: 'rgba(255, 255, 255, 0.6)';
 }
  >
-    { [{ id: 'sessions', label: '🤝 Sessions', icon: '🤝' },
-            { id: 'mars', label: '🏷️ MARS Regions', icon: '🏷️' },
-            { id: 'zada', label: '💬 Zada Patterns', icon: '💬' },
-            { id: 'workflows', label: '🎬 Workflows', icon: '🎬' },
-            { id: 'export', label: '🚀 VFX Export', icon: '🚀' }]: .map(tab => ()
-            < button, key = { tab, : .id }, onClick = {}(), setActiveTab(tab.id)) };
-style = {};
+    { [{ id: 'sessions', label: '🤝 Sessions', icon: '🤝' }]: { id: 'mars', label: '🏷️ MARS Regions', icon: '🏷️' } };
 {
+    id: 'zada', label;
+    '💬 Zada Patterns', icon;
+    '💬';
+}
+{
+    id: 'workflows', label;
+    '🎬 Workflows', icon;
+    '🎬';
+}
+{
+    id: 'export', label;
+    '🚀 VFX Export', icon;
+    '🚀';
+}
+map(tab => ()
+    < button, key = { tab, : .id }, onClick = {}(), setActiveTab(tab.id), style = {}, {
     flex: 1,
-        padding;
-    12,
-        border;
-    'none',
-        background;
-    activeTab === tab.id ? '#3b82f6' : 'transparent',
-        color;
-    activeTab === tab.id ? 'white' : '#64748b',
-        fontSize;
-    13,
-        fontWeight;
-    500,
-        cursor;
-    'pointer',
-        transition;
-    'all 0.2s',
-    ;
+    padding: 12,
+    border: 'none',
+    background: activeTab === tab.id ? '#3b82f6' : 'transparent',
+    color: activeTab === tab.id ? 'white' : '#64748b',
+    fontSize: 13,
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'all 0.2s'
 }
     >
-        { tab, : .label };
-button >
-;
+        { tab, : .label }, button >
+);
 div >
     { /* Tab Content */}
     < div;

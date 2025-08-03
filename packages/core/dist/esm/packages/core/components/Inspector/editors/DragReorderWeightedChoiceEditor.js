@@ -10,18 +10,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback, useMemo } from 'react';
 import { DragReorderWeightManager } from '../WeightManagement/DragReorderWeightManager';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
- > ;
+    > ;
 [key, string];
 unknown;
-export const DragReorderWeightedChoiceEditor = ({
-    data,
-    onChange,
-    nodeId = 'drag-reorder-weighted-choice',
-    disabled = false,
-    theme = 'cinema',
-    showPreview = true,
-    showAnalytics = true
-});
+showAnalytics = true;
 {
     const [isAddingChoice, setIsAddingChoice] = useState(false);
     const [newChoiceText, setNewChoiceText] = useState('');
@@ -33,11 +25,9 @@ export const DragReorderWeightedChoiceEditor = ({
             return [];
             return data.choices.map((choice, index) => ({}), id, `choice-${index}`);
         }
-    }, text, choice.text || `Choice ${index + 1}`);
+        text: choice.text || `Choice ${index + 1}`;
+    }, weight, choice.weight || 1, category, 'choice');
 }
-weight: choice.weight || 1,
-    category;
-'choice';
 ;
 [data.choices];
 ;
@@ -45,6 +35,7 @@ weight: choice.weight || 1,
 const handleOptionsChange = useCallback((newOptions) => {
     const newChoices = newOptions.map(option => ({}), text, option.text, weight, option.weight);
 });
+;
 onChange({ choices: newChoices });
 [onChange];
 ;
@@ -56,9 +47,9 @@ const handleAddChoice = useCallback(() => {
     const newChoices = [
         ...currentChoices,
         {
-            text: newChoiceText.trim(),
-            weight: 1
-        }
+            text: newChoiceText.trim()
+        },
+        weight, 1
     ];
     onChange({ choices: newChoices });
     setNewChoiceText('');
@@ -101,14 +92,12 @@ const choiceStats = useMemo(() => {
         return { totalWeight: 0, mostLikely: null, leastLikely: null };
         const totalWeight = data.choices.reduce((sum, choice) => sum + choice.weight, 0);
         const sortedChoices = [...data.choices].sort((a, b) => b.weight - a.weight);
-        return {
-            totalWeight,
+        return { totalWeight,
             mostLikely: sortedChoices[0],
-            leastLikely: sortedChoices[sortedChoices.length - 1],
-        };
+            leastLikely: sortedChoices[sortedChoices.length - 1] };
     }
-    [data.choices];
-});
+    ;
+}, [data.choices]);
 // Theme styles
 const getThemeStyles = () => {
     const themes = {
@@ -120,70 +109,48 @@ const getThemeStyles = () => {
             accent: '#3b82f6',
             success: '#10b981',
             warning: '#f59e0b',
-            error: '#ef4444',
-        },
-        dark: {
-            background: '#1f2937',
-            secondary: '#111827',
-            border: '#4b5563',
-            text: '#f9fafb',
-            accent: '#60a5fa',
-            success: '#34d399',
-            warning: '#fbbf24',
-            error: '#f87171',
-        },
-        cinema: {
-            background: '#1a1a1a',
-            secondary: '#0d1117',
-            border: '#ff7c00',
-            text: '#ffffff',
-            accent: '#ff7c00',
-            success: '#00d084',
-            warning: '#ffb700',
-            error: '#ff6b6b',
-        },
-        return: themes[theme]
-    };
-    const styles = getThemeStyles();
-    return;
-    _jsxs("div", { className: "drag-reorder-weighted-choice-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Choice Management", level: "basic", description: "Drag and drop to reorder weighted story choices", defaultExpanded: true, priority: "critical", fieldName: "choices", children: [_jsxs("div", { style: {
-                            background: styles.background,
-                            color: styles.text,
-                            fontFamily: 'Inter, system-ui, sans-serif',
-                            padding: '16px',
-                            borderRadius: '8px',
-                        }, children: [_jsx("div", { style: {
-                                    marginBottom: '16px',
-                                    paddingBottom: '12px',
-                                    borderBottom: `1px solid ${styles.border}`
-                                } }), "}>", _jsx("h4", { style: {
-                                    margin: 0,
-                                    fontSize: '16px',
-                                    fontWeight: 600,
-                                    color: styles.text,
-                                }, children: "\uD83C\uDFB2 Weighted Story Choices" }), _jsx("p", { style: {
-                                    margin: '4px 0 0 0',
-                                    fontSize: '12px',
-                                    opacity: 0.7,
-                                }, children: "Drag to reorder by importance, adjust weights for probability control" })] }), _jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [_jsx("span", { style: {
-                                    fontSize: '12px',
-                                    padding: '4px 8px',
-                                    background: styles.secondary,
-                                    border: `1px solid ${styles.border}`
-                                } }), ", borderRadius: '6px', opacity: 0.8; }}>", options.length, " ", options.length === 1 ? 'choice' : 'choices'] }), !disabled && ()
-                        < button, "onClick=", () => setIsAddingChoice(true), "style=", {
-                        background: styles.accent,
-                        color: styles.background,
-                        border: 'none',
-                        borderRadius: '6px',
-                        padding: '6px 12px',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'transform 0.2s ease',
-                        boxShadow: `0 2px 8px ${styles.accent}40`
-                    }, "} onMouseOver=", (e) => e.currentTarget.style.transform = 'translateY(-1px)', "onMouseOut=", (e) => e.currentTarget.style.transform = 'translateY(0)', "> \uFF0B Add Choice"] }), ")}"] });
-};
+            error: '#ef4444' }
+    }, dark;
+}, cinema;
+;
+return themes[theme];
+;
+const styles = getThemeStyles();
+return;
+_jsxs("div", { className: "drag-reorder-weighted-choice-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Choice Management", level: "basic", description: "Drag and drop to reorder weighted story choices", defaultExpanded: true, priority: "critical", fieldName: "choices", children: [_jsxs("div", { style: {
+                        background: styles.background,
+                        color: styles.text,
+                        fontFamily: 'Inter, system-ui, sans-serif',
+                        padding: '16px',
+                        borderRadius: '8px'
+                    }, children: [_jsx("div", { style: {
+                                marginBottom: '16px',
+                                paddingBottom: '12px'
+                            }, "borderBottom:": true }), " `1px solid $", styles.border, "`} }>", _jsx("h4", { style: {
+                                margin: 0,
+                                fontSize: '16px',
+                                fontWeight: 600,
+                                color: styles.text
+                            }, children: "\uD83C\uDFB2 Weighted Story Choices" }), _jsx("p", { style: {
+                                margin: '4px 0 0 0',
+                                fontSize: '12px',
+                                opacity: 0.7
+                            }, children: "Drag to reorder by importance, adjust weights for probability control" })] }), _jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [_jsx("span", { style: {
+                                fontSize: '12px',
+                                padding: '4px 8px',
+                                background: styles.secondary
+                            }, "border:": true }), " `1px solid $", styles.border, "`} borderRadius: '6px' opacity: 0.8; }>", options.length, " ", options.length === 1 ? 'choice' : 'choices'] }), !disabled && ()
+                    < button, "onClick=", () => setIsAddingChoice(true), "style=", {
+                    background: styles.accent,
+                    color: styles.background,
+                    border: 'none',
+                    borderRadius: '6px',
+                    padding: '6px 12px',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s ease'
+                }, "boxShadow: `0 2px 8px $", styles.accent, "40`} onMouseOver=", (e) => e.currentTarget.style.transform = 'translateY(-1px)', "onMouseOut=", (e) => e.currentTarget.style.transform = 'translateY(0)', "> \uFF0B Add Choice"] }), ")}"] });
 div >
     { /* Quick Stats */};
 {
@@ -191,20 +158,14 @@ div >
         < div;
     style = {};
     {
-        display: 'grid',
-            gridTemplateColumns;
-        'repeat(auto-fit, minmax(200px, 1fr))',
-            gap;
-        '16px',
-            marginBottom;
-        '24px',
-            padding;
-        '16px',
-            background;
-        styles.secondary,
-            border;
-        `1px solid ${styles.border}`;
+        display: 'grid';
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))';
+        gap: '16px';
+        marginBottom: '24px';
+        padding: '16px';
+        background: styles.secondary;
     }
+    border: `1px solid ${styles.border}`;
 }
 borderRadius: '8px';
  >
@@ -212,7 +173,7 @@ borderRadius: '8px';
                     fontSize: '24px',
                     fontWeight: 700,
                     color: styles.accent,
-                    marginBottom: '4px',
+                    marginBottom: '4px'
                 }, children: choiceStats.totalWeight.toFixed(1) }), _jsx("div", { style: { fontSize: '12px', opacity: 0.7 }, children: "Total Weight" })] });
 {
     choiceStats.mostLikely && ()
@@ -230,7 +191,7 @@ borderRadius: '8px';
             marginBottom: '4px',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            textOverflow: 'ellipsis'
         }, children: choiceStats.mostLikely.text })
         ,
             _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: ["Most Likely (", ((choiceStats.mostLikely.weight / choiceStats.totalWeight) * 100).toFixed(1), "%)"] }));
@@ -252,7 +213,7 @@ div >
             marginBottom: '4px',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            textOverflow: 'ellipsis'
         }, children: choiceStats.leastLikely.text })
         ,
             _jsxs("div", { style: { fontSize: '12px', opacity: 0.7 }, children: ["Least Likely (", ((choiceStats.leastLikely.weight / choiceStats.totalWeight) * 100).toFixed(1), "%)"] }));
@@ -266,22 +227,18 @@ div >
         < div;
     style = {};
     {
-        background: styles.secondary,
-            border;
-        `1px solid ${styles.border}`;
+        background: styles.secondary;
     }
+    border: `1px solid ${styles.border}`;
 }
-borderRadius: '8px',
-    padding;
-'16px',
-    marginBottom;
-'20px';
+borderRadius: '8px';
+padding: '16px';
+marginBottom: '20px';
  >
-    _jsxs("div", { style: { display: 'flex', gap: '12px', alignItems: 'center' }, children: [_jsx("input", { type: "text", value: newChoiceText, onChange: (e) => setNewChoiceText(e.target.value), placeholder: "Enter choice text...", autoFocus: true, style: {
+    (_jsxs("div", { style: { display: 'flex', gap: '12px', alignItems: 'center' }, children: [_jsx("input", { type: "text", value: newChoiceText, onChange: (e) => setNewChoiceText(e.target.value), placeholder: "Enter choice text...", autoFocus: true, style: {
                     flex: 1,
-                    padding: '8px 12px',
-                    border: `1px solid ${styles.border}`
-                } }), ", borderRadius: '6px', background: styles.background, color: styles.text, fontSize: '14px'; }} onKeyPress=", (e) => {
+                    padding: '8px 12px'
+                }, "border:": true }), " `1px solid $", styles.border, "`} borderRadius: '6px' background: styles.background color: styles.text fontSize: '14px'; onKeyPress=", (e) => {
                 if (e.key === 'Enter')
                     handleAddChoice();
                 if (e.key === 'Escape')
@@ -295,15 +252,27 @@ borderRadius: '8px',
                     fontSize: '14px',
                     fontWeight: 600,
                     cursor: newChoiceText.trim() ? 'pointer' : 'not-allowed',
-                    opacity: newChoiceText.trim() ? 1 : 0.5,
-                }, children: "Add" }), _jsx("button", { onClick: () => {
+                    opacity: newChoiceText.trim() ? 1 : 0.5
+                }
+                    >
+                        Add })] })
+        ,
+            _jsx("button", { onClick: () => {
                     setIsAddingChoice(false);
                     setNewChoiceText('');
                 }, style: {
                     background: 'transparent',
-                    color: styles.text,
-                    border: `1px solid ${styles.border}`
-                } }), ", borderRadius: '6px', padding: '8px 16px', fontSize: '14px', cursor: 'pointer'; }} > Cancel"] });
+                    color: styles.text
+                }, "border:": true }));
+`1px solid ${styles.border}`;
+borderRadius: '6px';
+padding: '8px 16px';
+fontSize: '14px';
+cursor: 'pointer';
+    >
+        Cancel;
+button >
+;
 div >
 ;
 div >
@@ -312,7 +281,7 @@ div >
 _jsx(DragReorderWeightManager, { options: options, onChange: handleOptionsChange, disabled: disabled, theme: theme, showWeights: true, showPercentages: true, allowWeightEditing: !disabled, allowLocking: false, enableBulkOperations: !disabled, showStatistics: true, showVisualWeights: true, style: {
         background: 'transparent',
         border: 'none',
-        padding: 0,
+        padding: 0
     } });
 { /* Empty State */ }
 {
@@ -320,20 +289,15 @@ _jsx(DragReorderWeightManager, { options: options, onChange: handleOptionsChange
         < div;
     style = {};
     {
-        textAlign: 'center',
-            padding;
-        '60px 20px',
-            background;
-        styles.secondary,
-            border;
-        `2px dashed ${styles.border}`;
+        textAlign: 'center';
+        padding: '60px 20px';
+        background: styles.secondary;
     }
+    border: `2px dashed ${styles.border}`;
 }
-borderRadius: '12px',
-    color;
-styles.text,
-    opacity;
-0.7;
+borderRadius: '12px';
+color: styles.text;
+opacity: 0.7;
  >
     (_jsx("div", { style: { fontSize: '48px', marginBottom: '16px' }, children: "\uD83C\uDFB2" })
         ,
@@ -348,24 +312,16 @@ styles.text,
 }
 style = {};
 {
-    background: styles.accent,
-        color;
-    styles.background,
-        border;
-    'none',
-        borderRadius;
-    '8px',
-        padding;
-    '12px 24px',
-        fontSize;
-    '14px',
-        fontWeight;
-    600,
-        cursor;
-    'pointer',
-        boxShadow;
-    `0 4px 12px ${styles.accent}30`;
+    background: styles.accent;
+    color: styles.background;
+    border: 'none';
+    borderRadius: '8px';
+    padding: '12px 24px';
+    fontSize: '14px';
+    fontWeight: 600;
+    cursor: 'pointer';
 }
+boxShadow: `0 4px 12px ${styles.accent}30`;
     >
 ;
 Add;
@@ -382,14 +338,11 @@ div >
         < div;
     style = {};
     {
-        marginTop: '32px',
-            padding;
-        '20px',
-            background;
-        styles.secondary,
-            border;
-        `1px solid ${styles.border}`;
+        marginTop: '32px';
+        padding: '20px';
+        background: styles.secondary;
     }
+    border: `1px solid ${styles.border}`;
 }
 borderRadius: '12px';
  >
@@ -397,17 +350,16 @@ borderRadius: '12px';
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '16px',
+            marginBottom: '16px'
         }, children: [_jsx("h4", { style: {
                     margin: 0,
                     fontSize: '16px',
                     fontWeight: 600,
-                    color: styles.accent,
+                    color: styles.accent
                 }, children: "\uD83C\uDFAF Preview Results" }), _jsxs("div", { style: { display: 'flex', gap: '8px', alignItems: 'center' }, children: [_jsx("label", { style: { fontSize: '12px', opacity: 0.7 }, children: "Sample size:" }), _jsx("input", { type: "number", value: previewCount, onChange: (e) => setPreviewCount(Math.max(1, Math.min(100, parseInt(e.target.value) || 10))), min: 1, max: 100, style: {
                             width: '60px',
-                            padding: '4px 6px',
-                            border: `1px solid ${styles.border}`
-                        } }), ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px'; }} />", _jsx("button", { onClick: generatePreview, style: {
+                            padding: '4px 6px'
+                        }, "border:": true }), " `1px solid $", styles.border, "`} borderRadius: '4px' background: styles.background color: styles.text fontSize: '12px'; />", _jsx("button", { onClick: generatePreview, style: {
                             background: styles.accent,
                             color: styles.background,
                             border: 'none',
@@ -415,7 +367,7 @@ borderRadius: '12px';
                             padding: '6px 12px',
                             fontSize: '12px',
                             fontWeight: 600,
-                            cursor: 'pointer',
+                            cursor: 'pointer'
                         }, children: "Generate" })] })] });
 {
     previewResults.length > 0 && ()
@@ -424,30 +376,25 @@ borderRadius: '12px';
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: '6px',
-                marginBottom: '12px',
+                marginBottom: '12px'
             }, children: [previewResults.map((result, index) => ()
                     < span, key = { index }, style = {}, {
                     padding: '4px 8px',
-                    background: styles.accent + '20',
-                    border: `1px solid ${styles.accent}40`
-                }), ", borderRadius: '4px', fontSize: '12px', color: styles.accent, fontWeight: 500; }} >", result] });
+                    background: styles.accent + '20'
+                }, border), ": `1px solid $", styles.accent, "40`} borderRadius: '4px' fontSize: '12px' color: styles.accent fontWeight: 500; >", result] });
 }
 div >
     { /* Preview Statistics */}
     < div;
 style = {};
 {
-    padding: '12px',
-        background;
-    styles.background,
-        border;
-    `1px solid ${styles.border}`;
+    padding: '12px';
+    background: styles.background;
 }
-borderRadius: '6px',
-    fontSize;
-'12px',
-    opacity;
-0.8;
+border: `1px solid ${styles.border}`;
+borderRadius: '6px';
+fontSize: '12px';
+opacity: 0.8;
  >
     _jsx("strong", { children: "Distribution:" });
 {
@@ -471,21 +418,15 @@ ProgressiveDisclosureSection >
     < div;
 style = {};
 {
-    marginTop: '24px',
-        paddingTop;
-    '16px',
-        borderTop;
-    `1px solid ${styles.border}`;
+    marginTop: '24px';
+    paddingTop: '16px';
 }
-display: 'flex',
-    justifyContent;
-'space-between',
-    alignItems;
-'center',
-    fontSize;
-'12px',
-    opacity;
-0.6;
+borderTop: `1px solid ${styles.border}`;
+display: 'flex';
+justifyContent: 'space-between';
+alignItems: 'center';
+fontSize: '12px';
+opacity: 0.6;
  >
     (_jsx("div", { children: "Wild Construct \u2022 Weighted Choice Editor" })
         ,

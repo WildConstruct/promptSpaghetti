@@ -5,6 +5,40 @@
  * Comprehensive validation framework for runtime nodes with security, type safety, and performance validation
  */
 import { z } from 'zod';
+;
+/** Performance-specific validation results */
+performance: {
+    passed: boolean;
+    issues: PerformanceIssue;
+    estimatedMemoryUsage: number;
+    estimatedExecutionTime: number;
+}
+;
+/** Type safety validation results */
+typeSafety: {
+    passed: boolean;
+    typeErrors: TypeError;
+    compatibility: 'full' | 'partial' | 'incompatible';
+}
+;
+/** Schema validation results */
+schema: {
+    passed: boolean;
+    schemaErrors: string;
+}
+;
+severity: 'low' | 'medium' | 'high' | 'critical';
+description: string;
+location: string;
+recommendation: string;
+severity: 'low' | 'medium' | 'high';
+description: string;
+impact: string;
+suggestion: string;
+/**
+* Core Node Validation Framework
+* Provides comprehensive validation for runtime nodes
+*/
 export class NodeValidationFramework {
     config;
     securityPatterns;
@@ -15,8 +49,8 @@ export class NodeValidationFramework {
             performanceValidation: true,
             schemaValidation: true,
             maxExecutionDepth: 100,
-            maxMemoryUsage: 50 * 1024 * 1024, // 50MB,
-            maxExecutionTime: 10000, // 10 seconds,
+            maxMemoryUsage: 50 * 1024 * 1024, // 50MB
+            maxExecutionTime: 10000, // 10 seconds }
             ...config
         };
         this.initializeSecurityPatterns();
@@ -32,48 +66,49 @@ export class NodeValidationFramework {
         // JavaScript injection patterns
         ['eval_usage', /\beval\s*\(/gi];
         ['function_constructor', /new\s+Function\s*\(/gi];
-        ['dangerous_globals', /\b(window|document|global|process)\b/gi],
-            // Prototype pollution
-            ['prototype_pollution', /__proto__|constructor\.prototype|Object\.prototype/gi],
-            // Code injection via template literals
-            ['template_injection', /\$\{.*\}/g],
-            // Import/require injection
-            ['dynamic_import', /import\s*\(\s*[^)]*\$\{|require\s*\(\s*[^)]*\$\{/gi],
-            // Dangerous functions
-            ['dangerous_functions', /\b(setTimeout|setInterval|execSync|spawn|exec)\s*\(/gi];
-        ;
-        /**
-         * Comprehensive node validation
-         */
-        validateNode(nodeData, AdvancedNodeData);
-        NodeValidationResult;
-        {
-            const result = {
-                valid: true,
-                errors: [],
-                warnings: [],
-                security: {
-                    passed: true,
-                    threats: [],
-                    riskLevel: 'low',
-                },
-                performance: {
-                    passed: true,
-                    issues: [],
-                    estimatedMemoryUsage: 0,
-                    estimatedExecutionTime: 0,
-                },
-                typeSafety: {
-                    passed: true,
-                    typeErrors: [],
-                    compatibility: 'full',
-                },
-                schema: {
-                    passed: true,
-                    schemaErrors: [],
-                },
-                : .config.securityValidation }, { this: , validateSecurity };
-            (nodeData, result);
+        ['dangerous_globals', /\b(window|document|global|process)\b/gi]
+        // Prototype pollution
+        ['prototype_pollution', /__proto__|constructor\.prototype|Object\.prototype/gi];
+    }
+    // Code injection via template literals
+    ['template_injection', /\$\{.*\}/g];
+    // Import/require injection
+    ['dynamic_import', /import\s*\(\s*[^)]*\$\{ |require\s*\(\s*[^)]*\$\{/gi];
+    // Dangerous functions
+    ['dangerous_functions', /\b(setTimeout|setInterval|execSync|spawn|exec)\s*\(/gi];
+    ;
+    /**
+     * Comprehensive node validation
+     */
+    validateNode(nodeData) {
+        const result = {
+            valid: true,
+            errors: [],
+            warnings: [],
+            security: {
+                passed: true,
+                threats: [],
+                riskLevel: 'low'
+            },
+            performance: {
+                passed: true,
+                issues: [],
+                estimatedMemoryUsage: 0,
+                estimatedExecutionTime: 0
+            },
+            typeSafety: {
+                passed: true,
+                typeErrors: [],
+                compatibility: 'full'
+            },
+            schema: {
+                passed: true,
+                schemaErrors: []
+            }
+        };
+        // Run all validation checks
+        if (this.config.securityValidation) {
+            this.validateSecurity(nodeData, result);
             if (this.config.performanceValidation) {
                 this.validatePerformance(nodeData, result);
                 if (this.config.strictTypeValidation) {
@@ -143,13 +178,16 @@ export class NodeValidationFramework {
             for (const [key, value] of Object.entries(obj)) {
                 this.scanForThreats(value, threats, `${location}.${key}`);
             }
+            if (Array.isArray(obj)) {
+                obj.forEach((item, index) => {
+                    this.scanForThreats(item, threats, `${location}[${index}]`);
+                });
+            }
+            ;
+            /**
+             * Scan individual string for security patterns
+             */
         }
-        else if (Array.isArray(obj)) {
-            obj.forEach((item, index) => {
-                this.scanForThreats(item, threats, `${location}[${index}]`);
-            });
-        }
-        ;
         /**
          * Scan individual string for security patterns
          */
@@ -162,16 +200,13 @@ export class NodeValidationFramework {
             const matches = text.match(pattern);
             if (matches) {
                 threats.push({});
-                type: this.getSecurityThreatType(threatType),
-                    severity;
-                this.getSecurityThreatSeverity(threatType),
-                    description;
-                `Detected ${threatType}: ${matches[0]}`;
+                type: this.getSecurityThreatType(threatType);
+                severity: this.getSecurityThreatSeverity(threatType);
             }
+            description: `Detected ${threatType}: ${matches[0]}`;
         }
-        location,
-            recommendation;
-        this.getSecurityRecommendation(threatType);
+        location;
+        recommendation: this.getSecurityRecommendation(threatType);
     }
     ;
     /**
@@ -205,22 +240,14 @@ export class NodeValidationFramework {
             // Check for dangerous expression patterns
             if (/\beval\b|\bFunction\b|\bexec\b/.test(expression)) {
                 threats.push({});
-                type: 'eval',
-                    severity;
-                'critical',
-                    description;
-                'Conditional expression contains dangerous evaluation functions',
-                    location;
-                'data.condition',
-                    recommendation;
-                'Use safe expression evaluator instead of eval()',
-                ;
+                type: 'eval';
+                severity: 'critical';
+                description: 'Conditional expression contains dangerous evaluation functions';
+                location: 'data.condition';
+                recommendation: 'Use safe expression evaluator instead of eval()';
             }
-            ;
-            /**
-             * Validate Python transform node security
-             */
         }
+        ;
         /**
          * Validate Python transform node security
          */
@@ -234,22 +261,14 @@ export class NodeValidationFramework {
             // Check for dangerous Python patterns
             if (/\b(exec|eval|__import__|compile|globals|locals)\b/.test(code)) {
                 threats.push({});
-                type: 'injection',
-                    severity;
-                'high',
-                    description;
-                'Python code contains potentially dangerous functions',
-                    location;
-                'data.code',
-                    recommendation;
-                'Use restricted execution environment or whitelist safe functions',
-                ;
+                type: 'injection';
+                severity: 'high';
+                description: 'Python code contains potentially dangerous functions';
+                location: 'data.code';
+                recommendation: 'Use restricted execution environment or whitelist safe functions';
             }
-            ;
-            /**
-             * Performance validation - memory usage, execution time, infinite loops
-             */
         }
+        ;
         /**
          * Performance validation - memory usage, execution time, infinite loops
          */
@@ -266,12 +285,10 @@ export class NodeValidationFramework {
         result.performance.estimatedMemoryUsage = estimatedMemory;
         if (estimatedMemory > this.config.maxMemoryUsage) {
             issues.push({});
-            type: 'memory',
-                severity;
-            'high',
-                description;
-            `Estimated memory usage (${Math.round(estimatedMemory / 1024)}KB) exceeds limit`;
+            type: 'memory';
+            severity: 'high';
         }
+        description: `Estimated memory usage (${Math.round(estimatedMemory / 1024)}KB) exceeds limit`;
     }
     impact;
     suggestion;
@@ -282,15 +299,12 @@ const estimatedTime = this.estimateExecutionTime(nodeData);
 result.performance.estimatedExecutionTime = estimatedTime;
 if (estimatedTime > this.config.maxExecutionTime) {
     issues.push({});
-    type: 'execution_time',
-        severity;
-    'high',
-        description;
-    `Estimated execution time (${estimatedTime}ms) exceeds limit`;
+    type: 'execution_time';
+    severity: 'high';
 }
-impact: 'May cause UI blocking or timeouts',
-    suggestion;
-'Optimize algorithm or use worker thread';
+description: `Estimated execution time (${estimatedTime}ms) exceeds limit`;
+impact: 'May cause UI blocking or timeouts';
+suggestion: 'Optimize algorithm or use worker thread';
 ;
 result.performance.issues = issues;
 result.performance.passed = issues.every(issue => issue.severity === 'low');
@@ -299,87 +313,79 @@ if (!result.performance.passed) {
 }
 validateInfiniteLoops(nodeData, AdvancedNodeData, issues, PerformanceIssue);
 void {
-    // Check for recursive patterns in node configuration
     if(nodeData) { }, : .type === 'Sequential' && nodeData.data.pattern === 'cyclical'
 };
 {
     const items = nodeData.data.items || [];
     if (items.length === 0) {
         issues.push({});
-        type: 'infinite_loop',
-            severity;
-        'high',
-            description;
-        'Cyclical Sequential node with no items will loop infinitely',
-            impact;
-        'Will freeze application',
-            suggestion;
-        'Add termination condition or default items',
-        ;
-    }
-    ;
-    if (nodeData.type === 'Markov' && nodeData.data.transitionMatrix) {
-        // Check for states with no exit conditions
-        const matrix = nodeData.data.transitionMatrix;
-        for (const [state, transitions] of Object.entries(matrix)) {
-            const totalWeight = Object.values();
-            ;
-            transitions;
-            reduce((sum, weight) => sum + weight, 0);
-            if (totalWeight === 0) {
-                issues.push({});
-                type: 'infinite_loop',
-                    severity;
-                'medium',
-                    description;
-                `Markov state '${state}' has no valid transitions`;
-            }
-        }
-        impact: 'May get stuck in infinite loop',
-            suggestion;
-        'Add transition weights or termination condition';
-    }
-    ;
-    validateTypeSafety(nodeData, AdvancedNodeData, result, NodeValidationResult);
-    void {
-        const: typeErrors, TypeError = [],
-        // Validate node data types against expected schema
-        this: .validateNodeDataTypes(nodeData, typeErrors),
-        // Validate I/O port compatibility
-        this: .validateIOPortTypes(nodeData, typeErrors),
-        result, : .typeSafety.typeErrors = typeErrors,
-        result, : .typeSafety.passed = typeErrors.length === 0,
-        result, : .typeSafety.compatibility = typeErrors.length === 0 ? 'full' :
-            typeErrors.some(e => e.field.includes('required')) ? 'incompatible' : 'partial',
-        if(, result) { }, : .typeSafety.passed
-    };
-    {
-        result.errors.push(`Type safety validation failed: ${typeErrors.length} type error(s)`);
-    }
-    validateSchema(nodeData, AdvancedNodeData, result, NodeValidationResult);
-    void {
-        const: schemaErrors, string = [],
-        try: {
-            // Validate basic node structure
-            const: nodeSchema = z.object({}),
-            id: z.string().min(1),
-            type: z.string().min(1),
-            config: z.object({}),
-            deterministic: z.boolean(),
-            cacheable: z.boolean(),
-            stateful: z.boolean(),
-        },
-        data: z.record(z.any())
-    };
-    ;
-    const validation = nodeSchema.safeParse(nodeData);
-    if (!validation.success) {
-        validation.error.errors.forEach(error => { });
-        schemaErrors.push(`Schema error: ${error.path.join('.')} - ${error.message}`);
+        type: 'infinite_loop';
+        severity: 'high';
+        description: 'Cyclical Sequential node with no items will loop infinitely';
+        impact: 'Will freeze application';
+        suggestion: 'Add termination condition or default items';
     }
 }
 ;
-try { }
+if (nodeData.type === 'Markov' && nodeData.data.transitionMatrix) { // Check for states with no exit conditions
+    const matrix = nodeData.data.transitionMatrix;
+    for (const [state, transitions] of Object.entries(matrix)) {
+        const totalWeight = Object.values();
+        ;
+        transitions;
+        number >
+        ;
+        reduce((sum, weight) => sum + weight, 0);
+        if (totalWeight === 0) {
+            issues.push({});
+            type: 'infinite_loop';
+            severity: 'medium';
+        }
+        description: `Markov state '${state}' has no valid transitions`;
+    }
+    impact: 'May get stuck in infinite loop';
+    suggestion: 'Add transition weights or termination condition';
+}
+;
+validateTypeSafety(nodeData, AdvancedNodeData, result, NodeValidationResult);
+void {
+    const: typeErrors, TypeError = [],
+    // Validate node data types against expected schema
+    this: .validateNodeDataTypes(nodeData, typeErrors),
+    // Validate I/O port compatibility
+    this: .validateIOPortTypes(nodeData, typeErrors),
+    result, : .typeSafety.typeErrors = typeErrors,
+    result, : .typeSafety.passed = typeErrors.length === 0,
+    result, : .typeSafety.compatibility = typeErrors.length === 0 ? 'full' :
+        typeErrors.some(e => e.field.includes('required')) ? 'incompatible' : 'partial',
+    if(, result) { }, : .typeSafety.passed
+};
+{
+    result.errors.push(`Type safety validation failed: ${typeErrors.length} type error(s)`);
+}
+validateSchema(nodeData, AdvancedNodeData, result, NodeValidationResult);
+void { const: schemaErrors, string = [],
+    try: {
+        // Validate basic node structure
+        const: nodeSchema = z.object({}),
+        id: z.string().min(1),
+        type: z.string().min(1),
+        config: z.object({}),
+        deterministic: z.boolean(),
+        cacheable: z.boolean(),
+        stateful: z.boolean()
+    }
+};
+data: z.record(z.any());
+;
+const validation = nodeSchema.safeParse(nodeData);
+if (!validation.success) {
+    validation.error.errors.forEach(error => { });
+    schemaErrors.push(`Schema error: ${error.path.join('.')} - ${error.message}`);
+}
+;
+try {
+}
 catch (error) {
     schemaErrors.push(`Schema validation error: ${error instanceof Error ? error.message : 'Unknown error'}`);
 }
@@ -390,9 +396,8 @@ if (!result.schema.passed) {
 }
 validateNodeDataTypes(nodeData, AdvancedNodeData, typeErrors, TypeError);
 void {
-    // Implementation for type validation based on node type
     // This would be expanded based on specific node type requirements
-    validateIOPortTypes(nodeData, typeErrors) { 
+    validateIOPortTypes(nodeData, typeErrors) {
         // Implementation for I/O port type validation
         // This would validate input/output port compatibility
     }
@@ -420,10 +425,10 @@ void {
             'Sequential': 1.5,
             'Markov': 2.0,
             'PythonTransform': 3.0,
-            'default': 1.0,
+            'default': 1.0
         };
-        return multipliers[nodeType] || multipliers.default;
     },
+    return: multipliers[nodeType] || multipliers.default,
     getNodeTypeTimeMultiplier(nodeType) {
         const multipliers = {
             'WeightedChoice': 1.0,
@@ -431,12 +436,11 @@ void {
             'Sequential': 1.5,
             'Markov': 2.0,
             'PythonTransform': 5.0,
-            'default': 1.0,
+            'default': 1.0
         };
-        return multipliers[nodeType] || multipliers.default;
     },
+    return: multipliers[nodeType] || multipliers.default,
     calculateDataComplexity(nodeData) {
-        // Simple complexity based on data size and structure depth
         const str = JSON.stringify(nodeData.data);
         const size = str.length;
         const depth = this.getObjectDepth(nodeData.data);
@@ -465,10 +469,10 @@ void {
             'prototype_pollution': 'prototype_pollution',
             'template_injection': 'injection',
             'dynamic_import': 'dangerous_import',
-            'dangerous_functions': 'unsafe_function',
+            'dangerous_functions': 'unsafe_function'
         };
-        return typeMap[threatType] || 'injection';
     },
+    return: typeMap[threatType] || 'injection',
     getSecurityThreatSeverity(threatType) {
         const severityMap = {
             'eval_usage': 'critical',
@@ -477,10 +481,10 @@ void {
             'prototype_pollution': 'high',
             'template_injection': 'medium',
             'dynamic_import': 'high',
-            'dangerous_functions': 'medium',
+            'dangerous_functions': 'medium'
         };
-        return severityMap[threatType] || 'medium';
     },
+    return: severityMap[threatType] || 'medium',
     getSecurityRecommendation(threatType) {
         const recommendations = {
             'eval_usage': 'Use safe expression evaluator or AST-based evaluation',
@@ -489,46 +493,40 @@ void {
             'prototype_pollution': 'Validate and sanitize object properties',
             'template_injection': 'Use parameterized templates with input validation',
             'dynamic_import': 'Use static imports or whitelist allowed modules',
-            'dangerous_functions': 'Use safe alternatives or implement timeouts',
+            'dangerous_functions': 'Use safe alternatives or implement timeouts'
         };
-        return recommendations[threatType] || 'Review and sanitize input data';
-        /**
-         * Validation utilities for common validation scenarios
-         */
-        export class NodeValidationUtils {
-            /**
-             * Quick security check for user input
-             */
-            static validateUserInput(input) {
-                const framework = new NodeValidationFramework({ securityValidation: true });
-                const threats = [];
-                framework['scanStringForThreats'](input, threats, 'user_input');
-                return threats;
-                /**
-                 * Quick performance estimate
-                 */
-            }
-            /**
-             * Quick performance estimate
-             */
-            static estimateNodePerformance(nodeData) {
-                const framework = new NodeValidationFramework({ performanceValidation: true });
-                return {
-                    memory: framework['estimateMemoryUsage'](nodeData),
-                    time: framework['estimateExecutionTime'](nodeData),
-                };
-                /**
-                 * Batch validate multiple nodes
-                 */
-            }
-            /**
-             * Batch validate multiple nodes
-             */
-            static validateNodeBatch(nodes) {
-                const framework = new NodeValidationFramework();
-                return nodes.map(node => framework.validateNode(node));
-                export default NodeValidationFramework;
-            }
+    },
+    return: recommendations[threatType] || 'Review and sanitize input data',
+    /**
+     * Validation utilities for common validation scenarios
+     */
+    class: NodeValidationUtils
+};
+{
+    validateUserInput(input, string);
+    SecurityThreat;
+    {
+        const framework = new NodeValidationFramework({ securityValidation: true });
+        const threats = [];
+        framework['scanStringForThreats'](input, threats, 'user_input');
+        return threats;
+        estimateNodePerformance(nodeData, AdvancedNodeData);
+        {
+            memory: number;
+            time: number;
+        }
+        {
+            const framework = new NodeValidationFramework({ performanceValidation: true });
+            return { memory: framework['estimateMemoryUsage'](nodeData),
+                time: framework['estimateExecutionTime'](nodeData) };
+        }
+        ;
+        validateNodeBatch(nodes, AdvancedNodeData);
+        NodeValidationResult;
+        {
+            const framework = new NodeValidationFramework();
+            return nodes.map(node => framework.validateNode(node));
+            export default NodeValidationFramework;
         }
     }
-};
+}

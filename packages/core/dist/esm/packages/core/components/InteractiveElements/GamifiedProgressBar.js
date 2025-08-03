@@ -6,21 +6,19 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * milestones, achievements, animations, and reward celebrations.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { InteractionType } from '../../services/Epic16InteractiveElementsService';
-{
-    // Configuration
+import { InteractionType } from ColorThreshold;
+from;
+'../../services/Epic16InteractiveElementsService';
+className = '';
+{ // Configuration
     const config = element.config.progress_config;
     const theme = element.config.theme;
     // State management
     const [animationState, setAnimationState] = useState({});
-    isAnimating: false,
-        newValue;
-    currentValue,
-        previousValue;
-    currentValue,
-        celebrationActive;
-    false,
-    ;
+    isAnimating: false;
+    newValue: currentValue;
+    previousValue: currentValue;
+    celebrationActive: false;
 }
 ;
 const [achievements, setAchievements] = useState([]);
@@ -70,40 +68,32 @@ useEffect(() => {
             description: 'Started your journey',
             icon: '🎯',
             unlocked: currentValue > config.min_value,
-            value: config.min_value + 1,
+            value: config.min_value + 1
         },
-        {
-            id: 'quarter_way',
+        { id: 'quarter_way',
             title: 'Quarter Champion',
             description: 'Reached 25% progress',
             icon: '🏃',
             unlocked: progressPercentage >= 25,
-            value: config.min_value + (config.max_value - config.min_value) * 0.25,
-        },
-        {
-            id: 'halfway_hero',
+            value: config.min_value + (config.max_value - config.min_value) * 0.25 },
+        { id: 'halfway_hero',
             title: 'Halfway Hero',
             description: 'Reached 50% progress',
             icon: '⭐',
             unlocked: progressPercentage >= 50,
-            value: config.min_value + (config.max_value - config.min_value) * 0.5,
-        },
-        {
-            id: 'three_quarter_master',
+            value: config.min_value + (config.max_value - config.min_value) * 0.5 },
+        { id: 'three_quarter_master',
             title: 'Three Quarter Master',
             description: 'Reached 75% progress',
             icon: '🔥',
             unlocked: progressPercentage >= 75,
-            value: config.min_value + (config.max_value - config.min_value) * 0.75,
-        },
-        {
-            id: 'completion_champion',
+            value: config.min_value + (config.max_value - config.min_value) * 0.75 },
+        { id: 'completion_champion',
             title: 'Completion Champion',
             description: 'Reached 100% progress',
             icon: '🏆',
-            unlocked: progressPercentage >= 100,
-            value: config.max_value
-        }
+            unlocked: progressPercentage >= 100 },
+        value, config.max_value
     ];
     setAchievements(initialAchievements);
 }, [currentValue, progressPercentage, config.min_value, config.max_value]);
@@ -124,27 +114,26 @@ if (config.milestones) {
     if (newlyReachedMilestone) {
         setAnimationState(prev => ({}), ...prev, celebrationActive, true, milestoneJustReached, newlyReachedMilestone);
     }
-    ;
-    onMilestoneReached?.(newlyReachedMilestone);
-    triggerCelebration();
-    // Track milestone achievement
-    interactiveService.trackInteraction(element.id, {});
-    type: InteractionType.CUSTOM,
-        user_id;
-    userId,
-        timestamp;
-    new Date(),
-        context;
-    {
-        page_url: window.location.href,
-            referrer;
-        document.referrer,
-            user_agent;
-        navigator.userAgent,
-            screen_resolution;
-        `${screen.width}x${screen.height}`;
-    }
 }
+;
+onMilestoneReached?.(newlyReachedMilestone);
+triggerCelebration();
+// Track milestone achievement
+interactiveService.trackInteraction(element.id, {});
+type: InteractionType.CUSTOM,
+    user_id;
+userId,
+    timestamp;
+new Date(),
+    context;
+{
+    page_url: window.location.href,
+        referrer;
+    document.referrer,
+        user_agent;
+    navigator.userAgent;
+}
+screen_resolution: `${screen.width}x${screen.height}`;
 viewport_size: `${window.innerWidth}x${window.innerHeight}`;
 device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
     session_id;
@@ -158,17 +147,15 @@ data: {
         milestone_value;
     newlyReachedMilestone.value,
         progress_percentage;
-    progressPercentage,
-    ;
+    progressPercentage;
 }
 result: {
     success: true,
         conversion;
-    true,
-        data;
-    {
-        milestone: newlyReachedMilestone;
-    }
+    true;
+}
+data: {
+    milestone: newlyReachedMilestone;
 }
 duration: 0;
 ;
@@ -180,6 +167,7 @@ if (previousValue < config.max_value && currentValue >= config.max_value) {
         setAnimationState(prev => ({}), ...prev, isAnimating, false, celebrationActive, false, milestoneJustReached, undefined);
     });
 }
+;
 config.animated ? 1000 : 0;
 ;
 return () => clearTimeout(animationTimeout);
@@ -197,9 +185,7 @@ Math.random() * 100,
 ;
 setParticles(newParticles);
 // Remove particles after animation
-setTimeout(() => {
-    setParticles([]);
-}, 2000);
+setTimeout(() => { setParticles([]); }, 2000);
 [];
 ;
 // Format value for display
@@ -221,10 +207,10 @@ const renderMilestones = () => {
         return;
         _jsxs("div", { className: "absolute transform -translate-x-1/2", style: { left: `${milestonePercentage}%`, top: '-8px' }, onMouseEnter: () => setShowTooltip(milestone.label), onMouseLeave: () => setShowTooltip(null), children: [_jsxs("div", { className: `w-4 h-4 rounded-full border-2 transition-all duration-300 cursor-pointer ${isReached
                         ? 'bg-green-500 border-green-500 scale-110'
-                        : isNext,
+                        : isNext
                             ? 'bg-yellow-400 border-yellow-400 animate-pulse'
-                            : 'bg-white border-gray-300',
-                    }`, children: [milestone.icon && isReached && ()
+                            : 'bg-white border-gray-300'}
+`, children: [milestone.icon && isReached && ()
                             < div, " className=\"text-xs text-center leading-none\">", milestone.icon] }), ")}"] }, milestone.value);
         {
             showTooltip === milestone.label && ()
@@ -273,9 +259,9 @@ div >
 return;
 _jsxs("div", { className: `relative ${className}`, children: ["}", _jsx("div", { className: "relative bg-gray-200 rounded-full overflow-hidden", style: {
                 height: `${theme.border_radius * 2}px`
-            } }), ", backgroundColor: theme.background_color; }} >", _jsx("div", { className: `h-full transition-all duration-500 ease-out ${config.animated ? 'transform origin-left' : ''}`, style: {
+            }, "backgroundColor:theme": true }), ".background_color; >", _jsx("div", { className: `h-full transition-all duration-500 ease-out ${config.animated ? 'transform origin-left' : ''}`, style: {
                 width: `${progressPercentage}%`
-            } }), ", backgroundColor: currentColor, transform: animationState.isAnimating && config.animated ? 'scaleX(1.05)' : 'scaleX(1)'; }} >", config.animated && ()
+            }, "backgroundColor:currentColor": true, "transform:animationState": true }), ".isAnimating && config.animated ? 'scaleX(1.05)' : 'scaleX(1)'; >", config.animated && ()
             < div, "className=\"absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse\" style=", { animationDuration: '2s' }, "/> )}"] });
 { /* Milestone markers */ }
 {
@@ -286,12 +272,10 @@ _jsxs("div", { className: `relative ${className}`, children: ["}", _jsx("div", {
     animationState.celebrationActive && particles.map(particle => ()
         < div, key = { particle, : .id }, className = "absolute w-2 h-2 rounded-full animate-ping", style = {}, {
         left: `${particle.x}%`
-    });
+    }, top, `${particle.y}%`);
 }
-top: `${particle.y}%`;
-backgroundColor: particle.color,
-    animationDuration;
-'1s';
+backgroundColor: particle.color;
+animationDuration: '1s';
 />;
 div >
     { /* Progress Label */};
@@ -313,11 +297,12 @@ div >
         (_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("span", { children: ["Next: ", nextMilestone.label] }), _jsxs("span", { children: [formatValue(nextMilestone.value - currentValue), " to go"] })] })
             ,
                 _jsx("div", { className: "w-full bg-gray-200 rounded-full h-1 mt-1", children: _jsx("div", { className: "bg-yellow-400 h-1 rounded-full transition-all duration-300", style: {
-                            width: `${Math.max(), }
-}
-                  0,
+                            width: `${Math.max()}
+
+                  0
                   (currentValue - (completedMilestones[completedMilestones.length - 1]?.value || config.min_value)
                 )) / (nextMilestone.value - (completedMilestones[completedMilestones.length - 1]?.value || config.min_value)) * 100)}%`
+                                /  >
                         } }) }));
     div >
     ;
@@ -350,10 +335,10 @@ div >
 _jsx("style", { children: `
         @keyframes scale-in {
           0% {
-            transform: scale(0.8);,
+            transform: scale(0.8)
   opacity: 0;
           100% {
-            transform: scale(1);,
+            transform: scale(1) }
   opacity: 1;
         .animate-scale-in {
           animation: scale-in 0.3s ease-out;

@@ -19,18 +19,18 @@ const INHERITANCE_MODES = [
     { value: 'individual', label: 'Individual - Custom preference per element' }
 ];
 const PreferenceControls = () => {
-    nodeId,
-        nodeType,
-        showNodeSpecificControls = true,
-        compact = false;
+    nodeId;
+    nodeType;
+    showNodeSpecificControls = true;
 };
+compact = false;
 {
-    const { globalDisclosureLevel, preferenceInheritance, setGlobalDisclosureLevel, setNodeDisclosureLevel, setNodeUseGlobalDefault, setPreferenceInheritance, getNodeDisclosureLevel, getEffectiveNodePreferences, clearNodePreferences } = useUISettingsStore();
+    const { globalDisclosureLevel, preferenceInheritance, setGlobalDisclosureLevel, setNodeDisclosureLevel, setNodeUseGlobalDefault, setPreferenceInheritance, getNodeDisclosureLevel, getEffectiveNodePreferences };
+    clearNodePreferences
+        = useUISettingsStore();
     const effectiveLevel = nodeId ? getNodeDisclosureLevel(nodeId, nodeType) : globalDisclosureLevel;
     const nodePrefs = nodeId ? getEffectiveNodePreferences(nodeId, nodeType) : null;
-    const handleGlobalLevelChange = (level) => {
-        setGlobalDisclosureLevel(level);
-    };
+    const handleGlobalLevelChange = (level) => { setGlobalDisclosureLevel(level); };
     const handleNodeLevelChange = (level) => {
         if (nodeId) {
             setNodeDisclosureLevel(nodeId, level);
@@ -41,12 +41,8 @@ const PreferenceControls = () => {
                 setNodeUseGlobalDefault(nodeId, useGlobal);
             }
             ;
-            const handleInheritanceChange = (inheritance) => {
-                setPreferenceInheritance(inheritance);
-            };
-            const resetAllPreferences = () => {
-                clearNodePreferences();
-            };
+            const handleInheritanceChange = (inheritance) => { setPreferenceInheritance(inheritance); };
+            const resetAllPreferences = () => { clearNodePreferences(); };
             if (compact) {
                 return;
                 _jsxs("div", { style: {
@@ -57,7 +53,7 @@ const PreferenceControls = () => {
                         background: 'rgba(66, 153, 225, 0.1)',
                         border: '1px solid #4a5568',
                         borderRadius: 4,
-                        fontSize: 11,
+                        fontSize: 11
                     }, children: [_jsx("span", { style: { color: '#a0aec0', minWidth: 'fit-content' }, children: "Level:" }), _jsx("select", { value: effectiveLevel, onChange: (e) => showNodeSpecificControls && nodeId ?
                                 handleNodeLevelChange(e.target.value) :
                                 handleGlobalLevelChange(e.target.value), style: {
@@ -67,7 +63,7 @@ const PreferenceControls = () => {
                                 borderRadius: 2,
                                 padding: '2px 4px',
                                 fontSize: 10,
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             }, children: DISCLOSURE_LEVELS.map(option => ()
                                 < option, key = { option, : .value }, value = { option, : .value } >
                                 { option, : .label.split(' - ')[0] }) }), "))}"] });
@@ -78,111 +74,113 @@ const PreferenceControls = () => {
     ;
     ;
     return;
-    _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("div", { style: {
-                    background: '#1a202c',
+    _jsx("div", { style: { marginBottom: 16 }, children: _jsxs("div", { style: {
+                background: '#1a202c',
+                border: '1px solid #4a5568',
+                borderRadius: 6,
+                padding: 12
+            }, children: [_jsxs("div", { style: {
+                        fontSize: 12,
+                        fontWeight: 500,
+                        color: '#e2e8f0',
+                        marginBottom: 12,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8
+                    }, children: [_jsx("span", { children: "\uD83D\uDCCB" }), "Disclosure Preferences"] }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
+                                display: 'block',
+                                fontSize: 11,
+                                color: '#a0aec0',
+                                marginBottom: 4,
+                                fontWeight: 500
+                            }, children: "Global Default Level" }), _jsx("select", { value: globalDisclosureLevel, onChange: (e) => handleGlobalLevelChange(e.target.value), style: {
+                                width: '100%',
+                                padding: '6px 8px',
+                                background: '#2d3748',
+                                color: '#e2e8f0',
+                                border: '1px solid #4a5568',
+                                borderRadius: 4,
+                                fontSize: 11,
+                                cursor: 'pointer'
+                            }
+                                >
+                                    { DISCLOSURE_LEVELS, : .map(option => ()
+                                            < option, key = { option, : .value }, value = { option, : .value } >
+                                            { option, : .label }) } })] }), "))}"] }) });
+    { /* Inheritance Mode */ }
+    _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
+                    display: 'block',
+                    fontSize: 11,
+                    color: '#a0aec0',
+                    marginBottom: 4,
+                    fontWeight: 500
+                }, children: "Preference Inheritance" }), _jsx("select", { value: preferenceInheritance, onChange: (e) => handleInheritanceChange(e.target.value), style: {
+                    width: '100%',
+                    padding: '6px 8px',
+                    background: '#2d3748',
+                    color: '#e2e8f0',
                     border: '1px solid #4a5568',
-                    borderRadius: 6,
-                    padding: 12,
-                }, children: [_jsxs("div", { style: {
-                            fontSize: 12,
-                            fontWeight: 500,
-                            color: '#e2e8f0',
-                            marginBottom: 12,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 8,
-                        }, children: [_jsx("span", { children: "\uD83D\uDCCB" }), "Disclosure Preferences"] }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
-                                    display: 'block',
-                                    fontSize: 11,
-                                    color: '#a0aec0',
-                                    marginBottom: 4,
-                                    fontWeight: 500,
-                                }, children: "Global Default Level" }), _jsx("select", { value: globalDisclosureLevel, onChange: (e) => handleGlobalLevelChange(e.target.value), style: {
-                                    width: '100%',
-                                    padding: '6px 8px',
-                                    background: '#2d3748',
-                                    color: '#e2e8f0',
-                                    border: '1px solid #4a5568',
-                                    borderRadius: 4,
-                                    fontSize: 11,
-                                    cursor: 'pointer',
-                                }, children: DISCLOSURE_LEVELS.map(option => ()
-                                    < option, key = { option, : .value }, value = { option, : .value } >
-                                    { option, : .label }) }), "))}"] })] }), _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx("label", { style: {
-                            display: 'block',
-                            fontSize: 11,
-                            color: '#a0aec0',
-                            marginBottom: 4,
-                            fontWeight: 500,
-                        }, children: "Preference Inheritance" }), _jsx("select", { value: preferenceInheritance, onChange: (e) => handleInheritanceChange(e.target.value), style: {
-                            width: '100%',
-                            padding: '6px 8px',
-                            background: '#2d3748',
-                            color: '#e2e8f0',
-                            border: '1px solid #4a5568',
-                            borderRadius: 4,
-                            fontSize: 11,
-                            cursor: 'pointer',
-                        }, children: INHERITANCE_MODES.map(option => ()
-                            < option, key = { option, : .value }, value = { option, : .value } >
-                            { option, : .label }) }), "))}"] }), _jsxs("div", { style: {
-                    fontSize: 10,
-                    color: '#6b7280',
-                    marginTop: 2,
-                    lineHeight: 1.4,
-                }, children: [preferenceInheritance === 'global' && 'All nodes use the global default level', preferenceInheritance === 'nodeType' && 'Nodes inherit from their type-specific preferences', preferenceInheritance === 'individual' && 'Each node can have its own disclosure level'] })] });
-    { /* Node-Specific Controls */ }
-    {
-        showNodeSpecificControls && nodeId && ()
-            < div;
-        style = {};
-        {
-            borderTop: '1px solid #4a5568',
-                paddingTop;
-            12,
-                marginTop;
-            12,
-            ;
-        }
-    }
-     >
-        _jsxs("div", { style: {
-                fontSize: 11,
-                fontWeight: 500,
-                color: '#e2e8f0',
-                marginBottom: 8,
-            }, children: ["This Node (", nodeType || 'unknown', ")"] });
-    {
-        nodePrefs && ()
-            < div;
-        style = {};
-        {
-            display: 'flex',
-                alignItems;
-            'center',
-                gap;
-            8,
-                marginBottom;
-            8,
-            ;
-        }
-    }
-     >
-        _jsxs("label", { style: {
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                fontSize: 10,
-                color: '#a0aec0',
-                cursor: 'pointer',
-            }, children: [_jsx("input", { type: "checkbox", checked: nodePrefs.useGlobalDefault, onChange: (e) => handleUseGlobalToggle(e.target.checked), style: {
-                        width: 12,
-                        height: 12,
-                        cursor: 'pointer',
-                    } }), "Use global default"] });
-    div >
-    ;
+                    borderRadius: 4,
+                    fontSize: 11,
+                    cursor: 'pointer'
+                }
+                    >
+                        { INHERITANCE_MODES, : .map(option => ()
+                                < option, key = { option, : .value }, value = { option, : .value } >
+                                { option, : .label }) } })] });
 }
+select >
+    _jsxs("div", { style: {
+            fontSize: 10,
+            color: '#6b7280',
+            marginTop: 2,
+            lineHeight: 1.4
+        }, children: [preferenceInheritance === 'global' && 'All nodes use the global default level', preferenceInheritance === 'nodeType' && 'Nodes inherit from their type-specific preferences', preferenceInheritance === 'individual' && 'Each node can have its own disclosure level'] });
+div >
+    { /* Node-Specific Controls */};
+{
+    showNodeSpecificControls && nodeId && ()
+        < div;
+    style = {};
+    {
+        borderTop: '1px solid #4a5568';
+        paddingTop: 12;
+        marginTop: 12;
+    }
+}
+ >
+    _jsxs("div", { style: {
+            fontSize: 11,
+            fontWeight: 500,
+            color: '#e2e8f0',
+            marginBottom: 8
+        }, children: ["This Node (", nodeType || 'unknown', ")"] });
+{
+    nodePrefs && ()
+        < div;
+    style = {};
+    {
+        display: 'flex';
+        alignItems: 'center';
+        gap: 8;
+        marginBottom: 8;
+    }
+}
+ >
+    _jsxs("label", { style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            fontSize: 10,
+            color: '#a0aec0',
+            cursor: 'pointer'
+        }, children: [_jsx("input", { type: "checkbox", checked: nodePrefs.useGlobalDefault, onChange: (e) => handleUseGlobalToggle(e.target.checked), style: {
+                    width: 12,
+                    height: 12,
+                    cursor: 'pointer'
+                } }), "Use global default"] });
+div >
+;
 {
     !nodePrefs?.useGlobalDefault && ()
         < div;
@@ -196,7 +194,7 @@ const PreferenceControls = () => {
             display: 'block',
             fontSize: 10,
             color: '#a0aec0',
-            marginBottom: 4,
+            marginBottom: 4
         }, children: "Node-specific level" })
         ,
             _jsx("select", { value: effectiveLevel, onChange: (e) => handleNodeLevelChange(e.target.value), style: {
@@ -207,14 +205,13 @@ const PreferenceControls = () => {
                     border: '1px solid #4a5568',
                     borderRadius: 3,
                     fontSize: 10,
-                    cursor: 'pointer',
-                }, children: DISCLOSURE_LEVELS.map(option => ()
-                    < option, key = { option, : .value }, value = { option, : .value } >
-                    { option, : .label }) }));
-select >
-;
-div >
-;
+                    cursor: 'pointer'
+                }
+                    >
+                        { DISCLOSURE_LEVELS, : .map(option => ()
+                                < option, key = { option, : .value }, value = { option, : .value } >
+                                { option, : .label }, option >
+                            ) }, select: true }));
 div >
 ;
 { /* Reset Button */ }
@@ -224,7 +221,7 @@ _jsxs("div", { style: {
         alignItems: 'center',
         marginTop: 12,
         paddingTop: 8,
-        borderTop: '1px solid #4a5568',
+        borderTop: '1px solid #4a5568'
     }, children: [_jsxs("div", { style: { fontSize: 10, color: '#6b7280' }, children: [Object.keys(nodePreferences).length, " custom node preferences"] }), _jsx("button", { onClick: resetAllPreferences, disabled: Object.keys(nodePreferences).length === 0, style: {
                 padding: '4px 8px',
                 fontSize: 9,
@@ -233,8 +230,12 @@ _jsxs("div", { style: {
                 border: 'none',
                 borderRadius: 3,
                 cursor: Object.keys(nodePreferences).length > 0 ? 'pointer' : 'not-allowed',
-                opacity: Object.keys(nodePreferences).length > 0 ? 1 : 0.5,
-            }, children: "Reset All" })] });
+                opacity: Object.keys(nodePreferences).length > 0 ? 1 : 0.5
+            }
+                >
+                    Reset, All: true })] });
+div >
+;
 div >
 ;
 div >

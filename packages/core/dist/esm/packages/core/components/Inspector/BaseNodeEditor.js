@@ -21,23 +21,24 @@ const getFilmmakerFriendlyError = (message) => {
         'parameter': 'option',
         'Parameter': 'Option',
         'schema': 'format',
-        'Schema': 'Format',
+        'Schema': 'Format'
     };
-    // Performance optimization: use a single pass replacement
-    let friendlyMessage = message;
-    Object.entries(errorMappings).forEach(([technical, friendly]) => {
-        friendlyMessage = friendlyMessage.replace(new RegExp(technical, 'gi'), friendly);
-    });
-    return friendlyMessage;
 };
+// Performance optimization: use a single pass replacement
+let friendlyMessage = message;
+Object.entries(errorMappings).forEach(([technical, friendly]) => { friendlyMessage = friendlyMessage.replace(new RegExp(technical, 'gi'), friendly); });
+return friendlyMessage;
+;
+onChange: (partial) => void ;
+className ?  : string;
+children ?  : React.ReactNode;
 export const BaseNodeEditor = ({
     nodeId,
     nodeData,
     schema,
     onChange,
-    className = '',
-    children
-});
+    className = '' });
+children;
 {
     const [values, setValues] = React.useState(nodeData || {});
     const [fieldErrors, setFieldErrors] = React.useState({});
@@ -54,6 +55,7 @@ export const BaseNodeEditor = ({
             try {
                 const fieldSchema = ();
                 schema;
+                unknown > ;
             }
             finally {
             }
@@ -62,11 +64,12 @@ export const BaseNodeEditor = ({
     shape?.[key] ?? schema._def?.shape?.()[key];
     if (fieldSchema) {
         const parsed = fieldSchema.safeParse(val);
-        setFieldErrors((prev) => ({}), ...prev, [key], parsed.success ? '' : getFilmmakerFriendlyError(parsed.error.issues[0]?.message ?? 'Invalid value'));
+        setFieldErrors((prev) => ({}), ...prev[key], parsed.success ? '' : getFilmmakerFriendlyError(parsed.error.issues[0]?.message ?? 'Invalid value'));
     }
-    ;
 }
-try { }
+;
+try {
+}
 catch (error) {
     console.warn('Error validating field:', key, error);
     // Call parent onChange
@@ -88,32 +91,32 @@ const getFieldSchema = (key) => {
             const s = schema._def.shape;
             const shapeObj = typeof s === 'function' ? s() : s;
             return shapeObj[key] ?? null;
-        }
-        try { }
-        catch (error) {
-            console.warn('Error getting field schema:', key, error);
-            return null;
-        }
-        ;
-        const renderField = (key) => {
-            const zodType = getFieldSchema(key);
-            if (!zodType)
+            try {
+            }
+            catch (error) {
+                console.warn('Error getting field schema:', key, error);
                 return null;
-            const fieldProps = {
-                label: key,
-                value: values[key],
-                fieldKey: key,
-                zodType,
-                error: fieldErrors[key],
-                onChange: (value) => updateField(key, value),
+            }
+            ;
+            const renderField = (key) => {
+                const zodType = getFieldSchema(key);
+                if (!zodType)
+                    return null;
+                const fieldProps = {
+                    label: key,
+                    value: values[key],
+                    fieldKey: key,
+                    zodType,
+                    error: fieldErrors[key],
+                    onChange: (value) => updateField(key, value)
+                };
             };
             // Allow custom field rendering via children
             if (children && React.isValidElement(children)) {
                 return React.cloneElement(children, {});
-                key,
-                ;
+                key;
             }
-        };
+        }
     }
     finally {
     }
@@ -127,8 +130,10 @@ _jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("label", { htmlFor: 
             fontWeight: 500,
             marginBottom: 4,
             color: '#e2e8f0',
-            fontSize: 12,
-        }, ">", key] }, key)
+            fontSize: 12
+        }
+            >
+                { key }] }, key)
     ,
         _jsx("input", { id: `field-${nodeId}-${key}`, type: zodType._def?.typeName === 'ZodNumber' ? 'number' : 'text', value: String(fieldProps.value ?? ''), onChange: (e) => {
                 const isNumber = zodType._def?.typeName === 'ZodNumber';
@@ -140,19 +145,16 @@ _jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("label", { htmlFor: 
                 borderRadius: 4,
                 background: '#2d3748',
                 color: '#e2e8f0',
-                fontSize: 12,
+                fontSize: 12
             }, placeholder: `Enter ${key}...` });
 {
     fieldErrors[key] && ()
         < div;
     style = {};
     {
-        color: '#f56565',
-            fontSize;
-        10,
-            marginTop;
-        2,
-        ;
+        color: '#f56565';
+        fontSize: 10;
+        marginTop: 2;
     }
 }
  >
@@ -187,24 +189,25 @@ const getFieldKeys = () => {
                 return shouldShowField(key, fieldType);
             }
             ;
+            try {
+            }
+            catch (error) {
+                console.warn('Error getting field keys:', error);
+                return [];
+            }
+            ;
+            const fieldKeys = getFieldKeys();
+            return;
+            _jsxs("div", { className: `base-node-editor ${className}`, children: ["}", fieldKeys.length > 0 ? ()
+                        :
+                    , "fieldKeys.map(renderField) ) : ()", _jsx("div", { style: {
+                            color: '#a0aec0',
+                            fontStyle: 'italic',
+                            textAlign: 'center',
+                            padding: 16,
+                            fontSize: 12
+                        }, children: "No editable properties found" }), ")}"] });
         }
-        try { }
-        catch (error) {
-            console.warn('Error getting field keys:', error);
-            return [];
-        }
-        ;
-        const fieldKeys = getFieldKeys();
-        return;
-        _jsxs("div", { className: `base-node-editor ${className}`, children: ["}", fieldKeys.length > 0 ? ()
-                    :
-                , "fieldKeys.map(renderField) ) : ()", _jsx("div", { style: {
-                        color: '#a0aec0',
-                        fontStyle: 'italic',
-                        textAlign: 'center',
-                        padding: 16,
-                        fontSize: 12,
-                    }, children: "No editable properties found" }), ")}"] });
     }
     finally {
     }

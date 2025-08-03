@@ -7,28 +7,22 @@ const simpleGraph = {
     nodes: [
         {
             id: 'greeting_choice',
-            type: 'WeightedChoice',
-            choices: [
-                { value: 'Hello', weight: 0.4 },
-                { value: 'Hi', weight: 0.3 },
-                { value: 'Greetings', weight: 0.3 }
-            ]
+            type: 'WeightedChoice'
         },
-        {
-            id: 'name_var',
+        choices, [
+            { value: 'Hello', weight: 0.4 },
+            { value: 'Hi', weight: 0.3 },
+            { value: 'Greetings', weight: 0.3 }
+        ],
+        { id: 'name_var',
             type: 'GetVariable',
-            key: 'user_name',
-        },
-        {
-            id: 'greeting_concat',
+            key: 'user_name' },
+        { id: 'greeting_concat',
             type: 'Concat',
-            inputs: ['greeting_choice', 'name_var'],
-        },
-        {
-            id: 'final_output',
-            type: 'Output',
-            inputs: ['greeting_concat']
-        }
+            inputs: ['greeting_choice', 'name_var'] },
+        { id: 'final_output',
+            type: 'Output' },
+        inputs, ['greeting_concat']
     ]
 };
 // Serialize the graph
@@ -39,8 +33,7 @@ name: 'Simple Greeting Generator',
     author;
 'claude-agent',
     created;
-new Date().toISOString(),
-;
+new Date().toISOString();
 ;
 console.log('=== LLM-Friendly Serialized Format ===');
 console.log(serialized);

@@ -4,21 +4,19 @@
  * Complete visual hierarchy design system for progressive disclosure architecture
  * providing consistent visual cues, typography, spacing, and accessibility.
  */
-export { 
-// Core design tokens
+export { // Core design tokens
 TypographyScale, HierarchyColors, SpacingScale, ComponentSizes, FieldImportanceStyles, 
 // Classification utilities
 classifyFieldPriority, 
 // UI components
 HierarchyHeader, HierarchyField, ComplexityIndicator, 
 // Accessibility utilities
-AccessibilityUtils, } from './HierarchyDesignSystem';
+AccessibilityUtils } from './HierarchyDesignSystem';
 // Re-export enhanced progressive disclosure component
-export { ProgressiveDisclosureSection, } from '../Inspector/ProgressiveDisclosureSection';
+export { ProgressiveDisclosureSection } from '../Inspector/ProgressiveDisclosureSection';
 // Demo component for testing and documentation
 export { VisualHierarchyDemoEditor } from '../Inspector/editors/VisualHierarchyDemoEditor';
-export default {
-    TypographyScale,
+export default { TypographyScale,
     HierarchyColors,
     SpacingScale,
     ComponentSizes,
@@ -29,5 +27,5 @@ export default {
     ComplexityIndicator,
     AccessibilityUtils,
     ProgressiveDisclosureSection,
-    VisualHierarchyDemoEditor,
-};
+    VisualHierarchyDemoEditor };
+;

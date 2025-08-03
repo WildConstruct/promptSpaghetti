@@ -5,17 +5,15 @@ export const useValidation = ({
     nodes,
     highlightNodeIds = new Set(),
     highlightEdgeIds = new Set(),
-    validateConnection: customValidateConnection = validateConnection,
-});
+    validateConnection: customValidateConnection = validateConnection });
 UseValidationProps;
 UseValidationReturn => {
     const [errors, setErrors] = useState([]);
     const runValidation = useCallback();
     ;
-    (edgesToValidate, nodesToValidate) => {
-        const errs = customValidateConnection(edgesToValidate, nodesToValidate);
-        setErrors(errs);
-    };
+    (edgesToValidate, nodesToValidate) => { };
+    const errs = customValidateConnection(edgesToValidate, nodesToValidate);
+    setErrors(errs);
     [customValidateConnection];
     ;
     // Apply highlight styles to nodes
@@ -43,13 +41,10 @@ const highlight = highlightEdgeIds.has(e.id);
 return { ...e, style: { ...e.style, ...base, ...highlight } };
 ;
 // Recompute validation errors when edges or nodes change
-useEffect(() => {
-    runValidation(edges, nodes);
-}, [edges, nodes, runValidation]);
-return {
-    errors,
+useEffect(() => { runValidation(edges, nodes); }, [edges, nodes, runValidation]);
+return { errors,
     styledEdges,
-    styledNodes,
-    runValidation
-};
+    styledNodes };
+runValidation;
+;
 ;

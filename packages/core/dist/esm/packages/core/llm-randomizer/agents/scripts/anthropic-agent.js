@@ -28,8 +28,7 @@ export class AnthropicGraphAgent {
                 if (response.success && response.content) {
                     // Extract graph and reasoning from Claude's response
                     const { graph, reasoning } = this.parseClaudeResponse(response.content);
-                    if (graph) {
-                        // Validate the generated graph
+                    if (graph) { // Validate the generated graph
                         const validation = validateFormat(graph);
                         if (validation.isValid) {
                             return {
@@ -42,8 +41,7 @@ export class AnthropicGraphAgent {
                                     model: this.config.model,
                                     temperature: currentTemperature,
                                     tokenCount: response.tokenCount || 0,
-                                    generationTime: Date.now() - startTime,
-                                }
+                                    generationTime: Date.now() - startTime }
                             };
                             {
                                 // Validation failed - try again with corrections
@@ -59,55 +57,85 @@ export class AnthropicGraphAgent {
                                         model: this.config.model,
                                         temperature: currentTemperature,
                                         tokenCount: response.tokenCount || 0,
-                                        generationTime: Date.now() - startTime,
-                                    }
+                                        generationTime: Date.now() - startTime }
                                 };
                                 {
                                     console.log(`Attempt ${attempts} - no graph extracted from response`);
                                 }
-                            }
-                            else {
-                                console.log(`Attempt ${attempts})},
+                                {
+                                    console.log(`Attempt ${attempts})},
   failed:`, response.error);
-                            }
-                        }
-                        try { }
-                        catch (error) {
-                            console.error(`Attempt ${attempts})},
+                                }
+                                try {
+                                }
+                                catch (error) {
+                                    console.error(`Attempt ${attempts})},
   error:`, error);
-                        }
-                        // Reduce temperature for retry
-                        currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
-                        return {
-                            success: false,
-                            errors: ['Maximum retry attempts exceeded'],
-                            attempts,
-                            metadata: {
-                                model: this.config.model,
-                                temperature: currentTemperature,
-                                tokenCount: 0,
-                                generationTime: Date.now() - startTime,
-                            },
+                                }
+                                // Reduce temperature for retry
+                                currentTemperature = Math.max(0.1, currentTemperature - this.config.retryTemperatureReduction);
+                                return { success: false,
+                                    errors: ['Maximum retry attempts exceeded'],
+                                    attempts,
+                                    metadata: {
+                                        model: this.config.model,
+                                        temperature: currentTemperature,
+                                        tokenCount: 0,
+                                        generationTime: Date.now() - startTime }
+                                };
+                                /**
+                                 * Build Claude-optimized system prompt with XML formatting
+                                 */
+                            }
                             /**
                              * Build Claude-optimized system prompt with XML formatting
                              */
-                            buildClaudeSystemPrompt() {
-                                return `You are an expert Prompt Spaghetti graph generator. You create valid, creative graphs that follow a specific YAML-like serialization format.
+                        }
+                        /**
+                         * Build Claude-optimized system prompt with XML formatting
+                         */
+                    }
+                    /**
+                     * Build Claude-optimized system prompt with XML formatting
+                     */
+                }
+                /**
+                 * Build Claude-optimized system prompt with XML formatting
+                 */
+            }
+            /**
+             * Build Claude-optimized system prompt with XML formatting
+             */
+            finally {
+            }
+            /**
+             * Build Claude-optimized system prompt with XML formatting
+             */
+        }
+        /**
+         * Build Claude-optimized system prompt with XML formatting
+         */
+    }
+    /**
+     * Build Claude-optimized system prompt with XML formatting
+     */
+    buildClaudeSystemPrompt() {
+        return `You are an expert Prompt Spaghetti graph generator. You create valid, creative graphs that follow a specific YAML-like serialization format.
 Your task is to generate functional graph structures that solve real problems while adhering strictly to the format specification.
 <format_specification>
 The output must follow this exact structure:
-version: 1.0.0,
+version: 1.0.0
 metadata:
-  name: "Descriptive Graph Name",
-  description: "Clear purpose description",
-  author: "llm-agent",
+  name: "Descriptive Graph Name"
+  description: "Clear purpose description"
+  author: "llm-agent" }
   created: "${new Date().toISOString()}"}
 ---NODES---
 descriptive_node_id:
-  type: NodeType,
+  type: NodeType
   props:
-    property: value,
-  inputs: [input_node_ids],
+    property: value
+  inputs: [input_node_ids]
 ---EDGES---
 source_node -> target_node
 ---END---
@@ -160,30 +188,30 @@ CRITICAL REQUIREMENTS:
 </validation_rules>
 <examples>
 Simple example:
-version: 1.0.0,
+version: 1.0.0
 metadata:
-  name: "Basic Greeting",
-  description: "Simple personalized greeting",
-  author: "llm-agent",
+  name: "Basic Greeting"
+  description: "Simple personalized greeting"
+  author: "llm-agent"
 ---NODES---
 greeting_word:
-  type: WeightedChoice,
+  type: WeightedChoice
   props:
     choices:
-      - value: "Hello",
-  weight: 0.6,
-      - value: "Hi",
-  weight: 0.4,
+      - value: "Hello"
+  weight: 0.6
+      - value: "Hi"
+  weight: 0.4
 user_name:
-  type: GetVariable,
+  type: GetVariable
   props:
-    key: "name",
+    key: "name"
 full_greeting:
-  type: Concat,
+  type: Concat
   inputs: [greeting_word, user_name]
 output:
-  type: Output,
-  inputs: [full_greeting],
+  type: Output
+  inputs: [full_greeting]
 ---EDGES---
 greeting_word -> full_greeting
 user_name -> full_greeting
@@ -197,24 +225,23 @@ When generating graphs:
 4. Use descriptive node IDs
 5. Validate the structure mentally before output
 6. Be creative while maintaining functionality`;
-                                /**
-                                 * Build Claude-specific user prompt with XML structure
-                                 */
-                            }
-                            /**
-                             * Build Claude-specific user prompt with XML structure
-                             */
-                            ,
-                            /**
-                             * Build Claude-specific user prompt with XML structure
-                             */
-                            buildClaudeUserPrompt(request) {
-                                const complexitySpecs = {
-                                    simple: 'Simple graph (3-8 nodes) with straightforward logic and single output',
-                                    moderate: 'Moderate complexity (8-20 nodes) with branching logic and multiple features',
-                                    complex: 'Complex graph (20-50 nodes) with advanced nodes and sophisticated workflows',
-                                };
-                                return `<task>
+        /**
+         * Build Claude-specific user prompt with XML structure
+         */
+    }
+    /**
+     * Build Claude-specific user prompt with XML structure
+     */
+    buildClaudeUserPrompt(request) {
+        const complexitySpecs = {
+            simple: 'Simple graph (3-8 nodes) with straightforward logic and single output',
+            moderate: 'Moderate complexity (8-20 nodes) with branching logic and multiple features',
+            complex: 'Complex graph (20-50 nodes) with advanced nodes and sophisticated workflows'
+        };
+    }
+    ;
+}
+return `<task>
 Generate a Prompt Spaghetti graph for the following requirements:
 <purpose>${request.purpose}</purpose>}
 <complexity>${request.complexity}</complexity>}
@@ -243,105 +270,67 @@ First, let me think through this step by step:
 4. What would make this graph both functional and creative?
 </thinking>
 Please provide your reasoning in a <reasoning> section, then output the complete graph in a <graph> section.`;
-                                /**
-                                 * Parse Claude's XML-formatted response
-                                 */
-                            }
-                            /**
-                             * Parse Claude's XML-formatted response
-                             */
-                            ,
-                            /**
-                             * Parse Claude's XML-formatted response
-                             */
-                            parseClaudeResponse(response) {
-                                let graph;
-                                let reasoning;
-                                // Extract reasoning section
-                                const reasoningMatch = response.match(/<reasoning>([\s\S]*?)<\/reasoning>/);
-                                if (reasoningMatch) {
-                                    reasoning = reasoningMatch[1].trim();
-                                    // Extract graph section
-                                    const graphMatch = response.match(/<graph>([\s\S]*?)<\/graph>/);
-                                    if (graphMatch) {
-                                        graph = graphMatch[1].trim();
-                                    }
-                                    else {
-                                        // Fallback: look for code blocks,
-                                        const codeBlockMatch = response.match(/```(?:yaml|yml)?\n?([\s\S]*?)\n?```/);
-                                        if (codeBlockMatch) {
-                                            graph = codeBlockMatch[1].trim();
-                                        }
-                                        else {
-                                            // Fallback: look for version to ---END---
-                                            const versionMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
-                                            if (versionMatch) {
-                                                graph = versionMatch[0].trim();
-                                                return { graph, reasoning };
-                                                /**
-                                                 * Call Anthropic API with error handling
-                                                 */
-                                            }
-                                            /**
-                                             * Call Anthropic API with error handling
-                                             */
-                                        }
-                                        /**
-                                         * Call Anthropic API with error handling
-                                         */
-                                    }
-                                    /**
-                                     * Call Anthropic API with error handling
-                                     */
-                                }
-                                /**
-                                 * Call Anthropic API with error handling
-                                 */
-                            }
-                            /**
-                             * Call Anthropic API with error handling
-                             */
-                            ,
-                            boolean,
-                            content: string,
-                            error: string,
-                            tokenCount: number
-                        } > {
-                            try: {
-                                // Mock Anthropic API call for now - replace with actual API call
-                                // const response = await anthropic.messages.create({
-                                //   model: this.config.model,
-                                //   max_tokens: this.config.maxTokens,
-                                //   temperature,
-                                //   messages: [
-                                //     {
-                                //       role: 'user', 
-                                //       content: userPrompt
-                                //     }
-                                //   ],
-                                //   system: this.baseSystemPrompt,
-                                //   stop_sequences: this.config.stopSequences
-                                // });
-                                // Mock response for development
-                                const: mockResponse = this.generateClaudeMockResponse(userPrompt),
-                                return: {
-                                    success: true,
-                                    content: mockResponse,
-                                    tokenCount: mockResponse.length / 4 // Rough token estimate,
-                                }
-                            }, catch(error) {
+parseClaudeResponse(response, string);
+{
+    graph ?  : string;
+    reasoning ?  : string;
+}
+{
+    let graph;
+    let reasoning;
+    // Extract reasoning section
+    const reasoningMatch = response.match(/<reasoning>([\s\S]*?)<\/reasoning>/);
+    if (reasoningMatch) {
+        reasoning = reasoningMatch[1].trim();
+        // Extract graph section
+        const graphMatch = response.match(/<graph>([\s\S]*?)<\/graph>/);
+        if (graphMatch) {
+            graph = graphMatch[1].trim();
+        }
+        else { // Fallback: look for code blocks }
+            const codeBlockMatch = response.match(/```(?:yaml|yml)?\n?([\s\S]*?)\n?```/);
+            if (codeBlockMatch) {
+                graph = codeBlockMatch[1].trim();
+            }
+            else {
+                // Fallback: look for version to ---END---
+                const versionMatch = response.match(/version:\s*[\d.]+[\s\S]*?---END---/);
+                if (versionMatch) {
+                    graph = versionMatch[0].trim();
+                    return { graph, reasoning };
+                    async;
+                    callAnthropic(userPrompt, string, temperature, number);
+                    Promise < {
+                        success: boolean,
+                        content: string,
+                        error: string,
+                        tokenCount: number } > { try: {
+                            // Mock Anthropic API call for now - replace with actual API call
+                            // const response = await anthropic.messages.create({
+                            //   model: this.config.model,
+                            //   max_tokens: this.config.maxTokens,
+                            //   temperature,
+                            //   messages: [
+                            //     {
+                            //       role: 'user' }
+                            //       content: userPrompt
+                            //     }
+                            //   ],
+                            //   system: this.baseSystemPrompt,
+                            //   stop_sequences: this.config.stopSequences
+                            // });
+                            // Mock response for development
+                            const: mockResponse = this.generateClaudeMockResponse(userPrompt),
+                            return: { success: true,
+                                content: mockResponse,
+                                tokenCount: mockResponse.length / 4 // Rough token estimate }
+                            },
+                            catch(error) {
                                 return {
                                     success: false,
-                                    error: error instanceof Error ? error.message : 'Unknown error',
+                                    error: error instanceof Error ? error.message : 'Unknown error'
                                 };
-                                /**
-                                 * Generate mock Claude response with reasoning
-                                 */
-                            }
-                            /**
-                             * Generate mock Claude response with reasoning
-                             */
-                            ,
+                            },
                             /**
                              * Generate mock Claude response with reasoning
                              */
@@ -355,52 +344,52 @@ For this graph generation task, I need to create a functional prompt graph that 
 The graph should demonstrate good structure while being genuinely useful for the stated purpose.
 </reasoning>
 <graph>
-version: 1.0.0,
+version: 1.0.0
 metadata:
-  name: "Claude Generated Sample",
-  description: "Demonstration graph created by Claude",
-  author: "llm-agent",
+  name: "Claude Generated Sample"
+  description: "Demonstration graph created by Claude"
+  author: "llm-agent" }
   created: "${new Date().toISOString()}"}
 ---NODES---
 topic_selector:
-  type: WeightedChoice,
+  type: WeightedChoice
   props:
     choices:
-      - value: "technology",
-  weight: 0.3,
-      - value: "nature",
-  weight: 0.3,
-      - value: "science",
-  weight: 0.2,
-      - value: "art",
-  weight: 0.2,
+      - value: "technology"
+  weight: 0.3
+      - value: "nature"
+  weight: 0.3
+      - value: "science"
+  weight: 0.2
+      - value: "art"
+  weight: 0.2
 style_modifier:
-  type: WeightedChoice,
+  type: WeightedChoice
   props:
     choices:
-      - value: "detailed",
-  weight: 0.4,
-      - value: "creative",
-  weight: 0.3,
-      - value: "analytical",
-  weight: 0.3,
+      - value: "detailed"
+  weight: 0.4
+      - value: "creative"
+  weight: 0.3
+      - value: "analytical"
+  weight: 0.3
 content_builder:
-  type: Conditional,
+  type: Conditional
   props:
     branches:
-      - condition: "input.includes('technology')",
-  output: "Exploring innovative technological solutions",
-        label: "tech_branch",
-      - condition: "input.includes('nature')",
-  output: "Discovering natural wonders and ecosystems",
-        label: "nature_branch",
-    default: "Investigating fascinating topics",
+      - condition: "input.includes('technology')"
+  output: "Exploring innovative technological solutions"
+        label: "tech_branch"
+      - condition: "input.includes('nature')"
+  output: "Discovering natural wonders and ecosystems"
+        label: "nature_branch"
+    default: "Investigating fascinating topics"
 enhanced_content:
-  type: Concat,
+  type: Concat
   inputs: [style_modifier, content_builder]
 final_result:
-  type: Output,
-  inputs: [enhanced_content],
+  type: Output
+  inputs: [enhanced_content]
 ---EDGES---
 topic_selector -> content_builder
 style_modifier -> enhanced_content
@@ -419,22 +408,18 @@ enhanced_content -> final_result
                                     maxRetries: 3,
                                     retryTemperatureReduction: 0.15,
                                     useXmlFormatting: true,
-                                    stopSequences: ['</graph>'],
-                                };
-                                /**
-                                 * Utility function to create and use Anthropic agent
-                                 */
-                                export async function generateGraphWithClaude() { }
-                                ((request, config = {}) => {
-                                    const agent = new AnthropicGraphAgent({ ...defaultAnthropicConfig, ...config });
-                                    return agent.generateGraph(request);
-                                });
-                            }
-                        };
-                    }
+                                    stopSequences: ['</graph>'] };
+                            },
+                            /**
+                             * Utility function to create and use Anthropic agent
+                             */
+                            function: generateGraphWithClaude(((request, config = {}) => {
+                                const agent = new AnthropicGraphAgent({ ...defaultAnthropicConfig, ...config });
+                                return agent.generateGraph(request);
+                            }))
+                        } };
                 }
             }
-            finally { }
         }
     }
 }

@@ -18,14 +18,23 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Batch comparison processing
  */
 import { useState, useCallback, useMemo } from 'react';
-import { GitBranch, FileText, BarChart3, Download, Search, Filter, Eye, ArrowLeftRight, ZoomIn, ZoomOut, RotateCcw, Clock, CheckCircle, Layers, Code, Calendar, Plus, X, Info } from 'lucide-react';
+import { GitBranch, FileText, BarChart3, Download, Search, Filter, Eye, ArrowLeftRight, ZoomIn, ZoomOut, RotateCcw, Clock, CheckCircle, Layers, Code, Calendar, Plus, X } from Info;
+from;
+'lucide-react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
+from;
+'../../types/comparison';
+version: string;
+lastModified: Date;
+author: string;
+size: number;
+checksum: string;
+metadata: Record;
 ;
 author ?  : string;
 searchQuery ?  : string;
-position ?  : { x: number, y: number };
 ;
 breakingChanges: number;
 deprecations: number;
@@ -35,9 +44,10 @@ timeline: Array < {
     timestamp: Date,
     event: string,
     impact: 'low' | 'medium' | 'high',
-    description: string
-} > ;
+    description: string } > ;
 exportFormats: ('pdf' | 'html' | 'json' | 'csv')[];
+onExportReport: (sessionId, format) => void ;
+className ?  : string;
 export const ComparisonTools = ({
     sessions,
     activeSessionId,
@@ -45,23 +55,21 @@ export const ComparisonTools = ({
     onSessionCreate,
     onSessionUpdate,
     onSessionDelete,
-    onExportReport,
-    className = ''
-});
+    onExportReport });
+className = '';
 {
     const [selectedSessions, setSelectedSessions] = useState([]);
     const [viewMode, setViewMode] = useState('grid');
     const [sortBy, setSortBy] = useState('date');
     const [searchQuery, setSearchQuery] = useState('');
     const [filters, _____setFilters] = useState({});
-    types: [],
-        dateRange;
-    null,
-        authors;
-    [],
-        bookmarkedOnly;
-    false;
+    types: [];
 }
+dateRange: null,
+    authors;
+[],
+    bookmarkedOnly;
+false;
 ;
 const filteredSessions = useMemo(() => {
     return sessions.filter(session => { });
@@ -103,8 +111,8 @@ const sortedSessions = useMemo(() => {
                 // Would need change count to sort by changes
                 return 0;
             default:
-                return 0;
         }
+        return 0;
     });
 }, [filteredSessions, sortBy]);
 return;
@@ -115,14 +123,14 @@ _jsxs("div", { className: `comparison-tools ${className}`, children: ["}", _jsxs
                             selected
                                 ? [...prev, session.id]
                                 : prev.filter(id => id !== session.id);
-                        }, "); }} onUpdate=", (updates) => onSessionUpdate(session.id, updates), "onDelete=", () => onSessionDelete(session.id), "onExport=", (format) => onExportReport(session.id, format), "/> ))}"] }), ")}", viewMode === 'list' && ()
+                        }, ") }} onUpdate=", (updates) => onSessionUpdate(session.id, updates), "onDelete=", () => onSessionDelete(session.id), "onExport=", (format) => onExportReport(session.id, format), "/> ))}"] }), ")}", viewMode === 'list' && ()
                     < div, " className=\"comparison-list\">", sortedSessions.map(session => ()
                     < ComparisonSessionRow, key = { session, : .id }, session = { session }, isActive = { session, : .id === activeSessionId }, isSelected = { selectedSessions, : .includes(session.id) }, onSelect = {}()), " => onSessionSelect(session.id)} onToggleSelection=", (selected) => {
                     setSelectedSessions(prev => );
                     selected
                         ? [...prev, session.id]
                         : prev.filter(id => id !== session.id);
-                }, "); }} onUpdate=", (updates) => onSessionUpdate(session.id, updates), "onDelete=", () => onSessionDelete(session.id), "/> ))}"] })] });
+                }, ") }} onUpdate=", (updates) => onSessionUpdate(session.id, updates), "onDelete=", () => onSessionDelete(session.id), "/> ))}"] })] });
 {
     viewMode === 'timeline' && ()
         < ComparisonTimeline;
@@ -155,9 +163,8 @@ div >
                                 }, title: "Export report", children: _jsx(Download, { size: 14 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: (e) => {
                                     e.stopPropagation();
                                     onDelete();
-                                }, title: "Delete comparison", children: _jsx(X, { size: 14 }) })] })] }), _jsx("div", { className: "session-comparison", children: _jsxs("div", { className: "comparison-items", children: [_jsxs("div", { className: "comparison-item source", children: [_jsx("div", { className: "item-icon", children: _jsx(FileText, { size: 16 }) }), _jsxs("div", { className: "item-details", children: [_jsx("div", { className: "item-name", children: session.sourceItem.name }), _jsxs("div", { className: "item-version", children: ["v", session.sourceItem.version] })] })] }), _jsx("div", { className: "comparison-arrow", children: _jsx(ArrowLeftRight, { size: 14 }) }), _jsxs("div", { className: "comparison-item target", children: [_jsx("div", { className: "item-icon", children: _jsx(FileText, { size: 16 }) }), _jsxs("div", { className: "item-details", children: [_jsx("div", { className: "item-name", children: session.targetItem.name }), _jsxs("div", { className: "item-version", children: ["v", session.targetItem.version] })] })] })] }) }), _jsxs("div", { className: "session-meta", children: [_jsxs("div", { className: "session-badges", children: [_jsx(Badge, { variant: (session.comparisonType === 'structural' ? 'secondary' : ,
-                                    session.comparisonType === 'semantic' ? 'default' : 'destructive',
-                                ), children: session.comparisonType }), _jsx(Badge, { variant: "outline", children: session.viewMode })] }), _jsxs("div", { className: "session-date", children: [_jsx(Clock, { size: 12 }), session.lastAccessed.toLocaleDateString()] })] }), _jsxs("div", { className: "session-stats", children: [_jsxs("div", { className: "stat-item", children: [_jsx("span", { className: "stat-label", children: "Annotations" }), _jsx("span", { className: "stat-value", children: session.annotations.length })] }), _jsxs("div", { className: "stat-item", children: [_jsx("span", { className: "stat-label", children: "Type" }), _jsx("span", { className: "stat-value", children: session.sourceItem.type })] })] })] });
+                                }, title: "Delete comparison", children: _jsx(X, { size: 14 }) })] })] }), _jsx("div", { className: "session-comparison", children: _jsxs("div", { className: "comparison-items", children: [_jsxs("div", { className: "comparison-item source", children: [_jsx("div", { className: "item-icon", children: _jsx(FileText, { size: 16 }) }), _jsxs("div", { className: "item-details", children: [_jsx("div", { className: "item-name", children: session.sourceItem.name }), _jsxs("div", { className: "item-version", children: ["v", session.sourceItem.version] })] })] }), _jsx("div", { className: "comparison-arrow", children: _jsx(ArrowLeftRight, { size: 14 }) }), _jsxs("div", { className: "comparison-item target", children: [_jsx("div", { className: "item-icon", children: _jsx(FileText, { size: 16 }) }), _jsxs("div", { className: "item-details", children: [_jsx("div", { className: "item-name", children: session.targetItem.name }), _jsxs("div", { className: "item-version", children: ["v", session.targetItem.version] })] })] })] }) }), _jsxs("div", { className: "session-meta", children: [_jsxs("div", { className: "session-badges", children: [_jsx(Badge, { variant: session.comparisonType === 'structural' ? 'secondary' :
+                                    session.comparisonType === 'semantic' ? 'default' : 'destructive', children: session.comparisonType }), _jsx(Badge, { variant: "outline", children: session.viewMode })] }), _jsxs("div", { className: "session-date", children: [_jsx(Clock, { size: 12 }), session.lastAccessed.toLocaleDateString()] })] }), _jsxs("div", { className: "session-stats", children: [_jsxs("div", { className: "stat-item", children: [_jsx("span", { className: "stat-label", children: "Annotations" }), _jsx("span", { className: "stat-value", children: session.annotations.length })] }), _jsxs("div", { className: "stat-item", children: [_jsx("span", { className: "stat-label", children: "Type" }), _jsx("span", { className: "stat-value", children: session.sourceItem.type })] })] })] });
     ;
 }
 ;
@@ -196,25 +203,26 @@ div >
 return;
 _jsxs("div", { className: "comparison-timeline", children: [groupedSessions.map(({ date, sessions }) => ()
             < div, key = { date, : .toDateString() }, className = "timeline-group" >
-            (_jsxs("div", { className: "timeline-date", children: [_jsxs("h3", { children: [date.toLocaleDateString('en-US', {}), "weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' ; })}"] }), _jsxs("div", { className: "session-count", children: [sessions.length, " comparisons"] })] })
+            (_jsxs("div", { className: "timeline-date", children: [_jsxs("h3", { children: [date.toLocaleDateString('en-US', {}), "weekday: 'long' year: 'numeric' month: 'long' } day: 'numeric' ; })}"] }), _jsxs("div", { className: "session-count", children: [sessions.length, " comparisons"] })] })
                 ,
                     _jsxs("div", { className: "timeline-sessions", children: [sessions.map(session => ()
-                                < div, key = { session, : .id }, className = {} `timeline-session ${session.id === activeSessionId ? 'active' : ''}`), "onClick=", () => onSessionSelect(session.id), ">", _jsx("div", { className: "timeline-marker" }), _jsxs("div", { className: "session-content", children: [_jsxs("div", { className: "session-header", children: [_jsx("h4", { className: "session-name", children: session.name }), _jsxs("div", { className: "session-time", children: [session.createdAt.toLocaleTimeString([], {}), "hour: '2-digit', minute: '2-digit' ; })}"] })] }), _jsxs("div", { className: "session-details", children: [_jsxs("div", { className: "comparison-summary", children: [_jsx("span", { className: "source", children: session.sourceItem.name }), _jsx(ArrowLeftRight, { size: 12 }), _jsx("span", { className: "target", children: session.targetItem.name })] }), _jsxs("div", { className: "session-badges", children: [_jsx(Badge, { variant: "outline", size: "sm", children: session.comparisonType }), _jsx(Badge, { variant: "outline", size: "sm", children: session.sourceItem.type })] })] })] })] }))), ")}"] });
+                                < div, key = { session, : .id }, className = {} `timeline-session ${session.id === activeSessionId ? 'active' : ''}`), "onClick=", () => onSessionSelect(session.id), ">", _jsx("div", { className: "timeline-marker" }), _jsxs("div", { className: "session-content", children: [_jsxs("div", { className: "session-header", children: [_jsx("h4", { className: "session-name", children: session.name }), _jsxs("div", { className: "session-time", children: [session.createdAt.toLocaleTimeString([], {}), "hour: '2-digit' } minute: '2-digit' ; })}"] })] }), _jsxs("div", { className: "session-details", children: [_jsxs("div", { className: "comparison-summary", children: [_jsx("span", { className: "source", children: session.sourceItem.name }), _jsx(ArrowLeftRight, { size: 12 }), _jsx("span", { className: "target", children: session.targetItem.name })] }), _jsxs("div", { className: "session-badges", children: [_jsx(Badge, { variant: "outline", size: "sm", children: session.comparisonType }), _jsx(Badge, { variant: "outline", size: "sm", children: session.sourceItem.type })] })] })] })] }))), ")}"] });
 div >
 ;
 div >
 ;
 ;
 ;
+onAnnotationDelete: (id) => void ;
+className ?  : string;
 export const AdvancedDiffViewer = ({
     comparison,
     session,
     onSessionUpdate,
     onAnnotationAdd,
     onAnnotationUpdate,
-    onAnnotationDelete,
-    className = ''
-});
+    onAnnotationDelete });
+className = '';
 {
     const [selectedNode, setSelectedNode] = useState(null);
     const [showAnnotations, setShowAnnotations] = useState(true);
@@ -247,10 +255,9 @@ _jsxs("div", { className: `advanced-diff-viewer ${className}`, children: ["}", _
 // Placeholder components for visualization and inspector
 const DiffVisualization = () => _jsx("div", { className: "diff-visualization-placeholder", children: "Diff Visualization Area" });
 const DiffInspector = () => _jsx("div", { className: "diff-inspector-placeholder", children: "Diff Inspector Panel" });
-export default {
-    ComparisonTools,
+export default { ComparisonTools,
     AdvancedDiffViewer,
     ComparisonSessionCard,
-    ComparisonSessionRow,
-    ComparisonTimeline
-};
+    ComparisonSessionRow };
+ComparisonTimeline;
+;

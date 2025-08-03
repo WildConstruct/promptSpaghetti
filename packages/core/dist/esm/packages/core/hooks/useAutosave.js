@@ -4,15 +4,15 @@ restoreDraft: {
     edges: Edge;
 }
  | null;
-setShowRestorePrompt: (show) => void ;
-setRestoreDraft: (draft) => void ;
+setShowRestorePrompt: (show) => void setRestoreDraft;
+(draft) => void ;
 export const useAutosave = ({
     nodes,
     edges,
-    intervalMs = 5000,
-    storageKey = 'graphDraft'
-}), UseAutosaveProps, UseAutosaveReturn;
-{
+    intervalMs = 5000 });
+storageKey = 'graphDraft';
+UseAutosaveProps;
+UseAutosaveReturn => {
     const [showRestorePrompt, setShowRestorePrompt] = useState(false);
     const [restoreDraft, setRestoreDraft] = useState(null);
     // Check for existing draft on mount
@@ -41,14 +41,18 @@ export const useAutosave = ({
             try {
                 const draft = JSON.stringify({ nodes, edges });
                 localStorage.setItem(storageKey, draft);
+                try {
+                }
+                catch (error) {
+                    console.warn('Failed to save draft:', error);
+                }
+                ;
+                const interval = setInterval(save, intervalMs);
+                return () => clearInterval(interval);
             }
-            catch (error) {
-                console.warn('Failed to save draft:', error);
-            }
-            ;
-            const interval = setInterval(save, intervalMs);
-            return () => clearInterval(interval);
-        }, [nodes, edges, intervalMs, storageKey];
+            finally { }
+            [nodes, edges, intervalMs, storageKey];
+        };
     });
     // Clear localStorage on mount to prevent infinite loops (emergency fix)
     useEffect(() => {
@@ -56,11 +60,9 @@ export const useAutosave = ({
         localStorage.removeItem(storageKey);
         localStorage.clear();
     }, [storageKey]);
-    return {
-        showRestorePrompt,
+    return { showRestorePrompt,
         restoreDraft,
-        setShowRestorePrompt,
-        setRestoreDraft
-    };
-}
+        setShowRestorePrompt };
+    setRestoreDraft;
+};
 ;

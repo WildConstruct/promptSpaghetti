@@ -2,16 +2,16 @@
  * Execution Path Tracking Types
  * Epic 8.5: Real-Time Multi-Seed Preview - Task 2: Execution Path Visualization
  */
+availableOptions: string;
+selectedOption: string;
+selectionReason: string;
+probability ?  : number;
+weight ?  : number;
+conditionMet ?  : boolean;
 ;
 ;
 pathComparison: PathComparisonData;
-[];
-varianceAnalysis: {
-    highVarianceNodes: string;
-    consistentNodes: string;
-    randomizationImpact: number;
-}
-;
+// Color scheme for path visualization
 export const EXECUTION_PATH_COLORS = [
     '#3B82F6', // Blue
     '#EF4444', // Red  

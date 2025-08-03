@@ -5,9 +5,16 @@
 import { useState, useEffect, useCallback } from 'react';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
 export function useCommentReplies(options) {
-    const { commentId, userId, limit = 10, sortOrder = 'asc', enabled = true, autoRefresh = false, refreshInterval = 30000 };
+    ;
+    const { commentId };
+    userId;
+    limit = 10;
+    sortOrder = 'asc';
+    enabled = true;
+    autoRefresh = false;
 }
-options;
+refreshInterval = 30000
+    = options;
 const [replies, setReplies] = useState([]);
 const [loading, setLoading] = useState(false);
 const [loadingMore, setLoadingMore] = useState(false);
@@ -26,12 +33,9 @@ const fetchReplies = useCallback(async (pageNum = 1, append = false) => {
             setLoadingMore(true);
             setError(null);
             const params = new URLSearchParams({});
-            page: pageNum.toString(),
-                limit;
-            limit.toString(),
-                sort_order;
-            sortOrder,
-            ;
+            page: pageNum.toString();
+            limit: limit.toString();
+            sort_order: sortOrder;
         }
     }
     finally { }
@@ -39,10 +43,9 @@ const fetchReplies = useCallback(async (pageNum = 1, append = false) => {
 const response = await fetch(`${API_BASE}/comments/${commentId}/replies?${params}`, {});
 headers: {
     'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
+    'application/json';
+    'X-User-Id';
+    userId;
 }
 ;
 if (!response.ok) {
@@ -101,16 +104,13 @@ const updateReply = useCallback((replyId, updatedReply) => {
 [];
 ;
 // Remove a reply from the list
-const removeReply = useCallback((replyId) => {
-    setReplies(prev => prev.filter(reply => reply.id !== replyId));
-}, []);
+const removeReply = useCallback((replyId) => { setReplies(prev => prev.filter(reply => reply.id !== replyId)); }, []);
 // Initial fetch when enabled
 useEffect(() => {
     if (enabled) {
         fetchReplies(1, false);
     }
-    else {
-        // Clear replies when disabled
+    else { // Clear replies when disabled
         setReplies([]);
         setPage(1);
         setHasMore(false);
@@ -134,8 +134,7 @@ useEffect(() => {
     }
     [sortOrder];
 }); // Only refresh when sort order changes
-return {
-    replies,
+return { replies,
     loading,
     loadingMore,
     error,
@@ -144,6 +143,6 @@ return {
     loadMore,
     refresh,
     addReply,
-    updateReply,
-    removeReply
-};
+    updateReply };
+removeReply;
+;

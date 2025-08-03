@@ -4,9 +4,8 @@ export const MetricsGrid = ({
     children,
     columns = 'auto',
     gap = 'medium',
-    minCardWidth = '250px',
-    className = ''
-});
+    minCardWidth = '250px' });
+className = '';
 {
     const getGridTemplateColumns = () => {
         if (columns === 'auto') {
@@ -16,15 +15,12 @@ export const MetricsGrid = ({
     };
 }
 ;
-const gapClass = {
-    small: 'gap-small',
+const gapClass = { small: 'gap-small',
     medium: 'gap-medium',
-    large: 'gap-large',
-}[gap];
+    large: 'gap-large' }[gap];
 return;
 _jsx("div", { className: `metrics-grid ${gapClass} ${className}`, style: {
-        gridTemplateColumns: getGridTemplateColumns(),
-    }, children: children });
-;
-;
-export default MetricsGrid;
+        gridTemplateColumns: getGridTemplateColumns()
+    }
+        >
+            { children }, div: true, children: "); }; export default MetricsGrid;" });

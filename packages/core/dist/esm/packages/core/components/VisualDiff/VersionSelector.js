@@ -7,11 +7,9 @@ export const VersionSelector = ({
     versions,
     sourceVersionId,
     targetVersionId,
-    onVersionChange,
-    className = ''
-});
-{
-    // Sort versions by version number (descending)
+    onVersionChange });
+className = '';
+{ // Sort versions by version number (descending)
     const sortedVersions = useMemo(() => {
         return [...versions].sort((a, b) => b.version_number - a.version_number);
     }, [versions]);
@@ -19,13 +17,12 @@ export const VersionSelector = ({
     const formatVersion = (version) => {
         const date = new Date(version.created_at).toLocaleDateString();
         const time = new Date(version.created_at).toLocaleTimeString([], {});
-        hour: '2-digit',
-            minute;
-        '2-digit',
-        ;
+        hour: '2-digit';
+        minute: '2-digit';
     };
-    return `v${version.version_number} - ${version.description || 'No description'} (${date} ${time})`;
 }
+;
+return `v${version.version_number} - ${version.description || 'No description'} (${date} ${time})`;
 ;
 // Handle source version change
 const handleSourceChange = (versionId) => {
@@ -47,18 +44,14 @@ const handleSourceChange = (versionId) => {
                 {
                     label: 'Current vs Previous',
                     source: sortedVersions[1]?.id,
-                    target: sortedVersions[0]?.id,
+                    target: sortedVersions[0]?.id
                 },
-                {
-                    label: 'Current vs 2 versions ago',
+                { label: 'Current vs 2 versions ago',
                     source: sortedVersions[2]?.id,
-                    target: sortedVersions[0]?.id,
-                },
-                {
-                    label: 'Previous vs 2 versions ago',
-                    source: sortedVersions[2]?.id,
-                    target: sortedVersions[1]?.id
-                }
+                    target: sortedVersions[0]?.id },
+                { label: 'Previous vs 2 versions ago',
+                    source: sortedVersions[2]?.id },
+                target, sortedVersions[1]?.id
             ].filter(option => option.source && option.target);
         };
         const quickOptions = getQuickCompareOptions();

@@ -7,9 +7,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
 export const StateInspectorPanel = ({
     devTools,
-    selectedDomain,
-    onDomainChange
-});
+    selectedDomain });
+onDomainChange;
 {
     const [stateHistory, setStateHistory] = useState([]);
     const [selectedSnapshot, setSelectedSnapshot] = useState(null);
@@ -32,14 +31,15 @@ export const StateInspectorPanel = ({
         if (snapshot.metadata?.domain) {
             const validation = devTools.validateStateIntegrity();
             ;
-            snapshot.state,
-                snapshot.metadata.domain,
-                {
-                    deep: true,
-                    checkReferences: true,
-                    validateSchema: true,
-                    checkMemoryLeaks: true
-                };
+            snapshot.state;
+            snapshot.metadata.domain;
+            {
+                deep: true;
+                checkReferences: true;
+                validateSchema: true;
+            }
+            checkMemoryLeaks: true;
+            ;
             setValidationResult(validation);
         }
         ;
@@ -103,9 +103,7 @@ div >
 ;
 return _jsx("span", { className: "unknown", children: String(value) });
 ;
-const formatTimestamp = (timestamp) => {
-    return new Date(timestamp).toLocaleString();
-};
+const formatTimestamp = (timestamp) => { return new Date(timestamp).toLocaleString(); };
 const getChangeTypeColor = (type) => {
     switch (type?.toLowerCase()) {
         case 'create': return '#27ae60';
@@ -196,22 +194,22 @@ div >
 div >
     _jsx("style", { jsx: true, children: `
         .inspector-panel {
-          height: 100%;,
+          height: 100%
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   background: var(--devtools-bg, #1e1e1e);
         .inspector-header {
           display: flex;
           align-items: center;
-          justify-content: space-between;,
+          justify-content: space-between
   padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
         .domain-selector label {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          font-size: 12px;,
+          font-size: 12px;
   color: var(--devtools-text, #fff);
         .domain-selector select {
           background: var(--devtools-input-bg, #2a2a2a);
@@ -226,12 +224,12 @@ div >
           color: var(--devtools-text, #fff);
           padding: 6px 10px;
           border-radius: 4px;
-          font-size: 12px;,
+          font-size: 12px;
   width: 200px;
-        .search-input::placeholder {,
+        .search-input::placeholder {
   color: var(--devtools-text-secondary, #aaa);
         .inspector-content {
-          flex: 1;,
+          flex: 1;
   display: flex;
           overflow: hidden;
         .history-sidebar {
@@ -240,9 +238,9 @@ div >
           display: flex;
           flex-direction: column;
         .history-sidebar h4 {
-          margin: 0;,
+          margin: 0;
   padding: 12px;
-          font-size: 13px;,
+          font-size: 13px;
   color: var(--devtools-text, #fff);
           border-bottom: 1px solid var(--devtools-border, #333);
           background: var(--devtools-section-bg, #252525);
@@ -252,9 +250,9 @@ div >
         .history-item {
           padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
-          cursor: pointer;,
+          cursor: pointer;
   transition: background 0.2s;
-        .history-item:hover {,
+        .history-item:hover {
   background: var(--devtools-hover, #2a2a2a);
         .history-item.selected {
           background: var(--devtools-selected-bg, #2a3a4a);
@@ -266,14 +264,14 @@ div >
           margin-bottom: 4px;
         .history-index {
           font-size: 11px;
-          font-weight: 600;,
+          font-weight: 600;
   color: var(--devtools-active, #61dafb);
         .history-time {
-          font-size: 10px;,
+          font-size: 10px;
   color: var(--devtools-text-secondary, #aaa);
         .history-change {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
           margin-bottom: 4px;
         .change-type {
@@ -281,16 +279,16 @@ div >
           font-weight: 500;
           text-transform: uppercase;
         .change-source {
-          font-size: 10px;,
+          font-size: 10px;
   color: var(--devtools-text-secondary, #aaa);
         .history-domain {
-          font-size: 11px;,
+          font-size: 11px;
   color: var(--devtools-domain, #f39c12);
           font-weight: 500;
         .state-viewer {
-          flex: 1;,
+          flex: 1;
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   overflow: hidden;
         .state-header {
           padding: 12px;
@@ -298,15 +296,15 @@ div >
           background: var(--devtools-section-bg, #252525);
         .state-header h4 {
           margin: 0 0 8px 0;
-          font-size: 13px;,
+          font-size: 13px;
   color: var(--devtools-text, #fff);
         .state-info {
-          display: flex;,
+          display: flex;
   gap: 16px;
-          font-size: 11px;,
+          font-size: 11px;
   color: var(--devtools-text-secondary, #aaa);
         .state-content {
-          flex: 1;,
+          flex: 1;
   overflow: auto;
           padding: 16px;
           font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
@@ -316,7 +314,7 @@ div >
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   height: 100%;
           color: var(--devtools-text-secondary, #aaa);
           text-align: center;
@@ -326,35 +324,34 @@ div >
         .clickable {
           cursor: pointer;
           user-select: none;
-        .clickable:hover {,
+        .clickable:hover { }
   background: var(--devtools-hover, #2a2a2a);
-        .string { color: #98c379; }
-        .number { color: #d19a66; }
-        .boolean { color: #c678dd; }
-        .null, .undefined { color: #5c6370; font-style: italic; }
-        .function { color: #61dafb; }
-        .array-container,
-        .object-container {
-          margin-left: 0;
-        .array-header,
+        .string { color: #98c379 }
+        .number { color: #d19a66 }
+        .boolean { color: #c678dd }
+        .null, .undefined { color: #5c6370; font-style: italic }
+        .function { color: #61dafb }
+        .array-container
+        .object-container { margin-left: 0;
+        .array-header
         .object-header {
           color: var(--devtools-text, #fff);
-          font-weight: 500;,
+          font-weight: 500;
   padding: 2px 4px;
           border-radius: 2px;
-        .array-items,
+        .array-items
         .object-properties {
           margin-left: 16px;
           margin-top: 4px;
           border-left: 1px solid var(--devtools-border, #333);
           padding-left: 12px;
-        .array-item,
+        .array-item
         .object-property {
-          margin: 4px 0;,
+          margin: 4px 0
   display: flex;
-          align-items: flex-start;,
+          align-items: flex-start
   gap: 8px;
-        .index,
+        .index
         .property-key {
           color: var(--devtools-text, #fff);
           font-weight: 500;
@@ -364,11 +361,11 @@ div >
           font-style: italic;
         .validation-section {
           border-top: 1px solid var(--devtools-border, #333);
-          padding: 16px;,
+          padding: 16px;
   background: var(--devtools-section-bg, #252525);
         .validation-section h5 {
           margin: 0 0 12px 0;
-          font-size: 13px;,
+          font-size: 13px;
   color: var(--devtools-text, #fff);
         .validation-status {
           font-size: 14px;
@@ -378,15 +375,15 @@ div >
           color: #27ae60;
         .validation-status.invalid {
           color: #e74c3c;
-        .validation-errors,
+        .validation-errors
         .validation-warnings {
           margin-bottom: 12px;
-        .validation-errors h6,
+        .validation-errors h6
         .validation-warnings h6 {
           margin: 0 0 8px 0;
-          font-size: 12px;,
+          font-size: 12px;
   color: var(--devtools-text, #fff);
-        .validation-error,
+        .validation-error
         .validation-warning {
           padding: 8px;
           margin-bottom: 4px;
@@ -394,21 +391,21 @@ div >
           font-size: 11px;
         .validation-error {
           background: rgba(231, 76, 60, 0.1);
-          border-left: 3px solid #e74c3c;,
+          border-left: 3px solid #e74c3c
   color: #e74c3c;
         .validation-warning {
           background: rgba(243, 156, 18, 0.1);
-          border-left: 3px solid #f39c12;,
+          border-left: 3px solid #f39c12
   color: #f39c12;
-        .error-value,
+        .error-value }
         .warning-suggestion {
           margin-top: 4px;
-          font-size: 10px;,
+          font-size: 10px;
   opacity: 0.8;
         .validation-performance {
-          display: flex;,
+          display: flex;
   gap: 16px;
-          font-size: 10px;,
+          font-size: 10px;
   color: var(--devtools-text-secondary, #aaa);
           padding-top: 8px;
           border-top: 1px solid var(--devtools-border, #333);

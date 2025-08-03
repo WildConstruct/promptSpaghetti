@@ -11,10 +11,9 @@ export * from './PromotionInterfaces';
 export * from './PromotionServices';
 // Export all event interfaces
 export * from './PromotionEvents';
-export { 
-// Core enums
+export { // Core enums
 PromotionType, PromotionStatus, PromotionTargetType, PromotionApplicationType, DiscountApplicationScope, 
 // Event enums
 PromotionEventType, EventPriority, EventDeliveryMethod, 
 // Validation schemas
-CreatePromotionSchema, UpdatePromotionSchema, ApplyPromotionSchema, CheckEligibilitySchema, } from './PromotionInterfaces';
+CreatePromotionSchema, UpdatePromotionSchema, ApplyPromotionSchema, CheckEligibilitySchema } from './PromotionInterfaces';

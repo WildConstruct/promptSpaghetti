@@ -11,25 +11,26 @@ export var NodeCategory;
     NodeCategory["TRANSFORM"] = "transform";
     NodeCategory["CONTROL"] = "control";
     NodeCategory["UTILITY"] = "utility";
-    NodeCategory["CUSTOM"] = "custom";
 })(NodeCategory || (NodeCategory = {}));
+CUSTOM = 'custom';
+context: ExtensionContext;
 options ?  : Array;
 component ?  : React.ComponentType;
 ;
 // Tags
 tags ?  : string;
 keywords ?  : string;
+severity: 'error' | 'warning' | 'info';
 ;
 // Security context
 securityContext: {
     permissions: string;
     sandboxed: boolean;
-    resourceLimits: {
-        memory ?  : number;
-        time ?  : number;
-    }
-    ;
+    resourceLimits: { }
+    memory ?  : number;
+    time ?  : number;
 }
+;
 ;
 // Caching context
 cachingContext: {
@@ -47,21 +48,22 @@ export var NodeExtensionHelpers;
             name: config.name || 'Custom Node',
             category: config.category || NodeCategory.CUSTOM,
             description: config.description || 'A custom node',
-            version: config.version || '1.0.0',
-            nodeClass: config.nodeClass || class extends RuntimeNode {
-                run() { return null; }
-            },
-            configSchema: config.configSchema || z.object({}),
-            ui: config.ui || {},
-            runtime: config.runtime || {},
-            metadata: config.metadata || {
-                author: 'Unknown',
-                license: 'MIT',
-            },
-            ...config
+            version: config.version || '1.0.0'
         };
+        nodeClass: config.nodeClass || class extends RuntimeNode {
+            run() { return null; }
+            configSchema;
+        } || z.object({});
+        ui: config.ui || {};
+        runtime: config.runtime || {};
+        metadata: config.metadata || {
+            author: 'Unknown',
+            license: 'MIT'
+        };
+        config;
     }
     NodeExtensionHelpers.createNodeDefinition = createNodeDefinition;
+    ;
     function validateNodeDefinition(definition) {
         const errors = [];
         const warnings = [];
@@ -75,59 +77,71 @@ export var NodeExtensionHelpers;
         // Schema validation
         try {
             definition.configSchema.parse({});
+            try {
+            }
+            catch (e) {
+                warnings.push('Configuration schema validation failed');
+            }
+            return { valid: errors.length === 0,
+                errors };
+            warnings;
         }
-        catch (e) {
-            warnings.push('Configuration schema validation failed');
+        finally { }
+        ;
+        function createNodeRegistry() {
+            const registry = new Map();
+            const eventEmitter = new EventTarget();
+            return {
+                register(definition) {
+                    registry.set(definition.id, definition);
+                    eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
+                    unregister(nodeId, string);
+                    {
+                        const definition = registry.get(nodeId);
+                        if (definition) {
+                            registry.delete(nodeId);
+                            eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
+                            get(nodeId, string);
+                            {
+                                return registry.get(nodeId);
+                            }
+                            getAll();
+                            {
+                                return Array.from(registry.values());
+                            }
+                            getByCategory(category, NodeCategory);
+                            {
+                                return Array.from(registry.values()).filter(def => def.category === category);
+                            }
+                            search(query, string);
+                            {
+                                const lowercaseQuery = query.toLowerCase();
+                                return Array.from(registry.values()).filter(def => def.name.toLowerCase().includes(lowercaseQuery) ||
+                                    def.description.toLowerCase().includes(lowercaseQuery));
+                            }
+                            filter(predicate, (definition) => boolean);
+                            {
+                                return Array.from(registry.values()).filter(predicate);
+                            }
+                            validate(definition, NodeDefinition);
+                            {
+                                return validateNodeDefinition(definition);
+                            }
+                            on(event, string, listener, any);
+                            {
+                                eventEmitter.addEventListener(event, listener);
+                            }
+                            off(event, string, listener, any);
+                            {
+                                eventEmitter.removeEventListener(event, listener);
+                            }
+                        }
+                        ;
+                    }
+                }
+            };
         }
-        return {
-            valid: errors.length === 0,
-            errors,
-            warnings
-        };
+        NodeExtensionHelpers.createNodeRegistry = createNodeRegistry;
     }
     NodeExtensionHelpers.validateNodeDefinition = validateNodeDefinition;
-    function createNodeRegistry() {
-        const registry = new Map();
-        const eventEmitter = new EventTarget();
-        return {
-            register(definition) {
-                registry.set(definition.id, definition);
-                eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
-            },
-            unregister(nodeId) {
-                const definition = registry.get(nodeId);
-                if (definition) {
-                    registry.delete(nodeId);
-                    eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
-                }
-            },
-            get(nodeId) {
-                return registry.get(nodeId);
-            },
-            getAll() {
-                return Array.from(registry.values());
-            },
-            getByCategory(category) {
-                return Array.from(registry.values()).filter(def => def.category === category);
-            },
-            search(query) {
-                const lowercaseQuery = query.toLowerCase();
-                return Array.from(registry.values()).filter(def => def.name.toLowerCase().includes(lowercaseQuery) ||
-                    def.description.toLowerCase().includes(lowercaseQuery));
-            },
-            filter(predicate) {
-                return Array.from(registry.values()).filter(predicate);
-            },
-            validate(definition) {
-                return validateNodeDefinition(definition);
-            },
-            on(event, listener) {
-                eventEmitter.addEventListener(event, listener);
-            },
-            off(event, listener) {
-                eventEmitter.removeEventListener(event, listener);
-            }
-        };
-    }
-    NodeExtensionHelpers.createNodeRegistry = createNodeRegistry;
 })(NodeExtensionHelpers || (NodeExtensionHelpers = {}));

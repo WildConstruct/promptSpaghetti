@@ -4,37 +4,45 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Detailed view component for individual extensions
  */
 import { useState } from 'react';
-export const ExtensionDetailView = ({ extension, status, viewMode, onToggle, onUninstall, onUpdate, onConfigure, onInstall, onClose }) => {
+export const ExtensionDetailView = ({ extension,
+    status,
+    viewMode,
+    onToggle,
+    onUninstall,
+    onUpdate,
+    onConfigure,
+    onInstall });
+onClose;
+{
     const [activeTab, setActiveTab] = useState('overview');
-    const getExtensionIcon = (type) => {
-        switch (type) {
-            case 'node': return '🔧';
-            case 'ui': return '🎨';
-            case 'transform': return '⚡';
-            case 'storage': return '💾';
-            default: return '📦';
-        }
-        ;
-        const formatFileSize = (bytes) => {
-            if (bytes < 1024)
-                return `${bytes} B`;
-            if (bytes < 1024 * 1024)
-                return `${(bytes / 1024).toFixed(1)} KB`;
-            return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-        };
-        const isInstalled = viewMode === 'installed';
-        const canToggle = isInstalled && onToggle;
-        const canUninstall = isInstalled && onUninstall;
-        const canUpdate = isInstalled && status.updateAvailable && onUpdate;
-        const canConfigure = isInstalled && onConfigure;
-        const canInstall = !isInstalled && onInstall;
-        return;
-        _jsxs("div", { className: "extension-detail-view", children: [_jsxs("div", { className: "extension-detail-header", children: [_jsx("button", { className: "back-btn", onClick: onClose, children: "\u2190 Back" }), _jsxs("div", { className: "header-actions", children: [canInstall && ()
-                                    < button, " className=\"primary-btn install-btn\" onClick=", onInstall, "> Install Extension"] }), ")}", canUpdate && ()
-                            < button, " className=\"primary-btn update-btn\" onClick=", onUpdate, "> Update to ", status.availableVersion] }), ")}", canToggle && ()
-                    < button, "className=", `toggle-btn ${status.enabled ? 'enabled' : 'disabled'}`, "onClick=", onToggle, ">", status.enabled ? 'Disable' : 'Enable'] });
+    const getExtensionIcon = (type) => { };
+    switch (type) {
+        case 'node': return '🔧';
+        case 'ui': return '🎨';
+        case 'transform': return '⚡';
+        case 'storage': return '💾';
+        default: return '📦';
+    }
+    ;
+    const formatFileSize = (bytes) => {
+        if (bytes < 1024)
+            return `${bytes} B`;
+        if (bytes < 1024 * 1024)
+            return `${(bytes / 1024).toFixed(1)} KB`;
+        return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     };
-};
+    const isInstalled = viewMode === 'installed';
+    const canToggle = isInstalled && onToggle;
+    const canUninstall = isInstalled && onUninstall;
+    const canUpdate = isInstalled && status.updateAvailable && onUpdate;
+    const canConfigure = isInstalled && onConfigure;
+    const canInstall = !isInstalled && onInstall;
+    return;
+    _jsxs("div", { className: "extension-detail-view", children: [_jsxs("div", { className: "extension-detail-header", children: [_jsx("button", { className: "back-btn", onClick: onClose, children: "\u2190 Back" }), _jsxs("div", { className: "header-actions", children: [canInstall && ()
+                                < button, " className=\"primary-btn install-btn\" onClick=", onInstall, "> Install Extension"] }), ")}", canUpdate && ()
+                        < button, " className=\"primary-btn update-btn\" onClick=", onUpdate, "> Update to ", status.availableVersion] }), ")}", canToggle && ()
+                < button, "className=", `toggle-btn ${status.enabled ? 'enabled' : 'disabled'}`, "onClick=", onToggle, ">", status.enabled ? 'Disable' : 'Enable'] });
+}
 div >
 ;
 div >
@@ -304,8 +312,9 @@ function getPermissionDescription(permission) {
         'ui-components': 'Add or modify user interface components',
         'extensions-api': 'Interact with other extensions',
         'system-info': 'Access system information and statistics',
-        'data-storage': 'Store and retrieve persistent data',
+        'data-storage': 'Store and retrieve persistent data'
     };
-    return descriptions[permission] || 'Access to system functionality';
-    export default ExtensionDetailView;
 }
+;
+return descriptions[permission] || 'Access to system functionality';
+export default ExtensionDetailView;

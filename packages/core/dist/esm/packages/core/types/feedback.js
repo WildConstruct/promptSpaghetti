@@ -146,8 +146,7 @@ z.number().min(1).max(5).optional(),
     easeOfUse;
 z.number().min(1).max(5).optional(),
     valueForMoney;
-z.number().min(1).max(5).optional(),
-;
+z.number().min(1).max(5).optional();
 optional();
 ;
 // Report Schema
@@ -196,8 +195,7 @@ z.string().optional(),
     device;
 z.string().optional(),
     version;
-z.string().optional(),
-;
+z.string().optional();
 optional(),
     // Bug tracking
     assignedTo;
@@ -232,8 +230,7 @@ z.string().uuid().optional(),
     implementedAt;
 z.date().optional(),
     implementationNotes;
-z.string().optional(),
-;
+z.string().optional();
 ;
 // =============================================================================
 // Feedback Aggregation Schemas
@@ -258,8 +255,7 @@ z.number().int().default(0),
     4;
 z.number().int().default(0),
     5;
-z.number().int().default(0),
-;
+z.number().int().default(0);
 // Review summary
 totalReviews: z.number().int().default(0),
     verifiedReviews;
@@ -303,8 +299,7 @@ z.string().uuid(),
     voteType;
 z.enum(['helpful', 'not_helpful']),
     createdAt;
-z.date(),
-;
+z.date();
 ;
 export const FeedbackReplySchema = z.object({});
 id: z.string().uuid(),
@@ -382,8 +377,7 @@ z.string().optional(),
     actualBehavior;
 z.string().optional(),
     attachments;
-z.array(z.string()).default([]),
-;
+z.array(z.string()).default([]);
 ;
 export const UpdateFeedbackRequestSchema = z.object({});
 title: z.string().min(1).max(200).optional(),
@@ -398,8 +392,7 @@ z.array(z.string().max(500)).optional(),
     useCase;
 z.string().max(1000).optional(),
     wouldRecommend;
-z.boolean().optional(),
-;
+z.boolean().optional();
 ;
 export const FeedbackFilterSchema = z.object({});
 targetId: z.string().uuid().optional(),
@@ -434,16 +427,14 @@ z.enum(['asc', 'desc']).default('desc'),
     limit;
 z.number().int().min(1).max(100).default(20),
     offset;
-z.number().int().min(0).default(0),
-;
+z.number().int().min(0).default(0);
 ;
 export const ModerateFeedbackRequestSchema = z.object({});
 action: z.enum(['approve', 'reject', 'flag', 'archive']),
     notes;
 z.string().optional(),
     rejectionReason;
-z.string().optional(),
-;
+z.string().optional();
 ;
 // =============================================================================
 // Validation Helpers
@@ -460,65 +451,55 @@ export const validateFeedback = (feedback) => {
         case 'suggestion':
             return SuggestionFeedbackSchema.parse(feedback);
         default:
-            return BaseFeedbackSchema.parse(feedback);
     }
-    ;
-    export const validateCreateFeedbackRequest = (request) => {
-        return CreateFeedbackRequestSchema.parse(request);
-    };
-    export const validateUpdateFeedbackRequest = (request) => {
-        return UpdateFeedbackRequestSchema.parse(request);
-    };
-    export const validateFeedbackFilter = (filter) => {
-        return FeedbackFilterSchema.parse(filter);
-    };
-    export const validateModerateFeedbackRequest = (request) => {
-        return ModerateFeedbackRequestSchema.parse(request);
-    };
-    // =============================================================================
-    // Constants and Descriptions
-    // =============================================================================
-    export const FEEDBACK_TYPE_DESCRIPTIONS = {
-        rating: 'Simple star rating',
-        review: 'Detailed review with rating',
-        comment: 'General comment or discussion',
-        report: 'Report inappropriate content',
-        suggestion: 'Improvement suggestion',
-        bug_report: 'Bug or technical issue',
-        feature_request: 'Request for new features',
-    };
-    export const FEEDBACK_CATEGORY_DESCRIPTIONS = {
-        general: 'General feedback',
-        usability: 'User experience and interface',
-        performance: 'Speed and performance issues',
-        documentation: 'Documentation and help content',
-        pricing: 'Pricing and billing',
-        support: 'Customer support experience',
-        technical: 'Technical issues and bugs',
-        content_quality: 'Quality of content and templates',
-    };
-    export const REPORT_REASON_DESCRIPTIONS = {
-        inappropriate_content: 'Content is inappropriate or offensive',
-        spam: 'Spam or promotional content',
-        copyright_violation: 'Copyright or intellectual property violation',
-        offensive_language: 'Contains offensive or abusive language',
-        misleading_information: 'Contains false or misleading information',
-        low_quality: 'Low quality or poorly written content',
-        duplicate_content: 'Duplicate or copied content',
-        terms_violation: 'Violates terms of service',
-        other: 'Other reason (specify in description)',
-    };
-    export const FEEDBACK_DEFAULTS = {
-        RATING_REQUIRED_TYPES: ['rating', 'review'],
-        MAX_ATTACHMENTS: 5,
-        MAX_ATTACHMENT_SIZE_MB: 10,
-        AUTO_APPROVE_THRESHOLD: 80, // Quality score,
-        FLAGGED_THRESHOLD: 3, // Number of reports,
-        MODERATION_QUEUE_PRIORITY: {
-            critical: 1,
-            high: 2,
-            medium: 3,
-            low: 4,
-        }
-    };
+    return BaseFeedbackSchema.parse(feedback);
 };
+export const validateCreateFeedbackRequest = (request) => { return CreateFeedbackRequestSchema.parse(request); };
+export const validateUpdateFeedbackRequest = (request) => { return UpdateFeedbackRequestSchema.parse(request); };
+export const validateFeedbackFilter = (filter) => { return FeedbackFilterSchema.parse(filter); };
+export const validateModerateFeedbackRequest = (request) => { return ModerateFeedbackRequestSchema.parse(request); };
+// =============================================================================
+// Constants and Descriptions
+// =============================================================================
+export const FEEDBACK_TYPE_DESCRIPTIONS = { rating: 'Simple star rating',
+    review: 'Detailed review with rating',
+    comment: 'General comment or discussion',
+    report: 'Report inappropriate content',
+    suggestion: 'Improvement suggestion',
+    bug_report: 'Bug or technical issue',
+    feature_request: 'Request for new features' };
+as;
+const ;
+export const FEEDBACK_CATEGORY_DESCRIPTIONS = { general: 'General feedback',
+    usability: 'User experience and interface',
+    performance: 'Speed and performance issues',
+    documentation: 'Documentation and help content',
+    pricing: 'Pricing and billing',
+    support: 'Customer support experience',
+    technical: 'Technical issues and bugs',
+    content_quality: 'Quality of content and templates' };
+as;
+const ;
+export const REPORT_REASON_DESCRIPTIONS = { inappropriate_content: 'Content is inappropriate or offensive',
+    spam: 'Spam or promotional content',
+    copyright_violation: 'Copyright or intellectual property violation',
+    offensive_language: 'Contains offensive or abusive language',
+    misleading_information: 'Contains false or misleading information',
+    low_quality: 'Low quality or poorly written content',
+    duplicate_content: 'Duplicate or copied content',
+    terms_violation: 'Violates terms of service',
+    other: 'Other reason (specify in description)' };
+as;
+const ;
+export const FEEDBACK_DEFAULTS = { RATING_REQUIRED_TYPES: ['rating', 'review'],
+    MAX_ATTACHMENTS: 5,
+    MAX_ATTACHMENT_SIZE_MB: 10,
+    AUTO_APPROVE_THRESHOLD: 80, // Quality score
+    FLAGGED_THRESHOLD: 3, // Number of reports
+    MODERATION_QUEUE_PRIORITY: {
+        critical: 1,
+        high: 2,
+        medium: 3,
+        low: 4
+    },
+    as, const:  };

@@ -14,4 +14,8 @@ trends: {
     hourly: Array;
 }
 ;
+activity: ActivityEvent;
+timestamp: string;
+loadMore: () => Promise;
+createActivity: (activity) => Promise;
 export {};

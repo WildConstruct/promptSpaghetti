@@ -6,7 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides drag-and-drop rule building, condition chaining, and action configuration.
  */
 import { useState } from 'react';
-import { SecurityEventType, SecurityEventSeverity } from '../../security/SecurityEventLoggingPolicies';
+import { SecurityEventType, SecurityEventSeverity } from ComplianceFramework;
+from;
+'../../security/SecurityEventLoggingPolicies';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -17,112 +19,54 @@ import { Select } from '../ui/Select';
 import { Checkbox } from '../ui/Checkbox';
 import { Textarea } from '../ui/Textarea';
 import './AlertRuleBuilder.css';
-const AVAILABLE_FIELDS = [];
-{
-    value: 'event_type', label;
-    'Event Type', type;
-    'enum';
-}
-{
-    value: 'severity', label;
-    'Severity', type;
-    'enum';
-}
-{
-    value: 'source_ip', label;
-    'Source IP', type;
-    'string';
-}
-{
-    value: 'user_id', label;
-    'User ID', type;
-    'string';
-}
-{
-    value: 'threat_level', label;
-    'Threat Level', type;
-    'number';
-}
-{
-    value: 'confidence_score', label;
-    'Confidence Score', type;
-    'number';
-}
-{
-    value: 'system_component', label;
-    'System Component', type;
-    'string';
-}
-{
-    value: 'tags', label;
-    'Tags', type;
-    'array';
-}
-{
-    value: 'request_count', label;
-    'Request Count', type;
-    'number';
-}
-{
-    value: 'failed_attempts', label;
-    'Failed Attempts', type;
-    'number';
-}
-{
-    value: 'data_volume', label;
-    'Data Volume', type;
-    'number';
-}
-{
-    value: 'response_time', label;
-    'Response Time', type;
-    'number';
-}
-;
-const OPERATORS_BY_TYPE = {
-    string: ['eq', 'ne', 'contains', 'regex'],
-    number: ['eq', 'ne', 'gt', 'lt', 'gte', 'lte'],
-    enum: ['eq', 'ne', 'in', 'not_in'],
-    array: ['contains', 'in', 'not_in'],
-};
+value: Error;
+logic_operator ?  : 'and' | 'or';
+config: Record;
+enabled: boolean;
+const AVAILABLE_FIELDS = [
+    { value: 'event_type', label: 'Event Type', type: 'enum' },
+    { value: 'severity', label: 'Severity', type: 'enum' },
+    { value: 'source_ip', label: 'Source IP', type: 'string' },
+    { value: 'user_id', label: 'User ID', type: 'string' },
+    { value: 'threat_level', label: 'Threat Level', type: 'number' },
+    { value: 'confidence_score', label: 'Confidence Score', type: 'number' },
+    { value: 'system_component', label: 'System Component', type: 'string' },
+    { value: 'tags', label: 'Tags', type: 'array' },
+    { value: 'request_count', label: 'Request Count', type: 'number' },
+    { value: 'failed_attempts', label: 'Failed Attempts', type: 'number' },
+    { value: 'data_volume', label: 'Data Volume', type: 'number' },
+    { value: 'response_time', label: 'Response Time', type: 'number' }
+];
+const OPERATORS_BY_TYPE = {};
 const ACTION_TYPES = [
-    {
-        type: 'notification',
+    { type: 'notification',
         name: 'Send Notification',
         description: 'Send alert notification to configured channels',
-        icon: '📢',
-    },
-    {
-        type: 'containment',
+        icon: '📢' },
+    { type: 'containment',
         name: 'Automated Containment',
         description: 'Automatically block IPs, lock accounts, or isolate systems',
-        icon: '🛡️',
-    },
-    {
-        type: 'escalation',
+        icon: '🛡️' },
+    { type: 'escalation',
         name: 'Escalate Alert',
         description: 'Escalate to security team or management',
-        icon: '🚨',
-    },
-    {
-        type: 'logging',
+        icon: '🚨' },
+    { type: 'logging',
         name: 'Enhanced Logging',
         description: 'Capture additional forensic data',
-        icon: '📝',
-    },
-    {
-        type: 'webhook',
+        icon: '📝' },
+    { type: 'webhook',
         name: 'Webhook Call',
         description: 'Call external webhook with alert data',
-        icon: '🔗'
-    }
+        icon: '🔗' }
 ];
 /**
 * Main Alert Rule Builder Component
 */
-export const AlertRuleBuilder, AlertRule;
+export const AlertRuleBuilder;
+alertRules: AlertRule;
 onRulesChange: (rules) => void ;
- > ;
+    > ;
 ({ alertRules, onRulesChange }) => {
     const [_____selectedRule, setSelectedRule] = useState(null);
     const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -140,40 +84,41 @@ onRulesChange: (rules) => void ;
             actions: [],
             notification_channels: [],
             created_at: new Date(),
-            updated_at: new Date(),
-        };
-        setEditingRule(newRule);
-        setShowCreateDialog(true);
-    };
-    const handleSaveRule = (rule) => {
-        const isNew = !alertRules.find(r => r.id === rule.id);
-        const updatedRule = { ...rule, updated_at: new Date() };
-        if (isNew) {
-            onRulesChange([...alertRules, updatedRule]);
-        }
-        else {
-            onRulesChange(alertRules.map(r => r.id === rule.id ? updatedRule : r));
-            setEditingRule(null);
-            setShowCreateDialog(false);
-        }
-        ;
-        const handleDeleteRule = (ruleId) => {
-            onRulesChange(alertRules.filter(r => r.id !== ruleId));
-            setShowDeleteDialog(null);
-        };
-        const handleToggleRule = (ruleId) => {
-            onRulesChange();
-            alertRules.map(rule => );
-            rule.id === ruleId
-                ? { ...rule, enabled: !rule.enabled, updated_at: new Date() }
-                : rule;
+            updated_at: new Date()
         };
     };
-    ;
+    setEditingRule(newRule);
+    setShowCreateDialog(true);
 };
+const handleSaveRule = (rule) => {
+    const isNew = !alertRules.find(r => r.id === rule.id);
+    const updatedRule = { ...rule, updated_at: new Date() };
+    if (isNew) {
+        onRulesChange([...alertRules, updatedRule]);
+    }
+    else {
+        onRulesChange(alertRules.map(r => r.id === rule.id ? updatedRule : r));
+        setEditingRule(null);
+        setShowCreateDialog(false);
+    }
+    ;
+    const handleDeleteRule = (ruleId) => {
+        onRulesChange(alertRules.filter(r => r.id !== ruleId));
+        setShowDeleteDialog(null);
+    };
+    const handleToggleRule = (ruleId) => {
+        onRulesChange();
+        alertRules.map(rule => );
+        rule.id === ruleId
+            ? { ...rule, enabled: !rule.enabled, updated_at: new Date() }
+            : rule;
+    };
+};
+;
+;
 return;
 _jsxs("div", { className: "alert-rule-builder", children: [_jsxs("div", { className: "builder-header", children: [_jsxs("div", { className: "header-content", children: [_jsx("h2", { children: "Security Alert Rules" }), _jsx("p", { children: "Create and manage automated security alert rules with custom conditions and actions" })] }), _jsx(Button, { variant: "primary", onClick: handleCreateRule, children: "Create Alert Rule" })] }), _jsx("div", { className: "rules-overview", children: _jsxs("div", { className: "overview-stats", children: [_jsxs("div", { className: "stat-card", children: [_jsx("span", { className: "stat-value", children: alertRules.length }), _jsx("span", { className: "stat-label", children: "Total Rules" })] }), _jsxs("div", { className: "stat-card", children: [_jsx("span", { className: "stat-value", children: alertRules.filter(r => r.enabled).length }), _jsx("span", { className: "stat-label", children: "Active Rules" })] }), _jsxs("div", { className: "stat-card", children: [_jsx("span", { className: "stat-value", children: alertRules.reduce((sum, r) => sum + r.actions.length, 0) }), _jsx("span", { className: "stat-label", children: "Total Actions" })] })] }) }), _jsxs("div", { className: "rules-grid", children: [alertRules.map(rule => ()
-                    < RuleCard, key = { rule, : .id }, rule = { rule }, onEdit = {}()), " => ", setEditingRule({ ...rule }), "; setShowCreateDialog(true); }} onToggle=", () => handleToggleRule(rule.id), "onDelete=", () => setShowDeleteDialog(rule.id), "onSelect=", () => setSelectedRule(rule), "/> ))}"] }), alertRules.length === 0 && ()
+                    < RuleCard, key = { rule, : .id }, rule = { rule }, onEdit = {}()), " => ", setEditingRule({ ...rule }), "; setShowCreateDialog(true); } onToggle=", () => handleToggleRule(rule.id), "onDelete=", () => setShowDeleteDialog(rule.id), "onSelect=", () => setSelectedRule(rule), "/> ))}"] }), alertRules.length === 0 && ()
             < div, " className=\"empty-state\">", _jsx("div", { className: "empty-icon", children: "\uD83D\uDEA8" }), _jsx("h3", { children: "No Alert Rules Configured" }), _jsx("p", { children: "Create your first security alert rule to start automated threat detection and response." }), _jsx(Button, { variant: "primary", onClick: handleCreateRule, children: "Create First Rule" })] });
 { /* Create/Edit Rule Dialog */ }
 {
@@ -217,7 +162,7 @@ onEdit: () => void ;
 onToggle: () => void ;
 onDelete: () => void ;
 onSelect: () => void ;
- > ;
+    > ;
 ({ rule, onEdit, onToggle, onDelete, onSelect }) => {
     return;
     _jsxs(Card, { className: `rule-card ${!rule.enabled ? 'disabled' : ''}`, children: ["}", _jsxs("div", { className: "rule-header", children: [_jsxs("div", { className: "rule-info", children: [_jsx("h3", { className: "rule-name", children: rule.name }), _jsx("p", { className: "rule-description", children: rule.description || 'No description' })] }), _jsx("div", { className: "rule-status", children: _jsx(Badge, { variant: rule.enabled ? 'success' : 'secondary', children: rule.enabled ? 'Active' : 'Disabled' }) })] }), _jsxs("div", { className: "rule-details", children: [_jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "detail-label", children: "Event Types:" }), _jsxs("span", { className: "detail-value", children: [rule.event_types.length > 0
@@ -231,7 +176,7 @@ const RuleEditDialog, AlertRule;
 open: boolean;
 onClose: () => void ;
 onSave: (rule) => void ;
- > ;
+    > ;
 ({ rule, open, onClose, onSave }) => {
     const [editedRule, setEditedRule] = useState({ ...rule });
     const [activeTab, setActiveTab] = useState('basic');
@@ -288,7 +233,7 @@ onUpdate: (updates) => void ;
                                         const updatedTypes = checked;
                                     } })
                                 ? [...rule.event_types, eventType]
-                                : rule.event_types.filter(t => t !== eventType)), "; onUpdate(", event_types, ": updatedTypes }); }} />", eventType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())] }), "))}"] });
+                                : rule.event_types.filter(t => t !== eventType)), "; onUpdate(", event_types, ": updatedTypes }); />", eventType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())] }), "))}"] });
     div >
     ;
     div >
@@ -308,18 +253,19 @@ onUpdate: (updates) => void ;
             field: 'threat_level',
             operator: 'gte',
             value: 5,
-            logic_operator: rule.conditions.length > 0 ? 'and' : undefined,
+            logic_operator: rule.conditions.length > 0 ? 'and' : undefined
         };
-        onUpdate({ conditions: [...rule.conditions, newCondition] });
     };
-    const updateCondition = (id, updates) => {
-        const updatedConditions = rule.conditions.map(condition => );
-        ;
-        condition.id === id ? { ...condition, ...updates } : condition;
-    };
-    ;
-    onUpdate({ conditions: updatedConditions });
+    onUpdate({ conditions: [...rule.conditions, newCondition] });
 };
+const updateCondition = (id, updates) => {
+    const updatedConditions = rule.conditions.map(condition => );
+    ;
+    condition.id === id ? { ...condition, ...updates } : condition;
+};
+;
+onUpdate({ conditions: updatedConditions });
+;
 const removeCondition = (id) => {
     onUpdate({ conditions: rule.conditions.filter(c => c.id !== id) });
 };
@@ -367,19 +313,21 @@ onUpdate: (updates) => void ;
         const newAction = {
             id: crypto.randomUUID(),
             type: actionType,
-            name: ACTION_TYPES.find(t => t.type === actionType)?.name || actionType,
-            config: {},
-            enabled: true };
-        onUpdate({ actions: [...rule.actions, newAction] });
+            name: ACTION_TYPES.find(t => t.type === actionType)?.name || actionType
+        };
+        config: { }
+        enabled: true;
     };
-    const updateAction = (id, updates) => {
-        const updatedActions = rule.actions.map(action => );
-        ;
-        action.id === id ? { ...action, ...updates } : action;
-    };
-    ;
-    onUpdate({ actions: updatedActions });
+    onUpdate({ actions: [...rule.actions, newAction] });
 };
+const updateAction = (id, updates) => {
+    const updatedActions = rule.actions.map(action => );
+    ;
+    action.id === id ? { ...action, ...updates } : action;
+};
+;
+onUpdate({ actions: updatedActions });
+;
 const removeAction = (id) => {
     onUpdate({ actions: rule.actions.filter(a => a.id !== id) });
 };
@@ -443,7 +391,6 @@ onUpdate: (updates) => void ;
 ({ rule, onUpdate }) => {
     return;
     _jsxs("div", { className: "notification-settings", children: [_jsx("p", { children: "Configure notification channels for this alert rule." }), _jsx("div", { className: "placeholder-content", children: _jsx("p", { children: "Notification channel configuration will be implemented based on the existing notification system." }) })] });
-    ;
 };
 // Utility functions
 function validateRule(rule) {
@@ -467,13 +414,13 @@ function validateRule(rule) {
                             gte: 'greater than or equal',
                             lte: 'less than or equal',
                             contains: 'contains',
-                            regex: 'matches regex',
-                            in: 'is in',
-                            not_in: 'is not in',
+                            regex: 'matches regex'
+                                in , 'is in': not_in, 'is not in': 
                         };
-                        return labels[operator] || operator;
-                        export default AlertRuleBuilder;
                     }
+                    ;
+                    return labels[operator] || operator;
+                    export default AlertRuleBuilder;
                 }
             }
         }

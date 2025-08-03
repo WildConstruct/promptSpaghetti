@@ -35,15 +35,13 @@ const getPriorityColor = (priority) => {
             case 2: return 'High';
             case 3: return 'Medium';
             case 4: return 'Low';
-            default: return 'Normal',
-            ;
-        }
-        ;
-        if (queue.length === 0) {
-            return;
-            _jsxs("div", { className: "text-center py-8", children: [_jsx(Clock, { className: "h-12 w-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "No Queue Items" }), _jsx("p", { className: "text-gray-500", children: "There are no pending lock requests in the queue." })] });
+            default: return 'Normal';
         }
     };
+    if (queue.length === 0) {
+        return;
+        _jsxs("div", { className: "text-center py-8", children: [_jsx(Clock, { className: "h-12 w-12 text-gray-400 mx-auto mb-4" }), _jsx("h3", { className: "text-lg font-medium text-gray-900 mb-2", children: "No Queue Items" }), _jsx("p", { className: "text-gray-500", children: "There are no pending lock requests in the queue." })] });
+    }
 };
 ;
 return;

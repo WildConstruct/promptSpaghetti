@@ -5,6 +5,9 @@
  * Framework-integrated WeightedChoice node with enhanced lifecycle and monitoring
  */
 import { FrameworkNode } from '../NodeFramework';
+/**
+* Framework-integrated WeightedChoice node
+*/
 export class WeightedChoiceFrameworkNode extends FrameworkNode {
     data;
     normalizedWeights = [];
@@ -30,7 +33,7 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                         stateful: false,
                         performanceHints: {
                             expectedExecutionTime: 'fast',
-                            memoryUsage: 'low',
+                            memoryUsage: 'low'
                         },
                         ports: {
                             inputs: [
@@ -39,16 +42,14 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     label: 'Choices',
                                     dataType: 'stringArray',
                                     required: true,
-                                    description: 'Array of choice options',
+                                    description: 'Array of choice options'
                                 },
-                                {
-                                    id: 'weights',
+                                { id: 'weights',
                                     label: 'Weights',
                                     dataType: 'numberArray',
                                     required: false,
                                     description: 'Relative weights for each choice',
-                                    defaultValue: []
-                                }
+                                    defaultValue: [] }
                             ],
                             outputs: [
                                 {
@@ -56,37 +57,31 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     label: 'Selected Choice',
                                     dataType: 'string',
                                     required: true,
-                                    description: 'The randomly selected choice',
+                                    description: 'The randomly selected choice'
                                 },
-                                {
-                                    id: 'index',
+                                { id: 'index',
                                     label: 'Choice Index',
                                     dataType: 'number',
-                                    required: false,
-                                    description: 'Index of the selected choice'
-                                }
-                            ]
-                        },
-                        metadata: {
-                            author: 'Framework Team',
-                            tags: ['random', 'choice', 'weighted', 'selection'],
-                            deprecated: false,
-                            experimental: false,
+                                    required: false },
+                                description, 'Index of the selected choice'
+                            ],
+                            metadata: {
+                                author: 'Framework Team',
+                                tags: ['random', 'choice', 'weighted', 'selection'],
+                                deprecated: false,
+                                experimental: false
+                            }
                         },
                         async onInitialize() {
-                            // Validate and normalize the data
                             this.validateChoicesAndWeights();
                             this.calculateNormalizedWeights();
                             // Set up performance monitoring if enabled
                             if (this.config.performanceHints?.expectedExecutionTime === 'fast') {
                                 // Enable lightweight monitoring
                                 this.framework?.emit('node_performance_hint', {});
-                                nodeId: this.id,
-                                    hint;
-                                'fast_execution',
-                                ;
+                                nodeId: this.id;
+                                hint: 'fast_execution';
                             }
-                            ;
                         },
                         async executeNode(context) {
                             const startTime = performance.now();
@@ -105,8 +100,12 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     index: selectedIndex,
                                     weight: this.data.weights[selectedIndex] || 1,
                                     normalizedWeight: this.normalizedWeights[selectedIndex],
-                                    totalWeight: this.totalWeight,
+                                    totalWeight: this.totalWeight
                                 };
+                            }
+                            finally { }
+                            ;
+                            try {
                             }
                             catch (error) {
                                 throw new Error(`WeightedChoice execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -139,12 +138,12 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                     totalChoices: number;
                                     totalWeight: number;
                                     averageWeight: number;
-                                    choiceDistribution: Array < {
-                                        choice: string,
-                                        weight: number,
-                                        normalizedWeight: number,
-                                        percentage: number
-                                    } > ;
+                                    choiceDistribution: Array < {};
+                                    choice: string;
+                                    weight: number;
+                                    normalizedWeight: number;
+                                    percentage: number;
+                                        > ;
                                     const choiceDistribution = this.data.choices.map((choice, index) => {
                                         const weight = this.data.weights[index] || 1;
                                         const normalizedWeight = this.normalizedWeights[index];
@@ -152,73 +151,64 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                         return {
                                             choice,
                                             weight,
-                                            normalizedWeight,
-                                            percentage
+                                            normalizedWeight
                                         };
+                                        percentage;
                                     });
-                                    return {
-                                        totalChoices: this.data.choices.length,
-                                        totalWeight: this.totalWeight,
-                                        averageWeight: this.totalWeight / this.data.choices.length,
-                                        choiceDistribution
-                                    };
-                                    /**
-                                     * Simulate multiple selections for testing
-                                     */
-                                    simulate(iterations, number, seed ?  : number);
-                                    {
-                                        results: Record;
-                                        percentages: Record;
-                                        expectedVsActual: Array < {
-                                            choice: string,
-                                            expected: number,
-                                            actual: number,
-                                            deviation: number
-                                        } > ;
-                                        const results = {};
-                                        const random = seed ? this.createSeededRandom(seed) : Math.random;
-                                        // Initialize result counts
-                                        this.data.choices.forEach(choice => { });
-                                        results[choice] = 0;
-                                    }
-                                    ;
-                                    // Perform simulations
-                                    for (let i = 0; i < iterations; i++) {
-                                        const selectedIndex = this.selectWeightedIndex(random());
-                                        const selectedChoice = this.data.choices[selectedIndex];
-                                        results[selectedChoice]++;
-                                        // Calculate percentages
-                                        const percentages = {};
-                                        Object.entries(results).forEach(([choice, count]) => {
-                                            percentages[choice] = (count / iterations) * 100;
-                                        });
-                                        // Compare expected vs actual
-                                        const expectedVsActual = this.data.choices.map((choice, index) => {
-                                            const expected = this.normalizedWeights[index] * 100;
-                                            const actual = percentages[choice] || 0;
-                                            const deviation = Math.abs(expected - actual);
-                                            return {
-                                                choice,
-                                                expected,
-                                                actual,
-                                                deviation
-                                            };
-                                        });
-                                        return {
-                                            results,
-                                            percentages,
-                                            expectedVsActual
-                                        };
-                                        // Private helper methods
-                                    }
-                                    // Private helper methods
                                 }
-                                // Private helper methods
+                                ;
+                                return { totalChoices: this.data.choices.length,
+                                    totalWeight: this.totalWeight,
+                                    averageWeight: this.totalWeight / this.data.choices.length };
+                                choiceDistribution;
                             }
-                            // Private helper methods
-                        }
-                        // Private helper methods
-                        ,
+                            ;
+                            /**
+                             * Simulate multiple selections for testing
+                             */
+                            simulate(iterations, number, seed ?  : number);
+                            {
+                                results: Record;
+                                percentages: Record;
+                                expectedVsActual: Array < {};
+                                choice: string;
+                                expected: number;
+                                actual: number;
+                                deviation: number;
+                                    > ;
+                                const results = {};
+                                const random = seed ? this.createSeededRandom(seed) : Math.random;
+                                // Initialize result counts
+                                this.data.choices.forEach(choice => { });
+                                results[choice] = 0;
+                            }
+                            ;
+                            // Perform simulations
+                            for (let i = 0; i < iterations; i++) {
+                                const selectedIndex = this.selectWeightedIndex(random());
+                                const selectedChoice = this.data.choices[selectedIndex];
+                                results[selectedChoice]++;
+                                // Calculate percentages
+                                const percentages = {};
+                                Object.entries(results).forEach(([choice, count]) => { percentages[choice] = (count / iterations) * 100; });
+                                // Compare expected vs actual
+                                const expectedVsActual = this.data.choices.map((choice, index) => {
+                                    const expected = this.normalizedWeights[index] * 100;
+                                    const actual = percentages[choice] || 0;
+                                    const deviation = Math.abs(expected - actual);
+                                    return {
+                                        choice,
+                                        expected,
+                                        actual
+                                    };
+                                    deviation;
+                                });
+                            }
+                            ;
+                            return { results,
+                                percentages };
+                            expectedVsActual;
+                        },
                         // Private helper methods
                         validateChoicesAndWeights() {
                             if (!Array.isArray(this.data.choices) || this.data.choices.length === 0) {
@@ -236,61 +226,64 @@ export class WeightedChoiceFrameworkNode extends FrameworkNode {
                                 }
                             }
                         },
-                        calculateNormalizedWeights() {
-                            // Use provided weights or default to 1 for each choice
-                            const weights = this.data.weights || this.data.choices.map(() => 1);
-                            this.totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-                            if (this.totalWeight === 0) {
-                                throw new Error('Total weight cannot be zero');
-                                if (this.data.normalizeWeights ?? true) {
-                                    this.normalizedWeights = weights.map(weight => weight / this.totalWeight);
-                                }
-                                else {
-                                    this.normalizedWeights = [...weights];
-                                }
-                            }
-                        },
-                        selectWeightedIndex(random) {
-                            let cumulativeWeight = 0;
-                            for (let i = 0; i < this.normalizedWeights.length; i++) {
-                                cumulativeWeight += this.normalizedWeights[i];
-                                if (random <= cumulativeWeight) {
-                                    return i;
-                                    // Fallback to last index (should not happen with proper normalization)
-                                    return this.data.choices.length - 1;
-                                }
-                            }
-                        },
-                        createSeededRandom(seed) {
-                            // Simple seeded random number generator for simulation
-                            let state = seed;
-                            return () => {
-                                state = (state * 1664525 + 1013904223) % 4294967296;
-                                return state / 4294967296;
-                            };
-                        },
-                        updatePerformanceMetrics(executionTime) {
-                            // Update node-specific performance metrics
-                            const metrics = this.getMetrics();
-                            metrics.memoryUsage = this.estimateMemoryUsage();
-                            this.framework?.emit('node_performance_update', {});
-                            nodeId: this.id,
-                                nodeType;
-                            this.getType(),
-                                executionTime,
-                                memoryUsage;
-                            metrics.memoryUsage,
-                            ;
-                        },
-                        estimateMemoryUsage() {
-                            // Rough estimate of memory usage in bytes
-                            const choicesMemory = this.data.choices.reduce((sum, choice) => sum + choice.length * 2, 0); // UTF-16;
-                            const weightsMemory = this.normalizedWeights.length * 8; // 64-bit floats;
-                            const overhead = 1024; // Object overhead;
-                            return choicesMemory + weightsMemory + overhead;
-                            export default WeightedChoiceFrameworkNode;
-                        } }
-                } };
+                        calculateNormalizedWeights() { }
+                        // Use provided weights or default to 1 for each choice
+                        ,
+                        // Use provided weights or default to 1 for each choice
+                        const: weights = this.data.weights || this.data.choices.map(() => 1),
+                        this: .totalWeight = weights.reduce((sum, weight) => sum + weight, 0),
+                        : .totalWeight === 0
+                    }
+                }
+            };
+            {
+                throw new Error('Total weight cannot be zero');
+                if (this.data.normalizeWeights ?? true) {
+                    this.normalizedWeights = weights.map(weight => weight / this.totalWeight);
+                }
+                else {
+                    this.normalizedWeights = [...weights];
+                }
+            }
         }
     }
+    selectWeightedIndex(random) {
+        let cumulativeWeight = 0;
+        for (let i = 0; i < this.normalizedWeights.length; i++) {
+            cumulativeWeight += this.normalizedWeights[i];
+            if (random <= cumulativeWeight) {
+                return i;
+                // Fallback to last index (should not happen with proper normalization)
+                return this.data.choices.length - 1;
+            }
+        }
+    }
+    createSeededRandom(seed) { }
+}
+// Simple seeded random number generator for simulation
+let state = seed;
+return () => {
+    state = (state * 1664525 + 1013904223) % 4294967296;
+    return state / 4294967296;
+};
+updatePerformanceMetrics(executionTime, number);
+void {
+    const: metrics = this.getMetrics(),
+    metrics, : .memoryUsage = this.estimateMemoryUsage(),
+    this: .framework?.emit('node_performance_update', {}),
+    nodeId: this.id,
+    nodeType: this.getType(),
+    executionTime,
+    memoryUsage: metrics.memoryUsage
+};
+;
+estimateMemoryUsage();
+number;
+{
+    // Rough estimate of memory usage in bytes
+    const choicesMemory = this.data.choices.reduce((sum, choice) => sum + choice.length * 2, 0); // UTF-16;
+    const weightsMemory = this.normalizedWeights.length * 8; // 64-bit floats;
+    const overhead = 1024; // Object overhead;
+    return choicesMemory + weightsMemory + overhead;
+    export default WeightedChoiceFrameworkNode;
 }

@@ -22,23 +22,5 @@ export const ResponsiveCorrectionsPanel = ({ isOpen, onClose }) => {
     return (_jsxs(_Fragment, { children: [isMobile ? (_jsx(MobileCorrectionsPanel, { isOpen: isOpen, onClose: onClose })) : (_jsx(CorrectionsManagerPanel, { isOpen: isOpen, onClose: onClose })), showStats && _jsx(CorrectionsStatsDashboard, { isOpen: showStats, onClose: () => setShowStats(false) })] }));
 };
 // Hook for managing corrections panel state
-export const useCorrectionsPanel = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [showStats, setShowStats] = useState(false);
-    const openPanel = () => setIsOpen(true);
-    const closePanel = () => setIsOpen(false);
-    const togglePanel = () => setIsOpen(!isOpen);
-    const openStats = () => setShowStats(true);
-    const closeStats = () => setShowStats(false);
-    const toggleStats = () => setShowStats(!showStats);
-    return {
-        isOpen,
-        showStats,
-        openPanel,
-        closePanel,
-        togglePanel,
-        openStats,
-        closeStats,
-        toggleStats,
-    };
-};
+export const useCorrectionsPanel = () => { return null; };
+;

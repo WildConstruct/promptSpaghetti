@@ -29,38 +29,38 @@ export const PreviewSection = ({ node }) => {
                 highlightInfo = {
                     selectedVariation: example,
                     selectedIndex: randomIndex,
-                    totalVariations: variations.length,
+                    totalVariations: variations.length
                 };
             }
-            else {
-                // Fallback to type-specific generation
-                switch (type) {
-                    case 'WeightedChoice':
-                        const options = data.options || [];
-                        if (options.length > 0) {
-                            const randomIndex = Math.floor((currentSeed % options.length));
-                            example = options[randomIndex];
-                        }
-                        else {
-                            example = 'No options defined';
-                            break;
-                        }
-                    case 'Concat':
-                        const delimiter = data.delimiter || ', ';
-                        example = `[Child 1]${delimiter}[Child 2]${delimiter}[Child 3]`;
-                }
-                break;
-            }
+            ;
         }
     });
 };
-'Output';
-const prompt = data.prompt || 'No prompt defined';
-example = prompt;
-break;
-'Include';
-const ref = data.ref || 'No reference defined';
-example = `[Included: ${ref}]`;
+{ // Fallback to type-specific generation
+    switch (type) {
+        case 'WeightedChoice':
+    }
+    const options = data.options || [];
+    if (options.length > 0) {
+        const randomIndex = Math.floor((currentSeed % options.length));
+        example = options[randomIndex];
+    }
+    else {
+        example = 'No options defined';
+        break;
+        'Concat';
+        const delimiter = data.delimiter || ', ';
+        example = `[Child 1]${delimiter}[Child 2]${delimiter}[Child 3]`;
+    }
+    break;
+    'Output';
+    const prompt = data.prompt || 'No prompt defined';
+    example = prompt;
+    break;
+    'Include';
+    const ref = data.ref || 'No reference defined';
+    example = `[Included: ${ref}]`;
+}
 break;
 'SetVariable';
 const varName = data.name || 'unnamed';
@@ -81,127 +81,122 @@ else {
     example = 'No subjects defined';
     break;
     'Connector';
-    const connectors = data.connectors || [];
-    if (connectors.length > 0) {
-        const randomIndex = Math.floor((currentSeed % connectors.length));
-        example = connectors[randomIndex];
-    }
-    else {
-        example = 'No connectors defined';
-        break;
-        'Attribute';
-        const attributes = data.attributes || [];
-        if (attributes.length > 0) {
-            const randomIndex = Math.floor((currentSeed % attributes.length));
-            example = attributes[randomIndex];
-        }
-        else {
-            example = 'No attributes defined';
-            break;
-            'Action';
-            const actions = data.actions || [];
-            if (actions.length > 0) {
-                const randomIndex = Math.floor((currentSeed % actions.length));
-                example = actions[randomIndex];
-            }
-            else {
-                example = 'No actions defined';
-                break;
-                example = `Preview for ${type} not implemented`;
-            }
-            results.push({ text: example, highlightInfo });
-            return results;
-        }
-        [node, numExamples, seed];
-        ;
-        useEffect(() => {
-            setExamples(generateExamples);
-        }, [generateExamples]);
-        const refreshExamples = () => {
-            setSeed(Math.floor(Math.random() * 100000));
-        };
-        return;
-        _jsxs(CollapsibleSection, { title: "Preview", collapsed: previewCollapsed, onToggle: () => setPreviewCollapsed(!previewCollapsed), children: [_jsxs("div", { style: { padding: '16px 20px 8px' }, children: [_jsx("div", { style: { marginBottom: 16 }, children: _jsxs("div", { style: {
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 12,
-                                    marginBottom: 12,
-                                }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: 6 }, children: [_jsx("label", { htmlFor: "num-examples", style: {
-                                                    fontSize: 12,
-                                                    fontWeight: 600,
-                                                    color: '#666',
-                                                }, children: "Examples:" }), _jsx("input", { id: "num-examples", type: "number", min: "1", max: "10", value: numExamples, onChange: (e) => setNumExamples(Number(e.target.value)), style: {
-                                                    width: 60,
-                                                    padding: '4px 8px',
-                                                    border: '1px solid #4a5568',
-                                                    borderRadius: 4,
-                                                    fontSize: 12,
-                                                    background: '#2d3748',
-                                                    color: '#e2e8f0',
-                                                } })] }), _jsx("button", { onClick: refreshExamples, style: {
-                                            background: '#4a5568',
+}
+const connectors = data.connectors || [];
+if (connectors.length > 0) {
+    const randomIndex = Math.floor((currentSeed % connectors.length));
+    example = connectors[randomIndex];
+}
+else {
+    example = 'No connectors defined';
+    break;
+    'Attribute';
+}
+const attributes = data.attributes || [];
+if (attributes.length > 0) {
+    const randomIndex = Math.floor((currentSeed % attributes.length));
+    example = attributes[randomIndex];
+}
+else {
+    example = 'No attributes defined';
+    break;
+    'Action';
+}
+const actions = data.actions || [];
+if (actions.length > 0) {
+    const randomIndex = Math.floor((currentSeed % actions.length));
+    example = actions[randomIndex];
+}
+else {
+    example = 'No actions defined';
+    break;
+    example = `Preview for ${type} not implemented`;
+}
+results.push({ text: example, highlightInfo });
+return results;
+[node, numExamples, seed];
+;
+useEffect(() => { setExamples(generateExamples); }, [generateExamples]);
+const refreshExamples = () => { setSeed(Math.floor(Math.random() * 100000)); };
+return;
+_jsxs(CollapsibleSection, { title: "Preview", collapsed: previewCollapsed, onToggle: () => setPreviewCollapsed(!previewCollapsed), children: [_jsxs("div", { style: { padding: '16px 20px 8px' }, children: [_jsx("div", { style: { marginBottom: 16 }, children: _jsxs("div", { style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 12,
+                            marginBottom: 12
+                        }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: 6 }, children: [_jsx("label", { htmlFor: "num-examples", style: {
+                                            fontSize: 12,
+                                            fontWeight: 600,
+                                            color: '#666'
+                                        }, children: "Examples:" }), _jsx("input", { id: "num-examples", type: "number", min: "1", max: "10", value: numExamples, onChange: (e) => setNumExamples(Number(e.target.value)), style: {
+                                            width: 60,
+                                            padding: '4px 8px',
                                             border: '1px solid #4a5568',
                                             borderRadius: 4,
-                                            padding: '4px 8px',
                                             fontSize: 12,
-                                            color: '#e2e8f0',
-                                            cursor: 'pointer',
-                                        }, title: "Refresh examples", children: "\u21BB" })] }) }), _jsxs("div", { style: {
-                                background: '#2d3748',
-                                border: '1px solid #4a5568',
-                                borderRadius: 6,
-                                minHeight: 100,
-                            }, children: [examples.length > 0 ? ()
-                                    < div : , " style=", { padding: 12 }, ">", examples.map((example, index) => ()
-                                    < div, key = { index }, style = {}, {
-                                    padding: '8px 12px',
-                                    background: '#374151',
+                                            background: '#2d3748',
+                                            color: '#e2e8f0'
+                                        }
+                                            /  >
+                                     })] }), _jsx("button", { onClick: refreshExamples, style: {
+                                    background: '#4a5568',
                                     border: '1px solid #4a5568',
                                     borderRadius: 4,
-                                    marginBottom: index < examples.length - 1 ? 8 : 0,
-                                    fontFamily: 'monospace',
-                                    fontSize: 13,
+                                    padding: '4px 8px',
+                                    fontSize: 12,
                                     color: '#e2e8f0',
-                                }), ">", _jsx("div", { style: { marginBottom: example.highlightInfo ? 4 : 0 }, children: example.text }), example.highlightInfo && ()
-                                    < div, " style=", {
-                                    fontSize: 10,
-                                    color: '#6b7280',
-                                    fontStyle: 'italic',
-                                    background: '#4a5568',
-                                    padding: '2px 6px',
-                                    borderRadius: 3,
-                                    display: 'inline-block',
-                                    border: '1px solid #f59e0b',
-                                }, "> Variation ", example.highlightInfo.selectedIndex + 1, " of ", example.highlightInfo.totalVariations] }), ")}"] }), "))}"] });
-        ()
-            < div;
-        style = {};
-        {
-            padding: 20,
-                textAlign;
-            'center',
-                color;
-            '#9ca3af',
-                fontStyle;
-            'italic',
-                fontSize;
-            13,
-            ;
-        }
-    }
-     >
-        No;
-    preview;
-    available;
-    div >
-    ;
+                                    cursor: 'pointer'
+                                }, title: "Refresh examples", children: "\u21BB" })] }) }), _jsxs("div", { style: {
+                        background: '#2d3748',
+                        border: '1px solid #4a5568',
+                        borderRadius: 6,
+                        minHeight: 100
+                    }, children: [examples.length > 0 ? ()
+                            < div : , " style=", { padding: 12 }, ">", examples.map((example, index) => ()
+                            < div, key = { index }, style = {}, {
+                            padding: '8px 12px',
+                            background: '#374151',
+                            border: '1px solid #4a5568',
+                            borderRadius: 4,
+                            marginBottom: index < examples.length - 1 ? 8 : 0,
+                            fontFamily: 'monospace',
+                            fontSize: 13,
+                            color: '#e2e8f0'
+                        }
+                            >
+                                _jsx("div", { style: { marginBottom: example.highlightInfo ? 4 : 0 }, children: example.text }), { example, : .highlightInfo && ()
+                                < div, style = {} }, {
+                            fontSize: 10,
+                            color: '#6b7280',
+                            fontStyle: 'italic',
+                            background: '#4a5568',
+                            padding: '2px 6px',
+                            borderRadius: 3,
+                            display: 'inline-block',
+                            border: '1px solid #f59e0b'
+                        }), "> Variation ", example.highlightInfo.selectedIndex + 1, " of ", example.highlightInfo.totalVariations] }), ")}"] }), "))}"] });
+()
+    < div;
+style = {};
+{
+    padding: 20;
+    textAlign: 'center';
+    color: '#9ca3af';
+    fontStyle: 'italic';
+    fontSize: 13;
 }
+ >
+    No;
+preview;
+available;
+div >
+;
 div >
     _jsx("div", { style: {
             marginTop: 12,
             fontSize: 11,
             color: '#6b7280',
-            fontStyle: 'italic',
+            fontStyle: 'italic'
         }, children: "Preview shows example outputs for this node type" });
 div >
 ;

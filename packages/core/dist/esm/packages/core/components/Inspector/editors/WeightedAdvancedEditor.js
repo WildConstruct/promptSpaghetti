@@ -4,17 +4,15 @@ import { SelectEditor } from '../SelectEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
 import { WeightSlider } from '../WeightSlider';
 import { WeightVisualizationPanel } from '../../WeightVisualization';
-text: choice.value,
-    weight;
-choice.weight;
 ;
 const handleChoicesChange = (newChoices) => {
     onChange({ choices: newChoices });
 };
 const handleAddChoice = () => {
-    const newChoice = {
-        value: `Choice ${choices.length + 1}` };
-}, weight;
+    const newChoice = {};
+    value: `Choice ${choices.length + 1}`;
+};
+weight: 1;
 ;
 handleChoicesChange([...choices, newChoice]);
 ;
@@ -61,11 +59,13 @@ const equalizeWeights = () => {
 const randomizeWeights = () => {
     const newChoices = choices.map(choice => ({}), ...choice, weight, Math.random() * 10 + 1);
 };
+;
 handleChoicesChange(newChoices);
 ;
 const setLinearProgression = () => {
     const newChoices = choices.map((choice, index) => ({}), ...choice, weight, index + 1);
 };
+;
 handleChoicesChange(newChoices);
 ;
 // Calculate effective weights after distribution and normalization
@@ -79,171 +79,171 @@ const getEffectiveWeights = () => {
             weights = weights.map(w => Math.pow(w, exponentialFactor));
             break;
         case 'gaussian':
-            weights = weights.map((w, index) => {
-                const x = index / (choices.length - 1 || 1);
-                const gaussian = Math.exp(-0.5 * Math.pow((x - gaussianMean) / gaussianStd, 2));
-                return w * gaussian;
-            });
-            break;
-        case 'linear':
-        case 'custom':
-        default:
-            // No transformation
-            break;
-            // Apply minimum weight
-            if (minWeight > 0) {
-                weights = weights.map(w => Math.max(w, minWeight));
-                // Normalize if requested
-                if (normalize) {
-                    const total = weights.reduce((sum, w) => sum + w, 0);
-                    if (total > 0) {
-                        weights = weights.map(w => w / total);
-                        return weights;
-                    }
-                    ;
-                    const effectiveWeights = getEffectiveWeights();
-                    return;
-                    _jsx("div", { className: "weighted-advanced-editor", children: _jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core weighted selection configuration", defaultExpanded: true, priority: "critical", fieldName: "name", children: [_jsx("div", { style: { marginBottom: 16 }, children: _jsx(TextFieldEditor, { label: "Choice Set Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "e.g., Character Emotions, Scene Styles, Action Types" }) }), _jsxs("div", { style: { marginBottom: 12 }, children: [_jsxs("div", { style: {
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                marginBottom: 8,
-                                            }, children: [_jsx("label", { style: {
-                                                        fontWeight: 500,
-                                                        color: '#e2e8f0',
-                                                        fontSize: 12,
-                                                    }, children: "Story Choices" }), _jsx("button", { onClick: handleAddChoice, style: {
-                                                        padding: '4px 8px',
-                                                        fontSize: 10,
-                                                        background: '#4299e1',
-                                                        border: 'none',
-                                                        borderRadius: 2,
-                                                        color: '#fff',
-                                                        cursor: 'pointer',
-                                                    }, children: "Add Choice" })] }), choices.length === 0 ? ()
-                                            < div : , " style=", {
-                                            background: '#2d3748',
-                                            border: '1px solid #4a5568',
-                                            borderRadius: 4,
-                                            padding: 16,
-                                            textAlign: 'center',
-                                            color: '#a0aec0',
-                                            fontSize: 12,
-                                            fontStyle: 'italic',
-                                        }, "> No story choices defined. Add options like \"Dramatic\", \"Comedy\", \"Action\" to create weighted selection."] }), ") : ()", _jsxs("div", { style: {
-                                        background: '#2d3748',
-                                        border: '1px solid #4a5568',
-                                        borderRadius: 4,
-                                        padding: 8,
-                                    }, children: [choices.map((choice, index) => {
-                                            const effectiveWeight = effectiveWeights[index] || 0;
-                                            const percentage = effectiveWeights.length > 0;
-                                        })
-                                            ? Math.round()
-                                            :
-                                        , "effectiveWeight * (normalize ? 100 : effectiveWeights.reduce((sum) w ) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0)) : Math.round(100 / choices.length); return;", _jsxs("div", { style: {
-                                                background: '#1a202c',
-                                                border: '1px solid #4a5568',
-                                                borderRadius: 4,
-                                                padding: 8,
-                                                marginBottom: index < choices.length - 1 ? 8 : 0,
-                                            }, children: [_jsxs("div", { style: {
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        marginBottom: 8,
-                                                        gap: 8,
-                                                    }, children: [_jsx("input", { type: "text", value: choice.value, onChange: (e) => handleUpdateChoice(index, 'value', e.target.value), style: {
-                                                                flex: 1,
-                                                                padding: 4,
-                                                                border: '1px solid #4a5568',
-                                                                borderRadius: 2,
-                                                                background: '#2d3748',
-                                                                color: '#e2e8f0',
-                                                                fontSize: 11,
-                                                            }, placeholder: 'e.g., "Suspenseful", "Lighthearted", "Intense"' }), _jsx("button", { onClick: () => handleRemoveChoice(index), style: {
-                                                                background: '#e53e3e',
-                                                                border: 'none',
-                                                                borderRadius: 2,
-                                                                color: '#fff',
-                                                                cursor: 'pointer',
-                                                                padding: '2px 6px',
-                                                                fontSize: 10,
-                                                            }, children: "Remove" })] }), _jsxs("div", { style: {
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: 8,
-                                                    }, children: [_jsx("label", { style: { fontSize: 10, color: '#a0aec0', minWidth: 80 }, children: "Raw Weight:" }), _jsx(WeightSlider, { value: choice.weight, onChange: (newWeight) => handleUpdateChoice(index, 'weight', newWeight), min: 0, max: Math.max(10, Math.max(...choices.map(c => c.weight)) * 1.5), step: 0.1, showNumeric: true, label: "Raw Weight" }), _jsxs("div", { style: {
-                                                                fontSize: 10,
-                                                                color: '#a0aec0',
-                                                                minWidth: 60,
-                                                                textAlign: 'right',
-                                                            }, children: [percentage.toFixed(1), "% chance"] })] })] }, index), "); })}"] }), ")}", _jsx("div", { style: {
-                                        fontSize: 10,
-                                        color: '#a0aec0',
-                                        marginTop: 4,
-                                    }, children: "Choose options and their relative likelihood. Higher weights = more likely to be selected." })] }) });
-                }
-            }
     }
+    weights = weights.map((w, index) => {
+        const x = index / (choices.length - 1 || 1);
+        const gaussian = Math.exp(-0.5 * Math.pow((x - gaussianMean) / gaussianStd, 2));
+        return w * gaussian;
+    });
+    break;
 };
-ProgressiveDisclosureSection >
-    { /* ADVANCED LEVEL: Distribution algorithms and weight controls */}
-    < ProgressiveDisclosureSection;
-title = "Advanced Weight Controls";
-level = "advanced";
-description = "Fine-tune selection algorithms and probability distributions";
-defaultExpanded = { false:  };
-priority = "important";
-fieldName = "distribution"
-    >
-        { /* Weight adjustment tools */};
-{
-    choices.length > 1 && ()
-        < div;
-    style = {};
-    {
-        marginBottom: 16,
-            display;
-        'flex',
-            gap;
-        8,
-            flexWrap;
-        'wrap',
+'linear';
+'custom';
+// No transformation
+break;
+// Apply minimum weight
+if (minWeight > 0) {
+    weights = weights.map(w => Math.max(w, minWeight));
+    // Normalize if requested
+    if (normalize) {
+        const total = weights.reduce((sum, w) => sum + w, 0);
+        if (total > 0) {
+            weights = weights.map(w => w / total);
+            return weights;
+        }
         ;
+        const effectiveWeights = getEffectiveWeights();
+        return;
+        _jsx("div", { className: "weighted-advanced-editor", children: _jsxs(ProgressiveDisclosureSection, { title: "Essential Settings", level: "basic", description: "Core weighted selection configuration", defaultExpanded: true, priority: "critical", fieldName: "name", children: [_jsx("div", { style: { marginBottom: 16 }, children: _jsx(TextFieldEditor, { label: "Choice Set Name", value: name, fieldKey: "name", zodType: null, onChange: handleNameChange, placeholder: "e.g., Character Emotions, Scene Styles, Action Types" }) }), _jsxs("div", { style: { marginBottom: 12 }, children: [_jsxs("div", { style: {
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginBottom: 8
+                                }, children: [_jsx("label", { style: {
+                                            fontWeight: 500,
+                                            color: '#e2e8f0',
+                                            fontSize: 12
+                                        }, children: "Story Choices" }), _jsx("button", { onClick: handleAddChoice, style: {
+                                            padding: '4px 8px',
+                                            fontSize: 10,
+                                            background: '#4299e1',
+                                            border: 'none',
+                                            borderRadius: 2,
+                                            color: '#fff',
+                                            cursor: 'pointer'
+                                        }, children: "Add Choice" })] }), choices.length === 0 ? ()
+                                < div : , " style=", {
+                                background: '#2d3748',
+                                border: '1px solid #4a5568',
+                                borderRadius: 4,
+                                padding: 16,
+                                textAlign: 'center',
+                                color: '#a0aec0',
+                                fontSize: 12,
+                                fontStyle: 'italic'
+                            }, "> No story choices defined. Add options like \"Dramatic\", \"Comedy\", \"Action\" to create weighted selection."] }), ") : ()", _jsxs("div", { style: {
+                            background: '#2d3748',
+                            border: '1px solid #4a5568',
+                            borderRadius: 4,
+                            padding: 8
+                        }, children: [choices.map((choice, index) => {
+                                const effectiveWeight = effectiveWeights[index] || 0;
+                                const percentage = effectiveWeights.length > 0;
+                            })
+                                ? Math.round()
+                                :
+                            , "effectiveWeight * (normalize ? 100 : effectiveWeights.reduce((sum) w ) => sum + w, 0) > 0 ? 100 / effectiveWeights.reduce((sum, w) => sum + w, 0) : 0)) : Math.round(100 / choices.length); return;", _jsx("div", { style: {
+                                    background: '#1a202c',
+                                    border: '1px solid #4a5568',
+                                    borderRadius: 4,
+                                    padding: 8,
+                                    marginBottom: index < choices.length - 1 ? 8 : 0
+                                }, children: _jsxs("div", { style: {
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        marginBottom: 8,
+                                        gap: 8
+                                    }, children: [_jsx("input", { type: "text", value: choice.value, onChange: (e) => handleUpdateChoice(index, 'value', e.target.value), style: {
+                                                flex: 1,
+                                                padding: 4,
+                                                border: '1px solid #4a5568',
+                                                borderRadius: 2,
+                                                background: '#2d3748',
+                                                color: '#e2e8f0',
+                                                fontSize: 11
+                                            }, placeholder: 'e.g., "Suspenseful", "Lighthearted", "Intense"' }), _jsx("button", { onClick: () => handleRemoveChoice(index), style: {
+                                                background: '#e53e3e',
+                                                border: 'none',
+                                                borderRadius: 2,
+                                                color: '#fff',
+                                                cursor: 'pointer',
+                                                padding: '2px 6px',
+                                                fontSize: 10
+                                            }
+                                                >
+                                                    Remove })] }) }, index), _jsxs("div", { style: {
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 8
+                                }, children: [_jsx("label", { style: { fontSize: 10, color: '#a0aec0', minWidth: 80 }, children: "Raw Weight:" }), _jsx(WeightSlider, { value: choice.weight, onChange: (newWeight) => handleUpdateChoice(index, 'weight', newWeight), min: 0, max: Math.max(10, Math.max(...choices.map(c => c.weight)) * 1.5), step: 0.1, showNumeric: true, label: "Raw Weight" }), _jsxs("div", { style: {
+                                            fontSize: 10,
+                                            color: '#a0aec0',
+                                            minWidth: 60,
+                                            textAlign: 'right'
+                                        }, children: [percentage.toFixed(1), "% chance"] })] })] }), "); })}"] }) });
     }
-}
- >
-    (_jsx("button", { onClick: equalizeWeights, style: {
-            padding: '4px 8px',
+    _jsx("div", { style: {
             fontSize: 10,
-            background: '#4a5568',
-            border: 'none',
-            borderRadius: 2,
-            color: '#e2e8f0',
-            cursor: 'pointer',
-        }, children: "Equal Weights" })
-        ,
-            _jsx("button", { onClick: randomizeWeights, style: {
-                    padding: '4px 8px',
-                    fontSize: 10,
-                    background: '#4a5568',
-                    border: 'none',
-                    borderRadius: 2,
-                    color: '#e2e8f0',
-                    cursor: 'pointer',
-                }, children: "Random Weights" })
-                ,
-                    _jsx("button", { onClick: setLinearProgression, style: {
-                            padding: '4px 8px',
-                            fontSize: 10,
-                            background: '#4a5568',
-                            border: 'none',
-                            borderRadius: 2,
-                            color: '#e2e8f0',
-                            cursor: 'pointer',
-                        }, children: "Linear Progression" }));
-div >
-;
+            color: '#a0aec0',
+            marginTop: 4
+        }, children: "Choose options and their relative likelihood. Higher weights = more likely to be selected." });
+    div >
+    ;
+    ProgressiveDisclosureSection >
+        { /* ADVANCED LEVEL: Distribution algorithms and weight controls */}
+        < ProgressiveDisclosureSection;
+    title = "Advanced Weight Controls";
+    level = "advanced";
+    description = "Fine-tune selection algorithms and probability distributions";
+    defaultExpanded = { false:  };
+    priority = "important";
+    fieldName = "distribution"
+        >
+            { /* Weight adjustment tools */};
+    {
+        choices.length > 1 && ()
+            < div;
+        style = {};
+        {
+            marginBottom: 16;
+            display: 'flex';
+            gap: 8;
+            flexWrap: 'wrap';
+        }
+    }
+     >
+        (_jsx("button", { onClick: equalizeWeights, style: {
+                padding: '4px 8px',
+                fontSize: 10,
+                background: '#4a5568',
+                border: 'none',
+                borderRadius: 2,
+                color: '#e2e8f0',
+                cursor: 'pointer'
+            }, children: "Equal Weights" })
+            ,
+                _jsx("button", { onClick: randomizeWeights, style: {
+                        padding: '4px 8px',
+                        fontSize: 10,
+                        background: '#4a5568',
+                        border: 'none',
+                        borderRadius: 2,
+                        color: '#e2e8f0',
+                        cursor: 'pointer'
+                    }, children: "Random Weights" })
+                    ,
+                        _jsx("button", { onClick: setLinearProgression, style: {
+                                padding: '4px 8px',
+                                fontSize: 10,
+                                background: '#4a5568',
+                                border: 'none',
+                                borderRadius: 2,
+                                color: '#e2e8f0',
+                                cursor: 'pointer'
+                            }, children: "Linear Progression" }));
+    div >
+    ;
+}
 _jsx("div", { style: { marginBottom: 16 }, children: _jsx(SelectEditor, { label: "Distribution Type", value: distributionType, fieldKey: "distributionType", zodType: null, onChange: handleDistributionTypeChange, options: distributionOptions }) });
 { /* Distribution-specific parameters */ }
 {
@@ -260,7 +260,7 @@ _jsx("div", { style: { marginBottom: 16 }, children: _jsx(SelectEditor, { label:
             _jsx("div", { style: {
                     fontSize: 10,
                     color: '#a0aec0',
-                    marginTop: 2,
+                    marginTop: 2
                 }, children: "Higher values create more extreme weight distributions (factor > 1 amplifies differences)" }));
 div >
 ;
@@ -270,13 +270,13 @@ div >
         (_jsxs("div", { style: { marginBottom: 12 }, children: [_jsx(TextFieldEditor, { label: "Gaussian Mean (0-1)", value: gaussianMean, fieldKey: "gaussianMean", zodType: null, onChange: handleGaussianMeanChange, placeholder: "0.5" }), _jsx("div", { style: {
                         fontSize: 10,
                         color: '#a0aec0',
-                        marginTop: 2,
+                        marginTop: 2
                     }, children: "Center of the bell curve (0 = first choice, 1 = last choice, 0.5 = middle)" })] })
             ,
                 _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx(TextFieldEditor, { label: "Standard Deviation", value: gaussianStd, fieldKey: "gaussianStd", zodType: null, onChange: handleGaussianStdChange, placeholder: "0.2" }), _jsx("div", { style: {
                                 fontSize: 10,
                                 color: '#a0aec0',
-                                marginTop: 2,
+                                marginTop: 2
                             }, children: "Width of the bell curve (smaller = more focused, larger = more spread)" })] }));
      >
     ;
@@ -287,34 +287,34 @@ _jsxs("div", { style: { marginBottom: 12 }, children: [_jsxs("label", { style: {
                 alignItems: 'center',
                 fontSize: 12,
                 color: '#e2e8f0',
-                cursor: 'pointer',
+                cursor: 'pointer'
             }, children: [_jsx("input", { type: "checkbox", checked: normalize, onChange: (e) => handleNormalizeChange(e.target.checked), style: { marginRight: 8 } }), "Normalize Weights"] }), _jsx("div", { style: {
                 fontSize: 10,
                 color: '#a0aec0',
                 marginTop: 2,
-                marginLeft: 20,
+                marginLeft: 20
             }, children: "Scale final weights to sum to 1.0 for probability calculations" })] })
     ,
         _jsxs("div", { style: { marginBottom: 16 }, children: [_jsx(TextFieldEditor, { label: "Minimum Weight", value: minWeight, fieldKey: "minWeight", zodType: null, onChange: handleMinWeightChange, placeholder: "0" }), _jsx("div", { style: {
                         fontSize: 10,
                         color: '#a0aec0',
-                        marginTop: 2,
+                        marginTop: 2
                     }, children: "Minimum weight threshold (0 = no minimum)" })] });
 { /* Distribution Explanation */ }
 _jsxs("div", { style: {
         background: '#1a202c',
         border: '1px solid #4a5568',
         borderRadius: 4,
-        padding: 8,
+        padding: 8
     }, children: [_jsx("div", { style: {
                 fontSize: 11,
                 fontWeight: 500,
                 color: '#e2e8f0',
-                marginBottom: 4,
+                marginBottom: 4
             }, children: "Distribution Effects:" }), _jsxs("div", { style: {
                 fontSize: 10,
                 color: '#a0aec0',
-                lineHeight: 1.4,
+                lineHeight: 1.4
             }, children: [distributionType === 'linear' &&
                     'Uses original weights without modification. Simple and predictable.', distributionType === 'exponential' &&
                     `Applies power transformation: weight^${exponentialFactor}. Amplifies differences between weights.`, distributionType === 'gaussian' &&
@@ -334,23 +334,18 @@ fieldName = "debug"
     < div;
 style = {};
 {
-    background: '#1a202c',
-        border;
-    '1px solid #4a5568',
-        borderRadius;
-    4,
-        padding;
-    8,
-        marginBottom;
-    16,
-    ;
+    background: '#1a202c';
+    border: '1px solid #4a5568';
+    borderRadius: 4;
+    padding: 8;
+    marginBottom: 16;
 }
  >
     (_jsx("div", { style: {
             fontSize: 11,
             fontWeight: 500,
             color: '#e2e8f0',
-            marginBottom: 4,
+            marginBottom: 4
         }, children: "Node Configuration:" })
         ,
             _jsxs("div", { style: { fontSize: 10, color: '#a0aec0', lineHeight: 1.4 }, children: [_jsxs("div", { children: ["Node ID: ", props.nodeId] }), _jsx("div", { children: "Type: WeightedAdvanced" }), _jsxs("div", { children: ["Choices: ", choices.length] }), _jsxs("div", { children: ["Distribution: ", distributionType] }), _jsxs("div", { children: ["Normalization: ", normalize ? 'Enabled' : 'Disabled'] }), _jsxs("div", { children: ["Min Weight: ", minWeight] }), distributionType === 'exponential' && _jsxs("div", { children: ["Exponential Factor: ", exponentialFactor] }), distributionType === 'gaussian' && ()
@@ -365,18 +360,12 @@ div >
     < div;
 style = {};
 {
-    background: '#1a202c',
-        border;
-    '1px solid #4a5568',
-        borderRadius;
-    4,
-        padding;
-    12,
-        fontSize;
-    12,
-        color;
-    '#e2e8f0',
-    ;
+    background: '#1a202c';
+    border: '1px solid #4a5568';
+    borderRadius: 4;
+    padding: 12;
+    fontSize: 12;
+    color: '#e2e8f0';
 }
  >
     { choices, : .length === 0 ? ()
@@ -413,7 +402,7 @@ div >
                 marginBottom: 4,
                 padding: '4px 8px',
                 background: 'rgba(66, 153, 225, 0.1)',
-                borderRadius: 2,
+                borderRadius: 2
             }, children: [_jsxs("span", { style: { flex: 1 }, children: ["\"", choice.value, "\""] }), _jsxs("span", { style: { color: '#a0aec0', fontSize: 10, minWidth: 80 }, children: [rawWeight, " \u2192 ", effectiveWeight.toFixed(3)] }), _jsxs("span", { style: { color: '#90cdf4', minWidth: 50, textAlign: 'right' }, children: [percentage, "%"] })] }, index);
     });
 }
@@ -423,7 +412,7 @@ _jsxs("div", { style: {
         paddingTop: 8,
         borderTop: '1px solid #4a5568',
         fontSize: 10,
-        color: '#a0aec0',
+        color: '#a0aec0'
     }, children: ["Raw total: ", choices.reduce((sum, c) => sum + c.weight, 0).toFixed(2), " \u2192 Effective total: ", effectiveWeights.reduce((sum, w) => sum + w, 0).toFixed(3), normalize && ' (normalized to 1.0)'] });
 div >
 ;

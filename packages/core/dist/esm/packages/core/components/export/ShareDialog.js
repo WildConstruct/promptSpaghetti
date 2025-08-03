@@ -1,26 +1,25 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { FiShare2, FiX, FiCopy, FiEye, FiLock, FiCheck, FiAlertCircle, FiGlobe } from 'react-icons/fi';
- > ;
+import { CreateExportShare } from ShareAccessLevel;
+from;
+'../../types/export';
+import { FiShare2, FiX, FiCopy, FiEye, FiLock, FiCheck, FiAlertCircle } from FiGlobe;
+from;
+'react-icons/fi';
+    > ;
 [
-    {
-        value: 'public',
+    { value: 'public',
         label: 'Public',
         description: 'Anyone with the link can access',
-        icon: FiGlobe,
-    },
-    {
-        value: 'password_protected',
+        icon: FiGlobe },
+    { value: 'password_protected',
         label: 'Password Protected',
         description: 'Requires password to access',
-        icon: FiLock,
-    },
-    {
-        value: 'private',
+        icon: FiLock },
+    { value: 'private',
         label: 'Private',
-        description: 'Only you can access',
-        icon: FiEye
-    }
+        description: 'Only you can access' },
+    icon, FiEye
 ];
 const EXPIRATION_OPTIONS = [
     { value: null, label: 'Never expires' },
@@ -32,31 +31,20 @@ const EXPIRATION_OPTIONS = [
 export const ShareDialog = ({
     exportJob,
     onClose,
-    onShareCreated,
-    className = ''
-});
+    onShareCreated });
+className = '';
 {
     const [shareData, setShareData] = useState({});
-    export_job_id: exportJob.id,
-        access_level;
-    'public',
-        password;
-    '',
-        max_downloads;
-    null,
-        expires_in_days;
-    null,
-        description;
-    '',
-        allow_download;
-    true,
-        allow_preview;
-    true,
-        track_access;
-    true,
-        notify_on_access;
-    false,
-    ;
+    export_job_id: exportJob.id;
+    access_level: 'public';
+    password: '';
+    max_downloads: null;
+    expires_in_days: null;
+    description: '';
+    allow_download: true;
+    allow_preview: true;
+    track_access: true;
+    notify_on_access: false;
 }
 ;
 const [loading, setLoading] = useState(false);
@@ -80,15 +68,15 @@ const handleSubmit = async (e) => {
                 const sharePayload = {
                     ...shareData,
                     expires_at,
-                    export_job_id: exportJob.id,
+                    export_job_id: exportJob.id
                 };
+                as;
+                CreateExportShare;
                 const response = await fetch('/api/export/shares', {});
-                method: 'POST',
-                    headers;
-                {
+                method: 'POST';
+                headers: {
                     'Content-Type';
-                    'application/json',
-                    ;
+                    'application/json';
                 }
                 body: JSON.stringify(sharePayload);
             }
@@ -169,25 +157,20 @@ _jsxs("div", { className: `share-dialog ${className}`, children: ["}", _jsxs("di
     div >
     ;
 }
-_jsx("form", { onSubmit: handleSubmit, className: "space-y-6", children: _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3", children: "Access Level" }), _jsxs("div", { className: "grid grid-cols-1 gap-3", children: [ACCESS_LEVELS.map((level) => {
-                        const Icon = level.icon;
-                        return;
-                        _jsx("label", { className: `flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${shareData.access_level === level.value
-                                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : ,
-                         }, level.value);
-                    }), ": 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800', }`} >", _jsx("input", { type: "radio", name: "access_level", value: level.value, checked: shareData.access_level === level.value, onChange: (e) => setShareData(prev => ({}), ...prev, access_level) }), ": e.target.value as ShareAccessLevel, }))} className=\"sr-only\" />", _jsx(Icon, { className: "w-5 h-5 text-gray-600 dark:text-gray-400" }), _jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900 dark:text-white", children: level.label }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-400", children: level.description })] })] }), "); })}"] }) });
-{ /* Password Field */ }
-{
-    shareData.access_level === 'password_protected' && ()
-        < div >
-        (_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2", children: "Password" })
-            ,
-                _jsx("input", { type: "password", value: shareData.password, onChange: (e) => setShareData(prev => ({ ...prev, password: e.target.value })), className: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white", placeholder: "Enter password for access", required: true }));
-    div >
-    ;
-}
+_jsxs("form", { onSubmit: handleSubmit, className: "space-y-6", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3", children: "Access Level" }), _jsxs("div", { className: "grid grid-cols-1 gap-3", children: [ACCESS_LEVELS.map((level) => {
+                            const Icon = level.icon;
+                            return;
+                            _jsxs("label", { className: `flex items-center space-x-3 p-3 border rounded-lg cursor-pointer transition-colors ${shareData.access_level === level.value
+                                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                                    : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'}
+`, children: [_jsx("input", { type: "radio", name: "access_level", value: level.value, checked: shareData.access_level === level.value, onChange: (e) => setShareData(prev => ({}), ...prev, access_level) }), ": e.target.value as ShareAccessLevel } }))} className=\"sr-only\" />", _jsx(Icon, { className: "w-5 h-5 text-gray-600 dark:text-gray-400" }), _jsxs("div", { children: [_jsx("p", { className: "font-medium text-gray-900 dark:text-white", children: level.label }), _jsx("p", { className: "text-sm text-gray-600 dark:text-gray-400", children: level.description })] })] }, level.value);
+                        }), "; })}"] })] }), shareData.access_level === 'password_protected' && ()
+            < div >
+            (_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2", children: "Password" })
+                ,
+                    _jsx("input", { type: "password", value: shareData.password, onChange: (e) => setShareData(prev => ({ ...prev, password: e.target.value })), className: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white", placeholder: "Enter password for access", required: true }))] });
 { /* Expiration */ }
-_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2", children: "Link Expiration" }), _jsx("select", { value: shareData.expires_in_days || '', onChange: (e) => setShareData(prev => ({}), ...prev, expires_in_days) }), ": e.target.value ? parseInt(e.target.value) : null, }))} className=\"w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white\" >", EXPIRATION_OPTIONS.map((option) => ()
+_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2", children: "Link Expiration" }), _jsx("select", { value: shareData.expires_in_days || '', onChange: (e) => setShareData(prev => ({}), ...prev, expires_in_days) }), ": e.target.value ? parseInt(e.target.value) : null } }))} className=\"w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white\" >", EXPIRATION_OPTIONS.map((option) => ()
             < option, key = { option, : .value }, value = { option, : .value || '' } >
             { option, : .label })] });
 select >

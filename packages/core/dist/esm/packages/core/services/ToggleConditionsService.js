@@ -24,7 +24,7 @@ export var ConditionType;
     userSegments ?  : string;
     // Rollout parameters
     percentage ?  : number;
-    salt ?  : string; // For consistent percentage calculation,
+    salt ?  : string; // For consistent percentage calculation }
     // Time-based parameters
     startTime ?  : Date;
     endTime ?  : Date;
@@ -46,104 +46,98 @@ export var ConditionType;
     // Custom expression parameters
     customVariables ?  : Record;
     functions ?  : Record;
-}
- > ;
-logic: 'AND' | 'OR';
-export var ComparisonOperator;
-(function (ComparisonOperator) {
-    ComparisonOperator["EQUALS"] = "equals";
-    ComparisonOperator["NOT_EQUALS"] = "not_equals";
-    ComparisonOperator["GREATER_THAN"] = "greater_than";
-    ComparisonOperator["LESS_THAN"] = "less_than";
-    ComparisonOperator["GREATER_EQUAL"] = "greater_equal";
-    ComparisonOperator["LESS_EQUAL"] = "less_equal";
-    ComparisonOperator["CONTAINS"] = "contains";
-    ComparisonOperator["NOT_CONTAINS"] = "not_contains";
-    ComparisonOperator["STARTS_WITH"] = "starts_with";
-    ComparisonOperator["ENDS_WITH"] = "ends_with";
-    ComparisonOperator["MATCHES_REGEX"] = "matches_regex";
-    ComparisonOperator["IN_LIST"] = "in_list";
-    ComparisonOperator["NOT_IN_LIST"] = "not_in_list";
-    ComparisonOperator[ComparisonOperator["export"] = void 0] = "export";
-    ComparisonOperator[ComparisonOperator["interface"] = void 0] = "interface";
-    ComparisonOperator[ComparisonOperator["ScheduleParams"] = void 0] = "ScheduleParams";
-})(ComparisonOperator || (ComparisonOperator = {}));
-{
-    daysOfWeek ?  : number; // 0-6, Sunday=0,
-    hoursOfDay ?  : number; // 0-23,
-    recurring ?  : boolean;
-    recurrencePattern ?  : 'daily' | 'weekly' | 'monthly',
+        > ;
+    logic: 'AND' | 'OR';
+    export let ComparisonOperator;
+    (function (ComparisonOperator) {
+        ComparisonOperator["EQUALS"] = "equals";
+        ComparisonOperator["NOT_EQUALS"] = "not_equals";
+        ComparisonOperator["GREATER_THAN"] = "greater_than";
+        ComparisonOperator["LESS_THAN"] = "less_than";
+        ComparisonOperator["GREATER_EQUAL"] = "greater_equal";
+        ComparisonOperator["LESS_EQUAL"] = "less_equal";
+        ComparisonOperator["CONTAINS"] = "contains";
+        ComparisonOperator["NOT_CONTAINS"] = "not_contains";
+        ComparisonOperator["STARTS_WITH"] = "starts_with";
+        ComparisonOperator["ENDS_WITH"] = "ends_with";
+        ComparisonOperator["MATCHES_REGEX"] = "matches_regex";
+        ComparisonOperator["IN_LIST"] = "in_list";
+        ComparisonOperator["NOT_IN_LIST"] = "not_in_list";
+        ComparisonOperator[ComparisonOperator["export"] = void 0] = "export";
+        ComparisonOperator[ComparisonOperator["interface"] = void 0] = "interface";
+        ComparisonOperator[ComparisonOperator["ScheduleParams"] = void 0] = "ScheduleParams";
+    })(ComparisonOperator || (ComparisonOperator = {}));
+    {
+        daysOfWeek ?  : number; // 0-6, Sunday=0;
+        hoursOfDay ?  : number; // 0-23;
+        recurring ?  : boolean;
+        recurrencePattern ?  : 'daily' | 'weekly' | 'monthly';
+    }
+    businessImpact: string;
+    technicalNotes: string;
+    author: string;
+    reviewedBy ?  : string;
+    reviewedAt ?  : Date;
+    platform: string;
+    browser ?  : string;
+    version ?  : string;
+    region: string;
+    timezone: string;
+    version: string;
     ;
-}
-;
-;
-;
-security: {
-    allowCustomExpressions: boolean;
-    maxExpressionComplexity: number;
-    enableSecurityAudit: boolean;
-    blockedPatterns: string;
-}
-;
-rollout: {
-    defaultSalt: string;
-    stickinessDuration: number; // seconds,
-    enableGradualRollout: boolean;
-    rolloutRateLimit: number; // percentage per hour,
-}
-;
-experiments: {
-    enableABTesting: boolean;
-    defaultTrafficAllocation: number;
-    maxVariants: number;
-    stickinessStrategy: 'user' | 'session' | 'device',
     ;
-}
-;
-export class ToggleConditionsService {
-    conditions = new Map();
-    toggleConditions = new Map(); // toggleId -> conditionIds
-    evaluationCache = new Map();
-    config;
-    expressionEvaluator;
-    constructor(config = {}) {
-        this.config = {
-            evaluation: {
-                enableCaching: true,
-                cacheTimeToLive: 300, // 5 minutes,
-                maxConditionsPerToggle: 20,
-                evaluationTimeout: 1000, // 1 second,
-                strictMode: false,
-                ...config.evaluation
-            },
-            security: {
-                allowCustomExpressions: true,
-                maxExpressionComplexity: 100,
-                enableSecurityAudit: true,
-                blockedPatterns: ['eval', 'Function', 'constructor', 'prototype', '__proto__'],
-                ...config.security
-            },
-            rollout: {
-                defaultSalt: 'toggle-conditions-v1',
-                stickinessDuration: 86400, // 24 hours,
-                enableGradualRollout: true,
-                rolloutRateLimit: 10, // 10% per hour,
-                ...config.rollout
-            },
-            experiments: {
-                enableABTesting: true,
-                defaultTrafficAllocation: 100,
-                maxVariants: 10,
-                stickinessStrategy: 'user',
-                ...config.experiments
-            },
-            this: .expressionEvaluator = new SafeExpressionEvaluator({}),
-            timeout: this.config.evaluation.evaluationTimeout,
-            maxComplexity: this.config.security.maxExpressionComplexity,
-        };
+    ;
+    /**
+     * Toggle Conditions Service
+     *
+     * Core service for evaluating complex conditions for feature toggles in Epic 17.
+     * Provides secure, performant, and flexible condition evaluation.
+     */
+    export class ToggleConditionsService {
+        conditions = new Map();
+        toggleConditions = new Map(); // toggleId -> conditionIds
+        evaluationCache = new Map();
+        config;
+        expressionEvaluator;
+        constructor(config = {}) {
+            this.config = {
+                evaluation: {
+                    enableCaching: true,
+                    cacheTimeToLive: 300, // 5 minutes
+                    maxConditionsPerToggle: 20,
+                    evaluationTimeout: 1000, // 1 second
+                    strictMode: false
+                },
+                ...config.evaluation,
+                security: {
+                    allowCustomExpressions: true,
+                    maxExpressionComplexity: 100,
+                    enableSecurityAudit: true,
+                    blockedPatterns: ['eval', 'Function', 'constructor', 'prototype', '__proto__']
+                },
+                ...config.security,
+                rollout: {
+                    defaultSalt: 'toggle-conditions-v1',
+                    stickinessDuration: 86400, // 24 hours
+                    enableGradualRollout: true,
+                    rolloutRateLimit: 10, // 10% per hour }
+                    ...config.rollout,
+                    experiments: {
+                        enableABTesting: true,
+                        defaultTrafficAllocation: 100,
+                        maxVariants: 10,
+                        stickinessStrategy: 'user'
+                    },
+                    ...config.experiments
+                },
+                this: .expressionEvaluator = new SafeExpressionEvaluator({}),
+                timeout: this.config.evaluation.evaluationTimeout,
+                maxComplexity: this.config.security.maxExpressionComplexity
+            };
+        }
         ;
         // Clean up expired cache entries periodically
-        if (this.config.evaluation.enableCaching) {
+        if(config, evaluation, enableCaching) {
             setInterval(() => this.cleanupCache(), this.config.evaluation.cacheTimeToLive * 1000);
             /**
             * Add or update a condition for a toggle
@@ -156,12 +150,12 @@ export class ToggleConditionsService {
                     ...condition,
                     id,
                     created: new Date(),
-                    lastModified: new Date(),
-                },
-                // Validate condition
-                const: validation = await this.validateCondition(fullCondition),
-                if(, validation) { }, : .valid && this.config.evaluation.strictMode };
-            {
+                    lastModified: new Date()
+                }
+            };
+            // Validate condition
+            const validation = await this.validateCondition(fullCondition);
+            if (!validation.valid && this.config.evaluation.strictMode) {
                 throw new Error(`Condition validation failed: ${validation.errors.join(', ')}`);
             }
             this.conditions.set(id, fullCondition);
@@ -177,8 +171,7 @@ export class ToggleConditionsService {
              */
             async;
             removeCondition(conditionId, string);
-            Promise < boolean > {
-                const: condition = this.conditions.get(conditionId),
+            Promise < boolean > { const: condition = this.conditions.get(conditionId),
                 if(, condition) {
                     return false;
                     this.conditions.delete(conditionId);
@@ -199,7 +192,8 @@ export class ToggleConditionsService {
                         Promise < ToggleEvaluationResult > {
                             const: startTime = Date.now(),
                             const: conditionIds = this.toggleConditions.get(toggleId) || [],
-                            if(conditionIds) { }, : .length === 0 };
+                            if(conditionIds) { }, : .length === 0
+                        };
                         {
                             return {
                                 toggleId,
@@ -210,171 +204,167 @@ export class ToggleConditionsService {
                                 metadata: {
                                     evaluatedAt: new Date(),
                                     totalExecutionTime: Date.now() - startTime,
-                                    cacheHit: false,
-                                },
-                                // Evaluate all conditions
-                                const: conditionResults, ConditionEvaluationResult = [],
-                                let, overallResult = false,
-                                let, variant: string | undefined,
-                                for(, conditionId, of, conditionIds) {
-                                    const condition = this.conditions.get(conditionId);
-                                    if (!condition || !condition.active) {
-                                        continue;
-                                        try {
-                                            const result = await this.evaluateCondition(condition, context);
-                                            conditionResults.push(result);
-                                            // Apply condition logic (OR-based by default)
-                                            if (result.result) {
-                                                overallResult = true;
-                                                // Extract variant for multivariate toggles
-                                                if (condition.conditionType === ConditionType.MULTIVARIATE && result.metadata.intermediateValues?.variant) {
-                                                    variant = result.metadata.intermediateValues.variant;
-                                                }
-                                                try { }
-                                                catch (error) {
-                                                    const errorMessage = error instanceof Error ? error.message : String(error);
-                                                    conditionResults.push({});
-                                                    conditionId,
-                                                        result;
-                                                    false,
-                                                        reason;
-                                                    `Evaluation error: ${errorMessage}`;
-                                                }
+                                    cacheHit: false
+                                }
+                            };
+                            // Evaluate all conditions
+                            const conditionResults = [];
+                            let overallResult = false;
+                            let variant;
+                            for (const conditionId of conditionIds) {
+                                const condition = this.conditions.get(conditionId);
+                                if (!condition || !condition.active) {
+                                    continue;
+                                    try {
+                                        const result = await this.evaluateCondition(condition, context);
+                                        conditionResults.push(result);
+                                        // Apply condition logic (OR-based by default)
+                                        if (result.result) {
+                                            overallResult = true;
+                                            // Extract variant for multivariate toggles
+                                            if (condition.conditionType === ConditionType.MULTIVARIATE && result.metadata.intermediateValues?.variant) {
+                                                variant = result.metadata.intermediateValues.variant;
                                             }
-                                            executionTime: 0,
-                                                metadata;
-                                            {
-                                                evaluatedAt: new Date(),
-                                                    contextHash;
-                                                this.generateContextHash(context),
-                                                ;
+                                            try { }
+                                            catch (error) {
+                                                const errorMessage = error instanceof Error ? error.message : String(error);
+                                                conditionResults.push({});
+                                                conditionId;
+                                                result: false;
                                             }
-                                            ;
-                                            // Calculate confidence based on condition results
-                                            const confidence = this.calculateConfidence(conditionResults);
-                                            return {
-                                                toggleId,
-                                                enabled: overallResult,
-                                                variant,
-                                                conditions: conditionResults,
-                                                confidence,
-                                                metadata: {
-                                                    evaluatedAt: new Date(),
-                                                    totalExecutionTime: Date.now() - startTime,
-                                                    cacheHit: false,
-                                                },
-                                                /**
-                                                 * Evaluate a single condition
-                                                 */
-                                                async evaluateCondition(condition, context) {
-                                                    const startTime = Date.now();
-                                                    const contextHash = this.generateContextHash(context);
-                                                    // Check cache first
-                                                    const cacheKey = `${condition.id}_${contextHash}`;
-                                                },
-                                                : .config.evaluation.enableCaching
-                                            };
-                                            {
-                                                const cached = this.evaluationCache.get(cacheKey);
-                                                if (cached && this.isCacheValid(cached)) {
-                                                    return cached;
-                                                    let result = false;
-                                                    let reason = '';
-                                                    const intermediateValues = {};
-                                                    try {
-                                                        switch (condition.conditionType) {
-                                                            case ConditionType.USER_ATTRIBUTE:
-                                                                result = this.evaluateUserAttribute(condition, context);
-                                                                reason = result ? 'User attributes match condition' : 'User attributes do not match';
-                                                                break;
-                                                            case ConditionType.USER_SEGMENT:
-                                                                result = this.evaluateUserSegment(condition, context);
-                                                                reason = result ? 'User in target segment' : 'User not in target segment';
-                                                                break;
-                                                            case ConditionType.PERCENTAGE:
-                                                                const percentageResult = this.evaluatePercentage(condition, context);
-                                                                result = percentageResult.included;
-                                                                intermediateValues.hash = percentageResult.hash;
-                                                                intermediateValues.threshold = percentageResult.threshold;
-                                                                reason = result ? `Included in ${condition.parameters.percentage}% rollout` : 'Excluded from rollout';
-                                                        }
-                                                        break;
-                                                    }
-                                                    finally {
-                                                    }
-                                                }
-                                            }
+                                            reason: `Evaluation error: ${errorMessage}`;
                                         }
-                                        finally {
+                                        executionTime: 0;
+                                        metadata: {
+                                            evaluatedAt: new Date();
+                                            contextHash: this.generateContextHash(context);
                                         }
                                     }
-                                },
-                                case: ConditionType.TIME_WINDOW,
-                                result = this.evaluateTimeWindow(condition, context),
-                                reason = result ? 'Within time window' : 'Outside time window',
-                                break: ,
-                                case: ConditionType.AB_TEST,
-                                const: abResult = this.evaluateABTest(condition, context),
-                                result = abResult.included,
-                                intermediateValues, : .variant = abResult.variant,
-                                reason = result ? `Assigned to variant: ${abResult.variant}` : 'Not included in A/B test'
-                            };
-                            break;
+                                    finally // Calculate confidence based on condition results
+                                     { }
+                                    ;
+                                    // Calculate confidence based on condition results
+                                    const confidence = this.calculateConfidence(conditionResults);
+                                    return { toggleId,
+                                        enabled: overallResult,
+                                        variant,
+                                        conditions: conditionResults,
+                                        confidence,
+                                        metadata: {
+                                            evaluatedAt: new Date(),
+                                            totalExecutionTime: Date.now() - startTime,
+                                            cacheHit: false
+                                        }
+                                    };
+                                    /**
+                                     * Evaluate a single condition
+                                     */
+                                    async;
+                                    evaluateCondition(condition, ToggleCondition, context, EvaluationContext);
+                                    Promise < ConditionEvaluationResult > {
+                                        const: startTime = Date.now(),
+                                        const: contextHash = this.generateContextHash(context),
+                                        // Check cache first
+                                        const: cacheKey = `${condition.id}_${contextHash}`
+                                    };
+                                    if (this.config.evaluation.enableCaching) {
+                                        const cached = this.evaluationCache.get(cacheKey);
+                                        if (cached && this.isCacheValid(cached)) {
+                                            return cached;
+                                            let result = false;
+                                            let reason = '';
+                                            const intermediateValues = {};
+                                            try {
+                                                switch (condition.conditionType) {
+                                                    case ConditionType.USER_ATTRIBUTE:
+                                                        result = this.evaluateUserAttribute(condition, context);
+                                                        reason = result ? 'User attributes match condition' : 'User attributes do not match';
+                                                        break;
+                                                    case ConditionType.USER_SEGMENT:
+                                                        result = this.evaluateUserSegment(condition, context);
+                                                        reason = result ? 'User in target segment' : 'User not in target segment';
+                                                        break;
+                                                    case ConditionType.PERCENTAGE:
+                                                        const percentageResult = this.evaluatePercentage(condition, context);
+                                                        result = percentageResult.included;
+                                                        intermediateValues.hash = percentageResult.hash;
+                                                        intermediateValues.threshold = percentageResult.threshold;
+                                                        reason = result ? `Included in ${condition.parameters.percentage}% rollout` : 'Excluded from rollout';
+                                                }
+                                                break;
+                                            }
+                                            finally {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 },
-                case: ConditionType.MULTIVARIATE,
-                const: mvResult = this.evaluateMultivariate(condition, context),
-                result = mvResult.included,
-                intermediateValues, : .variant = mvResult.variant,
-                reason = result ? `Assigned to variant: ${mvResult.variant}` : 'Not included in multivariate test'
-            };
+                case: ConditionType.TIME_WINDOW,
+                result = this.evaluateTimeWindow(condition, context),
+                reason = result ? 'Within time window' : 'Outside time window',
+                break: ,
+                case: ConditionType.AB_TEST,
+                const: abResult = this.evaluateABTest(condition, context),
+                result = abResult.included,
+                intermediateValues, : .variant = abResult.variant,
+                reason = result ? `Assigned to variant: ${abResult.variant}` : 'Not included in A/B test' };
             break;
-            ConditionType.CUSTOM_EXPRESSION;
-            result = await this.evaluateCustomExpression(condition, context);
-            reason = result ? 'Custom expression evaluated to true' : 'Custom expression evaluated to false';
-            break;
-            ConditionType.DEPENDENCY;
-            result = this.evaluateDependency(condition, context);
-            reason = result ? 'Dependencies satisfied' : 'Dependencies not met';
-            break;
-            ConditionType.GEOGRAPHIC;
-            result = this.evaluateGeographic(condition, context);
-            reason = result ? 'Geographic criteria met' : 'Outside target geographic area';
-            break;
-            ConditionType.DEVICE_TYPE;
-            result = this.evaluateDeviceType(condition, context);
-            reason = result ? 'Device type matches' : 'Device type does not match';
-            break;
-            ConditionType.TRAFFIC_SPLIT;
-            const trafficResult = this.evaluateTrafficSplit(condition, context);
-            result = trafficResult.included;
-            intermediateValues.bucket = trafficResult.bucket;
-            reason = result ? `Traffic split: bucket ${trafficResult.bucket}` : 'Not in target traffic bucket';
+            ConditionType.MULTIVARIATE;
+            const mvResult = this.evaluateMultivariate(condition, context);
+            result = mvResult.included;
+            intermediateValues.variant = mvResult.variant;
+            reason = result ? `Assigned to variant: ${mvResult.variant}` : 'Not included in multivariate test';
         }
         break;
-        ConditionType.FEATURE_FLAG;
-        result = this.evaluateFeatureFlag(condition, context);
-        reason = result ? 'Required feature flags active' : 'Required feature flags not active';
+        ConditionType;
+        CUSTOM_EXPRESSION = await this.evaluateCustomExpression(condition, context);
+        reason = result ? 'Custom expression evaluated to true' : 'Custom expression evaluated to false';
         break;
+        ConditionType;
+        DEPENDENCY = this.evaluateDependency(condition, context);
+        reason = result ? 'Dependencies satisfied' : 'Dependencies not met';
+        break;
+        ConditionType;
+        GEOGRAPHIC = this.evaluateGeographic(condition, context);
+        reason = result ? 'Geographic criteria met' : 'Outside target geographic area';
+        break;
+        ConditionType;
+        DEVICE_TYPE = this.evaluateDeviceType(condition, context);
+        reason = result ? 'Device type matches' : 'Device type does not match';
+        break;
+        ConditionType;
+        TRAFFIC_SPLIT;
+        trafficResult = this.evaluateTrafficSplit(condition, context);
+        result = trafficResult.included;
+        intermediateValues;
+        bucket = trafficResult.bucket;
+        reason = result ? `Traffic split: bucket ${trafficResult.bucket}` : 'Not in target traffic bucket';
     }
-    default;
+    break;
+    ConditionType.FEATURE_FLAG;
+    result = this.evaluateFeatureFlag(condition, context);
+    reason = result ? 'Required feature flags active' : 'Required feature flags not active';
+    break;
+    throw new Error(`Unknown condition type: ${condition.conditionType}`);
 }
-new Error(`Unknown condition type: ${condition.conditionType}`);
-try { }
+try {
+}
 catch (error) {
     result = false;
     reason = error instanceof Error ? error.message : String(error);
     if (this.config.security.enableSecurityAudit) {
         securityAudit.logEvent();
-        SecuritySeverity.ERROR,
-            SecurityEventCategory.EXPRESSION_VALIDATION,
-            'Condition evaluation failed',
-            {
-                conditionId: condition.id,
-                conditionType: condition.conditionType,
-                error: reason,
-            };
+        SecuritySeverity.ERROR;
+        SecurityEventCategory.EXPRESSION_VALIDATION;
+        'Condition evaluation failed';
+        {
+            conditionId: condition.id;
+            conditionType: condition.conditionType;
+            error: reason;
+        }
         false;
         ;
         const evaluationResult = {
@@ -384,38 +374,41 @@ catch (error) {
             executionTime: Date.now() - startTime,
             metadata: {
                 evaluatedAt: new Date(),
-                contextHash,
-                intermediateValues
+                contextHash
             },
-            : .config.evaluation.enableCaching }, { this: , evaluationCache, set };
-        (cacheKey, evaluationResult);
-        return evaluationResult;
-        /**
-        * Get all conditions for a toggle
-        */
-        getToggleConditions(toggleId, string);
-        ToggleCondition;
-        {
-            const conditionIds = this.toggleConditions.get(toggleId) || [];
-            return conditionIds
-                .map(id => this.conditions.get(id))
-                .filter((condition) => condition !== undefined),
-                    .sort((a, b) => b.priority - a.priority);
+            intermediateValues
+        };
+        // Cache the result
+        if (this.config.evaluation.enableCaching) {
+            this.evaluationCache.set(cacheKey, evaluationResult);
+            return evaluationResult;
             /**
-            * Bulk evaluate multiple toggles
+            * Get all conditions for a toggle
             */
-            async;
-            evaluateToggles(toggleIds, string, context, EvaluationContext);
-            Promise < Map < string, ToggleEvaluationResult >> {
-                const: results = new Map(),
-                const: evaluationPromises = toggleIds.map(async (toggleId) => {
+            getToggleConditions(toggleId, string);
+            ToggleCondition;
+            {
+                const conditionIds = this.toggleConditions.get(toggleId) || [];
+                return conditionIds
+                    .map(id => this.conditions.get(id))
+                    .filter((condition) => condition !== undefined)
+                    .sort((a, b) => b.priority - a.priority);
+                /**
+                * Bulk evaluate multiple toggles
+                */
+                async;
+                evaluateToggles(toggleIds, string, context, EvaluationContext);
+                Promise < Map < string, ToggleEvaluationResult >> {};
+                const results = new Map();
+                const evaluationPromises = toggleIds.map(async (toggleId) => {
                     const result = await this.evaluateToggle(toggleId, context);
                     results.set(toggleId, result);
-                }),
-                await, Promise, : .all(evaluationPromises),
-                return: results,
-                // Private evaluation methods
-                evaluateUserAttribute(condition, context) {
+                });
+                await Promise.all(evaluationPromises);
+                return results;
+                evaluateUserAttribute(condition, ToggleCondition, context, EvaluationContext);
+                boolean;
+                {
                     const params = condition.parameters.userAttributes;
                     if (!params || !context.user) {
                         return false;
@@ -425,288 +418,303 @@ catch (error) {
                     }
                     ;
                     return params.logic === 'AND' ? results.every(r => r) : results.some(r => r);
-                },
-                evaluateUserSegment(condition, context) {
-                    const segments = condition.parameters.userSegments;
-                    if (!segments || !context.user?.segment) {
-                        return false;
-                        return segments.includes(context.user.segment);
-                    }
-                },
-                evaluatePercentage(condition, context) {
-                    const percentage = condition.parameters.percentage || 0;
-                    const salt = condition.parameters.salt || this.config.rollout.defaultSalt;
-                    const userId = context.user?.id || 'anonymous';
-                    const hash = this.generateHash(`${condition.id}_${userId}_${salt}`);
-                },
-                const: hashValue = parseInt(hash.substring(0, 8), 16),
-                const: threshold = (hashValue / 0xFFFFFFFF) * 100,
-                return: {
-                    included: threshold < percentage,
-                    hash,
-                    threshold
-                },
-                evaluateTimeWindow(condition, context) {
-                    const now = context.timestamp || new Date();
-                    const startTime = condition.parameters.startTime;
-                    const endTime = condition.parameters.endTime;
-                    const schedule = condition.parameters.schedule;
-                    // Check basic time window
-                    if (startTime && now < startTime)
-                        return false;
-                    if (endTime && now > endTime)
-                        return false;
-                    // Check schedule if specified
-                    if (schedule) {
-                        const dayOfWeek = now.getDay();
-                        const hourOfDay = now.getHours();
-                        if (schedule.daysOfWeek && !schedule.daysOfWeek.includes(dayOfWeek)) {
-                            return false;
-                            if (schedule.hoursOfDay && !schedule.hoursOfDay.includes(hourOfDay)) {
-                                return false;
-                                return true;
-                            }
-                        }
-                    }
-                },
-                evaluateABTest(condition, context) {
-                    const experiment = condition.parameters.experiment;
-                    if (!experiment) {
-                        return { included: false, variant: 'control' };
-                        // Check traffic allocation
-                        const percentageResult = this.evaluatePercentage({});
-                    }
-                },
-                ...condition,
-                parameters: {
-                    percentage: experiment.trafficAllocation,
-                    salt: `ab_${experiment.experimentId}` } }, context;
-            ;
-            return {
-                included: percentageResult.included,
-                variant: percentageResult.included ? experiment.variant : 'control',
-            };
-            evaluateMultivariate(condition, ToggleCondition, context, EvaluationContext);
-            {
-                included: boolean;
-                variant: string;
-            }
-            {
-                // Simplified multivariate logic - would be more complex in full implementation
-                const experiment = condition.parameters.experiment;
-                if (!experiment) {
-                    return { included: false, variant: 'default' };
-                    const percentageResult = this.evaluatePercentage(condition, context);
-                    return {
-                        included: percentageResult.included,
-                        variant: experiment.variant,
-                    };
-                    async;
-                    evaluateCustomExpression(condition, ToggleCondition, context, EvaluationContext);
-                    Promise < boolean > {
-                        : .config.security.allowCustomExpressions
-                    };
+                    evaluateUserSegment(condition, ToggleCondition, context, EvaluationContext);
+                    boolean;
                     {
-                        return false;
-                        try {
-                            // Create safe evaluation context
-                            const evalContext = {
-                                user: context.user,
-                                request: context.request,
-                                environment: context.environment,
-                                timestamp: context.timestamp,
-                                ...condition.parameters.customVariables
-                            };
-                            const result = await this.expressionEvaluator.evaluate(condition.expression, evalContext);
-                            return Boolean(result);
+                        const segments = condition.parameters.userSegments;
+                        if (!segments || !context.user?.segment) {
+                            return false;
+                            return segments.includes(context.user.segment);
+                            evaluatePercentage(condition, ToggleCondition, context, EvaluationContext);
+                            {
+                                included: boolean;
+                                hash: string;
+                                threshold: number;
+                            }
+                            {
+                                const percentage = condition.parameters.percentage || 0;
+                                const salt = condition.parameters.salt || this.config.rollout.defaultSalt;
+                                const userId = context.user?.id || 'anonymous';
+                                const hash = this.generateHash(`${condition.id}_${userId}_${salt}`);
+                            }
+                            const hashValue = parseInt(hash.substring(0, 8), 16);
+                            const threshold = (hashValue / 0xFFFFFFFF) * 100;
+                            return { included: threshold < percentage,
+                                hash };
+                            threshold;
                         }
-                        catch (error) {
-                            if (this.config.evaluation.strictMode) {
-                                throw error;
+                        ;
+                        evaluateTimeWindow(condition, ToggleCondition, context, EvaluationContext);
+                        boolean;
+                        {
+                            const now = context.timestamp || new Date();
+                            const startTime = condition.parameters.startTime;
+                            const endTime = condition.parameters.endTime;
+                            const schedule = condition.parameters.schedule;
+                            // Check basic time window
+                            if (startTime && now < startTime)
                                 return false;
-                                evaluateDependency(condition, ToggleCondition, context, EvaluationContext);
-                                boolean;
-                                {
-                                    const required = condition.parameters.requiredToggles || [];
-                                    const conflicting = condition.parameters.conflictingToggles || [];
-                                    // Check required toggles
-                                    for (const toggleId of required) {
-                                        if (!context.toggles?.[toggleId]) {
+                            if (endTime && now > endTime)
+                                return false;
+                            // Check schedule if specified
+                            if (schedule) {
+                                const dayOfWeek = now.getDay();
+                                const hourOfDay = now.getHours();
+                                if (schedule.daysOfWeek && !schedule.daysOfWeek.includes(dayOfWeek)) {
+                                    return false;
+                                    if (schedule.hoursOfDay && !schedule.hoursOfDay.includes(hourOfDay)) {
+                                        return false;
+                                        return true;
+                                        evaluateABTest(condition, ToggleCondition, context, EvaluationContext);
+                                        {
+                                            included: boolean;
+                                            variant: string;
+                                        }
+                                        {
+                                            const experiment = condition.parameters.experiment;
+                                            if (!experiment) {
+                                                return { included: false, variant: 'control' };
+                                                // Check traffic allocation
+                                                const percentageResult = this.evaluatePercentage({});
+                                                condition,
+                                                    parameters;
+                                                {
+                                                    percentage: experiment.trafficAllocation;
+                                                }
+                                                salt: `ab_${experiment.experimentId}`;
+                                            }
+                                        }
+                                        context;
+                                        ;
+                                        return { included: percentageResult.included,
+                                            variant: percentageResult.included ? experiment.variant : 'control' };
+                                    }
+                                    ;
+                                    evaluateMultivariate(condition, ToggleCondition, context, EvaluationContext);
+                                    {
+                                        included: boolean;
+                                        variant: string;
+                                    }
+                                    {
+                                        // Simplified multivariate logic - would be more complex in full implementation
+                                        const experiment = condition.parameters.experiment;
+                                        if (!experiment) {
+                                            return { included: false, variant: 'default' };
+                                            const percentageResult = this.evaluatePercentage(condition, context);
+                                            return { included: percentageResult.included,
+                                                variant: experiment.variant };
+                                        }
+                                        ;
+                                        async;
+                                        evaluateCustomExpression(condition, ToggleCondition, context, EvaluationContext);
+                                        Promise < boolean > { : .config.security.allowCustomExpressions };
+                                        {
                                             return false;
-                                            // Check conflicting toggles
-                                            for (const toggleId of conflicting) {
-                                                if (context.toggles?.[toggleId]) {
+                                            try {
+                                                // Create safe evaluation context
+                                                const evalContext = {
+                                                    user: context.user,
+                                                    request: context.request,
+                                                    environment: context.environment,
+                                                    timestamp: context.timestamp
+                                                };
+                                                condition.parameters.customVariables;
+                                            }
+                                            finally { }
+                                            ;
+                                            const result = await this.expressionEvaluator.evaluate(condition.expression, evalContext);
+                                            return Boolean(result);
+                                            try {
+                                            }
+                                            catch (error) {
+                                                if (this.config.evaluation.strictMode) {
+                                                    throw error;
                                                     return false;
-                                                    return true;
-                                                    evaluateGeographic(condition, ToggleCondition, context, EvaluationContext);
+                                                    evaluateDependency(condition, ToggleCondition, context, EvaluationContext);
                                                     boolean;
                                                     {
-                                                        const countries = condition.parameters.countries;
-                                                        const regions = condition.parameters.regions;
-                                                        const cities = condition.parameters.cities;
-                                                        if (countries && context.request?.country) {
-                                                            return countries.includes(context.request.country);
-                                                            if (regions && context.request?.region) {
-                                                                return regions.includes(context.request.region);
-                                                                if (cities && context.request?.city) {
-                                                                    return cities.includes(context.request.city);
-                                                                    return false;
-                                                                    evaluateDeviceType(condition, ToggleCondition, context, EvaluationContext);
-                                                                    boolean;
-                                                                    {
-                                                                        const deviceTypes = condition.parameters.deviceTypes;
-                                                                        const platforms = condition.parameters.platforms;
-                                                                        if (deviceTypes && context.request?.device?.type) {
-                                                                            return deviceTypes.includes(context.request.device.type);
-                                                                            if (platforms && context.request?.device?.platform) {
-                                                                                return platforms.includes(context.request.device.platform);
-                                                                                return false;
-                                                                                evaluateTrafficSplit(condition, ToggleCondition, context, EvaluationContext);
-                                                                                {
-                                                                                    included: boolean;
-                                                                                    bucket: number;
-                                                                                }
-                                                                                {
-                                                                                    const userId = context.user?.id || 'anonymous';
-                                                                                    const hash = this.generateHash(`traffic_${condition.id}_${userId}`);
-                                                                                }
-                                                                                const bucket = parseInt(hash.substring(0, 2), 16) % 100;
-                                                                                const percentage = condition.parameters.percentage || 0;
-                                                                                return {
-                                                                                    included: bucket < percentage,
-                                                                                    bucket
-                                                                                };
-                                                                                evaluateFeatureFlag(condition, ToggleCondition, context, EvaluationContext);
-                                                                                boolean;
-                                                                                {
-                                                                                    const requiredFlags = condition.parameters.requiredToggles || [];
-                                                                                    return requiredFlags.every(flagId => );
-                                                                                    context.toggles?.[flagId] === true;
-                                                                                    ;
-                                                                                    compareValues(userValue, any, operator, ComparisonOperator, targetValue, any);
-                                                                                    boolean;
-                                                                                    {
-                                                                                        switch (operator) {
-                                                                                            case ComparisonOperator.EQUALS:
-                                                                                                return userValue === targetValue;
-                                                                                            case ComparisonOperator.NOT_EQUALS:
-                                                                                                return userValue !== targetValue;
-                                                                                            case ComparisonOperator.GREATER_THAN:
-                                                                                                return Number(userValue) > Number(targetValue);
-                                                                                            case ComparisonOperator.LESS_THAN:
-                                                                                                return Number(userValue) < Number(targetValue);
-                                                                                            case ComparisonOperator.GREATER_EQUAL:
-                                                                                                return Number(userValue) >= Number(targetValue);
-                                                                                            case ComparisonOperator.LESS_EQUAL:
-                                                                                                return Number(userValue) <= Number(targetValue);
-                                                                                            case ComparisonOperator.CONTAINS:
-                                                                                                return String(userValue).includes(String(targetValue));
-                                                                                            case ComparisonOperator.NOT_CONTAINS:
-                                                                                                return !String(userValue).includes(String(targetValue));
-                                                                                            case ComparisonOperator.STARTS_WITH:
-                                                                                                return String(userValue).startsWith(String(targetValue));
-                                                                                            case ComparisonOperator.ENDS_WITH:
-                                                                                                return String(userValue).endsWith(String(targetValue));
-                                                                                            case ComparisonOperator.MATCHES_REGEX:
-                                                                                                try {
-                                                                                                    return new RegExp(String(targetValue)).test(String(userValue));
-                                                                                                }
-                                                                                                catch {
+                                                        const required = condition.parameters.requiredToggles || [];
+                                                        const conflicting = condition.parameters.conflictingToggles || [];
+                                                        // Check required toggles
+                                                        for (const toggleId of required) {
+                                                            if (!context.toggles?.[toggleId]) {
+                                                                return false;
+                                                                // Check conflicting toggles
+                                                                for (const toggleId of conflicting) {
+                                                                    if (context.toggles?.[toggleId]) {
+                                                                        return false;
+                                                                        return true;
+                                                                        evaluateGeographic(condition, ToggleCondition, context, EvaluationContext);
+                                                                        boolean;
+                                                                        {
+                                                                            const countries = condition.parameters.countries;
+                                                                            const regions = condition.parameters.regions;
+                                                                            const cities = condition.parameters.cities;
+                                                                            if (countries && context.request?.country) {
+                                                                                return countries.includes(context.request.country);
+                                                                                if (regions && context.request?.region) {
+                                                                                    return regions.includes(context.request.region);
+                                                                                    if (cities && context.request?.city) {
+                                                                                        return cities.includes(context.request.city);
+                                                                                        return false;
+                                                                                        evaluateDeviceType(condition, ToggleCondition, context, EvaluationContext);
+                                                                                        boolean;
+                                                                                        {
+                                                                                            const deviceTypes = condition.parameters.deviceTypes;
+                                                                                            const platforms = condition.parameters.platforms;
+                                                                                            if (deviceTypes && context.request?.device?.type) {
+                                                                                                return deviceTypes.includes(context.request.device.type);
+                                                                                                if (platforms && context.request?.device?.platform) {
+                                                                                                    return platforms.includes(context.request.device.platform);
                                                                                                     return false;
+                                                                                                    evaluateTrafficSplit(condition, ToggleCondition, context, EvaluationContext);
+                                                                                                    {
+                                                                                                        included: boolean;
+                                                                                                        bucket: number;
+                                                                                                    }
+                                                                                                    {
+                                                                                                        const userId = context.user?.id || 'anonymous';
+                                                                                                        const hash = this.generateHash(`traffic_${condition.id}_${userId}`);
+                                                                                                    }
+                                                                                                    const bucket = parseInt(hash.substring(0, 2), 16) % 100;
+                                                                                                    const percentage = condition.parameters.percentage || 0;
+                                                                                                    return { included: bucket < percentage };
+                                                                                                    bucket;
                                                                                                 }
-                                                                                            case ComparisonOperator.IN_LIST:
-                                                                                                return Array.isArray(targetValue) && targetValue.includes(userValue);
-                                                                                            case ComparisonOperator.NOT_IN_LIST: return Array.isArray(targetValue) && !targetValue.includes(userValue);
-                                                                                            default:
-                                                                                                return false;
-                                                                                                generateHash(input, string);
-                                                                                                string;
+                                                                                                ;
+                                                                                                evaluateFeatureFlag(condition, ToggleCondition, context, EvaluationContext);
+                                                                                                boolean;
                                                                                                 {
-                                                                                                    // Simple hash function - would use crypto.createHash in full implementation
-                                                                                                    let hash = 0;
-                                                                                                    for (let i = 0; i < input.length; i++) {
-                                                                                                        const char = input.charCodeAt(i);
-                                                                                                        hash = ((hash << 5) - hash) + char;
-                                                                                                        hash = hash & hash; // Convert to 32-bit integer
-                                                                                                        return Math.abs(hash).toString(16);
-                                                                                                        generateConditionId();
+                                                                                                    const requiredFlags = condition.parameters.requiredToggles || [];
+                                                                                                    return requiredFlags.every(flagId => );
+                                                                                                    context.toggles?.[flagId] === true;
+                                                                                                    ;
+                                                                                                    compareValues(userValue, any, operator, ComparisonOperator, targetValue, any);
+                                                                                                    boolean;
+                                                                                                    {
+                                                                                                        switch (operator) {
+                                                                                                            case ComparisonOperator.EQUALS:
+                                                                                                                return userValue === targetValue;
+                                                                                                            case ComparisonOperator.NOT_EQUALS:
+                                                                                                                return userValue !== targetValue;
+                                                                                                            case ComparisonOperator.GREATER_THAN:
+                                                                                                                return Number(userValue) > Number(targetValue);
+                                                                                                            case ComparisonOperator.LESS_THAN:
+                                                                                                                return Number(userValue) < Number(targetValue);
+                                                                                                            case ComparisonOperator.GREATER_EQUAL:
+                                                                                                                return Number(userValue) >= Number(targetValue);
+                                                                                                            case ComparisonOperator.LESS_EQUAL:
+                                                                                                                return Number(userValue) <= Number(targetValue);
+                                                                                                            case ComparisonOperator.CONTAINS:
+                                                                                                                return String(userValue).includes(String(targetValue));
+                                                                                                            case ComparisonOperator.NOT_CONTAINS:
+                                                                                                                return !String(userValue).includes(String(targetValue));
+                                                                                                            case ComparisonOperator.STARTS_WITH:
+                                                                                                                return String(userValue).startsWith(String(targetValue));
+                                                                                                            case ComparisonOperator.ENDS_WITH:
+                                                                                                                return String(userValue).endsWith(String(targetValue));
+                                                                                                            case ComparisonOperator.MATCHES_REGEX:
+                                                                                                        }
+                                                                                                        try {
+                                                                                                            return new RegExp(String(targetValue)).test(String(userValue));
+                                                                                                        }
+                                                                                                        catch {
+                                                                                                            return false;
+                                                                                                            ComparisonOperator.IN_LIST;
+                                                                                                            return Array.isArray(targetValue) && targetValue.includes(userValue);
+                                                                                                            ComparisonOperator.NOT_IN_LIST;
+                                                                                                            return Array.isArray(targetValue) && !targetValue.includes(userValue);
+                                                                                                        }
+                                                                                                        return false;
+                                                                                                        generateHash(input, string);
                                                                                                         string;
                                                                                                         {
-                                                                                                            return `cond_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-                                                                                                        }
-                                                                                                        generateContextHash(context, EvaluationContext);
-                                                                                                        string;
-                                                                                                        {
-                                                                                                            const hashInput = JSON.stringify({});
-                                                                                                            userId: context.user?.id,
-                                                                                                                segment;
-                                                                                                            context.user?.segment,
-                                                                                                                country;
-                                                                                                            context.request?.country,
-                                                                                                                device;
-                                                                                                            context.request?.device?.type,
-                                                                                                                timestamp;
-                                                                                                            Math.floor((context.timestamp?.getTime() || Date.now()) / 60000); // minute precision,
-                                                                                                        }
-                                                                                                        ;
-                                                                                                        return this.generateHash(hashInput);
-                                                                                                        calculateConfidence(results, ConditionEvaluationResult);
-                                                                                                        number;
-                                                                                                        {
-                                                                                                            if (results.length === 0)
-                                                                                                                return 0;
-                                                                                                            const successfulEvaluations = results.filter(r => !r.reason.includes('error')).length;
-                                                                                                            return successfulEvaluations / results.length;
-                                                                                                            async;
-                                                                                                            validateCondition(condition, ToggleCondition);
-                                                                                                            Promise < { valid: boolean, errors: string, warnings: string } > {
-                                                                                                                const: errors, string = [],
-                                                                                                                const: warnings, string = [],
-                                                                                                                // Validate expression for custom expressions
-                                                                                                                if(condition) { }, : .conditionType === ConditionType.CUSTOM_EXPRESSION
-                                                                                                            };
-                                                                                                            {
-                                                                                                                try {
-                                                                                                                    this.expressionEvaluator.validate(condition.expression);
+                                                                                                            // Simple hash function - would use crypto.createHash in full implementation
+                                                                                                            let hash = 0;
+                                                                                                            for (let i = 0; i < input.length; i++) {
+                                                                                                                const char = input.charCodeAt(i);
+                                                                                                                hash = ((hash << 5) - hash) + char;
+                                                                                                                hash = hash & hash; // Convert to 32-bit integer
+                                                                                                                return Math.abs(hash).toString(16);
+                                                                                                                generateConditionId();
+                                                                                                                string;
+                                                                                                                {
+                                                                                                                    return `cond_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                                                                                                                 }
-                                                                                                                catch (error) {
-                                                                                                                    errors.push(`Invalid custom expression: ${error}`);
+                                                                                                                generateContextHash(context, EvaluationContext);
+                                                                                                                string;
+                                                                                                                {
+                                                                                                                    const hashInput = JSON.stringify({});
+                                                                                                                    userId: context.user?.id,
+                                                                                                                        segment;
+                                                                                                                    context.user?.segment,
+                                                                                                                        country;
+                                                                                                                    context.request?.country,
+                                                                                                                        device;
+                                                                                                                    context.request?.device?.type,
+                                                                                                                        timestamp;
+                                                                                                                    Math.floor((context.timestamp?.getTime() || Date.now()) / 60000); // minute precision }
                                                                                                                 }
-                                                                                                                // Validate parameters based on condition type
-                                                                                                                if (condition.conditionType === ConditionType.PERCENTAGE) {
-                                                                                                                    const percentage = condition.parameters.percentage;
-                                                                                                                    if (percentage === undefined || percentage < 0 || percentage > 100) {
-                                                                                                                        errors.push('Percentage must be between 0 and 100');
-                                                                                                                        return {
-                                                                                                                            valid: errors.length === 0,
-                                                                                                                            errors,
-                                                                                                                            warnings
-                                                                                                                        };
-                                                                                                                        clearToggleCache(toggleId, string);
-                                                                                                                        void {
-                                                                                                                            const: keysToDelete, string = [],
-                                                                                                                            : .evaluationCache.keys()
-                                                                                                                        };
-                                                                                                                        {
-                                                                                                                            if (key.startsWith(toggleId)) {
-                                                                                                                                keysToDelete.push(key);
-                                                                                                                                keysToDelete.forEach(key => this.evaluationCache.delete(key));
-                                                                                                                                cleanupCache();
-                                                                                                                                void {
-                                                                                                                                    const: now = Date.now(),
-                                                                                                                                    const: ttlMs = this.config.evaluation.cacheTimeToLive * 1000,
-                                                                                                                                    : .evaluationCache.entries()
+                                                                                                                ;
+                                                                                                                return this.generateHash(hashInput);
+                                                                                                                calculateConfidence(results, ConditionEvaluationResult);
+                                                                                                                number;
+                                                                                                                {
+                                                                                                                    if (results.length === 0)
+                                                                                                                        return 0;
+                                                                                                                    const successfulEvaluations = results.filter(r => !r.reason.includes('error')).length;
+                                                                                                                    return successfulEvaluations / results.length;
+                                                                                                                    async;
+                                                                                                                    validateCondition(condition, ToggleCondition);
+                                                                                                                    Promise < { valid: boolean, errors: string, warnings: string } > { const: errors, string = [],
+                                                                                                                        const: warnings, string = [],
+                                                                                                                        // Validate expression for custom expressions
+                                                                                                                        if(condition) { }, : .conditionType === ConditionType.CUSTOM_EXPRESSION };
+                                                                                                                    {
+                                                                                                                        try {
+                                                                                                                            this.expressionEvaluator.validate(condition.expression);
+                                                                                                                        }
+                                                                                                                        catch (error) {
+                                                                                                                            errors.push(`Invalid custom expression: ${error}`);
+                                                                                                                        }
+                                                                                                                        // Validate parameters based on condition type
+                                                                                                                        if (condition.conditionType === ConditionType.PERCENTAGE) {
+                                                                                                                            const percentage = condition.parameters.percentage;
+                                                                                                                            if (percentage === undefined || percentage < 0 || percentage > 100) {
+                                                                                                                                errors.push('Percentage must be between 0 and 100');
+                                                                                                                                return {
+                                                                                                                                    valid: errors.length === 0,
+                                                                                                                                    errors
                                                                                                                                 };
-                                                                                                                                {
-                                                                                                                                    if (now - result.metadata.evaluatedAt.getTime() > ttlMs) {
-                                                                                                                                        this.evaluationCache.delete(key);
-                                                                                                                                        isCacheValid(result, ConditionEvaluationResult);
-                                                                                                                                        boolean;
-                                                                                                                                        {
-                                                                                                                                            const now = Date.now();
-                                                                                                                                            const ttlMs = this.config.evaluation.cacheTimeToLive * 1000;
-                                                                                                                                            return now - result.metadata.evaluatedAt.getTime() < ttlMs;
-                                                                                                                                            export default ToggleConditionsService;
+                                                                                                                                warnings;
+                                                                                                                            }
+                                                                                                                            ;
+                                                                                                                            clearToggleCache(toggleId, string);
+                                                                                                                            void {
+                                                                                                                                const: keysToDelete, string = [],
+                                                                                                                                : .evaluationCache.keys()
+                                                                                                                            };
+                                                                                                                            {
+                                                                                                                                if (key.startsWith(toggleId)) {
+                                                                                                                                    keysToDelete.push(key);
+                                                                                                                                    keysToDelete.forEach(key => this.evaluationCache.delete(key));
+                                                                                                                                    cleanupCache();
+                                                                                                                                    void {
+                                                                                                                                        const: now = Date.now(),
+                                                                                                                                        const: ttlMs = this.config.evaluation.cacheTimeToLive * 1000,
+                                                                                                                                        : .evaluationCache.entries()
+                                                                                                                                    };
+                                                                                                                                    {
+                                                                                                                                        if (now - result.metadata.evaluatedAt.getTime() > ttlMs) {
+                                                                                                                                            this.evaluationCache.delete(key);
+                                                                                                                                            isCacheValid(result, ConditionEvaluationResult);
+                                                                                                                                            boolean;
+                                                                                                                                            {
+                                                                                                                                                const now = Date.now();
+                                                                                                                                                const ttlMs = this.config.evaluation.cacheTimeToLive * 1000;
+                                                                                                                                                return now - result.metadata.evaluatedAt.getTime() < ttlMs;
+                                                                                                                                                export default ToggleConditionsService;
+                                                                                                                                            }
                                                                                                                                         }
                                                                                                                                     }
                                                                                                                                 }
@@ -718,6 +726,7 @@ catch (error) {
                                                                                                         }
                                                                                                     }
                                                                                                 }
+                                                                                            }
                                                                                         }
                                                                                     }
                                                                                 }

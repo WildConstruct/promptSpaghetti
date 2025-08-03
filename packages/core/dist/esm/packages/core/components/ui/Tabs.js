@@ -16,9 +16,8 @@ div > ;
 export const TabsTrigger = ({
     children,
     className,
-    value,
-    ...props
-});
+    value });
+props;
 ()
     < button;
 className = {} `tabs-trigger ${className || ''}`;
@@ -39,9 +38,8 @@ button >
 export const TabsContent = ({
     children,
     className,
-    value,
-    ...props
-});
+    value });
+props;
 ()
     < div;
 className = {} `tabs-content ${className || ''}`;

@@ -1,5 +1,6 @@
 import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
+showWordCount = false;
 {
     const [localValue, setLocalValue] = React.useState(String(value ?? ''));
     const [isFocused, setIsFocused] = React.useState(false);
@@ -20,33 +21,33 @@ import React from 'react';
         setLocalValue(newValue);
         onChange(newValue);
     };
-    const getWordCount = (text) => {
-        return text.trim().split(/\s+/).filter(word => word.length > 0).length;
-    };
+    const getWordCount = (text) => { return text.trim().split(/\s+/).filter(word => word.length > 0).length; };
     const inputId = `field-${fieldKey}`;
 }
-const textareaStyle = {
-    width: '100%',
+const textareaStyle = { width: '100%',
     padding: 8,
-    border: error,
-}
-    ? '1px solid #f56565'
-    : isFocused
-        ? '1px solid #4299e1'
-        : '1px solid #4a5568', borderRadius, background, color, fontSize, fontFamily, outline, transition, resize;
-'none';
-'vertical',
-    minHeight;
-autoResize ? `${rows * 1.5}em` : undefined;
+    border: error
+        ? '1px solid #f56565'
+        : isFocused
+            ? '1px solid #4299e1'
+            : '1px solid #4a5568',
+    borderRadius: 4,
+    background: '#2d3748',
+    color: '#e2e8f0',
+    fontSize: 13,
+    fontFamily: 'system-ui, -apple-system, sans-serif',
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
+    resize: autoResize ? 'none' : 'vertical' };
+minHeight: autoResize ? `${rows * 1.5}em` : undefined;
 ;
-const labelStyle = {
-    display: 'block',
+const labelStyle = { display: 'block',
     fontWeight: 500,
     marginBottom: 4,
     color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: '0.025em',
-};
+    letterSpacing: '0.025em' };
+;
 const wordCount = getWordCount(localValue);
 const charCount = localValue.length;
 return;
@@ -59,14 +60,10 @@ _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { htmlFor:
         < div;
     style = {};
     {
-        color: '#f56565',
-            fontSize;
-        11,
-            marginTop;
-        4,
-            fontWeight;
-        400,
-        ;
+        color: '#f56565';
+        fontSize: 11;
+        marginTop: 4;
+        fontWeight: 400;
     }
 }
  >
@@ -78,7 +75,7 @@ _jsxs("div", { style: {
         justifyContent: 'space-between',
         marginTop: 2,
         fontSize: 10,
-        color: '#a0aec0',
+        color: '#a0aec0'
     }, children: [showWordCount && (()), wordCount, " word", wordCount !== 1 ? 's' : ''] });
 {
     maxLength && ()

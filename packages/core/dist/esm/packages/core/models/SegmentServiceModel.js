@@ -1,10 +1,18 @@
- > ;
+/**
+ * Segment Service Model (Epic 17)
+ *
+ * DEPLOYMENT BLOCKER FIX: Service layer models for user segment management
+ * providing business logic, validation, and orchestration for segment operations.
+ */
+import { UserSegment } from BehaviorEvent;
+from;
+'./UserSegmentModel';
+    > ;
 executionTime: number;
-'size_change' | 'performance_degradation' | 'condition_mismatch';
 severity: 'low' | 'medium' | 'high';
 description: string;
 recommendation ?  : string;
- > ;
+    > ;
 ;
 // Evaluation metrics
 totalEvaluations: number;
@@ -20,8 +28,7 @@ conditionPerformance: Array < {
     conditionId: string,
     evaluationTime: number,
     matchRate: number,
-    errorRate: number
-} > ;
+    errorRate: number } > ;
 // System metrics
 memoryUsage: number; // bytes,
 cpuUsage: number; // percentage,
@@ -43,7 +50,7 @@ confidence: number; // 0-1
 generatedAt: Date;
 generatedBy: 'system' | 'ml_model' | 'user_request';
 modelVersion ?  : string;
- > ;
+    > ;
 // Status and lifecycle
 status: 'draft' | 'running' | 'paused' | 'completed' | 'cancelled';
 startDate: Date;
@@ -56,29 +63,29 @@ successCriteria: Array < {
     metric: string,
     operator: 'greater_than' | 'less_than' | 'between',
     value: number | [number, number],
-    significance: number
-} > ;
+    significance: number } // 0-1 }
+    > ;
 // Results
-results ?  : {
-    variants: Array < {
-        variantId: string,
-        userCount: number,
-        metrics: (Record),
-        conversionRate: number,
-        confidence: number } > ,
-    winner: string,
-    significance: number,
-    liftPercentage: number
-};
+results ?  : { variants: Array < {},
+    variantId: string,
+    userCount: number,
+    metrics: (Record),
+    conversionRate: number,
+    confidence: number }
+    > ;
+winner ?  : string;
+significance: number;
+liftPercentage: number;
+;
 // Metadata
 createdBy: string;
 createdAt: Date;
 lastUpdated: Date;
- > ;
+    > ;
 // Target segments
 targetSegments: string;
 // Execution settings
-schedule: string; // cron expression,
+schedule: string; // cron expression
 isActive: boolean;
 // Status and monitoring
 lastRun ?  : Date;
@@ -92,16 +99,14 @@ executionHistory: Array < {
     recordsSuccessful: number,
     recordsFailed: number,
     status: 'success' | 'partial' | 'failed',
-    errorMessage: string
-} > ;
- > ;
+    errorMessage: string } > ;
+    > ;
 // Consent management
 requiresConsent: boolean;
 consentTypes: string;
 consentValidation: Array < {
     condition: string,
-    errorMessage: string
-} > ;
+    errorMessage: string } > ;
 // Audit requirements
 auditTrail: boolean;
 auditRetention: number; // days
@@ -117,8 +122,7 @@ fieldMappings: Array < {
     sourceField: string,
     targetField: string,
     transformation: string,
-    required: boolean
-} > ;
+    required: boolean } > ;
 // Status and monitoring
 isActive: boolean;
 lastSync ?  : Date;
@@ -132,8 +136,7 @@ syncHistory: Array < {
     recordsSuccessful: number,
     recordsFailed: number,
     status: 'success' | 'partial' | 'failed',
-    errorMessage: string
-} > ;
+    errorMessage: string } > ;
 deleteSegment(id, string, options ?  : { force: boolean });
 Promise;
 getSegment(id, string, options ?  : { includeAnalytics: boolean });
@@ -142,8 +145,7 @@ querySegments(query, SegmentQuery);
 Promise < {
     segments: UserSegment,
     totalCount: number,
-    hasMore: boolean
-} > ;
+    hasMore: boolean } > ;
 // Segment evaluation
 evaluateSegment(segmentId, string, options ?  : { userId: string });
 Promise;
@@ -157,10 +159,7 @@ Promise;
 getUserSegments(userId, string);
 Promise;
 getSegmentUsers(segmentId, string, options ?  : { limit: number, offset: number });
-Promise < {
-    users: SegmentMembership,
-    totalCount: number
-} > ;
+Promise;
 // Analytics and insights
 getSegmentAnalytics(segmentId, string, timeRange ?  : { start: Date, end: Date });
 Promise;
@@ -194,12 +193,9 @@ validateSegment(segmentId, string);
 Promise < {
     isValid: boolean,
     errors: string,
-    warnings: string
-} > ;
+    warnings: string } > ;
 getSystemHealth();
-Promise < {
-    status: 'healthy' | 'degraded' | 'unhealthy',
-    metrics: (Record),
-    issues: string
-} > ;
-export {};
+Promise < { status: 'healthy' | 'degraded' | 'unhealthy' };
+metrics: Record;
+issues: string;
+    > ;

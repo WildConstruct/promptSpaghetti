@@ -11,28 +11,24 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { z } from 'zod';
 // Validation schemas
 const PolicyFormSchema = z.object({});
-policyType: z.enum(),
-    ['PRIVACY_POLICY',
-        'TERMS_OF_SERVICE',
-        'COOKIE_POLICY',
-        'DATA_PROCESSING_AGREEMENT',
-        'CONSENT_POLICY',
-        'RETENTION_POLICY',
-        'SECURITY_POLICY',
-        'ACCEPTABLE_USE_POLICY',
-        'GDPR_POLICY',
-        'CCPA_POLICY',
-        'CUSTOM'];
-title: z.string().min(5, 'Title must be at least 5 characters').max(200, 'Title must be less than 200 characters'),
-    description;
-z.string().min(10, 'Description must be at least 10 characters').max(1000, 'Description must be less than 1000 characters'),
-    jurisdiction;
-z.array(z.string()).min(1, 'At least one jurisdiction is required'),
-    complianceFrameworks;
-z.array(z.string()),
-    audience;
-z.array(z.string()).min(1, 'At least one audience is required'),
+policyType: z.enum();
+['PRIVACY_POLICY',
+    'TERMS_OF_SERVICE',
+    'COOKIE_POLICY',
+    'DATA_PROCESSING_AGREEMENT',
+    'CONSENT_POLICY',
+    'RETENTION_POLICY',
+    'SECURITY_POLICY',
+    'ACCEPTABLE_USE_POLICY',
+    'GDPR_POLICY',
+    'CCPA_POLICY',
+    'CUSTOM'];
 ;
+title: z.string().min(5, 'Title must be at least 5 characters').max(200, 'Title must be less than 200 characters');
+description: z.string().min(10, 'Description must be at least 10 characters').max(1000, 'Description must be less than 1000 characters');
+jurisdiction: z.array(z.string()).min(1, 'At least one jurisdiction is required');
+complianceFrameworks: z.array(z.string());
+audience: z.array(z.string()).min(1, 'At least one audience is required');
 ;
 export const PolicyConfigurationInterface = ({
     onPolicyCreate,
@@ -41,49 +37,32 @@ export const PolicyConfigurationInterface = ({
     initialPolicy,
     mode = 'create',
     complianceFrameworks = ['GDPR', 'CCPA', 'SOX', 'HIPAA', 'PCI-DSS'],
-    jurisdictions = ['US', 'EU', 'UK', 'CA', 'AU'],
-    templates = []
-});
-{
-    // State management
+    jurisdictions = ['US', 'EU', 'UK', 'CA', 'AU'] });
+templates = [];
+{ // State management
     const [currentTab, setCurrentTab] = useState('basic');
     const [formData, setFormData] = useState({});
-    policyType: 'PRIVACY_POLICY',
-        title;
-    '',
-        description;
-    '',
-        jurisdiction;
-    [],
-        complianceFrameworks;
-    [],
-        audience;
-    [],
-        templateId;
-    '',
-        variables;
-    { }
-    customizations: [];
+    policyType: 'PRIVACY_POLICY';
+    title: '';
+    description: '';
+    jurisdiction: [];
+    complianceFrameworks: [];
+    audience: [];
+    templateId: '';
 }
+variables: { }
+customizations: [];
 ;
 const [deploymentConfig, setDeploymentConfig] = useState({});
-environment: 'STAGING',
-    channels;
-[],
-    rolloutType;
-'IMMEDIATE',
-    phases;
-[],
-    notifications;
-{
-    enabled: true,
-        channels;
-    ['EMAIL'],
-        template;
-    'default',
-        immediate;
-    true,
-    ;
+environment: 'STAGING';
+channels: [];
+rolloutType: 'IMMEDIATE';
+phases: [];
+notifications: {
+    enabled: true;
+    channels: ['EMAIL'];
+    template: 'default';
+    immediate: true;
 }
 ;
 const [errors, setErrors] = useState({});
@@ -93,24 +72,16 @@ const [selectedTemplate, setSelectedTemplate] = useState(null);
 useEffect(() => {
     if (initialPolicy && mode !== 'create') {
         setFormData({});
-        policyType: initialPolicy.policyType,
-            title;
-        initialPolicy.title,
-            description;
-        initialPolicy.description,
-            jurisdiction;
-        initialPolicy.jurisdiction,
-            complianceFrameworks;
-        initialPolicy.complianceFrameworks,
-            audience;
-        initialPolicy.audience,
-            templateId;
-        initialPolicy.templateId || '',
-            variables;
-        initialPolicy.variables || {},
-            customizations;
-        initialPolicy.customizations || [];
+        policyType: initialPolicy.policyType;
+        title: initialPolicy.title;
+        description: initialPolicy.description;
+        jurisdiction: initialPolicy.jurisdiction;
+        complianceFrameworks: initialPolicy.complianceFrameworks;
+        audience: initialPolicy.audience;
+        templateId: initialPolicy.templateId || '';
     }
+    variables: initialPolicy.variables || {};
+    customizations: initialPolicy.customizations || [];
 });
 [initialPolicy, mode];
 ;
@@ -119,7 +90,7 @@ const handleTemplateSelect = useCallback((templateId) => {
     const template = templates.find(t => t.templateId === templateId);
     if (template) {
         setSelectedTemplate(template);
-        setFormData(prev => ({}), ...prev, templateId, policyType, template.policyType, complianceFrameworks, [template.framework], variables, template.variables.reduce((acc, variable) => ({}), ...acc, [variable.name], variable.defaultValue || ''));
+        setFormData(prev => ({}), ...prev, templateId, policyType, template.policyType, complianceFrameworks, [template.framework], variables, template.variables.reduce((acc, variable) => ({}), ...acc[variable.name], variable.defaultValue || ''));
     }
 }), {};
 ;
@@ -131,16 +102,19 @@ const validateForm = useCallback(() => {
         PolicyFormSchema.parse(formData);
         setErrors({});
         return true;
-    }
-    catch (error) {
-        if (error instanceof z.ZodError) {
-            const newErrors = {};
-            error.errors.forEach(err => { });
-            if (err.path) {
-                newErrors[err.path.join('.')] = err.message;
+        try {
+        }
+        catch (error) {
+            if (error instanceof z.ZodError) {
+                const newErrors = {};
+                error.errors.forEach(err => { });
+                if (err.path) {
+                    newErrors[err.path.join('.')] = err.message;
+                }
             }
         }
     }
+    finally { }
 });
 setErrors(newErrors);
 return false;
@@ -154,21 +128,22 @@ const handleCreate = useCallback(async () => {
     try {
         const policyData = {
             ...formData,
-            templateId: selectedTemplate?.templateId,
+            templateId: selectedTemplate?.templateId
         };
-        if (onPolicyCreate) {
-            await onPolicyCreate(policyData);
-        }
-        try { }
-        catch (error) {
-            console.error('Error creating policy:', error);
-        }
-        finally {
-            setIsLoading(false);
-        }
-        [formData, selectedTemplate, validateForm, onPolicyCreate];
     }
     finally { }
+    ;
+    if (onPolicyCreate) {
+        await onPolicyCreate(policyData);
+    }
+    try { }
+    catch (error) {
+        console.error('Error creating policy:', error);
+    }
+    finally {
+        setIsLoading(false);
+    }
+    [formData, selectedTemplate, validateForm, onPolicyCreate];
 });
 const handleUpdate = useCallback(async () => {
     if (!validateForm())
@@ -177,13 +152,23 @@ const handleUpdate = useCallback(async () => {
     try {
         const updateData = {
             policyId: initialPolicy?.policyId,
-            version: initialPolicy?.version,
-            changes: [
-                {
-                    changeId: `CHG-${Date.now()}`
-                }
-            ]
-        }, type, location, description, impact, as, ChangeImpact, requiresReacceptance, newValue, description, impact, as, ChangeImpact, requiresApproval, notificationRequired;
+            version: initialPolicy?.version
+        };
+        changes: [
+            {
+                changeId: `CHG-${Date.now()}`
+            },
+            type, 'CONTENT',
+            location, 'general',
+            description, 'Policy configuration updated via interface',
+            impact, 'MEDIUM',
+            requiresReacceptance, true,
+            newValue, formData
+        ];
+        description: 'Updated policy configuration';
+        impact: 'MEDIUM';
+        requiresApproval: true;
+        notificationRequired: true;
     }
     finally { }
     ;
@@ -216,21 +201,19 @@ const handleDeploy = useCallback(async () => {
         };
     }
     finally { }
-}), rollbackCriteria, monitoringPeriod;
+}), rollbackCriteria;
+monitoringPeriod: 24;
 notificationSettings: {
-    enabled: deploymentConfig.notifications.enabled,
-        channels;
-    deploymentConfig.notifications.channels.map(channel => ({}), type, channel, configuration, {}, enabled, true);
+    enabled: deploymentConfig.notifications.enabled;
+    channels: deploymentConfig.notifications.channels.map(channel => ({}), type, channel);
 }
-audiences: formData.audience,
-    template;
-deploymentConfig.notifications.template,
-    scheduling;
-{
-    immediate: deploymentConfig.notifications.immediate,
-        scheduled;
-    deploymentConfig.notifications.scheduled,
-    ;
+configuration: { }
+enabled: true;
+audiences: formData.audience;
+template: deploymentConfig.notifications.template;
+scheduling: {
+    immediate: deploymentConfig.notifications.immediate;
+    scheduled: deploymentConfig.notifications.scheduled;
 }
 ;
 if (onPolicyDeploy) {
@@ -262,8 +245,8 @@ const updateFormField = useCallback((field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
 }, []);
 const addCustomization = useCallback(() => {
-    const newCustomization = {
-        customizationId: `CUST-${Date.now()}` };
+    const newCustomization = {};
+    customizationId: `CUST-${Date.now()}`;
 }, type, 'CONTENT', target, '', value, '', priority, 1, enabled, true);
 ;
 setFormData(prev => ({}), ...prev, customizations, [...prev.customizations, newCustomization]);
@@ -271,13 +254,15 @@ setFormData(prev => ({}), ...prev, customizations, [...prev.customizations, newC
 [];
 ;
 const updateCustomization = useCallback((index, field, value) => {
-    setFormData(prev => ({}), ...prev, customizations, prev.customizations.map((cust, i) => i === index ? { ...cust, [field]: value } : cust));
-});
+    setFormData(prev => ({}), ...prev);
+}, customizations, prev.customizations.map((cust, i) => i === index ? { ...cust, [field]: value } : cust));
+;
 [];
 ;
 const removeCustomization = useCallback((index) => {
     setFormData(prev => ({}), ...prev, customizations, prev.customizations.filter((_, i) => i !== index));
 });
+;
 [];
 ;
 return;
@@ -358,10 +343,8 @@ div >
         checked = { formData, : .variables[variable.name] || false };
         onChange = {}(e);
         updateFormField('variables', {});
-        formData.variables,
-            [variable.name];
-        e.target.checked,
-        ;
+        formData.variables[variable.name];
+        e.target.checked;
     }
 }
 disabled = { mode } === 'view';
@@ -375,10 +358,8 @@ id = { variable, : .name };
 value = { formData, : .variables[variable.name] || '' };
 onChange = {}(e);
 updateFormField('variables', {});
-formData.variables,
-    [variable.name];
-e.target.value,
-;
+formData.variables[variable.name];
+e.target.value;
 disabled = { mode } === 'view';
 />;
 variable.type === 'NUMBER' ? ()
@@ -390,10 +371,8 @@ id = { variable, : .name };
 value = { formData, : .variables[variable.name] || '' };
 onChange = {}(e);
 updateFormField('variables', {});
-formData.variables,
-    [variable.name];
-e.target.value,
-;
+formData.variables[variable.name];
+e.target.value;
 disabled = { mode } === 'view';
 />;
 ()
@@ -403,10 +382,8 @@ id = { variable, : .name };
 value = { formData, : .variables[variable.name] || '' };
 onChange = {}(e);
 updateFormField('variables', {});
-formData.variables,
-    [variable.name];
-e.target.value,
-;
+formData.variables[variable.name];
+e.target.value;
 disabled = { mode } === 'view';
 />;
 div >
@@ -443,10 +420,10 @@ div >
                                             }
                                             else {
                                                 updateFormField();
-                                                'complianceFrameworks',
-                                                    formData.complianceFrameworks.filter(f => f !== framework);
+                                                'complianceFrameworks';
                                             }
-                                        } })), "); }} disabled=", mode === 'view', "/>", framework] }), "))}"] }));
+                                            formData.complianceFrameworks.filter(f => f !== framework);
+                                        } })), "); disabled=", mode === 'view', "/>", framework] }), "))}"] }));
     div >
         { formData, : .complianceFrameworks.length > 0 && ()
                 < div, className = "compliance-info" >
@@ -507,9 +484,9 @@ div >
     className = "config-section" >
         (_jsx("h3", { children: "Deployment Configuration" })
             ,
-                _jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "environment", children: "Environment" }), _jsx("select", { id: "environment", value: deploymentConfig.environment, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, environment) }), ": e.target.value as 'STAGING' | 'PRODUCTION', }))} disabled=", mode === 'view', ">", _jsx("option", { value: "STAGING", children: "Staging" }), _jsx("option", { value: "PRODUCTION", children: "Production" })] }));
+                _jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "environment", children: "Environment" }), _jsx("select", { id: "environment", value: deploymentConfig.environment, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, environment) }), ": e.target.value as 'STAGING' | 'PRODUCTION' } }))} disabled=", mode === 'view', ">", _jsx("option", { value: "STAGING", children: "Staging" }), _jsx("option", { value: "PRODUCTION", children: "Production" })] }));
     div >
-        _jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "rolloutType", children: "Rollout Strategy" }), _jsx("select", { id: "rolloutType", value: deploymentConfig.rolloutType, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, rolloutType) }), ": e.target.value as any, }))} disabled=", mode === 'view', ">", _jsx("option", { value: "IMMEDIATE", children: "Immediate" }), _jsx("option", { value: "PHASED", children: "Phased" }), _jsx("option", { value: "CANARY", children: "Canary" }), _jsx("option", { value: "BLUE_GREEN", children: "Blue-Green" })] });
+        _jsxs("div", { className: "form-group", children: [_jsx("label", { htmlFor: "rolloutType", children: "Rollout Strategy" }), _jsx("select", { id: "rolloutType", value: deploymentConfig.rolloutType, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, rolloutType) }), ": e.target.value as any } }))} disabled=", mode === 'view', ">", _jsx("option", { value: "IMMEDIATE", children: "Immediate" }), _jsx("option", { value: "PHASED", children: "Phased" }), _jsx("option", { value: "CANARY", children: "Canary" }), _jsx("option", { value: "BLUE_GREEN", children: "Blue-Green" })] });
     div >
         _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Deployment Channels" }), _jsxs("div", { className: "checkbox-group", children: [['web', 'mobile', 'email', 'api'].map(channel => ()
                             < label, key = { channel }, className = "checkbox-label" >
@@ -517,9 +494,9 @@ div >
                                     if (e.target.checked) {
                                         setDeploymentConfig(prev => ({}), ...prev, channels);
                                     }
-                                } })), ": [...prev.channels, channel], })); } else ", setDeploymentConfig(prev => ({}), ...prev, channels), ": prev.channels.filter(c => c !== channel), })); }} disabled=", mode === 'view', "/>", channel.toUpperCase()] }), "))}"] });
+                                } })), ": [...prev.channels, channel] } })); else ", setDeploymentConfig(prev => ({}), ...prev, channels), ": prev.channels.filter(c => c !== channel) } })); disabled=", mode === 'view', "/>", channel.toUpperCase()] }), "))}"] });
     div >
-        (_jsxs("div", { className: "notification-settings", children: [_jsx("h4", { children: "Notification Settings" }), _jsx("div", { className: "form-group", children: _jsxs("label", { className: "checkbox-label", children: [_jsx("input", { type: "checkbox", checked: deploymentConfig.notifications.enabled, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, notifications) }), ": ", ...(prev.notifications, enabled), ": e.target.checked } }))} disabled=", mode === 'view', "/> Enable Notifications"] }) }), deploymentConfig.notifications.enabled && ()
+        (_jsxs("div", { className: "notification-settings", children: [_jsx("h4", { children: "Notification Settings" }), _jsx("div", { className: "form-group", children: _jsxs("label", { className: "checkbox-label", children: [_jsx("input", { type: "checkbox", checked: deploymentConfig.notifications.enabled, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev), "notifications:": true, ...(prev.notifications, enabled) }), ": e.target.checked } }))} disabled=", mode === 'view', "/> Enable Notifications"] }) }), deploymentConfig.notifications.enabled && ()
                     <  >
                     _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Notification Channels" }), _jsxs("div", { className: "checkbox-group", children: [['EMAIL', 'SMS', 'IN_APP', 'PUSH'].map(channel => ()
                                         < label, key = { channel }, className = "checkbox-label" >
@@ -527,11 +504,9 @@ div >
                                                 if (e.target.checked) {
                                                     setDeploymentConfig(prev => ({}), ...prev, notifications);
                                                 }
-                                            } })), ": ", (,
-                                    ), "...prev.notifications, channels: [...prev.notifications.channels, channel], })); } else ", setDeploymentConfig(prev => ({}), ...prev, notifications), ": ", (,
-                                    ), "...prev.notifications, channels: prev.notifications.channels.filter(c => c !== channel), })); }} disabled=", mode === 'view', "/>", channel] }), "))}"] })] })
+                                            } })), ": ", ...prev.notifications, "channels: [...prev.notifications.channels, channel] } })); else ", setDeploymentConfig(prev => ({}), ...prev, notifications), ": ", ...prev.notifications, "channels: prev.notifications.channels.filter(c => c !== channel) } })); disabled=", mode === 'view', "/>", channel] }), "))}"] })] })
             ,
-                _jsx("div", { className: "form-group", children: _jsxs("label", { className: "checkbox-label", children: [_jsx("input", { type: "checkbox", checked: deploymentConfig.notifications.immediate, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, notifications) }), ": ", ...(prev.notifications, immediate), ": e.target.checked } }))} disabled=", mode === 'view', "/> Send Immediately"] }) }));
+                _jsx("div", { className: "form-group", children: _jsxs("label", { className: "checkbox-label", children: [_jsx("input", { type: "checkbox", checked: deploymentConfig.notifications.immediate, onChange: (e) => setDeploymentConfig(prev => ({}), ...prev), "notifications:": true, ...(prev.notifications, immediate) }), ": e.target.checked } }))} disabled=", mode === 'view', "/> Send Immediately"] }) }));
     {
         !deploymentConfig.notifications.immediate && ()
             < div;
@@ -540,7 +515,7 @@ div >
                 ,
                     _jsx("input", { type: "datetime-local", id: "scheduledDate", value: deploymentConfig.notifications.scheduled?.toISOString().slice(0, 16) || '', onChange: (e) => setDeploymentConfig(prev => ({}), ...prev, notifications, {
                             ...prev.notifications,
-                            scheduled: new Date(e.target.value),
+                            scheduled: new Date(e.target.value)
                         }) }));
     }
     disabled = { mode } === 'view';

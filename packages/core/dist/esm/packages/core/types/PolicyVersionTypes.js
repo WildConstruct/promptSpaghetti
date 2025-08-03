@@ -7,6 +7,6 @@
 ;
 ;
 policy: Policy;
- > ;
+    > ;
 changeTypeDistribution: Record;
 export {};

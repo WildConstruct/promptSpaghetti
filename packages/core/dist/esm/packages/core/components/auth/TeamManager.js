@@ -2,7 +2,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 11.4 Team Manager Component
 // React component for team management with hierarchical structure and member management
 import { useState, useEffect } from 'react';
-import { Users, Plus, Edit2, Trash2, Crown, Shield, User, Eye, ChevronRight, ChevronDown, UserPlus, Settings, Activity } from 'lucide-react';
+import { Users, Plus, Edit2, Trash2, Crown, Shield, User, Eye, ChevronRight, ChevronDown, UserPlus, Settings } from Activity;
+from;
+'lucide-react';
 ;
 currentUser ?  : { id: string, name: string, email: string, role: string };
 onTeamChange ?  : (team) => void ;
@@ -19,23 +21,16 @@ const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
 // Form state
 const [formData, setFormData] = useState({});
-name: '',
-    description;
-'',
-    parentTeamId;
-'',
-    settings;
-{ }
+name: '';
+description: '';
+parentTeamId: '';
+settings: { }
 ;
 const [memberFormData, setMemberFormData] = useState({});
-userId: '',
-    role;
-'member',
+userId: '';
+role: 'member';
 ;
-;
-useEffect(() => {
-    loadTeams();
-}, [organizationId]);
+useEffect(() => { loadTeams(); }, [organizationId]);
 useEffect(() => {
     if (selectedTeam) {
         loadTeamMembers(selectedTeam.id);
@@ -49,8 +44,8 @@ const loadTeams = async () => {
     }
     finally {
     }
-}, credentials;
-;
+    credentials: 'include';
+};
 if (!response.ok) {
     throw new Error('Failed to load teams');
     const data = await response.json();
@@ -73,30 +68,35 @@ if (!response.ok) {
         }
         finally {
         }
-    }, credentials;
-}
-;
-if (!response.ok) {
-    throw new Error('Failed to load team members');
-    const data = await response.json();
-    setTeamMembers(data.data);
-}
-try { }
-catch (err) {
-    console.error('Failed to load team members:', err);
-}
-;
-const createTeam = async () => {
-    try {
-        const response = await fetch(`/api/auth/organizations/${organizationId}/teams`, {});
+        credentials: 'include';
+    };
+    if (!response.ok) {
+        throw new Error('Failed to load team members');
+        const data = await response.json();
+        setTeamMembers(data.data);
     }
-    finally {
+    try { }
+    catch (err) {
+        console.error('Failed to load team members:', err);
     }
-}, method, headers, credentials, body;
-({
-    ...formData,
-    parentTeamId: formData.parentTeamId || undefined,
-});
+    ;
+    const createTeam = async () => {
+        try {
+            const response = await fetch(`/api/auth/organizations/${organizationId}/teams`, {});
+        }
+        finally {
+        }
+        method: 'POST';
+        headers: {
+            'Content-Type';
+            'application/json';
+        }
+        credentials: 'include';
+        body: JSON.stringify({});
+    };
+    formData;
+    parentTeamId: formData.parentTeamId || undefined;
+}
 ;
 if (!response.ok) {
     const errorData = await response.json();
@@ -120,11 +120,16 @@ const updateTeam = async () => {
     }
     finally {
     }
-}, method, headers, credentials, body;
-({
-    ...formData,
-    parentTeamId: formData.parentTeamId || undefined,
-});
+    method: 'PUT';
+    headers: {
+        'Content-Type';
+        'application/json';
+    }
+    credentials: 'include';
+    body: JSON.stringify({});
+};
+formData;
+parentTeamId: formData.parentTeamId || undefined;
 ;
 if (!response.ok) {
     const errorData = await response.json();
@@ -146,110 +151,116 @@ const deleteTeam = async (teamId) => {
         }
         finally {
         }
-    }
-    method: 'DELETE',
-        credentials;
-    'include';
-};
-if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to delete team');
-    await loadTeams();
-    if (selectedTeam?.id === teamId) {
-        setSelectedTeam(teams.find(team => team.id !== teamId) || null);
-    }
-    try { }
-    catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to delete team');
+        method: 'DELETE';
+        credentials: 'include';
     }
     ;
-    const addTeamMember = async () => {
-        if (!selectedTeam)
-            return;
-        try {
-            const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members`, {});
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete team');
+        await loadTeams();
+        if (selectedTeam?.id === teamId) {
+            setSelectedTeam(teams.find(team => team.id !== teamId) || null);
         }
-        finally {
+        try { }
+        catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to delete team');
         }
-    }, method, headers, credentials, body;
-    (memberFormData);
-}
-;
-if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to add team member');
-    await loadTeamMembers(selectedTeam.id);
-    setShowAddMember(false);
-    setMemberFormData({ userId: '', role: 'member' });
-}
-try { }
-catch (err) {
-    setError(err instanceof Error ? err.message : 'Failed to add team member');
-}
-;
-const removeTeamMember = async (userId) => {
-    if (!selectedTeam || !confirm('Are you sure you want to remove this member?'))
-        return;
-    try {
-        const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {});
+        ;
+        const addTeamMember = async () => {
+            if (!selectedTeam)
+                return;
+            try {
+                const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members`, {});
+            }
+            finally {
+            }
+            method: 'POST';
+            headers: {
+                'Content-Type';
+                'application/json';
+            }
+            credentials: 'include';
+            body: JSON.stringify(memberFormData);
+        };
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to add team member');
+            await loadTeamMembers(selectedTeam.id);
+            setShowAddMember(false);
+            setMemberFormData({ userId: '', role: 'member' });
+            try {
+            }
+            catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to add team member');
+            }
+            ;
+            const removeTeamMember = async (userId) => {
+                if (!selectedTeam || !confirm('Are you sure you want to remove this member?'))
+                    return;
+                try {
+                    const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {});
+                }
+                finally {
+                }
+                method: 'DELETE';
+                credentials: 'include';
+            };
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to remove team member');
+                await loadTeamMembers(selectedTeam.id);
+            }
+            try { }
+            catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to remove team member');
+            }
+            ;
+            const updateMemberRole = async (userId, newRole) => {
+                if (!selectedTeam)
+                    return;
+                try {
+                    const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {});
+                }
+                finally {
+                }
+                method: 'PUT';
+                headers: {
+                    'Content-Type';
+                    'application/json';
+                }
+                credentials: 'include';
+                body: JSON.stringify({ role: newRole });
+            };
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to update member role');
+                await loadTeamMembers(selectedTeam.id);
+            }
+            try { }
+            catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to update member role');
+            }
+            ;
+            const resetForm = () => {
+                setFormData({});
+                name: '';
+                description: '';
+                parentTeamId: '';
+            };
+            settings: { }
+        }
+        ;
     }
-    finally {
-    }
-}, method, credentials;
-;
-if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to remove team member');
-    await loadTeamMembers(selectedTeam.id);
-}
-try { }
-catch (err) {
-    setError(err instanceof Error ? err.message : 'Failed to remove team member');
-}
-;
-const updateMemberRole = async (userId, newRole) => {
-    if (!selectedTeam)
-        return;
-    try {
-        const response = await fetch(`/api/auth/teams/${selectedTeam.id}/members/${userId}`, {});
-    }
-    finally {
-    }
-}, method, headers, credentials, body;
-({ role: newRole });
-;
-if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to update member role');
-    await loadTeamMembers(selectedTeam.id);
-}
-try { }
-catch (err) {
-    setError(err instanceof Error ? err.message : 'Failed to update member role');
-}
-;
-const resetForm = () => {
-    setFormData({});
-    name: '',
-        description;
-    '',
-        parentTeamId;
-    '',
-        settings;
-    { }
-};
-;
-const startEditing = (team) => {
-    setEditingTeam(team);
-    setFormData({});
-    name: team.name,
-        description;
-    team.description || '',
-        parentTeamId;
-    team.parentTeamId || '',
-        settings;
-    team.settings,
     ;
+    const startEditing = (team) => {
+        setEditingTeam(team);
+        setFormData({});
+        name: team.name;
+        description: team.description || '';
+        parentTeamId: team.parentTeamId || '';
+        settings: team.settings;
+    };
 };
 ;
 const toggleTeamExpansion = (teamId) => {
@@ -286,8 +297,8 @@ const toggleTeamExpansion = (teamId) => {
                     const hasChildren = teamList.some(t => t.parentTeamId === team.id);
                     const isExpanded = expandedTeams.has(team.id);
                     return;
-                    _jsxs("div", { children: [_jsxs("div", { onClick: () => setSelectedTeam(team), className: `flex items-center p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedTeam?.id === team.id ? 'bg-blue-50 border-r-2 border-blue-600' : '',
-                                }`, style: { paddingLeft: `${level * 20 + 12}px` }, children: [hasChildren && ()
+                    _jsxs("div", { children: [_jsxs("div", { onClick: () => setSelectedTeam(team), className: `flex items-center p-3 cursor-pointer hover:bg-gray-50 transition-colors ${selectedTeam?.id === team.id ? 'bg-blue-50 border-r-2 border-blue-600' : ''}
+`, style: { paddingLeft: `${level * 20 + 12}px` }, children: [hasChildren && ()
                                         < button, "onClick=", (e) => {
                                         e.stopPropagation();
                                         toggleTeamExpansion(team.id);
@@ -330,8 +341,8 @@ _jsxs("div", { className: "grid grid-cols-1 lg:grid-cols-4 gap-6", children: [_j
                         ].map((tab) => ()
                             < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} className=", `flex items-center py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
                             ? 'border-blue-500 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                        }`, ">", _jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }), "))}"] })] });
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, ">", _jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }), "))}"] })] });
 { /* Tab Content */ }
 _jsxs("div", { className: "p-6", children: [activeTab === 'overview' && ()
             < div, " className=\"space-y-6\">", _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [_jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: teamMembers.length }), _jsx("div", { className: "text-sm text-gray-600", children: "Team Members" })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: teamMembers.filter(m => m.role === 'admin' || m.role === 'owner').length }), _jsx("div", { className: "text-sm text-gray-600", children: "Administrators" })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("div", { className: "text-2xl font-bold text-gray-900", children: teams.filter(t => t.parentTeamId === selectedTeam.id).length }), _jsx("div", { className: "text-sm text-gray-600", children: "Sub-teams" })] })] }), _jsxs("div", { className: "bg-gray-50 p-4 rounded-lg", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-3", children: "Team Information" }), _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "text-sm", children: [_jsx("span", { className: "font-medium text-gray-700", children: "Created:" }), _jsx("span", { className: "ml-2 text-gray-600", children: new Date(selectedTeam.createdAt).toLocaleDateString() })] }), _jsxs("div", { className: "text-sm", children: [_jsx("span", { className: "font-medium text-gray-700", children: "Last Updated:" }), _jsx("span", { className: "ml-2 text-gray-600", children: new Date(selectedTeam.updatedAt).toLocaleDateString() })] }), selectedTeam.parentTeamId && ()

@@ -2,19 +2,15 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { substituteVariables } from '../utils/templateParser';
 ;
 export const useRealTimePreview = (graph, seedConfig = {}) => {
-    // State
     const [variants, setVariants] = useState([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [performance, setPerformance] = useState({});
-    averageExecutionTime: 0,
-        totalGenerations;
-    0,
-        successRate;
-    100,
-        lastUpdate;
-    Date.now(),
-    ;
+    averageExecutionTime: 0;
+    totalGenerations: 0;
+    successRate: 100;
+    lastUpdate: Date.now();
 };
+;
 const [error, setError] = useState(null);
 // Refs for managing async operations
 const debounceTimeoutRef = useRef(null);
@@ -23,9 +19,8 @@ const generationCounterRef = useRef(0);
 // Generate preview variants based on current weights and template
 const generatePreview = useCallback(async());
 ;
-weights: WeightControlOption,
-    force;
-boolean = false;
+weights: WeightControlOption;
+force: boolean = false;
 Promise;
 {
     if (!template.trim() || (!force && isGenerating)) {
@@ -49,31 +44,28 @@ Promise;
                     const selectedOptions = performWeightedSelection(weights, seed);
                     // Substitute variables in template
                     const substitutedTemplate = substituteVariables(template, {});
-                }, ...variables, ...selectedOptions);
+                }, ...variables);
             }
-            finally // Simulate generation delay (would be actual AI generation)
-             { }
-            ;
-            // Simulate generation delay (would be actual AI generation)
-            await new Promise(resolve => );
-            setTimeout(resolve, Math.random() * 200 + 50);
-            ;
-            // Check if generation was aborted
-            if (abortController.signal.aborted) {
-                throw new Error('Generation aborted');
-                return {
-                    id: `variant_${generationId}_${index}`
-                };
+            finally {
             }
-            seed,
-                result;
-            substitutedTemplate,
-                timestamp;
-            Date.now(),
-                executionTime;
-            performance.now() - startTime,
-                weightSnapshot;
-            weights.map(w => ({ ...w })), // Deep copy
+            selectedOptions;
+        }
+        ;
+        // Simulate generation delay (would be actual AI generation)
+        await new Promise(resolve => );
+        setTimeout(resolve, Math.random() * 200 + 50);
+        ;
+        // Check if generation was aborted
+        if (abortController.signal.aborted) {
+            throw new Error('Generation aborted');
+            return {
+                id: `variant_${generationId}_${index}`
+            };
+            seed;
+            result: substitutedTemplate;
+            timestamp: Date.now();
+            executionTime: performance.now() - startTime;
+            weightSnapshot: weights.map(w => ({ ...w })), // Deep copy
                 variables;
             {
                 variables, ;
@@ -81,87 +73,92 @@ Promise;
             }
         }
         ;
-    }
-    ;
-    // Update variants if this is still the current generation
-    if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
-        setVariants(newVariants);
-        // Update performance metrics
-        if (fullConfig.enablePerformanceTracking) {
-            const executionTime = performance.now() - startTime;
-            setPerformance(prev => ({}), averageExecutionTime, (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, successRate, ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)), lastUpdate, Date.now());
+        ;
+        // Update variants if this is still the current generation
+        if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
+            setVariants(newVariants);
+            // Update performance metrics
+            if (fullConfig.enablePerformanceTracking) {
+                const executionTime = performance.now() - startTime;
+                setPerformance(prev => ({}), averageExecutionTime, (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, successRate, ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)), lastUpdate, Date.now());
+            }
         }
         ;
-    }
-    try { }
-    catch (err) {
-        if (!abortController.signal.aborted) {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-            setError(errorMessage);
-            // Update performance metrics for failed generation
-            if (fullConfig.enablePerformanceTracking) {
-                setPerformance(prev => ({}), ...prev, successRate, (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, lastUpdate, Date.now());
-            }
-            ;
+        try {
         }
-        try { }
-        finally {
-            if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
-                setIsGenerating(false);
+        catch (err) {
+            if (!abortController.signal.aborted) {
+                const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+                setError(errorMessage);
+                // Update performance metrics for failed generation
+                if (fullConfig.enablePerformanceTracking) {
+                    setPerformance(prev => ({}), ...prev, successRate, (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, lastUpdate, Date.now());
+                }
             }
-            [template, variables, fullConfig, isGenerating];
             ;
-            // Debounced preview update for weight changes
-            const requestPreview = useCallback((weights) => {
-                if (!fullConfig.autoRefresh)
-                    return;
-                // Clear existing debounce timeout
-                if (debounceTimeoutRef.current) {
-                    clearTimeout(debounceTimeoutRef.current);
-                    // Set new debounced timeout
-                    debounceTimeoutRef.current = setTimeout(() => {
-                        generatePreview(weights);
-                    }, fullConfig.debounceMs);
+            try {
+            }
+            finally {
+                if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
+                    setIsGenerating(false);
                 }
-                [generatePreview, fullConfig];
-            });
-            // Force immediate preview generation
-            const forcePreview = useCallback((weights) => {
-                // Clear any pending debounced calls
-                if (debounceTimeoutRef.current) {
-                    clearTimeout(debounceTimeoutRef.current);
-                    debounceTimeoutRef.current = null;
-                    generatePreview(weights, true);
-                }
-                [generatePreview];
-            });
-            // Refresh single variant
-            const refreshVariant = useCallback(async (variantId) => {
-                const variant = variants.find(v => v.id === variantId);
-                if (!variant)
-                    return;
-                setIsGenerating(true);
-                try {
-                    const startTime = performance.now();
-                    const selectedOptions = performWeightedSelection(variant.weightSnapshot, variant.seed + 1);
-                    const substitutedTemplate = substituteVariables(template, {});
-                }
-                finally {
-                }
-            }, ...variables, ...selectedOptions);
+                [template, variables, fullConfig, isGenerating];
+                ;
+                // Debounced preview update for weight changes
+                const requestPreview = useCallback((weights) => {
+                    if (!fullConfig.autoRefresh)
+                        return;
+                    // Clear existing debounce timeout
+                    if (debounceTimeoutRef.current) {
+                        clearTimeout(debounceTimeoutRef.current);
+                        // Set new debounced timeout
+                        debounceTimeoutRef.current = setTimeout(() => {
+                            generatePreview(weights);
+                        }, fullConfig.debounceMs);
+                    }
+                    [generatePreview, fullConfig];
+                });
+                // Force immediate preview generation
+                const forcePreview = useCallback((weights) => {
+                    if (debounceTimeoutRef.current) {
+                        clearTimeout(debounceTimeoutRef.current);
+                        debounceTimeoutRef.current = null;
+                        generatePreview(weights, true);
+                    }
+                    [generatePreview];
+                });
+                // Refresh single variant
+                const refreshVariant = useCallback(async (variantId) => {
+                    const variant = variants.find(v => v.id === variantId);
+                    if (!variant)
+                        return;
+                    setIsGenerating(true);
+                    try {
+                        const startTime = performance.now();
+                        const selectedOptions = performWeightedSelection(variant.weightSnapshot, variant.seed + 1);
+                        const substitutedTemplate = substituteVariables(template, {});
+                    }
+                    finally {
+                    }
+                }, ...variables);
+            }
+            selectedOptions;
         }
         ;
         await new Promise(resolve => setTimeout(resolve, 100)); // Simulate generation
-        const updatedVariant = {
-            ...variant,
+        const updatedVariant = { ...variant,
             result: substitutedTemplate,
             timestamp: Date.now(),
-            executionTime: performance.now() - startTime,
-            variables: { ...variables, ...selectedOptions }
-        };
-        setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
+            executionTime: performance.now() - startTime };
+        variables: {
+            variables, ;
+            selectedOptions;
+        }
     }
-    try { }
+    ;
+    setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
+    try {
+    }
     catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to refresh variant');
     }
@@ -171,9 +168,7 @@ Promise;
     [variants, template, variables];
     ;
     // Get variant by ID
-    const getVariant = useCallback((variantId) => {
-        return variants.find(v => v.id === variantId);
-    }, [variants]);
+    const getVariant = useCallback((variantId) => { return variants.find(v => v.id === variantId); }, [variants]);
     // Get performance insights
     const getPerformanceInsights = useCallback(() => {
         const insights = [];
@@ -219,9 +214,9 @@ const clearVariants = useCallback(() => {
         successRate;
     100,
         lastUpdate;
-    Date.now(),
-    ;
+    Date.now();
 });
+;
 [];
 ;
 // Cleanup on unmount
@@ -237,8 +232,7 @@ useEffect(() => {
         [];
     };
 });
-return {
-    variants,
+return { variants,
     isGenerating,
     performance,
     error,
@@ -252,8 +246,8 @@ return {
     getPerformanceInsights,
     exportVariants,
     // Config
-    config: fullConfig,
-};
+    config: fullConfig };
+;
 ;
 // Helper function for weighted selection
 const performWeightedSelection = ();

@@ -6,7 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * for templates, tutorials, best practices, and marketplace documentation.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { PencilIcon, DocumentIcon, EyeIcon, HeartIcon, MagnifyingGlassIcon, PlusIcon, TrashIcon, ClockIcon, UserIcon, StarIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, DocumentIcon, EyeIcon, HeartIcon, MagnifyingGlassIcon, PlusIcon, TrashIcon, ClockIcon, UserIcon } from StarIcon;
+from;
+'@heroicons/react/24/outline';
 ;
 analytics: {
     averageRating: number;
@@ -19,15 +21,19 @@ analytics: {
 ;
 featured ?  : boolean;
 searchQuery ?  : string;
+direction: 'asc' | 'desc';
+onUpdateCategory: (id, category) => Promise;
+className ?  : string;
+// Article List Component
 export const ArticleList, Article;
 filter: ArticleFilter;
 sort: ArticleSort;
-onEdit: (article) => void ;
-onDelete: (article) => void ;
-onDuplicate: (article) => void ;
-onView: (article) => void ;
+onEdit: (article) => void onDelete;
+(article) => void onDuplicate;
+(article) => void onView;
+(article) => void ;
 currentUser: ArticleAuthor;
- > ;
+    > ;
 ({ articles, filter, sort, onEdit, onDelete, onDuplicate, onView, currentUser }) => {
     const filteredAndSortedArticles = useMemo(() => {
         const filtered = articles.filter(article => { });
@@ -78,8 +84,8 @@ currentUser: ArticleAuthor;
             case 'rating':
                 return (a.analytics.averageRating - b.analytics.averageRating) * multiplier;
             default:
-                return 0;
         }
+        return 0;
     });
     return filtered;
 }, [articles, filter, sort];
@@ -144,13 +150,14 @@ div >
 ;
 // Article Editor Component
 export const ArticleEditor;
-(article) => Promise;
 onCancel: () => void ;
 onUploadAttachment: (file) => Promise;
- > ;
+    > ;
 ({ article, categories, onSave, onCancel, onUploadAttachment }) => {
-    const [formData, setFormData] = useState(() => ({}), title, article?.title || '', content, article?.content || '', excerpt, article?.excerpt || '', status, article?.status || 'draft', category, article?.category || categories[0], tags, article?.tags || [], difficulty, article?.difficulty || 'beginner', featured, article?.featured || false, seo, article?.seo || {}, ...article);
+    const [formData, setFormData] = useState(() => ({}), title, article?.title || '', content, article?.content || '', excerpt, article?.excerpt || '', status, article?.status || 'draft', category, article?.category || categories[0], tags, article?.tags || [], difficulty, article?.difficulty || 'beginner', featured, article?.featured || false);
 };
+seo: article?.seo || {};
+article;
 ;
 const [newTag, setNewTag] = useState('');
 const [isSaving, setIsSaving] = useState(false);
@@ -168,6 +175,7 @@ setNewTag('');
 const handleRemoveTag = useCallback((tagToRemove) => {
     setFormData(prev => ({}), ...prev, tags, prev.tags?.filter(tag => tag !== tagToRemove) || []);
 });
+;
 [];
 ;
 const handleSave = useCallback(async () => {
@@ -221,9 +229,8 @@ export const ArticleManagement = ({
     onDuplicateArticle,
     onUploadAttachment,
     onCreateCategory,
-    onUpdateCategory,
-    className = ''
-});
+    onUpdateCategory });
+className = '';
 {
     const [activeTab, setActiveTab] = useState('list');
     const [editingArticle, setEditingArticle] = useState(null);
@@ -266,7 +273,6 @@ export const ArticleManagement = ({
         setEditingArticle(null);
     }, []);
     const handleView = useCallback((article) => {
-        // Navigate to article view or open preview modal
         console.log('View article:', article);
     }, []);
     const handleDelete = useCallback(async (article) => {
@@ -293,23 +299,23 @@ export const ArticleManagement = ({
     return;
     _jsxs("div", { className: `bg-gray-50 min-h-screen ${className}`, children: ["}", _jsxs("div", { className: "max-w-7xl mx-auto px-4 py-8", children: [_jsxs("div", { className: "mb-8", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("h1", { className: "text-2xl font-bold text-gray-900", children: "Knowledge Base Management" }), _jsxs("button", { onClick: handleCreateNew, className: "flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md", children: [_jsx(PlusIcon, { className: "h-5 w-5" }), "New Article"] })] }), _jsx("div", { className: "border-b border-gray-200", children: _jsxs("nav", { className: "-mb-px flex space-x-8", children: [_jsxs("button", { onClick: () => setActiveTab('list'), className: `py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'list'
                                                 ? 'border-blue-500 text-blue-600'
-                                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                                            }`, children: ["Articles (", articles.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('categories'), className: `py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'categories'
+                                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, children: ["Articles (", articles.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('categories'), className: `py-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'categories'
                                                 ? 'border-blue-500 text-blue-600'
-                                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                                            }`, children: ["Categories (", categories.length, ")"] })] }) })] }), activeTab === 'list' && (), _jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-4 mb-6", children: [_jsxs("div", { className: "flex items-center gap-4 mb-4", children: [_jsxs("div", { className: "flex-1 relative", children: [_jsx(MagnifyingGlassIcon, { className: "h-5 w-5 absolute left-3 top-3 text-gray-400" }), _jsx("input", { type: "text", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), placeholder: "Search articles...", className: "w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" })] }), _jsxs("select", { value: `${sort.field}-${sort.direction}`, onChange: (e) => {
+                                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, children: ["Categories (", categories.length, ")"] })] }) })] }), activeTab === 'list' && (), _jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-4 mb-6", children: [_jsxs("div", { className: "flex items-center gap-4 mb-4", children: [_jsxs("div", { className: "flex-1 relative", children: [_jsx(MagnifyingGlassIcon, { className: "h-5 w-5 absolute left-3 top-3 text-gray-400" }), _jsx("input", { type: "text", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), placeholder: "Search articles...", className: "w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" })] }), _jsxs("select", { value: `${sort.field}-${sort.direction}`, onChange: (e) => {
                                             const [field, direction] = e.target.value.split('-');
                                             setSort({ field, direction });
                                         }, className: "px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "updatedAt-desc", children: "Recently Updated" }), _jsx("option", { value: "createdAt-desc", children: "Newest First" }), _jsx("option", { value: "title-asc", children: "Title A-Z" }), _jsx("option", { value: "viewCount-desc", children: "Most Viewed" }), _jsx("option", { value: "likeCount-desc", children: "Most Liked" }), _jsx("option", { value: "rating-desc", children: "Highest Rated" })] })] }), _jsxs("div", { className: "flex flex-wrap gap-2", children: [_jsx("button", { onClick: () => setFilter(prev => ({ ...prev, status: prev.status?.includes('published') ? undefined : ['published'] })), className: `px-3 py-1 rounded-full text-sm border ${filter.status?.includes('published')
                                             ? 'bg-green-100 text-green-800 border-green-300'
-                                            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200',
-                                        }`, children: "Published" }), _jsx("button", { onClick: () => setFilter(prev => ({ ...prev, featured: prev.featured === true ? undefined : true })), className: `px-3 py-1 rounded-full text-sm border ${filter.featured === true
+                                            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'}
+`, children: "Published" }), _jsx("button", { onClick: () => setFilter(prev => ({ ...prev, featured: prev.featured === true ? undefined : true })), className: `px-3 py-1 rounded-full text-sm border ${filter.featured === true
                                             ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                                            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200',
-                                        }`, children: "Featured" }), _jsx("button", { onClick: () => setFilter(prev => ({ ...prev, author: prev.author?.includes(currentUser.id) ? undefined : [currentUser.id] })), className: `px-3 py-1 rounded-full text-sm border ${filter.author?.includes(currentUser.id)
+                                            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'}
+`, children: "Featured" }), _jsx("button", { onClick: () => setFilter(prev => ({ ...prev, author: prev.author?.includes(currentUser.id) ? undefined : [currentUser.id] })), className: `px-3 py-1 rounded-full text-sm border ${filter.author?.includes(currentUser.id)
                                             ? 'bg-blue-100 text-blue-800 border-blue-300'
-                                            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200',
-                                        }`, children: "My Articles" })] })] }), _jsx(ArticleList, { articles: articles, filter: filter, sort: sort, onEdit: handleEdit, onDelete: handleDelete, onDuplicate: handleDuplicate, onView: handleView, currentUser: currentUser })] }), ")}", activeTab === 'editor' && ()
+                                            : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'}
+`, children: "My Articles" })] })] }), _jsx(ArticleList, { articles: articles, filter: filter, sort: sort, onEdit: handleEdit, onDelete: handleDelete, onDuplicate: handleDuplicate, onView: handleView, currentUser: currentUser })] }), ")}", activeTab === 'editor' && ()
                 < ArticleEditor, "article=", editingArticle || undefined, "categories=", categories, "onSave=", handleSaveArticle, "onCancel=", handleCancel, "onUploadAttachment=", onUploadAttachment, "/> )}", activeTab === 'categories' && ()
                 < div, " className=\"bg-white rounded-lg border border-gray-200 p-6\">", _jsxs("div", { className: "flex items-center justify-between mb-6", children: [_jsx("h2", { className: "text-xl font-semibold text-gray-900", children: "Article Categories" }), _jsxs("button", { className: "flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md", children: [_jsx(PlusIcon, { className: "h-5 w-5" }), "New Category"] })] }), _jsx("div", { className: "space-y-4", children: categories.map((category) => ()
                     < div, key = { category, : .id }, className = "flex items-center justify-between p-4 border border-gray-200 rounded-lg" >

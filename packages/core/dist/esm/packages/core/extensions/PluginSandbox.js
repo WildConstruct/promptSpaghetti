@@ -37,20 +37,19 @@ export class PluginSandbox {
             enableFileSystem: false,
             enableNetwork: false,
             enableChildProcess: false,
-            maxCallStack: 100,
-            contextName: `plugin-${manifest.id}`
+            maxCallStack: 100
         };
+        contextName: `plugin-${manifest.id}`;
     }
     options;
 }
 ;
-this.resourceUsage = {
-    memoryUsed: 0,
+this.resourceUsage = { memoryUsed: 0,
     executionTime: 0,
     apiCalls: 0,
     fileOperations: 0,
-    networkRequests: 0,
-};
+    networkRequests: 0 };
+;
 this.allowedAPIs = new Set(this.manifest.permissions || []);
 this.context = this.createSandboxContext();
 /**
@@ -58,9 +57,7 @@ this.context = this.createSandboxContext();
  */
 async;
 loadModule(modulePath, string);
-Promise < any > {
-    : .disposed
-};
+Promise < any > { : .disposed };
 {
     throw new Error('Sandbox has been disposed');
     const absolutePath = resolve(this.pluginPath, modulePath);
@@ -71,9 +68,8 @@ Promise < any > {
     */
     async;
     executeCode(code, string, filename, string = 'plugin.js');
-    Promise < any > {
-        : .disposed };
-    {
+    Promise < any > {};
+    if (this.disposed) {
         throw new Error('Sandbox has been disposed');
         const startTime = Date.now();
         let result;
@@ -139,91 +135,89 @@ Promise < any > {
                                 clearTimeout: this.createTimerProxy('clearTimeout'),
                                 clearInterval: this.createTimerProxy('clearInterval'),
                                 process: this.createProcessProxy(),
-                                require: this.createRequireProxy(),
-                                module: { exports: {} },
-                                exports: {},
-                                __filename: '',
-                                __dirname: '',
-                                global: {}
+                                require: this.createRequireProxy()
                             };
-                            // Self-reference for global
-                            sandboxGlobal.global = sandboxGlobal;
-                            return createContext(sandboxGlobal, {});
-                            name: this.options.contextName,
-                                codeGeneration;
-                            {
-                                strings: false, // Disable eval(),
-                                    wasm;
-                                false; // Disable WebAssembly,
+                            module: {
+                                exports: { }
                             }
-                            ;
-                            createConsoleProxy();
-                            Console;
-                            {
-                                const originalConsole = console;
-                                return {
-                                    ...originalConsole,
-                                    log: (...args) => {
-                                        this.trackAPICall('console.log');
-                                        originalConsole.log(`[${this.manifest.id}]`, ...args);
-                                    }
-                                },
-                                    error;
-                                (...args) => {
-                                    this.trackAPICall('console.error');
-                                    originalConsole.error(`[${this.manifest.id}]`, ...args);
-                                };
-                            }
+                            exports: { }
+                            __filename: '';
+                            __dirname: '';
+                            global: { }
+                            as;
+                            any;
+                        }
+                        ;
+                        // Self-reference for global
+                        sandboxGlobal.global = sandboxGlobal;
+                        return createContext(sandboxGlobal, {});
+                        name: this.options.contextName;
+                        codeGeneration: {
+                            strings: false, // Disable eval()
+                                wasm;
+                            false; // Disable WebAssembly }
+                        }
+                        ;
+                        createConsoleProxy();
+                        Console;
+                        {
+                            const originalConsole = console;
+                            return {
+                                ...originalConsole,
+                                log: (...args) => { },
+                                this: .trackAPICall('console.log'),
+                                originalConsole, : .log(`[${this.manifest.id}]`, ...args)
+                            };
+                            error: (...args) => {
+                                this.trackAPICall('console.error');
+                                originalConsole.error(`[${this.manifest.id}]`, ...args);
+                            };
                             warn: (...args) => {
                                 this.trackAPICall('console.warn');
                                 originalConsole.warn(`[${this.manifest.id}]`, ...args);
                             };
-                        }
-                        info: (...args) => {
-                            this.trackAPICall('console.info');
-                            originalConsole.info(`[${this.manifest.id}]`, ...args);
-                        };
-                    }
-                    as;
-                    Console;
-                    createBufferProxy();
-                    typeof Buffer;
-                    {
-                        return new Proxy(Buffer, {});
-                        construct: (target, args) => {
-                            this.trackAPICall('Buffer');
-                            return new target(...args);
-                        },
-                            apply;
-                        (target, thisArg, args) => {
-                            this.trackAPICall('Buffer');
-                            return target.apply(thisArg, args);
-                        };
-                        ;
-                        createTimerProxy(timerType, string);
-                        {
-                            const originalTimer = global[timerType];
-                            return (...args) => {
-                                this.trackAPICall(timerType);
-                                if (timerType === 'setTimeout' || timerType === 'setInterval') {
-                                    // Limit maximum timeout/interval to prevent runaway timers
-                                    const maxTimeout = 60000; // 1 minute;
-                                    if (args[1] > maxTimeout) {
-                                        args[1] = maxTimeout;
-                                        return originalTimer.apply(global, args);
-                                    }
-                                    ;
-                                    createProcessProxy();
-                                    Partial < NodeJS.Process > {
-                                        return: {
-                                            env: process.env, // Read-only access to environment variables,
-                                            version: process.version,
-                                            platform: process.platform,
-                                            arch: process.arch,
-                                            pid: process.pid,
+                            info: (...args) => {
+                                this.trackAPICall('console.info');
+                                originalConsole.info(`[${this.manifest.id}]`, ...args);
+                            };
+                            as;
+                            Console;
+                            createBufferProxy();
+                            typeof Buffer;
+                            {
+                                return new Proxy(Buffer, {});
+                                construct: (target, args) => { };
+                                this.trackAPICall('Buffer');
+                                return new target(...args);
+                                apply: (target, thisArg, args) => {
+                                    this.trackAPICall('Buffer');
+                                    return target.apply(thisArg, args);
+                                };
+                                ;
+                                createTimerProxy(timerType, string);
+                                {
+                                    const originalTimer = global[timerType];
+                                    return (...args) => { };
+                                    this.trackAPICall(timerType);
+                                    if (timerType === 'setTimeout' || timerType === 'setInterval') { // Limit maximum timeout/interval to prevent runaway timers
+                                        const maxTimeout = 60000; // 1 minute;
+                                        if (args[1] > maxTimeout) {
+                                            args[1] = maxTimeout;
+                                            return originalTimer.apply(global, args);
+                                        }
+                                        ;
+                                        createProcessProxy();
+                                        Partial < NodeJS.Process > { return: {
+                                                env: process.env, // Read-only access to environment variables
+                                                version: process.version,
+                                                platform: process.platform,
+                                                arch: process.arch,
+                                                pid: process.pid
+                                            }
                                             // Exclude dangerous methods like exit, kill, etc.
-                                        },
-                                        createRequireProxy() {
+                                        };
+                                        createRequireProxy();
+                                        {
                                             return (id) => {
                                                 this.trackAPICall('require');
                                                 // Check if module is blocked
@@ -253,103 +247,105 @@ Promise < any > {
                                                         }
                                                 }
                                                 ;
-                                            };
-                                        },
-                                        createFileSystemProxy() {
-                                            if (!this.hasPermission('fs:read') && !this.hasPermission('fs:write')) {
-                                                throw new Error('Filesystem access not permitted');
-                                                const fs = require('fs');
-                                                const proxy = {};
-                                                // Only expose read operations if write is not permitted
-                                                if (this.hasPermission('fs:read')) {
-                                                    proxy.readFileSync = (...args) => {
-                                                        this.trackFileOperation('read');
-                                                        return fs.readFileSync(...args);
-                                                    };
-                                                    proxy.readFile = (...args) => {
-                                                        this.trackFileOperation('read');
-                                                        return fs.readFile(...args);
-                                                    };
-                                                    if (this.hasPermission('fs:write')) {
-                                                        proxy.writeFileSync = (...args) => {
+                                                createFileSystemProxy();
+                                                {
+                                                    if (!this.hasPermission('fs:read') && !this.hasPermission('fs:write')) {
+                                                        throw new Error('Filesystem access not permitted');
+                                                        const fs = require('fs');
+                                                        const proxy = {};
+                                                        // Only expose read operations if write is not permitted
+                                                        if (this.hasPermission('fs:read')) {
+                                                            proxy.readFileSync = (...args) => { };
+                                                            this.trackFileOperation('read');
+                                                            return fs.readFileSync(...args);
+                                                        }
+                                                        ;
+                                                        proxy.readFile = (...args) => {
+                                                            this.trackFileOperation('read');
+                                                            return fs.readFile(...args);
+                                                        };
+                                                        if (this.hasPermission('fs:write')) {
+                                                            proxy.writeFileSync = (...args) => { };
                                                             this.trackFileOperation('write');
                                                             return fs.writeFileSync(...args);
-                                                        };
+                                                        }
+                                                        ;
                                                         proxy.writeFile = (...args) => {
                                                             this.trackFileOperation('write');
                                                             return fs.writeFile(...args);
                                                         };
                                                         return proxy;
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        createCryptoProxy() {
-                                            const cryptoModule = require('crypto');
-                                            return {
-                                                randomBytes: cryptoModule.randomBytes,
-                                                createHash: cryptoModule.createHash,
-                                                createHmac: cryptoModule.createHmac,
-                                                // Exclude potentially dangerous functions like createCipher
-                                            };
-                                        },
-                                        wrapCode(code, filename) {
-                                            return `
+                                                        createCryptoProxy();
+                                                        {
+                                                            const cryptoModule = require('crypto');
+                                                            return {
+                                                                randomBytes: cryptoModule.randomBytes,
+                                                                createHash: cryptoModule.createHash,
+                                                                createHmac: cryptoModule.createHmac
+                                                            };
+                                                            // Exclude potentially dangerous functions like createCipher
+                                                        }
+                                                        ;
+                                                        wrapCode(code, string, filename, string);
+                                                        string;
+                                                        {
+                                                            return `
       (function(require, module, exports, __filename, __dirname) {
         ${code}
         return module.exports;
       })(require, module, exports, "${filename}", "${dirname(filename)}");}
     `;
-                                        },
-                                        async executeWithTimeout(code, filename) {
-                                            return new Promise((resolve, reject) => {
-                                                const timeout = setTimeout(() => {
-                                                    reject(new Error('Script execution timed out'));
-                                                }, this.options.timeout);
-                                                try {
-                                                    const result = runInContext(code, this.context, {});
-                                                    filename,
-                                                        timeout;
-                                                    this.options.timeout,
-                                                        displayErrors;
-                                                    true,
-                                                    ;
+                                                            async;
+                                                            executeWithTimeout(code, string, filename, string);
+                                                            Promise < any > { return: new Promise((resolve, reject) => {
+                                                                    const timeout = setTimeout(() => {
+                                                                        reject(new Error('Script execution timed out'));
+                                                                    }, this.options.timeout);
+                                                                    try {
+                                                                        const result = runInContext(code, this.context, {});
+                                                                        filename;
+                                                                        timeout: this.options.timeout;
+                                                                        displayErrors: true;
+                                                                    }
+                                                                    finally {
+                                                                    }
+                                                                }),
+                                                                catch(error) {
+                                                                    clearTimeout(timeout);
+                                                                    reject(error);
+                                                                },
+                                                                trackAPICall(api) {
+                                                                    this.resourceUsage.apiCalls++;
+                                                                    // Check rate limiting
+                                                                    if (this.resourceUsage.apiCalls > 10000) { // 10k calls limit
+                                                                        throw new Error('API call rate limit exceeded');
+                                                                    }
+                                                                },
+                                                                trackFileOperation(operation) {
+                                                                    this.resourceUsage.fileOperations++;
+                                                                    // Check file operation limits
+                                                                    if (this.resourceUsage.fileOperations > 1000) { // 1k file ops limit
+                                                                        throw new Error('File operation limit exceeded');
+                                                                    }
+                                                                },
+                                                                updateMemoryUsage() {
+                                                                    // Note: Getting accurate memory usage for a specific context is complex in Node.js
+                                                                    // This is a simplified implementation
+                                                                    const memUsage = process.memoryUsage();
+                                                                    this.resourceUsage.memoryUsed = memUsage.heapUsed;
+                                                                    // Check memory limits
+                                                                    if (this.resourceUsage.memoryUsed > this.options.memoryLimit) {
+                                                                        throw new Error('Memory limit exceeded');
+                                                                    }
+                                                                } };
+                                                        }
+                                                    }
                                                 }
-                                                finally { }
-                                            });
-                                            clearTimeout(timeout);
-                                            resolve(result);
-                                        }, catch(error) {
-                                            clearTimeout(timeout);
-                                            reject(error);
-                                        },
-                                        trackAPICall(api) {
-                                            this.resourceUsage.apiCalls++;
-                                            // Check rate limiting
-                                            if (this.resourceUsage.apiCalls > 10000) { // 10k calls limit
-                                                throw new Error('API call rate limit exceeded');
-                                            }
-                                        },
-                                        trackFileOperation(operation) {
-                                            this.resourceUsage.fileOperations++;
-                                            // Check file operation limits
-                                            if (this.resourceUsage.fileOperations > 1000) { // 1k file ops limit
-                                                throw new Error('File operation limit exceeded');
-                                            }
-                                        },
-                                        updateMemoryUsage() {
-                                            // Note: Getting accurate memory usage for a specific context is complex in Node.js
-                                            // This is a simplified implementation
-                                            const memUsage = process.memoryUsage();
-                                            this.resourceUsage.memoryUsed = memUsage.heapUsed;
-                                            // Check memory limits
-                                            if (this.resourceUsage.memoryUsed > this.options.memoryLimit) {
-                                                throw new Error('Memory limit exceeded');
-                                            }
+                                            };
                                         }
-                                    };
+                                    }
                                 }
-                            };
+                            }
                         }
                     }
                 }

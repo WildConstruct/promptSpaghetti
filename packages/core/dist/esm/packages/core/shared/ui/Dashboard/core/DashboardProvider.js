@@ -6,14 +6,19 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * Provides shared state and functionality across dashboard components
  */
 import { createContext, useContext, useState, useCallback } from 'react';
+clearSelection: () => void ;
+isSelected: (id) => boolean;
+// Actions
+onRefresh ?  : () => void ;
+onExport ?  : (format) => void ;
+onTimeRangeChange ?  : (timeRange) => void ;
 const DashboardContext = createContext(undefined);
 export const DashboardProvider = ({
     children,
     timeRange: initialTimeRange = '7d',
     onTimeRangeChange,
-    onRefresh,
-    onExport
-});
+    onRefresh });
+onExport;
 {
     const [timeRange, setTimeRange] = useState(initialTimeRange);
     const [refreshing, setRefreshing] = useState(false);
@@ -33,9 +38,7 @@ export const DashboardProvider = ({
         setFilters({});
         setSearchTerm('');
     }, []);
-    const selectItem = useCallback((id) => {
-        setSelectedItems(prev => new Set([...prev, id]));
-    }, []);
+    const selectItem = useCallback((id) => { setSelectedItems(prev => new Set([...prev, id])); }, []);
     const deselectItem = useCallback((id) => {
         setSelectedItems(prev => { });
         const newSet = new Set(prev);
@@ -45,17 +48,10 @@ export const DashboardProvider = ({
 }
 [];
 ;
-const selectAll = useCallback((ids) => {
-    setSelectedItems(new Set(ids));
-}, []);
-const clearSelection = useCallback(() => {
-    setSelectedItems(new Set());
-}, []);
-const isSelected = useCallback((id) => {
-    return selectedItems.has(id);
-}, [selectedItems]);
-const contextValue = {
-    timeRange,
+const selectAll = useCallback((ids) => { setSelectedItems(new Set(ids)); }, []);
+const clearSelection = useCallback(() => { setSelectedItems(new Set()); }, []);
+const isSelected = useCallback((id) => { return selectedItems.has(id); }, [selectedItems]);
+const contextValue = { timeRange,
     setTimeRange: handleTimeRangeChange,
     refreshing,
     setRefreshing,
@@ -76,9 +72,9 @@ const contextValue = {
     clearSelection,
     isSelected,
     onRefresh,
-    onExport,
-    onTimeRangeChange
-};
+    onExport };
+onTimeRangeChange;
+;
 return;
 _jsx(DashboardContext.Provider, { value: contextValue, children: children });
 ;

@@ -97,75 +97,84 @@ export var DisputeType;
                 MERCHANT_REPORT = 'merchant_report',
                 SYSTEM_DETECTION = 'system_detection',
                 ADMIN_INITIATED = 'admin_initiated';
-        }
-        export let DisputeEvidenceType;
-        (function (DisputeEvidenceType) {
-            DisputeEvidenceType["TRANSACTION_RECEIPT"] = "transaction_receipt";
-            DisputeEvidenceType["AUTHORIZATION_PROOF"] = "authorization_proof";
-            DisputeEvidenceType["DELIVERY_CONFIRMATION"] = "delivery_confirmation";
-            DisputeEvidenceType["COMMUNICATION_LOG"] = "communication_log";
-            DisputeEvidenceType["REFUND_PROOF"] = "refund_proof";
-            DisputeEvidenceType["PRODUCT_DESCRIPTION"] = "product_description";
-            DisputeEvidenceType["CUSTOMER_COMMUNICATION"] = "customer_communication";
-            DisputeEvidenceType["TECHNICAL_ANALYSIS"] = "technical_analysis";
-            DisputeEvidenceType["USAGE_LOGS"] = "usage_logs";
-            DisputeEvidenceType["QUALITY_ASSESSMENT"] = "quality_assessment";
-            DisputeEvidenceType["POLICY_DOCUMENTATION"] = "policy_documentation";
-            DisputeEvidenceType["OTHER"] = "other";
-            DisputeEvidenceType[DisputeEvidenceType["export"] = void 0] = "export";
-            DisputeEvidenceType[DisputeEvidenceType["interface"] = void 0] = "interface";
-            DisputeEvidenceType[DisputeEvidenceType["DisputeAttachment"] = void 0] = "DisputeAttachment";
-        })(DisputeEvidenceType || (DisputeEvidenceType = {}));
-        {
-            attachmentId: string;
-            filename: string;
-            fileType: string;
-            fileSize: number;
-            url: string;
-            uploadedBy: string;
-            uploadedAt: Date;
-            category: 'evidence' | 'communication' | 'documentation' | 'screenshot',
+            export let DisputeEvidenceType;
+            (function (DisputeEvidenceType) {
+                DisputeEvidenceType["TRANSACTION_RECEIPT"] = "transaction_receipt";
+                DisputeEvidenceType["AUTHORIZATION_PROOF"] = "authorization_proof";
+                DisputeEvidenceType["DELIVERY_CONFIRMATION"] = "delivery_confirmation";
+                DisputeEvidenceType["COMMUNICATION_LOG"] = "communication_log";
+                DisputeEvidenceType["REFUND_PROOF"] = "refund_proof";
+                DisputeEvidenceType["PRODUCT_DESCRIPTION"] = "product_description";
+                DisputeEvidenceType["CUSTOMER_COMMUNICATION"] = "customer_communication";
+                DisputeEvidenceType["TECHNICAL_ANALYSIS"] = "technical_analysis";
+                DisputeEvidenceType["USAGE_LOGS"] = "usage_logs";
+                DisputeEvidenceType["QUALITY_ASSESSMENT"] = "quality_assessment";
+                DisputeEvidenceType["POLICY_DOCUMENTATION"] = "policy_documentation";
+                DisputeEvidenceType["OTHER"] = "other";
+                DisputeEvidenceType[DisputeEvidenceType["export"] = void 0] = "export";
+                DisputeEvidenceType[DisputeEvidenceType["interface"] = void 0] = "interface";
+                DisputeEvidenceType[DisputeEvidenceType["DisputeAttachment"] = void 0] = "DisputeAttachment";
+            })(DisputeEvidenceType || (DisputeEvidenceType = {}));
+            {
+                attachmentId: string;
+                filename: string;
+                fileType: string;
+                fileSize: number;
+                url: string;
+                uploadedBy: string;
+                uploadedAt: Date;
+                category: 'evidence' | 'communication' | 'documentation' | 'screenshot';
+            }
+            export let DisputeOutcome;
+            (function (DisputeOutcome) {
+                DisputeOutcome["WON"] = "won";
+                DisputeOutcome["LOST"] = "lost";
+                DisputeOutcome["PARTIALLY_WON"] = "partially_won";
+                DisputeOutcome["SETTLED"] = "settled";
+                DisputeOutcome["WITHDRAWN"] = "withdrawn";
+            })(DisputeOutcome || (DisputeOutcome = {}));
+            EXPIRED = 'expired';
+            dueDate: Date;
+            description: string;
+            criticality: 'low' | 'medium' | 'high' | 'critical';
+            automated: boolean;
+            notificationSent: boolean;
+            trigger: string;
+            conditions: Record;
+            executed: boolean;
+            executedAt ?  : Date;
+            result ?  : string;
             ;
+            metrics: DisputeMetrics;
+            insights: DisputeInsight;
+            recommendations: DisputeRecommendation;
+            generatedAt: Date;
+            confidence: number;
+            actionable: boolean;
+            relatedMetrics: string;
+            generatedAt: Date;
+            ;
+            successMetrics: string;
+            generatedAt: Date;
+            ;
+            amountRange ?  : { min: number,
+                max: number };
+            assignedTo ?  : string;
+            source ?  : DisputeSource;
+            argument: string;
+            evidence: DisputeEvidence;
+            attachments: DisputeAttachment;
+            preparedBy: string;
+            reviewedBy ?  : string;
+            submittedBy ?  : string;
+            submittedAt ?  : Date;
+            status: 'draft' | 'review' | 'approved' | 'submitted';
+            outcome ?  : DisputeOutcome;
+            notes ?  : string;
+            sentAt: Date;
+            readAt ?  : Date;
+            actionRequired: boolean;
+            actionUrl ?  : string;
         }
     }
 }
-export var DisputeOutcome;
-(function (DisputeOutcome) {
-    DisputeOutcome["WON"] = "won";
-    DisputeOutcome["LOST"] = "lost";
-    DisputeOutcome["PARTIALLY_WON"] = "partially_won";
-    DisputeOutcome["SETTLED"] = "settled";
-    DisputeOutcome["WITHDRAWN"] = "withdrawn";
-    DisputeOutcome["EXPIRED"] = "expired";
-    DisputeOutcome[DisputeOutcome["export"] = void 0] = "export";
-    DisputeOutcome[DisputeOutcome["interface"] = void 0] = "interface";
-    DisputeOutcome[DisputeOutcome["DisputeResolution"] = void 0] = "DisputeResolution";
-})(DisputeOutcome || (DisputeOutcome = {}));
-{
-    outcome: DisputeOutcome;
-    finalAmount: number;
-    adjustedAmount ?  : number;
-    reason: string;
-    resolvedBy: string;
-    resolvedAt: Date;
-    liabilityAmount: number;
-    feesAwarded: number;
-    notes ?  : string;
-    appealable: boolean;
-    appealDeadline ?  : Date;
-}
-;
-metrics: DisputeMetrics;
-insights: DisputeInsight;
-recommendations: DisputeRecommendation;
-generatedAt: Date;
-;
-successMetrics: string;
-generatedAt: Date;
-;
-amountRange ?  : {
-    min: number,
-    max: number
-};
-assignedTo ?  : string;
-source ?  : DisputeSource;

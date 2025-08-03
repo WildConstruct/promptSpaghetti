@@ -90,73 +90,64 @@ export var EscalationTriggerType;
                     field: z.string(),
                     operator: z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'contains', 'regex']),
                     value: z.union([z.string(), z.number(), z.boolean()]),
-                    logicalOperator: z.enum(['AND', 'OR']).optional(),
+                    logicalOperator: z.enum(['AND', 'OR']).optional()
                 })] = "EscalationConditionSchema";
-                AssignmentType[AssignmentType["export"] = void 0] = "export";
-                AssignmentType[AssignmentType["const"] = void 0] = "const";
-                AssignmentType[AssignmentType["NotificationMethodSchema"] = z.object({
-                    type: z.nativeEnum(NotificationType),
-                    address: z.string(),
-                    priority: z.nativeEnum(EscalationPriority),
-                    immediateDelivery: z.boolean(),
-                    retryCount: z.number().min(0).max(10).optional(),
-                    retryInterval: z.number().min(1).optional(),
-                })] = "NotificationMethodSchema";
-                AssignmentType[AssignmentType["export"] = void 0] = "export";
-                AssignmentType[AssignmentType["const"] = void 0] = "const";
-                AssignmentType[AssignmentType["EscalationActionSchema"] = z.object({
-                    actionId: z.string(),
-                    type: z.nativeEnum(EscalationActionType),
-                    configuration: z.record(z.unknown()),
-                    executeImmediately: z.boolean(),
-                    rollbackable: z.boolean(),
-                })] = "EscalationActionSchema";
-                AssignmentType[AssignmentType["export"] = void 0] = "export";
-                AssignmentType[AssignmentType["const"] = void 0] = "const";
-                AssignmentType[AssignmentType["EscalationLevelSchema"] = z.object({
-                    levelId: z.string(),
-                    level: z.number().min(0),
-                    name: z.string().min(1).max(100),
-                    description: z.string().max(500),
-                    assignmentType: z.nativeEnum(AssignmentType),
-                    assignmentTarget: z.string(),
-                    notificationMethods: z.array(AssignmentType.NotificationMethodSchema),
-                    notificationTemplate: z.string().optional(),
-                    responseTimeLimit: z.number().min(1),
-                    resolutionTimeLimit: z.number().min(1),
-                    automaticActions: z.array(AssignmentType.EscalationActionSchema).optional(),
-                    requiredActions: z.array(z.string()).optional(),
-                    escalationCriteria: z.array(AssignmentType.EscalationConditionSchema).optional(),
-                })] = "EscalationLevelSchema";
-                AssignmentType[AssignmentType["export"] = void 0] = "export";
-                AssignmentType[AssignmentType["const"] = void 0] = "const";
-                AssignmentType[AssignmentType["EscalationRuleSchema"] = z.object({
-                    ruleId: z.string(),
-                    name: z.string().min(1).max(255),
-                    description: z.string().max(1000),
-                    category: z.nativeEnum(EscalationCategory),
-                    enabled: z.boolean(),
-                    triggerType: z.nativeEnum(EscalationTriggerType),
-                    conditions: z.array(AssignmentType.EscalationConditionSchema),
-                    escalationPath: z.array(AssignmentType.EscalationLevelSchema).min(1),
-                    initialDelay: z.number().min(1).optional(),
-                    escalationInterval: z.number().min(1).optional(),
-                    maxEscalationTime: z.number().min(1).optional(),
-                    businessHoursOnly: z.boolean().optional(),
-                    allowWeekends: z.boolean().optional(),
-                    timeZone: z.string().optional(),
-                    createdBy: z.string(),
-                    createdAt: z.date(),
-                    lastModified: z.date(),
-                    version: z.number().min(1),
-                })] = "EscalationRuleSchema";
-                // =============================================================================
-                // Core Interfaces
-                // =============================================================================
             })(AssignmentType || (AssignmentType = {}));
+            ;
+            export const NotificationMethodSchema = z.object({ type: z.nativeEnum(NotificationType),
+                address: z.string(),
+                priority: z.nativeEnum(EscalationPriority),
+                immediateDelivery: z.boolean(),
+                retryCount: z.number().min(0).max(10).optional(),
+                retryInterval: z.number().min(1).optional() });
         }
+        ;
+        export const EscalationActionSchema = z.object({ actionId: z.string(),
+            type: z.nativeEnum(EscalationActionType),
+            configuration: z.record(z.unknown()),
+            executeImmediately: z.boolean(),
+            rollbackable: z.boolean() });
     }
+    ;
+    export const EscalationLevelSchema = z.object({ levelId: z.string(),
+        level: z.number().min(0),
+        name: z.string().min(1).max(100),
+        description: z.string().max(500),
+        assignmentType: z.nativeEnum(AssignmentType),
+        assignmentTarget: z.string(),
+        notificationMethods: z.array(NotificationMethodSchema),
+        notificationTemplate: z.string().optional(),
+        responseTimeLimit: z.number().min(1),
+        resolutionTimeLimit: z.number().min(1),
+        automaticActions: z.array(EscalationActionSchema).optional(),
+        requiredActions: z.array(z.string()).optional(),
+        escalationCriteria: z.array(EscalationConditionSchema).optional() });
 }
+;
+export const EscalationRuleSchema = z.object({ ruleId: z.string(),
+    name: z.string().min(1).max(255),
+    description: z.string().max(1000),
+    category: z.nativeEnum(EscalationCategory),
+    enabled: z.boolean(),
+    triggerType: z.nativeEnum(EscalationTriggerType),
+    conditions: z.array(EscalationConditionSchema),
+    escalationPath: z.array(EscalationLevelSchema).min(1),
+    initialDelay: z.number().min(1).optional(),
+    escalationInterval: z.number().min(1).optional(),
+    maxEscalationTime: z.number().min(1).optional(),
+    businessHoursOnly: z.boolean().optional(),
+    allowWeekends: z.boolean().optional(),
+    timeZone: z.string().optional(),
+    createdBy: z.string(),
+    createdAt: z.date(),
+    lastModified: z.date(),
+    version: z.number().min(1) });
+;
+title: string;
+message: string;
+affectedCases: string;
+recommendedActions: string;
+createdAt: Date;
 ;
 recentEscalations: EscalationCase;
 urgentCases: EscalationCase;
@@ -171,8 +162,7 @@ workloadDistribution: WorkloadAssignment;
 categoryBreakdown: CategoryBreakdown;
 alerts: EscalationAlert;
 recommendations: EscalationRecommendation;
-[];
-warnings: string;
+;
 ;
 casesHandled: number;
 averageResolutionTime: number;
@@ -203,47 +193,22 @@ export var EscalationEventType;
     timestamp: Date;
     data: Record;
     triggeredBy: string;
-    integrations ?  : string; // Integration IDs that should receive this event,
-    // =============================================================================
-    // Configuration Types
-    // =============================================================================
+    integrations ?  : string; // Integration IDs that should receive this event }
+    export default {
+        EscalationTriggerType,
+        EscalationStatus,
+        EscalationPriority,
+        EscalationCategory,
+        NotificationType,
+        EscalationActionType,
+        AssignmentType,
+        EscalationEventType,
+        // Export all schemas
+        EscalationConditionSchema,
+        NotificationMethodSchema,
+        EscalationActionSchema,
+        EscalationLevelSchema
+    };
+    EscalationRuleSchema;
 }
 ;
-notifications: {
-    retryAttempts: number;
-    retryInterval: number; // minutes,
-    enableBatching: boolean;
-    batchSize: number;
-    batchInterval: number; // minutes,
-}
-;
-performance: {
-    metricsRetentionDays: number;
-    autoCleanupExpiredCases: boolean;
-    maxConcurrentEscalations: number;
-}
-;
-integrations: {
-    enableWebhooks: boolean;
-    webhookTimeout: number; // seconds,
-    enableSlackNotifications: boolean;
-    enableTeamsNotifications: boolean;
-}
-;
-export default {
-    // Export all enums and interfaces
-    EscalationTriggerType,
-    EscalationStatus,
-    EscalationPriority,
-    EscalationCategory,
-    NotificationType,
-    EscalationActionType,
-    AssignmentType,
-    EscalationEventType,
-    // Export all schemas
-    EscalationConditionSchema,
-    NotificationMethodSchema,
-    EscalationActionSchema,
-    EscalationLevelSchema,
-    EscalationRuleSchema
-};

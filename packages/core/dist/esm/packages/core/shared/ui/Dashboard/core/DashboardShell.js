@@ -68,44 +68,35 @@ export const DashboardShell = ({
     maxWidth,
     padding = 'medium',
     className = '',
-    headerClassName = '',
-    contentClassName = ''
-});
+    headerClassName = '' });
+contentClassName = '';
 {
     const [internalActiveTab, setInternalActiveTab] = useState();
     activeTab || tabs?.[0]?.id || '';
     ;
     const currentActiveTab = activeTab || internalActiveTab;
-    const handleTabChange = (tabId) => {
-        setInternalActiveTab(tabId);
-        onTabChange?.(tabId);
-    };
-    const handleRefresh = () => {
-        onRefresh?.();
-    };
-    const handleExport = (format) => {
-        onExport?.(format);
-    };
-    const handleTimeRangeChange = (newTimeRange) => {
-        onTimeRangeChange?.(newTimeRange);
-    };
-    // Get current tab content
-    const currentTabContent = tabs?.find(tab => tab.id === currentActiveTab)?.content;
-    // Determine padding class
-    const paddingClass = {
-        none: 'dashboard-padding-none',
-        small: 'dashboard-padding-small',
-        medium: 'dashboard-padding-medium',
-        large: 'dashboard-padding-large',
-    }[padding];
-    return;
-    _jsx(DashboardProvider, { timeRange: timeRange, onTimeRangeChange: handleTimeRangeChange, onRefresh: handleRefresh, onExport: handleExport, children: _jsxs("div", { className: `dashboard-shell ${fullWidth ? 'full-width' : ''} ${className}`, style: { maxWidth: fullWidth ? undefined : maxWidth }, children: [_jsx(DashboardHeader, { title: title, description: description, icon: icon, actions: actions, showRefresh: showRefresh, showExport: showExport, onRefresh: handleRefresh, onExport: handleExport, timeRange: timeRange, timeRangeOptions: timeRangeOptions, onTimeRangeChange: handleTimeRangeChange, showTimeRange: showTimeRange, className: headerClassName }), tabs && tabs.length > 0 && ()
-                    < DashboardTabs, "tabs=", tabs, "activeTab=", currentActiveTab, "onTabChange=", handleTabChange, "/> )}", _jsxs("div", { className: `dashboard-content ${paddingClass} ${contentClassName}`, children: ["}", loading && ()
-                            < LoadingState, "message=\"Loading dashboard data...\" overlay=", !!children, "/> )}", error && !loading && ()
-                            < ErrorState, "error=", error, "title=\"Failed to load dashboard\" onRetry=", onRefresh, "/> )}", !loading && !error && (), tabs ? currentTabContent : children] }), ")}"] }) });
-    DashboardProvider >
-    ;
-    ;
+    const handleTabChange = (tabId) => { };
+    setInternalActiveTab(tabId);
+    onTabChange?.(tabId);
 }
+;
+const handleRefresh = () => { onRefresh?.(); };
+const handleExport = (format) => { onExport?.(format); };
+const handleTimeRangeChange = (newTimeRange) => { onTimeRangeChange?.(newTimeRange); };
+// Get current tab content
+const currentTabContent = tabs?.find(tab => tab.id === currentActiveTab)?.content;
+// Determine padding class
+const paddingClass = { none: 'dashboard-padding-none',
+    small: 'dashboard-padding-small',
+    medium: 'dashboard-padding-medium',
+    large: 'dashboard-padding-large' }[padding];
+return;
+_jsx(DashboardProvider, { timeRange: timeRange, onTimeRangeChange: handleTimeRangeChange, onRefresh: handleRefresh, onExport: handleExport, children: _jsxs("div", { className: `dashboard-shell ${fullWidth ? 'full-width' : ''} ${className}`, style: { maxWidth: fullWidth ? undefined : maxWidth }, children: [_jsx(DashboardHeader, { title: title, description: description, icon: icon, actions: actions, showRefresh: showRefresh, showExport: showExport, onRefresh: handleRefresh, onExport: handleExport, timeRange: timeRange, timeRangeOptions: timeRangeOptions, onTimeRangeChange: handleTimeRangeChange, showTimeRange: showTimeRange, className: headerClassName }), tabs && tabs.length > 0 && ()
+                < DashboardTabs, "tabs=", tabs, "activeTab=", currentActiveTab, "onTabChange=", handleTabChange, "/> )}", _jsxs("div", { className: `dashboard-content ${paddingClass} ${contentClassName}`, children: ["}", loading && ()
+                        < LoadingState, "message=\"Loading dashboard data...\" overlay=", !!children, "/> )}", error && !loading && ()
+                        < ErrorState, "error=", error, "title=\"Failed to load dashboard\" onRetry=", onRefresh, "/> )}", !loading && !error && (), tabs ? currentTabContent : children] }), ")}"] }) });
+DashboardProvider >
+;
+;
 ;
 export default DashboardShell;

@@ -6,7 +6,7 @@
  */
 
 import { GeneratedNode } from './PromptParser';
-import { Epic1NodeType } from './index';
+import { Epic1NodeType } from './nodeTypes';
 
 /**
  * Position coordinates for a node

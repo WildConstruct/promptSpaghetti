@@ -7,6 +7,9 @@
 import { Epic16PrerequisiteSystem } from './Epic16PrerequisiteSystem';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+// =============================================================================
+// Prerequisite Runner Implementation
+// =============================================================================
 export class Epic16PrerequisiteRunner {
     system;
     options;
@@ -17,106 +20,92 @@ export class Epic16PrerequisiteRunner {
             colors: true,
             environment: 'development',
             timeout: 30000,
-            concurrency: 5,
-            ...options
+            concurrency: 5
         };
-        this.system = new Epic16PrerequisiteSystem(this.buildSystemConfig());
-        this.setupEventListeners();
-        /**
-         * Run prerequisite checks with the configured options
-         */
+        options;
     }
-    /**
-     * Run prerequisite checks with the configured options
-     */
-    async run() {
-        const startTime = Date.now();
-        try {
-            // Load configuration if specified
-            if (this.options.configFile) {
-                await this.loadConfigFile(this.options.configFile);
-                // Filter checks based on options
-                this.filterChecks();
-                // Run prerequisite checks
-                this.log('🔍 Starting Epic 16 prerequisite checks...', 'info');
-                const report = await this.system.runAllChecks();
-                // Auto-fix if enabled
-                let autoFixResults;
-                if (this.options.autoFix && !report.overall.passed) {
-                    this.log('🔧 Running auto-fix for failed checks...', 'info');
-                    autoFixResults = await this.system.autoFixFailures();
-                    // Re-run checks after auto-fix
-                    this.log('🔍 Re-running checks after auto-fix...', 'info');
-                    const updatedReport = await this.system.runAllChecks();
-                    Object.assign(report, updatedReport);
-                    // Generate output
-                    const outputPath = await this.generateOutput(report, autoFixResults);
-                    const duration = Date.now() - startTime;
-                    const result = {
-                        success: report.overall.passed,
-                        report,
-                        autoFixResults,
-                        outputPath,
-                        duration
-                    };
-                    // Display summary
-                    this.displaySummary(result);
-                    return result;
-                }
-                try { }
-                catch (error) {
-                    this.log(`❌ Prerequisite check failed: ${error instanceof Error ? error.message : String(error)}`, 'error');
-                }
-                throw error;
-                /**
-                 * Run quick status check for monitoring
-                 */
-            }
-            /**
-             * Run quick status check for monitoring
-             */
-        }
-        /**
-         * Run quick status check for monitoring
-         */
-        finally {
-        }
-        /**
-         * Run quick status check for monitoring
-         */
-    }
-    string;
-    details;
+    ;
 }
- > {
+this.system = new Epic16PrerequisiteSystem(this.buildSystemConfig());
+this.setupEventListeners();
+async;
+run();
+Promise < PrerequisiteRunnerResult > { const: startTime = Date.now(),
     try: {
-        const: quickStatus = await this.system.getQuickStatus(),
-        let, message: string,
-        switch(quickStatus) { }, : .overall
-    }
-};
+        : .options.configFile
+    } };
 {
-    'healthy';
-    message = '✅ All critical prerequisites are healthy';
+    await this.loadConfigFile(this.options.configFile);
+    // Filter checks based on options
+    this.filterChecks();
+    // Run prerequisite checks
+    this.log('🔍 Starting Epic 16 prerequisite checks...', 'info');
+    const report = await this.system.runAllChecks();
+    // Auto-fix if enabled
+    let autoFixResults;
+    if (this.options.autoFix && !report.overall.passed) {
+        this.log('🔧 Running auto-fix for failed checks...', 'info');
+        autoFixResults = await this.system.autoFixFailures();
+        // Re-run checks after auto-fix
+        this.log('🔍 Re-running checks after auto-fix...', 'info');
+        const updatedReport = await this.system.runAllChecks();
+        Object.assign(report, updatedReport);
+        // Generate output
+        const outputPath = await this.generateOutput(report, autoFixResults);
+        const duration = Date.now() - startTime;
+        const result = {
+            success: report.overall.passed,
+            report,
+            autoFixResults,
+            outputPath
+        };
+        duration;
+    }
+    ;
+    // Display summary
+    this.displaySummary(result);
+    return result;
+    try {
+    }
+    catch (error) {
+        this.log(`❌ Prerequisite check failed: ${error instanceof Error ? error.message : String(error)}`, 'error');
+    }
+    throw error;
+    async;
+    getQuickStatus();
+    Promise < { status: 'healthy' | 'degraded' | 'critical' };
+    message: string;
+    details: any;
+        > {
+            try: {
+                const: quickStatus = await this.system.getQuickStatus(),
+                let, message: string,
+                switch(quickStatus) { }, : .overall
+            }
+        };
+    {
+        'healthy';
+        message = '✅ All critical prerequisites are healthy';
+        break;
+        'degraded';
+        message = `⚠️ ${quickStatus.criticalFailures} critical prerequisite(s) failing`;
+    }
     break;
-    'degraded';
-    message = `⚠️ ${quickStatus.criticalFailures} critical prerequisite(s) failing`;
+    'critical';
+    message = `❌ ${quickStatus.criticalFailures} critical prerequisites failing - Epic 16 may not function properly`;
 }
 break;
-'critical';
-message = `❌ ${quickStatus.criticalFailures} critical prerequisites failing - Epic 16 may not function properly`;
-break;
-return {
-    status: quickStatus.overall,
+return { status: quickStatus.overall,
     message,
-    details: quickStatus,
-};
-try { }
+    details: quickStatus };
+;
+try {
+}
 catch (error) {
     return {
-        status: 'critical',
-        message: `❌ Unable to check prerequisite status: ${error instanceof Error ? error.message : String(error)}`
+        status: 'critical'
     };
+    message: `❌ Unable to check prerequisite status: ${error instanceof Error ? error.message : String(error)}`;
 }
 details: {
     error: String(error);
@@ -141,25 +130,25 @@ Epic16PrerequisiteConfig;
             redis: process.env.REDIS_URL,
             postgres: process.env.DATABASE_URL,
             stripe: process.env.STRIPE_SECRET_KEY,
-            claude: process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY,
-        },
-        environment: this.options.environment || 'development'
-    };
-    setupEventListeners();
-    void {
-        : .options.verbose
-    };
-    {
-        this.system.on('checks_started', (data) => {
-            this.log(`🚀 Starting ${data.totalChecks} prerequisite checks...`, 'info');
-        });
-    }
-    ;
-    this.system.on('check_started', (data) => {
-        this.log(`  ⏳ Checking: ${data.check.name}`, 'debug');
+            claude: process.env.CLAUDE_API_KEY || process.env.ANTHROPIC_API_KEY }
+    },
+        environment;
+    this.options.environment || 'development';
+}
+;
+setupEventListeners();
+void {
+    : .options.verbose
+};
+{
+    this.system.on('checks_started', (data) => {
+        this.log(`🚀 Starting ${data.totalChecks} prerequisite checks...`, 'info');
     });
 }
 ;
+this.system.on('check_started', (data) => {
+    this.log(`  ⏳ Checking: ${data.check.name}`, 'debug');
+});
 this.system.on('check_completed', (data) => {
     const icon = data.result.passed ? '✅' : '❌';
     this.log(`  ${icon} ${data.checkId}: ${data.result.message}`, data.result.passed ? 'debug' : 'warn');
@@ -180,65 +169,60 @@ Promise < void  > {
         // Merge with existing options
         Object, : .assign(this.options, config),
         this: .log(`📄 Loaded configuration from ${configPath}`, 'info')
-    }
-};
-try { }
-catch (error) {
-    this.log(`⚠️ Failed to load configuration file ${configPath}: ${error instanceof Error ? error.message : String(error)}`, 'warn');
-}
-filterChecks();
-void {
-    : .options.onlyChecks && this.options.onlyChecks.length > 0
-};
-{
-    this.log(`🎯 Running only specified checks: ${this.options.onlyChecks.join(', ')}`, 'info');
-}
-if (this.options.skipChecks && this.options.skipChecks.length > 0) {
-    this.log(`⏭️ Skipping checks: ${this.options.skipChecks.join(', ')}`, 'info');
-}
-async;
-generateOutput(report, PrerequisiteReport, autoFixResults ?  : Record);
-Promise < string | undefined > {
-    : .options.outputFile && this.options.format === 'console'
-};
-{
-    return undefined;
-    let output;
-    let extension;
-    switch (this.options.format) {
-        case 'json':
-            output = JSON.stringify({ report, autoFixResults }, null, 2);
-            extension = 'json';
-            break;
-        case 'html':
-            output = this.generateHTMLReport(report, autoFixResults);
-            extension = 'html';
-            break;
-        case 'markdown':
-            output = this.generateMarkdownReport(report, autoFixResults);
-            extension = 'md';
-            break;
-        case 'console':
-        default:
+    },
+    catch(error) {
+        this.log(`⚠️ Failed to load configuration file ${configPath}: ${error instanceof Error ? error.message : String(error)}`, 'warn');
+    },
+    filterChecks() {
+        // Implementation would filter the checks in the system based on options
+        // This is a placeholder for the filtering logic
+        if (this.options.onlyChecks && this.options.onlyChecks.length > 0) {
+            this.log(`🎯 Running only specified checks: ${this.options.onlyChecks.join(', ')}`, 'info');
+        }
+        if (this.options.skipChecks && this.options.skipChecks.length > 0) {
+            this.log(`⏭️ Skipping checks: ${this.options.skipChecks.join(', ')}`, 'info');
+        }
+    },
+    async generateOutput(report, autoFixResults) {
+        if (!this.options.outputFile && this.options.format === 'console') {
             return undefined;
-            if (this.options.outputFile) {
-                await fs.writeFile(this.options.outputFile, output, 'utf-8');
-                return this.options.outputFile;
+            let output;
+            let extension;
+            switch (this.options.format) {
+                case 'json':
+                    output = JSON.stringify({ report, autoFixResults }, null, 2);
+                    extension = 'json';
+                    break;
+                case 'html':
+                    output = this.generateHTMLReport(report, autoFixResults);
+                    extension = 'html';
+                    break;
+                case 'markdown':
+                    output = this.generateMarkdownReport(report, autoFixResults);
+                    extension = 'md';
+                    break;
+                case 'console':
+                default:
+                    return undefined;
+                    if (this.options.outputFile) {
+                        await fs.writeFile(this.options.outputFile, output, 'utf-8');
+                        return this.options.outputFile;
+                    }
+                    else {
+                        // Generate default filename
+                        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                        const filename = `epic16-prerequisites-${timestamp}.${extension}`;
+                    }
+                    const outputPath = path.join(process.cwd(), filename);
+                    await fs.writeFile(outputPath, output, 'utf-8');
+                    return outputPath;
             }
-            else {
-                // Generate default filename
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                const filename = `epic16-prerequisites-${timestamp}.${extension}`;
-            }
-            const outputPath = path.join(process.cwd(), filename);
-            await fs.writeFile(outputPath, output, 'utf-8');
-            return outputPath;
-            generateHTMLReport(report, PrerequisiteReport, autoFixResults ?  : Record);
-            string;
-            {
-                const statusColor = report.overall.passed ? '#10b981' : '#ef4444';
-                const statusText = report.overall.passed ? 'PASSED' : 'FAILED';
-                return `
+        }
+    },
+    generateHTMLReport(report, autoFixResults) {
+        const statusColor = report.overall.passed ? '#10b981' : '#ef4444';
+        const statusText = report.overall.passed ? 'PASSED' : 'FAILED';
+        return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -246,26 +230,26 @@ Promise < string | undefined > {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Epic 16 Prerequisites Report</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; margin-bottom: 30px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; max-width: 1200px; margin: 0 auto; padding: 20px }
+        .header { text-align: center; margin-bottom: 30px }
         .status { font-size: 24px; font-weight: bold; color: ${statusColor}; }
-        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .summary-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center; }
-        .summary-card h3 { margin: 0 0 10px 0; color: #666; }
-        .summary-card .value { font-size: 28px; font-weight: bold; color: #333; }
-        .categories { margin-bottom: 30px; }
-        .category { margin-bottom: 20px; }
-        .category h3 { margin: 0 0 10px 0; padding: 10px; background: #e9ecef; border-radius: 4px; }
-        .checks { margin-left: 20px; }
-        .check { display: flex; align-items: center; padding: 8px; margin: 4px 0; border-radius: 4px; }
-        .check.passed { background: #d1fae5; }
-        .check.failed { background: #fee2e2; }
-        .check-icon { margin-right: 10px; font-size: 16px; }
-        .check-name { font-weight: 500; flex: 1; }
-        .check-message { color: #666; font-size: 14px; }
-        .recommendations { background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 4px solid #ffc107; }
-        .autofix-results { background: #e7f3ff; padding: 20px; border-radius: 8px; border-left: 4px solid #0066cc; margin-top: 20px; }
-        .timestamp { text-align: center; color: #666; font-size: 14px; margin-top: 30px; }
+        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px }
+        .summary-card { background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center }
+        .summary-card h3 { margin: 0 0 10px 0; color: #666 }
+        .summary-card .value { font-size: 28px; font-weight: bold; color: #333 }
+        .categories { margin-bottom: 30px }
+        .category { margin-bottom: 20px }
+        .category h3 { margin: 0 0 10px 0; padding: 10px; background: #e9ecef; border-radius: 4px }
+        .checks { margin-left: 20px }
+        .check { display: flex; align-items: center; padding: 8px; margin: 4px 0; border-radius: 4px }
+        .check.passed { background: #d1fae5 }
+        .check.failed { background: #fee2e2 }
+        .check-icon { margin-right: 10px; font-size: 16px }
+        .check-name { font-weight: 500; flex: 1 }
+        .check-message { color: #666; font-size: 14px }
+        .recommendations { background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 4px solid #ffc107 }
+        .autofix-results { background: #e7f3ff; padding: 20px; border-radius: 8px; border-left: 4px solid #0066cc; margin-top: 20px }
+        .timestamp { text-align: center; color: #666; font-size: 14px; margin-top: 30px }
     </style>
 </head>
 <body>
@@ -305,19 +289,19 @@ Promise < string | undefined > {
     .filter(([checkId]) => {
       // Find the check category (this is simplified)
       return true; // Would need to implement proper category filtering
-  }
+
     .map(([checkId, result]) => `
-                    < div, class {
-                } = "check ${result.passed ? 'passed' : 'failed'}" > )}
+            < div, class {
+        } = "check ${result.passed ? 'passed' : 'failed'}" > )}
                             <span class="check-icon">${result.passed ? '✅' : '❌'}</span>}
                             <span class="check-name">${checkId}</span>}
                             <span class="check-message">${result.message}</span>}
                         </div>
                       `;
-                join('');
-            }
-            /div>
-                < /div> `).join('')}
+    }, : .join('')
+}
+    < /div>
+    < /div> `).join('')}
     </div>
     ${report.recommendations.length > 0 ? `}
         <div class="recommendations">
@@ -342,18 +326,16 @@ Promise < string | undefined > {
     </div>
 </body>
 </html>`;
-            generateMarkdownReport(report, PrerequisiteReport, autoFixResults ?  : Record);
-            string;
-            {
-                const statusEmoji = report.overall.passed ? '✅' : '❌';
-                const statusText = report.overall.passed ? 'PASSED' : 'FAILED';
-                let markdown = '# Epic 16 Prerequisites Report\n\n';
-                markdown += `## ${statusEmoji} Overall Status: ${statusText}\n\n`;
-            }
-            markdown += `**Generated:** ${report.generatedAt.toLocaleString()}\n`;
-    }
-    markdown += `**Report ID:** ${report.reportId}\n`;
+generateMarkdownReport(report, PrerequisiteReport, autoFixResults ?  : Record);
+string;
+{
+    const statusEmoji = report.overall.passed ? '✅' : '❌';
+    const statusText = report.overall.passed ? 'PASSED' : 'FAILED';
+    let markdown = '# Epic 16 Prerequisites Report\n\n';
+    markdown += `## ${statusEmoji} Overall Status: ${statusText}\n\n`;
 }
+markdown += `**Generated:** ${report.generatedAt.toLocaleString()}\n`;
+markdown += `**Report ID:** ${report.reportId}\n`;
 markdown += `**Version:** ${report.version}\n\n`;
 // Summary
 markdown += '## 📊 Summary\n\n';
@@ -533,9 +515,10 @@ if (report.recommendations.length > 0) {
                                         return 1;
                                     case 'critical':
                                     default:
-                                        return 2;
                                 }
-                                try { }
+                                return 2;
+                                try {
+                                }
                                 catch (error) {
                                     console.error(`❌ Health check failed: ${error instanceof Error ? error.message : String(error)}`);
                                 }

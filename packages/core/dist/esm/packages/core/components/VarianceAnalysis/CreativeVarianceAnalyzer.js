@@ -27,9 +27,8 @@ clientPresentability: number;
 revisionPotential: number;
 export const CreativeVarianceAnalyzer = ({
     results,
-    varianceAnalysis,
-    className = ''
-});
+    varianceAnalysis });
+className = '';
 {
     const [activeTab, setActiveTab] = useState('overview');
     const [_____selectedMetric, _____setSelectedMetric] = useState(null);
@@ -38,24 +37,38 @@ export const CreativeVarianceAnalyzer = ({
         const validResults = results.filter(r => !r.error && r.output);
         if (validResults.length < 2) {
             return {
-                sentenceLengthVariance: 0,
-                paragraphCount: { min: 0, max: 0, avg: 0 },
-                readingComplexity: 0,
-                vocabularyRichness: 0,
-                repetitionIndex: 0,
-                semanticCoherence: 0,
-                ideaDensity: 0,
-                conceptualLeaps: 0,
-                narrativeConsistency: 0,
-                industryReadiness: 0,
-                clientPresentability: 0,
-                revisionPotential: 0
+                sentenceLengthVariance: 0
             };
-            // Sentence length analysis
-            const sentenceLengths = validResults.flatMap(r => { });
-            const sentences = r.output?.split(/[.!?]+/).filter(s => s.trim().length > 0) || [];
-            return sentences.map(s => s.trim().split(/\s+/).length);
+            paragraphCount: {
+                min: 0, max;
+                0, avg;
+                0;
+            }
+            readingComplexity: 0,
+                vocabularyRichness;
+            0,
+                repetitionIndex;
+            0,
+                semanticCoherence;
+            0,
+                ideaDensity;
+            0,
+                conceptualLeaps;
+            0,
+                narrativeConsistency;
+            0,
+                industryReadiness;
+            0,
+                clientPresentability;
+            0,
+                revisionPotential;
+            0;
         }
+        ;
+        // Sentence length analysis
+        const sentenceLengths = validResults.flatMap(r => { });
+        const sentences = r.output?.split(/[.!?]+/).filter(s => s.trim().length > 0) || [];
+        return sentences.map(s => s.trim().split(/\s+/).length);
     });
     const avgSentenceLength = sentenceLengths.reduce((sum, len) => sum + len, 0) / sentenceLengths.length;
     const sentenceLengthVariance = sentenceLengths.reduce();
@@ -68,11 +81,10 @@ export const CreativeVarianceAnalyzer = ({
     return r.output?.split(/\n\s*\n/).filter(p => p.trim().length > 0).length || 1;
 }
 ;
-const paragraphCount = {
-    min: Math.min(...paragraphCounts),
+const paragraphCount = { min: Math.min(...paragraphCounts),
     max: Math.max(...paragraphCounts),
-    avg: paragraphCounts.reduce((sum, count) => sum + count, 0) / paragraphCounts.length,
-};
+    avg: paragraphCounts.reduce((sum, count) => sum + count, 0) / paragraphCounts.length };
+;
 // Vocabulary richness (unique words / total words)
 const allWords = validResults.flatMap(r => );
 ;
@@ -147,31 +159,31 @@ for (let i = 0; i < validResults.length; i++) {
             narrativeConsistency: Math.round(narrativeConsistency),
             industryReadiness: Math.round(industryReadiness),
             clientPresentability: Math.round(clientPresentability),
-            revisionPotential: Math.round(revisionPotential),
+            revisionPotential: Math.round(revisionPotential)
         };
     }
-    [results, varianceAnalysis];
     ;
-    // Generate creative insights
-    const creativeInsights = useMemo(() => {
-        if (!varianceAnalysis)
-            return [];
-        const insights = [];
-        if (varianceAnalysis.uniquenessScore > 80) {
-            insights.push({});
-            type: 'positive',
-                title;
-            'High Creative Diversity',
-                description;
-            'Results show excellent variation with minimal repetition - perfect for exploring different creative directions.',
-                metric;
-            'uniquenessScore',
-                value;
-            varianceAnalysis.uniquenessScore,
-            ;
-        }
-    });
 }
+[results, varianceAnalysis];
+;
+// Generate creative insights
+const creativeInsights = useMemo(() => {
+    if (!varianceAnalysis)
+        return [];
+    const insights = [];
+    if (varianceAnalysis.uniquenessScore > 80) {
+        insights.push({});
+        type: 'positive',
+            title;
+        'High Creative Diversity',
+            description;
+        'Results show excellent variation with minimal repetition - perfect for exploring different creative directions.',
+            metric;
+        'uniquenessScore',
+            value;
+        varianceAnalysis.uniquenessScore;
+    }
+});
 if (varianceAnalysis.uniquenessScore < 40) {
     insights.push({});
     type: 'warning',
@@ -182,8 +194,7 @@ if (varianceAnalysis.uniquenessScore < 40) {
         metric;
     'uniquenessScore',
         value;
-    varianceAnalysis.uniquenessScore,
-    ;
+    varianceAnalysis.uniquenessScore;
 }
 ;
 if (advancedMetrics.industryReadiness > 75) {
@@ -196,8 +207,7 @@ if (advancedMetrics.industryReadiness > 75) {
         metric;
     'industryReadiness',
         value;
-    advancedMetrics.industryReadiness,
-    ;
+    advancedMetrics.industryReadiness;
 }
 ;
 if (advancedMetrics.clientPresentability > 80) {
@@ -210,8 +220,7 @@ if (advancedMetrics.clientPresentability > 80) {
         metric;
     'clientPresentability',
         value;
-    advancedMetrics.clientPresentability,
-    ;
+    advancedMetrics.clientPresentability;
 }
 ;
 if (advancedMetrics.clientPresentability < 50) {
@@ -224,8 +233,7 @@ if (advancedMetrics.clientPresentability < 50) {
         metric;
     'clientPresentability',
         value;
-    advancedMetrics.clientPresentability,
-    ;
+    advancedMetrics.clientPresentability;
 }
 ;
 if (varianceAnalysis.creativityScore > 70) {
@@ -238,8 +246,7 @@ if (varianceAnalysis.creativityScore > 70) {
         metric;
     'creativityScore',
         value;
-    varianceAnalysis.creativityScore,
-    ;
+    varianceAnalysis.creativityScore;
 }
 ;
 if (advancedMetrics.revisionPotential > 75) {
@@ -252,8 +259,7 @@ if (advancedMetrics.revisionPotential > 75) {
         metric;
     'revisionPotential',
         value;
-    advancedMetrics.revisionPotential,
-    ;
+    advancedMetrics.revisionPotential;
 }
 ;
 return insights;
@@ -262,15 +268,11 @@ return insights;
 if (!varianceAnalysis || results.length < 2) {
     return;
     _jsx("div", { className: `creative-variance-analyzer ${className}`, style: ({}, ), "background:": true });
-    'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-        borderRadius;
-    12,
-        border;
-    '1px solid #e2e8f0',
-        padding;
-    24,
-        textAlign;
-    'center';
+    'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)';
+    borderRadius: 12;
+    border: '1px solid #e2e8f0';
+    padding: 24;
+    textAlign: 'center';
 }
  >
     (_jsx("div", { style: { fontSize: 24, marginBottom: 12 }, children: "\uD83D\uDCCA" })
@@ -292,25 +294,19 @@ onClick ?  : () => void ;
     < div;
 style = {};
 {
-    background: 'white',
-        borderRadius;
-    8,
-        border;
-    `2px solid ${color}20`;
+    background: 'white';
+    borderRadius: 8;
 }
-padding: 16,
-    cursor;
-onClick ? 'pointer' : 'default',
-    transition;
-'all 0.2s',
-    ':hover';
-onClick ? {
-    borderColor: color,
-    transform: 'translateY(-2px)',
-    boxShadow: `0 4px 12px ${color}20`
-}
+border: `2px solid ${color}20`;
+padding: 16;
+cursor: onClick ? 'pointer' : 'default';
+transition: 'all 0.2s';
+':hover';
+onClick ? { borderColor: color,
+    transform: 'translateY(-2px)' }
     :
 ;
+boxShadow: `0 4px 12px ${color}20`;
 { }
 onClick = { onClick }
     >
@@ -318,21 +314,21 @@ onClick = { onClick }
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: 8,
+                marginBottom: 8
             }, children: [_jsx("span", { style: {
                         fontSize: 14,
                         fontWeight: 600,
-                        color: '#374151',
+                        color: '#374151'
                     }, children: title }), _jsxs("span", { style: {
                         fontSize: 20,
                         fontWeight: 700,
-                        color: color,
+                        color: color
                     }, children: [value, suffix] })] })
             ,
                 _jsx("div", { style: {
                         fontSize: 12,
                         color: '#6b7280',
-                        lineHeight: 1.4,
+                        lineHeight: 1.4
                     }, children: description }));
 { /* Progress bar */ }
 _jsxs("div", { style: {
@@ -340,35 +336,28 @@ _jsxs("div", { style: {
         height: 4,
         background: '#f3f4f6',
         borderRadius: 2,
-        overflow: 'hidden',
+        overflow: 'hidden'
     }, children: [_jsx("div", { style: {
                 height: '100%',
-                background: color,
-                width: `${Math.min(100, value)}%`
-            } }), ", transition: 'width 0.3s ease'; }} />"] });
+                background: color
+            }, "width:": true }), " `$", Math.min(100, value), "%`} transition: 'width 0.3s ease'; } />"] });
 div >
 ;
 ;
 return;
 _jsx("div", { className: `creative-variance-analyzer ${className}`, style: ({}, ), "background:": true });
-'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-    borderRadius;
-12,
-    border;
-'1px solid #e2e8f0',
-    overflow;
-'hidden';
+'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)';
+borderRadius: 12;
+border: '1px solid #e2e8f0';
+overflow: 'hidden';
  >
     { /* Header */}
     < div;
 style = {};
 {
-    padding: 20,
-        borderBottom;
-    '1px solid #e2e8f0',
-        background;
-    'rgba(255, 255, 255, 0.8)',
-    ;
+    padding: 20;
+    borderBottom: '1px solid #e2e8f0';
+    background: 'rgba(255, 255, 255, 0.8)';
 }
  >
     (_jsx("h3", { style: {
@@ -378,57 +367,50 @@ style = {};
             color: '#1e293b',
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            gap: 8
         }, children: "\uD83D\uDCCA Creative Variance Analysis" })
         ,
             _jsxs("div", { style: {
                     fontSize: 14,
                     color: '#64748b',
-                    marginTop: 4,
+                    marginTop: 4
                 }, children: ["Professional insights for ", results.length, " generated results"] }));
 div >
     { /* Tab Navigation */}
     < div;
 style = {};
 {
-    display: 'flex',
-        borderBottom;
-    '1px solid #e2e8f0',
-        background;
-    'rgba(255, 255, 255, 0.6)',
-    ;
+    display: 'flex';
+    borderBottom: '1px solid #e2e8f0';
+    background: 'rgba(255, 255, 255, 0.6)';
 }
  >
-    { [{ id: 'overview', label: '🎯 Overview', icon: '🎯' },
-            { id: 'content', label: '📝 Content Analysis', icon: '📝' },
-            { id: 'creative', label: '🎨 Creative Metrics', icon: '🎨' },
-            { id: 'professional', label: '💼 Professional Assessment', icon: '💼' }]: .map(tab => ()
-            < button, key = { tab, : .id }, onClick = {}(), setActiveTab(tab.id)) };
-style = {};
+    { [{ id: 'overview', label: '🎯 Overview', icon: '🎯' }]: { id: 'content', label: '📝 Content Analysis', icon: '📝' } };
 {
+    id: 'creative', label;
+    '🎨 Creative Metrics', icon;
+    '🎨';
+}
+{
+    id: 'professional', label;
+    '💼 Professional Assessment', icon;
+    '💼';
+}
+map(tab => ()
+    < button, key = { tab, : .id }, onClick = {}(), setActiveTab(tab.id), style = {}, {
     flex: 1,
-        padding;
-    12,
-        border;
-    'none',
-        background;
-    activeTab === tab.id ? '#3b82f6' : 'transparent',
-        color;
-    activeTab === tab.id ? 'white' : '#64748b',
-        fontSize;
-    13,
-        fontWeight;
-    500,
-        cursor;
-    'pointer',
-        transition;
-    'all 0.2s',
-    ;
+    padding: 12,
+    border: 'none',
+    background: activeTab === tab.id ? '#3b82f6' : 'transparent',
+    color: activeTab === tab.id ? 'white' : '#64748b',
+    fontSize: 13,
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: 'all 0.2s'
 }
     >
-        { tab, : .label };
-button >
-;
+        { tab, : .label }, button >
+);
 div >
     { /* Tab Content */}
     < div;
@@ -443,40 +425,32 @@ _jsxs("div", { style: { marginBottom: 24 }, children: [_jsx("h4", { style: {
                 margin: '0 0 12px 0',
                 fontSize: 14,
                 fontWeight: 600,
-                color: '#374151',
+                color: '#374151'
             }, children: "\uD83D\uDD0D Key Creative Insights" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: [creativeInsights.slice(0, 3).map((insight, index) => ()
                     < div, key = { index }, style = {}, {
                     padding: 12,
-                    background: insight.type === 'positive' ? '#dcfce7' : ,
-                    insight, : .type === 'warning' ? '#fef3c7' :
-                        insight.type === 'suggestion' ? '#dbeafe' : '#f3f4f6',
-                    borderRadius: 6,
-                    borderLeft: `4px solid ${}
-                      insight.type === 'positive' ? '#10b981' :
-                        insight.type === 'warning' ? '#f59e0b' :
-                          insight.type === 'suggestion' ? '#3b82f6' : '#6b7280'
-                    }`
-                }), ">", _jsxs("div", { style: {
+                    background: insight.type === 'positive' ? '#dcfce7' :
+                        insight.type === 'warning' ? '#fef3c7' :
+                            insight.type === 'suggestion' ? '#dbeafe' : '#f3f4f6',
+                    borderRadius: 6
+                }, borderLeft), ": `4px solid $", "insight.type === 'positive' ? '#10b981' : insight.type === 'warning' ? '#f59e0b' : insight.type === 'suggestion' ? '#3b82f6' : '#6b7280' ` }>", _jsxs("div", { style: {
                         fontSize: 13,
                         fontWeight: 600,
                         color: '#1f2937',
-                        marginBottom: 4,
+                        marginBottom: 4
                     }, children: [insight.title, " (", insight.value, "%)"] }), _jsx("div", { style: {
                         fontSize: 12,
                         color: '#4b5563',
-                        lineHeight: 1.4,
+                        lineHeight: 1.4
                     }, children: insight.description })] }), "))}"] });
 div >
     { /* Quick Stats */}
     < div;
 style = {};
 {
-    display: 'grid',
-        gridTemplateColumns;
-    'repeat(auto-fit, minmax(150px, 1fr))',
-        gap;
-    12,
-    ;
+    display: 'grid';
+    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))';
+    gap: 12;
 }
  >
     (_jsx(MetricCard, { title: "Uniqueness", value: varianceAnalysis.uniquenessScore, suffix: "%", description: "Content variation across results", color: "#10b981" })
@@ -495,12 +469,9 @@ div >
         < div;
     style = {};
     {
-        display: 'grid',
-            gridTemplateColumns;
-        'repeat(auto-fit, minmax(200px, 1fr))',
-            gap;
-        16,
-        ;
+        display: 'grid';
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))';
+        gap: 16;
     }
 }
  >
@@ -522,12 +493,9 @@ div >
         < div;
     style = {};
     {
-        display: 'grid',
-            gridTemplateColumns;
-        'repeat(auto-fit, minmax(200px, 1fr))',
-            gap;
-        16,
-        ;
+        display: 'grid';
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))';
+        gap: 16;
     }
 }
  >
@@ -551,28 +519,28 @@ div >
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
                 gap: 16,
-                marginBottom: 24,
+                marginBottom: 24
             }, children: [_jsx(MetricCard, { title: "Industry Readiness", value: advancedMetrics.industryReadiness, suffix: "%", description: "Professional standards compliance", color: "#3b82f6" }), _jsx(MetricCard, { title: "Client Presentability", value: advancedMetrics.clientPresentability, suffix: "%", description: "Ready for client presentation", color: "#10b981" }), _jsx(MetricCard, { title: "Professional Suitability", value: varianceAnalysis.professionalSuitability, suffix: "%", description: "Overall professional quality", color: "#8b5cf6" }), _jsx(MetricCard, { title: "Genre Consistency", value: varianceAnalysis.genreConsistency, suffix: "%", description: "Thematic and stylistic coherence", color: "#f59e0b" })] });
     { /* Professional Recommendations */ }
     _jsxs("div", { children: [_jsx("h4", { style: {
                     margin: '0 0 12px 0',
                     fontSize: 14,
                     fontWeight: 600,
-                    color: '#374151',
+                    color: '#374151'
                 }, children: "\uD83D\uDCBC Professional Recommendations" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: [creativeInsights.filter(insight => )['industryReadiness', 'clientPresentability', 'professionalSuitability'].includes(insight.metric), ").map((insight, index) => ()", _jsxs("div", { style: {
                             padding: 12,
                             background: 'white',
                             borderRadius: 6,
-                            border: '1px solid #e5e7eb',
+                            border: '1px solid #e5e7eb'
                         }, children: [_jsx("div", { style: {
                                     fontSize: 13,
                                     fontWeight: 600,
                                     color: '#1f2937',
-                                    marginBottom: 4,
+                                    marginBottom: 4
                                 }, children: insight.title }), _jsx("div", { style: {
                                     fontSize: 12,
                                     color: '#4b5563',
-                                    lineHeight: 1.4,
+                                    lineHeight: 1.4
                                 }, children: insight.description })] }, index), "))}"] })] });
     div >
     ;

@@ -1,7 +1,24 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useRef, useEffect } from 'react';
-import { Send, Bold, Italic, Link, List, Code, AtSign, Paperclip, Eye, Edit3 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Send, Bold, Italic, Link, List, Code, AtSign, Paperclip, Eye } from Edit3;
+from;
+'lucide-react';
 import { CommentMentions } from './CommentMentions';
+onCancel: () => void ;
+placeholder ?  : string;
+submitLabel ?  : string;
+workspaceId ?  : string;
+maxLength ?  : number;
+showPreview ?  : boolean;
+allowFormatting ?  : boolean;
+allowMentions ?  : boolean;
+allowAttachments ?  : boolean;
+export const [isPreview, setIsPreview] = useState(false);
+const [mentions, setMentions] = useState([]);
+const [showMentions, setShowMentions] = useState(false);
+const [mentionQuery, setMentionQuery] = useState('');
+const [cursorPosition, setCursorPosition] = useState(0);
+const [isSubmitting, setIsSubmitting] = useState(false);
 const textareaRef = useRef(null);
 const mentionPositionRef = useRef({ start: 0, end: 0 });
 useEffect(() => {
@@ -41,22 +58,22 @@ useEffect(() => {
                 setShowMentions(true);
                 mentionPositionRef.current = {
                     start: lastAtIndex,
-                    end: cursorPos,
+                    end: cursorPos
                 };
             }
-            else {
-                setShowMentions(false);
-            }
             ;
-            textarea.addEventListener('input', handleTextChange);
-            textarea.addEventListener('selectionchange', handleTextChange);
-            return () => {
-                textarea.removeEventListener('input', handleTextChange);
-                textarea.removeEventListener('selectionchange', handleTextChange);
-            };
         }
-        [allowMentions];
-    };
+        else {
+            setShowMentions(false);
+        }
+        ;
+        textarea.addEventListener('input', handleTextChange);
+        textarea.addEventListener('selectionchange', handleTextChange);
+        return () => {
+            textarea.removeEventListener('input', handleTextChange);
+            textarea.removeEventListener('selectionchange', handleTextChange);
+        };
+    }, [allowMentions];
 });
 const handleContentChange = (e) => {
     const newContent = e.target.value;
@@ -162,8 +179,8 @@ div >
 className = "flex items-center space-x-1" >
     _jsx("button", { type: "button", onClick: () => setIsPreview(!isPreview), className: `p-1 rounded transition-colors ${isPreview
             ? 'text-blue-600 bg-blue-100'
-            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200',
-        }`, title: isPreview ? 'Edit' : 'Preview', children: isPreview ? _jsx(Edit3, { className: "w-4 h-4" }) : _jsx(Eye, { className: "w-4 h-4" }) });
+            : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'}
+`, title: isPreview ? 'Edit' : 'Preview', children: isPreview ? _jsx(Edit3, { className: "w-4 h-4" }) : _jsx(Eye, { className: "w-4 h-4" }) });
 div >
 ;
 div >
@@ -171,8 +188,8 @@ div >
 { /* Editor/Preview */ }
 _jsxs("div", { className: "relative", children: [isPreview ? ()
             :
-        , "renderPreview(); ) : ()", _jsx("textarea", { ref: textareaRef, value: content, onChange: handleContentChange, onKeyDown: handleKeyDown, placeholder: placeholder, className: `w-full min-h-[100px] p-3 border border-gray-300 ${allowFormatting ? 'rounded-b-md rounded-t-none' : 'rounded-md',
-            },
+        , "renderPreview(); ) : ()", _jsx("textarea", { ref: textareaRef, value: content, onChange: handleContentChange, onKeyDown: handleKeyDown, placeholder: placeholder, className: `w-full min-h-[100px] p-3 border border-gray-300 ${allowFormatting ? 'rounded-b-md rounded-t-none' : 'rounded-md'}
+
   focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none`, style: { maxHeight: '300px' } }), ")}", _jsxs("div", { className: "absolute bottom-2 right-2 text-xs text-gray-400", children: [content.length, "/", maxLength] })] });
 { /* Mentions Dropdown */ }
 {

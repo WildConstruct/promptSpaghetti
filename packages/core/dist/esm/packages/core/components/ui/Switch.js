@@ -4,9 +4,8 @@ export const Switch = ({
     onCheckedChange,
     id,
     size = 'md',
-    disabled = false,
-    className = ''
-});
+    disabled = false });
+className = '';
 {
     return;
     _jsxs("label", { className: `switch ${size} ${className}`, children: ["}", _jsx("input", { type: "checkbox", checked: checked, onChange: (e) => onCheckedChange?.(e.target.checked), id: id, disabled: disabled, className: "switch-input" }), _jsx("span", { className: "switch-slider" })] });

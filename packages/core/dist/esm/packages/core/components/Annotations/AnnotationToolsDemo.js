@@ -17,7 +17,9 @@ import NodeAnnotationSystem from './NodeAnnotations';
 import DrawingAnnotationsCanvas from './DrawingAnnotations';
 import RegionAnnotationSystem from './RegionAnnotations';
 // Import existing components for integration
-import { MessageCircle, Pen, Square, Link as LinkIcon, Eye, Download, Users, Film, Zap } from 'lucide-react';
+import { MessageCircle, Pen, Square, Link as LinkIcon, Eye, Download, Users, Film } from Zap;
+from;
+'lucide-react';
 {
     id: 'node-001', name;
     'Character Input', type;
@@ -106,264 +108,168 @@ const DEFAULT_USER = {
     role: 'director',
     email: 'sarah@vfxstudio.com',
     color: '#ff7c00',
-    avatar: '/avatars/director.jpg',
-};
+    avatar: '/avatars/director.jpg' };
+;
 const TEAM_MEMBERS = [
     DEFAULT_USER,
-    {
-        id: 'user-vfx-sup',
+    { id: 'user-vfx-sup',
         name: 'Mike VFX Supervisor',
         role: 'vfx_supervisor',
         email: 'mike@vfxstudio.com',
         color: '#3b82f6',
-        avatar: '/avatars/vfx-supervisor.jpg',
-    },
-    {
-        id: 'user-artist',
+        avatar: '/avatars/vfx-supervisor.jpg' },
+    { id: 'user-artist',
         name: 'Alex Artist',
         role: 'artist',
         email: 'alex@vfxstudio.com',
         color: '#10b981',
-        avatar: '/avatars/artist.jpg',
-    },
-    {
-        id: 'user-pipeline',
+        avatar: '/avatars/artist.jpg' },
+    { id: 'user-pipeline',
         name: 'Jordan Pipeline TD',
         role: 'pipeline_td',
         email: 'jordan@vfxstudio.com',
-        color: '#8b5cf6',
-        avatar: '/avatars/pipeline-td.jpg'
-    }
+        color: '#8b5cf6' },
+    avatar, '/avatars/pipeline-td.jpg'
 ];
 export const AnnotationToolsDemo = ({
     className = '',
     title = 'VFX Annotation Tools Demonstration',
     showAllTools = true,
-    readonly = false,
-    initialUser = DEFAULT_USER
-});
-{
-    // State for current user and selected tools
+    readonly = false });
+initialUser = DEFAULT_USER;
+{ // State for current user and selected tools
     const [currentUser, setCurrentUser] = useState(initialUser);
     const [selectedNode, setSelectedNode] = useState('node-002');
     const [activeAnnotationTool, setActiveAnnotationTool] = useState('node');
     // Annotation data state
     const [nodeAnnotations, setNodeAnnotations] = useState([]);
     {
-        id: 'node-ann-001',
-            nodeId;
-        'node-002',
-            type;
-        'review',
-            content;
-        'Motion blur intensity needs adjustment - currently too strong for this shot',
-            author;
-        DEFAULT_USER,
-            priority;
-        'high',
-            status;
-        'open',
-            timestamp;
-        '2025-07-22T09:00:00Z',
-            lastModified;
-        '2025-07-22T09:00:00Z',
-            attachments;
-        [],
-            replies;
-        [
+        id: 'node-ann-001';
+        nodeId: 'node-002';
+        type: 'review';
+        content: 'Motion blur intensity needs adjustment - currently too strong for this shot';
+        author: DEFAULT_USER;
+        priority: 'high';
+        status: 'open';
+        timestamp: '2025-07-22T09:00:00Z';
+        lastModified: '2025-07-22T09:00:00Z';
+        attachments: [];
+        replies: [
             {
                 id: 'reply-001',
                 content: 'I can reduce the blur amount by 30%. Will that work?',
                 author: TEAM_MEMBERS[2], // Artist
-                timestamp: '2025-07-22T09:30:00Z',
-                reactions: { '👍': [DEFAULT_USER] }
-            }
-        ],
-            tags;
-        ['motion-blur', 'adjustment', 'character'],
-            visibility;
-        'public',
-            linkedAnnotations;
-        [],
-            estimatedTime;
-        1;
-    }
-    {
-        id: 'node-ann-002',
-            nodeId;
-        'node-003',
-            type;
-        'creative',
-            content;
-        'Color temperature should be warmer to match the sunset mood',
-            author;
-        DEFAULT_USER,
-            priority;
-        'medium',
-            status;
-        'in_progress',
-            timestamp;
-        '2025-07-22T08:30:00Z',
-            lastModified;
-        '2025-07-22T09:15:00Z',
-            attachments;
-        [],
-            replies;
-        [],
-            tags;
-        ['color', 'creative', 'sunset'],
-            visibility;
-        'public',
-            linkedAnnotations;
-        [],
-            assignee;
-        TEAM_MEMBERS[2]; // Artist,
-    }
-    {
-        id: 'node-ann-003',
-            nodeId;
-        'node-006',
-            type;
-        'technical',
-            content;
-        'Lighting setup needs optimization - render time is too high',
-            author;
-        TEAM_MEMBERS[3], // Pipeline TD
-            priority;
-        'critical',
-            status;
-        'open',
-            timestamp;
-        '2025-07-22T07:45:00Z',
-            lastModified;
-        '2025-07-22T07:45:00Z',
-            attachments;
-        [],
-            replies;
-        [],
-            tags;
-        ['performance', 'lighting', 'optimization'],
-            visibility;
-        'public',
-            linkedAnnotations;
-        [],
-            estimatedTime;
-        3;
-        ;
-        const [drawingAnnotations, setDrawingAnnotations] = useState([]);
+                timestamp: '2025-07-22T09:30:00Z'
+            },
+            reactions, { '👍': [DEFAULT_USER] }
+        ];
+        tags: ['motion-blur', 'adjustment', 'character'];
+        visibility: 'public';
+        linkedAnnotations: [];
+        estimatedTime: 1;
         {
-            id: 'draw-001',
-                type;
-            'arrow',
-                points;
-            [{ x: 170, y: 140 }, { x: 250, y: 140 }],
-                style;
+            id: 'node-ann-002';
+            nodeId: 'node-003';
+            type: 'creative';
+            content: 'Color temperature should be warmer to match the sunset mood';
+            author: DEFAULT_USER;
+            priority: 'medium';
+            status: 'in_progress';
+            timestamp: '2025-07-22T08:30:00Z';
+            lastModified: '2025-07-22T09:15:00Z';
+            attachments: [];
+            replies: [];
+            tags: ['color', 'creative', 'sunset'];
+            visibility: 'public';
+            linkedAnnotations: [];
+            assignee: TEAM_MEMBERS[2]; // Artist }
             {
-                color: '#ff7c00',
-                    thickness;
-                4,
-                    opacity;
-                1,
-                    lineCap;
-                'round',
-                    lineJoin;
-                'round',
+                id: 'node-ann-003';
+                nodeId: 'node-006';
+                type: 'technical';
+                content: 'Lighting setup needs optimization - render time is too high';
+                author: TEAM_MEMBERS[3], // Pipeline TD
+                    priority;
+                'critical';
+                status: 'open';
+                timestamp: '2025-07-22T07:45:00Z';
+                lastModified: '2025-07-22T07:45:00Z';
+                attachments: [];
+                replies: [];
+                tags: ['performance', 'lighting', 'optimization'];
+                visibility: 'public';
+                linkedAnnotations: [];
+                estimatedTime: 3;
                 ;
-            }
-            layer: 1,
-                author;
-            DEFAULT_USER,
-                timestamp;
-            '2025-07-22T09:00:00Z',
-                visible;
-            true,
-                locked;
-            false;
-        }
-        {
-            id: 'draw-002',
-                type;
-            'circle',
-                points;
-            [{ x: 310, y: 140 }, { x: 340, y: 170 }],
-                style;
-            {
-                color: '#ef4444',
-                    thickness;
-                3,
-                    opacity;
-                0.8,
-                    fillColor;
-                '#ef4444',
-                    fillOpacity;
-                0.1,
-                    lineCap;
-                'round',
-                    lineJoin;
-                'round',
-                ;
-            }
-            layer: 2,
-                author;
-            DEFAULT_USER,
-                timestamp;
-            '2025-07-22T09:05:00Z',
-                visible;
-            true,
-                locked;
-            false;
-        }
-        {
-            id: 'draw-003',
-                type;
-            'text',
-                points;
-            [{ x: 320, y: 200 }],
-                style;
-            {
-                color: '#1f2937',
-                    thickness;
-                1,
-                    opacity;
-                1,
-                    fontSize;
-                14,
-                    fontFamily;
-                'Arial',
-                    fontWeight;
-                'bold',
-                    lineCap;
-                'round',
-                    lineJoin;
-                'round',
-                ;
-            }
-            layer: 3,
-                author;
-            DEFAULT_USER,
-                timestamp;
-            '2025-07-22T09:07:00Z',
-                visible;
-            true,
-                locked;
-            false,
-                text;
-            'NEEDS ATTENTION';
-            ;
-            const [regionAnnotations, setRegionAnnotations] = useState([]);
-            {
-                id: 'region-001',
-                    name;
-                'Character Pipeline',
-                    type;
-                'mars_zone',
-                    shape;
-                'rectangle',
-                    area;
+                const [drawingAnnotations, setDrawingAnnotations] = useState([]);
                 {
-                    shape: 'rectangle',
-                        bounds;
-                    {
+                    id: 'draw-001';
+                    type: 'arrow';
+                }
+                points: [{ x: 170, y: 140 }, { x: 250, y: 140 }];
+                style: {
+                    color: '#ff7c00';
+                    thickness: 4;
+                    opacity: 1;
+                    lineCap: 'round';
+                    lineJoin: 'round';
+                }
+                layer: 1;
+                author: DEFAULT_USER;
+                timestamp: '2025-07-22T09:00:00Z';
+                visible: true;
+                locked: false;
+                {
+                    id: 'draw-002';
+                    type: 'circle';
+                }
+                points: [{ x: 310, y: 140 }, { x: 340, y: 170 }];
+                style: {
+                    color: '#ef4444';
+                    thickness: 3;
+                    opacity: 0.8;
+                    fillColor: '#ef4444';
+                    fillOpacity: 0.1;
+                    lineCap: 'round';
+                    lineJoin: 'round';
+                }
+                layer: 2;
+                author: DEFAULT_USER;
+                timestamp: '2025-07-22T09:05:00Z';
+                visible: true;
+                locked: false;
+                {
+                    id: 'draw-003';
+                    type: 'text';
+                }
+                points: [{ x: 320, y: 200 }];
+                style: {
+                    color: '#1f2937';
+                    thickness: 1;
+                    opacity: 1;
+                    fontSize: 14;
+                    fontFamily: 'Arial';
+                    fontWeight: 'bold';
+                    lineCap: 'round';
+                    lineJoin: 'round';
+                }
+                layer: 3;
+                author: DEFAULT_USER;
+                timestamp: '2025-07-22T09:07:00Z';
+                visible: true;
+                locked: false;
+                text: 'NEEDS ATTENTION';
+                ;
+                const [regionAnnotations, setRegionAnnotations] = useState([]);
+                {
+                    id: 'region-001';
+                    name: 'Character Pipeline';
+                    type: 'mars_zone';
+                    shape: 'rectangle';
+                    area: {
+                        shape: 'rectangle';
+                    }
+                    bounds: {
                         x: 30, y;
                         80, width;
                         360, height;
@@ -373,66 +279,41 @@ export const AnnotationToolsDemo = ({
                         { x: 30, y: 80 },
                         { x: 390, y: 200 }
                     ];
-                }
-                style: {
-                    borderColor: '#8b5cf6',
-                        borderWidth;
-                    3,
-                        borderStyle;
-                    'dashed',
-                        fillColor;
-                    '#8b5cf6',
-                        fillOpacity;
-                    0.1,
-                    ;
-                }
-                description: 'Primary character processing pipeline - critical path for hero shots',
-                    author;
-                TEAM_MEMBERS[1], // VFX Supervisor
-                    timestamp;
-                '2025-07-22T08:00:00Z',
-                    lastModified;
-                '2025-07-22T08:00:00Z',
-                    visible;
-                true,
-                    locked;
-                false,
-                    priority;
-                'critical',
-                    status;
-                'active',
-                    marsZone;
-                'subject_focus',
-                    nodeIds;
-                ['node-001', 'node-002', 'node-003'],
-                    tags;
-                ['character', 'hero', 'critical-path'],
-                    metadata;
-                {
-                    nodeCount: 3,
-                        totalComplexity;
-                    240,
-                        estimatedRenderTime;
-                    12.5,
-                        performanceImpact;
-                    'high',
-                        lastAnalysis;
-                    '2025-07-22T08:00:00Z',
-                    ;
-                }
-                {
-                    id: 'region-002',
-                        name;
-                    'Background Processing',
-                        type;
-                    'optimization_zone',
-                        shape;
-                    'rectangle',
-                        area;
+                    style: {
+                        borderColor: '#8b5cf6';
+                        borderWidth: 3;
+                        borderStyle: 'dashed';
+                        fillColor: '#8b5cf6';
+                        fillOpacity: 0.1;
+                    }
+                    description: 'Primary character processing pipeline - critical path for hero shots';
+                    author: TEAM_MEMBERS[1], // VFX Supervisor
+                        timestamp;
+                    '2025-07-22T08:00:00Z';
+                    lastModified: '2025-07-22T08:00:00Z';
+                    visible: true;
+                    locked: false;
+                    priority: 'critical';
+                    status: 'active';
+                    marsZone: 'subject_focus';
+                    nodeIds: ['node-001', 'node-002', 'node-003'];
+                    tags: ['character', 'hero', 'critical-path'];
+                    metadata: {
+                        nodeCount: 3;
+                        totalComplexity: 240;
+                        estimatedRenderTime: 12.5;
+                        performanceImpact: 'high';
+                        lastAnalysis: '2025-07-22T08:00:00Z';
+                    }
                     {
-                        shape: 'rectangle',
-                            bounds;
-                        {
+                        id: 'region-002';
+                        name: 'Background Processing';
+                        type: 'optimization_zone';
+                        shape: 'rectangle';
+                        area: {
+                            shape: 'rectangle';
+                        }
+                        bounds: {
                             x: 30, y;
                             230, width;
                             360, height;
@@ -442,63 +323,41 @@ export const AnnotationToolsDemo = ({
                             { x: 30, y: 230 },
                             { x: 390, y: 350 }
                         ];
-                    }
-                    style: {
-                        borderColor: '#10b981',
-                            borderWidth;
-                        2,
-                            borderStyle;
-                        'solid',
-                            fillColor;
-                        '#10b981',
-                            fillOpacity;
-                        0.08,
-                        ;
-                    }
-                    description: 'Background elements - optimization candidate for render performance',
-                        author;
-                    TEAM_MEMBERS[3], // Pipeline TD
-                        timestamp;
-                    '2025-07-22T07:30:00Z',
-                        lastModified;
-                    '2025-07-22T09:00:00Z',
-                        visible;
-                    true,
-                        locked;
-                    false,
-                        priority;
-                    'medium',
-                        status;
-                    'active',
-                        nodeIds;
-                    ['node-005', 'node-006', 'node-007'],
-                        tags;
-                    ['background', 'optimization', 'performance'],
-                        metadata;
-                    {
-                        nodeCount: 3,
-                            totalComplexity;
-                        180,
-                            estimatedRenderTime;
-                        8.2,
-                            performanceImpact;
-                        'medium',
-                            lastAnalysis;
-                        '2025-07-22T08:30:00Z';
-                        ;
-                        // UI state
-                        const [showGrid, setShowGrid] = useState(true);
-                        const [showPerformanceMetrics, setShowPerformanceMetrics] = useState(true);
-                        const [showTeamPanel, setShowTeamPanel] = useState(false);
-                        const [globalVisibility, setGlobalVisibility] = useState({});
-                        nodeAnnotations: true,
-                            drawingAnnotations;
-                        true,
-                            regionAnnotations;
-                        true,
-                            connectionAnnotations;
-                        true,
-                        ;
+                        style: {
+                            borderColor: '#10b981';
+                            borderWidth: 2;
+                            borderStyle: 'solid';
+                            fillColor: '#10b981';
+                            fillOpacity: 0.08;
+                        }
+                        description: 'Background elements - optimization candidate for render performance';
+                        author: TEAM_MEMBERS[3], // Pipeline TD
+                            timestamp;
+                        '2025-07-22T07:30:00Z';
+                        lastModified: '2025-07-22T09:00:00Z';
+                        visible: true;
+                        locked: false;
+                        priority: 'medium';
+                        status: 'active';
+                        nodeIds: ['node-005', 'node-006', 'node-007'];
+                        tags: ['background', 'optimization', 'performance'];
+                        metadata: {
+                            nodeCount: 3;
+                            totalComplexity: 180;
+                            estimatedRenderTime: 8.2;
+                            performanceImpact: 'medium';
+                            lastAnalysis: '2025-07-22T08:30:00Z';
+                            ;
+                            // UI state
+                            const [showGrid, setShowGrid] = useState(true);
+                            const [showPerformanceMetrics, setShowPerformanceMetrics] = useState(true);
+                            const [showTeamPanel, setShowTeamPanel] = useState(false);
+                            const [globalVisibility, setGlobalVisibility] = useState({});
+                            nodeAnnotations: true;
+                            drawingAnnotations: true;
+                            regionAnnotations: true;
+                            connectionAnnotations: true;
+                        }
                     }
                     ;
                     // Statistics calculations
@@ -518,61 +377,59 @@ export const AnnotationToolsDemo = ({
                         openIssues,
                         criticalIssues,
                         teamMembers,
-                        avgRenderTime: avgRenderTime.toFixed(1),
+                        avgRenderTime: avgRenderTime.toFixed(1)
                     };
                 }
-                [nodeAnnotations, drawingAnnotations, regionAnnotations];
                 ;
-                // Annotation handlers
-                const handleNodeAnnotationCreate = useCallback();
-                ;
-                (annotation) => ;
-                'id' | 'timestamp' | 'lastModified' | 'replies' >
-                ;
-                {
-                    const newAnnotation = {
-                        ...annotation,
-                        id: `node-ann-${Date.now()}`
-                    };
-                }
-                timestamp: new Date().toISOString(),
-                    lastModified;
-                new Date().toISOString(),
-                    replies;
-                [];
             }
+            [nodeAnnotations, drawingAnnotations, regionAnnotations];
             ;
-            setNodeAnnotations(prev => [...prev, newAnnotation]);
+            // Annotation handlers
+            const handleNodeAnnotationCreate = useCallback();
+            ;
+            (annotation) => ;
+            'id' | 'timestamp' | 'lastModified' | 'replies' >
+            ;
+            {
+                const newAnnotation = {
+                    ...annotation
+                };
+                id: `node-ann-${Date.now()}`;
+            }
+            timestamp: new Date().toISOString();
+            lastModified: new Date().toISOString();
+            replies: [];
         }
-        [];
         ;
-        const handleNodeAnnotationUpdate = useCallback((annotationId, updates) => {
-            setNodeAnnotations(prev => );
-            prev.map(ann => );
-            ann.id === annotationId
-                ? { ...ann, ...updates, lastModified: new Date().toISOString() }
-                : ann;
-        });
+        setNodeAnnotations(prev => [...prev, newAnnotation]);
     }
     [];
     ;
-    const handleNodeAnnotationDelete = useCallback((annotationId) => {
-        setNodeAnnotations(prev => prev.filter(ann => ann.id !== annotationId));
-    }, []);
-    const handleReplyCreate = useCallback();
-    ;
-    (annotationId) => ;
-    reply: Omit;
-    {
-        const newReply = {
-            ...reply,
-            id: `reply-${Date.now()}`
-        };
-    }
-    timestamp: new Date().toISOString(),
-        reactions;
-    { }
+    const handleNodeAnnotationUpdate = useCallback((annotationId, updates) => {
+        setNodeAnnotations(prev => );
+        prev.map(ann => );
+        ann.id === annotationId
+            ? { ...ann, ...updates, lastModified: new Date().toISOString() }
+            : ann;
+    });
 }
+[];
+;
+const handleNodeAnnotationDelete = useCallback((annotationId) => { setNodeAnnotations(prev => prev.filter(ann => ann.id !== annotationId)); }, []);
+const handleReplyCreate = useCallback();
+;
+(annotationId) => reply;
+Omit < NodeAnnotation['replies'][0];
+'id' | 'timestamp' | 'reactions' >
+;
+{
+    const newReply = {
+        ...reply
+    };
+    id: `reply-${Date.now()}`;
+}
+timestamp: new Date().toISOString();
+reactions: { }
 ;
 setNodeAnnotations(prev => );
 prev.map(ann => );
@@ -589,7 +446,7 @@ const exportAnnotations = useCallback(() => {
             exportedBy: currentUser,
             exportedAt: new Date().toISOString(),
             version: '1.0.0',
-            project: 'VFX Demo Scene',
+            project: 'VFX Demo Scene'
         },
         nodeAnnotations,
         drawingAnnotations,
@@ -608,13 +465,9 @@ URL.revokeObjectURL(url);
 [nodeAnnotations, drawingAnnotations, regionAnnotations, currentUser, stats];
 ;
 // Get annotations for selected node
-const selectedNodeAnnotations = useMemo(() => {
-    return selectedNode ? nodeAnnotations.filter(ann => ann.nodeId === selectedNode) : [];
-}, [nodeAnnotations, selectedNode]);
+const selectedNodeAnnotations = useMemo(() => { return selectedNode ? nodeAnnotations.filter(ann => ann.nodeId === selectedNode) : []; }, [nodeAnnotations, selectedNode]);
 // Get selected node details
-const selectedNodeDetails = useMemo(() => {
-    return selectedNode ? SAMPLE_NODES.find(node => node.id === selectedNode) : null;
-}, [selectedNode]);
+const selectedNodeDetails = useMemo(() => { return selectedNode ? SAMPLE_NODES.find(node => node.id === selectedNode) : null; }, [selectedNode]);
 return;
 _jsxs("div", { className: `annotation-tools-demo ${className}`, children: ["}", _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-3", children: [_jsx(Film, { className: "w-6 h-6 text-blue-600" }), _jsx("span", { children: title }), _jsx(Badge, { variant: "secondary", className: "text-xs", children: "Professional VFX Workflow" })] }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsxs(Button, { variant: "outline", size: "sm", onClick: () => setShowTeamPanel(!showTeamPanel), children: [_jsx(Users, { className: "w-4 h-4 mr-2" }), "Team (", TEAM_MEMBERS.length, ")"] }), _jsxs(Select, { value: currentUser.id, onValueChange: (userId) => setCurrentUser(TEAM_MEMBERS.find(u => u.id === userId) || DEFAULT_USER), children: [_jsx(SelectTrigger, { className: "w-48", children: _jsx(SelectValue, {}) }), _jsx(SelectContent, { children: TEAM_MEMBERS.map(user => ()
                                                     < SelectItem, key = { user, : .id }, value = { user, : .id } >
@@ -626,8 +479,8 @@ _jsxs("div", { className: `annotation-tools-demo ${className}`, children: ["}", 
                                             _jsx(Switch, { checked: visible, onCheckedChange: (checked) => setGlobalVisibility(prev => ({ ...prev, [key]: checked }))
                                                     /  >
                                                     _jsx("span", { className: "text-sm capitalize", children: key.replace(/([A-Z])/g, ' $1').trim() }) })) }), "))}"] }), _jsxs("div", { className: "flex items-center gap-4 mt-4 pt-4 border-t", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Switch, { checked: showGrid, onCheckedChange: setShowGrid }), _jsx("span", { className: "text-sm", children: "Show Grid" })] }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Switch, { checked: showPerformanceMetrics, onCheckedChange: setShowPerformanceMetrics }), _jsx("span", { className: "text-sm", children: "Performance Metrics" })] })] })] }) }), _jsxs(Tabs, { value: activeAnnotationTool, onValueChange: setActiveAnnotationTool, children: [_jsxs(TabsList, { className: "grid w-full grid-cols-4", children: [_jsxs(TabsTrigger, { value: "node", className: "flex items-center gap-2", children: [_jsx(MessageCircle, { className: "w-4 h-4" }), "Node Annotations"] }), _jsxs(TabsTrigger, { value: "drawing", className: "flex items-center gap-2", children: [_jsx(Pen, { className: "w-4 h-4" }), "Drawing Tools"] }), _jsxs(TabsTrigger, { value: "region", className: "flex items-center gap-2", children: [_jsx(Square, { className: "w-4 h-4" }), "Region Annotations"] }), _jsxs(TabsTrigger, { value: "connection", className: "flex items-center gap-2", children: [_jsx(LinkIcon, { className: "w-4 h-4" }), "Connections"] })] }), _jsxs(TabsContent, { value: "node", className: "space-y-4", children: [_jsx("div", { className: "grid grid-cols-1 lg:grid-cols-3 gap-6", children: _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsx(CardTitle, { className: "text-sm", children: "Select Node for Annotation" }) }), _jsxs(CardContent, { children: [_jsxs("div", { className: "space-y-2", children: [SAMPLE_NODES.map(node => ()
-                                                                < div, key = { node, : .id }, className = {} `p-3 border rounded cursor-pointer transition-colors ${selectedNode === node.id ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50',
-                                                            }`), "onClick=", () => setSelectedNode(node.id), ">", _jsx("div", { className: "font-medium text-sm", children: node.name }), _jsx("div", { className: "text-xs text-gray-500", children: node.type }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [nodeAnnotations.filter(a => a.nodeId === node.id).length, " annotations"] })] }), "))}"] })] }) }), _jsxs("div", { className: "lg:col-span-2", children: [selectedNodeDetails && ()
+                                                                < div, key = { node, : .id }, className = {} `p-3 border rounded cursor-pointer transition-colors ${selectedNode === node.id ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}
+`), "onClick=", () => setSelectedNode(node.id), ">", _jsx("div", { className: "font-medium text-sm", children: node.name }), _jsx("div", { className: "text-xs text-gray-500", children: node.type }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [nodeAnnotations.filter(a => a.nodeId === node.id).length, " annotations"] })] }), "))}"] })] }) }), _jsxs("div", { className: "lg:col-span-2", children: [selectedNodeDetails && ()
                                             < NodeAnnotationSystem, "nodeId=", selectedNodeDetails.id, "nodeName=", selectedNodeDetails.name, "nodeType=", selectedNodeDetails.type, "annotations=", selectedNodeAnnotations, "currentUser=", currentUser, "onAnnotationCreate=", handleNodeAnnotationCreate, "onAnnotationUpdate=", handleNodeAnnotationUpdate, "onAnnotationDelete=", handleNodeAnnotationDelete, "onReplyCreate=", handleReplyCreate, "/> )}", !selectedNode && ()
                                             < Card >
                                             _jsxs(CardContent, { className: "flex flex-col items-center justify-center py-12", children: [_jsx(MessageCircle, { className: "w-16 h-16 text-gray-400 mb-4" }), _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2", children: "Select a Node" }), _jsx("p", { className: "text-gray-600 text-center", children: "Choose a node from the list to view and manage its annotations" })] })] }), ")}"] })] })] })
@@ -663,7 +516,7 @@ CardContent >
 Card >
     _jsx("style", { children: `
         .annotation-tools-demo {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         @media (max-width: 768px) {

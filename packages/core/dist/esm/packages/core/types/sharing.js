@@ -2,27 +2,18 @@
  * Core Sharing Data Model - Epic 16 Implementation
  * Comprehensive TypeScript interfaces for sharing functionality
  */
-;
-accessControls: {
-    ipWhitelist: string;
-    geoRestrictions: string;
-    requireAuthentication: boolean;
-    maxConcurrentUsers ?  : number;
-    sessionTimeout ?  : number; // minutes,
-}
-;
-position ?  : { x: number, y: number }; // For positioned comments
-resolved: boolean;
-resolvedBy ?  : UserInfo;
-resolvedAt ?  : Date;
 coordinates: {
     lat: number;
     lng: number;
 }
 ;
+operatingSystem: string;
+browser: string;
+views: number;
 ;
 ;
 metrics ?  : ('views' | 'downloads' | 'collaborations')[];
+// Error types
 export class ShareError extends Error {
     message;
     code;
@@ -46,7 +37,7 @@ export var ShareErrorCode;
     ShareErrorCode[ShareErrorCode["SharingSystemConfig"] = void 0] = "SharingSystemConfig";
 })(ShareErrorCode || (ShareErrorCode = {}));
 {
-    maxShareDuration: number; // days,
+    maxShareDuration: number; // days;
     defaultAccessLevel: ShareAccessLevel;
     allowAnonymousSharing: boolean;
     requireEmailVerification: boolean;
@@ -54,22 +45,21 @@ export var ShareErrorCode;
     allowPasswordProtection: boolean;
     trackAnalyticsByDefault: boolean;
     defaultRetentionDays: number;
-    maxFileSizeForSharing: number; // bytes,
+    maxFileSizeForSharing: number; // bytes }
     supportedFormats: string;
     encryptionRequired: boolean;
-    // Event types for real-time updates
+    export let ShareEventType;
+    (function (ShareEventType) {
+        ShareEventType["SHARE_CREATED"] = "share_created";
+        ShareEventType["SHARE_ACCESSED"] = "share_accessed";
+        ShareEventType["SHARE_DOWNLOADED"] = "share_downloaded";
+        ShareEventType["SHARE_EXPIRED"] = "share_expired";
+        ShareEventType["SHARE_REVOKED"] = "share_revoked";
+        ShareEventType["COLLABORATOR_ADDED"] = "collaborator_added";
+        ShareEventType["COLLABORATOR_REMOVED"] = "collaborator_removed";
+        ShareEventType["PERMISSION_CHANGED"] = "permission_changed";
+        ShareEventType["COMMENT_ADDED"] = "comment_added";
+        ShareEventType["CONTENT_UPDATED"] = "content_updated";
+    })(ShareEventType || (ShareEventType = {}));
+    ANNOTATION_ADDED = 'annotation_added';
 }
-export var ShareEventType;
-(function (ShareEventType) {
-    ShareEventType["SHARE_CREATED"] = "share_created";
-    ShareEventType["SHARE_ACCESSED"] = "share_accessed";
-    ShareEventType["SHARE_DOWNLOADED"] = "share_downloaded";
-    ShareEventType["SHARE_EXPIRED"] = "share_expired";
-    ShareEventType["SHARE_REVOKED"] = "share_revoked";
-    ShareEventType["COLLABORATOR_ADDED"] = "collaborator_added";
-    ShareEventType["COLLABORATOR_REMOVED"] = "collaborator_removed";
-    ShareEventType["PERMISSION_CHANGED"] = "permission_changed";
-    ShareEventType["COMMENT_ADDED"] = "comment_added";
-    ShareEventType["CONTENT_UPDATED"] = "content_updated";
-    ShareEventType["ANNOTATION_ADDED"] = "annotation_added";
-})(ShareEventType || (ShareEventType = {}));

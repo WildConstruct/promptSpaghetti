@@ -6,8 +6,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Provides UI for managing custom constraint rules and enforcement levels
  */
 import { useState, useEffect } from 'react';
-import { Plus, Edit3, Trash2, Save, X, AlertTriangle, Info, CheckCircle, Settings, Download, Upload } from 'lucide-react';
-import { HISTORICAL_ERAS } from '../../types/UTDG';
+import { Plus, Edit3, Trash2, Save, X, AlertTriangle, Info, CheckCircle, Settings, Download } from Upload;
+from;
+'lucide-react';
+from;
+'../../types/UTDG';
 import './ConstraintRuleManager.css';
 {
     const [constraints, setConstraints] = useState([]);
@@ -22,9 +25,15 @@ import './ConstraintRuleManager.css';
         setConstraints(defaultConstraints);
     }, []);
     const handleCreateConstraint = () => {
-        const newConstraint = {
-            id: `custom_${Date.now()}` };
-    }, rule, eras, enforcement, message, description, historical_basis;
+        const newConstraint = {};
+        id: `custom_${Date.now()}`;
+    };
+    rule: 'era_compatibility';
+    eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH];
+    enforcement: 'warning';
+    message: 'New constraint rule';
+    description: 'Custom constraint description';
+    historical_basis: 'Historical basis for this constraint';
 }
 ;
 setEditingConstraint(newConstraint);
@@ -201,28 +210,24 @@ function getDefaultConstraints() {
             enforcement: 'strict',
             message: 'Medieval and modern items should not be mixed',
             description: 'Prevents inappropriate mixing of medieval and modern elements',
-            historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents',
+            historical_basis: 'Medieval technology and materials were fundamentally different from modern equivalents'
         },
-        {
-            id: 'silk-availability-medieval',
+        { id: 'silk-availability-medieval',
             rule: 'material_availability',
             eras: [HISTORICAL_ERAS.MEDIEVAL_EARLY],
             regions: ['Northern Europe'],
             enforcement: 'warning',
             message: 'Silk was extremely rare in early medieval Northern Europe',
             description: 'Warns when silk is used in contexts where it would have been extremely expensive or unavailable',
-            historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy',
-        },
-        {
-            id: 'social-class-clothing',
+            historical_basis: 'Silk trade routes were disrupted and silk was primarily available to royalty and high clergy' },
+        { id: 'social-class-clothing',
             rule: 'social_class_appropriateness',
             eras: [HISTORICAL_ERAS.MEDIEVAL_HIGH, HISTORICAL_ERAS.MEDIEVAL_LATE],
             social_classes: ['peasant'],
             enforcement: 'warning',
             message: 'Elaborate clothing inappropriate for peasant social class',
-            description: 'Ensures clothing matches the economic and legal constraints of social classes',
-            historical_basis: 'Sumptuary laws regulated clothing by social class in medieval Europe'
-        }
+            description: 'Ensures clothing matches the economic and legal constraints of social classes' },
+        historical_basis, 'Sumptuary laws regulated clothing by social class in medieval Europe'
     ];
     export default ConstraintRuleManager;
 }

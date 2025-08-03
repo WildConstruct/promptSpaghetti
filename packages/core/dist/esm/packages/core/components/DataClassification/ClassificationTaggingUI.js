@@ -7,34 +7,26 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * to data elements with validation, approval workflow, and audit trail
  */
 import { useState, useEffect } from 'react';
-import { CLASSIFICATION_LEVELS, DEFAULT_HANDLING_REQUIREMENTS } from '../../types/DataClassification';
+import { CLASSIFICATION_LEVELS } from DEFAULT_HANDLING_REQUIREMENTS;
+from;
+'../../types/DataClassification';
+showHandlingRequirements = true;
 {
     const [formData, setFormData] = useState({});
-    classification: existingClassification?.classification || '',
-        rationale;
-    existingClassification?.rationale || '',
-        dataOwner;
-    existingClassification?.dataOwner || context?.dataOwner || '',
-        businessJustification;
-    existingClassification?.metadata.businessJustification || '',
-        riskAssessment;
-    existingClassification?.metadata.riskAssessment || '',
-        regulatoryRequirements;
-    existingClassification?.metadata.regulatoryRequirements || [],
-        dataLineage;
-    existingClassification?.metadata.dataLineage || [],
-    ;
+    classification: existingClassification?.classification || '';
+    rationale: existingClassification?.rationale || '';
+    dataOwner: existingClassification?.dataOwner || context?.dataOwner || '';
+    businessJustification: existingClassification?.metadata.businessJustification || '';
+    riskAssessment: existingClassification?.metadata.riskAssessment || '';
+    regulatoryRequirements: existingClassification?.metadata.regulatoryRequirements || [];
+    dataLineage: existingClassification?.metadata.dataLineage || [];
 }
 ;
 const [validation, setValidation] = useState({});
-valid: true,
-    errors;
-[],
-    warnings;
-[],
-    recommendations;
-[],
-;
+valid: true;
+errors: [];
+warnings: [];
+recommendations: [];
 ;
 const [showRequirements, setShowRequirements] = useState(false);
 const [currentUser] = useState('current-user'); // TODO: Get from auth context
@@ -65,14 +57,14 @@ useEffect(() => {
                                 const newValidation = {
                                     valid: errors.length === 0,
                                     errors,
-                                    warnings,
-                                    recommendations
-                                };
-                                setValidation(newValidation);
-                                onValidationChange?.(newValidation);
+                                    warnings };
+                                recommendations;
                             }
-                            [formData, onValidationChange];
+                            ;
+                            setValidation(newValidation);
+                            onValidationChange?.(newValidation);
                         }
+                        [formData, onValidationChange];
                     }
                 }
             }
@@ -83,6 +75,7 @@ const handleFieldChange = (field, value) => {
     setFormData(prev => ({}), ...prev, [field], value);
 };
 ;
+;
 const handleArrayFieldChange = (field, value) => {
     const items = value.split(',').map(item => item.trim()).filter(item => item.length > 0);
     handleFieldChange(field, items);
@@ -90,10 +83,20 @@ const handleArrayFieldChange = (field, value) => {
 const handleSubmit = () => {
     if (!validation.valid || !formData.classification)
         return;
-    const classification = {
-        id: existingClassification?.id || `class-${dataId}-${Date.now()}` };
-}, dataElement, classification, as, DataClassificationLevel, rationale, dataOwner, classifiedBy, classificationDate;
-(),
+    const classification = {};
+    id: existingClassification?.id || `class-${dataId}-${Date.now()}`;
+};
+dataElement: dataId,
+    classification;
+formData.classification,
+    rationale;
+formData.rationale,
+    dataOwner;
+formData.dataOwner,
+    classifiedBy;
+currentUser,
+    classificationDate;
+new Date(),
     reviewDate;
 new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
     approvals;
@@ -108,8 +111,7 @@ new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
         dataLineage;
     formData.dataLineage,
         relatedClassifications;
-    [],
-    ;
+    [];
 }
 ;
 onClassificationChange(classification);
@@ -119,10 +121,11 @@ const getClassificationColor = (level) => {
         PUBLIC: 'bg-green-100 text-green-800 border-green-300',
         INTERNAL: 'bg-blue-100 text-blue-800 border-blue-300',
         CONFIDENTIAL: 'bg-yellow-100 text-yellow-800 border-yellow-300',
-        RESTRICTED: 'bg-red-100 text-red-800 border-red-300',
+        RESTRICTED: 'bg-red-100 text-red-800 border-red-300'
     };
-    return colors[level];
 };
+return colors[level];
+;
 const getHandlingRequirements = () => {
     if (!formData.classification)
         return null;
@@ -132,14 +135,15 @@ return;
 _jsxs("div", { className: "classification-tagging-ui bg-white border border-gray-200 rounded-lg p-6 shadow-sm", children: [_jsxs("div", { className: "mb-6", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2", children: "Data Classification" }), _jsx("p", { className: "text-sm text-gray-600", children: "Classify this data element according to its sensitivity and handling requirements" })] }), _jsxs("div", { className: "mb-6 p-4 bg-gray-50 rounded-lg", children: [_jsx("h4", { className: "font-medium text-gray-900 mb-2", children: "Data Element" }), _jsxs("p", { className: "text-sm text-gray-700", children: ["ID: ", dataId] }), context && ()
                     < div, " className=\"mt-2 text-sm text-gray-600\">", _jsxs("p", { children: ["Type: ", context.dataType] }), _jsxs("p", { children: ["Business Context: ", context.businessContext] }), _jsxs("p", { children: ["Risk Level: ", _jsx("span", { className: `px-2 py-1 rounded text-xs font-medium ${context.riskLevel === 'CRITICAL' ? 'bg-red-100 text-red-800' : ,
                                 context.riskLevel === 'HIGH' ? 'bg-orange-100 text-orange-800' : ,
-                                context.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' : ,
-                                'bg-green-100 text-green-800'}`, children: context.riskLevel })] })] }), ")}"] });
+                                context.riskLevel === 'MEDIUM' ? 'bg-yellow-100 text-yellow-800' : }
+  'bg-green-100 text-green-800'
+`, children: context.riskLevel })] })] }), ")}"] });
 { /* Classification Level Selection */ }
 _jsxs("div", { className: "mb-6", children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Classification Level *" }), _jsxs("div", { className: "grid grid-cols-2 gap-3", children: [CLASSIFICATION_LEVELS.map(level => ()
                     < button, key = { level }, type = "button", disabled = { readonly }, onClick = {}()), " => handleFieldChange('classification', level)} className=", `p-3 text-left border-2 rounded-lg transition-colors ${formData.classification === level
                     ? `${getClassificationColor(level)} border-opacity-100` : }
                   : 'bg-white border-gray-200 hover:border-gray-300';
-  } ${readonly ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`, ">", _jsx("div", { className: "font-medium", children: level }), _jsxs("div", { className: "text-xs text-gray-600 mt-1", children: [level === 'PUBLIC' && 'No restrictions', level === 'INTERNAL' && 'Internal use only', level === 'CONFIDENTIAL' && 'Limited access required', level === 'RESTRICTED' && 'Highest protection level'] })] }), "))}"] });
+ ${readonly ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}`, ">", _jsx("div", { className: "font-medium", children: level }), _jsxs("div", { className: "text-xs text-gray-600 mt-1", children: [level === 'PUBLIC' && 'No restrictions', level === 'INTERNAL' && 'Internal use only', level === 'CONFIDENTIAL' && 'Limited access required', level === 'RESTRICTED' && 'Highest protection level'] })] }), "))}"] });
 div >
     { /* Rationale */}
     < div;

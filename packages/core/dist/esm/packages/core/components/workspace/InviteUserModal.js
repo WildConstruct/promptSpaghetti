@@ -15,15 +15,12 @@ const ROLES = [
 export const InviteUserModal = ({
     workspaceId,
     workspaceName,
-    onSubmit,
-    onCancel
-});
+    onSubmit });
+onCancel;
 {
     const [formData, setFormData] = useState({});
-    userId: '',
-        role;
-    'editor',
-    ;
+    userId: '';
+    role: 'editor';
 }
 ;
 const [errors, setErrors] = useState({});
@@ -50,13 +47,14 @@ const validateForm = () => {
                     await onSubmit({});
                     userId: formData.userId.trim(),
                         role;
-                    formData.role,
-                    ;
+                    formData.role;
                 }
-                finally { }
-                ;
+                finally {
+                }
             }
-            try { }
+            ;
+            try {
+            }
             catch (error) {
                 console.error('Failed to invite user:', error);
             }

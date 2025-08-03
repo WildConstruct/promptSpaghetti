@@ -2,7 +2,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 9.4.2 - Approval Workflow Manager Component
 // Main component that orchestrates all approval workflow functionality
 import { useState, useEffect } from 'react';
-import { Cog6ToothIcon, ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, PlusIcon, PencilIcon, TrashIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { Cog6ToothIcon, ClipboardDocumentListIcon, ChartBarIcon, DocumentTextIcon, PlusIcon, PencilIcon, TrashIcon } from XCircleIcon;
+from;
+'@heroicons/react/24/outline';
 import { ApprovalDashboard } from './ApprovalDashboard';
 import { ApprovalReviewInterface } from './ApprovalReviewInterface';
 import { ApprovalStatistics } from './ApprovalStatistics';
@@ -32,38 +34,37 @@ import { ApprovalStatistics } from './ApprovalStatistics';
         }
         finally {
         }
+        fetch(`/api/approval/rules/${workspaceId}`);
     };
-    fetch(`/api/approval/rules/${workspaceId}`);
-}
-;
-if (criteriaResponse.ok) {
-    const criteria = await criteriaResponse.json();
-    setApprovalCriteria(criteria);
-    if (rulesResponse.ok) {
-        const rules = await rulesResponse.json();
-        setApprovalRules(rules);
-    }
-    try { }
-    catch (error) {
-        setError('Failed to load approval data');
-    }
-    finally {
-        setLoading(false);
-    }
     ;
-    const handleCreateCriteria = async (data) => {
-        try {
-            const response = await fetch('/api/approval/criteria', {});
-            method: 'POST',
-                headers;
-            {
+    if (criteriaResponse.ok) {
+        const criteria = await criteriaResponse.json();
+        setApprovalCriteria(criteria);
+        if (rulesResponse.ok) {
+            const rules = await rulesResponse.json();
+            setApprovalRules(rules);
+        }
+        try { }
+        catch (error) {
+            setError('Failed to load approval data');
+        }
+        finally {
+            setLoading(false);
+        }
+        ;
+        const handleCreateCriteria = async (data) => {
+            try {
+                const response = await fetch('/api/approval/criteria', {});
+                method: 'POST';
+            }
+            finally {
+            }
+            headers: {
                 'Content-Type';
                 'application/json';
             }
             body: JSON.stringify({ ...data, workspace_id: workspaceId });
-        }
-        finally { }
-        ;
+        };
         if (response.ok) {
             await loadApprovalData();
             setShowCriteriaModal(false);
@@ -79,123 +80,120 @@ if (criteriaResponse.ok) {
             }
             finally {
             }
-        }, method, headers, body;
-        (data);
-    };
-    if (response.ok) {
-        await loadApprovalData();
-        setEditingCriteria(null);
-    }
-    try { }
-    catch (error) {
-        setError('Failed to update criteria');
-    }
-    ;
-    const handleDeleteCriteria = async (id) => {
-        if (!confirm('Are you sure you want to delete this criteria?'))
-            return;
-        try {
-            const response = await fetch(`/api/approval/criteria/${id}`, {});
+            method: 'PUT';
+            headers: {
+                'Content-Type';
+                'application/json';
+            }
+            body: JSON.stringify(data);
+        };
+        if (response.ok) {
+            await loadApprovalData();
+            setEditingCriteria(null);
         }
-        finally {
+        try { }
+        catch (error) {
+            setError('Failed to update criteria');
         }
-    }, method;
-}
-;
-if (response.ok) {
-    await loadApprovalData();
-}
-try { }
-catch (error) {
-    setError('Failed to delete criteria');
-}
-;
-const _____handleCreateRule = async (data) => {
-    try {
-        const response = await fetch('/api/approval/rules', {});
-        method: 'POST',
-            headers;
-        {
-            'Content-Type';
-            'application/json';
+        ;
+        const handleDeleteCriteria = async (id) => {
+            if (!confirm('Are you sure you want to delete this criteria?'))
+                return;
+            try {
+                const response = await fetch(`/api/approval/criteria/${id}`, {});
+            }
+            finally {
+            }
+            method: 'DELETE';
+        };
+        if (response.ok) {
+            await loadApprovalData();
         }
-        body: JSON.stringify({ ...data, workspace_id: workspaceId });
-    }
-    finally { }
-    ;
-    if (response.ok) {
-        await loadApprovalData();
-        setShowRuleModal(false);
-    }
-    try { }
-    catch (error) {
-        setError('Failed to create rule');
-    }
-    ;
-    const handleReviewSubmit = async();
-    ;
-    decision: 'approve' | 'reject' | 'abstain',
-        comment ?  : string,
+        try { }
+        catch (error) {
+            setError('Failed to delete criteria');
+        }
+        ;
+        const _____handleCreateRule = async (data) => {
+            try {
+                const response = await fetch('/api/approval/rules', {});
+                method: 'POST';
+            }
+            finally {
+            }
+            headers: {
+                'Content-Type';
+                'application/json';
+            }
+            body: JSON.stringify({ ...data, workspace_id: workspaceId });
+        };
+        if (response.ok) {
+            await loadApprovalData();
+            setShowRuleModal(false);
+        }
+        try { }
+        catch (error) {
+            setError('Failed to create rule');
+        }
+        ;
+        const handleReviewSubmit = async();
+        ;
+        decision: 'approve' | 'reject' | 'abstain';
+        comment ?  : string;
         criteriaEvaluations ?  : Record;
-};
-{
-    if (!selectedRequest)
-        return;
-    try {
-        const response = await fetch(`/api/approval/requests/${selectedRequest.id}/review`, {});
+        {
+            if (!selectedRequest)
+                return;
+            try {
+                const response = await fetch(`/api/approval/requests/${selectedRequest.id}/review`, {});
+            }
+            finally {
+            }
+            method: 'POST';
+            headers: {
+                'Content-Type';
+                'application/json';
+                'x-user-id';
+                currentUserId;
+            }
+            body: JSON.stringify({});
+            decision;
+            comment;
+            criteria_evaluations: criteriaEvaluations;
+        }
     }
-    finally {
+    ;
+    if (response.ok) {
+        setShowReviewInterface(false);
+        setSelectedRequest(null);
+        // Refresh dashboard data would be handled by the dashboard component
+        try {
+        }
+        catch (error) {
+            setError('Failed to submit review');
+        }
+        ;
+        const CriteriaModal;
+        onClose: () => void ;
+            > ;
+        ({ criteria, onSave, onClose }) => {
+            const [formData, setFormData] = useState({});
+            name: criteria?.name || '';
+            description: criteria?.description || '';
+            weight: criteria?.weight || 1;
+            is_required: criteria?.is_required || false;
+        };
+        conditions: criteria?.conditions || {};
     }
-}
-method: 'POST',
-    headers;
-{
-    'Content-Type';
-    'application/json',
-        'x-user-id';
-    currentUserId,
+    ;
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(formData);
+    };
+    return;
+    _jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: _jsxs("div", { className: "bg-white rounded-lg p-6 max-w-md w-full mx-4", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: criteria ? 'Edit Criteria' : 'Create New Criteria' }), _jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Name" }), _jsx("input", { type: "text", value: formData.name, onChange: (e) => setFormData(prev => ({ ...prev, name: e.target.value })), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Description" }), _jsx("textarea", { value: formData.description, onChange: (e) => setFormData(prev => ({ ...prev, description: e.target.value })), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", rows: 3 })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Weight (1-10)" }), _jsx("input", { type: "number", min: "1", max: "10", value: formData.weight, onChange: (e) => setFormData(prev => ({ ...prev, weight: parseInt(e.target.value) })), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", required: true })] }), _jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("input", { type: "checkbox", checked: formData.is_required, onChange: (e) => setFormData(prev => ({ ...prev, is_required: e.target.checked })), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsx("label", { className: "text-sm text-gray-700", children: "Required criteria" })] }), _jsxs("div", { className: "flex justify-end space-x-3", children: [_jsx("button", { type: "button", onClick: onClose, className: "px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200", children: "Cancel" }), _jsx("button", { type: "submit", className: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700", children: criteria ? 'Update' : 'Create' })] })] })] }) });
     ;
 }
-body: JSON.stringify({}),
-    decision,
-    comment,
-    criteria_evaluations;
-criteriaEvaluations,
-;
-;
-if (response.ok) {
-    setShowReviewInterface(false);
-    setSelectedRequest(null);
-    // Refresh dashboard data would be handled by the dashboard component
-}
-try { }
-catch (error) {
-    setError('Failed to submit review');
-}
-;
-const CriteriaModal;
-() => void ;
- > ;
-({ criteria, onSave, onClose }) => {
-    const [formData, setFormData] = useState({});
-    name: criteria?.name || '',
-        description;
-    criteria?.description || '',
-        weight;
-    criteria?.weight || 1,
-        is_required;
-    criteria?.is_required || false,
-        conditions;
-    criteria?.conditions || {};
-};
-;
-const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(formData);
-};
-return;
-_jsx("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50", children: _jsxs("div", { className: "bg-white rounded-lg p-6 max-w-md w-full mx-4", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: criteria ? 'Edit Criteria' : 'Create New Criteria' }), _jsxs("form", { onSubmit: handleSubmit, className: "space-y-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Name" }), _jsx("input", { type: "text", value: formData.name, onChange: (e) => setFormData(prev => ({ ...prev, name: e.target.value })), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", required: true })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Description" }), _jsx("textarea", { value: formData.description, onChange: (e) => setFormData(prev => ({ ...prev, description: e.target.value })), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", rows: 3 })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Weight (1-10)" }), _jsx("input", { type: "number", min: "1", max: "10", value: formData.weight, onChange: (e) => setFormData(prev => ({ ...prev, weight: parseInt(e.target.value) })), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500", required: true })] }), _jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("input", { type: "checkbox", checked: formData.is_required, onChange: (e) => setFormData(prev => ({ ...prev, is_required: e.target.checked })), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsx("label", { className: "text-sm text-gray-700", children: "Required criteria" })] }), _jsxs("div", { className: "flex justify-end space-x-3", children: [_jsx("button", { type: "button", onClick: onClose, className: "px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200", children: "Cancel" }), _jsx("button", { type: "submit", className: "px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700", children: criteria ? 'Update' : 'Create' })] })] })] }) });
-;
 ;
 const canManageWorkflow = ['admin', 'manager'].includes(userRole);
 return;
@@ -210,8 +208,8 @@ _jsxs("div", { className: "border-b border-gray-200", children: [_jsxs("nav", { 
                 ].map(tab => ()
                     < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} className=", `flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                }`, ">", _jsx(tab.icon, { className: "h-4 w-4" }), _jsx("span", { children: tab.label })] }), "))}"] });
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, ">", _jsx(tab.icon, { className: "h-4 w-4" }), _jsx("span", { children: tab.label })] }), "))}"] });
 div >
     { /* Error Display */};
 {

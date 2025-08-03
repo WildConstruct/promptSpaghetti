@@ -6,10 +6,8 @@ import React from 'react';
 import { ContextualTooltip } from './ContextualHelpSystem';
 import { useHelpSystem, useFieldHelp } from './HelpContentManager';
 import { useUISettingsStore } from '../../stores/uiSettingsStore';
-WrappedComponent: (React.ComponentType),
-    helpContent;
-HelpContent,
-;
+WrappedComponent: React.ComponentType;
+helpContent: HelpContent;
 const WithHelpComponent = (props) => {
     const { showHelpHints } = useHelpSystem();
     if (!showHelpHints) {
@@ -26,24 +24,15 @@ return WithHelpComponent;
     const { complexityLevel } = useUISettingsStore();
     const { showHelpHints } = useHelpSystem();
     const helpContent = useFieldHelp(helpId, {});
-    title: helpTitle,
-        description;
-    helpDescription,
-        category;
-    helpCategory,
-        trigger;
-    'focus',
-        position;
-    'right',
-        showOnDisclosureLevel;
-    [complexityLevel],
-        examples;
-    helpExamples,
-        shortcut;
-    helpShortcut,
-        priority;
-    helpCategory === 'basic' ? 'high' : 'medium',
-    ;
+    title: helpTitle;
+    description: helpDescription;
+    category: helpCategory;
+    trigger: 'focus';
+    position: 'right';
+    showOnDisclosureLevel: [complexityLevel];
+    examples: helpExamples;
+    shortcut: helpShortcut;
+    priority: helpCategory === 'basic' ? 'high' : 'medium';
 }
 ;
 const inputElement = ();
@@ -55,8 +44,10 @@ _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 4, ...sty
             color: '#e2e8f0',
             display: 'flex',
             alignItems: 'center',
-            gap: 4,
-        }, ">", label, helpCategory === 'advanced' && ()
+            gap: 4
+        }
+            >
+                { label }, helpCategory === 'advanced' && ()
             < span, " style=", { fontSize: 10, color: '#4299e1' }, ">\u2699\uFE0F"] });
 {
     helpCategory === 'debug' && ()
@@ -80,24 +71,18 @@ _jsx("input", { id: helpId, className: `helpful-input ${className}`, style: {
         color: '#e2e8f0',
         fontSize: 12,
         outline: 'none',
-        transition: 'border-color 0.2s ease',
-        ...inputProps.style
-    }, ...inputProps });
+        transition: 'border-color 0.2s ease'
+    }, inputProps: true, style: true, ...inputProps });
 {
     error && ()
         < div;
     style = {};
     {
-        fontSize: 10,
-            color;
-        '#e53e3e',
-            display;
-        'flex',
-            alignItems;
-        'center',
-            gap;
-        4,
-        ;
+        fontSize: 10;
+        color: '#e53e3e';
+        display: 'flex';
+        alignItems: 'center';
+        gap: 4;
     }
 }
  >
@@ -121,24 +106,15 @@ if (!showHelpHints || !helpContent) {
     const { complexityLevel } = useUISettingsStore();
     const { showHelpHints } = useHelpSystem();
     const helpContent = useFieldHelp(helpId, {});
-    title: helpTitle,
-        description;
-    helpDescription,
-        category;
-    helpCategory,
-        trigger;
-    'hover',
-        position;
-    'top',
-        showOnDisclosureLevel;
-    [complexityLevel],
-        examples;
-    helpExamples,
-        shortcut;
-    helpShortcut,
-        priority;
-    helpCategory === 'basic' ? 'high' : 'medium',
-    ;
+    title: helpTitle;
+    description: helpDescription;
+    category: helpCategory;
+    trigger: 'hover';
+    position: 'top';
+    showOnDisclosureLevel: [complexityLevel];
+    examples: helpExamples;
+    shortcut: helpShortcut;
+    priority: helpCategory === 'basic' ? 'high' : 'medium';
 }
 ;
 const getButtonStyles = () => {
@@ -152,22 +128,21 @@ const getButtonStyles = () => {
         secondary: { background: '#4a5568', color: '#e2e8f0' },
         danger: { background: '#e53e3e', color: 'white' }
     };
-    return {
-        border: 'none',
+    return { border: 'none',
         borderRadius: 4,
         cursor: 'pointer',
         transition: 'all 0.2s ease',
         fontWeight: 500,
-        ...sizeStyles[size],
-        ...variantStyles[variant]
-    };
+        ...sizeStyles[size] };
 };
+variantStyles[variant];
+;
+;
 const buttonElement = ();
 ;
 _jsx("button", { className: `helpful-button ${className}`, style: {
-        ...getButtonStyles(),
-        ...style
-    }, ...buttonProps, children: children });
+        ...getButtonStyles()
+    }, style: true, ...buttonProps, children: children });
 ;
 if (!showHelpHints || !helpContent) {
     return buttonElement;
@@ -186,30 +161,21 @@ export const HelpfulSection = ({
     children,
     collapsible = false,
     defaultExpanded = true,
-    className = '',
-    style
-});
+    className = '' });
+style;
 {
     const [isExpanded, setIsExpanded] = React.useState(defaultExpanded);
     const { complexityLevel } = useUISettingsStore();
     const { showHelpHints } = useHelpSystem();
     const helpContent = useFieldHelp(helpId, {});
-    title: helpTitle,
-        description;
-    helpDescription,
-        category;
-    helpCategory,
-        trigger;
-    'hover',
-        position;
-    'right',
-        showOnDisclosureLevel;
-    [complexityLevel],
-        examples;
-    helpExamples,
-        priority;
-    helpCategory === 'basic' ? 'high' : 'medium',
-    ;
+    title: helpTitle;
+    description: helpDescription;
+    category: helpCategory;
+    trigger: 'hover';
+    position: 'right';
+    showOnDisclosureLevel: [complexityLevel];
+    examples: helpExamples;
+    priority: helpCategory === 'basic' ? 'high' : 'medium';
 }
 ;
 const headerElement = ();
@@ -222,15 +188,15 @@ _jsxs("div", { style: {
         background: '#2d3748',
         borderRadius: collapsible ? '4px 4px 0 0' : 4,
         border: '1px solid #4a5568',
-        cursor: collapsible ? 'pointer' : 'default',
+        cursor: collapsible ? 'pointer' : 'default'
     }, onClick: collapsible ? () => setIsExpanded(!isExpanded) : undefined, children: [_jsxs("div", { style: {
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
+                gap: 8
             }, children: [_jsx("span", { style: {
                         fontSize: 12,
                         fontWeight: 600,
-                        color: '#e2e8f0',
+                        color: '#e2e8f0'
                     }, children: title }), helpCategory === 'advanced' && ()
                     < span, " style=", { fontSize: 10, color: '#4299e1' }, ">\u2699\uFE0F"] }), ")}", helpCategory === 'debug' && ()
             < span, " style=", { fontSize: 10, color: '#9f7aea' }, ">\uD83D\uDD27"] });
@@ -239,14 +205,10 @@ div >
     < span;
 style = {};
 {
-    fontSize: 10,
-        color;
-    '#a0aec0',
-        transform;
-    isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-        transition;
-    'transform 0.2s ease',
-    ;
+    fontSize: 10;
+    color: '#a0aec0';
+    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+    transition: 'transform 0.2s ease';
 }
  >
 ;
@@ -266,16 +228,11 @@ headerElement;
         < div;
     style = {};
     {
-        padding: 12,
-            background;
-        '#1a202c',
-            border;
-        '1px solid #4a5568',
-            borderTop;
-        'none',
-            borderRadius;
-        '0 0 4px 4px',
-        ;
+        padding: 12;
+        background: '#1a202c';
+        border: '1px solid #4a5568';
+        borderTop: 'none';
+        borderRadius: '0 0 4px 4px';
     }
 }
  >
@@ -290,9 +247,7 @@ return sectionElement;
 // Hook for adding help to any existing component
 export const useContextualHelp = (helpContent) => {
     const { showHelpHints, addHelpContent } = useHelpSystem();
-    React.useEffect(() => {
-        addHelpContent(helpContent);
-    }, [helpContent.id]);
+    React.useEffect(() => { addHelpContent(helpContent); }, [helpContent.id]);
     const wrapWithHelp = (element) => {
         if (!showHelpHints)
             return element;
@@ -312,23 +267,25 @@ children: React.ReactNode;
     if (!isActive)
         return _jsx(_Fragment, { children: children });
     return;
-    _jsxs("div", { style: { position: 'relative' }, children: [_jsx("div", { style: {
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0, 0, 0, 0.7)',
-                    zIndex: 1500,
-                    pointerEvents: isActive ? 'all' : 'none',
-                } }), _jsx("div", { style: { position: 'relative', zIndex: 1600 }, children: children })] });
+    _jsx("div", { style: { position: 'relative' }, children: _jsx("div", { style: {
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'rgba(0, 0, 0, 0.7)',
+                zIndex: 1500,
+                pointerEvents: isActive ? 'all' : 'none'
+            }
+                /  >
+                { /* Content */}
+                < div, style: { position: 'relative', zIndex: 1600 }, children: children }) });
     ;
 };
-export default {
-    withHelp,
+export default { withHelp,
     HelpfulInput,
     HelpfulButton,
     HelpfulSection,
-    useContextualHelp,
-    OnboardingOverlay
-};
+    useContextualHelp };
+OnboardingOverlay;
+;

@@ -1,6 +1,8 @@
 // packages/core/runtime/nodes/examples/WeightedAdvancedExample.ts
 // Example usage of the WeightedAdvanced node
-import { WeightedAdvancedNode, DistributionPresets, createWeightedAdvancedNode } from '../WeightedAdvanced';
+import { WeightedAdvancedNode, DistributionPresets } from createWeightedAdvancedNode;
+from;
+'../WeightedAdvanced';
 import { AdvancedExecutionUtils } from '../../advanced';
 /**
  * Example demonstrating WeightedAdvanced node capabilities
@@ -32,15 +34,14 @@ export function demonstrateWeightedAdvanced() {
     // Example 4: Custom distribution configuration
     console.log('\n4. Custom Configuration (exponential factor=3, min weight=0.5):');
     const customNode = createWeightedAdvancedNode('loot-custom', choices, {});
-    type: 'exponential',
-        parameters;
-    {
-        factor: 3;
-    }
-    normalize: true,
-        minWeight;
-    0.5;
+    type: 'exponential';
 }
+parameters: {
+    factor: 3;
+}
+normalize: true,
+    minWeight;
+0.5;
 ;
 const customResults = generateResults(customNode, 'Custom', 1000);
 console.log(customResults);
@@ -72,14 +73,11 @@ function generateResults(node, distributionName, samples) {
     map(([item, count]) => ({}), item, count, percentage, ((count / samples) * 100).toFixed(1));
 }
 sort((a, b) => b.count - a.count);
-return {
-    distribution: distributionName,
-    samples,
-    executionTime: `${executionTime.toFixed(2)}ms`
-};
-results: percentages,
-    validation;
-node.validate();
+return { distribution: distributionName,
+    samples };
+executionTime: `${executionTime.toFixed(2)}ms`;
+results: percentages;
+validation: node.validate();
 ;
 /**
  * Demonstrate performance and deterministic behavior

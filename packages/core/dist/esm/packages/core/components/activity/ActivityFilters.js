@@ -4,13 +4,13 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Filter controls for activity feed
  */
 import { useState } from 'react';
+className = '';
 {
     const [showAdvanced, setShowAdvanced] = useState(false);
     const [dateRange, setDateRange] = useState({});
     from: filters.from_date ? filters.from_date.toISOString().split('T')[0] : '',
         to;
-    filters.to_date ? filters.to_date.toISOString().split('T')[0] : '',
-    ;
+    filters.to_date ? filters.to_date.toISOString().split('T')[0] : '';
 }
 ;
 const handleEventTypeChange = (eventType, checked) => {
@@ -27,9 +27,9 @@ const handleDateRangeChange = (field, value) => {
     onFilterChange({});
     from_date: newDateRange.from ? new Date(newDateRange.from) : undefined,
         to_date;
-    newDateRange.to ? new Date(newDateRange.to) : undefined,
-    ;
+    newDateRange.to ? new Date(newDateRange.to) : undefined;
 };
+;
 ;
 const clearFilters = () => {
     setDateRange({ from: '', to: '' });
@@ -40,9 +40,9 @@ const clearFilters = () => {
         from_date;
     undefined,
         to_date;
-    undefined,
-    ;
+    undefined;
 };
+;
 ;
 const hasActiveFilters = !!();
 ;
@@ -51,19 +51,18 @@ filters.actor_id ||
     filters.from_date ||
     filters.to_date;
 ;
-const eventTypeGroups = {
-    workspace: eventTypes.filter(t => t.startsWith('workspace.')),
+const eventTypeGroups = { workspace: eventTypes.filter(t => t.startsWith('workspace.')),
     project: eventTypes.filter(t => t.startsWith('project.')),
     resource: eventTypes.filter(t => t.startsWith('resource.')),
     comment: eventTypes.filter(t => t.startsWith('comment.')),
     user: eventTypes.filter(t => t.startsWith('user.')),
-    other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix))),
-};
+    other: eventTypes.filter(t => !['workspace.', 'project.', 'resource.', 'comment.', 'user.'].some(prefix => t.startsWith(prefix))) };
+;
 return;
 _jsxs("div", { className: `activity-filters ${className}`, children: ["}", _jsxs("div", { className: "activity-filters__header", children: [_jsx("h4", { children: "Filter Activity" }), _jsxs("div", { className: "activity-filters__actions", children: [hasActiveFilters && ()
                             < button, "className=\"btn btn--ghost btn--small\" onClick=", clearFilters, "> Clear Filters"] }), ")}", _jsx("button", { className: "btn btn--ghost btn--small", onClick: () => setShowAdvanced(!showAdvanced), children: showAdvanced ? 'Simple' : 'Advanced' })] })] })
     ,
-        _jsx("div", { className: "activity-filters__content", children: _jsxs("div", { className: "filter-group", children: [_jsx("label", { className: "filter-label", children: "Quick Filters" }), _jsxs("div", { className: "quick-filters", children: [_jsx("button", { className: `quick-filter ${!hasActiveFilters ? 'quick-filter--active' : ''}`, onClick: clearFilters, children: "All Activity" }), _jsx("button", { className: `quick-filter ${filters.event_types?.includes('comment.created') ? 'quick-filter--active' : ''}`, onClick: () => onFilterChange({ event_types: ['comment.created'] }), children: "Comments" }), _jsx("button", { className: `quick-filter ${filters.event_types?.some(t => t.includes('created')) ? 'quick-filter--active' : ''}`, onClick: () => onFilterChange({}), "event_types:eventTypes": true }), ".filter(t => t.includes('created')); })} > Created Items"] }), _jsx("button", { className: `quick-filter ${filters.event_types?.some(t => t.startsWith('user.')) ? 'quick-filter--active' : ''}`, onClick: () => onFilterChange({}), "event_types:eventTypes": true }), ".filter(t => t.startsWith('user.')); })} > User Activity"] }) });
+        _jsx("div", { className: "activity-filters__content", children: _jsxs("div", { className: "filter-group", children: [_jsx("label", { className: "filter-label", children: "Quick Filters" }), _jsxs("div", { className: "quick-filters", children: [_jsx("button", { className: `quick-filter ${!hasActiveFilters ? 'quick-filter--active' : ''}`, onClick: clearFilters, children: "All Activity" }), _jsx("button", { className: `quick-filter ${filters.event_types?.includes('comment.created') ? 'quick-filter--active' : ''}`, onClick: () => onFilterChange({ event_types: ['comment.created'] }), children: "Comments" }), _jsx("button", { className: `quick-filter ${filters.event_types?.some(t => t.includes('created')) ? 'quick-filter--active' : ''}`, onClick: () => onFilterChange({}), "event_types:eventTypes": true }), ".filter(t => t.includes('created')) })} > Created Items"] }), _jsx("button", { className: `quick-filter ${filters.event_types?.some(t => t.startsWith('user.')) ? 'quick-filter--active' : ''}`, onClick: () => onFilterChange({}), "event_types:eventTypes": true }), ".filter(t => t.startsWith('user.')) })} > User Activity"] }) });
 div >
     { /* Date Range */}
     < div;

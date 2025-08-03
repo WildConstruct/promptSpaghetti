@@ -5,16 +5,15 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { GraphDiffEngine } from './GraphDiffEngine';
-export const VisualDiffViewer = ({
-    fromGraphData,
-    toGraphData,
-    diff: externalDiff,
-    isOpen,
-    onClose,
-    onApplyChange,
-    onRejectChange,
-    className = ''
-});
+export const VisualDiffViewer = ({});
+fromGraphData;
+toGraphData;
+diff: externalDiff;
+isOpen;
+onClose;
+onApplyChange;
+onRejectChange;
+className = '';
 {
     const [diff, setDiff] = useState(externalDiff || null);
     const [viewMode, setViewMode] = useState('side-by-side');
@@ -54,22 +53,18 @@ const computeDiff = async () => {
         switch (filterMode) {
             case 'structural':
                 return GraphDiffEngine.filterChanges(diff, {});
-                change_types: ['added', 'removed'],
-                    element_types;
-                ['node', 'edge'],
-                ;
+                change_types: ['added', 'removed'];
+                element_types: ['node', 'edge'];
         }
     });
 };
 'properties';
 return GraphDiffEngine.filterChanges(diff, {});
-element_types: ['property'],
-;
+element_types: ['property'];
 ;
 'positions';
 return GraphDiffEngine.filterChanges(diff, {});
-change_types: ['moved'],
-;
+change_types: ['moved'];
 ;
 'significant';
 return GraphDiffEngine.getSignificantChanges(diff, 0.6);
@@ -78,11 +73,11 @@ return diff.changes;
 ;
 const getChangeColor = (change) => {
     switch (change.type) {
-        case 'added': return '#10B981'; // green,
-        case 'removed': return '#EF4444'; // red,
-        case 'modified': return '#F59E0B'; // yellow,
-        case 'moved': return '#8B5CF6'; // purple,
-        default: return '#6B7280'; // gray,
+        case 'added': return '#10B981'; // green
+        case 'removed': return '#EF4444'; // red
+        case 'modified': return '#F59E0B'; // yellow
+        case 'moved': return '#8B5CF6'; // purple
+        default: return '#6B7280'; // gray }
     }
     ;
     const getChangeIcon = (change) => {
@@ -133,8 +128,8 @@ const getChangeColor = (change) => {
                                         ].map(filter => ()
                                             < button, key = { filter, : .key }, onClick = {}()), " => setFilterMode(filter.key as FilterMode)} className=", `px-3 py-1 text-xs rounded-full transition-colors ${filterMode === filter.key
                                             ? 'bg-blue-500 text-white'
-                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200',
-                                        }`, ">", filter.label, " (", filter.count, ")"] }), "))}"] }), _jsxs("div", { className: "flex items-center space-x-4 text-sm", children: [_jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: highlightSimilar, onChange: (e) => setHighlightSimilar(e.target.checked), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" }), "Highlight similar"] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: showRegions, onChange: (e) => setShowRegions(e.target.checked), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" }), "Show regions"] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: showPaths, onChange: (e) => setShowPaths(e.target.checked), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" }), "Show paths"] })] })] });
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+`, ">", filter.label, " (", filter.count, ")"] }), "))}"] }), _jsxs("div", { className: "flex items-center space-x-4 text-sm", children: [_jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: highlightSimilar, onChange: (e) => setHighlightSimilar(e.target.checked), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" }), "Highlight similar"] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: showRegions, onChange: (e) => setShowRegions(e.target.checked), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" }), "Show regions"] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: showPaths, onChange: (e) => setShowPaths(e.target.checked), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2" }), "Show paths"] })] })] });
                 { /* Changes List */ }
                 _jsxs("div", { className: "flex-1 overflow-y-auto", children: [loading ? ()
                             < div : , " className=\"flex justify-center items-center py-8\">", _jsx("div", { className: "animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500" })] });
@@ -180,59 +175,22 @@ const renderSummaryStats = () => {
     if (!diff)
         return null;
     const stats = [
-        { label: 'Similarity', value: `${Math.round(diff.summary.similarity_score * 100)}%`, color: 'text-green-600' }
+        { label: 'Similarity', value: `${Math.round(diff.summary.similarity_score * 100)}%`, color: 'text-green-600' },
+        { label: 'Complexity', value: `${diff.summary.complexity_score.toFixed(1)}/10`, color: 'text-blue-600' },
+        { label: 'Total Changes', value: diff.summary.total_changes.toString(), color: 'text-gray-900' },
+        { label: 'Nodes Added', value: diff.summary.added_nodes.toString(), color: 'text-green-600' },
+        { label: 'Nodes Removed', value: diff.summary.removed_nodes.toString(), color: 'text-red-600' },
+        { label: 'Nodes Modified', value: diff.summary.modified_nodes.toString(), color: 'text-orange-600' },
+        { label: 'Nodes Moved', value: diff.summary.moved_nodes.toString(), color: 'text-purple-600' },
+        { label: 'Edges Added', value: diff.summary.added_edges.toString(), color: 'text-green-600' },
+        { label: 'Edges Removed', value: diff.summary.removed_edges.toString(), color: 'text-red-600' },
+        { label: 'Properties Changed', value: diff.summary.property_changes.toString(), color: 'text-blue-600' }
     ];
+    return;
+    _jsxs("div", { className: "grid grid-cols-2 gap-3 p-4 bg-gray-50 border-b border-gray-200", children: [stats.map(stat => ()
+                < div, key = { stat, : .label }, className = "text-center" >
+                _jsx("div", { className: `text-lg font-semibold ${stat.color}`, children: stat.value })), _jsx("div", { className: "text-xs text-gray-600", children: stat.label })] });
 };
-{
-    label: 'Complexity', value;
-    `${diff.summary.complexity_score.toFixed(1)}/10`, color;
-    'text-blue-600';
-}
-{
-    label: 'Total Changes', value;
-    diff.summary.total_changes.toString(), color;
-    'text-gray-900';
-}
-{
-    label: 'Nodes Added', value;
-    diff.summary.added_nodes.toString(), color;
-    'text-green-600';
-}
-{
-    label: 'Nodes Removed', value;
-    diff.summary.removed_nodes.toString(), color;
-    'text-red-600';
-}
-{
-    label: 'Nodes Modified', value;
-    diff.summary.modified_nodes.toString(), color;
-    'text-orange-600';
-}
-{
-    label: 'Nodes Moved', value;
-    diff.summary.moved_nodes.toString(), color;
-    'text-purple-600';
-}
-{
-    label: 'Edges Added', value;
-    diff.summary.added_edges.toString(), color;
-    'text-green-600';
-}
-{
-    label: 'Edges Removed', value;
-    diff.summary.removed_edges.toString(), color;
-    'text-red-600';
-}
-{
-    label: 'Properties Changed', value;
-    diff.summary.property_changes.toString(), color;
-    'text-blue-600';
-}
-;
-return;
-_jsxs("div", { className: "grid grid-cols-2 gap-3 p-4 bg-gray-50 border-b border-gray-200", children: [stats.map(stat => ()
-            < div, key = { stat, : .label }, className = "text-center" >
-            _jsx("div", { className: `text-lg font-semibold ${stat.color}`, children: stat.value })), _jsx("div", { className: "text-xs text-gray-600", children: stat.label })] });
 div >
 ;
 ;
@@ -247,8 +205,8 @@ _jsxs("div", { className: `visual-diff-viewer ${className} fixed inset-0 bg-blac
                             ].map(mode => ()
                                 < button, key = { mode, : .key }, onClick = {}()), " => setViewMode(mode.key as ViewMode)} className=", `flex-1 flex items-center justify-center px-4 py-2 text-sm font-medium rounded transition-colors ${viewMode === mode.key
                                 ? 'bg-white text-gray-900 shadow-sm'
-                                : 'text-gray-600 hover:text-gray-900',
-                            }`, ">", _jsx("span", { className: "mr-2", children: mode.icon }), mode.label] }), "))}"] }) }), renderSummaryStats(), _jsxs("div", { className: "flex-1 flex overflow-hidden", children: [_jsx("div", { className: "w-80 border-r border-gray-200 bg-white", children: renderChangesList() }), _jsxs("div", { className: "flex-1 bg-gray-50 relative", children: [viewMode === 'side-by-side' && ()
+                                : 'text-gray-600 hover:text-gray-900'}
+`, ">", _jsx("span", { className: "mr-2", children: mode.icon }), mode.label] }), "))}"] }) }), renderSummaryStats(), _jsxs("div", { className: "flex-1 flex overflow-hidden", children: [_jsx("div", { className: "w-80 border-r border-gray-200 bg-white", children: renderChangesList() }), _jsxs("div", { className: "flex-1 bg-gray-50 relative", children: [viewMode === 'side-by-side' && ()
                             < SideBySideView, "fromGraph=", fromGraphData, "toGraph=", toGraphData, "diff=", diff, "selectedChange=", selectedChange, "showRegions=", showRegions, "showPaths=", showPaths, "zoom=", zoom, "pan=", pan, "onZoomChange=", setZoom, "onPanChange=", setPan, "/> )}", viewMode === 'overlay' && ()
                             < OverlayView, "fromGraph=", fromGraphData, "toGraph=", toGraphData, "diff=", diff, "selectedChange=", selectedChange, "showRegions=", showRegions, "showPaths=", showPaths, "zoom=", zoom, "pan=", pan, "onZoomChange=", setZoom, "onPanChange=", setPan, "/> )}", viewMode === 'changes-only' && ()
                             < ChangesOnlyView, "diff=", diff, "filteredChanges=", filteredChanges, "selectedChange=", selectedChange, "getChangeColor=", getChangeColor, "getChangeIcon=", getChangeIcon, "/> )}", _jsxs("div", { className: "absolute bottom-4 right-4 flex flex-col space-y-2", children: [_jsx("button", { onClick: () => setZoom(prev => Math.min(3, prev * 1.2)), className: "bg-white border border-gray-300 rounded p-2 hover:bg-gray-50 transition-colors", children: _jsx("svg", { className: "h-4 w-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 6v6m0 0v6m0-6h6m-6 0H6" }) }) }), _jsx("button", { onClick: () => setZoom(prev => Math.max(0.2, prev / 1.2)), className: "bg-white border border-gray-300 rounded p-2 hover:bg-gray-50 transition-colors", children: _jsx("svg", { className: "h-4 w-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M20 12H4" }) }) }), _jsx("button", { onClick: () => { setZoom(1); setPan({ x: 0, y: 0 }); }, className: "bg-white border border-gray-300 rounded p-2 hover:bg-gray-50 transition-colors text-xs", children: "Reset" })] })] })] })] });
@@ -270,8 +228,8 @@ div >
 }
 ;
 return;
-_jsxs("div", { className: `p-3 cursor-pointer transition-colors ${isSelected ? 'bg-blue-50 border-l-4 border-l-blue-500' : 'hover:bg-gray-50',
-    }`, onClick: onClick, children: [_jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("div", { className: "w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-medium", style: { backgroundColor: getChangeColor(change) }, children: getChangeIcon(change) }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsxs("div", { className: "flex items-center justify-between mb-1", children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 truncate", children: change.element_id }), _jsxs("span", { className: `text-xs ${getSignificanceColor(change.significance)}`, children: ["}", getSignificanceLevel(change.significance)] })] }), _jsx("p", { className: "text-xs text-gray-600 mb-2", children: renderChangeDescription() }), change.old_value !== undefined && change.new_value !== undefined && ()
+_jsxs("div", { className: `p-3 cursor-pointer transition-colors ${isSelected ? 'bg-blue-50 border-l-4 border-l-blue-500' : 'hover:bg-gray-50'}
+`, onClick: onClick, children: [_jsxs("div", { className: "flex items-start space-x-3", children: [_jsx("div", { className: "w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-medium", style: { backgroundColor: getChangeColor(change) }, children: getChangeIcon(change) }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsxs("div", { className: "flex items-center justify-between mb-1", children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 truncate", children: change.element_id }), _jsxs("span", { className: `text-xs ${getSignificanceColor(change.significance)}`, children: ["}", getSignificanceLevel(change.significance)] })] }), _jsx("p", { className: "text-xs text-gray-600 mb-2", children: renderChangeDescription() }), change.old_value !== undefined && change.new_value !== undefined && ()
                             < div, " className=\"text-xs space-y-1\">", _jsxs("div", { className: "text-red-600", children: ["\u2212 ", JSON.stringify(change.old_value).slice(0, 50)] }), _jsxs("div", { className: "text-green-600", children: ["+ ", JSON.stringify(change.new_value).slice(0, 50)] })] }), ")}", (onApply || onReject) && isSelected && ()
                     < div, " className=\"flex space-x-2 mt-2\">", onApply && ()
                     < button, "onClick=", (e) => { e.stopPropagation(); onApply(); }, "className=\"text-xs px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors\" > Apply"] }), ")}", onReject && ()

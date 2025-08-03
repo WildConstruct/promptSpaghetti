@@ -1,14 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { ExecutionPathAnalyzer } from './execution/ExecutionTracker';
 import { varianceAnalysisService } from './services/VarianceAnalysisService';
-executionPath ?  : { steps: unknown, randomizationPoints: unknown };
-weightChoices ?  : Array < {
-    nodeId: string,
-    selectedOption: unknown,
-    availableOptions: unknown,
-    weights: number,
-    selectionProbability: number
-} > ;
+    > ;
 // Epic 8.5 Task 3: Individual result management
 locked ?  : boolean;
 lockedAt ?  : number;
@@ -18,10 +11,7 @@ export function usePreviewSeeds() {
     const [error, setError] = useState(null);
     const [results, setResults] = useState([]);
     const [aggregateError, setAggregateError] = useState(null);
-    const [performanceStats, setPerformanceStats] = useState < {
-        totalTime: number,
-        averageTime: number
-    } | null > (null);
+    const [performanceStats, setPerformanceStats] = useState(null);
     // Epic 8.5 Task 3: Individual result management state
     const [lockedResults, setLockedResults] = useState([]);
     const [regeneratingResults, setRegeneratingResults] = useState([]);
@@ -41,7 +31,6 @@ export function usePreviewSeeds() {
         [];
     });
     const runPreview = useCallback(async (graph, specificSeed, resultIndex) => {
-        // Store the graph for regeneration purposes
         lastGraphRef.current = graph;
         // Handle selective regeneration
         if (typeof resultIndex === 'number' && specificSeed) {
@@ -62,71 +51,77 @@ export function usePreviewSeeds() {
                 const response = await fetch('/preview', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        graph,
+                    body: JSON.stringify({ graph,
                         runs: 5,
-                        seedStart: Math.floor(Math.random() * 10000),
-                    }),
-                    signal: controller.signal
+                        seedStart: Math.floor(Math.random() * 10000) })
                 });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
-                }
-                const data = await response.json();
-                if (controller.signal.aborted) {
-                    return; // Skip state updates if cancelled
-                    // Transform API results to frontend format with execution path data
-                    const perSeedResults = data.results.map((result, index) => ({
-                        seed: result.seed,
-                        output: result.output?.startsWith('Error:') ? undefined : result.output,
-                        error: result.output?.startsWith('Error:') ? result.output : undefined,
-                        executionTimeMs: result.executionTimeMs,
-                        // Epic 8.5 Task 2: Capture execution path data from server;
-                        executionPath: result.executionPath,
-                        weightChoices: result.weightChoices || [],
-                        // Extract node/edge tracking from execution path
-                        usedNodeIds: result.executionPath ? result.executionPath.nodeExecutionOrder :
-                            (result.output && !result.output.startsWith('Error:') ? [`node_${result.seed}`] : []),
-                        usedEdgeIds: result.executionPath ? [] : // Will be computed from execution path if needed
-                            (result.output && !result.output.startsWith('Error:') ? [`edge_${result.seed}`] : []),
-                        // Generate debug info for visualization
-                        debugInfo: result.executionPath ? generateDebugInfo(result.executionPath) : undefined,
-                        // Epic 8.5 Task 3: Preserve locked state during regeneration;
-                        locked: results[index]?.locked || false,
-                        lockedAt: results[index]?.lockedAt,
-                        lockedNote: results[index]?.lockedNote
-                    }));
-                    setResults(perSeedResults);
-                    updateVarianceMetrics(perSeedResults);
-                    const failed = perSeedResults.filter((r) => r.error).length;
-                    if (failed > 0) {
-                        setAggregateError(`${failed} of ${perSeedResults.length} previews failed`);
-                    }
-                    // Calculate performance stats
-                    const totalTime = Date.now() - startTime;
-                    const executionTimes = perSeedResults;
-                }
+                signal: controller.signal;
             }
-            finally {
-            }
+            finally { }
         }
-    })
-        .map(r => r.executionTimeMs)
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (controller.signal.aborted) {
+        return; // Skip state updates if cancelled
+        // Transform API results to frontend format with execution path data
+        const perSeedResults = data.results.map((result, index) => ({
+            seed: result.seed,
+            output: result.output?.startsWith('Error:') ? undefined : result.output,
+            error: result.output?.startsWith('Error:') ? result.output : undefined,
+            executionTimeMs: result.executionTimeMs
+            // Epic 8.5 Task 2: Capture execution path data from server;
+            ,
+            // Epic 8.5 Task 2: Capture execution path data from server;
+            executionPath: result.executionPath,
+            weightChoices: result.weightChoices || []
+        }
+        // Extract node/edge tracking from execution path
+        )
+        // Extract node/edge tracking from execution path
+        , 
+        // Extract node/edge tracking from execution path
+        usedNodeIds, result.executionPath ? result.executionPath.nodeExecutionOrder :
+            (result.output && !result.output.startsWith('Error:') ? [`node_${result.seed}`] : []), usedEdgeIds, result.executionPath ? [] : // Will be computed from execution path if needed
+            (result.output && !result.output.startsWith('Error:') ? [`edge_${result.seed}`] : [])
+        // Generate debug info for visualization
+        , 
+        // Generate debug info for visualization
+        debugInfo, result.executionPath ? generateDebugInfo(result.executionPath) : undefined
+        // Epic 8.5 Task 3: Preserve locked state during regeneration;
+        , 
+        // Epic 8.5 Task 3: Preserve locked state during regeneration;
+        locked, results[index]?.locked || false, lockedAt, results[index]?.lockedAt, lockedNote, results[index]?.lockedNote);
+    }
+    ;
+    setResults(perSeedResults);
+    updateVarianceMetrics(perSeedResults);
+    const failed = perSeedResults.filter((r) => r.error).length;
+    if (failed > 0) {
+        setAggregateError(`${failed} of ${perSeedResults.length} previews failed`);
+    }
+    // Calculate performance stats
+    const totalTime = Date.now() - startTime;
+    const executionTimes = perSeedResults;
+    map(r => r.executionTimeMs)
         .filter((t) => typeof t === 'number');
     if (executionTimes.length > 0) {
         const averageTime = Math.round(executionTimes.reduce((sum, time) => sum + time, 0) / executionTimes.length);
         setPerformanceStats({});
-        totalTime,
-            averageTime;
+        totalTime;
     }
-    ;
-    // Log performance for Epic 8.5 monitoring
-    console.log(`Preview performance: ${totalTime}ms total, ${averageTime}ms avg execution`);
+    averageTime;
 }
-try { }
+;
+// Log performance for Epic 8.5 monitoring
+console.log(`Preview performance: ${totalTime}ms total, ${averageTime}ms avg execution`);
+try {
+}
 catch (err) {
     if (err?.name !== 'AbortError') {
         setError(err?.message ?? 'Unknown error');
@@ -145,7 +140,6 @@ catch (err) {
     }, []);
     // Epic 8.5 Task 3: Regenerate specific result while maintaining others
     const regenerateSpecificResult = useCallback(async (graph, seed, resultIndex) => {
-        // Check if result is locked
         if (results[resultIndex]?.locked) {
             console.warn('Cannot regenerate locked result');
             return;
@@ -156,12 +150,11 @@ catch (err) {
                 const response = await fetch('/preview', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        graph,
+                    body: JSON.stringify({ graph,
                         runs: 1,
-                        seedStart: Math.floor(Math.random() * 10000) // Use new random seed,
+                        seedStart: Math.floor(Math.random() * 10000) // Use new random seed }
                     }),
                     signal: controller.signal
                 });
@@ -178,31 +171,35 @@ catch (err) {
                         error: newResult.output?.startsWith('Error:') ? newResult.output : undefined,
                         executionTimeMs: newResult.executionTimeMs,
                         executionPath: newResult.executionPath,
-                        weightChoices: newResult.weightChoices || [],
-                        usedNodeIds: newResult.executionPath ? newResult.executionPath.nodeExecutionOrder :
-                            (newResult.output && !newResult.output.startsWith('Error:') ? [`node_${newResult.seed}`] : []),
-                        usedEdgeIds: newResult.executionPath ? [] :
-                            (newResult.output && !newResult.output.startsWith('Error:') ? [`edge_${newResult.seed}`] : []),
-                        debugInfo: newResult.executionPath ? generateDebugInfo(newResult.executionPath) : undefined
+                        weightChoices: newResult.weightChoices || []
                     };
-                    // Update only the specific result
-                    setResults(prev => {
-                        const updated = [...prev];
-                        updated[resultIndex] = transformedResult;
-                        updateVarianceMetrics(updated);
-                        return updated;
-                    });
+                    usedNodeIds: newResult.executionPath ? newResult.executionPath.nodeExecutionOrder :
+                        (newResult.output && !newResult.output.startsWith('Error:') ? [`node_${newResult.seed}`] : []);
+                    usedEdgeIds: newResult.executionPath ? [] :
+                        (newResult.output && !newResult.output.startsWith('Error:') ? [`edge_${newResult.seed}`] : []);
+                    debugInfo: newResult.executionPath ? generateDebugInfo(newResult.executionPath) : undefined;
                 }
-                try { }
+                ;
+                // Update only the specific result
+                setResults(prev => {
+                    const updated = [...prev];
+                    updated[resultIndex] = transformedResult;
+                    updateVarianceMetrics(updated);
+                    return updated;
+                });
+                try {
+                }
                 catch (err) {
                     if (err?.name !== 'AbortError') {
                         setError(`Failed to regenerate result: ${err?.message ?? 'Unknown error'}`);
                     }
+                    try {
+                    }
+                    finally {
+                        setRegeneratingResults(prev => prev.filter(i => i !== resultIndex));
+                    }
+                    [results];
                 }
-                finally {
-                    setRegeneratingResults(prev => prev.filter(i => i !== resultIndex));
-                }
-                [results];
             }
             finally { }
         }
@@ -216,9 +213,10 @@ catch (err) {
                     ...updated[index],
                     locked: true,
                     lockedAt: Date.now(),
-                    lockedNote: note,
+                    lockedNote: note
                 };
             }
+            ;
             updateVarianceMetrics(updated);
             return updated;
         });
@@ -232,9 +230,10 @@ catch (err) {
                     ...updated[index],
                     locked: false,
                     lockedAt: undefined,
-                    lockedNote: undefined,
+                    lockedNote: undefined
                 };
             }
+            ;
             updateVarianceMetrics(updated);
             return updated;
         });
@@ -246,21 +245,24 @@ catch (err) {
         }
         await regenerateSpecificResult(lastGraphRef.current, results[index].seed, index);
     }, [results, regenerateSpecificResult]);
-    return {
-        loading,
+    return { loading,
         error,
         results,
         runPreview,
         cancelPreview,
         performanceStats,
-        aggregateError,
-        // Epic 8.5 Task 3: Individual result management,
+        aggregateError
+        // Epic 8.5 Task 3: Individual result management
+        ,
+        // Epic 8.5 Task 3: Individual result management
         lockedResults,
         regeneratingResults,
         lockResult,
         unlockResult,
-        regenerateResult,
-        // Epic 8.5 Task 5: Creative variance analysis,
+        regenerateResult
+        // Epic 8.5 Task 5: Creative variance analysis }
+        ,
+        // Epic 8.5 Task 5: Creative variance analysis }
         varianceMetrics
     };
 }
@@ -274,6 +276,6 @@ function generateDebugInfo(executionPath) {
         nodeExecutionOrder: executionPath.nodeExecutionOrder,
         randomChoices: executionPath.randomizationPoints,
         performanceBreakdown: debugInfo.performanceBreakdown,
-        memoryUsage: undefined // Could be added in future,
+        memoryUsage: undefined // Could be added in future }
     };
 }

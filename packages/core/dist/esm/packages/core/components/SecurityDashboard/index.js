@@ -13,7 +13,7 @@
 export { default as SecurityDashboardMain } from './SecurityDashboardMain';
 export { default as SecurityDashboardDataService } from './SecurityDashboardDataService';
 // Core Framework Components (re-exported for convenience)
-export { SecurityDashboardFramework, DashboardType, SecurityRole, DashboardTheme, } from '../../security/dashboard/SecurityDashboardFramework';
+export { SecurityDashboardFramework, DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
 export { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
 export { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
 export { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard';

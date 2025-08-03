@@ -1,8 +1,14 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { Card, Tabs, Table, Tag, Typography, Collapse, Badge, Select, Tooltip, Alert, Space, Statistic, Row, Col } from 'antd';
-import { PlusOutlined, MinusOutlined, EditOutlined, WarningOutlined, InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { CONFLICT_DESCRIPTIONS, RESOLUTION_STRATEGY_DESCRIPTIONS } from '../../types/restoration';
+import { Card, Tabs, Table, Tag, Typography, Collapse, Badge, Select, Tooltip, Alert, Space, Statistic, Row } from Col;
+from;
+'antd';
+import { PlusOutlined, MinusOutlined, EditOutlined, WarningOutlined, InfoCircleOutlined } from QuestionCircleOutlined;
+from;
+'@ant-design/icons';
+import { CONFLICT_DESCRIPTIONS } from RESOLUTION_STRATEGY_DESCRIPTIONS;
+from;
+'../../types/restoration';
 const { TabPane } = Tabs;
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
@@ -11,10 +17,11 @@ const { Option } = Select;
     const [activeTab, setActiveTab] = useState('changes');
     const [conflictResolutions, setConflictResolutions] = useState({});
     const handleConflictResolution = (conflictId, strategy) => {
-        setConflictResolutions(prev => ({}), ...prev, [conflictId], strategy);
+        setConflictResolutions(prev => ({}), ...prev[conflictId], strategy);
     };
-    onConflictResolve(conflictId, strategy);
 }
+;
+onConflictResolve(conflictId, strategy);
 ;
 const getChangeIcon = (type) => {
     switch (type) {
@@ -37,59 +44,50 @@ const getChangeIcon = (type) => {
             case 'delete':
                 return 'error';
             default:
-                return 'default';
         }
-        ;
-        const getRiskLevelColor = (level) => {
-            switch (level) {
-                case 'low':
-                    return 'success';
-                case 'medium':
-                    return 'warning';
-                case 'high':
-                    return 'error';
-                default:
-                    return 'default';
-            }
-            ;
-            const nodeColumns = [
-                {
-                    title: 'Action',
-                    dataIndex: 'action',
-                    key: 'action',
-                    width: 80,
-                    render: (action) => (),
-                }
-                    < Tag, color = { getChangeColor(action) { }, as, any }, icon = {} >
-                    { action, : .toUpperCase() }
-            ];
-        };
+        return 'default';
     };
+    const getRiskLevelColor = (level) => {
+        switch (level) {
+            case 'low':
+                return 'success';
+            case 'medium':
+                return 'warning';
+            case 'high':
+                return 'error';
+            default:
+        }
+        return 'default';
+    };
+    const nodeColumns = [
+        { title: 'Action',
+            dataIndex: 'action',
+            key: 'action',
+            width: 80,
+            render: (action) => () }
+            < Tag, color = { getChangeColor(action) { }, as, any }, icon = {} >
+            { action, : .toUpperCase() }
+    ];
 };
 Tag >
-;
+    { title: 'Node ID',
+        dataIndex: 'id',
+        key: 'id',
+        width: 200,
+        render: (id) => () }
+    < Text;
+code;
+style = {};
 {
-    title: 'Node ID',
-        dataIndex;
-    'id',
-        key;
-    'id',
-        width;
-    200,
-        render;
-    (id) => (),
-        _jsx(Text, { code: true, style: { fontSize: '12px' }, children: id });
+    fontSize: '12px';
 }
-{
-    title: 'Type',
-        dataIndex;
-    'type',
-        key;
-    'type',
-        width;
-    120,
-    ;
-}
+ >
+    { id };
+Text >
+    { title: 'Type',
+        dataIndex: 'type',
+        key: 'type',
+        width: 120 };
 {
     title: 'Label',
         dataIndex;
@@ -97,8 +95,7 @@ Tag >
         key;
     'label',
         render;
-    (label) => label || _jsx(Text, { type: "secondary", children: "No label" }),
-    ;
+    (label) => label || _jsx(Text, { type: "secondary", children: "No label" });
 }
 {
     title: 'Properties',
@@ -107,125 +104,110 @@ Tag >
         key;
     'properties',
         render;
-    (properties) => (),
-        _jsxs(Text, { type: "secondary", children: [properties ? Object.keys(properties).length : 0, " properties"] });
-    ;
-    const edgeColumns = [
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-            width: 80,
-            render: (action) => (),
-        }
-            < Tag, color = { getChangeColor(action) { }, as, any }, icon = {} >
-            { action, : .toUpperCase() }
-    ];
-    Tag >
-    ;
+    (properties) => ();
 }
+_jsxs(Text, { type: "secondary", children: [properties ? Object.keys(properties).length : 0, " properties"] });
+;
+const edgeColumns = [
+    { title: 'Action',
+        dataIndex: 'action',
+        key: 'action',
+        width: 80,
+        render: (action) => () }
+        < Tag, color = { getChangeColor(action) { }, as, any }, icon = {} >
+        { action, : .toUpperCase() }
+];
+Tag >
+    { title: 'Edge ID',
+        dataIndex: 'id',
+        key: 'id',
+        width: 200,
+        render: (id) => () }
+    < Text;
+code;
+style = {};
 {
-    title: 'Edge ID',
-        dataIndex;
-    'id',
-        key;
-    'id',
-        width;
-    200,
-        render;
-    (id) => (),
-        _jsx(Text, { code: true, style: { fontSize: '12px' }, children: id });
+    fontSize: '12px';
 }
+ >
+    { id };
+Text >
+    { title: 'From',
+        dataIndex: 'source',
+        key: 'source',
+        width: 150,
+        render: (source) => () }
+    < Text;
+code;
+style = {};
 {
-    title: 'From',
-        dataIndex;
-    'source',
-        key;
-    'source',
-        width;
-    150,
-        render;
-    (source) => (),
-        _jsx(Text, { code: true, style: { fontSize: '12px' }, children: source });
+    fontSize: '12px';
 }
+ >
+    { source };
+Text >
+    { title: 'To',
+        dataIndex: 'target',
+        key: 'target',
+        width: 150,
+        render: (target) => () }
+    < Text;
+code;
+style = {};
 {
-    title: 'To',
-        dataIndex;
-    'target',
-        key;
-    'target',
-        width;
-    150,
-        render;
-    (target) => (),
-        _jsx(Text, { code: true, style: { fontSize: '12px' }, children: target });
+    fontSize: '12px';
 }
-{
-    title: 'Type',
-        dataIndex;
-    'type',
-        key;
-    'type',
-        width;
-    120;
-    ;
-    const conflictColumns = [
-        {
-            title: 'Conflict',
-            dataIndex: 'conflictType',
-            key: 'conflictType',
-            width: 150,
-            render: (type) => (),
-        }
-            < Tooltip, title = { CONFLICT_DESCRIPTIONS, [type]:  } >
-            _jsx(Tag, { color: "warning", icon: _jsx(WarningOutlined, {}), children: type.replace('_', ' ').toUpperCase() })
-    ];
-    Tooltip >
-    ;
-}
-{
-    title: 'Resource',
-        dataIndex;
-    'resourceId',
-        key;
-    'resourceId',
-        width;
-    200,
-        render;
-    (resourceId, record) => ()
-        < div >
-        (_jsx(Text, { code: true, style: { fontSize: '12px' }, children: resourceId })
-            ,
-                _jsx("br", {})
+ >
+    { target };
+Text >
+    { title: 'Type',
+        dataIndex: 'type',
+        key: 'type',
+        width: 120,
+        const: conflictColumns = [
+            {
+                title: 'Conflict',
+                dataIndex: 'conflictType',
+                key: 'conflictType',
+                width: 150,
+                render: (type) => ()
+            }
+                < Tooltip, title = { CONFLICT_DESCRIPTIONS, [type]:  } >
+                _jsx(Tag, { color: "warning", icon: _jsx(WarningOutlined, {}), children: type.replace('_', ' ').toUpperCase() }),
+            Tooltip >
+                { title: 'Resource',
+                    dataIndex: 'resourceId',
+                    key: 'resourceId',
+                    width: 200 },
+            render, (resourceId, record) => ()
+                < div >
+                (_jsx(Text, { code: true, style: { fontSize: '12px' }, children: resourceId })
                     ,
-                        _jsx(Text, { type: "secondary", style: { fontSize: '11px' }, children: record.resourceType }));
-    div >
-    ;
-}
-{
-    title: 'Description',
-        dataIndex;
-    'conflictDescription',
-        key;
-    'conflictDescription',
-        render;
-    (description) => description || _jsx(Text, { type: "secondary", children: "No description" }),
-    ;
-}
-{
-    title: 'Resolution',
-        dataIndex;
-    'id',
-        key;
-    'resolution',
-        width;
-    200,
-        render;
-    (conflictId) => (),
-        _jsx(Select, { placeholder: "Choose resolution", style: { width: '100%' }, value: conflictResolutions[conflictId], onChange: (value) => handleConflictResolution(conflictId, value), children: Object.entries(RESOLUTION_STRATEGY_DESCRIPTIONS).map(([key, description]) => ()
+                        _jsx("br", {})
+                            ,
+                                _jsx(Text, { type: "secondary", style: { fontSize: '11px' }, children: record.resourceType })),
+            div >
+                { title: 'Description',
+                    dataIndex: 'conflictDescription',
+                    key: 'conflictDescription',
+                    render: (description) => description || _jsx(Text, { type: "secondary", children: "No description" }) },
+            { title: 'Resolution',
+                dataIndex: 'id',
+                key: 'resolution',
+                width: 200,
+                render: (conflictId) => () }
+                < Select,
+            placeholder = "Choose resolution",
+            style = {}, { width: '100%' }
+        ] };
+value = { conflictResolutions, [conflictId]:  };
+onChange = {}(value);
+handleConflictResolution(conflictId, value);
+    >
+        { Object, : .entries(RESOLUTION_STRATEGY_DESCRIPTIONS).map(([key, description]) => ()
                 < Option, key = { key }, value = { key } >
-                _jsx(Tooltip, { title: description, children: key.replace('_', ' ').toUpperCase() })) });
-}
+                _jsx(Tooltip, { title: description, children: key.replace('_', ' ').toUpperCase() }), Option >
+            ) };
 Select >
 ;
 ;

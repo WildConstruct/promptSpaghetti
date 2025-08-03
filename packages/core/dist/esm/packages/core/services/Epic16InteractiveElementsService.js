@@ -8,7 +8,6 @@
 import { EventEmitter } from 'events';
 export var InteractiveElementType;
 (function (InteractiveElementType) {
-    // Real-time elements
     InteractiveElementType["LIVE_CHAT"] = "live_chat";
     InteractiveElementType["REAL_TIME_NOTIFICATIONS"] = "real_time_notifications";
     InteractiveElementType["ACTIVITY_FEED"] = "activity_feed";
@@ -60,9 +59,15 @@ export var InteractiveElementType;
     DRAFT = 'draft',
         ACTIVE = 'active',
         PAUSED = 'paused',
-        ARCHIVED = 'archived',
-        ERROR = 'error';
+        ARCHIVED = 'archived';
 }
+ERROR = 'error';
+height: number | 'auto' | string;
+z_index: number;
+responsive: boolean;
+breakpoints: ResponsiveBreakpoint;
+min_width: number;
+overrides: Partial;
 export var AnimationType;
 (function (AnimationType) {
     AnimationType["NONE"] = "none";
@@ -74,22 +79,14 @@ export var AnimationType;
     AnimationType["SCALE"] = "scale";
     AnimationType["ROTATE"] = "rotate";
     AnimationType["BOUNCE"] = "bounce";
-    AnimationType["ELASTIC"] = "elastic";
-    AnimationType[AnimationType["export"] = void 0] = "export";
-    AnimationType[AnimationType["interface"] = void 0] = "interface";
-    AnimationType[AnimationType["BehaviorConfig"] = void 0] = "BehaviorConfig";
 })(AnimationType || (AnimationType = {}));
-{
-    auto_trigger: boolean;
-    trigger_delay: number;
-    auto_dismiss: boolean;
-    dismiss_delay: number;
-    click_outside_dismiss: boolean;
-    escape_key_dismiss: boolean;
-    max_interactions: number;
-    cooldown_period: number;
-    frequency_cap: FrequencyCap;
-}
+ELASTIC = 'elastic';
+invalidation_keys: string;
+headers: Record;
+auth_required: boolean;
+rate_limit: number;
+timeout: number;
+retry_config: RetryConfig;
 export var InteractionType;
 (function (InteractionType) {
     InteractionType["CLICK"] = "click";
@@ -100,21 +97,9 @@ export var InteractionType;
     InteractionType["VOICE"] = "voice";
     InteractionType["GESTURE"] = "gesture";
     InteractionType["API_CALL"] = "api_call";
-    InteractionType["CUSTOM"] = "custom";
-    InteractionType[InteractionType["export"] = void 0] = "export";
-    InteractionType[InteractionType["interface"] = void 0] = "interface";
-    InteractionType[InteractionType["InteractionContext"] = void 0] = "InteractionContext";
 })(InteractionType || (InteractionType = {}));
-{
-    page_url: string;
-    referrer: string;
-    user_agent: string;
-    screen_resolution: string;
-    viewport_size: string;
-    device_type: 'desktop' | 'mobile' | 'tablet';
-    session_id: string;
-    ab_test_variant: string | null;
-}
+CUSTOM = 'custom';
+weight: number;
 export var TargetType;
 (function (TargetType) {
     TargetType["USER_ATTRIBUTE"] = "user_attribute";
@@ -123,17 +108,8 @@ export var TargetType;
     TargetType["TEMPORAL"] = "temporal";
     TargetType["DEVICE"] = "device";
     TargetType["CONTENT"] = "content";
-    TargetType["CUSTOM"] = "custom";
-    TargetType[TargetType["export"] = void 0] = "export";
-    TargetType[TargetType["interface"] = void 0] = "interface";
-    TargetType[TargetType["TargetRule"] = void 0] = "TargetRule";
 })(TargetType || (TargetType = {}));
-{
-    field: string;
-    operator: ComparisonOperator;
-    value: any;
-    case_sensitive: boolean;
-}
+CUSTOM = 'custom';
 export var ComparisonOperator;
 (function (ComparisonOperator) {
     ComparisonOperator["EQUALS"] = "equals";
@@ -150,19 +126,8 @@ export var ComparisonOperator;
     ComparisonOperator["NOT_IN"] = "not_in";
     ComparisonOperator["REGEX"] = "regex";
     ComparisonOperator["EXISTS"] = "exists";
-    ComparisonOperator["NOT_EXISTS"] = "not_exists";
-    ComparisonOperator[ComparisonOperator["export"] = void 0] = "export";
-    ComparisonOperator[ComparisonOperator["interface"] = void 0] = "interface";
-    ComparisonOperator[ComparisonOperator["ElementTrigger"] = void 0] = "ElementTrigger";
 })(ComparisonOperator || (ComparisonOperator = {}));
-{
-    id: string;
-    type: TriggerType;
-    conditions: TriggerCondition;
-    delay: number;
-    max_triggers: number;
-    cooldown: number;
-}
+NOT_EXISTS = 'not_exists';
 export var TriggerType;
 (function (TriggerType) {
     TriggerType["PAGE_LOAD"] = "page_load";
@@ -173,16 +138,8 @@ export var TriggerType;
     TriggerType["CUSTOM_EVENT"] = "custom_event";
     TriggerType["EXIT_INTENT"] = "exit_intent";
     TriggerType["IDLE_TIME"] = "idle_time";
-    TriggerType["ELEMENT_VISIBLE"] = "element_visible";
-    TriggerType[TriggerType["export"] = void 0] = "export";
-    TriggerType[TriggerType["interface"] = void 0] = "interface";
-    TriggerType[TriggerType["TriggerCondition"] = void 0] = "TriggerCondition";
 })(TriggerType || (TriggerType = {}));
-{
-    field: string;
-    operator: ComparisonOperator;
-    value: any;
-}
+ELEMENT_VISIBLE = 'element_visible';
 export var IntegrationType;
 (function (IntegrationType) {
     IntegrationType["ANALYTICS"] = "analytics";
@@ -213,13 +170,20 @@ export var IntegrationType;
             emoji_support: boolean,
             moderation_enabled: boolean,
             profanity_filter: boolean,
-            rate_limiting: {
-                messages_per_minute: number,
-                chars_per_message: number
-            }
+            rate_limiting: {},
+            messages_per_minute: number,
+            chars_per_message: number
         }
     };
 }
+;
+;
+;
+;
+action_data: Record;
+duration: number;
+optional: boolean;
+// Service class
 export class Epic16InteractiveElementsService extends EventEmitter {
     elements = new Map();
     activeElements = new Set();
@@ -231,16 +195,12 @@ export class Epic16InteractiveElementsService extends EventEmitter {
         async;
         createElement(elementData, (Omit));
         Promise < InteractiveElement > {
-            const: element, InteractiveElement = {
-                id: `element-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }
-        },
-            created;
-        new Date(),
-            lastUpdated;
-        new Date(),
-            version;
-        '1.0.0',
-        ;
+            const: element, InteractiveElement = {},
+            id: `element-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        };
+        created: new Date();
+        lastUpdated: new Date();
+        version: '1.0.0';
         elementData;
     }
     ;
@@ -248,79 +208,58 @@ export class Epic16InteractiveElementsService extends EventEmitter {
 this.elements.set(element.id, element);
 // Initialize analytics
 this.analyticsData.set(element.id, {});
-total_impressions: 0,
-    unique_users;
-0,
-    total_interactions;
-0,
-    interaction_rate;
-0,
-    conversion_rate;
-0,
-    average_render_time;
-0,
-    average_interaction_time;
-0,
-    time_to_first_interaction;
-0,
-    session_duration;
-0,
-    bounce_rate;
-0,
-    return_rate;
-0,
-    sharing_rate;
-0,
-    completion_rate;
-0,
-    error_rate;
-0,
-    satisfaction_score;
-0,
-    nps_score;
-0,
-    accessibility_score;
-100,
-    daily_stats;
-[],
-    hourly_distribution;
-new Array(24).fill(0),
-    geographical_distribution;
-{ }
+total_impressions: 0;
+unique_users: 0;
+total_interactions: 0;
+interaction_rate: 0;
+conversion_rate: 0;
+average_render_time: 0;
+average_interaction_time: 0;
+time_to_first_interaction: 0;
+session_duration: 0;
+bounce_rate: 0;
+return_rate: 0;
+sharing_rate: 0;
+completion_rate: 0;
+error_rate: 0;
+satisfaction_score: 0;
+nps_score: 0;
+accessibility_score: 100;
+daily_stats: [];
+hourly_distribution: new Array(24).fill(0);
+geographical_distribution: { }
 device_distribution: { }
 ;
 this.emit('elementCreated', element);
 return element;
 async;
 updateElement(elementId, string, updates, (Partial));
-Promise < InteractiveElement | null > {
-    const: element = this.elements.get(elementId),
+Promise < InteractiveElement | null > { const: element = this.elements.get(elementId),
     if(, element) { }, return: null,
     const: updatedElement = {
         ...element,
         ...updates,
-        lastUpdated: new Date(),
-    },
-    this: .elements.set(elementId, updatedElement),
-    this: .emit('elementUpdated', updatedElement),
-    return: updatedElement,
-    async deleteElement(elementId) {
+        lastUpdated: new Date()
+    }
+};
+this.elements.set(elementId, updatedElement);
+this.emit('elementUpdated', updatedElement);
+return updatedElement;
+async;
+deleteElement(elementId, string);
+Promise < boolean > {
+    const: element = this.elements.get(elementId),
+    if(, element) { }, return: false,
+    this: .elements.delete(elementId),
+    this: .activeElements.delete(elementId),
+    this: .analyticsData.delete(elementId),
+    this: .emit('elementDeleted', { elementId, element }),
+    return: true,
+    // Element activation and control
+    async activateElement(elementId, context) {
         const element = this.elements.get(elementId);
-        if (!element)
+        if (!element || element.status !== ElementStatus.ACTIVE)
             return false;
-        this.elements.delete(elementId);
-        this.activeElements.delete(elementId);
-        this.analyticsData.delete(elementId);
-        this.emit('elementDeleted', { elementId, element });
-        return true;
-        // Element activation and control
-        async;
-        activateElement(elementId, string, context, ActivationContext);
-        Promise < boolean > {
-            const: element = this.elements.get(elementId),
-            if(, element) { }
-        } || element.status !== ElementStatus.ACTIVE;
-        return false;
         // Check targeting conditions
         if (!this.shouldShowElement(element, context))
             return false;
@@ -342,8 +281,8 @@ Promise < InteractiveElement | null > {
                     const element = this.elements.get(elementId);
                     if (!element)
                         return;
-                    const fullInteraction = {
-                        id: `interaction-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+                    const fullInteraction = {};
+                    id: `interaction-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
                 },
                 ...interaction
             };
@@ -404,11 +343,15 @@ Promise < InteractiveElement | null > {
             const variables = { ...condition.variables, ...context };
             const result = this.evaluateExpression(condition.expression, variables);
             return Boolean(result);
+            try {
+            }
+            catch (error) {
+                console.warn(`Failed to evaluate condition ${condition.id}:`, error);
+            }
+            return false;
         }
-        catch (error) {
-            console.warn(`Failed to evaluate condition ${condition.id}:`, error);
+        finally {
         }
-        return false;
     },
     checkFrequencyCap(element, userId) {
         const frequencyCap = element.config.behavior.frequency_cap;
@@ -470,17 +413,14 @@ Promise < InteractiveElement | null > {
         let userSession = this.userSessions.get(userId);
         if (!userSession) {
             userSession = {
-                userId,
-                sessionId: `session-${Date.now()}`
+                userId
             };
+            sessionId: `session-${Date.now()}`;
         }
-        startTime: new Date(),
-            elementInteractions;
-        new Map(),
-            uniqueElements;
-        new Set(),
-            totalInteractions;
-        0;
+        startTime: new Date();
+        elementInteractions: new Map();
+        uniqueElements: new Set();
+        totalInteractions: 0;
     },
     this: .userSessions.set(userId, userSession),
     if(, userSession) { }, : .uniqueElements.has(elementId)
@@ -552,34 +492,35 @@ Promise < InteractiveElement | null > {
                                     case ComparisonOperator.NOT_EXISTS:
                                         return fieldValue === undefined || fieldValue === null;
                                     case ComparisonOperator.REGEX:
+                                }
+                                try {
+                                    const regex = new RegExp(String(targetValue), caseSensitive ? 'g' : 'gi');
+                                    return regex.test(String(fieldValue));
+                                }
+                                catch {
+                                    return false;
+                                    return false;
+                                    evaluateExpression(expression, string, variables, (Record));
+                                    any;
+                                    {
+                                        // Simple expression evaluator - in production, use a proper expression engine
                                         try {
-                                            const regex = new RegExp(String(targetValue), caseSensitive ? 'g' : 'gi');
-                                            return regex.test(String(fieldValue));
+                                            const func = new Function(...Object.keys(variables), `return ${expression}`);
+                                        }
+                                        finally {
+                                        }
+                                        return func(...Object.values(variables));
+                                        try {
                                         }
                                         catch {
                                             return false;
+                                            totalInteractions: number;
+                                            export default Epic16InteractiveElementsService;
                                         }
-                                    default:
-                                        return false;
-                                        evaluateExpression(expression, string, variables, (Record));
-                                        any;
-                                        {
-                                            // Simple expression evaluator - in production, use a proper expression engine
-                                            try {
-                                                const func = new Function(...Object.keys(variables), `return ${expression}`);
-                                            }
-                                            finally {
-                                            }
-                                            return func(...Object.values(variables));
-                                        }
-                                        try { }
-                                        catch {
-                                            return false;
-                                        }
+                                    }
                                 }
                             }
                         }
-                        export default Epic16InteractiveElementsService;
                     }
                 }
             }

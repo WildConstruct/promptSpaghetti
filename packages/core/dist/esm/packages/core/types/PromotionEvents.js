@@ -1,9 +1,10 @@
+from;
+'./PromotionInterfaces';
 // =============================================================================
 // Core Event Types and Enums
 // =============================================================================
 export var PromotionEventType;
 (function (PromotionEventType) {
-    // Lifecycle events
     PromotionEventType["PROMOTION_CREATED"] = "promotion.created";
     PromotionEventType["PROMOTION_UPDATED"] = "promotion.updated";
     PromotionEventType["PROMOTION_ACTIVATED"] = "promotion.activated";
@@ -98,34 +99,74 @@ export var PromotionEventType;
         last_delivery_attempt ?  : Date;
         successfully_delivered: boolean;
         // Event relationships
-        correlation_id ?  : string; // Links related events,
-        parent_event_id ?  : string; // For event chains,
-        causation_id ?  : string; // What caused this event,
+        correlation_id ?  : string; // Links related events;
+        parent_event_id ?  : string; // For event chains;
+        causation_id ?  : string; // What caused this event;
         // TTL and retention
         expires_at ?  : Date;
         retention_policy ?  : RetentionPolicy;
         // Metadata
         metadata: Record;
-        version: string; // Event schema version,
+        version: string; // Event schema version }
+            > ;
+        // Usage tracking
+        user_usage_count: number;
+        total_promotion_usage: number;
+        // Application method
+        application_method: 'automatic' | 'code' | 'manual' | 'rule_triggered';
+        // Success/failure information
+        success: boolean;
+        failure_reason ?  : string;
+        validation_errors ?  : string;
+            > ;
+        // Launch/update specific data
+        launch_configuration ?  : Record;
+        configuration_changes ?  : Record;
+        alert_severity: 'info' | 'warning' | 'error' | 'critical';
+        alert_title: string;
+        alert_description: string;
+        // Alert specifics
+        threshold_value ?  : number;
+        current_value ?  : number;
+        threshold_type ?  : 'absolute' | 'percentage' | 'rate';
+        // Affected entities
+        affected_promotions ?  : string;
+        affected_users ?  : string;
+        affected_campaigns ?  : string;
+        // Recommended actions
+        recommended_actions ?  : AlertAction;
+        auto_actions_taken ?  : AlertAction;
+        // Alert routing
+        alert_routing_rules ?  : string;
+        notification_channels ?  : EventDeliveryMethod;
+        // Alert lifecycle
+        alert_status: 'new' | 'acknowledged' | 'in_progress' | 'resolved' | 'dismissed';
+        acknowledged_by ?  : string;
+        acknowledged_at ?  : Date;
+        resolution_details ?  : string;
+        ordering_guarantee: boolean;
+        // Subscription lifecycle
+        created_at: Date;
+        created_by: string;
+        last_activity_at ?  : Date;
+        expires_at ?  : Date;
+        value: any;
+        case_sensitive ?  : boolean;
+        credentials: Record;
+            > ;
+        track_clicks: boolean;
+            > ;
+            > ;
+        total_count: number;
+        has_more: boolean;
+        // =============================================================================
+        // Export all event interfaces
+        // =============================================================================
+        export type { BasePromotionEvent, EventSource, EventContext, PromotionEventData, PromotionLifecycleEventData, PromotionUsageEventData, PromotionPerformanceEventData, ContentPromotionEventData, CampaignEventData, UserInteractionEventData, SystemEventData, AlertEventData, IPromotionEventHandler, IPromotionEventBus, IPromotionNotificationService, PromotionEventSubscription, NotificationRecipient };
+        NotificationTemplate;
     }
+    ;
+    export { PromotionEventType, EventPriority };
+    EventDeliveryMethod;
 }
- > ;
-// Usage tracking
-user_usage_count: number;
-total_promotion_usage: number;
-// Application method
-application_method: 'automatic' | 'code' | 'manual' | 'rule_triggered';
-// Success/failure information
-success: boolean;
-failure_reason ?  : string;
-validation_errors ?  : string;
- > ;
-// Launch/update specific data
-launch_configuration ?  : Record;
-configuration_changes ?  : Record;
- > ;
- > ;
- > ;
-total_count: number;
-has_more: boolean;
-export { EventPriority, EventDeliveryMethod };
+;

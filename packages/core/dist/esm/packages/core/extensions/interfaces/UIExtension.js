@@ -1,3 +1,4 @@
+// UI Component Categories
 export var UIComponentCategory;
 (function (UIComponentCategory) {
     UIComponentCategory["EDITOR"] = "editor";
@@ -7,8 +8,8 @@ export var UIComponentCategory;
     UIComponentCategory["MENU"] = "menu";
     UIComponentCategory["WIDGET"] = "widget";
     UIComponentCategory["OVERLAY"] = "overlay";
-    UIComponentCategory["CUSTOM"] = "custom";
 })(UIComponentCategory || (UIComponentCategory = {}));
+CUSTOM = 'custom';
 ;
 hideOnMobile ?  : boolean;
 hideOnTablet ?  : boolean;
@@ -62,6 +63,7 @@ easing: {
     easeInOut: string;
 }
 ;
+// Menu Target
 export var MenuTarget;
 (function (MenuTarget) {
     MenuTarget["MAIN_MENU"] = "main";
@@ -70,8 +72,16 @@ export var MenuTarget;
     MenuTarget["PALETTE"] = "palette";
     MenuTarget["INSPECTOR"] = "inspector";
     MenuTarget["GRAPH"] = "graph";
-    MenuTarget["CUSTOM"] = "custom";
 })(MenuTarget || (MenuTarget = {}));
+CUSTOM = 'custom';
+colors: ThemeColors;
+typography: ThemeTypography;
+spacing: ThemeSpacing;
+shadows: ThemeShadows;
+borders: ThemeBorders;
+transitions: ThemeTransitions;
+custom ?  : Record;
+// UI Extension Helper Functions
 export var UIExtensionHelpers;
 (function (UIExtensionHelpers) {
     function createTheme(partial) {
@@ -92,9 +102,9 @@ export var UIExtensionHelpers;
                 error: '#dc3545',
                 warning: '#ffc107',
                 success: '#28a745',
-                info: '#17a2b8',
-                ...partial.colors
+                info: '#17a2b8'
             },
+            ...partial.colors,
             typography: {
                 fontFamily: 'system-ui, -apple-system, sans-serif',
                 fontSize: {
@@ -104,131 +114,132 @@ export var UIExtensionHelpers;
                     lg: '1.125rem',
                     xl: '1.25rem',
                     '2xl': '1.5rem',
-                    '3xl': '1.875rem',
+                    '3xl': '1.875rem'
                 },
                 fontWeight: {
                     light: 300,
                     normal: 400,
                     medium: 500,
                     semibold: 600,
-                    bold: 700,
+                    bold: 700
                 },
                 lineHeight: {
                     tight: 1.25,
                     normal: 1.5,
-                    relaxed: 1.75,
+                    relaxed: 1.75
                 },
                 letterSpacing: {
                     tight: '-0.025em',
                     normal: '0em',
-                    wide: '0.025em',
+                    wide: '0.025em'
                 },
-                ...partial.typography
-            },
-            spacing: {
-                xs: '0.25rem',
-                sm: '0.5rem',
-                md: '1rem',
-                lg: '1.5rem',
-                xl: '2rem',
-                '2xl': '3rem',
-                '3xl': '4rem',
-                ...partial.spacing
-            },
-            shadows: {
-                sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
-                md: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                lg: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                xl: '0 10px 15px rgba(0, 0, 0, 0.1)',
-                none: 'none',
-                ...partial.shadows
-            },
-            borders: {
-                width: {
-                    thin: '1px',
-                    normal: '2px',
-                    thick: '4px',
+                ...partial.typography,
+                spacing: {
+                    xs: '0.25rem',
+                    sm: '0.5rem',
+                    md: '1rem',
+                    lg: '1.5rem',
+                    xl: '2rem',
+                    '2xl': '3rem',
+                    '3xl': '4rem'
                 },
-                radius: {
-                    none: '0',
-                    sm: '0.125rem',
-                    md: '0.25rem',
-                    lg: '0.5rem',
-                    full: '9999px',
+                ...partial.spacing,
+                shadows: {
+                    sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                    md: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                    lg: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    xl: '0 10px 15px rgba(0, 0, 0, 0.1)',
+                    none: 'none'
                 },
-                style: {
-                    solid: 'solid',
-                    dashed: 'dashed',
-                    dotted: 'dotted',
-                },
-                ...partial.borders
-            },
-            transitions: {
-                duration: {
-                    fast: '150ms',
-                    normal: '200ms',
-                    slow: '300ms',
-                },
-                easing: {
-                    linear: 'linear',
-                    ease: 'ease',
-                    easeIn: 'ease-in',
-                    easeOut: 'ease-out',
-                    easeInOut: 'ease-in-out',
-                },
-                ...partial.transitions
-            },
-            custom: partial.custom
+                ...partial.shadows,
+                borders: {
+                    width: {
+                        thin: '1px',
+                        normal: '2px',
+                        thick: '4px'
+                    },
+                    radius: {
+                        none: '0',
+                        sm: '0.125rem',
+                        md: '0.25rem',
+                        lg: '0.5rem',
+                        full: '9999px'
+                    },
+                    style: {
+                        solid: 'solid',
+                        dashed: 'dashed',
+                        dotted: 'dotted'
+                    },
+                    ...partial.borders,
+                    transitions: {
+                        duration: {
+                            fast: '150ms',
+                            normal: '200ms',
+                            slow: '300ms'
+                        },
+                        easing: {
+                            linear: 'linear',
+                            ease: 'ease',
+                            easeIn: 'ease-in',
+                            easeOut: 'ease-out',
+                            easeInOut: 'ease-in-out'
+                        },
+                        ...partial.transitions,
+                        custom: partial.custom
+                    },
+                    function: createCommand(partial, (Partial)), CommandContribution
+                }
+            }
         };
+        {
+            return {
+                id: partial.id || 'custom-command',
+                title: partial.title || 'Custom Command',
+                description: partial.description,
+                category: partial.category,
+                icon: partial.icon
+            };
+            handler: partial.handler || (() => { });
+            enablement: partial.enablement;
+            keybinding: partial.keybinding;
+            context: partial.context;
+        }
+        ;
+        function createMenu(partial) {
+            return {
+                id: partial.id || 'custom-menu',
+                label: partial.label || 'Custom Menu',
+                icon: partial.icon,
+                order: partial.order || 0,
+                type: partial.type || 'item',
+                command: partial.command,
+                submenu: partial.submenu,
+                when: partial.when,
+                menu: partial.menu || MenuTarget.CUSTOM
+            };
+        }
+        UIExtensionHelpers.createMenu = createMenu;
+        ;
+        function validateUIComponent(definition) {
+            const errors = [];
+            const warnings = [];
+            // Basic validation
+            if (!definition.id)
+                errors.push('Component ID is required');
+            if (!definition.name)
+                errors.push('Component name is required');
+            if (!definition.component)
+                errors.push('Component class is required');
+            // React component validation
+            if (definition.component && typeof definition.component !== 'function') {
+                errors.push('Component must be a valid React component');
+            }
+            return { valid: errors.length === 0,
+                errors };
+            warnings;
+        }
+        UIExtensionHelpers.validateUIComponent = validateUIComponent;
+        ;
     }
     UIExtensionHelpers.createTheme = createTheme;
-    function createCommand(partial) {
-        return {
-            id: partial.id || 'custom-command',
-            title: partial.title || 'Custom Command',
-            description: partial.description,
-            category: partial.category,
-            icon: partial.icon,
-            handler: partial.handler || (() => { }),
-            enablement: partial.enablement,
-            keybinding: partial.keybinding,
-            context: partial.context
-        };
-    }
-    UIExtensionHelpers.createCommand = createCommand;
-    function createMenu(partial) {
-        return {
-            id: partial.id || 'custom-menu',
-            label: partial.label || 'Custom Menu',
-            icon: partial.icon,
-            order: partial.order || 0,
-            type: partial.type || 'item',
-            command: partial.command,
-            submenu: partial.submenu,
-            when: partial.when,
-            menu: partial.menu || MenuTarget.CUSTOM,
-        };
-    }
-    UIExtensionHelpers.createMenu = createMenu;
-    function validateUIComponent(definition) {
-        const errors = [];
-        const warnings = [];
-        // Basic validation
-        if (!definition.id)
-            errors.push('Component ID is required');
-        if (!definition.name)
-            errors.push('Component name is required');
-        if (!definition.component)
-            errors.push('Component class is required');
-        // React component validation
-        if (definition.component && typeof definition.component !== 'function') {
-            errors.push('Component must be a valid React component');
-        }
-        return {
-            valid: errors.length === 0,
-            errors,
-            warnings
-        };
-    }
-    UIExtensionHelpers.validateUIComponent = validateUIComponent;
 })(UIExtensionHelpers || (UIExtensionHelpers = {}));

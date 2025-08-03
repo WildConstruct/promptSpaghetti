@@ -17,8 +17,8 @@ const defaultFilters = {
     tags: [],
     rating: 0,
     compatibility: [],
-    sortBy: 'relevance',
-};
+    sortBy: 'relevance' };
+;
 export const MarketplaceSearch = ({
     onSearch,
     onFiltersChange,
@@ -27,9 +27,8 @@ export const MarketplaceSearch = ({
     availableModels = ['claude-3-haiku', 'claude-3-sonnet', 'claude-3-opus'],
     searchSuggestions = [],
     isLoading = false,
-    resultCount,
-    className = ''
-});
+    resultCount });
+className = '';
 {
     const [query, setQuery] = useState('');
     const [filters, setFilters] = useState(defaultFilters);
@@ -57,15 +56,14 @@ export const MarketplaceSearch = ({
 ;
 // Handle clicks outside to close suggestions
 useEffect(() => {
-    const handleClickOutside = (event) => {
-        if (searchRef.current && !searchRef.current.contains(event.target)) {
-            setShowSuggestions(false);
-        }
-        ;
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [];
-});
+    const handleClickOutside = (event) => { };
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSuggestions(false);
+    }
+    ;
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+}, []);
 const handleSearch = () => {
     onSearch(query, filters);
     setShowSuggestions(false);
@@ -107,7 +105,7 @@ const handleKeyPress = (e) => {
                 updateFilters({ tags: filters.tags.filter(tag => tag !== tagToRemove) });
             };
             const _____formatPrice = (cents) => {
-                return `$${(cents / 100).toFixed(0)}`;
+                return `${(cents / 100).toFixed(0)}`;
             };
         }
         ;
@@ -165,8 +163,8 @@ div >
 className = "mt-4 flex items-center justify-between" >
     _jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("button", { onClick: () => setShowFilters(!showFilters), className: `flex items-center space-x-2 px-3 py-2 border rounded-md text-sm font-medium ${showFilters || activeFilterCount > 0
                     ? 'border-blue-300 text-blue-700 bg-blue-50'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50',
-                }`, children: [_jsx("svg", { className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v6.586a1 1 0 01-1.414.914l-4-2A1 1 0 018 18.586v-4.586a1 1 0 00-.293-.707L1.293 7.293A1 1 0 011 6.586V4z" }) }), _jsx("span", { children: "Filters" }), activeFilterCount > 0 && ()
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'}
+`, children: [_jsx("svg", { className: "h-4 w-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707v6.586a1 1 0 01-1.414.914l-4-2A1 1 0 018 18.586v-4.586a1 1 0 00-.293-.707L1.293 7.293A1 1 0 011 6.586V4z" }) }), _jsx("span", { children: "Filters" }), activeFilterCount > 0 && ()
                         < span, " className=\"bg-blue-600 text-white text-xs rounded-full px-2 py-0.5\">", activeFilterCount] }), ")}"] });
 {
     activeFilterCount > 0 && ()
@@ -217,10 +215,9 @@ div >
                                             }
                                             else {
                                                 updateFilters({});
-                                                compatibility: filters.compatibility.filter(m => m !== model),
-                                                ;
+                                                compatibility: filters.compatibility.filter(m => m !== model);
                                             }
-                                        } })), "; }} className=\"mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500\" />", _jsx("span", { className: "text-sm text-gray-700", children: model })] }), "))}"] })] });
+                                        } })), "; } className=\"mr-2 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500\" />", _jsx("span", { className: "text-sm text-gray-700", children: model })] }), "))}"] })] });
     { /* AI Generated */ }
     _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Content Type" }), _jsxs("div", { className: "space-y-1", children: [_jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "radio", name: "aiGenerated", checked: filters.isAiGenerated === undefined, onChange: () => updateFilters({ isAiGenerated: undefined }), className: "mr-2 h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" }), _jsx("span", { className: "text-sm text-gray-700", children: "All Templates" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "radio", name: "aiGenerated", checked: filters.isAiGenerated === true, onChange: () => updateFilters({ isAiGenerated: true }), className: "mr-2 h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" }), _jsx("span", { className: "text-sm text-gray-700", children: "AI Generated" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "radio", name: "aiGenerated", checked: filters.isAiGenerated === false, onChange: () => updateFilters({ isAiGenerated: false }), className: "mr-2 h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" }), _jsx("span", { className: "text-sm text-gray-700", children: "Human Created" })] })] })] });
     div >

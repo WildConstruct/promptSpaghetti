@@ -24,8 +24,7 @@ z.string().min(1).max(100),
     prerequisites;
 z.array(z.string()).optional(),
     objectives;
-z.array(z.string()).min(1).max(10),
-;
+z.array(z.string()).min(1).max(10);
 ;
 export const tutorialStepSchema = z.object({});
 id: z.string().uuid(),
@@ -42,8 +41,8 @@ z.number().min(1).max(60), // minutes,
     resources;
 z.array(z.object({}), type, z.enum(['link', 'file', 'image', 'video']), url, z.string().url().refine(url => { }));
 // Security: Only allow HTTPS URLs and specific domains,
-return url.startsWith('https://') && ,
-    (url.includes('example.com') || url.includes('tutorials.internal'));
+return url.startsWith('https://') && ;
+(url.includes('example.com') || url.includes('tutorials.internal'));
 'Invalid resource URL';
 title: z.string().min(1).max(100);
 optional(),
@@ -51,8 +50,7 @@ optional(),
 z.object({});
 required: z.boolean().default(false),
     criteria;
-z.array(z.string()).optional(),
-;
+z.array(z.string()).optional();
 optional();
 ;
 export const tutorialMetadataSchema = z.object({});
@@ -63,8 +61,7 @@ z.string().min(1).max(100),
     email;
 z.string().email(),
     reputation;
-z.number().min(0).max(10000).default(0),
-;
+z.number().min(0).max(10000).default(0);
 version: z.string().regex(/^\d+\.\d+\.\d+$/, 'Invalid version format'),
     lastUpdated;
 z.date(),
@@ -76,15 +73,13 @@ screenReaderCompatible: z.boolean().default(false),
     captionsAvailable;
 z.boolean().default(false),
     transcriptAvailable;
-z.boolean().default(false),
-;
+z.boolean().default(false);
 optional(),
     licensing;
 z.object({});
 type: z.enum(['cc0', 'cc-by', 'cc-by-sa', 'proprietary', 'internal']),
     attribution;
-z.string().optional(),
-;
+z.string().optional();
 ;
 export const tutorialCompletionSchema = z.object({});
 userId: z.string().uuid(),
@@ -107,8 +102,7 @@ z.string().max(1000).optional(),
     rating;
 z.number().min(1).max(5).optional(),
     feedback;
-z.string().max(2000).optional(),
-;
+z.string().max(2000).optional();
 ;
 // Main tutorial schema with comprehensive validation
 export const tutorialSchema = z.object({});
@@ -129,8 +123,7 @@ z.boolean().default(true),
     maxAttempts;
 z.number().min(1).max(10).default(3),
     certificateEnabled;
-z.boolean().default(false),
-;
+z.boolean().default(false);
 analytics: z.object({});
 totalViews: z.number().min(0).default(0),
     totalCompletions;
@@ -140,40 +133,28 @@ z.number().min(0).max(5).default(0),
     averageCompletionTime;
 z.number().min(0).default(0), // minutes,
     completionRate;
-z.number().min(0).max(100).default(0),
-;
+z.number().min(0).max(100).default(0);
 optional(),
     status;
 z.enum(['draft', 'review', 'published', 'archived', 'suspended']).default('draft');
 ;
 // Tutorial collection for learning paths
 export const learningPathSchema = z.object({});
-id: z.string().uuid(),
-    title;
-z.string().min(1).max(200),
-    description;
-z.string().min(10).max(2000),
-    tutorialIds;
-z.array(z.string().uuid()).min(1).max(20),
-    prerequisites;
-z.array(z.string().uuid()).optional(),
-    estimatedDuration;
-z.number().min(1), // minutes,
+id: z.string().uuid();
+title: z.string().min(1).max(200);
+description: z.string().min(10).max(2000);
+tutorialIds: z.array(z.string().uuid()).min(1).max(20);
+prerequisites: z.array(z.string().uuid()).optional();
+estimatedDuration: z.number().min(1), // minutes
     difficulty;
-z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
-    category;
-z.string().min(1).max(100),
-    author;
-z.object({});
-id: z.string().uuid(),
-    name;
-z.string().min(1).max(100),
-;
-isPublic: z.boolean().default(false),
-    createdAt;
-z.date(),
-    updatedAt;
-z.date();
+z.enum(['beginner', 'intermediate', 'advanced', 'expert']);
+category: z.string().min(1).max(100);
+author: z.object({});
+id: z.string().uuid();
+name: z.string().min(1).max(100);
+isPublic: z.boolean().default(false);
+createdAt: z.date();
+updatedAt: z.date();
 ;
 // Security utilities
 export class TutorialSecurity {
@@ -197,13 +178,11 @@ export class TutorialSecurity {
                     if (content.length > 100000) {
                         errors.push('Content exceeds maximum length limit');
                         return {
-                            isValid: errors.length === 0,
-                            errors
+                            isValid: errors.length === 0
                         };
-                        /**
-                         * Sanitizes user input to prevent XSS attacks
-                         */
+                        errors;
                     }
+                    ;
                     /**
                      * Sanitizes user input to prevent XSS attacks
                      */
@@ -259,78 +238,60 @@ export class TutorialSecurity {
                                 const validation = tutorialSchema.safeParse(tutorialData);
                                 if (!validation.success) {
                                     return {
-                                        success: false,
-                                        errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+                                        success: false
                                     };
+                                    errors: validation.error.errors.map(e => `${e.path.join('.')}: ${e.message}`);
                                 }
-                                ;
-                                // Security validation
-                                const contentValidation = TutorialSecurity.validateContent(tutorialData.content.content);
-                                if (!contentValidation.isValid) {
+                            }
+                            finally // Security validation
+                             { }
+                            ;
+                            // Security validation
+                            const contentValidation = TutorialSecurity.validateContent(tutorialData.content.content);
+                            if (!contentValidation.isValid) {
+                                return {
+                                    success: false,
+                                    errors: contentValidation.errors
+                                };
+                            }
+                            ;
+                            // Validate each step content
+                            for (const step of tutorialData.steps) {
+                                const stepValidation = TutorialSecurity.validateContent(step.content);
+                                if (!stepValidation.isValid) {
                                     return {
-                                        success: false,
-                                        errors: contentValidation.errors,
+                                        success: false
                                     };
-                                    // Validate each step content
-                                    for (const step of tutorialData.steps) {
-                                        const stepValidation = TutorialSecurity.validateContent(step.content);
-                                        if (!stepValidation.isValid) {
-                                            return {
-                                                success: false,
-                                                errors: [`Step "${step.title}": ${stepValidation.errors.join(', ')}`]
-                                            };
-                                        }
-                                        ;
-                                        // Rate limiting check (example implementation)
-                                        const userTutorialCount = await this.getUserTutorialCount(userId);
-                                        if (userTutorialCount > 100) {
-                                            return {
-                                                success: false,
-                                                errors: ['User has exceeded tutorial creation limit'],
-                                            };
-                                            // TODO: Actual database implementation
-                                            const tutorialId = crypto.randomUUID();
-                                            return {
-                                                success: true,
-                                                tutorialId
-                                            };
-                                        }
-                                        try { }
-                                        catch (error) {
-                                            return {
-                                                success: false,
-                                                errors: ['Internal server error'],
-                                            };
-                                            /**
-                                             * Gets user tutorial count for rate limiting
-                                             */
-                                        }
-                                        /**
-                                         * Gets user tutorial count for rate limiting
-                                         */
-                                    }
-                                    /**
-                                     * Gets user tutorial count for rate limiting
-                                     */
+                                    errors: [`Step "${step.title}": ${stepValidation.errors.join(', ')}`];
                                 }
-                                /**
-                                 * Gets user tutorial count for rate limiting
-                                 */
                             }
-                            /**
-                             * Gets user tutorial count for rate limiting
-                             */
-                            finally {
+                            ;
+                            // Rate limiting check (example implementation)
+                            const userTutorialCount = await this.getUserTutorialCount(userId);
+                            if (userTutorialCount > 100) {
+                                return {
+                                    success: false,
+                                    errors: ['User has exceeded tutorial creation limit']
+                                };
                             }
-                            /**
-                             * Gets user tutorial count for rate limiting
-                             */
+                            ;
+                            // TODO: Actual database implementation
+                            const tutorialId = crypto.randomUUID();
+                            return { success: true };
+                            tutorialId;
                         }
+                        ;
+                        catch(error) {
+                            return {
+                                success: false,
+                                errors: ['Internal server error']
+                            };
+                        }
+                        ;
                         /**
                          * Gets user tutorial count for rate limiting
                          */
                         static async getUserTutorialCount(userId) {
-                            // TODO: Implement actual database query,
                             return 0;
                             /**
                             * Searches tutorials with security filtering
@@ -342,7 +303,7 @@ export class TutorialSecurity {
                         static async searchTutorials(query, userId) {
                             // Sanitize search query
                             const sanitizedQuery = TutorialSecurity.sanitizeInput(query);
-                            // TODO: Implement actual search with security filters,
+                            // TODO: Implement actual search with security filters
                             // - Filter by user permissions
                             // - Apply content moderation
                             // - Rate limit search requests
@@ -354,10 +315,13 @@ export class TutorialSecurity {
                                 tutorialStep: tutorialStepSchema,
                                 tutorialMetadata: tutorialMetadataSchema,
                                 tutorialCompletion: tutorialCompletionSchema,
-                                learningPath: learningPathSchema,
+                                learningPath: learningPathSchema
                             };
-                            export default TutorialDataAccess;
                         }
+                        ;
+                        export;
+                        default;
+                        TutorialDataAccess;
                     }
                 }
             }

@@ -17,8 +17,6 @@
  * - Dynamic step generation and modification
  */
 import { EventEmitter } from 'events';
-[];
-onValidationFailure: 'retry' | 'skip' | 'abort' | 'rollback';
 ;
 fastestStep: {
     id: string;
@@ -48,6 +46,7 @@ performance: {
     cacheExpiryTime: number;
 }
 ;
+// Main Step Sequencing System
 export class StepSequencingSystem extends EventEmitter {
     sequences = new Map();
     executions = new Map();
@@ -60,49 +59,52 @@ export class StepSequencingSystem extends EventEmitter {
         super();
         this.config = {
             execution: {
-                defaultTimeout: 30000, // 30 seconds,
+                defaultTimeout: 30000, // 30 seconds
                 maxConcurrentExecutions: 10,
                 enableProgressPersistence: true,
                 enablePerformanceTracking: true,
                 enableRollback: true,
-                autoRetryOnFailure: true,
+                autoRetryOnFailure: true
             },
             validation: {
                 validateDependencies: true,
                 validateConditions: true,
                 strictValidation: true,
-                allowCircularDependencies: false,
+                allowCircularDependencies: false
             },
             performance: {
                 trackExecutionMetrics: true,
                 optimizeExecutionOrder: true,
                 enableCaching: true,
-                cacheExpiryTime: 3600000 // 1 hour,
+                cacheExpiryTime: 3600000 // 1 hour }
+                , // 1 hour }
+                ...config
             },
-            ...config
-        };
-        this.registerBuiltInHandlers();
-        // Sequence management
-        async;
-        createSequence(definition, (Omit));
-        Promise < string > {
-            const: sequenceId = `seq_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-        };
-        const sequence = {
-            id: sequenceId,
-            ...definition,
-            metadata: {
-                ...definition.metadata,
-                createdAt: new Date(),
-                lastModified: new Date(),
+            this: .registerBuiltInHandlers(),
+            // Sequence management
+            async createSequence(definition) {
+                const sequenceId = `seq_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            },
+            const: sequence, SequenceDefinition = {
+                id: sequenceId,
+                ...definition,
+                metadata: {
+                    ...definition.metadata,
+                    createdAt: new Date(),
+                    lastModified: new Date()
+                }
             },
             // Validate sequence
             await, this: .validateSequence(sequence),
-            : .config.performance.optimizeExecutionOrder }, { sequence, steps = this.optimizeStepOrder(sequence.steps) };
-        this.sequences.set(sequenceId, sequence);
-        this.emit('sequenceCreated', {});
-        sequenceId,
-            sequence;
+            : .config.performance.optimizeExecutionOrder
+        };
+        {
+            sequence.steps = this.optimizeStepOrder(sequence.steps);
+            this.sequences.set(sequenceId, sequence);
+            this.emit('sequenceCreated', {});
+            sequenceId;
+        }
+        sequence;
     }
     ;
 }
@@ -123,29 +125,31 @@ Promise < void  > {
     if(activeExecution) {
         throw new Error(`Cannot update sequence ${sequenceId}: execution ${activeExecution.id} is currently running`);
     },
-    const: updatedSequence = {
-        ...sequence,
+    const: updatedSequence = { ...sequence,
         ...updates,
         metadata: {
             ...sequence.metadata,
             ...updates.metadata,
-            lastModified: new Date(),
-        },
-        await, this: .validateSequence(updatedSequence),
-        this: .sequences.set(sequenceId, updatedSequence),
-        this: .emit('sequenceUpdated', {}),
-        sequenceId,
-        sequence: updatedSequence,
-        updates
+            lastModified: new Date()
+        }
     },
-    async deleteSequence(sequenceId, force = false) {
-        const sequence = this.sequences.get(sequenceId);
-        if (!sequence) {
-            return;
-            // Check for active executions
-            if (!force) {
-                const activeExecutions = Array.from(this.executions.values());
-            }
+    await, this: .validateSequence(updatedSequence),
+    this: .sequences.set(sequenceId, updatedSequence),
+    this: .emit('sequenceUpdated', {}),
+    sequenceId,
+    sequence: updatedSequence
+};
+updates;
+;
+async;
+deleteSequence(sequenceId, string, force = false);
+Promise < void  > {
+    const: sequence = this.sequences.get(sequenceId),
+    if(, sequence) {
+        return;
+        // Check for active executions
+        if (!force) {
+            const activeExecutions = Array.from(this.executions.values());
         }
     },
     : 
@@ -157,8 +161,8 @@ Promise < void  > {
 }
 this.sequences.delete(sequenceId);
 this.emit('sequenceDeleted', {});
-sequenceId,
-    sequence;
+sequenceId;
+sequence;
 ;
 // Execution management
 async;
@@ -174,30 +178,33 @@ startExecution(sequenceId, string, (context = {}, options = {}) => {
     }
     const execution = {
         id: executionId,
-        sequenceId,
-        name: options.name || `Execution of ${sequence.name}` };
+        sequenceId
+    };
+    name: options.name || `Execution of ${sequence.name}`;
 }, status, 'initializing', currentStep, sequence.entryPoint, completedSteps, [], failedSteps, [], skippedSteps, [], context, {
     variables: {},
     userInput: {},
     sessionData: {},
     executionState: {},
     rollbackStack: [],
-    ...context
-}, progress, this.initializeProgress(sequence), performance, {
-    totalDuration: 0,
-    averageStepDuration: 0,
+    ...context,
+    progress: this.initializeProgress(sequence),
+    performance: {
+        totalDuration: 0,
+        averageStepDuration: 0
+    },
     fastestStep: { id: '', duration: Infinity },
     slowestStep: { id: '', duration: 0 },
     retryCount: 0,
     errorCount: 0,
-    effectiveSuccessRate: 0
-}, startTime, new Date());
-;
+    effectiveSuccessRate: 0,
+    startTime: new Date()
+});
 this.executions.set(executionId, execution);
 this.activeExecutions.add(executionId);
 this.emit('executionStarted', {});
-executionId,
-    execution;
+executionId;
+execution;
 ;
 // Start execution
 this.runExecution(executionId);
@@ -218,8 +225,8 @@ execution.status = 'paused';
 execution.pausedAt = new Date();
 this.activeExecutions.delete(executionId);
 this.emit('executionPaused', {});
-executionId,
-    execution;
+executionId;
+execution;
 ;
 async;
 resumeExecution(executionId, string);
@@ -237,8 +244,8 @@ execution.status = 'running';
 execution.resumedAt = new Date();
 this.activeExecutions.add(executionId);
 this.emit('executionResumed', {});
-executionId,
-    execution;
+executionId;
+execution;
 ;
 // Resume execution
 this.runExecution(executionId);
@@ -253,9 +260,9 @@ Promise < void  > {
     execution, : .endTime = new Date(),
     this: .activeExecutions.delete(executionId),
     this: .emit('executionCancelled', {}),
-    executionId,
-    execution
+    executionId
 };
+execution;
 ;
 // Step execution and control
 async;
@@ -286,759 +293,755 @@ Promise < StepExecutionStatus > {
             stepId,
             step,
             attempt;
-        attempts,
-        ;
+        attempts;
     }
     finally // Check dependencies
-     { }
-    ;
-    // Check dependencies
-    if (this.config.validation.validateDependencies) {
-        await this.validateStepDependencies(execution, step);
-        // Check conditions
-        if (step.conditions && this.config.validation.validateConditions) {
-            const conditionsMet = await this.evaluateStepConditions(execution, step);
-            if (!conditionsMet) {
-                this.updateStepPerformance(step, startTime, 'skipped', attempts);
-                execution.skippedSteps.push(stepId);
-                return 'skipped';
-                // Execute step action
-                if (step.action) {
-                    await this.executeStepAction(execution, step);
-                    // Validate step completion
-                    if (step.validation) {
-                        await this.validateStepCompletion(execution, step);
-                        // Update rollback stack
-                        if (this.config.execution.enableRollback && step.rollback?.enabled) {
-                            this.addToRollbackStack(execution, step);
-                            const duration = performance.now() - startTime;
-                            this.updateStepPerformance(step, startTime, 'completed', attempts);
-                            this.updateExecutionProgress(execution, stepId, 'completed', duration);
-                            execution.completedSteps.push(stepId);
-                            this.emit('stepCompleted', {});
-                            executionId,
-                                stepId,
-                                step,
-                                duration,
-                                attempts;
-                        }
-                        ;
-                        return 'completed';
-                    }
-                    try { }
-                    catch (error) {
-                        lastError = error;
-                        execution.performance.errorCount++;
-                        this.emit('stepError', {});
+     {
+    }
+}
+;
+// Check dependencies
+if (this.config.validation.validateDependencies) {
+    await this.validateStepDependencies(execution, step);
+    // Check conditions
+    if (step.conditions && this.config.validation.validateConditions) {
+        const conditionsMet = await this.evaluateStepConditions(execution, step);
+        if (!conditionsMet) {
+            this.updateStepPerformance(step, startTime, 'skipped', attempts);
+            execution.skippedSteps.push(stepId);
+            return 'skipped';
+            // Execute step action
+            if (step.action) {
+                await this.executeStepAction(execution, step);
+                // Validate step completion
+                if (step.validation) {
+                    await this.validateStepCompletion(execution, step);
+                    // Update rollback stack
+                    if (this.config.execution.enableRollback && step.rollback?.enabled) {
+                        this.addToRollbackStack(execution, step);
+                        const duration = performance.now() - startTime;
+                        this.updateStepPerformance(step, startTime, 'completed', attempts);
+                        this.updateExecutionProgress(execution, stepId, 'completed', duration);
+                        execution.completedSteps.push(stepId);
+                        this.emit('stepCompleted', {});
                         executionId,
                             stepId,
                             step,
-                            error;
-                        error.message,
-                            attempt;
-                        attempts,
-                        ;
+                            duration;
                     }
-                    ;
-                    // Check if should retry
-                    if (attempts < (step.retryPolicy?.maxAttempts || 1)) {
-                        execution.performance.retryCount++;
-                        // Calculate retry delay
-                        const delay = this.calculateRetryDelay(step.retryPolicy, attempts);
-                        await this.delay(delay);
-                        this.emit('stepRetrying', {});
-                        executionId,
-                            stepId,
-                            step,
-                            attempt;
-                        attempts + 1,
-                            delay;
-                    }
-                    ;
-                    // All retry attempts failed
-                    const duration = performance.now() - startTime;
-                    this.updateStepPerformance(step, startTime, 'failed', attempts);
-                    this.updateExecutionProgress(execution, stepId, 'failed', duration);
-                    execution.failedSteps.push(stepId);
-                    this.emit('stepFailed', {});
+                    attempts;
+                }
+                ;
+                return 'completed';
+                try {
+                }
+                catch (error) {
+                    lastError = error;
+                    execution.performance.errorCount++;
+                    this.emit('stepError', {});
                     executionId,
                         stepId,
                         step,
                         error;
-                    lastError?.message,
-                        attempts;
+                    error.message,
+                        attempt;
+                    attempts;
                 }
+            }
+            ;
+            // Check if should retry
+            if (attempts < (step.retryPolicy?.maxAttempts || 1)) {
+                execution.performance.retryCount++;
+                // Calculate retry delay
+                const delay = this.calculateRetryDelay(step.retryPolicy, attempts);
+                await this.delay(delay);
+                this.emit('stepRetrying', {});
+                executionId,
+                    stepId,
+                    step,
+                    attempt;
+                attempts + 1;
+            }
+            delay;
+        }
+        ;
+        // All retry attempts failed
+        const duration = performance.now() - startTime;
+        this.updateStepPerformance(step, startTime, 'failed', attempts);
+        this.updateExecutionProgress(execution, stepId, 'failed', duration);
+        execution.failedSteps.push(stepId);
+        this.emit('stepFailed', {});
+        executionId,
+            stepId,
+            step,
+            error;
+        lastError?.message;
+    }
+    attempts;
+}
+;
+return 'failed';
+// Rollback operations
+async;
+rollbackExecution(executionId, string, toStepId ?  : string);
+Promise < void  > {
+    const: execution = this.executions.get(executionId),
+    if(, execution) {
+        throw new Error(`Execution ${executionId} not found`);
+    },
+    : .config.execution.enableRollback
+};
+{
+    throw new Error('Rollback is disabled in configuration');
+    const rollbackEntries = toStepId;
+    execution.context.rollbackStack.filter(entry => entry.stepId === toStepId);
+    execution.context.rollbackStack;
+    this.emit('rollbackStarted', {});
+    executionId;
+    toStepId;
+    entriesCount: rollbackEntries.length;
+}
+;
+for (const entry of rollbackEntries.reverse()) {
+    if (entry.reversible) {
+        try {
+            await this.executeRollbackAction(execution, entry);
+            this.emit('stepRolledBack', {});
+            executionId;
+            stepId: entry.stepId;
+        }
+        finally {
+        }
+        entry;
+    }
+    ;
+    try {
+    }
+    catch (error) {
+        this.emit('rollbackError', {});
+        executionId;
+        stepId: entry.stepId;
+        error: error.message;
+    }
+}
+;
+// Update execution state
+if (toStepId) {
+    execution.currentStep = toStepId;
+    execution.completedSteps = execution.completedSteps.filter(id => );
+    !rollbackEntries.some(entry => entry.stepId === id);
+}
+else {
+    execution.currentStep = undefined;
+    execution.completedSteps = [];
+    this.emit('rollbackCompleted', {});
+    executionId;
+}
+toStepId;
+;
+// Query and inspection methods
+getSequence(sequenceId, string);
+SequenceDefinition | null;
+{
+    return this.sequences.get(sequenceId) || null;
+    listSequences(filters ?  : {});
+}
+category ?  : string;
+tags ?  : string;
+difficulty ?  : string;
+SequenceDefinition;
+{
+    let sequences = Array.from(this.sequences.values());
+    if (filters) {
+        if (filters.category) {
+            sequences = sequences.filter(seq => seq.metadata.category === filters.category);
+            if (filters.tags?.length) {
+                sequences = sequences.filter(seq => );
+                filters.tags.some(tag => seq.metadata.tags.includes(tag));
                 ;
-                return 'failed';
-                // Rollback operations
-                async;
-                rollbackExecution(executionId, string, toStepId ?  : string);
-                Promise < void  > {
-                    const: execution = this.executions.get(executionId),
-                    if(, execution) {
-                        throw new Error(`Execution ${executionId} not found`);
-                    },
-                    : .config.execution.enableRollback
-                };
-                {
-                    throw new Error('Rollback is disabled in configuration');
-                    const rollbackEntries = toStepId;
-                    execution.context.rollbackStack.filter(entry => entry.stepId === toStepId);
-                    execution.context.rollbackStack;
-                    this.emit('rollbackStarted', {});
-                    executionId,
-                        toStepId,
-                        entriesCount;
-                    rollbackEntries.length,
-                    ;
-                }
-                ;
-                for (const entry of rollbackEntries.reverse()) {
-                    if (entry.reversible) {
-                        try {
-                            await this.executeRollbackAction(execution, entry);
-                            this.emit('stepRolledBack', {});
-                            executionId,
-                                stepId;
-                            entry.stepId,
-                                entry;
-                        }
-                        finally { }
-                        ;
-                    }
-                    try { }
-                    catch (error) {
-                        this.emit('rollbackError', {});
-                        executionId,
-                            stepId;
-                        entry.stepId,
-                            error;
-                        error.message,
-                        ;
-                    }
-                    ;
-                    // Update execution state
-                    if (toStepId) {
-                        execution.currentStep = toStepId;
-                        execution.completedSteps = execution.completedSteps.filter(id => );
-                        !rollbackEntries.some(entry => entry.stepId === id);
-                        ;
-                    }
-                    else {
-                        execution.currentStep = undefined;
-                        execution.completedSteps = [];
-                        this.emit('rollbackCompleted', {});
-                        executionId,
-                            toStepId;
-                    }
-                    ;
-                    // Query and inspection methods
-                    getSequence(sequenceId, string);
-                    SequenceDefinition | null;
+                if (filters.difficulty) {
+                    sequences = sequences.filter(seq => seq.metadata.difficulty === filters.difficulty);
+                    return sequences.sort((a, b) => b.metadata.lastModified.getTime() - a.metadata.lastModified.getTime());
+                    getExecution(executionId, string);
+                    SequenceExecution | null;
                     {
-                        return this.sequences.get(sequenceId) || null;
-                        listSequences(filters ?  : {}),
-                            category ?  : string;
-                        tags ?  : string;
-                        difficulty ?  : string;
+                        return this.executions.get(executionId) || null;
+                        listExecutions(filters ?  : {});
+                        sequenceId ?  : string;
+                        status ?  : string;
+                        dateRange ?  : { start: Date, end: Date };
                     }
-                    SequenceDefinition;
+                    SequenceExecution;
                     {
-                        let sequences = Array.from(this.sequences.values());
+                        let executions = Array.from(this.executions.values());
                         if (filters) {
-                            if (filters.category) {
-                                sequences = sequences.filter(seq => seq.metadata.category === filters.category);
-                                if (filters.tags?.length) {
-                                    sequences = sequences.filter(seq => );
-                                    filters.tags.some(tag => seq.metadata.tags.includes(tag));
+                            if (filters.sequenceId) {
+                                executions = executions.filter(exec => exec.sequenceId === filters.sequenceId);
+                                if (filters.status?.length) {
+                                    executions = executions.filter(exec => filters.status.includes(exec.status));
+                                    if (filters.dateRange) {
+                                        executions = executions.filter(exec => );
+                                        exec.startTime >= filters.dateRange.start &&
+                                            exec.startTime <= filters.dateRange.end;
+                                        ;
+                                        return executions.sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
+                                        // Handler registration
+                                        registerActionHandler(type, string, handler, (...args) => unknown);
+                                        void {
+                                            this: .actionHandlers.set(type, handler),
+                                            registerValidator(type, validator) {
+                                                this.validators.set(type, validator);
+                                                registerRollbackHandler(stepId, string, handler, (...args) => unknown);
+                                                void {
+                                                    this: .rollbackHandlers.set(stepId, handler),
+                                                    totalExecutions: number,
+                                                    successRate: number,
+                                                    averageDuration: number,
+                                                    commonFailurePoints: (Array),
+                                                    performanceMetrics: (Record),
+                                                    const: executions = this.listExecutions({ sequenceId }),
+                                                    const: completedExecutions = executions.filter(exec => exec.status === 'completed'),
+                                                    const: totalExecutions = executions.length,
+                                                    const: successRate = totalExecutions > 0 ? (completedExecutions.length / totalExecutions) * 100 : 0,
+                                                    const: averageDuration = completedExecutions.length > 0,
+                                                    completedExecutions, : .reduce((sum, exec) => sum + exec.performance.totalDuration, 0) / completedExecutions.length,
+                                                    0: ,
+                                                    // Calculate failure points
+                                                    const: failureCounts
+                                                };
+                                                { }
+                                                ;
+                                                const stepCounts = {};
+                                                executions.forEach(exec => { });
+                                                exec.failedSteps.forEach(stepId => { });
+                                                failureCounts[stepId] = (failureCounts[stepId] || 0) + 1;
+                                            },
+                                            []: , ...exec.completedSteps, ...exec.failedSteps, : .forEach(stepId => { }),
+                                            stepCounts, [stepId]:  = (stepCounts[stepId] || 0) + 1
+                                        };
+                                        ;
+                                    }
                                     ;
-                                    if (filters.difficulty) {
-                                        sequences = sequences.filter(seq => seq.metadata.difficulty === filters.difficulty);
-                                        return sequences.sort((a, b) => b.metadata.lastModified.getTime() - a.metadata.lastModified.getTime());
-                                        getExecution(executionId, string);
-                                        SequenceExecution | null;
-                                        {
-                                            return this.executions.get(executionId) || null;
-                                            listExecutions(filters ?  : {});
-                                            sequenceId ?  : string;
-                                            status ?  : string;
-                                            dateRange ?  : { start: Date, end: Date };
+                                    const commonFailurePoints = Object.entries(failureCounts);
+                                    map(([stepId, failures]) => ({}), stepId, failureRate, (failures / (stepCounts[stepId] || 1)) * 100);
+                                }
+                            }
+                            sort((a, b) => b.failureRate - a.failureRate);
+                            return { totalExecutions,
+                                successRate,
+                                averageDuration,
+                                commonFailurePoints,
+                                performanceMetrics: {
+                                    averageRetryCount: executions.reduce((sum, exec) => sum + exec.performance.retryCount, 0) / totalExecutions,
+                                    averageErrorCount: executions.reduce((sum, exec) => sum + exec.performance.errorCount, 0) / totalExecutions
+                                }
+                            };
+                            // Configuration management
+                            updateConfig(config, (Partial));
+                            void {
+                                this: .config = { ...this.config, ...config },
+                                this: .emit('configUpdated', { config: this.config }),
+                                // Cleanup
+                                destroy() {
+                                    for (const executionId of this.activeExecutions) {
+                                        this.cancelExecution(executionId);
+                                        this.sequences.clear();
+                                        this.executions.clear();
+                                        this.activeExecutions.clear();
+                                        this.actionHandlers.clear();
+                                        this.validators.clear();
+                                        this.rollbackHandlers.clear();
+                                        this.removeAllListeners();
+                                        // Private methods
+                                    }
+                                    // Private methods
+                                }
+                                // Private methods
+                                ,
+                                // Private methods
+                                async runExecution(executionId) {
+                                    const execution = this.executions.get(executionId);
+                                    if (!execution)
+                                        return;
+                                    const sequence = this.sequences.get(execution.sequenceId);
+                                    if (!sequence)
+                                        return;
+                                    try {
+                                        execution.status = 'running';
+                                        while (execution.currentStep && execution.status === 'running') {
+                                            const stepStatus = await this.executeStep(executionId, execution.currentStep);
+                                            if (stepStatus === 'failed') {
+                                                execution.status = 'failed';
+                                                break;
+                                                // Determine next step
+                                                const nextStep = this.getNextStep(sequence, execution.currentStep, stepStatus);
+                                                execution.currentStep = nextStep;
+                                                // Check if reached exit point
+                                                if (!nextStep || sequence.exitPoints.includes(execution.currentStep)) {
+                                                    execution.status = 'completed';
+                                                    break;
+                                                    execution.endTime = new Date();
+                                                    execution.performance.totalDuration = execution.endTime.getTime() - execution.startTime.getTime();
+                                                    this.activeExecutions.delete(executionId);
+                                                    this.emit('executionCompleted', {});
+                                                    executionId;
+                                                    execution;
+                                                    finalStatus: execution.status;
+                                                }
+                                            }
+                                            ;
+                                            try {
+                                            }
+                                            catch (error) {
+                                                execution.status = 'failed';
+                                                execution.endTime = new Date();
+                                                this.activeExecutions.delete(executionId);
+                                                this.emit('executionError', {});
+                                                executionId;
+                                                error: error.message;
+                                            }
                                         }
-                                        SequenceExecution;
-                                        {
-                                            let executions = Array.from(this.executions.values());
-                                            if (filters) {
-                                                if (filters.sequenceId) {
-                                                    executions = executions.filter(exec => exec.sequenceId === filters.sequenceId);
-                                                    if (filters.status?.length) {
-                                                        executions = executions.filter(exec => filters.status.includes(exec.status));
-                                                        if (filters.dateRange) {
-                                                            executions = executions.filter(exec => );
-                                                            exec.startTime >= filters.dateRange.start &&
-                                                                exec.startTime <= filters.dateRange.end;
-                                                            ;
-                                                            return executions.sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
-                                                            // Handler registration
-                                                            registerActionHandler(type, string, handler, (...args) => unknown);
-                                                            void {
-                                                                this: .actionHandlers.set(type, handler),
-                                                                registerValidator(type, validator) {
-                                                                    this.validators.set(type, validator);
-                                                                    registerRollbackHandler(stepId, string, handler, (...args) => unknown);
-                                                                    void {
-                                                                        this: .rollbackHandlers.set(stepId, handler),
-                                                                        const: executions = this.listExecutions({ sequenceId }),
-                                                                        const: completedExecutions = executions.filter(exec => exec.status === 'completed'),
-                                                                        const: totalExecutions = executions.length,
-                                                                        const: successRate = totalExecutions > 0 ? (completedExecutions.length / totalExecutions) * 100 : 0,
-                                                                        const: averageDuration = completedExecutions.length > 0,
-                                                                        completedExecutions, : .reduce((sum, exec) => sum + exec.performance.totalDuration, 0) / completedExecutions.length,
-                                                                        0: ,
-                                                                        // Calculate failure points
-                                                                        const: failureCounts
-                                                                    };
-                                                                    { }
-                                                                    ;
-                                                                    const stepCounts = {};
-                                                                    executions.forEach(exec => { });
-                                                                    exec.failedSteps.forEach(stepId => { });
-                                                                    failureCounts[stepId] = (failureCounts[stepId] || 0) + 1;
-                                                                },
-                                                                []: , ...exec.completedSteps, ...exec.failedSteps, : .forEach(stepId => { }),
-                                                                stepCounts, [stepId]:  = (stepCounts[stepId] || 0) + 1
-                                                            };
-                                                            ;
-                                                        }
-                                                        ;
-                                                        const commonFailurePoints = Object.entries(failureCounts);
-                                                        map(([stepId, failures]) => ({}), stepId, failureRate, (failures / (stepCounts[stepId] || 1)) * 100);
+                                        ;
+                                    }
+                                    finally {
+                                    }
+                                },
+                                async validateSequence(sequence) {
+                                    // Check for entry point
+                                    const entryStep = sequence.steps.find(s => s.id === sequence.entryPoint);
+                                    if (!entryStep) {
+                                        throw new Error(`Entry point ${sequence.entryPoint} not found in sequence steps`);
+                                    }
+                                    // Check for exit points
+                                    for (const exitPoint of sequence.exitPoints) {
+                                        const exitStep = sequence.steps.find(s => s.id === exitPoint);
+                                        if (!exitStep) {
+                                            throw new Error(`Exit point ${exitPoint} not found in sequence steps`);
+                                        }
+                                        // Check for circular dependencies
+                                        if (!this.config.validation.allowCircularDependencies) {
+                                            this.detectCircularDependencies(sequence.steps);
+                                            // Validate step references
+                                            for (const step of sequence.steps) {
+                                                for (const depId of step.dependencies) {
+                                                    const depStep = sequence.steps.find(s => s.id === depId);
+                                                    if (!depStep) {
+                                                        throw new Error(`Dependency ${depId} not found for step ${step.id}`);
                                                     }
-                                                    sort((a, b) => b.failureRate - a.failureRate);
-                                                    return {
-                                                        totalExecutions,
-                                                        successRate,
-                                                        averageDuration,
-                                                        commonFailurePoints,
-                                                        performanceMetrics: {
-                                                            averageRetryCount: executions.reduce((sum, exec) => sum + exec.performance.retryCount, 0) / totalExecutions,
-                                                            averageErrorCount: executions.reduce((sum, exec) => sum + exec.performance.errorCount, 0) / totalExecutions,
-                                                        },
-                                                        // Configuration management
-                                                        updateConfig(config) {
-                                                            this.config = { ...this.config, ...config };
-                                                            this.emit('configUpdated', { config: this.config });
-                                                            // Cleanup
-                                                            destroy();
-                                                            void {
-                                                                : .activeExecutions
-                                                            };
-                                                            {
-                                                                this.cancelExecution(executionId);
-                                                                this.sequences.clear();
-                                                                this.executions.clear();
-                                                                this.activeExecutions.clear();
-                                                                this.actionHandlers.clear();
-                                                                this.validators.clear();
-                                                                this.rollbackHandlers.clear();
-                                                                this.removeAllListeners();
-                                                                // Private methods
-                                                            }
-                                                            // Private methods
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                detectCircularDependencies(steps) {
+                                    const visited = new Set();
+                                    const recursionStack = new Set();
+                                    const visit = (stepId) => {
+                                        if (recursionStack.has(stepId)) {
+                                            throw new Error(`Circular dependency detected involving step ${stepId}`);
+                                        }
+                                        if (visited.has(stepId)) {
+                                            return false;
+                                            visited.add(stepId);
+                                            recursionStack.add(stepId);
+                                            const step = steps.find(s => s.id === stepId);
+                                            if (step) {
+                                                for (const depId of step.dependencies) {
+                                                    if (visit(depId)) {
+                                                        return true;
+                                                        recursionStack.delete(stepId);
+                                                        return false;
+                                                    }
+                                                    ;
+                                                    for (const step of steps) {
+                                                        if (!visited.has(step.id)) {
+                                                            visit(step.id);
                                                         }
-                                                        // Private methods
-                                                        ,
-                                                        // Private methods
-                                                        async runExecution(executionId) {
-                                                            const execution = this.executions.get(executionId);
-                                                            if (!execution)
-                                                                return;
-                                                            const sequence = this.sequences.get(execution.sequenceId);
-                                                            if (!sequence)
-                                                                return;
-                                                            try {
-                                                                execution.status = 'running';
-                                                                while (execution.currentStep && execution.status === 'running') {
-                                                                    const stepStatus = await this.executeStep(executionId, execution.currentStep);
-                                                                    if (stepStatus === 'failed') {
-                                                                        execution.status = 'failed';
-                                                                        break;
-                                                                        // Determine next step
-                                                                        const nextStep = this.getNextStep(sequence, execution.currentStep, stepStatus);
-                                                                        execution.currentStep = nextStep;
-                                                                        // Check if reached exit point
-                                                                        if (!nextStep || sequence.exitPoints.includes(execution.currentStep)) {
-                                                                            execution.status = 'completed';
-                                                                            break;
-                                                                            execution.endTime = new Date();
-                                                                            execution.performance.totalDuration = execution.endTime.getTime() - execution.startTime.getTime();
-                                                                            this.activeExecutions.delete(executionId);
-                                                                            this.emit('executionCompleted', {});
-                                                                            executionId,
-                                                                                execution,
-                                                                                finalStatus;
-                                                                            execution.status,
-                                                                            ;
-                                                                        }
-                                                                        ;
-                                                                    }
-                                                                    try { }
-                                                                    catch (error) {
-                                                                        execution.status = 'failed';
-                                                                        execution.endTime = new Date();
-                                                                        this.activeExecutions.delete(executionId);
-                                                                        this.emit('executionError', {});
-                                                                        executionId,
-                                                                            error;
-                                                                        error.message,
-                                                                        ;
-                                                                    }
-                                                                    ;
-                                                                }
-                                                            }
-                                                            finally {
-                                                            }
-                                                        },
-                                                        async validateSequence(sequence) {
-                                                            // Check for entry point
-                                                            const entryStep = sequence.steps.find(s => s.id === sequence.entryPoint);
-                                                            if (!entryStep) {
-                                                                throw new Error(`Entry point ${sequence.entryPoint} not found in sequence steps`);
-                                                            }
-                                                            // Check for exit points
-                                                            for (const exitPoint of sequence.exitPoints) {
-                                                                const exitStep = sequence.steps.find(s => s.id === exitPoint);
-                                                                if (!exitStep) {
-                                                                    throw new Error(`Exit point ${exitPoint} not found in sequence steps`);
-                                                                }
-                                                                // Check for circular dependencies
-                                                                if (!this.config.validation.allowCircularDependencies) {
-                                                                    this.detectCircularDependencies(sequence.steps);
-                                                                    // Validate step references
-                                                                    for (const step of sequence.steps) {
-                                                                        for (const depId of step.dependencies) {
-                                                                            const depStep = sequence.steps.find(s => s.id === depId);
-                                                                            if (!depStep) {
-                                                                                throw new Error(`Dependency ${depId} not found for step ${step.id}`);
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        detectCircularDependencies(steps) {
-                                                            const visited = new Set();
-                                                            const recursionStack = new Set();
-                                                            const visit = (stepId) => {
-                                                                if (recursionStack.has(stepId)) {
-                                                                    throw new Error(`Circular dependency detected involving step ${stepId}`);
-                                                                }
-                                                                if (visited.has(stepId)) {
-                                                                    return false;
-                                                                    visited.add(stepId);
-                                                                    recursionStack.add(stepId);
-                                                                    const step = steps.find(s => s.id === stepId);
-                                                                    if (step) {
-                                                                        for (const depId of step.dependencies) {
-                                                                            if (visit(depId)) {
-                                                                                return true;
-                                                                                recursionStack.delete(stepId);
-                                                                                return false;
-                                                                            }
-                                                                            ;
-                                                                            for (const step of steps) {
-                                                                                if (!visited.has(step.id)) {
-                                                                                    visit(step.id);
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            };
-                                                        },
-                                                        optimizeStepOrder(steps) {
-                                                            // Topological sort based on dependencies
-                                                            const sorted = [];
-                                                            const visited = new Set();
-                                                            const temp = new Set();
-                                                            const visit = (stepId) => {
-                                                                if (temp.has(stepId)) {
-                                                                    throw new Error(`Circular dependency detected at step ${stepId}`);
-                                                                }
-                                                                if (visited.has(stepId)) {
-                                                                    return;
-                                                                    temp.add(stepId);
-                                                                    const step = steps.find(s => s.id === stepId);
-                                                                    if (step) {
-                                                                        for (const depId of step.dependencies) {
-                                                                            visit(depId);
-                                                                            temp.delete(stepId);
-                                                                            visited.add(stepId);
-                                                                            sorted.push(step);
-                                                                        }
-                                                                        ;
-                                                                        for (const step of steps) {
-                                                                            if (!visited.has(step.id)) {
-                                                                                visit(step.id);
-                                                                                return sorted;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            };
-                                                        },
-                                                        initializeProgress(sequence) {
-                                                            const milestones = [];
-                                                            // Create milestones for every 25% of steps
-                                                            const totalSteps = sequence.steps.length;
-                                                            for (let i = 25; i <= 100; i += 25) {
-                                                                const stepIndex = Math.floor((i / 100) * totalSteps);
-                                                                if (stepIndex < totalSteps) {
-                                                                    const step = sequence.steps[stepIndex];
-                                                                    milestones.push({});
-                                                                    id: `milestone_${i}`;
-                                                                }
-                                                            }
-                                                            name: `${i}% Complete`;
-                                                        }
-                                                    },
-                                                        stepId;
-                                                    step.id,
-                                                        percentage;
-                                                    i,
-                                                        reached;
-                                                    false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    };
+                                },
+                                optimizeStepOrder(steps) {
+                                    // Topological sort based on dependencies
+                                    const sorted = [];
+                                    const visited = new Set();
+                                    const temp = new Set();
+                                    const visit = (stepId) => {
+                                        if (temp.has(stepId)) {
+                                            throw new Error(`Circular dependency detected at step ${stepId}`);
+                                        }
+                                        if (visited.has(stepId)) {
+                                            return;
+                                            temp.add(stepId);
+                                            const step = steps.find(s => s.id === stepId);
+                                            if (step) {
+                                                for (const depId of step.dependencies) {
+                                                    visit(depId);
+                                                    temp.delete(stepId);
+                                                    visited.add(stepId);
+                                                    sorted.push(step);
                                                 }
                                                 ;
-                                                return {
-                                                    totalSteps,
-                                                    completedSteps: 0,
-                                                    currentStep: 0,
-                                                    percentage: 0,
-                                                    estimatedTimeRemaining: sequence.metadata.estimatedTotalDuration,
-                                                    milestones
-                                                };
-                                                async;
-                                                validateStepDependencies(execution, SequenceExecution, step, SequenceStep);
-                                                Promise < void  > {
-                                                    for(, depId, of, step) { }, : .dependencies
-                                                };
-                                                {
-                                                    if (!execution.completedSteps.includes(depId)) {
-                                                        throw new Error(`Step ${step.id} dependency ${depId} has not been completed`);
+                                                for (const step of steps) {
+                                                    if (!visited.has(step.id)) {
+                                                        visit(step.id);
+                                                        return sorted;
                                                     }
-                                                    async;
-                                                    evaluateStepConditions(execution, SequenceExecution, step, SequenceStep);
-                                                    Promise < boolean > {
-                                                        if(, step) { }, : .conditions || step.conditions.length === 0
-                                                    };
+                                                }
+                                            }
+                                        }
+                                    };
+                                },
+                                initializeProgress(sequence) {
+                                    const milestones = [];
+                                    // Create milestones for every 25% of steps
+                                    const totalSteps = sequence.steps.length;
+                                    for (let i = 25; i <= 100; i += 25) {
+                                        const stepIndex = Math.floor((i / 100) * totalSteps);
+                                        if (stepIndex < totalSteps) {
+                                            const step = sequence.steps[stepIndex];
+                                            milestones.push({});
+                                            id: `milestone_${i}`;
+                                        }
+                                    }
+                                    name: `${i}% Complete`;
+                                }
+                            },
+                                stepId;
+                            step.id,
+                                percentage;
+                            i,
+                                reached;
+                            false;
+                        }
+                        ;
+                        return { totalSteps,
+                            completedSteps: 0,
+                            currentStep: 0,
+                            percentage: 0,
+                            estimatedTimeRemaining: sequence.metadata.estimatedTotalDuration };
+                        milestones;
+                    }
+                    ;
+                    async;
+                    validateStepDependencies(execution, SequenceExecution, step, SequenceStep);
+                    Promise < void  > {
+                        for(, depId, of, step) { }, : .dependencies
+                    };
+                    {
+                        if (!execution.completedSteps.includes(depId)) {
+                            throw new Error(`Step ${step.id} dependency ${depId} has not been completed`);
+                        }
+                        async;
+                        evaluateStepConditions(execution, SequenceExecution, step, SequenceStep);
+                        Promise < boolean > {
+                            if(, step) { }, : .conditions || step.conditions.length === 0
+                        };
+                        {
+                            return true;
+                            for (const condition of step.conditions) {
+                                const result = await this.evaluateCondition(execution, condition);
+                                if (!result) {
+                                    return false;
+                                    return true;
+                                    async;
+                                    evaluateCondition(execution, SequenceExecution, condition, StepCondition);
+                                    Promise < boolean > {
+                                        let, result = false,
+                                        switch(condition) { }, : .type
+                                    };
+                                    {
+                                        'boolean';
+                                        result = !!execution.context.variables[condition.field];
+                                        break;
+                                        'value';
+                                        {
+                                            const value = execution.context.variables[condition.field];
+                                            result = this.compareValues(value, condition.operator, condition.value);
+                                            break;
+                                            'expression';
+                                            result = this.evaluateExpression(condition.expression, execution.context);
+                                            break;
+                                            'function';
+                                            {
+                                                const validator = this.validators.get(condition.function);
+                                                if (validator) {
+                                                    result = await validator(execution.context);
+                                                    break;
+                                                    return condition.negated ? !result : result;
+                                                    compareValues(actual, unknown, operator, string, expected, unknown);
+                                                    boolean;
                                                     {
-                                                        return true;
-                                                        for (const condition of step.conditions) {
-                                                            const result = await this.evaluateCondition(execution, condition);
-                                                            if (!result) {
+                                                        switch (operator) {
+                                                            case 'equals': return actual === expected;
+                                                            case 'not_equals': return actual !== expected;
+                                                            case 'greater': return actual > expected;
+                                                            case 'less': return actual < expected;
+                                                            case 'contains': return String(actual).includes(String(expected));
+                                                            case 'exists': return actual !== undefined && actual !== null;
+                                                            default:
                                                                 return false;
-                                                                return true;
-                                                                async;
-                                                                evaluateCondition(execution, SequenceExecution, condition, StepCondition);
-                                                                Promise < boolean > {
-                                                                    let, result = false,
-                                                                    switch(condition) { }, : .type
-                                                                };
+                                                                evaluateExpression(expression, string, context, ExecutionContext);
+                                                                boolean;
                                                                 {
-                                                                    'boolean';
-                                                                    result = !!execution.context.variables[condition.field];
-                                                                    break;
-                                                                    'value';
-                                                                    {
-                                                                        const value = execution.context.variables[condition.field];
-                                                                        result = this.compareValues(value, condition.operator, condition.value);
-                                                                        break;
-                                                                        'expression';
-                                                                        result = this.evaluateExpression(condition.expression, execution.context);
-                                                                        break;
-                                                                        'function';
+                                                                    // Simple expression evaluator - in practice, use a safer evaluation library
+                                                                    try {
+                                                                        const func = new Function('context', `return ${expression}`);
+                                                                    }
+                                                                    finally {
+                                                                    }
+                                                                    return !!func(context);
+                                                                    try {
+                                                                    }
+                                                                    catch {
+                                                                        return false;
+                                                                        async;
+                                                                        executeStepAction(execution, SequenceExecution, step, SequenceStep);
+                                                                        Promise < void  > {
+                                                                            if(, step) { }, : .action, return: ,
+                                                                            const: handler = this.actionHandlers.get(step.action.type),
+                                                                            if(, handler) {
+                                                                                throw new Error(`No handler registered for action type ${step.action.type}`);
+                                                                            },
+                                                                            const: timeout = step.action.timeout || step.timeout || this.config.execution.defaultTimeout,
+                                                                            if(step) { }, : .action.async
+                                                                        };
                                                                         {
-                                                                            const validator = this.validators.get(condition.function);
-                                                                            if (validator) {
-                                                                                result = await validator(execution.context);
-                                                                                break;
-                                                                                return condition.negated ? !result : result;
-                                                                                compareValues(actual, unknown, operator, string, expected, unknown);
-                                                                                boolean;
-                                                                                {
-                                                                                    switch (operator) {
-                                                                                        case 'equals': return actual === expected;
-                                                                                        case 'not_equals': return actual !== expected;
-                                                                                        case 'greater': return actual > expected;
-                                                                                        case 'less': return actual < expected;
-                                                                                        case 'contains': return String(actual).includes(String(expected));
-                                                                                        case 'exists': return actual !== undefined && actual !== null;
-                                                                                        default:
-                                                                                            return false;
-                                                                                            evaluateExpression(expression, string, context, ExecutionContext);
-                                                                                            boolean;
-                                                                                            {
-                                                                                                // Simple expression evaluator - in practice, use a safer evaluation library
-                                                                                                try {
-                                                                                                    const func = new Function('context', `return ${expression}`);
-                                                                                                }
-                                                                                                finally {
-                                                                                                }
-                                                                                                return !!func(context);
+                                                                            await Promise.race([]);
+                                                                            handler(step.action.parameters, execution.context);
+                                                                        }
+                                                                        new Promise((_, reject) => setTimeout(() => reject(new Error('Action timeout')), timeout));
+                                                                        ;
+                                                                        {
+                                                                            await handler(step.action.parameters, execution.context);
+                                                                            async;
+                                                                            validateStepCompletion(execution, SequenceExecution, step, SequenceStep);
+                                                                            Promise < void  > {
+                                                                                if(, step) { }, : .validation || !step.validation.required, return: ,
+                                                                                for(, validator, of, step) { }, : .validation.validators
+                                                                            };
+                                                                            {
+                                                                                const validatorFunc = this.validators.get(validator.type);
+                                                                                if (!validatorFunc) {
+                                                                                    throw new Error(`No validator registered for type ${validator.type}`);
+                                                                                }
+                                                                                const isValid = await validatorFunc(execution.context, validator.parameters);
+                                                                                if (!isValid) {
+                                                                                    throw new Error(validator.message);
+                                                                                    addToRollbackStack(execution, SequenceExecution, step, SequenceStep);
+                                                                                    void {
+                                                                                        if(, step) { }, : .rollback?.enabled, return: ,
+                                                                                        const: entry, RollbackEntry = {
+                                                                                            stepId: step.id,
+                                                                                            timestamp: new Date()
+                                                                                        },
+                                                                                        state: { ...execution.context.executionState },
+                                                                                        action: step.action?.type || 'unknown',
+                                                                                        reversible: step.rollback.action !== undefined
+                                                                                    };
+                                                                                    execution.context.rollbackStack.push(entry);
+                                                                                    async;
+                                                                                    executeRollbackAction(execution, SequenceExecution, entry, RollbackEntry);
+                                                                                    Promise < void  > { const: handler = this.rollbackHandlers.get(entry.stepId),
+                                                                                        if(handler) {
+                                                                                            await handler(execution.context, entry.state);
+                                                                                        },
+                                                                                        calculateRetryDelay(retryPolicy, attempt) {
+                                                                                            switch (retryPolicy.backoffStrategy) {
+                                                                                                case 'linear':
+                                                                                                    return Math.min(retryPolicy.baseDelay * attempt, retryPolicy.maxDelay);
+                                                                                                case 'exponential':
+                                                                                                    return Math.min(retryPolicy.baseDelay * Math.pow(2, attempt - 1), retryPolicy.maxDelay);
+                                                                                                case 'custom':
+                                                                                                    // Implement custom backoff logic
+                                                                                                    return retryPolicy.baseDelay;
+                                                                                                default:
+                                                                                                    return retryPolicy.baseDelay;
                                                                                             }
-                                                                                            try { }
-                                                                                            catch {
-                                                                                                return false;
-                                                                                                async;
-                                                                                                executeStepAction(execution, SequenceExecution, step, SequenceStep);
-                                                                                                Promise < void  > {
-                                                                                                    if(, step) { }, : .action, return: ,
-                                                                                                    const: handler = this.actionHandlers.get(step.action.type),
-                                                                                                    if(, handler) {
-                                                                                                        throw new Error(`No handler registered for action type ${step.action.type}`);
-                                                                                                    },
-                                                                                                    const: timeout = step.action.timeout || step.timeout || this.config.execution.defaultTimeout,
-                                                                                                    if(step) { }, : .action.async
-                                                                                                };
-                                                                                                {
-                                                                                                    await Promise.race([]);
-                                                                                                    handler(step.action.parameters, execution.context),
-                                                                                                        new Promise((_, reject) => setTimeout(() => reject(new Error('Action timeout')), timeout));
-                                                                                                    ;
-                                                                                                }
-                                                                                                {
-                                                                                                    await handler(step.action.parameters, execution.context);
-                                                                                                    async;
-                                                                                                    validateStepCompletion(execution, SequenceExecution, step, SequenceStep);
-                                                                                                    Promise < void  > {
-                                                                                                        if(, step) { }, : .validation || !step.validation.required, return: ,
-                                                                                                        for(, validator, of, step) { }, : .validation.validators
-                                                                                                    };
-                                                                                                    {
-                                                                                                        const validatorFunc = this.validators.get(validator.type);
-                                                                                                        if (!validatorFunc) {
-                                                                                                            throw new Error(`No validator registered for type ${validator.type}`);
+                                                                                        },
+                                                                                        startTime: number,
+                                                                                        status: StepExecutionStatus,
+                                                                                        attempts: number, void: {
+                                                                                            const: duration = performance.now() - startTime,
+                                                                                            const: record, ExecutionRecord = {
+                                                                                                timestamp: new Date(),
+                                                                                                duration,
+                                                                                                status
+                                                                                            },
+                                                                                            attempts
+                                                                                        },
+                                                                                        step, : .performance.lastExecutions.push(record),
+                                                                                        // Keep only last 100 executions
+                                                                                        if(step) { }, : .performance.lastExecutions.length > 100 };
+                                                                                    {
+                                                                                        step.performance.lastExecutions.shift();
+                                                                                        // Update averages
+                                                                                        const executions = step.performance.lastExecutions;
+                                                                                        step.performance.averageExecutionTime = executions.reduce((sum, ex) => sum + ex.duration, 0) / executions.length;
+                                                                                        step.performance.successRate = (executions.filter(ex => ex.status === 'completed').length / executions.length) * 100;
+                                                                                        step.performance.failureRate = (executions.filter(ex => ex.status === 'failed').length / executions.length) * 100;
+                                                                                        step.performance.retryRate = (executions.filter(ex => ex.attempts > 1).length / executions.length) * 100;
+                                                                                        updateExecutionProgress(execution, SequenceExecution);
+                                                                                        stepId: string;
+                                                                                        status: StepExecutionStatus;
+                                                                                        duration: number;
+                                                                                        void {};
+                                                                                        if (status === 'completed') {
+                                                                                            execution.progress.completedSteps++;
+                                                                                            execution.progress.currentStep = execution.progress.completedSteps;
+                                                                                            execution.progress.percentage = (execution.progress.completedSteps / execution.progress.totalSteps) * 100;
+                                                                                            // Update performance metrics
+                                                                                            execution.performance.totalDuration += duration;
+                                                                                            execution.performance.averageStepDuration = execution.performance.totalDuration / execution.progress.currentStep;
+                                                                                            if (duration < execution.performance.fastestStep.duration) {
+                                                                                                execution.performance.fastestStep = { id: stepId, duration };
+                                                                                                if (duration > execution.performance.slowestStep.duration) {
+                                                                                                    execution.performance.slowestStep = { id: stepId, duration };
+                                                                                                    // Check milestones
+                                                                                                    for (const milestone of execution.progress.milestones) {
+                                                                                                        if (!milestone.reached && execution.progress.percentage >= milestone.percentage) {
+                                                                                                            milestone.reached = true;
+                                                                                                            milestone.timestamp = new Date();
+                                                                                                            this.emit('milestoneReached', {});
+                                                                                                            executionId: execution.id;
                                                                                                         }
-                                                                                                        const isValid = await validatorFunc(execution.context, validator.parameters);
-                                                                                                        if (!isValid) {
-                                                                                                            throw new Error(validator.message);
-                                                                                                            addToRollbackStack(execution, SequenceExecution, step, SequenceStep);
-                                                                                                            void {
-                                                                                                                if(, step) { }, : .rollback?.enabled, return: ,
-                                                                                                                const: entry, RollbackEntry = {
-                                                                                                                    stepId: step.id,
-                                                                                                                    timestamp: new Date(),
-                                                                                                                    state: { ...execution.context.executionState },
-                                                                                                                    action: step.action?.type || 'unknown',
-                                                                                                                    reversible: step.rollback.action !== undefined
-                                                                                                                },
-                                                                                                                execution, : .context.rollbackStack.push(entry),
-                                                                                                                async executeRollbackAction(execution, entry) {
-                                                                                                                    const handler = this.rollbackHandlers.get(entry.stepId);
-                                                                                                                    if (handler) {
-                                                                                                                        await handler(execution.context, entry.state);
-                                                                                                                    }
-                                                                                                                },
-                                                                                                                calculateRetryDelay(retryPolicy, attempt) {
-                                                                                                                    switch (retryPolicy.backoffStrategy) {
-                                                                                                                        case 'linear':
-                                                                                                                            return Math.min(retryPolicy.baseDelay * attempt, retryPolicy.maxDelay);
-                                                                                                                        case 'exponential':
-                                                                                                                            return Math.min(retryPolicy.baseDelay * Math.pow(2, attempt - 1), retryPolicy.maxDelay);
-                                                                                                                        case 'custom':
-                                                                                                                            // Implement custom backoff logic
-                                                                                                                            return retryPolicy.baseDelay;
-                                                                                                                        default:
-                                                                                                                            return retryPolicy.baseDelay;
-                                                                                                                    }
-                                                                                                                },
-                                                                                                                startTime: number,
-                                                                                                                status: StepExecutionStatus,
-                                                                                                                attempts: number, void: {
-                                                                                                                    const: duration = performance.now() - startTime,
-                                                                                                                    const: record, ExecutionRecord = {
-                                                                                                                        timestamp: new Date(),
-                                                                                                                        duration,
-                                                                                                                        status,
-                                                                                                                        attempts
-                                                                                                                    },
-                                                                                                                    step, : .performance.lastExecutions.push(record),
-                                                                                                                    // Keep only last 100 executions
-                                                                                                                    if(step) { }, : .performance.lastExecutions.length > 100 }
-                                                                                                            };
-                                                                                                            {
-                                                                                                                step.performance.lastExecutions.shift();
-                                                                                                                // Update averages
-                                                                                                                const executions = step.performance.lastExecutions;
-                                                                                                                step.performance.averageExecutionTime = executions.reduce((sum, ex) => sum + ex.duration, 0) / executions.length;
-                                                                                                                step.performance.successRate = (executions.filter(ex => ex.status === 'completed').length / executions.length) * 100;
-                                                                                                                step.performance.failureRate = (executions.filter(ex => ex.status === 'failed').length / executions.length) * 100;
-                                                                                                                step.performance.retryRate = (executions.filter(ex => ex.attempts > 1).length / executions.length) * 100;
-                                                                                                                updateExecutionProgress(execution, SequenceExecution),
-                                                                                                                    stepId;
-                                                                                                                string,
-                                                                                                                    status;
-                                                                                                                StepExecutionStatus,
-                                                                                                                    duration;
-                                                                                                                number;
-                                                                                                                void {
-                                                                                                                    if(status) { } } === 'completed';
-                                                                                                                {
-                                                                                                                    execution.progress.completedSteps++;
-                                                                                                                    execution.progress.currentStep = execution.progress.completedSteps;
-                                                                                                                    execution.progress.percentage = (execution.progress.completedSteps / execution.progress.totalSteps) * 100;
-                                                                                                                    // Update performance metrics
-                                                                                                                    execution.performance.totalDuration += duration;
-                                                                                                                    execution.performance.averageStepDuration = execution.performance.totalDuration / execution.progress.currentStep;
-                                                                                                                    if (duration < execution.performance.fastestStep.duration) {
-                                                                                                                        execution.performance.fastestStep = { id: stepId, duration };
-                                                                                                                        if (duration > execution.performance.slowestStep.duration) {
-                                                                                                                            execution.performance.slowestStep = { id: stepId, duration };
-                                                                                                                            // Check milestones
-                                                                                                                            for (const milestone of execution.progress.milestones) {
-                                                                                                                                if (!milestone.reached && execution.progress.percentage >= milestone.percentage) {
-                                                                                                                                    milestone.reached = true;
-                                                                                                                                    milestone.timestamp = new Date();
-                                                                                                                                    this.emit('milestoneReached', {});
-                                                                                                                                    executionId: execution.id,
-                                                                                                                                        milestone;
+                                                                                                        milestone;
+                                                                                                    }
+                                                                                                    ;
+                                                                                                    getNextStep(sequence, SequenceDefinition, currentStepId, string, status, StepExecutionStatus);
+                                                                                                    string | null;
+                                                                                                    {
+                                                                                                        const currentStep = sequence.steps.find(s => s.id === currentStepId);
+                                                                                                        if (!currentStep || !currentStep.action) {
+                                                                                                            return null;
+                                                                                                            // Check action-specific next steps
+                                                                                                            switch (status) {
+                                                                                                                case 'completed':
+                                                                                                                    return currentStep.action.onSuccess || null;
+                                                                                                                case 'failed':
+                                                                                                                    return currentStep.action.onFailure || null;
+                                                                                                                case 'skipped':
+                                                                                                                    return currentStep.action.onSkip || null;
+                                                                                                                default:
+                                                                                                                    return null;
+                                                                                                                    registerBuiltInHandlers();
+                                                                                                                    void {
+                                                                                                                        // Register built-in action handlers
+                                                                                                                        this: .registerActionHandler('function', async (params, _context) => { }
+                                                                                                                        // Execute a named function
+                                                                                                                        , 
+                                                                                                                        // Execute a named function
+                                                                                                                        console.log('Executing function:', params.name))
+                                                                                                                    };
+                                                                                                                    ;
+                                                                                                                    this.registerActionHandler('data', async (params, context) => {
+                                                                                                                        if (params.set) {
+                                                                                                                            Object.assign(context.variables, params.set);
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                    this.registerActionHandler('delay', async (params, context) => {
+                                                                                                                        await this.delay(params.duration || 1000);
+                                                                                                                    });
+                                                                                                                    // Register built-in validators
+                                                                                                                    this.registerValidator('required', async (context, params) => { return context.variables[params.field] !== undefined; });
+                                                                                                                    this.registerValidator('format', async (context, params) => {
+                                                                                                                        const value = context.variables[params.field];
+                                                                                                                        const regex = new RegExp(params.pattern);
+                                                                                                                        return regex.test(String(value));
+                                                                                                                    });
+                                                                                                                    delay(ms, number);
+                                                                                                                    Promise < void  > { return: new Promise(resolve => setTimeout(resolve, ms)),
+                                                                                                                        // Sequence Builder Helper
+                                                                                                                        class: SequenceBuilder };
+                                                                                                                    {
+                                                                                                                        definition: Partial;
+                                                                                                                        steps: SequenceStep = [];
+                                                                                                                        constructor(name, string, description = '');
+                                                                                                                        {
+                                                                                                                            this.definition = {
+                                                                                                                                name,
+                                                                                                                                description,
+                                                                                                                                version: '1.0.0',
+                                                                                                                                steps: [],
+                                                                                                                                entryPoint: '',
+                                                                                                                                exitPoints: [],
+                                                                                                                                metadata: {
+                                                                                                                                    category: 'general',
+                                                                                                                                    tags: [],
+                                                                                                                                    estimatedTotalDuration: 0,
+                                                                                                                                    difficulty: 'medium',
+                                                                                                                                    createdAt: new Date(),
+                                                                                                                                    lastModified: new Date()
                                                                                                                                 }
-                                                                                                                                ;
-                                                                                                                                getNextStep(sequence, SequenceDefinition, currentStepId, string, status, StepExecutionStatus);
-                                                                                                                                string | null;
+                                                                                                                            };
+                                                                                                                            addStep(step, (Omit));
+                                                                                                                            SequenceBuilder;
+                                                                                                                            {
+                                                                                                                                const fullStep = {
+                                                                                                                                    ...step,
+                                                                                                                                    performance: {
+                                                                                                                                        averageExecutionTime: 0,
+                                                                                                                                        successRate: 100,
+                                                                                                                                        failureRate: 0,
+                                                                                                                                        retryRate: 0,
+                                                                                                                                        lastExecutions: []
+                                                                                                                                    }
+                                                                                                                                };
+                                                                                                                                this.steps.push(fullStep);
+                                                                                                                                return this;
+                                                                                                                                setEntryPoint(stepId, string);
+                                                                                                                                SequenceBuilder;
                                                                                                                                 {
-                                                                                                                                    const currentStep = sequence.steps.find(s => s.id === currentStepId);
-                                                                                                                                    if (!currentStep || !currentStep.action) {
-                                                                                                                                        return null;
-                                                                                                                                        // Check action-specific next steps
-                                                                                                                                        switch (status) {
-                                                                                                                                            case 'completed':
-                                                                                                                                                return currentStep.action.onSuccess || null;
-                                                                                                                                            case 'failed':
-                                                                                                                                                return currentStep.action.onFailure || null;
-                                                                                                                                            case 'skipped':
-                                                                                                                                                return currentStep.action.onSkip || null;
-                                                                                                                                            default:
-                                                                                                                                                return null;
-                                                                                                                                                registerBuiltInHandlers();
-                                                                                                                                                void {
-                                                                                                                                                    // Register built-in action handlers
-                                                                                                                                                    this: .registerActionHandler('function', async (params, _context) => {
-                                                                                                                                                        // Execute a named function
-                                                                                                                                                        console.log('Executing function:', params.name);
-                                                                                                                                                    }),
-                                                                                                                                                    this: .registerActionHandler('data', async (params, context) => {
-                                                                                                                                                        // Set data in context
-                                                                                                                                                        if (params.set) {
-                                                                                                                                                            Object.assign(context.variables, params.set);
-                                                                                                                                                        }
-                                                                                                                                                    }),
-                                                                                                                                                    this: .registerActionHandler('delay', async (params, context) => {
-                                                                                                                                                        // Add delay
-                                                                                                                                                        await this.delay(params.duration || 1000);
-                                                                                                                                                    }),
-                                                                                                                                                    // Register built-in validators
-                                                                                                                                                    this: .registerValidator('required', async (context, params) => {
-                                                                                                                                                        return context.variables[params.field] !== undefined;
-                                                                                                                                                    }),
-                                                                                                                                                    this: .registerValidator('format', async (context, params) => {
-                                                                                                                                                        const value = context.variables[params.field];
-                                                                                                                                                        const regex = new RegExp(params.pattern);
-                                                                                                                                                        return regex.test(String(value));
-                                                                                                                                                    }),
-                                                                                                                                                    delay(ms) {
-                                                                                                                                                        return new Promise(resolve => setTimeout(resolve, ms));
-                                                                                                                                                        // Sequence Builder Helper
-                                                                                                                                                        export class SequenceBuilder {
-                                                                                                                                                            definition;
-                                                                                                                                                            steps = [];
-                                                                                                                                                            constructor(name, description = '') {
-                                                                                                                                                                this.definition = {
-                                                                                                                                                                    name,
-                                                                                                                                                                    description,
-                                                                                                                                                                    version: '1.0.0',
-                                                                                                                                                                    steps: [],
-                                                                                                                                                                    entryPoint: '',
-                                                                                                                                                                    exitPoints: [],
-                                                                                                                                                                    metadata: {
-                                                                                                                                                                        category: 'general',
-                                                                                                                                                                        tags: [],
-                                                                                                                                                                        estimatedTotalDuration: 0,
-                                                                                                                                                                        difficulty: 'medium',
-                                                                                                                                                                        createdAt: new Date(),
-                                                                                                                                                                        lastModified: new Date(),
-                                                                                                                                                                    },
-                                                                                                                                                                    addStep(step) {
-                                                                                                                                                                        const fullStep = {
-                                                                                                                                                                            ...step,
-                                                                                                                                                                            performance: {
-                                                                                                                                                                                averageExecutionTime: 0,
-                                                                                                                                                                                successRate: 100,
-                                                                                                                                                                                failureRate: 0,
-                                                                                                                                                                                retryRate: 0,
-                                                                                                                                                                                lastExecutions: [],
-                                                                                                                                                                            },
-                                                                                                                                                                            this: .steps.push(fullStep),
-                                                                                                                                                                            return: this,
-                                                                                                                                                                            setEntryPoint(stepId) {
-                                                                                                                                                                                this.definition.entryPoint = stepId;
-                                                                                                                                                                                return this;
-                                                                                                                                                                                addExitPoint(stepId, string);
-                                                                                                                                                                                SequenceBuilder;
-                                                                                                                                                                                {
-                                                                                                                                                                                    if (!this.definition.exitPoints) {
-                                                                                                                                                                                        this.definition.exitPoints = [];
-                                                                                                                                                                                        this.definition.exitPoints.push(stepId);
-                                                                                                                                                                                        return this;
-                                                                                                                                                                                        setMetadata(metadata, (Partial));
-                                                                                                                                                                                        SequenceBuilder;
-                                                                                                                                                                                        {
-                                                                                                                                                                                            this.definition.metadata = { ...this.definition.metadata, ...metadata };
-                                                                                                                                                                                            return this;
-                                                                                                                                                                                            build();
-                                                                                                                                                                                            Omit < SequenceDefinition, 'id' > {
-                                                                                                                                                                                                this: .definition.steps = this.steps,
-                                                                                                                                                                                                : .definition.entryPoint && this.steps.length > 0
-                                                                                                                                                                                            };
-                                                                                                                                                                                            {
-                                                                                                                                                                                                this.definition.entryPoint = this.steps[0].id;
-                                                                                                                                                                                                if (!this.definition.exitPoints?.length && this.steps.length > 0) {
-                                                                                                                                                                                                    this.definition.exitPoints = [this.steps[this.steps.length - 1].id];
-                                                                                                                                                                                                    return this.definition;
-                                                                                                                                                                                                    export default {
-                                                                                                                                                                                                        StepSequencingSystem,
-                                                                                                                                                                                                        SequenceBuilder
-                                                                                                                                                                                                    };
-                                                                                                                                                                                                }
-                                                                                                                                                                                            }
-                                                                                                                                                                                        }
-                                                                                                                                                                                    }
-                                                                                                                                                                                }
-                                                                                                                                                                            } };
-                                                                                                                                                                    }
-                                                                                                                                                                };
-                                                                                                                                                            }
-                                                                                                                                                        }
-                                                                                                                                                    } };
+                                                                                                                                    this.definition.entryPoint = stepId;
+                                                                                                                                    return this;
+                                                                                                                                    addExitPoint(stepId, string);
+                                                                                                                                    SequenceBuilder;
+                                                                                                                                    {
+                                                                                                                                        if (!this.definition.exitPoints) {
+                                                                                                                                            this.definition.exitPoints = [];
+                                                                                                                                            this.definition.exitPoints.push(stepId);
+                                                                                                                                            return this;
+                                                                                                                                            setMetadata(metadata, (Partial));
+                                                                                                                                            SequenceBuilder;
+                                                                                                                                            {
+                                                                                                                                                this.definition.metadata = { ...this.definition.metadata, ...metadata };
+                                                                                                                                                return this;
+                                                                                                                                                build();
+                                                                                                                                                Omit < SequenceDefinition, 'id' > { this: .definition.steps = this.steps,
+                                                                                                                                                    : .definition.entryPoint && this.steps.length > 0 };
+                                                                                                                                                {
+                                                                                                                                                    this.definition.entryPoint = this.steps[0].id;
+                                                                                                                                                    if (!this.definition.exitPoints?.length && this.steps.length > 0) {
+                                                                                                                                                        this.definition.exitPoints = [this.steps[this.steps.length - 1].id];
+                                                                                                                                                        return this.definition;
+                                                                                                                                                        export default {
+                                                                                                                                                            StepSequencingSystem
+                                                                                                                                                        };
+                                                                                                                                                        SequenceBuilder;
+                                                                                                                                                    }
+                                                                                                                                                    ;
+                                                                                                                                                }
+                                                                                                                                            }
                                                                                                                                         }
                                                                                                                                     }
                                                                                                                                 }
                                                                                                                             }
                                                                                                                         }
                                                                                                                     }
-                                                                                                                }
                                                                                                             }
                                                                                                         }
                                                                                                     }
                                                                                                 }
                                                                                             }
+                                                                                        }
                                                                                     }
                                                                                 }
                                                                             }
                                                                         }
                                                                     }
                                                                 }
-                                                            }
                                                         }
                                                     }
                                                 }

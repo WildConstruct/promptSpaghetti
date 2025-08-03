@@ -18,8 +18,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * - Behavioral Targeting Controls
  */
 import { useState, useMemo } from 'react';
-import { Users, Target, Filter, Globe, Clock, TrendingUp, Settings, Eye, Play, Pause, BarChart3, Calendar, Zap, Search, Plus, X, ChevronDown, ChevronRight, CheckCircle, Layers, DragDropIcon as Grip } from 'lucide-react';
- > ;
+import { Users, Target, Filter, Globe, Clock, TrendingUp, Settings, Eye, Play, Pause, BarChart3, Calendar, Zap, Search, Plus, X, ChevronDown, ChevronRight, CheckCircle, Layers } from DragDropIcon as Grip;
+from;
+'lucide-react';
+    > ;
 demographics: {
     age: Record;
     location: Record;
@@ -27,9 +29,7 @@ demographics: {
 }
 ;
 export const [sortBy, setSortBy] = useState('name');
-const filteredAudiences = useMemo(() => {
-    const filtered = audiences.filter(audience => );
-});
+const filteredAudiences = useMemo(() => { const filtered = audiences.filter(audience => ); });
 audience.name.toLowerCase().includes(searchTerm.toLowerCase());
 ;
 return filtered.sort((a, b) => {
@@ -39,8 +39,8 @@ return filtered.sort((a, b) => {
         case 'updated':
             return new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime();
         default:
-            return a.name.localeCompare(b.name);
     }
+    return a.name.localeCompare(b.name);
 });
 [audiences, searchTerm, sortBy];
 ;
@@ -98,29 +98,24 @@ div >
 ;
 ;
 ;
- > ;
+    > ;
 onPreview ?  : (conditions) => Promise;
 showVisualBuilder ?  : boolean;
 export const [previewLoading, setPreviewLoading] = useState(false);
 const [showPreview, setShowPreview] = useState(false);
 const [draggedCondition, setDraggedCondition] = useState(null);
 const addCondition = (type = 'attribute') => {
-    const newCondition = {
-        id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` };
-    type,
-        field;
-    availableFields[0]?.key || '',
-        operator;
-    'equals',
-        value;
-    '',
-        logicalOperator;
-    conditions.length > 0 ? 'AND' : undefined,
-        weight;
-    1,
-        isEnabled;
-    true;
+    const newCondition = {};
+    id: `condition_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 };
+type;
+field: availableFields[0]?.key || '';
+operator: 'equals';
+value: '';
+logicalOperator: conditions.length > 0 ? 'AND' : undefined;
+weight: 1;
+isEnabled: true;
+;
 onChange([...conditions, newCondition]);
 ;
 const updateCondition = (id, updates) => {
@@ -273,34 +268,17 @@ div >
 ;
 ;
 ;
+onCitiesChange: (cities) => void ;
+excludeMode ?  : boolean;
+onExcludeModeChange ?  : (exclude) => void ;
 // Mock data - in real implementation, this would come from props or API
-const countries = [];
-{
-    code: 'US', name;
-    'United States', userCount;
-    125000;
-}
-{
-    code: 'GB', name;
-    'United Kingdom', userCount;
-    89000;
-}
-{
-    code: 'CA', name;
-    'Canada', userCount;
-    67000;
-}
-{
-    code: 'AU', name;
-    'Australia', userCount;
-    45000;
-}
-{
-    code: 'DE', name;
-    'Germany', userCount;
-    78000;
-}
-;
+const countries = [
+    { code: 'US', name: 'United States', userCount: 125000 },
+    { code: 'GB', name: 'United Kingdom', userCount: 89000 },
+    { code: 'CA', name: 'Canada', userCount: 67000 },
+    { code: 'AU', name: 'Australia', userCount: 45000 },
+    { code: 'DE', name: 'Germany', userCount: 78000 }
+];
 return;
 _jsxs("div", { className: "geographic-targeting", children: [_jsxs("div", { className: "geo-header", children: [_jsxs("div", { className: "header-title", children: [_jsx(Globe, { size: 20 }), _jsx("h3", { children: "Geographic Targeting" })] }), _jsx("div", { className: "exclude-toggle", children: _jsxs("label", { className: "toggle-label", children: [_jsx("input", { type: "checkbox", checked: excludeMode, onChange: (e) => onExcludeModeChange?.(e.target.checked) }), "Exclude selected locations"] }) })] }), _jsxs("div", { className: "geo-tabs", children: [['countries', 'regions', 'cities'].map(tab => ()
                     < button, key = { tab }, className = {} `tab-btn ${activeTab === tab ? 'active' : ''}`), "onClick=", () => setActiveTab(tab), ">", tab.charAt(0).toUpperCase() + tab.slice(1)] }), "))}"] })
@@ -310,7 +288,7 @@ _jsxs("div", { className: "geographic-targeting", children: [_jsxs("div", { clas
                 _jsxs("div", { className: "geo-content", children: [activeTab === 'countries' && ()
                             < div, " className=\"countries-grid\">", countries.filter(country => ), "country.name.toLowerCase().includes(searchTerm.toLowerCase()) ).map(country => ()", _jsx("div", { className: `country-item ${selectedCountries.includes(country.code) ? 'selected' : ''}`, onClick: () => {
                                 const newSelection = selectedCountries.includes(country.code);
-                            } }, country.code), "? selectedCountries.filter(c => c !== country.code) : [...selectedCountries, country.code]; onCountriesChange(newSelection); }} >", _jsx("div", { className: "country-flag", children: _jsx("div", { className: "flag-icon", children: country.code }) }), _jsxs("div", { className: "country-info", children: [_jsx("div", { className: "country-name", children: country.name }), _jsxs("div", { className: "user-count", children: [country.userCount.toLocaleString(), " users"] })] }), selectedCountries.includes(country.code) && ()
+                            } }, country.code), "? selectedCountries.filter(c => c !== country.code) : [...selectedCountries, country.code]; onCountriesChange(newSelection) }} >", _jsx("div", { className: "country-flag", children: _jsx("div", { className: "flag-icon", children: country.code }) }), _jsxs("div", { className: "country-info", children: [_jsx("div", { className: "country-name", children: country.name }), _jsxs("div", { className: "user-count", children: [country.userCount.toLocaleString(), " users"] })] }), selectedCountries.includes(country.code) && ()
                             < CheckCircle, " size=", 16, " className=\"selected-icon\" /> )}"] });
 div >
 ;
@@ -321,66 +299,21 @@ div >
 ;
 ;
 ;
-_jsx(Layers, { size: 20 })
+onDuplicateSegment: (id) => void ;
+return;
+_jsx("div", { className: "segment-management", children: _jsxs("div", { className: "segments-header", children: [_jsxs("div", { className: "header-title", children: [_jsx(Layers, { size: 20 }), _jsx("h3", { children: "User Segments" }), _jsxs("div", { className: "segment-count", children: [segments.length, " segments"] })] }), _jsx("button", { className: "btn btn-primary", onClick: () => onCreateSegment({}), "name:": true }), " 'New Segment' conditions: [] userCount: 0 isActive: true tags: [] color: '#3B82F6' } })} >", _jsx(Plus, { size: 16 }), "Create Segment"] }) })
     ,
-        _jsx("h3", { children: "User Segments" })
-            ,
-                _jsxs("div", { className: "segment-count", children: [segments.length, " segments"] });
-div >
-    _jsx("button", { className: "btn btn-primary", onClick: () => onCreateSegment({}), "name:": true });
-'New Segment',
-    conditions;
-[],
-    userCount;
-0,
-    isActive;
-true,
-    tags;
-[],
-    color;
-'#3B82F6',
-;
-    >
-        _jsx(Plus, { size: 16 });
-Create;
-Segment;
-button >
-;
-div >
-    _jsxs("div", { className: "segments-list", children: [segments.map(segment => ()
-                < div, key = { segment, : .id }, className = {} `segment-card ${expandedSegment === segment.id ? 'expanded' : ''}`), ">", _jsx("div", { className: "segment-header", onClick: () => setExpandedSegment(expandedSegment === segment.id ? null : segment.id) }), "; }>", _jsx("div", { className: "segment-indicator", children: _jsx("div", { className: "segment-color", style: { backgroundColor: segment.color } }) }), _jsxs("div", { className: "segment-info", children: [_jsxs("div", { className: "segment-title", children: [_jsx("h4", { children: segment.name }), _jsxs("div", { className: "segment-status", children: [segment.isActive ? ()
-                                        < CheckCircle : , " size=", 16, " className=\"text-green\" /> ) : ()", _jsx(Pause, { size: 16, className: "text-gray" }), ")}"] })] }), _jsx("div", { className: "segment-description", children: segment.description }), _jsxs("div", { className: "segment-metrics", children: [_jsxs("span", { className: "metric", children: [_jsx(Users, { size: 14 }), segment.userCount.toLocaleString(), " users"] }), _jsxs("span", { className: "metric", children: [_jsx(Filter, { size: 14 }), segment.conditions.length, " conditions"] }), _jsxs("span", { className: "metric", children: [_jsx(Calendar, { size: 14 }), "Updated ", new Date(segment.lastUpdated).toLocaleDateString()] })] })] }), _jsx("div", { className: "segment-actions", children: _jsx("button", { className: "expand-btn", children: expandedSegment === segment.id ?
-                        _jsx(ChevronDown, { size: 16 }) :
-                        _jsx(ChevronRight, { size: 16 }) }) })] });
-{
-    expandedSegment === segment.id && ()
-        < div;
-    className = "segment-details" >
-        _jsxs("div", { className: "segment-conditions", children: [_jsx("h5", { children: "Targeting Conditions" }), segment.conditions.length === 0 ? ()
-                    < p : , " className=\"no-conditions\">No conditions defined"] });
-    ()
-        < div;
-    className = "conditions-list" >
-        { segment, : .conditions.map((condition, index) => ()
-                < div, key = { condition, : .id }, className = "condition-item" >
-                { index } > 0 && ()
-                < span, className = "logical-op" >
-                { condition, : .logicalOperator || 'AND' }, span >
-            ) }
-        < span;
-    className = "condition-text" >
-        { condition, : .field };
-    {
-        condition.operator;
-    }
-    {
-        condition.value;
-    }
-    span >
-    ;
-    div >
-    ;
-}
+        _jsxs("div", { className: "segments-list", children: [segments.map(segment => ()
+                    < div, key = { segment, : .id }, className = {} `segment-card ${expandedSegment === segment.id ? 'expanded' : ''}`), ">", _jsxs("div", { className: "segment-header", onClick: () => setExpandedSegment(expandedSegment === segment.id ? null : segment.id), children: [_jsx("div", { className: "segment-indicator", children: _jsx("div", { className: "segment-color", style: { backgroundColor: segment.color } }) }), _jsxs("div", { className: "segment-info", children: [_jsxs("div", { className: "segment-title", children: [_jsx("h4", { children: segment.name }), _jsxs("div", { className: "segment-status", children: [segment.isActive ? ()
+                                                    < CheckCircle : , " size=", 16, " className=\"text-green\" /> ) : ()", _jsx(Pause, { size: 16, className: "text-gray" }), ")}"] })] }), _jsx("div", { className: "segment-description", children: segment.description }), _jsxs("div", { className: "segment-metrics", children: [_jsxs("span", { className: "metric", children: [_jsx(Users, { size: 14 }), segment.userCount.toLocaleString(), " users"] }), _jsxs("span", { className: "metric", children: [_jsx(Filter, { size: 14 }), segment.conditions.length, " conditions"] }), _jsxs("span", { className: "metric", children: [_jsx(Calendar, { size: 14 }), "Updated ", new Date(segment.lastUpdated).toLocaleDateString()] })] })] }), _jsx("div", { className: "segment-actions", children: _jsx("button", { className: "expand-btn", children: expandedSegment === segment.id ?
+                                    _jsx(ChevronDown, { size: 16 }) :
+                                    _jsx(ChevronRight, { size: 16 }) }) })] }), expandedSegment === segment.id && ()
+                    < div, " className=\"segment-details\">", _jsxs("div", { className: "segment-conditions", children: [_jsx("h5", { children: "Targeting Conditions" }), segment.conditions.length === 0 ? ()
+                            < p : , " className=\"no-conditions\">No conditions defined"] }), ") : ()", _jsx("div", { className: "conditions-list", children: segment.conditions.map((condition, index) => ()
+                        < div, key = { condition, : .id }, className = "condition-item" >
+                        { index } > 0 && ()
+                        < span, className = "logical-op" >
+                        { condition, : .logicalOperator || 'AND' }) }), ")}", _jsxs("span", { className: "condition-text", children: [condition.field, " ", condition.operator, " ", condition.value] })] });
 div >
 ;
 div >
@@ -401,12 +334,7 @@ div >
                         ,
                             _jsx("p", { children: "Create user segments to organize your targeting" })
                                 ,
-                                    _jsx("button", { className: "btn btn-primary", onClick: () => onCreateSegment({}), "name:": true })), 'My First Segment': ,
-        conditions: [],
-        userCount: 0,
-        isActive: true,
-        tags: [],
-        color: '#3B82F6', };
+                                    _jsx("button", { className: "btn btn-primary", onClick: () => onCreateSegment({}), "name:": true })), 'My First Segment': conditions, []: userCount, 0: isActive, true: tags, []: color, '#3B82F6':  };
     >
         _jsx(Plus, { size: 16 });
 Create;
@@ -420,13 +348,13 @@ div >
 ;
 ;
 ;
- > ;
+    > ;
 geographicBreakdown: Record;
 timeSeriesData: Array < {
     date: string,
     impressions: number,
-    conversions: number
-} > ;
+    conversions: number } > ;
 ;
 timeRange: '24h' | '7d' | '30d' | '90d';
 onTimeRangeChange: (range) => void ;
+;

@@ -14,30 +14,21 @@ const CITATION_STYLES = [
     { id: 'mla', name: 'MLA', description: 'Modern Language Association' },
     { id: 'apa', name: 'APA', description: 'American Psychological Association' }
 ];
+className = '';
 {
     const [showAddForm, setShowAddForm] = useState(false);
     const [editingCitation, setEditingCitation] = useState(null);
     const [formData, setFormData] = useState({});
-    type: citationStyle,
-        volume;
-    '',
-        reporter;
-    '',
-        page;
-    '',
-        court;
-    '',
-        date;
-    '',
-        url;
-    '',
-        pinpoint;
-    '',
-        title;
-    '',
-        author;
-    '',
-    ;
+    type: citationStyle;
+    volume: '';
+    reporter: '';
+    page: '';
+    court: '';
+    date: '';
+    url: '';
+    pinpoint: '';
+    title: '';
+    author: '';
 }
 ;
 const [searchQuery, setSearchQuery] = useState('');
@@ -46,37 +37,25 @@ const [filterType, setFilterType] = useState('all');
 useEffect(() => {
     if (editingCitation) {
         setFormData({});
-        type: editingCitation.type,
-            volume;
-        editingCitation.volume || '',
-            reporter;
-        editingCitation.reporter || '',
-            page;
-        editingCitation.page || '',
-            court;
-        editingCitation.court || '',
-            date;
-        editingCitation.date || '',
-            url;
-        editingCitation.url || '',
-            pinpoint;
-        editingCitation.pinpoint || '',
-            title;
-        extractTitleFromCitation(editingCitation),
-            author;
-        extractAuthorFromCitation(editingCitation),
-        ;
+        type: editingCitation.type;
+        volume: editingCitation.volume || '';
+        reporter: editingCitation.reporter || '';
+        page: editingCitation.page || '';
+        court: editingCitation.court || '';
+        date: editingCitation.date || '';
+        url: editingCitation.url || '';
+        pinpoint: editingCitation.pinpoint || '';
+        title: extractTitleFromCitation(editingCitation);
+        author: extractAuthorFromCitation(editingCitation);
     }
 });
 [editingCitation];
 ;
 const extractTitleFromCitation = (citation) => {
-    // Extract title from longForm - simplified extraction
     const parts = citation.longForm.split(',');
     return parts[0]?.trim() || '';
 };
 const extractAuthorFromCitation = (citation) => {
-    // Extract author from longForm - simplified extraction
     if (citation.longForm.includes('v.')) {
         const parts = citation.longForm.split('v.');
         return parts[0]?.trim() || '';
@@ -96,26 +75,25 @@ const extractAuthorFromCitation = (citation) => {
             case 'apa':
                 return generateAPACitation(data);
             default:
-                return generateBluebookCitation(data);
         }
-        ;
-        const generateBluebookCitation = (data) => {
-            let longForm = '';
-            let shortForm = '';
-            if (data.title && data.volume && data.reporter && data.page) {
-                // Case citation
-                longForm = `${data.title}, ${data.volume} ${data.reporter} ${data.page}`;
-            }
-            if (data.court && data.date) {
-                longForm += ` (${data.court} ${data.date})`;
-            }
-            shortForm = `${data.volume} ${data.reporter} ${data.page}`;
-        };
-        if (data.pinpoint) {
-            shortForm += `, ${data.pinpoint}`;
-        }
+        return generateBluebookCitation(data);
     };
-    if (data.title) {
+    const generateBluebookCitation = (data) => {
+        let longForm = '';
+        let shortForm = '';
+        if (data.title && data.volume && data.reporter && data.page) {
+            // Case citation
+            longForm = `${data.title}, ${data.volume} ${data.reporter} ${data.page}`;
+        }
+        if (data.court && data.date) {
+            longForm += ` (${data.court} ${data.date})`;
+        }
+        shortForm = `${data.volume} ${data.reporter} ${data.page}`;
+    };
+    if (data.pinpoint) {
+        shortForm += `, ${data.pinpoint}`;
+    }
+    else if (data.title) {
         // Basic citation
         longForm = data.title;
         if (data.date) {
@@ -186,30 +164,29 @@ const generateAPACitation = (data) => {
         }
         shortForm = `${data.author}, ${data.date}`;
     }
-}, { longForm = `${data.title} (${data.date}).` };
-shortForm = data.title;
-return { longForm, shortForm };
-;
+    else {
+        longForm = `${data.title} (${data.date}).`;
+    }
+    shortForm = data.title;
+    return { longForm, shortForm };
+};
 const handleFormSubmit = (e) => {
     e.preventDefault();
     const { longForm, shortForm } = generateCitation(formData);
     const citation = {
-        id: editingCitation?.id || `citation_${Date.now()}` };
-}, type, longForm, shortForm, volume;
- || undefined,
-    reporter;
-formData.reporter || undefined,
-    page;
-formData.page || undefined,
-    court;
-formData.court || undefined,
-    date;
-formData.date || undefined,
-    url;
-formData.url || undefined,
-    pinpoint;
-formData.pinpoint || undefined;
-;
+        id: editingCitation?.id || `citation_${Date.now()}`
+    };
+    type: formData.type;
+    longForm;
+    shortForm;
+    volume: formData.volume || undefined;
+    reporter: formData.reporter || undefined;
+    page: formData.page || undefined;
+    court: formData.court || undefined;
+    date: formData.date || undefined;
+    url: formData.url || undefined;
+    pinpoint: formData.pinpoint || undefined;
+};
 if (editingCitation) {
     onCitationEdit(editingCitation.id, citation);
     setEditingCitation(null);
@@ -221,27 +198,18 @@ else {
 ;
 const resetForm = () => {
     setFormData({});
-    type: citationStyle,
-        volume;
-    '',
-        reporter;
-    '',
-        page;
-    '',
-        court;
-    '',
-        date;
-    '',
-        url;
-    '',
-        pinpoint;
-    '',
-        title;
-    '',
-        author;
-    '',
-    ;
+    type: citationStyle;
+    volume: '';
+    reporter: '';
+    page: '';
+    court: '';
+    date: '';
+    url: '';
+    pinpoint: '';
+    title: '';
+    author: '';
 };
+;
 setShowAddForm(false);
 ;
 const handleEdit = (citation) => {
@@ -257,12 +225,16 @@ const handleDelete = (citationId) => {
         try {
             await navigator.clipboard.writeText(text);
             // You could add a toast notification here
+            try {
+            }
+            catch (err) {
+                console.error('Failed to copy citation:', err);
+            }
+            ;
+            const filteredAndSortedCitations = citations;
         }
-        catch (err) {
-            console.error('Failed to copy citation:', err);
+        finally {
         }
-        ;
-        const filteredAndSortedCitations = citations;
     };
 };
 filter(citation => { });
@@ -282,8 +254,8 @@ sort((a, b) => {
             return a.type.localeCompare(b.type);
         case 'date':
         default:
-            return (b.date || '').localeCompare(a.date || '');
     }
+    return (b.date || '').localeCompare(a.date || '');
 });
 return;
 _jsxs("div", { className: `citation-manager ${className}`, children: ["}", _jsx("style", { children: `
@@ -293,107 +265,107 @@ _jsxs("div", { className: `citation-manager ${className}`, children: ["}", _jsx(
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
           .manager-header {
-            background: #f7fafc;,
+            background: #f7fafc
   padding: 1.5rem;
             border-bottom: 1px solid #e2e8f0;
           .manager-title {
             font-size: 1.5rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #2d3748;
             margin: 0 0 1rem 0;
           .header-controls {
-            display: flex;,
+            display: flex;
   gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
           .add-citation-btn {
-            background: #4299e1;,
+            background: #4299e1
   color: white;
-            border: none;,
+            border: none;
   padding: 0.5rem 1rem;
-            border-radius: 6px;,
+            border-radius: 6px;
   cursor: pointer;
-            font-weight: 500;,
+            font-weight: 500;
   transition: background 0.2s;
-          .add-citation-btn:hover {,
+          .add-citation-btn:hover {
   background: #3182ce;
           .search-input {
-            padding: 0.5rem;,
+            padding: 0.5rem
   border: 1px solid #cbd5e0;
             border-radius: 6px;
             font-size: 0.9rem;
             min-width: 200px;
           .filter-select {
-            padding: 0.5rem;,
+            padding: 0.5rem
   border: 1px solid #cbd5e0;
             border-radius: 6px;
             font-size: 0.9rem;
           .citation-form {
-            background: #f7fafc;,
+            background: #f7fafc
   padding: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;,
+            border-bottom: 1px solid #e2e8f0
   display: grid;
-            grid-template-columns: 1fr 1fr;,
+            grid-template-columns: 1fr 1fr
   gap: 1rem;
           .form-title {
             grid-column: 1 / -1;
             font-size: 1.2rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #2d3748;
             margin: 0 0 1rem 0;
           .form-group {
             display: flex;
-            flex-direction: column;,
+            flex-direction: column;
   gap: 0.25rem;
           .form-group.full-width {
             grid-column: 1 / -1;
           .form-label {
             font-size: 0.9rem;
-            font-weight: 500;,
+            font-weight: 500;
   color: #4a5568;
           .form-input {
-            padding: 0.5rem;,
+            padding: 0.5rem
   border: 1px solid #cbd5e0;
             border-radius: 4px;
             font-size: 0.9rem;
           .form-actions {
-            grid-column: 1 / -1;,
+            grid-column: 1 / -1
   display: flex;
             gap: 1rem;
             justify-content: flex-end;
             margin-top: 1rem;
           .form-button {
             padding: 0.5rem 1rem;
-            border-radius: 6px;,
+            border-radius: 6px;
   cursor: pointer;
-            font-weight: 500;,
+            font-weight: 500;
   transition: background 0.2s;
             border: none;
           .form-button.primary {
-            background: #4299e1;,
+            background: #4299e1
   color: white;
-          .form-button.primary:hover {,
+          .form-button.primary:hover {
   background: #3182ce;
           .form-button.secondary {
-            background: #e2e8f0;,
+            background: #e2e8f0
   color: #2d3748;
-          .form-button.secondary:hover {,
+          .form-button.secondary:hover {
   background: #cbd5e0;
           .citations-list {
             padding: 1.5rem;
           .citations-stats {
-            display: flex;,
+            display: flex;
   gap: 2rem;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid #e2e8f0;
-            font-size: 0.9rem;,
+            font-size: 0.9rem
   color: #718096;
           .citation-item {
-            padding: 1.5rem;,
+            padding: 1.5rem
   border: 1px solid #e2e8f0;
             border-radius: 6px;
-            margin-bottom: 1rem;,
+            margin-bottom: 1rem;
   transition: all 0.2s;
           .citation-item:hover {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -404,7 +376,7 @@ _jsxs("div", { className: `citation-manager ${className}`, children: ["}", _jsx(
             align-items: flex-start;
             margin-bottom: 0.75rem;
           .citation-type {
-            background: #4299e1;,
+            background: #4299e1
   color: white;
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
@@ -412,57 +384,57 @@ _jsxs("div", { className: `citation-manager ${className}`, children: ["}", _jsx(
             font-weight: 500;
             text-transform: uppercase;
           .citation-actions {
-            display: flex;,
+            display: flex;
   gap: 0.5rem;
           .citation-action-btn {
-            background: none;,
+            background: none;
   border: 1px solid #cbd5e0;
             padding: 0.25rem 0.5rem;
-            border-radius: 4px;,
+            border-radius: 4px;
   cursor: pointer;
-            font-size: 0.8rem;,
+            font-size: 0.8rem
   color: #4a5568;
             transition: all 0.2s;
-          .citation-action-btn:hover {,
+          .citation-action-btn:hover {
   background: #f7fafc;
             border-color: #a0aec0;
           .citation-long-form {
-            font-size: 1rem;,
+            font-size: 1rem;
   color: #2d3748;
             margin-bottom: 0.5rem;
             line-height: 1.5;
             font-weight: 500;
           .citation-short-form {
-            font-size: 0.9rem;,
+            font-size: 0.9rem
   color: #718096;
             font-style: italic;
           .citation-metadata {
-            display: flex;,
+            display: flex;
   gap: 1rem;
             margin-top: 0.75rem;
-            font-size: 0.8rem;,
+            font-size: 0.8rem
   color: #a0aec0;
           .no-citations {
-            text-align: center;,
+            text-align: center;
   padding: 3rem 2rem;
             color: #718096;
           .no-citations-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
           .preview-section {
-            background: #f0fff4;,
+            background: #f0fff4
   border: 1px solid #c6f6d5;
-            border-radius: 4px;,
+            border-radius: 4px;
   padding: 1rem;
             grid-column: 1 / -1;
             margin-top: 1rem;
           .preview-title {
             font-size: 0.9rem;
-            font-weight: 600;,
+            font-weight: 600;
   color: #2f855a;
             margin-bottom: 0.5rem;
           .preview-citation {
-            font-size: 0.9rem;,
+            font-size: 0.9rem }
   color: #2d3748;
             font-family: 'Times New Roman', serif;
             line-height: 1.5;

@@ -7,7 +7,10 @@ import { jsx as _jsx } from "react/jsx-runtime";
  * for organizing and managing collections of nodes on the graph canvas.
  */
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { REGION_GROUP_COLORS, REGION_GROUP_STYLES } from '../../types/CollaborationTypes';
+import { REGION_GROUP_COLORS } from REGION_GROUP_STYLES;
+from;
+'../../types/CollaborationTypes';
+zoom = 1;
 {
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
@@ -48,10 +51,9 @@ const shouldShowGroup = useCallback(() => {
         case 'collapsed':
             return !group.collapsed;
         default:
-            return true;
     }
-    [group.visible, group.visibility, group.collapsed, selected, isDragging, isResizing, isEditingLabel];
-});
+    return true;
+}, [group.visible, group.visibility, group.collapsed, selected, isDragging, isResizing, isEditingLabel]);
 // Handle mouse down for dragging
 const handleMouseDown = useCallback((e) => {
     if (!canMove || isEditingLabel)
@@ -60,11 +62,10 @@ const handleMouseDown = useCallback((e) => {
     e.preventDefault();
     setIsDragging(true);
     setDragStart({});
-    x: e.clientX - group.bounds.x,
-        y;
-    e.clientY - group.bounds.y,
-    ;
+    x: e.clientX - group.bounds.x;
+    y: e.clientY - group.bounds.y;
 });
+;
 [canMove, isEditingLabel, group.bounds];
 ;
 // Handle resize handle mouse down
@@ -75,15 +76,12 @@ const handleResizeMouseDown = useCallback((e, handle) => {
     e.preventDefault();
     setIsResizing(true);
     setResizeStart({});
-    x: e.clientX,
-        y;
-    e.clientY,
-        width;
-    group.bounds.width,
-        height;
-    group.bounds.height,
-        handle;
-});
+    x: e.clientX;
+    y: e.clientY;
+    width: group.bounds.width;
+    height: group.bounds.height;
+}, handle);
+;
 [canResize, isEditingLabel, group.bounds];
 ;
 // Handle mouse move for dragging and resizing
@@ -93,14 +91,12 @@ useEffect(() => {
             const newX = e.clientX - dragStart.x;
             const newY = e.clientY - dragStart.y;
             onAction({});
-            type: 'move',
-                groupId;
-            group.id,
-                position;
-            {
-                x: newX, y;
-                newY;
-            }
+            type: 'move';
+            groupId: group.id;
+        }
+        position: {
+            x: newX, y;
+            newY;
         }
     };
 });
@@ -109,36 +105,33 @@ if (isResizing) {
     const deltaY = e.clientY - resizeStart.y;
     const newBounds = { ...group.bounds };
     switch (resizeStart.handle) {
-        case 'se': // Southeast,
+        case 'se': // Southeast
             newBounds.width = Math.max(100, resizeStart.width + deltaX);
             newBounds.height = Math.max(80, resizeStart.height + deltaY);
             break;
-        case 'sw': // Southwest,
+        case 'sw': // Southwest
             newBounds.width = Math.max(100, resizeStart.width - deltaX);
             newBounds.height = Math.max(80, resizeStart.height + deltaY);
             newBounds.x = group.bounds.x + deltaX;
             break;
-        case 'ne': // Northeast,
+        case 'ne': // Northeast
             newBounds.width = Math.max(100, resizeStart.width + deltaX);
             newBounds.height = Math.max(80, resizeStart.height - deltaY);
             newBounds.y = group.bounds.y + deltaY;
             break;
-        case 'nw': // Northwest,
+        case 'nw': // Northwest
             newBounds.width = Math.max(100, resizeStart.width - deltaX);
             newBounds.height = Math.max(80, resizeStart.height - deltaY);
             newBounds.x = group.bounds.x + deltaX;
             newBounds.y = group.bounds.y + deltaY;
             break;
             onAction({});
-            type: 'resize',
-                groupId;
-            group.id,
-                bounds;
-            newBounds,
-            ;
+            type: 'resize';
+            groupId: group.id;
+            bounds: newBounds;
     }
-    ;
 }
+;
 ;
 const handleMouseUp = () => {
     setIsDragging(false);
@@ -164,14 +157,10 @@ const startEditingLabel = useCallback(() => {
 const saveLabel = useCallback(() => {
     setIsEditingLabel(false);
     onAction({});
-    type: 'update',
-        groupId;
-    group.id,
-        group;
-    {
-        label: editLabelValue.trim() || 'Untitled Group';
-    }
-});
+    type: 'update';
+    groupId: group.id;
+}, group, { label: editLabelValue.trim() || 'Untitled Group' });
+;
 [editLabelValue, group.id, onAction];
 ;
 const cancelEditLabel = useCallback(() => {
@@ -186,12 +175,11 @@ const handleLabelKeyDown = useCallback((e) => {
             saveLabel();
             break;
         case 'Escape':
-            e.preventDefault();
-            cancelEditLabel();
-            break;
     }
-    [saveLabel, cancelEditLabel];
-});
+    e.preventDefault();
+    cancelEditLabel();
+    break;
+}, [saveLabel, cancelEditLabel]);
 // Focus input when editing starts
 useEffect(() => {
     if (isEditingLabel && labelInputRef.current) {
@@ -203,11 +191,10 @@ useEffect(() => {
 // Handle collapse/expand
 const handleToggleCollapse = useCallback(() => {
     onAction({});
-    type: group.collapsed ? 'expand' : 'collapse',
-        groupId;
-    group.id,
-    ;
+    type: group.collapsed ? 'expand' : 'collapse';
+    groupId: group.id;
 });
+;
 [group.collapsed, group.id, onAction];
 ;
 // Don't render if not visible
@@ -219,26 +206,20 @@ if (!shouldShowGroup()) {
             left: group.bounds.x,
             top: group.bounds.y,
             width: group.bounds.width,
-            height: group.bounds.height,
-            border: `${group.borderWidth || 2}px ${styleConfig.borderStyle} ${group.color}`
-        }, "borderRadius:styleConfig": true, borderRadius: true, "backgroundColor:group": true, backgroundColor: true }) || colorTheme.background,
-        opacity;
-    group.opacity || 0.8,
-        boxShadow;
-    styleConfig.boxShadow,
-        cursor;
-    isDragging ? 'grabbing' : (canMove ? 'grab' : 'default'),
-        zIndex;
-    (group.zIndex || 0) + (selected ? 100 : 0),
-        transition;
-    isDragging || isResizing ? 'none' : 'all 0.2s ease',
-        transform;
-    selected ? 'scale(1.02)' : 'scale(1)',
-        pointerEvents;
-    'all',
-        fontFamily;
-    'system-ui, -apple-system, sans-serif';
+            height: group.bounds.height
+        }, "border:": true });
+    `${group.borderWidth || 2}px ${styleConfig.borderStyle} ${group.color}`;
 }
+borderRadius: styleConfig.borderRadius;
+backgroundColor: group.backgroundColor || colorTheme.background;
+opacity: group.opacity || 0.8;
+boxShadow: styleConfig.boxShadow;
+cursor: isDragging ? 'grabbing' : (canMove ? 'grab' : 'default');
+zIndex: (group.zIndex || 0) + (selected ? 100 : 0);
+transition: isDragging || isResizing ? 'none' : 'all 0.2s ease';
+transform: selected ? 'scale(1.02)' : 'scale(1)';
+pointerEvents: 'all';
+fontFamily: 'system-ui, -apple-system, sans-serif';
 onMouseDown = { handleMouseDown };
 onDoubleClick = { startEditingLabel }
     >
@@ -248,64 +229,40 @@ onDoubleClick = { startEditingLabel }
         < div;
     style = {};
     {
-        position: 'absolute',
-            top;
-        -25,
-            left;
-        0,
-            right;
-        0,
-            height;
-        24,
-            display;
-        'flex',
-            alignItems;
-        'center',
-            gap;
-        8,
-            padding;
-        '0 8px',
-            background;
-        colorTheme.primary,
-            color;
-        'white',
-            fontSize;
-        12,
-            fontWeight;
-        600,
-            borderRadius;
-        '4px 4px 0 0',
-            boxShadow;
-        '0 2px 4px rgba(0, 0, 0, 0.1)',
-            cursor;
-        'default',
-        ;
+        position: 'absolute';
+        top: -25;
+        left: 0;
+        right: 0;
+        height: 24;
+        display: 'flex';
+        alignItems: 'center';
+        gap: 8;
+        padding: '0 8px';
+        background: colorTheme.primary;
+        color: 'white';
+        fontSize: 12;
+        fontWeight: 600;
+        borderRadius: '4px 4px 0 0';
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)';
+        cursor: 'default';
     }
+    onMouseDown = {}(e);
+    e.stopPropagation();
 }
-onMouseDown = {}(e);
-e.stopPropagation();
     >
         { /* Collapse/Expand button */}
     < button;
 onClick = { handleToggleCollapse };
 style = {};
 {
-    background: 'none',
-        border;
-    'none',
-        color;
-    'white',
-        fontSize;
-    12,
-        cursor;
-    'pointer',
-        padding;
-    '2px 4px',
-        borderRadius;
-    2,
-        transition;
-    'background-color 0.2s ease',
-    ;
+    background: 'none';
+    border: 'none';
+    color: 'white';
+    fontSize: 12;
+    cursor: 'pointer';
+    padding: '2px 4px';
+    borderRadius: 2;
+    transition: 'background-color 0.2s ease';
 }
 onMouseEnter = {}(e);
 {
@@ -335,24 +292,15 @@ onKeyDown = { handleLabelKeyDown };
 onBlur = { saveLabel };
 style = {};
 {
-    flex: 1,
-        background;
-    'rgba(255, 255, 255, 0.9)',
-        color;
-    colorTheme.text,
-        border;
-    'none',
-        outline;
-    'none',
-        padding;
-    '2px 6px',
-        fontSize;
-    12,
-        fontWeight;
-    600,
-        borderRadius;
-    3,
-    ;
+    flex: 1;
+    background: 'rgba(255, 255, 255, 0.9)';
+    color: colorTheme.text;
+    border: 'none';
+    outline: 'none';
+    padding: '2px 6px';
+    fontSize: 12;
+    fontWeight: 600;
+    borderRadius: 3;
 }
 maxLength = { 50:  }
     /  >
@@ -361,16 +309,11 @@ maxLength = { 50:  }
     < span;
 style = {};
 {
-    flex: 1,
-        cursor;
-    canEdit ? 'pointer' : 'default',
-        textOverflow;
-    'ellipsis',
-        overflow;
-    'hidden',
-        whiteSpace;
-    'nowrap',
-    ;
+    flex: 1;
+    cursor: canEdit ? 'pointer' : 'default';
+    textOverflow: 'ellipsis';
+    overflow: 'hidden';
+    whiteSpace: 'nowrap';
 }
 onDoubleClick = { startEditingLabel };
 title = { group, : .label }
@@ -384,20 +327,13 @@ span >
         < span;
     style = {};
     {
-        fontSize: 10,
-            opacity;
-        0.9,
-            background;
-        'rgba(255, 255, 255, 0.2)',
-            padding;
-        '2px 6px',
-            borderRadius;
-        10,
-            minWidth;
-        16,
-            textAlign;
-        'center',
-        ;
+        fontSize: 10;
+        opacity: 0.9;
+        background: 'rgba(255, 255, 255, 0.2)';
+        padding: '2px 6px';
+        borderRadius: 10;
+        minWidth: 16;
+        textAlign: 'center';
     }
 }
 title = {} `${nodeCount} node${nodeCount !== 1 ? 's' : ''}`;
@@ -435,7 +371,7 @@ div >
             border: '1px solid white',
             borderRadius: '50%',
             cursor: 'se-resize',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
         }, onMouseDown: (e) => handleResizeMouseDown(e, 'se') });
     { /* Southwest handle */ }
     _jsx("div", { style: {
@@ -448,7 +384,7 @@ div >
             border: '1px solid white',
             borderRadius: '50%',
             cursor: 'sw-resize',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
         }, onMouseDown: (e) => handleResizeMouseDown(e, 'sw') });
     { /* Northeast handle */ }
     _jsx("div", { style: {
@@ -461,7 +397,7 @@ div >
             border: '1px solid white',
             borderRadius: '50%',
             cursor: 'ne-resize',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
         }, onMouseDown: (e) => handleResizeMouseDown(e, 'ne') });
     { /* Northwest handle */ }
     _jsx("div", { style: {
@@ -474,7 +410,7 @@ div >
             border: '1px solid white',
             borderRadius: '50%',
             cursor: 'nw-resize',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'
         }, onMouseDown: (e) => handleResizeMouseDown(e, 'nw') });
      >
     ;
@@ -485,63 +421,40 @@ div >
         < div;
     style = {};
     {
-        position: 'absolute',
-            bottom;
-        '100%',
-            left;
-        '50%',
-            transform;
-        'translateX(-50%)',
-            marginBottom;
-        8,
-            padding;
-        '6px 10px',
-            background;
-        'rgba(0, 0, 0, 0.8)',
-            color;
-        'white',
-            fontSize;
-        11,
-            borderRadius;
-        4,
-            whiteSpace;
-        'nowrap',
-            opacity;
-        0,
-            pointerEvents;
-        'none',
-            transition;
-        'opacity 0.2s ease',
-            zIndex;
-        1000,
-        ;
+        position: 'absolute';
+        bottom: '100%';
+        left: '50%';
+        transform: 'translateX(-50%)';
+        marginBottom: 8;
+        padding: '6px 10px';
+        background: 'rgba(0, 0, 0, 0.8)';
+        color: 'white';
+        fontSize: 11;
+        borderRadius: 4;
+        whiteSpace: 'nowrap';
+        opacity: 0;
+        pointerEvents: 'none';
+        transition: 'opacity 0.2s ease';
+        zIndex: 1000;
     }
+    className = "group-description-tooltip"
+        /  >
+    ;
 }
-className = "group-description-tooltip"
-    /  >
-;
 { /* Collapsed state indicator */ }
 {
     group.collapsed && ()
         < div;
     style = {};
     {
-        position: 'absolute',
-            top;
-        '50%',
-            left;
-        '50%',
-            transform;
-        'translate(-50%, -50%)',
-            color;
-        colorTheme.text,
-            fontSize;
-        24,
-            opacity;
-        0.6,
-            pointerEvents;
-        'none',
-        ;
+        position: 'absolute';
+        top: '50%';
+        left: '50%';
+        transform: 'translate(-50%, -50%)';
+        color: colorTheme.text;
+        fontSize: 24;
+        opacity: 0.6;
+        pointerEvents: 'none';
     }
 }
     >

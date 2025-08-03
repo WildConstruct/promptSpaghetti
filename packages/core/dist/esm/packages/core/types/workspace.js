@@ -2,8 +2,15 @@
  * Epic 9.2.1 - Workspace Types
  * TypeScript types for workspace functionality (client-side)
  */
+metadata: Record;
+created_by: string;
+created_at: Date;
+updated_at: Date;
+delivery_channel: 'in_app' | 'email' | 'push';
+read_at ?  : Date;
+delivered_at: Date;
+// Permission constants
 export const PERMISSIONS = {
-    // Workspace permissions
     WORKSPACE_READ: 1 << 0,
     WORKSPACE_WRITE: 1 << 1,
     WORKSPACE_ADMIN: 1 << 2,
@@ -29,8 +36,10 @@ export const PERMISSIONS = {
     // Advanced permissions
     ACTIVITY_READ: 1 << 18,
     NOTIFICATION_MANAGE: 1 << 19,
-    EXPORT_DATA: 1 << 20,
+    EXPORT_DATA: 1 << 20
 };
+as;
+const ;
 // Utility functions
 export function hasPermission(userPermissions, requiredPermission) {
     return (userPermissions & requiredPermission) !== 0;

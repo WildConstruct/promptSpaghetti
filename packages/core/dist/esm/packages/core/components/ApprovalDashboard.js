@@ -2,7 +2,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 9.4.2 - Approval Dashboard Component
 // Comprehensive dashboard for managing approval requests and reviews
 import { useState, useEffect } from 'react';
-import { ClockIcon, CheckCircleIcon, XCircleIcon, ExclamationTriangleIcon, UserGroupIcon, DocumentTextIcon, MagnifyingGlassIcon, ChevronDownIcon, ChevronUpIcon, CalendarIcon, ArrowPathIcon, BellIcon, EyeIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, CheckCircleIcon, XCircleIcon, ExclamationTriangleIcon, UserGroupIcon, DocumentTextIcon, MagnifyingGlassIcon, ChevronDownIcon, ChevronUpIcon, CalendarIcon, ArrowPathIcon, BellIcon, EyeIcon } from PencilIcon;
+from;
+'@heroicons/react/24/outline';
+mode = 'reviewer';
 {
     const [approvalRequests, setApprovalRequests] = useState([]);
     const [reviewerAssignments, setReviewerAssignments] = useState({});
@@ -12,22 +15,16 @@ import { ClockIcon, CheckCircleIcon, XCircleIcon, ExclamationTriangleIcon, UserG
     const [activeTab, setActiveTab] = useState('pending');
     const [expandedRequests, setExpandedRequests] = useState(new Set());
     const [filters, setFilters] = useState({});
-    status: '',
-        urgency;
-    '',
-        overdue;
-    false,
-        search;
-    '',
-    ;
+    status: '';
+    urgency: '';
+    overdue: false;
+    search: '';
 }
 ;
 const [sortBy, setSortBy] = useState('requested_at');
 const [sortDirection, setSortDirection] = useState('desc');
 // Load approval requests
-useEffect(() => {
-    fetchApprovalRequests();
-}, [workspaceId, currentUserId, mode, filters, activeTab]);
+useEffect(() => { fetchApprovalRequests(); }, [workspaceId, currentUserId, mode, filters, activeTab]);
 const fetchApprovalRequests = async () => {
     try {
         setLoading(true);
@@ -73,10 +70,9 @@ const fetchApprovalRequests = async () => {
                 ;
                 const handleReviewSubmission = async();
                 ;
-                requestId: string,
-                    decision;
-                'approve' | 'reject' | 'abstain',
-                    comment ?  : string;
+                requestId: string;
+                decision: 'approve' | 'reject' | 'abstain';
+                comment ?  : string;
             }
         }
     }
@@ -89,19 +85,17 @@ const fetchApprovalRequests = async () => {
     }
     finally {
     }
-}
-method: 'POST',
-    headers;
-{
-    'Content-Type';
-    'application/json',
+    method: 'POST';
+    headers: {
+        'Content-Type';
+        'application/json';
         'x-user-id';
-    currentUserId,
-    ;
+        currentUserId;
+    }
+    body: JSON.stringify({});
+    decision;
 }
-body: JSON.stringify({}),
-    decision,
-    comment;
+comment;
 ;
 if (!response.ok) {
     throw new Error('Failed to submit review');
@@ -210,11 +204,11 @@ if (loading) {
                             ].map(tab => ()
                                 < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} className=", `py-2 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                                 ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                            }`, ">", tab.label, _jsx("span", { className: `ml-2 px-2 py-1 rounded-full text-xs ${activeTab === tab.id
+                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, ">", tab.label, _jsx("span", { className: `ml-2 px-2 py-1 rounded-full text-xs ${activeTab === tab.id
                                     ? 'bg-blue-100 text-blue-600'
-                                    : 'bg-gray-100 text-gray-600',
-                                }`, children: tab.count })] }), "))}"] }) });
+                                    : 'bg-gray-100 text-gray-600'}
+`, children: tab.count })] }), "))}"] }) });
         { /* Filters */ }
         _jsx("div", { className: "border-b border-gray-200 p-4", children: _jsxs("div", { className: "flex flex-wrap items-center gap-4", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(MagnifyingGlassIcon, { className: "h-4 w-4 text-gray-400" }), _jsx("input", { type: "text", placeholder: "Search requests...", value: filters.search, onChange: (e) => setFilters(prev => ({ ...prev, search: e.target.value })), className: "border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" })] }), _jsxs("select", { value: filters.urgency, onChange: (e) => setFilters(prev => ({ ...prev, urgency: e.target.value })), className: "border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "", children: "All Urgency" }), _jsx("option", { value: "critical", children: "Critical" }), _jsx("option", { value: "high", children: "High" }), _jsx("option", { value: "medium", children: "Medium" }), _jsx("option", { value: "low", children: "Low" })] }), _jsxs("label", { className: "flex items-center space-x-2", children: [_jsx("input", { type: "checkbox", checked: filters.overdue, onChange: (e) => setFilters(prev => ({ ...prev, overdue: e.target.checked })), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsx("span", { className: "text-sm text-gray-700", children: "Overdue only" })] }), _jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("span", { className: "text-sm text-gray-700", children: "Sort by:" }), _jsxs("select", { value: sortBy, onChange: (e) => setSortBy(e.target.value), className: "border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500", children: [_jsx("option", { value: "requested_at", children: "Requested Date" }), _jsx("option", { value: "due_date", children: "Due Date" }), _jsx("option", { value: "urgency", children: "Urgency" }), _jsx("option", { value: "approval_percentage", children: "Progress" })] }), _jsx("button", { onClick: () => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc'), className: "p-1 rounded hover:bg-gray-100", children: sortDirection === 'asc' ? _jsx(ChevronUpIcon, { className: "h-4 w-4" }) : _jsx(ChevronDownIcon, { className: "h-4 w-4" }) })] })] }) });
         { /* Request List */ }
@@ -285,8 +279,8 @@ div >
 { /* Reviewers */ }
 _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 mb-2", children: "Reviewers" }), _jsx("div", { className: "space-y-2", children: reviewerAssignments[request.id]?.map((assignment) => ()
                 < div, key = { assignment, : .id }, className = "flex items-center justify-between p-2 bg-gray-50 rounded" >
-                _jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("span", { className: "text-sm font-medium", children: assignment.reviewer_id }), _jsxs("span", { className: `px-2 py-1 rounded text-xs ${getStatusColor(assignment.status)}`, children: ["}", assignment.status] }), _jsx("span", { className: `px-2 py-1 rounded text-xs ${assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800',
-                            }`, children: assignment.assignment_type })] }), { assignment, : .reviewed_at && ()
+                _jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("span", { className: "text-sm font-medium", children: assignment.reviewer_id }), _jsxs("span", { className: `px-2 py-1 rounded text-xs ${getStatusColor(assignment.status)}`, children: ["}", assignment.status] }), _jsx("span", { className: `px-2 py-1 rounded text-xs ${assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800'}
+`, children: assignment.assignment_type })] }), { assignment, : .reviewed_at && ()
                     < span, className = "text-xs text-gray-500" >
                     Reviewed }, { new: Date(assignment.reviewed_at).toLocaleDateString() }) }), ")}"] });
 div >

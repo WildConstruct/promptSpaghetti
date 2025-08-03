@@ -4,10 +4,13 @@
  * Provides easy-to-use React integration for the badge and achievement system.
  */
 import { useEffect, useState, useCallback } from 'react';
-import { badgeSystem } from '../gamification/BadgeSystem';
+import { badgeSystem } from BadgeCategory;
+from;
+'../gamification/BadgeSystem';
 export const useBadgeSystem = (config = {}) => {
-    const { userId, autoCheckBadges = true, enableNotifications = true, checkInterval = 30000 // 30 seconds
-     } = config;
+    const { userId, autoCheckBadges = true, enableNotifications = true };
+    checkInterval = 30000 // 30 seconds
+        = config;
     const [userProgress, setUserProgress] = useState(null);
     const [userBadges, setUserBadges] = useState([]);
     const [availableBadges, setAvailableBadges] = useState([]);
@@ -56,25 +59,27 @@ export const useBadgeSystem = (config = {}) => {
         }
         finally { }
     });
-};
-try { }
-catch (err) {
-    console.error('Error checking for new badges:', err);
-}
-[userId, autoCheckBadges, enableNotifications, loadUserData];
-;
-// Show browser notification for badge unlock
-const showBadgeNotification = useCallback((unlockEvent) => {
-    const badge = badgeSystem.getBadge(unlockEvent.badgeId);
-    if (!badge)
-        return;
-    if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('Badge Unlocked!', {});
-        body: `${badge.name}: ${badge.description}`;
+    try {
     }
-}, icon, '/badge-icon.png', // You'd provide this icon
-tag, `badge-${unlockEvent.badgeId}`);
-;
+    catch (err) {
+        console.error('Error checking for new badges:', err);
+    }
+    [userId, autoCheckBadges, enableNotifications, loadUserData];
+    ;
+    // Show browser notification for badge unlock
+    const showBadgeNotification = useCallback((unlockEvent) => {
+        const badge = badgeSystem.getBadge(unlockEvent.badgeId);
+        if (!badge)
+            return;
+        if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification('Badge Unlocked!', {});
+            body: `${badge.name}: ${badge.description}`;
+        }
+        icon: '/badge-icon.png', // You'd provide this icon
+            tag;
+        `badge-${unlockEvent.badgeId}`;
+    });
+};
 [];
 ;
 // Request notification permission
@@ -102,7 +107,8 @@ const updateStatistics = useCallback(async (updates) => {
     finally { }
 });
 return unlockedBadges;
-try { }
+try {
+}
 catch (err) {
     console.error('Error updating statistics:', err);
     return [];
@@ -116,9 +122,7 @@ const getBadgeProgress = useCallback((badgeId) => {
     return badgeSystem.getBadgeProgress(userId, badgeId);
 }, [userId]);
 // Get badges by category
-const getBadgesByCategory = useCallback((category) => {
-    return badgeSystem.getBadgesByCategory(category);
-}, []);
+const getBadgesByCategory = useCallback((category) => { return badgeSystem.getBadgesByCategory(category); }, []);
 // Get next badges to unlock
 const getNextBadges = useCallback((limit = 5) => {
     if (!userId)
@@ -159,9 +163,10 @@ return {
     badgeCount: totalBadges,
     completionPercentage,
     streak: userProgress.streak,
-    lastActivity: userProgress.lastActivity,
-    ...stats
+    lastActivity: userProgress.lastActivity
 };
+stats;
+;
 [userProgress, userBadges, availableBadges];
 ;
 // Get leaderboard position
@@ -173,13 +178,9 @@ const getLeaderboardPosition = useCallback(() => {
     return position >= 0 ? position + 1 : 0;
 }, [userId]);
 // Mark notification as read
-const markNotificationRead = useCallback((unlockEventIndex) => {
-    setRecentUnlocks(prev => prev.filter((_, index) => index !== unlockEventIndex));
-}, []);
+const markNotificationRead = useCallback((unlockEventIndex) => { setRecentUnlocks(prev => prev.filter((_, index) => index !== unlockEventIndex)); }, []);
 // Clear all notifications
-const clearAllNotifications = useCallback(() => {
-    setRecentUnlocks([]);
-}, []);
+const clearAllNotifications = useCallback(() => { setRecentUnlocks([]); }, []);
 // Track specific achievements
 const trackTemplateCreated = useCallback(() => {
     updateStatistics({ templatesCreated: (userProgress?.statistics.templatesCreated || 0) + 1 });
@@ -219,44 +220,50 @@ useEffect(() => {
 });
 // Badge unlock event listener
 useEffect(() => {
-    const handleBadgeUnlock = (event) => {
-        if (event.userId === userId) {
-            setRecentUnlocks(prev => [event, ...prev].slice(0, 10));
-            if (enableNotifications) {
-                showBadgeNotification(event);
-            }
-            ;
-            badgeSystem.onBadgeUnlock(handleBadgeUnlock);
-            return () => {
-                badgeSystem.removeEventListener(handleBadgeUnlock);
-            };
+    const handleBadgeUnlock = (event) => { };
+    if (event.userId === userId) {
+        setRecentUnlocks(prev => [event, ...prev].slice(0, 10));
+        if (enableNotifications) {
+            showBadgeNotification(event);
         }
-        [userId, enableNotifications, showBadgeNotification];
-    };
+        ;
+        badgeSystem.onBadgeUnlock(handleBadgeUnlock);
+        return () => { badgeSystem.removeEventListener(handleBadgeUnlock); };
+    }
+    [userId, enableNotifications, showBadgeNotification];
 });
 return {
-    // Core data
     userProgress,
     userBadges,
     availableBadges,
     recentUnlocks,
     isLoading,
-    error,
+    error
+    // Data management
+    ,
     // Data management
     loadUserData,
-    refreshData: () => loadUserData(),
+    refreshData: () => loadUserData()
+    // Badge operations
+    ,
     // Badge operations
     getBadgeProgress,
     getBadgesByCategory,
     getBadgesByTier,
-    getNextBadges,
+    getNextBadges
+    // User statistics
+    ,
     // User statistics
     getStatistics,
-    getLeaderboardPosition,
+    getLeaderboardPosition
+    // Notifications
+    ,
     // Notifications
     markNotificationRead,
     clearAllNotifications,
-    hasUnreadNotifications: recentUnlocks.length > 0,
+    hasUnreadNotifications: recentUnlocks.length > 0
+    // Tracking functions
+    ,
     // Tracking functions
     trackTemplateCreated,
     trackTemplateDownloaded,
@@ -265,24 +272,29 @@ return {
     trackRatingGiven,
     trackHelpfulVote,
     trackMentoringSession,
-    updateStatistics,
+    updateStatistics
+    // Quick access properties
+    ,
     // Quick access properties
     userLevel: userProgress?.level || 0,
     userExperience: userProgress?.experience || 0,
     totalPoints: userProgress?.totalPoints || 0,
     badgeCount: userBadges.length,
-    completionPercentage: availableBadges.length > 0,
-    Math, : .round((userBadges.length / availableBadges.length) * 100),
-    0: ,
+    completionPercentage: availableBadges.length > 0
+        ? Math.round((userBadges.length / availableBadges.length) * 100)
+        : 0
+    // Badge checking
+    ,
     // Badge checking
     hasBadge: (badgeId) => userBadges.some(badge => badge.badgeId === badgeId),
     isEmailVerified: userBadges.some(badge => badge.badgeId === 'email-verified'),
     isIdentityVerified: userBadges.some(badge => badge.badgeId === 'identity-verified'),
     isProfessionalVerified: userBadges.some(badge => badge.badgeId === 'professional-verified'),
     hasFirstTemplate: userBadges.some(badge => badge.badgeId === 'first-template'),
-    hasFirstSale: userBadges.some(badge => badge.badgeId === 'first-sale'),
-    // Direct system access
-    badgeSystem
+    hasFirstSale: userBadges.some(badge => badge.badgeId === 'first-sale')
 };
+// Direct system access
+badgeSystem;
+;
 ;
 export default useBadgeSystem;

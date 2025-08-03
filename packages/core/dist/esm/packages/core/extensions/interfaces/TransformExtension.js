@@ -3,6 +3,7 @@
  * Defines interfaces for extending the data transformation system
  */
 import { z } from 'zod';
+// Transform Types
 export var TransformType;
 (function (TransformType) {
     TransformType["TEXT"] = "text";
@@ -13,8 +14,19 @@ export var TransformType;
     TransformType["NUMBER"] = "number";
     TransformType["BOOLEAN"] = "boolean";
     TransformType["DATE"] = "date";
-    TransformType["CUSTOM"] = "custom";
 })(TransformType || (TransformType = {}));
+CUSTOM = 'custom';
+outputSchema: z.ZodSchema;
+configSchema: z.ZodSchema;
+// UI configuration
+ui: TransformUIConfiguration;
+// Runtime configuration
+runtime: TransformRuntimeConfiguration;
+// Pipeline configuration
+pipeline: TransformPipelineConfiguration;
+// Metadata
+metadata: TransformMetadata;
+context: ExtensionContext;
 options ?  : Array;
 component ?  : React.ComponentType;
 // Advanced options
@@ -25,24 +37,20 @@ maxLength ?  : number;
 min ?  : number;
 max ?  : number;
 step ?  : number;
- > ;
+    > ;
 ;
 ;
 // Output validation
-outputValidation ?  : {
-    sanitize: boolean,
+outputValidation ?  : { sanitize: boolean,
     allowedTypes: string,
-    maxSize: number
-};
+    maxSize: number };
 ;
 ;
 // Compatibility
-compatibility ?  : {
-    minVersion: string,
+compatibility ?  : { minVersion: string,
     maxVersion: string,
     deprecated: boolean,
-    deprecationMessage: string
-};
+    deprecationMessage: string };
 // Categories and tags
 categories ?  : string;
 tags ?  : string;
@@ -56,18 +64,15 @@ metadata: {
 }
 ;
 // Pipeline context
-pipeline ?  : {
-    position: number,
+pipeline ?  : { position: number,
     total: number,
     previousOutput: any,
-    nextTransform: string
-};
+    nextTransform: string };
 // Caching context
-cache ?  : {
-    enabled: boolean,
+cache ?  : { enabled: boolean,
     key: string,
-    hit: boolean
-};
+    hit: boolean };
+// Transform Extension Helper Functions
 export var TransformExtensionHelpers;
 (function (TransformExtensionHelpers) {
     function createTransformDefinition(config) {
@@ -76,36 +81,37 @@ export var TransformExtensionHelpers;
             name: config.name || 'Custom Transform',
             description: config.description || 'A custom data transform',
             version: config.version || '1.0.0',
-            type: config.type || TransformType.CUSTOM,
-            transformClass: config.transformClass || class {
-                id = config.id || 'custom-transform';
-                name = config.name || 'Custom Transform';
-                type = config.type || TransformType.CUSTOM;
-                version = config.version || '1.0.0';
-                transform(input) { return input; }
-                validateInput() { return { valid: true, errors: [], warnings: [] }; }
-                validateOutput() { return { valid: true, errors: [], warnings: [] }; }
-                getInputSchema() { return z.any(); }
-                getOutputSchema() { return z.any(); }
-                getConfiguration() { return {}; }
-                setConfiguration() { }
-                getMetadata() { return { author: 'Unknown', license: 'MIT' }; }
-                async initialize() { }
-                async dispose() { }
-            },
-            inputSchema: config.inputSchema || z.any(),
-            outputSchema: config.outputSchema || z.any(),
-            configSchema: config.configSchema || z.object({}),
-            ui: config.ui || {},
-            runtime: config.runtime || {},
-            pipeline: config.pipeline || {},
-            metadata: config.metadata || {
-                author: 'Unknown',
-                license: 'MIT',
-            }
+            type: config.type || TransformType.CUSTOM
+        };
+        transformClass: config.transformClass || class {
+            id = config.id || 'custom-transform';
+            name = config.name || 'Custom Transform';
+            type = config.type || TransformType.CUSTOM;
+            version = config.version || '1.0.0';
+            transform(input) { return input; }
+            validateInput() { return { valid: true, errors: [], warnings: [] }; }
+            validateOutput() { return { valid: true, errors: [], warnings: [] }; }
+            getInputSchema() { return z.any(); }
+            getOutputSchema() { return z.any(); }
+            getConfiguration() { return {}; }
+            setConfiguration() { }
+            getMetadata() { return { author: 'Unknown', license: 'MIT' }; }
+            async initialize() { }
+            async dispose() { }
+            inputSchema;
+        } || z.any();
+        outputSchema: config.outputSchema || z.any();
+        configSchema: config.configSchema || z.object({});
+        ui: config.ui || {};
+        runtime: config.runtime || {};
+        pipeline: config.pipeline || {};
+        metadata: config.metadata || {
+            author: 'Unknown',
+            license: 'MIT'
         };
     }
     TransformExtensionHelpers.createTransformDefinition = createTransformDefinition;
+    ;
     function validateTransformDefinition(definition) {
         const errors = [];
         const warnings = [];
@@ -123,11 +129,12 @@ export var TransformExtensionHelpers;
             errors.push('Output schema is required');
         return {
             valid: errors.length === 0,
-            errors,
-            warnings
+            errors
         };
+        warnings;
     }
     TransformExtensionHelpers.validateTransformDefinition = validateTransformDefinition;
+    ;
     function createTransformRegistry() {
         const registry = new Map();
         const eventEmitter = new EventTarget();
@@ -135,49 +142,61 @@ export var TransformExtensionHelpers;
             register(definition) {
                 registry.set(definition.id, definition);
                 eventEmitter.dispatchEvent(new CustomEvent('registered', { detail: definition }));
-            },
-            unregister(transformId) {
-                const definition = registry.get(transformId);
-                if (definition) {
-                    registry.delete(transformId);
-                    eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
+                unregister(transformId, string);
+                {
+                    const definition = registry.get(transformId);
+                    if (definition) {
+                        registry.delete(transformId);
+                        eventEmitter.dispatchEvent(new CustomEvent('unregistered', { detail: definition }));
+                        get(transformId, string);
+                        {
+                            return registry.get(transformId);
+                        }
+                        getAll();
+                        {
+                            return Array.from(registry.values());
+                        }
+                        getByType(type, TransformType);
+                        {
+                            return Array.from(registry.values()).filter(def => def.type === type);
+                        }
+                        getByCategory(category, string);
+                        {
+                            return Array.from(registry.values()).filter(def => def.ui.category === category);
+                        }
+                        search(query, string);
+                        {
+                            const lowercaseQuery = query.toLowerCase();
+                            return Array.from(registry.values()).filter(def => def.name.toLowerCase().includes(lowercaseQuery) ||
+                                def.description.toLowerCase().includes(lowercaseQuery));
+                        }
+                        filter(predicate, (definition) => boolean);
+                        {
+                            return Array.from(registry.values()).filter(predicate);
+                        }
+                        getCompatible(inputType, string, outputType, string);
+                        {
+                            return Array.from(registry.values()).filter(def => {
+                                const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
+                                const outputCompatible = def.pipeline.outputCompatibility?.includes(outputType) ?? true;
+                                return inputCompatible && outputCompatible;
+                            });
+                            validate(definition, TransformDefinition);
+                            {
+                                return validateTransformDefinition(definition);
+                            }
+                            on(event, string, listener, any);
+                            {
+                                eventEmitter.addEventListener(event, listener);
+                            }
+                            off(event, string, listener, any);
+                            {
+                                eventEmitter.removeEventListener(event, listener);
+                            }
+                        }
+                        ;
+                    }
                 }
-            },
-            get(transformId) {
-                return registry.get(transformId);
-            },
-            getAll() {
-                return Array.from(registry.values());
-            },
-            getByType(type) {
-                return Array.from(registry.values()).filter(def => def.type === type);
-            },
-            getByCategory(category) {
-                return Array.from(registry.values()).filter(def => def.ui.category === category);
-            },
-            search(query) {
-                const lowercaseQuery = query.toLowerCase();
-                return Array.from(registry.values()).filter(def => def.name.toLowerCase().includes(lowercaseQuery) ||
-                    def.description.toLowerCase().includes(lowercaseQuery));
-            },
-            filter(predicate) {
-                return Array.from(registry.values()).filter(predicate);
-            },
-            getCompatible(inputType, outputType) {
-                return Array.from(registry.values()).filter(def => {
-                    const inputCompatible = def.pipeline.inputCompatibility?.includes(inputType) ?? true;
-                    const outputCompatible = def.pipeline.outputCompatibility?.includes(outputType) ?? true;
-                    return inputCompatible && outputCompatible;
-                });
-            },
-            validate(definition) {
-                return validateTransformDefinition(definition);
-            },
-            on(event, listener) {
-                eventEmitter.addEventListener(event, listener);
-            },
-            off(event, listener) {
-                eventEmitter.removeEventListener(event, listener);
             }
         };
     }

@@ -47,7 +47,6 @@ import { FilePreview } from './FilePreview';
     });
     // Handle mouse enter
     const handleMouseEnter = useCallback(() => {
-        // Clear any hide timeout
         if (hideTimeoutRef.current) {
             clearTimeout(hideTimeoutRef.current);
             hideTimeoutRef.current = null;
@@ -66,7 +65,6 @@ import { FilePreview } from './FilePreview';
     });
     // Handle mouse leave
     const handleMouseLeave = useCallback(() => {
-        // Clear any show timeout
         if (showTimeoutRef.current) {
             clearTimeout(showTimeoutRef.current);
             showTimeoutRef.current = null;
@@ -78,13 +76,9 @@ import { FilePreview } from './FilePreview';
         [];
     });
     // Handle focus (for keyboard accessibility)
-    const handleFocus = useCallback(() => {
-        handleMouseEnter();
-    }, [handleMouseEnter]);
+    const handleFocus = useCallback(() => { handleMouseEnter(); }, [handleMouseEnter]);
     // Handle blur
-    const handleBlur = useCallback(() => {
-        handleMouseLeave();
-    }, [handleMouseLeave]);
+    const handleBlur = useCallback(() => { handleMouseLeave(); }, [handleMouseLeave]);
     // Handle preview click
     const handlePreviewClick = useCallback(() => {
         onClick?.(file);
@@ -99,9 +93,7 @@ import { FilePreview } from './FilePreview';
         [];
     });
     // Handle preview mouse leave
-    const handlePreviewMouseLeave = useCallback(() => {
-        setIsVisible(false);
-    }, []);
+    const handlePreviewMouseLeave = useCallback(() => { setIsVisible(false); }, []);
     // Cleanup timeouts on unmount
     useEffect(() => {
         return () => {
@@ -118,19 +110,18 @@ import { FilePreview } from './FilePreview';
     return;
     _jsxs(_Fragment, { children: [_jsx("div", { ref: triggerRef, onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave, onFocus: handleFocus, onBlur: handleBlur, style: { display: 'inline-block' }, children: children }), isVisible && ()
                 < div, "ref=", previewRef, "className=\"absolute\" style=", {
-                position: 'fixed',
-                left: `${position.x}px`
-            }, ", top: `$", position.y, "px`} }, zIndex: 10000, backgroundColor: 'white', boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)', borderRadius: '8px', border: '1px solid #e5e5e5', maxWidth: '350px', animation: 'fadeIn 0.15s ease-out'; }} onMouseEnter=", handlePreviewMouseEnter, "onMouseLeave=", handlePreviewMouseLeave, "onClick=", handlePreviewClick, "role=\"tooltip\" aria-label=", `Preview of ${file.metadata.title || file.name}`, ">", _jsx(FilePreview, { file: file, mode: "full", isHover: true, onClick: onClick ? handlePreviewClick : undefined })] });
+                position: 'fixed'
+            }, "left: `$", position.x, "px`} top: `$", position.y, "px`} zIndex: 10000 backgroundColor: 'white' boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)' borderRadius: '8px' border: '1px solid #e5e5e5' maxWidth: '350px' animation: 'fadeIn 0.15s ease-out'; onMouseEnter=", handlePreviewMouseEnter, "onMouseLeave=", handlePreviewMouseLeave, "onClick=", handlePreviewClick, "role=\"tooltip\" aria-label=", `Preview of ${file.metadata.title || file.name}`, ">", _jsx(FilePreview, { file: file, mode: "full", isHover: true, onClick: onClick ? handlePreviewClick : undefined })] });
     div >
     ;
 }
 _jsx("style", { children: `
         @keyframes fadeIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: translateY(-4px);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: translateY(0);
       ` });
  >

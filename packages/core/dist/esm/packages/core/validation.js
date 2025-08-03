@@ -1,3 +1,7 @@
+/**
+* Validate current graph connections.
+* Returns an array of errors – empty means valid.
+*/
 export function validateConnection(edges, nodes) {
     const errors = [];
     const seenPairs = new Set();
@@ -10,9 +14,9 @@ export function validateConnection(edges, nodes) {
         }
         if (seenPairs.has(key)) {
             errors.push({ edgeId: e.id, message: 'Duplicate edge' });
-        }
-        else {
-            seenPairs.add(key);
+            {
+                seenPairs.add(key);
+            }
         }
     });
     return errors;

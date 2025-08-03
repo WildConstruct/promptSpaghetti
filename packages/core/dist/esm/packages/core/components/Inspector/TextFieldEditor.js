@@ -18,42 +18,30 @@ import React from 'react';
         ;
         const inputId = `field-${fieldKey}`;
     };
-    const inputStyle = {
-        width: '100%',
+    const inputStyle = { width: '100%',
         padding: 8,
-        border: error,
-    }
-        ? '1px solid #f56565'
-        : isFocused;
-    '1px solid #4299e1';
-    '1px solid #4a5568',
-        borderRadius;
-    4,
-        background;
-    '#2d3748',
-        color;
-    '#e2e8f0',
-        fontSize;
-    13,
-        fontFamily;
-    'system-ui, -apple-system, sans-serif',
-        outline;
-    'none',
-        transition;
-    'border-color 0.2s ease',
-        resize;
-    multiline ? 'vertical' : 'none',
-    ;
+        border: error
+            ? '1px solid #f56565'
+            : isFocused
+                ? '1px solid #4299e1'
+                : '1px solid #4a5568',
+        borderRadius: 4,
+        background: '#2d3748',
+        color: '#e2e8f0',
+        fontSize: 13,
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        outline: 'none',
+        transition: 'border-color 0.2s ease',
+        resize: multiline ? 'vertical' : 'none' };
 }
 ;
-const labelStyle = {
-    display: 'block',
+const labelStyle = { display: 'block',
     fontWeight: 500,
     marginBottom: 4,
     color: '#e2e8f0',
     fontSize: 12,
-    letterSpacing: '0.025em',
-};
+    letterSpacing: '0.025em' };
+;
 return;
 _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { htmlFor: inputId, style: labelStyle, children: [label, error && ()
                     < span, " style=", { color: '#f56565', marginLeft: 4, fontSize: 10 }, "> *"] }), ")}"] });
@@ -103,14 +91,10 @@ style = { inputStyle }
         < div;
     style = {};
     {
-        color: '#f56565',
-            fontSize;
-        11,
-            marginTop;
-        4,
-            fontWeight;
-        400,
-        ;
+        color: '#f56565';
+        fontSize: 11;
+        marginTop: 4;
+        fontWeight: 400;
     }
 }
  >
@@ -122,14 +106,10 @@ div >
         < div;
     style = {};
     {
-        color: '#a0aec0',
-            fontSize;
-        10,
-            marginTop;
-        2,
-            textAlign;
-        'right',
-        ;
+        color: '#a0aec0';
+        fontSize: 10;
+        marginTop: 2;
+        textAlign: 'right';
     }
 }
  >

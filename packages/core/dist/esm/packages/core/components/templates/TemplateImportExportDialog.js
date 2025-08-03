@@ -4,7 +4,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Advanced UI for importing and exporting templates with versioning support
  */
 import { useState, useCallback, useRef } from 'react';
-import { FiUpload, FiDownload, FiGitBranch, FiPackage, FiCheck, FiAlert, FiX, FiFile, FiGlobe, FiArrowRight, FiRefreshCw } from 'react-icons/fi';
+import { TemplateVersion } from TemplateBundle;
+from;
+'../../templates/TemplateVersionManager';
+import { FiUpload, FiDownload, FiGitBranch, FiPackage, FiCheck, FiAlert, FiX, FiFile, FiGlobe, FiArrowRight } from FiRefreshCw;
+from;
+'react-icons/fi';
 ;
 export const TemplateImportExportDialog = ({
     isOpen,
@@ -12,24 +17,18 @@ export const TemplateImportExportDialog = ({
     mode,
     template,
     onImportComplete,
-    onExportComplete,
-    className = ''
-});
-{
-    // Import state
+    onExportComplete });
+className = '';
+{ // Import state
     const [importSource, setImportSource] = useState('file');
     const [importStep, setImportStep] = useState('source');
     const [importFile, setImportFile] = useState(null);
     const [importUrl, setImportUrl] = useState('');
     const [gitConfig, setGitConfig] = useState({});
-    url: '',
-        branch;
-    'main',
-        username;
-    '',
-        token;
-    '',
-    ;
+    url: '';
+    branch: 'main';
+    username: '';
+    token: '';
 }
 ;
 // Export state
@@ -42,38 +41,23 @@ const [validation, setValidation] = useState(null);
 const [errors, setErrors] = useState([]);
 const [warnings, setWarnings] = useState([]);
 const [importOptions, setImportOptions] = useState({});
-format: 'json',
-    source;
-'',
-    merge_strategy;
-'replace',
-    resolve_conflicts;
-'auto',
-    update_dependencies;
-true,
-    create_backup;
-true,
-    validate_schema;
-true,
-    validate_dependencies;
-true,
-    validate_compatibility;
-true,
-;
+format: 'json';
+source: '';
+merge_strategy: 'replace';
+resolve_conflicts: 'auto';
+update_dependencies: true;
+create_backup: true;
+validate_schema: true;
+validate_dependencies: true;
+validate_compatibility: true;
 ;
 const [exportOptions, setExportOptions] = useState({});
-format: 'json',
-    include_version_history;
-false,
-    include_dependencies;
-true,
-    include_analytics;
-false,
-    bundle_dependencies;
-true,
-    compress;
-true,
-;
+format: 'json';
+include_version_history: false;
+include_dependencies: true;
+include_analytics: false;
+bundle_dependencies: true;
+compress: true;
 ;
 const fileInputRef = useRef(null);
 // Import handlers
@@ -81,7 +65,9 @@ const handleFileSelect = useCallback((event) => {
     const file = event.target.files?.[0];
     if (file) {
         setImportFile(file);
-        setImportOptions(prev => ({}), ...prev, source, file, format, file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' : , file.name.endsWith('.zip') ? 'zip' : , file.name.endsWith('.bundle') ? 'template_bundle' : 'json');
+        setImportOptions(prev => ({}), ...prev, source, file, format, file.name.endsWith('.yaml') || file.name.endsWith('.yml') ? 'yaml' :
+            file.name.endsWith('.zip') ? 'zip' :
+                file.name.endsWith('.bundle') ? 'template_bundle' : 'json');
     }
 });
 [];
@@ -137,9 +123,11 @@ if (!hasValidExtension) {
                         name: 'Sample Workflow Template',
                         version: '2.1.0',
                         author: 'Template Creator',
-                        dependencies: 2,
-                    },
-                    setWarnings(mockValidation) { }, : .warnings };
+                        dependencies: 2
+                    }
+                };
+                setValidation(mockValidation);
+                setWarnings(mockValidation.warnings);
                 if (mockValidation.valid) {
                     setImportStep('preview');
                 }
@@ -149,14 +137,13 @@ if (!hasValidExtension) {
                     console.error('Validation failed:', error);
                     setErrors([errorMessage]);
                     setValidation({});
-                    valid: false,
-                        warnings;
-                    [],
-                        errors;
-                    [errorMessage],
-                    ;
+                    valid: false;
+                    warnings: [];
+                    errors: [errorMessage];
                 }
-                ;
+            }
+            ;
+            try {
             }
             finally {
                 setLoading(false);
@@ -180,8 +167,9 @@ if (!hasValidExtension) {
                                 imported_version: {
                                     id: 'version-123',
                                     version_number: '2.1.0',
-                                    template_id: 'template-456',
+                                    template_id: 'template-456'
                                 },
+                                as, TemplateVersion,
                                 warnings: ['Some customization points were updated'],
                                 errors: [],
                                 original_version: '2.0.0',
@@ -191,75 +179,80 @@ if (!hasValidExtension) {
                                 dependencies_updated: 2,
                                 migration_applied: false,
                                 backup_version_id: 'backup-789',
-                                can_rollback: true };
+                                can_rollback: true
+                            };
                             // Simulate network delay
                             await new Promise(resolve => setTimeout(resolve, 2000));
                             setImportStep('complete');
                             setWarnings(prev => [...prev, ...mockResult.warnings]);
                             onImportComplete?.(mockResult);
-                        }
-                        try { }
-                        catch (error) {
-                            const errorMessage = error instanceof Error ? error.message : 'Import failed';
-                            console.error('Import failed:', error);
-                            setErrors([errorMessage]);
-                            // Reset to previous step on error
-                            setImportStep('preview');
-                        }
-                        finally {
-                            setLoading(false);
-                        }
-                        ;
-                        // Export handlers
-                        const handleExportTemplate = async () => {
-                            setLoading(true);
-                            setExportStep('export');
-                            setErrors([]);
-                            setWarnings([]);
                             try {
-                                // Validate template exists
-                                if (!template) {
-                                    throw new Error('No template selected for export');
-                                    // Validate export options
-                                    if (exportOptions.include_version_history && !exportOptions.include_dependencies) {
-                                        setWarnings(prev => [...prev, 'Exporting version history without dependencies may cause import issues']);
-                                        // Mock export - in real implementation, would call TemplateVersionManager
-                                        const mockResult = {
-                                            download_url: 'https://example.com/download/template-export.json',
-                                            filename: 'workflow-template-v1.0.0.json',
-                                            size: 245760,
-                                            checksum: 'abc123def456',
-                                        };
+                            }
+                            catch (error) {
+                                const errorMessage = error instanceof Error ? error.message : 'Import failed';
+                                console.error('Import failed:', error);
+                                setErrors([errorMessage]);
+                                // Reset to previous step on error
+                                setImportStep('preview');
+                            }
+                            finally {
+                                setLoading(false);
+                            }
+                            ;
+                            // Export handlers
+                            const handleExportTemplate = async () => {
+                                setLoading(true);
+                                setExportStep('export');
+                                setErrors([]);
+                                setWarnings([]);
+                                try {
+                                    // Validate template exists
+                                    if (!template) {
+                                        throw new Error('No template selected for export');
+                                        // Validate export options
+                                        if (exportOptions.include_version_history && !exportOptions.include_dependencies) {
+                                            setWarnings(prev => [...prev, 'Exporting version history without dependencies may cause import issues']);
+                                            // Mock export - in real implementation, would call TemplateVersionManager
+                                            const mockResult = {
+                                                download_url: 'https://example.com/download/template-export.json',
+                                                filename: 'workflow-template-v1.0.0.json',
+                                                size: 245760,
+                                                checksum: 'abc123def456'
+                                            };
+                                        }
+                                        ;
                                         // Simulate processing time
                                         await new Promise(resolve => setTimeout(resolve, 1500));
                                         setExportStep('complete');
                                         onExportComplete?.(mockResult);
+                                        try {
+                                        }
+                                        catch (error) {
+                                            const errorMessage = error instanceof Error ? error.message : 'Export failed';
+                                            console.error('Export failed:', error);
+                                            setErrors([errorMessage]);
+                                            // Reset to format selection on error
+                                            setExportStep('format');
+                                        }
+                                        finally {
+                                            setLoading(false);
+                                        }
+                                        ;
+                                        // Render helpers
+                                        const renderImportStepIndicator = () => ();
+                                        ;
+                                        _jsx("div", { className: "flex items-center justify-center mb-6 space-x-2", children: ['source', 'options', 'validation', 'preview', 'import', 'complete'].map((step, index) => ()
+                                                < div, key = { step }, className = "flex items-center" >
+                                                _jsx("div", { className: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${importStep === step ? 'bg-blue-600 text-white' :
+                                                        ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? 'bg-green-600 text-white' : }
+  'bg-gray-300 text-gray-600'
+`, children: ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? _jsx(FiCheck, {}) : index + 1 }), { 5:  && _jsx(FiArrowRight, { className: "mx-2 text-gray-400" }) }) });
                                     }
-                                    try { }
-                                    catch (error) {
-                                        const errorMessage = error instanceof Error ? error.message : 'Export failed';
-                                        console.error('Export failed:', error);
-                                        setErrors([errorMessage]);
-                                        // Reset to format selection on error
-                                        setExportStep('format');
-                                    }
-                                    finally {
-                                        setLoading(false);
-                                    }
-                                    ;
-                                    // Render helpers
-                                    const renderImportStepIndicator = () => ();
-                                    ;
-                                    _jsx("div", { className: "flex items-center justify-center mb-6 space-x-2", children: ['source', 'options', 'validation', 'preview', 'import', 'complete'].map((step, index) => ()
-                                            < div, key = { step }, className = "flex items-center" >
-                                            _jsx("div", { className: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${importStep === step ? 'bg-blue-600 text-white' : ,
-                                                    ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? 'bg-green-600 text-white' : ,
-                                                    'bg-gray-300 text-gray-600'}`, children: ['source', 'options', 'validation', 'preview'].indexOf(importStep) > index ? _jsx(FiCheck, {}) : index + 1 }), { 5:  && _jsx(FiArrowRight, { className: "mx-2 text-gray-400" }) }) });
                                 }
-                            }
-                            finally {
-                            }
-                        };
+                                finally {
+                                }
+                            };
+                        }
                     }
                 }
                 finally {
@@ -271,11 +264,11 @@ if (!hasValidExtension) {
         ;
         const renderSourceSelection = () => ();
         ;
-        _jsxs("div", { className: "space-y-4", children: [_jsx("h3", { className: "text-lg font-semibold mb-4", children: "Select Import Source" }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("button", { onClick: () => setImportSource('file'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'file' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-                            }`, children: [_jsx(FiFile, { className: "text-2xl mb-2 text-blue-600" }), _jsx("div", { className: "font-semibold", children: "Local File" }), _jsx("div", { className: "text-sm text-gray-600", children: "Upload JSON, YAML, or ZIP file" })] }), _jsxs("button", { onClick: () => setImportSource('git'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'git' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-                            }`, children: [_jsx(FiGitBranch, { className: "text-2xl mb-2 text-green-600" }), _jsx("div", { className: "font-semibold", children: "Git Repository" }), _jsx("div", { className: "text-sm text-gray-600", children: "Import from GitHub, GitLab, etc." })] }), _jsxs("button", { onClick: () => setImportSource('url'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'url' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-                            }`, children: [_jsx(FiGlobe, { className: "text-2xl mb-2 text-purple-600" }), _jsx("div", { className: "font-semibold", children: "URL" }), _jsx("div", { className: "text-sm text-gray-600", children: "Download from web URL" })] }), _jsxs("button", { onClick: () => setImportSource('marketplace'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'marketplace' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400',
-                            }`, children: [_jsx(FiPackage, { className: "text-2xl mb-2 text-orange-600" }), _jsx("div", { className: "font-semibold", children: "Marketplace" }), _jsx("div", { className: "text-sm text-gray-600", children: "Browse public templates" })] })] }), importSource === 'file' && ()
+        _jsxs("div", { className: "space-y-4", children: [_jsx("h3", { className: "text-lg font-semibold mb-4", children: "Select Import Source" }), _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("button", { onClick: () => setImportSource('file'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'file' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+`, children: [_jsx(FiFile, { className: "text-2xl mb-2 text-blue-600" }), _jsx("div", { className: "font-semibold", children: "Local File" }), _jsx("div", { className: "text-sm text-gray-600", children: "Upload JSON, YAML, or ZIP file" })] }), _jsxs("button", { onClick: () => setImportSource('git'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'git' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+`, children: [_jsx(FiGitBranch, { className: "text-2xl mb-2 text-green-600" }), _jsx("div", { className: "font-semibold", children: "Git Repository" }), _jsx("div", { className: "text-sm text-gray-600", children: "Import from GitHub, GitLab, etc." })] }), _jsxs("button", { onClick: () => setImportSource('url'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'url' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+`, children: [_jsx(FiGlobe, { className: "text-2xl mb-2 text-purple-600" }), _jsx("div", { className: "font-semibold", children: "URL" }), _jsx("div", { className: "text-sm text-gray-600", children: "Download from web URL" })] }), _jsxs("button", { onClick: () => setImportSource('marketplace'), className: `p-4 border-2 rounded-lg text-left transition-colors ${importSource === 'marketplace' ? 'border-blue-600 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+`, children: [_jsx(FiPackage, { className: "text-2xl mb-2 text-orange-600" }), _jsx("div", { className: "font-semibold", children: "Marketplace" }), _jsx("div", { className: "text-sm text-gray-600", children: "Browse public templates" })] })] }), importSource === 'file' && ()
                     < div, " className=\"mt-4\">", _jsx("input", { ref: fileInputRef, type: "file", accept: ".json,.yaml,.yml,.zip,.bundle", onChange: handleFileSelect, className: "hidden" }), _jsxs("button", { onClick: () => fileInputRef.current?.click(), className: "w-full p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-600 transition-colors", children: [_jsx(FiUpload, { className: "mx-auto text-3xl text-gray-400 mb-2" }), _jsx("div", { className: "text-gray-600", children: importFile ? importFile.name : 'Click to select file or drag and drop' })] })] });
     }
     {
@@ -303,9 +296,9 @@ if (!hasValidExtension) {
     ;
     const renderImportOptions = () => ();
     ;
-    _jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold", children: "Import Options" }), _jsxs("div", { className: "grid grid-cols-2 gap-6", children: [_jsx("div", { className: "space-y-4", children: _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Merge Strategy" }), _jsx("select", { value: importOptions.merge_strategy, onChange: (e) => setImportOptions(prev => ({}), ...prev, merge_strategy) }), ": e.target.value as 'replace' | 'merge' | 'keep_both'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "replace", children: "Replace existing" }), _jsx("option", { value: "merge", children: "Merge with existing" }), _jsx("option", { value: "keep_both", children: "Keep both versions" })] }) }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Conflict Resolution" }), _jsx("select", { value: importOptions.resolve_conflicts, onChange: (e) => setImportOptions(prev => ({}), ...prev, resolve_conflicts) }), ": e.target.value as 'auto' | 'manual' | 'skip'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "auto", children: "Auto resolve" }), _jsx("option", { value: "manual", children: "Manual resolution" }), _jsx("option", { value: "skip", children: "Skip conflicts" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Version Handling" }), _jsx("select", { value: importOptions.version_bump || 'patch', onChange: (e) => setImportOptions(prev => ({}), ...prev, version_bump) }), ": e.target.value as 'patch' | 'minor' | 'major' | 'custom'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "patch", children: "Patch (1.0.1)" }), _jsx("option", { value: "minor", children: "Minor (1.1.0)" }), _jsx("option", { value: "major", children: "Major (2.0.0)" }), _jsx("option", { value: "custom", children: "Custom version" })] })] });
+    _jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold", children: "Import Options" }), _jsxs("div", { className: "grid grid-cols-2 gap-6", children: [_jsx("div", { className: "space-y-4", children: _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Merge Strategy" }), _jsx("select", { value: importOptions.merge_strategy, onChange: (e) => setImportOptions(prev => ({}), ...prev), "merge_strategy:e": true }), ".target.value as 'replace' | 'merge' | 'keep_both'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "replace", children: "Replace existing" }), _jsx("option", { value: "merge", children: "Merge with existing" }), _jsx("option", { value: "keep_both", children: "Keep both versions" })] }) }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Conflict Resolution" }), _jsx("select", { value: importOptions.resolve_conflicts, onChange: (e) => setImportOptions(prev => ({}), ...prev), "resolve_conflicts:e": true }), ".target.value as 'auto' | 'manual' | 'skip'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "auto", children: "Auto resolve" }), _jsx("option", { value: "manual", children: "Manual resolution" }), _jsx("option", { value: "skip", children: "Skip conflicts" })] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Version Handling" }), _jsx("select", { value: importOptions.version_bump || 'patch', onChange: (e) => setImportOptions(prev => ({}), ...prev), "version_bump:e": true }), ".target.value as 'patch' | 'minor' | 'major' | 'custom'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "patch", children: "Patch (1.0.1)" }), _jsx("option", { value: "minor", children: "Minor (1.1.0)" }), _jsx("option", { value: "major", children: "Major (2.0.0)" }), _jsx("option", { value: "custom", children: "Custom version" })] })] });
     div >
-        _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Validation" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.validate_schema, onChange: (e) => setImportOptions(prev => ({}), ...prev, validate_schema) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Validate template schema" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.validate_dependencies, onChange: (e) => setImportOptions(prev => ({}), ...prev, validate_dependencies) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Check dependencies" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.validate_compatibility, onChange: (e) => setImportOptions(prev => ({}), ...prev, validate_compatibility) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Validate compatibility" })] })] }), _jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Safety" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.create_backup, onChange: (e) => setImportOptions(prev => ({}), ...prev, create_backup) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Create backup before import" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.update_dependencies, onChange: (e) => setImportOptions(prev => ({}), ...prev, update_dependencies) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Update dependencies" })] })] })] });
+        _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Validation" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.validate_schema, onChange: (e) => setImportOptions(prev => ({}), ...prev), "validate_schema:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Validate template schema" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.validate_dependencies, onChange: (e) => setImportOptions(prev => ({}), ...prev), "validate_dependencies:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Check dependencies" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.validate_compatibility, onChange: (e) => setImportOptions(prev => ({}), ...prev), "validate_compatibility:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Validate compatibility" })] })] }), _jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Safety" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.create_backup, onChange: (e) => setImportOptions(prev => ({}), ...prev), "create_backup:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Create backup before import" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: importOptions.update_dependencies, onChange: (e) => setImportOptions(prev => ({}), ...prev), "update_dependencies:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Update dependencies" })] })] })] });
     div >
     ;
     div >
@@ -314,10 +307,10 @@ if (!hasValidExtension) {
     const renderValidationResults = () => ();
     ;
     _jsxs("div", { className: "space-y-4", children: [_jsx("h3", { className: "text-lg font-semibold", children: "Validation Results" }), validation && ()
-                < div, " className=", `p-4 rounded-lg border-2 ${validation.valid ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50',
-            }`, ">", _jsxs("div", { className: "flex items-center mb-3", children: [validation.valid ? ()
-                        < FiCheck : , " className=\"text-green-600 text-xl mr-2\" /> ) : ()", _jsx(FiX, { className: "text-red-600 text-xl mr-2" }), ")}", _jsx("span", { className: `font-semibold ${validation.valid ? 'text-green-800' : 'text-red-800',
-                        }`, children: validation.valid ? 'Template is valid' : 'Template has issues' })] }), validation.templateInfo && ()
+                < div, " className=", `p-4 rounded-lg border-2 ${validation.valid ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}
+`, ">", _jsxs("div", { className: "flex items-center mb-3", children: [validation.valid ? ()
+                        < FiCheck : , " className=\"text-green-600 text-xl mr-2\" /> ) : ()", _jsx(FiX, { className: "text-red-600 text-xl mr-2" }), ")}", _jsx("span", { className: `font-semibold ${validation.valid ? 'text-green-800' : 'text-red-800'}
+`, children: validation.valid ? 'Template is valid' : 'Template has issues' })] }), validation.templateInfo && ()
                 < div, " className=\"bg-white p-3 rounded-lg mb-3\">", _jsx("h4", { className: "font-medium mb-2", children: "Template Information" }), _jsxs("div", { className: "grid grid-cols-2 gap-2 text-sm", children: [_jsxs("div", { children: [_jsx("span", { className: "font-medium", children: "Name:" }), " ", validation.templateInfo.name] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium", children: "Version:" }), " ", validation.templateInfo.version] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium", children: "Author:" }), " ", validation.templateInfo.author] }), _jsxs("div", { children: [_jsx("span", { className: "font-medium", children: "Dependencies:" }), " ", validation.templateInfo.dependencies] })] })] });
 }
 {
@@ -358,7 +351,7 @@ div >
 ;
 const renderExportOptions = () => ();
 ;
-_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold", children: "Export Configuration" }), _jsxs("div", { className: "grid grid-cols-2 gap-6", children: [_jsx("div", { className: "space-y-4", children: _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Export Format" }), _jsx("select", { value: exportOptions.format, onChange: (e) => setExportOptions(prev => ({}), ...prev, format) }), ": e.target.value as 'json' | 'yaml' | 'zip' | 'template_bundle'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "json", children: "JSON Format" }), _jsx("option", { value: "yaml", children: "YAML Format" }), _jsx("option", { value: "zip", children: "ZIP Archive" }), _jsx("option", { value: "template_bundle", children: "Template Bundle" })] }) }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Template Version" }), _jsxs("select", { value: selectedVersionId, onChange: (e) => setSelectedVersionId(e.target.value), className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600", children: [_jsx("option", { value: "", children: "Latest version" }), _jsx("option", { value: "v2.1.0", children: "v2.1.0 (Current)" }), _jsx("option", { value: "v2.0.0", children: "v2.0.0" }), _jsx("option", { value: "v1.9.1", children: "v1.9.1" })] })] })] }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Include" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.include_version_history, onChange: (e) => setExportOptions(prev => ({}), ...prev, include_version_history) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Version history" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.include_dependencies, onChange: (e) => setExportOptions(prev => ({}), ...prev, include_dependencies) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Dependencies" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.include_analytics, onChange: (e) => setExportOptions(prev => ({}), ...prev, include_analytics) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Usage analytics" })] })] }), _jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Bundle Options" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.bundle_dependencies, onChange: (e) => setExportOptions(prev => ({}), ...prev, bundle_dependencies) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Bundle dependencies" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.compress, onChange: (e) => setExportOptions(prev => ({}), ...prev, compress) }), ": e.target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Compress output" })] })] })] })] });
+_jsxs("div", { className: "space-y-6", children: [_jsx("h3", { className: "text-lg font-semibold", children: "Export Configuration" }), _jsxs("div", { className: "grid grid-cols-2 gap-6", children: [_jsx("div", { className: "space-y-4", children: _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Export Format" }), _jsx("select", { value: exportOptions.format, onChange: (e) => setExportOptions(prev => ({}), ...prev), "format:e": true }), ".target.value as 'json' | 'yaml' | 'zip' | 'template_bundle'; }))} className=\"w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600\" >", _jsx("option", { value: "json", children: "JSON Format" }), _jsx("option", { value: "yaml", children: "YAML Format" }), _jsx("option", { value: "zip", children: "ZIP Archive" }), _jsx("option", { value: "template_bundle", children: "Template Bundle" })] }) }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Template Version" }), _jsxs("select", { value: selectedVersionId, onChange: (e) => setSelectedVersionId(e.target.value), className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600", children: [_jsx("option", { value: "", children: "Latest version" }), _jsx("option", { value: "v2.1.0", children: "v2.1.0 (Current)" }), _jsx("option", { value: "v2.0.0", children: "v2.0.0" }), _jsx("option", { value: "v1.9.1", children: "v1.9.1" })] })] })] }), _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Include" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.include_version_history, onChange: (e) => setExportOptions(prev => ({}), ...prev), "include_version_history:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Version history" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.include_dependencies, onChange: (e) => setExportOptions(prev => ({}), ...prev), "include_dependencies:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Dependencies" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.include_analytics, onChange: (e) => setExportOptions(prev => ({}), ...prev), "include_analytics:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Usage analytics" })] })] }), _jsxs("div", { className: "space-y-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Bundle Options" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.bundle_dependencies, onChange: (e) => setExportOptions(prev => ({}), ...prev), "bundle_dependencies:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Bundle dependencies" })] }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: exportOptions.compress, onChange: (e) => setExportOptions(prev => ({}), ...prev), "compress:e": true }), ".target.checked ; }))} className=\"mr-2\" />", _jsx("span", { className: "text-sm", children: "Compress output" })] })] })] })] });
 div >
 ;
 ;

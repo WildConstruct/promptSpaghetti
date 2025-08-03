@@ -1,5 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useRef, useCallback } from 'react';
+theme = 'cinema';
 {
     const [isFocused, setIsFocused] = useState(false);
     const [cursorPosition, setCursorPosition] = useState(0);
@@ -24,7 +25,7 @@ import { useState, useRef, useCallback } from 'react';
                             padding: '2px 6px',
                             borderRadius: 4,
                             fontSize: '0.9em',
-                            fontWeight: 600,
+                            fontWeight: 600
                         }, children: match[0] }, `var-${match.index}`));
                     lastIndex = match.index + match[0].length;
                     // Add remaining text
@@ -70,51 +71,49 @@ import { useState, useRef, useCallback } from 'react';
                     border: '#718096',
                     text: '#e2e8f0',
                     accent: '#4299e1',
-                    toolbar: '#2d3748',
-                };
-            case 'dark':
-                return {
-                    background: '#2d3748',
-                    border: '#4a5568',
-                    text: '#f7fafc',
-                    accent: '#38a169',
-                    toolbar: '#1a202c',
-                };
-            case 'light':
-            default:
-                return {
-                    background: '#ffffff',
-                    border: '#e2e8f0',
-                    text: '#2d3748',
-                    accent: '#3182ce',
-                    toolbar: '#f7fafc',
+                    toolbar: '#2d3748'
                 };
         }
         ;
-        const colors = getThemeColors();
-        return;
-        _jsxs("div", { className: "rich-text-editor", style: { position: 'relative' }, children: [showToolbar && ()
-                    < div, "style=", {
-                    display: 'flex',
-                    gap: 4,
-                    padding: 8,
-                    background: colors.toolbar,
-                    borderRadius: '6px 6px 0 0',
-                    borderBottom: `1px solid ${colors.border}`
-                }, "} >", _jsx(ToolbarButton, { onClick: insertVariable, title: "Insert Variable", theme: theme, children: '{{var}}' }), nodeType === 'concat' && ()
-                    <  >
-                    (_jsx(ToolbarButton, { onClick: insertCondition, title: "Insert Condition", theme: theme, children: "if" })
-                        ,
-                            _jsx(ToolbarButton, { onClick: insertLoop, title: "Insert Loop", theme: theme, children: "for" }))] });
     };
+    'dark';
+    return { background: '#2d3748',
+        border: '#4a5568',
+        text: '#f7fafc',
+        accent: '#38a169',
+        toolbar: '#1a202c' };
 }
+;
+'light';
+return {
+    background: '#ffffff',
+    border: '#e2e8f0',
+    text: '#2d3748',
+    accent: '#3182ce',
+    toolbar: '#f7fafc' };
+;
+;
+const colors = getThemeColors();
+return;
+_jsxs("div", { className: "rich-text-editor", style: { position: 'relative' }, children: [showToolbar && ()
+            < div, "style=", {
+            display: 'flex',
+            gap: 4,
+            padding: 8,
+            background: colors.toolbar,
+            borderRadius: '6px 6px 0 0'
+        }, "borderBottom: `1px solid $", colors.border, "`} >", _jsx(ToolbarButton, { onClick: insertVariable, title: "Insert Variable", theme: theme, children: '{{var}}' }), nodeType === 'concat' && ()
+            <  >
+            (_jsx(ToolbarButton, { onClick: insertCondition, title: "Insert Condition", theme: theme, children: "if" })
+                ,
+                    _jsx(ToolbarButton, { onClick: insertLoop, title: "Insert Loop", theme: theme, children: "for" }))] });
 _jsx("div", { style: { flex: 1 } })
     ,
         _jsxs("span", { style: {
                 fontSize: 11,
                 color: colors.text,
                 opacity: 0.7,
-                alignSelf: 'center',
+                alignSelf: 'center'
             }, children: [value.length, " chars"] });
 div >
 ;
@@ -135,8 +134,10 @@ _jsxs("div", { style: { position: 'relative' }, children: [enableSyntaxHighlight
             whiteSpace: 'pre-wrap',
             wordWrap: 'break-word',
             overflow: 'hidden',
-            zIndex: 1,
-        }, ">", highlightSyntax(value)] });
+            zIndex: 1
+        }
+            >
+                {}] });
 { /* Actual Textarea */ }
 _jsx("textarea", { ref: textareaRef, value: value, onChange: (e) => onChange(e.target.value), onFocus: () => setIsFocused(true), onBlur: () => setIsFocused(false), onSelect: (e) => {
         const target = e.target;
@@ -145,30 +146,20 @@ _jsx("textarea", { ref: textareaRef, value: value, onChange: (e) => onChange(e.t
         width: '100%',
         height,
         padding: 12,
-        background: enableSyntaxHighlighting ? 'transparent' : colors.background,
-        border: `2px solid ${isFocused ? colors.accent : colors.border}`
-    }, "borderRadius:showToolbar": true });
-'0 0 6px 6px';
-6,
-    borderTop;
-showToolbar ? 'none' : `2px solid ${isFocused ? colors.accent : colors.border}`;
-color: enableSyntaxHighlighting ? 'transparent' : colors.text,
-    fontSize;
-14,
-    fontFamily;
-'SFMono-Regular, Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace',
-    lineHeight;
-1.5,
-    resize;
-'vertical',
-    outline;
-'none',
-    caretColor;
-colors.text,
-    position;
-'relative',
-    zIndex;
-2;
+        background: enableSyntaxHighlighting ? 'transparent' : colors.background
+    }, "border:": true });
+`2px solid ${isFocused ? colors.accent : colors.border}`;
+borderRadius: showToolbar ? '0 0 6px 6px' : 6;
+borderTop: showToolbar ? 'none' : `2px solid ${isFocused ? colors.accent : colors.border}`;
+color: enableSyntaxHighlighting ? 'transparent' : colors.text;
+fontSize: 14;
+fontFamily: 'SFMono-Regular, Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace';
+lineHeight: 1.5;
+resize: 'vertical';
+outline: 'none';
+caretColor: colors.text;
+position: 'relative';
+zIndex: 2;
 />;
 div >
     { /* Live Preview for template nodes */};
@@ -177,18 +168,14 @@ div >
         < div;
     style = {};
     {
-        marginTop: 8,
-            padding;
-        8,
-            background;
-        colors.toolbar,
-            border;
-        `1px solid ${colors.border}`;
+        marginTop: 8;
+        padding: 8;
+        background: colors.toolbar;
     }
+    border: `1px solid ${colors.border}`;
 }
-borderRadius: 4,
-    fontSize;
-12;
+borderRadius: 4;
+fontSize: 12;
     >
         (_jsx("div", { style: { color: colors.text, opacity: 0.7, marginBottom: 4 }, children: "Template Preview:" })
             ,
@@ -199,6 +186,7 @@ div >
 ;
 ;
 ;
+theme: 'light' | 'dark' | 'cinema';
 const ToolbarButton = ({ onClick, title, children, theme }) => {
     const getButtonColors = () => {
         switch (theme) {
@@ -222,7 +210,7 @@ const ToolbarButton = ({ onClick, title, children, theme }) => {
                 cursor: 'pointer',
                 fontSize: 11,
                 fontWeight: 600,
-                transition: 'background 0.2s ease',
+                transition: 'background 0.2s ease'
             }, onMouseEnter: (e) => {
                 e.target.style.background = colors.hover;
             }, onMouseLeave: (e) => {
@@ -245,19 +233,20 @@ const renderTemplatePreview = (template) => {
             'date': '2024-01-15',
             'variable': 'sample_value',
             'item': 'example_item',
-            'condition': 'true',
+            'condition': 'true'
         };
-        return sampleData[varName] || `[${varName}]`;
     });
+    return sampleData[varName] || `[${varName}]`;
 };
+;
 ;
 // Specialized Rich Text Editor for different node types
 export const NodeSpecificRichEditor, string;
 data: NodeData;
 field: string;
 onChange: (field, value) => void ;
-theme ?  : 'light' | 'dark' | 'cinema';
- > ;
+theme ?  : 'light' | 'dark' | 'cinema'
+    > ;
 ({ nodeType, data, field, onChange, theme = 'cinema' }) => {
     const value = data[field] || '';
     const getEditorConfig = () => {
@@ -270,32 +259,29 @@ theme ?  : 'light' | 'dark' | 'cinema';
                     enableSyntaxHighlighting: true
                 };
             case 'conditional':
-                return {
-                    placeholder: 'Enter condition expression...',
+                return { placeholder: 'Enter condition expression...',
                     height: 60,
                     showToolbar: true,
-                    enableSyntaxHighlighting: true,
-                };
-            case 'output':
-                return {
-                    placeholder: 'Enter output text or template...',
-                    height: 80,
-                    showToolbar: false,
-                    enableSyntaxHighlighting: false,
-                };
-            default:
-                return {
-                    placeholder: 'Enter text...',
-                    height: 80,
-                    showToolbar: false,
-                    enableSyntaxHighlighting: false,
-                };
+                    enableSyntaxHighlighting: true };
         }
         ;
-        const config = getEditorConfig();
-        return;
-        _jsx(RichTextEditor, { value: value, onChange: (newValue) => onChange(field, newValue), nodeType: nodeType, theme: theme, ...config });
     };
-    ;
+    'output';
+    return { placeholder: 'Enter output text or template...',
+        height: 80,
+        showToolbar: false,
+        enableSyntaxHighlighting: false };
 };
+return {
+    placeholder: 'Enter text...',
+    height: 80,
+    showToolbar: false,
+    enableSyntaxHighlighting: false };
+;
+;
+const config = getEditorConfig();
+return;
+_jsx(RichTextEditor, { value: value, onChange: (newValue) => onChange(field, newValue), nodeType: nodeType, theme: theme, ...config });
+;
+;
 export default RichTextEditor;

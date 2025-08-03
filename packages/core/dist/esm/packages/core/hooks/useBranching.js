@@ -1,4 +1,9 @@
 import { useState, useCallback } from 'react';
+from;
+'../types/branching';
+getMergeRequestReviews: (mergeRequestId) => Promise;
+// Analytics and insights
+getBranchStats: (projectId) => Promise;
 getBranchTimeline: (projectId, dateRange) => Promise;
 getBranchHierarchy: (projectId) => Promise;
 compareBranches: (sourceBranchId, targetBranchId) => Promise;
@@ -11,71 +16,63 @@ export const useBranching = () => {
     const [error, setError] = useState(null);
     const apiCall = useCallback(async());
     ;
-    url: string,
-        options;
-    RequestInit = {};
+    url: string;
 };
+options: RequestInit = {};
 Promise;
 {
     try {
         setLoading(true);
         setError(null);
         const response = await fetch(url, {});
-        options,
-            headers;
-        {
+        options;
+        headers: {
             'Content-Type';
-            'application/json',
-            ;
-            options.headers;
+            'application/json';
         }
-        ;
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        if (!data.success) {
-            throw new Error(data.error || 'Request failed');
-            return data.data;
-        }
-        try { }
-        catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-            setError(errorMessage);
-            throw err;
-        }
-        finally {
-            setLoading(false);
-        }
-        [];
-        ;
-        // Branch operations
-        const createBranch = useCallback(async (request) => {
-            return apiCall('/api/branches', {});
-            method: 'POST',
-                body;
-            JSON.stringify(request),
-            ;
-        });
+        options.headers;
     }
     finally { }
-    [apiCall];
     ;
-    const updateBranch = useCallback(async (branchId, request) => {
-        return apiCall(`/api/branches/${branchId}`, {});
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data.success) {
+        throw new Error(data.error || 'Request failed');
+        return data.data;
+    }
+    try { }
+    catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+        setError(errorMessage);
+        throw err;
+    }
+    finally {
+        setLoading(false);
+    }
+    [];
+    ;
+    // Branch operations
+    const createBranch = useCallback(async (request) => {
+        return apiCall('/api/branches', {});
+        method: 'POST';
+        body: JSON.stringify(request);
     });
 }
-method: 'PUT',
-    body;
-JSON.stringify(request);
+;
+[apiCall];
+;
+const updateBranch = useCallback(async (branchId, request) => {
+    return apiCall(`/api/branches/${branchId}`, {});
+}, method, 'PUT', body, JSON.stringify(request));
 ;
 [apiCall];
 ;
 const deleteBranch = useCallback(async (branchId) => {
     return apiCall(`/api/branches/${branchId}`, {});
-});
-method: 'DELETE';
+}, method, 'DELETE');
 ;
 [apiCall];
 ;
@@ -119,18 +116,11 @@ const listBranches = useCallback(async (filter) => {
 // Commit operations
 const createCommit = useCallback(async (request) => {
     return apiCall(`/api/branches/${request.branchId}/commits`, {});
-});
-method: 'POST',
-    body;
-JSON.stringify({});
-snapshotId: request.snapshotId,
-    commitMessage;
-request.commitMessage,
-    parentCommitIds;
-request.parentCommitIds,
-    commitMetadata;
-request.commitMetadata,
-;
+}, method, 'POST', body, JSON.stringify({}));
+snapshotId: request.snapshotId;
+commitMessage: request.commitMessage;
+parentCommitIds: request.parentCommitIds;
+commitMetadata: request.commitMetadata;
 ;
 [apiCall];
 ;
@@ -145,19 +135,15 @@ const getBranchCommits = useCallback(async (branchId, limit = 20, offset = 0) =>
 // Merge request operations
 const createMergeRequest = useCallback(async (request) => {
     return apiCall('/api/merge-requests', {});
-    method: 'POST',
-        body;
-    JSON.stringify(request),
-    ;
+    method: 'POST';
+    body: JSON.stringify(request);
 });
+;
 [apiCall];
 ;
 const updateMergeRequest = useCallback(async (mergeRequestId, request) => {
     return apiCall(`/api/merge-requests/${mergeRequestId}`, {});
-});
-method: 'PUT',
-    body;
-JSON.stringify(request);
+}, method, 'PUT', body, JSON.stringify(request));
 ;
 [apiCall];
 ;
@@ -200,42 +186,29 @@ const listMergeRequests = useCallback(async (filter) => {
 ;
 const closeMergeRequest = useCallback(async (mergeRequestId) => {
     return apiCall(`/api/merge-requests/${mergeRequestId}/close`, {});
-});
-method: 'POST';
+}, method, 'POST');
 ;
 [apiCall];
 ;
 const mergeBranch = useCallback(async (request) => {
     return apiCall(`/api/merge-requests/${request.mergeRequestId}/merge`, {});
-});
-method: 'POST',
-    body;
-JSON.stringify({});
-mergeStrategy: request.mergeStrategy,
-    commitMessage;
-request.commitMessage,
-    deleteSourceBranch;
-request.deleteSourceBranch,
-;
+}, method, 'POST', body, JSON.stringify({}));
+mergeStrategy: request.mergeStrategy;
+commitMessage: request.commitMessage;
+deleteSourceBranch: request.deleteSourceBranch;
 ;
 [apiCall];
 ;
 // Review operations
 const createReview = useCallback(async (request) => {
     return apiCall(`/api/merge-requests/${request.mergeRequestId}/reviews`, {});
-});
-method: 'POST',
-    body;
-JSON.stringify({});
-status: request.status,
-    reviewMessage;
-request.reviewMessage,
-;
+}, method, 'POST', body, JSON.stringify({}));
+status: request.status;
+reviewMessage: request.reviewMessage;
 ;
 [apiCall];
 ;
 const updateReview = useCallback(async (reviewId, request) => {
-    // Would implement update review endpoint
     throw new Error('Update review not implemented yet');
 }, [apiCall]);
 const getMergeRequestReviews = useCallback(async (mergeRequestId) => {
@@ -272,18 +245,12 @@ const compareBranches = useCallback(async (sourceBranchId, targetBranchId) => {
 // Synchronization
 const syncBranch = useCallback(async (request) => {
     return apiCall(`/api/branches/${request.branchId}/sync`, {});
-});
-method: 'POST',
-    body;
-JSON.stringify(request);
+}, method, 'POST', body, JSON.stringify(request));
 ;
 [apiCall];
 ;
-const clearError = useCallback(() => {
-    setError(null);
-}, []);
-return {
-    loading,
+const clearError = useCallback(() => { setError(null); }, []);
+return { loading,
     error,
     createBranch,
     updateBranch,
@@ -305,7 +272,7 @@ return {
     getBranchTimeline,
     getBranchHierarchy,
     compareBranches,
-    syncBranch,
-    clearError
-};
+    syncBranch };
+clearError;
+;
 ;

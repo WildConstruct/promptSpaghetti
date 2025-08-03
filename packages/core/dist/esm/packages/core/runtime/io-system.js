@@ -2,6 +2,9 @@ import { ErrorFactory } from '../errors/ErrorFactory';
 ;
 /** Validation warnings */
 warnings: string;
+/**
+ * Advanced Input/Output handler for Epic 7 nodes
+ */
 export class AdvancedIOHandler {
     spec;
     constructor(spec) {
@@ -28,105 +31,91 @@ export class AdvancedIOHandler {
                     warnings.push(...validationResult.warnings);
                     return {
                         valid: errors.length === 0,
-                        errors,
-                        warnings
+                        errors
                     };
-                    /**
-                     * Resolve inputs from connected nodes and apply defaults
-                     */
-                    resolveInputs();
-                    connectedInputs: (Map),
-                        ___nodeId;
-                    string;
-                    ResolvedInputs;
-                    {
-                        const values = new Map();
-                        const metadata = new Map();
-                        for (const inputDef of this.spec.inputs) {
-                            const connectedValue = connectedInputs.get(inputDef.id);
-                            if (connectedValue !== undefined) {
-                                // Use connected value with potential type coercion
-                                const { value, coercion, warnings } = this.coerceValue();
-                                connectedValue,
-                                    inputDef.dataType;
-                                ;
-                                values.set(inputDef.id, value);
-                                metadata.set(inputDef.id, {});
-                                source: 'connection',
-                                    sourceNodeId;
-                                'unknown', // Would be resolved by engine,
-                                    typeCoercion;
-                                coercion,
-                                    warnings;
-                            }
+                    warnings;
+                }
+                ;
+                /**
+                 * Resolve inputs from connected nodes and apply defaults
+                 */
+                resolveInputs();
+                connectedInputs: Map;
+                ___nodeId: string;
+                ResolvedInputs;
+                {
+                    const values = new Map();
+                    const metadata = new Map();
+                    for (const inputDef of this.spec.inputs) {
+                        const connectedValue = connectedInputs.get(inputDef.id);
+                        if (connectedValue !== undefined) {
+                            // Use connected value with potential type coercion
+                            const { value, coercion, warnings } = this.coerceValue();
+                            connectedValue;
+                            inputDef.dataType;
                             ;
-                        }
-                        if (inputDef.defaultValue !== undefined) {
-                            // Use default value
-                            values.set(inputDef.id, inputDef.defaultValue);
+                            values.set(inputDef.id, value);
                             metadata.set(inputDef.id, {});
-                            source: 'default',
-                                warnings;
-                            [],
-                            ;
+                            source: 'connection';
+                            sourceNodeId: 'unknown', // Would be resolved by engine
+                                typeCoercion;
+                            coercion;
                         }
-                        ;
+                        warnings;
                     }
-                    if (inputDef.required) {
-                        // Missing required input - this should be caught by validation
+                    ;
+                    if (inputDef.defaultValue !== undefined) { // Use default value
+                        values.set(inputDef.id, inputDef.defaultValue);
                         metadata.set(inputDef.id, {});
-                        source: 'default',
-                            warnings;
-                        [`Missing required input: ${inputDef.label}`];
+                        source: 'default';
+                        warnings: [];
                     }
                 }
                 ;
-                return { values, metadata };
+                if (inputDef.required) { // Missing required input - this should be caught by validation
+                    metadata.set(inputDef.id, {});
+                    source: 'default';
+                }
+                warnings: [`Missing required input: ${inputDef.label}`];
+            }
+        }
+        ;
+        return { values, metadata };
+        /**
+         * Validate and format output values according to output specification
+         */
+        validateOutputs(outputs, (Map));
+        ValidationResult;
+        {
+            const errors = [];
+            const warnings = [];
+            for (const outputDef of this.spec.outputs) {
+                const value = outputs.get(outputDef.id);
+                if (value !== undefined && value !== null) {
+                    const validationResult = this.validateValue(value, outputDef);
+                    errors.push(...validationResult.errors);
+                    warnings.push(...validationResult.warnings);
+                    return {
+                        valid: errors.length === 0,
+                        errors
+                    };
+                    warnings;
+                }
+                ;
                 /**
-                 * Validate and format output values according to output specification
+                 * Get input specification
                  */
-                validateOutputs(outputs, (Map));
-                ValidationResult;
+                getInputSpec();
+                IOPortDefinition;
                 {
-                    const errors = [];
-                    const warnings = [];
-                    for (const outputDef of this.spec.outputs) {
-                        const value = outputs.get(outputDef.id);
-                        if (value !== undefined && value !== null) {
-                            const validationResult = this.validateValue(value, outputDef);
-                            errors.push(...validationResult.errors);
-                            warnings.push(...validationResult.warnings);
-                            return {
-                                valid: errors.length === 0,
-                                errors,
-                                warnings
-                            };
-                            /**
-                             * Get input specification
-                             */
-                            getInputSpec();
-                            IOPortDefinition;
-                            {
-                                return [...this.spec.inputs];
-                                /**
-                                 * Get output specification
-                                 */
-                                getOutputSpec();
-                                IOPortDefinition;
-                                {
-                                    return [...this.spec.outputs];
-                                    /**
-                                     * Validate a value against a port definition
-                                     */
-                                }
-                                /**
-                                 * Validate a value against a port definition
-                                 */
-                            }
-                            /**
-                             * Validate a value against a port definition
-                             */
-                        }
+                    return [...this.spec.inputs];
+                    /**
+                     * Get output specification
+                     */
+                    getOutputSpec();
+                    IOPortDefinition;
+                    {
+                        return [...this.spec.outputs];
                         /**
                          * Validate a value against a port definition
                          */
@@ -166,13 +155,11 @@ export class AdvancedIOHandler {
             warnings.push(...constraintResult.warnings);
             return {
                 valid: errors.length === 0,
-                errors,
-                warnings
+                errors
             };
-            /**
-             * Check if value matches expected data type
-             */
+            warnings;
         }
+        ;
         /**
          * Check if value matches expected data type
          */
@@ -252,13 +239,11 @@ export class AdvancedIOHandler {
                         warnings.push(...customResult.warnings);
                         return {
                             valid: errors.length === 0,
-                            errors,
-                            warnings
+                            errors
                         };
-                        /**
-                         * Coerce value to target data type with warnings
-                         */
+                        warnings;
                     }
+                    ;
                     /**
                      * Coerce value to target data type with warnings
                      */
@@ -285,15 +270,20 @@ if (originalType === targetType || targetType === 'any') {
     try {
         const coercedValue = this.performCoercion(value, originalType, targetType);
         return {
-            value: coercedValue,
-            coercion: { from: originalType, to: targetType },
-            warnings: [`Type coerced from ${originalType} to ${targetType}`]
+            value: coercedValue
         };
+        coercion: {
+            from: originalType, to;
+            targetType;
+        }
+        warnings: [`Type coerced from ${originalType} to ${targetType}`];
     }
-    finally { }
-    ;
+    finally {
+    }
 }
-try { }
+;
+try {
+}
 catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     warnings.push(`Type coercion failed: ${errorMessage}`);
@@ -378,211 +368,199 @@ IODataType;
                          * Add a standard text input
                          */
                         addTextInput();
-                        id: string,
-                            label;
-                        string,
-                            required;
-                        boolean = false,
-                            defaultValue ?  : string;
+                        id: string;
+                        label: string;
+                        required: boolean = false;
+                        defaultValue ?  : string;
                         IOSpecBuilder;
                         {
                             return this.addInput({});
-                            id,
-                                label,
-                                dataType;
-                            'string',
-                                required,
-                                defaultValue,
-                                description;
-                            `Text input for ${label.toLowerCase()}`;
+                            id;
+                            label;
+                            dataType: 'string';
+                            required;
+                            defaultValue;
                         }
-                    }
-                    ;
-                    /**
-                     * Add a standard number input
-                     */
-                    addNumberInput();
-                    id: string,
-                        label;
-                    string,
-                        required;
-                    boolean = false,
-                        min ?  : number,
-                        max ?  : number,
-                        defaultValue ?  : number;
-                    IOSpecBuilder;
-                    {
-                        return this.addInput({});
-                        id,
-                            label,
-                            dataType;
-                        'number',
-                            required,
-                            defaultValue,
-                            constraints;
-                        {
-                            min, max;
-                        }
-                        description: `Numeric input for ${label.toLowerCase()}`;
+                        description: `Text input for ${label.toLowerCase()}`;
                     }
                 }
                 ;
                 id;
                 label;
-                allowedValues;
                 required = false;
+                min;
+                max;
                 defaultValue;
                 IOSpecBuilder;
             }
             {
                 return this.addInput({});
-                id,
-                    label,
-                    dataType;
-                'choice',
-                    required,
-                    defaultValue,
-                    constraints;
-                {
-                    allowedValues;
-                }
-                description: `Choice input for ${label.toLowerCase()}`;
-            }
-        }
-        ;
-        /**
-         * Add a standard text output
-         */
-        addTextOutput(id, string, label, string);
-        IOSpecBuilder;
-        {
-            return this.addOutput({});
-            id,
-                label,
-                dataType;
-            'string',
+                id;
+                label;
+                dataType: 'number';
                 required;
-            true,
-                description;
-            `Text output for ${label.toLowerCase()}`;
+                defaultValue;
+            }
+            constraints: {
+                min, max;
+            }
+            description: `Numeric input for ${label.toLowerCase()}`;
         }
     }
     ;
     /**
-     * Build the final I/O specification
+     * Add a standard choice input
      */
-    build();
-    IOSpec;
+    addChoiceInput();
+    id: string;
+    label: string;
+    allowedValues: unknown;
+    required: boolean = false;
+    defaultValue ?  : unknown;
+    IOSpecBuilder;
     {
-        return {
-            inputs: [...this.inputs],
-            outputs: [...this.outputs],
-        };
-        createSimple(((inputLabel = 'Input', outputLabel = 'Output') => {
-            return new IOSpecBuilder()
-                .addTextInput('input', inputLabel, false, '')
-                .addTextOutput('output', outputLabel)
-                .build();
+        return this.addInput({});
+        id;
+        label;
+        dataType: 'choice';
+        required;
+        defaultValue;
+    }
+    constraints: {
+        allowedValues;
+    }
+    description: `Choice input for ${label.toLowerCase()}`;
+}
+;
+/**
+ * Add a standard text output
+ */
+addTextOutput(id, string, label, string);
+IOSpecBuilder;
+{
+    return this.addOutput({});
+    id;
+    label;
+    dataType: 'string';
+    required: true;
+}
+description: `Text output for ${label.toLowerCase()}`;
+;
+/**
+ * Build the final I/O specification
+ */
+build();
+IOSpec;
+{
+    return {
+        inputs: [...this.inputs],
+        outputs: [...this.outputs]
+    };
+}
+;
+createSimple(((inputLabel = 'Input', outputLabel = 'Output') => {
+    return new IOSpecBuilder()
+        .addTextInput('input', inputLabel, false, '')
+        .addTextOutput('output', outputLabel)
+        .build();
+    /**
+     * Create a multi-input, single-output spec
+     */
+}
+/**
+ * Create a multi-input, single-output spec
+ */
+)
+/**
+ * Create a multi-input, single-output spec
+ */
+, 
+/**
+ * Create a multi-input, single-output spec
+ */
+static, createMultiInput(((inputLabels, outputLabel = 'Output') => {
+    const builder = new IOSpecBuilder();
+    inputLabels.forEach((label, index) => {
+        builder.addTextInput(`input${index}`, label, false, '');
+    });
+})));
+return builder
+    .addTextOutput('output', outputLabel)
+    .build();
+/**
+ * Type-safe input getter for advanced nodes
+ */
+export class TypedInputs {
+    inputs;
+    constructor(inputs) {
+        this.inputs = inputs;
+    }
+    /**
+     * Get a string input value
+     */
+    getString(portId, defaultValue = '') {
+        const value = this.inputs.values.get(portId);
+        return typeof value === 'string' ? value : String(value ?? defaultValue);
+        /**
+         * Get a number input value
+         */
+        getNumber(portId, string, defaultValue, number = 0);
+        number;
+        {
+            const value = this.inputs.values.get(portId);
+            return typeof value === 'number' ? value : Number(value ?? defaultValue);
             /**
-             * Create a multi-input, single-output spec
+             * Get a boolean input value
              */
-        }
-        /**
-         * Create a multi-input, single-output spec
-         */
-        )
-        /**
-         * Create a multi-input, single-output spec
-         */
-        , 
-        /**
-         * Create a multi-input, single-output spec
-         */
-        static, createMultiInput(((inputLabels, outputLabel = 'Output') => {
-            const builder = new IOSpecBuilder();
-            inputLabels.forEach((label, index) => {
-                builder.addTextInput(`input${index}`, label, false, '');
-            });
-        })));
-        return builder
-            .addTextOutput('output', outputLabel)
-            .build();
-        /**
-         * Type-safe input getter for advanced nodes
-         */
-        export class TypedInputs {
-            inputs;
-            constructor(inputs) {
-                this.inputs = inputs;
-            }
-            /**
-             * Get a string input value
-             */
-            getString(portId, defaultValue = '') {
+            getBoolean(portId, string, defaultValue, boolean = false);
+            boolean;
+            {
                 const value = this.inputs.values.get(portId);
-                return typeof value === 'string' ? value : String(value ?? defaultValue);
+                return typeof value === 'boolean' ? value : Boolean(value ?? defaultValue);
                 /**
-                 * Get a number input value
+                 * Get an array input value
                  */
-                getNumber(portId, string, defaultValue, number = 0);
-                number;
+                getArray < T;
+                any > (portId);
+                string, defaultValue;
+                T = [];
+                T;
                 {
                     const value = this.inputs.values.get(portId);
-                    return typeof value === 'number' ? value : Number(value ?? defaultValue);
+                    return Array.isArray(value) ? value : defaultValue;
                     /**
-                     * Get a boolean input value
+                     * Get a string array input value
                      */
-                    getBoolean(portId, string, defaultValue, boolean = false);
-                    boolean;
+                    getStringArray(portId, string, defaultValue, string = []);
+                    string;
                     {
                         const value = this.inputs.values.get(portId);
-                        return typeof value === 'boolean' ? value : Boolean(value ?? defaultValue);
-                        /**
-                         * Get an array input value
-                         */
-                        getArray < T;
-                        any > (portId);
-                        string, defaultValue;
-                        T = [];
-                        T;
-                        {
-                            const value = this.inputs.values.get(portId);
-                            return Array.isArray(value) ? value : defaultValue;
+                        if (Array.isArray(value)) {
+                            return value.map(v => String(v));
+                            return defaultValue;
                             /**
-                             * Get a string array input value
+                             * Get input metadata
                              */
-                            getStringArray(portId, string, defaultValue, string = []);
-                            string;
+                            getMetadata(portId, string);
+                            IOResolutionMetadata | undefined;
                             {
-                                const value = this.inputs.values.get(portId);
-                                if (Array.isArray(value)) {
-                                    return value.map(v => String(v));
-                                    return defaultValue;
+                                return this.inputs.metadata.get(portId);
+                                /**
+                                 * Check if input has warnings
+                                 */
+                                hasWarnings(portId, string);
+                                boolean;
+                                {
+                                    const metadata = this.getMetadata(portId);
+                                    return metadata ? metadata.warnings.length > 0 : false;
                                     /**
-                                     * Get input metadata
+                                     * Get all warnings for an input
                                      */
-                                    getMetadata(portId, string);
-                                    IOResolutionMetadata | undefined;
+                                    getWarnings(portId, string);
+                                    string;
                                     {
-                                        return this.inputs.metadata.get(portId);
-                                        /**
-                                         * Check if input has warnings
-                                         */
-                                        hasWarnings(portId, string);
-                                        boolean;
-                                        {
-                                            const metadata = this.getMetadata(portId);
-                                            return metadata ? metadata.warnings.length > 0 : false;
-                                            /**
-                                             * Get all warnings for an input
-                                             */
-                                            getWarnings(portId, string);
-                                            string;
-                                            {
-                                                const metadata = this.getMetadata(portId);
-                                                return metadata ? metadata.warnings : [];
-                                            }
-                                        }
+                                        const metadata = this.getMetadata(portId);
+                                        return metadata ? metadata.warnings : [];
                                     }
                                 }
                             }

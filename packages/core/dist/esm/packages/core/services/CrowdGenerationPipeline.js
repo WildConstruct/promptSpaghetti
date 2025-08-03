@@ -8,14 +8,14 @@ import { VFXPipelineMetadata } from '../types/VFXExport';
 crowd: {
     size: number;
     density: 'sparse' | 'moderate' | 'dense';
-    demographics: CrowdDemographics;
-    activity: CrowdActivity;
 }
+demographics: CrowdDemographics;
+activity: CrowdActivity;
 ;
 constraints: {
     historicalAccuracy: 'strict' | 'moderate' | 'creative';
     socialMixing: boolean; // Can different social classes interact?,
-    genderMixing: boolean; // Era-appropriate gender interactions,
+    genderMixing: boolean; // Era-appropriate gender interactions }
     culturalSensitivity: boolean;
 }
 ;
@@ -25,20 +25,7 @@ output: {
     vfxPipeline: VFXPipelineMetadata;
 }
 ;
-;
-ageDistribution: {
-    children: number; // 0-12 years,
-    youth: number; // 13-25 years,
-    adults: number; // 26-55 years,
-    elderly: number; // 56+ years,
-}
-;
-genderRatio: {
-    male: number;
-    female: number;
-    nonBinary ?  : number; // For appropriate historical periods,
-}
-;
+interactions: InteractionType;
 ;
 appearance: {
     clothing: HistoricalItem;
@@ -57,10 +44,11 @@ position: {
     x: number;
     y: number;
     z: number;
-    facing: number; // degrees,
+    facing: number; // degrees }
 }
 ;
 historicalAccuracy: number; // 0-1 score
+historicalContext: string;
 ;
 validation: {
     overallAccuracy: number;
@@ -72,9 +60,12 @@ vfx: {
     renderComplexity: 'low' | 'medium' | 'high';
     memoryEstimate: number; // MB,
     polyCount: number;
-    textureSize: number; // MB,
+    textureSize: number; // MB }
 }
 ;
+/**
+ * Main pipeline class for crowd generation
+ */
 export class CrowdGenerationPipeline {
     historicalDataService;
     constraintValidator;
@@ -100,21 +91,21 @@ generateCrowd(request, CrowdGenerationRequest);
 Promise < CrowdGenerationResult > {
     const: startTime = Date.now(),
     try: {
-        // Stage 1: Historical Context Preparation,
+        // Stage 1: Historical Context Preparation
         const: historicalContext = await this.prepareHistoricalContext(request),
-        // Stage 2: Individual Generation,
+        // Stage 2: Individual Generation
         const: individuals = await this.generateIndividuals(request, historicalContext),
-        // Stage 3: Group Formation,
+        // Stage 3: Group Formation
         const: groups = await this.formGroups(individuals, request, historicalContext),
-        // Stage 4: Interaction Generation,
+        // Stage 4: Interaction Generation
         const: interactions = await this.generateInteractions(individuals, groups, request),
-        // Stage 5: Historical Validation,
+        // Stage 5: Historical Validation
         const: validation = await this.validateHistoricalAccuracy(),
         individuals,
         groups,
         interactions,
         request,
-        // Stage 6: Metadata Generation,
+        // Stage 6: Metadata Generation
         const: metadata = this.generateMetadata(),
         request,
         validation,
@@ -123,10 +114,11 @@ Promise < CrowdGenerationResult > {
             individuals,
             groups,
             interactions,
-            validation,
-            metadata
-        }
-    }, catch(error) {
+            validation
+        },
+        metadata
+    },
+    catch(error) {
         throw new CrowdGenerationError(`Pipeline failed: ${error.message}`, error);
     }
     /**
@@ -143,36 +135,28 @@ Promise < CrowdGenerationResult > {
             category: 'clothing',
             filters: {
                 occasion: this.mapActivityToOccasion(request.crowd.activity.primary),
-                gender: 'unisex' // Will be filtered per individual,
+                gender: 'unisex' // Will be filtered per individual }
+                , // Will be filtered per individual }
+                accuracyLevel: request.constraints.historicalAccuracy,
+                limit: 1000
             },
-            accuracyLevel: request.constraints.historicalAccuracy,
-            limit: 1000
+            const: clothingData = await this.historicalDataService.query(clothingQuery),
+            const: socialStructure = await this.historicalDataService.getSocialStructure()
         };
-        const clothingData = await this.historicalDataService.query(clothingQuery);
-        const socialStructure = await this.historicalDataService.getSocialStructure();
-        ;
-        request.scene.era,
-            request.scene.region;
+        request.scene.era;
+        request.scene.region;
         ;
         const culturalRules = await this.historicalDataService.getCulturalRules();
         ;
-        request.scene.era,
-            request.scene.region;
+        request.scene.era;
+        request.scene.region;
         ;
-        return {
-            clothing: clothingData.data,
+        return { clothing: clothingData.data,
             socialStructure,
             culturalRules,
             validOccupations: await this.getValidOccupations(request),
-            behaviorPatterns: await this.getBehaviorPatterns(request),
-        };
-        /**
-         * Stage 2: Generate individual crowd members
-         */
+            behaviorPatterns: await this.getBehaviorPatterns(request) };
     }
-    /**
-     * Stage 2: Generate individual crowd members
-     */
 }((request, context) => {
     const individuals = [];
     for (let i = 0; i < request.crowd.size; i++) {
@@ -194,23 +178,22 @@ demographics,
     context;
 ;
 const position = this.generatePosition(i, request.crowd);
-const individual = {
-    id: `individual_${i}` };
+const individual = {};
+id: `individual_${i}`;
 demographics: {
     age: demographics.age,
         gender;
     demographics.gender,
         socialClass;
-    demographics.socialClass,
-        occupation;
+    demographics.socialClass;
 }
+occupation;
 appearance: {
     clothing: clothing.items,
         accessories;
     clothing.accessories,
         physicalTraits;
-    this.generatePhysicalTraits(demographics),
-    ;
+    this.generatePhysicalTraits(demographics);
 }
 behavior: {
     activity: behavior.primary,
@@ -219,8 +202,7 @@ behavior: {
         movement;
     behavior.movement,
         interactions;
-    behavior.interactions,
-    ;
+    behavior.interactions;
 }
 position,
     historicalAccuracy;
@@ -258,27 +240,27 @@ Promise < CrowdGroup > {
             ;
             const interaction = this.createInteraction();
             ;
-            interactionType,
-                relevantIndividuals,
-                groups;
+            interactionType;
+            relevantIndividuals;
+            groups;
             ;
             if (interaction) {
                 interactions.push(interaction);
                 return interactions;
                 /**
-                * Stage 5: Validate historical accuracy of generated crowd,
+                * Stage 5: Validate historical accuracy of generated crowd
                 */
             }
             /**
-            * Stage 5: Validate historical accuracy of generated crowd,
+            * Stage 5: Validate historical accuracy of generated crowd
             */
         }
         /**
-        * Stage 5: Validate historical accuracy of generated crowd,
+        * Stage 5: Validate historical accuracy of generated crowd
         */
     }
     /**
-    * Stage 5: Validate historical accuracy of generated crowd,
+    * Stage 5: Validate historical accuracy of generated crowd
     */
     ,
     groups: CrowdGroup,
@@ -290,9 +272,9 @@ Promise < CrowdGroup > {
         for (const individual of individuals) {
             const individualValidation = await this.constraintValidator.validateIndividual();
             ;
-            individual,
-                request.scene.era,
-                request.constraints;
+            individual;
+            request.scene.era;
+            request.constraints;
             ;
             violations.push(...individualValidation.violations);
             overallAccuracy += individual.historicalAccuracy;
@@ -300,20 +282,20 @@ Promise < CrowdGroup > {
             for (const group of groups) {
                 const groupValidation = await this.constraintValidator.validateGroup();
                 ;
-                group,
-                    individuals,
-                    request.scene.era,
-                    request.constraints;
+                group;
+                individuals;
+                request.scene.era;
+                request.constraints;
                 ;
                 violations.push(...groupValidation.violations);
                 // Validate interactions
                 for (const interaction of interactions) {
                     const interactionValidation = await this.constraintValidator.validateInteraction();
                     ;
-                    interaction,
-                        individuals,
-                        request.scene.era,
-                        request.constraints;
+                    interaction;
+                    individuals;
+                    request.scene.era;
+                    request.constraints;
                     ;
                     violations.push(...interactionValidation.violations);
                     return {
@@ -323,132 +305,138 @@ Promise < CrowdGroup > {
                         suggestions: await this.generateSuggestions(violations),
                         metadata: {
                             rulesApplied: violations.length,
-                            processingTime: Date.now(),
-                        },
-                        validation: ValidationResult,
-                        processingTime: number, CrowdMetadata
+                            processingTime: Date.now()
+                        }
                     };
-                    {
-                        return {
-                            generation: {
-                                timestamp: new Date().toISOString(),
-                                processingTime,
-                                algorithm: 'Historical Crowd Generation v1.0',
-                                version: '1.0.0',
-                            },
-                            validation: {
-                                overallAccuracy: validation.overallScore,
-                                constraintViolations: validation.violations.length,
-                                historicalConsistency: this.calculateConsistencyScore(validation),
-                            },
-                            vfx: {
-                                renderComplexity: this.calculateRenderComplexity(request.crowd.size),
-                                memoryEstimate: this.estimateMemoryUsage(request.crowd.size),
-                                polyCount: request.crowd.size * 10000, // Estimated,
-                                textureSize: request.crowd.size * 2 // MB per individual,
-                            },
-                            // Helper methods
-                            mapActivityToOccasion(activity) {
-                                const mapping = {
-                                    'market day': 'daily',
-                                    'religious ceremony': 'religious',
-                                    'royal procession': 'ceremonial',
-                                    'military parade': 'military',
-                                };
-                                return mapping[activity] || 'daily';
-                            },
-                            generateDemographics(demographics) {
-                                // Implementation for demographic generation
-                                return {
-                                    age: this.sampleAge(demographics.ageDistribution),
-                                    gender: this.sampleGender(demographics.genderRatio),
-                                    socialClass: this.sampleSocialClass(demographics.socialClasses),
-                                };
-                            },
-                            generatePosition(index, crowd) {
-                                // Implementation for crowd positioning
-                                return {
-                                    x: Math.random() * 100,
-                                    y: 0,
-                                    z: Math.random() * 100,
-                                    facing: Math.random() * 360,
-                                };
-                                // Additional helper methods would be implemented here...
-                            }
-                            // Additional helper methods would be implemented here...
-                            ,
-                            // Additional helper methods would be implemented here...
-                            sampleAge(ageDistribution) { return 25; },
-                            sampleGender(genderRatio) {
-                                return 'male';
-                            },
-                            sampleSocialClass(socialClasses) {
-                                return 'peasant';
-                            },
-                            selectOccupation(demographics, context) {
-                                return 'farmer';
-                            },
-                            generatePhysicalTraits(demographics) { return []; },
-                            formFamilyGroups(individuals, context) { return []; },
-                            formGuildGroups(individuals, context) { return []; },
-                            formReligiousGroups(individuals, context) { return []; },
-                            createInteraction(type, individuals, groups) { return null; },
-                            generateSuggestions(violations) { return []; },
-                            calculateConsistencyScore(validation) { return 0.9; },
-                            calculateRenderComplexity(size) {
-                                return 'medium';
-                            },
-                            estimateMemoryUsage(size) { return size * 5; },
-                            getValidOccupations(request) { return []; },
-                            getBehaviorPatterns(request) { return []; }
-                            // Supporting classes and interfaces
-                        };
-                    }
-                    class CrowdGenerationError extends Error {
-                        cause;
-                        constructor(message, cause) {
-                            super(message);
-                            this.cause = cause;
-                            this.name = 'CrowdGenerationError';
-                            // Placeholder classes for dependency injection
-                            class HistoricalDataService {
-                            }
-                        }
-                        async query(query) { return { data: [] }; }
-                        async getSocialStructure(era, region) { return {}; }
-                        async getCulturalRules(era, region) { return {}; }
-                    }
-                    class ConstraintValidator {
-                        async validateIndividual(individual, era, constraints) { return { violations: [] }; }
-                        individuals;
-                        era;
-                        constraints;
-                        Promise() { return { violations: [] }; }
-                        individuals;
-                        era;
-                        constraints;
-                        Promise() { return { violations: [] }; }
-                    }
-                    class HistoricalClothingGenerator {
-                        async generateClothing(demographics, occupation, scene, context) {
-                            return { items: [], accessories: [], accuracyScore: 0.9 };
-                            class CrowdBehaviorEngine {
-                                generateBehavior(demographics, occupation, activity, context) {
-                                    return {
-                                        primary: 'standing',
-                                        posture: 'neutral',
-                                        movement: 'stationary',
-                                        interactions: [],
-                                    };
-                                    class VFXExporter {
-                                    }
-                                    // Implementation would be defined elsewhere
-                                    export { CrowdGenerationPipeline, CrowdGenerationError };
-                                }
-                            }
-                        }
-                    }
+                    /**
+                     * Generate comprehensive metadata for the crowd
+                     */
                 }
+                /**
+                 * Generate comprehensive metadata for the crowd
+                 */
+            }
+            /**
+             * Generate comprehensive metadata for the crowd
+             */
+        }
+        /**
+         * Generate comprehensive metadata for the crowd
+         */
+    }
+    /**
+     * Generate comprehensive metadata for the crowd
+     */
+    ,
+    validation: ValidationResult,
+    processingTime: number, CrowdMetadata
+};
+{
+    return {
+        generation: {
+            timestamp: new Date().toISOString(),
+            processingTime,
+            algorithm: 'Historical Crowd Generation v1.0',
+            version: '1.0.0'
+        },
+        validation: {
+            overallAccuracy: validation.overallScore,
+            constraintViolations: validation.violations.length,
+            historicalConsistency: this.calculateConsistencyScore(validation)
+        },
+        vfx: {
+            renderComplexity: this.calculateRenderComplexity(request.crowd.size),
+            memoryEstimate: this.estimateMemoryUsage(request.crowd.size),
+            polyCount: request.crowd.size * 10000, // Estimated
+            textureSize: request.crowd.size * 2 // MB per individual }
+        },
+        // Helper methods
+        mapActivityToOccasion(activity) {
+            const mapping = {
+                'market day': 'daily',
+                'religious ceremony': 'religious',
+                'royal procession': 'ceremonial',
+                'military parade': 'military'
+            };
+        },
+        return: mapping[activity] || 'daily',
+        generateDemographics(demographics) {
+            return {
+                age: this.sampleAge(demographics.ageDistribution),
+                gender: this.sampleGender(demographics.genderRatio),
+                socialClass: this.sampleSocialClass(demographics.socialClasses)
+            };
+        },
+        generatePosition(index, crowd) {
+            return {
+                x: Math.random() * 100,
+                y: 0,
+                z: Math.random() * 100,
+                facing: Math.random() * 360
+            };
+        },
+        // Additional helper methods would be implemented here...
+        sampleAge(ageDistribution) { return 25; },
+        sampleGender(genderRatio) { return 'male'; },
+        sampleSocialClass(socialClasses) { return 'peasant'; },
+        selectOccupation(demographics, context) { return 'farmer'; },
+        generatePhysicalTraits(demographics) { return []; },
+        formFamilyGroups(individuals, context) { return []; },
+        formGuildGroups(individuals, context) { return []; },
+        formReligiousGroups(individuals, context) { return []; },
+        createInteraction(type, individuals, groups) { return null; },
+        generateSuggestions(violations) { return []; },
+        calculateConsistencyScore(validation) { return 0.9; },
+        calculateRenderComplexity(size) { return 'medium'; },
+        estimateMemoryUsage(size) { return size * 5; },
+        getValidOccupations(request) { return []; },
+        getBehaviorPatterns(request) { return []; }
+        // Supporting classes and interfaces
+        ,
+        // Supporting classes and interfaces
+        interface, HistoricalContext
+    };
+    {
+        clothing: HistoricalItem;
+        socialStructure: any;
+        culturalRules: any;
+        validOccupations: any;
+        behaviorPatterns: any;
+        class CrowdGenerationError extends Error {
+            cause;
+            constructor(message, cause) {
+                this.cause = cause;
             }
         }
-    } };
+        this.name = 'CrowdGenerationError';
+        // Placeholder classes for dependency injection
+        class HistoricalDataService {
+            async query(query) { return { data: [] }; }
+            async getSocialStructure(era, region) { return {}; }
+            async getCulturalRules(era, region) { return {}; }
+        }
+        class ConstraintValidator {
+            async validateIndividual(individual, era, constraints) { return { violations: [] }; }
+            individuals;
+            era;
+            constraints;
+            Promise() { return { violations: [] }; }
+            individuals;
+            era;
+            constraints;
+            Promise() { return { violations: [] }; }
+        }
+        class HistoricalClothingGenerator {
+            async generateClothing(demographics, occupation, scene, context) {
+                return { items: [], accessories: [], accuracyScore: 0.9 };
+                class CrowdBehaviorEngine {
+                }
+                ;
+                class VFXExporter {
+                }
+                // Implementation would be defined elsewhere
+                export { CrowdGenerationPipeline, CrowdGenerationError };
+            }
+        }
+    }
+}

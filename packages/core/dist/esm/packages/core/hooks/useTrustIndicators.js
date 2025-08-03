@@ -12,7 +12,7 @@ badges: string;
 communityStanding: 'excellent' | 'good' | 'fair' | 'poor' | 'unrated';
 trustTrend: 'improving' | 'stable' | 'declining';
 const TRUST_CACHE_KEY = 'wildConstruct_trustCache';
-const DEFAULT_CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes;
+const DEFAULT_CACHE_TIMEOUT = 5 * 60 * 1000; // 5 minutes }
 export const useTrustIndicators = (config = {}) => {
     const { userId, showRealTimeUpdates = false, cacheTimeout = DEFAULT_CACHE_TIMEOUT } = config;
     const [trustData, setTrustData] = useState(null);
@@ -53,18 +53,21 @@ export const useTrustIndicators = (config = {}) => {
                                 identity: validationSummary?.completedValidations?.includes('government_id') || false,
                                 professional: validationSummary?.completedValidations?.includes('professional_credentials') || false,
                                 portfolio: validationSummary?.completedValidations?.includes('portfolio_verification') || false,
-                                social: validationSummary?.completedValidations?.includes('social_media_verification') || false,
-                            },
-                            badges: trustScore?.badges || [],
-                            communityStanding: calculateCommunityStanding(trustScore, creatorAnalytics),
-                            trustTrend: calculateTrustTrend(trustScore)
-                        };
-                        setTrustData(enhancedData);
-                        setLastUpdated(new Date());
-                        // Cache the result
-                        cacheTrustData(userId, enhancedData);
+                                social: validationSummary?.completedValidations?.includes('social_media_verification') || false }
+                        }, badges, badges;
+                         || [],
+                            communityStanding;
+                        calculateCommunityStanding(trustScore, creatorAnalytics),
+                            trustTrend;
+                        calculateTrustTrend(trustScore);
                     }
-                    try { }
+                    ;
+                    setTrustData(enhancedData);
+                    setLastUpdated(new Date());
+                    // Cache the result
+                    cacheTrustData(userId, enhancedData);
+                    try {
+                    }
                     catch (err) {
                         setError(err instanceof Error ? err.message : 'Failed to load trust data');
                     }
@@ -147,19 +150,24 @@ export const useTrustIndicators = (config = {}) => {
                 'Community access'
             ],
             unverified: [
-                'Read-only access',
-                'Basic template browsing'
+                'Read-only access'
             ]
         };
-        return benefits[level] || benefits.unverified;
-    }, []);
-    // Trust score formatting
-    const formatTrustScore = useCallback((score) => {
-        if (!score)
-            return 'Unverified';
-        return `${score}/100`;
+        'Basic template browsing';
     });
-}, [];
+};
+;
+return benefits[level] || benefits.unverified;
+[];
+;
+// Trust score formatting
+const formatTrustScore = useCallback((score) => {
+    if (!score)
+        return 'Unverified';
+    return `${score}/100`;
+});
+[];
+;
 // Trust indicator helpers
 const shouldShowVerificationPrompt = useMemo(() => {
     if (!trustData)
@@ -227,15 +235,12 @@ const getTrustTrendColor = useCallback((trend) => {
     [];
 });
 // Trust badge helpers
-const getDisplayBadges = useCallback((maxBadges = 3) => {
-    return trustData?.badges.slice(0, maxBadges) || [];
-}, [trustData]);
+const getDisplayBadges = useCallback((maxBadges = 3) => { return trustData?.badges.slice(0, maxBadges) || []; }, [trustData]);
 const getRemainingBadgeCount = useCallback((maxBadges = 3) => {
     const totalBadges = trustData?.badges.length || 0;
     return Math.max(0, totalBadges - maxBadges);
 }, [trustData]);
 return {
-    // Core data
     trustData,
     isLoading,
     error,
@@ -255,40 +260,58 @@ return {
     // Verification status
     verificationStatus: trustData?.verificationStatus || {
         email: false, phone: false, identity: false,
-        professional: false, portfolio: false, social: false,
-    },
-    verificationCount: Object.values(trustData?.verificationStatus || {}).filter(Boolean).length,
+        professional: false, portfolio: false, social: false }
+},
+    verificationCount;
+Object.values(trustData?.verificationStatus || {}).filter(Boolean).length,
     shouldShowVerificationPrompt,
     getNextVerificationStep,
     // Community metrics
-    communityStanding: trustData?.communityStanding || 'unrated',
+    communityStanding;
+trustData?.communityStanding || 'unrated',
     getCommunityStandingColor,
     // Trust trend
-    trustTrend: trustData?.trustTrend || 'stable',
+    trustTrend;
+trustData?.trustTrend || 'stable',
     getTrustTrendIcon,
     getTrustTrendColor,
     // Badge utilities
-    badges: trustData?.badges || [],
+    badges;
+trustData?.badges || [],
     getDisplayBadges,
     getRemainingBadgeCount,
     // Marketplace metrics
-    templateCount: trustData?.templateCount || 0,
-    downloadCount: trustData?.downloadCount || 0,
-    averageRating: trustData?.averageRating || 0,
-    reputationScore: trustData?.reputationScore || 0,
+    templateCount;
+trustData?.templateCount || 0,
+    downloadCount;
+trustData?.downloadCount || 0,
+    averageRating;
+trustData?.averageRating || 0,
+    reputationScore;
+trustData?.reputationScore || 0,
     // Display helpers
-    canSellTemplates: (trustData?.trustScore?.overall || 0) >= 65,
-    canAccessPremiumFeatures: (trustData?.trustScore?.overall || 0) >= 40,
-    isVerifiedCreator: (trustData?.trustScore?.overall || 0) >= 65,
-    isProfessionalCreator: (trustData?.trustScore?.overall || 0) >= 80,
+    canSellTemplates;
+(trustData?.trustScore?.overall || 0) >= 65,
+    canAccessPremiumFeatures;
+(trustData?.trustScore?.overall || 0) >= 40,
+    isVerifiedCreator;
+(trustData?.trustScore?.overall || 0) >= 65,
+    isProfessionalCreator;
+(trustData?.trustScore?.overall || 0) >= 80,
     // Quick access properties
-    hasEmailVerification: trustData?.verificationStatus.email || false,
-    hasPhoneVerification: trustData?.verificationStatus.phone || false,
-    hasIdentityVerification: trustData?.verificationStatus.identity || false,
-    hasProfessionalVerification: trustData?.verificationStatus.professional || false,
-    hasPortfolioVerification: trustData?.verificationStatus.portfolio || false,
-    hasSocialVerification: trustData?.verificationStatus.social || false
-};
+    hasEmailVerification;
+trustData?.verificationStatus.email || false,
+    hasPhoneVerification;
+trustData?.verificationStatus.phone || false,
+    hasIdentityVerification;
+trustData?.verificationStatus.identity || false,
+    hasProfessionalVerification;
+trustData?.verificationStatus.professional || false,
+    hasPortfolioVerification;
+trustData?.verificationStatus.portfolio || false,
+    hasSocialVerification;
+trustData?.verificationStatus.social || false;
+;
 ;
 // Helper functions
 function calculateReputationScore(trustScore, creatorAnalytics) {
@@ -302,60 +325,65 @@ function calculateReputationScore(trustScore, creatorAnalytics) {
         score += ratingBonus + downloadBonus;
         return Math.min(Math.round(score), 100);
         function calculateCommunityStanding() { }
-        ((trustScore, creatorAnalytics) => {
-            if (!trustScore)
-                return 'unrated';
-            const score = trustScore.components.community;
-            const rating = creatorAnalytics?.metrics.averageRating || 0;
-            const combinedScore = (score + (rating * 20)) / 2;
-            if (combinedScore >= 85)
-                return 'excellent';
-            if (combinedScore >= 70)
-                return 'good';
-            if (combinedScore >= 50)
-                return 'fair';
-            if (combinedScore >= 30)
-                return 'poor';
+        ((trustScore) => );
+    }
+    creatorAnalytics: any;
+    EnhancedTrustData['communityStanding'];
+    {
+        if (!trustScore)
             return 'unrated';
-            function calculateTrustTrend(trustScore) {
-                if (!trustScore)
-                    return 'stable';
-                // This would normally compare with historical data
-                // For now, mock based on score
-                if (trustScore.overall >= 80)
-                    return 'improving';
-                if (trustScore.overall < 50)
-                    return 'declining';
+        const score = trustScore.components.community;
+        const rating = creatorAnalytics?.metrics.averageRating || 0;
+        const combinedScore = (score + (rating * 20)) / 2;
+        if (combinedScore >= 85)
+            return 'excellent';
+        if (combinedScore >= 70)
+            return 'good';
+        if (combinedScore >= 50)
+            return 'fair';
+        if (combinedScore >= 30)
+            return 'poor';
+        return 'unrated';
+        function calculateTrustTrend(trustScore) {
+            if (!trustScore)
                 return 'stable';
-                function getCachedTrustData(userId) {
-                    try {
-                        const cached = localStorage.getItem(`${TRUST_CACHE_KEY}_${userId}`);
-                    }
-                    finally {
-                    }
-                    return cached ? JSON.parse(cached) : null;
+            // This would normally compare with historical data
+            // For now, mock based on score
+            if (trustScore.overall >= 80)
+                return 'improving';
+            if (trustScore.overall < 50)
+                return 'declining';
+            return 'stable';
+            function getCachedTrustData(userId) {
+                try {
+                    const cached = localStorage.getItem(`${TRUST_CACHE_KEY}_${userId}`);
                 }
-                try { }
+                finally {
+                }
+                return cached ? JSON.parse(cached) : null;
+                try {
+                }
                 catch {
                     return null;
                     function cacheTrustData(userId, data) {
                         try {
                             const cacheData = {
                                 data,
-                                timestamp: Date.now(),
+                                timestamp: Date.now()
                             };
-                            localStorage.setItem(`${TRUST_CACHE_KEY}_${userId}`, JSON.stringify(cacheData));
                         }
-                        finally {
-                        }
+                        finally { }
+                        ;
+                        localStorage.setItem(`${TRUST_CACHE_KEY}_${userId}`, JSON.stringify(cacheData));
                     }
-                    try { }
+                    try {
+                    }
                     catch {
                         // Ignore caching errors
                         export default useTrustIndicators;
                     }
                 }
             }
-        });
+        }
     }
 }

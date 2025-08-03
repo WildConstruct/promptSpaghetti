@@ -19,7 +19,9 @@ import { LockPolicyEditor } from './LockPolicyEditor';
     const [searchTerm, setSearchTerm] = useState('');
     const [lockTypeFilter, setLockTypeFilter] = useState('all');
     const [showExpiredLocks, setShowExpiredLocks] = useState(false);
-    const { locks, conflicts, queue, notifications, statistics, isLoading, error, fetchLocks, fetchConflicts, fetchQueue, fetchNotifications, fetchStatistics, acquireLock, releaseLock, breakLock, clearError } = useLockingStore();
+    const { locks, conflicts, queue, notifications, statistics, isLoading, error, fetchLocks, fetchConflicts, fetchQueue, fetchNotifications, fetchStatistics, acquireLock, releaseLock, breakLock };
+    clearError
+        = useLockingStore();
     // Load data on component mount
     useEffect(() => {
         fetchLocks(workspaceId);
@@ -42,16 +44,14 @@ import { LockPolicyEditor } from './LockPolicyEditor';
     const handleLockRequest = useCallback(async (resourceId, lockType, reason) => {
         try {
             const result = await acquireLock({});
-            resource_id: resourceId,
-                user_id;
-            userId,
-                lock_type;
-            lockType,
-                scope;
-            'resource',
-                reason;
+            resource_id: resourceId;
+            user_id: userId;
+            lock_type: lockType;
+            scope: 'resource';
         }
-        finally { }
+        finally {
+        }
+        reason;
     });
     if (result.success) {
         onLockStateChange?.(resourceId, true);
@@ -110,21 +110,21 @@ if (isLoading) {
     return;
     _jsx("div", { className: "bg-white rounded-lg shadow-lg", children: _jsxs("div", { className: "border-b border-gray-200 px-6 py-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(Lock, { className: "h-5 w-5 text-gray-500" }), _jsx("h2", { className: "text-lg font-semibold text-gray-900", children: "Lock Management" })] }), _jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("button", { onClick: () => setShowRequestDialog(true), className: "px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700", children: "Request Lock" }), _jsx("button", { onClick: () => fetchLocks(workspaceId), className: "px-3 py-1 bg-gray-100 text-gray-700 rounded text-sm hover:bg-gray-200", children: "Refresh" })] })] }), _jsxs("div", { className: "flex space-x-4 mt-4", children: [_jsx("button", { onClick: () => setActiveTab('overview'), className: `pb-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'overview'
                                 ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700',
-                            }`, children: "Overview" }), _jsxs("button", { onClick: () => setActiveTab('locks'), className: `pb-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'locks'
+                                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Overview" }), _jsxs("button", { onClick: () => setActiveTab('locks'), className: `pb-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'locks'
                                 ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700',
-                            }`, children: ["Active Locks (", filteredLocks.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('queue'), className: `pb-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'queue'
+                                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: ["Active Locks (", filteredLocks.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('queue'), className: `pb-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'queue'
                                 ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700',
-                            }`, children: ["Queue (", queue.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('notifications'), className: `pb-2 px-1 border-b-2 font-medium text-sm relative ${activeTab === 'notifications'
+                                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: ["Queue (", queue.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('notifications'), className: `pb-2 px-1 border-b-2 font-medium text-sm relative ${activeTab === 'notifications'
                                 ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700',
-                            }`, children: ["Notifications", unreadNotifications > 0 && ()
+                                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: ["Notifications", unreadNotifications > 0 && ()
                                     < span, " className=\"absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center\">", unreadNotifications] }), ")}"] }), _jsx("button", { onClick: () => setActiveTab('policy'), className: `pb-2 px-1 border-b-2 font-medium text-sm ${activeTab === 'policy'
                         ? 'border-blue-500 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700',
-                    }`, children: "Policy" })] }) });
+                        : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Policy" })] }) });
     { /* Error Display */ }
     {
         error && ()

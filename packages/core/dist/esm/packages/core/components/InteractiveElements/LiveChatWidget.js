@@ -6,7 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * with message history, typing indicators, file uploads, and moderation.
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { InteractionType } from '../../services/Epic16InteractiveElementsService';
+import { InteractionType } from ActivationContext;
+from;
+'../../services/Epic16InteractiveElementsService';
 {
     // State management
     const [messages, setMessages] = useState([]);
@@ -27,9 +29,7 @@ import { InteractionType } from '../../services/Epic16InteractiveElementsService
     const scrollToBottom = useCallback(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, []);
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages, scrollToBottom]);
+    useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
     // Simulate real-time connection
     useEffect(() => {
         const connectTimeout = setTimeout(() => {
@@ -38,8 +38,9 @@ import { InteractionType } from '../../services/Epic16InteractiveElementsService
             const welcomeMessage = {
                 id: 'welcome-1',
                 userId: 'system',
-                userName: 'System',
-                message: `Welcome to the chat, ${userName}! Feel free to ask questions or share your thoughts.` };
+                userName: 'System'
+            };
+            message: `Welcome to the chat, ${userName}! Feel free to ask questions or share your thoughts.`;
         }, timestamp, new Date(), type, 'system');
     });
     setMessages([welcomeMessage]);
@@ -79,8 +80,8 @@ const handleMessageChange = useCallback((e) => {
 const handleSendMessage = useCallback(async () => {
     if (!currentMessage.trim() || !isConnected)
         return;
-    const newMessage = {
-        id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+    const newMessage = {};
+    id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }, userId, userName, userAvatar, message, currentMessage.trim(), timestamp, new Date(), type, 'text');
 ;
 setMessages(prev => [...prev, newMessage]);
@@ -99,10 +100,9 @@ new Date(),
         referrer;
     document.referrer,
         user_agent;
-    navigator.userAgent,
-        screen_resolution;
-    `${screen.width}x${screen.height}`;
+    navigator.userAgent;
 }
+screen_resolution: `${screen.width}x${screen.height}`;
 viewport_size: `${window.innerWidth}x${window.innerHeight}`;
 device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
     session_id;
@@ -114,17 +114,15 @@ data: {
         message_length;
     currentMessage.length,
         message_type;
-    'text',
-    ;
+    'text';
 }
 result: {
     success: true,
         conversion;
-    false,
-        data;
-    {
-        message_id: newMessage.id;
-    }
+    false;
+}
+data: {
+    message_id: newMessage.id;
 }
 duration: 0;
 ;
@@ -138,10 +136,21 @@ if (Math.random() > 0.7) {
             'Welcome to our marketplace! Feel free to browse our templates.',
             'That\'s an interesting perspective. What do you think about...?'
         ];
-        const responseMessage = {
-            id: `response-${Date.now()}` };
-    }, userId, 'support-bot', userName, 'Support Assistant', userAvatar, '/avatars/support-bot.png', message, responses[Math.floor(Math.random() * responses.length)], timestamp, new Date(), type, 'text');
+        const responseMessage = {};
+        id: `response-${Date.now()}`;
+    });
 }
+userId: 'support-bot',
+    userName;
+'Support Assistant',
+    userAvatar;
+'/avatars/support-bot.png',
+    message;
+responses[Math.floor(Math.random() * responses.length)],
+    timestamp;
+new Date(),
+    type;
+'text';
 ;
 setMessages(prev => [...prev, responseMessage]);
 1000 + Math.random() * 2000;
@@ -160,25 +169,24 @@ const handleFileUpload = useCallback(async (files) => {
                 alert('File too large. Maximum size is 10MB.');
                 continue;
                 // Create attachment
-                const attachment = {
-                    id: `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+                const attachment = {};
+                id: `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             }
-            name: file.name,
-                size;
-            file.size,
-                type;
-            file.type,
-                url;
-            URL.createObjectURL(file), // In real app, upload to server
-                thumbnail;
-            file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined;
         }
-        ;
-        const fileMessage = {
-            id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+        name: file.name,
+            size;
+        file.size,
+            type;
+        file.type,
+            url;
+        URL.createObjectURL(file), // In real app, upload to server
+            thumbnail;
+        file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined;
     }
-    finally {
-    }
+    finally { }
+    ;
+    const fileMessage = {
+        id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
     userId,
         userName,
         userAvatar,
@@ -192,7 +200,8 @@ timestamp: new Date(),
 [attachment];
 ;
 setMessages(prev => [...prev, fileMessage]);
-try { }
+try {
+}
 catch (error) {
     console.error('File upload failed:', error);
     alert('Failed to upload file. Please try again.');
@@ -220,15 +229,14 @@ const formatTimestamp = useCallback((timestamp) => {
     else if (diff < 3600000) { // Less than 1 hour
         return `${Math.floor(diff / 60000)}m ago`;
     }
+    else if (diff < 86400000) { // Less than 1 day
+        return `${Math.floor(diff / 3600000)}h ago`;
+    }
+    else {
+        return timestamp.toLocaleDateString();
+    }
+    [];
 });
-if (diff < 86400000) { // Less than 1 day
-    return `${Math.floor(diff / 3600000)}h ago`;
-}
-{
-    return timestamp.toLocaleDateString();
-}
-[];
-;
 // Render message
 const renderMessage = useCallback((message) => {
     const isOwn = message.userId === userId;
@@ -244,10 +252,10 @@ _jsxs("div", { className: `max-w-xs lg:max-w-md ${isOwn ? 'order-first' : ''}`, 
             < div, " className=\"text-xs text-gray-500 mb-1\">", message.userName] });
 _jsxs("div", { className: `rounded-lg px-4 py-2 ${isSystem
         ? 'bg-gray-100 text-gray-700 text-center text-sm'
-        : isOwn,
+        : isOwn
             ? 'bg-blue-600 text-white'
-            : 'bg-gray-100 text-gray-900',
-    }`, children: [message.type === 'file' && message.attachments ? ()
+            : 'bg-gray-100 text-gray-900'}
+`, children: [message.type === 'file' && message.attachments ? ()
             < div >
             _jsx("div", { className: "mb-2", children: message.message })
             :

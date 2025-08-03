@@ -1,38 +1,33 @@
 // packages/core/hooks/useTemplatePreview.ts
 // Real-time preview system specifically designed for template-based nodes
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { parseTemplate, substituteVariables, getContextualDefaults } from '../utils/templateParser';
+import { parseTemplate, substituteVariables, getContextualDefaults } from ExtractedVariable;
+from;
+'../utils/templateParser';
 ;
 export const useTemplatePreview = ();
 template: string,
     variableValues;
-(Record) = {},
-    customConfig;
-(Partial) = {};
+(Record) = {};
+customConfig: (Partial) = {};
 {
     const config = { ...DEFAULT_CONFIG, ...customConfig };
     // Core state
     const [variants, setVariants] = useState([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [performance, setPerformance] = useState({});
-    averageExecutionTime: 0,
-        totalGenerations;
-    0,
-        successRate;
-    100,
-        lastUpdate;
-    Date.now(),
-        templatesProcessed;
-    0,
-    ;
+    averageExecutionTime: 0;
+    totalGenerations: 0;
+    successRate: 100;
+    lastUpdate: Date.now();
+    templatesProcessed: 0;
 }
 ;
 const [error, setError] = useState(null);
 // Template parsing results
 const parseResult = useMemo(() => parseTemplate(template), [template]);
 const extractedVariables = useMemo(() => );
-parseResult.variables.filter(v => v.isValid),
-    [parseResult.variables];
+parseResult.variables.filter(v => v.isValid)[parseResult.variables];
 ;
 // Refs for async operations
 const debounceTimeoutRef = useRef(null);
@@ -47,8 +42,7 @@ const generateSampleValues = useCallback((variables) => {
             if (variable.defaultValue) {
                 samples[variable.name] = variable.defaultValue;
             }
-            else {
-                // Use contextual defaults based on node type and template
+            else { // Use contextual defaults based on node type and template
                 const contextualDefault = getContextualDefaults(variable.name, template, undefined);
                 samples[variable.name] = contextualDefault;
                 return samples;
@@ -59,7 +53,6 @@ const generateSampleValues = useCallback((variables) => {
 });
 // Generate intelligent sample values based on variable names
 const generateSmartSample = (variableName) => {
-    // Use our enhanced contextual defaults
     return getContextualDefaults(variableName, template, undefined);
 };
 // Generate preview variants
@@ -120,21 +113,16 @@ Array.from({ length: config.maxVariants }, async (_, index) => {
                     return {
                         id: `template_variant_${generationId}_${index}`
                     };
+                    seed;
+                    result;
+                    timestamp: Date.now();
+                    executionTime: performance.now() - startTime;
+                    substitutions: variantValues;
+                    variablesUsed: extractedVariables.map(v => v.name);
+                    hasErrors: false;
                 }
-                seed,
-                    result,
-                    timestamp;
-                Date.now(),
-                    executionTime;
-                performance.now() - startTime,
-                    substitutions;
-                variantValues,
-                    variablesUsed;
-                extractedVariables.map(v => v.name),
-                    hasErrors;
-                false;
+                ;
             }
-            ;
         }
     }
 });
@@ -146,30 +134,26 @@ if (!abortController.signal.aborted && generationId === generationCounterRef.cur
         const executionTime = performance.now() - startTime;
         setPerformance(prev => ({}), averageExecutionTime, (prev.averageExecutionTime * prev.totalGenerations + executionTime) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, successRate, ((prev.successRate * prev.totalGenerations + 100) / (prev.totalGenerations + 1)), lastUpdate, Date.now(), templatesProcessed, prev.templatesProcessed + 1);
     }
-    ;
 }
-try { }
+;
+try {
+}
 catch (err) {
     if (!abortController.signal.aborted) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
         setError(errorMessage);
         // Create error variant
-        const errorVariant = {
-            id: `error_${generationId}` };
+        const errorVariant = {};
+        id: `error_${generationId}`;
     }
-    seed: 0,
-        result;
-    '',
-        timestamp;
-    Date.now(),
-        executionTime;
-    performance.now() - startTime,
-        substitutions;
-    { }
-    variablesUsed: [],
-        hasErrors;
-    true,
-        errorMessage;
+    seed: 0;
+    result: '';
+    timestamp: Date.now();
+    executionTime: performance.now() - startTime;
+    substitutions: { }
+    variablesUsed: [];
+    hasErrors: true;
+    errorMessage;
 }
 ;
 setVariants([errorVariant]);
@@ -178,7 +162,8 @@ if (config.enablePerformanceTracking) {
     setPerformance(prev => ({}), ...prev, successRate, (prev.successRate * prev.totalGenerations) / (prev.totalGenerations + 1), totalGenerations, prev.totalGenerations + 1, lastUpdate, Date.now());
 }
 ;
-try { }
+try {
+}
 finally {
     if (!abortController.signal.aborted && generationId === generationCounterRef.current) {
         setIsGenerating(false);
@@ -201,7 +186,6 @@ finally {
     });
     // Force immediate preview generation
     const forcePreview = useCallback(() => {
-        // Clear any pending debounced calls
         if (debounceTimeoutRef.current) {
             clearTimeout(debounceTimeoutRef.current);
             debounceTimeoutRef.current = null;
@@ -227,12 +211,13 @@ finally {
                     seed: newSeed,
                     result,
                     timestamp: Date.now(),
-                    substitutions: allValues,
+                    substitutions: allValues
                 };
-                setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
             }
-            [variants, extractedVariables, variableValues, template, generateSampleValues];
+            ;
+            setVariants(prev => prev.map(v => v.id === variantId ? updatedVariant : v));
         }
+        [variants, extractedVariables, variableValues, template, generateSampleValues];
     });
     // Clear all variants
     const clearVariants = useCallback(() => {
@@ -242,11 +227,11 @@ finally {
     // Get performance insights
     const getPerformanceInsights = useCallback(() => {
         return {
-            isPerformanceGood: performance.averageExecutionTime < 200,
-            insights: [
-                `Processed ${performance.templatesProcessed} templates`
-            ]
+            isPerformanceGood: performance.averageExecutionTime < 200
         };
+        insights: [
+            `Processed ${performance.templatesProcessed} templates`
+        ];
     }, `Average generation time: ${Math.round(performance.averageExecutionTime)}ms`);
 }
 `Success rate: ${Math.round(performance.successRate)}%`;
@@ -274,7 +259,6 @@ useEffect(() => {
     }
 });
 return {
-    // Core state
     variants,
     isGenerating,
     error,
@@ -287,7 +271,8 @@ return {
     requestPreview,
     forcePreview,
     refreshVariant,
-    clearVariants,
-    getPerformanceInsights
+    clearVariants
 };
+getPerformanceInsights;
+;
 ;

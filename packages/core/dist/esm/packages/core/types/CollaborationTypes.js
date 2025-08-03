@@ -44,9 +44,15 @@ timestamp: string;
 lastModified: string;
 position ?  : { x: number, y: number };
 positionOffset ?  : number;
+nodeId: string;
+labelId ?  : string;
+config ?  : Partial;
+customLabel ?  : string;
 ;
 position ?  : { x: number, y: number };
 size ?  : { width: number, height: number };
 content ?  : string;
 color ?  : StickyNoteColor;
 export {};
+// Predefined color schemes for sticky notes
+// Default sticky note configuration

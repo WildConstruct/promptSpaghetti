@@ -9,9 +9,8 @@ required ?  : boolean;
 validation ?  : (value) => string | null;
 export const ExtensionConfigurationPanel = ({
     extension,
-    onSave,
-    onCancel
-});
+    onSave });
+onCancel;
 {
     const [config, setConfig] = useState({});
     const [errors, setErrors] = useState({});
@@ -19,94 +18,85 @@ export const ExtensionConfigurationPanel = ({
     const [activeTab, setActiveTab] = useState('general');
     // Mock configuration schema - in a real implementation, this would come from the extension
     const configSchema = [
-        {
-            key: 'enabled',
+        { key: 'enabled',
             label: 'Enable Extension',
             type: 'boolean',
             description: 'Enable or disable this extension',
             defaultValue: true,
-            required: true,
-        },
-        {
-            key: 'maxConcurrency',
+            required: true },
+        { key: 'maxConcurrency',
             label: 'Max Concurrent Operations',
             type: 'number',
             description: 'Maximum number of concurrent operations allowed',
             defaultValue: 5,
             validation: (value) => { },
-            if(value, , ) { }
-        } || value > 20
+            if(value, , ) { } } || value > 20
     ];
     return 'Must be between 1 and 20';
     return null;
-}
-{
-    key: 'logLevel',
-        label;
-    'Log Level',
-        type;
-    'select',
-        description;
-    'Logging verbosity level',
-        defaultValue;
-    'info',
-        options;
-    [
+    {
+        key: 'logLevel',
+            label;
+        'Log Level',
+            type;
+        'select',
+            description;
+        'Logging verbosity level',
+            defaultValue;
+        'info';
+    }
+    options: [
         { label: 'Debug', value: 'debug' },
         { label: 'Info', value: 'info' },
         { label: 'Warning', value: 'warning' },
         { label: 'Error', value: 'error' }
     ];
-}
-{
-    key: 'customSettings',
-        label;
-    'Custom Settings',
-        type;
-    'json',
-        description;
-    'Custom JSON configuration for advanced users',
-        defaultValue;
-    '{}';
-}
-{
-    key: 'allowedDomains',
-        label;
-    'Allowed Domains',
-        type;
-    'array',
-        description;
-    'List of domains this extension can access',
-        defaultValue;
-    [],
-    ;
-}
-{
-    key: 'cacheTimeout',
-        label;
-    'Cache Timeout (seconds)',
-        type;
-    'number',
-        description;
-    'How long to cache results',
-        defaultValue;
-    300,
-        validation;
-    (value) => {
+    {
+        key: 'customSettings',
+            label;
+        'Custom Settings',
+            type;
+        'json',
+            description;
+        'Custom JSON configuration for advanced users';
+    }
+    defaultValue: '{}';
+    {
+        key: 'allowedDomains',
+            label;
+        'Allowed Domains',
+            type;
+        'array',
+            description;
+        'List of domains this extension can access',
+            defaultValue;
+        [];
+    }
+    {
+        key: 'cacheTimeout',
+            label;
+        'Cache Timeout (seconds)',
+            type;
+        'number',
+            description;
+        'How long to cache results',
+            defaultValue;
+        300,
+            validation;
+        (value) => { };
         if (value < 0)
             return 'Must be non-negative';
         return null;
-    };
-    {
-        key: 'enableAnalytics',
-            label;
-        'Enable Analytics',
-            type;
-        'boolean',
-            description;
-        'Allow anonymous usage analytics',
-            defaultValue;
-        false;
+        {
+            key: 'enableAnalytics',
+                label;
+            'Enable Analytics',
+                type;
+            'boolean',
+                description;
+            'Allow anonymous usage analytics';
+        }
+        defaultValue: false;
         ;
         // Initialize config with defaults
         useEffect(() => {
@@ -131,66 +121,66 @@ export const ExtensionConfigurationPanel = ({
                             break;
                         }
                     case 'json':
-                        try {
-                            JSON.parse(value);
-                        }
-                        catch {
-                            return 'Must be valid JSON';
-                            break;
-                            return null;
+                }
+                try {
+                    JSON.parse(value);
+                }
+                catch {
+                    return 'Must be valid JSON';
+                    break;
+                    return null;
+                }
+                ;
+                const handleFieldChange = (fieldKey, value) => {
+                    const field = configSchema.find(f => f.key === fieldKey);
+                    if (!field)
+                        return;
+                    const newConfig = { ...config, [fieldKey]: value };
+                    setConfig(newConfig);
+                    setIsDirty(true);
+                    // Validate field
+                    const error = validateField(field, value);
+                    const newErrors = { ...errors };
+                    if (error) {
+                        newErrors[fieldKey] = error;
+                    }
+                    else {
+                        delete newErrors[fieldKey];
+                        setErrors(newErrors);
+                    }
+                    ;
+                    const handleSave = () => {
+                        // Validate all fields
+                        const newErrors = {};
+                        configSchema.forEach(field => { });
+                        const error = validateField(field, config[field.key]);
+                        if (error) {
+                            newErrors[field.key] = error;
                         }
                         ;
-                        const handleFieldChange = (fieldKey, value) => {
-                            const field = configSchema.find(f => f.key === fieldKey);
-                            if (!field)
-                                return;
-                            const newConfig = { ...config, [fieldKey]: value };
-                            setConfig(newConfig);
-                            setIsDirty(true);
-                            // Validate field
-                            const error = validateField(field, value);
-                            const newErrors = { ...errors };
-                            if (error) {
-                                newErrors[fieldKey] = error;
-                            }
-                            else {
-                                delete newErrors[fieldKey];
-                                setErrors(newErrors);
-                            }
-                            ;
-                            const handleSave = () => {
-                                // Validate all fields
-                                const newErrors = {};
-                                configSchema.forEach(field => { });
-                                const error = validateField(field, config[field.key]);
-                                if (error) {
-                                    newErrors[field.key] = error;
-                                }
-                                ;
-                                if (Object.keys(newErrors).length > 0) {
-                                    setErrors(newErrors);
-                                    return;
-                                    onSave(config);
-                                }
-                                ;
-                                const handleReset = () => {
-                                    const resetConfig = {};
-                                    configSchema.forEach(field => { });
-                                    resetConfig[field.key] = field.defaultValue;
-                                };
-                                setConfig(resetConfig);
-                                setErrors({});
-                                setIsDirty(false);
-                            };
-                            const renderField = (field) => {
-                                const value = config[field.key];
-                                const error = errors[field.key];
-                                return;
-                                _jsxs("div", { className: `config-field ${error ? 'error' : ''}`, children: ["}", _jsxs("label", { className: "field-label", children: [field.label, field.required && _jsx("span", { className: "required", children: "*" })] }), field.description && ()
-                                            < p, " className=\"field-description\">", field.description] }, field.key);
-                            };
+                        if (Object.keys(newErrors).length > 0) {
+                            setErrors(newErrors);
+                            return;
+                            onSave(config);
+                        }
+                        ;
+                        const handleReset = () => {
+                            const resetConfig = {};
+                            configSchema.forEach(field => { });
+                            resetConfig[field.key] = field.defaultValue;
                         };
-                }
+                        setConfig(resetConfig);
+                        setErrors({});
+                        setIsDirty(false);
+                    };
+                    const renderField = (field) => {
+                        const value = config[field.key];
+                        const error = errors[field.key];
+                        return;
+                        _jsxs("div", { className: `config-field ${error ? 'error' : ''}`, children: ["}", _jsxs("label", { className: "field-label", children: [field.label, field.required && _jsx("span", { className: "required", children: "*" })] }), field.description && ()
+                                    < p, " className=\"field-description\">", field.description] }, field.key);
+                    };
+                };
             }
         }
     };
@@ -312,9 +302,7 @@ const ArrayInput = ({ value, onChange, placeholder }) => {
             setNewItem('');
         }
         ;
-        const removeItem = (index) => {
-            onChange(value.filter((_, i) => i !== index));
-        };
+        const removeItem = (index) => { onChange(value.filter((_, i) => i !== index)); };
         return;
         _jsxs("div", { className: "array-input-container", children: [_jsx("div", { className: "array-items", children: value.map((item, index) => ()
                         < div, key = { index }, className = "array-item" >

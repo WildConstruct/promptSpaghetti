@@ -63,6 +63,7 @@ initialize(context, ExtensionContext);
 Promise;
 dispose();
 Promise;
+// Storage Types
 export var StorageType;
 (function (StorageType) {
     StorageType["MEMORY"] = "memory";
@@ -75,8 +76,9 @@ export var StorageType;
     StorageType["GRAPH"] = "graph";
     StorageType["TIME_SERIES"] = "time_series";
     StorageType["SEARCH"] = "search";
-    StorageType["CUSTOM"] = "custom";
 })(StorageType || (StorageType = {}));
+CUSTOM = 'custom';
+context: ExtensionContext;
 options ?  : Array;
 component ?  : React.ComponentType;
 // Security
@@ -86,74 +88,59 @@ masked ?  : boolean;
 multiline ?  : boolean;
 fileFilter ?  : string;
 urlProtocols ?  : string;
+metric: string;
+options ?  : any;
 ;
 // Retry configuration
-retry ?  : {
-    enabled: boolean,
+retry ?  : { enabled: boolean,
     maxRetries: number,
     retryDelay: number,
-    backoffStrategy: 'fixed' | 'exponential' | 'linear',
-};
+    backoffStrategy: 'fixed' | 'exponential' | 'linear' };
+;
 // Timeout configuration
-timeout ?  : {
-    connection: number,
+timeout ?  : { connection: number,
     query: number,
-    idle: number
-};
+    idle: number };
 // SSL/TLS configuration
-ssl ?  : {
-    enabled: boolean,
+ssl ?  : { enabled: boolean,
     certificatePath: string,
     keyPath: string,
     caPath: string,
-    rejectUnauthorized: boolean
-};
+    rejectUnauthorized: boolean };
 ;
 // Compression
-compression ?  : {
-    enabled: boolean,
+compression ?  : { enabled: boolean,
     algorithm: 'gzip' | 'deflate' | 'brotli',
-    level: number
-};
+    level: number };
 // Batching
-batching ?  : {
-    enabled: boolean,
+batching ?  : { enabled: boolean,
     size: number,
-    timeout: number
-};
+    timeout: number };
 // Optimization
-optimization ?  : {
-    indexing: boolean,
+optimization ?  : { indexing: boolean,
     prefetching: boolean,
-    lazy: boolean
-};
+    lazy: boolean };
 ;
 // Access control
-accessControl ?  : {
-    enabled: boolean,
+accessControl ?  : { enabled: boolean,
     users: StorageUser,
-    roles: StorageRole
-};
+    roles: StorageRole };
 // Audit logging
-audit ?  : {
-    enabled: boolean,
+audit ?  : { enabled: boolean,
     events: string,
-    destination: string
-};
+    destination: string };
 // Data masking
-masking ?  : {
-    enabled: boolean,
+masking ?  : { enabled: boolean,
     patterns: string,
-    maskingChar: string
-};
+    maskingChar: string };
+action: 'log' | 'email' | 'webhook' | 'custom';
+actionConfig ?  : any;
 ;
 // Compatibility
-compatibility ?  : {
-    minVersion: string,
+compatibility ?  : { minVersion: string,
     maxVersion: string,
     platforms: string,
-    dependencies: string
-};
+    dependencies: string };
 // Categories and tags
 categories ?  : string;
 tags ?  : string;
@@ -209,6 +196,12 @@ memory: {
 ;
 lastChecked: Date;
 transform ?  : (key, value) => { key: string; value: any; };
+totalKeys: number;
+processedKeys: number;
+percentage: number;
+estimatedTimeRemaining: number;
+currentKey ?  : string;
+// Storage Extension Helper Functions
 export var StorageExtensionHelpers;
 (function (StorageExtensionHelpers) {
     function createStorageProvider(config) {
@@ -217,72 +210,73 @@ export var StorageExtensionHelpers;
             name: config.name || 'Custom Storage',
             description: config.description || 'A custom storage provider',
             version: config.version || '1.0.0',
-            type: config.type || StorageType.CUSTOM,
-            providerClass: config.providerClass || class {
-                id = config.id || 'custom-storage';
-                name = config.name || 'Custom Storage';
-                type = config.type || StorageType.CUSTOM;
-                version = config.version || '1.0.0';
-                async connect() { }
-                async disconnect() { }
-                isConnected() { return true; }
-                async get() { return undefined; }
-                async set() { }
-                async delete() { }
-                async exists() { return false; }
-                async clear() { }
-                async getMany() { return []; }
-                async setMany() { }
-                async deleteMany() { }
-                async keys() { return []; }
-                async count() { return 0; }
-                async increment() { return 0; }
-                async decrement() { return 0; }
-                async expire() { }
-                async ttl() { return -1; }
-                supportsCollections() { return false; }
-                supportsTransactions() { return false; }
-                supportsQueries() { return false; }
-                supportsStreaming() { return false; }
-                async getStats() { return {}; }
-                async healthCheck() { return { status: 'healthy', lastChecked: new Date() }; }
-                getConfiguration() { return {}; }
-                setConfiguration() { }
-                getMetadata() { return { author: 'Unknown', license: 'MIT' }; }
-                async initialize() { }
-                async dispose() { }
-            },
-            configSchema: config.configSchema || z.object({}),
-            ui: config.ui || {},
-            runtime: config.runtime || {},
-            capabilities: config.capabilities || {
-                get: true,
-                set: true,
-                delete: true,
-                exists: true,
-                clear: true,
-                batchGet: false,
-                batchSet: false,
-                batchDelete: false,
-                keys: true,
-                count: true,
-                pattern: false,
-                increment: false,
-                decrement: false,
-                expire: false,
-                ttl: false,
-                collections: false,
-                transactions: false,
-                queries: false,
-                streaming: false,
-                backup: false,
-                restore: false,
-            },
-            metadata: config.metadata || {
-                author: 'Unknown',
-                license: 'MIT',
-            }
+            type: config.type || StorageType.CUSTOM
+        };
+        providerClass: config.providerClass || class {
+            id = config.id || 'custom-storage';
+            name = config.name || 'Custom Storage';
+            type = config.type || StorageType.CUSTOM;
+            version = config.version || '1.0.0';
+            async connect() { }
+            async disconnect() { }
+            isConnected() { return true; }
+            async get() { return undefined; }
+            async set() { }
+            async delete() { }
+            async exists() { return false; }
+            async clear() { }
+            async getMany() { return []; }
+            async setMany() { }
+            async deleteMany() { }
+            async keys() { return []; }
+            async count() { return 0; }
+            async increment() { return 0; }
+            async decrement() { return 0; }
+            async expire() { }
+            async ttl() { return -1; }
+            supportsCollections() { return false; }
+            supportsTransactions() { return false; }
+            supportsQueries() { return false; }
+            supportsStreaming() { return false; }
+            async getStats() { return {}; }
+            async healthCheck() { return { status: 'healthy', lastChecked: new Date() }; }
+            getConfiguration() { return {}; }
+            setConfiguration() { }
+            getMetadata() { return { author: 'Unknown', license: 'MIT' }; }
+            async initialize() { }
+            async dispose() { }
+            configSchema;
+        } || z.object({});
+        ui: config.ui || {};
+        runtime: config.runtime || {};
+        capabilities: config.capabilities || {
+            get: true,
+            set: true,
+            delete: true,
+            exists: true,
+            clear: true,
+            batchGet: false,
+            batchSet: false,
+            batchDelete: false,
+            keys: true,
+            count: true,
+            pattern: false,
+            increment: false,
+            decrement: false,
+            expire: false,
+            ttl: false,
+            collections: false,
+            transactions: false,
+            queries: false,
+            streaming: false,
+            backup: false,
+            restore: false
+        };
+        metadata: config.metadata || {
+            author: 'Unknown',
+            license: 'MIT'
         };
     }
     StorageExtensionHelpers.createStorageProvider = createStorageProvider;
+    ;
 })(StorageExtensionHelpers || (StorageExtensionHelpers = {}));

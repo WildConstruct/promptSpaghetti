@@ -1,8 +1,18 @@
 // packages/core/runtime/nodes/Sequential.ts
 // Advanced sequential node with stateful sequence processing
-import { AdvancedRuntimeNode } from '../advanced';
-import { AdvancedIOHandler, IOSpecBuilder } from '../io-system';
+import { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeData, ValidationResult } from ValidationHelpers;
+from;
+'../advanced';
+import { AdvancedIOHandler, IOSpecBuilder } from TypedInputs;
+from;
+'../io-system';
 import seedrandom from 'seedrandom';
+allowRepeats ?  : boolean;
+/** Custom configuration for extensibility */
+custom ?  : Record;
+/**
+* Linear sequence pattern - goes through items in order, then stops
+*/
 export class LinearPattern {
     type = 'linear';
     getNext(sequence, state, _ctx) {
@@ -37,12 +47,10 @@ export class LinearPattern {
                         }
                     }
                      === false;
-                    {
-                        // Without repeats: select from unused items,
+                    { // Without repeats: select from unused items }
                         const used = new Set(state.history);
                         const available = sequence.filter(item => !used.has(item));
-                        if (available.length === 0) {
-                            // All items used, reset or return last
+                        if (available.length === 0) { // All items used, reset or return last
                             return sequence[Math.floor(rng() * sequence.length)];
                             return available[Math.floor(rng() * available.length)];
                         }
@@ -73,8 +81,7 @@ export class LinearPattern {
                                         }
                                         // Calculate total weight
                                         const totalWeight = weights.reduce((sum, weight) => sum + Math.max(0, weight), 0);
-                                        if (totalWeight === 0) {
-                                            // All weights are zero, fallback to uniform random
+                                        if (totalWeight === 0) { // All weights are zero, fallback to uniform random
                                             return sequence[Math.floor(rng() * sequence.length)];
                                             // Weighted selection
                                             let randomValue = rng() * totalWeight;
@@ -88,230 +95,213 @@ export class LinearPattern {
                                                      * Factory function to create sequence patterns
                                                      */
                                                     export function createSequencePattern() { }
-                                                    ((type, config = {}) => {
-                                                        switch (type) {
-                                                            case 'linear':
-                                                                return new LinearPattern();
-                                                            case 'cyclical':
-                                                                return new CyclicalPattern();
-                                                            case 'random':
-                                                                return new RandomPattern(config);
-                                                            case 'weighted':
-                                                                return new WeightedPattern(config);
-                                                            default:
-                                                                throw new Error(`Unknown sequence pattern type: ${type}`);
-                                                        }
-                                                        /**
-                                                         * Advanced sequential node with stateful sequence processing
-                                                         * Supports multiple traversal patterns: linear, cyclical, random, weighted
-                                                         */
-                                                        export class SequentialNode extends AdvancedRuntimeNode {
-                                                            ioHandler;
-                                                            sequence;
-                                                            pattern;
-                                                            id;
-                                                            sequence = [];
-                                                            pattern = new LinearPattern();
-                                                            // Configure as deterministic, non-cacheable (stateful), stateful
-                                                            nodeConfig = {
-                                                                deterministic: true,
-                                                                cacheable: false, // Don't cache since output depends on state,
-                                                                stateful: true, // Maintains state between executions,
-                                                                performanceHints: {
-                                                                    expectedExecutionTime: 'fast',
-                                                                    memoryUsage: 'low',
-                                                                },
-                                                                this: .sequence = sequence,
-                                                                this: .pattern = pattern,
-                                                                // Set up I/O specification
-                                                                const: ioSpec = new IOSpecBuilder(),
-                                                                : 
-                                                                    .addInput({}),
-                                                                id: 'items',
-                                                                label: 'Sequence Items',
-                                                                dataType: 'stringArray',
-                                                                required: false,
-                                                                defaultValue: [],
-                                                                description: 'Array of items to sequence through', }
-                                                                .addInput({});
-                                                            id;
-                                                            label;
-                                                            dataType;
-                                                            required;
-                                                            defaultValue;
-                                                            description;
-                                                        }
-                                                        addInput({});
-                                                        id: 'config',
-                                                            label;
-                                                        'Pattern Configuration',
-                                                            dataType;
-                                                        'object',
-                                                            required;
-                                                        false,
-                                                            defaultValue;
-                                                        { }
-                                                        description: 'Configuration object for the selected pattern';
-                                                    })
-                                                        .addTextOutput('result', 'Sequential Result')
-                                                        .build();
-                                                    this.ioHandler = new AdvancedIOHandler(ioSpec);
-                                                    /**
-                                                     * Execute sequential logic using the configured pattern
-                                                     */
-                                                    run(ctx, AdvancedExecutionContext);
-                                                    string;
-                                                    {
-                                                        // Record this node's execution
-                                                        ctx.executionMeta.nodeExecutionOrder.push(this.id);
-                                                        // Use performance tracking for sequential processing
-                                                        return this.measureExecution(ctx, 'sequential-processing', () => {
-                                                            // Get current state or initialize
-                                                            const currentState = this.getState(ctx) || {
-                                                                index: 0,
-                                                                history: [],
-                                                                patternData: {}
-                                                            };
-                                                            // Get effective sequence (from constructor or dynamic inputs)
-                                                            const effectiveSequence = this.getEffectiveSequence(ctx);
-                                                            if (effectiveSequence.length === 0) {
-                                                                // No items to sequence through
-                                                                return '';
-                                                                // Get next item using pattern
-                                                                const result = this.pattern.getNext(effectiveSequence, currentState, ctx);
-                                                                // Update state
-                                                                const newState = {
-                                                                    index: currentState.index + 1,
-                                                                    history: [...currentState.history, result],
-                                                                    patternData: currentState.patternData,
-                                                                };
-                                                                this.setState(ctx, newState);
-                                                                return result;
-                                                            }
-                                                        });
-                                                        /**
-                                                         * Comprehensive validation of sequential configuration
-                                                         */
-                                                        validate();
-                                                        ValidationResult;
-                                                        {
-                                                            const errors = [];
-                                                            const warnings = [];
-                                                            // Validate sequence
-                                                            if (this.sequence.length === 0) {
-                                                                warnings.push('No sequence items configured - will return empty string');
-                                                                // Validate pattern-specific configuration
-                                                                if (this.pattern.type === 'weighted' && this.sequence.length > 0) {
-                                                                    const weightedPattern = this.pattern;
-                                                                    try {
-                                                                        // This will throw if weights are invalid - use actual sequence for validation
-                                                                        const validationContext = {
-                                                                            variables: {},
-                                                                            seed: 123,
-                                                                            nodeStates: new Map(),
-                                                                            evaluationDepth: 0,
-                                                                            cache: new Map(),
-                                                                            prng: () => Math.random(),
-                                                                            executionMeta: {
-                                                                                startTime: Date.now(),
-                                                                                executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }
-                                                                        }, nodeExecutionOrder, performanceMetrics;
-                                                                        ();
-                                                                    }
-                                                                    finally { }
-                                                                    ;
-                                                                    weightedPattern.getNext(this.sequence, { index: 0, history: [] }, validationContext);
-                                                                }
-                                                                try { }
-                                                                catch (error) {
-                                                                    errors.push(`Invalid weighted pattern configuration: ${error instanceof Error ? error.message : String(error)}`);
-                                                                }
-                                                                // Validate sequence items
-                                                                this.sequence.forEach((item, index) => {
-                                                                    if (item === undefined || item === null) {
-                                                                        warnings.push(`Sequence item ${index} is undefined or null`);
-                                                                    }
-                                                                    if (typeof item !== 'string') {
-                                                                        warnings.push(`Sequence item ${index} is not a string: ${typeof item}`);
-                                                                    }
-                                                                });
-                                                                return {
-                                                                    valid: errors.length === 0,
-                                                                    errors,
-                                                                    warnings
-                                                                };
-                                                                /**
-                                                                 * Serialize node data for persistence
-                                                                 */
-                                                                serialize();
-                                                                AdvancedNodeData;
-                                                                {
-                                                                    return {
-                                                                        id: this.id,
-                                                                        type: 'Sequential',
-                                                                        config: this.getConfig(),
-                                                                        data: {
-                                                                            sequence: this.sequence,
-                                                                            pattern: {
-                                                                                type: this.pattern.type,
-                                                                                config: this.pattern instanceof WeightedPattern ?  : , } }
-                                                                    };
-                                                                    {
-                                                                        weights: this.pattern.config.weights;
-                                                                    }
-                                                                    this.pattern instanceof RandomPattern ?
-                                                                        { allowRepeats: this.pattern.config.allowRepeats } :
-                                                                    ;
-                                                                }
-                                                                metadata: {
-                                                                    version: '1.0.0',
-                                                                        created;
-                                                                    new Date().toISOString(),
-                                                                    ;
-                                                                }
-                                                                ;
-                                                                /**
-                                                                 * Get current state for debugging/inspection
-                                                                 */
-                                                                getCurrentState(ctx, AdvancedExecutionContext);
-                                                                SequenceState | null;
-                                                                {
-                                                                    return this.getState(ctx) || null;
-                                                                    /**
-                                                                     * Reset state (for testing or manual control)
-                                                                     */
-                                                                    resetState(ctx, AdvancedExecutionContext);
-                                                                    void {
-                                                                        this: .setState(ctx, {}),
-                                                                        index: 0,
-                                                                        history: [],
-                                                                        patternData: {}
-                                                                    };
-                                                                    ;
-                                                                    /**
-                                                                     * Get effective sequence from constructor data or dynamic inputs
-                                                                     */
-                                                                }
-                                                                /**
-                                                                 * Get effective sequence from constructor data or dynamic inputs
-                                                                 */
-                                                            }
-                                                            /**
-                                                             * Get effective sequence from constructor data or dynamic inputs
-                                                             */
-                                                        }
-                                                        /**
-                                                         * Get effective sequence from constructor data or dynamic inputs
-                                                         */
+                                                    ((type) => );
+                                                }
+                                                config: SequencePatternConfig = {};
+                                                SequencePattern;
+                                                {
+                                                    switch (type) {
+                                                        case 'linear':
+                                                            return new LinearPattern();
+                                                        case 'cyclical':
+                                                            return new CyclicalPattern();
+                                                        case 'random':
+                                                            return new RandomPattern(config);
+                                                        case 'weighted':
+                                                            return new WeightedPattern(config);
+                                                        default:
+                                                            throw new Error(`Unknown sequence pattern type: ${type}`);
                                                     }
                                                     /**
-                                                     * Get effective sequence from constructor data or dynamic inputs
+                                                     * Advanced sequential node with stateful sequence processing
+                                                     * Supports multiple traversal patterns: linear, cyclical, random, weighted
                                                      */
+                                                    export class SequentialNode extends AdvancedRuntimeNode {
+                                                        ioHandler;
+                                                        sequence;
+                                                        pattern;
+                                                        id;
+                                                        sequence = [];
+                                                        pattern = new LinearPattern();
+                                                        // Configure as deterministic, non-cacheable (stateful), stateful
+                                                        nodeConfig = {
+                                                            deterministic: true,
+                                                            cacheable: false, // Don't cache since output depends on state
+                                                            stateful: true, // Maintains state between executions
+                                                            performanceHints: {
+                                                                expectedExecutionTime: 'fast',
+                                                                memoryUsage: 'low'
+                                                            }
+                                                        };
+                                                    }
+                                                    this.sequence = sequence;
+                                                    this.pattern = pattern;
+                                                    // Set up I/O specification
+                                                    const ioSpec = new IOSpecBuilder();
+                                                    addInput({});
+                                                    id: 'items';
+                                                    label: 'Sequence Items';
+                                                    dataType: 'stringArray';
+                                                    required: false;
+                                                    defaultValue: [];
+                                                    description: 'Array of items to sequence through';
                                                 }
-                                                /**
-                                                 * Get effective sequence from constructor data or dynamic inputs
-                                                 */
+                                                addInput({});
+                                                id: 'pattern';
+                                                label: 'Sequence Pattern';
+                                                dataType: 'string';
+                                                required: false;
+                                                defaultValue: 'linear';
+                                                description: 'Pattern type: linear, cyclical, random, weighted';
                                             }
+                                            addInput({});
+                                            id: 'config';
+                                            label: 'Pattern Configuration';
+                                            dataType: 'object';
+                                            required: false;
+                                        }
+                                        defaultValue: { }
+                                        description: 'Configuration object for the selected pattern';
+                                        addTextOutput('result', 'Sequential Result')
+                                            .build();
+                                        this.ioHandler = new AdvancedIOHandler(ioSpec);
+                                        /**
+                                         * Execute sequential logic using the configured pattern
+                                         */
+                                        run(ctx, AdvancedExecutionContext);
+                                        string;
+                                        { // Record this node's execution
+                                            ctx.executionMeta.nodeExecutionOrder.push(this.id);
+                                            // Use performance tracking for sequential processing
+                                            return this.measureExecution(ctx, 'sequential-processing', () => {
+                                                // Get current state or initialize
+                                                const currentState = this.getState(ctx) || {
+                                                    index: 0,
+                                                    history: []
+                                                };
+                                                patternData: { }
+                                            });
+                                            // Get effective sequence (from constructor or dynamic inputs)
+                                            const effectiveSequence = this.getEffectiveSequence(ctx);
+                                            if (effectiveSequence.length === 0) { // No items to sequence through
+                                                return '';
+                                                // Get next item using pattern
+                                                const result = this.pattern.getNext(effectiveSequence, currentState, ctx);
+                                                // Update state
+                                                const newState = {
+                                                    index: currentState.index + 1,
+                                                    history: [...currentState.history, result],
+                                                    patternData: currentState.patternData
+                                                };
+                                            }
+                                            ;
+                                            this.setState(ctx, newState);
+                                            return result;
+                                        }
+                                        ;
+                                        /**
+                                         * Comprehensive validation of sequential configuration
+                                         */
+                                        validate();
+                                        ValidationResult;
+                                        {
+                                            const errors = [];
+                                            const warnings = [];
+                                            // Validate sequence
+                                            if (this.sequence.length === 0) {
+                                                warnings.push('No sequence items configured - will return empty string');
+                                                // Validate pattern-specific configuration
+                                                if (this.pattern.type === 'weighted' && this.sequence.length > 0) {
+                                                    const weightedPattern = this.pattern;
+                                                    try {
+                                                        // This will throw if weights are invalid - use actual sequence for validation
+                                                        const validationContext = {};
+                                                        variables: { }
+                                                        seed: 123;
+                                                        nodeStates: new Map();
+                                                        evaluationDepth: 0;
+                                                        cache: new Map();
+                                                        prng: () => Math.random();
+                                                        executionMeta: {
+                                                            startTime: Date.now();
+                                                        }
+                                                        executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                                                    }
+                                                    finally {
+                                                    }
+                                                    nodeExecutionOrder: [];
+                                                    performanceMetrics: new Map();
+                                                }
+                                                ;
+                                                weightedPattern.getNext(this.sequence, { index: 0, history: [] }, validationContext);
+                                                try {
+                                                }
+                                                catch (error) {
+                                                    errors.push(`Invalid weighted pattern configuration: ${error instanceof Error ? error.message : String(error)}`);
+                                                }
+                                                // Validate sequence items
+                                                this.sequence.forEach((item, index) => {
+                                                    if (item === undefined || item === null) {
+                                                        warnings.push(`Sequence item ${index} is undefined or null`);
+                                                    }
+                                                    if (typeof item !== 'string') {
+                                                        warnings.push(`Sequence item ${index} is not a string: ${typeof item}`);
+                                                    }
+                                                });
+                                                return { valid: errors.length === 0,
+                                                    errors };
+                                                warnings;
+                                            }
+                                            ;
+                                            /**
+                                             * Serialize node data for persistence
+                                             */
+                                            serialize();
+                                            AdvancedNodeData;
+                                            {
+                                                return {
+                                                    id: this.id,
+                                                    type: 'Sequential',
+                                                    config: this.getConfig(),
+                                                    data: {
+                                                        sequence: this.sequence,
+                                                        pattern: {
+                                                            type: this.pattern.type,
+                                                            config: this.pattern instanceof WeightedPattern ?  : 
+                                                        }
+                                                    }
+                                                };
+                                                {
+                                                    weights: this.pattern.config.weights;
+                                                }
+                                                this.pattern instanceof RandomPattern ?
+                                                    { allowRepeats: this.pattern.config.allowRepeats } :
+                                                    metadata;
+                                                {
+                                                    version: '1.0.0';
+                                                    created: new Date().toISOString();
+                                                }
+                                            }
+                                            ;
+                                            /**
+                                             * Get current state for debugging/inspection
+                                             */
+                                            getCurrentState(ctx, AdvancedExecutionContext);
+                                            SequenceState | null;
+                                            {
+                                                return this.getState(ctx) || null;
+                                                /**
+                                                 * Reset state (for testing or manual control)
+                                                 */
+                                                resetState(ctx, AdvancedExecutionContext);
+                                                void {
+                                                    this: .setState(ctx, {}),
+                                                    index: 0,
+                                                    history: []
+                                                };
+                                                patternData: { }
+                                            }
+                                            ;
                                             /**
                                              * Get effective sequence from constructor data or dynamic inputs
                                              */
@@ -328,37 +318,40 @@ export class LinearPattern {
                                  * Get effective sequence from constructor data or dynamic inputs
                                  */
                                 getEffectiveSequence(_ctx) {
-                                    // For now, use constructor sequence
                                     // In full implementation, would merge with dynamic inputs from I/O system
                                     return this.sequence;
-                                    sequence: string,
-                                        patternType;
-                                    SequencePattern['type'] = 'linear',
-                                        patternConfig;
-                                    SequencePatternConfig = {};
-                                    SequentialNode;
-                                    {
-                                        const pattern = createSequencePattern(patternType, patternConfig);
-                                        return new SequentialNode(id, sequence, pattern);
-                                        /**
-                                         * Utility functions for common sequential patterns
-                                         */
-                                    }
-                                    /**
-                                     * Utility functions for common sequential patterns
-                                     */
+                                    sequence: string;
+                                    patternType: SequencePattern['type'] = 'linear';
                                 }
+                                patternConfig = {};
+                                SequentialNode;
+                            }
+                            {
+                                const pattern = createSequencePattern(patternType, patternConfig);
+                                return new SequentialNode(id, sequence, pattern);
                                 /**
                                  * Utility functions for common sequential patterns
                                  */
-                                export;
                             }
+                            /**
+                             * Utility functions for common sequential patterns
+                             */
                         }
-                        as;
-                        const ;
+                        /**
+                         * Utility functions for common sequential patterns
+                         */
                     }
+                    /**
+                     * Utility functions for common sequential patterns
+                     */
                 }
+                /**
+                 * Utility functions for common sequential patterns
+                 */
+                export;
             }
+            as;
+            const ;
         }
     }
 }

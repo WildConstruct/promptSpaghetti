@@ -6,77 +6,71 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * functionality including dashboard, form, and intelligent routing.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Epic16HelpRequestService } from '../../services/Epic16HelpRequestService';
+import { Epic16HelpRequestService } from HelpRequestConfig;
+from;
+'../../services/Epic16HelpRequestService';
 import HelpRequestDashboard from './HelpRequestDashboard';
 import HelpRequestForm from './HelpRequestForm';
-{
-    // Service instance
+{ // Service instance
     const helpService = useMemo(() => {
         return new Epic16HelpRequestService(config);
     }, [config]);
     // State management
     const [_____selectedRequest, setSelectedRequest] = useState(null);
     const [view, setView] = useState('dashboard');
-    const [notifications, setNotifications] = useState < Array < {
-        id: string,
-        type: 'success' | 'error' | 'info' | 'warning',
-        message: string,
-        timestamp: Date
-    } >> ([]);
+    const [notifications, setNotifications] = useState([]);
     // Set up event listeners for service events
     useEffect(() => {
         const handleRequestSubmitted = (data) => {
             setNotifications(prev => [...prev, {}]);
             id: `submitted-${data.request.id}`;
         };
-    }, type, 'success', message, `Help request ${data.request.id} has been submitted`);
+        type: 'success';
+        message: `Help request ${data.request.id} has been submitted`;
+    }, timestamp, new Date());
+    ;
 }
-timestamp: new Date();
-;
 ;
 const handleRequestAutoResolved = (data) => {
     setNotifications(prev => [...prev, {}]);
     id: `auto-resolved-${data.request.id}`;
 };
-type: 'info',
-    message;
-`Help request ${data.request.id} was automatically resolved`;
+type: 'info';
+message: `Help request ${data.request.id} was automatically resolved`;
 timestamp: new Date();
 ;
 ;
-const handleRequestStatusChanged = (data) => , request;
+const handleRequestStatusChanged = (data) => request, HelpRequest;
 oldStatus: string;
 newStatus: string;
 {
     setNotifications(prev => [...prev, {}]);
     id: `status-${data.request.id}-${Date.now()}`;
 }
-type: 'info',
-    message;
-`Help request ${data.request.id} status changed to ${data.newStatus}`;
+type: 'info';
+message: `Help request ${data.request.id} status changed to ${data.newStatus}`;
 timestamp: new Date();
 ;
 ;
-const handleRequestEscalated = (data) => , request;
+const handleRequestEscalated = (data) => request, HelpRequest;
 reason: string;
 {
     setNotifications(prev => [...prev, {}]);
     id: `escalated-${data.request.id}`;
 }
-type: 'warning',
-    message;
-`Help request ${data.request.id} has been escalated`;
+type: 'warning';
+message: `Help request ${data.request.id} has been escalated`;
 timestamp: new Date();
 ;
 ;
-const handleResponseAdded = (data) => , request;
+const handleResponseAdded = (data) => ;
+request: HelpRequest;
 {
     setNotifications(prev => [...prev, {}]);
     id: `response-${data.request.id}-${Date.now()}`;
 }
-type: 'info',
-    message;
-`New response added to help request ${data.request.id}`;
+type: 'info';
+message: `New response added to help request ${data.request.id}`;
 timestamp: new Date();
 ;
 ;
@@ -87,7 +81,6 @@ helpService.on('help_request_status_changed', handleRequestStatusChanged);
 helpService.on('help_request_escalated', handleRequestEscalated);
 helpService.on('help_response_added', handleResponseAdded);
 return () => {
-    // Cleanup listeners
     helpService.off('help_request_submitted', handleRequestSubmitted);
     helpService.off('help_request_auto_resolved', handleRequestAutoResolved);
     helpService.off('help_request_status_changed', handleRequestStatusChanged);
@@ -107,30 +100,26 @@ useEffect(() => {
     [notifications];
 });
 // Handle request selection
-const handleRequestSelect = (request) => {
-    setSelectedRequest(request);
-};
+const handleRequestSelect = (request) => { setSelectedRequest(request); };
 // Handle form submission
 const handleFormSubmitted = (request) => {
     setSelectedRequest(request);
     setView('dashboard');
 };
 // Handle view navigation
-const handleViewChange = (newView) => {
-    setView(newView);
-};
+const handleViewChange = (newView) => { setView(newView); };
 return;
 _jsx("div", { className: "epic16-help-request-system h-full flex flex-col relative", children: _jsxs("div", { className: "bg-white border-b border-gray-200 px-6 py-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("nav", { className: "flex space-x-8", children: [_jsx("button", { onClick: () => handleViewChange('dashboard'), className: `py-2 px-1 border-b-2 font-medium text-sm ${view === 'dashboard'
                                     ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700',
-                                }`, children: "Help Dashboard" }), _jsx("button", { onClick: () => handleViewChange('form'), className: `py-2 px-1 border-b-2 font-medium text-sm ${view === 'form'
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Help Dashboard" }), _jsx("button", { onClick: () => handleViewChange('form'), className: `py-2 px-1 border-b-2 font-medium text-sm ${view === 'form'
                                     ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700',
-                                }`, children: "Submit Request" }), userRole === 'admin' && ()
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Submit Request" }), userRole === 'admin' && ()
                                 < button, "onClick=", () => handleViewChange('settings'), "className=", `py-2 px-1 border-b-2 font-medium text-sm ${view === 'settings'
                                 ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700',
-                            }`, "> Settings"] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("div", { className: "text-sm text-gray-600", children: ["User: ", _jsx("span", { className: "font-medium", children: userId })] }), _jsxs("div", { className: "text-sm text-gray-600", children: ["Role: ", _jsx("span", { className: "font-medium capitalize", children: userRole })] }), _jsxs("div", { className: "text-sm text-gray-600", children: ["Tier: ", _jsx("span", { className: "font-medium capitalize", children: userTier })] })] })] }) });
+                                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, "> Settings"] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("div", { className: "text-sm text-gray-600", children: ["User: ", _jsx("span", { className: "font-medium", children: userId })] }), _jsxs("div", { className: "text-sm text-gray-600", children: ["Role: ", _jsx("span", { className: "font-medium capitalize", children: userRole })] }), _jsxs("div", { className: "text-sm text-gray-600", children: ["Tier: ", _jsx("span", { className: "font-medium capitalize", children: userTier })] })] })] }) });
 { /* Main Content Area */ }
 _jsxs("div", { className: "flex-1 overflow-hidden", children: [view === 'dashboard' && ()
             < HelpRequestDashboard, "helpService=", helpService, "userId=", userId, "userRole=", userRole, "onRequestSelect=", handleRequestSelect, "/> )}", view === 'form' && ()
@@ -160,7 +149,7 @@ div >
     ;
 }
 ;
- > ;
+    > ;
 const NotificationSystem = ({ notifications }) => {
     if (notifications.length === 0)
         return null;
@@ -170,14 +159,12 @@ const NotificationSystem = ({ notifications }) => {
                     success: 'bg-green-50 border-green-200 text-green-700',
                     error: 'bg-red-50 border-red-200 text-red-700',
                     info: 'bg-blue-50 border-blue-200 text-blue-700',
-                    warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+                    warning: 'bg-yellow-50 border-yellow-200 text-yellow-700'
                 };
-                return;
-                _jsxs("div", { className: `max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`, children: [_jsxs("div", { className: "flex", children: [_jsxs("div", { className: "flex-shrink-0", children: [notification.type === 'success' && ()
-                                            < svg, " className=\"h-5 w-5 text-green-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z", clipRule: "evenodd" })] }), ")}", notification.type === 'error' && ()
-                                    < svg, " className=\"h-5 w-5 text-red-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z", clipRule: "evenodd" })] }), ")}", notification.type === 'info' && ()
-                            < svg, " className=\"h-5 w-5 text-blue-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z", clipRule: "evenodd" })] }, notification.id);
-            }), notification.type === 'warning' && ()
+            }), "; return;", _jsxs("div", { className: `max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`, children: [_jsxs("div", { className: "flex", children: [_jsxs("div", { className: "flex-shrink-0", children: [notification.type === 'success' && ()
+                                        < svg, " className=\"h-5 w-5 text-green-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z", clipRule: "evenodd" })] }), ")}", notification.type === 'error' && ()
+                                < svg, " className=\"h-5 w-5 text-red-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z", clipRule: "evenodd" })] }), ")}", notification.type === 'info' && ()
+                        < svg, " className=\"h-5 w-5 text-blue-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z", clipRule: "evenodd" })] }, notification.id), ")}", notification.type === 'warning' && ()
                 < svg, " className=\"h-5 w-5 text-yellow-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z", clipRule: "evenodd" })] });
 };
 div >

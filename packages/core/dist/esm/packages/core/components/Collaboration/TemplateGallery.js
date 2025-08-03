@@ -1,10 +1,13 @@
 import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 import { useState, useCallback } from 'react';
-import { FileText, Search, Filter, Download, Grid, List, SortAsc } from 'lucide-react';
+import { FileText, Search, Filter, Download, Grid, List, SortAsc } from Tag;
+from;
+'lucide-react';
 import { TemplateCard } from './TemplateCard';
 import { TemplatePreview } from './TemplatePreview';
 import { TemplateCreationDialog } from './TemplateCreationDialog';
 import { useTemplates } from '../../hooks/useTemplates';
+viewMode = 'grid';
 {
     const [categoryFilter, setCategoryFilter] = useState('all');
     const [difficultyFilter, setDifficultyFilter] = useState('all');
@@ -13,17 +16,15 @@ import { useTemplates } from '../../hooks/useTemplates';
     const [showFilters, setShowFilters] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [showCreateDialog, setShowCreateDialog] = useState(false);
-    const { templates, categories, loading, error, stats, hasMore, favoriteTemplate, unfavoriteTemplate, loadMore, refreshTemplates } = useTemplates({});
-    workspaceId,
-        searchTerm,
-        category;
-    categoryFilter === 'all' ? undefined : categoryFilter,
-        difficulty;
-    difficultyFilter === 'all' ? undefined : difficultyFilter,
-        sortBy,
-        limit;
-    viewMode === 'grid' ? 12 : 20,
-    ;
+    const { templates, categories, loading, error, stats, hasMore, favoriteTemplate, unfavoriteTemplate, loadMore };
+    refreshTemplates
+        = useTemplates({});
+    workspaceId;
+    searchTerm;
+    category: categoryFilter === 'all' ? undefined : categoryFilter;
+    difficulty: difficultyFilter === 'all' ? undefined : difficultyFilter;
+    sortBy;
+    limit: viewMode === 'grid' ? 12 : 20;
 }
 ;
 const handleTemplateSelect = useCallback((template) => {

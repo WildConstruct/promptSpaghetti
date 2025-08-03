@@ -1,39 +1,37 @@
 ;
 let createHash;
-try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+try { // eslint-disable-next-line @typescript-eslint/no-require-imports
     createHash = require('crypto').createHash;
 }
-catch {
-    // Browser environment - use a simple hash alternative
+catch { // Browser environment - use a simple hash alternative
     createHash = () => ({
         update: (data) => ({
-            digest: () => {
-                // Simple hash fallback for browser testing
-                let hash = 0;
-                for (let i = 0; i < data.length; i++) {
-                    const char = data.charCodeAt(i);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash; // Convert to 32-bit integer
-                    return Math.abs(hash).toString(16).padStart(16, '0');
-                }
-            }
-        })
-    });
+            digest: () => { }
+            // Simple hash fallback for browser testing
+            ,
+            // Simple hash fallback for browser testing
+            let, hash = 0,
+            for(let, i = 0, i, , data) { }, : .length, i }++) });
+    {
+        const char = data.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32-bit integer
+        return Math.abs(hash).toString(16).padStart(16, '0');
+    }
 }
+;
 export class GraphSerializer {
-    static FORMAT_VERSION = '1.0.0';
-    static SECTION_DELIMITERS = {
-        NODES: '---NODES---',
-        EDGES: '---EDGES---',
-        END: '---END---',
-    };
-    metadata;
-    options = {};
 }
+;
+serialize(graph, Graph);
+metadata ?  : SerializationMetadata,
+    options;
+SerializationOptions = {};
 string;
 {
-    const { includeChecksum = true, includeMetadata = true, compactFormat = false, validateOnSerialize = true } = options;
+    const { includeChecksum = true, includeMetadata = true, compactFormat = false };
+    validateOnSerialize = true
+        = options;
     if (validateOnSerialize) {
         this.validateGraph(graph);
         const lines = [];
@@ -218,11 +216,10 @@ switch (node.type) {
             edges.push({});
             source: inputId,
                 target;
-            node.id,
-            ;
+            node.id;
         }
-        ;
 }
+;
 ;
 ;
 return edges;
@@ -278,8 +275,8 @@ string;
                             for (const node of graph.nodes) {
                                 if (!visited.has(node.id)) {
                                     dfs(node.id);
-                                    metadata ?  : SerializationMetadata,
-                                        options ?  : SerializationOptions;
+                                    metadata ?  : SerializationMetadata;
+                                    options ?  : SerializationOptions;
                                     string;
                                     {
                                         return GraphSerializer.serialize(graph, metadata, options);
@@ -290,9 +287,10 @@ string;
                                             return {
                                                 author: 'llm-agent',
                                                 created: new Date().toISOString(),
-                                                description: 'LLM-generated graph',
+                                                description: 'LLM-generated graph'
                                             };
                                         }
+                                        ;
                                     }
                                 }
                             }

@@ -12,7 +12,9 @@ import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Slider } from '../ui/Slider';
 import { Switch } from '../ui/Switch';
-import { Pen, Circle, Square, ArrowRight, Minus, Type, Eraser, Undo, Redo, Trash2, Save, Download, Palette, Layers } from 'lucide-react';
+import { Pen, Circle, Square, ArrowRight, Minus, Type, Eraser, Undo, Redo, Trash2, Save, Download, Palette } from Layers;
+from;
+'lucide-react';
 points: Array;
 style: DrawingStyle;
 layer: number;
@@ -26,12 +28,8 @@ transform ?  : {
     scale: { x: number, y: number }
 };
 // Drawing tool configurations
-const DRAWING_TOOLS = {};
-freehand: {
-    icon: _jsx(Pen, { className: "w-4 h-4" }), label;
-    'Pen', cursor;
-    'crosshair';
-}
+const DRAWING_TOOLS = {}, freehand;
+/>, label: 'Pen', cursor: 'crosshair';
 arrow: {
     icon: _jsx(ArrowRight, { className: "w-4 h-4" }), label;
     'Arrow', cursor;
@@ -95,9 +93,8 @@ export const DrawingAnnotationsCanvas = ({
     onSave,
     readonly = false,
     showGrid = false,
-    gridSize = 20,
-    className = ''
-});
+    gridSize = 20 });
+className = '';
 {
     const canvasRef = useRef(null);
     const overlayCanvasRef = useRef(null);
@@ -112,22 +109,14 @@ export const DrawingAnnotationsCanvas = ({
     ;
     // Drawing style state
     const [drawingStyle, setDrawingStyle] = useState({});
-    color: currentUser.color || '#ff7c00',
-        thickness;
-    3,
-        opacity;
-    1,
-        lineCap;
-    'round',
-        lineJoin;
-    'round',
-        fontSize;
-    16,
-        fontFamily;
-    'Arial',
-        fontWeight;
-    'normal',
-    ;
+    color: currentUser.color || '#ff7c00';
+    thickness: 3;
+    opacity: 1;
+    lineCap: 'round';
+    lineJoin: 'round';
+    fontSize: 16;
+    fontFamily: 'Arial';
+    fontWeight: 'normal';
 }
 ;
 // UI state
@@ -153,11 +142,11 @@ const getCanvasCoordinates = useCallback((event) => {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    return {
-        x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
-        y: (event.clientY - rect.top) * scaleY / zoom - pan.y,
-    };
-}, [zoom, pan]);
+    return { x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
+        y: (event.clientY - rect.top) * scaleY / zoom - pan.y };
+});
+[zoom, pan];
+;
 // Draw background grid
 const drawGrid = useCallback((ctx) => {
     if (!showGrid)
@@ -249,8 +238,8 @@ const drawAnnotation = useCallback((ctx, annotation) => {
 });
 ctx.moveTo(end.x, end.y);
 ctx.lineTo();
-end.x - arrowLength * Math.cos(angle + arrowAngle),
-    end.y - arrowLength * Math.sin(angle + arrowAngle);
+end.x - arrowLength * Math.cos(angle + arrowAngle);
+end.y - arrowLength * Math.sin(angle + arrowAngle);
 ;
 ctx.stroke();
 break;
@@ -347,11 +336,11 @@ if (annotation.points.length >= 2) {
                                 break;
                             }
                         case 'circle':
-                            if (currentPoints.length === 2) {
-                                const centerX = currentPoints[0].x;
-                                const centerY = currentPoints[0].y;
-                                const radius = Math.sqrt();
-                            }
+                    }
+                    if (currentPoints.length === 2) {
+                        const centerX = currentPoints[0].x;
+                        const centerY = currentPoints[0].y;
+                        const radius = Math.sqrt();
                     }
                 }
             });
@@ -409,25 +398,19 @@ if (annotation.points.length >= 2) {
         if (!isDrawing || readonly)
             return;
         if (currentPoints.length > 0) {
-            const newAnnotation = {
-                id: `drawing-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+            const newAnnotation = {};
+            id: `drawing-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         }
-        type: currentTool === 'eraser' ? 'freehand' : currentTool,
-            points;
-        [...currentPoints],
-            style;
-        { }
+        type: currentTool === 'eraser' ? 'freehand' : currentTool;
+        points: [...currentPoints];
+        style: { }
     }, ...drawingStyle);
 }
-layer: currentLayer,
-    author;
-currentUser,
-    timestamp;
-new Date().toISOString(),
-    visible;
-true,
-    locked;
-false;
+layer: currentLayer;
+author: currentUser;
+timestamp: new Date().toISOString();
+visible: true;
+locked: false;
 ;
 const updatedAnnotations = [...annotations, newAnnotation];
 onAnnotationsChange(updatedAnnotations);
@@ -477,13 +460,12 @@ link.click();
 [];
 ;
 // Re-render when annotations change
-useEffect(() => {
-    renderAnnotations();
-}, [renderAnnotations]);
+useEffect(() => { renderAnnotations(); }, [renderAnnotations]);
 // Layer visibility statistics
 const layerStats = useMemo(() => {
     return DRAWING_LAYERS.map(layer => ({}), ...layer, count, annotations.filter(a => a.layer === layer.id).length, visible, layerVisibility[layer.id]);
 });
+;
 [annotations, layerVisibility];
 ;
 return;
@@ -500,8 +482,8 @@ CardHeader >
                 (_jsx(CardHeader, { children: _jsx(CardTitle, { className: "text-sm", children: "Drawing Style" }) })
                     ,
                         _jsx(CardContent, { className: "space-y-4", children: _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium mb-2", children: "Color" }), _jsxs("div", { className: "flex flex-wrap gap-1", children: [DRAWING_COLORS.map(color => ()
-                                                        < button, key = { color }, className = {} `w-6 h-6 rounded border-2 ${drawingStyle.color === color ? 'border-gray-800' : 'border-gray-300',
-                                                    }`), "style=", { backgroundColor: color }, "onClick=", () => setDrawingStyle(prev => ({ ...prev, color })), "/> ))}"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium mb-2", children: "Thickness" }), _jsx(Slider, { value: [drawingStyle.thickness], onValueChange: (value) => setDrawingStyle(prev => ({ ...prev, thickness: value[0] })), min: 1, max: 20, step: 1 }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [drawingStyle.thickness, "px"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium mb-2", children: "Opacity" }), _jsx(Slider, { value: [drawingStyle.opacity * 100], onValueChange: (value) => setDrawingStyle(prev => ({ ...prev, opacity: value[0] / 100 })), min: 10, max: 100, step: 10 }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [Math.round(drawingStyle.opacity * 100), "%"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium mb-2", children: "Line Style" }), _jsx(Select, { value: drawingStyle.dashPattern ? 'dashed' : 'solid', onValueChange: (value) => setDrawingStyle(prev => ({}), ...prev, dashPattern) }), ": value === 'dashed' ? [5, 5] : undefined }))} >", _jsx(SelectTrigger, { children: _jsx(SelectValue, {}) }), _jsxs(SelectContent, { children: [_jsx(SelectItem, { value: "solid", children: "Solid" }), _jsx(SelectItem, { value: "dashed", children: "Dashed" })] })] })] }) })) }) });
+                                                        < button, key = { color }, className = {} `w-6 h-6 rounded border-2 ${drawingStyle.color === color ? 'border-gray-800' : 'border-gray-300'}
+`), "style=", { backgroundColor: color }, "onClick=", () => setDrawingStyle(prev => ({ ...prev, color })), "/> ))}"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium mb-2", children: "Thickness" }), _jsx(Slider, { value: [drawingStyle.thickness], onValueChange: (value) => setDrawingStyle(prev => ({ ...prev, thickness: value[0] })), min: 1, max: 20, step: 1 }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [drawingStyle.thickness, "px"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium mb-2", children: "Opacity" }), _jsx(Slider, { value: [drawingStyle.opacity * 100], onValueChange: (value) => setDrawingStyle(prev => ({ ...prev, opacity: value[0] / 100 })), min: 10, max: 100, step: 10 }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [Math.round(drawingStyle.opacity * 100), "%"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-xs font-medium mb-2", children: "Line Style" }), _jsx(Select, { value: drawingStyle.dashPattern ? 'dashed' : 'solid', onValueChange: (value) => setDrawingStyle(prev => ({}), ...prev), "dashPattern:value": true }), " === 'dashed' ? [5, 5] : undefined }))} >", _jsx(SelectTrigger, { children: _jsx(SelectValue, {}) }), _jsxs(SelectContent, { children: [_jsx(SelectItem, { value: "solid", children: "Solid" }), _jsx(SelectItem, { value: "dashed", children: "Dashed" })] })] })] }) })) }) });
 Card >
 ;
 { /* Layer Panel */ }
@@ -528,14 +510,16 @@ Card >
 _jsxs("div", { className: "relative border border-gray-300 rounded-lg overflow-hidden", style: { width, height }, children: [backgroundImageUrl && ()
             < canvas, "ref=", backgroundCanvasRef, "width=", width, "height=", height, "className=\"absolute inset-0\" style=", {
             backgroundImage: `url(${backgroundImageUrl})`
-        }, ", backgroundSize: 'cover', backgroundPosition: 'center'; }} /> )}", _jsx("canvas", { ref: canvasRef, width: width, height: height, className: "absolute inset-0" }), _jsx("canvas", { ref: overlayCanvasRef, width: width, height: height, className: "absolute inset-0 cursor-crosshair", onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, onMouseLeave: () => {
+        }, "backgroundSize: 'cover' backgroundPosition: 'center'; } /> )}", _jsx("canvas", { ref: canvasRef, width: width, height: height, className: "absolute inset-0" }), _jsx("canvas", { ref: overlayCanvasRef, width: width, height: height, className: "absolute inset-0 cursor-crosshair", onMouseDown: handleMouseDown, onMouseMove: handleMouseMove, onMouseUp: handleMouseUp, onMouseLeave: () => {
                 setIsDrawing(false);
                 setCurrentPoints([]);
             }, style: {
                 cursor: DRAWING_TOOLS[currentTool]?.cursor || 'crosshair',
-                pointerEvents: readonly ? 'none' : 'all',
-            } }), readonly && ()
-            < div, " className=\"absolute inset-0 bg-gray-500 bg-opacity-10 flex items-center justify-center\">", _jsx(Badge, { variant: "secondary", children: "Read Only" })] });
+                pointerEvents: readonly ? 'none' : 'all'
+            }
+                /  >
+                { /* Readonly overlay */}, ...readonly && ()
+                < div, className: "absolute inset-0 bg-gray-500 bg-opacity-10 flex items-center justify-center", children: _jsx(Badge, { variant: "secondary", children: "Read Only" }) })] });
 div >
 ;
 div >

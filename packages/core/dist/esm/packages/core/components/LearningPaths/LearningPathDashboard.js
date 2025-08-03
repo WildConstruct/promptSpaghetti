@@ -6,7 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with personalized recommendations, progress tracking, and analytics.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { LearningCategory, DifficultyLevel, TargetAudience, EnrollmentStatus } from '../../services/Epic16LearningPathService';
+import { LearningCategory, DifficultyLevel, TargetAudience, EnrollmentStatus } from Epic16LearningPathService;
+from;
+'../../services/Epic16LearningPathService';
 duration: {
     min ?  : number;
     max ?  : number;
@@ -17,11 +19,9 @@ searchQuery: string;
 export const LearningPathDashboard = ({
     learningService,
     userId,
-    userRole,
-    onPathSelect
-});
-{
-    // State management
+    userRole });
+onPathSelect;
+{ // State management
     const [availablePaths, setAvailablePaths] = useState([]);
     const [userPaths, setUserPaths] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
@@ -29,17 +29,13 @@ export const LearningPathDashboard = ({
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filters, setFilters] = useState({});
-    category: [],
-        difficulty;
-    [],
-        audience;
-    [],
-        duration;
-    { }
-    certification: null,
-        searchQuery;
-    '';
+    category: [];
+    difficulty: [];
+    audience: [];
 }
+duration: { }
+certification: null;
+searchQuery: '';
 ;
 const [view, setView] = useState('discover');
 const [analytics, setAnalytics] = useState(null);
@@ -50,18 +46,14 @@ const loadData = useCallback(async () => {
     try {
         // Load available paths
         const searchResults = await learningService.searchLearningPaths('', {});
-        category: filters.category.length > 0 ? filters.category : undefined,
-            difficulty;
-        filters.difficulty.length > 0 ? filters.difficulty : undefined,
-            audience;
-        filters.audience.length > 0 ? filters.audience : undefined,
-            duration;
-        Object.keys(filters.duration).length > 0 ? filters.duration : undefined,
-            certification;
-        filters.certification ?? undefined,
-        ;
+        category: filters.category.length > 0 ? filters.category : undefined;
+        difficulty: filters.difficulty.length > 0 ? filters.difficulty : undefined;
+        audience: filters.audience.length > 0 ? filters.audience : undefined;
+        duration: Object.keys(filters.duration).length > 0 ? filters.duration : undefined;
+        certification: filters.certification ?? undefined;
     }
-    finally { }
+    finally {
+    }
 });
 setAvailablePaths(searchResults);
 // Load user's paths
@@ -84,9 +76,7 @@ finally {
 }
 [learningService, userId, userRole, filters];
 ;
-useEffect(() => {
-    loadData();
-}, [loadData]);
+useEffect(() => { loadData(); }, [loadData]);
 // Filter paths based on search query
 const filteredPaths = useMemo(() => {
     if (!filters.searchQuery)
@@ -104,30 +94,30 @@ const handleEnroll = async (pathId) => {
     try {
         await learningService.enrollUser(userId, pathId);
         await loadData(); // Refresh data
+        try {
+        }
+        catch (err) {
+            setError(err instanceof Error ? err.message : 'Failed to enroll in path');
+        }
+        ;
+        // Handle path selection
+        const handlePathSelect = (path) => {
+            setSelectedPath(path);
+            onPathSelect?.(path);
+        };
+        // Reset filters
+        const resetFilters = () => {
+            setFilters({});
+            category: [];
+            difficulty: [];
+            audience: [];
+        };
+        duration: { }
+        certification: null;
+        searchQuery: '';
     }
-    catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to enroll in path');
-    }
+    finally { }
     ;
-    // Handle path selection
-    const handlePathSelect = (path) => {
-        setSelectedPath(path);
-        onPathSelect?.(path);
-    };
-    // Reset filters
-    const resetFilters = () => {
-        setFilters({});
-        category: [],
-            difficulty;
-        [],
-            audience;
-        [],
-            duration;
-        { }
-        certification: null,
-            searchQuery;
-        '';
-    };
 };
 // Render learning path card
 const renderPathCard = (path, enrollment) => {
@@ -155,9 +145,10 @@ className = "flex-1" >
         ,
             _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all duration-300", style: { width: `${progress}%` } }) })
                 ,
-                    _jsxs("div", { className: "mt-2 flex items-center justify-between", children: [_jsx("span", { className: `text-xs font-medium px-2 py-1 rounded-full ${status === EnrollmentStatus.COMPLETED ? 'bg-green-100 text-green-800' : ,
-                                    status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' : ,
-                                    'bg-gray-100 text-gray-800'}`, children: status?.replace('_', ' ').toUpperCase() }), _jsx("button", { className: "text-blue-600 hover:text-blue-800 text-sm font-medium", children: "Continue \u2192" })] }));
+                    _jsxs("div", { className: "mt-2 flex items-center justify-between", children: [_jsx("span", { className: `text-xs font-medium px-2 py-1 rounded-full ${status === EnrollmentStatus.COMPLETED ? 'bg-green-100 text-green-800' :
+                                    status === EnrollmentStatus.IN_PROGRESS ? 'bg-blue-100 text-blue-800' : }
+  'bg-gray-100 text-gray-800'
+`, children: status?.replace('_', ' ').toUpperCase() }), _jsx("button", { className: "text-blue-600 hover:text-blue-800 text-sm font-medium", children: "Continue \u2192" })] }));
 div >
 ;
 ()
@@ -195,8 +186,8 @@ _jsxs("div", { className: "mt-4", children: [_jsxs("nav", { className: "flex spa
                 ].map((tab) => ()
                     < button, key = { tab, : .key }, onClick = {}()), " => setView(tab.key as any)} className=", `py-2 px-1 border-b-2 font-medium text-sm ${view === tab.key
                     ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700',
-                }`, ">", _jsx("span", { className: "mr-2", children: tab.icon }), tab.label] }), "))}"] });
+                    : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, ">", _jsx("span", { className: "mr-2", children: tab.icon }), tab.label] }), "))}"] });
 div >
 ;
 div >
@@ -207,13 +198,13 @@ div >
                                                 const newCategories = e.target.checked;
                                             } })
                                         ? [...filters.category, category]
-                                        : filters.category.filter(c => c !== category)), "; setFilters(", ...(filters, category), ": newCategories }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: category.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) })] }), "))}"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Difficulty" }), _jsxs("div", { className: "space-y-2", children: [Object.values(DifficultyLevel).map((difficulty) => ()
+                                        : filters.category.filter(c => c !== category)), "; setFilters(", ...(filters, category), ": newCategories }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: category.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) })] }), "))}"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Difficulty" }), _jsxs("div", { className: "space-y-2", children: [Object.values(DifficultyLevel).map((difficulty) => ()
                                 < label, key = { difficulty }, className = "flex items-center" >
                                 _jsx("input", { type: "checkbox", checked: filters.difficulty.includes(difficulty), onChange: (e) => {
                                         const newDifficulties = e.target.checked;
                                     } })
                                 ? [...filters.difficulty, difficulty]
-                                : filters.difficulty.filter(d => d !== difficulty)), "; setFilters(", ...(filters, difficulty), ": newDifficulties }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: difficulty })] }), "))}"] })] });
+                                : filters.difficulty.filter(d => d !== difficulty)), "; setFilters(", ...(filters, difficulty), ": newDifficulties }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: difficulty })] }), "))}"] })] });
 { /* Target Audience Filter */ }
 _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Target Audience" }), _jsxs("div", { className: "space-y-2 max-h-32 overflow-y-auto", children: [Object.values(TargetAudience).map((audience) => ()
                     < label, key = { audience }, className = "flex items-center" >
@@ -221,13 +212,13 @@ _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium 
                             const newAudience = e.target.checked;
                         } })
                     ? [...filters.audience, audience]
-                    : filters.audience.filter(a => a !== audience)), "; setFilters(", ...(filters, audience), ": newAudience }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: audience.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) })] }), "))}"] });
+                    : filters.audience.filter(a => a !== audience)), "; setFilters(", ...(filters, audience), ": newAudience }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: audience.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase()) })] }), "))}"] });
 div >
     { /* Duration Filter */}
     < div >
     (_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Duration (hours)" })
         ,
-            _jsxs("div", { className: "grid grid-cols-2 gap-2", children: [_jsx("input", { type: "number", placeholder: "Min", value: filters.duration.min || '', onChange: (e) => setFilters({}) }), "...filters, duration: ", ...(filters.duration, min), ": e.target.value ? parseInt(e.target.value) * 60 : undefined } })} className=\"px-3 py-2 border border-gray-300 rounded-md text-sm\" />", _jsx("input", { type: "number", placeholder: "Max", value: filters.duration.max ? Math.floor(filters.duration.max / 60) : '', onChange: (e) => setFilters({}) }), "...filters, duration: ", ...(filters.duration, max), ": e.target.value ? parseInt(e.target.value) * 60 : undefined } })} className=\"px-3 py-2 border border-gray-300 rounded-md text-sm\" />"] }));
+            _jsxs("div", { className: "grid grid-cols-2 gap-2", children: [_jsx("input", { type: "number", placeholder: "Min", value: filters.duration.min || '', onChange: (e) => setFilters({}) }), "...filters } duration: ", ...(filters.duration, min), ": e.target.value ? parseInt(e.target.value) * 60 : undefined } })} className=\"px-3 py-2 border border-gray-300 rounded-md text-sm\" />", _jsx("input", { type: "number", placeholder: "Max", value: filters.duration.max ? Math.floor(filters.duration.max / 60) : '', onChange: (e) => setFilters({}) }), "...filters } duration: ", ...(filters.duration, max), ": e.target.value ? parseInt(e.target.value) * 60 : undefined } })} className=\"px-3 py-2 border border-gray-300 rounded-md text-sm\" />"] }));
 div >
     { /* Certification Filter */}
     < div >

@@ -1,5 +1,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
+from;
+'../../types/export';
 import { useExport } from '../../hooks/useExport';
 import { ExportTemplateList } from './ExportTemplateList';
 import { ExportJobList } from './ExportJobList';
@@ -8,11 +10,12 @@ import { ExportStatsDashboard } from './ExportStatsDashboard';
 import { ShareManager } from './ShareManager';
 import { ShareDialog } from './ShareDialog';
 import { ImportDialog } from './ImportDialog';
-import { FiDownload, FiFile, FiClock, FiBarChart3, FiPlus, FiRefreshCw, FiShare2, FiUpload } from 'react-icons/fi';
-export const ExportManager = ({
-    projectId,
-    className = ''
-});
+import { FiDownload, FiFile, FiClock, FiBarChart3, FiPlus, FiRefreshCw, FiShare2 } from FiUpload;
+from;
+'react-icons/fi';
+export const ExportManager = ({});
+projectId;
+className = '';
 {
     const [activeTab, setActiveTab] = useState('templates');
     const [showWizard, setShowWizard] = useState(false);
@@ -20,9 +23,10 @@ export const ExportManager = ({
     const [refreshInterval, setRefreshInterval] = useState(null);
     const [shareDialogJob, setShareDialogJob] = useState(null);
     const [showImportDialog, setShowImportDialog] = useState(false);
-    const { templates, jobs, statistics, loading, error, fetchTemplates, fetchJobs, fetchStatistics, createExportJob, cancelExportJob, refetch } = useExport(projectId);
+    const { templates, jobs, statistics, loading, error, fetchTemplates, fetchJobs, fetchStatistics, createExportJob, cancelExportJob };
+    refetch
+        = useExport(projectId);
     useEffect(() => {
-        // Initial data fetch
         fetchTemplates();
         fetchJobs();
         fetchStatistics();
@@ -45,13 +49,17 @@ export const ExportManager = ({
         try {
             const exportData = {
                 export_format: format,
-                export_type: type,
-                export_scope: {},
-                export_options: {},
-                custom_filters: {}
+                export_type: type
             };
-            await createExportJob(exportData);
-            setActiveTab('jobs');
+            export_scope: { }
+            export_options: { }
+            custom_filters: { }
+        }
+        finally { }
+        ;
+        await createExportJob(exportData);
+        setActiveTab('jobs');
+        try {
         }
         catch (error) {
             console.error('Quick export failed:', error);
@@ -77,16 +85,12 @@ export const ExportManager = ({
                 setShareDialogJob(job);
             }
             ;
-            const handleShareDialogClose = () => {
-                setShareDialogJob(null);
-            };
+            const handleShareDialogClose = () => { setShareDialogJob(null); };
             const handleShareCreated = (_____share) => {
-                // Refresh data after creating a share
                 fetchJobs();
                 fetchStatistics();
             };
             const handleImportComplete = (_____result) => {
-                // Refresh data after import
                 fetchTemplates();
                 fetchJobs();
                 fetchStatistics();
@@ -117,9 +121,7 @@ export const ExportManager = ({
     return null;
 }
 ;
-const getActiveJobsCount = () => {
-    return jobs.filter(job => job.status === 'pending' || job.status === 'processing').length;
-};
+const getActiveJobsCount = () => { return jobs.filter(job => job.status === 'pending' || job.status === 'processing').length; };
 const getRecentJobsCount = () => {
     const oneDayAgo = new Date();
     oneDayAgo.setDate(oneDayAgo.getDate() - 1);
@@ -133,8 +135,9 @@ _jsxs("div", { className: `export-manager ${className}`, children: ["}", _jsxs("
                                     { id: 'statistics', label: 'Statistics', icon: FiBarChart3 }
                                 ].map((tab) => ()
                                     < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as ActiveTab)} className=", `flex items-center space-x-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
-                                    ? 'border-blue-500 text-blue-600 dark:text-blue-400' : ,
-                                , ": 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300', }`} >", _jsx(tab.icon, { className: "w-4 h-4" }), _jsx("span", { children: tab.label })] }), "))}"] })] })] });
+                                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}
+`, ">", _jsx(tab.icon, { className: "w-4 h-4" }), _jsx("span", { children: tab.label })] }), "))}"] })] })] });
 { /* Main Content */ }
 _jsxs("div", { className: "export-manager-content", children: [error && ()
             < div, " className=\"mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg\">", _jsxs("div", { className: "flex items-center", children: [_jsx("div", { className: "flex-shrink-0", children: _jsx("svg", { className: "w-5 h-5 text-red-400", viewBox: "0 0 20 20", fill: "currentColor", children: _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z", clipRule: "evenodd" }) }) }), _jsx("div", { className: "ml-3", children: _jsx("p", { className: "text-sm text-red-800 dark:text-red-200", children: error }) })] })] });

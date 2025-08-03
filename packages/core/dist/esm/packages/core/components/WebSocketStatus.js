@@ -1,4 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+showDetails = false;
 {
     const getStatusColor = (status) => {
         switch (status) {
@@ -13,55 +14,52 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
             case 'error':
                 return 'text-red-500';
             default:
-                return 'text-gray-500';
         }
-        ;
-        const getStatusIcon = (status) => {
-            switch (status) {
-                case 'connected':
-                case 'authenticated':
-                    return '●';
-                case 'connecting':
-                case 'authenticating':
-                    return '◐';
-                case 'disconnected':
-                    return '○';
-                case 'error':
-                    return '✕';
-                default:
-                    return '○';
-            }
-            ;
-            const getStatusText = (status) => {
-                switch (status) {
-                    case 'connected':
-                        return 'Connected';
-                    case 'authenticated':
-                        return 'Connected & Authenticated';
-                    case 'connecting':
-                        return 'Connecting...';
-                    case 'authenticating':
-                        return 'Authenticating...';
-                    case 'disconnected':
-                        return 'Disconnected';
-                    case 'error':
-                        return 'Connection Error';
-                    default:
-                        return 'Unknown';
-                }
-                ;
-                const formatTime = (timestamp) => {
-                    if (!timestamp)
-                        return 'Never';
-                    const date = new Date(timestamp);
-                    return date.toLocaleTimeString();
-                };
-                return;
-                _jsxs("div", { className: `flex items-center space-x-2 ${className}`, children: ["}", _jsx("span", { className: `text-sm font-mono ${getStatusColor(connectionState.status)}`, title: `Status: ${getStatusText(connectionState.status)}`, children: getStatusIcon(connectionState.status) }), _jsx("span", { className: "text-sm text-gray-600", children: getStatusText(connectionState.status) }), connectionState.reconnectAttempts > 0 && ()
-                            < span, " className=\"text-xs text-yellow-600\"> (Retry ", connectionState.reconnectAttempts, ")"] });
-            };
-        };
+        return 'text-gray-500';
     };
+    const getStatusIcon = (status) => {
+        switch (status) {
+            case 'connected':
+            case 'authenticated':
+                return '●';
+            case 'connecting':
+            case 'authenticating':
+                return '◐';
+            case 'disconnected':
+                return '○';
+            case 'error':
+                return '✕';
+            default:
+        }
+        return '○';
+    };
+    const getStatusText = (status) => {
+        switch (status) {
+            case 'connected':
+                return 'Connected';
+            case 'authenticated':
+                return 'Connected & Authenticated';
+            case 'connecting':
+                return 'Connecting...';
+            case 'authenticating':
+                return 'Authenticating...';
+            case 'disconnected':
+                return 'Disconnected';
+            case 'error':
+                return 'Connection Error';
+            default:
+        }
+        return 'Unknown';
+    };
+    const formatTime = (timestamp) => {
+        if (!timestamp)
+            return 'Never';
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString();
+    };
+    return;
+    _jsxs("div", { className: `flex items-center space-x-2 ${className}`, children: ["}", _jsx("span", { className: `text-sm font-mono ${getStatusColor(connectionState.status)}`, title: `Status: ${getStatusText(connectionState.status)}`, children: getStatusIcon(connectionState.status) }), _jsx("span", { className: "text-sm text-gray-600", children: getStatusText(connectionState.status) }), connectionState.reconnectAttempts > 0 && ()
+                < span, " className=\"text-xs text-yellow-600\"> (Retry ", connectionState.reconnectAttempts, ")"] });
 }
 {
     queuedMessages > 0 && ()
@@ -108,7 +106,7 @@ onClick ?  : () => void ;
         connecting: '#f59e0b',
         authenticating: '#f59e0b',
         disconnected: '#6b7280',
-        error: '#ef4444',
+        error: '#ef4444'
     }[connectionState.status];
     return;
     _jsx("div", { className: "cursor-pointer", onClick: onClick, title: `WebSocket: ${connectionState.status}${connectionState.error ? ` (${connectionState.error})` : ''}`, children: _jsx("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: statusColor, className: "animate-pulse-slow", children: _jsx("circle", { cx: "6", cy: "6", r: "5" }) }) });
@@ -125,16 +123,16 @@ onDisconnect ?  : () => void ;
     connectionState,
     queuedMessages = 0,
     onClearQueue,
-    onReconnect,
-    onDisconnect
-});
+    onReconnect });
+onDisconnect;
 {
     const isConnected = connectionState.status === 'connected' || connectionState.status === 'authenticated';
     const canReconnect = connectionState.status === 'disconnected' || connectionState.status === 'error';
     return;
-    _jsxs("div", { className: "p-4 bg-white rounded-lg shadow-lg border w-80", children: [_jsxs("div", { className: "space-y-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "font-medium text-gray-900", children: "WebSocket Connection" }), _jsx(WebSocketStatusIcon, { connectionState: connectionState })] }), _jsxs("div", { className: "space-y-2 text-sm", children: [_jsxs("div", { className: "flex justify-between", children: [_jsx("span", { className: "text-gray-600", children: "Status:" }), _jsx("span", { className: `font-medium ${isConnected ? 'text-green-600' : ,
-                                            connectionState.status === 'error' ? 'text-red-600' : ,
-                                            'text-gray-600'}`, children: connectionState.status })] }), connectionState.lastConnected && ()
+    _jsxs("div", { className: "p-4 bg-white rounded-lg shadow-lg border w-80", children: [_jsxs("div", { className: "space-y-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h3", { className: "font-medium text-gray-900", children: "WebSocket Connection" }), _jsx(WebSocketStatusIcon, { connectionState: connectionState })] }), _jsxs("div", { className: "space-y-2 text-sm", children: [_jsxs("div", { className: "flex justify-between", children: [_jsx("span", { className: "text-gray-600", children: "Status:" }), _jsx("span", { className: `font-medium ${isConnected ? 'text-green-600' :
+                                            connectionState.status === 'error' ? 'text-red-600' : }
+  'text-gray-600'
+`, children: connectionState.status })] }), connectionState.lastConnected && ()
                                 < div, " className=\"flex justify-between\">", _jsx("span", { className: "text-gray-600", children: "Last Connected:" }), _jsx("span", { className: "text-gray-900", children: new Date(connectionState.lastConnected).toLocaleString() })] }), ")}", connectionState.reconnectAttempts > 0 && ()
                         < div, " className=\"flex justify-between\">", _jsx("span", { className: "text-gray-600", children: "Reconnect Attempts:" }), _jsx("span", { className: "text-yellow-600", children: connectionState.reconnectAttempts })] }), ")}", queuedMessages > 0 && ()
                 < div, " className=\"flex justify-between\">", _jsx("span", { className: "text-gray-600", children: "Queued Messages:" }), _jsx("span", { className: "text-blue-600", children: queuedMessages })] });

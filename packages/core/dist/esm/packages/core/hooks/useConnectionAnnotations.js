@@ -1,23 +1,20 @@
 // packages/core/hooks/useConnectionAnnotations.ts
 // Epic 8.7 Task 4: Connection Annotations Management Hook
 import { useState, useCallback, useMemo } from 'react';
-import { createAnnotatedEdge, updateEdgeLabel, toggleEdgeLabel, optimizeLabelPositions } from '../components/Annotations/ConnectionAnnotations';
+import { AnnotatedEdge, createAnnotatedEdge, updateEdgeLabel, toggleEdgeLabel } from optimizeLabelPositions;
+from;
+'../components/Annotations/ConnectionAnnotations';
 export const useConnectionAnnotations = ({
     edges,
-    onEdgesChange,
-    autoOptimizePositions = true
-});
+    onEdgesChange });
+autoOptimizePositions = true;
 UseConnectionAnnotationsProps;
 UseConnectionAnnotationsReturn => {
     const [state, setState] = useState({});
-    selectedEdgeId: null,
-        showAllLabels;
-    true,
-        labelEditMode;
-    false,
-        smartPositioning;
-    true,
-    ;
+    selectedEdgeId: null;
+    showAllLabels: true;
+    labelEditMode: false;
+    smartPositioning: true;
 };
 ;
 // Convert edges to annotated edges, preserving existing annotations
@@ -39,10 +36,9 @@ return state.smartPositioning && autoOptimizePositions
 // Add a label to an edge
 const addLabel = useCallback(());
 ;
-edgeId: string,
-    label;
-string,
-    options ?  : Partial;
+edgeId: string;
+label: string;
+options ?  : Partial;
 {
     const updatedEdges = annotatedEdges.map(edge => );
     ;
@@ -51,26 +47,30 @@ string,
             ...edge,
             label,
             showLabel: true,
-            interactive: true,
-            ...options,
-            edge
-        } : , [annotatedEdges, onEdgesChange];
+            interactive: true
+        }
+        :
     ;
-    // Update label properties for an edge
-    const updateLabel = useCallback((edgeId, updates) => {
-        const updatedEdges = updateEdgeLabel(annotatedEdges, edgeId, updates);
-        onEdgesChange(updatedEdges);
-    }, [annotatedEdges, onEdgesChange]);
-    // Remove label from an edge
-    const removeLabel = useCallback((edgeId) => {
-        const updatedEdges = annotatedEdges.map(edge => );
-    });
-    edge.id === edgeId
-        ? { ...edge, label: undefined, showLabel: false }
-        : edge;
+    options: edge;
     ;
     onEdgesChange(updatedEdges);
 }
+[annotatedEdges, onEdgesChange];
+;
+// Update label properties for an edge
+const updateLabel = useCallback((edgeId, updates) => {
+    const updatedEdges = updateEdgeLabel(annotatedEdges, edgeId, updates);
+    onEdgesChange(updatedEdges);
+}, [annotatedEdges, onEdgesChange]);
+// Remove label from an edge
+const removeLabel = useCallback((edgeId) => {
+    const updatedEdges = annotatedEdges.map(edge => );
+});
+edge.id === edgeId
+    ? { ...edge, label: undefined, showLabel: false }
+    : edge;
+;
+onEdgesChange(updatedEdges);
 [annotatedEdges, onEdgesChange];
 ;
 // Toggle label visibility for an edge
@@ -107,6 +107,7 @@ onEdgesChange(updatedEdges);
 const clearAllLabels = useCallback(() => {
     const updatedEdges = annotatedEdges.map(edge => ({}), ...edge, label, undefined, showLabel, false, labelStyle, undefined, labelPosition, undefined, labelOffset, undefined, interactive, undefined);
 });
+;
 onEdgesChange(updatedEdges);
 [annotatedEdges, onEdgesChange];
 ;
@@ -122,8 +123,7 @@ const setLabelEditMode = useCallback((enabled) => {
 // Set smart positioning
 const setSmartPositioning = useCallback((enabled) => {
     setState(prev => ({ ...prev, smartPositioning: enabled }));
-    if (enabled) {
-        // Apply optimization immediately when enabled
+    if (enabled) { // Apply optimization immediately when enabled
         optimizePositions();
     }
     [optimizePositions];
@@ -146,83 +146,91 @@ const getVisibleLabelsCount = useCallback(() => {
 [annotatedEdges];
 ;
 return {
-    // State
     annotatedEdges,
     selectedEdgeId: state.selectedEdgeId,
     showAllLabels: state.showAllLabels,
     labelEditMode: state.labelEditMode,
-    smartPositioning: state.smartPositioning,
+    smartPositioning: state.smartPositioning
+    // Actions
+    ,
     // Actions
     addLabel,
     updateLabel,
     removeLabel,
     toggleLabel,
-    selectEdge,
+    selectEdge
+    // Bulk operations
+    ,
     // Bulk operations
     showAllLabelsToggle,
     hideAllLabels,
     clearAllLabels,
-    optimizePositions,
+    optimizePositions
+    // Mode toggles
+    ,
     // Mode toggles
     setLabelEditMode,
-    setSmartPositioning,
+    setSmartPositioning
+    // Utility
+    ,
     // Utility
     getEdgeLabel,
-    hasLabel,
-    getVisibleLabelsCount
+    hasLabel
 };
+getVisibleLabelsCount;
+;
 ;
 // Connection annotation utilities for common use cases
 export const connectionAnnotationPresets = {
-    // Common label styles for different connection types
     dataFlow: {
         labelStyle: {
             color: '#4299e1',
             backgroundColor: 'rgba(66, 153, 225, 0.1)',
-            border: '1px solid #4299e1',
+            border: '1px solid #4299e1'
         },
         control: {
             labelStyle: {
                 color: '#ed8936',
                 backgroundColor: 'rgba(237, 137, 54, 0.1)',
-                border: '1px solid #ed8936',
+                border: '1px solid #ed8936'
             },
             dependency: {
                 labelStyle: {
                     color: '#9f7aea',
                     backgroundColor: 'rgba(159, 122, 234, 0.1)',
-                    border: '1px solid #9f7aea',
+                    border: '1px solid #9f7aea'
                 },
                 error: {
                     labelStyle: {
                         color: '#f56565',
                         backgroundColor: 'rgba(245, 101, 101, 0.1)',
-                        border: '1px solid #f56565',
-                    },
-                    // Common label templates for different connection types
-                    const: labelTemplates = {
-                        success: 'Success',
-                        failure: 'Failure',
-                        fallback: 'Fallback',
-                        optional: 'Optional',
-                        required: 'Required',
-                        primary: 'Primary',
-                        secondary: 'Secondary',
-                        input: 'Input',
-                        output: 'Output',
-                        config: 'Config',
-                        data: 'Data',
-                    },
-                    // Helper to create preset connections
-                    const: createPresetConnection = (baseEdge) => ,
-                    preset: keyof, typeof: connectionAnnotationPresets,
-                    label: string, AnnotatedEdge } } } }
+                        border: '1px solid #f56565'
+                    }
+                },
+                // Common label templates for different connection types
+                const: labelTemplates = { success: 'Success',
+                    failure: 'Failure',
+                    fallback: 'Fallback',
+                    optional: 'Optional',
+                    required: 'Required',
+                    primary: 'Primary',
+                    secondary: 'Secondary',
+                    input: 'Input',
+                    output: 'Output',
+                    config: 'Config',
+                    data: 'Data' }
+            },
+            // Helper to create preset connections
+            const: createPresetConnection = (baseEdge) => preset, keyof, typeof: connectionAnnotationPresets,
+            label: string, AnnotatedEdge
+        }
+    }
 };
 {
     return createAnnotatedEdge();
-    baseEdge,
-        label,
-        connectionAnnotationPresets[preset];
-    ;
+    baseEdge;
+    label;
 }
+connectionAnnotationPresets[preset];
+;
 ;

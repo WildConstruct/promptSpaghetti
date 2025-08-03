@@ -7,45 +7,33 @@
  * system events, and administrative activities across the platform.
  */
 ;
-// Timing Information
-duration ?  : number; // milliseconds
-startTime ?  : string;
-endTime ?  : string;
-// Metadata
-metadata: Record;
-tags: string;
-// Change Tracking
-changes ?  : ActivityChange;
-// Error Information (for failed activities)
-error ?  : {
-    code: string,
-    message: string,
-    stack: string,
-    details: (Record)
-};
-// Audit Trail
-createdAt: string;
-updatedAt ?  : string;
-version: number;
+// Health Check Data
+healthStatus ?  : 'healthy' | 'warning' | 'critical' | 'unknown';
+componentStatus ?  : Record;
+;
+;
+// Threshold Information
+thresholds ?  : Record;
+thresholdViolations ?  : string;
+// Performance Context
+loadLevel ?  : 'low' | 'medium' | 'high' | 'peak';
+concurrentUsers ?  : number;
 facets ?  : Record;
 executionTime: number;
- > ;
+    > ;
 topSources: Array < {
     source: string,
     count: number,
-    percentage: number
-} > ;
+    percentage: number } > ;
 topActions: Array < {
     action: string,
     count: number,
-    percentage: number
-} > ;
+    percentage: number } > ;
 topUsers: Array < {
     userId: string,
     userEmail: string,
     count: number,
-    percentage: number
-} > ;
+    percentage: number } > ;
 errorRate: number;
 averageDuration: number;
 performanceMetrics: {
@@ -54,13 +42,14 @@ performanceMetrics: {
     p99: number;
 }
 ;
+ActivityMetrics;
+;
 // Default configurations
 export const DEFAULT_ACTIVITY_RETENTION_DAYS = 90;
 export const DEFAULT_ACTIVITY_PAGE_SIZE = 50;
 export const MAX_ACTIVITY_PAGE_SIZE = 1000;
 // Activity type display configurations
-export const ACTIVITY_TYPE_LABELS = {
-    user_action: 'User Action',
+export const ACTIVITY_TYPE_LABELS = { user_action: 'User Action',
     system_event: 'System Event',
     admin_action: 'Admin Action',
     security_event: 'Security Event',
@@ -71,12 +60,11 @@ export const ACTIVITY_TYPE_LABELS = {
     authentication: 'Authentication',
     authorization: 'Authorization',
     file_operation: 'File Operation',
-    workflow_event: 'Workflow Event',
-};
-export const ACTIVITY_SEVERITY_COLORS = {
-    critical: '#dc2626',
+    workflow_event: 'Workflow Event' };
+;
+export const ACTIVITY_SEVERITY_COLORS = { critical: '#dc2626',
     high: '#ea580c',
     medium: '#d97706',
     low: '#65a30d',
-    info: '#2563eb',
-};
+    info: '#2563eb' };
+;

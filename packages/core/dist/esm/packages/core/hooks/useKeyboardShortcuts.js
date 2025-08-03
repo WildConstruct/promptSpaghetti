@@ -5,11 +5,14 @@
  * Professional keyboard shortcut management for Wild Construct
  */
 import { useEffect, useCallback, useRef } from 'react';
+/**
+* Hook for managing keyboard shortcuts in the graph editor
+*/
 export const useKeyboardShortcuts = ({
     shortcuts,
-    enabled = true,
-    preventDefault = true
-}), UseKeyboardShortcutsOptions;
+    enabled = true });
+preventDefault = true;
+UseKeyboardShortcutsOptions;
 {
     const shortcutsRef = useRef(shortcuts);
     // Update shortcuts ref when shortcuts change
@@ -68,10 +71,9 @@ export const useKeyboardShortcuts = ({
         document.addEventListener('keydown', handleKeyDown, { capture: true });
         return () => document.removeEventListener('keydown', handleKeyDown, { capture: true });
     }, [handleKeyDown, enabled]);
-    return {
-        shortcuts: shortcutsRef.current,
-    };
+    return { shortcuts: shortcutsRef.current };
 }
+;
 ;
 /**
  * Hook for command palette specific shortcuts
@@ -104,140 +106,108 @@ KeyboardShortcut => {
             cmd: true,
             description: 'Undo last action',
             action: () => actions.onUndo?.(),
-            enabled: !!actions.onUndo,
+            enabled: !!actions.onUndo
         },
-        {
-            key: 'z',
+        { key: 'z',
             cmd: true,
             shift: true,
             description: 'Redo last action',
             action: () => actions.onRedo?.(),
-            enabled: !!actions.onRedo,
-        },
-        {
-            key: 's',
+            enabled: !!actions.onRedo },
+        { key: 's',
             cmd: true,
             description: 'Save graph',
             action: () => actions.onSave?.(),
-            enabled: !!actions.onSave,
-        },
-        {
-            key: 'c',
+            enabled: !!actions.onSave },
+        { key: 'c',
             cmd: true,
             description: 'Copy selected nodes',
             action: () => actions.onCopy?.(),
-            enabled: !!actions.onCopy,
-        },
-        {
-            key: 'v',
+            enabled: !!actions.onCopy },
+        { key: 'v',
             cmd: true,
             description: 'Paste nodes',
             action: () => actions.onPaste?.(),
-            enabled: !!actions.onPaste,
-        },
-        {
-            key: 'Delete',
+            enabled: !!actions.onPaste },
+        { key: 'Delete',
             description: 'Delete selected nodes',
             action: () => actions.onDelete?.(),
-            enabled: !!actions.onDelete,
-        },
-        {
-            key: 'Backspace',
+            enabled: !!actions.onDelete },
+        { key: 'Backspace',
             description: 'Delete selected nodes',
             action: () => actions.onDelete?.(),
-            enabled: !!actions.onDelete,
-        },
-        {
-            key: 'a',
+            enabled: !!actions.onDelete },
+        { key: 'a',
             cmd: true,
             description: 'Select all nodes',
             action: () => actions.onSelectAll?.(),
-            enabled: !!actions.onSelectAll,
-        },
-        {
-            key: 'd',
+            enabled: !!actions.onSelectAll },
+        { key: 'd',
             cmd: true,
             description: 'Duplicate selected nodes',
             action: () => actions.onDuplicate?.(),
-            enabled: !!actions.onDuplicate,
-        }
+            enabled: !!actions.onDuplicate }
         // Navigation
         ,
         // Navigation
-        {
-            key: '0',
+        { key: '0',
             cmd: true,
             description: 'Fit view to all nodes',
             action: () => actions.onFitView?.(),
-            enabled: !!actions.onFitView,
-        },
-        {
-            key: '=',
+            enabled: !!actions.onFitView },
+        { key: '=',
             cmd: true,
             description: 'Zoom in',
             action: () => actions.onZoomIn?.(),
-            enabled: !!actions.onZoomIn,
-        },
-        {
-            key: '-',
+            enabled: !!actions.onZoomIn },
+        { key: '-',
             cmd: true,
             description: 'Zoom out',
             action: () => actions.onZoomOut?.(),
-            enabled: !!actions.onZoomOut,
-        }
+            enabled: !!actions.onZoomOut }
         // Node creation shortcuts
         ,
         // Node creation shortcuts
-        {
-            key: 'n',
+        { key: 'n',
             cmd: true,
             description: 'Create new weighted choice node',
             action: () => actions.onNewNode?.('WeightedChoice'),
-            enabled: !!actions.onNewNode,
-        },
-        {
-            key: 'o',
+            enabled: !!actions.onNewNode },
+        { key: 'o',
             cmd: true,
             description: 'Create new output node',
             action: () => actions.onNewNode?.('Output'),
-            enabled: !!actions.onNewNode,
-        },
-        {
-            key: 'l',
+            enabled: !!actions.onNewNode },
+        { key: 'l',
             cmd: true,
             description: 'Create new concat node',
             action: () => actions.onNewNode?.('Concat'),
-            enabled: !!actions.onNewNode,
-        }
+            enabled: !!actions.onNewNode }
         // Export
         ,
         // Export
-        {
-            key: 'e',
+        { key: 'e',
             cmd: true,
             description: 'Export graph',
             action: () => actions.onExport?.(),
-            enabled: !!actions.onExport,
-        }
+            enabled: !!actions.onExport }
         // Film industry specific shortcuts
         ,
         // Film industry specific shortcuts
-        {
-            key: 'g',
+        { key: 'g',
             cmd: true,
             description: 'Generate character development',
             action: () => actions.onNewNode?.('character-development'),
-            enabled: !!actions.onNewNode,
-        },
-        {
-            key: 'h',
+            enabled: !!actions.onNewNode },
+        { key: 'h',
             cmd: true,
             shift: true,
             description: 'Show keyboard shortcuts help',
-            action: () => { },
+            action: () => { }
             // This could open a help modal
-            console, : .log('Keyboard shortcuts help')
-        }
+            ,
+            // This could open a help modal
+            console, : .log('Keyboard shortcuts help') }
     ];
 };
 /**
@@ -265,36 +235,37 @@ export const formatKeyCombo = (shortcut) => {
                         'Escape': 'Esc',
                         'Backspace': '⌫',
                         'Delete': '⌦',
-                        ' ': 'Space',
-                    };
-                    if (keyMappings[key]) {
-                        key = keyMappings[key];
-                    }
-                    else {
-                        key = key.charAt(0).toUpperCase() + key.slice(1);
-                        parts.push(key);
-                        return parts.join(isMac ? '' : '+');
-                    }
-                    ;
-                    /**
-                     * Check if a keyboard shortcut conflicts with browser shortcuts
-                     */
-                    export const checkBrowserConflicts = (shortcut) => {
-                        const browserShortcuts = [
-                            { key: 'r', cmd: true }, // Refresh
-                            { key: 't', cmd: true }, // New tab
-                            { key: 'w', cmd: true }, // Close tab
-                            { key: 'l', cmd: true }, // Address bar
-                            { key: 'j', cmd: true }, // Downloads
-                            { key: 'k', cmd: true }, // Search
-                        ];
-                        return browserShortcuts.some(browser => );
-                        browser.key === shortcut.key.toLowerCase() &&
-                            !!browser.cmd === !!shortcut.cmd &&
-                            !shortcut.shift && // We use shift to avoid conflicts
-                            !shortcut.alt;
+                        ' ': 'Space'
                     };
                 }
+                ;
+                if (keyMappings[key]) {
+                    key = keyMappings[key];
+                }
+                else {
+                    key = key.charAt(0).toUpperCase() + key.slice(1);
+                    parts.push(key);
+                    return parts.join(isMac ? '' : '+');
+                }
+                ;
+                /**
+                 * Check if a keyboard shortcut conflicts with browser shortcuts
+                 */
+                export const checkBrowserConflicts = (shortcut) => {
+                    const browserShortcuts = [
+                        { key: 'r', cmd: true }, // Refresh
+                        { key: 't', cmd: true }, // New tab
+                        { key: 'w', cmd: true }, // Close tab
+                        { key: 'l', cmd: true }, // Address bar
+                        { key: 'j', cmd: true }, // Downloads
+                        { key: 'k', cmd: true }, // Search
+                    ];
+                    return browserShortcuts.some(browser => );
+                    browser.key === shortcut.key.toLowerCase() &&
+                        !!browser.cmd === !!shortcut.cmd &&
+                        !shortcut.shift && // We use shift to avoid conflicts
+                        !shortcut.alt;
+                };
             }
         }
     }

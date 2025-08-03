@@ -14,34 +14,32 @@ export const PresencePanel = ({
     onUnfollowUser,
     followingUserId,
     showDetailedView = false,
-    maxAvatars = 5,
-    className = ''
-});
+    maxAvatars = 5 });
+className = '';
 {
     const [expanded, setExpanded] = useState(false);
     const activeUsers = users.filter(user => user.status === 'active');
     const idleUsers = users.filter(user => user.status === 'idle');
     const awayUsers = users.filter(user => user.status === 'away');
     const typingUsers = users.filter(user => user.isTyping);
-    const formatLastSeen = (timestamp) => {
-        const now = Date.now();
-        const diff = now - timestamp;
-        if (diff < 60000) { // Less than 1 minute
-            return 'Just now';
-        }
-        else if (diff < 3600000) { // Less than 1 hour
-            const minutes = Math.floor(diff / 60000);
-            return `${minutes}m ago`;
-        }
-    };
-    if (diff < 86400000) { // Less than 1 day
+    const formatLastSeen = (timestamp) => { };
+    const now = Date.now();
+    const diff = now - timestamp;
+    if (diff < 60000) { // Less than 1 minute
+        return 'Just now';
+    }
+    else if (diff < 3600000) { // Less than 1 hour
+        const minutes = Math.floor(diff / 60000);
+        return `${minutes}m ago`;
+    }
+    else if (diff < 86400000) { // Less than 1 day
         const hours = Math.floor(diff / 3600000);
         return `${hours}h ago`;
     }
-}
-{
-    const days = Math.floor(diff / 86400000);
-    return `${days}d ago`;
+    else {
+        const days = Math.floor(diff / 86400000);
+        return `${days}d ago`;
+    }
 }
 ;
 const getActivityText = (user) => {
@@ -132,8 +130,8 @@ div >
             }
             ;
             return;
-            _jsxs("div", { className: `flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 ${!isCurrentUser && onUserClick ? 'cursor-pointer' : '',
-                } ${isFollowing ? 'bg-blue-50 border border-blue-200' : ''}`, onClick: handleClick, children: [_jsxs("div", { className: "flex items-center space-x-3 min-w-0 flex-1", children: [_jsx(UserAvatar, { userId: user.userId, userName: user.userName, userAvatar: user.userAvatar, status: user.status, size: "medium" }), _jsxs("div", { className: "min-w-0 flex-1", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsxs("span", { className: "font-medium text-gray-900 truncate", children: [user.userName || user.userId, isCurrentUser && ()
+            _jsxs("div", { className: `flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 ${!isCurrentUser && onUserClick ? 'cursor-pointer' : ''}
+ ${isFollowing ? 'bg-blue-50 border border-blue-200' : ''}`, onClick: handleClick, children: [_jsxs("div", { className: "flex items-center space-x-3 min-w-0 flex-1", children: [_jsx(UserAvatar, { userId: user.userId, userName: user.userName, userAvatar: user.userAvatar, status: user.status, size: "medium" }), _jsxs("div", { className: "min-w-0 flex-1", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsxs("span", { className: "font-medium text-gray-900 truncate", children: [user.userName || user.userId, isCurrentUser && ()
                                                         < span, " className=\"ml-2 text-xs text-gray-500\">(You)"] }), ")}"] }), user.isTyping && ()
                                         < div, " className=\"flex space-x-1\">", _jsx("div", { className: "w-1 h-1 bg-gray-400 rounded-full animate-bounce" }), _jsx("div", { className: "w-1 h-1 bg-gray-400 rounded-full animate-bounce", style: { animationDelay: '0.1s' } }), _jsx("div", { className: "w-1 h-1 bg-gray-400 rounded-full animate-bounce", style: { animationDelay: '0.2s' } })] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-2 text-xs text-gray-500", children: [_jsx("span", { children: getActivityText(user) }), _jsx("span", { children: "\u2022" }), _jsx("span", { children: formatLastSeen(user.lastSeen) })] })] });
         };
@@ -144,16 +142,15 @@ div >
         < button;
     onClick = { handleFollowClick };
     className = {} `px-2 py-1 text-xs font-medium rounded ${isFollowing
-        ? 'bg-blue-100 text-blue-800 hover:bg-blue-200' : ,
-    ;
-    'bg-gray-100 text-gray-700 hover:bg-gray-200',
-    ;
+        ? 'bg-blue-100 text-blue-800 hover:bg-blue-200'
+        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+`;
 }
-`}
-        >
-          {isFollowing ? 'Following' : 'Follow'}
-        </button>
-      )}
-    </div>
-  );
-};;
+    >
+        { isFollowing, 'Following': 'Follow' };
+button >
+;
+div >
+;
+;
+;

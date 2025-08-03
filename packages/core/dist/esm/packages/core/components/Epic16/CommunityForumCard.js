@@ -6,7 +6,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with engagement metrics, moderation features, and real-time updates.
  */
 import { useState } from 'react';
- > ;
+    > ;
 export const CommunityForumCard = ({
     post,
     variant = 'detailed',
@@ -18,9 +18,8 @@ export const CommunityForumCard = ({
     onReply,
     onReport,
     onModerate,
-    onClick,
-    className = ''
-});
+    onClick });
+className = '';
 {
     const [showModerationMenu, setShowModerationMenu] = useState(false);
     const [showReportDialog, setShowReportDialog] = useState(false);
@@ -174,10 +173,10 @@ if (variant === 'compact') {
         showActions && ()
             < div;
         className = "px-4 py-3 border-t border-gray-100 bg-gray-50" >
-            _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("button", { onClick: () => handleVote('like'), className: `flex items-center space-x-1 text-sm ${userVote === 'like' ? 'text-green-600' : 'text-gray-500 hover:text-green-600',
-                                }`, children: [_jsx("svg", { className: "w-4 h-4", fill: userVote === 'like' ? 'currentColor' : 'none', viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" }) }), _jsx("span", { children: formatNumber(post.likes) })] }), _jsxs("button", { onClick: () => handleVote('dislike'), className: `flex items-center space-x-1 text-sm ${userVote === 'dislike' ? 'text-red-600' : 'text-gray-500 hover:text-red-600',
-                                }`, children: [_jsx("svg", { className: "w-4 h-4", fill: userVote === 'dislike' ? 'currentColor' : 'none', viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" }) }), _jsx("span", { children: formatNumber(post.dislikes) })] }), _jsxs("button", { onClick: () => onReply?.(post.id), className: "flex items-center space-x-1 text-sm text-gray-500 hover:text-blue-600", children: [_jsx("svg", { className: "w-4 h-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.013 8.013 0 01-7-4L1 20l4-4 4-4a8 8 0 018-8c4.418 0 8 3.582 8 8z" }) }), _jsx("span", { children: formatNumber(post.replies) })] }), _jsx("button", { onClick: handleBookmark, className: `flex items-center space-x-1 text-sm ${isBookmarked ? 'text-yellow-600' : 'text-gray-500 hover:text-yellow-600',
-                                }`, children: _jsx("svg", { className: "w-4 h-4", fill: isBookmarked ? 'currentColor' : 'none', viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" }) }) })] }), _jsxs("div", { className: "flex items-center space-x-4 text-sm text-gray-500", children: [_jsxs("span", { children: [formatNumber(post.views), " views"] }), _jsx("button", { onClick: () => setShowReportDialog(true), className: "hover:text-red-600", children: "Report" })] })] });
+            _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("button", { onClick: () => handleVote('like'), className: `flex items-center space-x-1 text-sm ${userVote === 'like' ? 'text-green-600' : 'text-gray-500 hover:text-green-600'}
+`, children: [_jsx("svg", { className: "w-4 h-4", fill: userVote === 'like' ? 'currentColor' : 'none', viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" }) }), _jsx("span", { children: formatNumber(post.likes) })] }), _jsxs("button", { onClick: () => handleVote('dislike'), className: `flex items-center space-x-1 text-sm ${userVote === 'dislike' ? 'text-red-600' : 'text-gray-500 hover:text-red-600'}
+`, children: [_jsx("svg", { className: "w-4 h-4", fill: userVote === 'dislike' ? 'currentColor' : 'none', viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v2a2 2 0 002 2h.095c.5 0 .905-.405.905-.905 0-.714.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" }) }), _jsx("span", { children: formatNumber(post.dislikes) })] }), _jsxs("button", { onClick: () => onReply?.(post.id), className: "flex items-center space-x-1 text-sm text-gray-500 hover:text-blue-600", children: [_jsx("svg", { className: "w-4 h-4", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.013 8.013 0 01-7-4L1 20l4-4 4-4a8 8 0 018-8c4.418 0 8 3.582 8 8z" }) }), _jsx("span", { children: formatNumber(post.replies) })] }), _jsx("button", { onClick: handleBookmark, className: `flex items-center space-x-1 text-sm ${isBookmarked ? 'text-yellow-600' : 'text-gray-500 hover:text-yellow-600'}
+`, children: _jsx("svg", { className: "w-4 h-4", fill: isBookmarked ? 'currentColor' : 'none', viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" }) }) })] }), _jsxs("div", { className: "flex items-center space-x-4 text-sm text-gray-500", children: [_jsxs("span", { children: [formatNumber(post.views), " views"] }), _jsx("button", { onClick: () => setShowReportDialog(true), className: "hover:text-red-600", children: "Report" })] })] });
         div >
         ;
     }
@@ -187,7 +186,7 @@ if (variant === 'compact') {
             < div;
         className = "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" >
             _jsxs("div", { className: "bg-white rounded-lg shadow-xl w-full max-w-md", children: [_jsxs("div", { className: "p-6", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "Report Post" }), _jsxs("div", { className: "space-y-3", children: [['Spam', 'Inappropriate Content', 'Harassment', 'Copyright Violation', 'Other'].map((reason) => ()
-                                        < button, key = { reason }, onClick = {}()), " => ", onReport?.(post.id, reason), "; setShowReportDialog(false); }} className=\"w-full text-left px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50\" >", reason] }), "))}"] }), _jsx("div", { className: "mt-6 flex justify-end space-x-3", children: _jsx("button", { onClick: () => setShowReportDialog(false), className: "px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50", children: "Cancel" }) })] });
+                                        < button, key = { reason }, onClick = {}()), " => ", onReport?.(post.id, reason), "; setShowReportDialog(false) }} className=\"w-full text-left px-3 py-2 border border-gray-300 rounded-md hover:bg-gray-50\" >", reason] }), "))}"] }), _jsx("div", { className: "mt-6 flex justify-end space-x-3", children: _jsx("button", { onClick: () => setShowReportDialog(false), className: "px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50", children: "Cancel" }) })] });
         div >
         ;
         div >

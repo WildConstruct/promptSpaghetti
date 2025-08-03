@@ -7,6 +7,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * error handling, user-friendly fallback UI, and production monitoring
  */
 import React, { Component } from 'react';
+retryCount: number;
+/**
+* Error boundary component for node generation operations
+*/
 export class NodeGenerationErrorBoundary extends Component {
     maxRetries = 3;
     retryTimeoutId = null;
@@ -16,78 +20,79 @@ export class NodeGenerationErrorBoundary extends Component {
             hasError: false,
             error: null,
             errorInfo: null,
-            retryCount: 0,
+            retryCount: 0
         };
     }
+    ;
     static getDerivedStateFromError(error) {
         return {
             hasError: true,
             error,
             errorInfo: null,
-            retryCount: 0,
+            retryCount: 0
         };
-        componentDidCatch(error, Error, errorInfo, ErrorInfo);
-        {
-            console.error('Node generation error caught by boundary:', error, errorInfo);
-            this.setState(prevState => ({}), ...prevState, errorInfo);
-        }
-        ;
-        if (this.props.onError) {
-            this.props.onError(error, errorInfo);
-            // Log to monitoring service in production
-            if (process.env.NODE_ENV === 'production') {
-                this.logToMonitoringService(error, errorInfo);
-                componentWillUnmount();
-                {
-                    if (this.retryTimeoutId) {
-                        clearTimeout(this.retryTimeoutId);
-                    }
-                }
-            }
-        }
-    }
-    logToMonitoringService(error, errorInfo) {
-        // In a real application, this would send to a monitoring service like Sentry
-        console.warn('Production error in node generation:', {}),
-            error;
-        error.message,
-            stack;
-        error.stack,
-            componentStack;
-        errorInfo.componentStack,
-            timestamp;
-        new Date().toISOString(),
-            userAgent;
-        navigator.userAgent,
-            url;
-        window.location.href,
-        ;
     }
     ;
-    handleRetry = () => {
-        if (this.state.retryCount >= this.maxRetries) {
-            console.warn('Maximum retry attempts reached for node generation');
-            return;
-            this.setState(prevState => ({}), hasError, false, error, null, errorInfo, null, retryCount, prevState.retryCount + 1);
+    componentDidCatch(error, errorInfo) {
+        console.error('Node generation error caught by boundary:', error, errorInfo);
+        this.setState(prevState => ({}), ...prevState);
+    }
+    errorInfo;
+}
+;
+if (this.props.onError) {
+    this.props.onError(error, errorInfo);
+    // Log to monitoring service in production
+    if (process.env.NODE_ENV === 'production') {
+        this.logToMonitoringService(error, errorInfo);
+        componentWillUnmount();
+        {
+            if (this.retryTimeoutId) {
+                clearTimeout(this.retryTimeoutId);
+                logToMonitoringService(error, Error, errorInfo, ErrorInfo);
+                {
+                    // In a real application, this would send to a monitoring service like Sentry
+                    console.warn('Production error in node generation:', {}),
+                        error;
+                    error.message,
+                        stack;
+                    error.stack,
+                        componentStack;
+                    errorInfo.componentStack,
+                        timestamp;
+                    new Date().toISOString(),
+                        userAgent;
+                    navigator.userAgent,
+                        url;
+                    window.location.href;
+                }
+            }
+            ;
+            handleRetry = () => {
+                if (this.state.retryCount >= this.maxRetries) {
+                    console.warn('Maximum retry attempts reached for node generation');
+                    return;
+                    this.setState(prevState => ({}), hasError, false, error, null, errorInfo, null, retryCount, prevState.retryCount + 1);
+                }
+            };
+            ;
+            // Add a small delay before retry to allow any transient issues to resolve
+            this.retryTimeoutId = setTimeout(() => {
+                this.forceUpdate();
+            }, 1000);
         }
         ;
-        // Add a small delay before retry to allow any transient issues to resolve
-        this.retryTimeoutId = setTimeout(() => {
-            // Force re-render to retry the operation
-            this.forceUpdate();
-        }, 1000);
-    };
-    handleReset = () => {
-        this.setState({});
-        hasError: false,
-            error;
-        null,
-            errorInfo;
-        null,
-            retryCount;
-        0,
-        ;
-    };
+        handleReset = () => {
+            this.setState({});
+            hasError: false,
+                error;
+            null,
+                errorInfo;
+            null,
+                retryCount;
+            0;
+        };
+    }
     ;
 }
 ;
@@ -103,68 +108,64 @@ getThemeStyles = () => {
             accent: '#3b82f6',
             error: '#ef4444',
             warning: '#f59e0b',
-            success: '#10b981',
-        },
-        dark: {
-            background: '#1f2937',
-            secondary: '#111827',
-            border: '#4b5563',
-            text: '#f9fafb',
-            textSecondary: '#9ca3af',
-            accent: '#60a5fa',
-            error: '#f87171',
-            warning: '#fbbf24',
-            success: '#34d399',
-        },
-        cinema: {
-            background: '#1a1a1a',
-            secondary: '#0d1117',
-            border: '#ff7c00',
-            text: '#ffffff',
-            textSecondary: '#a0a0a0',
-            accent: '#ff7c00',
-            error: '#ff4444',
-            warning: '#ffaa00',
-            success: '#00ff88',
-        },
-        return: themes[theme]
-    };
-    renderErrorDetails = (error, errorInfo) => {
-        const styles = this.getThemeStyles();
-        if (process.env.NODE_ENV !== 'development') {
-            return null;
-            return;
-            _jsx("details", { style: {
-                    marginTop: '16px',
-                    padding: '12px',
-                    background: styles.secondary,
-                    border: `1px solid ${styles.border}`
-                }, "borderRadius:": true });
-            '6px',
-                fontSize;
-            '12px',
-                color;
-            styles.textSecondary,
-                fontFamily;
-            'Monaco, monospace';
-        }
-    };
-     >
-        (_jsx("summary", { style: {
-                cursor: 'pointer',
-                fontWeight: 600,
-                marginBottom: '8px',
-                color: styles.text,
-            }, children: "Error Details (Development Only)" })
-            ,
-                _jsxs("div", { style: { whiteSpace: 'pre-wrap', maxHeight: '200px', overflow: 'auto' }, children: [_jsx("strong", { children: "Error:" }), " ", error.message, error.stack && ()
-                            <  >
-                            (_jsx("br", {}), _jsx("br", {})
-                                ,
-                                    _jsx("strong", { children: "Stack Trace:" })
-                                        ,
-                                            _jsx("br", {})), error.stack] }));
+            success: '#10b981' }
+    }, dark;
+},
+    cinema;
+{
+    background: '#1a1a1a',
+        secondary;
+    '#0d1117',
+        border;
+    '#ff7c00',
+        text;
+    '#ffffff',
+        textSecondary;
+    '#a0a0a0',
+        accent;
+    '#ff7c00',
+        error;
+    '#ff4444',
+        warning;
+    '#ffaa00',
+        success;
+    '#00ff88';
+}
+;
+return themes[theme];
+;
+renderErrorDetails = (error, errorInfo) => {
+    const styles = this.getThemeStyles();
+    if (process.env.NODE_ENV !== 'development') {
+        return null;
+        return;
+        _jsx("details", { style: {
+                marginTop: '16px',
+                padding: '12px',
+                background: styles.secondary
+            }, "border:": true });
+        `1px solid ${styles.border}`;
+    }
+    borderRadius: '6px';
+    fontSize: '12px';
+    color: styles.textSecondary;
+    fontFamily: 'Monaco, monospace';
 };
+ >
+    (_jsx("summary", { style: {
+            cursor: 'pointer',
+            fontWeight: 600,
+            marginBottom: '8px',
+            color: styles.text
+        }, children: "Error Details (Development Only)" })
+        ,
+            _jsxs("div", { style: { whiteSpace: 'pre-wrap', maxHeight: '200px', overflow: 'auto' }, children: [_jsx("strong", { children: "Error:" }), " ", error.message, error.stack && ()
+                        <  >
+                        (_jsx("br", {}), _jsx("br", {})
+                            ,
+                                _jsx("strong", { children: "Stack Trace:" })
+                                    ,
+                                        _jsx("br", {})), error.stack] }));
 {
     errorInfo?.componentStack && ()
         <  >
@@ -192,24 +193,20 @@ renderDefaultFallback = (error) => {
     _jsx("div", { style: {
             padding: '32px',
             textAlign: 'center',
-            background: styles.background,
-            border: `1px solid ${styles.error}`
-        }, "borderRadius:": true });
-    '12px',
-        margin;
-    '16px',
-        fontFamily;
-    'Inter, system-ui, sans-serif';
+            background: styles.background
+        }, "border:": true });
+    `1px solid ${styles.error}`;
 };
+borderRadius: '12px';
+margin: '16px';
+fontFamily: 'Inter, system-ui, sans-serif';
  >
     { /* Error Icon */}
     < div;
 style = {};
 {
-    fontSize: '48px',
-        marginBottom;
-    '16px',
-    ;
+    fontSize: '48px';
+    marginBottom: '16px';
 }
  >
 ;
@@ -218,14 +215,10 @@ div >
     < h2;
 style = {};
 {
-    margin: '0 0 8px 0',
-        fontSize;
-    '20px',
-        fontWeight;
-    600,
-        color;
-    styles.error,
-    ;
+    margin: '0 0 8px 0';
+    fontSize: '20px';
+    fontWeight: 600;
+    color: styles.error;
 }
  >
     Node;
@@ -236,12 +229,9 @@ h2 >
     < p;
 style = {};
 {
-    margin: '0 0 24px 0',
-        color;
-    styles.textSecondary,
-        lineHeight;
-    1.5,
-    ;
+    margin: '0 0 24px 0';
+    color: styles.textSecondary;
+    lineHeight: 1.5;
 }
  >
     We;
@@ -260,18 +250,12 @@ p >
     < ul;
 style = {};
 {
-    textAlign: 'left',
-        margin;
-    '0 0 24px 0',
-        padding;
-    '0 0 0 20px',
-        color;
-    styles.textSecondary,
-        fontSize;
-    '14px',
-        lineHeight;
-    1.6,
-    ;
+    textAlign: 'left';
+    margin: '0 0 24px 0';
+    padding: '0 0 0 20px';
+    color: styles.textSecondary;
+    fontSize: '14px';
+    lineHeight: 1.6;
 }
  >
     (_jsx("li", { children: "Invalid suggestion data or analysis results" })
@@ -288,23 +272,18 @@ ul >
     < div;
 style = {};
 {
-    background: styles.secondary,
-        padding;
-    '16px',
-        borderRadius;
-    '8px',
-        marginBottom;
-    '24px',
-        textAlign;
-    'left',
-    ;
+    background: styles.secondary;
+    padding: '16px';
+    borderRadius: '8px';
+    marginBottom: '24px';
+    textAlign: 'left';
 }
  >
     (_jsx("h3", { style: {
             margin: '0 0 8px 0',
             fontSize: '14px',
             fontWeight: 600,
-            color: styles.text,
+            color: styles.text
         }, children: "Suggested Solutions:" })
         ,
             _jsxs("ul", { style: {
@@ -312,21 +291,17 @@ style = {};
                     padding: '0 0 0 16px',
                     fontSize: '13px',
                     color: styles.textSecondary,
-                    lineHeight: 1.5,
+                    lineHeight: 1.5
                 }, children: [_jsx("li", { children: "Try reducing the number of selected suggestions" }), _jsx("li", { children: "Check your internet connection" }), _jsx("li", { children: "Refresh the page and try again" }), _jsx("li", { children: "Clear your browser cache" }), _jsx("li", { children: "Try a different browser if the issue persists" })] }));
 div >
     { /* Action Buttons */}
     < div;
 style = {};
 {
-    display: 'flex',
-        gap;
-    '12px',
-        justifyContent;
-    'center',
-        alignItems;
-    'center',
-    ;
+    display: 'flex';
+    gap: '12px';
+    justifyContent: 'center';
+    alignItems: 'center';
 }
  >
     { canRetry } && ()
@@ -334,28 +309,17 @@ style = {};
 onClick = { this: .handleRetry };
 style = {};
 {
-    padding: '12px 24px',
-        background;
-    styles.accent,
-        border;
-    'none',
-        borderRadius;
-    '6px',
-        color;
-    styles.background,
-        fontSize;
-    '14px',
-        fontWeight;
-    600,
-        cursor;
-    'pointer',
-        display;
-    'flex',
-        alignItems;
-    'center',
-        gap;
-    '8px',
-    ;
+    padding: '12px 24px';
+    background: styles.accent;
+    border: 'none';
+    borderRadius: '6px';
+    color: styles.background;
+    fontSize: '14px';
+    fontWeight: 600;
+    cursor: 'pointer';
+    display: 'flex';
+    alignItems: 'center';
+    gap: '8px';
 }
     >
 ;
@@ -364,32 +328,26 @@ button >
 ;
 _jsx("button", { onClick: this.handleReset, style: {
         padding: '12px 24px',
-        background: 'transparent',
-        border: `1px solid ${styles.border}`
-    }, "borderRadius:": true });
-'6px',
-    color;
-styles.text,
-    fontSize;
-'14px',
-    cursor;
-'pointer';
+        background: 'transparent'
+    }, "border:": true });
+`1px solid ${styles.border}`;
+borderRadius: '6px';
+color: styles.text;
+fontSize: '14px';
+cursor: 'pointer';
     >
 ;
 Reset;
 button >
     _jsx("button", { onClick: () => window.location.reload(), style: {
             padding: '12px 24px',
-            background: 'transparent',
-            border: `1px solid ${styles.warning}`
-        }, "borderRadius:": true });
-'6px',
-    color;
-styles.warning,
-    fontSize;
-'14px',
-    cursor;
-'pointer';
+            background: 'transparent'
+        }, "border:": true });
+`1px solid ${styles.warning}`;
+borderRadius: '6px';
+color: styles.warning;
+fontSize: '14px';
+cursor: 'pointer';
     >
 ;
 Reload;
@@ -403,20 +361,15 @@ div >
         < div;
     style = {};
     {
-        marginTop: '16px',
-            padding;
-        '8px 12px',
-            background;
-        styles.warning + '20',
-            border;
-        `1px solid ${styles.warning}`;
+        marginTop: '16px';
+        padding: '8px 12px';
+        background: styles.warning + '20';
     }
+    border: `1px solid ${styles.warning}`;
 }
-borderRadius: '6px',
-    fontSize;
-'12px',
-    color;
-styles.warning;
+borderRadius: '6px';
+fontSize: '12px';
+color: styles.warning;
  >
 ;
 Retry;
@@ -436,20 +389,15 @@ div >
         < div;
     style = {};
     {
-        marginTop: '16px',
-            padding;
-        '12px',
-            background;
-        styles.error + '20',
-            border;
-        `1px solid ${styles.error}`;
+        marginTop: '16px';
+        padding: '12px';
+        background: styles.error + '20';
     }
+    border: `1px solid ${styles.error}`;
 }
-borderRadius: '6px',
-    fontSize;
-'13px',
-    color;
-styles.error;
+borderRadius: '6px';
+fontSize: '13px';
+color: styles.error;
  >
     (_jsx("strong", { children: "Maximum retry attempts reached." })
         ,
@@ -483,39 +431,39 @@ render();
             return this.props.fallback(this.state.error, this.handleRetry);
             return this.renderDefaultFallback(this.state.error);
             return this.props.children;
-            WrappedComponent: (React.ComponentType),
-                errorBoundaryProps ?  : Omit;
-            const WithErrorBoundaryComponent = (props) => ();
-            ;
-            _jsx(NodeGenerationErrorBoundary, { ...errorBoundaryProps, children: _jsx(WrappedComponent, { ...props }) });
-            ;
-            WithErrorBoundaryComponent.displayName =
-                `withNodeGenerationErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name})`;
+            WrappedComponent: React.ComponentType;
         }
-        return WithErrorBoundaryComponent;
-        /**
-         * Hook for programmatically triggering error boundaries in functional components
-         */
-        export function useErrorHandler() {
-            return (error, errorInfo) => {
-                // This would typically integrate with error reporting services
-                console.error('Error handled programmatically:', error, errorInfo);
-                if (process.env.NODE_ENV === 'production') {
-                    // Log to monitoring service
-                    console.warn('Production error reported:', {}),
-                        error;
-                    error.message,
-                        stack;
-                    error.stack,
-                        timestamp;
-                    new Date().toISOString(),
-                    ;
-                }
-                ;
-                // Re-throw to trigger error boundary
-                throw error;
-            };
-            export default NodeGenerationErrorBoundary;
-        }
+        errorBoundaryProps ?  : Omit;
+        const WithErrorBoundaryComponent = (props) => ();
+        ;
+        _jsx(NodeGenerationErrorBoundary, { ...errorBoundaryProps, children: _jsx(WrappedComponent, { ...props }) });
+        ;
+        WithErrorBoundaryComponent.displayName =
+            `withNodeGenerationErrorBoundary(${WrappedComponent.displayName || WrappedComponent.name})`;
     }
+    return WithErrorBoundaryComponent;
+    /**
+     * Hook for programmatically triggering error boundaries in functional components
+     */
+    export function useErrorHandler() {
+        return (error, errorInfo) => {
+            // This would typically integrate with error reporting services
+            console.error('Error handled programmatically:', error, errorInfo);
+            if (process.env.NODE_ENV === 'production') {
+                // Log to monitoring service
+                console.warn('Production error reported:', {}),
+                    error;
+                error.message,
+                    stack;
+                error.stack,
+                    timestamp;
+                new Date().toISOString();
+            }
+        };
+        ;
+        // Re-throw to trigger error boundary
+        throw error;
+    }
+    ;
+    export default NodeGenerationErrorBoundary;
 }

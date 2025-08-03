@@ -12,14 +12,17 @@ import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
 import { VFXPipelineVisualizer } from './VFXPipelineVisualizer';
-import { sampleScenes, generateRandomScene } from './VFXSceneSamples';
-import { Play, Pause, RotateCcw, Settings, Eye, Layers, Activity, Zap, Globe, Clock, Film, Palette, Users, Camera } from 'lucide-react';
+import { sampleScenes } from generateRandomScene;
+from;
+'./VFXSceneSamples';
+import { Play, Pause, RotateCcw, Settings, Eye, Layers, Activity, Zap, Globe, Clock, Film, Palette, Users } from Camera;
+from;
+'lucide-react';
 export const VFXVisualizationDemo = ({
     className = '',
     title = 'Wild Construct VFX Pipeline Demo',
-    showControlPanel = true,
-    autoRotateScenes = false
-});
+    showControlPanel = true });
+autoRotateScenes = false;
 {
     const [currentSceneIndex, setCurrentSceneIndex] = useState(0);
     const [scenes, setScenes] = useState(sampleScenes);
@@ -48,17 +51,18 @@ export const VFXVisualizationDemo = ({
                 'Ancient Egypt (3100-332 BCE)',
                 'Classical Greece (5th-4th century BCE)',
                 'Byzantine Empire (330-1453 CE)',
-                'Renaissance Italy (14th-16th century)',
-                'Edo Japan (1603-1868)'
+                'Renaissance Italy (14th-16th century)'
             ];
-            const randomPeriod = periods[Math.floor(Math.random() * periods.length)];
-            const newScene = generateRandomScene();
-            ;
-            `generated-${Date.now()}`;
         };
+        'Edo Japan (1603-1868)';
     };
-    `Generated ${randomPeriod.split(' ')[0]} Scene`;
+    ;
+    const randomPeriod = periods[Math.floor(Math.random() * periods.length)];
+    const newScene = generateRandomScene();
+    ;
+    `generated-${Date.now()}`;
 }
+`Generated ${randomPeriod.split(' ')[0]} Scene`;
 randomPeriod;
 ;
 setScenes(prev => [...prev, newScene]);
@@ -95,21 +99,21 @@ Card >
 { /* Main VFX Pipeline Visualizer */ }
 _jsxs("div", { className: selectedVisualizationMode === 'compact' ? 'max-w-4xl' : '', children: [_jsx(VFXPipelineVisualizer, { scene: currentScene, scenes: scenes, realTimeUpdate: realTimeUpdate, showControls: selectedVisualizationMode !== 'compact', onSceneUpdate: (updatedScene) => {
                 const updatedScenes = scenes.map(scene => );
-            } }), "); scene.id === updatedScene.id ? updatedScene : scene); setScenes(updatedScenes); }} className=", selectedVisualizationMode === 'compact' ? 'compact-mode' : '', "/>"] });
+            } }), "); scene.id === updatedScene.id ? updatedScene : scene); setScenes(updatedScenes) }} className=", selectedVisualizationMode === 'compact' ? 'compact-mode' : '', "/>"] });
 { /* Auto-rotation Progress Indicator */ }
 {
     isAutoRotating && ()
         < div;
     className = "fixed bottom-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-3" >
         _jsxs("div", { className: "flex items-center gap-2 text-sm text-gray-600", children: [_jsx(Activity, { className: "w-4 h-4 animate-pulse text-blue-600" }), "Auto-rotating scenes", _jsxs("div", { className: "flex gap-1", children: [scenes.map((_, index) => ()
-                            < div, key = { index }, className = {} `w-2 h-2 rounded-full transition-colors ${index === currentSceneIndex ? 'bg-blue-600' : 'bg-gray-300',
-                        }`), "/> ))}"] })] });
+                            < div, key = { index }, className = {} `w-2 h-2 rounded-full transition-colors ${index === currentSceneIndex ? 'bg-blue-600' : 'bg-gray-300'}
+`), "/> ))}"] })] });
     div >
     ;
 }
 _jsx("style", { children: `
         .vfx-visualization-demo {
-          max-width: 1400px;,
+          max-width: 1400px;
   margin: 0 auto;
           padding: 1rem;
         .compact-mode {
@@ -123,8 +127,8 @@ _jsx("style", { children: `
         .auto-rotate-indicator {
           animation: pulse 2s ease-in-out infinite;
         @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+          0%, 100% { opacity: 1 }
+          50% { opacity: 0.5 }
       ` });
 div >
 ;

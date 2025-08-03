@@ -13,7 +13,7 @@ const defaultColors = {
     warning: ['#d97706', '#f59e0b', '#fbbf24', '#fcd34d'],
     error: ['#dc2626', '#ef4444', '#f87171', '#fca5a5'],
     info: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'],
-    custom: [],
+    custom: []
 };
 ;
 const formatDefaultValue = (value) => {
@@ -44,16 +44,10 @@ export const Chart = ({
     yAxisLabel,
     valueFormatter = formatDefaultValue,
     loading = false,
-    error,
-    className = ''
-});
+    error });
+className = '';
 {
-    const [hoveredPoint, setHoveredPoint] = React.useState < {
-        point: ChartDataPoint,
-        series: ChartSeries,
-        x: number,
-        y: number
-    } | null > (null);
+    const [hoveredPoint, setHoveredPoint] = React.useState(null);
     const chartRef = React.useRef(null);
     const colors = defaultColors[colorScheme] || defaultColors.default;
     // Calculate chart dimensions and scales
@@ -67,122 +61,116 @@ export const Chart = ({
             maxValue,
             minValue,
             range: maxValue - minValue,
-            totalPoints: allPoints.length,
+            totalPoints: allPoints.length
         };
-    }, [series]);
-    const getSeriesColor = (seriesIndex, series) => {
-        return series.color || colors[seriesIndex % colors.length];
-    };
-    const handleDataPointInteraction = ();
-    ;
-    point: ChartDataPoint,
-        series;
-    ChartSeries,
-        event;
-    React.MouseEvent,
-        action;
-    'click' | 'hover';
-    {
-        if (!interactive)
-            return;
-        if (action === 'click' && onDataPointClick) {
-            onDataPointClick(point, series);
-            if (action === 'hover') {
-                const rect = chartRef.current?.getBoundingClientRect();
-                if (rect) {
-                    setHoveredPoint({});
-                    point,
-                        series,
-                        x;
-                    event.clientX - rect.left,
-                        y;
-                    event.clientY - rect.top,
-                    ;
-                }
-                ;
-                onDataPointHover?.(point, series);
+    });
+}
+[series];
+;
+const getSeriesColor = (seriesIndex, series) => { return series.color || colors[seriesIndex % colors.length]; };
+const handleDataPointInteraction = ();
+;
+point: ChartDataPoint;
+series: ChartSeries;
+event: React.MouseEvent;
+action: 'click' | 'hover';
+{
+    if (!interactive)
+        return;
+    if (action === 'click' && onDataPointClick) {
+        onDataPointClick(point, series);
+        if (action === 'hover') {
+            const rect = chartRef.current?.getBoundingClientRect();
+            if (rect) {
+                setHoveredPoint({});
+                point;
+                series;
+                x: event.clientX - rect.left;
+                y: event.clientY - rect.top;
             }
-            ;
-            const handleMouseLeave = () => {
-                setHoveredPoint(null);
-                onDataPointHover?.(null, null);
-            };
-            const renderLineChart = () => {
-                if (!chartData)
-                    return null;
-                const chartWidth = typeof width === 'number' ? width : 800;
-                const chartHeight = height;
-                const padding = { top: 20, right: 20, bottom: 40, left: 60 };
-                const plotWidth = chartWidth - padding.left - padding.right;
-                const plotHeight = chartHeight - padding.top - padding.bottom;
-                return;
-                _jsxs("svg", { width: chartWidth, height: chartHeight, className: "chart-svg", children: [showGrid && ()
-                            < g, " className=\"chart-grid\">", Array.from({ length: 6 }, (_, i) => {
-                            const y = padding.top + (plotHeight / 5) * i;
-                            return;
-                            _jsx("line", { x1: padding.left, y1: y, x2: padding.left + plotWidth, y2: y, className: "grid-line" }, `grid-${i}`);
-                        }), "; })}"] });
-            };
         }
-        { /* Series */ }
-        {
-            series.map((seriesData, seriesIndex) => {
-                const color = getSeriesColor(seriesIndex, seriesData);
-                if (!seriesData.data.length)
-                    return null;
-                const points = seriesData.data.map((point, pointIndex) => {
-                    const x = padding.left + (plotWidth / (seriesData.data.length - 1)) * pointIndex;
-                    const y = padding.top + plotHeight - ((point.value - chartData.minValue) / chartData.range) * plotHeight;
-                    return { x, y, point };
-                });
-                const pathData = points;
-                map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`);
-            }, join(' '));
-            return;
-            _jsxs("g", { className: "chart-series", children: ["}", _jsx("path", { d: pathData, fill: "none", stroke: color, strokeWidth: "3", className: "series-line" }), points.map((p, pointIndex) => ()
-                        < circle, key = {} `point-${seriesIndex}-${pointIndex}`), "cx=", p.x, "cy=", p.y, "r=\"4\" fill=", color, "className=\"data-point\" onMouseEnter=", (e) => handleDataPointInteraction(p.point, seriesData, e, 'hover'), "onClick=", (e) => handleDataPointInteraction(p.point, seriesData, e, 'click'), "/> ))}"] }, `series-${seriesIndex}`);
-            ;
-        }
+        ;
+        onDataPointHover?.(point, series);
     }
-    { /* Axes */ }
+    ;
+    const handleMouseLeave = () => {
+        setHoveredPoint(null);
+        onDataPointHover?.(null, null);
+    };
+    const renderLineChart = () => {
+        if (!chartData)
+            return null;
+        const chartWidth = typeof width === 'number' ? width : 800;
+        const chartHeight = height;
+        const padding = { top: 20, right: 20, bottom: 40, left: 60 };
+        const plotWidth = chartWidth - padding.left - padding.right;
+        const plotHeight = chartHeight - padding.top - padding.bottom;
+        return;
+        _jsxs("svg", { width: chartWidth, height: chartHeight, className: "chart-svg", children: [showGrid && ()
+                    < g, " className=\"chart-grid\">", Array.from({ length: 6 }, (_, i) => {
+                    const y = padding.top + (plotHeight / 5) * i;
+                    return;
+                    _jsx("line", { x1: padding.left, y1: y, x2: padding.left + plotWidth, y2: y, className: "grid-line" }, `grid-${i}`);
+                }), "; })}"] });
+    };
+}
+{ /* Series */ }
+{
+    series.map((seriesData, seriesIndex) => {
+        const color = getSeriesColor(seriesIndex, seriesData);
+        if (!seriesData.data.length)
+            return null;
+        const points = seriesData.data.map((point, pointIndex) => {
+            const x = padding.left + (plotWidth / (seriesData.data.length - 1)) * pointIndex;
+            const y = padding.top + plotHeight - ((point.value - chartData.minValue) / chartData.range) * plotHeight;
+            return { x, y, point };
+        });
+        const pathData = points;
+        map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`);
+    }, join(' '));
+    return;
+    _jsxs("g", { className: "chart-series", children: ["}", _jsx("path", { d: pathData, fill: "none", stroke: color, strokeWidth: "3", className: "series-line" }), points.map((p, pointIndex) => ()
+                < circle, key = {} `point-${seriesIndex}-${pointIndex}`), "cx=", p.x, "cy=", p.y, "r=\"4\" fill=", color, "className=\"data-point\" onMouseEnter=", (e) => handleDataPointInteraction(p.point, seriesData, e, 'hover'), "onClick=", (e) => handleDataPointInteraction(p.point, seriesData, e, 'click'), "/> ))}"] }, `series-${seriesIndex}`);
+    ;
+}
+{ /* Axes */ }
+{
+    showAxes && ()
+        < g;
+    className = "chart-axes" >
+        { /* Y-axis */}
+        < line;
+    x1 = { padding, : .left };
+    y1 = { padding, : .top };
+    x2 = { padding, : .left };
+    y2 = { padding, : .top + plotHeight };
+    className = "axis-line"
+        /  >
+        { /* X-axis */}
+        < line;
+    x1 = { padding, : .left };
+    y1 = { padding, : .top + plotHeight };
+    x2 = { padding, : .left + plotWidth };
+    y2 = { padding, : .top + plotHeight };
+    className = "axis-line"
+        /  >
+        { /* Y-axis labels */};
     {
-        showAxes && ()
-            < g;
-        className = "chart-axes" >
-            { /* Y-axis */}
-            < line;
-        x1 = { padding, : .left };
-        y1 = { padding, : .top };
-        x2 = { padding, : .left };
-        y2 = { padding, : .top + plotHeight };
-        className = "axis-line"
-            /  >
-            { /* X-axis */}
-            < line;
-        x1 = { padding, : .left };
-        y1 = { padding, : .top + plotHeight };
-        x2 = { padding, : .left + plotWidth };
-        y2 = { padding, : .top + plotHeight };
-        className = "axis-line"
-            /  >
-            { /* Y-axis labels */};
-        {
-            Array.from({ length: 6 }, (_, i) => {
-                const value = chartData.minValue + (chartData.range / 5) * (5 - i);
-                const y = padding.top + (plotHeight / 5) * i;
-                return;
-                _jsx("text", { x: padding.left - 10, y: y + 4, className: "axis-label", textAnchor: "end", children: valueFormatter(value) }, `y-label-${i}`);
-            });
-        }
-    }
-    { /* X-axis labels */ }
-    {
-        series[0]?.data.map((point, i) => {
-            const x = padding.left + (plotWidth / (series[0].data.length - 1)) * i;
+        Array.from({ length: 6 }, (_, i) => {
+            const value = chartData.minValue + (chartData.range / 5) * (5 - i);
+            const y = padding.top + (plotHeight / 5) * i;
             return;
-            _jsx("text", { x: x, y: padding.top + plotHeight + 20, className: "axis-label", textAnchor: "middle", children: point.label }, `x-label-${i}`);
+            _jsx("text", { x: padding.left - 10, y: y + 4, className: "axis-label", textAnchor: "end", children: valueFormatter(value) }, `y-label-${i}`);
         });
     }
+}
+{ /* X-axis labels */ }
+{
+    series[0]?.data.map((point, i) => {
+        const x = padding.left + (plotWidth / (series[0].data.length - 1)) * i;
+        return;
+        _jsx("text", { x: x, y: padding.top + plotHeight + 20, className: "axis-label", textAnchor: "middle", children: point.label }, `x-label-${i}`);
+    });
 }
 g >
 ;
@@ -269,7 +257,7 @@ const renderPieChart = () => {
                 const pathData = [
                     `M ${centerX} ${centerY}`
                 ];
-            }), "`L $", x1, " $", y1, "`} } `A $", radius, " $", radius, " 0 $", largeArcFlag, " 1 $", x2, " $", y2, "`} } 'Z' ].join(' '); const color = point.color || getSeriesColor(index, series[0]); const result = (;);", _jsx("path", { d: pathData, fill: color, className: "pie-slice", onMouseEnter: (e) => handleDataPointInteraction(point, series[0], e, 'hover'), onClick: (e) => handleDataPointInteraction(point, series[0], e, 'click') }, `slice-${index}`), "); currentAngle += angle; return result; })}"] });
+            }, `L ${x1} ${y1}`), "`A $", radius, " $", radius, " 0 $", largeArcFlag, " 1 $", x2, " $", y2, "`} 'Z' ].join(' '); const color = point.color || getSeriesColor(index, series[0]); const result = (;);", _jsx("path", { d: pathData, fill: color, className: "pie-slice", onMouseEnter: (e) => handleDataPointInteraction(point, series[0], e, 'hover'), onClick: (e) => handleDataPointInteraction(point, series[0], e, 'click') }, `slice-${index}`), "); currentAngle += angle; return result; })}"] });
 };
 ;
 ;
@@ -283,59 +271,58 @@ const renderChart = () => {
         case 'line':
         case 'area':
         default:
-            return renderLineChart();
     }
-    ;
-    if (loading) {
-        return;
-        _jsxs("div", { className: `chart chart-loading ${className}`, style: { height, width }, children: ["}", _jsxs("div", { className: "chart-loading-content", children: [_jsx("div", { className: "loading-shimmer" }), _jsx("div", { className: "loading-text", children: "Loading chart..." })] })] });
-    }
+    return renderLineChart();
 };
-;
-if (error) {
+if (loading) {
     return;
-    _jsxs("div", { className: `chart chart-error ${className}`, style: { height, width }, children: ["}", _jsxs("div", { className: "chart-error-content", children: [_jsx("div", { className: "error-icon", children: "\u26A0\uFE0F" }), _jsx("div", { className: "error-text", children: error })] })] });
+    _jsxs("div", { className: `chart chart-loading ${className}`, style: { height, width }, children: ["}", _jsxs("div", { className: "chart-loading-content", children: [_jsx("div", { className: "loading-shimmer" }), _jsx("div", { className: "loading-text", children: "Loading chart..." })] })] });
     ;
-    if (!series.length || !chartData) {
+    if (error) {
         return;
-        _jsxs("div", { className: `chart chart-empty ${className}`, style: { height, width }, children: ["}", _jsxs("div", { className: "chart-empty-content", children: [_jsx("div", { className: "empty-icon", children: "\uD83D\uDCCA" }), _jsx("div", { className: "empty-text", children: "No data to display" })] })] });
+        _jsxs("div", { className: `chart chart-error ${className}`, style: { height, width }, children: ["}", _jsxs("div", { className: "chart-error-content", children: [_jsx("div", { className: "error-icon", children: "\u26A0\uFE0F" }), _jsx("div", { className: "error-text", children: error })] })] });
         ;
-        return;
-        _jsxs("div", { ref: chartRef, className: `chart chart-${type} chart-${variant} ${className}`, style: { height, width, aspectRatio }, onMouseLeave: handleMouseLeave, children: [title && _jsx("div", { className: "chart-title", children: title }), _jsxs("div", { className: "chart-container", children: [renderChart(), hoveredPoint && ()
-                            < div, "className=\"chart-tooltip\" style=", {
-                            left: hoveredPoint.x,
-                            top: hoveredPoint.y - 10,
-                        }, ">", _jsx("div", { className: "tooltip-series", children: hoveredPoint.series.name }), _jsx("div", { className: "tooltip-label", children: hoveredPoint.point.label }), _jsx("div", { className: "tooltip-value", children: valueFormatter(hoveredPoint.point.value) })] }), ")}"] });
-        { /* Legend */ }
-        {
-            showLegend && series.length > 1 && ()
-                < div;
-            className = "chart-legend" >
-                { series, : .map((seriesData, index) => ()
-                        < div, key = {} `legend-${index}`) };
-            className = "legend-item" > ;
+        if (!series.length || !chartData) {
+            return;
+            _jsxs("div", { className: `chart chart-empty ${className}`, style: { height, width }, children: ["}", _jsxs("div", { className: "chart-empty-content", children: [_jsx("div", { className: "empty-icon", children: "\uD83D\uDCCA" }), _jsx("div", { className: "empty-text", children: "No data to display" })] })] });
+            ;
+            return;
+            _jsxs("div", { ref: chartRef, className: `chart chart-${type} chart-${variant} ${className}`, style: { height, width, aspectRatio }, onMouseLeave: handleMouseLeave, children: [title && _jsx("div", { className: "chart-title", children: title }), _jsxs("div", { className: "chart-container", children: [renderChart(), hoveredPoint && ()
+                                < div, "className=\"chart-tooltip\" style=", {
+                                left: hoveredPoint.x,
+                                top: hoveredPoint.y - 10
+                            }, ">", _jsx("div", { className: "tooltip-series", children: hoveredPoint.series.name }), _jsx("div", { className: "tooltip-label", children: hoveredPoint.point.label }), _jsx("div", { className: "tooltip-value", children: valueFormatter(hoveredPoint.point.value) })] }), ")}"] });
+            { /* Legend */ }
+            {
+                showLegend && series.length > 1 && ()
+                    < div;
+                className = "chart-legend" >
+                    { series, : .map((seriesData, index) => ()
+                            < div, key = {} `legend-${index}`) };
+                className = "legend-item" > ;
+            }
+            _jsx("div", { className: "legend-color", style: { backgroundColor: getSeriesColor(index, seriesData) } })
+                ,
+                    _jsx("span", { className: "legend-label", children: seriesData.name });
+            div >
+            ;
         }
-        _jsx("div", { className: "legend-color", style: { backgroundColor: getSeriesColor(index, seriesData) } })
-            ,
-                _jsx("span", { className: "legend-label", children: seriesData.name });
         div >
         ;
+    }
+    { /* Axis labels */ }
+    {
+        (xAxisLabel || yAxisLabel) && ()
+            < div;
+        className = "chart-axis-labels" >
+            { xAxisLabel } && _jsx("div", { className: "x-axis-label", children: xAxisLabel });
+    }
+    {
+        yAxisLabel && _jsx("div", { className: "y-axis-label", children: yAxisLabel });
     }
     div >
     ;
 }
-{ /* Axis labels */ }
-{
-    (xAxisLabel || yAxisLabel) && ()
-        < div;
-    className = "chart-axis-labels" >
-        { xAxisLabel } && _jsx("div", { className: "x-axis-label", children: xAxisLabel });
-}
-{
-    yAxisLabel && _jsx("div", { className: "y-axis-label", children: yAxisLabel });
-}
-div >
-;
 div >
 ;
 ;

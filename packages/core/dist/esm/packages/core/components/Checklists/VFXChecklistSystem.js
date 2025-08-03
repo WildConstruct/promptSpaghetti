@@ -11,45 +11,42 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
-import { CheckSquare, Plus, Edit3, Trash2, RotateCw, Timer, Calendar, Users, FileText, AlertTriangle, CheckCircle, Clock, Eye, Filter, Search, BarChart3, Zap, Camera, Film, Palette } from 'lucide-react';
+import { CheckSquare, Plus, Edit3, Trash2, RotateCw, Timer, Calendar, Users, FileText, AlertTriangle, CheckCircle, Clock, Eye, Filter, Search, BarChart3, Zap, Camera, Film } from Palette;
+from;
+'lucide-react';
+url: string;
+thumbnailUrl ?  : string;
+size: number;
+uploadedBy: VFXTeamMember;
+uploadedAt: string;
+status: 'pending' | 'passed' | 'failed' | 'waived';
+criteria: string;
+result ?  : string;
+checkedBy ?  : VFXTeamMember;
+checkedAt ?  : string;
+required: boolean;
+mentions: string;
 reactions: {
     [emoji, string];
     VFXTeamMember;
 }
 ;
+tags: string;
+metadata: VFXChecklistMetadata;
+onCommentCreate: (itemId, comment) => void ;
+readonly ?  : boolean;
+showStatistics ?  : boolean;
+compactView ?  : boolean;
+className ?  : string;
 // Status configurations with VFX-specific colors and labels
-const STATUS_CONFIG = {};
-pending: {
-    color: '#6b7280', label;
-    'Pending', icon;
-    Clock;
-}
-in_progress: {
-    color: '#f59e0b', label;
-    'In Progress', icon;
-    Timer;
-}
-review: {
-    color: '#3b82f6', label;
-    'In Review', icon;
-    Eye;
-}
-approved: {
-    color: '#10b981', label;
-    'Approved', icon;
-    CheckCircle;
-}
-rejected: {
-    color: '#ef4444', label;
-    'Rejected', icon;
-    AlertTriangle;
-}
-blocked: {
-    color: '#8b5cf6', label;
-    'Blocked', icon;
-    AlertTriangle;
-}
-;
+const STATUS_CONFIG = {
+    pending: { color: '#6b7280', label: 'Pending', icon: Clock },
+    in_progress: { color: '#f59e0b', label: 'In Progress', icon: Timer },
+    review: { color: '#3b82f6', label: 'In Review', icon: Eye },
+    approved: { color: '#10b981', label: 'Approved', icon: CheckCircle },
+    rejected: { color: '#ef4444', label: 'Rejected', icon: AlertTriangle },
+    blocked: { color: '#8b5cf6', label: 'Blocked', icon: AlertTriangle }
+};
 const PRIORITY_CONFIG = {
     low: { color: '#10b981', label: 'Low' },
     medium: { color: '#f59e0b', label: 'Medium' },
@@ -90,11 +87,9 @@ export const VFXChecklistSystem = ({
     onCommentCreate,
     readonly = false,
     showStatistics = true,
-    compactView = false,
-    className = ''
-});
-{
-    // UI state
+    compactView = false });
+className = '';
+{ // UI state
     const [_____selectedTab, _____setSelectedTab] = useState('overview');
     const [selectedItem, setSelectedItem] = useState(null);
     const [showFilters, setShowFilters] = useState(false);
@@ -109,22 +104,14 @@ export const VFXChecklistSystem = ({
     // Creation state
     const [isCreating, setIsCreating] = useState(false);
     const [newItemTemplate, setNewItemTemplate] = useState({});
-    title: '',
-        description;
-    '',
-        priority;
-    'medium',
-        category;
-    'asset_creation',
-        vfxPhase;
-    'asset_build',
-        subtasks;
-    [],
-        tags;
-    [],
-        dependencies;
-    [],
-    ;
+    title: '';
+    description: '';
+    priority: 'medium';
+    category: 'asset_creation';
+    vfxPhase: 'asset_build';
+    subtasks: [];
+    tags: [];
+    dependencies: [];
 }
 ;
 // Filtered and sorted items
@@ -170,10 +157,10 @@ filtered.sort((a, b) => {
             comparison = statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status);
             break;
         case 'progress':
-            comparison = a.completion - b.completion;
-            break;
-            return sortOrder === 'asc' ? comparison : -comparison;
     }
+    comparison = a.completion - b.completion;
+    break;
+    return sortOrder === 'asc' ? comparison : -comparison;
 });
 return filtered;
 [checklist.items, searchTerm, statusFilter, priorityFilter, categoryFilter, assigneeFilter, showCompleted, sortBy, sortOrder];
@@ -204,57 +191,58 @@ return {
     totalEstimated,
     totalActual,
     avgProgress,
-    efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0,
+    efficiency: totalEstimated > 0 ? ((totalEstimated - totalActual) / totalEstimated) * 100 : 0
 };
+;
 [checklist.items];
 ;
 // Handle item status change
 const handleStatusChange = useCallback((itemId, newStatus) => {
     const updates = {
         status: newStatus,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
     };
-    // Auto-complete when approved
-    if (newStatus === 'approved') {
-        updates.completion = 100;
-        onItemUpdate(itemId, updates);
-    }
-    [onItemUpdate];
 });
+// Auto-complete when approved
+if (newStatus === 'approved') {
+    updates.completion = 100;
+    onItemUpdate(itemId, updates);
+}
+[onItemUpdate];
+;
 // Handle priority change
 const handlePriorityChange = useCallback((itemId, newPriority) => {
     onItemUpdate(itemId, {});
-    priority: newPriority,
-        updatedAt;
-    new Date().toISOString(),
-    ;
+    priority: newPriority;
+    updatedAt: new Date().toISOString();
 });
+;
 [onItemUpdate];
 ;
 // Handle assignee change
 const handleAssigneeChange = useCallback((itemId, assigneeId) => {
     const assignee = checklist.team.find(member => member.id === assigneeId);
     onItemUpdate(itemId, {});
-    assignee,
-        updatedAt;
-    new Date().toISOString(),
-    ;
+    assignee;
+    updatedAt: new Date().toISOString();
 });
+;
 [checklist.team, onItemUpdate];
 ;
 // Handle progress change
 const handleProgressChange = useCallback((itemId, completion) => {
     const updates = {
         completion,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
     };
-    // Auto-approve when 100% complete
-    if (completion === 100 && currentUser.permissions.canApprove) {
-        updates.status = 'approved';
-        onItemUpdate(itemId, updates);
-    }
-    [currentUser.permissions.canApprove, onItemUpdate];
 });
+// Auto-approve when 100% complete
+if (completion === 100 && currentUser.permissions.canApprove) {
+    updates.status = 'approved';
+    onItemUpdate(itemId, updates);
+}
+[currentUser.permissions.canApprove, onItemUpdate];
+;
 // Create new item
 const handleCreateItem = useCallback(() => {
     if (!newItemTemplate.title?.trim())
@@ -271,28 +259,23 @@ const handleCreateItem = useCallback(() => {
         qualityGates: [],
         comments: [],
         dependencies: newItemTemplate.dependencies || [],
-        tags: newItemTemplate.tags || [],
+        tags: newItemTemplate.tags || []
     };
+    as;
+    Omit;
     onItemCreate(newItem);
     setIsCreating(false);
     setNewItemTemplate({});
-    title: '',
-        description;
-    '',
-        priority;
-    'medium',
-        category;
-    'asset_creation',
-        vfxPhase;
-    'asset_build',
-        subtasks;
-    [],
-        tags;
-    [],
-        dependencies;
-    [],
-    ;
+    title: '';
+    description: '';
+    priority: 'medium';
+    category: 'asset_creation';
+    vfxPhase: 'asset_build';
+    subtasks: [];
+    tags: [];
+    dependencies: [];
 });
+;
 [newItemTemplate, currentUser, onItemCreate];
 ;
 return;
@@ -384,19 +367,18 @@ div >
             type;
         'comment',
             mentions;
-        [],
-            reactions;
-        { }
-    });
-    setNewComment('');
+        [];
+    }, reactions, {});
 }
+;
+setNewComment('');
 [newComment, item.id, currentUser, onCommentCreate];
 ;
 return;
 _jsxs(Card, { className: `checklist-item ${isSelected ? 'ring-2 ring-blue-500' : ''} ${isOverdue ? 'border-red-300' : ''}`, children: ["}", _jsxs(CardContent, { className: "p-4", children: [_jsxs("div", { className: "flex items-start gap-4", children: [_jsx("div", { className: "flex-shrink-0 mt-1", children: _jsx("button", { onClick: () => onStatusChange(item.id, item.status === 'approved' ? 'pending' : 'approved'), disabled: readonly, className: `w-5 h-5 border-2 rounded flex items-center justify-center ${item.status === 'approved'
                                     ? 'bg-green-500 border-green-500 text-white'
-                                    : 'border-gray-300 hover:border-gray-400',
-                                }`, children: item.status === 'approved' && _jsx(CheckSquare, { className: "w-3 h-3" }) }) }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex-1", children: [_jsxs("h3", { className: `font-medium ${item.status === 'approved' ? 'line-through text-gray-500' : 'text-gray-900'}`, children: ["}", item.title] }), item.description && ()
+                                    : 'border-gray-300 hover:border-gray-400'}
+`, children: item.status === 'approved' && _jsx(CheckSquare, { className: "w-3 h-3" }) }) }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex-1", children: [_jsxs("h3", { className: `font-medium ${item.status === 'approved' ? 'line-through text-gray-500' : 'text-gray-900'}`, children: ["}", item.title] }), item.description && ()
                                                     < p, " className=\"text-sm text-gray-600 mt-1\">", item.description] }), ")}"] }), _jsxs("div", { className: "flex items-center gap-2 ml-4", children: [_jsxs(Badge, { variant: "secondary", style: { backgroundColor: `${statusConfig.color}20`, color: statusConfig.color }, className: "flex items-center gap-1", children: [_jsx(StatusIcon, { className: "w-3 h-3" }), statusConfig.label] }), _jsx(Badge, { variant: "secondary", style: { backgroundColor: `${priorityConfig.color}20`, color: priorityConfig.color }, children: priorityConfig.label }), isOverdue && ()
                                             < Badge, " variant=\"destructive\" className=\"flex items-center gap-1\">", _jsx(AlertTriangle, { className: "w-3 h-3" }), "Overdue"] }), ")}"] })] }), !compact && ()
                     < div, " className=\"mt-3\">", _jsxs("div", { className: "flex items-center justify-between text-xs text-gray-600 mb-1", children: [_jsx("span", { children: "Progress" }), _jsxs("span", { children: [item.completion, "%"] })] }), _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all", style: { width: `${item.completion}%` } }) })] }), ")}", !compact && ()
@@ -453,7 +435,7 @@ div >
                     < div, key = { subtask, : .id }, className = "flex items-center gap-2 text-sm" >
                     _jsx("input", { type: "checkbox", checked: subtask.completed, onChange: () => {
                             const updatedSubtasks = item.subtasks.map(st => );
-                        } })), "; st.id === subtask.id ? ", ...(st, completed), ": !st.completed } : st ); onItemUpdate(item.id, ", subtasks, ": updatedSubtasks }); }} disabled=", readonly, "className=\"w-3 h-3\" />", _jsx("span", { className: subtask.completed ? 'line-through text-gray-500' : 'text-gray-700', children: subtask.title })] });
+                        } })), "; st.id === subtask.id ? ", ...(st, completed), ": !st.completed } : st ); onItemUpdate(item.id, ", subtasks, ": updatedSubtasks }); disabled=", readonly, "className=\"w-3 h-3\" />", _jsx("span", { className: subtask.completed ? 'line-through text-gray-500' : 'text-gray-700', children: subtask.title })] });
 }
 {
     item.subtasks.length > 3 && ()

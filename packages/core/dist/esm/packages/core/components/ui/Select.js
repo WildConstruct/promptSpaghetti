@@ -28,9 +28,8 @@ div > ;
 export const SelectItem = ({
     children,
     className,
-    value,
-    ...props
-});
+    value });
+props;
 ()
     < div;
 className = {} `select-item ${className || ''}`;

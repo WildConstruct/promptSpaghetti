@@ -1,8 +1,7 @@
 import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 export const ComparisonStats = ({
-    comparison,
-    className = ''
-});
+    comparison });
+className = '';
 {
     const { changes_summary, similarity_score, comparison_duration_ms } = comparison;
     // Calculate total changes

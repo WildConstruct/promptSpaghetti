@@ -1,18 +1,25 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
-import { professionalColors, professionalShadows, professionalSpacing, professionalBorderRadius } from '../styles/professional-design-system';
+import { professionalColors, professionalShadows, professionalSpacing } from professionalBorderRadius;
+from;
+'../styles/professional-design-system';
 /**
 * Professional Node Renderer - Cinema 4D/Substance Designer inspired
 *
-* Features:,
+* Features:;
 * - Professional gradients and shadows
 * - Cinema 4D signature orange accents
 * - Clean typography with proper hierarchy
 * - Subtle animations and hover states
 * - Industry-standard color coding
 */
-export const ProfessionalNodeRenderer = memo(({}), id, data, selected = false, onSelect, getNodeMeta, getCategoryColor);
+export const ProfessionalNodeRenderer = memo(({}), id);
+data;
+selected = false;
+onSelect;
+getNodeMeta;
+getCategoryColor;
 {
     try {
         const hasVariations = data?.variations && data.variations.length > 0;
@@ -28,11 +35,11 @@ export const ProfessionalNodeRenderer = memo(({}), id, data, selected = false, o
             cursor: 'pointer',
             // Professional gradient background inspired by Cinema 4D panels
             background: `linear-gradient(),
-        135deg,
+        135deg }
         ${professionalColors.background.tertiary} 0%}
-}
+
         ${professionalColors.background.secondary} 50%}
-}
+
         ${professionalColors.background.tertiary} 100%}
       )`,
             border: selected, }
@@ -93,8 +100,7 @@ selected,
         borderRadius;
     'inherit',
         pointerEvents;
-    'none',
-    ;
+    'none';
 }
 ;
 const headerStyle = {
@@ -134,23 +140,21 @@ const titleStyle = {
     fontSize: 'var(--font-size-base)',
     marginBottom: properties.length > 0 ? professionalSpacing[2] : 0,
     color: professionalColors.text.primary,
-    lineHeight: 1.3,
-    // Subtle glow for selected state
-    ...(selected && {
-        textShadow: `0 0 8px ${professionalColors.accent.orange}40` })
-};
+    lineHeight: 1.3 };
+(selected && {
+    textShadow: `0 0 8px ${professionalColors.accent.orange}40` });
 ;
 const propertiesStyle = {
     fontSize: 'var(--font-size-xs)',
     color: professionalColors.text.secondary,
     lineHeight: 1.4,
-    fontFamily: 'var(--font-mono)' // Use monospace for technical properties,
+    fontFamily: 'var(--font-mono)' // Use monospace for technical properties }
 };
 const handleBaseStyle = {
     width: 14, // Slightly larger for better interaction
     height: 14,
-    borderRadius: '50%',
-    border: `2px solid ${professionalColors.background.secondary}` };
+    borderRadius: '50%' };
+border: `2px solid ${professionalColors.background.secondary}`;
 cursor: 'crosshair',
     zIndex;
 10,
@@ -159,87 +163,66 @@ cursor: 'crosshair',
     boxShadow;
 professionalShadows.elevation.sm;
 ;
-const inputHandleStyle = {
-    ...handleBaseStyle,
+const inputHandleStyle = { ...handleBaseStyle,
     background: professionalColors.ui.border,
     '&:hover': {
         background: professionalColors.ui.borderHover,
         transform: 'scale(1.1)',
-        boxShadow: professionalShadows.elevation.md,
-    },
-    const: outputHandleStyle, React, : .CSSProperties = {
-        ...handleBaseStyle,
+        boxShadow: professionalShadows.elevation.md }
+};
+const outputHandleStyle = { ...handleBaseStyle,
+    background: categoryColor,
+    '&:hover': {
         background: categoryColor,
-        '&:hover': {
-            background: categoryColor,
-            transform: 'scale(1.1)',
-            boxShadow: `${professionalShadows.elevation.md}, 0 0 12px ${categoryColor}40`
-        }
+        transform: 'scale(1.1)'
     },
-    // Variation badge style
-    const: variationBadgeStyle, React, : .CSSProperties = {
-        marginLeft: 'auto',
-        width: 20,
-        height: 20,
-        backgroundColor: 'rgba(255,255,255,0.25)',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: 10,
-        fontWeight: 'bold',
-        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
-        transition: 'all 0.2s ease',
-    },
-    return: 
-}
-    < div;
-role = "button";
-data - testid;
-{
-    `node-${id}`;
-}
-tabIndex = { 0:  };
-onClick = {}(e);
-{
-    e.stopPropagation();
-    onSelect(id);
-}
-onKeyDown = {}(e);
-{
-    if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
+    boxShadow: `${professionalShadows.elevation.md}, 0 0 12px ${categoryColor}40` };
+;
+// Variation badge style
+const variationBadgeStyle = {
+    marginLeft: 'auto',
+    width: 20,
+    height: 20,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    borderRadius: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 10,
+    fontWeight: 'bold',
+    boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)',
+    transition: 'all 0.2s ease' };
+;
+return;
+_jsx("div", { role: "button", "data-testid": `node-${id}`, tabIndex: 0, onClick: (e) => {
+        e.stopPropagation();
         onSelect(id);
-    }
-}
-style = { nodeStyle };
-onMouseEnter = {}(e);
-{
-    if (!selected) {
-        e.currentTarget.style.WebkitTransform = 'translateY(-3px) translateZ(0)';
-        e.currentTarget.style.transform = 'translateY(-3px) translateZ(0)';
-        e.currentTarget.style.boxShadow = professionalShadows.node.hover;
-        // Subtle glow effect on hover
-        e.currentTarget.style.filter = 'brightness(1.05)';
-    }
-}
-onMouseLeave = {}(e);
-{
-    if (!selected) {
-        e.currentTarget.style.WebkitTransform = 'translateY(0) translateZ(0)';
-        e.currentTarget.style.transform = 'translateY(0) translateZ(0)';
-        e.currentTarget.style.boxShadow = professionalShadows.node.default;
-        e.currentTarget.style.filter = 'brightness(1)';
-    }
-}
-aria - label;
-{
-    (() => {
+    }, onKeyDown: (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(id);
+        }
+    }, style: nodeStyle, onMouseEnter: (e) => {
+        if (!selected) {
+            e.currentTarget.style.WebkitTransform = 'translateY(-3px) translateZ(0)';
+            e.currentTarget.style.transform = 'translateY(-3px) translateZ(0)';
+            e.currentTarget.style.boxShadow = professionalShadows.node.hover;
+            // Subtle glow effect on hover
+            e.currentTarget.style.filter = 'brightness(1.05)';
+        }
+    }, onMouseLeave: (e) => {
+        if (!selected) {
+            e.currentTarget.style.WebkitTransform = 'translateY(0) translateZ(0)';
+            e.currentTarget.style.transform = 'translateY(0) translateZ(0)';
+            e.currentTarget.style.boxShadow = professionalShadows.node.default;
+            e.currentTarget.style.filter = 'brightness(1)';
+        }
+    }, "aria-label": (() => {
         const label = data?.label ?? nodeMeta.label;
         const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');
-    });
-    return summary ? `${label}. ${summary}` : label;
-}
+    }), return: true, summary: true });
+`${label}. ${summary}`;
+label;
 ();
     >
         { /* Professional Header Section */}
@@ -275,11 +258,12 @@ div >
         { properties, : .map(([k, v], idx) => ()
                 < div, key = { k }, style = {}, {
                 marginBottom: idx < properties.length - 1 ? '3px' : 0,
-                opacity: 0.8,
-            }) } >
+                opacity: 0.8
+            })
+        } >
         _jsxs("span", { style: {
                 color: professionalColors.text.tertiary,
-                fontWeight: 500,
+                fontWeight: 500
             }, children: [k, ":"] });
     {
         ' ';
@@ -311,50 +295,42 @@ isConnectable = { true:  }
 div >
 ;
 ;
-try { }
+try {
+}
 catch (error) {
     console.error('ProfessionalNodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
     return;
     _jsx("div", { style: {
             cursor: 'pointer',
-            background: `linear-gradient(),
-            135deg,
+            background: `linear-gradient()
+            135deg }
             ${professionalColors.background.tertiary} 0%}
-}
+
             ${professionalColors.background.secondary} 100%}
           )`,
             border: `1px solid ${professionalColors.accent.red}`
         }, "borderRadius:professionalBorderRadius": true, md: true, "minWidth:": true });
-    180,
-        minHeight;
-    90,
-        padding;
-    professionalSpacing[3],
-        color;
-    professionalColors.text.primary,
-        display;
-    'flex',
-        alignItems;
-    'center',
-        justifyContent;
-    'center',
-        fontFamily;
-    'var(--font-primary)',
-        boxShadow;
-    professionalShadows.elevation.md,
-        textAlign;
-    'center';
+    180;
+    minHeight: 90;
+    padding: professionalSpacing[3];
+    color: professionalColors.text.primary;
+    display: 'flex';
+    alignItems: 'center';
+    justifyContent: 'center';
+    fontFamily: 'var(--font-primary)';
+    boxShadow: professionalShadows.elevation.md;
+    textAlign: 'center';
+        >
+            _jsxs("div", { children: [_jsx("div", { style: {
+                            fontSize: 'var(--font-size-lg)',
+                            marginBottom: professionalSpacing[2],
+                            color: professionalColors.accent.red
+                        }, children: "\u26A0\uFE0F" }), _jsxs("div", { style: { fontSize: 'var(--font-size-sm)' }, children: ["Error: ", data?.nodeType || data?.type || 'Unknown'] })] });
+    div >
+    ;
+    ;
 }
-    >
-        _jsxs("div", { children: [_jsx("div", { style: {
-                        fontSize: 'var(--font-size-lg)',
-                        marginBottom: professionalSpacing[2],
-                        color: professionalColors.accent.red,
-                    }, children: "\u26A0\uFE0F" }), _jsxs("div", { style: { fontSize: 'var(--font-size-sm)' }, children: ["Error: ", data?.nodeType || data?.type || 'Unknown'] })] });
-div >
-;
-;
 ;
 ProfessionalNodeRenderer.displayName = 'ProfessionalNodeRenderer';
 export default ProfessionalNodeRenderer;

@@ -1,5 +1,6 @@
 ;
-;
+confidence: number;
+label ?  : string;
 ;
 connectionPattern: ConnectionPattern;
 nodeConfiguration: {
@@ -37,6 +38,8 @@ statistics: {
     complexityScore: number;
 }
 ;
+suggestions: string;
+recommendation: string;
 ;
 efficiency: number; // 0-100, higher is better
 overlaps: number;
@@ -57,7 +60,6 @@ rendering: {
     iconClass: string;
     colorScheme: string;
 }
-;
 ;
 ;
 userPreferences: {
@@ -100,13 +102,19 @@ userStats: {
 }
 ;
 ;
-export const ERROR_CODES = {
-    INVALID_INPUT: 'INVALID_INPUT',
+/**
+ * Default values and constants
+ */
+/**
+ * Error codes for validation and generation
+ */
+export const ERROR_CODES = { INVALID_INPUT: 'INVALID_INPUT',
     GENERATION_FAILED: 'GENERATION_FAILED',
     LAYOUT_ERROR: 'LAYOUT_ERROR',
     CONNECTION_ERROR: 'CONNECTION_ERROR',
     VALIDATION_FAILED: 'VALIDATION_FAILED',
     PERFORMANCE_LIMIT: 'PERFORMANCE_LIMIT',
     SECURITY_VIOLATION: 'SECURITY_VIOLATION',
-    TIMEOUT: 'TIMEOUT',
-};
+    TIMEOUT: 'TIMEOUT' };
+as;
+const ;

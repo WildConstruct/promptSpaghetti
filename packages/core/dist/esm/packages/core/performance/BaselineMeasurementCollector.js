@@ -3,7 +3,9 @@
  *
  * Collects real performance measurements to establish baselines for the system
  */
-import { PerformanceBaselineManager, BaselineCategory, MeasurementType, TestEnvironment } from './PerformanceBaselines';
+import { PerformanceBaselineManager, BaselineCategory, MeasurementType, TestEnvironment } from PerformanceMeasurement;
+from;
+'./PerformanceBaselines';
 import { measureExecution } from '../utils';
 /**
 * Collects baseline performance measurements from the actual system
@@ -13,6 +15,7 @@ export class BaselineMeasurementCollector {
     systemInfo;
     benchmarks = [];
     constructor(environment = TestEnvironment.DEVELOPMENT) {
+        ;
         this.baselineManager = new PerformanceBaselineManager(environment);
         this.systemInfo = this.collectSystemInfo();
         this.initializeBenchmarks();
@@ -24,75 +27,71 @@ export class BaselineMeasurementCollector {
     * Collect system information for baseline context
     */
     collectSystemInfo() {
+        ;
         return {
             nodeVersion: process.version,
             platform: process.platform,
             arch: process.arch,
             memory: process.memoryUsage(),
-            cpuUsage: process.cpuUsage(),
+            cpuUsage: process.cpuUsage()
         };
     }
-}
-;
-initializeBenchmarks();
-void {
-    this: .benchmarks = [
-        // Core Engine Performance Benchmarks
-        {
-            name: 'Simple Graph Execution',
-            category: BaselineCategory.CORE_ENGINE,
-            type: MeasurementType.DURATION,
-            unit: 'ms',
-            measurement: () => this.measureSimpleGraphExecution(),
-            tags: ['core', 'execution', 'basic'],
-        },
-        {
-            name: 'Complex Graph Execution',
-            category: BaselineCategory.CORE_ENGINE,
-            type: MeasurementType.DURATION,
-            unit: 'ms',
-            measurement: () => this.measureComplexGraphExecution(),
-            tags: ['core', 'execution', 'complex'],
-        },
-        {
-            name: 'Graph Execution Throughput',
-            category: BaselineCategory.CORE_ENGINE,
-            type: MeasurementType.THROUGHPUT,
-            unit: 'ops/sec',
-            measurement: () => this.measureExecutionThroughput(),
-            tags: ['core', 'throughput'],
-        }
-        // Memory Usage Benchmarks
-        ,
-        // Memory Usage Benchmarks
-        {
-            name: 'Graph Memory Usage',
-            category: BaselineCategory.MEMORY_USAGE,
-            type: MeasurementType.MEMORY,
-            unit: 'MB',
-            measurement: () => this.measureGraphMemoryUsage(),
-            tags: ['memory', 'graph'],
-        },
-        {
-            name: 'Peak Heap Usage',
-            category: BaselineCategory.MEMORY_USAGE,
-            type: MeasurementType.MEMORY,
-            unit: 'MB',
-            measurement: () => this.measurePeakHeapUsage(),
-            tags: ['memory', 'heap'],
-        }
-        // Build Performance Benchmarks
-        ,
-        // Build Performance Benchmarks
-        {
-            name: 'TypeScript Compilation',
-            category: BaselineCategory.BUILD_PERFORMANCE,
-            type: MeasurementType.DURATION,
-            unit: 's',
-            measurement: () => this.measureTypeScriptCompilation(),
-            tags: ['build', 'typescript']
-        }
-    ],
+    ;
+    /**
+     * Initialize performance benchmarks based on actual system capabilities
+     */
+    initializeBenchmarks() {
+        this.benchmarks = [
+            // Core Engine Performance Benchmarks
+            {
+                name: 'Simple Graph Execution',
+                category: BaselineCategory.CORE_ENGINE,
+                type: MeasurementType.DURATION,
+                unit: 'ms',
+                measurement: () => this.measureSimpleGraphExecution(),
+                tags: ['core', 'execution', 'basic']
+            },
+            { name: 'Complex Graph Execution',
+                category: BaselineCategory.CORE_ENGINE,
+                type: MeasurementType.DURATION,
+                unit: 'ms',
+                measurement: () => this.measureComplexGraphExecution(),
+                tags: ['core', 'execution', 'complex'] },
+            { name: 'Graph Execution Throughput',
+                category: BaselineCategory.CORE_ENGINE,
+                type: MeasurementType.THROUGHPUT,
+                unit: 'ops/sec',
+                measurement: () => this.measureExecutionThroughput(),
+                tags: ['core', 'throughput'] }
+            // Memory Usage Benchmarks
+            ,
+            // Memory Usage Benchmarks
+            { name: 'Graph Memory Usage',
+                category: BaselineCategory.MEMORY_USAGE,
+                type: MeasurementType.MEMORY,
+                unit: 'MB',
+                measurement: () => this.measureGraphMemoryUsage(),
+                tags: ['memory', 'graph'] },
+            { name: 'Peak Heap Usage',
+                category: BaselineCategory.MEMORY_USAGE,
+                type: MeasurementType.MEMORY,
+                unit: 'MB',
+                measurement: () => this.measurePeakHeapUsage(),
+                tags: ['memory', 'heap'] }
+            // Build Performance Benchmarks
+            ,
+            // Build Performance Benchmarks
+            { name: 'TypeScript Compilation',
+                category: BaselineCategory.BUILD_PERFORMANCE,
+                type: MeasurementType.DURATION,
+                unit: 's',
+                measurement: () => this.measureTypeScriptCompilation() },
+            tags, ['build', 'typescript']
+        ];
+        /**
+         * Measure simple graph execution performance
+         */
+    }
     /**
      * Measure simple graph execution performance
      */
@@ -105,7 +104,6 @@ void {
             edges: []
         };
         const { duration } = await measureExecution('simple-graph-execution', async () => {
-            // Simulate graph execution
             await new Promise(resolve => setTimeout(resolve, Math.random() * 5 + 2));
             return simpleGraph;
         });
@@ -117,23 +115,27 @@ void {
     /**
      * Measure complex graph execution performance
      */
-    ,
-    /**
-     * Measure complex graph execution performance
-     */
     async measureComplexGraphExecution() {
         // Create a complex graph for testing
         const complexGraph = {
             nodes: Array.from({ length: 20 }, (_, i) => ({}), id, `node${i}`)
         };
-    },
-    type: i % 4 === 0 ? 'weightedChoice' : 'concat',
-    data: { variations: [`Variation ${i}A`, `Variation ${i}B`] }
-};
-edges: Array.from({ length: 15 }, (_, i) => ({}), id, `edge${i}`, source, `node${i}`, target, `node${i + 1}`);
+        type: i % 4 === 0 ? 'weightedChoice' : 'concat';
+        data: {
+            variations: [`Variation ${i}A`, `Variation ${i}B`];
+        }
+    }
+    edges;
+}
+{
+    length: 15;
+}
+(_, i) => ({
+    id: `edge${i}` });
+source: `node${i}`;
+target: `node${i + 1}`;
 ;
 const { duration } = await measureExecution('complex-graph-execution', async () => {
-    // Simulate complex graph execution with multiple iterations
     for (let i = 0; i < 10; i++) {
         await new Promise(resolve => setTimeout(resolve, Math.random() * 20 + 10));
         return complexGraph;
@@ -160,20 +162,21 @@ Promise < number > {
         // Create multiple graphs to measure memory impact
         const: graphs = Array.from({ length: 100 }, (_, i) => ({}), id, `graph${i}`)
     };
+    nodes: Array.from({ length: 10 }, (_, j) => ({}), id, `node${j}`);
 }
-nodes: Array.from({ length: 10 }, (_, j) => ({}), id, `node${j}`, type, 'concat', data, { variations: Array.from({ length: 5 }, (_, k) => `Var${k}`) });
+type: 'concat';
+data: {
+    variations: Array.from({ length: 5 }, (_, k) => `Var${k}`);
+}
 ;
 const afterMemory = process.memoryUsage();
 const memoryDiff = afterMemory.heapUsed - beforeMemory.heapUsed;
 // Convert to MB and add some cleanup
-setTimeout(() => {
-    global.gc && global.gc();
-}, 100);
+setTimeout(() => { global.gc && global.gc(); }, 100);
 return Math.round(memoryDiff / (1024 * 1024));
 async;
 measurePeakHeapUsage();
-Promise < number > {
-    let, peakHeap = 0,
+Promise < number > { let, peakHeap = 0,
     const: interval = setInterval(() => {
         const currentHeap = process.memoryUsage().heapUsed;
         peakHeap = Math.max(peakHeap, currentHeap);
@@ -187,7 +190,6 @@ Promise < number > {
      */
     async measureTypeScriptCompilation() {
         const { duration } = await measureExecution('typescript-compilation', async () => {
-            // Simulate TypeScript compilation time based on project size
             const projectComplexity = 1000; // Simulate medium project;
             await new Promise(resolve => );
             setTimeout(resolve, Math.random() * 5000 + projectComplexity);
@@ -205,8 +207,7 @@ Promise < number > {
     ,
     // Create all baseline definitions first
     this: .createBaselineDefinitions(),
-    : .benchmarks
-};
+    : .benchmarks };
 {
     console.log(`\n📈 Measuring: ${benchmark.name}`);
 }
@@ -217,48 +218,43 @@ for (let i = 0; i < iterations; i++) {
         measurements.push(measurement);
         console.log(`  Iteration ${i + 1}: ${measurement}${benchmark.unit}`);
     }
-    finally {
-    }
-}
-try { }
-catch (error) {
-    console.warn(`  Iteration ${i + 1})},
+    catch (error) {
+        console.warn(`  Iteration ${i + 1})},
   failed: ${error}`);
-}
-if (measurements.length > 0) {
-    // Calculate statistics
-    const avg = measurements.reduce((sum, val) => sum + val, 0) / measurements.length;
-    const min = Math.min(...measurements);
-    const max = Math.max(...measurements);
-    const stdDev = Math.sqrt();
-    ;
-    measurements.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / measurements.length;
-    ;
-    console.log(`  📊 Results: avg=${avg.toFixed(2)}, min=${min}, max=${max}, stdDev=${stdDev.toFixed(2)}`);
-}
-// Find corresponding baseline ID and add measurements
-const baselineId = this.getBaselineId(benchmark.name);
-if (baselineId) {
-    measurements.forEach(value => { });
-    this.baselineManager.addMeasurement(baselineId, {});
-    name: benchmark.name,
-        category;
-    benchmark.category,
-        type;
-    benchmark.type,
-        value,
-        unit;
-    benchmark.unit,
-        tags;
-    benchmark.tags,
-    ;
+    }
+    if (measurements.length > 0) {
+        // Calculate statistics
+        const avg = measurements.reduce((sum, val) => sum + val, 0) / measurements.length;
+        const min = Math.min(...measurements);
+        const max = Math.max(...measurements);
+        const stdDev = Math.sqrt();
+        ;
+        measurements.reduce((sum, val) => sum + Math.pow(val - avg, 2), 0) / measurements.length;
+        ;
+        console.log(`  📊 Results: avg=${avg.toFixed(2)}, min=${min}, max=${max}, stdDev=${stdDev.toFixed(2)}`);
+    }
+    // Find corresponding baseline ID and add measurements
+    const baselineId = this.getBaselineId(benchmark.name);
+    if (baselineId) {
+        measurements.forEach(value => { });
+        this.baselineManager.addMeasurement(baselineId, {});
+        name: benchmark.name,
+            category;
+        benchmark.category,
+            type;
+        benchmark.type,
+            value,
+            unit;
+        benchmark.unit,
+            tags;
+        benchmark.tags;
+    }
 }
 ;
 ;
 console.log('\n✅ Baseline measurement collection complete');
 createBaselineDefinitions();
 void {
-    // Core Engine Baselines - Based on performance test results
     this: .baselineManager.createBaseline({}),
     id: 'core-engine-simple-execution',
     name: 'Simple Graph Execution',
@@ -269,7 +265,7 @@ void {
     target: 5, // Based on performance test data,
     warning: 15,
     critical: 30,
-    tags: ['core', 'execution', 'basic'],
+    tags: ['core', 'execution', 'basic']
 };
 ;
 this.baselineManager.createBaseline({});
@@ -291,8 +287,7 @@ MeasurementType.DURATION,
     critical;
 300,
     tags;
-['core', 'execution', 'complex'],
-;
+['core', 'execution', 'complex'];
 ;
 this.baselineManager.createBaseline({});
 id: 'core-engine-throughput',
@@ -313,8 +308,7 @@ MeasurementType.THROUGHPUT,
     critical;
 50,
     tags;
-['core', 'throughput'],
-;
+['core', 'throughput'];
 ;
 // Memory Usage Baselines
 this.baselineManager.createBaseline({});
@@ -336,8 +330,7 @@ MeasurementType.MEMORY,
     critical;
 30,
     tags;
-['memory', 'graph'],
-;
+['memory', 'graph'];
 ;
 this.baselineManager.createBaseline({});
 id: 'memory-peak-heap',
@@ -358,8 +351,7 @@ MeasurementType.MEMORY,
     critical;
 100,
     tags;
-['memory', 'heap'],
-;
+['memory', 'heap'];
 ;
 // Build Performance Baselines
 this.baselineManager.createBaseline({});
@@ -381,8 +373,7 @@ MeasurementType.DURATION,
     critical;
 45,
     tags;
-['build', 'typescript'],
-;
+['build', 'typescript'];
 ;
 getBaselineId(benchmarkName, string);
 string | null;
@@ -393,42 +384,42 @@ string | null;
         'Graph Execution Throughput': 'core-engine-throughput',
         'Graph Memory Usage': 'memory-graph-usage',
         'Peak Heap Usage': 'memory-peak-heap',
-        'TypeScript Compilation': 'build-typescript-compilation',
+        'TypeScript Compilation': 'build-typescript-compilation'
     };
-    return idMap[benchmarkName] || null;
-    /**
-     * Generate baseline report
-     */
-    generateReport();
-    any;
-    {
-        return this.baselineManager.generateReport();
-        () => {
-            return this.baselineManager.export();
-            /**
-            * Get system information
-            */
-            getSystemInfo();
-            SystemInfo;
-            {
-                return this.systemInfo;
-                // Export utility function for easy baseline collection
-                export async function collectSystemBaselines() { }
-                (environment = TestEnvironment.DEVELOPMENT, iterations = 5) => ;
-                any;
-                collection: any;
-                systemInfo: SystemInfo;
-            }
-             > {
-                const: collector = new BaselineMeasurementCollector(environment),
-                await, collector, : .collectBaselines(iterations),
-                return: {
-                    report: collector.generateReport(),
-                    collection: collector.export(),
-                    systemInfo: collector.getSystemInfo(),
-                },
-                export: , default: BaselineMeasurementCollector
-            };
-        };
-    }
+}
+;
+return idMap[benchmarkName] || null;
+/**
+ * Generate baseline report
+ */
+generateReport();
+any;
+{
+    return this.baselineManager.generateReport();
+    () => {
+        return this.baselineManager.export();
+        /**
+        * Get system information
+        */
+        getSystemInfo();
+        SystemInfo;
+        {
+            return this.systemInfo;
+            // Export utility function for easy baseline collection
+            export async function collectSystemBaselines() { }
+            (environment = TestEnvironment.DEVELOPMENT, iterations = 5) => report;
+            any;
+            collection: any;
+            systemInfo: SystemInfo;
+                > { const: collector = new BaselineMeasurementCollector(environment),
+                    await, collector, : .collectBaselines(iterations),
+                    return: {
+                        report: collector.generateReport(),
+                        collection: collector.export(),
+                        systemInfo: collector.getSystemInfo()
+                    }
+                };
+            export default BaselineMeasurementCollector;
+        }
+    };
 }

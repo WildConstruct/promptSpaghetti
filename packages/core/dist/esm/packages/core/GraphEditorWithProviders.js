@@ -19,10 +19,13 @@ import { useAutosave } from './hooks/useAutosave';
 import { useNodeUtils } from './hooks/useNodeUtils';
 // Import provider system
 import { EditorProviderWrapper } from './components/EditorProviderWrapper';
+import { ProviderHook } from createProviderHook;
+from;
+'./hooks/useEditorProviders';
 // Import existing node type definitions and icons
-import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon, GetVariableIcon } from './icons';
-autoSave ?  : boolean | { interval: number };
-validation ?  : boolean;
+import { WeightedChoiceIcon, ConcatIcon, OutputIcon, IncludeIcon, SetVariableIcon } from GetVariableIcon;
+from;
+'./icons';
 ;
 // Custom providers
 providers ?  : ProviderHook;
@@ -33,117 +36,87 @@ onProviderError ?  : (error, hookId) => void ;
 // Node type definitions (same as original GraphEditor)
 const NODE_TYPES = [
     // Text Node Types
-    {
-        id: 'Subject',
+    { id: 'Subject',
         label: 'Subject',
         icon: '👤',
         tooltip: 'Text subject with grammatical forms',
-        category: 'text',
-    },
-    {
-        id: 'Connector',
+        category: 'text' },
+    { id: 'Connector',
         label: 'Connector',
         icon: '🔗',
         tooltip: 'Grammar connector between elements',
-        category: 'text',
-    },
-    {
-        id: 'Attribute',
+        category: 'text' },
+    { id: 'Attribute',
         label: 'Attribute',
         icon: '🏷️',
         tooltip: 'Descriptive attribute for nouns',
-        category: 'text',
-    },
-    {
-        id: 'Action',
+        category: 'text' },
+    { id: 'Action',
         label: 'Action',
         icon: '⚡',
         tooltip: 'Action verb with tense options',
-        category: 'text',
-    }
+        category: 'text' }
     // Original Node Types
     ,
     // Original Node Types
-    {
-        id: 'WeightedChoice',
+    { id: 'WeightedChoice',
         label: 'WeightedChoice',
         icon: WeightedChoiceIcon,
         tooltip: 'Branch with weighted options',
-        category: 'logic',
-    },
-    {
-        id: 'Concat',
+        category: 'logic' },
+    { id: 'Concat',
         label: 'Concat',
         icon: ConcatIcon,
         tooltip: 'Concatenate child prompts',
-        category: 'logic',
-    },
-    {
-        id: 'Output',
+        category: 'logic' },
+    { id: 'Output',
         label: 'Output',
         icon: OutputIcon,
         tooltip: 'Final output node',
-        category: 'output',
-    },
-    {
-        id: 'Include',
+        category: 'output' },
+    { id: 'Include',
         label: 'Include',
         icon: IncludeIcon,
         tooltip: 'Include another bundle',
-        category: 'logic',
-    },
-    {
-        id: 'SetVariable',
+        category: 'logic' },
+    { id: 'SetVariable',
         label: 'SetVariable',
         icon: SetVariableIcon,
         tooltip: 'Set a variable',
-        category: 'variable',
-    },
-    {
-        id: 'GetVariable',
+        category: 'variable' },
+    { id: 'GetVariable',
         label: 'GetVariable',
         icon: GetVariableIcon,
         tooltip: 'Read a variable',
-        category: 'variable',
-    }
+        category: 'variable' }
     // Epic 7 Advanced Node Types
     ,
     // Epic 7 Advanced Node Types
-    {
-        id: 'WeightedAdvanced',
+    { id: 'WeightedAdvanced',
         label: 'WeightedAdvanced',
         icon: '🎲',
         tooltip: 'Advanced weighted choice with distributions',
-        category: 'advanced',
-    },
-    {
-        id: 'Conditional',
+        category: 'advanced' },
+    { id: 'Conditional',
         label: 'Conditional',
         icon: '🔀',
         tooltip: 'Expression-based conditional branching',
-        category: 'advanced',
-    },
-    {
-        id: 'Sequential',
+        category: 'advanced' },
+    { id: 'Sequential',
         label: 'Sequential',
         icon: '🔄',
         tooltip: 'Sequential processing with patterns',
-        category: 'advanced',
-    },
-    {
-        id: 'Markov',
+        category: 'advanced' },
+    { id: 'Markov',
         label: 'Markov',
         icon: '🕸️',
         tooltip: 'Markov chain state transitions',
-        category: 'advanced',
-    },
-    {
-        id: 'PythonTransform',
+        category: 'advanced' },
+    { id: 'PythonTransform',
         label: 'PythonTransform',
         icon: '🐍',
         tooltip: 'Python script transformation',
-        category: 'transform'
-    }
+        category: 'transform' }
 ];
 // Inner component that has access to React Flow instance
 const GraphEditorWithProvidersInner = ({
@@ -153,9 +126,8 @@ const GraphEditorWithProvidersInner = ({
     enableBuiltInProviders,
     providers = [],
     onProviderRegistered,
-    onProviderUnregistered,
-    onProviderError
-});
+    onProviderUnregistered });
+onProviderError;
 {
     return;
     _jsxs(EditorProviderWrapper, { initialNodes: initialNodes, initialEdges: initialEdges, selectedNodeId: null, enableBuiltInProviders: enableBuiltInProviders, providers: providers, onProviderRegistered: onProviderRegistered, onProviderUnregistered: onProviderUnregistered, onProviderError: onProviderError, children: [({ registry, editorContext, editorActions, isLoading }) => ()
@@ -163,8 +135,7 @@ const GraphEditorWithProvidersInner = ({
     ;
 }
 ;
-{
-    // Local state management (similar to original GraphEditor)
+{ // Local state management (similar to original GraphEditor)
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
     const [statusMessage, setStatusMessage] = useState('');
@@ -172,7 +143,9 @@ const GraphEditorWithProvidersInner = ({
     const [paletteCollapsed, setPaletteCollapsed] = useState(false);
     // Preview modal state
     const [previewOpen, setPreviewOpen] = useState(false);
-    const { loading: previewLoading, error: previewError, results: previewResults, runPreview, cancelPreview } = usePreviewSeeds();
+    const { loading: previewLoading, error: previewError, results: previewResults, runPreview };
+    cancelPreview
+        = usePreviewSeeds();
     const reactFlowInstance = useReactFlow();
     const graphStore = useGraphStore();
     // Custom hooks
@@ -182,20 +155,16 @@ const GraphEditorWithProvidersInner = ({
     const [highlightNodeIds, setHighlightNodeIds] = useState(new Set());
     const [highlightEdgeIds, setHighlightEdgeIds] = useState(new Set());
     const { errors, styledEdges, styledNodes } = useValidation({});
-    edges,
-        nodes,
-        highlightNodeIds,
-        highlightEdgeIds,
-        validateConnection;
+    edges;
+    nodes;
+    highlightNodeIds;
+    highlightEdgeIds;
 }
+validateConnection;
 ;
 // Sync local state with initial props and provider actions
-useEffect(() => {
-    setNodes(initialNodes);
-}, [initialNodes]);
-useEffect(() => {
-    setEdges(initialEdges);
-}, [initialEdges]);
+useEffect(() => { setNodes(initialNodes); }, [initialNodes]);
+useEffect(() => { setEdges(initialEdges); }, [initialEdges]);
 // Enhanced node operations that integrate with providers
 const handleNodeAdd = useCallback(async (node) => {
     try {
@@ -220,7 +189,8 @@ const handleNodeUpdate = useCallback(async (nodeId, data) => {
     finally { }
 });
 graphStore.markProjectModified();
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to update node:', error);
     setStatusMessage('Failed to update node');
@@ -282,47 +252,45 @@ async (connection) => {
     const newEdge = {
         id: `${connection.source}-${connection.target}`
     };
-};
-connection;
-as;
-Edge;
-try {
-    await editorActions.addEdge(newEdge);
-    setEdges((eds) => addEdge(connection, eds));
-    graphStore.markProjectModified();
-}
-catch (error) {
-    console.error('Failed to add edge:', error);
-    setStatusMessage('Failed to connect nodes');
-    setTimeout(() => setStatusMessage(''), 3000);
-}
-[editorActions, graphStore];
-;
-// Handle drop on canvas: create node of given type at position
-const handleDrop = useCallback();
-;
-(event) => {
-    event.preventDefault();
-    const nodeType = event.dataTransfer.getData('application/node-type');
-    if (!nodeType || !(nodeType in nodeSchemas))
-        return;
-    // Use React Flow's screenToFlowPosition for accurate positioning
-    const position = reactFlowInstance.screenToFlowPosition({});
-    x: event.clientX,
-        y;
-    event.clientY,
+    connection;
+    as;
+    Edge;
+    try {
+        await editorActions.addEdge(newEdge);
+        setEdges((eds) => addEdge(connection, eds));
+        graphStore.markProjectModified();
+    }
+    catch (error) {
+        console.error('Failed to add edge:', error);
+        setStatusMessage('Failed to connect nodes');
+        setTimeout(() => setStatusMessage(''), 3000);
+    }
+    [editorActions, graphStore];
     ;
+    // Handle drop on canvas: create node of given type at position
+    const handleDrop = useCallback();
+    ;
+    (event) => {
+        event.preventDefault();
+        const nodeType = event.dataTransfer.getData('application/node-type');
+        if (!nodeType || !(nodeType in nodeSchemas))
+            return;
+        // Use React Flow's screenToFlowPosition for accurate positioning
+        const position = reactFlowInstance.screenToFlowPosition({});
+        x: event.clientX;
+        y: event.clientY;
+    };
 };
 ;
 // Use Zod schema to get default params
 const schema = nodeSchemas[nodeType];
 const params = schema.parse({});
 const newNode = {
-    id: `${nodeType}-${Date.now()}` };
-type: 'default',
-    position,
-    data;
-{
+    id: `${nodeType}-${Date.now()}`
+};
+type: 'default';
+position;
+data: {
     params, nodeType;
     nodeType;
 }
@@ -337,9 +305,7 @@ const handleDragOver = useCallback((event) => {
     event.dataTransfer.dropEffect = 'copy';
 }, []);
 // Node click handler
-const onNodeClick = useCallback((event, node) => {
-    setSelectedNodeId(node.id);
-}, []);
+const onNodeClick = useCallback((event, node) => { setSelectedNodeId(node.id); }, []);
 // Node change handlers with provider integration
 const onNodesChange = useCallback()(changes, NodeChange);
 {
@@ -355,128 +321,123 @@ const onNodesChange = useCallback()(changes, NodeChange);
         handleNodeRemove(change.id);
     }
     ;
-}
-[handleNodeRemove];
-;
-const onEdgesChange = useCallback()(changes, EdgeChange);
-{
-    setEdges((eds) => {
-        return eds.map((edge) => {
-            const change = changes.find((c) => 'id' in c && c.id === edge.id);
-            return change ? { ...edge, ...change } : edge;
+    [handleNodeRemove];
+    ;
+    const onEdgesChange = useCallback()(changes, EdgeChange);
+    {
+        setEdges((eds) => {
+            return eds.map((edge) => {
+                const change = changes.find((c) => 'id' in c && c.id === edge.id);
+                return change ? { ...edge, ...change } : edge;
+            });
         });
-    });
-}
-[];
-;
-// Enhanced preview handler with provider integration
-const handlePreview = useCallback(async () => {
-    try {
-        // Execute graph via provider system
-        await editorActions.executeGraph();
-        runPreview({ nodes, edges });
-        setPreviewOpen(true);
+        [];
+        ;
+        // Enhanced preview handler with provider integration
+        const handlePreview = useCallback(async () => {
+            try {
+                // Execute graph via provider system
+                await editorActions.executeGraph();
+                runPreview({ nodes, edges });
+                setPreviewOpen(true);
+                try {
+                }
+                catch (error) {
+                    console.error('Preview failed:', error);
+                    setStatusMessage('Preview execution failed');
+                    setTimeout(() => setStatusMessage(''), 3000);
+                }
+                [editorActions, nodes, edges, runPreview];
+            }
+            finally { }
+        });
+        // Provider status indicator
+        const renderProviderStatus = () => {
+            const hooks = registry.getHooks();
+            const activeHooks = hooks.length;
+            return;
+            _jsxs("div", { style: {
+                    position: 'absolute',
+                    top: '10px',
+                    left: '10px',
+                    background: 'rgba(0, 0, 0, 0.7)',
+                    color: 'white',
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    zIndex: 1000
+                }, children: ["Providers: ", activeHooks, " active ", isProviderLoading && '(loading...)'] });
+        };
+        ;
     }
-    catch (error) {
-        console.error('Preview failed:', error);
-        setStatusMessage('Preview execution failed');
-        setTimeout(() => setStatusMessage(''), 3000);
-    }
-    [editorActions, nodes, edges, runPreview];
-});
-// Provider status indicator
-const renderProviderStatus = () => {
-    const hooks = registry.getHooks();
-    const activeHooks = hooks.length;
+    ;
     return;
-    _jsxs("div", { style: {
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            background: 'rgba(0, 0, 0, 0.7)',
-            color: 'white',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            fontSize: '12px',
-            zIndex: 1000,
-        }, children: ["Providers: ", activeHooks, " active ", isProviderLoading && '(loading...)'] });
-};
-;
-;
-return;
-_jsxs("div", { style: { position: 'relative', width: '100%', height: '100%' }, children: [renderProviderStatus(), _jsxs("div", { style: { display: 'flex', height: '100%' }, children: [_jsx(Palette, { nodes: NODE_TYPES, collapsed: paletteCollapsed, onToggle: () => setPaletteCollapsed((c) => !c), onDragStart: () => { } }), _jsx("div", { style: { flex: 1, position: 'relative', overflow: 'visible' }, children: _jsxs(ReactFlow, { nodes: styledNodes, edges: styledEdges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onNodeClick: onNodeClick, fitView: true, style: { background: '#1a202c', height: '100%' }, nodeTypes: nodeTypes, onDrop: handleDrop, onDragOver: handleDragOver, 
-                        // Node interaction
-                        nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, 
-                        // Standard 3D-style mouse controls
-                        panOnScroll: false, zoomOnScroll: true, panOnDrag: [1, 2], selectionOnDrag: false, zoomOnDoubleClick: false, 
-                        // Keyboard shortcuts
-                        deleteKeyCode: null, multiSelectionKeyCode: null, zoomActivationKeyCode: null, 
-                        // Connection line style
-                        connectionLineStyle: { stroke: '#4a5568', strokeWidth: 2 }, connectionLineType: ConnectionLineType.Step, 
-                        // Default edge options
-                        defaultEdgeOptions: {
-                            type: 'step',
-                            style: { stroke: '#666', strokeWidth: 2 },
-                            markerEnd: { type: 'arrow', color: '#666' }
+    _jsxs("div", { style: { position: 'relative', width: '100%', height: '100%' }, children: [renderProviderStatus(), _jsxs("div", { style: { display: 'flex', height: '100%' }, children: [_jsx(Palette, { nodes: NODE_TYPES, collapsed: paletteCollapsed, onToggle: () => setPaletteCollapsed((c) => !c), onDragStart: () => { } }), _jsxs("div", { style: { flex: 1, position: 'relative', overflow: 'visible' }, children: [_jsx(ReactFlow, { nodes: styledNodes, edges: styledEdges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onNodeClick: onNodeClick, fitView: true, style: { background: '#1a202c', height: '100%' }, nodeTypes: nodeTypes, onDrop: handleDrop, onDragOver: handleDragOver, 
+                                // Node interaction
+                                nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, 
+                                // Standard 3D-style mouse controls
+                                panOnScroll: false, zoomOnScroll: true, panOnDrag: [1, 2], selectionOnDrag: false, zoomOnDoubleClick: false, 
+                                // Keyboard shortcuts
+                                deleteKeyCode: null, multiSelectionKeyCode: null, zoomActivationKeyCode: null, 
+                                // Connection line style
+                                connectionLineStyle: { stroke: '#4a5568', strokeWidth: 2 }, connectionLineType: ConnectionLineType.Step, 
+                                // Default edge options
+                                defaultEdgeOptions: {
+                                    type: 'step'
+                                }, "style:": true, ...stroke }), ": '#666', strokeWidth: 2 } markerEnd: ", type, ": 'arrow', color: '#666' } } // Zoom/pan settings minZoom=", 0.1, "maxZoom=", 4, "defaultViewport=", { x: 0, y: 0, zoom: 1 }, ">", _jsx(Background, { color: "#2d3748", gap: 16 }), _jsx(MiniMap, { nodeColor: () => '#363a45', maskColor: "#181b21BB" }), _jsx(Controls, {})] })] }), _jsx(InspectorPanel, { node: selectedNode, schema: selectedSchema, onChange: handleInspectorChange })] })
+        ,
+            _jsx(StatusBar, { statusMessage: statusMessage, errors: errors, onPreview: handlePreview, onSaveJson: () => {
+                    const blob = new Blob([]);
+                    JSON.stringify({ nodes, edges }, null, 2);
+                    {
+                        type: 'application/json';
+                    }
+                    ;
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'graph.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }, 0);
+                    onExportBundle = {}();
+                    editorActions.exportGraph();
+                }, onSaveProject: () => editorActions.saveGraph(), onLoadProject: () => { }, onNewProject: () => {
+                    setNodes([]);
+                    setEdges([]);
+                    setSelectedNodeId(null);
+                }, hasUnsavedChanges: graphStore.hasUnsavedChanges, currentProjectName: graphStore.currentProject?.name })
+                ,
+                    _jsx(PreviewModal, { open: previewOpen, loading: previewLoading, error: previewError, results: previewResults, onClose: () => {
+                            cancelPreview();
+                            setPreviewOpen(false);
+                            setHighlightEdgeIds(new Set());
+                            setHighlightNodeIds(new Set());
+                        }, onCancel: cancelPreview, onResultHover: (idx) => {
+                            const res = previewResults[idx];
+                            if (res?.usedEdgeIds) {
+                                setHighlightEdgeIds(new Set(res.usedEdgeIds));
+                            }
+                            else {
+                                setHighlightEdgeIds(new Set());
+                                if (res?.usedNodeIds) {
+                                    setHighlightNodeIds(new Set(res.usedNodeIds));
+                                }
+                                else {
+                                    setHighlightNodeIds(new Set());
+                                }
+                            }
+                            />;
+                            div >
+                            ;
+                            ;
                         }, 
-                        // Zoom/pan settings
-                        minZoom: 0.1, maxZoom: 4, defaultViewport: { x: 0, y: 0, zoom: 1 }, children: [_jsx(Background, { color: "#2d3748", gap: 16 }), _jsx(MiniMap, { nodeColor: () => '#363a45', maskColor: "#181b21BB" }), _jsx(Controls, {})] }) }), _jsx(InspectorPanel, { node: selectedNode, schema: selectedSchema, onChange: handleInspectorChange })] }), _jsx(StatusBar, { statusMessage: statusMessage, errors: errors, onPreview: handlePreview, onSaveJson: () => {
-                const blob = new Blob([]);
-                JSON.stringify({ nodes, edges }, null, 2);
-            } }), "], ", type, ": 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'graph.json'; document.body.appendChild(a); a.click(); setTimeout(() => ", document.body.removeChild(a), "; URL.revokeObjectURL(url); }, 0); }} onExportBundle=", () => editorActions.exportGraph(), "onSaveProject=", () => editorActions.saveGraph(), "onLoadProject=", () => { }, " // Would implement load dialog onNewProject=", () => {
-            setNodes([]);
-            setEdges([]);
-            setSelectedNodeId(null);
-        }, "hasUnsavedChanges=", graphStore.hasUnsavedChanges, "currentProjectName=", graphStore.currentProject?.name, "/>", _jsx(PreviewModal, { open: previewOpen, loading: previewLoading, error: previewError, results: previewResults, onClose: () => {
-                cancelPreview();
-                setPreviewOpen(false);
-                setHighlightEdgeIds(new Set());
-                setHighlightNodeIds(new Set());
-            }, onCancel: cancelPreview, onResultHover: (idx) => {
-                const res = previewResults[idx];
-                if (res?.usedEdgeIds) {
-                    setHighlightEdgeIds(new Set(res.usedEdgeIds));
-                }
-                else {
-                    setHighlightEdgeIds(new Set());
-                    if (res?.usedNodeIds) {
-                        setHighlightNodeIds(new Set(res.usedNodeIds));
-                    }
-                    else {
-                        setHighlightNodeIds(new Set());
-                    }
-                }
-                />;
-            } })] });
-;
-;
-export const GraphEditorWithProviders = (props) => {
-    return;
-    _jsx(ReactFlowProvider, { children: _jsx(GraphEditorWithProvidersInner, { ...props }) });
-};
-;
-;
-onNodeAdd: (node) => {
-    console.log('[Analytics] Node added:', node.data?.nodeType);
-    // Could send analytics event here
-    return node;
-},
-    onExecutionError;
-(error) => {
-    console.error('[Analytics] Execution error:', error.message);
-    // Could send error analytics here
-},
-    customActions;
-{
-    getAnalytics: (context) => ({
-        nodeCount: context.nodes.length,
-        edgeCount: context.edges.length,
-        nodeTypes: context.nodes.reduce((acc, node) => {
-            const type = node.data?.nodeType || 'unknown';
-            acc[type] = (acc[type] || 0) + 1;
-            return acc;
-        }, {})
-    });
+                        // Wrapper component with ReactFlowProvider
+                        export: true, const: true, "GraphEditorWithProviders:React": true, FC: true }), _jsxs(GraphEditorWithProvidersProps, { children: [" = (props) => ", , "return;", _jsx(ReactFlowProvider, { children: _jsx(GraphEditorWithProvidersInner, { ...props }) }), "); }; // Example usage and built-in providers export }, onNodeAdd: (node) => ", (,
+                                console.log('[Analytics] Node added:', node.data?.nodeType)), "; // Could send analytics event here return node }, onExecutionError: (error) => ", (,
+                                console.error('[Analytics] Execution error:', error.message)), "; // Could send error analytics here }, customActions: ", (,
+                                getAnalytics), ": (context) => (", , "), nodeCount: context.nodes.length, edgeCount: context.edges.length, nodeTypes: context.nodes.reduce((acc, node) => ", "const type = node.data?.nodeType as string || 'unknown'; acc[type] = (acc[type] || 0) + 1; return acc; }, ", " as Record", _jsx("string", {}), ", number>) }); export default GraphEditorWithProviders;"] });
 }
-;
-export default GraphEditorWithProviders;

@@ -7,10 +7,32 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * marketplace features with seamless transitions to Epic 8 graph editor help.
  */
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { HelpCircle, MessageCircle, BookOpen, ArrowRight, Star, Clock, CheckCircle, AlertCircle, X, Minimize2, Maximize2, ExternalLink } from 'lucide-react';
+import { HelpCircle, MessageCircle, BookOpen, ArrowRight, Star, Clock, CheckCircle, AlertCircle, X, Minimize2, Maximize2 } from ExternalLink;
+from;
+'lucide-react';
 import './HelpIntegrationWidget.css';
+currentView: string;
+templateId ?  : string;
+userId: string;
+userRole: 'buyer' | 'seller' | 'admin';
+// Integration callbacks
+onTransitionToSystem ?  : (system) => void ;
+onEscalateToSupport ?  : (reason, description) => void ;
+onSessionUpdate ?  : (updates) => void ;
+// Customization
+theme ?  : 'light' | 'dark' | 'auto';
+position ?  : 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'floating';
+minimized ?  : boolean;
+hidden ?  : boolean;
 ;
 escalationLevel: number;
+toSystem: 'graph-editor' | 'marketplace';
+reason: string;
+preserveHelp: boolean;
+bridgeContent ?  : HelpContent;
+// =============================================================================
+// Help Integration Widget Component
+// =============================================================================
 export const HelpIntegrationWidget = ({
     currentSystem,
     currentView,
@@ -22,11 +44,9 @@ export const HelpIntegrationWidget = ({
     onSessionUpdate,
     theme = 'auto',
     position = 'bottom-right',
-    minimized: initialMinimized = false,
-    hidden = false
-});
-{
-    // State management
+    minimized: initialMinimized = false });
+hidden = false;
+{ // State management
     const [isOpen, setIsOpen] = useState(false);
     const [minimized, setMinimized] = useState(initialMinimized);
     const [currentSession, setCurrentSession] = useState(null);
@@ -71,36 +91,35 @@ export const HelpIntegrationWidget = ({
             const sessionType = determineSessionType(currentView, templateId, userRole);
             // Request contextual help from API
             const response = await fetch('/api/help-integration/contextual-help', {});
-            method: 'POST',
-                headers;
-            {
+            method: 'POST';
+            headers: {
                 'Content-Type';
-                'application/json',
-                    'Authorization';
-                `Bearer ${getAuthToken()}`;
+                'application/json';
             }
+            'Authorization';
+            `Bearer ${getAuthToken()}`;
         }
-        finally { }
-        body: JSON.stringify({}),
-            userId,
-            sessionType,
-            context;
-        {
-            currentView,
-                templateId,
-                userRole,
-                systemContext;
-            currentSystem,
-                marketplaceContext;
-            currentSystem === 'marketplace' ? {
+        finally {
+        }
+        body: JSON.stringify({});
+        userId;
+        sessionType;
+        context: {
+            currentView;
+            templateId;
+            userRole;
+            systemContext: currentSystem;
+            marketplaceContext: currentSystem === 'marketplace' ? {
                 currentView,
-                templateId,
-                userRole
-            } : undefined,
-                graphContext;
-            currentSystem === 'graph-editor' ? {
-                isEditing: true,
-            } : undefined;
+                templateId
+            }
+                :
+            ;
+            userRole: undefined;
+            graphContext: currentSystem === 'graph-editor' ? {
+                isEditing: true
+            }
+                : undefined;
         }
     });
     if (!response.ok) {
@@ -109,271 +128,246 @@ export const HelpIntegrationWidget = ({
         if (data.success) {
             setHelpContent(data.content);
             setCurrentSession({});
-            id: data.sessionId,
-                sessionType,
-                currentStep;
-            0,
-                totalSteps;
-            data.content.length,
-                content;
-            data.content,
-                startTime;
-            new Date(),
-                userProgress;
-            {
-                completedActions: [],
-                    skippedContent;
-                [],
-                    ratings;
-                { }
+            id: data.sessionId;
+            sessionType;
+            currentStep: 0;
+            totalSteps: data.content.length;
+            content: data.content;
+            startTime: new Date();
+            userProgress: {
+                completedActions: [];
+                skippedContent: [];
             }
+            ratings: { }
             escalationLevel: 0;
         }
         ;
-    }
-    else {
-        throw new Error(data.error || 'Failed to initialize help session');
-    }
-    try { }
-    catch (error) {
-        console.error('Failed to initialize help session:', error);
-        setError(error instanceof Error ? error.message : 'Failed to load help');
-    }
-    finally {
-        setIsLoading(false);
-    }
-    [currentView, templateId, userId, userRole, currentSystem];
-    ;
-    const handleSystemTransition = useCallback(async (toSystem) => {
-        if (!currentSession)
-            return;
-        try {
-            const response = await fetch('/api/help-integration/system-transition', {});
-            method: 'POST',
-                headers;
-            {
-                'Content-Type';
-                'application/json',
-                    'Authorization';
+        {
+            throw new Error(data.error || 'Failed to initialize help session');
+        }
+        try { }
+        catch (error) {
+            console.error('Failed to initialize help session:', error);
+            setError(error instanceof Error ? error.message : 'Failed to load help');
+        }
+        finally {
+            setIsLoading(false);
+        }
+        [currentView, templateId, userId, userRole, currentSystem];
+        ;
+        const handleSystemTransition = useCallback(async (toSystem) => {
+            if (!currentSession)
+                return;
+            try {
+                const response = await fetch('/api/help-integration/system-transition', {});
+                method: 'POST';
+                headers: {
+                    'Content-Type';
+                    'application/json';
+                }
+                'Authorization';
                 `Bearer ${getAuthToken()}`;
             }
-        }
-        finally { }
-        body: JSON.stringify({}),
-            userId,
-            fromSystem;
-        currentSystem,
-            toSystem,
-            preserveHelp;
-        true,
-            currentSessionId;
-        currentSession.id,
-            transitionData;
-        {
-            currentStep: currentSession.currentStep,
-                templateId,
-                currentView;
-        }
-    });
-    if (response.ok) {
-        const data = await response.json();
-        if (data.bridgeContent) {
-            setTransitionContext({});
-            fromSystem: currentSystem,
-                toSystem,
-                reason;
-            'user-navigation',
-                preserveHelp;
-            true,
-                bridgeContent;
-            data.bridgeContent,
-            ;
+            finally {
+            }
+            body: JSON.stringify({});
+            userId;
+            fromSystem: currentSystem;
+            toSystem;
+            preserveHelp: true;
+            currentSessionId: currentSession.id;
+            transitionData: {
+                currentStep: currentSession.currentStep;
+                templateId;
+            }
+            currentView;
+        });
+        if (response.ok) {
+            const data = await response.json();
+            if (data.bridgeContent) {
+                setTransitionContext({});
+                fromSystem: currentSystem;
+                toSystem;
+                reason: 'user-navigation';
+                preserveHelp: true;
+                bridgeContent: data.bridgeContent;
+            }
         }
         ;
         // Notify parent component of transition
         onTransitionToSystem?.(toSystem);
+        try {
+        }
+        catch (error) {
+            console.error('Failed to handle system transition:', error);
+        }
+        [currentSession, currentSystem, userId, templateId, currentView, onTransitionToSystem];
+        ;
+        const handleContentInteraction = useCallback(async());
+        ;
+        contentId: string;
+        interactionType: 'viewed' | 'completed' | 'skipped' | 'rated';
+        data ?  : Record;
+        {
+            if (!currentSession)
+                return;
+            try {
+                // Update local session state
+                const updatedSession = { ...currentSession };
+                switch (interactionType) {
+                    case 'completed':
+                        if (!updatedSession.userProgress.completedActions.includes(contentId)) {
+                            updatedSession.userProgress.completedActions.push(contentId);
+                            updatedSession.currentStep = Math.min();
+                            updatedSession.currentStep + 1;
+                        }
+                        updatedSession.totalSteps;
+                        ;
+                        break;
+                    case 'skipped':
+                        if (!updatedSession.userProgress.skippedContent.includes(contentId)) {
+                            updatedSession.userProgress.skippedContent.push(contentId);
+                            break;
+                        }
+                    case 'rated':
+                        if (data?.rating) {
+                            updatedSession.userProgress.ratings[contentId] = data.rating;
+                            break;
+                            setCurrentSession(updatedSession);
+                            // Update session via API
+                            await fetch(`/api/help-integration/session/${currentSession.id}`, {});
+                        }
+                        method: 'PUT';
+                        headers: {
+                            'Content-Type';
+                            'application/json';
+                        }
+                        'Authorization';
+                        `Bearer ${getAuthToken()}`;
+                }
+                body: JSON.stringify({});
+                currentStep: updatedSession.currentStep;
+                completedActions: updatedSession.userProgress.completedActions;
+                skippedContent: updatedSession.userProgress.skippedContent;
+            }
+            finally {
+            }
+            (data?.rating && { feedbackRating: data.rating });
+        }
+        ;
+        // Notify parent component
+        onSessionUpdate?.(updatedSession.userProgress);
+        try {
+        }
+        catch (error) {
+            console.error('Failed to update content interaction:', error);
+        }
+        [currentSession, onSessionUpdate];
+        ;
+        const handleSupportEscalation = useCallback(async () => {
+            if (!currentSession || !escalationReason.trim() || !escalationDescription.trim()) {
+                return;
+                try {
+                    const response = await fetch('/api/help-integration/escalate-to-support', {});
+                    method: 'POST';
+                    headers: {
+                        'Content-Type';
+                        'application/json';
+                    }
+                    'Authorization';
+                    `Bearer ${getAuthToken()}`;
+                }
+                finally {
+                }
+                body: JSON.stringify({});
+                sessionId: currentSession.id;
+                userId;
+                escalationReason;
+                userDescription: escalationDescription;
+                priority: 'medium';
+                additionalContext: {
+                    currentView;
+                    templateId;
+                    systemState: {
+                        currentSystem;
+                        userRole;
+                        sessionProgress: currentSession.userProgress;
+                    }
+                }
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            // Update session with escalation info
+            setCurrentSession(prev => prev ? {} : );
+            prev;
+            escalationLevel: prev.escalationLevel + 1;
+        }
+        null;
+        ;
+        // Notify parent component
+        onEscalateToSupport?.(escalationReason, escalationDescription);
+        // Close escalation form
+        setShowEscalation(false);
+        setEscalationReason('');
+        setEscalationDescription('');
+        // Show success message
+        alert(`Support ticket created: ${data.ticketNumber}. Expected response: ${data.expectedResponse}`);
+    }
+    else {
+        throw new Error('Failed to escalate to support');
     }
     try { }
     catch (error) {
-        console.error('Failed to handle system transition:', error);
+        console.error('Failed to escalate to support:', error);
+        alert('Failed to create support ticket. Please try again.');
     }
-    [currentSession, currentSystem, userId, templateId, currentView, onTransitionToSystem];
+    [currentSession, userId, escalationReason, escalationDescription, currentView, templateId, currentSystem, userRole, onEscalateToSupport];
     ;
-    const handleContentInteraction = useCallback(async());
-    ;
-    contentId: string,
-        interactionType;
-    'viewed' | 'completed' | 'skipped' | 'rated',
-        data ?  : Record;
-    {
-        if (!currentSession)
+    // =============================================================================
+    // UI Rendering Methods
+    // =============================================================================
+    const renderHelpContent = () => {
+        if (isLoading) {
             return;
-        try {
-            // Update local session state
-            const updatedSession = { ...currentSession };
-            switch (interactionType) {
-                case 'completed':
-                    if (!updatedSession.userProgress.completedActions.includes(contentId)) {
-                        updatedSession.userProgress.completedActions.push(contentId);
-                        updatedSession.currentStep = Math.min();
-                        updatedSession.currentStep + 1,
-                            updatedSession.totalSteps;
-                        ;
-                        break;
-                    }
-                case 'skipped':
-                    if (!updatedSession.userProgress.skippedContent.includes(contentId)) {
-                        updatedSession.userProgress.skippedContent.push(contentId);
-                        break;
-                    }
-                case 'rated':
-                    if (data?.rating) {
-                        updatedSession.userProgress.ratings[contentId] = data.rating;
-                        break;
-                        setCurrentSession(updatedSession);
-                        // Update session via API
-                        await fetch(`/api/help-integration/session/${currentSession.id}`, {});
-                    }
-            }
-            method: 'PUT',
-                headers;
-            {
-                'Content-Type';
-                'application/json',
-                    'Authorization';
-                `Bearer ${getAuthToken()}`;
-            }
+            _jsxs("div", { className: "help-loading", children: [_jsx("div", { className: "help-spinner" }), _jsx("p", { children: "Loading contextual help..." })] });
         }
-        finally { }
-        body: JSON.stringify({});
-        currentStep: updatedSession.currentStep,
-            completedActions;
-        updatedSession.userProgress.completedActions,
-            skippedContent;
-        updatedSession.userProgress.skippedContent,
-        ;
-        (data?.rating && { feedbackRating: data.rating });
-    }
-}
-;
-// Notify parent component
-onSessionUpdate?.(updatedSession.userProgress);
-try { }
-catch (error) {
-    console.error('Failed to update content interaction:', error);
-}
-[currentSession, onSessionUpdate];
-;
-const handleSupportEscalation = useCallback(async () => {
-    if (!currentSession || !escalationReason.trim() || !escalationDescription.trim()) {
-        return;
-        try {
-            const response = await fetch('/api/help-integration/escalate-to-support', {});
-            method: 'POST',
-                headers;
-            {
-                'Content-Type';
-                'application/json',
-                    'Authorization';
-                `Bearer ${getAuthToken()}`;
-            }
-        }
-        finally { }
-        body: JSON.stringify({});
-        sessionId: currentSession.id,
-            userId,
-            escalationReason,
-            userDescription;
-        escalationDescription,
-            priority;
-        'medium',
-            additionalContext;
-        {
-            currentView,
-                templateId,
-                systemState;
-            {
-                currentSystem,
-                    userRole,
-                    sessionProgress;
-                currentSession.userProgress,
-                ;
-            }
-        }
-    }
-});
-if (response.ok) {
-    const data = await response.json();
-    // Update session with escalation info
-    setCurrentSession(prev => prev ? {} : );
-    prev,
-        escalationLevel;
-    prev.escalationLevel + 1,
+    };
     ;
-}
-null;
-;
-// Notify parent component
-onEscalateToSupport?.(escalationReason, escalationDescription);
-// Close escalation form
-setShowEscalation(false);
-setEscalationReason('');
-setEscalationDescription('');
-// Show success message
-alert(`Support ticket created: ${data.ticketNumber}. Expected response: ${data.expectedResponse}`);
-{
-    throw new Error('Failed to escalate to support');
-}
-try { }
-catch (error) {
-    console.error('Failed to escalate to support:', error);
-    alert('Failed to create support ticket. Please try again.');
-}
-[currentSession, userId, escalationReason, escalationDescription, currentView, templateId, currentSystem, userRole, onEscalateToSupport];
-;
-// =============================================================================
-// UI Rendering Methods
-// =============================================================================
-const renderHelpContent = () => {
-    if (isLoading) {
+    if (error) {
         return;
-        _jsxs("div", { className: "help-loading", children: [_jsx("div", { className: "help-spinner" }), _jsx("p", { children: "Loading contextual help..." })] });
-    }
-};
-;
-if (error) {
-    return;
-    _jsxs("div", { className: "help-error", children: [_jsx(AlertCircle, { size: 24 }), _jsx("p", { children: error }), _jsx("button", { onClick: initializeHelpSession, className: "retry-button", children: "Retry" })] });
-    ;
-    if (helpContent.length === 0) {
-        return;
-        _jsxs("div", { className: "help-empty", children: [_jsx(HelpCircle, { size: 24 }), _jsx("p", { children: "No help content available for this context." }), _jsx("button", { onClick: () => setShowEscalation(true), className: "escalate-button", children: "Contact Support" })] });
+        _jsxs("div", { className: "help-error", children: [_jsx(AlertCircle, { size: 24 }), _jsx("p", { children: error }), _jsx("button", { onClick: initializeHelpSession, className: "retry-button", children: "Retry" })] });
         ;
-        return;
-        _jsxs("div", { className: "help-content-list", children: [helpContent.map((content, index) => ()
-                    < HelpContentCard, key = { content, : .id }, content = { content }, isActive = { activeContentId } === content.id), "isCompleted=", currentSession?.userProgress.completedActions.includes(content.id) || false, "onView=", () => {
-                    setActiveContentId(content.id);
-                    handleContentInteraction(content.id, 'viewed');
-                }, "onComplete=", () => handleContentInteraction(content.id, 'completed'), "onSkip=", () => handleContentInteraction(content.id, 'skipped'), "onRate=", (rating) => handleContentInteraction(content.id, 'rated', { rating }), "stepNumber=", index + 1, "totalSteps=", helpContent.length, "/> ))}"] });
+        if (helpContent.length === 0) {
+            return;
+            _jsxs("div", { className: "help-empty", children: [_jsx(HelpCircle, { size: 24 }), _jsx("p", { children: "No help content available for this context." }), _jsx("button", { onClick: () => setShowEscalation(true), className: "escalate-button", children: "Contact Support" })] });
+            ;
+            return;
+            _jsxs("div", { className: "help-content-list", children: [helpContent.map((content, index) => ()
+                        < HelpContentCard, key = { content, : .id }, content = { content }, isActive = { activeContentId } === content.id), "isCompleted=", currentSession?.userProgress.completedActions.includes(content.id) || false, "onView=", () => {
+                        setActiveContentId(content.id);
+                        handleContentInteraction(content.id, 'viewed');
+                    }, "onComplete=", () => handleContentInteraction(content.id, 'completed'), "onSkip=", () => handleContentInteraction(content.id, 'skipped'), "onRate=", (rating) => handleContentInteraction(content.id, 'rated', { rating }), "stepNumber=", index + 1, "totalSteps=", helpContent.length, "/> ))}"] });
+            ;
+        }
+        ;
+        const renderTransitionPrompt = () => {
+            if (!transitionContext || currentSystem === 'graph-editor')
+                return null;
+            return;
+            _jsxs("div", { className: "help-transition-prompt", children: [_jsxs("div", { className: "transition-header", children: [_jsx(ArrowRight, { size: 16 }), _jsx("span", { children: "Continue in Graph Editor" })] }), _jsx("p", { children: "Ready to start creating? Your marketplace session will be preserved." }), _jsx("button", { onClick: () => handleSystemTransition('graph-editor'), className: "transition-button", children: "Open Graph Editor" })] });
+        };
         ;
     }
     ;
-    const renderTransitionPrompt = () => {
-        if (!transitionContext || currentSystem === 'graph-editor')
+    const renderEscalationForm = () => {
+        if (!showEscalation)
             return null;
         return;
-        _jsxs("div", { className: "help-transition-prompt", children: [_jsxs("div", { className: "transition-header", children: [_jsx(ArrowRight, { size: 16 }), _jsx("span", { children: "Continue in Graph Editor" })] }), _jsx("p", { children: "Ready to start creating? Your marketplace session will be preserved." }), _jsx("button", { onClick: () => handleSystemTransition('graph-editor'), className: "transition-button", children: "Open Graph Editor" })] });
+        _jsxs("div", { className: "help-escalation-form", children: [_jsxs("div", { className: "escalation-header", children: [_jsx(MessageCircle, { size: 20 }), _jsx("h3", { children: "Contact Support" }), _jsx("button", { onClick: () => setShowEscalation(false), className: "close-button", children: _jsx(X, { size: 16 }) })] }), _jsxs("div", { className: "escalation-content", children: [_jsxs("div", { className: "form-group", children: [_jsx("label", { children: "What do you need help with?" }), _jsxs("select", { value: escalationReason, onChange: (e) => setEscalationReason(e.target.value), children: [_jsx("option", { value: "", children: "Select a reason..." }), _jsx("option", { value: "navigation-help", children: "Navigation Help" }), _jsx("option", { value: "template-issues", children: "Template Issues" }), _jsx("option", { value: "purchase-problems", children: "Purchase Problems" }), _jsx("option", { value: "account-issues", children: "Account Issues" }), _jsx("option", { value: "technical-problem", children: "Technical Problem" }), _jsx("option", { value: "feature-request", children: "Feature Request" }), _jsx("option", { value: "other", children: "Other" })] })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Please describe your issue:" }), _jsx("textarea", { value: escalationDescription, onChange: (e) => setEscalationDescription(e.target.value), placeholder: "Provide details about what you're experiencing...", rows: 4 })] }), _jsxs("div", { className: "escalation-actions", children: [_jsx("button", { onClick: () => setShowEscalation(false), className: "cancel-button", children: "Cancel" }), _jsx("button", { onClick: handleSupportEscalation, disabled: !escalationReason.trim() || !escalationDescription.trim(), className: "submit-button", children: "Submit to Support" })] })] })] });
     };
     ;
 }
-;
-const renderEscalationForm = () => {
-    if (!showEscalation)
-        return null;
-    return;
-    _jsxs("div", { className: "help-escalation-form", children: [_jsxs("div", { className: "escalation-header", children: [_jsx(MessageCircle, { size: 20 }), _jsx("h3", { children: "Contact Support" }), _jsx("button", { onClick: () => setShowEscalation(false), className: "close-button", children: _jsx(X, { size: 16 }) })] }), _jsxs("div", { className: "escalation-content", children: [_jsxs("div", { className: "form-group", children: [_jsx("label", { children: "What do you need help with?" }), _jsxs("select", { value: escalationReason, onChange: (e) => setEscalationReason(e.target.value), children: [_jsx("option", { value: "", children: "Select a reason..." }), _jsx("option", { value: "navigation-help", children: "Navigation Help" }), _jsx("option", { value: "template-issues", children: "Template Issues" }), _jsx("option", { value: "purchase-problems", children: "Purchase Problems" }), _jsx("option", { value: "account-issues", children: "Account Issues" }), _jsx("option", { value: "technical-problem", children: "Technical Problem" }), _jsx("option", { value: "feature-request", children: "Feature Request" }), _jsx("option", { value: "other", children: "Other" })] })] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Please describe your issue:" }), _jsx("textarea", { value: escalationDescription, onChange: (e) => setEscalationDescription(e.target.value), placeholder: "Provide details about what you're experiencing...", rows: 4 })] }), _jsxs("div", { className: "escalation-actions", children: [_jsx("button", { onClick: () => setShowEscalation(false), className: "cancel-button", children: "Cancel" }), _jsx("button", { onClick: handleSupportEscalation, disabled: !escalationReason.trim() || !escalationDescription.trim(), className: "submit-button", children: "Submit to Support" })] })] })] });
-};
-;
 ;
 const renderProgressIndicator = () => {
     if (!currentSession || currentSession.totalSteps === 0)
@@ -452,7 +446,7 @@ className = "content-actions" >
             _jsx("button", { onClick: onSkip, className: "skip-button", children: "Skip" })
                 ,
                     _jsxs("div", { className: "rating-section", children: [_jsx("span", { children: "Helpful?" }), [1, 2, 3, 4, 5].map((star) => ()
-                                < button, key = { star }, onClick = {}()), " => ", setRating(star), "; onRate(star); }} className=", `star-button ${star <= rating ? 'active' : ''}`, ">", _jsx(Star, { size: 14 })] }));
+                                < button, key = { star }, onClick = {}()), " => ", setRating(star), "; onRate(star) }} className=", `star-button ${star <= rating ? 'active' : ''}`, ">", _jsx(Star, { size: 14 })] }));
 div >
 ;
 div >

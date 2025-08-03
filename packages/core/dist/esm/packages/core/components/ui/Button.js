@@ -1,4 +1,6 @@
-`button button-${variant} button-${size} ${className || ''}`;
+()
+    < button;
+className = {} `button button-${variant} button-${size} ${className || ''}`;
 {
     props;
 }

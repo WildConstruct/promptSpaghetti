@@ -7,19 +7,12 @@ import { NodeMetadataManager, Genre, Style } from '../historical/NodeMetadataMan
 import { DataSourceManager } from '../external-data/DataSourceManager';
 import { MedievalDemo } from '../demo/MedievalDemo';
 ;
-relationships: UTDGRelationship;
-;
-;
-temporalConstraints ?  : {
-    startYear: number,
+temporalConstraints ?  : { startYear: number,
     endYear: number,
-    seasons: string
-};
-socialConstraints ?  : {
-    socialClasses: string,
+    seasons: string };
+socialConstraints ?  : { socialClasses: string,
     professions: string,
-    genders: string
-};
+    genders: string };
 ;
 creative: {
     genre: Genre;
@@ -31,8 +24,8 @@ creative: {
 technical: {
     accuracy: 'strict' | 'moderate' | 'creative';
     sources: 'academic' | 'popular' | 'mixed';
-    validation: boolean;
 }
+validation: boolean;
 ;
 ;
 export class UTDGFoundation {
@@ -73,40 +66,26 @@ export class UTDGFoundation {
         // Historical Eras as core nodes
         const eras = await this.metadataManager.getAllEras();
         for (const era of eras) {
-            const eraNode = {
-                id: `era_${era.id}` };
+            const eraNode = {};
+            id: `era_${era.id}`;
         }
-        type: 'concept',
-            label;
-        era.name,
-            description;
-        era.description,
-            properties;
-        {
-            startYear: era.startYear,
-                endYear;
-            era.endYear,
-                characteristics;
-            era.characteristics,
-                socialStructure;
-            era.socialStructure,
-                technology;
-            era.technology,
-                artStyles;
-            era.artStyles,
-            ;
+        type: 'concept';
+        label: era.name;
+        description: era.description;
+        properties: {
+            startYear: era.startYear;
+            endYear: era.endYear;
+            characteristics: era.characteristics;
+            socialStructure: era.socialStructure;
+            technology: era.technology;
+            artStyles: era.artStyles;
         }
         metadata: {
-            era: era.id,
-                tags;
-            ['historical_era', 'chronology'],
-                confidence;
-            1.0,
-                sources;
-            ['Historical academic sources'],
-                lastUpdated;
-            new Date(),
-            ;
+            era: era.id;
+            tags: ['historical_era', 'chronology'];
+            confidence: 1.0;
+            sources: ['Historical academic sources'];
+            lastUpdated: new Date();
         }
         relationships: [];
     }
@@ -116,36 +95,24 @@ this.addNode(eraNode);
 // Genres as core nodes
 const genres = await this.metadataManager.getAllGenres();
 for (const genre of genres) {
-    const genreNode = {
-        id: `genre_${genre.id}` };
+    const genreNode = {};
+    id: `genre_${genre.id}`;
 }
-type: 'concept',
-    label;
-genre.name,
-    description;
-genre.description,
-    properties;
-{
-    characteristics: genre.characteristics,
-        commonThemes;
-    genre.commonThemes,
-        typicalElements;
-    genre.typicalElements,
-        audienceExpectations;
-    genre.audienceExpectations,
-    ;
+type: 'concept';
+label: genre.name;
+description: genre.description;
+properties: {
+    characteristics: genre.characteristics;
+    commonThemes: genre.commonThemes;
+    typicalElements: genre.typicalElements;
+    audienceExpectations: genre.audienceExpectations;
 }
 metadata: {
-    genre: genre.id,
-        tags;
-    ['literary_genre', 'creative_writing'],
-        confidence;
-    1.0,
-        sources;
-    ['Literary theory', 'Genre studies'],
-        lastUpdated;
-    new Date(),
-    ;
+    genre: genre.id;
+    tags: ['literary_genre', 'creative_writing'];
+    confidence: 1.0;
+    sources: ['Literary theory', 'Genre studies'];
+    lastUpdated: new Date();
 }
 relationships: [];
 ;
@@ -155,84 +122,56 @@ const socialClasses = [
     'peasant', 'merchant', 'craftsman', 'minor_noble', 'major_noble', 'clergy', 'royal'
 ];
 for (const socialClass of socialClasses) {
-    const classNode = {
-        id: `social_${socialClass}` };
+    const classNode = {};
+    id: `social_${socialClass}`;
 }
-type: 'entity',
-    label;
-socialClass.replace('_', ' ').toUpperCase(),
-    description;
-`Members of the ${socialClass} social class`;
+type: 'entity';
+label: socialClass.replace('_', ' ').toUpperCase();
+description: `Members of the ${socialClass} social class`;
 properties: {
-    economicPower: this.getSocialClassEconomicPower(socialClass),
-        politicalInfluence;
-    this.getSocialClassPoliticalInfluence(socialClass),
-        socialMobility;
-    this.getSocialClassMobility(socialClass),
-        typicalOccupations;
-    this.getSocialClassOccupations(socialClass),
-    ;
+    economicPower: this.getSocialClassEconomicPower(socialClass);
+    politicalInfluence: this.getSocialClassPoliticalInfluence(socialClass);
+    socialMobility: this.getSocialClassMobility(socialClass);
+    typicalOccupations: this.getSocialClassOccupations(socialClass);
 }
 metadata: {
-    tags: ['social_class', 'hierarchy', 'society'],
-        confidence;
-    0.9,
-        sources;
-    ['Social history', 'Medieval studies'],
-        lastUpdated;
-    new Date(),
-    ;
+    tags: ['social_class', 'hierarchy', 'society'];
+    confidence: 0.9;
+    sources: ['Social history', 'Medieval studies'];
+    lastUpdated: new Date();
 }
 relationships: [];
 ;
 this.addNode(classNode);
 async;
 integrateMedievalContent();
-Promise < void  > {
-    const: medievalContent = this.medievalDemo.getAllMedievalContent(),
+Promise < void  > { const: medievalContent = this.medievalDemo.getAllMedievalContent(),
     // Add clothing as entities
-    for(, clothing, of, medievalContent) { }, : .clothing
-};
+    for(, clothing, of, medievalContent) { }, : .clothing };
 {
-    const clothingNode = {
-        id: `clothing_${clothing.id}` };
+    const clothingNode = {};
+    id: `clothing_${clothing.id}`;
 }
-type: 'entity',
-    label;
-clothing.name,
-    description;
-clothing.description,
-    properties;
-{
-    socialClass: clothing.socialClass,
-        gender;
-    clothing.gender,
-        materials;
-    clothing.materials,
-        colors;
-    clothing.colors,
-        period;
-    clothing.period,
-        regions;
-    clothing.regions,
-        seasonality;
-    clothing.seasonality,
-        occasions;
-    clothing.occasions,
-    ;
+type: 'entity';
+label: clothing.name;
+description: clothing.description;
+properties: {
+    socialClass: clothing.socialClass;
+    gender: clothing.gender;
+    materials: clothing.materials;
+    colors: clothing.colors;
+    period: clothing.period;
+    regions: clothing.regions;
+    seasonality: clothing.seasonality;
+    occasions: clothing.occasions;
 }
 metadata: {
-    era: 'medieval',
-        tags;
-    ['clothing', 'material_culture', clothing.socialClass, clothing.gender],
-        confidence;
-    clothing.historicalAccuracy === 'high' ? 0.9 : ,
-        clothing.historicalAccuracy === 'medium' ? 0.7 : 0.5,
-        sources;
-    clothing.sources,
-        lastUpdated;
-    new Date(),
-    ;
+    era: 'medieval';
+    tags: ['clothing', 'material_culture', clothing.socialClass, clothing.gender];
+    confidence: clothing.historicalAccuracy === 'high' ? 0.9 :
+        clothing.historicalAccuracy === 'medium' ? 0.7 : 0.5;
+    sources: clothing.sources;
+    lastUpdated: new Date();
 }
 relationships: [];
 ;
@@ -242,140 +181,91 @@ if (clothing.socialClass) {
     this.addRelationship({});
     id: `${clothingNode.id}_worn_by_${clothing.socialClass}`;
 }
-sourceNodeId: clothingNode.id,
-    targetNodeId;
-`social_${clothing.socialClass}`;
-type: 'requires',
-    strength;
-0.8,
-    direction;
-'sourceToTarget',
-    context;
-'Appropriate social class for wearing this clothing';
+sourceNodeId: clothingNode.id;
+targetNodeId: `social_${clothing.socialClass}`;
+type: 'requires';
+strength: 0.8;
+direction: 'sourceToTarget';
+context: 'Appropriate social class for wearing this clothing';
 ;
 // Add materials as entities
 for (const material of medievalContent.materials) {
-    const materialNode = {
-        id: `material_${material.id}` };
+    const materialNode = {};
+    id: `material_${material.id}`;
 }
-type: 'entity',
-    label;
-material.name,
-    description;
-`${material.type} material used in medieval times`;
+type: 'entity';
+label: material.name;
+description: `${material.type} material used in medieval times`;
 properties: {
-    type: material.type,
-        availability;
-    material.availability,
-        cost;
-    material.cost,
-        durability;
-    material.durability,
-        socialStatus;
-    material.socialStatus,
-        tradingSources;
-    material.tradingSources,
-        primaryUses;
-    material.primaryUses,
-    ;
+    type: material.type;
+    availability: material.availability;
+    cost: material.cost;
+    durability: material.durability;
+    socialStatus: material.socialStatus;
+    tradingSources: material.tradingSources;
+    primaryUses: material.primaryUses;
 }
 metadata: {
-    era: 'medieval',
-        tags;
-    ['material', 'trade', 'economy', material.type],
-        confidence;
-    0.9,
-        sources;
-    ['Archaeological evidence', 'Trade records'],
-        lastUpdated;
-    new Date(),
-    ;
+    era: 'medieval';
+    tags: ['material', 'trade', 'economy', material.type];
+    confidence: 0.9;
+    sources: ['Archaeological evidence', 'Trade records'];
+    lastUpdated: new Date();
 }
 relationships: [];
 ;
 this.addNode(materialNode);
 // Add characters as entities
 for (const character of medievalContent.characters) {
-    const characterNode = {
-        id: `character_${character.id}` };
+    const characterNode = {};
+    id: `character_${character.id}`;
 }
-type: 'entity',
-    label;
-character.name,
-    description;
-character.description,
-    properties;
-{
-    profession: character.profession,
-        socialClass;
-    character.socialClass,
-        gender;
-    character.gender,
-        age;
-    character.age,
-        skills;
-    character.skills,
-        possessions;
-    character.possessions,
-        socialConnections;
-    character.socialConnections,
-    ;
+type: 'entity';
+label: character.name;
+description: character.description;
+properties: {
+    profession: character.profession;
+    socialClass: character.socialClass;
+    gender: character.gender;
+    age: character.age;
+    skills: character.skills;
+    possessions: character.possessions;
+    socialConnections: character.socialConnections;
 }
 metadata: {
-    era: 'medieval',
-        tags;
-    ['character', 'person', character.profession, character.socialClass],
-        confidence;
-    0.8,
-        sources;
-    ['Historical records', 'Archaeological evidence'],
-        lastUpdated;
-    new Date(),
-    ;
+    era: 'medieval';
+    tags: ['character', 'person', character.profession, character.socialClass];
+    confidence: 0.8;
+    sources: ['Historical records', 'Archaeological evidence'];
+    lastUpdated: new Date();
 }
 relationships: [];
 ;
 this.addNode(characterNode);
 // Add locations as entities
 for (const location of medievalContent.locations) {
-    const locationNode = {
-        id: `location_${location.id}` };
+    const locationNode = {};
+    id: `location_${location.id}`;
 }
-type: 'entity',
-    label;
-location.name,
-    description;
-location.description,
-    properties;
-{
-    type: location.type,
-        socialContext;
-    location.socialContext,
-        typicalActivities;
-    location.typicalActivities,
-        socialClasses;
-    location.socialClasses,
-        timeOfDay;
-    location.timeOfDay,
-        season;
-    location.season,
-        geographicalRegion;
-    location.geographicalRegion,
-        politicalContext;
-    location.politicalContext,
-    ;
+type: 'entity';
+label: location.name;
+description: location.description;
+properties: {
+    type: location.type;
+    socialContext: location.socialContext;
+    typicalActivities: location.typicalActivities;
+    socialClasses: location.socialClasses;
+    timeOfDay: location.timeOfDay;
+    season: location.season;
+    geographicalRegion: location.geographicalRegion;
+    politicalContext: location.politicalContext;
 }
 metadata: {
-    era: 'medieval',
-        tags;
-    ['location', 'setting', location.type],
-        confidence;
-    0.9,
-        sources;
-    ['Archaeological sites', 'Historical documents'],
-        lastUpdated;
-    new Date(),
-    ;
+    era: 'medieval';
+    tags: ['location', 'setting', location.type];
+    confidence: 0.9;
+    sources: ['Archaeological sites', 'Historical documents'];
+    lastUpdated: new Date();
 }
 relationships: [];
 ;
@@ -431,8 +321,7 @@ id: 'historical_fiction_medieval_era',
     direction;
 'sourceToTarget',
     context;
-'Historical fiction often set in medieval period',
-;
+'Historical fiction often set in medieval period';
 ;
 this.addRelationship({});
 id: 'fantasy_medieval_influences',
@@ -447,12 +336,10 @@ id: 'fantasy_medieval_influences',
     direction;
 'sourceToTarget',
     context;
-'Fantasy genre draws heavily from medieval aesthetics',
-;
+'Fantasy genre draws heavily from medieval aesthetics';
 ;
 addNode(node, UTDGNode);
-void {
-    this: .nodes.set(node.id, node),
+void { this: .nodes.set(node.id, node),
     this: .updateIndices(node),
     /**
     * Add relationship to the graph
@@ -569,24 +456,24 @@ void {
             confidenceThreshold;
         context.technical.accuracy === 'strict' ? 0.8 : 0.5,
             maxResults;
-        20,
-        ;
-    },
-    // Generate character suggestions
-    const: characters = relevantNodes.filter(node => ),
-    node, : .metadata.tags.includes('character') || node.type === 'entity' && node.id.startsWith('character_'),
-    if(characters) { }, : .length > 0
+        20;
+    }
 };
-{
+;
+// Generate character suggestions
+const characters = relevantNodes.filter(node => );
+;
+node.metadata.tags.includes('character') || node.type === 'entity' && node.id.startsWith('character_');
+;
+if (characters.length > 0) {
     suggestions.push({});
     type: 'character',
         content;
     characters[0],
         confidence;
-    characters[0].metadata.confidence,
-        reasoning;
-    `Character from ${context.historical.era} era matching ${context.creative.genre} genre`;
+    characters[0].metadata.confidence;
 }
+reasoning: `Character from ${context.historical.era} era matching ${context.creative.genre} genre`;
 alternatives: characters.slice(1, 4),
     historicalAccuracy;
 this.validateHistoricalAccuracy(characters[0], context);
@@ -602,10 +489,9 @@ if (settings.length > 0) {
         content;
     settings[0],
         confidence;
-    settings[0].metadata.confidence,
-        reasoning;
-    `Setting appropriate for ${context.historical.era} period and ${context.creative.genre} genre`;
+    settings[0].metadata.confidence;
 }
+reasoning: `Setting appropriate for ${context.historical.era} period and ${context.creative.genre} genre`;
 alternatives: settings.slice(1, 4),
     historicalAccuracy;
 this.validateHistoricalAccuracy(settings[0], context);
@@ -623,10 +509,9 @@ if (objects.length > 0) {
         content;
     objects[0],
         confidence;
-    objects[0].metadata.confidence,
-        reasoning;
-    `Objects and materials from ${context.historical.era} period`;
+    objects[0].metadata.confidence;
 }
+reasoning: `Objects and materials from ${context.historical.era} period`;
 alternatives: objects.slice(1, 4),
     historicalAccuracy;
 this.validateHistoricalAccuracy(objects[0], context);
@@ -686,15 +571,15 @@ source.includes('academic') ||
                                 this.indexByTags.get(tag).add(node.id);
                                 async;
                                 validateGraphConsistency();
-                                Promise < {
-                                    isValid: boolean,
-                                    errors: string,
-                                    warnings: string
-                                } > {
-                                    const: errors, string = [],
-                                    const: warnings, string = [],
-                                    : .relationships.values()
-                                };
+                                Promise < {};
+                                isValid: boolean;
+                                errors: string;
+                                warnings: string;
+                                    > {
+                                        const: errors, string = [],
+                                        const: warnings, string = [],
+                                        : .relationships.values()
+                                    };
                                 {
                                     if (!this.nodes.has(relationship.sourceNodeId)) {
                                         errors.push(`Relationship ${relationship.id} references non-existent source node ${relationship.sourceNodeId}`);
@@ -714,130 +599,132 @@ source.includes('academic') ||
                                             if (node.metadata.confidence < 0 || node.metadata.confidence > 1) {
                                                 errors.push(`Invalid confidence score ${node.metadata.confidence} for node ${node.id}`);
                                             }
-                                            return {
-                                                isValid: errors.length === 0,
-                                                errors,
-                                                warnings
-                                            };
-                                            hasCircularDependency(nodeId, string, visited, (Set), recursionStack, (Set));
-                                            boolean;
-                                            {
-                                                if (recursionStack.has(nodeId)) {
-                                                    return true;
-                                                    if (visited.has(nodeId)) {
-                                                        return false;
-                                                        visited.add(nodeId);
-                                                        recursionStack.add(nodeId);
-                                                        const node = this.nodes.get(nodeId);
-                                                        if (node) {
-                                                            for (const relationship of node.relationships) {
-                                                                if (relationship.type === 'requires' || relationship.type === 'partOf') {
-                                                                    const targetId = relationship.targetNodeId;
-                                                                    if (this.hasCircularDependency(targetId, visited, recursionStack)) {
-                                                                        return true;
-                                                                        recursionStack.delete(nodeId);
-                                                                        return false;
-                                                                        getSocialClassEconomicPower(socialClass, string);
-                                                                        number;
-                                                                        {
-                                                                            const powerMap = {
-                                                                                'peasant': 0.1,
-                                                                                'merchant': 0.4,
-                                                                                'craftsman': 0.3,
-                                                                                'minor_noble': 0.6,
-                                                                                'major_noble': 0.8,
-                                                                                'clergy': 0.5,
-                                                                                'royal': 1.0,
-                                                                            };
-                                                                            return powerMap[socialClass] || 0.1;
-                                                                            getSocialClassPoliticalInfluence(socialClass, string);
-                                                                            number;
-                                                                            {
-                                                                                const influenceMap = {
-                                                                                    'peasant': 0.0,
-                                                                                    'merchant': 0.2,
-                                                                                    'craftsman': 0.1,
-                                                                                    'minor_noble': 0.5,
-                                                                                    'major_noble': 0.8,
-                                                                                    'clergy': 0.6,
-                                                                                    'royal': 1.0,
+                                            return { isValid: errors.length === 0,
+                                                errors };
+                                            warnings;
+                                        }
+                                        ;
+                                        hasCircularDependency(nodeId, string, visited, (Set), recursionStack, (Set));
+                                        boolean;
+                                        {
+                                            if (recursionStack.has(nodeId)) {
+                                                return true;
+                                                if (visited.has(nodeId)) {
+                                                    return false;
+                                                    visited.add(nodeId);
+                                                    recursionStack.add(nodeId);
+                                                    const node = this.nodes.get(nodeId);
+                                                    if (node) {
+                                                        for (const relationship of node.relationships) {
+                                                            if (relationship.type === 'requires' || relationship.type === 'partOf') {
+                                                                const targetId = relationship.targetNodeId;
+                                                                if (this.hasCircularDependency(targetId, visited, recursionStack)) {
+                                                                    return true;
+                                                                    recursionStack.delete(nodeId);
+                                                                    return false;
+                                                                    getSocialClassEconomicPower(socialClass, string);
+                                                                    number;
+                                                                    {
+                                                                        const powerMap = {
+                                                                            'peasant': 0.1,
+                                                                            'merchant': 0.4,
+                                                                            'craftsman': 0.3,
+                                                                            'minor_noble': 0.6,
+                                                                            'major_noble': 0.8,
+                                                                            'clergy': 0.5,
+                                                                            'royal': 1.0
+                                                                        };
+                                                                    }
+                                                                    ;
+                                                                    return powerMap[socialClass] || 0.1;
+                                                                    getSocialClassPoliticalInfluence(socialClass, string);
+                                                                    number;
+                                                                    {
+                                                                        const influenceMap = {
+                                                                            'peasant': 0.0,
+                                                                            'merchant': 0.2,
+                                                                            'craftsman': 0.1,
+                                                                            'minor_noble': 0.5,
+                                                                            'major_noble': 0.8,
+                                                                            'clergy': 0.6,
+                                                                            'royal': 1.0
+                                                                        };
+                                                                    }
+                                                                    ;
+                                                                    return influenceMap[socialClass] || 0.0;
+                                                                    getSocialClassMobility(socialClass, string);
+                                                                    number;
+                                                                    {
+                                                                        const mobilityMap = {
+                                                                            'peasant': 0.1,
+                                                                            'merchant': 0.6,
+                                                                            'craftsman': 0.4,
+                                                                            'minor_noble': 0.3,
+                                                                            'major_noble': 0.2,
+                                                                            'clergy': 0.5,
+                                                                            'royal': 0.0
+                                                                        };
+                                                                    }
+                                                                    ;
+                                                                    return mobilityMap[socialClass] || 0.1;
+                                                                    getSocialClassOccupations(socialClass, string);
+                                                                    string;
+                                                                    {
+                                                                        const occupationMap = {
+                                                                            'peasant': ['farmer', 'laborer', 'serf', 'shepherd'],
+                                                                            'merchant': ['trader', 'banker', 'importer', 'shop owner'],
+                                                                            'craftsman': ['blacksmith', 'carpenter', 'weaver', 'potter', 'baker'],
+                                                                            'minor_noble': ['knight', 'lord of manor', 'court official'],
+                                                                            'major_noble': ['duke', 'earl', 'count', 'baron'],
+                                                                            'clergy': ['priest', 'monk', 'bishop', 'abbot'],
+                                                                            'royal': ['king', 'queen', 'prince', 'princess']
+                                                                        };
+                                                                    }
+                                                                    ;
+                                                                    return occupationMap[socialClass] || [];
+                                                                    getGraphStats();
+                                                                    {
+                                                                        totalNodes: number;
+                                                                        totalRelationships: number;
+                                                                        nodesByType: Record;
+                                                                        nodesByEra: Record;
+                                                                        averageConfidence: number;
+                                                                        const nodesByType = {};
+                                                                        const nodesByEra = {};
+                                                                        let totalConfidence = 0;
+                                                                        for (const node of this.nodes.values()) {
+                                                                            nodesByType[node.type] = (nodesByType[node.type] || 0) + 1;
+                                                                            if (node.metadata.era) {
+                                                                                nodesByEra[node.metadata.era] = (nodesByEra[node.metadata.era] || 0) + 1;
+                                                                                totalConfidence += node.metadata.confidence;
+                                                                                return {
+                                                                                    totalNodes: this.nodes.size,
+                                                                                    totalRelationships: this.relationships.size,
+                                                                                    nodesByType,
+                                                                                    nodesByEra,
+                                                                                    averageConfidence: this.nodes.size > 0 ? totalConfidence / this.nodes.size : 0
                                                                                 };
-                                                                                return influenceMap[socialClass] || 0.0;
-                                                                                getSocialClassMobility(socialClass, string);
-                                                                                number;
-                                                                                {
-                                                                                    const mobilityMap = {
-                                                                                        'peasant': 0.1,
-                                                                                        'merchant': 0.6,
-                                                                                        'craftsman': 0.4,
-                                                                                        'minor_noble': 0.3,
-                                                                                        'major_noble': 0.2,
-                                                                                        'clergy': 0.5,
-                                                                                        'royal': 0.0,
-                                                                                    };
-                                                                                    return mobilityMap[socialClass] || 0.1;
-                                                                                    getSocialClassOccupations(socialClass, string);
-                                                                                    string;
-                                                                                    {
-                                                                                        const occupationMap = {
-                                                                                            'peasant': ['farmer', 'laborer', 'serf', 'shepherd'],
-                                                                                            'merchant': ['trader', 'banker', 'importer', 'shop owner'],
-                                                                                            'craftsman': ['blacksmith', 'carpenter', 'weaver', 'potter', 'baker'],
-                                                                                            'minor_noble': ['knight', 'lord of manor', 'court official'],
-                                                                                            'major_noble': ['duke', 'earl', 'count', 'baron'],
-                                                                                            'clergy': ['priest', 'monk', 'bishop', 'abbot'],
-                                                                                            'royal': ['king', 'queen', 'prince', 'princess'],
-                                                                                        };
-                                                                                        return occupationMap[socialClass] || [];
-                                                                                        getGraphStats();
-                                                                                        {
-                                                                                            totalNodes: number;
-                                                                                            totalRelationships: number;
-                                                                                            nodesByType: Record;
-                                                                                            nodesByEra: Record;
-                                                                                            averageConfidence: number;
-                                                                                            const nodesByType = {};
-                                                                                            const nodesByEra = {};
-                                                                                            let totalConfidence = 0;
-                                                                                            for (const node of this.nodes.values()) {
-                                                                                                nodesByType[node.type] = (nodesByType[node.type] || 0) + 1;
-                                                                                                if (node.metadata.era) {
-                                                                                                    nodesByEra[node.metadata.era] = (nodesByEra[node.metadata.era] || 0) + 1;
-                                                                                                    totalConfidence += node.metadata.confidence;
-                                                                                                    return {
-                                                                                                        totalNodes: this.nodes.size,
-                                                                                                        totalRelationships: this.relationships.size,
-                                                                                                        nodesByType,
-                                                                                                        nodesByEra,
-                                                                                                        averageConfidence: this.nodes.size > 0 ? totalConfidence / this.nodes.size : 0,
-                                                                                                    };
-                                                                                                    exportGraph();
-                                                                                                    {
-                                                                                                        nodes: UTDGNode;
-                                                                                                        relationships: UTDGRelationship;
-                                                                                                        metadata: {
-                                                                                                            exportDate: Date;
-                                                                                                            version: string;
-                                                                                                            stats: any;
-                                                                                                        }
-                                                                                                        ;
-                                                                                                        return {
-                                                                                                            nodes: Array.from(this.nodes.values()),
-                                                                                                            relationships: Array.from(this.relationships.values()),
-                                                                                                            metadata: {
-                                                                                                                exportDate: new Date(),
-                                                                                                                version: '1.0.0',
-                                                                                                                stats: this.getGraphStats(),
-                                                                                                            },
-                                                                                                            export: , default: UTDGFoundation
-                                                                                                        };
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
                                                                             }
+                                                                            ;
+                                                                            exportGraph();
+                                                                            {
+                                                                                nodes: UTDGNode;
+                                                                                relationships: UTDGRelationship;
+                                                                                metadata: { }
+                                                                                exportDate: Date;
+                                                                                version: string;
+                                                                                stats: any;
+                                                                            }
+                                                                            ;
+                                                                            return { nodes: Array.from(this.nodes.values()),
+                                                                                relationships: Array.from(this.relationships.values()),
+                                                                                metadata: {
+                                                                                    exportDate: new Date(),
+                                                                                    version: '1.0.0',
+                                                                                    stats: this.getGraphStats()
+                                                                                }
+                                                                            };
+                                                                            export default UTDGFoundation;
                                                                         }
                                                                     }
                                                                 }

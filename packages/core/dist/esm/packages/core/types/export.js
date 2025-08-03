@@ -42,10 +42,9 @@ z.boolean().default(false),
     include_comments;
 z.boolean().default(false),
     include_attachments;
-z.boolean().default(false),
-    // Format-specific options
-    format_options;
-z.record(z.unknown()).default({}),
+z.boolean().default(false);
+// Format-specific options
+format_options: z.record(z.unknown()).default({}),
     // Filtering options
     filter_options;
 z.record(z.unknown()).default({}),
@@ -80,8 +79,7 @@ true,
     usage_count;
 true,
     last_used_at;
-true,
-;
+true;
 ;
 export const UpdateExportTemplateSchema = CreateExportTemplateSchema.partial();
 // Export Job Types
@@ -108,9 +106,8 @@ z.string().uuid().optional(),
     export_format;
 ExportFormatSchema,
     export_type;
-ExportTypeSchema,
-    export_scope;
-z.record(z.unknown()).default({}),
+ExportTypeSchema;
+export_scope: z.record(z.unknown()).default({}),
     // Source data
     source_snapshot_id;
 z.string().uuid().optional(),
@@ -185,8 +182,7 @@ true,
     memory_usage;
 true,
     cpu_usage;
-true,
-;
+true;
 ;
 export const UpdateExportJobSchema = z.object({});
 status: ExportJobStatusSchema.optional(),
@@ -213,8 +209,7 @@ z.number().int().min(0).optional(),
     memory_usage;
 z.number().int().min(0).optional(),
     cpu_usage;
-z.number().min(0).max(100).optional(),
-;
+z.number().min(0).max(100).optional();
 ;
 // Export Schedule Types
 export const ExportScheduleSchema = z.object({});
@@ -234,10 +229,9 @@ z.boolean().default(true),
     schedule_expression;
 z.string().min(1).max(100), // Cron expression
     timezone;
-z.string().default('UTC'),
-    // Export configuration
-    export_options;
-z.record(z.unknown()).default({}),
+z.string().default('UTC');
+// Export configuration
+export_options: z.record(z.unknown()).default({}),
     notification_options;
 z.record(z.unknown()).default({}),
     // Schedule metadata
@@ -274,8 +268,7 @@ true,
     successful_runs;
 true,
     failed_runs;
-true,
-;
+true;
 ;
 export const UpdateExportScheduleSchema = CreateExportScheduleSchema.partial();
 // Export Share Types
@@ -331,8 +324,7 @@ z.string().datetime().optional(),
 z.number().int().min(0).default(0),
     // Share URL
     share_url;
-z.string().url().optional(),
-;
+z.string().url().optional();
 ;
 export const CreateExportShareSchema = ExportShareSchema.omit({});
 id: true,
@@ -343,8 +335,7 @@ true,
     last_accessed_at;
 true,
     access_count;
-true,
-;
+true;
 ;
 export const UpdateExportShareSchema = z.object({});
 share_name: z.string().max(255).optional(),
@@ -359,8 +350,7 @@ z.array(z.string()).optional(),
     expires_at;
 z.string().datetime().optional(),
     is_active;
-z.boolean().optional(),
-;
+z.boolean().optional();
 ;
 // Export Analytics Types
 export const ExportAnalyticsSchema = z.object({});
@@ -393,8 +383,7 @@ z.string().datetime(),
     date_bucket;
 z.string().date(),
     hour_bucket;
-z.string().datetime(),
-;
+z.string().datetime();
 ;
 export const CreateExportAnalyticsSchema = ExportAnalyticsSchema.omit({});
 id: true,
@@ -403,8 +392,7 @@ true,
     date_bucket;
 true,
     hour_bucket;
-true,
-;
+true;
 ;
 // Export Format Definition Types
 export const ExportFormatDefinitionSchema = z.object({});
@@ -430,10 +418,9 @@ z.boolean().default(false),
     supports_encryption;
 z.boolean().default(false),
     max_file_size;
-z.number().int().min(0).optional(),
-    // Format configuration
-    default_options;
-z.record(z.unknown()).default({}),
+z.number().int().min(0).optional();
+// Format configuration
+default_options: z.record(z.unknown()).default({}),
     validation_schema;
 z.record(z.unknown()).optional(),
     // Format status
@@ -451,8 +438,7 @@ id: true,
     created_at;
 true,
     updated_at;
-true,
-;
+true;
 ;
 export const UpdateExportFormatDefinitionSchema = CreateExportFormatDefinitionSchema.partial();
 // Export Options Types
@@ -474,8 +460,7 @@ z.boolean().default(false),
 z.object({});
 start: z.string().datetime().optional(),
     end;
-z.string().datetime().optional(),
-;
+z.string().datetime().optional();
 optional(),
     user_filters;
 z.array(z.string().uuid()).optional(),
@@ -492,16 +477,14 @@ pretty: z.boolean().default(true),
     include_schema;
 z.boolean().default(false),
     array_format;
-z.boolean().default(false),
-;
+z.boolean().default(false);
 ;
 export const YamlExportOptionsSchema = CommonExportOptionsSchema.extend({});
 include_comments: z.boolean().default(true),
     flow_style;
 z.boolean().default(false),
     explicit_start;
-z.boolean().default(false),
-;
+z.boolean().default(false);
 ;
 export const XmlExportOptionsSchema = CommonExportOptionsSchema.extend({});
 pretty: z.boolean().default(true),
@@ -510,8 +493,7 @@ z.boolean().default(true),
     namespace;
 z.string().optional(),
     root_element;
-z.string().default('export'),
-;
+z.string().default('export');
 ;
 export const CsvExportOptionsSchema = CommonExportOptionsSchema.extend({});
 delimiter: z.string().default(','),
@@ -520,8 +502,7 @@ z.boolean().default(true),
     quote_all;
 z.boolean().default(false),
     flatten_objects;
-z.boolean().default(true),
-;
+z.boolean().default(true);
 ;
 export const MarkdownExportOptionsSchema = CommonExportOptionsSchema.extend({});
 include_toc: z.boolean().default(true),
@@ -530,8 +511,7 @@ z.enum(['github', 'commonmark']).default('github'),
     heading_level;
 z.number().int().min(1).max(6).default(1),
     code_blocks;
-z.boolean().default(true),
-;
+z.boolean().default(true);
 ;
 export const PdfExportOptionsSchema = CommonExportOptionsSchema.extend({});
 page_size: z.enum(['A4', 'A3', 'Letter', 'Legal']).default('A4'),
@@ -549,14 +529,12 @@ z.number().min(0).default(20),
     bottom;
 z.number().min(0).default(20),
     left;
-z.number().min(0).default(20),
-;
+z.number().min(0).default(20);
 ({
     top: 20,
     right: 20,
     bottom: 20,
-    left: 20,
-});
+    left: 20 });
 ;
 export const HtmlExportOptionsSchema = CommonExportOptionsSchema.extend({});
 include_css: z.boolean().default(true),
@@ -565,8 +543,7 @@ z.boolean().default(true),
     theme;
 z.enum(['default', 'dark', 'light']).default('default'),
     minify;
-z.boolean().default(false),
-;
+z.boolean().default(false);
 ;
 export const ZipExportOptionsSchema = CommonExportOptionsSchema.extend({});
 compression_level: z.number().int().min(0).max(9).default(6),
@@ -575,8 +552,7 @@ z.boolean().default(true),
     separate_files;
 z.boolean().default(false),
     folder_structure;
-z.boolean().default(true),
-;
+z.boolean().default(true);
 ;
 export const VFXExportOptionsSchema = CommonExportOptionsSchema.extend({});
 // Export quality level
@@ -619,8 +595,7 @@ z.boolean().default(true),
     preserve_node_configuration;
 z.boolean().default(true),
     include_rng_states;
-z.boolean().default(true),
-;
+z.boolean().default(true);
 ;
 // Export Result Types
 export const ExportResultSchema = z.object({});
@@ -636,8 +611,7 @@ z.string().datetime().optional(),
     share_token;
 z.string().optional(),
     error_message;
-z.string().optional(),
-;
+z.string().optional();
 ;
 export const ExportProgressSchema = z.object({});
 job_id: z.string().uuid(),
@@ -650,8 +624,7 @@ z.string().optional(),
     estimated_completion;
 z.string().datetime().optional(),
     processing_log;
-z.string().optional(),
-;
+z.string().optional();
 ;
 // Export Statistics Types
 export const ExportStatisticsSchema = z.object({});
@@ -671,6 +644,8 @@ z.array(z.object({}), template_id, z.string().uuid(), template_name, z.string(),
 success_rate: z.number().min(0).max(100),
     last_export_at;
 z.string().datetime().optional();
+;
+share: ExportShare | null;
 ;
 // Validation helpers
 export function validateExportOptions(format, options) {

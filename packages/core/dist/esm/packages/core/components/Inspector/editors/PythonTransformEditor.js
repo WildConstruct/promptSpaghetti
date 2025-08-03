@@ -25,11 +25,7 @@ export const PythonTransformEditor = (props) => {
     const defaultOutput = pythonConfig.defaultOutput || '';
     // No manual collapse state needed - managed by ProgressiveDisclosureSection
     // State for validation
-    const [codeValidation, setCodeValidation] = useState < {
-        valid: boolean,
-        errors: string,
-        warnings: string
-    } | null > (null);
+    const [codeValidation, setCodeValidation] = useState(null);
     const [isValidating, setIsValidating] = useState(false);
     const handleFieldChange = (field, value) => {
         onChange({ [field]: value });
@@ -41,8 +37,7 @@ export const PythonTransformEditor = (props) => {
 };
 pythonConfig,
     [field];
-value,
-;
+value;
 ;
 ;
 const handleModuleToggle = (module) => {
@@ -95,24 +90,25 @@ const addCustomModule = () => {
                         warnings.push('Potential infinite loop detected');
                         setCodeValidation({});
                         valid: errors.length === 0,
-                            errors,
-                            warnings;
+                            errors;
                     }
-                    ;
+                    warnings;
                 }
-                try { }
+                ;
+                try {
+                }
                 catch (error) {
                     setCodeValidation({});
                     valid: false,
                         errors;
                     ['Validation service unavailable'],
                         warnings;
-                    [],
-                    ;
+                    [];
                 }
-                ;
             }
-            try { }
+            ;
+            try {
+            }
             finally {
                 setIsValidating(false);
             }
@@ -129,49 +125,75 @@ const addCustomModule = () => {
                     color: '#e2e8f0',
                     resize: 'vertical',
                     minHeight: 200,
-                    maxHeight: 400,
+                    maxHeight: 400
                 };
-                if (codeValidation && !codeValidation.valid) {
-                    return { ...baseStyles, borderColor: '#e53e3e' };
-                    return baseStyles;
-                }
-                ;
-                return;
-                _jsx("div", { className: "python-transform-editor", children: _jsxs(ProgressiveDisclosureSection, { title: "Python Code", level: "basic", description: "Write Python functions to transform your story data", defaultExpanded: true, priority: "critical", fieldName: "code", children: [_jsx("div", { style: { marginBottom: 8 }, children: _jsxs("div", { style: {
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        marginBottom: 8,
-                                    }, children: [_jsx("label", { style: {
-                                                fontWeight: 500,
-                                                color: '#e2e8f0',
-                                                fontSize: 12,
-                                            }, children: "Transform Function" }), _jsxs("div", { style: { display: 'flex', gap: 8 }, children: [isValidating && ()
-                                                    < span, " style=", { fontSize: 10, color: '#4299e1' }, "> Validating..."] }), ")}", _jsx("button", { onClick: validateCode, disabled: isValidating, style: {
-                                                padding: '4px 8px',
-                                                fontSize: 10,
-                                                background: '#4299e1',
-                                                border: 'none',
-                                                borderRadius: 2,
-                                                color: 'white',
-                                                cursor: 'pointer',
-                                                opacity: isValidating ? 0.5 : 1,
-                                            }, children: "Validate" })] }) }), _jsx("textarea", { value: code, onChange: (e) => handleFieldChange('code', e.target.value), placeholder: "def transform(input_data):\\n    # Your Python code here\\n    return input_data", style: getCodeEditorStyles() }), codeValidation && ()
-                                < div, " style=", { marginTop: 8 }, ">", codeValidation.errors.length > 0 && ()
-                                < div, " style=", {
-                                background: 'rgba(229, 62, 62, 0.1)',
-                                border: '1px solid #e53e3e',
-                                borderRadius: 4,
-                                padding: 8,
-                                marginBottom: 8,
-                            }, ">", _jsx("div", { style: { color: '#e53e3e', fontSize: 10, fontWeight: 500, marginBottom: 4 }, children: "Validation Errors:" }), codeValidation.errors.map((error, index) => ()
-                                < div, key = { index }, style = {}, { color: '#e53e3e', fontSize: 10 }), "> \u2022 ", error] }) });
             };
+            if (codeValidation && !codeValidation.valid) {
+                return { ...baseStyles, borderColor: '#e53e3e' };
+                return baseStyles;
+            }
+            ;
+            return;
+            _jsx("div", { className: "python-transform-editor", children: _jsx(ProgressiveDisclosureSection, { title: "Python Code", level: "basic", description: "Write Python functions to transform your story data", defaultExpanded: true, priority: "critical", fieldName: "code", children: _jsx("div", { style: { marginBottom: 8 }, children: _jsxs("div", { style: {
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginBottom: 8
+                            }, children: [_jsx("label", { style: {
+                                        fontWeight: 500,
+                                        color: '#e2e8f0',
+                                        fontSize: 12
+                                    }, children: "Transform Function" }), _jsxs("div", { style: { display: 'flex', gap: 8 }, children: [isValidating && ()
+                                            < span, " style=", { fontSize: 10, color: '#4299e1' }, "> Validating..."] }), ")}", _jsx("button", { onClick: validateCode, disabled: isValidating, style: {
+                                        padding: '4px 8px',
+                                        fontSize: 10,
+                                        background: '#4299e1',
+                                        border: 'none',
+                                        borderRadius: 2,
+                                        color: 'white',
+                                        cursor: 'pointer',
+                                        opacity: isValidating ? 0.5 : 1
+                                    }
+                                        >
+                                            Validate })] }) }) }) })
+                ,
+                    _jsx("textarea", { value: code, onChange: (e) => handleFieldChange('code', e.target.value), placeholder: "def transform(input_data):\\n    # Your Python code here\\n    return input_data", style: getCodeEditorStyles() });
+            { /* Validation Results */ }
+            {
+                codeValidation && ()
+                    < div;
+                style = {};
+                {
+                    marginTop: 8;
+                }
+            }
+             >
+                { codeValidation, : .errors.length > 0 && ()
+                        < div, style = {} };
+            {
+                background: 'rgba(229, 62, 62, 0.1)';
+                border: '1px solid #e53e3e';
+                borderRadius: 4;
+                padding: 8;
+                marginBottom: 8;
+            }
         }
-        finally {
+        finally { }
+         >
+            _jsx("div", { style: { color: '#e53e3e', fontSize: 10, fontWeight: 500, marginBottom: 4 }, children: "Validation Errors:" });
+        {
+            codeValidation.errors.map((error, index) => ()
+                < div, key = { index }, style = {}, { color: '#e53e3e', fontSize: 10 });
         }
+         >
+        ;
     };
 };
+{
+    error;
+}
+div >
+;
 div >
 ;
 {
@@ -179,16 +201,11 @@ div >
         < div;
     style = {};
     {
-        background: 'rgba(237, 137, 54, 0.1)',
-            border;
-        '1px solid #ed8936',
-            borderRadius;
-        4,
-            padding;
-        8,
-            marginBottom;
-        8,
-        ;
+        background: 'rgba(237, 137, 54, 0.1)';
+        border: '1px solid #ed8936';
+        borderRadius: 4;
+        padding: 8;
+        marginBottom: 8;
     }
 }
  >
@@ -211,16 +228,11 @@ div >
         < div;
     style = {};
     {
-        background: 'rgba(56, 178, 172, 0.1)',
-            border;
-        '1px solid #38b2ac',
-            borderRadius;
-        4,
-            padding;
-        8,
-            marginBottom;
-        8,
-        ;
+        background: 'rgba(56, 178, 172, 0.1)';
+        border: '1px solid #38b2ac';
+        borderRadius: 4;
+        padding: 8;
+        marginBottom: 8;
     }
 }
  >
@@ -232,7 +244,7 @@ div >
 _jsxs("div", { style: {
         fontSize: 10,
         color: '#a0aec0',
-        lineHeight: 1.4,
+        lineHeight: 1.4
     }, children: [_jsx("strong", { children: "Requirements:" }), _jsx("br", {}), "\u2022 Must define a ", _jsx("code", { children: "transform(input_data)" }), " function", _jsx("br", {}), "\u2022 Function should return a string or value that can be converted to string", _jsx("br", {}), "\u2022 Use ", _jsx("code", { children: "input_data" }), " parameter to access the input from connected nodes", _jsx("br", {}), "\u2022 Access context variables via ", _jsx("code", { children: "context['variable_name']" })] });
 div >
 ;
@@ -254,18 +266,18 @@ fieldName = "resources"
                                 fontSize: 10,
                                 color: '#a0aec0',
                                 lineHeight: 1.4,
-                                marginTop: 8,
+                                marginTop: 8
                             }, children: "Resource limits help prevent runaway code from consuming excessive system resources. Set appropriate limits based on your expected processing requirements." })
                             ,
                                 _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("div", { style: { marginBottom: 12 }, children: [_jsxs("div", { style: {
                                                         display: 'flex',
                                                         justifyContent: 'space-between',
                                                         alignItems: 'center',
-                                                        marginBottom: 8,
+                                                        marginBottom: 8
                                                     }, children: [_jsx("label", { style: {
                                                                 fontWeight: 500,
                                                                 color: '#e2e8f0',
-                                                                fontSize: 12,
+                                                                fontSize: 12
                                                             }, children: "Available Modules" }), _jsx("button", { onClick: addCustomModule, style: {
                                                                 padding: '4px 8px',
                                                                 fontSize: 10,
@@ -273,7 +285,7 @@ fieldName = "resources"
                                                                 border: 'none',
                                                                 borderRadius: 2,
                                                                 color: 'white',
-                                                                cursor: 'pointer',
+                                                                cursor: 'pointer'
                                                             }, children: "+ Custom" })] }), _jsxs("div", { style: { marginBottom: 12 }, children: [_jsx("div", { style: { fontSize: 10, color: '#a0aec0', marginBottom: 8 }, children: "Common Modules:" }), _jsxs("div", { style: { display: 'flex', flexWrap: 'wrap', gap: 4 }, children: [COMMON_MODULES.map((module) => ()
                                                                     < button, key = { module }, onClick = {}()), " => handleModuleToggle(module)} style=", {
                                                                     padding: '2px 6px',
@@ -283,8 +295,10 @@ fieldName = "resources"
                                                                     borderRadius: 2,
                                                                     color: 'white',
                                                                     cursor: 'pointer',
-                                                                    opacity: allowedModules.includes(module) ? 1 : 0.7,
-                                                                }, ">", module] }), "))}"] })] }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: 10, color: '#a0aec0', marginBottom: 8 }, children: "Currently Allowed:" }), _jsxs("div", { style: { display: 'flex', flexWrap: 'wrap', gap: 4 }, children: [allowedModules.map((module) => ()
+                                                                    opacity: allowedModules.includes(module) ? 1 : 0.7
+                                                                }
+                                                                    >
+                                                                        { module }] }), "))}"] })] }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: 10, color: '#a0aec0', marginBottom: 8 }, children: "Currently Allowed:" }), _jsxs("div", { style: { display: 'flex', flexWrap: 'wrap', gap: 4 }, children: [allowedModules.map((module) => ()
                                                             < div, key = { module }, style = {}, {
                                                             display: 'flex',
                                                             alignItems: 'center',
@@ -294,7 +308,7 @@ fieldName = "resources"
                                                             border: '1px solid #4a5568',
                                                             borderRadius: 2,
                                                             fontSize: 10,
-                                                            color: '#e2e8f0',
+                                                            color: '#e2e8f0'
                                                         }), ">", module, _jsx("button", { onClick: () => removeModule(module), style: {
                                                                 background: 'none',
                                                                 border: 'none',
@@ -303,7 +317,7 @@ fieldName = "resources"
                                                                 fontSize: 10,
                                                                 padding: 0,
                                                                 width: 12,
-                                                                height: 12,
+                                                                height: 12
                                                             }, children: "\u2715" })] }), "))}"] })] }));
 div >
 ;
@@ -325,16 +339,16 @@ fieldName = "debug"
                         gap: 8,
                         fontSize: 12,
                         color: '#e2e8f0',
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }, children: [_jsx("input", { type: "checkbox", checked: strictMode, onChange: (e) => handlePythonConfigChange('strictMode', e.target.checked), style: {
                                 width: 14,
                                 height: 14,
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             } }), "Strict Mode"] }), _jsx("div", { style: {
                         fontSize: 10,
                         color: '#a0aec0',
                         marginTop: 2,
-                        marginLeft: 22,
+                        marginLeft: 22
                     }, children: "Enable additional security restrictions and validation" })] })
             ,
                 _jsxs("div", { style: { marginBottom: 16 }, children: [_jsxs("label", { style: {
@@ -343,16 +357,16 @@ fieldName = "debug"
                                 gap: 8,
                                 fontSize: 12,
                                 color: '#e2e8f0',
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             }, children: [_jsx("input", { type: "checkbox", checked: enableCaching, onChange: (e) => handlePythonConfigChange('enableCaching', e.target.checked), style: {
                                         width: 14,
                                         height: 14,
-                                        cursor: 'pointer',
+                                        cursor: 'pointer'
                                     } }), "Enable Caching"] }), _jsx("div", { style: {
                                 fontSize: 10,
                                 color: '#a0aec0',
                                 marginTop: 2,
-                                marginLeft: 22,
+                                marginLeft: 22
                             }, children: "Cache execution results for identical inputs to improve performance" })] })
                     ,
                         _jsx(TextFieldEditor, { label: "Executor URL (Optional)", value: executorUrl, fieldKey: "executorUrl", zodType: null, onChange: (value) => handlePythonConfigChange('executorUrl', value), placeholder: "http://localhost:8001" })
@@ -380,19 +394,19 @@ _jsxs("div", { style: { marginTop: 16 }, children: [_jsxs("div", { style: {
                 borderRadius: 4,
                 padding: 12,
                 fontSize: 12,
-                color: '#e2e8f0',
+                color: '#e2e8f0'
             }, children: [_jsx("div", { style: { marginBottom: 8, fontWeight: 500 }, children: "Python Execution Configuration:" }), _jsxs("div", { style: { marginBottom: 4 }, children: [_jsx("span", { style: { color: '#a0aec0' }, children: "Memory Limit:" }), " ", memoryLimit] }), _jsxs("div", { style: { marginBottom: 4 }, children: [_jsx("span", { style: { color: '#a0aec0' }, children: "Timeout:" }), " ", timeout, " seconds"] }), _jsxs("div", { style: { marginBottom: 4 }, children: [_jsx("span", { style: { color: '#a0aec0' }, children: "Modules:" }), " ", allowedModules.join(', ')] }), _jsxs("div", { style: { marginBottom: 4 }, children: [_jsx("span", { style: { color: '#a0aec0' }, children: "Strict Mode:" }), " ", strictMode ? 'Enabled' : 'Disabled'] }), _jsxs("div", { style: { marginBottom: 4 }, children: [_jsx("span", { style: { color: '#a0aec0' }, children: "Caching:" }), " ", enableCaching ? 'Enabled' : 'Disabled'] }), _jsxs("div", { style: { marginBottom: 4 }, children: [_jsx("span", { style: { color: '#a0aec0' }, children: "Fallback:" }), " ", fallbackBehavior] }), executorUrl && ()
                     < div, " style=", { marginBottom: 4 }, ">", _jsx("span", { style: { color: '#a0aec0' }, children: "Custom Executor:" }), " ", executorUrl] }), ")}", _jsxs("div", { style: {
                 marginTop: 8,
                 padding: 8,
                 background: 'rgba(66, 153, 225, 0.1)',
-                borderRadius: 2,
+                borderRadius: 2
             }, children: [_jsx("div", { style: { color: '#a0aec0', fontSize: 10, marginBottom: 4 }, children: "Code Preview:" }), _jsxs("div", { style: {
                         fontFamily: 'monospace',
                         fontSize: 9,
                         maxHeight: 100,
                         overflow: 'auto',
-                        whiteSpace: 'pre-wrap',
+                        whiteSpace: 'pre-wrap'
                     }, children: [code.slice(0, 200), code.length > 200 ? '...' : ''] })] })] });
 div >
 ;

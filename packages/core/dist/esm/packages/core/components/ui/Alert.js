@@ -1,4 +1,6 @@
-`alert alert-${variant} ${className || ''}`;
+()
+    < div;
+className = {} `alert alert-${variant} ${className || ''}`;
 {
     props;
 }
@@ -11,9 +13,8 @@ div >
 ;
 export const AlertTitle = ({
     children,
-    className,
-    ...props
-});
+    className });
+props;
 ()
     < h5;
 className = {} `alert-title ${className || ''}`;
@@ -29,9 +30,8 @@ h5 >
 ;
 export const AlertDescription = ({
     children,
-    className,
-    ...props
-});
+    className });
+props;
 ()
     < p;
 className = {} `alert-description ${className || ''}`;

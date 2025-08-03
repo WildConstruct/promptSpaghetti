@@ -7,37 +7,32 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with enhanced accessibility, security validation, and modern design
  */
 import { useState, useCallback, useMemo } from 'react';
-import { GENERATION_DEFAULTS } from '../../types/NodeGenerationTypes';
+from;
+'../../types/NodeGenerationTypes';
+onCancel: () => void ;
+isGenerating ?  : boolean;
+theme ?  : 'light' | 'dark' | 'cinema';
+/**
+* Component for selecting suggestions and configuring generation options
+*/
 export const [generationOptions, setGenerationOptions] = useState({});
-layout: GENERATION_DEFAULTS.DEFAULT_LAYOUT,
-    spacing;
-GENERATION_DEFAULTS.DEFAULT_SPACING,
-    connectionPattern;
-GENERATION_DEFAULTS.DEFAULT_CONNECTION_PATTERN,
-    nodeConfiguration;
-{
-    autoConnect: true,
-        useSmartPositioning;
-    true,
-        preserveUserNodes;
-    true,
-    ;
+layout: GENERATION_DEFAULTS.DEFAULT_LAYOUT;
+spacing: GENERATION_DEFAULTS.DEFAULT_SPACING;
+connectionPattern: GENERATION_DEFAULTS.DEFAULT_CONNECTION_PATTERN;
+nodeConfiguration: {
+    autoConnect: true;
+    useSmartPositioning: true;
+    preserveUserNodes: true;
 }
 validation: {
-    enableStrictValidation: true,
-        allowDuplicateConnections;
-    false,
-        maxNodesPerGeneration;
-    GENERATION_DEFAULTS.MAX_NODES_GENERATED,
-    ;
+    enableStrictValidation: true;
+    allowDuplicateConnections: false;
+    maxNodesPerGeneration: GENERATION_DEFAULTS.MAX_NODES_GENERATED;
 }
 performance: {
-    batchSize: GENERATION_DEFAULTS.BATCH_SIZE,
-        useProgressiveGeneration;
-    false,
-        enablePerformanceTracking;
-    true,
-    ;
+    batchSize: GENERATION_DEFAULTS.BATCH_SIZE;
+    useProgressiveGeneration: false;
+    enablePerformanceTracking: true;
 }
 ;
 // Theme styles
@@ -53,7 +48,7 @@ const getThemeStyles = () => {
             success: '#10b981',
             warning: '#f59e0b',
             error: '#ef4444',
-            hover: '#f3f4f6',
+            hover: '#f3f4f6'
         },
         dark: {
             background: '#1f2937',
@@ -65,7 +60,7 @@ const getThemeStyles = () => {
             success: '#34d399',
             warning: '#fbbf24',
             error: '#f87171',
-            hover: '#374151',
+            hover: '#374151'
         },
         cinema: {
             background: '#1a1a1a',
@@ -77,32 +72,30 @@ const getThemeStyles = () => {
             success: '#00ff88',
             warning: '#ffaa00',
             error: '#ff4444',
-            hover: '#2d2d2d',
-        },
-        return: themes[theme]
+            hover: '#2d2d2d'
+        }
     };
-    const styles = getThemeStyles();
-    // Toggle suggestion selection
-    const toggleSuggestion = useCallback((suggestionId) => {
-        setSelectedSuggestions(prev => { });
-        const newSelected = new Set(prev);
-        if (newSelected.has(suggestionId)) {
-            newSelected.delete(suggestionId);
-        }
-        else {
-            newSelected.add(suggestionId);
-            return newSelected;
-        }
-    });
-}, [];
+    return themes[theme];
+};
+const styles = getThemeStyles();
+// Toggle suggestion selection
+const toggleSuggestion = useCallback((suggestionId) => {
+    setSelectedSuggestions(prev => { });
+    const newSelected = new Set(prev);
+    if (newSelected.has(suggestionId)) {
+        newSelected.delete(suggestionId);
+    }
+    else {
+        newSelected.add(suggestionId);
+        return newSelected;
+    }
+});
+[];
+;
 // Select all suggestions
-const selectAll = useCallback(() => {
-    setSelectedSuggestions(new Set(suggestions.map(s => s.id)));
-}, [suggestions]);
+const selectAll = useCallback(() => { setSelectedSuggestions(new Set(suggestions.map(s => s.id))); }, [suggestions]);
 // Clear all selections
-const clearAll = useCallback(() => {
-    setSelectedSuggestions(new Set());
-}, []);
+const clearAll = useCallback(() => { setSelectedSuggestions(new Set()); }, []);
 // Handle generation with security validation
 const handleGenerate = () => {
     const selected = suggestions.filter(s => selectedSuggestions.has(s.id));
@@ -129,7 +122,7 @@ const handleGenerate = () => {
         selectedCount: selected.length,
         averageConfidence,
         highConfidenceCount: selected.filter(s => s.confidence >= 80).length,
-        estimatedGenerationTime: Math.ceil(selected.length / 10) // Rough estimate,
+        estimatedGenerationTime: Math.ceil(selected.length / 10) // Rough estimate }
     };
 }, [suggestions, selectedSuggestions];
 // Confidence color helper
@@ -146,24 +139,22 @@ const getCategoryIcon = (category) => {
         content: '📝',
         logic: '⚙️',
         output: '📤',
-        variable: '🔢',
+        variable: '🔢'
     };
-    return icons[category] || '📋';
 };
+return icons[category] || '📋';
+;
 return;
 _jsx("div", { style: {
         width: '800px',
         maxHeight: '700px',
-        background: styles.background,
-        border: `1px solid ${styles.border}`
-    }, "borderRadius:": true });
-'16px',
-    boxShadow;
-'0 20px 60px rgba(0, 0, 0, 0.3)',
-    overflow;
-'hidden',
-    fontFamily;
-'Inter, system-ui, sans-serif';
+        background: styles.background
+    }, "border:": true });
+`1px solid ${styles.border}`;
+borderRadius: '16px';
+boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)';
+overflow: 'hidden';
+fontFamily: 'Inter, system-ui, sans-serif';
 role = "dialog";
 aria - labelledby;
 "suggestion-selector-title";
@@ -174,116 +165,62 @@ aria - describedby;
     < div;
 style = {};
 {
-    padding: '24px',
-        borderBottom;
-    `1px solid ${styles.border}`;
+    padding: '24px';
 }
+borderBottom: `1px solid ${styles.border}`;
 background: styles.secondary;
  >
-    (_jsx("h2", { id: "suggestion-selector-title", style: {
+    _jsxs("h2", { id: "suggestion-selector-title", style: {
             margin: '0 0 8px 0',
             fontSize: '24px',
             fontWeight: 600,
-            color: styles.text,
-        }, children: "\uD83C\uDFAF Select Suggestions to Generate" })
-        ,
-            _jsx("p", { id: "suggestion-selector-description", style: {
+            color: styles.text
+        }
+            >
+        , Select: true, Suggestions: true, to: true, Generate: true, h2: true, children: [_jsx("p", { id: "suggestion-selector-description", style: {
                     margin: 0,
                     color: styles.textSecondary,
-                    lineHeight: 1.5,
-                }, children: "Choose which analyzed suggestions you'd like to convert into nodes on your canvas" }));
-{ /* Statistics */ }
+                    lineHeight: 1.5
+                }, children: "Choose which analyzed suggestions you'd like to convert into nodes on your canvas" }), _jsxs("div", { style: {
+                    marginTop: '16px',
+                    padding: '12px',
+                    background: styles.hover,
+                    borderRadius: '8px',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gap: '16px',
+                    fontSize: '14px'
+                }, children: [_jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "Selected" }), _jsxs("div", { style: { color: styles.accent, fontWeight: 600, fontSize: '18px' }, children: [stats.selectedCount, "/", stats.totalSuggestions] })] }), _jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "Avg Confidence" }), _jsxs("div", { style: {
+                                    color: getConfidenceColor(stats.averageConfidence),
+                                    fontWeight: 600,
+                                    fontSize: '18px'
+                                }, children: [stats.averageConfidence.toFixed(0), "%"] })] }), _jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "High Quality" }), _jsx("div", { style: { color: styles.success, fontWeight: 600, fontSize: '18px' }, children: stats.highConfidenceCount })] }), _jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "Est. Time" }), _jsxs("div", { style: { color: styles.text, fontWeight: 600, fontSize: '18px' }, children: ["~", stats.estimatedGenerationTime, "s"] })] })] })] });
+{ /* Suggestions List */ }
 _jsxs("div", { style: {
-        marginTop: '16px',
-        padding: '12px',
-        background: styles.hover,
-        borderRadius: '8px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '16px',
-        fontSize: '14px',
-    }, children: [_jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "Selected" }), _jsxs("div", { style: { color: styles.accent, fontWeight: 600, fontSize: '18px' }, children: [stats.selectedCount, "/", stats.totalSuggestions] })] }), _jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "Avg Confidence" }), _jsxs("div", { style: {
-                        color: getConfidenceColor(stats.averageConfidence),
-                        fontWeight: 600,
-                        fontSize: '18px',
-                    }, children: [stats.averageConfidence.toFixed(0), "%"] })] }), _jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "High Quality" }), _jsx("div", { style: { color: styles.success, fontWeight: 600, fontSize: '18px' }, children: stats.highConfidenceCount })] }), _jsxs("div", { children: [_jsx("div", { style: { color: styles.textSecondary }, children: "Est. Time" }), _jsxs("div", { style: { color: styles.text, fontWeight: 600, fontSize: '18px' }, children: ["~", stats.estimatedGenerationTime, "s"] })] })] });
-div >
-    { /* Suggestions List */}
-    < div;
-style = {};
-{
-    maxHeight: '400px',
-        overflow;
-    'auto',
-        padding;
-    '16px',
-    ;
-}
- >
-    { /* Selection Controls */}
-    < div;
-style = {};
-{
-    display: 'flex',
-        gap;
-    '12px',
-        marginBottom;
-    '16px',
-        alignItems;
-    'center',
-    ;
-}
- >
-    _jsx("button", { onClick: selectAll, disabled: isGenerating, style: {
-            padding: '8px 16px',
-            background: 'transparent',
-            border: `1px solid ${styles.accent}`
-        }, "borderRadius:": true });
-'6px',
-    color;
-styles.accent,
-    fontSize;
-'14px',
-    cursor;
-isGenerating ? 'not-allowed' : 'pointer',
-    opacity;
-isGenerating ? 0.5 : 1;
-aria - label;
-"Select all suggestions"
-    >
-        Select;
-All;
-button >
-    _jsx("button", { onClick: clearAll, disabled: isGenerating, style: {
-            padding: '8px 16px',
-            background: 'transparent',
-            border: `1px solid ${styles.textSecondary}`
-        }, "borderRadius:": true });
-'6px',
-    color;
-styles.textSecondary,
-    fontSize;
-'14px',
-    cursor;
-isGenerating ? 'not-allowed' : 'pointer',
-    opacity;
-isGenerating ? 0.5 : 1;
-aria - label;
-"Clear all selections"
-    >
-        Clear;
-All;
-button >
-    _jsxs("div", { style: { marginLeft: 'auto', fontSize: '12px', color: styles.textSecondary }, children: ["Max ", GENERATION_DEFAULTS.MAX_NODES_GENERATED, " nodes allowed"] });
+        maxHeight: '400px',
+        overflow: 'auto',
+        padding: '16px'
+    }, children: [_jsxs("div", { style: {
+                display: 'flex',
+                gap: '12px',
+                marginBottom: '16px',
+                alignItems: 'center'
+            }, children: [_jsx("button", { onClick: selectAll, disabled: isGenerating, style: {
+                        padding: '8px 16px',
+                        background: 'transparent'
+                    }, "border:": true }), " `1px solid $", styles.accent, "`} borderRadius: '6px' color: styles.accent fontSize: '14px' cursor: isGenerating ? 'not-allowed' : 'pointer' opacity: isGenerating ? 0.5 : 1; aria-label=\"Select all suggestions\" > Select All"] }), _jsx("button", { onClick: clearAll, disabled: isGenerating, style: {
+                padding: '8px 16px',
+                background: 'transparent'
+            }, "border:": true }), " `1px solid $", styles.textSecondary, "`} borderRadius: '6px' color: styles.textSecondary fontSize: '14px' cursor: isGenerating ? 'not-allowed' : 'pointer' opacity: isGenerating ? 0.5 : 1; aria-label=\"Clear all selections\" > Clear All"] })
+    ,
+        _jsxs("div", { style: { marginLeft: 'auto', fontSize: '12px', color: styles.textSecondary }, children: ["Max ", GENERATION_DEFAULTS.MAX_NODES_GENERATED, " nodes allowed"] });
 div >
     { /* Suggestions Grid */}
     < div;
 style = {};
 {
-    display: 'grid',
-        gap;
-    '12px',
-    ;
+    display: 'grid';
+    gap: '12px';
 }
  >
     { suggestions, : .map(suggestion => { }),
@@ -295,25 +232,17 @@ onClick = {}();
 !isGenerating && toggleSuggestion(suggestion.id);
 style = {};
 {
-    padding: '16px',
-        border;
-    `1px solid ${isSelected ? styles.accent : styles.border}`;
+    padding: '16px';
 }
-borderRadius: '8px',
-    background;
-isSelected ? styles.accent + '10' : styles.secondary,
-    cursor;
-isGenerating ? 'not-allowed' : 'pointer',
-    opacity;
-isGenerating ? 0.7 : 1,
-    transition;
-'all 0.2s ease',
-    display;
-'flex',
-    alignItems;
-'flex-start',
-    gap;
-'12px';
+border: `1px solid ${isSelected ? styles.accent : styles.border}`;
+borderRadius: '8px';
+background: isSelected ? styles.accent + '10' : styles.secondary;
+cursor: isGenerating ? 'not-allowed' : 'pointer';
+opacity: isGenerating ? 0.7 : 1;
+transition: 'all 0.2s ease';
+display: 'flex';
+alignItems: 'flex-start';
+gap: '12px';
 role = "checkbox";
 aria - checked;
 {
@@ -340,36 +269,25 @@ onKeyDown = {}(e);
     < div;
 style = {};
 {
-    width: '20px',
-        height;
-    '20px',
-        border;
-    `2px solid ${isSelected ? styles.accent : styles.border}`;
+    width: '20px';
+    height: '20px';
 }
-borderRadius: '4px',
-    background;
-isSelected ? styles.accent : 'transparent',
-    display;
-'flex',
-    alignItems;
-'center',
-    justifyContent;
-'center',
-    flexShrink;
-0,
-    marginTop;
-'2px';
+border: `2px solid ${isSelected ? styles.accent : styles.border}`;
+borderRadius: '4px';
+background: isSelected ? styles.accent : 'transparent';
+display: 'flex';
+alignItems: 'center';
+justifyContent: 'center';
+flexShrink: 0;
+marginTop: '2px';
  >
     { isSelected } && ()
     < div;
 style = {};
 {
-    color: styles.background,
-        fontSize;
-    '12px',
-        fontWeight;
-    'bold',
-    ;
+    color: styles.background;
+    fontSize: '12px';
+    fontWeight: 'bold';
 }
  >
 ;
@@ -387,21 +305,21 @@ style = {};
                     margin: 0,
                     fontSize: '16px',
                     fontWeight: 600,
-                    color: styles.text,
+                    color: styles.text
                 }, children: suggestion.title }), _jsxs("div", { style: {
                     padding: '2px 6px',
                     background: getConfidenceColor(suggestion.confidence) + '20',
                     color: getConfidenceColor(suggestion.confidence),
                     fontSize: '11px',
                     borderRadius: '4px',
-                    fontWeight: 500,
+                    fontWeight: 500
                 }, children: [suggestion.confidence, "%"] })] })
         ,
             _jsx("p", { id: `suggestion-${suggestion.id}-description`, style: {
                     margin: '0 0 8px 0',
                     fontSize: '14px',
                     color: styles.textSecondary,
-                    lineHeight: 1.4,
+                    lineHeight: 1.4
                 }, children: suggestion.description })
                 ,
                     _jsxs("div", { style: { display: 'flex', gap: '12px', fontSize: '12px', color: styles.textSecondary }, children: [_jsxs("span", { children: ["Type: ", suggestion.nodeType] }), _jsxs("span", { children: ["Category: ", suggestion.metadata.category] }), _jsxs("span", { children: ["Priority: ", suggestion.metadata.priority] })] }));
@@ -417,10 +335,9 @@ div >
     < div;
 style = {};
 {
-    padding: '16px',
-        borderTop;
-    `1px solid ${styles.border}`;
+    padding: '16px';
 }
+borderTop: `1px solid ${styles.border}`;
 borderBottom: `1px solid ${styles.border}`;
 background: styles.secondary;
  >
@@ -431,24 +348,22 @@ background: styles.secondary;
                                 marginBottom: '4px',
                                 fontSize: '12px',
                                 fontWeight: 500,
-                                color: styles.text,
-                            }, children: "Layout" }), _jsx("select", { value: generationOptions.layout, onChange: (e) => setGenerationOptions(prev => ({}), ...prev, layout) }), ": e.target.value as LayoutType ; }))} disabled=", isGenerating, "style=", {
+                                color: styles.text
+                            }, children: "Layout" }), _jsx("select", { value: generationOptions.layout, onChange: (e) => setGenerationOptions(prev => ({}), ...prev), "layout:e": true }), ".target.value as LayoutType ; }))} disabled=", isGenerating, "style=", {
                             width: '100%',
-                            padding: '6px 8px',
-                            border: `1px solid ${styles.border}`
-                        }, ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px'; }} >", _jsx("option", { value: "linear", children: "Linear" }), _jsx("option", { value: "hierarchical", children: "Hierarchical" }), _jsx("option", { value: "radial", children: "Radial" }), _jsx("option", { value: "grid", children: "Grid" })] }) }));
+                            padding: '6px 8px'
+                        }, "border: `1px solid $", styles.border, "`} borderRadius: '4px' background: styles.background color: styles.text fontSize: '12px'; >", _jsx("option", { value: "linear", children: "Linear" }), _jsx("option", { value: "hierarchical", children: "Hierarchical" }), _jsx("option", { value: "radial", children: "Radial" }), _jsx("option", { value: "grid", children: "Grid" })] }) }));
 { /* Connection Pattern */ }
 _jsxs("div", { children: [_jsx("label", { style: {
                 display: 'block',
                 marginBottom: '4px',
                 fontSize: '12px',
                 fontWeight: 500,
-                color: styles.text,
-            }, children: "Connections" }), _jsx("select", { value: generationOptions.connectionPattern, onChange: (e) => setGenerationOptions(prev => ({}), ...prev, connectionPattern) }), ": e.target.value as ConnectionPattern ; }))} disabled=", isGenerating, "style=", {
+                color: styles.text
+            }, children: "Connections" }), _jsx("select", { value: generationOptions.connectionPattern, onChange: (e) => setGenerationOptions(prev => ({}), ...prev), "connectionPattern:e": true }), ".target.value as ConnectionPattern ; }))} disabled=", isGenerating, "style=", {
             width: '100%',
-            padding: '6px 8px',
-            border: `1px solid ${styles.border}`
-        }, ", borderRadius: '4px', background: styles.background, color: styles.text, fontSize: '12px'; }} >", _jsx("option", { value: "sequential", children: "Sequential" }), _jsx("option", { value: "branching", children: "Branching" }), _jsx("option", { value: "hub-and-spoke", children: "Hub & Spoke" }), _jsx("option", { value: "workflow", children: "Workflow" }), _jsx("option", { value: "mesh", children: "Mesh" })] });
+            padding: '6px 8px'
+        }, "border: `1px solid $", styles.border, "`} borderRadius: '4px' background: styles.background color: styles.text fontSize: '12px'; >", _jsx("option", { value: "sequential", children: "Sequential" }), _jsx("option", { value: "branching", children: "Branching" }), _jsx("option", { value: "hub-and-spoke", children: "Hub & Spoke" }), _jsx("option", { value: "workflow", children: "Workflow" }), _jsx("option", { value: "mesh", children: "Mesh" })] });
 div >
     { /* Spacing */}
     < div >
@@ -457,24 +372,25 @@ div >
             marginBottom: '4px',
             fontSize: '12px',
             fontWeight: 500,
-            color: styles.text,
+            color: styles.text
         }, children: "Spacing" })
         ,
             _jsx("select", { value: generationOptions.spacing.horizontal, onChange: (e) => {
                     const spacing = parseInt(e.target.value);
-                    setGenerationOptions(prev => ({}), ...prev, spacing, { horizontal: spacing, vertical: spacing * 0.75 });
-                }, disabled: isGenerating, style: {
-                    width: '100%',
-                    padding: '6px 8px',
-                    border: `1px solid ${styles.border}`
-                }, "borderRadius:": true }));
-'4px',
-    background;
-styles.background,
-    color;
-styles.text,
-    fontSize;
-'12px';
+                    setGenerationOptions(prev => ({}), ...prev);
+                }, "spacing:": true, ...horizontal, spacing: true, "vertical:spacing": true })) * 0.75;
+;
+disabled = { isGenerating };
+style = {};
+{
+    width: '100%';
+    padding: '6px 8px';
+}
+border: `1px solid ${styles.border}`;
+borderRadius: '4px';
+background: styles.background;
+color: styles.text;
+fontSize: '12px';
     >
         (_jsx("option", { value: "150", children: "Tight" })
             ,
@@ -494,32 +410,23 @@ div >
     < div;
 style = {};
 {
-    padding: '20px 24px',
-        background;
-    styles.secondary,
-        display;
-    'flex',
-        justifyContent;
-    'space-between',
-        alignItems;
-    'center',
-    ;
+    padding: '20px 24px';
+    background: styles.secondary;
+    display: 'flex';
+    justifyContent: 'space-between';
+    alignItems: 'center';
 }
  >
     _jsx("button", { onClick: onCancel, disabled: isGenerating, style: {
             padding: '12px 20px',
-            background: 'transparent',
-            border: `1px solid ${styles.border}`
-        }, "borderRadius:": true });
-'8px',
-    color;
-styles.text,
-    fontSize;
-'14px',
-    cursor;
-isGenerating ? 'not-allowed' : 'pointer',
-    opacity;
-isGenerating ? 0.5 : 1;
+            background: 'transparent'
+        }, "border:": true });
+`1px solid ${styles.border}`;
+borderRadius: '8px';
+color: styles.text;
+fontSize: '14px';
+cursor: isGenerating ? 'not-allowed' : 'pointer';
+opacity: isGenerating ? 0.5 : 1;
     >
         Cancel;
 button >
@@ -529,13 +436,12 @@ button >
                 alignItems: 'center',
                 gap: '8px',
                 color: styles.accent,
-                fontSize: '14px',
+                fontSize: '14px'
             }, ">", _jsx("div", { style: {
                     width: '16px',
-                    height: '16px',
-                    border: `2px solid ${styles.accent}`
-                } }), ", borderTop: '2px solid transparent', borderRadius: '50%', animation: 'spin 1s linear infinite'; }} /> Generating..."] });
-_jsxs("button", { onClick: handleGenerate, disabled: isGenerating || stats.selectedCount === 0, style: {
+                    height: '16px'
+                }, "border:": true }), " `2px solid $", styles.accent, "`} borderTop: '2px solid transparent' borderRadius: '50%' animation: 'spin 1s linear infinite'; } /> Generating..."] });
+_jsx("button", { onClick: handleGenerate, disabled: isGenerating || stats.selectedCount === 0, style: {
         padding: '12px 24px',
         background: styles.accent,
         border: 'none',
@@ -547,17 +453,17 @@ _jsxs("button", { onClick: handleGenerate, disabled: isGenerating || stats.selec
         opacity: (isGenerating || stats.selectedCount === 0) ? 0.5 : 1,
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
-    }, children: ["\u2728 Generate ", stats.selectedCount, " Node", stats.selectedCount !== 1 ? 's' : ''] });
-div >
-;
+        gap: '8px'
+    }
+        >
+    , Generate: true, ...stats.selectedCount, Node: true, ...stats.selectedCount !== 1 ? 's' : '', button: true });
 div >
     ({ /* CSS for spinner animation */});
 {
     `
           @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
         `;
 }
 style >

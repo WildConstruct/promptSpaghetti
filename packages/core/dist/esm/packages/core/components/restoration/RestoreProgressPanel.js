@@ -1,9 +1,16 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState } from 'react';
-import { Card, Progress, Typography, Space, Button, Statistic, Row, Col, Alert, Tag, List, Collapse, Modal } from 'antd';
-import { LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined, WarningOutlined, StopOutlined, InfoCircleOutlined, ClockCircleOutlined, EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Card, Progress, Typography, Space, Button, Statistic, Row, Col, Alert, Tag, List, Collapse } from Modal;
+from;
+'antd';
+import { LoadingOutlined, CheckCircleOutlined, CloseCircleOutlined, WarningOutlined, StopOutlined, InfoCircleOutlined, ClockCircleOutlined, EditOutlined } from ExclamationCircleOutlined;
+from;
+'@ant-design/icons';
+from;
+'../../types/restoration';
 const { Title, Text } = Typography;
 const { Panel } = Collapse;
+showDetails = false;
 {
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [detailsVisible, setDetailsVisible] = useState(showDetails);
@@ -36,49 +43,47 @@ const { Panel } = Collapse;
                 case 'cancelled':
                     return 'default';
                 default:
-                    return 'default';
             }
-            ;
-            const getProgressStatus = () => {
-                switch (progress.status) {
-                    case 'completed':
-                        return 'success';
-                    case 'failed':
-                        return 'exception';
-                    case 'cancelled':
-                        return 'exception';
-                    default:
-                        return 'active';
-                }
-                ;
-                const formatTime = (milliseconds) => {
-                    if (milliseconds < 1000) {
-                        return `${milliseconds}ms`;
-                    }
-                    const seconds = Math.floor(milliseconds / 1000);
-                    if (seconds < 60) {
-                        return `${seconds}s`;
-                    }
-                    const minutes = Math.floor(seconds / 60);
-                    return `${minutes}m ${seconds % 60}s`;
-                };
-            };
-            const handleCancelConfirm = () => {
-                setShowCancelModal(false);
-                onCancel();
-            };
-            const isInProgress = progress.status === 'in_progress' || progress.status === 'pending';
-            const isCompleted = progress.status === 'completed';
-            const isFailed = progress.status === 'failed';
-            const isCancelled = progress.status === 'cancelled';
-            return;
-            _jsx("div", { children: _jsx(Card, { style: { marginBottom: '16px' }, children: _jsxs(Row, { align: "middle", justify: "space-between", children: [_jsx(Col, { children: _jsxs(Space, { size: "large", children: [_jsxs(Space, { children: [getStatusIcon(progress.status), _jsx(Title, { level: 4, style: { margin: 0 }, children: progress.status.replace('_', ' ').toUpperCase() })] }), _jsx(Tag, { color: getStatusColor(progress.status), size: "large", children: progress.status.replace('_', ' ').toUpperCase() })] }) }), _jsxs(Col, { children: [isInProgress && ()
-                                        < Button, "danger icon=", _jsx(StopOutlined, {}), "onClick=", () => setShowCancelModal(true), "> Cancel Restoration"] }), ")}"] }) }) });
-            { /* Progress Bar */ }
-            _jsxs(Card, { title: "Progress", style: { marginBottom: '16px' }, children: [_jsx(Progress, { percent: progress.progressPercentage, status: getProgressStatus(), strokeWidth: 12, showInfo: true, format: (percent) => `${percent}%` }), progress.currentOperation && ()
-                        < div, " style=", { marginTop: '8px' }, ">", _jsx(Text, { type: "secondary", children: "Current operation: " }), _jsx(Text, { code: true, children: progress.currentOperation })] });
+            return 'default';
+        };
+        const getProgressStatus = () => {
+            switch (progress.status) {
+                case 'completed':
+                    return 'success';
+                case 'failed':
+                    return 'exception';
+                case 'cancelled':
+                    return 'exception';
+                default:
+            }
+            return 'active';
+        };
+        const formatTime = (milliseconds) => {
+            if (milliseconds < 1000) {
+                return `${milliseconds}ms`;
+            }
+            const seconds = Math.floor(milliseconds / 1000);
+            if (seconds < 60) {
+                return `${seconds}s`;
+            }
+            const minutes = Math.floor(seconds / 60);
+            return `${minutes}m ${seconds % 60}s`;
         };
     };
+    const handleCancelConfirm = () => {
+        setShowCancelModal(false);
+        onCancel();
+    };
+    const isInProgress = progress.status === 'in_progress' || progress.status === 'pending';
+    const isCompleted = progress.status === 'completed';
+    const isFailed = progress.status === 'failed';
+    const isCancelled = progress.status === 'cancelled';
+    return;
+    _jsx("div", { children: _jsx(Card, { style: { marginBottom: '16px' }, children: _jsxs(Row, { align: "middle", justify: "space-between", children: [_jsx(Col, { children: _jsxs(Space, { size: "large", children: [_jsxs(Space, { children: [getStatusIcon(progress.status), _jsx(Title, { level: 4, style: { margin: 0 }, children: progress.status.replace('_', ' ').toUpperCase() })] }), _jsx(Tag, { color: getStatusColor(progress.status), size: "large", children: progress.status.replace('_', ' ').toUpperCase() })] }) }), _jsxs(Col, { children: [isInProgress && ()
+                                < Button, "danger icon=", _jsx(StopOutlined, {}), "onClick=", () => setShowCancelModal(true), "> Cancel Restoration"] }), ")}"] }) }) });
+    { /* Progress Bar */ }
+    _jsxs(Card, { title: "Progress", style: { marginBottom: '16px' }, children: [_jsx(Progress, { percent: progress.progressPercentage, status: getProgressStatus(), strokeWidth: 12, showInfo: true, format: (percent) => `${percent}%` }), progress.currentOperation && ()
+                < div, " style=", { marginTop: '8px' }, ">", _jsx(Text, { type: "secondary", children: "Current operation: " }), _jsx(Text, { code: true, children: progress.currentOperation })] });
 }
 {
     progress.estimatedTimeRemaining && progress.estimatedTimeRemaining > 0 && ()
@@ -106,8 +111,10 @@ style = {};
     (_jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Operations", value: progress.operationsCompleted, suffix: `/ ${progress.totalOperations}`, prefix: _jsx(EditOutlined, {}) }) }) })
         ,
             _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Conflicts", value: progress.conflictsResolved, suffix: `/ ${progress.totalConflicts}`, prefix: _jsx(WarningOutlined, {}), valueStyle: {
-                            color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600',
-                        } }) }) })
+                            color: progress.totalConflicts > 0 ? '#fa8c16' : '#3f8600'
+                        }
+                            /  >
+                     }) }) })
                 ,
                     _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Progress", value: progress.progressPercentage, suffix: "%", prefix: _jsx(LoadingOutlined, {}) }) }) })
                         ,

@@ -1,4 +1,7 @@
 import { useState, useCallback } from 'react';
+from;
+'../types/attribution';
+getAttributionTimeline: (projectId, filter) => Promise;
 getContributorStats: (projectId, dateRange) => Promise;
 listAttributions: (filter) => Promise;
 startSession: (projectId, sessionId) => Promise;
@@ -16,81 +19,77 @@ export const useAttribution = () => {
     const [error, setError] = useState(null);
     const apiCall = useCallback(async());
     ;
-    url: string,
-        options;
-    RequestInit = {};
+    url: string;
 };
+options: RequestInit = {};
 Promise;
 {
     try {
         setLoading(true);
         setError(null);
         const response = await fetch(url, {});
-        options,
-            headers;
-        {
+        options;
+        headers: {
             'Content-Type';
-            'application/json',
-            ;
-            options.headers;
+            'application/json';
         }
-        ;
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        if (!data.success) {
-            throw new Error(data.error || 'Request failed');
-            return data.data;
-        }
-        try { }
-        catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-            setError(errorMessage);
-            throw err;
-        }
-        finally {
-            setLoading(false);
-        }
-        [];
-        ;
-        const recordAttribution = useCallback(async (request) => {
-            return apiCall('/api/attribution/record', {});
-            method: 'POST',
-                body;
-            JSON.stringify(request),
-            ;
-        });
+        options.headers;
     }
     finally { }
-    [apiCall];
     ;
-    const getAttributionStats = useCallback(async (request) => {
-        const params = new URLSearchParams();
-        if (request.period)
-            params.append('period', request.period);
-        if (request.authorId)
-            params.append('authorId', request.authorId);
-        if (request.startDate)
-            params.append('startDate', request.startDate.toISOString());
-        if (request.endDate)
-            params.append('endDate', request.endDate.toISOString());
-        if (request.resourceType)
-            params.append('resourceType', request.resourceType);
-        if (request.changeType)
-            params.append('changeType', request.changeType);
-        if (request.includeAggregations !== undefined)
-            params.append('includeAggregations', request.includeAggregations.toString());
-        if (request.includeTimeline !== undefined)
-            params.append('includeTimeline', request.includeTimeline.toString());
-        if (request.includeHeatmap !== undefined)
-            params.append('includeHeatmap', request.includeHeatmap.toString());
-        if (request.includeCollaborationMetrics !== undefined)
-            params.append('includeCollaborationMetrics', request.includeCollaborationMetrics.toString());
-        return apiCall(`/api/attribution/stats/${request.projectId}?${params.toString()}`);
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data.success) {
+        throw new Error(data.error || 'Request failed');
+        return data.data;
+    }
+    try { }
+    catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+        setError(errorMessage);
+        throw err;
+    }
+    finally {
+        setLoading(false);
+    }
+    [];
+    ;
+    const recordAttribution = useCallback(async (request) => {
+        return apiCall('/api/attribution/record', {});
+        method: 'POST';
+        body: JSON.stringify(request);
     });
 }
+;
+[apiCall];
+;
+const getAttributionStats = useCallback(async (request) => {
+    const params = new URLSearchParams();
+    if (request.period)
+        params.append('period', request.period);
+    if (request.authorId)
+        params.append('authorId', request.authorId);
+    if (request.startDate)
+        params.append('startDate', request.startDate.toISOString());
+    if (request.endDate)
+        params.append('endDate', request.endDate.toISOString());
+    if (request.resourceType)
+        params.append('resourceType', request.resourceType);
+    if (request.changeType)
+        params.append('changeType', request.changeType);
+    if (request.includeAggregations !== undefined)
+        params.append('includeAggregations', request.includeAggregations.toString());
+    if (request.includeTimeline !== undefined)
+        params.append('includeTimeline', request.includeTimeline.toString());
+    if (request.includeHeatmap !== undefined)
+        params.append('includeHeatmap', request.includeHeatmap.toString());
+    if (request.includeCollaborationMetrics !== undefined)
+        params.append('includeCollaborationMetrics', request.includeCollaborationMetrics.toString());
+    return apiCall(`/api/attribution/stats/${request.projectId}?${params.toString()}`);
+});
 [apiCall];
 ;
 const getAttributionTimeline = useCallback(async (projectId, filter) => {
@@ -171,26 +170,21 @@ const listAttributions = useCallback(async (filter) => {
 ;
 const startSession = useCallback(async (projectId, sessionId) => {
     return apiCall('/api/attribution/session/start', {});
-    method: 'POST',
-        body;
-    JSON.stringify({ projectId, sessionId });
-});
+    method: 'POST';
+}, body, JSON.stringify({ projectId, sessionId }));
+;
 [apiCall];
 ;
 const endSession = useCallback(async (sessionId) => {
     return apiCall('/api/attribution/session/end', {});
-    method: 'POST',
-        body;
-    JSON.stringify({ sessionId });
-});
+    method: 'POST';
+}, body, JSON.stringify({ sessionId }));
+;
 [apiCall];
 ;
 const updatePrivacySettings = useCallback(async (request) => {
     return apiCall(`/api/attribution/privacy/${request.projectId}`, {});
-});
-method: 'PUT',
-    body;
-JSON.stringify(request);
+}, method, 'PUT', body, JSON.stringify(request));
 ;
 [apiCall];
 ;
@@ -201,8 +195,7 @@ const getPrivacySettings = useCallback(async (projectId) => {
 ;
 const cleanupOldData = useCallback(async (projectId) => {
     return apiCall(`/api/attribution/cleanup/${projectId}`, {});
-});
-method: 'POST';
+}, method, 'POST');
 ;
 [apiCall];
 ;
@@ -223,17 +216,13 @@ const getAuthorAttribution = useCallback(async (projectId, authorId, dateRange) 
 ;
 const recordBatchAttributions = useCallback(async (projectId, attributions, batchId) => {
     return apiCall('/api/attribution/batch', {});
-    method: 'POST',
-        body;
-    JSON.stringify({ projectId, attributions, batchId });
-});
+    method: 'POST';
+}, body, JSON.stringify({ projectId, attributions, batchId }));
+;
 [apiCall];
 ;
-const clearError = useCallback(() => {
-    setError(null);
-}, []);
-return {
-    loading,
+const clearError = useCallback(() => { setError(null); }, []);
+return { loading,
     error,
     recordAttribution,
     getAttributionStats,
@@ -247,7 +236,7 @@ return {
     cleanupOldData,
     getResourceAttribution,
     getAuthorAttribution,
-    recordBatchAttributions,
-    clearError
-};
+    recordBatchAttributions };
+clearError;
+;
 ;

@@ -1,25 +1,6 @@
-;
-// Version control
-versionControl: {
-    version: number;
-    previousVersion ?  : string;
-    changes: string;
-    tags: string;
-    branch ?  : string;
-}
-;
-// Sharing settings
-sharing: {
-    permissions: 'private' | 'read_only' | 'collaborative' | 'public';
-    collaborators: Array < {
-        userId: string,
-        name: string,
-        role: 'viewer' | 'editor' | 'admin',
-        addedAt: string
-    } > ;
-    shareUrl ?  : string;
-    expiresAt ?  : string;
-}
+    > ;
+shareUrl ?  : string;
+expiresAt ?  : string;
 ;
 ;
 // Complete graph structure
@@ -27,31 +8,29 @@ graph: {
     nodes: Node;
     edges: AnnotatedEdge;
     // Graph-level settings
-    settings: {
-        canvasPosition: {
-            x: number;
-            y: number;
-            zoom: number;
-        }
-        ;
-        theme ?  : string;
-        gridVisible ?  : boolean;
-        snapToGrid ?  : boolean;
-        readonly ?  : boolean;
+    settings: { }
+    canvasPosition: {
+        x: number;
+        y: number;
+        zoom: number;
     }
     ;
+    theme ?  : string;
+    gridVisible ?  : boolean;
+    snapToGrid ?  : boolean;
+    readonly ?  : boolean;
 }
 ;
+;
 // All annotation types
-annotations: {
-    // Connection labels (already handled in AnnotatedEdge)
-    connectionLabels: Array < {
-        edgeId: string,
-        label: string,
-        style: any,
-        position: any,
-        visible: boolean
-    } > ;
+annotations: { // Connection labels (already handled in AnnotatedEdge)
+    connectionLabels: Array < {};
+    edgeId: string;
+    label: string;
+    style ?  : any;
+    position ?  : any;
+    visible: boolean;
+        > ;
     // Sticky notes
     stickyNotes: Array < {
         id: string,
@@ -63,8 +42,8 @@ annotations: {
         author: string,
         createdAt: string,
         updatedAt: string,
-        visible: boolean
-    } > ;
+        visible: boolean }
+        > ;
     // Node labels/annotations
     nodeLabels: Array < {
         nodeId: string,
@@ -72,8 +51,7 @@ annotations: {
         description: string,
         tags: string,
         color: string,
-        notes: string
-    } > ;
+        notes: string } > ;
     // Region grouping/areas
     regions: Array < {
         id: string,
@@ -83,8 +61,8 @@ annotations: {
         opacity: number,
         nodeIds: string,
         description: string,
-        collapsed: boolean
-    } > ;
+        collapsed: boolean }
+        > ;
     // Comments and discussions
     comments: Array < {
         id: string,
@@ -99,33 +77,32 @@ annotations: {
             id: string,
             content: string,
             author: string,
-            timestamp: string
-        } > 
-    } > ;
+            timestamp: string } >  }
+        > ;
 }
 ;
 // Collaboration metadata
 collaboration: {
-    changeHistory: Array < {
-        id: string,
-        timestamp: string,
-        author: string,
-        operation: string,
-        target: string,
-        before: any,
-        after: any,
-        description: string
-    } > ;
+    changeHistory: Array < {};
+    id: string;
+    timestamp: string;
+    author: string;
+    operation: string;
+    target: string;
+    before ?  : any;
+    after ?  : any;
+    description: string;
+        > ;
     conflicts: Array < {
         id: string,
         timestamp: string,
         type: 'merge' | 'edit' | 'delete',
-        targetType: 'node' | 'edge' | 'annotation',
-        targetId: string,
-        authors: string,
-        resolved: boolean,
-        resolution: any
-    } > ;
+        targetType: 'node' | 'edge' | 'annotation' };
+    targetId: string;
+    authors: string;
+    resolved: boolean;
+    resolution ?  : any;
+        > ;
     lastSync: string;
     syncStatus: 'synced' | 'pending' | 'conflict' | 'offline';
 }
@@ -138,6 +115,7 @@ compatibility: {
     errors: string;
 }
 ;
+// Graph sharing service
 export class GraphSharingService {
     static instance;
     sharedGraphs = new Map();
@@ -149,156 +127,144 @@ export class GraphSharingService {
              * Export graph with all annotations for sharing
              */
             async;
-            exportForSharing(nodes, Node),
-                edges;
-            AnnotatedEdge,
-                annotations;
-            any = {},
-                metadata;
-            (Partial) = {},
-                options;
-            {
-                includeHistory ?  : boolean;
-                includeComments ?  : boolean;
-                permissions ?  : SharedGraphFormat['metadata']['sharing']['permissions'];
-                author: {
-                    id: string;
-                    name: string;
-                    email ?  : string;
+            exportForSharing(nodes, Node);
+            edges: AnnotatedEdge;
+        }
+        annotations: any = {};
+        metadata: (Partial) = {};
+        options: {
+            includeHistory ?  : boolean;
+            includeComments ?  : boolean;
+            permissions ?  : SharedGraphFormat['metadata']['sharing']['permissions'];
+            author: {
+                id: string;
+                name: string;
+                email ?  : string;
+            }
+            Promise < SharedGraphFormat > { const: exportId = this.generateExportId(),
+                const: timestamp = new Date().toISOString(),
+                // Extract connection labels from annotated edges
+                const: connectionLabels = edges,
+                : 
+                    .filter(edge => edge.label && edge.label.trim().length > 0)
+                    .map(edge => ({}), edgeId, edge.id, label, edge.label, style, edge.labelStyle, position, {
+                    type: edge.labelPosition,
+                    offset: edge.labelOffset
+                }, visible, edge.showLabel ?? true)
+            };
+            ;
+            const sharedGraph = {
+                metadata: {
+                    exportId,
+                    version: '1.0.0',
+                    timestamp,
+                    title: metadata.title || 'Untitled Graph',
+                    description: metadata.description,
+                    author: options.author,
+                    versionControl: {
+                        version: 1,
+                        changes: ['Initial share'],
+                        tags: metadata.versionControl?.tags || [],
+                        branch: metadata.versionControl?.branch || 'main'
+                    },
+                    sharing: {
+                        permissions: options.permissions || 'read_only',
+                        collaborators: [],
+                        shareUrl: this.generateShareUrl(exportId)
+                    },
+                    graph: {
+                        nodes: this.sanitizeNodes(nodes),
+                        edges: this.sanitizeEdges(edges),
+                        settings: {},
+                        canvasPosition: { x: 0, y: 0, zoom: 1 },
+                        gridVisible: true,
+                        snapToGrid: false,
+                        readonly: options.permissions === 'read_only',
+                        annotations: { connectionLabels,
+                            stickyNotes: annotations.stickyNotes || [],
+                            nodeLabels: this.extractNodeLabels(nodes),
+                            regions: annotations.regions || [],
+                            comments: options.includeComments ? (annotations.comments || []) : [] },
+                        collaboration: {
+                            changeHistory: options.includeHistory ? [] : [],
+                            conflicts: [],
+                            lastSync: timestamp,
+                            syncStatus: 'synced'
+                        },
+                        compatibility: {
+                            minVersion: '1.0.0',
+                            features: [
+                                'connection-labels',
+                                'sticky-notes',
+                                'node-annotations',
+                                'region-grouping',
+                                'collaboration',
+                                'version-control'
+                            ],
+                            warnings: [],
+                            errors: []
+                        }
+                    },
+                    // Store for later retrieval
+                    this: .sharedGraphs.set(exportId, sharedGraph),
+                    return: sharedGraph,
+                    options: { validateIntegrity: boolean,
+                        mergeConflicts: 'overwrite' | 'merge' | 'ask',
+                        preserveAnnotations: boolean } = {}
                 }
-                Promise < SharedGraphFormat > {
-                    const: exportId = this.generateExportId(),
-                    const: timestamp = new Date().toISOString(),
-                    // Extract connection labels from annotated edges
-                    const: connectionLabels = edges,
-                    : 
-                        .filter(edge => edge.label && edge.label.trim().length > 0)
-                        .map(edge => ({}), edgeId, edge.id, label, edge.label, style, edge.labelStyle, position, {
-                        type: edge.labelPosition,
-                        offset: edge.labelOffset,
-                    }, visible, edge.showLabel ?? true)
-                };
-                ;
-                const sharedGraph = {
-                    metadata: {
-                        exportId,
-                        version: '1.0.0',
-                        timestamp,
-                        title: metadata.title || 'Untitled Graph',
-                        description: metadata.description,
-                        author: options.author,
-                        versionControl: {
-                            version: 1,
-                            changes: ['Initial share'],
-                            tags: metadata.versionControl?.tags || [],
-                            branch: metadata.versionControl?.branch || 'main',
-                        },
-                        sharing: {
-                            permissions: options.permissions || 'read_only',
-                            collaborators: [],
-                            shareUrl: this.generateShareUrl(exportId),
-                        },
-                        graph: {
-                            nodes: this.sanitizeNodes(nodes),
-                            edges: this.sanitizeEdges(edges),
-                            settings: {
-                                canvasPosition: { x: 0, y: 0, zoom: 1 },
-                                gridVisible: true,
-                                snapToGrid: false,
-                                readonly: options.permissions === 'read_only'
-                            },
-                            annotations: {
-                                connectionLabels,
-                                stickyNotes: annotations.stickyNotes || [],
-                                nodeLabels: this.extractNodeLabels(nodes),
-                                regions: annotations.regions || [],
-                                comments: options.includeComments ? (annotations.comments || []) : [],
-                            },
-                            collaboration: {
-                                changeHistory: options.includeHistory ? [] : [],
-                                conflicts: [],
-                                lastSync: timestamp,
-                                syncStatus: 'synced',
-                            },
-                            compatibility: {
-                                minVersion: '1.0.0',
-                                features: [
-                                    'connection-labels',
-                                    'sticky-notes',
-                                    'node-annotations',
-                                    'region-grouping',
-                                    'collaboration',
-                                    'version-control'
-                                ],
-                                warnings: [],
-                                errors: [],
-                            },
-                            // Store for later retrieval
-                            this: .sharedGraphs.set(exportId, sharedGraph),
-                            return: sharedGraph,
-                            options: {
-                                validateIntegrity: boolean,
-                                mergeConflicts: 'overwrite' | 'merge' | 'ask',
-                                preserveAnnotations: boolean
-                            } = {} }
-                    } };
-                Promise < {
-                    success: boolean,
-                    graph: { nodes: Node, edges: AnnotatedEdge },
-                    annotations: SharedGraphFormat['annotations'],
-                    errors: string,
-                    warnings: string
-                } > {
-                    const: errors, string = [],
+            };
+            Promise < {
+                success: boolean,
+                graph: { nodes: Node, edges: AnnotatedEdge },
+                annotations: SharedGraphFormat['annotations'],
+                errors: string,
+                warnings: string
+            }
+                > { const: errors, string = [],
                     const: warnings, string = [],
                     try: {
                         // Validate format version compatibility
                         const: validation = this.validateSharedGraph(sharedGraph),
                         if(, validation) { }, : .valid
-                    }
-                };
-                {
-                    errors.push(...validation.errors);
-                    warnings.push(...validation.warnings);
-                    // Import graph structure
-                    const nodes = await this.importNodes(sharedGraph.graph.nodes);
-                    const edges = await this.importEdges(sharedGraph.graph.edges, sharedGraph.annotations.connectionLabels);
-                    // Restore annotations if requested
-                    let annotations = sharedGraph.annotations;
-                    if (!options.preserveAnnotations) {
-                        annotations = {
-                            connectionLabels: sharedGraph.annotations.connectionLabels,
-                            stickyNotes: [],
-                            nodeLabels: [],
-                            regions: [],
-                            comments: [],
-                        };
-                        return {
-                            success: errors.length === 0,
-                            graph: { nodes, edges },
-                            annotations,
-                            errors: errors.length > 0 ? errors : undefined,
-                            warnings: warnings.length > 0 ? warnings : undefined
-                        };
-                    }
-                    try { }
-                    catch (error) {
-                        return {
-                            success: false,
-                            errors: [error instanceof Error ? error.message : 'Unknown import error'],
-                        };
-                        /**
-                         * Validate shared graph format and integrity
-                         */
-                    }
-                    /**
-                     * Validate shared graph format and integrity
-                     */
+                    } };
+            {
+                errors.push(...validation.errors);
+                warnings.push(...validation.warnings);
+                // Import graph structure
+                const nodes = await this.importNodes(sharedGraph.graph.nodes);
+                const edges = await this.importEdges(sharedGraph.graph.edges, sharedGraph.annotations.connectionLabels);
+                // Restore annotations if requested
+                let annotations = sharedGraph.annotations;
+                if (!options.preserveAnnotations) {
+                    annotations = {
+                        connectionLabels: sharedGraph.annotations.connectionLabels,
+                        stickyNotes: [],
+                        nodeLabels: [],
+                        regions: [],
+                        comments: []
+                    };
                 }
-                /**
-                 * Validate shared graph format and integrity
-                 */
+                ;
+                return { success: errors.length === 0 };
+                graph: {
+                    nodes, edges;
+                }
+                annotations,
+                    errors;
+                errors.length > 0 ? errors : undefined,
+                    warnings;
+                warnings.length > 0 ? warnings : undefined;
             }
+            ;
+            try {
+            }
+            catch (error) {
+                return {
+                    success: false,
+                    errors: [error instanceof Error ? error.message : 'Unknown import error']
+                };
+            }
+            ;
             /**
              * Validate shared graph format and integrity
              */
@@ -345,15 +311,14 @@ export class GraphSharingService {
                                     if (major > 1) {
                                         errors.push(`Unsupported major version: ${version}`);
                                     }
+                                    else if (major === 1 && minor > 0) {
+                                        warnings.push(`Newer minor version detected: ${version}. Some features may not be available.`);
+                                    }
+                                    return { valid: errors.length === 0,
+                                        errors };
+                                    warnings;
                                 }
-                                if (major === 1 && minor > 0) {
-                                    warnings.push(`Newer minor version detected: ${version}. Some features may not be available.`);
-                                }
-                                return {
-                                    valid: errors.length === 0,
-                                    errors,
-                                    warnings
-                                };
+                                ;
                                 /**
                                  * Create a new version of a shared graph
                                  */
@@ -369,8 +334,7 @@ export class GraphSharingService {
                                         id: string;
                                         name: string;
                                     }
-                                    Promise < SharedGraphFormat > {
-                                        const: newVersion, SharedGraphFormat = {
+                                    Promise < SharedGraphFormat > { const: newVersion, SharedGraphFormat = {
                                             ...baseGraph,
                                             metadata: {
                                                 ...baseGraph.metadata,
@@ -381,21 +345,16 @@ export class GraphSharingService {
                                                     version: baseGraph.metadata.versionControl.version + 1,
                                                     previousVersion: baseGraph.metadata.exportId,
                                                     changes: [
-                                                        ...baseGraph.metadata.versionControl.changes,
-                                                        changes.changeDescription
+                                                        ...baseGraph.metadata.versionControl.changes
                                                     ]
                                                 },
-                                                graph: {
-                                                    ...baseGraph.graph,
+                                                changes, : .changeDescription,
+                                                graph: { ...baseGraph.graph,
                                                     nodes: changes.nodes || baseGraph.graph.nodes,
-                                                    edges: changes.edges || baseGraph.graph.edges,
-                                                },
-                                                annotations: {
-                                                    ...baseGraph.annotations,
-                                                    ...changes.annotations
-                                                },
-                                                collaboration: {
-                                                    ...baseGraph.collaboration,
+                                                    edges: changes.edges || baseGraph.graph.edges },
+                                                annotations: { ...baseGraph.annotations },
+                                                ...changes.annotations,
+                                                collaboration: { ...baseGraph.collaboration,
                                                     changeHistory: [
                                                         ...baseGraph.collaboration.changeHistory,
                                                         {
@@ -407,173 +366,180 @@ export class GraphSharingService {
                                                             description: changes.changeDescription
                                                         }
                                                     ],
-                                                    lastSync: new Date().toISOString(),
-                                                },
-                                                // Store new version
-                                                this: .sharedGraphs.set(newVersion.metadata.exportId, newVersion),
-                                                return: newVersion,
-                                                /**
-                                                 * Generate shareable URL for a graph
-                                                 */
-                                                generateShareUrl(exportId) {
-                                                    // In production, this would generate a proper URL
-                                                    return `https://wild-construct.app/shared/${exportId}`;
-                                                }
-                                                /**
-                                                 * Sanitize nodes for sharing (remove sensitive data)
-                                                 */
-                                                ,
-                                                /**
-                                                 * Sanitize nodes for sharing (remove sensitive data)
-                                                 */
-                                                sanitizeNodes(nodes) {
-                                                    return nodes.map(node => ({}), ...node, data, {
-                                                        ...node.data,
-                                                        // Remove any sensitive or internal data
-                                                        _internal: undefined,
-                                                        _private: undefined,
-                                                    });
-                                                    ;
-                                                    /**
-                                                     * Sanitize edges for sharing
-                                                     */
-                                                }
-                                                /**
-                                                 * Sanitize edges for sharing
-                                                 */
-                                                ,
-                                                /**
-                                                 * Sanitize edges for sharing
-                                                 */
-                                                sanitizeEdges(edges) {
-                                                    return edges.map(edge => ({}), ...edge, 
-                                                    // Ensure all annotation data is preserved
-                                                    label, edge.label, labelStyle, edge.labelStyle, labelPosition, edge.labelPosition, labelOffset, edge.labelOffset, showLabel, edge.showLabel, interactive, edge.interactive);
-                                                },
-                                                /**
-                                                 * Extract node labels from node data
-                                                 */
-                                                extractNodeLabels(nodes) {
-                                                    return nodes.map(node => ({}), nodeId, node.id, label, node.data?.label, description, node.data?.description, tags, Array.isArray(node.data?.tags) ? node.data.tags : [], color, node.data?.color, notes, node.data?.notes);
-                                                }, : .filter(label => ),
-                                                label, : .label || label.description || label.tags.length > 0 || label.notes,
-                                                /**
-                                                 * Import nodes with annotation restoration
-                                                 */
-                                                async importNodes(nodes) {
-                                                    // In a real implementation, this might involve validation,
-                                                    // ID remapping, or other import-specific processing
-                                                    return nodes;
-                                                    /**
-                                                    * Import edges with label restoration
-                                                    */
-                                                }
-                                                /**
-                                                * Import edges with label restoration
-                                                */
-                                            }(edges, AnnotatedEdge, connectionLabels, SharedGraphFormat['annotations']['connectionLabels']), Promise() {
-                                                // Create a map for quick label lookup
-                                                const labelMap = new Map(connectionLabels.map(label => [label.edgeId, label]));
-                                                // Restore connection labels
-                                                return edges.map(edge => { });
-                                                const labelData = labelMap.get(edge.id);
-                                                if (labelData && !edge.label) {
-                                                    return {
-                                                        ...edge,
-                                                        label: labelData.label,
-                                                        labelStyle: labelData.style,
-                                                        labelPosition: labelData.position?.type,
-                                                        labelOffset: labelData.position?.offset,
-                                                        showLabel: labelData.visible,
-                                                        interactive: true,
-                                                    };
-                                                    return edge;
-                                                }
-                                                ;
-                                                /**
-                                                 * Utility methods
-                                                 */
-                                            }
-                                            /**
-                                             * Utility methods
-                                             */
-                                            ,
-                                            /**
-                                             * Utility methods
-                                             */
-                                            generateExportId() {
-                                                return `shared_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                                                    lastSync: new Date().toISOString() }
                                             },
-                                            generateChangeId() {
-                                                return `change_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+                                            // Store new version
+                                            this: .sharedGraphs.set(newVersion.metadata.exportId, newVersion),
+                                            return: newVersion,
+                                            /**
+                                             * Generate shareable URL for a graph
+                                             */
+                                            generateShareUrl(exportId) {
+                                                // In production, this would generate a proper URL
+                                                return `https://wild-construct.app/shared/${exportId}`;
                                             }
                                             /**
-                                             * Get shared graph by ID
+                                             * Sanitize nodes for sharing (remove sensitive data)
                                              */
                                             ,
                                             /**
-                                             * Get shared graph by ID
+                                             * Sanitize nodes for sharing (remove sensitive data)
                                              */
-                                            getSharedGraph(exportId) {
-                                                return this.sharedGraphs.get(exportId) || null;
-                                                /**
-                                                 * List all shared graphs for a user
-                                                 */
-                                                getUserSharedGraphs(userId, string);
-                                                SharedGraphFormat;
-                                                {
-                                                    return Array.from(this.sharedGraphs.values()).filter(graph => );
-                                                    graph.metadata.author.id === userId ||
-                                                        graph.metadata.sharing.collaborators.some(c => c.userId === userId);
-                                                    ;
-                                                    /**
-                                                     * Update sharing permissions
-                                                     */
-                                                    updateSharingPermissions();
-                                                    exportId: string,
-                                                        permissions;
-                                                    SharedGraphFormat['metadata']['sharing']['permissions'],
-                                                        collaborators ?  : SharedGraphFormat['metadata']['sharing']['collaborators'];
-                                                    boolean;
-                                                    {
-                                                        const graph = this.sharedGraphs.get(exportId);
-                                                        if (!graph)
-                                                            return false;
-                                                        graph.metadata.sharing.permissions = permissions;
-                                                        if (collaborators) {
-                                                            graph.metadata.sharing.collaborators = collaborators;
-                                                            return true;
-                                                            // Export utilities
-                                                            export const graphSharingService = GraphSharingService.getInstance();
-                                                            export const exportGraphForSharing = ();
-                                                            nodes: Node,
-                                                                edges;
-                                                            AnnotatedEdge,
-                                                                options;
-                                                            any = {};
-                                                            graphSharingService.exportForSharing(nodes, edges, {}, {}, options);
-                                                            export const importSharedGraph = (sharedGraph, options = {}) => graphSharingService.importSharedGraph(sharedGraph, options);
-                                                            export const validateSharedGraphFormat = (sharedGraph) => {
-                                                                // Basic validation - in production would use Zod schema
-                                                                return Boolean();
-                                                                sharedGraph?.metadata?.exportId &&
-                                                                    sharedGraph?.graph?.nodes &&
-                                                                    sharedGraph?.graph?.edges &&
-                                                                    sharedGraph?.annotations;
-                                                            };
-                                                            ;
-                                                        }
-                                                        ;
-                                                    }
-                                                }
-                                            } }
+                                            sanitizeNodes(nodes) {
+                                                return nodes.map(node => ({}), ...node, data, {
+                                                    ...node.data
+                                                    // Remove any sensitive or internal data
+                                                    ,
+                                                    // Remove any sensitive or internal data
+                                                    _internal: undefined,
+                                                    _private: undefined
+                                                });
+                                            },
+                                            /**
+                                             * Sanitize edges for sharing
+                                             */
+                                            sanitizeEdges(edges) {
+                                                return edges.map(edge => ({}), ...edge
+                                                // Ensure all annotation data is preserved
+                                                , 
+                                                // Ensure all annotation data is preserved
+                                                label, edge.label, labelStyle, edge.labelStyle, labelPosition, edge.labelPosition, labelOffset, edge.labelOffset, showLabel, edge.showLabel, interactive, edge.interactive);
+                                            }
+                                        },
+                                        /**
+                                         * Extract node labels from node data
+                                         */
+                                        extractNodeLabels(nodes) {
+                                            return nodes.map(node => ({}), nodeId, node.id, label, node.data?.label, description, node.data?.description, tags, Array.isArray(node.data?.tags) ? node.data.tags : [], color, node.data?.color, notes, node.data?.notes);
+                                        }
                                     };
+                                    filter(label => );
+                                    label.label || label.description || label.tags.length > 0 || label.notes;
+                                    ;
+                                    /**
+                                     * Import nodes with annotation restoration
+                                     */
                                 }
+                                /**
+                                 * Import nodes with annotation restoration
+                                 */
                             }
+                            /**
+                             * Import nodes with annotation restoration
+                             */
                         }
+                        /**
+                         * Import nodes with annotation restoration
+                         */
                     }
+                    /**
+                     * Import nodes with annotation restoration
+                     */
                 }
+                /**
+                 * Import nodes with annotation restoration
+                 */
             }
+            /**
+             * Import nodes with annotation restoration
+             */
         }
+        /**
+         * Import nodes with annotation restoration
+         */
+    }
+    /**
+     * Import nodes with annotation restoration
+     */
+    async importNodes(nodes) {
+        // ID remapping, or other import-specific processing
+        return nodes;
+        /**
+        * Import edges with label restoration
+        */
+    }
+}
+(edges, connectionLabels) => {
+    // Create a map for quick label lookup
+    const labelMap = new Map(connectionLabels.map(label => [label.edgeId, label]));
+    // Restore connection labels
+    return edges.map(edge => { });
+    const labelData = labelMap.get(edge.id);
+    if (labelData && !edge.label) {
+        return {
+            ...edge,
+            label: labelData.label,
+            labelStyle: labelData.style,
+            labelPosition: labelData.position?.type,
+            labelOffset: labelData.position?.offset,
+            showLabel: labelData.visible,
+            interactive: true
+        };
+    }
+    ;
+    return edge;
+};
+;
+generateExportId();
+string;
+{
+    return `shared_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+generateChangeId();
+string;
+{
+    return `change_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+}
+/**
+ * Get shared graph by ID
+ */
+getSharedGraph(exportId, string);
+SharedGraphFormat | null;
+{
+    return this.sharedGraphs.get(exportId) || null;
+    /**
+     * List all shared graphs for a user
+     */
+    getUserSharedGraphs(userId, string);
+    SharedGraphFormat;
+    {
+        return Array.from(this.sharedGraphs.values()).filter(graph => );
+        graph.metadata.author.id === userId ||
+            graph.metadata.sharing.collaborators.some(c => c.userId === userId);
+        ;
+        /**
+         * Update sharing permissions
+         */
+        updateSharingPermissions();
+        exportId: string;
+        permissions: SharedGraphFormat['metadata']['sharing']['permissions'];
+        collaborators ?  : SharedGraphFormat['metadata']['sharing']['collaborators'];
+        boolean;
+        {
+            const graph = this.sharedGraphs.get(exportId);
+            if (!graph)
+                return false;
+            graph.metadata.sharing.permissions = permissions;
+            if (collaborators) {
+                graph.metadata.sharing.collaborators = collaborators;
+                return true;
+                // Export utilities
+                export const graphSharingService = GraphSharingService.getInstance();
+                export const exportGraphForSharing = ();
+                nodes: Node;
+                edges: AnnotatedEdge;
+            }
+            options: any = {};
+            graphSharingService.exportForSharing(nodes, edges, {}, {}, options);
+            export const importSharedGraph = (sharedGraph, options = {}) => graphSharingService.importSharedGraph(sharedGraph, options);
+            export const validateSharedGraphFormat = (sharedGraph) => {
+                return Boolean();
+                sharedGraph?.metadata?.exportId &&
+                    sharedGraph?.graph?.nodes &&
+                    sharedGraph?.graph?.edges &&
+                    sharedGraph?.annotations;
+            };
+        }
+        ;
     }
 }

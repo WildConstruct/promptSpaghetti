@@ -18,9 +18,8 @@ export const CaseStudyCard = ({
     onAuthorClick,
     onBookmark,
     onLike,
-    onShare,
-    className = ''
-});
+    onShare });
+className = '';
 {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
@@ -53,28 +52,28 @@ export const CaseStudyCard = ({
             'consulting': '💼',
             'e-commerce': '🛒',
             'non-profit': '🤝',
-            'other': '🏢',
+            'other': '🏢'
         };
-        return industryIcons[industry] || '🏢';
     };
-    // Calculate ROI display value
-    const getROIDisplay = () => {
-        if (!caseStudy.roiMetrics.costSavings.amount)
-            return null;
-        const amount = caseStudy.roiMetrics.costSavings.amount;
-        const currency = caseStudy.roiMetrics.costSavings.currency;
-        if (amount >= 1000000) {
-            return `${currency}${(amount / 1000000).toFixed(1)}M`;
-        }
-    };
-    if (amount >= 1000) {
-        return `${currency}${(amount / 1000).toFixed(1)}K`;
-    }
-}
-{
-    return `${currency}${amount.toFixed(0)}`;
+    return industryIcons[industry] || '🏢';
 }
 ;
+// Calculate ROI display value
+const getROIDisplay = () => {
+    if (!caseStudy.roiMetrics.costSavings.amount)
+        return null;
+    const amount = caseStudy.roiMetrics.costSavings.amount;
+    const currency = caseStudy.roiMetrics.costSavings.currency;
+    if (amount >= 1000000) {
+        return `${currency}${(amount / 1000000).toFixed(1)}M`;
+    }
+    else if (amount >= 1000) {
+        return `${currency}${(amount / 1000).toFixed(1)}K`;
+    }
+    else {
+        return `${currency}${amount.toFixed(0)}`;
+    }
+};
 // Handle card click
 const handleCardClick = (e) => {
     e.preventDefault();
@@ -189,8 +188,7 @@ div >
                     < button, key = { template, : .templateId }, className = "template-chip", onClick = {}(e), {
                     e, : .stopPropagation(),
                     onTemplateClick
-                }(template.templateId))
-            };
+                }(template.templateId)) };
     }
         >
             { template, : .templateName };
@@ -286,15 +284,15 @@ div >
 div >
     _jsx("style", { children: `
         .case-study-card {
-          position: relative;,
+          position: relative;
   background: #ffffff;
           border-radius: 12px;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          overflow: hidden;,
+          overflow: hidden;
   transition: all 0.3s ease;
-          cursor: pointer;,
+          cursor: pointer;
   border: 1px solid #e0e4e7;
-        .case-study-card:hover {,
+        .case-study-card:hover {
   transform: translateY(-4px);
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
           border-color: #3b82f6;
@@ -306,93 +304,93 @@ div >
           max-width: 500px;
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
         .featured-badge {
-          position: absolute;,
+          position: absolute;
   top: 12px;
           left: 12px;
-          z-index: 3;,
+          z-index: 3;
   background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-          color: #ffffff;,
+          color: #ffffff
   padding: 4px 8px;
           border-radius: 12px;
           font-size: 11px;
-          font-weight: 600;,
+          font-weight: 600;
   display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
         .badge-icon {
           font-size: 10px;
         .card-image {
-          position: relative;,
+          position: relative;
   width: 100%;
-          height: 200px;,
+          height: 200px;
   overflow: hidden;
         .case-study-card.compact .card-image {
           height: 160px;
         .case-study-card.featured .card-image {
           height: 240px;
         .card-image img {
-          width: 100%;,
+          width: 100%
   height: 100%;
-          object-fit: cover;,
+          object-fit: cover;
   transition: transform 0.3s ease;
-        .case-study-card:hover .card-image img {,
+        .case-study-card:hover .card-image img {
   transform: scale(1.05);
         .image-placeholder {
-          width: 100%;,
+          width: 100%
   height: 100%;
           background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
           display: flex;
           align-items: center;
           justify-content: center;
         .placeholder-icon {
-          font-size: 48px;,
+          font-size: 48px;
   opacity: 0.5;
         .type-badge {
-          position: absolute;,
+          position: absolute;
   top: 12px;
-          right: 12px;,
+          right: 12px;
   padding: 6px 10px;
-          border-radius: 16px;,
+          border-radius: 16px;
   color: #ffffff;
           font-size: 12px;
-          font-weight: 600;,
+          font-weight: 600;
   display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
           backdrop-filter: blur(4px);
         .type-icon {
           font-size: 14px;
         .quick-actions {
-          position: absolute;,
+          position: absolute;
   bottom: 12px;
-          right: 12px;,
+          right: 12px;
   display: flex;
-          gap: 6px;,
+          gap: 6px;
   opacity: 0;
           transition: opacity 0.3s ease;
-        .case-study-card:hover .quick-actions {,
+        .case-study-card:hover .quick-actions {
   opacity: 1;
         .action-btn {
           background: rgba(255, 255, 255, 0.9);
           border: none;
-          border-radius: 50%;,
+          border-radius: 50%
   width: 32px;
-          height: 32px;,
+          height: 32px;
   display: flex;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   cursor: pointer;
           transition: all 0.2s ease;
           backdrop-filter: blur(4px);
           font-size: 14px;
-        .action-btn:hover {,
-  transform: scale(1.1);,
+        .action-btn:hover {
+  transform: scale(1.1)
   background: #ffffff;
         .action-btn.active {
-          background: #3b82f6;,
+          background: #3b82f6
   color: #ffffff;
         .card-content {
-          padding: 20px;,
+          padding: 20px;
   position: relative;
         .case-study-card.compact .card-content {
           padding: 16px;
@@ -407,7 +405,7 @@ div >
         .case-study-title {
           margin: 0 0 4px 0;
           font-size: 18px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           line-height: 1.3;
         .case-study-card.compact .case-study-title {
@@ -416,97 +414,97 @@ div >
           font-size: 20px;
         .case-study-subtitle {
           margin: 0;
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           line-height: 1.4;
         .industry-badge {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
-          background: #f3f4f6;,
+          background: #f3f4f6
   padding: 4px 8px;
           border-radius: 8px;
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
           white-space: nowrap;
         .industry-icon {
           font-size: 14px;
         .case-study-summary {
           margin: 0 0 16px 0;
-          font-size: 14px;,
+          font-size: 14px;
   color: #4b5563;
           line-height: 1.5;
         .metrics-section {
-          display: flex;,
+          display: flex;
   gap: 16px;
-          margin-bottom: 16px;,
+          margin-bottom: 16px;
   padding: 12px;
           background: #f8fafc;
           border-radius: 8px;
         .metric-item {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 2px;
           flex: 1;
         .metric-icon {
           font-size: 16px;
         .metric-label {
-          font-size: 11px;,
+          font-size: 11px;
   color: #6b7280;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         .metric-value {
           font-size: 14px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .templates-section {
           margin-bottom: 16px;
         .templates-header {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 6px;
           margin-bottom: 8px;
         .templates-icon {
           font-size: 14px;
         .templates-label {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
           font-weight: 500;
         .template-list {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 6px;
         .template-chip {
-          background: #e0f2fe;,
+          background: #e0f2fe
   color: #0369a1;
-          border: 1px solid #bae6fd;,
+          border: 1px solid #bae6fd
   padding: 4px 8px;
           border-radius: 12px;
-          font-size: 11px;,
+          font-size: 11px;
   cursor: pointer;
           transition: all 0.2s ease;
-        .template-chip:hover {,
-  background: #0369a1;,
+        .template-chip:hover {
+  background: #0369a1
   color: #ffffff;
         .template-more {
-          font-size: 11px;,
+          font-size: 11px;
   color: #6b7280;
           font-style: italic;
         .tags-section {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 6px;
           margin-bottom: 16px;
         .tag {
-          background: #f3f4f6;,
+          background: #f3f4f6
   color: #4b5563;
           padding: 3px 6px;
           border-radius: 4px;
           font-size: 10px;
           font-weight: 500;
         .tag-more {
-          font-size: 10px;,
+          font-size: 10px;
   color: #9ca3af;
           font-style: italic;
         .card-footer {
@@ -518,60 +516,60 @@ div >
           border-top: 1px solid #f3f4f6;
         .author-section {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          cursor: pointer;,
+          cursor: pointer;
   transition: opacity 0.2s ease;
-        .author-section:hover {,
+        .author-section:hover {
   opacity: 0.8;
         .author-avatar {
-          width: 32px;,
+          width: 32px;
   height: 32px;
           border-radius: 50%;
           object-fit: cover;
         .author-avatar-placeholder {
-          width: 32px;,
+          width: 32px;
   height: 32px;
-          border-radius: 50%;,
+          border-radius: 50%
   background: #e5e7eb;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 14px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #6b7280;
         .author-info {
           display: flex;
           flex-direction: column;
         .author-name {
           font-size: 12px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
         .verified-badge {
           color: #10b981;
           font-size: 10px;
         .author-title {
-          font-size: 10px;,
+          font-size: 10px;
   color: #6b7280;
         .engagement-stats {
-          display: flex;,
+          display: flex;
   gap: 12px;
           align-items: center;
         .stat {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 3px;
-          font-size: 11px;,
+          font-size: 11px;
   color: #6b7280;
         .stat-icon {
           font-size: 12px;
         .difficulty-badge {
-          position: absolute;,
+          position: absolute;
   bottom: 16px;
-          right: 16px;,
+          right: 16px;
   padding: 2px 6px;
           border-radius: 8px;
           font-size: 9px;
@@ -579,16 +577,16 @@ div >
           text-transform: uppercase;
           letter-spacing: 0.5px;
         .difficulty-beginner {
-          background: #dcfce7;,
+          background: #dcfce7
   color: #166534;
         .difficulty-intermediate {
-          background: #fef3c7;,
+          background: #fef3c7
   color: #92400e;
         .difficulty-advanced {
-          background: #fecaca;,
+          background: #fecaca
   color: #991b1b;
         .difficulty-expert {
-          background: #e0e7ff;,
+          background: #e0e7ff
   color: #3730a3;
         @media (max-width: 768px) {
           .case-study-card {
@@ -596,7 +594,7 @@ div >
           .card-image {
             height: 180px;
           .metrics-section {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 8px;
           .metric-item {
             flex-direction: row;
@@ -607,14 +605,14 @@ div >
             gap: 8px;
           .card-header {
             flex-direction: column;
-            align-items: flex-start;,
+            align-items: flex-start
   gap: 8px;
           .title-section {
             margin-right: 0;
           .industry-badge {
             align-self: flex-start;
         @media (max-width: 480px) {
-          .case-study-card.compact .card-content,
+          .case-study-card.compact .card-content }
           .case-study-card.standard .card-content {
             padding: 12px;
           .case-study-title {
@@ -624,10 +622,10 @@ div >
           .metrics-section {
             padding: 8px;
           .template-chip {
-            font-size: 10px;,
+            font-size: 10px;
   padding: 3px 6px;
           .quick-actions {
-            opacity: 1;,
+            opacity: 1;
   position: static;
             margin-top: 8px;
             justify-content: center;

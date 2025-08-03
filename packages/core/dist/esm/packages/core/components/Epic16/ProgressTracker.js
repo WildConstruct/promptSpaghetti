@@ -11,16 +11,17 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
-import { Trophy, Star, Award, Target, Users, Download, Eye, Heart, BookOpen, CheckCircle, Calendar, PlusCircle, Zap, Crown, Flame } from 'lucide-react';
+import { Trophy, Star, Target, Users, Download, Eye, Heart, BookOpen, CheckCircle, Calendar, PlusCircle, Zap, Crown } from Flame;
+from;
+'lucide-react';
 export const ProgressTracker = ({
     userId,
     variant = 'full',
     showDetailedMetrics = true,
     enableAnimations = true,
     onMilestoneComplete,
-    onLevelUp,
-    className = ''
-});
+    onLevelUp });
+className = '';
 {
     const [userProgress, setUserProgress] = useState(null);
     const [metrics, setMetrics] = useState(null);
@@ -39,189 +40,181 @@ export const ProgressTracker = ({
             joinDate: new Date('2024-01-15'),
             lastActivity: new Date(),
             streakDays: 7,
-            longestStreak: 21,
+            longestStreak: 21
         };
-        const mockMetrics = {
-            templatesViewed: 156,
-            searchesPerformed: 89,
-            categoriesExplored: 12,
-            filtersUsed: 34,
-            templatesDownloaded: 45,
-            templatesPurchased: 12,
-            templatesImplemented: 38,
-            projectsCompleted: 23,
-            templatesCreated: 8,
-            templatesPublished: 6,
-            templatesShared: 15,
-            reviewsWritten: 12,
-            likesReceived: 234,
-            sharesReceived: 67,
-            followersGained: 89,
-            collaborationsJoined: 5,
-            tutorialsCompleted: 14,
-            skillsLearned: ['Advanced Prompting', 'Template Design', 'API Integration', 'Data Analysis'],
-            certificationsEarned: 3,
-            learningPathsCompleted: 2,
-        };
-        const mockMilestones = [
-            {
-                id: 'first-download',
-                title: 'First Download',
-                description: 'Download your first template',
-                category: 'usage',
-                target: 1,
-                current: 1,
-                completed: true,
-                completedAt: new Date('2024-01-20'),
-                xpReward: 100,
-                badgeReward: 'first-download-badge',
-                icon: '📥',
-                tier: 'bronze',
-                rarity: 'common',
-            },
-            {
-                id: 'template-creator',
-                title: 'Template Creator',
-                description: 'Create and publish 5 templates',
-                category: 'creation',
-                target: 5,
-                current: 6,
-                completed: true,
-                completedAt: new Date('2024-03-15'),
-                xpReward: 500,
-                badgeReward: 'creator-badge',
-                icon: '🎨',
-                tier: 'gold',
-                rarity: 'rare',
-            },
-            {
-                id: 'community-contributor',
-                title: 'Community Contributor',
-                description: 'Receive 100 likes on your templates',
-                category: 'social',
-                target: 100,
-                current: 234,
-                completed: true,
-                completedAt: new Date('2024-05-22'),
-                xpReward: 750,
-                badgeReward: 'contributor-badge',
-                icon: '❤️',
-                tier: 'platinum',
-                rarity: 'epic',
-            },
-            {
-                id: 'learning-enthusiast',
-                title: 'Learning Enthusiast',
-                description: 'Complete 20 tutorials',
-                category: 'learning',
-                target: 20,
-                current: 14,
-                completed: false,
-                xpReward: 300,
-                icon: '📚',
-                tier: 'silver',
-                rarity: 'uncommon',
-            },
-            {
-                id: 'marketplace-explorer',
-                title: 'Marketplace Explorer',
-                description: 'View templates from all 15 categories',
-                category: 'discovery',
-                target: 15,
-                current: 12,
-                completed: false,
-                xpReward: 200,
-                icon: '🗺️',
-                tier: 'silver',
-                rarity: 'uncommon',
-            },
-            {
-                id: 'streak-master',
-                title: 'Streak Master',
-                description: 'Maintain a 30-day activity streak',
-                category: 'special',
-                target: 30,
-                current: 7,
-                completed: false,
-                xpReward: 1000,
-                badgeReward: 'streak-master-badge',
-                icon: '🔥',
-                tier: 'diamond',
-                rarity: 'legendary'
-            }
-        ];
-        setUserProgress(mockUserProgress);
-        setMetrics(mockMetrics);
-        setMilestones(mockMilestones);
-        setRecentAchievements(mockMilestones.filter(m => m.completed).slice(-3));
-        setIsLoading(false);
-    }, [userId]);
-    const getMilestoneIcon = (iconString) => {
-        const iconMap = {
-            '📥': _jsx(Download, { className: "w-5 h-5" }),
-            '🎨': _jsx(PlusCircle, { className: "w-5 h-5" }),
-            '❤️': _jsx(Heart, { className: "w-5 h-5" }),
-            '📚': _jsx(BookOpen, { className: "w-5 h-5" }),
-            '🗺️': _jsx(Eye, { className: "w-5 h-5" }),
-            '🔥': _jsx(Flame, { className: "w-5 h-5" }),
-            '🏆': _jsx(Trophy, { className: "w-5 h-5" }),
-            '⭐': _jsx(Star, { className: "w-5 h-5" }),
-            '🎯': _jsx(Target, { className: "w-5 h-5" }),
-            '👥': _jsx(Users, { className: "w-5 h-5" }),
-        };
-        return iconMap[iconString] || _jsx(Award, { className: "w-5 h-5" });
+    });
+    const mockMetrics = {
+        templatesViewed: 156,
+        searchesPerformed: 89,
+        categoriesExplored: 12,
+        filtersUsed: 34,
+        templatesDownloaded: 45,
+        templatesPurchased: 12,
+        templatesImplemented: 38,
+        projectsCompleted: 23,
+        templatesCreated: 8,
+        templatesPublished: 6,
+        templatesShared: 15,
+        reviewsWritten: 12,
+        likesReceived: 234,
+        sharesReceived: 67,
+        followersGained: 89,
+        collaborationsJoined: 5,
+        tutorialsCompleted: 14,
+        skillsLearned: ['Advanced Prompting', 'Template Design', 'API Integration', 'Data Analysis'],
+        certificationsEarned: 3,
+        learningPathsCompleted: 2
     };
-    const getTierColor = (tier) => {
-        switch (tier) {
-            case 'diamond': return 'text-purple-600 bg-purple-100';
-            case 'platinum': return 'text-cyan-600 bg-cyan-100';
-            case 'gold': return 'text-yellow-600 bg-yellow-100';
-            case 'silver': return 'text-gray-600 bg-gray-100';
-            case 'bronze': return 'text-orange-600 bg-orange-100';
-            default: return 'text-gray-600 bg-gray-100';
+}
+;
+const mockMilestones = [
+    { id: 'first-download',
+        title: 'First Download',
+        description: 'Download your first template',
+        category: 'usage',
+        target: 1,
+        current: 1,
+        completed: true,
+        completedAt: new Date('2024-01-20'),
+        xpReward: 100,
+        badgeReward: 'first-download-badge',
+        icon: '📥',
+        tier: 'bronze',
+        rarity: 'common' },
+    { id: 'template-creator',
+        title: 'Template Creator',
+        description: 'Create and publish 5 templates',
+        category: 'creation',
+        target: 5,
+        current: 6,
+        completed: true,
+        completedAt: new Date('2024-03-15'),
+        xpReward: 500,
+        badgeReward: 'creator-badge',
+        icon: '🎨',
+        tier: 'gold',
+        rarity: 'rare' },
+    { id: 'community-contributor',
+        title: 'Community Contributor',
+        description: 'Receive 100 likes on your templates',
+        category: 'social',
+        target: 100,
+        current: 234,
+        completed: true,
+        completedAt: new Date('2024-05-22'),
+        xpReward: 750,
+        badgeReward: 'contributor-badge',
+        icon: '❤️',
+        tier: 'platinum',
+        rarity: 'epic' },
+    { id: 'learning-enthusiast',
+        title: 'Learning Enthusiast',
+        description: 'Complete 20 tutorials',
+        category: 'learning',
+        target: 20,
+        current: 14,
+        completed: false,
+        xpReward: 300,
+        icon: '📚',
+        tier: 'silver',
+        rarity: 'uncommon' },
+    { id: 'marketplace-explorer',
+        title: 'Marketplace Explorer',
+        description: 'View templates from all 15 categories',
+        category: 'discovery',
+        target: 15,
+        current: 12,
+        completed: false,
+        xpReward: 200,
+        icon: '🗺️',
+        tier: 'silver',
+        rarity: 'uncommon' },
+    { id: 'streak-master',
+        title: 'Streak Master',
+        description: 'Maintain a 30-day activity streak',
+        category: 'special',
+        target: 30,
+        current: 7,
+        completed: false,
+        xpReward: 1000,
+        badgeReward: 'streak-master-badge',
+        icon: '🔥',
+        tier: 'diamond' },
+    rarity, 'legendary'
+];
+setUserProgress(mockUserProgress);
+setMetrics(mockMetrics);
+setMilestones(mockMilestones);
+setRecentAchievements(mockMilestones.filter(m => m.completed).slice(-3));
+setIsLoading(false);
+[userId];
+;
+const getMilestoneIcon = (iconString) => {
+    const iconMap = {
+        '📥': _jsx(Download, { className: "w-5 h-5" }),
+        '🎨': _jsx(PlusCircle, { className: "w-5 h-5" }),
+        '❤️': _jsx(Heart, { className: "w-5 h-5" }),
+        '📚': _jsx(BookOpen, { className: "w-5 h-5" }),
+        '🗺️': _jsx(Eye, { className: "w-5 h-5" }),
+        '🔥': _jsx(Flame, { className: "w-5 h-5" }),
+        '🏆': _jsx(Trophy, { className: "w-5 h-5" }),
+        '⭐': _jsx(Star, { className: "w-5 h-5" }),
+        '🎯': _jsx(Target, { className: "w-5 h-5" }),
+        '👥': _jsx(Users, { className: "w-5 h-5" })
+    };
+};
+return iconMap[iconString] || _jsx(Award, { className: "w-5 h-5" });
+;
+const getTierColor = (tier) => {
+    switch (tier) {
+        case 'diamond': return 'text-purple-600 bg-purple-100';
+        case 'platinum': return 'text-cyan-600 bg-cyan-100';
+        case 'gold': return 'text-yellow-600 bg-yellow-100';
+        case 'silver': return 'text-gray-600 bg-gray-100';
+        case 'bronze': return 'text-orange-600 bg-orange-100';
+        default: return 'text-gray-600 bg-gray-100';
+    }
+    ;
+    const getCategoryIcon = (category) => {
+        switch (category) {
+            case 'discovery': return _jsx(Eye, { className: "w-4 h-4" });
+            case 'usage': return _jsx(Download, { className: "w-4 h-4" });
+            case 'creation': return _jsx(PlusCircle, { className: "w-4 h-4" });
+            case 'social': return _jsx(Users, { className: "w-4 h-4" });
+            case 'learning': return _jsx(BookOpen, { className: "w-4 h-4" });
+            case 'special': return _jsx(Crown, { className: "w-4 h-4" });
+            default: return _jsx(Target, { className: "w-4 h-4" });
         }
         ;
-        const getCategoryIcon = (category) => {
-            switch (category) {
-                case 'discovery': return _jsx(Eye, { className: "w-4 h-4" });
-                case 'usage': return _jsx(Download, { className: "w-4 h-4" });
-                case 'creation': return _jsx(PlusCircle, { className: "w-4 h-4" });
-                case 'social': return _jsx(Users, { className: "w-4 h-4" });
-                case 'learning': return _jsx(BookOpen, { className: "w-4 h-4" });
-                case 'special': return _jsx(Crown, { className: "w-4 h-4" });
-                default: return _jsx(Target, { className: "w-4 h-4" });
-            }
-            ;
-            const getProgressPercentage = () => {
-                if (!userProgress)
-                    return 0;
-                const currentProgress = userProgress.totalXP - userProgress.currentLevelXP;
-                const levelRange = userProgress.nextLevelXP - userProgress.currentLevelXP;
-                return (currentProgress / levelRange) * 100;
-            };
-            const getFilteredMilestones = () => {
-                if (selectedCategory === 'all')
-                    return milestones;
-                return milestones.filter(milestone => milestone.category === selectedCategory);
-            };
-            const renderOverview = () => ();
-            ;
-            _jsxs("div", { className: "space-y-6", children: [_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(Crown, { className: "w-5 h-5 text-yellow-500" }), "Level Progress"] }) }), _jsx(CardContent, { children: _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsxs("div", { className: "text-2xl font-bold", children: ["Level ", userProgress?.level] }), _jsxs("div", { className: "text-sm text-gray-500", children: [userProgress?.totalXP, " / ", userProgress?.nextLevelXP, " XP"] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "text-lg font-semibold text-blue-600", children: ["+", userProgress ? userProgress.nextLevelXP - userProgress.totalXP : 0, " XP to next level"] }), _jsxs("div", { className: "text-sm text-gray-500", children: [Math.round(getProgressPercentage()), "% complete"] })] })] }), _jsx(Progress, { value: getProgressPercentage(), className: "h-3" })] }) })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", children: [_jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-blue-100 rounded-lg", children: _jsx(Eye, { className: "w-5 h-5 text-blue-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.templatesViewed }), _jsx("div", { className: "text-sm text-gray-500", children: "Templates Viewed" })] })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-green-100 rounded-lg", children: _jsx(Download, { className: "w-5 h-5 text-green-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.templatesDownloaded }), _jsx("div", { className: "text-sm text-gray-500", children: "Downloads" })] })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-purple-100 rounded-lg", children: _jsx(PlusCircle, { className: "w-5 h-5 text-purple-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.templatesCreated }), _jsx("div", { className: "text-sm text-gray-500", children: "Created" })] })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-red-100 rounded-lg", children: _jsx(Heart, { className: "w-5 h-5 text-red-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.likesReceived }), _jsx("div", { className: "text-sm text-gray-500", children: "Likes Received" })] })] }) }) })] }), recentAchievements.length > 0 && ()
-                        < Card >
-                        (_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(Trophy, { className: "w-5 h-5 text-yellow-500" }), "Recent Achievements"] }) })
-                            ,
-                                _jsxs(CardContent, { children: [_jsx("div", { className: "space-y-3", children: recentAchievements.map((achievement) => ()
-                                                < div, key = { achievement, : .id }, className = "flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border-l-4 border-yellow-500" >
-                                                (_jsx("div", { className: "flex-shrink-0", children: getMilestoneIcon(achievement.icon) })
-                                                    ,
-                                                        _jsxs("div", { className: "flex-1", children: [_jsx("div", { className: "font-medium", children: achievement.title }), _jsx("div", { className: "text-sm text-gray-600", children: achievement.description })] })
-                                                            ,
-                                                                _jsxs("div", { className: "text-right", children: [_jsx(Badge, { className: getTierColor(achievement.tier), children: achievement.tier.toUpperCase() }), _jsxs("div", { className: "text-sm text-gray-500 mt-1", children: ["+", achievement.xpReward, " XP"] })] }))) }), "))}"] }))] });
+        const getProgressPercentage = () => {
+            if (!userProgress)
+                return 0;
+            const currentProgress = userProgress.totalXP - userProgress.currentLevelXP;
+            const levelRange = userProgress.nextLevelXP - userProgress.currentLevelXP;
+            return (currentProgress / levelRange) * 100;
         };
+        const getFilteredMilestones = () => {
+            if (selectedCategory === 'all')
+                return milestones;
+            return milestones.filter(milestone => milestone.category === selectedCategory);
+        };
+        const renderOverview = () => ();
+        ;
+        _jsxs("div", { className: "space-y-6", children: [_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(Crown, { className: "w-5 h-5 text-yellow-500" }), "Level Progress"] }) }), _jsx(CardContent, { children: _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsxs("div", { className: "text-2xl font-bold", children: ["Level ", userProgress?.level] }), _jsxs("div", { className: "text-sm text-gray-500", children: [userProgress?.totalXP, " / ", userProgress?.nextLevelXP, " XP"] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "text-lg font-semibold text-blue-600", children: ["+", userProgress ? userProgress.nextLevelXP - userProgress.totalXP : 0, " XP to next level"] }), _jsxs("div", { className: "text-sm text-gray-500", children: [Math.round(getProgressPercentage()), "% complete"] })] })] }), _jsx(Progress, { value: getProgressPercentage(), className: "h-3" })] }) })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4", children: [_jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-blue-100 rounded-lg", children: _jsx(Eye, { className: "w-5 h-5 text-blue-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.templatesViewed }), _jsx("div", { className: "text-sm text-gray-500", children: "Templates Viewed" })] })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-green-100 rounded-lg", children: _jsx(Download, { className: "w-5 h-5 text-green-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.templatesDownloaded }), _jsx("div", { className: "text-sm text-gray-500", children: "Downloads" })] })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-purple-100 rounded-lg", children: _jsx(PlusCircle, { className: "w-5 h-5 text-purple-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.templatesCreated }), _jsx("div", { className: "text-sm text-gray-500", children: "Created" })] })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center gap-3", children: [_jsx("div", { className: "p-2 bg-red-100 rounded-lg", children: _jsx(Heart, { className: "w-5 h-5 text-red-600" }) }), _jsxs("div", { children: [_jsx("div", { className: "text-2xl font-bold", children: metrics?.likesReceived }), _jsx("div", { className: "text-sm text-gray-500", children: "Likes Received" })] })] }) }) })] }), recentAchievements.length > 0 && ()
+                    < Card >
+                    (_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(Trophy, { className: "w-5 h-5 text-yellow-500" }), "Recent Achievements"] }) })
+                        ,
+                            _jsxs(CardContent, { children: [_jsx("div", { className: "space-y-3", children: recentAchievements.map((achievement) => ()
+                                            < div, key = { achievement, : .id }, className = "flex items-center gap-3 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border-l-4 border-yellow-500" >
+                                            (_jsx("div", { className: "flex-shrink-0", children: getMilestoneIcon(achievement.icon) })
+                                                ,
+                                                    _jsxs("div", { className: "flex-1", children: [_jsx("div", { className: "font-medium", children: achievement.title }), _jsx("div", { className: "text-sm text-gray-600", children: achievement.description })] })
+                                                        ,
+                                                            _jsxs("div", { className: "text-right", children: [_jsx(Badge, { className: getTierColor(achievement.tier), children: achievement.tier.toUpperCase() }), _jsxs("div", { className: "text-sm text-gray-500 mt-1", children: ["+", achievement.xpReward, " XP"] })] }))) }), "))}"] }))] });
     };
-    Card >
-    ;
-}
+};
+Card >
+;
 { /* Activity Streak */ }
 _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center gap-2", children: [_jsx(Flame, { className: "w-5 h-5 text-orange-500" }), "Activity Streak"] }) }), _jsx(CardContent, { children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsxs("div", { className: "text-2xl font-bold", children: [userProgress?.streakDays, " days"] }), _jsx("div", { className: "text-sm text-gray-500", children: "Current streak" })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "text-lg font-semibold", children: [userProgress?.longestStreak, " days"] }), _jsx("div", { className: "text-sm text-gray-500", children: "Longest streak" })] })] }) })] });
 div >

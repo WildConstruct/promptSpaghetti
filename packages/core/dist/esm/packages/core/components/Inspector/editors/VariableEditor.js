@@ -3,28 +3,21 @@ import { TextFieldEditor } from '../TextFieldEditor';
 import { SelectEditor } from '../SelectEditor';
 import { TemplateEditor } from '../TemplateEditor';
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
-import { useContextualHelp } from '../../help';
+from;
+'../../help';
+;
 // Contextual help for template editor
 const { wrapWithHelp: wrapTemplateHelp } = useContextualHelp({});
-id: 'variable-template-field',
-    title;
-'Value Template',
-    description;
-'Define what value to store using templates. Use {variable} syntax to reference other stored values.',
-    category;
-'basic',
-    trigger;
-'hover',
-    position;
-'top',
-    showOnDisclosureLevel;
-['basic', 'advanced', 'debug'],
-    examples;
-['Character: {character_name}', '{mood} character in {location}'],
-    relatedFeatures;
-['variable-system', 'template-engine'],
-    priority;
-'medium';
+id: 'variable-template-field';
+title: 'Value Template';
+description: 'Define what value to store using templates. Use {variable} syntax to reference other stored values.';
+category: 'basic';
+trigger: 'hover';
+position: 'top';
+showOnDisclosureLevel: ['basic', 'advanced', 'debug'];
+examples: ['Character: {character_name}', '{mood} character in {location}'];
+relatedFeatures: ['variable-system', 'template-engine'];
+priority: 'medium';
 ;
 return;
 _jsxs("div", { className: "variable-editor", children: [_jsxs(ProgressiveDisclosureSection, { title: "Variable Settings", level: "basic", description: isSetVariable ? 'Define what value to store' : 'Retrieve stored values', defaultExpanded: true, priority: "critical", fieldName: isSetVariable ? 'value' : 'variableName', children: [wrapVariableNameHelp()
@@ -34,7 +27,7 @@ _jsxs("div", { className: "variable-editor", children: [_jsxs(ProgressiveDisclos
                         fontSize: 12,
                         fontWeight: 500,
                         color: '#e2e8f0',
-                        marginBottom: 6,
+                        marginBottom: 6
                     }, children: "Value Template" }), _jsx(TemplateEditor, { value: template || value, onChange: (val) => {
                         handleFieldChange('template', val);
                         handleFieldChange('value', val); // Maintain backward compatibility
@@ -57,7 +50,7 @@ _jsxs("div", { className: "variable-editor", children: [_jsxs(ProgressiveDisclos
                                 _jsxs("div", { style: {
                                         fontSize: 10,
                                         color: '#a0aec0',
-                                        marginTop: 4,
+                                        marginTop: 4
                                     }, children: ["Use natural language with ", '{variable}', " syntax. Variables become input ports."] });
                             { /* Show type inference information (backward compatible) */ }
                             {
@@ -65,13 +58,36 @@ _jsxs("div", { className: "variable-editor", children: [_jsxs(ProgressiveDisclos
                                     < div;
                                 style = {};
                                 {
-                                    fontSize: 10,
-                                        color;
+                                    fontSize: 10;
+                                    color: '#4299e1';
+                                    marginTop: 6;
+                                    padding: 6;
+                                    background: 'rgba(66, 153, 225, 0.1)';
+                                    borderRadius: 4;
+                                    border: '1px solid rgba(66, 153, 225, 0.3)';
                                 }
                             }
+                             >
+                                _jsx("strong", { children: "\uD83E\uDD16 Auto-detected:" });
+                            {
+                                ' ';
+                            }
+                            {
+                                nodeData.extractedVariables?.map((v, idx) => ()
+                                    < span, key = { v, : .name || `var_${idx}` } > );
+                            }
+                            {
+                                v.name || 'variable';
+                            }
+                            ({ v, : .inferredType || 'auto' });
+                            {
+                                v.defaultValue && ` = "${v.defaultValue}"`;
+                            }
+                            {
+                                idx < nodeData.extractedVariables.length - 1 ? ', ' : '';
+                            }
                         }
-                    } }), ": '#4299e1', marginTop: 6, padding: 6, background: 'rgba(66, 153, 225, 0.1)', borderRadius: 4, border: '1px solid rgba(66, 153, 225, 0.3)', }}>", _jsx("strong", { children: "\uD83E\uDD16 Auto-detected:" }), " ", ' ', nodeData.extractedVariables?.map((v, idx) => ()
-                    < span, key = { v, : .name || `var_${idx}` } > ), v.name || 'variable', " (", v.inferredType || 'auto', ")", v.defaultValue && ` = "${v.defaultValue}"`, idx < nodeData.extractedVariables.length - 1 ? ', ' : ''] }), ")) || 'No variables detected'}"] });
+                    } })] }), ")) || 'No variables detected'}"] });
 div >
 ;
 {
@@ -79,18 +95,12 @@ div >
         < div;
     style = {};
     {
-        fontSize: 12,
-            color;
-        '#a0aec0',
-            padding;
-        12,
-            background;
-        'rgba(66, 153, 225, 0.1)',
-            borderRadius;
-        6,
-            border;
-        '1px solid rgba(66, 153, 225, 0.3)',
-        ;
+        fontSize: 12;
+        color: '#a0aec0';
+        padding: 12;
+        background: 'rgba(66, 153, 225, 0.1)';
+        borderRadius: 6;
+        border: '1px solid rgba(66, 153, 225, 0.3)';
     }
 }
  >
@@ -137,11 +147,11 @@ ProgressiveDisclosureSection >
                         gap: 8,
                         fontSize: 12,
                         color: '#e2e8f0',
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }, children: [_jsx("input", { type: "checkbox", checked: allowOverwrite, onChange: (e) => handleFieldChange('allowOverwrite', e.target.checked), style: {
                                 width: 14,
                                 height: 14,
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             } }), "Allow overwriting existing variable"] }) })
                 ,
                     _jsx(SelectEditor, { label: "Scope", value: scope, fieldKey: "scope", options: SCOPE_OPTIONS, zodType: null, onChange: (value) => handleFieldChange('scope', value) }));
@@ -157,11 +167,11 @@ ProgressiveDisclosureSection >
                         gap: 8,
                         fontSize: 12,
                         color: '#e2e8f0',
-                        cursor: 'pointer',
+                        cursor: 'pointer'
                     }, children: [_jsx("input", { type: "checkbox", checked: required, onChange: (e) => handleFieldChange('required', e.target.checked), style: {
                                 width: 14,
                                 height: 14,
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             } }), "Variable is required"] }) })
                 ,
                     _jsx(TextFieldEditor, { label: "Default Value", value: defaultValue, fieldKey: "defaultValue", zodType: null, onChange: (value) => handleFieldChange('defaultValue', value), placeholder: "Fallback value if variable not found..." }));

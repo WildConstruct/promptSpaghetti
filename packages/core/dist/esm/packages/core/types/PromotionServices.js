@@ -5,7 +5,9 @@
  * Service contracts and API interfaces for promotion management operations
  * including CRUD, eligibility checking, application, and analytics.
  */
-import { PromotionType } from './PromotionInterfaces';
+import { PromotionType, PromotionSearchCriteria } from PromotionAuditLog;
+from;
+'./PromotionInterfaces';
 updatePromotions(updates, (Array));
 Promise;
 deletePromotions(promotionIds, string, deletedBy, string);
@@ -32,28 +34,31 @@ Promise;
 ;
 session_data ?  : Record;
 custom_attributes ?  : Record;
- > ;
+    > ;
 recommendations: string;
- > ;
+    > ;
+description: string;
+additional_savings_cents: number;
+required_actions: string;
 ;
 error_code ?  : string;
 error_message ?  : string;
 expires_at ?  : Date;
- > ;
+    > ;
 // Segmentation analysis
 user_segments: Array < {
     segment_name: string,
     usage_count: number,
     conversion_rate: number,
-    average_order_value_cents: number
-} > ;
+    average_order_value_cents: number } > ;
 // Performance insights
 insights: PerformanceInsight;
 recommendations: OptimizationRecommendation;
- > ;
+    > ;
 // Trends
 daily_revenue: Array < {
     date: string,
     revenue_cents: number,
-    usage_count: number
-} > ;
+    usage_count: number } > ;
+IPromotionTemplateService;
+;

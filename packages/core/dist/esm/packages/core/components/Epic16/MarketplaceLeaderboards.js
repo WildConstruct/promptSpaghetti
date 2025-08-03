@@ -7,24 +7,17 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * categories, and user engagement rankings with real-time updates.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { Trophy, Award, Users, FileText, Calendar, Filter, RefreshCw } from 'lucide-react';
+import { Trophy, Medal, Award, TrendingUp, TrendingDown, Users, FileText, Star, Eye, Calendar, Filter, RefreshCw } from ExternalLink;
+from;
+'lucide-react';
 ;
-export const MarketplaceLeaderboards = ({
-    defaultTab = 'templates',
-    onTemplateClick,
-    onCreatorClick,
-    onCategoryClick,
-    className = ''
-});
-{
-    // State management
+className = '';
+{ // State management
     const [activeTab, setActiveTab] = useState(defaultTab);
     const [activeMetric, setActiveMetric] = useState('revenue');
     const [filter, setFilter] = useState({});
-    timeframe: 'all',
-        limit;
-    25,
-    ;
+    timeframe: 'all';
+    limit: 25;
 }
 ;
 const [leaderboard, setLeaderboard] = useState(null);
@@ -40,14 +33,12 @@ const fetchLeaderboard = useCallback(async () => {
         setLoading(true);
         setError(null);
         const params = new URLSearchParams({});
-        timeframe: filter.timeframe,
-            limit;
-        filter.limit.toString(),
-            offset;
-        '0',
-        ;
+        timeframe: filter.timeframe;
+        limit: filter.limit.toString();
+        offset: '0';
     }
-    finally { }
+    finally {
+    }
 });
 if (filter.category) {
     params.append('category', filter.category);
@@ -112,55 +103,47 @@ if (!response.ok) {
         }
     });
     ;
-}
-try { }
-catch (error) {
-    console.error('Failed to fetch categories:', error);
-}
-[];
-;
-useEffect(() => {
-    fetchLeaderboard();
-}, [fetchLeaderboard]);
-useEffect(() => {
-    fetchCategories();
-}, [fetchCategories]);
-// Auto-refresh every 10 minutes
-useEffect(() => {
-    const interval = setInterval(() => {
-        fetchLeaderboard();
-    }, 10 * 60 * 1000);
-    return () => clearInterval(interval);
-}, [fetchLeaderboard]);
-// =============================================================================
-// Event Handlers
-// =============================================================================
-const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    setActiveMetric(getDefaultMetric(tab));
-};
-const handleMetricChange = (metric) => {
-    setActiveMetric(metric);
-};
-const handleFilterChange = (newFilter) => {
-    setFilter(prev => ({ ...prev, ...newFilter }));
-};
-const handleRefresh = () => {
-    fetchLeaderboard();
-};
-const handleEntryClick = (entry) => {
-    switch (activeTab) {
-        case 'templates':
-            onTemplateClick?.(entry.id);
-            break;
-        case 'creators':
-            onCreatorClick?.(entry.id);
-            break;
-        case 'categories':
-            onCategoryClick?.(entry.id);
-            break;
+    try {
     }
+    catch (error) {
+        console.error('Failed to fetch categories:', error);
+    }
+    [];
     ;
+    useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
+    useEffect(() => { fetchCategories(); }, [fetchCategories]);
+    // Auto-refresh every 10 minutes
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchLeaderboard();
+        }, 10 * 60 * 1000);
+        return () => clearInterval(interval);
+    }, [fetchLeaderboard]);
+    // =============================================================================
+    // Event Handlers
+    // =============================================================================
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        setActiveMetric(getDefaultMetric(tab));
+    };
+    const handleMetricChange = (metric) => { setActiveMetric(metric); };
+    const handleFilterChange = (newFilter) => {
+        setFilter(prev => ({ ...prev, ...newFilter }));
+    };
+    const handleRefresh = () => { fetchLeaderboard(); };
+    const handleEntryClick = (entry) => {
+        switch (activeTab) {
+            case 'templates':
+                onTemplateClick?.(entry.id);
+                break;
+            case 'creators':
+                onCreatorClick?.(entry.id);
+                break;
+            case 'categories':
+        }
+        onCategoryClick?.(entry.id);
+        break;
+    };
     // =============================================================================
     // UI Rendering Methods
     // =============================================================================
@@ -175,13 +158,13 @@ const handleEntryClick = (entry) => {
         _jsxs("div", { className: "border-b border-gray-200 mb-6", children: [_jsxs("nav", { className: "-mb-px flex space-x-8", children: [tabs.map((tab) => ()
                             < button, key = { tab, : .id }, onClick = {}()), " => handleTabChange(tab.id)} className=", `flex items-center py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                             ? 'border-blue-500 text-blue-600'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                        }`, ">", _jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }), "))}"] });
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, ">", _jsx(tab.icon, { className: "w-4 h-4 mr-2" }), tab.label] }), "))}"] });
     };
-};
-div >
-;
-;
+    div >
+    ;
+    ;
+}
 ;
 const renderMetricSelector = () => {
     const metrics = getMetricsForTab(activeTab);
@@ -189,8 +172,8 @@ const renderMetricSelector = () => {
     _jsxs("div", { className: "flex flex-wrap gap-2", children: [metrics.map((metric) => ()
                 < button, key = { metric, : .id }, onClick = {}()), " => handleMetricChange(metric.id)} className=", `px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${activeMetric === metric.id
                 ? 'bg-blue-100 text-blue-700'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200',
-            }`, ">", metric.label] });
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}
+`, ">", metric.label] });
 };
 div >
 ;
@@ -242,376 +225,207 @@ const renderLeaderboardEntry = (entry, index) => {
     const isTopThree = index < 3;
     const rankIcon = getRankIcon(index + 1);
     return;
-    _jsx("div", { onClick: () => handleEntryClick(entry), className: `flex items-center p-4 rounded-lg border transition-all cursor-pointer ${isTopThree
-            ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 hover:from-yellow-100 hover:to-yellow-200' : ,
-     }, entry.id);
+    _jsxs("div", { onClick: () => handleEntryClick(entry), className: `flex items-center p-4 rounded-lg border transition-all cursor-pointer ${isTopThree
+            ? 'bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 hover:from-yellow-100 hover:to-yellow-200'
+            : 'bg-white border-gray-200 hover:bg-gray-50'}
+`, children: [_jsxs("div", { className: "flex-shrink-0 w-12 text-center", children: [rankIcon ? ()
+                        < div : , " className=\"flex justify-center\">", rankIcon] }), ") : ()", _jsxs("span", { className: "text-lg font-bold text-gray-600", children: ["#", entry.rank] }), ")}"] }, entry.id);
+    { /* Main Content */ }
+    _jsx("div", { className: "flex-1 ml-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h4", { className: "font-semibold text-gray-900", children: entry.name }), _jsx("div", { className: "text-sm text-gray-600", children: renderEntryDetails(entry) })] }), _jsxs("div", { className: "text-right", children: [_jsx("div", { className: "text-lg font-bold text-gray-900", children: formatScore(entry.score, activeMetric) }), entry.change !== 0 && ()
+                            < div, " className=", `flex items-center text-sm ${entry.change > 0 ? 'text-green-600' : 'text-red-600'}
+`, ">", entry.change > 0 ? _jsx(TrendingUp, { className: "w-3 h-3 mr-1" }) : _jsx(TrendingDown, { className: "w-3 h-3 mr-1" }), Math.abs(entry.change)] }), ")}"] }) });
 };
-'bg-white border-gray-200 hover:bg-gray-50',
+div >
+    { /* Action Icon */}
+    < div;
+className = "flex-shrink-0 ml-4" >
+    _jsx(ExternalLink, { className: "w-4 h-4 text-gray-400" });
+div >
 ;
-`}
-      >
-        {/* Rank */}
-        <div className="flex-shrink-0 w-12 text-center">
-          {rankIcon ? ()
-            <div className="flex justify-center">{rankIcon}</div>
-          ) : ()
-            <span className="text-lg font-bold text-gray-600">#{entry.rank}</span>
-          )}
-        </div>
-        {/* Main Content */}
-        <div className="flex-1 ml-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-semibold text-gray-900">{entry.name}</h4>
-              <div className="text-sm text-gray-600">
-                {renderEntryDetails(entry)}
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-lg font-bold text-gray-900">
-                {formatScore(entry.score, activeMetric)}
-              </div>
-              {entry.change !== 0 && ()
-                <div className={`;
-flex;
-items - center;
-text - sm;
-$;
-{
-    entry.change > 0 ? 'text-green-600' : 'text-red-600',
+div >
+;
+;
+;
+const renderEntryDetails = (entry) => {
+    switch (activeTab) {
+        case 'templates':
+            const templateData = entry.metadata;
+            return;
+            _jsxs("div", { className: "flex items-center space-x-4 text-xs", children: [_jsxs("span", { children: ["by ", templateData.creatorName] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Eye, { className: "w-3 h-3 mr-1" }), templateData.totalPurchases, " purchases"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Star, { className: "w-3 h-3 mr-1" }), templateData.averageRating?.toFixed(1) || 'N/A'] })] });
+    }
+};
+;
+'creators';
+const creatorData = entry.metadata;
+return;
+_jsxs("div", { className: "flex items-center space-x-4 text-xs", children: [_jsxs("span", { children: [creatorData.templateCount, " templates"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Star, { className: "w-3 h-3 mr-1" }), creatorData.averageRating?.toFixed(1) || 'N/A'] }), creatorData.verificationBadges?.length > 0 && ()
+            < span, " className=\"px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs\"> Verified"] });
+div >
+;
+;
+'categories';
+const categoryData = entry.metadata;
+return;
+_jsxs("div", { className: "flex items-center space-x-4 text-xs", children: [_jsxs("span", { children: [categoryData.templateCount, " templates"] }), _jsxs("span", { children: ["Growth: ", categoryData.growthRate?.toFixed(1), "%"] })] });
+;
+'engagement';
+const engagementData = entry.metadata;
+return;
+_jsxs("div", { className: "flex items-center space-x-4 text-xs", children: [_jsxs("span", { children: [engagementData.badgeCount, " badges"] }), _jsxs("span", { children: ["Level ", engagementData.level] }), _jsxs("span", { children: [engagementData.reviewsWritten, " reviews"] })] });
+;
+return null;
+;
+const renderLeaderboard = () => {
+    if (loading) {
+        return;
+        _jsxs("div", { className: "flex items-center justify-center h-64", children: [_jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" }), _jsx("span", { className: "ml-3 text-gray-600", children: "Loading leaderboard..." })] });
+    }
+};
+;
+if (error) {
+    return;
+    _jsxs("div", { className: "bg-red-50 border border-red-200 rounded-lg p-6 text-center", children: [_jsx("div", { className: "text-red-600 mb-2", children: "Failed to load leaderboard" }), _jsx("div", { className: "text-sm text-red-500 mb-4", children: error }), _jsx("button", { onClick: handleRefresh, className: "bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700", children: "Try Again" })] });
+    ;
+    if (!leaderboard || leaderboard.leaderboard.length === 0) {
+        return;
+        _jsxs("div", { className: "text-center py-12", children: [_jsx(Trophy, { className: "mx-auto w-16 h-16 text-gray-400" }), _jsx("h3", { className: "mt-4 text-lg font-medium text-gray-900", children: "No entries found" }), _jsx("p", { className: "mt-2 text-gray-600", children: "Try adjusting your filters or check back later." })] });
+        ;
+        return;
+        _jsx("div", { className: "space-y-3", children: leaderboard.leaderboard.map((entry, index) => renderLeaderboardEntry(entry, index)) });
+        ;
+    }
+    ;
+    // =============================================================================
+    // Main Render
+    // =============================================================================
+    return;
+    _jsxs("div", { className: `marketplace-leaderboards ${className}`, children: ["}", _jsxs("div", { className: "mb-8", children: [_jsx("h1", { className: "text-2xl font-bold text-gray-900", children: "Marketplace Leaderboards" }), _jsx("p", { className: "text-gray-600", children: "Discover top performers across the marketplace" })] }), renderTabNavigation(), _jsxs("div", { className: "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6", children: [renderMetricSelector(), renderFilters()] }), renderLeaderboardHeader(), renderLeaderboard()] });
     ;
 }
-`}>
-                  {entry.change > 0 ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
-                  {Math.abs(entry.change)}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        {/* Action Icon */}
-        <div className="flex-shrink-0 ml-4">
-          <ExternalLink className="w-4 h-4 text-gray-400" />
-        </div>
-      </div>
-    );
-  };
-  const renderEntryDetails = (entry: LeaderboardEntry) => {
-    switch (activeTab) {
-    case 'templates':
-      const templateData = entry.metadata as any;
-      return;
-        <div className="flex items-center space-x-4 text-xs">
-          <span>by {templateData.creatorName}</span>
-          <span className="flex items-center">
-            <Eye className="w-3 h-3 mr-1" />
-            {templateData.totalPurchases} purchases
-          </span>
-          <span className="flex items-center">
-            <Star className="w-3 h-3 mr-1" />
-            {templateData.averageRating?.toFixed(1) || 'N/A'}
-          </span>
-        </div>
-      );
-    case 'creators':
-      const creatorData = entry.metadata as any;
-      return;
-        <div className="flex items-center space-x-4 text-xs">
-          <span>{creatorData.templateCount} templates</span>
-          <span className="flex items-center">
-            <Star className="w-3 h-3 mr-1" />
-            {creatorData.averageRating?.toFixed(1) || 'N/A'}
-          </span>
-          {creatorData.verificationBadges?.length > 0 && ()
-            <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">
-                Verified
-            </span>
-          )}
-        </div>
-      );
-    case 'categories':
-      const categoryData = entry.metadata as any;
-      return;
-        <div className="flex items-center space-x-4 text-xs">
-          <span>{categoryData.templateCount} templates</span>
-          <span>Growth: {categoryData.growthRate?.toFixed(1)}%</span>
-        </div>
-      );
-    case 'engagement':
-      const engagementData = entry.metadata as any;
-      return;
-        <div className="flex items-center space-x-4 text-xs">
-          <span>{engagementData.badgeCount} badges</span>
-          <span>Level {engagementData.level}</span>
-          <span>{engagementData.reviewsWritten} reviews</span>
-        </div>
-      );
-    default:
-      return null;
-  };
-  const renderLeaderboard = () => {
-    if (loading) {
-      return;
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600">Loading leaderboard...</span>
-        </div>
-      );
-    if (error) {
-      return;
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-          <div className="text-red-600 mb-2">Failed to load leaderboard</div>
-          <div className="text-sm text-red-500 mb-4">{error}</div>
-          <button
-            onClick={handleRefresh}
-            className="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700"
-          >
-            Try Again
-          </button>
-        </div>
-      );
-    if (!leaderboard || leaderboard.leaderboard.length === 0) {
-      return;
-        <div className="text-center py-12">
-          <Trophy className="mx-auto w-16 h-16 text-gray-400" />
-          <h3 className="mt-4 text-lg font-medium text-gray-900">No entries found</h3>
-          <p className="mt-2 text-gray-600">
-            Try adjusting your filters or check back later.
-          </p>
-        </div>
-      );
-    return;
-      <div className="space-y-3">
-        {leaderboard.leaderboard.map((entry, index) => 
-          renderLeaderboardEntry(entry, index)
-        )}
-      </div>
-    );
-  };
-  // =============================================================================
-  // Main Render
-  // =============================================================================
-  return;
-    <div className={`;
-marketplace - leaderboards;
-$;
-{
-    className;
-}
-`}>}
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Marketplace Leaderboards</h1>
-        <p className="text-gray-600">Discover top performers across the marketplace</p>
-      </div>
-      {/* Tab Navigation */}
-      {renderTabNavigation()}
-      {/* Controls */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-        {renderMetricSelector()}
-        {renderFilters()}
-      </div>
-      {/* Leaderboard Header */}
-      {renderLeaderboardHeader()}
-      {/* Leaderboard Content */}
-      {renderLeaderboard()}
-    </div>
-  );
-};
-
+;
 // =============================================================================
 // Helper Functions
 // =============================================================================
-function getLeaderboardEndpoint(tab: string, metric: string): string {
-  const baseUrl = '/api/leaderboards';
-  switch (tab) {
-  case 'templates':
-    return `;
-$;
-{
-    baseUrl;
+function getLeaderboardEndpoint(tab, metric) {
+    const baseUrl = '/api/leaderboards';
+    switch (tab) {
+        case 'templates':
+            return `${baseUrl}/templates/${metric}`;
+    }
+    'creators';
+    return `${baseUrl}/creators/${metric}`;
 }
-/templates/$;
-{
-    metric;
+'categories';
+return `${baseUrl}/categories/${metric}`;
+'engagement';
+return `${baseUrl}/engagement/${metric}`;
+return `${baseUrl}/templates/revenue`;
+function getDefaultMetric(tab) {
+    switch (tab) {
+        case 'templates':
+            return 'revenue';
+        case 'creators':
+            return 'revenue';
+        case 'categories':
+            return 'revenue';
+        case 'engagement':
+            return 'points';
+        default:
+            return 'revenue';
+            function getMetricsForTab(tab) {
+                switch (tab) {
+                    case 'templates':
+                        return [
+                            { id: 'revenue', label: 'Revenue' },
+                            { id: 'purchases', label: 'Purchases' },
+                            { id: 'rating', label: 'Rating' },
+                            { id: 'trending', label: 'Trending' }
+                        ];
+                    case 'creators':
+                        return [
+                            { id: 'revenue', label: 'Revenue' },
+                            { id: 'templates', label: 'Templates' },
+                            { id: 'rating', label: 'Rating' },
+                            { id: 'badges', label: 'Badges' }
+                        ];
+                    case 'categories':
+                        return [
+                            { id: 'revenue', label: 'Revenue' },
+                            { id: 'templates', label: 'Templates' },
+                            { id: 'growth', label: 'Growth' }
+                        ];
+                    case 'engagement':
+                        return [
+                            { id: 'points', label: 'Points' },
+                            { id: 'badges', label: 'Badges' },
+                            { id: 'reviews', label: 'Reviews' },
+                            { id: 'contributions', label: 'Contributions' }
+                        ];
+                    default:
+                        return [{ id: 'revenue', label: 'Revenue' }];
+                        function getLeaderboardTitle(tab, metric) {
+                            const metricLabels = {
+                                revenue: 'Top Revenue',
+                                purchases: 'Most Purchased',
+                                rating: 'Highest Rated',
+                                trending: 'Trending',
+                                templates: 'Most Templates',
+                                badges: 'Most Badges',
+                                growth: 'Fastest Growing',
+                                points: 'Most Points',
+                                reviews: 'Most Reviews',
+                                contributions: 'Top Contributors'
+                            };
+                        }
+                        ;
+                        const tabLabels = { templates: 'Templates',
+                            creators: 'Creators',
+                            categories: 'Categories',
+                            engagement: 'Community' };
+                }
+                ;
+                return `${metricLabels[metric]} ${tabLabels[tab]}`;
+            }
+            function formatScore(score, metric) {
+                switch (metric) {
+                    case 'revenue':
+                        return `${(score / 100).toFixed(2)}`;
+                }
+            }
+        case 'rating':
+            return `${score.toFixed(1)} ★`;
+    }
+    'growth';
+    return `${score.toFixed(1)}%`;
 }
-`;}
-  case 'creators':
-    return `;
-$;
-{
-    baseUrl;
+return score.toLocaleString();
+function getRankIcon(rank) {
+    switch (rank) {
+        case 1:
+            return _jsx(Trophy, { className: "w-6 h-6 text-yellow-500" });
+        case 2:
+            return _jsx(Medal, { className: "w-6 h-6 text-gray-400" });
+        case 3:
+            return _jsx(Award, { className: "w-6 h-6 text-orange-500" });
+        default:
+            return null;
+            function formatTimeAgo(date) {
+                const now = new Date();
+                const diffMs = now.getTime() - date.getTime();
+                const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                if (diffMinutes < 1)
+                    return 'just now';
+                if (diffMinutes < 60)
+                    return `${diffMinutes}m ago`;
+            }
+            const diffHours = Math.floor(diffMinutes / 60);
+            if (diffHours < 24)
+                return `${diffHours}h ago`;
+    }
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays}d ago`;
 }
-/creators/$;
-{
-    metric;
+function getAuthToken() {
+    return localStorage.getItem('authToken') || '';
+    export default MarketplaceLeaderboards;
 }
-`;}
-  case 'categories':
-    return `;
-$;
-{
-    baseUrl;
-}
-/categories/$;
-{
-    metric;
-}
-`;}
-  case 'engagement':
-    return `;
-$;
-{
-    baseUrl;
-}
-/engagement/$;
-{
-    metric;
-}
-`;},},
-  default:
-    return `;
-$;
-{
-    baseUrl;
-}
-/templates/revenue `;}
-function getDefaultMetric(tab: string): string {
-  switch (tab) {
-  case 'templates':
-    return 'revenue';
-  case 'creators':
-    return 'revenue';
-  case 'categories':
-    return 'revenue';
-  case 'engagement':
-    return 'points';
-  default:
-    return 'revenue';
-function getMetricsForTab(tab: string): Array<{ id: string; label: string }> {
-  switch (tab) {
-  case 'templates':
-    return [
-      { id: 'revenue', label: 'Revenue' },
-      { id: 'purchases', label: 'Purchases' },
-      { id: 'rating', label: 'Rating' },
-      { id: 'trending', label: 'Trending' }
-    ];
-  case 'creators':
-    return [
-      { id: 'revenue', label: 'Revenue' },
-      { id: 'templates', label: 'Templates' },
-      { id: 'rating', label: 'Rating' },
-      { id: 'badges', label: 'Badges' }
-    ];
-  case 'categories':
-    return [
-      { id: 'revenue', label: 'Revenue' },
-      { id: 'templates', label: 'Templates' },
-      { id: 'growth', label: 'Growth' }
-    ];
-  case 'engagement':
-    return [
-      { id: 'points', label: 'Points' },
-      { id: 'badges', label: 'Badges' },
-      { id: 'reviews', label: 'Reviews' },
-      { id: 'contributions', label: 'Contributions' }
-    ];
-  default:
-    return [{ id: 'revenue', label: 'Revenue' }];
-function getLeaderboardTitle(tab: string, metric: string): string {
-  const metricLabels: Record<string, string> = {,
-  revenue: 'Top Revenue',
-  purchases: 'Most Purchased',
-  rating: 'Highest Rated',
-  trending: 'Trending',
-  templates: 'Most Templates',
-  badges: 'Most Badges',
-  growth: 'Fastest Growing',
-  points: 'Most Points',
-  reviews: 'Most Reviews',
-  contributions: 'Top Contributors',
-};
-  const tabLabels: Record<string, string> = {
-  templates: 'Templates',
-  creators: 'Creators',
-  categories: 'Categories',
-  engagement: 'Community',
-};
-  return `;
-$;
-{
-    metricLabels[metric];
-}
-$;
-{
-    tabLabels[tab];
-}
-`;}
-function formatScore(score: number, metric: string): string {
-  switch (metric) {
-  case 'revenue':
-    return `;
-$$;
-{
-    (score / 100).toFixed(2);
-}
-`;}
-  case 'rating':
-    return `;
-$;
-{
-    score.toFixed(1);
-}
-`;}
-  case 'growth':
-    return `;
-$;
-{
-    score.toFixed(1);
-}
- % `;},},
-  default:
-    return score.toLocaleString();
-function getRankIcon(rank: number): React.ReactNode | null {
-  switch (rank) {
-  case 1:
-    return <Trophy className="w-6 h-6 text-yellow-500" />;
-  case 2:
-    return <Medal className="w-6 h-6 text-gray-400" />;
-  case 3:
-    return <Award className="w-6 h-6 text-orange-500" />;
-  default:
-    return null;
-function formatTimeAgo(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMinutes = Math.floor(diffMs / (1000 * 60));
-  if (diffMinutes < 1) return 'just now';
-  if (diffMinutes < 60) return `;
-$;
-{
-    diffMinutes;
-}
-m;
-ago `;}
-  const diffHours = Math.floor(diffMinutes / 60);
-  if (diffHours < 24) return `;
-$;
-{
-    diffHours;
-}
-h;
-ago `;}
-  const diffDays = Math.floor(diffHours / 24);
-  return `;
-$;
-{
-    diffDays;
-}
-d;
-ago `;}
-function getAuthToken(): string {
-  return localStorage.getItem('authToken') || '';
-
-export default MarketplaceLeaderboards;;

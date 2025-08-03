@@ -5,9 +5,17 @@
 import { useState, useEffect, useCallback } from 'react';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
 export function useComments(options) {
-    const { workspaceId, targetType, targetId, userId, limit = 20, sortOrder = 'desc', autoRefresh = false, refreshInterval = 30000 };
+    ;
+    const { workspaceId };
+    targetType;
+    targetId;
+    userId;
+    limit = 20;
+    sortOrder = 'desc';
+    autoRefresh = false;
 }
-options;
+refreshInterval = 30000
+    = options;
 const [comments, setComments] = useState([]);
 const [loading, setLoading] = useState(true);
 const [loadingMore, setLoadingMore] = useState(false);
@@ -24,16 +32,11 @@ const fetchComments = useCallback(async (pageNum = 1, append = false) => {
             setLoadingMore(true);
             setError(null);
             const params = new URLSearchParams({});
-            target_type: targetType,
-                target_id;
-            targetId,
-                page;
-            pageNum.toString(),
-                limit;
-            limit.toString(),
-                sort_order;
-            sortOrder,
-            ;
+            target_type: targetType;
+            target_id: targetId;
+            page: pageNum.toString();
+            limit: limit.toString();
+            sort_order: sortOrder;
         }
     }
     finally { }
@@ -41,10 +44,9 @@ const fetchComments = useCallback(async (pageNum = 1, append = false) => {
 const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/comments?${params}`, {});
 headers: {
     'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
+    'application/json';
+    'X-User-Id';
+    userId;
 }
 ;
 if (!response.ok) {
@@ -74,17 +76,8 @@ finally {
 // Create a new comment
 const createComment = useCallback(async (commentData) => {
     const response = await fetch(`${API_BASE}/comments`, {});
-});
-method: 'POST',
-    headers;
-{
-    'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
-}
-body: JSON.stringify(commentData);
+}, method, 'POST', headers, { 'Content-Type': 'application/json',
+    'X-User-Id': userId }, body, JSON.stringify(commentData));
 ;
 if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -106,17 +99,8 @@ return newComment;
 // Update an existing comment
 const updateComment = useCallback(async (commentId, updates) => {
     const response = await fetch(`${API_BASE}/comments/${commentId}`, {});
-});
-method: 'PUT',
-    headers;
-{
-    'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
-}
-body: JSON.stringify(updates);
+}, method, 'PUT', headers, { 'Content-Type': 'application/json',
+    'X-User-Id': userId }, body, JSON.stringify(updates));
 ;
 if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -132,16 +116,8 @@ return updatedComment;
 // Delete a comment
 const deleteComment = useCallback(async (commentId) => {
     const response = await fetch(`${API_BASE}/comments/${commentId}`, {});
-});
-method: 'DELETE',
-    headers;
-{
-    'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
-}
+}, method, 'DELETE', headers, { 'Content-Type': 'application/json',
+    'X-User-Id': userId });
 ;
 if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -169,9 +145,12 @@ const getComment = useCallback(async (commentId) => {
     }
     finally {
     }
-}, headers, {
-    'Content-Type': 'application/json',
-    'X-User-Id': userId,
+    headers: {
+        'Content-Type';
+        'application/json';
+        'X-User-Id';
+        userId;
+    }
 });
 if (!response.ok) {
     if (response.status === 404)
@@ -179,7 +158,8 @@ if (!response.ok) {
     throw new Error(`Failed to fetch comment: ${response.statusText}`);
 }
 return await response.json();
-try { }
+try {
+}
 catch (err) {
     console.error('Failed to fetch comment:', err);
     return null;
@@ -187,9 +167,7 @@ catch (err) {
 [userId];
 ;
 // Initial fetch and setup
-useEffect(() => {
-    fetchComments(1, false);
-}, [fetchComments]);
+useEffect(() => { fetchComments(1, false); }, [fetchComments]);
 // Auto-refresh interval
 useEffect(() => {
     if (!autoRefresh)
@@ -206,8 +184,7 @@ useEffect(() => {
     }
     [sortOrder];
 }); // Only refresh when sort order changes
-return {
-    comments,
+return { comments,
     loading,
     loadingMore,
     error,
@@ -217,6 +194,6 @@ return {
     updateComment,
     deleteComment,
     loadMore,
-    refresh,
-    getComment
-};
+    refresh };
+getComment;
+;

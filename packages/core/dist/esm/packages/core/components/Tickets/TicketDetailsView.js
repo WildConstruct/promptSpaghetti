@@ -6,18 +6,17 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * and SLA tracking. Provides full ticket management capabilities.
  */
 import { useState, useMemo } from 'react';
-import { TicketPriority } from '../../services/Epic16TicketIntegrationService';
+import { TicketPriority } from Epic16TicketIntegrationService;
+from;
+'../../services/Epic16TicketIntegrationService';
 {
     const [currentTicket, setCurrentTicket] = useState(ticket);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [commentForm, setCommentForm] = useState({});
-    content: '',
-        visibility;
-    'public',
-        attachments;
-    [],
-    ;
+    content: '';
+    visibility: 'public';
+    attachments: [];
 }
 ;
 const [showStatusUpdate, setShowStatusUpdate] = useState(false);
@@ -45,9 +44,11 @@ const slaStatus = useMemo(() => {
         responseWarning: responseTimeRemaining > 0 && responseTimeRemaining < (currentTicket.sla.responseTime.warningThreshold * 60 * 1000),
         resolutionWarning: resolutionTimeRemaining > 0 && resolutionTimeRemaining < (currentTicket.sla.resolutionTime.warningThreshold * 60 * 1000),
         responseTimeRemaining: Math.max(0, responseTimeRemaining),
-        resolutionTimeRemaining: Math.max(0, resolutionTimeRemaining),
+        resolutionTimeRemaining: Math.max(0, resolutionTimeRemaining)
     };
-}, [currentTicket]);
+});
+[currentTicket];
+;
 // Format time remaining
 const formatTimeRemaining = (ms) => {
     const hours = Math.floor(ms / (1000 * 60 * 60));
@@ -56,14 +57,13 @@ const formatTimeRemaining = (ms) => {
         const days = Math.floor(hours / 24);
         return `${days}d ${hours % 24}h`;
     }
+    else if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+    }
+    else {
+        return `${minutes}m`;
+    }
 };
-if (hours > 0) {
-    return `${hours}h ${minutes}m`;
-}
-{
-    return `${minutes}m`;
-}
-;
 // Handle comment submission
 const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -83,31 +83,31 @@ const handleCommentSubmit = async (e) => {
             attachments;
         [], // Simplified - would handle file uploads,
             mentions;
-        [],
-        ;
+        [];
     }
-    finally { }
-    ;
-    if (newComment) {
-        const updatedTicket = {
-            ...currentTicket,
-            comments: [...currentTicket.comments, newComment],
-            updatedAt: new Date(),
-        };
-        setCurrentTicket(updatedTicket);
-        onTicketUpdate?.(updatedTicket);
-        // Reset form
-        setCommentForm({});
-        content: '',
-            visibility;
-        'public',
-            attachments;
-        [],
-        ;
+    finally {
     }
-    ;
 };
-try { }
+if (newComment) {
+    const updatedTicket = {
+        ...currentTicket,
+        comments: [...currentTicket.comments, newComment],
+        updatedAt: new Date()
+    };
+}
+;
+setCurrentTicket(updatedTicket);
+onTicketUpdate?.(updatedTicket);
+// Reset form
+setCommentForm({});
+content: '',
+    visibility;
+'public',
+    attachments;
+[];
+;
+try {
+}
 catch (err) {
     setError(err instanceof Error ? err.message : 'Failed to add comment');
 }
@@ -213,14 +213,14 @@ div >
     { /* SLA Status */}
     < div;
 className = "mt-4 grid grid-cols-2 gap-4" >
-    (_jsx("div", { className: "bg-gray-50 rounded-lg p-3", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Response SLA" }), _jsxs("span", { className: `text-xs font-medium ${slaStatus.responseOverdue ? 'text-red-600' : ,
-                        slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600',
-                    }`, children: [currentTicket.sla.responseTime.actual
+    (_jsx("div", { className: "bg-gray-50 rounded-lg p-3", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Response SLA" }), _jsxs("span", { className: `text-xs font-medium ${slaStatus.responseOverdue ? 'text-red-600' :
+                        slaStatus.responseWarning ? 'text-yellow-600' : 'text-green-600'}
+`, children: [currentTicket.sla.responseTime.actual
                             ? `Responded in ${currentTicket.sla.responseTime.actual}m` : , ": slaStatus.responseOverdue ? 'OVERDUE' : formatTimeRemaining(slaStatus.responseTimeRemaining)"] })] }) })
         ,
-            _jsx("div", { className: "bg-gray-50 rounded-lg p-3", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Resolution SLA" }), _jsxs("span", { className: `text-xs font-medium ${slaStatus.resolutionOverdue ? 'text-red-600' : ,
-                                slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600',
-                            }`, children: [currentTicket.sla.resolutionTime.actual
+            _jsx("div", { className: "bg-gray-50 rounded-lg p-3", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Resolution SLA" }), _jsxs("span", { className: `text-xs font-medium ${slaStatus.resolutionOverdue ? 'text-red-600' :
+                                slaStatus.resolutionWarning ? 'text-yellow-600' : 'text-green-600'}
+`, children: [currentTicket.sla.resolutionTime.actual
                                     ? `Resolved in ${Math.round(currentTicket.sla.resolutionTime.actual / 60)}h` : , ": slaStatus.resolutionOverdue ? 'OVERDUE' : formatTimeRemaining(slaStatus.resolutionTimeRemaining)"] })] }) }));
 div >
     { error } && ()
@@ -302,9 +302,10 @@ div >
                         < div, key = { integration, : .system }, className = "flex items-center justify-between p-2 bg-white rounded border" >
                         (_jsx("span", { className: "text-sm font-medium", children: integration.system })
                             ,
-                                _jsx("span", { className: `px-2 py-1 text-xs rounded ${integration.status === 'synced' ? 'bg-green-100 text-green-800' : ,
-                                        integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : ,
-                                        'bg-red-100 text-red-800'}`, children: integration.status }))) }));
+                                _jsx("span", { className: `px-2 py-1 text-xs rounded ${integration.status === 'synced' ? 'bg-green-100 text-green-800' :
+                                        integration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : }
+  'bg-red-100 text-red-800'
+`, children: integration.status }))) }));
 }
 div >
 ;
@@ -359,11 +360,11 @@ const StatusBadge = ({ status }) => {
         [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
         [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
         [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
-        [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700',
+        [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700'
     };
-    return;
-    _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`, children: ["}", status.replace('_', ' ').toUpperCase()] });
 };
+return;
+_jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`, children: ["}", status.replace('_', ' ').toUpperCase()] });
 ;
 ;
 const PriorityBadge = ({ priority }) => {
@@ -372,23 +373,23 @@ const PriorityBadge = ({ priority }) => {
         [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
         [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
         [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
-        [TicketPriority.CRITICAL]: 'bg-red-500 text-white',
+        [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
     };
-    return;
-    _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: ["}", priority.toUpperCase()] });
 };
+return;
+_jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: ["}", priority.toUpperCase()] });
 ;
 ;
 const CommentItem = ({ comment, canViewInternal }) => {
     const visibilityColors = {
         public: 'bg-green-100 text-green-800',
         internal: 'bg-yellow-100 text-yellow-800',
-        private: 'bg-red-100 text-red-800',
+        private: 'bg-red-100 text-red-800'
     };
-    return;
-    _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-4", children: [_jsxs("div", { className: "flex items-start justify-between mb-2", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("span", { className: "font-medium text-gray-900", children: comment.author }), _jsx("span", { className: "text-sm text-gray-500", children: comment.authorType }), _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${visibilityColors[comment.visibility]}`, children: ["}", comment.visibility.toUpperCase()] })] }), _jsx("span", { className: "text-sm text-gray-500", children: comment.createdAt.toLocaleString() })] }), _jsx("p", { className: "text-gray-700 whitespace-pre-wrap", children: comment.content }), comment.attachments.length > 0 && ()
-                < div, " className=\"mt-2 text-sm text-blue-600\">", comment.attachments.length, " attachment", comment.attachments.length !== 1 ? 's' : ''] });
 };
+return;
+_jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-4", children: [_jsxs("div", { className: "flex items-start justify-between mb-2", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("span", { className: "font-medium text-gray-900", children: comment.author }), _jsx("span", { className: "text-sm text-gray-500", children: comment.authorType }), _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${visibilityColors[comment.visibility]}`, children: ["}", comment.visibility.toUpperCase()] })] }), _jsx("span", { className: "text-sm text-gray-500", children: comment.createdAt.toLocaleString() })] }), _jsx("p", { className: "text-gray-700 whitespace-pre-wrap", children: comment.content }), comment.attachments.length > 0 && ()
+            < div, " className=\"mt-2 text-sm text-blue-600\">", comment.attachments.length, " attachment", comment.attachments.length !== 1 ? 's' : ''] });
 div >
 ;
 ;
@@ -403,7 +404,7 @@ const AttachmentItem = ({ attachment }) => {
 const StatusUpdateModal, TicketStatus;
 onStatusUpdate: (status) => void ;
 onClose: () => void ;
- > ;
+    > ;
 ({ currentStatus, onStatusUpdate, onClose }) => {
     const [selectedStatus, setSelectedStatus] = useState(currentStatus);
     return;
@@ -415,8 +416,8 @@ onClose: () => void ;
     ;
 };
 const AssignmentModal;
-() => void ;
- > ;
+onClose: () => void ;
+    > ;
 ({ currentAssignee, onAssign, onClose }) => {
     const [selectedAssignee, setSelectedAssignee] = useState(currentAssignee || '');
     return;
@@ -426,7 +427,7 @@ const AssignmentModal;
 const EscalationModal;
 (reason) => void ;
 onClose: () => void ;
- > ;
+    > ;
 ({ onEscalate, onClose }) => {
     const [reason, setReason] = useState('');
     return;

@@ -70,122 +70,150 @@ export var RevisionRequestStatus;
                 REJECTION_GIVEN = 'rejection_given',
                 ADDITIONAL_INFO_REQUESTED = 'additional_info_requested',
                 IMPLEMENTATION_STARTED = 'implementation_started',
-                IMPLEMENTATION_COMPLETED = 'implementation_completed',
-                REQUEST_CANCELLED = 'request_cancelled';
+                IMPLEMENTATION_COMPLETED = 'implementation_completed';
         }
+        REQUEST_CANCELLED = 'request_cancelled';
+        ;
+        content: string;
+        createdBy: string;
+        createdAt: Date;
+        resolved ?  : boolean;
+        resolvedBy ?  : string;
+        resolvedAt ?  : Date;
+        ;
+        dueDateRange ?  : { start: Date,
+            end: Date };
+        // Content filters
+        contentId ?  : string;
+        tags ?  : string;
+        // Text search
+        search ?  : string; // Search in title, description, requested changes
+        // Complexity and urgency
+        minUrgencyScore ?  : number;
+        maxUrgencyScore ?  : number;
+        minComplexityScore ?  : number;
+        maxComplexityScore ?  : number;
+        // Pagination and sorting
+        page ?  : number;
+        pageSize ?  : number;
+        sortBy ?  : RevisionRequestSortField;
+        sortOrder ?  : 'asc' | 'desc';
+        ;
+        aggregations: RevisionRequestAggregations;
+        filters: AppliedFilters;
+        ;
+        averageCompletionTime: number; // in hours
+        topRequesters: Array < {};
+        requesterId: string;
+        requesterName: string;
+        count: number;
+            > ;
+        topReviewers: Array < {
+            reviewerId: string,
+            reviewerName: string,
+            count: number,
+            averageResponseTime: number } > ;
+            > ;
+        ;
+        ;
+            > ;
+        completionTrends: Array < {
+            date: string,
+            completed: number,
+            averageTime: number } > ;
+        contentTypeTrends: Array < {
+            contentType: RevisionContentType,
+            trend: 'increasing' | 'decreasing' | 'stable' };
+        changePercent: number;
+            > ;
+        title: string;
+        description: string;
+        impact: 'low' | 'medium' | 'high';
+        confidence: number;
+        data: Record;
+        recommendedActions: string;
+        relatedRequests ?  : string;
+        ;
+        metrics: string;
+        query: RevisionRequestSearchQuery;
+        fields ?  : string;
+        includeEvidence ?  : boolean;
+        includeTimeline ?  : boolean;
+        includeComments ?  : boolean;
+        ;
+        // Evidence settings
+        maxEvidenceFiles: number;
+        maxFileSizeMB: number;
+        allowedFileTypes: string;
+        enableAnnotations: boolean;
+        // Advanced features
+        enableComplexityScoring: boolean;
+        enableImpactScoring: boolean;
+        enablePredictiveAnalytics: boolean;
+        retentionDays: number;
+        export const DEFAULT_REVISION_REQUEST_CONFIG = {
+            enableAutoAssignment: true,
+            defaultReviewerAssignment: 'workload_based',
+            autoEscalationDays: 3,
+            enableSLA: true,
+            slaHours: {
+                [RevisionRequestPriority.LOW]: 168, // 7 days
+                [RevisionRequestPriority.MEDIUM]: 72, // 3 days
+                [RevisionRequestPriority.HIGH]: 24, // 1 day
+                [RevisionRequestPriority.URGENT]: 4, // 4 hours
+                [RevisionRequestPriority.CRITICAL]: 1 // 1 hour }
+                , // 1 hour }
+                requireApprovalFor: [
+                    RevisionRequestType.SECURITY_UPDATE,
+                    RevisionRequestType.COMPLIANCE_UPDATE
+                ],
+                multipleReviewersFor: [
+                    RevisionRequestType.SECURITY_UPDATE,
+                    RevisionRequestType.COMPLIANCE_UPDATE
+                ],
+                enableEmailNotifications: true,
+                enableSlackNotifications: true,
+                notificationSettings: {
+                    onAssignment: true,
+                    onStatusChange: true,
+                    onComment: true,
+                    onDueDate: true,
+                    onOverdue: true
+                },
+                maxEvidenceFiles: 10,
+                maxFileSizeMB: 25,
+                allowedFileTypes: [
+                    'image/jpeg', 'image/png', 'image/gif',
+                    'application/pdf',
+                    'text/plain', 'text/markdown',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'video/mp4', 'video/quicktime'
+                ],
+                enableAnnotations: true,
+                enableComplexityScoring: true,
+                enableImpactScoring: true,
+                enablePredictiveAnalytics: false,
+                retentionDays: 2555 // ~7 years;
+            },
+            // Utility types for forms and UI
+            interface, RevisionRequestFormData
+        }, { title: string };
+        description: string;
+        requestedChanges: string;
+        businessJustification: string;
+        contentType: RevisionContentType;
+        contentId: string;
+        type: RevisionRequestType;
+        priority: RevisionRequestPriority;
+        dueDate ?  : Date;
+        estimatedHours ?  : number;
+        tags: string;
+        evidence: File;
     }
+    reviewNotes: string;
+    rejectionReason ?  : string;
+    approvalNotes ?  : string;
+    estimatedImplementationHours ?  : number;
+    implementationPlan ?  : string;
+    additionalRequirements ?  : string;
 }
-;
-content: string;
-createdBy: string;
-createdAt: Date;
-resolved ?  : boolean;
-resolvedBy ?  : string;
-resolvedAt ?  : Date;
-;
-dueDateRange ?  : {
-    start: Date,
-    end: Date
-};
-// Content filters
-contentId ?  : string;
-tags ?  : string;
-// Text search
-search ?  : string; // Search in title, description, requested changes
-// Complexity and urgency
-minUrgencyScore ?  : number;
-maxUrgencyScore ?  : number;
-minComplexityScore ?  : number;
-maxComplexityScore ?  : number;
-// Pagination and sorting
-page ?  : number;
-pageSize ?  : number;
-sortBy ?  : RevisionRequestSortField;
-sortOrder ?  : 'asc' | 'desc';
-;
-aggregations: RevisionRequestAggregations;
-filters: AppliedFilters;
-;
-averageCompletionTime: number; // in hours,
-topRequesters: Array < {
-    requesterId: string,
-    requesterName: string,
-    count: number
-} > ;
-topReviewers: Array < {
-    reviewerId: string,
-    reviewerName: string,
-    count: number,
-    averageResponseTime: number
-} > ;
- > ;
-;
-;
- > ;
-completionTrends: Array < {
-    date: string,
-    completed: number,
-    averageTime: number
-} > ;
-contentTypeTrends: Array < {
-    contentType: RevisionContentType,
-    trend: 'increasing' | 'decreasing' | 'stable',
-    changePercent: number
-} > ;
-;
-metrics: string;
-;
-// Evidence settings
-maxEvidenceFiles: number;
-maxFileSizeMB: number;
-allowedFileTypes: string;
-enableAnnotations: boolean;
-// Advanced features
-enableComplexityScoring: boolean;
-enableImpactScoring: boolean;
-enablePredictiveAnalytics: boolean;
-retentionDays: number;
-export const DEFAULT_REVISION_REQUEST_CONFIG = {
-    enableAutoAssignment: true,
-    defaultReviewerAssignment: 'workload_based',
-    autoEscalationDays: 3,
-    enableSLA: true,
-    slaHours: {
-        [RevisionRequestPriority.LOW]: 168, // 7 days,
-        [RevisionRequestPriority.MEDIUM]: 72, // 3 days,
-        [RevisionRequestPriority.HIGH]: 24, // 1 day,
-        [RevisionRequestPriority.URGENT]: 4, // 4 hours,
-        [RevisionRequestPriority.CRITICAL]: 1 // 1 hour,
-    },
-    requireApprovalFor: [
-        RevisionRequestType.SECURITY_UPDATE,
-        RevisionRequestType.COMPLIANCE_UPDATE
-    ],
-    multipleReviewersFor: [
-        RevisionRequestType.SECURITY_UPDATE,
-        RevisionRequestType.COMPLIANCE_UPDATE
-    ],
-    enableEmailNotifications: true,
-    enableSlackNotifications: true,
-    notificationSettings: {
-        onAssignment: true,
-        onStatusChange: true,
-        onComment: true,
-        onDueDate: true,
-        onOverdue: true,
-    },
-    maxEvidenceFiles: 10,
-    maxFileSizeMB: 25,
-    allowedFileTypes: [
-        'image/jpeg', 'image/png', 'image/gif',
-        'application/pdf',
-        'text/plain', 'text/markdown',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'video/mp4', 'video/quicktime'
-    ],
-    enableAnnotations: true,
-    enableComplexityScoring: true,
-    enableImpactScoring: true,
-    enablePredictiveAnalytics: false,
-    retentionDays: 2555 // ~7 years;
-};

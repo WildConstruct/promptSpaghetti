@@ -5,12 +5,14 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Phase 4: State Debugging & DevTools - Dependency Visualization UI
  */
 import { useState, useRef } from 'react';
+onGenerateGraph: () => void ;
+selectedDomain: string;
+onDomainChange: (domain) => void ;
 export const DependencyGraphPanel = ({
     dependencyGraph,
     onGenerateGraph,
-    selectedDomain,
-    onDomainChange
-});
+    selectedDomain });
+onDomainChange;
 {
     const [layout, setLayout] = useState('hierarchical');
     const [filters, setFilters] = useState({});
@@ -22,8 +24,7 @@ export const DependencyGraphPanel = ({
         showLabels;
     true,
         showMetrics;
-    false,
-    ;
+    false;
 }
 ;
 const [selectedNode, setSelectedNode] = useState(null);
@@ -32,18 +33,10 @@ const svgRef = useRef(null);
 const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
 };
-const handleNodeClick = (nodeId) => {
-    setSelectedNode(selectedNode === nodeId ? null : nodeId);
-};
-const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev * 1.2, 5));
-};
-const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev / 1.2, 0.1));
-};
-const handleResetZoom = () => {
-    setZoom(1);
-};
+const handleNodeClick = (nodeId) => { setSelectedNode(selectedNode === nodeId ? null : nodeId); };
+const handleZoomIn = () => { setZoom(prev => Math.min(prev * 1.2, 5)); };
+const handleZoomOut = () => { setZoom(prev => Math.max(prev / 1.2, 0.1)); };
+const handleResetZoom = () => { setZoom(1); };
 const getNodeColor = (type) => {
     switch (type) {
         case 'state': return '#61dafb';
@@ -152,13 +145,13 @@ div >
 }
 _jsx("style", { jsx: true, children: `
         .dependency-graph-panel {
-          height: 100%;,
+          height: 100%
   display: flex;
-          flex-direction: column;,
+          flex-direction: column;
   background: var(--devtools-bg, #1e1e1e);
         .graph-controls {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 16px;
           padding: 12px;
           border-bottom: 1px solid var(--devtools-border, #333);
@@ -166,9 +159,9 @@ _jsx("style", { jsx: true, children: `
           flex-wrap: wrap;
         .control-group {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
-          font-size: 12px;,
+          font-size: 12px;
   color: var(--devtools-text, #fff);
         .control-group select {
           background: var(--devtools-input-bg, #2a2a2a);
@@ -179,7 +172,7 @@ _jsx("style", { jsx: true, children: `
           font-size: 12px;
         .checkbox-label {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
           cursor: pointer;
         .checkbox-label input[type="checkbox"] {
@@ -189,46 +182,46 @@ _jsx("style", { jsx: true, children: `
           border: 1px solid var(--devtools-border, #333);
           color: var(--devtools-text, #fff);
           padding: 4px 8px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 12px;
           min-width: 30px;
-        .zoom-btn:hover {,
+        .zoom-btn:hover {
   background: var(--devtools-hover, #404040);
         .zoom-level {
           min-width: 50px;
           text-align: center;
-          font-size: 11px;,
+          font-size: 11px;
   color: var(--devtools-text-secondary, #aaa);
         .regenerate-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;,
+          border: none;
   color: #000;
           padding: 6px 12px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 12px;
           font-weight: 500;
         .graph-content {
-          flex: 1;,
+          flex: 1;
   display: flex;
           overflow: hidden;
         .graph-viewer {
-          flex: 1;,
+          flex: 1;
   overflow: auto;
           display: flex;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   background: var(--devtools-graph-bg, #1a1a1a);
         .dependency-graph-svg {
           border: 1px solid var(--devtools-border, #333);
-          border-radius: 4px;,
+          border-radius: 4px;
   background: var(--devtools-bg, #1e1e1e);
         .empty-graph {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;,
+          justify-content: center;
   height: 400px;
           color: var(--devtools-text-secondary, #aaa);
           text-align: center;
@@ -237,21 +230,21 @@ _jsx("style", { jsx: true, children: `
           margin-bottom: 16px;
         .generate-btn {
           background: var(--devtools-active, #61dafb);
-          border: none;,
+          border: none;
   color: #000;
           padding: 8px 16px;
-          border-radius: 4px;,
+          border-radius: 4px;
   cursor: pointer;
           font-size: 14px;
           margin-top: 16px;
         .node-circle {
-          cursor: pointer;,
+          cursor: pointer;
   transition: all 0.2s;
         .node-circle:hover {
-          stroke-width: 2;,
+          stroke-width: 2;
   filter: brightness(1.2);
-        .node-label,
-        .node-metric,
+        .node-label
+        .node-metric }
         .edge-label {
           pointer-events: none;
           user-select: none;
@@ -263,7 +256,7 @@ _jsx("style", { jsx: true, children: `
           overflow-y: auto;
         .node-details h4 {
           margin: 0 0 16px 0;
-          font-size: 14px;,
+          font-size: 14px;
   color: var(--devtools-text, #fff);
           border-bottom: 1px solid var(--devtools-border, #333);
           padding-bottom: 8px;
@@ -271,7 +264,7 @@ _jsx("style", { jsx: true, children: `
           margin-bottom: 16px;
         .detail-section h5 {
           margin: 0 0 8px 0;
-          font-size: 12px;,
+          font-size: 12px;
   color: var(--devtools-text, #fff);
           text-transform: uppercase;
         .detail-item {
@@ -291,7 +284,7 @@ _jsx("style", { jsx: true, children: `
           overflow-y: auto;
         .relationship-item {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 8px;
           margin-bottom: 4px;
           font-size: 11px;
@@ -305,7 +298,7 @@ _jsx("style", { jsx: true, children: `
           color: var(--devtools-text, #fff);
           font-family: monospace;
         .graph-stats {
-          display: flex;,
+          display: flex;
   gap: 24px;
           padding: 12px;
           border-top: 1px solid var(--devtools-border, #333);
@@ -313,14 +306,14 @@ _jsx("style", { jsx: true, children: `
         .stat-item {
           display: flex;
           flex-direction: column;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
         .stat-label {
-          font-size: 10px;,
+          font-size: 10px;
   color: var(--devtools-text-secondary, #aaa);
           text-transform: uppercase;
         .stat-value {
-          font-size: 14px;,
+          font-size: 14px;
   color: var(--devtools-text, #fff);
           font-weight: 600;
         .circular-deps {

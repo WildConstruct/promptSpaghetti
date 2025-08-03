@@ -1,18 +1,18 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
+div >
+;
+div >
+;
 {
     adverbVariations.length > 0 && ()
         < div;
     style = {};
     {
-        marginTop: 8,
-            padding;
-        8,
-            background;
-        'rgba(34, 197, 94, 0.1)',
-            borderRadius;
-        2,
-        ;
+        marginTop: 8;
+        padding: 8;
+        background: 'rgba(34, 197, 94, 0.1)';
+        borderRadius: 2;
     }
 }
  >

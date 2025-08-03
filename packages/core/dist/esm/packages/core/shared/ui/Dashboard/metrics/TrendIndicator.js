@@ -10,15 +10,13 @@ export const TrendIndicator = ({
     showIcon = true,
     showValue = true,
     showPeriod = true,
-    format = 'percentage',
-    className = ''
-});
-{
-    // Determine if this trend is positive based on direction and context
+    format = 'percentage' });
+className = '';
+{ // Determine if this trend is positive based on direction and context
     const isPositiveTrend = () => {
         if (isGoodTrend !== undefined) {
             return direction === 'up' ? isGoodTrend : !isGoodTrend;
-            // Default: up trends are positive, down trends are negative,
+            // Default: up trends are positive, down trends are negative }
             return direction === 'up';
         }
         ;
@@ -30,16 +28,15 @@ export const TrendIndicator = ({
                     return TrendingDown;
                 case 'neutral':
                 default:
-                    return Minus;
             }
-            ;
-            const formatTrendValue = () => {
-                const absValue = Math.abs(value);
-                switch (format) {
-                    case 'percentage':
-                        return `${absValue.toFixed(1)}%`;
-                }
-            };
+            return Minus;
+        };
+        const formatTrendValue = () => {
+            const absValue = Math.abs(value);
+            switch (format) {
+                case 'percentage':
+                    return `${absValue.toFixed(1)}%`;
+            }
         };
     };
     'number';
@@ -54,11 +51,10 @@ const getTrendClass = () => {
         return 'trend-neutral';
     return isPositiveTrend() ? 'trend-positive' : 'trend-negative';
 };
-const iconSizes = {
-    small: 12,
+const iconSizes = { small: 12,
     medium: 14,
-    large: 16,
-};
+    large: 16 };
+;
 const TrendIcon = getTrendIcon();
 return;
 _jsxs("div", { className: `trend-indicator ${getTrendClass()} trend-${size} ${className}`, children: ["}", showIcon && ()

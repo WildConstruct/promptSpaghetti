@@ -30,19 +30,19 @@ import { ReconnectionState } from '../../network-resilience/ReconnectionHandler'
                 case ConnectionState.FAILED:
                     return '❌';
                 default:
-                    return '❓';
             }
-            ;
-            const getStatusText = () => {
-                if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
-                    return 'Reconnecting...';
-                    switch (status.connectionState) {
-                        case ConnectionState.CONNECTED:
-                            return `Connected (${status.connectionQuality})`;
-                    }
-                }
-            };
+            return '❓';
         }
+        ;
+        const getStatusText = () => {
+            if (status.reconnectionState === ReconnectionState.ATTEMPTING) {
+                return 'Reconnecting...';
+                switch (status.connectionState) {
+                    case ConnectionState.CONNECTED:
+                        return `Connected (${status.connectionQuality})`;
+                }
+            }
+        };
     };
     ConnectionState.CONNECTING;
     return 'Connecting...';
@@ -67,27 +67,27 @@ const getStatusColor = () => {
             case ConnectionQuality.POOR:
                 return '#ef4444'; // red-500
             default:
-                return '#6b7280'; // gray-500
         }
-        {
-            return status.reconnectionState === ReconnectionState.ATTEMPTING ? '#3b82f6' : '#ef4444';
-        }
-        ;
-        const formatLastSync = () => {
-            if (!status.lastSync)
-                return 'Never';
-            const now = Date.now();
-            const diff = now - status.lastSync;
-            if (diff < 60000)
-                return 'Just now';
-            if (diff < 3600000)
-                return `${Math.floor(diff / 60000)}m ago`;
-        };
-        if (diff < 86400000)
-            return `${Math.floor(diff / 3600000)}h ago`;
+        return '#6b7280';
+    } // gray-500
+    else {
+        return status.reconnectionState === ReconnectionState.ATTEMPTING ? '#3b82f6' : '#ef4444';
     }
-    return `${Math.floor(diff / 86400000)}d ago`;
+    ;
+    const formatLastSync = () => {
+        if (!status.lastSync)
+            return 'Never';
+        const now = Date.now();
+        const diff = now - status.lastSync;
+        if (diff < 60000)
+            return 'Just now';
+        if (diff < 3600000)
+            return `${Math.floor(diff / 60000)}m ago`;
+    };
+    if (diff < 86400000)
+        return `${Math.floor(diff / 3600000)}h ago`;
 };
+return `${Math.floor(diff / 86400000)}d ago`;
 ;
 if (compact) {
     return;
@@ -100,14 +100,12 @@ div >
 return;
 _jsx("div", { className: `connection-status-indicator ${className}`, onClick: onClick, style: {
         padding: '8px 12px',
-        backgroundColor: '#f8fafc',
-        border: `2px solid ${getStatusColor()}`
-    }, "borderRadius:": true });
-'8px',
-    cursor;
-onClick ? 'pointer' : 'default',
-    minWidth;
-'200px';
+        backgroundColor: '#f8fafc'
+    }, "border:": true });
+`2px solid ${getStatusColor()}`;
+borderRadius: '8px';
+cursor: onClick ? 'pointer' : 'default';
+minWidth: '200px';
     >
         _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("span", { className: `text-lg ${isAnimating ? 'animate-spin' : ''}`, style: { color: getStatusColor() }, children: getConnectionIcon() }), _jsx("span", { className: "font-medium text-sm text-gray-800", children: getStatusText() })] }), status.queueSize > 0 && ()
                     < div, " className=\"flex items-center gap-1\">", _jsx("span", { className: "text-xs text-gray-600", children: "Queue:" }), _jsx("span", { className: "text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded", children: status.queueSize })] });

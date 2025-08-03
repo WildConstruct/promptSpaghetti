@@ -11,7 +11,13 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Progress } from '../ui/Progress';
-import { Plus, Search, Play, Pause, Copy, Edit, Clock, Users, BarChart, Download, Upload, Star, Tag, Calendar, TrendingUp, CheckCircle, Eye, ExternalLink } from 'lucide-react';
+import { Plus, Search, Play, Pause, Copy, Edit, Clock, Users, BarChart, Download, Upload, Star, Tag, Calendar, TrendingUp, CheckCircle, Eye } from ExternalLink;
+from;
+'lucide-react';
+from;
+'../../types/experiment';
+selectedExperiments: string;
+showArchived: boolean;
 export const ExperimentManager = ({
     experiments,
     templates,
@@ -26,29 +32,19 @@ export const ExperimentManager = ({
     onStopExperiment,
     onExportExperiments,
     onImportTemplate,
-    onCreateTemplate,
-    className = ''
-});
+    onCreateTemplate });
+className = '';
 {
     const [state, setState] = useState({});
-    activeTab: 'experiments',
-        searchQuery;
-    '',
-        statusFilter;
-    'all',
-        typeFilter;
-    'all',
-        tagFilter;
-    '',
-        sortBy;
-    'updated',
-        sortOrder;
-    'desc',
-        selectedExperiments;
-    [],
-        showArchived;
-    false,
-    ;
+    activeTab: 'experiments';
+    searchQuery: '';
+    statusFilter: 'all';
+    typeFilter: 'all';
+    tagFilter: '';
+    sortBy: 'updated';
+    sortOrder: 'desc';
+    selectedExperiments: [];
+    showArchived: false;
 }
 ;
 /**
@@ -101,15 +97,15 @@ filtered.sort((a, b) => {
             break;
         case 'updated':
         default:
-            aValue = a.updatedAt.getTime();
-            bValue = b.updatedAt.getTime();
-            break;
-            if (aValue < bValue)
-                return state.sortOrder === 'asc' ? -1 : 1;
-            if (aValue > bValue)
-                return state.sortOrder === 'asc' ? 1 : -1;
-            return 0;
     }
+    aValue = a.updatedAt.getTime();
+    bValue = b.updatedAt.getTime();
+    break;
+    if (aValue < bValue)
+        return state.sortOrder === 'asc' ? -1 : 1;
+    if (aValue > bValue)
+        return state.sortOrder === 'asc' ? 1 : -1;
+    return 0;
 });
 return filtered;
 [experiments, state];
@@ -123,10 +119,12 @@ const experimentStats = React.useMemo(() => {
         running: experiments.filter(e => e.status === 'running').length,
         draft: experiments.filter(e => e.status === 'draft').length,
         completed: experiments.filter(e => e.status === 'completed').length,
-        archived: experiments.filter(e => e.status === 'archived').length,
+        archived: experiments.filter(e => e.status === 'archived').length
     };
-    return stats;
-}, [experiments]);
+});
+return stats;
+[experiments];
+;
 /**
  * Get all unique tags
  */
@@ -152,12 +150,13 @@ const handleBulkAction = useCallback(async (action) => {
                 await onExportExperiments('json');
                 break;
                 setState(prev => ({ ...prev, selectedExperiments: [] }));
+                try {
+                }
+                catch (error) {
+                    console.error('Bulk action failed:', error);
+                }
+                [state.selectedExperiments, onArchiveExperiment, onExportExperiments];
         }
-        try { }
-        catch (error) {
-            console.error('Bulk action failed:', error);
-        }
-        [state.selectedExperiments, onArchiveExperiment, onExportExperiments];
     }
     finally { }
 });
@@ -165,11 +164,11 @@ const handleBulkAction = useCallback(async (action) => {
  * Toggle experiment selection
  */
 const toggleExperimentSelection = useCallback((experimentId) => {
-    setState(prev => ({}), ...prev, selectedExperiments, prev.selectedExperiments.includes(experimentId))
+    setState(prev => ({}), ...prev, selectedExperiments, prev.selectedExperiments.includes(experimentId)
         ? prev.selectedExperiments.filter(id => id !== experimentId)
-        : [...prev.selectedExperiments, experimentId],
-    ;
+        : [...prev.selectedExperiments, experimentId]);
 });
+;
 [];
 ;
 /**
@@ -181,11 +180,9 @@ const getStatusVariant = useCallback((status) => {
         case 'completed': return 'default';
         case 'paused': return 'secondary';
         case 'archived': return 'outline';
-        default: return 'secondary',
-        ;
+        default: return 'secondary';
     }
-    [];
-});
+}, []);
 /**
  * Format duration
  */
@@ -201,12 +198,12 @@ return;
 _jsxs("div", { className: `experiment-manager ${className}`, children: ["}", _jsxs("div", { className: "manager-header", children: [_jsxs("div", { className: "header-info", children: [_jsx("h1", { className: "text-2xl font-bold", children: "Experiment Management" }), _jsxs("div", { className: "stats-summary flex space-x-4 text-sm text-gray-600", children: [_jsxs("span", { children: [experimentStats.total, " Total"] }), _jsxs("span", { children: [experimentStats.running, " Running"] }), _jsxs("span", { children: [experimentStats.completed, " Completed"] })] })] }), _jsxs("div", { className: "header-actions", children: [_jsxs(Button, { variant: "outline", onClick: () => onExportExperiments('csv'), children: [_jsx(Download, { className: "w-4 h-4 mr-2" }), "Export"] }), _jsxs(Button, { onClick: () => onCreateExperiment(), children: [_jsx(Plus, { className: "w-4 h-4 mr-2" }), "Create Experiment"] })] })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-4 gap-4 mb-6", children: [_jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("div", { className: "text-sm text-gray-600", children: "Running" }), _jsx("div", { className: "text-2xl font-bold", children: experimentStats.running })] }), _jsx(Play, { className: "w-8 h-8 text-green-500" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("div", { className: "text-sm text-gray-600", children: "Draft" }), _jsx("div", { className: "text-2xl font-bold", children: experimentStats.draft })] }), _jsx(Edit, { className: "w-8 h-8 text-blue-500" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("div", { className: "text-sm text-gray-600", children: "Completed" }), _jsx("div", { className: "text-2xl font-bold", children: experimentStats.completed })] }), _jsx(CheckCircle, { className: "w-8 h-8 text-green-500" })] }) }) }), _jsx(Card, { children: _jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("div", { className: "text-sm text-gray-600", children: "Success Rate" }), _jsxs("div", { className: "text-2xl font-bold", children: [experimentStats.completed > 0
                                                     ? Math.round((experimentStats.completed / (experimentStats.completed + experimentStats.archived)) * 100)
                                                     : 0, "%"] })] }), _jsx(TrendingUp, { className: "w-8 h-8 text-purple-500" })] }) }) })] }), _jsxs(Tabs, { value: state.activeTab, onValueChange: (tab) => setState(prev => ({ ...prev, activeTab: tab })), children: [_jsxs(TabsList, { className: "grid w-full grid-cols-4", children: [_jsx(TabsTrigger, { value: "experiments", children: "Experiments" }), _jsx(TabsTrigger, { value: "templates", children: "Templates" }), _jsx(TabsTrigger, { value: "knowledge", children: "Knowledge Base" }), _jsx(TabsTrigger, { value: "analytics", children: "Analytics" })] }), _jsxs(TabsContent, { value: "experiments", className: "space-y-4", children: [_jsx(Card, { children: _jsxs(CardContent, { className: "p-4", children: [_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-6 gap-4", children: [_jsx("div", { className: "md:col-span-2", children: _jsxs("div", { className: "relative", children: [_jsx(Search, { className: "w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" }), _jsx(Input, { value: state.searchQuery, onChange: (e) => setState(prev => ({ ...prev, searchQuery: e.target.value })), placeholder: "Search experiments...", className: "pl-10" })] }) }), _jsxs(Select, { value: state.statusFilter, onValueChange: (value) => setState(prev => ({ ...prev, statusFilter: value })), children: [_jsx(SelectTrigger, { children: _jsx(SelectValue, { placeholder: "Status" }) }), _jsxs(SelectContent, { children: [_jsx(SelectItem, { value: "all", children: "All Status" }), _jsx(SelectItem, { value: "draft", children: "Draft" }), _jsx(SelectItem, { value: "running", children: "Running" }), _jsx(SelectItem, { value: "paused", children: "Paused" }), _jsx(SelectItem, { value: "completed", children: "Completed" }), _jsx(SelectItem, { value: "archived", children: "Archived" })] })] }), _jsxs(Select, { value: state.typeFilter, onValueChange: (value) => setState(prev => ({ ...prev, typeFilter: value })), children: [_jsx(SelectTrigger, { children: _jsx(SelectValue, { placeholder: "Type" }) }), _jsxs(SelectContent, { children: [_jsx(SelectItem, { value: "all", children: "All Types" }), _jsx(SelectItem, { value: "prompt", children: "Prompt" }), _jsx(SelectItem, { value: "graph", children: "Graph" }), _jsx(SelectItem, { value: "feature_flag", children: "Feature Flag" })] })] }), _jsxs(Select, { value: state.tagFilter, onValueChange: (value) => setState(prev => ({ ...prev, tagFilter: value })), children: [_jsx(SelectTrigger, { children: _jsx(SelectValue, { placeholder: "Tag" }) }), _jsxs(SelectContent, { children: [_jsx(SelectItem, { value: "", children: "All Tags" }), allTags.map(tag => ()
-                                                                < SelectItem, key = { tag }, value = { tag } > { tag })] }), "))}"] })] }), _jsx(Select, { value: `${state.sortBy}-${state.sortOrder}`, onValueChange: (value) => { }, const: true }), " [sortBy, sortOrder] = value.split('-'); setState(); prev => (", ...prev, ") sortBy: sortBy as 'created' | 'updated' | 'name' | 'status', sortOrder: sortOrder as 'asc' | 'desc' } )); }}>", _jsx(SelectTrigger, { children: _jsx(SelectValue, { placeholder: "Sort" }) }), _jsxs(SelectContent, { children: [_jsx(SelectItem, { value: "updated-desc", children: "Latest Updated" }), _jsx(SelectItem, { value: "created-desc", children: "Latest Created" }), _jsx(SelectItem, { value: "name-asc", children: "Name A-Z" }), _jsx(SelectItem, { value: "status-asc", children: "Status" })] })] }) }), _jsxs("div", { className: "flex items-center justify-between mt-4", children: [_jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("label", { className: "flex items-center text-sm", children: [_jsx("input", { type: "checkbox", checked: state.showArchived, onChange: (e) => setState(prev => ({ ...prev, showArchived: e.target.checked })), className: "mr-2" }), "Show Archived"] }), state.selectedExperiments.length > 0 && ()
+                                                                < SelectItem, key = { tag }, value = { tag } > { tag })] }), "))}"] })] }), _jsx(Select, { value: `${state.sortBy}-${state.sortOrder}`, onValueChange: (value) => { }, const: true }), " [sortBy, sortOrder] = value.split('-'); setState(); prev => (", ...prev, ") sortBy: sortBy as 'created' | 'updated' | 'name' | 'status' } sortOrder: sortOrder as 'asc' | 'desc' } )); }>", _jsx(SelectTrigger, { children: _jsx(SelectValue, { placeholder: "Sort" }) }), _jsxs(SelectContent, { children: [_jsx(SelectItem, { value: "updated-desc", children: "Latest Updated" }), _jsx(SelectItem, { value: "created-desc", children: "Latest Created" }), _jsx(SelectItem, { value: "name-asc", children: "Name A-Z" }), _jsx(SelectItem, { value: "status-asc", children: "Status" })] })] }) }), _jsxs("div", { className: "flex items-center justify-between mt-4", children: [_jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("label", { className: "flex items-center text-sm", children: [_jsx("input", { type: "checkbox", checked: state.showArchived, onChange: (e) => setState(prev => ({ ...prev, showArchived: e.target.checked })), className: "mr-2" }), "Show Archived"] }), state.selectedExperiments.length > 0 && ()
                                             < div, " className=\"flex items-center space-x-2\">", _jsxs("span", { className: "text-sm text-gray-600", children: [state.selectedExperiments.length, " selected"] }), _jsx(Button, { size: "sm", variant: "outline", onClick: () => handleBulkAction('archive'), children: "Archive" }), _jsx(Button, { size: "sm", variant: "outline", onClick: () => handleBulkAction('export'), children: "Export" })] }), ")}"] }), _jsxs("div", { className: "text-sm text-gray-600", children: [filteredExperiments.length, " of ", experiments.length, " experiments"] })] })] })] });
 { /* Experiments List */ }
 _jsxs("div", { className: "space-y-3", children: [filteredExperiments.map((experiment) => ()
             < Card, key = { experiment, : .id }, className = "hover:shadow-md transition-shadow" >
-            (_jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("input", { type: "checkbox", checked: state.selectedExperiments.includes(experiment.id), onChange: () => toggleExperimentSelection(experiment.id), className: "rounded" }), _jsxs("div", { className: "flex-1", children: [_jsxs("div", { className: "flex items-center space-x-2 mb-1", children: [_jsx("h3", { className: "font-semibold text-lg", children: experiment.name }), _jsx(Badge, { variant: getStatusVariant(experiment.status), children: experiment.status }), _jsx(Badge, { variant: "outline", children: experiment.type })] }), _jsx("p", { className: "text-sm text-gray-600 mb-2 line-clamp-2", children: experiment.hypothesis }), _jsxs("div", { className: "flex items-center space-x-4 text-xs text-gray-500", children: [_jsxs("span", { className: "flex items-center", children: [_jsx(Users, { className: "w-3 h-3 mr-1" }), experiment.variants.length, " variants"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(BarChart, { className: "w-3 h-3 mr-1" }), experiment.metrics.length, " metrics"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Clock, { className: "w-3 h-3 mr-1" }), formatDuration(), "experiment.createdAt, experiment.status === 'completed' ? experiment.schedule?.endAt : undefined )}"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Calendar, { className: "w-3 h-3 mr-1" }), experiment.updatedAt.toLocaleDateString()] })] }), experiment.tags.length > 0 && ()
+            (_jsx(CardContent, { className: "p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("input", { type: "checkbox", checked: state.selectedExperiments.includes(experiment.id), onChange: () => toggleExperimentSelection(experiment.id), className: "rounded" }), _jsxs("div", { className: "flex-1", children: [_jsxs("div", { className: "flex items-center space-x-2 mb-1", children: [_jsx("h3", { className: "font-semibold text-lg", children: experiment.name }), _jsx(Badge, { variant: getStatusVariant(experiment.status), children: experiment.status }), _jsx(Badge, { variant: "outline", children: experiment.type })] }), _jsx("p", { className: "text-sm text-gray-600 mb-2 line-clamp-2", children: experiment.hypothesis }), _jsxs("div", { className: "flex items-center space-x-4 text-xs text-gray-500", children: [_jsxs("span", { className: "flex items-center", children: [_jsx(Users, { className: "w-3 h-3 mr-1" }), experiment.variants.length, " variants"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(BarChart, { className: "w-3 h-3 mr-1" }), experiment.metrics.length, " metrics"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Clock, { className: "w-3 h-3 mr-1" }), formatDuration(), "experiment.createdAt } experiment.status === 'completed' ? experiment.schedule?.endAt : undefined )}"] }), _jsxs("span", { className: "flex items-center", children: [_jsx(Calendar, { className: "w-3 h-3 mr-1" }), experiment.updatedAt.toLocaleDateString()] })] }), experiment.tags.length > 0 && ()
                                             < div, " className=\"flex items-center space-x-1 mt-2\">", _jsx(Tag, { className: "w-3 h-3 text-gray-400" }), experiment.tags.map(tag => ()
                                             < Badge, key = { tag }, variant = "outline", className = "text-xs" >
                                             { tag })] }), "))}"] }), ")}"] }) })

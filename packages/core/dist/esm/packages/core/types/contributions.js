@@ -47,8 +47,7 @@ export const ContributorLevelSchema = z.enum([]);
 // =============================================================================
 // Base Contribution Schema
 // =============================================================================
-export const BaseContributionSchema = z.object({
-    id: z.string().uuid(),
+export const BaseContributionSchema = z.object({ id: z.string().uuid(),
     type: ContributionTypeSchema,
     contributorId: z.string().uuid(),
     contributorName: z.string(),
@@ -57,11 +56,11 @@ export const BaseContributionSchema = z.object({
     title: z.string().min(5).max(200),
     description: z.string().min(20).max(2000),
     tags: z.array(z.string()).max(20).default([]),
-    category: z.string().optional(),
-    // Content
-    content: z.record(z.unknown()).default({}),
-    assets: z.array(z.object({}), id, z.string(), type, z.enum(['image', 'video', 'document', 'code', 'graph']), url, z.string().url(), filename, z.string(), size, z.number().positive(), mimeType, z.string())
-});
+    category: z.string().optional() }
+// Content
+, 
+// Content
+content, z.record(z.unknown()).default({}), assets, z.array(z.object({}), id, z.string(), type, z.enum(['image', 'video', 'document', 'code', 'graph']), url, z.string().url(), filename, z.string(), size, z.number().positive(), mimeType, z.string()));
 ([]),
     // Workflow Status
     status;
@@ -107,16 +106,14 @@ z.date();
 // =============================================================================
 // Template Contribution Schema
 // =============================================================================
-export const TemplateContributionSchema = BaseContributionSchema.extend({
-    type: z.literal('template'),
+export const TemplateContributionSchema = BaseContributionSchema.extend({ type: z.literal('template'),
     content: z.object({}),
     graphJson: z.record(z.unknown()),
     promptYaml: z.string().optional(),
     claudeModel: z.string().default('claude-3-sonnet'),
     tokenEstimate: z.number().int().default(0),
     safetyScore: z.number().min(0).max(1).default(1.0),
-    testCases: z.array(z.object({}), input, z.string(), expectedOutput, z.string(), actualOutput, z.string().optional(), passed, z.boolean().optional())
-});
+    testCases: z.array(z.object({}), input, z.string(), expectedOutput, z.string(), actualOutput, z.string().optional(), passed, z.boolean().optional()) });
 ([]),
     pricing;
 z.object({});
@@ -124,8 +121,7 @@ type: z.enum(['free', 'paid']),
     priceInCents;
 z.number().int().min(0).optional(),
     currency;
-z.string().length(3).default('USD'),
-;
+z.string().length(3).default('USD');
 marketplace: z.object({});
 isListed: z.boolean().default(false),
     listedAt;
@@ -137,15 +133,13 @@ z.number().default(0),
     avgRating;
 z.number().min(0).max(5).default(0),
     reviewCount;
-z.number().int().default(0),
-;
+z.number().int().default(0);
 optional();
 ;
 // =============================================================================
 // Knowledge Article Contribution Schema
 // =============================================================================
-export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend({
-    type: z.literal('knowledge_article'),
+export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend({ type: z.literal('knowledge_article'),
     content: z.object({}),
     articleType: z.enum(['guide', 'tutorial', 'reference', 'faq', 'troubleshooting']),
     difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
@@ -153,22 +147,9 @@ export const KnowledgeArticleContributionSchema = BaseContributionSchema.extend(
     prerequisites: z.array(z.string()).default([]),
     learningObjectives: z.array(z.string()).default([]),
     // Content Structure
-    sections: z.array(z.object({}), id, z.string(), title, z.string(), content, z.string(), order, z.number().int(), type, z.enum(['text', 'code', 'image', 'video', 'interactive']))
-}), 
+    sections: z.array(z.object({}), id, z.string(), title, z.string(), content, z.string(), order, z.number().int(), type, z.enum(['text', 'code', 'image', 'video', 'interactive'])) });
 // Interactive Elements
-codeExamples;
-(z.object({}),
-    id);
-z.string(),
-    language;
-z.string(),
-    code;
-z.string(),
-    description;
-z.string(),
-    runnable;
-z.boolean().default(false),
-;
+codeExamples: z.array(z.object({}), id, z.string(), language, z.string(), code, z.string(), description, z.string(), runnable, z.boolean().default(false));
 ([]),
     // SEO and Discovery
     keywords;
@@ -182,8 +163,7 @@ z.array(z.object({}), title, z.string(), url, z.string().url(), description, z.s
 // =============================================================================
 // Tutorial Contribution Schema
 // =============================================================================
-export const TutorialContributionSchema = BaseContributionSchema.extend({
-    type: z.literal('tutorial'),
+export const TutorialContributionSchema = BaseContributionSchema.extend({ type: z.literal('tutorial'),
     content: z.object({}),
     tutorialType: z.enum(['step_by_step', 'video', 'interactive', 'workshop']),
     difficulty: z.enum(['beginner', 'intermediate', 'advanced', 'expert']),
@@ -191,8 +171,7 @@ export const TutorialContributionSchema = BaseContributionSchema.extend({
     prerequisites: z.array(z.string()).default([]),
     tools: z.array(z.string()).default([]),
     // Tutorial Structure
-    steps: z.array(z.object({}), id, z.string(), title, z.string(), description, z.string(), content, z.string(), order, z.number().int(), estimatedTime, z.number().int(), assets, z.array(z.string()).default([]), checkpoints, z.array(z.object({}), description, z.string(), validation, z.string().optional()))
-});
+    steps: z.array(z.object({}), id, z.string(), title, z.string(), description, z.string(), content, z.string(), order, z.number().int(), estimatedTime, z.number().int(), assets, z.array(z.string()).default([]), checkpoints, z.array(z.object({}), description, z.string(), validation, z.string().optional())) });
 ([]);
 // Expected Outcomes
 deliverables: z.array(z.string()).default([]),
@@ -206,8 +185,7 @@ z.array(z.object({}), name, z.string(), type, z.string(), url, z.string().url(),
 // =============================================================================
 // Case Study Contribution Schema
 // =============================================================================
-export const CaseStudyContributionSchema = BaseContributionSchema.extend({
-    type: z.literal('case_study'),
+export const CaseStudyContributionSchema = BaseContributionSchema.extend({ type: z.literal('case_study'),
     content: z.object({}),
     caseStudyType: z.enum(['success_story', 'implementation', 'roi_analysis', 'comparison', 'innovation']),
     industry: z.string(),
@@ -217,17 +195,18 @@ export const CaseStudyContributionSchema = BaseContributionSchema.extend({
     challenge: z.object({}),
     description: z.string(),
     painPoints: z.array(z.string()).default([]),
-    constraints: z.array(z.string()).default([]),
-}), solution;
-({
-    description: z.string(),
-    approach: z.string(),
-    templatesUsed: z.array(z.string()).default([]),
-    implementation: z.string(),
-    timeline: z.string().optional(),
-}),
-    results;
-z.object({});
+    constraints: z.array(z.string()).default([]) });
+solution: z.object({});
+description: z.string(),
+    approach;
+z.string(),
+    templatesUsed;
+z.array(z.string()).default([]),
+    implementation;
+z.string(),
+    timeline;
+z.string().optional();
+results: z.object({});
 outcomes: z.array(z.string()).default([]),
     metrics;
 z.array(z.object({}), name, z.string(), before, z.string(), after, z.string(), improvement, z.string().optional());
@@ -240,8 +219,7 @@ z.string().optional(),
     qualityImprovement;
 z.string().optional(),
     description;
-z.string().optional(),
-;
+z.string().optional();
 optional();
 // Supporting Materials
 testimonials: z.array(z.object({}), author, z.string(), role, z.string(), company, z.string().optional(), quote, z.string(), avatar, z.string().url().optional());
@@ -253,8 +231,7 @@ z.array(z.object({}), type, z.enum(['before_after', 'screenshot', 'video', 'diag
 // =============================================================================
 // Pattern Library Contribution Schema
 // =============================================================================
-export const PatternLibraryContributionSchema = BaseContributionSchema.extend({
-    type: z.literal('pattern_library'),
+export const PatternLibraryContributionSchema = BaseContributionSchema.extend({ type: z.literal('pattern_library'),
     content: z.object({}),
     patternType: z.enum(['prompt_pattern', 'graph_pattern', 'workflow_pattern', 'integration_pattern']),
     domain: z.string(),
@@ -271,20 +248,9 @@ export const PatternLibraryContributionSchema = BaseContributionSchema.extend({
     consequences: z.string(),
     implementation: z.string(),
     sampleCode: z.string().optional(),
-    knownUses: z.array(z.string()).default([]),
-}), 
+    knownUses: z.array(z.string()).default([]) });
 // Examples and Variations
-examples;
-(z.object({}),
-    title);
-z.string(),
-    description;
-z.string(),
-    code;
-z.string(),
-    explanation;
-z.string(),
-;
+examples: z.array(z.object({}), title, z.string(), description, z.string(), code, z.string(), explanation, z.string());
 ([]),
     variations;
 z.array(z.object({}), name, z.string(), description, z.string(), whenToUse, z.string(), tradeoffs, z.string());
@@ -297,8 +263,7 @@ z.array(z.object({}), patternId, z.string(), relationship, z.enum(['uses', 'used
 // =============================================================================
 // Community Post Contribution Schema
 // =============================================================================
-export const CommunityPostContributionSchema = BaseContributionSchema.extend({
-    type: z.literal('community_post'),
+export const CommunityPostContributionSchema = BaseContributionSchema.extend({ type: z.literal('community_post'),
     content: z.object({}),
     postType: z.enum(['discussion', 'question', 'announcement', 'showcase', 'feedback']),
     forum: z.string(),
@@ -306,8 +271,7 @@ export const CommunityPostContributionSchema = BaseContributionSchema.extend({
     isPinned: z.boolean().default(false),
     // Discussion Structure
     body: z.string(),
-    replies: z.array(z.object({}), id, z.string(), authorId, z.string(), authorName, z.string(), content, z.string(), createdAt, z.date(), updatedAt, z.date().optional(), votes, z.number().int().default(0), isAcceptedAnswer, z.boolean().default(false))
-});
+    replies: z.array(z.object({}), id, z.string(), authorId, z.string(), authorName, z.string(), content, z.string(), createdAt, z.date(), updatedAt, z.date().optional(), votes, z.number().int().default(0), isAcceptedAnswer, z.boolean().default(false)) });
 ([]),
     // Engagement
     votes;
@@ -322,34 +286,29 @@ z.string().optional();
 // =============================================================================
 // Contribution Request/Response Schemas
 // =============================================================================
-export const CreateContributionRequestSchema = z.object({
-    type: ContributionTypeSchema,
+export const CreateContributionRequestSchema = z.object({ type: ContributionTypeSchema,
     title: z.string().min(5).max(200),
     description: z.string().min(20).max(2000),
     category: z.string().optional(),
     tags: z.array(z.string()).max(20).default([]),
     content: z.record(z.unknown()),
     assets: z.array(z.string()).default([]),
-    saveAsDraft: z.boolean().default(false),
-});
-export const UpdateContributionRequestSchema = z.object({
-    title: z.string().min(5).max(200).optional(),
+    saveAsDraft: z.boolean().default(false) });
+;
+export const UpdateContributionRequestSchema = z.object({ title: z.string().min(5).max(200).optional(),
     description: z.string().min(20).max(2000).optional(),
     category: z.string().optional(),
     tags: z.array(z.string()).max(20).optional(),
     content: z.record(z.unknown()).optional(),
-    assets: z.array(z.string()).optional(),
-});
-export const ContributionReviewRequestSchema = z.object({
-    action: z.enum(['approve', 'request_revision', 'reject']),
+    assets: z.array(z.string()).optional() });
+;
+export const ContributionReviewRequestSchema = z.object({ action: z.enum(['approve', 'request_revision', 'reject']),
     qualityRating: ContributionQualityRatingSchema.optional(),
     moderatorNotes: z.string().optional(),
-    revisionRequests: z.array(z.object({}), reason, z.string(), details, z.string())
-}), optional;
-();
+    revisionRequests: z.array(z.object({}), reason, z.string(), details, z.string()) });
+optional();
 ;
-export const ContributionFilterSchema = z.object({
-    type: ContributionTypeSchema.optional(),
+export const ContributionFilterSchema = z.object({ type: ContributionTypeSchema.optional(),
     status: ContributionStatusSchema.optional(),
     contributorId: z.string().uuid().optional(),
     category: z.string().optional(),
@@ -361,13 +320,12 @@ export const ContributionFilterSchema = z.object({
     sortBy: z.enum(['created_at', 'updated_at', 'views', 'likes', 'quality_score']).default('created_at'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
     limit: z.number().int().min(1).max(100).default(20),
-    offset: z.number().int().min(0).default(0),
-});
+    offset: z.number().int().min(0).default(0) });
+;
 // =============================================================================
 // Contributor Profile Schema
 // =============================================================================
-export const ContributorProfileSchema = z.object({
-    id: z.string().uuid(),
+export const ContributorProfileSchema = z.object({ id: z.string().uuid(),
     userId: z.string().uuid(),
     // Profile Information
     displayName: z.string(),
@@ -379,11 +337,13 @@ export const ContributorProfileSchema = z.object({
     social: z.object({}),
     twitter: z.string().optional(),
     linkedin: z.string().optional(),
-    github: z.string().optional(),
-}).optional(), 
-// Contribution Stats
-level, totalContributions;
-().int().default(0),
+    github: z.string().optional() });
+optional(),
+    // Contribution Stats
+    level;
+ContributorLevelSchema,
+    totalContributions;
+z.number().int().default(0),
     publishedContributions;
 z.number().int().default(0),
     totalViews;
@@ -408,8 +368,7 @@ z.boolean().default(false),
     emailOnFeature;
 z.boolean().default(true),
     weeklyDigest;
-z.boolean().default(true),
-;
+z.boolean().default(true);
 ({}),
     createdAt;
 z.date(),
@@ -438,54 +397,43 @@ export const validateContribution = (contribution) => {
             throw new Error(`Unknown contribution type: ${base.type}`);
     }
 };
-export const validateCreateContributionRequest = (request) => {
-    return CreateContributionRequestSchema.parse(request);
-};
-export const validateUpdateContributionRequest = (request) => {
-    return UpdateContributionRequestSchema.parse(request);
-};
-export const validateContributionReviewRequest = (request) => {
-    return ContributionReviewRequestSchema.parse(request);
-};
-export const validateContributionFilter = (filter) => {
-    return ContributionFilterSchema.parse(filter);
-};
-export const validateContributorProfile = (profile) => {
-    return ContributorProfileSchema.parse(profile);
-};
+export const validateCreateContributionRequest = (request) => { return CreateContributionRequestSchema.parse(request); };
+export const validateUpdateContributionRequest = (request) => { return UpdateContributionRequestSchema.parse(request); };
+export const validateContributionReviewRequest = (request) => { return ContributionReviewRequestSchema.parse(request); };
+export const validateContributionFilter = (filter) => { return ContributionFilterSchema.parse(filter); };
+export const validateContributorProfile = (profile) => { return ContributorProfileSchema.parse(profile); };
 // =============================================================================
 // Constants and Descriptions
 // =============================================================================
-export const CONTRIBUTION_TYPE_DESCRIPTIONS = {
-    template: 'Reusable prompt templates for the marketplace',
+export const CONTRIBUTION_TYPE_DESCRIPTIONS = { template: 'Reusable prompt templates for the marketplace',
     knowledge_article: 'Educational articles and guides',
     tutorial: 'Step-by-step learning content',
     case_study: 'Real-world implementation stories',
     pattern_library: 'Reusable design and prompt patterns',
     community_post: 'Community discussions and questions',
     documentation: 'Technical documentation',
-    review: 'Reviews and feedback on templates',
-};
-export const CONTRIBUTION_STATUS_DESCRIPTIONS = {
-    draft: 'Work in progress, not yet submitted',
+    review: 'Reviews and feedback on templates' };
+as;
+const ;
+export const CONTRIBUTION_STATUS_DESCRIPTIONS = { draft: 'Work in progress, not yet submitted',
     submitted: 'Submitted for review',
     under_review: 'Currently being reviewed by moderators',
     revision_requested: 'Changes requested before approval',
     approved: 'Approved but not yet published',
     published: 'Live and publicly available',
     rejected: 'Rejected and will not be published',
-    archived: 'Removed from public view',
-};
-export const CONTRIBUTOR_LEVEL_DESCRIPTIONS = {
-    newcomer: 'New to the platform',
+    archived: 'Removed from public view' };
+as;
+const ;
+export const CONTRIBUTOR_LEVEL_DESCRIPTIONS = { newcomer: 'New to the platform',
     contributor: 'Has made initial contributions',
     regular: 'Regular contributor with good quality',
     trusted: 'Trusted contributor with high quality work',
     expert: 'Expert contributor with exceptional content',
-    moderator: 'Community moderator and content reviewer',
-};
-export const CONTRIBUTION_DEFAULTS = {
-    QUALITY_THRESHOLD_PUBLISH: 70,
+    moderator: 'Community moderator and content reviewer' };
+as;
+const ;
+export const CONTRIBUTION_DEFAULTS = { QUALITY_THRESHOLD_PUBLISH: 70,
     MIN_TITLE_LENGTH: 5,
     MAX_TITLE_LENGTH: 200,
     MIN_DESCRIPTION_LENGTH: 20,
@@ -494,5 +442,6 @@ export const CONTRIBUTION_DEFAULTS = {
     MAX_ASSETS_PER_CONTRIBUTION: 50,
     MAX_ASSET_SIZE_MB: 10,
     AUTO_PUBLISH_SCORE_THRESHOLD: 90,
-    FEATURED_CONTRIBUTION_THRESHOLD: 95,
-};
+    FEATURED_CONTRIBUTION_THRESHOLD: 95 };
+as;
+const ;

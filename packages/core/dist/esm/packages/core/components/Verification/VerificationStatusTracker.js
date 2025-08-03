@@ -7,107 +7,53 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useEffect, useCallback } from 'react';
 {
-    type: 'phone_verification',
-        title;
-    'Phone Verification',
-        description;
-    'Add phone number for two-factor authentication',
-        priority;
-    'high',
-    ;
-}
-{
-    type: 'government_id',
-        title;
-    'Government ID',
-        description;
-    'Upload government-issued identification',
-        priority;
-    'medium',
-    ;
-}
-{
-    type: 'professional_credentials',
-        title;
-    'Professional Credentials',
-        description;
-    'Verify your film industry experience and credentials',
-        priority;
-    'medium',
-    ;
-}
-{
-    type: 'portfolio_verification',
-        title;
-    'Portfolio Verification',
-        description;
-    'Verify your professional portfolio and work samples',
-        priority;
-    'medium',
-    ;
-}
-{
-    type: 'social_media_verification',
-        title;
-    'Social Media Verification',
-        description;
-    'Link your professional social media profiles',
-        priority;
-    'low';
-    ;
-    export const VerificationStatusTracker = ({
-        userId,
-        onRefresh,
-        onRequestVerification
-    });
-    {
-        const [verificationItems, setVerificationItems] = useState([]);
-        const [isLoading, setIsLoading] = useState(true);
-        const [lastRefresh, setLastRefresh] = useState(new Date());
-        // Mock data loading - in real implementation, this would fetch from API
-        const loadVerificationStatus = useCallback(async () => {
-            setIsLoading(true);
-            try {
-                // Simulate API call delay
-                await new Promise(resolve => setTimeout(resolve, 500));
-                // Mock verification status data
-                const mockStatuses = {
-                    email_verification: {
-                        status: 'approved',
-                        requestId: 'req_email_123',
-                        submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago,
-                    },
+    const [verificationItems, setVerificationItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [lastRefresh, setLastRefresh] = useState(new Date());
+    // Mock data loading - in real implementation, this would fetch from API
+    const loadVerificationStatus = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            // Mock verification status data
+            const mockStatuses = { email_verification: {
+                    status: 'approved',
+                    requestId: 'req_email_123',
+                    submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000) // 2 days ago }
+                    , // 2 days ago }
                     phone_verification: {
                         status: 'pending',
                         requestId: 'req_phone_456',
-                        submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago,
-                    },
-                    government_id: {
-                        status: 'in_review',
-                        requestId: 'req_id_789',
-                        submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000) // 6 hours ago,
-                    },
-                    const: items, VerificationStatusItem = VERIFICATION_TYPES.map(type => { }),
-                    const: mockStatus = mockStatuses[type.type],
-                    const: baseItem, VerificationStatusItem = {
-                        ...type,
-                        status: mockStatus?.status || 'not_started',
-                        requestId: mockStatus?.requestId,
-                        submittedAt: mockStatus?.submittedAt,
-                        lastUpdated: mockStatus?.submittedAt,
+                        submittedAt: new Date(Date.now() - 1 * 60 * 60 * 1000) // 1 hour ago }
+                        , // 1 hour ago }
+                        government_id: {
+                            status: 'in_review',
+                            requestId: 'req_id_789',
+                            submittedAt: new Date(Date.now() - 6 * 60 * 60 * 1000) // 6 hours ago }
+                        },
+                        const: items, VerificationStatusItem = VERIFICATION_TYPES.map(type => { }),
+                        const: mockStatus = mockStatuses[type.type],
+                        const: baseItem, VerificationStatusItem = {
+                            ...type,
+                            status: mockStatus?.status || 'not_started',
+                            requestId: mockStatus?.requestId,
+                            submittedAt: mockStatus?.submittedAt,
+                            lastUpdated: mockStatus?.submittedAt
+                        }
                     },
                     // Add next steps based on status
                     baseItem, : .nextSteps = generateNextSteps(baseItem.status, type.type),
                     baseItem, : .estimatedCompletion = getEstimatedCompletion(baseItem.status, type.type),
                     return: baseItem
-                };
-            }
-            finally { }
-        });
-        setVerificationItems(items);
-        setLastRefresh(new Date());
+                } };
+        }
+        finally { }
+    });
+    setVerificationItems(items);
+    setLastRefresh(new Date());
+    try {
     }
-    try { }
     catch (error) {
         console.error('Failed to load verification status:', error);
     }
@@ -116,9 +62,7 @@ import { useState, useEffect, useCallback } from 'react';
     }
     [userId];
     ;
-    useEffect(() => {
-        loadVerificationStatus();
-    }, [loadVerificationStatus]);
+    useEffect(() => { loadVerificationStatus(); }, [loadVerificationStatus]);
     const handleRefresh = useCallback(() => {
         loadVerificationStatus();
         onRefresh?.();
@@ -158,11 +102,9 @@ import { useState, useEffect, useCallback } from 'react';
             case 'expired': return 'Expired';
             case 'requires_update': return 'Needs Update';
             case 'not_started': return 'Not Started';
-            default: return 'Unknown',
-            ;
+            default: return 'Unknown';
         }
-        [];
-    });
+    }, []);
     const getPriorityColor = useCallback((priority) => {
         switch (priority) {
             case 'high': return '#ef4444';
@@ -181,7 +123,7 @@ import { useState, useEffect, useCallback } from 'react';
           .verification-status-tracker.loading {
             display: flex;
             align-items: center;
-            justify-content: center;,
+            justify-content: center;
   padding: 60px 20px;
             color: #6b7280;
           .loading-spinner {
@@ -193,7 +135,7 @@ import { useState, useEffect, useCallback } from 'react';
                         < div, key = { item, : .type }, className = "verification-item" >
                         (_jsxs("div", { className: "item-header", children: [_jsxs("div", { className: "item-title", children: [_jsx("span", { className: "status-icon", children: getStatusIcon(item.status) }), _jsxs("div", { className: "title-text", children: [_jsx("h3", { children: item.title }), _jsxs("span", { className: "priority-badge", style: { backgroundColor: getPriorityColor(item.priority) }, children: [item.priority, " priority"] })] })] }), _jsx("div", { className: "status-badge", style: {
                                         color: getStatusColor(item.status),
-                                        borderColor: getStatusColor(item.status),
+                                        borderColor: getStatusColor(item.status)
                                     }, children: getStatusText(item.status) })] })
                             ,
                                 _jsx("div", { className: "item-description", children: item.description })), { /* Status Details */}, { item, : .status !== 'not_started' && ()
@@ -264,11 +206,11 @@ div >
 div >
     _jsx("style", { children: `
         .verification-status-tracker {
-          max-width: 900px;,
+          max-width: 900px;
   margin: 0 auto;
           padding: 24px;
         .tracker-header {
-          margin-bottom: 32px;,
+          margin-bottom: 32px;
   padding: 24px;
           background: white;
           border-radius: 8px;
@@ -280,51 +222,51 @@ div >
           margin-bottom: 20px;
         .header-main h2 {
           font-size: 24px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0;
         .refresh-btn {
-          background: #f3f4f6;,
+          background: #f3f4f6
   border: none;
           padding: 8px 12px;
-          border-radius: 6px;,
+          border-radius: 6px;
   cursor: pointer;
-          font-size: 14px;,
+          font-size: 14px;
   color: #374151;
           transition: background-color 0.2s;
-        .refresh-btn:hover {,
+        .refresh-btn:hover {
   background: #e5e7eb;
         .progress-summary {
           margin-bottom: 12px;
         .progress-bar {
-          width: 100%;,
+          width: 100%
   height: 8px;
           background-color: #e5e7eb;
-          border-radius: 4px;,
+          border-radius: 4px;
   overflow: hidden;
           margin-bottom: 8px;
         .progress-fill {
-          height: 100%;,
+          height: 100%
   background: linear-gradient(90deg, #3b82f6, #10b981);
           transition: width 0.3s ease;
         .progress-text {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           font-weight: 500;
         .last-updated {
-          font-size: 12px;,
+          font-size: 12px;
   color: #9ca3af;
         .verification-items {
-          display: grid;,
+          display: grid;
   gap: 20px;
         .verification-item {
           background: white;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 24px;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          border-left: 4px solid #e5e7eb;,
+          border-left: 4px solid #e5e7eb
   transition: transform 0.2s, box-shadow 0.2s;
-        .verification-item:hover {,
+        .verification-item:hover {
   transform: translateY(-2px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         .item-header {
@@ -334,30 +276,30 @@ div >
           margin-bottom: 12px;
         .item-title {
           display: flex;
-          align-items: flex-start;,
+          align-items: flex-start
   gap: 12px;
         .status-icon {
           font-size: 24px;
           margin-top: 2px;
         .title-text h3 {
           font-size: 18px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 6px 0;
         .priority-badge {
           color: white;
-          font-size: 11px;,
+          font-size: 11px;
   padding: 2px 8px;
           border-radius: 12px;
           font-weight: 500;
           text-transform: uppercase;
         .status-badge {
-          padding: 6px 12px;,
+          padding: 6px 12px
   border: 1px solid;
           border-radius: 6px;
           font-size: 12px;
           font-weight: 600;
-          text-transform: uppercase;,
+          text-transform: uppercase;
   background: rgba(255, 255, 255, 0.8);
         .item-description {
           color: #6b7280;
@@ -365,12 +307,12 @@ div >
           margin-bottom: 16px;
           line-height: 1.5;
         .status-details {
-          margin-bottom: 16px;,
+          margin-bottom: 16px;
   padding: 12px;
           background: #f9fafb;
           border-radius: 6px;
         .detail-item {
-          font-size: 13px;,
+          font-size: 13px;
   color: #374151;
           margin-bottom: 4px;
         .detail-item:last-child {
@@ -378,7 +320,7 @@ div >
         .detail-item strong {
           color: #1f2937;
         .next-steps {
-          margin-bottom: 20px;,
+          margin-bottom: 20px;
   padding: 12px;
           background: #fffbeb;
           border-radius: 6px;
@@ -394,39 +336,39 @@ div >
           font-size: 13px;
           margin-bottom: 4px;
         .item-actions {
-          display: flex;,
+          display: flex;
   gap: 12px;
         .btn {
-          padding: 8px 16px;,
+          padding: 8px 16px
   border: none;
           border-radius: 6px;
           font-size: 14px;
-          font-weight: 500;,
+          font-weight: 500;
   cursor: pointer;
           transition: all 0.2s;
         .btn-primary {
-          background: #3b82f6;,
+          background: #3b82f6
   color: white;
-        .btn-primary:hover {,
+        .btn-primary:hover {
   background: #2563eb;
         .btn-warning {
-          background: #f59e0b;,
+          background: #f59e0b
   color: white;
-        .btn-warning:hover {,
+        .btn-warning:hover {
   background: #d97706;
         .btn-secondary {
-          background: #6b7280;,
+          background: #6b7280
   color: white;
-        .btn-secondary:hover {,
+        .btn-secondary:hover {
   background: #4b5563;
         @media (max-width: 768px) {
           .verification-status-tracker {
             padding: 16px;
-          .tracker-header,
+          .tracker-header }
           .verification-item {
             padding: 16px;
           .item-header {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 12px;
             align-items: flex-start;
           .status-badge {
@@ -469,10 +411,11 @@ function generateNextSteps(status, type) {
                 'social_media_verification': '1-2 business days',
                 'address_verification': '2-3 business days',
                 'payment_method_verification': '1-2 business days',
-                'basic_profile': 'Immediate',
+                'basic_profile': 'Immediate'
             };
-            return completionTimes[type] || '1-3 business days';
-            export default VerificationStatusTracker;
         }
+        ;
+        return completionTimes[type] || '1-3 business days';
+        export default VerificationStatusTracker;
     });
 }

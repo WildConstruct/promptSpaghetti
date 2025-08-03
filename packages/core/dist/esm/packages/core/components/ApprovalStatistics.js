@@ -2,8 +2,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 9.4.2 - Approval Statistics Component
 // Comprehensive statistics and analytics for approval workflows
 import React, { useState, useEffect } from 'react';
-import { ChartBarIcon, ClockIcon, CheckCircleIcon, XCircleIcon, ExclamationTriangleIcon, DocumentTextIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, ClockIcon, CheckCircleIcon, XCircleIcon, ExclamationTriangleIcon, DocumentTextIcon } from ArrowPathIcon;
+from;
+'@heroicons/react/24/outline';
 top_reviewers: Array;
+refreshInterval = 30000; // 30 seconds
 {
     const [statistics, setStatistics] = useState(null);
     const [performanceMetrics, setPerformanceMetrics] = useState(null);
@@ -25,32 +28,32 @@ top_reviewers: Array;
         }
         finally {
         }
+        fetch(`/api/approval/statistics/${workspaceId}/performance?period=${period}`);
     };
-    fetch(`/api/approval/statistics/${workspaceId}/performance?period=${period}`);
+    ;
+    if (!statsResponse.ok || !performanceResponse.ok) {
+        throw new Error('Failed to fetch statistics');
+        const stats = await statsResponse.json();
+        const performance = await performanceResponse.json();
+        setStatistics(stats);
+        setPerformanceMetrics(performance);
+        setLastUpdated(new Date());
+    }
+    try { }
+    catch (error) {
+        setError(error instanceof Error ? error.message : 'Failed to fetch statistics');
+    }
+    finally {
+        setLoading(false);
+    }
+    ;
+    const formatDuration = (hours) => {
+        if (hours < 1)
+            return `${Math.round(hours * 60)}m`;
+    };
+    if (hours < 24)
+        return `${Math.round(hours)}h`;
 }
-;
-if (!statsResponse.ok || !performanceResponse.ok) {
-    throw new Error('Failed to fetch statistics');
-    const stats = await statsResponse.json();
-    const performance = await performanceResponse.json();
-    setStatistics(stats);
-    setPerformanceMetrics(performance);
-    setLastUpdated(new Date());
-}
-try { }
-catch (error) {
-    setError(error instanceof Error ? error.message : 'Failed to fetch statistics');
-}
-finally {
-    setLoading(false);
-}
-;
-const formatDuration = (hours) => {
-    if (hours < 1)
-        return `${Math.round(hours * 60)}m`;
-};
-if (hours < 24)
-    return `${Math.round(hours)}h`;
 return `${Math.round(hours / 24)}d`;
 ;
 const formatPercentage = (value) => {
@@ -88,7 +91,7 @@ icon: React.ReactNode;
 color: string;
 trend ?  : React.ReactNode;
 subtitle ?  : string;
- > ;
+    > ;
 ({ title, value, icon, color, trend, subtitle }) => ()
     < div;
 className = "bg-white rounded-lg shadow p-6" >
@@ -196,10 +199,10 @@ if (loading && !statistics) {
 { /* Recent Activity Summary */ }
 _jsxs("div", { className: "bg-white rounded-lg shadow p-6", children: [_jsxs("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: ["Performance Summary (", period, ")"] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-6", children: [_jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-green-600", children: performanceMetrics?.approved_count || 0 }), _jsx("div", { className: "text-sm text-gray-600", children: "Approved" })] }), _jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-red-600", children: performanceMetrics?.rejected_count || 0 }), _jsx("div", { className: "text-sm text-gray-600", children: "Rejected" })] }), _jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-blue-600", children: performanceMetrics?.total_approvals || 0 }), _jsx("div", { className: "text-sm text-gray-600", children: "Total Reviews" })] })] })] });
 { /* Health Indicators */ }
-_jsxs("div", { className: "bg-white rounded-lg shadow p-6", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "System Health" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("div", { className: `w-3 h-3 rounded-full ${statistics && statistics.overdue_requests === 0 ? 'bg-green-500' : 'bg-red-500',
-                            }` }), _jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-900", children: "Overdue Requests" }), _jsxs("p", { className: "text-xs text-gray-600", children: [statistics?.overdue_requests || 0, " overdue"] })] })] }), _jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("div", { className: `w-3 h-3 rounded-full ${statistics && statistics.avg_approval_time_hours < 48 ? 'bg-green-500' : 'bg-yellow-500',
-                            }` }), _jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-900", children: "Response Time" }), _jsxs("p", { className: "text-xs text-gray-600", children: [statistics ? formatDuration(statistics.avg_approval_time_hours) : 'N/A', " average"] })] })] }), _jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("div", { className: `w-3 h-3 rounded-full ${statistics && statistics.approval_rate > 80 ? 'bg-green-500' : 'bg-yellow-500',
-                            }` }), _jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-900", children: "Approval Rate" }), _jsx("p", { className: "text-xs text-gray-600", children: statistics ? formatPercentage(statistics.approval_rate) : 'N/A' })] })] })] })] });
+_jsxs("div", { className: "bg-white rounded-lg shadow p-6", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "System Health" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-4", children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("div", { className: `w-3 h-3 rounded-full ${statistics && statistics.overdue_requests === 0 ? 'bg-green-500' : 'bg-red-500'}
+` }), _jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-900", children: "Overdue Requests" }), _jsxs("p", { className: "text-xs text-gray-600", children: [statistics?.overdue_requests || 0, " overdue"] })] })] }), _jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("div", { className: `w-3 h-3 rounded-full ${statistics && statistics.avg_approval_time_hours < 48 ? 'bg-green-500' : 'bg-yellow-500'}
+` }), _jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-900", children: "Response Time" }), _jsxs("p", { className: "text-xs text-gray-600", children: [statistics ? formatDuration(statistics.avg_approval_time_hours) : 'N/A', " average"] })] })] }), _jsxs("div", { className: "flex items-center space-x-3", children: [_jsx("div", { className: `w-3 h-3 rounded-full ${statistics && statistics.approval_rate > 80 ? 'bg-green-500' : 'bg-yellow-500'}
+` }), _jsxs("div", { children: [_jsx("p", { className: "text-sm font-medium text-gray-900", children: "Approval Rate" }), _jsx("p", { className: "text-xs text-gray-600", children: statistics ? formatPercentage(statistics.approval_rate) : 'N/A' })] })] })] })] });
 div >
 ;
 ;

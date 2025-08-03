@@ -17,7 +17,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * - Responsive help interfaces
  */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { HelpCircle, X, ChevronLeft, ChevronRight, Play, Pause, SkipForward, ArrowLeft, Info, Lightbulb, BookOpen, Video, FileText, Search, Star, ThumbsUp, ThumbsDown, MessageCircle, ExternalLink, Minimize2, Check, Target, Clock } from 'lucide-react';
+import { HelpCircle, X, ChevronLeft, ChevronRight, Play, Pause, SkipForward, ArrowLeft, Info, Lightbulb, BookOpen, Video, FileText, Search, Star, ThumbsUp, ThumbsDown, MessageCircle, ExternalLink, Minimize2, Check, Target } from Clock;
+from;
+'lucide-react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
@@ -35,9 +37,8 @@ export const HelpTooltip = ({
     helpText,
     className = '',
     children,
-    onShow,
-    onHide
-});
+    onShow });
+onHide;
 {
     const [isVisible, setIsVisible] = useState(false);
     const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
@@ -119,7 +120,7 @@ export const HelpTooltip = ({
                 top: tooltipPosition.top,
                 left: tooltipPosition.left,
                 maxWidth,
-                zIndex: 9999,
+                zIndex: 9999
             }, ">", showArrow && _jsx("div", { className: `help-tooltip-arrow help-tooltip-arrow-${position}` }), _jsxs("div", { className: "help-tooltip-content", children: [title && _jsx("div", { className: "help-tooltip-title", children: title }), _jsx("div", { className: "help-tooltip-body", children: content }), (helpLink || helpText) && ()
                         < div, " className=\"help-tooltip-actions\">", helpLink && ()
                         < Button, "variant=\"ghost\" size=\"sm\" onClick=", () => window.open(helpLink, '_blank'), "className=\"help-tooltip-link\" >", _jsx(ExternalLink, { size: 12 }), helpText || 'Learn more'] }), ")}"] });
@@ -144,9 +145,8 @@ export const ContextualHelpPanel = ({
     searchable = true,
     filterable = true,
     className = '',
-    onContentSelect,
-    onFeedback
-});
+    onContentSelect });
+onFeedback;
 {
     const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
     const [searchQuery, setSearchQuery] = useState('');
@@ -174,9 +174,7 @@ const handleContentClick = useCallback((item) => {
     setSelectedContent(item);
     onContentSelect?.(item);
 }, [onContentSelect]);
-const handleFeedback = useCallback((contentId, helpful) => {
-    onFeedback?.(contentId, helpful);
-}, [onFeedback]);
+const handleFeedback = useCallback((contentId, helpful) => { onFeedback?.(contentId, helpful); }, [onFeedback]);
 if (isCollapsed && collapsible) {
     return;
     _jsxs("div", { className: `help-panel help-panel-collapsed help-panel-${position} ${className}`, children: ["}", _jsx(Button, { variant: "ghost", size: "icon", onClick: () => setIsCollapsed(false), className: "help-panel-expand", title: "Show help", children: _jsx(HelpCircle, { size: 18 }) })] });
@@ -258,9 +256,8 @@ export const GuidedTour = ({
     isActive,
     onComplete,
     onSkip,
-    onStepChange,
-    className = ''
-});
+    onStepChange });
+className = '';
 {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -284,12 +281,9 @@ export const GuidedTour = ({
                 // Add spotlight effect positioning
                 // Scroll element into view
                 targetElement.scrollIntoView({});
-                behavior: 'smooth',
-                    block;
-                'center',
-                    inline;
-                'center',
-                ;
+                behavior: 'smooth';
+                block: 'center';
+                inline: 'center';
             }
         }
     });
@@ -323,12 +317,8 @@ export const GuidedTour = ({
         }
         [isFirstStep, currentStepIndex, goToStep];
     });
-    const skipTour = useCallback(() => {
-        onSkip?.();
-    }, [onSkip]);
-    const toggleAutoplay = useCallback(() => {
-        setIsPlaying(!isPlaying);
-    }, [isPlaying]);
+    const skipTour = useCallback(() => { onSkip?.(); }, [onSkip]);
+    const toggleAutoplay = useCallback(() => { setIsPlaying(!isPlaying); }, [isPlaying]);
     // Auto-advance when playing
     useEffect(() => {
         if (!isPlaying || !isActive)
@@ -361,9 +351,8 @@ export const HelpHub = ({
     content,
     context,
     onTourStart,
-    onContentView,
-    className = ''
-});
+    onContentView });
+className = '';
 {
     const [activeTab, setActiveTab] = useState('getting-started');
     const suggestedTours = useMemo(() => {
@@ -464,9 +453,8 @@ div >
 ;
 export const QuickHelp = ({
     helpContent,
-    onHelpRequest,
-    className = ''
-});
+    onHelpRequest });
+className = '';
 {
     const [isOpen, setIsOpen] = useState(false);
     return;
@@ -483,10 +471,9 @@ div >
 ;
 ;
 ;
-export default {
-    HelpTooltip,
+export default { HelpTooltip,
     ContextualHelpPanel,
     GuidedTour,
-    HelpHub,
-    QuickHelp
-};
+    HelpHub };
+QuickHelp;
+;

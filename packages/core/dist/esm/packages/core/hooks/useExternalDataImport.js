@@ -1,7 +1,17 @@
 // packages/core/hooks/useExternalDataImport.ts
 // Epic 8.8 Task 1: Data Import Hooks with Caching System
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { dataSourceManager } from '../external-data/DataSourceManager';
+import { dataSourceManager, DataSource, HistoricalQuery } from QueryResult;
+from;
+'../external-data/DataSourceManager';
+lastQuery: HistoricalQuery | null;
+lastResults: QueryResult;
+availableDataSources: DataSource;
+enabledSourcesCount: number;
+cacheHitRate: number;
+lastUpdateTime: string | null;
+stopRealTimeUpdates: () => void ;
+// Utility functions
 validateQuery: (query) => { valid: boolean; errors: string; };
 getQuerySuggestions: (partial) => string;
 exportResults: (format) => string;
@@ -10,30 +20,20 @@ export const useExternalDataImport = ({
     refreshInterval = 300000, // 5 minutes
     enableRealTimeUpdates = false,
     cacheStrategy = 'conservative',
-    onError,
-    onSuccess
-}), UseExternalDataImportProps = {}, UseExternalDataImportReturn;
-{
+    onError });
+onSuccess: UseExternalDataImportProps = {};
+UseExternalDataImportReturn => {
     const [state, setState] = useState({});
-    isLoading: false,
-        hasError;
-    false,
-        error;
-    null,
-        lastQuery;
-    null,
-        lastResults;
-    [],
-        availableDataSources;
-    [],
-        enabledSourcesCount;
-    0,
-        cacheHitRate;
-    0,
-        lastUpdateTime;
-    null,
-    ;
-}
+    isLoading: false;
+    hasError: false;
+    error: null;
+    lastQuery: null;
+    lastResults: [];
+    availableDataSources: [];
+    enabledSourcesCount: 0;
+    cacheHitRate: 0;
+    lastUpdateTime: null;
+};
 ;
 const refreshIntervalRef = useRef();
 const realTimeUpdateRef = useRef();
@@ -65,8 +65,8 @@ useEffect(() => {
 // Query external data
 const queryData = useCallback(async());
 ;
-query: HistoricalQuery,
-    sourceIds ?  : string;
+query: HistoricalQuery;
+sourceIds ?  : string;
 Promise;
 {
     setState(prev => ({}), ...prev, isLoading, true, hasError, false, error, null);
@@ -84,7 +84,8 @@ try {
     0;
     setState(prev => ({}), ...prev, isLoading, false, lastQuery, query, lastResults, results, cacheHitRate, Math.round(cacheHitRate * 100) / 100, lastUpdateTime, new Date().toISOString());
 }
-finally { }
+finally {
+}
 ;
 if (onSuccess) {
     onSuccess(results);
@@ -116,17 +117,18 @@ const clearCache = useCallback(() => {
     cacheStatsRef.current = { hits: 0, total: 0 };
     setState(prev => ({}), ...prev, cacheHitRate, 0);
 });
+;
 [];
 ;
 // Add new data source
 const addDataSource = useCallback((source) => {
     const manager = dataSourceManager;
     manager.registerDataSource(source);
-    setState(prev => ({}), ...prev, availableDataSources, [...prev.availableDataSources, source], enabledSourcesCount, source.enabled)
+    setState(prev => ({}), ...prev, availableDataSources, [...prev.availableDataSources, source], enabledSourcesCount, source.enabled
         ? prev.enabledSourcesCount + 1
-        : prev.enabledSourcesCount,
-    ;
+        : prev.enabledSourcesCount);
 });
+;
 [];
 ;
 // Update existing data source
@@ -137,13 +139,13 @@ const updateDataSource = useCallback((sourceId, updates) => {
     if (existingSource) {
         const updatedSource = { ...existingSource, ...updates };
         sources.set(sourceId, updatedSource);
-        setState(prev => ({}), ...prev, availableDataSources, prev.availableDataSources.map(s => ), s.id === sourceId ? updatedSource : s),
-            enabledSourcesCount;
-        prev.availableDataSources,
-                .map(s => s.id === sourceId ? updatedSource : s),
-                .filter(s => s.enabled).length;
+        setState(prev => ({}), ...prev, availableDataSources, prev.availableDataSources.map(s => ), s.id === sourceId ? updatedSource : s);
+        enabledSourcesCount: prev.availableDataSources
+            .map(s => s.id === sourceId ? updatedSource : s);
     }
-});
+})
+    .filter(s => s.enabled).length;
+;
 [];
 ;
 // Remove data source
@@ -152,11 +154,11 @@ const removeDataSource = useCallback((sourceId) => {
     const sources = manager.dataSources;
     const removedSource = sources.get(sourceId);
     sources.delete(sourceId);
-    setState(prev => ({}), ...prev, availableDataSources, prev.availableDataSources.filter(s => s.id !== sourceId), enabledSourcesCount, removedSource?.enabled)
+    setState(prev => ({}), ...prev, availableDataSources, prev.availableDataSources.filter(s => s.id !== sourceId), enabledSourcesCount, removedSource?.enabled
         ? prev.enabledSourcesCount - 1
-        : prev.enabledSourcesCount,
-    ;
+        : prev.enabledSourcesCount);
 });
+;
 [];
 ;
 // Toggle data source enabled state
@@ -169,18 +171,15 @@ const toggleDataSource = useCallback((sourceId) => {
 });
 s.id === sourceId ? { ...s, enabled: !s.enabled } : s;
 ;
-return {
-    ...prev,
+return { ...prev,
     availableDataSources: updatedSources,
-    enabledSourcesCount: updatedSources.filter(s => s.enabled).length,
-};
+    enabledSourcesCount: updatedSources.filter(s => s.enabled).length };
+;
 ;
 [];
 ;
 // Get specific data source
-const getDataSource = useCallback((sourceId) => {
-    return state.availableDataSources.find(s => s.id === sourceId) || null;
-}, [state.availableDataSources]);
+const getDataSource = useCallback((sourceId) => { return state.availableDataSources.find(s => s.id === sourceId) || null; }, [state.availableDataSources]);
 // Start real-time updates
 const startRealTimeUpdates = useCallback(() => {
     if (!enableRealTimeUpdates)
@@ -212,12 +211,13 @@ const validateQuery = useCallback((query) => {
                 if (query.offset && query.offset < 0) {
                     errors.push('Offset must be non-negative');
                     return {
-                        valid: errors.length === 0,
-                        errors
+                        valid: errors.length === 0
                     };
+                    errors;
                 }
-                [];
+                ;
             }
+            [];
         }
     }
 });
@@ -229,16 +229,18 @@ const getQuerySuggestions = useCallback((partial) => {
         suggestions.push('Try "medieval", "renaissance", "ancient", "modern"', 'Use specific periods like "early-medieval" or "high-renaissance"');
         // Category suggestions
         if (!partial.category) {
-            suggestions.push('Popular categories: "clothing", "architecture", "art", "literature"', 'Historical categories: "warfare", "trade", "religion", "daily-life"');
-            // Region suggestions
-            if (!partial.region) {
-                suggestions.push('Add regions like "europe", "asia", "middle-east" for more specific results');
-                return suggestions;
-            }
-            [];
+            suggestions.push('Popular categories: "clothing", "architecture", "art", "literature"');
         }
+        'Historical categories: "warfare", "trade", "religion", "daily-life"';
     }
 });
+// Region suggestions
+if (!partial.region) {
+    suggestions.push('Add regions like "europe", "asia", "middle-east" for more specific results');
+    return suggestions;
+}
+[];
+;
 // Export results in different formats
 const exportResults = useCallback((format) => {
     if (format === 'json') {
@@ -249,17 +251,16 @@ const exportResults = useCallback((format) => {
                 return '';
             const headers = Object.keys(allData[0]);
             const csvRows = [
-                headers.join(','),
-                ...allData.map(row => ),
-                headers.map(header => { })
+                headers.join(',')
             ];
-            const value = row[header];
-            // Escape quotes and wrap in quotes if contains comma
-            const escaped = String(value).replace(/"/g, '""');
-            return escaped.includes(',') ? `"${escaped}"` : escaped;
         }
     }
-}).join(',');
+}, ...allData.map(row => ), headers.map(header => { }));
+const value = row[header];
+// Escape quotes and wrap in quotes if contains comma
+const escaped = String(value).replace(/"/g, '""');
+return escaped.includes(',') ? `"${escaped}"` : escaped;
+join(',');
 ;
 return csvRows.join('\n');
 return '';
@@ -279,83 +280,37 @@ useEffect(() => {
     };
 });
 return {
-    // State
-    state,
+    state
+    // Data operations
+    ,
     // Data operations
     queryData,
     refreshData,
-    clearCache,
+    clearCache
+    // Data source management
+    ,
     // Data source management
     addDataSource,
     updateDataSource,
     removeDataSource,
     toggleDataSource,
-    getDataSource,
+    getDataSource
+    // Real-time updates
+    ,
     // Real-time updates
     startRealTimeUpdates,
-    stopRealTimeUpdates,
+    stopRealTimeUpdates
+    // Utility functions
+    ,
     // Utility functions
     validateQuery,
-    getQuerySuggestions,
-    exportResults
+    getQuerySuggestions
 };
+exportResults;
+;
 ;
 // Specialized hook for historical query building
-export const useQueryBuilder = () => {
-    const [query, setQuery] = useState({});
-    const [isValid, setIsValid] = useState(false);
-    const [validationErrors, setValidationErrors] = useState([]);
-    const updateQuery = useCallback((updates) => {
-        const newQuery = { ...query, ...updates };
-        setQuery(newQuery);
-        // Validate the query
-        const required = ['category', 'era'];
-        const errors = required.filter(field => !newQuery[field]);
-        setValidationErrors(errors.map(field => `${field} is required`));
-    }, setIsValid(errors.length === 0));
-}, [query];
-const resetQuery = useCallback(() => {
-    setQuery({});
-    setIsValid(false);
-    setValidationErrors([]);
-}, []);
-const buildQuery = useCallback(() => {
-    if (!isValid)
-        return null;
-    return {
-        era: query.era || '',
-        region: query.region,
-        category: query.category || '',
-        subcategory: query.subcategory,
-        keywords: query.keywords,
-        filters: query.filters || {},
-        limit: query.limit || 50,
-        offset: query.offset || 0,
-        sortBy: query.sortBy,
-        sortOrder: query.sortOrder || 'desc'
-    };
-}, [query, isValid]);
-return {
-    query,
-    isValid,
-    validationErrors,
-    updateQuery,
-    resetQuery,
-    buildQuery
-};
-;
-// Hook for caching management and statistics
-export const useCacheManagement = () => {
-    const [cacheStats, setCacheStats] = useState({});
-    size: 0,
-        hitRate;
-    0,
-        lastCleanup;
-    '',
-        entries;
-    0,
-    ;
-};
+export const useQueryBuilder = () => { return null; };
 const getCacheStats = useCallback(() => {
     const manager = dataSourceManager;
     const cache = manager.cache;
@@ -363,14 +318,12 @@ const getCacheStats = useCallback(() => {
     for (const [entry] of cache.entries()) {
         totalSize += entry.size;
         setCacheStats({});
-        size: Math.round(totalSize / 1024), // KB,
+        size: Math.round(totalSize / 1024), // KB
             hitRate;
-        0, // Would need to track this in the manager,
+        0, // Would need to track this in the manager
             lastCleanup;
-        new Date().toISOString(),
-            entries;
-        cache.size,
-        ;
+        new Date().toISOString();
+        entries: cache.size;
     }
 });
 [];
@@ -385,13 +338,10 @@ const optimizeCache = useCallback(() => {
     manager.cleanupCache();
     getCacheStats();
 }, [getCacheStats]);
-useEffect(() => {
-    getCacheStats();
-}, [getCacheStats]);
-return {
-    cacheStats,
+useEffect(() => { getCacheStats(); }, [getCacheStats]);
+return { cacheStats,
     getCacheStats,
-    clearCache,
-    optimizeCache
-};
+    clearCache };
+optimizeCache;
+;
 ;

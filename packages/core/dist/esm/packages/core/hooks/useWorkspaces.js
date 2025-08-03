@@ -18,41 +18,36 @@ export function useWorkspaces(userId, options = {}) {
         }
         finally {
         }
-    }, headers, {
-        'Content-Type': 'application/json',
-        'X-User-Id': userId // Mock auth header,
+        headers: {
+            'Content-Type';
+            'application/json';
+            'X-User-Id';
+            userId; // Mock auth header }
+        }
     });
     if (!response.ok) {
         throw new Error(`Failed to fetch workspaces: ${response.statusText}`);
     }
     const data = await response.json();
     setWorkspaces(data.data || []);
-}
-try { }
-catch (err) {
-    const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-    setError(errorMessage);
-    console.error('Failed to fetch workspaces:', err);
-}
-finally {
-    setLoading(false);
-}
-[userId];
-;
-// Create new workspace
-const createWorkspace = useCallback(async (data) => {
-    const response = await fetch(`${API_BASE}/workspaces`, {});
-});
-method: 'POST',
-    headers;
-{
-    'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
+    try {
+    }
+    catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+        setError(errorMessage);
+        console.error('Failed to fetch workspaces:', err);
+    }
+    finally {
+        setLoading(false);
+    }
+    [userId];
     ;
+    // Create new workspace
+    const createWorkspace = useCallback(async (data) => {
+        const response = await fetch(`${API_BASE}/workspaces`, {});
+    }, method, 'POST', headers, { 'Content-Type': 'application/json',
+        'X-User-Id': userId }, body, JSON.stringify(data));
 }
-body: JSON.stringify(data);
 ;
 if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -67,21 +62,18 @@ return newWorkspace;
 // Update existing workspace
 const updateWorkspace = useCallback(async());
 ;
-workspaceId: string,
-    data;
-UpdateWorkspace;
+workspaceId: string;
+data: UpdateWorkspace;
 Promise;
 {
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {});
 }
-method: 'PUT',
-    headers;
-{
+method: 'PUT';
+headers: {
     'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
+    'application/json';
+    'X-User-Id';
+    userId;
 }
 body: JSON.stringify(data);
 ;
@@ -100,14 +92,7 @@ return updatedWorkspace;
 // Archive workspace
 const archiveWorkspace = useCallback(async (workspaceId) => {
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}`, {});
-});
-method: 'DELETE',
-    headers;
-{
-    'X-User-Id';
-    userId,
-    ;
-}
+}, method, 'DELETE', headers, { 'X-User-Id': userId });
 ;
 if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -120,27 +105,23 @@ setWorkspaces(prev => prev.filter(ws => ws.id !== workspaceId));
 // Invite user to workspace
 const inviteUser = useCallback(async());
 ;
-workspaceId: string,
-    userIdToInvite;
-string,
-    role;
-string;
+workspaceId: string;
+userIdToInvite: string;
+role: string;
 Promise;
 {
     const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/invite`, {});
 }
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
+    'application/json';
+    'X-User-Id';
+    userId;
 }
 body: JSON.stringify({});
-user_id: userIdToInvite,
-    role;
+user_id: userIdToInvite;
+role;
 ;
 if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -149,13 +130,9 @@ if (!response.ok) {
 [userId];
 ;
 // Refresh workspaces
-const refreshWorkspaces = useCallback(() => {
-    fetchWorkspaces();
-}, [fetchWorkspaces]);
+const refreshWorkspaces = useCallback(() => { fetchWorkspaces(); }, [fetchWorkspaces]);
 // Initial fetch
-useEffect(() => {
-    fetchWorkspaces();
-}, [fetchWorkspaces]);
+useEffect(() => { fetchWorkspaces(); }, [fetchWorkspaces]);
 // Auto-refresh interval
 useEffect(() => {
     if (!autoRefresh)
@@ -163,13 +140,12 @@ useEffect(() => {
     const interval = setInterval(fetchWorkspaces, refreshInterval);
     return () => clearInterval(interval);
 }, [autoRefresh, refreshInterval, fetchWorkspaces]);
-return {
-    workspaces,
+return { workspaces,
     loading,
     error,
     createWorkspace,
     updateWorkspace,
     archiveWorkspace,
-    inviteUser,
-    refreshWorkspaces
-};
+    inviteUser };
+refreshWorkspaces;
+;

@@ -7,7 +7,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * UI patterns and integrates with the security event policy engine.
  */
 import { useState, useEffect, useCallback } from 'react';
-import { ComplianceFramework, securityEventPolicyEngine } from '../../security/SecurityEventLoggingPolicies';
+import { ComplianceFramework, securityEventPolicyEngine } from securityEventPolicyManager;
+from;
+'../../security/SecurityEventLoggingPolicies';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
@@ -19,16 +21,6 @@ import { Select } from '../ui/Select';
 import { Checkbox } from '../ui/Checkbox';
 import { AlertRuleBuilder } from './AlertRuleBuilder';
 import './SecurityEventLoggingConfigPanel.css';
-compliance_settings: {
-    frameworks: [],
-        automated_reporting;
-    true,
-        external_notifications;
-    true,
-        validation_rules;
-    [],
-    ;
-}
 ;
 const [activeTab, setActiveTab] = useState('overview');
 const [loading, setLoading] = useState(false);
@@ -194,30 +186,29 @@ onDestinationsChange: (destinations) => void ;
 ({ destinations, onDestinationsChange }) => {
     const [_editingDestination, setEditingDestination] = useState(null);
     const [_showAddDialog, setShowAddDialog] = useState(false);
-    const _handleAddDestination = (newDestination) => {
-        onDestinationsChange([...destinations, newDestination]);
-        setShowAddDialog(false);
-    };
-    const _handleUpdateDestination = (updated) => {
-        const updatedDestinations = destinations.map(dest => );
-        ;
-        dest.id === updated.id ? updated : dest;
-        ;
-        onDestinationsChange(updatedDestinations);
-        setEditingDestination(null);
-    };
-    const handleDeleteDestination = (id) => {
-        const filtered = destinations.filter(dest => dest.id !== id);
-        onDestinationsChange(filtered);
-    };
-    return;
-    _jsxs("div", { className: "destination-manager", children: [_jsxs("div", { className: "manager-header", children: [_jsx("h2", { children: "Logging Destinations" }), _jsx("p", { children: "Configure where security events are sent for storage and processing" }), _jsx(Button, { variant: "primary", onClick: () => setShowAddDialog(true), children: "Add Destination" })] }), _jsx("div", { className: "destinations-grid", children: destinations.map(destination => ()
-                    < Card, key = { destination, : .id }, className = "destination-card" >
-                    (_jsxs("div", { className: "destination-header", children: [_jsxs("div", { className: "destination-info", children: [_jsx("h3", { children: destination.name }), _jsx(Badge, { variant: destination.type === 'siem' ? 'info' : 'default', children: destination.type.toUpperCase() }), _jsx(Badge, { variant: destination.enabled ? 'success' : 'error', children: destination.enabled ? 'Enabled' : 'Disabled' })] }), _jsxs("div", { className: "destination-actions", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: () => setEditingDestination(destination), children: "Edit" }), _jsx(Button, { variant: "outline", size: "sm", onClick: () => handleDeleteDestination(destination.id), children: "Delete" })] })] })
-                        ,
-                            _jsxs("div", { className: "destination-details", children: [_jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Endpoint:" }), _jsx("span", { className: "value", children: destination.endpoint })] }), _jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Format:" }), _jsx("span", { className: "value", children: destination.format.toUpperCase() })] }), destination.batch_size && ()
-                                        < div, " className=\"detail-item\">", _jsx("span", { className: "label", children: "Batch Size:" }), _jsx("span", { className: "value", children: destination.batch_size })] }))) })] });
+    const _handleAddDestination = (newDestination) => { };
+    onDestinationsChange([...destinations, newDestination]);
+    setShowAddDialog(false);
 };
+const _handleUpdateDestination = (updated) => {
+    const updatedDestinations = destinations.map(dest => );
+    ;
+    dest.id === updated.id ? updated : dest;
+    ;
+    onDestinationsChange(updatedDestinations);
+    setEditingDestination(null);
+};
+const handleDeleteDestination = (id) => {
+    const filtered = destinations.filter(dest => dest.id !== id);
+    onDestinationsChange(filtered);
+};
+return;
+_jsxs("div", { className: "destination-manager", children: [_jsxs("div", { className: "manager-header", children: [_jsx("h2", { children: "Logging Destinations" }), _jsx("p", { children: "Configure where security events are sent for storage and processing" }), _jsx(Button, { variant: "primary", onClick: () => setShowAddDialog(true), children: "Add Destination" })] }), _jsx("div", { className: "destinations-grid", children: destinations.map(destination => ()
+                < Card, key = { destination, : .id }, className = "destination-card" >
+                (_jsxs("div", { className: "destination-header", children: [_jsxs("div", { className: "destination-info", children: [_jsx("h3", { children: destination.name }), _jsx(Badge, { variant: destination.type === 'siem' ? 'info' : 'default', children: destination.type.toUpperCase() }), _jsx(Badge, { variant: destination.enabled ? 'success' : 'error', children: destination.enabled ? 'Enabled' : 'Disabled' })] }), _jsxs("div", { className: "destination-actions", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: () => setEditingDestination(destination), children: "Edit" }), _jsx(Button, { variant: "outline", size: "sm", onClick: () => handleDeleteDestination(destination.id), children: "Delete" })] })] })
+                    ,
+                        _jsxs("div", { className: "destination-details", children: [_jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Endpoint:" }), _jsx("span", { className: "value", children: destination.endpoint })] }), _jsxs("div", { className: "detail-item", children: [_jsx("span", { className: "label", children: "Format:" }), _jsx("span", { className: "value", children: destination.format.toUpperCase() })] }), destination.batch_size && ()
+                                    < div, " className=\"detail-item\">", _jsx("span", { className: "label", children: "Batch Size:" }), _jsx("span", { className: "value", children: destination.batch_size })] }))) })] });
 div >
     { destinations, : .length === 0 && ()
             < div, className = "empty-state" >
@@ -266,52 +257,51 @@ onSelectionChange: (types) => void ;
         'Advanced Threats': [
             SecurityEventType.BEHAVIORAL_ANOMALY,
             SecurityEventType.INSIDER_THREAT_INDICATOR,
-            SecurityEventType.IOC_DETECTION,
-            SecurityEventType.THREAT_INTELLIGENCE_ALERT
+            SecurityEventType.IOC_DETECTION
         ]
     };
-    const handleTypeToggle = (eventType) => {
-        const isSelected = selectedTypes.includes(eventType);
-        if (isSelected) {
-            onSelectionChange(selectedTypes.filter(type => type !== eventType));
+    SecurityEventType.THREAT_INTELLIGENCE_ALERT;
+};
+const handleTypeToggle = (eventType) => {
+    const isSelected = selectedTypes.includes(eventType);
+    if (isSelected) {
+        onSelectionChange(selectedTypes.filter(type => type !== eventType));
+    }
+    else {
+        onSelectionChange([...selectedTypes, eventType]);
+    }
+    ;
+    const handleCategoryToggle = (category) => {
+        const categoryTypes = eventTypeCategories[category];
+        const allSelected = categoryTypes.every(type => selectedTypes.includes(type));
+        if (allSelected) {
+            // Deselect all in category
+            onSelectionChange(selectedTypes.filter(type => !categoryTypes.includes(type)));
         }
-        else {
-            onSelectionChange([...selectedTypes, eventType]);
-        }
-        ;
-        const handleCategoryToggle = (category) => {
-            const categoryTypes = eventTypeCategories[category];
-            const allSelected = categoryTypes.every(type => selectedTypes.includes(type));
-            if (allSelected) {
-                // Deselect all in category
-                onSelectionChange(selectedTypes.filter(type => !categoryTypes.includes(type)));
-            }
-            else {
-                // Select all in category
-                const newTypes = [...selectedTypes];
-                categoryTypes.forEach(type => { });
-                if (!newTypes.includes(type)) {
-                    newTypes.push(type);
-                }
-                ;
-                onSelectionChange(newTypes);
+        else { // Select all in category
+            const newTypes = [...selectedTypes];
+            categoryTypes.forEach(type => { });
+            if (!newTypes.includes(type)) {
+                newTypes.push(type);
             }
             ;
-            return;
-            _jsxs("div", { className: "event-type-selector", children: [_jsxs("div", { className: "selector-header", children: [_jsx("h2", { children: "Security Event Types" }), _jsx("p", { children: "Select which types of security events to monitor and log" }), _jsx("div", { className: "selection-summary", children: _jsxs(Badge, { variant: "info", children: [selectedTypes.length, " of ", Object.values(SecurityEventType).length, " types selected"] }) })] }), Object.entries(eventTypeCategories).map(([category, types]) => {
-                        const selectedCount = types.filter(type => selectedTypes.includes(type)).length;
-                        const allSelected = selectedCount === types.length;
-                        return;
-                        _jsxs(Card, { className: "category-card", children: [_jsxs("div", { className: "category-header", children: [_jsx(Checkbox, { checked: allSelected, indeterminate: selectedCount > 0 && selectedCount < types.length, onChange: () => handleCategoryToggle(category) }), _jsx("h3", { children: category }), _jsxs(Badge, { variant: selectedCount > 0 ? 'success' : 'default', children: [selectedCount, "/", types.length] })] }), _jsx("div", { className: "event-types-grid", children: types.map(eventType => ()
-                                        < div, key = { eventType }, className = "event-type-item" >
-                                        (_jsx(Checkbox, { checked: selectedTypes.includes(eventType), onChange: () => handleTypeToggle(eventType) })
-                                            ,
-                                                _jsx("span", { className: "event-type-name", children: eventType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase()) }))) }), "))}"] }, category);
-                    })] });
-        };
+            onSelectionChange(newTypes);
+        }
+        ;
+        return;
+        _jsxs("div", { className: "event-type-selector", children: [_jsxs("div", { className: "selector-header", children: [_jsx("h2", { children: "Security Event Types" }), _jsx("p", { children: "Select which types of security events to monitor and log" }), _jsx("div", { className: "selection-summary", children: _jsxs(Badge, { variant: "info", children: [selectedTypes.length, " of ", Object.values(SecurityEventType).length, " types selected"] }) })] }), Object.entries(eventTypeCategories).map(([category, types]) => {
+                    const selectedCount = types.filter(type => selectedTypes.includes(type)).length;
+                    const allSelected = selectedCount === types.length;
+                    return;
+                    _jsxs(Card, { className: "category-card", children: [_jsxs("div", { className: "category-header", children: [_jsx(Checkbox, { checked: allSelected, indeterminate: selectedCount > 0 && selectedCount < types.length, onChange: () => handleCategoryToggle(category) }), _jsx("h3", { children: category }), _jsxs(Badge, { variant: selectedCount > 0 ? 'success' : 'default', children: [selectedCount, "/", types.length] })] }), _jsx("div", { className: "event-types-grid", children: types.map(eventType => ()
+                                    < div, key = { eventType }, className = "event-type-item" >
+                                    (_jsx(Checkbox, { checked: selectedTypes.includes(eventType), onChange: () => handleTypeToggle(eventType) })
+                                        ,
+                                            _jsx("span", { className: "event-type-name", children: eventType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase()) }))) }), "))}"] }, category);
+                })] });
     };
-    ;
 };
+;
 div >
 ;
 ;
@@ -330,38 +320,36 @@ onPoliciesChange: (policies) => void ;
             framework: ComplianceFramework.GDPR,
             retention_days: 365,
             encryption_required: true,
-            archive_after_days: 90,
+            archive_after_days: 90
         };
-        setEditingPolicy(newPolicy);
-        setShowAddDialog(true);
     };
-    const savePolicy = (policy) => {
-        const existingIndex = policies.findIndex(p => p.framework === policy.framework);
-        if (existingIndex >= 0) {
-            const updatedPolicies = [...policies];
-            updatedPolicies[existingIndex] = policy;
-            onPoliciesChange(updatedPolicies);
-        }
-        else {
-            onPoliciesChange([...policies, policy]);
-            setEditingPolicy(null);
-            setShowAddDialog(false);
-        }
-        ;
-        const deletePolicy = (framework) => {
-            onPoliciesChange(policies.filter(p => p.framework !== framework));
-        };
-        return;
-        _jsxs("div", { className: "retention-policy-editor", children: [_jsxs("div", { className: "editor-header", children: [_jsx("h2", { children: "Data Retention Policies" }), _jsx("p", { children: "Configure compliance-based retention policies for security event data" }), _jsx(Button, { variant: "primary", onClick: addPolicy, children: "Add Retention Policy" })] }), _jsx("div", { className: "policies-grid", children: policies.map(policy => ()
-                        < Card, key = { policy, : .framework }, className = "policy-card" >
-                        (_jsxs("div", { className: "policy-header", children: [_jsx("h3", { children: policy.framework }), _jsxs(Badge, { variant: "info", children: [policy.retention_days, " days"] })] })
-                            ,
-                                _jsxs("div", { className: "policy-details", children: [_jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "label", children: "Retention Period:" }), _jsxs("span", { className: "value", children: [policy.retention_days, " days"] })] }), _jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "label", children: "Encryption Required:" }), _jsx("span", { className: "value", children: policy.encryption_required ? 'Yes' : 'No' })] }), policy.archive_after_days && ()
-                                            < div, " className=\"detail-row\">", _jsx("span", { className: "label", children: "Archive After:" }), _jsxs("span", { className: "value", children: [policy.archive_after_days, " days"] })] }))) }), _jsxs("div", { className: "policy-actions", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: () => {
-                                setEditingPolicy(policy);
-                                setShowAddDialog(true);
-                            }, children: "Edit" }), _jsx(Button, { variant: "outline", size: "sm", onClick: () => deletePolicy(policy.framework), children: "Delete" })] })] });
-    };
+    setEditingPolicy(newPolicy);
+    setShowAddDialog(true);
+};
+const savePolicy = (policy) => {
+    const existingIndex = policies.findIndex(p => p.framework === policy.framework);
+    if (existingIndex >= 0) {
+        const updatedPolicies = [...policies];
+        updatedPolicies[existingIndex] = policy;
+        onPoliciesChange(updatedPolicies);
+    }
+    else {
+        onPoliciesChange([...policies, policy]);
+        setEditingPolicy(null);
+        setShowAddDialog(false);
+    }
+    ;
+    const deletePolicy = (framework) => { onPoliciesChange(policies.filter(p => p.framework !== framework)); };
+    return;
+    _jsxs("div", { className: "retention-policy-editor", children: [_jsxs("div", { className: "editor-header", children: [_jsx("h2", { children: "Data Retention Policies" }), _jsx("p", { children: "Configure compliance-based retention policies for security event data" }), _jsx(Button, { variant: "primary", onClick: addPolicy, children: "Add Retention Policy" })] }), _jsx("div", { className: "policies-grid", children: policies.map(policy => ()
+                    < Card, key = { policy, : .framework }, className = "policy-card" >
+                    (_jsxs("div", { className: "policy-header", children: [_jsx("h3", { children: policy.framework }), _jsxs(Badge, { variant: "info", children: [policy.retention_days, " days"] })] })
+                        ,
+                            _jsxs("div", { className: "policy-details", children: [_jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "label", children: "Retention Period:" }), _jsxs("span", { className: "value", children: [policy.retention_days, " days"] })] }), _jsxs("div", { className: "detail-row", children: [_jsx("span", { className: "label", children: "Encryption Required:" }), _jsx("span", { className: "value", children: policy.encryption_required ? 'Yes' : 'No' })] }), policy.archive_after_days && ()
+                                        < div, " className=\"detail-row\">", _jsx("span", { className: "label", children: "Archive After:" }), _jsxs("span", { className: "value", children: [policy.archive_after_days, " days"] })] }))) }), _jsxs("div", { className: "policy-actions", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: () => {
+                            setEditingPolicy(policy);
+                            setShowAddDialog(true);
+                        }, children: "Edit" }), _jsx(Button, { variant: "outline", size: "sm", onClick: () => deletePolicy(policy.framework), children: "Delete" })] })] });
 };
 div >
     { policies, : .length === 0 && ()
@@ -449,14 +437,12 @@ const addValidationRule = () => {
     const newRule = {
         framework: ComplianceFramework.GDPR,
         field: 'user_id',
-        required: true,
+        required: true
     };
-    onSettingsChange({});
 };
-settings,
-    validation_rules;
-[...settings.validation_rules, newRule],
-;
+onSettingsChange({});
+settings;
+validation_rules: [...settings.validation_rules, newRule];
 ;
 ;
 const removeValidationRule = (index) => {
@@ -512,95 +498,84 @@ div >
 // Helper function for framework descriptions
 function getFrameworkDescription(framework) {
     const descriptions = {
-        [ComplianceFramework.GDPR]: 'General Data Protection Regulation (EU)',
-        [ComplianceFramework.CCPA]: 'California Consumer Privacy Act',
-        [ComplianceFramework.SOX]: 'Sarbanes-Oxley Act',
-        [ComplianceFramework.HIPAA]: 'Health Insurance Portability and Accountability Act',
-        [ComplianceFramework.ISO27001]: 'ISO 27001 Information Security Management',
-        [ComplianceFramework.PCI_DSS]: 'Payment Card Industry Data Security Standard',
-        [ComplianceFramework.NIST]: 'NIST Cybersecurity Framework',
-        [ComplianceFramework.FERPA]: 'Family Educational Rights and Privacy Act',
-        [ComplianceFramework.GLBA]: 'Gramm-Leach-Bliley Act',
-        [ComplianceFramework.FEDRAMP]: 'Federal Risk and Authorization Management Program',
+        [ComplianceFramework.GDPR]: 'General Data Protection Regulation (EU)'[ComplianceFramework.CCPA], 'California Consumer Privacy Act': [ComplianceFramework.SOX], 'Sarbanes-Oxley Act': [ComplianceFramework.HIPAA], 'Health Insurance Portability and Accountability Act': [ComplianceFramework.ISO27001], 'ISO 27001 Information Security Management': [ComplianceFramework.PCI_DSS], 'Payment Card Industry Data Security Standard': [ComplianceFramework.NIST], 'NIST Cybersecurity Framework': [ComplianceFramework.FERPA], 'Family Educational Rights and Privacy Act': [ComplianceFramework.GLBA], 'Gramm-Leach-Bliley Act': [ComplianceFramework.FEDRAMP], 'Federal Risk and Authorization Management Program': 
     };
-    return descriptions[framework] || framework;
-    // Utility functions (would be replaced with actual API calls)
-    async function fetchSecurityLoggingConfig() {
-        // Simulate API call
-        return {
-            enabled: true,
-            destinations: [
-                {
-                    id: '1',
-                    name: 'Primary Database',
-                    type: 'database',
-                    endpoint: 'postgresql://localhost:5432/security_logs',
-                    enabled: true,
-                    format: 'json',
-                    batch_size: 100,
-                    flush_interval: 30000,
-                },
-                {
-                    id: '2',
-                    name: 'SIEM Integration',
-                    type: 'siem',
-                    endpoint: 'https://siem.company.com/api/events',
-                    enabled: true,
-                    format: 'cef',
-                    credentials: { api_key: '***' }
-                }
-            ],
-            event_types: [
-                SecurityEventType.AUTHENTICATION_FAILURE,
-                SecurityEventType.CODE_INJECTION_ATTEMPT,
-                SecurityEventType.NETWORK_INTRUSION_ATTEMPT
-            ],
-            alert_rules: [],
-            retention_policies: [],
-            performance_settings: {
-                batch_processing_enabled: true,
+}
+;
+return descriptions[framework] || framework;
+// Utility functions (would be replaced with actual API calls)
+async function fetchSecurityLoggingConfig() {
+    return {
+        enabled: true,
+        destinations: [
+            {
+                id: '1',
+                name: 'Primary Database',
+                type: 'database',
+                endpoint: 'postgresql://localhost:5432/security_logs',
+                enabled: true,
+                format: 'json',
                 batch_size: 100,
-                batch_interval_ms: 60000,
-                queue_size_limit: 10000,
-                circuit_breaker_enabled: true,
-                circuit_breaker_threshold: 100,
-                rate_limit_per_minute: 1000,
+                flush_interval: 30000
             },
-            compliance_settings: {
-                frameworks: [ComplianceFramework.SOX, ComplianceFramework.GDPR],
-                automated_reporting: true,
-                external_notifications: true,
-                validation_rules: [],
-            },
-            function: saveSecurityLoggingConfig(config, SecurityLoggingConfig), void:  > {
-                // Simulate API call
-                await: new Promise(resolve => setTimeout(resolve, 1000)),
-                console, : .log('Saved configuration:', config),
-                function: testSecurityLoggingConfig(_config, SecurityLoggingConfig), Promise() {
-                    // Simulate configuration test
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    return {
-                        success: true,
-                        tests: [
-                            { name: 'Database Connection', status: 'pass' },
-                            { name: 'SIEM Integration', status: 'pass' },
-                            { name: 'Event Processing', status: 'pass' }
-                        ]
-                    };
-                    function validateConfiguration(config) {
-                        const errors = [];
-                        if (config.destinations.length === 0) {
-                            errors.push('At least one logging destination must be configured');
-                            if (config.event_types.length === 0) {
-                                errors.push('At least one event type must be selected for monitoring');
-                                // Add more validation rules as needed
-                                return errors;
-                                export default SecurityEventLoggingConfigPanel;
-                            }
-                        }
-                    }
+            { id: '2',
+                name: 'SIEM Integration',
+                type: 'siem',
+                endpoint: 'https://siem.company.com/api/events',
+                enabled: true,
+                format: 'cef' },
+            credentials, { api_key: '***' }
+        ],
+        event_types: [
+            SecurityEventType.AUTHENTICATION_FAILURE,
+            SecurityEventType.CODE_INJECTION_ATTEMPT,
+            SecurityEventType.NETWORK_INTRUSION_ATTEMPT
+        ],
+        alert_rules: [],
+        retention_policies: [],
+        performance_settings: {
+            batch_processing_enabled: true,
+            batch_size: 100,
+            batch_interval_ms: 60000,
+            queue_size_limit: 10000,
+            circuit_breaker_enabled: true,
+            circuit_breaker_threshold: 100,
+            rate_limit_per_minute: 1000
+        },
+        compliance_settings: {
+            frameworks: [ComplianceFramework.SOX, ComplianceFramework.GDPR],
+            automated_reporting: true,
+            external_notifications: true,
+            validation_rules: []
+        }
+    };
+    async function saveSecurityLoggingConfig(config) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('Saved configuration:', config);
+        async function testSecurityLoggingConfig(_config) {
+            // Simulate configuration test
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            return {
+                success: true
+            };
+            tests: [
+                { name: 'Database Connection', status: 'pass' },
+                { name: 'SIEM Integration', status: 'pass' },
+                { name: 'Event Processing', status: 'pass' }
+            ];
+        }
+        ;
+        function validateConfiguration(config) {
+            const errors = [];
+            if (config.destinations.length === 0) {
+                errors.push('At least one logging destination must be configured');
+                if (config.event_types.length === 0) {
+                    errors.push('At least one event type must be selected for monitoring');
+                    // Add more validation rules as needed
+                    return errors;
+                    export default SecurityEventLoggingConfigPanel;
                 }
             }
-        };
+        }
     }
 }

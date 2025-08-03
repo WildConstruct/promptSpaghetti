@@ -1,10 +1,18 @@
+// Enhanced data model reflecting actual editor usage patterns
+choices: string;
+weights: number;
+variableType ?  : 'string' | 'number' | 'boolean' | 'object' | 'auto';
+scope ?  : 'global' | 'local' | 'session';
+persistent ?  : boolean;
+allowOverwrite ?  : boolean;
+variableName: string;
+defaultValue ?  : string;
+variableType ?  : 'string' | 'number' | 'boolean' | 'object' | 'auto';
+scope ?  : 'global' | 'local' | 'session';
+required ?  : boolean;
 // Type guards
-export function isRuntimeNodeType(type) {
-    return ['WeightedChoice', 'Concat', 'Output', 'Include', 'SetVariable', 'GetVariable'].includes(type);
-}
-export function isUINodeType(type) {
-    return ['Subject', 'Connector', 'Attribute', 'Action'].includes(type);
-}
+export function isRuntimeNodeType(type) { return ['WeightedChoice', 'Concat', 'Output', 'Include', 'SetVariable', 'GetVariable'].includes(type); }
+export function isUINodeType(type) { return ['Subject', 'Connector', 'Attribute', 'Action'].includes(type); }
 // Node data factory functions
 export function createBaseNodeData(id, label) {
     return {
@@ -16,17 +24,19 @@ export function createBaseNodeData(id, label) {
         tags: [],
         includeMetadata: false,
         transformations: [],
-        contextHints: [],
+        contextHints: []
     };
 }
+;
 export function createWeightedChoiceNodeData(id, label = 'Weighted Choice') {
     return {
         ...createBaseNodeData(id, label),
         type: 'WeightedChoice',
         choices: [],
-        weights: [],
+        weights: []
     };
 }
+;
 export function createConcatNodeData(id, label = 'Concat') {
     return {
         ...createBaseNodeData(id, label),
@@ -34,26 +44,29 @@ export function createConcatNodeData(id, label = 'Concat') {
         separator: ' ',
         joinMode: 'space',
         trimInputs: true,
-        preserveOrder: true,
+        preserveOrder: true
     };
 }
+;
 export function createOutputNodeData(id, label = 'Output') {
     return {
         ...createBaseNodeData(id, label),
         type: 'Output',
         template: '',
         format: 'text',
-        destination: 'stdout',
+        destination: 'stdout'
     };
 }
+;
 export function createIncludeNodeData(id, label = 'Include') {
     return {
         ...createBaseNodeData(id, label),
         type: 'Include',
         name: '',
-        includeType: 'template',
+        includeType: 'template'
     };
 }
+;
 export function createSetVariableNodeData(id, label = 'Set Variable') {
     return {
         ...createBaseNodeData(id, label),
@@ -63,9 +76,10 @@ export function createSetVariableNodeData(id, label = 'Set Variable') {
         variableType: 'auto',
         scope: 'global',
         persistent: false,
-        allowOverwrite: true,
+        allowOverwrite: true
     };
 }
+;
 export function createGetVariableNodeData(id, label = 'Get Variable') {
     return {
         ...createBaseNodeData(id, label),
@@ -74,9 +88,10 @@ export function createGetVariableNodeData(id, label = 'Get Variable') {
         defaultValue: '',
         variableType: 'auto',
         scope: 'global',
-        required: false,
+        required: false
     };
 }
+;
 export function createSubjectNodeData(id, label = 'Subject') {
     return {
         ...createBaseNodeData(id, label),
@@ -85,9 +100,10 @@ export function createSubjectNodeData(id, label = 'Subject') {
         grammaticalPerson: 'third',
         allowPronouns: false,
         pronouns: [],
-        baseForm: '',
+        baseForm: ''
     };
 }
+;
 export function createActionNodeData(id, label = 'Action') {
     return {
         ...createBaseNodeData(id, label),
@@ -97,9 +113,10 @@ export function createActionNodeData(id, label = 'Action') {
         mood: 'indicative',
         requiresObject: false,
         intensity: 'medium',
-        adverbVariations: [],
+        adverbVariations: []
     };
 }
+;
 // Factory function dispatcher
 export function createNodeData(type, id, label) {
     switch (type) {
@@ -125,52 +142,50 @@ export function createNodeData(type, id, label) {
             // Fallback for unimplemented types
             return {
                 ...createBaseNodeData(id, label || type),
-                type: type,
+                type: type
             };
     }
-}
-export function serializeForRuntime(nodeData) {
-    if (!isRuntimeNodeType(nodeData.type)) {
-        // UI-only nodes cannot be serialized for runtime
-        return null;
+    ;
+    // Convert UI node data to runtime-compatible format
+    export function serializeForRuntime(nodeData) {
+        if (!isRuntimeNodeType(nodeData.type)) {
+            // UI-only nodes cannot be serialized for runtime
+            return null;
+        }
+        const base = {
+            id: nodeData.id,
+            type: nodeData.type };
     }
-    const base = {
-        id: nodeData.id,
-        type: nodeData.type,
-    };
+    ;
     switch (nodeData.type) {
         case 'WeightedChoice':
             return {
                 ...base,
                 choices: nodeData.choices.map((choice, index) => ({
                     value: choice,
-                    weight: nodeData.weights[index] || 1,
-                }))
+                    weight: nodeData.weights[index] || 1 }))
             };
-        case 'Concat':
-            return base; // Concat nodes are handled by the runtime with input connections
-        case 'Output':
-            return base; // Output nodes are handled by the runtime
-        case 'Include':
-            return {
-                ...base,
-                name: nodeData.name,
-            };
-        case 'SetVariable':
-            return {
-                ...base,
-                key: nodeData.variableName,
-                value: nodeData.value,
-            };
-        case 'GetVariable':
-            return {
-                ...base,
-                key: nodeData.variableName,
-            };
-        default:
-            return base;
     }
+    ;
+    'Concat';
+    return base; // Concat nodes are handled by the runtime with input connections
+    'Output';
+    return base; // Output nodes are handled by the runtime
+    'Include';
+    return { ...base,
+        name: nodeData.name };
 }
+;
+'SetVariable';
+return { ...base,
+    key: nodeData.variableName,
+    value: nodeData.value };
+;
+'GetVariable';
+return { ...base,
+    key: nodeData.variableName };
+;
+return base;
 // Convert runtime node data back to UI format
 export function deserializeFromRuntime(runtimeData) {
     if (!isRuntimeNodeType(runtimeData.type)) {
@@ -184,33 +199,30 @@ export function deserializeFromRuntime(runtimeData) {
             const weights = (runtimeData.choices || []).map((c) => c.weight || 1);
             return {
                 ...createWeightedChoiceNodeData(id),
-                choices,
-                weights
+                choices
             };
-        case 'Concat':
-            return createConcatNodeData(id);
-        case 'Output':
-            return createOutputNodeData(id);
-        case 'Include':
-            return {
-                ...createIncludeNodeData(id),
-                name: runtimeData.name || '',
-            };
-        case 'SetVariable':
-            return {
-                ...createSetVariableNodeData(id),
-                variableName: runtimeData.key || '',
-                value: runtimeData.value || '',
-            };
-        case 'GetVariable':
-            return {
-                ...createGetVariableNodeData(id),
-                variableName: runtimeData.key || '',
-            };
-        default:
-            return null;
+            weights;
     }
+    ;
+    'Concat';
+    return createConcatNodeData(id);
+    'Output';
+    return createOutputNodeData(id);
+    'Include';
+    return { ...createIncludeNodeData(id),
+        name: runtimeData.name || '' };
 }
+;
+'SetVariable';
+return { ...createSetVariableNodeData(id),
+    variableName: runtimeData.key || '',
+    value: runtimeData.value || '' };
+;
+'GetVariable';
+return { ...createGetVariableNodeData(id),
+    variableName: runtimeData.key || '' };
+;
+return null;
 // Validation utilities
 export function validateNodeData(nodeData) {
     const errors = [];
@@ -232,18 +244,18 @@ export function validateNodeData(nodeData) {
         if (data.choices && data.weights && data.choices.length !== data.weights.length) {
             errors.push('WeightedChoice nodes must have matching choices and weights arrays');
         }
-    }
-    if (nodeData.type === 'Include') {
-        const data = nodeData;
-        if (!data.name) {
-            errors.push('Include nodes must have a name');
+        if (nodeData.type === 'Include') {
+            const data = nodeData;
+            if (!data.name) {
+                errors.push('Include nodes must have a name');
+            }
+            if (nodeData.type === 'SetVariable' || nodeData.type === 'GetVariable') {
+                const data = nodeData;
+                if (!data.variableName) {
+                    errors.push(`${nodeData.type} nodes must have a variable name`);
+                }
+            }
+            return errors;
         }
     }
-    if (nodeData.type === 'SetVariable' || nodeData.type === 'GetVariable') {
-        const data = nodeData;
-        if (!data.variableName) {
-            errors.push(`${nodeData.type} nodes must have a variable name`);
-        }
-    }
-    return errors;
 }

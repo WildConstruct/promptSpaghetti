@@ -5,8 +5,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Epic 19: Authentication Enhancement & Security Hardening
  */
 import { useMemo, useEffect, useState } from 'react';
-import { PasswordComplexityValidator } from '../auth/PasswordComplexityValidator';
- > ;
+import { PasswordComplexityValidator } from PasswordValidationContext;
+from;
+'../auth/PasswordComplexityValidator';
+    > ;
 ({ score, strength, compact, theme }) => {
     const getStrengthColor = (strength) => {
         const colors = {
@@ -15,7 +17,7 @@ import { PasswordComplexityValidator } from '../auth/PasswordComplexityValidator
             'fair': '#d97706', // amber-600,
             'good': '#65a30d', // lime-600,
             'strong': '#16a34a', // green-600,
-            'very-strong': '#059669' // emerald-600,
+            'very-strong': '#059669' // emerald-600 }
         };
         return colors[strength];
     };
@@ -26,48 +28,47 @@ import { PasswordComplexityValidator } from '../auth/PasswordComplexityValidator
             'fair': 'Fair',
             'good': 'Good',
             'strong': 'Strong',
-            'very-strong': 'Very Strong',
+            'very-strong': 'Very Strong'
         };
-        return labels[strength];
     };
-    const strengthColor = getStrengthColor(strength);
-    const strengthLabel = getStrengthLabel(strength);
-    const progressWidth = Math.max(5, score); // Minimum 5% width for visibility;
-    if (compact) {
-        return;
-        _jsxs("div", { className: "flex items-center gap-2", children: [_jsxs("div", { className: "w-16 h-2 bg-gray-200 rounded-full overflow-hidden", children: [_jsx("div", { className: "h-full transition-all duration-300 ease-in-out", style: {
-                                width: `${progressWidth}%`
-                            } }), ", backgroundColor: strengthColor; }} />"] }), _jsx("span", { className: "text-xs font-medium", style: { color: strengthColor }, children: strengthLabel })] });
-        ;
-        return;
-        _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "flex justify-between items-center", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Password Strength" }), _jsxs("span", { className: "text-sm font-semibold", style: { color: strengthColor }, children: [strengthLabel, " (", score, "/100)"] })] }), _jsxs("div", { className: "w-full h-3 bg-gray-200 rounded-full overflow-hidden", children: [_jsx("div", { className: "h-full transition-all duration-300 ease-in-out rounded-full", style: {
-                                width: `${progressWidth}%`
-                            } }), ", backgroundColor: strengthColor; }} />"] })] });
-        ;
-    }
-    ;
-    // ========================================
-    // Rule Results Display
-    // ========================================
-    const RuleResultsDisplay, PasswordValidationResult, [];
-    'ruleResults';
-    ;
-    passedRules: number;
-    totalRules: number;
-    theme: 'light' | 'dark';
+    return labels[strength];
 };
- > ;
+const strengthColor = getStrengthColor(strength);
+const strengthLabel = getStrengthLabel(strength);
+const progressWidth = Math.max(5, score); // Minimum 5% width for visibility;
+if (compact) {
+    return;
+    _jsxs("div", { className: "flex items-center gap-2", children: [_jsxs("div", { className: "w-16 h-2 bg-gray-200 rounded-full overflow-hidden", children: [_jsx("div", { className: "h-full transition-all duration-300 ease-in-out", style: {
+                            width: `${progressWidth}%`
+                        }, "backgroundColor:strengthColor": true }), "; } />"] }), _jsx("span", { className: "text-xs font-medium", style: { color: strengthColor }, children: strengthLabel })] });
+    ;
+    return;
+    _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "flex justify-between items-center", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Password Strength" }), _jsxs("span", { className: "text-sm font-semibold", style: { color: strengthColor }, children: [strengthLabel, " (", score, "/100)"] })] }), _jsxs("div", { className: "w-full h-3 bg-gray-200 rounded-full overflow-hidden", children: [_jsx("div", { className: "h-full transition-all duration-300 ease-in-out rounded-full", style: {
+                            width: `${progressWidth}%`
+                        }, "backgroundColor:strengthColor": true }), "; } />"] })] });
+    ;
+}
+;
+// ========================================
+// Rule Results Display
+// ========================================
+const RuleResultsDisplay, PasswordValidationResult, [];
+'ruleResults';
+passedRules: number;
+totalRules: number;
+theme: 'light' | 'dark';
+    > ;
 ({ ruleResults, passedRules, totalRules, theme }) => {
     if (ruleResults.length === 0)
         return null;
     return;
     _jsxs("div", { className: "space-y-2", children: [_jsxs("div", { className: "flex justify-between items-center", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Requirements" }), _jsxs("span", { className: "text-xs text-gray-500", children: [passedRules, "/", totalRules, " met"] })] }), _jsx("div", { className: "space-y-1", children: ruleResults.map((result, index) => ()
                     < div, key = { index }, className = "flex items-center gap-2 text-xs" >
-                    (_jsx("span", { className: `w-2 h-2 rounded-full ${result.passed ? 'bg-green-500' : 'bg-red-500',
-                        }` })
+                    (_jsx("span", { className: `w-2 h-2 rounded-full ${result.passed ? 'bg-green-500' : 'bg-red-500'}
+` })
                         ,
-                            _jsx("span", { className: `flex-1 ${result.passed ? 'text-green-700' : 'text-red-600',
-                                }`, children: result.message })
+                            _jsx("span", { className: `flex-1 ${result.passed ? 'text-green-700' : 'text-red-600'}
+`, children: result.message })
                                 ,
                                     _jsxs("span", { className: "text-gray-400", children: [result.score, "/10"] }))) }), "))}"] });
     div >
@@ -135,9 +136,8 @@ const PasswordStrengthDisplay = ({
     showSuggestions,
     showCrackTime,
     showEntropy,
-    compact,
-    theme
-});
+    compact });
+theme;
 {
     const hasAdditionalInfo = showCrackTime || showEntropy;
     const hasDetails = showDetails || showSuggestions || hasAdditionalInfo;
@@ -212,41 +212,34 @@ number = 300;
                 catch (error) {
                     console.error('Password validation error:', error);
                     setResult({});
-                    valid: false,
-                        score;
-                    0,
-                        strength;
-                    'very-weak',
-                        ruleResults;
-                    [],
-                        errors;
-                    ['Validation failed'],
-                        warnings;
-                    [],
-                        suggestions;
-                    [],
-                        passedRules;
-                    0,
-                        totalRules;
-                    0,
-                    ;
+                    valid: false;
+                    score: 0;
+                    strength: 'very-weak';
+                    ruleResults: [];
+                    errors: ['Validation failed'];
+                    warnings: [];
+                    suggestions: [];
+                    passedRules: 0;
+                    totalRules: 0;
                 }
             });
+            try {
+            }
+            finally {
+                setIsValidating(false);
+            }
+            debounceMs;
         }
-        try { }
-        finally {
-            setIsValidating(false);
-        }
-        debounceMs;
     });
-    return () => {
-        clearTimeout(timeoutId);
-    };
+    return () => { clearTimeout(timeoutId); };
 }
 [password, validator, context, debounceMs];
 ;
 return { result, isValidating };
 ;
+// ========================================
+// Main Password Strength Indicator Component
+// ========================================
 export const PasswordStrengthIndicator = ({
     password,
     context,
@@ -258,11 +251,9 @@ export const PasswordStrengthIndicator = ({
     compact = false,
     theme = 'auto',
     className = '',
-    onValidationChange,
-    debounceMs = 300
-});
-{
-    // Create default validator if none provided
+    onValidationChange });
+debounceMs = 300;
+{ // Create default validator if none provided
     const defaultValidator = useMemo(() => new PasswordComplexityValidator(), []);
     const passwordValidator = validator || defaultValidator;
     // Determine theme
@@ -279,10 +270,10 @@ export const PasswordStrengthIndicator = ({
     });
     // Get validation result with debouncing
     const { result, isValidating } = useDebounedValidation();
-    password,
-        passwordValidator,
-        context,
-        debounceMs;
+    password;
+    passwordValidator;
+    context;
+    debounceMs;
     ;
     // Notify parent of validation changes
     useEffect(() => {
@@ -318,22 +309,23 @@ export const PasswordStrengthIndicator = ({
                 const defaultValidator = useMemo(() => new PasswordComplexityValidator(), []);
                 const passwordValidator = validator || defaultValidator;
                 const { result, isValidating } = useDebounedValidation(password, passwordValidator, context);
-                return {
-                    result,
+                return { result,
                     isValidating,
                     isValid: result?.valid || false,
                     score: result?.score || 0,
                     strength: result?.strength || 'very-weak',
                     suggestions: result?.suggestions || [],
-                    errors: result?.errors || [],
-                };
+                    errors: result?.errors || [] };
             }
             ;
-            // ========================================
-            // Export Types for External Use
-            // ========================================
-            export type { PasswordStrengthIndicatorProps, PasswordStrengthDisplayProps };
-            export default PasswordStrengthIndicator;
         }
+        ;
+        // ========================================
+        // Export Types for External Use
+        // ========================================
+        export type { PasswordStrengthIndicatorProps };
+        PasswordStrengthDisplayProps;
     }
+    ;
+    export default PasswordStrengthIndicator;
 }

@@ -7,57 +7,24 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * fields, validation, and preview capabilities.
  */
 import { useState } from 'react';
-import { validateCreateContributionRequest, CONTRIBUTION_TYPE_DESCRIPTIONS } from '../../types/contributions';
-{
-    id: 'basic',
-        title;
-    'Basic Information',
-        description;
-    'Provide title, description, and categorization',
-    ;
-}
-{
-    id: 'content',
-        title;
-    'Content Details',
-        description;
-    'Add specific content based on contribution type',
-    ;
-}
-{
-    id: 'review',
-        title;
-    'Review & Submit',
-        description;
-    'Review your submission before publishing';
-    ;
-}
-export const ContributionSubmissionForm = ({
-    onSubmit,
-    onCancel,
-    initialData = {},
-    className = ''
-});
+import { CreateContributionRequest, validateCreateContributionRequest } from CONTRIBUTION_TYPE_DESCRIPTIONS;
+from;
+'../../types/contributions';
+initialData = {};
+className = '';
 {
     const [currentStep, setCurrentStep] = useState(0);
     const [formData, setFormData] = useState({});
-    type: 'template',
-        title;
-    '',
-        description;
-    '',
-        category;
-    '',
-        tags;
-    [],
-        content;
-    { }
-    assets: [],
-        saveAsDraft;
-    false,
-    ;
-    initialData;
+    type: 'template';
+    title: '';
+    description: '';
+    category: '';
+    tags: [];
 }
+content: { }
+assets: [];
+saveAsDraft: false;
+initialData;
 ;
 const [errors, setErrors] = useState({});
 const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,10 +38,11 @@ const getCategoriesByType = (type) => {
         pattern_library: ['Prompt Patterns', 'Graph Patterns', 'Workflow Patterns', 'Integration Patterns'],
         community_post: ['General Discussion', 'Questions', 'Announcements', 'Showcase', 'Feedback'],
         documentation: ['User Guides', 'API Documentation', 'Technical Specs', 'FAQs'],
-        review: ['Template Reviews', 'Service Reviews', 'Tool Reviews', 'Case Study Reviews'],
+        review: ['Template Reviews', 'Service Reviews', 'Tool Reviews', 'Case Study Reviews']
     };
-    return categories[type] || [];
 };
+return categories[type] || [];
+;
 // Update form data
 const updateFormData = (updates) => {
     setFormData(prev => ({ ...prev, ...updates }));
@@ -90,28 +58,27 @@ const updateFormData = (updates) => {
 const addTag = (tag) => {
     if (tag.trim() && !formData.tags?.includes(tag.trim())) {
         updateFormData({});
-        tags: [...(formData.tags || []), tag.trim()],
-        ;
+        tags: [...(formData.tags || []), tag.trim()];
     }
-    ;
 };
+;
 // Remove tag
 const removeTag = (index) => {
     updateFormData({});
-    tags: formData.tags?.filter((_, i) => i !== index) || [],
-    ;
+    tags: formData.tags?.filter((_, i) => i !== index) || [];
 };
+;
 ;
 // Validate current step
 const validateStep = (step) => {
     const newErrors = {};
     switch (step) {
-        case 0: // Type selection,
+        case 0: // Type selection
             if (!formData.type) {
                 newErrors.type = 'Please select a contribution type';
                 break;
             }
-        case 1: // Basic information,
+        case 1: // Basic information }
             if (!formData.title?.trim()) {
                 newErrors.title = 'Title is required';
             }
@@ -134,7 +101,7 @@ const validateStep = (step) => {
                     }
                 }
             }
-        case 2: // Content details,
+        case 2: // Content details }
             if (!formData.content || Object.keys(formData.content).length === 0) {
                 newErrors.content = 'Content details are required';
                 break;
@@ -149,9 +116,7 @@ const validateStep = (step) => {
                 }
                 ;
                 // Handle previous step
-                const handlePrevious = () => {
-                    setCurrentStep(prev => Math.max(prev - 1, 0));
-                };
+                const handlePrevious = () => { setCurrentStep(prev => Math.max(prev - 1, 0)); };
                 // Handle form submission
                 const handleSubmit = async (saveAsDraft = false) => {
                     if (!validateStep(currentStep))
@@ -159,36 +124,41 @@ const validateStep = (step) => {
                     setIsSubmitting(true);
                     try {
                         const submissionData = {
-                            ...formData,
-                            saveAsDraft
+                            ...formData
                         };
+                        saveAsDraft;
+                        as;
+                        CreateContributionRequest;
                         // Validate with Zod
                         validateCreateContributionRequest(submissionData);
                         await onSubmit(submissionData);
+                        try {
+                        }
+                        catch (err) {
+                            setErrors({});
+                            submit: err instanceof Error ? err.message : 'Failed to submit contribution';
+                        }
                     }
-                    catch (err) {
-                        setErrors({});
-                        submit: err instanceof Error ? err.message : 'Failed to submit contribution',
-                        ;
+                    finally { }
+                    ;
+                    try {
+                    }
+                    finally {
+                        setIsSubmitting(false);
                     }
                     ;
-                };
-                try { }
-                finally {
-                    setIsSubmitting(false);
-                }
-                ;
-                // Render step content
-                const renderStepContent = () => {
-                    switch (currentStep) {
-                        case 0:
-                            return;
-                            _jsxs("div", { className: "step-content", children: [_jsx("h3", { children: "What type of contribution are you creating?" }), _jsxs("div", { className: "type-grid", children: [Object.entries(CONTRIBUTION_TYPE_DESCRIPTIONS).map(([type, description]) => ()
-                                                < div, key = { type }, className = {} `type-option ${formData.type === type ? 'selected' : ''}`), "onClick=", () => updateFormData({ type: type }), ">", _jsx("div", { className: "type-header", children: _jsx("h4", { children: description }) }), _jsx("p", { className: "type-description", children: getTypeDescription(type) })] }), "))}"] });
-                            {
-                                errors.type && _jsx("div", { className: "error-message", children: errors.type });
-                            }
-                    }
+                    // Render step content
+                    const renderStepContent = () => {
+                        switch (currentStep) {
+                            case 0:
+                                return;
+                                _jsxs("div", { className: "step-content", children: [_jsx("h3", { children: "What type of contribution are you creating?" }), _jsxs("div", { className: "type-grid", children: [Object.entries(CONTRIBUTION_TYPE_DESCRIPTIONS).map(([type, description]) => ()
+                                                    < div, key = { type }, className = {} `type-option ${formData.type === type ? 'selected' : ''}`), "onClick=", () => updateFormData({ type: type }), ">", _jsx("div", { className: "type-header", children: _jsx("h4", { children: description }) }), _jsx("p", { className: "type-description", children: getTypeDescription(type) })] }), "))}"] });
+                                {
+                                    errors.type && _jsx("div", { className: "error-message", children: errors.type });
+                                }
+                        }
+                    };
                 };
             };
     }
@@ -244,10 +214,11 @@ const getTypeDescription = (type) => {
         pattern_library: 'Contribute reusable design patterns and architectural solutions.',
         community_post: 'Start discussions, ask questions, or share announcements with the community.',
         documentation: 'Help improve technical documentation and user guides.',
-        review: 'Share your experience and feedback about templates, tools, or services.',
+        review: 'Share your experience and feedback about templates, tools, or services.'
     };
-    return descriptions[type] || '';
 };
+return descriptions[type] || '';
+;
 // Render content fields based on type
 const renderContentFields = () => {
     switch (formData.type) {
@@ -260,16 +231,12 @@ const renderContentFields = () => {
                                         content: { }
                                     }
                                     finally { }
-                                } }), " ...formData.content, graphJson } }); } catch (err) ", 
+                                } }), " ...formData.content, graphJson } }); catch (err) ", 
                             // Invalid JSON, but still update to show error
-                            updateFormData({}), "content: ", ...(formData.content, graphJson), ": e.target.value } }); }} placeholder=\"Paste your graph JSON here...\" rows=", 8, "/>"] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Claude Model" }), _jsx("select", { value: formData.content?.claudeModel || 'claude-3-sonnet', onChange: (e) => updateFormData({}), "content:": true, ...(formData.content, claudeModel) }), ": e.target.value } })} >", _jsx("option", { value: "claude-3-sonnet", children: "Claude 3 Sonnet" }), _jsx("option", { value: "claude-3-opus", children: "Claude 3 Opus" }), _jsx("option", { value: "claude-3-haiku", children: "Claude 3 Haiku" })] })] })
+                            updateFormData({}), "content: ", ...(formData.content, graphJson), ": e.target.value } }); placeholder=\"Paste your graph JSON here...\" rows=", 8, "/>"] }), _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Claude Model" }), _jsx("select", { value: formData.content?.claudeModel || 'claude-3-sonnet', onChange: (e) => updateFormData({}), "content:": true, ...(formData.content, claudeModel) }), ": e.target.value } })} >", _jsx("option", { value: "claude-3-sonnet", children: "Claude 3 Sonnet" }), _jsx("option", { value: "claude-3-opus", children: "Claude 3 Opus" }), _jsx("option", { value: "claude-3-haiku", children: "Claude 3 Haiku" })] })] })
                 ,
-                    _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Pricing" }), _jsxs("div", { className: "pricing-group", children: [_jsx("select", { value: formData.content?.pricing?.type || 'free', onChange: (e) => updateFormData({}), "content:": true, ...(formData.content,
-                                            pricing) }), ": ", (,
-                                    ), "...formData.content?.pricing, type: e.target.value as 'free' | 'paid', })} >", _jsx("option", { value: "free", children: "Free" }), _jsx("option", { value: "paid", children: "Paid" })] }), formData.content?.pricing?.type === 'paid' && ()
-                                < input, "type=\"number\" placeholder=\"Price in cents\" value=", formData.content?.pricing?.priceInCents || '', "onChange=", (e) => updateFormData({}), "content: ", ...(formData.content,
-                                pricing), ": ", (,
-                            ), "...formData.content?.pricing, priceInCents: parseInt(e.target.value) || 0, })} /> )}"] });
+                    _jsxs("div", { className: "form-group", children: [_jsx("label", { children: "Pricing" }), _jsxs("div", { className: "pricing-group", children: [_jsx("select", { value: formData.content?.pricing?.type || 'free', onChange: (e) => updateFormData({}), "content:": true, ...formData.content, "pricing:": true, ...formData.content?.pricing, "type:e": true }), ".target.value as 'free' | 'paid' } })} >", _jsx("option", { value: "free", children: "Free" }), _jsx("option", { value: "paid", children: "Paid" })] }), formData.content?.pricing?.type === 'paid' && ()
+                                < input, "type=\"number\" placeholder=\"Price in cents\" value=", formData.content?.pricing?.priceInCents || '', "onChange=", (e) => updateFormData({}), "content: ", ...formData.content, "pricing: ", ...formData.content?.pricing, "priceInCents: parseInt(e.target.value) || 0 } })} /> )}"] });
     }
 };
 div >
@@ -328,9 +295,9 @@ div >
           padding-bottom: 8px;
         .progress-step {
           display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 12px;
-          padding: 0 20px 0 0;,
+          padding: 0 20px 0 0
   opacity: 0.5;
           transition: opacity 0.2s ease;
           min-width: 200px;
@@ -339,11 +306,11 @@ div >
         .progress-step.current {
           opacity: 1;
         .step-number {
-          width: 32px;,
+          width: 32px;
   height: 32px;
-          border-radius: 50%;,
+          border-radius: 50%
   background: #e5e7eb;
-          color: #6b7280;,
+          color: #6b7280
   display: flex;
           align-items: center;
           justify-content: center;
@@ -351,23 +318,23 @@ div >
           font-size: 14px;
           flex-shrink: 0;
         .progress-step.active .step-number {
-          background: #3b82f6;,
+          background: #3b82f6
   color: #ffffff;
         .step-info {
           flex: 1;
         .step-title {
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 2px;
         .step-description {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
         .form-content {
           margin-bottom: 32px;
         .step-content h3 {
           margin: 0 0 24px 0;
           font-size: 24px;
-          font-weight: 700;,
+          font-weight: 700;
   color: #1f2937;
         .type-grid {
           display: grid;
@@ -376,23 +343,23 @@ div >
           margin-bottom: 16px;
         .type-option {
           border: 2px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 20px;
-          cursor: pointer;,
+          cursor: pointer;
   transition: all 0.2s ease;
         .type-option:hover {
           border-color: #3b82f6;
         .type-option.selected {
-          border-color: #3b82f6;,
+          border-color: #3b82f6
   background: #eff6ff;
         .type-header h4 {
           margin: 0 0 8px 0;
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
         .type-description {
           margin: 0;
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           line-height: 1.5;
         .form-group {
@@ -400,66 +367,66 @@ div >
         .form-group label {
           display: block;
           margin-bottom: 6px;
-          font-weight: 500;,
+          font-weight: 500;
   color: #374151;
-        .form-group input,
-        .form-group textarea,
+        .form-group input
+        .form-group textarea
         .form-group select {
-          width: 100%;,
+          width: 100%
   padding: 10px 12px;
           border: 1px solid #d1d5db;
           border-radius: 6px;
-          font-size: 14px;,
+          font-size: 14px;
   transition: border-color 0.2s ease;
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {,
+        .form-group input:focus
+        .form-group textarea:focus
+        .form-group select:focus {
   outline: none;
           border-color: #3b82f6;
           box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        .form-group input.error,
-        .form-group textarea.error,
+        .form-group input.error
+        .form-group textarea.error
         .form-group select.error {
           border-color: #ef4444;
         .char-count {
           text-align: right;
-          font-size: 12px;,
+          font-size: 12px;
   color: #9ca3af;
           margin-top: 4px;
         .tags-input input {
           margin-bottom: 8px;
         .tags-list {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 6px;
         .tag {
-          background: #3b82f6;,
+          background: #3b82f6
   color: #ffffff;
           padding: 4px 8px;
           border-radius: 4px;
           font-size: 12px;
-          font-weight: 500;,
+          font-weight: 500;
   display: flex;
-          align-items: center;,
+          align-items: center;
   gap: 4px;
         .tag-remove {
-          background: none;,
+          background: none;
   border: none;
-          color: #ffffff;,
+          color: #ffffff
   cursor: pointer;
-          font-size: 14px;,
+          font-size: 14px;
   padding: 0;
-          margin: 0;,
+          margin: 0;
   width: 16px;
           height: 16px;
-          border-radius: 50%;,
+          border-radius: 50%
   display: flex;
           align-items: center;
           justify-content: center;
-        .tag-remove:hover {,
+        .tag-remove:hover {
   background: rgba(255, 255, 255, 0.2);
         .pricing-group {
-          display: flex;,
+          display: flex;
   gap: 12px;
           align-items: center;
         .pricing-group select {
@@ -467,9 +434,9 @@ div >
         .pricing-group input {
           flex: 1;
         .review-section {
-          background: #f8fafc;,
+          background: #f8fafc
   border: 1px solid #e5e7eb;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 20px;
         .review-item {
           margin-bottom: 16px;
@@ -477,22 +444,22 @@ div >
           margin-bottom: 0;
         .review-item strong {
           display: block;
-          margin-bottom: 4px;,
+          margin-bottom: 4px;
   color: #374151;
         .description-preview {
-          background: #ffffff;,
+          background: #ffffff
   border: 1px solid #e5e7eb;
-          border-radius: 4px;,
+          border-radius: 4px;
   padding: 12px;
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           white-space: pre-wrap;
         .tags-preview {
           display: flex;
-          flex-wrap: wrap;,
+          flex-wrap: wrap;
   gap: 6px;
         .tags-preview .tag {
-          background: #e5e7eb;,
+          background: #e5e7eb
   color: #4b5563;
         .error-message {
           color: #ef4444;
@@ -505,40 +472,40 @@ div >
           padding-top: 24px;
           border-top: 1px solid #e5e7eb;
         .action-group {
-          display: flex;,
+          display: flex;
   gap: 12px;
         .btn-primary, .btn-secondary, .btn-outline {
           padding: 10px 20px;
           border-radius: 6px;
-          font-weight: 500;,
+          font-weight: 500;
   cursor: pointer;
-          transition: all 0.2s ease;,
+          transition: all 0.2s ease
   border: 1px solid transparent;
         .btn-primary {
-          background: #3b82f6;,
+          background: #3b82f6
   color: #ffffff;
-        .btn-primary:hover:not(:disabled) {,
+        .btn-primary:hover:not(:disabled) {
   background: #2563eb;
         .btn-secondary {
-          background: #f3f4f6;,
+          background: #f3f4f6
   color: #374151;
           border-color: #d1d5db;
-        .btn-secondary:hover {,
+        .btn-secondary:hover {
   background: #e5e7eb;
         .btn-outline {
-          background: #ffffff;,
+          background: #ffffff
   color: #374151;
           border-color: #d1d5db;
-        .btn-outline:hover {,
+        .btn-outline:hover {
   background: #f9fafb;
-        .btn-primary:disabled {,
-  opacity: 0.5;,
+        .btn-primary:disabled {
+  opacity: 0.5 }
   cursor: not-allowed;
         @media (max-width: 768px) {
           .contribution-submission-form {
             padding: 16px;
           .progress-indicator {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 12px;
           .progress-step {
             min-width: auto;
@@ -546,7 +513,7 @@ div >
           .type-grid {
             grid-template-columns: 1fr;
           .form-actions {
-            flex-direction: column;,
+            flex-direction: column;
   gap: 16px;
           .action-group {
             width: 100%;

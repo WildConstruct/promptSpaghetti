@@ -6,24 +6,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Builds upon existing TemplatePreviewModal and EmbeddableContent infrastructure.
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { EyeIcon, ShareIcon, HeartIcon, StarIcon, DownloadIcon, CodeBracketIcon, LinkIcon, PhotoIcon, PlayIcon, ArrowsPointingOutIcon, ClipboardDocumentIcon, CheckIcon, Cog6ToothIcon, DevicePhoneMobileIcon, ComputerDesktopIcon, TabletIcon, PaintBrushIcon, AdjustmentsHorizontalIcon, ChatBubbleLeftIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, ShareIcon, HeartIcon, StarIcon, DownloadIcon, CodeBracketIcon, LinkIcon, PhotoIcon, PlayIcon, ArrowsPointingOutIcon, ClipboardDocumentIcon, CheckIcon, Cog6ToothIcon, PaintBrushIcon, AdjustmentsHorizontalIcon } from ChatBubbleLeftIcon;
+from;
+'@heroicons/react/24/outline';
 ;
-customFonts ?  : {
-    heading: string,
-    body: string
-};
-export const PREVIEW_SIZES = [
-    { width: 320, height: 568, label: 'Mobile', icon: DevicePhoneMobileIcon, description: 'iPhone/Android portrait' },
-    { width: 768, height: 1024, label: 'Tablet', icon: TabletIcon, description: 'iPad portrait' },
-    { width: 1024, height: 768, label: 'Tablet Landscape', icon: TabletIcon, description: 'iPad landscape' },
-    { width: 1200, height: 630, label: 'Desktop', icon: ComputerDesktopIcon, description: 'Standard desktop view' },
-    { width: 400, height: 600, label: 'Widget', icon: ArrowsPointingOutIcon, description: 'Sidebar widget' },
-    { width: 800, height: 400, label: 'Banner', icon: PhotoIcon, description: 'Header banner' }
-];
-// Embed code generation component
-export const EmbedCodeGenerator, Template;
-customization: EmbedCustomization;
-onCustomizationChange: (updates) => void ;
+customFonts ?  : { heading: string,
+    body: string };
  > ;
 ({ template, customization, onCustomizationChange }) => {
     const [activeTab, setActiveTab] = useState('iframe');
@@ -32,10 +20,9 @@ onCustomizationChange: (updates) => void ;
         const baseUrl = `${window.location.origin}/embed/template/${template.id}`;
     });
     const params = new URLSearchParams({});
-    theme: customization.theme.name,
-        size;
-    `${customization.size.width}x${customization.size.height}`;
+    theme: customization.theme.name;
 };
+size: `${customization.size.width}x${customization.size.height}`;
 features: JSON.stringify(customization.features),
     layout;
 JSON.stringify(customization.layout),
@@ -77,24 +64,24 @@ switch (activeTab) {
 <EmbeddedTemplatePreview
   template={{
     id: "${template.id}"}
-},
+
   title: "${template.title}"}
-},
+
   description: "${template.description}"}
-  }}
+
   embedConfig={{
     theme: "${customization.theme.name}"}
-},
+
   size: { width: ${customization.size.width}, height: ${customization.size.height} }
-},
+
   features: ${JSON.stringify(customization.features, null, 2)}
-},
+
   layout: ${JSON.stringify(customization.layout, null, 2)}
-},
+
   branding: ${JSON.stringify(customization.branding, null, 2)}
-},
+
   social: ${JSON.stringify(customization.social, null, 2)}
-  }}
+
   variant="standard"
   interactive={true}
   showSocialActions={true}
@@ -123,8 +110,8 @@ _jsx("div", { className: "bg-white border border-gray-200 rounded-lg", children:
                     ].map((tab) => ()
                         < button, key = { tab, : .id }, onClick = {}()), " => setActiveTab(tab.id as any)} className=", `py-3 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                         ? 'border-blue-500 text-blue-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                    }`, ">", tab.label] }), "))}"] }) })
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, ">", tab.label] }), "))}"] }) })
     ,
         _jsx("div", { className: "p-4", children: _jsx("pre", { className: "bg-gray-900 text-gray-100 p-4 rounded-lg text-sm overflow-auto max-h-64", children: _jsx("code", { children: embedCode }) }) });
 div >
@@ -136,7 +123,7 @@ export const EmbedCustomizationPanel, EmbedCustomization;
 onCustomizationChange: (updates) => void ;
 previewSize: PreviewSize;
 onPreviewSizeChange: (size) => void ;
- > ;
+    > ;
 ({ customization, onCustomizationChange, previewSize, onPreviewSizeChange }) => {
     const [activeSection, setActiveSection] = useState('size');
     const updateSize = useCallback((updates) => {
@@ -187,8 +174,8 @@ _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg", children
                             return;
                             _jsxs("button", { onClick: () => setActiveSection(section.id), className: `flex items-center gap-2 py-3 px-1 border-b-2 font-medium text-sm ${activeSection === section.id
                                     ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                                }`, children: [_jsx(Icon, { className: "h-4 w-4" }), section.label] }, section.id);
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, children: [_jsx(Icon, { className: "h-4 w-4" }), section.label] }, section.id);
                         }), "; })}"] })] }), _jsx("div", { className: "p-4 space-y-6", children: activeSection === 'size' && ()
                 < div >
                 (_jsx("h4", { className: "font-medium text-gray-700 mb-3", children: "Preview Size" })
@@ -196,8 +183,8 @@ _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg", children
                         _jsxs("div", { className: "grid grid-cols-2 gap-3 mb-4", children: [PREVIEW_SIZES.map((size) => {
                                     const Icon = size.icon;
                                     return;
-                                    _jsxs("button", { onClick: () => onPreviewSizeChange(size), className: `flex items-center gap-3 p-3 border rounded-lg text-left hover:bg-gray-50 ${previewSize.label === size.label ? 'border-blue-500 bg-blue-50' : 'border-gray-200',
-                                        }`, children: [_jsx(Icon, { className: "h-5 w-5 text-gray-600" }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: size.label }), _jsxs("div", { className: "text-sm text-gray-600", children: [size.width, " \u00D7 ", size.height] }), _jsx("div", { className: "text-xs text-gray-500", children: size.description })] })] }, size.label);
+                                    _jsxs("button", { onClick: () => onPreviewSizeChange(size), className: `flex items-center gap-3 p-3 border rounded-lg text-left hover:bg-gray-50 ${previewSize.label === size.label ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}
+`, children: [_jsx(Icon, { className: "h-5 w-5 text-gray-600" }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: size.label }), _jsxs("div", { className: "text-sm text-gray-600", children: [size.width, " \u00D7 ", size.height] }), _jsx("div", { className: "text-xs text-gray-500", children: size.description })] })] }, size.label);
                                 }), "; })}"] })
                             ,
                                 _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Width" }), _jsx("input", { type: "number", value: customization.size.width, onChange: (e) => updateSize({ width: parseInt(e.target.value) || 0 }), className: "w-full px-3 py-2 border border-gray-300 rounded-md", min: "200", max: "1920" })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Height" }), _jsx("input", { type: "number", value: customization.size.height, onChange: (e) => updateSize({ height: parseInt(e.target.value) || 0 }), className: "w-full px-3 py-2 border border-gray-300 rounded-md", min: "200", max: "1080" })] })] })) }), ")}", activeSection === 'theme' && ()
@@ -205,8 +192,8 @@ _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg", children
             (_jsx("h4", { className: "font-medium text-gray-700 mb-3", children: "Theme" })
                 ,
                     _jsxs("div", { className: "grid grid-cols-3 gap-3 mb-4", children: [['light', 'dark', 'auto'].map((theme) => ()
-                                < button, key = { theme }, onClick = {}()), " => updateTheme(", name, ": theme as any })} className=", `p-3 border rounded-lg text-center capitalize ${customization.theme.name === theme ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50',
-                            }`, ">", theme] })), "))}"] });
+                                < button, key = { theme }, onClick = {}()), " => updateTheme(", name, ": theme as any })} className=", `p-3 border rounded-lg text-center capitalize ${customization.theme.name === theme ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}
+`, ">", theme] })), "))}"] });
 {
     customization.branding.customColors && ()
         < div;
@@ -217,14 +204,12 @@ _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg", children
             < div, key = { key }, className = "flex items-center gap-3" >
             (_jsx("label", { className: "w-20 text-sm text-gray-600 capitalize", children: key })
                 ,
-                    _jsx("input", { type: "color", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...(customization.branding.customColors,
-                            [key]), e: true, target: true, value: true })));
+                    _jsx("input", { type: "color", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...customization.branding.customColors[key], e: true, target: true, value: true })));
     }
 }
 className = "w-12 h-10 border border-gray-300 rounded cursor-pointer"
     /  >
-    _jsx("input", { type: "text", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...(customization.branding.customColors,
-            [key]), e: true, target: true, value: true, className: "flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm" });
+    _jsx("input", { type: "text", value: value, onChange: (e) => updateBranding({}), "customColors:": true, ...customization.branding.customColors[key], e: true, target: true, value: true, className: "flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm" });
 div >
 ;
 div >
@@ -238,14 +223,14 @@ div >
         _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Orientation" }), _jsxs("div", { className: "flex gap-2", children: [['horizontal', 'vertical', 'grid'].map((orientation) => ()
                             < button, key = { orientation }, onClick = {}()), " => updateLayout(", orientation, ": orientation as any })} className=", `px-3 py-2 border rounded-md text-sm capitalize ${customization.layout.orientation === orientation
                             ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:bg-gray-50',
-                        }`, ">", orientation] }), "))}"] });
+                            : 'border-gray-300 hover:bg-gray-50'}
+`, ">", orientation] }), "))}"] });
     div >
         _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Content Alignment" }), _jsxs("div", { className: "flex gap-2", children: [['left', 'center', 'right'].map((alignment) => ()
                             < button, key = { alignment }, onClick = {}()), " => updateLayout(", contentAlignment, ": alignment as any })} className=", `px-3 py-2 border rounded-md text-sm capitalize ${customization.layout.contentAlignment === alignment
                             ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:bg-gray-50',
-                        }`, ">", alignment] }), "))}"] });
+                            : 'border-gray-300 hover:bg-gray-50'}
+`, ">", alignment] }), "))}"] });
     div >
         _jsx("div", { className: "space-y-3", children: [
                 { key: 'showHeader', label: 'Show Header' },
@@ -322,9 +307,8 @@ export const EmbeddedTemplatePreview = ({
     showMetrics = true,
     showSocialActions = true,
     showPurchaseButton = true,
-    maxWidth,
-    maxHeight
-});
+    maxWidth });
+maxHeight;
 {
     const [isCustomizing, setIsCustomizing] = useState(false);
     const [previewSize, setPreviewSize] = useState(PREVIEW_SIZES[1]); // Default to tablet
@@ -340,130 +324,108 @@ export const EmbeddedTemplatePreview = ({
         fonts: { }
     }
     features: {
-        showPreview: true,
-            showMetadata;
-        true,
-            showActions;
-        showSocialActions,
-            showComments;
-        false,
-            enableInteraction;
-        interactive,
-            enableSharing;
-        true,
-            enablePurchase;
-        showPurchaseButton,
-            showRating;
-        true,
-        ;
+        showPreview: true;
+        showMetadata: true;
+        showActions: showSocialActions;
+        showComments: false;
+        enableInteraction: interactive;
+        enableSharing: true;
+        enablePurchase: showPurchaseButton;
+        showRating: true;
     }
     layout: {
-        orientation: 'vertical',
-            showHeader;
-        true,
-            showFooter;
-        true,
-            showSidebar;
-        false,
-            contentAlignment;
-        'center',
-            spacing;
-        'normal',
-            borderRadius;
-        8,
-            shadow;
-        'md',
-        ;
+        orientation: 'vertical';
+        showHeader: true;
+        showFooter: true;
+        showSidebar: false;
+        contentAlignment: 'center';
+        spacing: 'normal';
+        borderRadius: 8;
+        shadow: 'md';
     }
     branding: {
-        showLogo: true,
-            showTitle;
-        true,
-            showAuthor;
-        true,
-            showPoweredBy;
-        true,
-            customColors;
-        {
-            primary: '#3B82F6',
-                secondary;
-            '#64748B',
-                accent;
-            '#10B981',
-                background;
-            '#FFFFFF',
-                text;
-            '#1F2937',
-            ;
+        showLogo: true;
+        showTitle: true;
+        showAuthor: true;
+        showPoweredBy: true;
+        customColors: {
+            primary: '#3B82F6';
+            secondary: '#64748B';
+            accent: '#10B981';
+            background: '#FFFFFF';
+            text: '#1F2937';
         }
         social: {
-            showLikes: true,
-                showShares;
-            true,
-                showComments;
-            false,
-                showRating;
-            true,
-                showDownloads;
-            true,
-                enableInteraction;
-            interactive,
-                showAuthorInfo;
-            true,
-                showStats;
-            showMetrics,
-            ;
+            showLikes: true;
+            showShares: true;
+            showComments: false;
+            showRating: true;
+            showDownloads: true;
+            enableInteraction: interactive;
+            showAuthorInfo: true;
+            showStats: showMetrics;
         }
-        ;
-        // Update customization when preview size changes
-        useEffect(() => {
-            setCustomization(prev => ({}), ...prev, size, { ...prev.size, width: previewSize.width, height: previewSize.height });
-        });
-        ;
     }
-    [previewSize];
     ;
-    const handleCustomizationChange = useCallback((updates) => {
-        const newCustomization = { ...customization, ...updates };
-        setCustomization(newCustomization);
-        onCustomize?.({ ...embedConfig, ...newCustomization });
-    }, [customization, embedConfig, onCustomize]);
-    const handleShare = useCallback((method) => {
-        onShare?.({ ...method, customization });
-    }, [onShare, customization]);
-    const getVariantStyles = () => {
-        switch (variant) {
-            case 'compact':
-                return 'p-3 text-sm';
-            case 'detailed':
-                return 'p-6 text-base';
-            case 'showcase':
-                return 'p-8 text-lg';
-            default:
-                return 'p-4 text-sm';
-        }
-        ;
-        return;
-        _jsxs("div", { className: `bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`, children: ["}", _jsx("div", { className: "border-b border-gray-200 p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-3", children: [_jsx(PhotoIcon, { className: "h-6 w-6 text-blue-500" }), _jsxs("div", { children: [_jsx("h3", { className: "font-semibold text-gray-900", children: "Embedded Template Preview" }), _jsx("p", { className: "text-sm text-gray-600", children: template.title })] })] }), _jsxs("div", { className: "flex items-center gap-2", children: [showCustomization && ()
-                                        < button, "onClick=", () => setIsCustomizing(!isCustomizing), "className=\"flex items-center gap-2 px-3 py-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded\" >", _jsx(Cog6ToothIcon, { className: "h-4 w-4" }), "Customize"] }), ")}", _jsxs("button", { onClick: () => handleShare({ type: 'embed' }), className: "flex items-center gap-2 px-3 py-1 bg-blue-600 text-white hover:bg-blue-700 rounded", children: [_jsx(ShareIcon, { className: "h-4 w-4" }), "Share"] })] }) })] });
-        { /* Main content */ }
-        _jsxs("div", { className: isCustomizing ? 'grid grid-cols-1 lg:grid-cols-2 gap-6 p-6' : 'p-6', children: [_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Live Preview" }), _jsxs("div", { className: "flex items-center gap-2 text-sm text-gray-600", children: [_jsx("span", { children: previewSize.label }), _jsx("span", { className: "text-gray-400", children: "\u2022" }), _jsxs("span", { children: [customization.size.width, " \u00D7 ", customization.size.height] })] })] }), _jsxs("div", { className: "border border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center", style: {
-                                maxWidth: maxWidth || 'none',
-                                maxHeight: maxHeight || 'none',
-                                minHeight: '400px',
-                            }, children: [_jsxs("div", { className: "bg-white border border-gray-200 rounded shadow-md overflow-hidden", style: {
-                                        width: Math.min(customization.size.width, maxWidth || customization.size.width),
-                                        height: Math.min(customization.size.height, maxHeight || customization.size.height),
-                                        maxWidth: '100%',
-                                        maxHeight: '100%',
-                                    }, children: [_jsxs("div", { className: `h-full flex flex-col ${getVariantStyles()}`, children: ["}", customization.layout.showHeader && customization.branding.showTitle && ()
-                                                    < div, " className=\"border-b border-gray-100 pb-2 mb-3\">", _jsx("h5", { className: "font-semibold text-gray-900 truncate", children: template.title }), customization.branding.showAuthor && ()
-                                                    < p, " className=\"text-xs text-gray-600\">by ", template.author.name] }), ")}"] }), ")}", _jsx("div", { className: "flex-1 flex items-center justify-center bg-gray-50 rounded mb-3", children: _jsxs("div", { className: "text-center text-gray-500", children: [_jsx(PlayIcon, { className: "h-8 w-8 mx-auto mb-2" }), _jsx("p", { className: "text-sm", children: "Template Preview" }), _jsx("p", { className: "text-xs", children: template.description })] }) }), customization.social.showStats && showMetrics && ()
-                                    < div, " className=\"flex items-center gap-4 text-xs text-gray-600 mb-3\">", customization.social.showLikes && ()
-                                    < div, " className=\"flex items-center gap-1\">", _jsx(HeartIcon, { className: "h-3 w-3" }), _jsx("span", { children: template.metrics?.likes || 0 })] }), ")}", customization.social.showDownloads && ()
-                            < div, " className=\"flex items-center gap-1\">", _jsx(DownloadIcon, { className: "h-3 w-3" }), _jsx("span", { children: template.metrics?.downloads || 0 })] }), ")}", customization.social.showRating && ()
-                    < div, " className=\"flex items-center gap-1\">", _jsx(StarIcon, { className: "h-3 w-3" }), _jsx("span", { children: template.rating?.average.toFixed(1) || '0.0' })] });
-    };
+    // Update customization when preview size changes
+    useEffect(() => {
+        setCustomization(prev => ({}), ...prev);
+    }, size, { ...prev.size, width: previewSize.width, height: previewSize.height });
+}
+;
+[previewSize];
+;
+const handleCustomizationChange = useCallback((updates) => {
+    const newCustomization = { ...customization, ...updates };
+    setCustomization(newCustomization);
+    onCustomize?.({ ...embedConfig, ...newCustomization });
+}, [customization, embedConfig, onCustomize]);
+const handleShare = useCallback((method) => {
+    onShare?.({ ...method, customization });
+}, [onShare, customization]);
+const getVariantStyles = () => {
+    switch (variant) {
+        case 'compact':
+            return 'p-3 text-sm';
+        case 'detailed':
+            return 'p-6 text-base';
+        case 'showcase':
+            return 'p-8 text-lg';
+        default:
+    }
+    return 'p-4 text-sm';
+};
+return;
+_jsxs("div", { className: `bg-white border border-gray-200 rounded-lg overflow-hidden ${className}`, children: ["}", _jsx("div", { className: "border-b border-gray-200 p-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-3", children: [_jsx(PhotoIcon, { className: "h-6 w-6 text-blue-500" }), _jsxs("div", { children: [_jsx("h3", { className: "font-semibold text-gray-900", children: "Embedded Template Preview" }), _jsx("p", { className: "text-sm text-gray-600", children: template.title })] })] }), _jsxs("div", { className: "flex items-center gap-2", children: [showCustomization && ()
+                                < button, "onClick=", () => setIsCustomizing(!isCustomizing), "className=\"flex items-center gap-2 px-3 py-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded\" >", _jsx(Cog6ToothIcon, { className: "h-4 w-4" }), "Customize"] }), ")}", _jsxs("button", { onClick: () => handleShare({ type: 'embed' }), className: "flex items-center gap-2 px-3 py-1 bg-blue-600 text-white hover:bg-blue-700 rounded", children: [_jsx(ShareIcon, { className: "h-4 w-4" }), "Share"] })] }) })] });
+{ /* Main content */ }
+_jsxs("div", { className: isCustomizing ? 'grid grid-cols-1 lg:grid-cols-2 gap-6 p-6' : 'p-6', children: [_jsxs("div", { className: "space-y-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Live Preview" }), _jsxs("div", { className: "flex items-center gap-2 text-sm text-gray-600", children: [_jsx("span", { children: previewSize.label }), _jsx("span", { className: "text-gray-400", children: "\u2022" }), _jsxs("span", { children: [customization.size.width, " \u00D7 ", customization.size.height] })] })] }), _jsxs("div", { className: "border border-gray-300 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center", style: {
+                        maxWidth: maxWidth || 'none',
+                        maxHeight: maxHeight || 'none',
+                        minHeight: '400px'
+                    }, children: [_jsxs("div", { className: "bg-white border border-gray-200 rounded shadow-md overflow-hidden", style: {
+                                width: Math.min(customization.size.width, maxWidth || customization.size.width),
+                                height: Math.min(customization.size.height, maxHeight || customization.size.height),
+                                maxWidth: '100%',
+                                maxHeight: '100%'
+                            }
+                                >
+                                    { /* Simulated embedded content */}
+                                < div, className: `h-full flex flex-col ${getVariantStyles()}`, children: ["}", customization.layout.showHeader && customization.branding.showTitle && ()
+                                    < div, " className=\"border-b border-gray-100 pb-2 mb-3\">", _jsx("h5", { className: "font-semibold text-gray-900 truncate", children: template.title }), customization.branding.showAuthor && ()
+                                    < p, " className=\"text-xs text-gray-600\">by ", template.author.name] }), ")}"] }), ")}", _jsx("div", { className: "flex-1 flex items-center justify-center bg-gray-50 rounded mb-3", children: _jsxs("div", { className: "text-center text-gray-500", children: [_jsx(PlayIcon, { className: "h-8 w-8 mx-auto mb-2" }), _jsx("p", { className: "text-sm", children: "Template Preview" }), _jsx("p", { className: "text-xs", children: template.description })] }) }), customization.social.showStats && showMetrics && ()
+                    < div, " className=\"flex items-center gap-4 text-xs text-gray-600 mb-3\">", customization.social.showLikes && ()
+                    < div, " className=\"flex items-center gap-1\">", _jsx(HeartIcon, { className: "h-3 w-3" }), _jsx("span", { children: template.metrics?.likes || 0 })] }), ")}", customization.social.showDownloads && ()
+            < div, " className=\"flex items-center gap-1\">", _jsx(DownloadIcon, { className: "h-3 w-3" }), _jsx("span", { children: template.metrics?.downloads || 0 })] });
+{
+    customization.social.showRating && ()
+        < div;
+    className = "flex items-center gap-1" >
+        (_jsx(StarIcon, { className: "h-3 w-3" })
+            ,
+                _jsx("span", { children: template.rating?.average.toFixed(1) || '0.0' }));
+    div >
+    ;
 }
 div >
 ;

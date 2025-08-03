@@ -4,33 +4,28 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * UI for version restoration with conflict resolution, preview, and progress tracking
  */
 import { useState, useEffect } from 'react';
-export const VersionRestoreDialog = ({
-    snapshot,
-    currentGraphData,
-    restoreManager,
-    isOpen,
-    onClose,
-    onRestoreComplete,
-    className = ''
-});
+from;
+'../../version-history/VersionRestoreManager';
+export const VersionRestoreDialog = ({});
+snapshot;
+currentGraphData;
+restoreManager;
+isOpen;
+onClose;
+onRestoreComplete;
+className = '';
 {
     const [currentStep, setCurrentStep] = useState('options');
     const [restoreOptions, setRestoreOptions] = useState({});
-    create_backup: true,
-        backup_title;
-    `Pre-restore backup ${new Date().toLocaleDateString()}`;
+    create_backup: true;
 }
-restore_mode: 'merge',
-    conflict_resolution;
-'prompt',
-    preserve_current_changes;
-true,
-    restore_metadata;
-true,
-    restore_workflow_state;
-false,
-    notify_collaborators;
-true;
+backup_title: `Pre-restore backup ${new Date().toLocaleDateString()}`;
+restore_mode: 'merge';
+conflict_resolution: 'prompt';
+preserve_current_changes: true;
+restore_metadata: true;
+restore_workflow_state: false;
+notify_collaborators: true;
 ;
 const [preview, setPreview] = useState(null);
 const [conflicts, setConflicts] = useState([]);
@@ -46,7 +41,6 @@ useEffect(() => {
     [isOpen];
 });
 useEffect(() => {
-    // Poll for restore state updates when restore is in progress
     let interval;
     if (restoreState?.id && restoreState.status === 'in_progress') {
         interval = setInterval(async () => {
@@ -62,10 +56,8 @@ useEffect(() => {
                 }
             }
         });
-        return () => {
-            if (interval)
-                clearInterval(interval);
-        };
+        return () => { if (interval)
+            clearInterval(interval); };
     }
     [restoreState?.id, restoreState?.status];
 });
@@ -84,12 +76,12 @@ const handleOptionsNext = async () => {
         setError('');
         const previewData = await restoreManager.createRestorePreview();
         ;
-        snapshot.id,
-            currentGraphData,
-            restoreOptions;
+        snapshot.id;
+        currentGraphData;
     }
     finally {
     }
+    restoreOptions;
 };
 ;
 setPreview(previewData);
@@ -133,9 +125,9 @@ const handleExecuteRestore = async () => {
         setError('');
         setCurrentStep('progress');
         const { restoreId, result } = await restoreManager.executeRestore();
-        snapshot.id,
-            restoreOptions,
-            conflictResolutions;
+        snapshot.id;
+        restoreOptions;
+        conflictResolutions;
     }
     finally // Set initial restore state
      {
@@ -144,20 +136,13 @@ const handleExecuteRestore = async () => {
 ;
 // Set initial restore state
 setRestoreState({});
-id: restoreId,
-    status;
-'in_progress',
-    progress;
-0,
-    current_step;
-'Starting restore...',
-    total_steps;
-8,
-    completed_steps;
-0,
-    started_at;
-new Date().toISOString(),
-;
+id: restoreId;
+status: 'in_progress';
+progress: 0;
+current_step: 'Starting restore...';
+total_steps: 8;
+completed_steps: 0;
+started_at: new Date().toISOString();
 ;
 // Wait for result
 try {
@@ -179,8 +164,9 @@ finally {
 }
 ;
 const handleConflictResolutionChange = (conflictId, resolution) => {
-    setConflictResolutions(prev => ({}), ...prev, [conflictId], resolution);
+    setConflictResolutions(prev => ({}), ...prev[conflictId], resolution);
 };
+;
 ;
 const getRiskLevelColor = (level) => {
     switch (level) {
@@ -213,13 +199,13 @@ const getRiskLevelColor = (level) => {
                                     < div, key = { step, : .key }, className = "flex items-center" >
                                     (_jsx("div", { className: `w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${currentStep === step.key
                                             ? 'bg-blue-500 text-white'
-                                            : ['options', 'conflicts', 'preview'].indexOf(currentStep) > ['options', 'conflicts', 'preview'].indexOf(step.key),
+                                            : ['options', 'conflicts', 'preview'].indexOf(currentStep) > ['options', 'conflicts', 'preview'].indexOf(step.key)
                                                 ? 'bg-green-500 text-white'
-                                                : 'bg-gray-200 text-gray-600',
-                                        }`, children: index + 1 })
+                                                : 'bg-gray-200 text-gray-600'}
+`, children: index + 1 })
                                         ,
-                                            _jsx("span", { className: `ml-2 text-sm ${currentStep === step.key ? 'text-gray-900 font-medium' : 'text-gray-500',
-                                                }`, children: step.label })), { 4:  && _jsx("div", { className: "w-8 h-0.5 bg-gray-200 mx-4" }) }) }), "))}"] }) }), _jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [error && ()
+                                            _jsx("span", { className: `ml-2 text-sm ${currentStep === step.key ? 'text-gray-900 font-medium' : 'text-gray-500'}
+`, children: step.label })), { 4:  && _jsx("div", { className: "w-8 h-0.5 bg-gray-200 mx-4" }) }) }), "))}"] }) }), _jsxs("div", { className: "flex-1 overflow-y-auto p-6", children: [error && ()
                             < div, " className=\"mb-4 bg-red-50 border border-red-200 rounded-lg p-4\">", _jsxs("div", { className: "flex", children: [_jsx("svg", { className: "h-5 w-5 text-red-400", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.728-.833-2.498 0L3.316 16.5c-.77.833.192 2.5 1.732 2.5z" }) }), _jsxs("div", { className: "ml-3", children: [_jsx("h3", { className: "text-sm font-medium text-red-800", children: "Error" }), _jsx("p", { className: "text-sm text-red-700 mt-1", children: error })] })] })] }), ")}", currentStep === 'options' && ()
                     < RestoreOptionsStep, "options=", restoreOptions, "onChange=", setRestoreOptions, "snapshot=", snapshot, "/> )}", currentStep === 'conflicts' && ()
                     < ConflictResolutionStep, "conflicts=", conflicts, "resolutions=", conflictResolutions, "onResolutionChange=", handleConflictResolutionChange, "getSeverityColor=", getSeverityColor, "/> )}", currentStep === 'preview' && preview && ()
@@ -253,6 +239,7 @@ div >
 ;
 ;
 ;
+snapshot: VersionSnapshot;
 const RestoreOptionsStep = ({ options, onChange, snapshot }) => {
     return;
     _jsxs("div", { className: "space-y-6", children: [_jsxs("div", { children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "Restore Options" }), _jsx("p", { className: "text-sm text-gray-600 mb-6", children: "Configure how the version should be restored. These settings will affect how conflicts are handled and what data is restored." })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-6", children: [_jsxs("div", { className: "space-y-4", children: [_jsx("h4", { className: "font-medium text-gray-900", children: "Backup" }), _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type: "checkbox", checked: options.create_backup, onChange: (e) => onChange({ ...options, create_backup: e.target.checked }), className: "rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsx("span", { className: "ml-2 text-sm text-gray-700", children: "Create backup before restore" })] }), options.create_backup && ()
@@ -339,8 +326,8 @@ div >
                         { value: 'merge', label: 'Merge', description: 'Attempt to merge both values', disabled: !conflict.auto_resolvable },
                         { value: 'manual', label: 'Manual', description: 'Resolve manually later' }
                     ].map(option => ()
-                        < label, key = { option, : .value }, className = {} `flex items-start p-2 border rounded ${resolutions[conflict.id] === option.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200',
-                    } ${option.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`), ">}", _jsx("input", { type: "radio", name: `conflict-${conflict.id}`, value: option.value, checked: resolutions[conflict.id] === option.value, onChange: (e) => onResolutionChange(conflict.id, e.target.value), disabled: option.disabled, className: "mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsxs("div", { className: "ml-2", children: [_jsx("span", { className: "text-sm font-medium text-gray-900", children: option.label }), _jsx("p", { className: "text-xs text-gray-600", children: option.description })] })] }), "))}"] });
+                        < label, key = { option, : .value }, className = {} `flex items-start p-2 border rounded ${resolutions[conflict.id] === option.value ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}
+ ${option.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`), ">}", _jsx("input", { type: "radio", name: `conflict-${conflict.id}`, value: option.value, checked: resolutions[conflict.id] === option.value, onChange: (e) => onResolutionChange(conflict.id, e.target.value), disabled: option.disabled, className: "mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500" }), _jsxs("div", { className: "ml-2", children: [_jsx("span", { className: "text-sm font-medium text-gray-900", children: option.label }), _jsx("p", { className: "text-xs text-gray-600", children: option.description })] })] }), "))}"] });
     div >
     ;
     div >

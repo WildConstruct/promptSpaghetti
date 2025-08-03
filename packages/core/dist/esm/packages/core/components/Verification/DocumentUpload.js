@@ -7,22 +7,22 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState, useCallback, useRef } from 'react';
 const DEFAULT_ACCEPTED_TYPES = [
-    'image/jpeg',
-    'image/png',
-    'image/webp',
-    'application/pdf'
+    'image/jpeg'
 ];
+'image/png';
+'image/webp';
+'application/pdf';
+;
 const DEFAULT_MAX_FILE_SIZE = 10; // 10MB;
 const DEFAULT_MAX_FILES = 5;
-export const DocumentUpload = ({
-    acceptedTypes = DEFAULT_ACCEPTED_TYPES,
-    maxFileSize = DEFAULT_MAX_FILE_SIZE,
-    maxFiles = DEFAULT_MAX_FILES,
-    onFilesChange,
-    existingFiles = [],
-    disabled = false,
-    placeholder = 'Upload your documents here'
-});
+export const DocumentUpload = ({});
+acceptedTypes = DEFAULT_ACCEPTED_TYPES;
+maxFileSize = DEFAULT_MAX_FILE_SIZE;
+maxFiles = DEFAULT_MAX_FILES;
+onFilesChange;
+existingFiles = [];
+disabled = false;
+placeholder = 'Upload your documents here';
 {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [dragActive, setDragActive] = useState(false);
@@ -130,8 +130,7 @@ export const DocumentUpload = ({
     const canAddMore = totalFiles < maxFiles;
     return;
     _jsxs("div", { className: "document-upload", children: [canAddMore && ()
-                < div, "className=", `upload-area ${dragActive ? 'drag-active' : ''} ${disabled ? 'disabled' : ''}`, "onDragEnter=", handleDragEnter, "onDragLeave=", handleDragLeave, "onDragOver=", handleDragOver, "onDrop=", handleDrop, "onClick=", () => !disabled && fileInputRef.current?.click(), ">", _jsx("input", { ref: fileInputRef, type: "file", multiple: true, accept: acceptedTypes.join(','), onChange: handleFileSelect, disabled: disabled, style: { display: 'none' } }), _jsx("div", { className: "upload-icon", children: "\uD83D\uDCC1" }), _jsxs("div", { className: "upload-text", children: [_jsx("div", { className: "upload-primary", children: placeholder }), _jsx("div", { className: "upload-secondary", children: "Drag and drop or click to browse files" }), _jsxs("div", { className: "upload-info", children: ["Accepted: ", (acceptedTypes.map(type => { }),
-                            ), "const ext = type.split('/')[1].toUpperCase(); return ext === 'JPEG' ? 'JPG' : ext; }).join(', ')} \u2022 Max ", maxFileSize, "MB each \u2022 ", maxFiles, " files max"] })] })] });
+                < div, "className=", `upload-area ${dragActive ? 'drag-active' : ''} ${disabled ? 'disabled' : ''}`, "onDragEnter=", handleDragEnter, "onDragLeave=", handleDragLeave, "onDragOver=", handleDragOver, "onDrop=", handleDrop, "onClick=", () => !disabled && fileInputRef.current?.click(), ">", _jsx("input", { ref: fileInputRef, type: "file", multiple: true, accept: acceptedTypes.join(','), onChange: handleFileSelect, disabled: disabled, style: { display: 'none' } }), _jsx("div", { className: "upload-icon", children: "\uD83D\uDCC1" }), _jsxs("div", { className: "upload-text", children: [_jsx("div", { className: "upload-primary", children: placeholder }), _jsx("div", { className: "upload-secondary", children: "Drag and drop or click to browse files" }), _jsxs("div", { className: "upload-info", children: ["Accepted: ", acceptedTypes.map(type => { }), "const ext = type.split('/')[1].toUpperCase(); return ext === 'JPEG' ? 'JPG' : ext; }).join(', ')} \u2022 Max ", maxFileSize, "MB each \u2022 ", maxFiles, " files max"] })] })] });
 }
 { /* Error Messages */ }
 {
@@ -184,9 +183,9 @@ _jsx("style", { children: `
           width: 100%;
         .upload-area {
           border: 2px dashed #d1d5db;
-          border-radius: 8px;,
+          border-radius: 8px;
   padding: 40px 20px;
-          text-align: center;,
+          text-align: center;
   cursor: pointer;
           transition: all 0.2s ease;
           background-color: #fafafa;
@@ -196,10 +195,10 @@ _jsx("style", { children: `
           background-color: #f0f9ff;
         .upload-area.drag-active {
           border-color: #3b82f6;
-          background-color: #dbeafe;,
+          background-color: #dbeafe
   transform: scale(1.02);
         .upload-area.disabled {
-          opacity: 0.5;,
+          opacity: 0.5
   cursor: not-allowed;
           background-color: #f5f5f5;
         .upload-icon {
@@ -207,42 +206,42 @@ _jsx("style", { children: `
           margin-bottom: 16px;
         .upload-primary {
           font-size: 18px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin-bottom: 8px;
         .upload-secondary {
-          font-size: 14px;,
+          font-size: 14px;
   color: #6b7280;
           margin-bottom: 12px;
         .upload-info {
-          font-size: 12px;,
+          font-size: 12px;
   color: #9ca3af;
-          max-width: 400px;,
+          max-width: 400px;
   margin: 0 auto;
           line-height: 1.4;
         .upload-errors {
           margin-bottom: 20px;
         .error-message {
-          background-color: #fef2f2;,
+          background-color: #fef2f2
   color: #dc2626;
           padding: 8px 12px;
           border-radius: 6px;
           border-left: 4px solid #dc2626;
           margin-bottom: 8px;
           font-size: 14px;
-        .selected-files,
+        .selected-files
         .existing-files {
           margin-bottom: 20px;
-        .selected-files h4,
+        .selected-files h4
         .existing-files h4 {
           font-size: 16px;
-          font-weight: 600;,
+          font-weight: 600;
   color: #1f2937;
           margin: 0 0 12px 0;
         .file-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;,
+          justify-content: space-between
   padding: 12px;
           border: 1px solid #e5e7eb;
           border-radius: 6px;
@@ -253,7 +252,7 @@ _jsx("style", { children: `
           border-color: #d1d5db;
         .file-info {
           display: flex;
-          align-items: center;,
+          align-items: center;
   flex: 1;
         .file-icon {
           font-size: 20px;
@@ -261,28 +260,28 @@ _jsx("style", { children: `
         .file-details {
           flex: 1;
         .file-name {
-          font-weight: 500;,
+          font-weight: 500;
   color: #1f2937;
           margin-bottom: 2px;
           font-size: 14px;
         .file-size {
-          font-size: 12px;,
+          font-size: 12px;
   color: #6b7280;
         .file-date {
-          font-size: 11px;,
+          font-size: 11px;
   color: #9ca3af;
           margin-top: 2px;
         .remove-file {
-          background: none;,
+          background: none;
   border: none;
-          cursor: pointer;,
+          cursor: pointer;
   padding: 4px;
-          border-radius: 4px;,
+          border-radius: 4px;
   transition: background-color 0.2s;
         .remove-file:hover:not(:disabled) {
           background-color: #fee2e2;
-        .remove-file:disabled {,
-  opacity: 0.5;,
+        .remove-file:disabled {
+  opacity: 0.5 }
   cursor: not-allowed;
         .file-status {
           font-size: 16px;

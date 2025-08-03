@@ -6,29 +6,25 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * with excellent UX for discovery and reading across the template marketplace ecosystem.
  */
 import React, { useState, useMemo, useCallback } from 'react';
-import { DocumentIcon, AcademicCapIcon, LightBulbIcon, MagnifyingGlassIcon, ListBulletIcon, Squares2X2Icon, ClockIcon, EyeIcon, HeartIcon, ShareIcon, BookmarkIcon, UserIcon, StarIcon, ChevronRightIcon, ArrowRightIcon, CheckIcon, PlayIcon } from '@heroicons/react/24/outline';
+import { DocumentIcon, AcademicCapIcon, LightBulbIcon, MagnifyingGlassIcon, ListBulletIcon, Squares2X2Icon, ClockIcon, EyeIcon, HeartIcon, ShareIcon, BookmarkIcon, UserIcon, StarIcon, ChevronRightIcon, ArrowRightIcon, CheckIcon } from PlayIcon;
+from;
+'@heroicons/react/24/outline';
 icon: React.ComponentType;
 articles: Article;
 color: string;
 featured: boolean;
-export const KnowledgeBaseHero = ({
-    stats,
-    onSearch,
-    onBrowseCategory,
-    featuredSections
-});
+featuredSections: KnowledgeBaseSection;
 {
     const [searchQuery, setSearchQuery] = useState('');
-    const handleSearchSubmit = (e) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            onSearch(searchQuery.trim());
-        }
-        ;
-        return;
-        _jsx("div", { className: "bg-gradient-to-br from-blue-50 via-white to-purple-50", children: _jsxs("div", { className: "max-w-7xl mx-auto px-4 py-16", children: [_jsxs("div", { className: "text-center mb-12", children: [_jsx("h1", { className: "text-4xl md:text-5xl font-bold text-gray-900 mb-4", children: "Knowledge Base" }), _jsx("p", { className: "text-xl text-gray-600 mb-8 max-w-3xl mx-auto", children: "Discover comprehensive guides, tutorials, and best practices for prompt engineering, template creation, and marketplace success." }), _jsx("form", { onSubmit: handleSearchSubmit, className: "max-w-2xl mx-auto mb-8", children: _jsxs("div", { className: "relative", children: [_jsx(MagnifyingGlassIcon, { className: "h-6 w-6 absolute left-4 top-3 text-gray-400" }), _jsx("input", { type: "text", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), placeholder: "Search articles, guides, tutorials...", className: "w-full pl-12 pr-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm" }), _jsx("button", { type: "submit", disabled: !searchQuery.trim(), className: "absolute right-2 top-2 px-4 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed", children: "Search" })] }) }), _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto", children: [_jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-blue-600", children: stats.totalArticles }), _jsx("div", { className: "text-sm text-gray-600", children: "Articles" })] }), _jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-green-600", children: stats.totalCategories }), _jsx("div", { className: "text-sm text-gray-600", children: "Categories" })] }), _jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-purple-600", children: stats.totalAuthors }), _jsx("div", { className: "text-sm text-gray-600", children: "Contributors" })] }), _jsxs("div", { className: "text-center", children: [_jsxs("div", { className: "text-2xl font-bold text-orange-600", children: [(stats.totalViews / 1000).toFixed(1), "k"] }), _jsx("div", { className: "text-sm text-gray-600", children: "Views" })] })] })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: [featuredSections.map((section) => ()
-                                < div, key = { section, : .id }, className = "bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer", onClick = {}()), " => onBrowseCategory(section.id)} >", _jsx("div", { className: "flex items-center mb-4", children: _jsxs("div", { className: `p-3 rounded-lg bg-${section.color}-100`, children: ["}", _jsx(section.icon, { className: `h-6 w-6 text-${section.color}-600` }), "}"] }) }), _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2", children: section.title }), _jsx("p", { className: "text-gray-600 text-sm mb-4", children: section.description }), _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("span", { className: "text-sm text-gray-500", children: [section.articles.length, " articles"] }), _jsx(ChevronRightIcon, { className: "h-4 w-4 text-gray-400" })] })] }), "))}"] }) });
-    };
+    const handleSearchSubmit = (e) => { };
+    e.preventDefault();
+    if (searchQuery.trim()) {
+        onSearch(searchQuery.trim());
+    }
+    ;
+    return;
+    _jsx("div", { className: "bg-gradient-to-br from-blue-50 via-white to-purple-50", children: _jsxs("div", { className: "max-w-7xl mx-auto px-4 py-16", children: [_jsxs("div", { className: "text-center mb-12", children: [_jsx("h1", { className: "text-4xl md:text-5xl font-bold text-gray-900 mb-4", children: "Knowledge Base" }), _jsx("p", { className: "text-xl text-gray-600 mb-8 max-w-3xl mx-auto", children: "Discover comprehensive guides, tutorials, and best practices for prompt engineering template creation, and marketplace success." }), _jsx("form", { onSubmit: handleSearchSubmit, className: "max-w-2xl mx-auto mb-8", children: _jsxs("div", { className: "relative", children: [_jsx(MagnifyingGlassIcon, { className: "h-6 w-6 absolute left-4 top-3 text-gray-400" }), _jsx("input", { type: "text", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), placeholder: "Search articles, guides, tutorials...", className: "w-full pl-12 pr-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm" }), _jsx("button", { type: "submit", disabled: !searchQuery.trim(), className: "absolute right-2 top-2 px-4 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed", children: "Search" })] }) }), _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto", children: [_jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-blue-600", children: stats.totalArticles }), _jsx("div", { className: "text-sm text-gray-600", children: "Articles" })] }), _jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-green-600", children: stats.totalCategories }), _jsx("div", { className: "text-sm text-gray-600", children: "Categories" })] }), _jsxs("div", { className: "text-center", children: [_jsx("div", { className: "text-2xl font-bold text-purple-600", children: stats.totalAuthors }), _jsx("div", { className: "text-sm text-gray-600", children: "Contributors" })] }), _jsxs("div", { className: "text-center", children: [_jsxs("div", { className: "text-2xl font-bold text-orange-600", children: [(stats.totalViews / 1000).toFixed(1), "k"] }), _jsx("div", { className: "text-sm text-gray-600", children: "Views" })] })] })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6", children: [featuredSections.map((section) => ()
+                            < div, key = { section, : .id }, className = "bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow cursor-pointer", onClick = {}()), " => onBrowseCategory(section.id)} >", _jsx("div", { className: "flex items-center mb-4", children: _jsxs("div", { className: `p-3 rounded-lg bg-${section.color}-100`, children: ["}", _jsx(section.icon, { className: `h-6 w-6 text-${section.color}-600` }), "}"] }) }), _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2", children: section.title }), _jsx("p", { className: "text-gray-600 text-sm mb-4", children: section.description }), _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("span", { className: "text-sm text-gray-500", children: [section.articles.length, " articles"] }), _jsx(ChevronRightIcon, { className: "h-4 w-4 text-gray-400" })] })] }), "))}"] }) });
     div >
     ;
     ;
@@ -45,9 +41,8 @@ export const ArticleCard = ({
     onClick,
     onBookmark,
     onLike,
-    onShare,
-    className = ''
-});
+    onShare });
+className = '';
 {
     const handleCardClick = useCallback(() => {
         onClick?.(article);
@@ -210,9 +205,8 @@ div >
 export const CategoryBrowser = ({
     categories,
     onSelectCategory,
-    layout = 'grid',
-    showArticleCount = true
-});
+    layout = 'grid' });
+showArticleCount = true;
 {
     if (layout === 'list') {
         return;
@@ -243,40 +237,38 @@ export const LearningPathCard = ({
     variant = 'detailed',
     showProgress = true,
     currentUserProgress = 0,
-    onClick,
-    onEnroll
-});
+    onClick });
+onEnroll;
 {
-    const getDifficultyColor = (difficulty) => {
-        switch (difficulty) {
-            case 'beginner': return 'bg-green-100 text-green-800';
-            case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-            case 'advanced': return 'bg-red-100 text-red-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
+    const getDifficultyColor = (difficulty) => { };
+    switch (difficulty) {
+        case 'beginner': return 'bg-green-100 text-green-800';
+        case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+        case 'advanced': return 'bg-red-100 text-red-800';
+        default: return 'bg-gray-100 text-gray-800';
+    }
+    ;
+    const completedSteps = learningPath.steps.filter(step => step.completed).length;
+    const progressPercentage = currentUserProgress || (completedSteps / learningPath.steps.length) * 100;
+    if (variant === 'compact') {
+        return;
+        _jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer", children: [_jsxs("div", { onClick: () => onClick?.(learningPath), children: [_jsx("h3", { className: "font-medium text-gray-900 mb-2 line-clamp-2", children: learningPath.title }), _jsx("p", { className: "text-gray-600 text-sm line-clamp-2 mb-3", children: learningPath.description }), _jsxs("div", { className: "flex items-center justify-between mb-3", children: [_jsxs("span", { className: `px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`, children: ["}", learningPath.difficulty] }), _jsxs("span", { className: "text-sm text-gray-500", children: [learningPath.estimatedTime, "m"] })] }), showProgress && ()
+                            < div, " className=\"mb-3\">", _jsxs("div", { className: "flex items-center justify-between text-xs text-gray-500 mb-1", children: [_jsx("span", { children: "Progress" }), _jsxs("span", { children: [Math.round(progressPercentage), "%"] })] }), _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all", style: { width: `${progressPercentage}%` } }) })] }), ")}"] });
+        div >
         ;
-        const completedSteps = learningPath.steps.filter(step => step.completed).length;
-        const progressPercentage = currentUserProgress || (completedSteps / learningPath.steps.length) * 100;
-        if (variant === 'compact') {
-            return;
-            _jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer", children: [_jsxs("div", { onClick: () => onClick?.(learningPath), children: [_jsx("h3", { className: "font-medium text-gray-900 mb-2 line-clamp-2", children: learningPath.title }), _jsx("p", { className: "text-gray-600 text-sm line-clamp-2 mb-3", children: learningPath.description }), _jsxs("div", { className: "flex items-center justify-between mb-3", children: [_jsxs("span", { className: `px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`, children: ["}", learningPath.difficulty] }), _jsxs("span", { className: "text-sm text-gray-500", children: [learningPath.estimatedTime, "m"] })] }), showProgress && ()
-                                < div, " className=\"mb-3\">", _jsxs("div", { className: "flex items-center justify-between text-xs text-gray-500 mb-1", children: [_jsx("span", { children: "Progress" }), _jsxs("span", { children: [Math.round(progressPercentage), "%"] })] }), _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all", style: { width: `${progressPercentage}%` } }) })] }), ")}"] });
-        }
-    };
-    div >
-    ;
-    ;
-    // Detailed variant
-    return;
-    _jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow", children: [_jsxs("div", { onClick: () => onClick?.(learningPath), className: "cursor-pointer", children: [_jsxs("div", { className: "flex items-start justify-between mb-4", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx(AcademicCapIcon, { className: "h-6 w-6 text-blue-600" }), _jsx("span", { className: "text-sm font-medium text-blue-600", children: "Learning Path" })] }), _jsxs("span", { className: `px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`, children: ["}", learningPath.difficulty] })] }), _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600", children: learningPath.title }), _jsx("p", { className: "text-gray-600 line-clamp-3 mb-4", children: learningPath.description })] }), _jsxs("div", { className: "flex items-center gap-4 text-sm text-gray-500 mb-4", children: [_jsxs("div", { className: "flex items-center gap-1", children: [_jsx(ClockIcon, { className: "h-4 w-4" }), _jsxs("span", { children: [learningPath.estimatedTime, "m"] })] }), _jsxs("div", { className: "flex items-center gap-1", children: [_jsx(DocumentIcon, { className: "h-4 w-4" }), _jsxs("span", { children: [learningPath.steps.length, " steps"] })] }), _jsxs("div", { className: "flex items-center gap-1", children: [_jsx(UserIcon, { className: "h-4 w-4" }), _jsxs("span", { children: [learningPath.enrolledCount, " enrolled"] })] })] }), showProgress && ()
-                < div, " className=\"mb-4\">", _jsxs("div", { className: "flex items-center justify-between text-sm text-gray-700 mb-2", children: [_jsx("span", { children: "Your Progress" }), _jsxs("span", { children: [Math.round(progressPercentage), "% complete"] })] }), _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all", style: { width: `${progressPercentage}%` } }) }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [completedSteps, " of ", learningPath.steps.length, " steps completed"] })] });
+        ;
+        // Detailed variant
+        return;
+        _jsxs("div", { className: "bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow", children: [_jsxs("div", { onClick: () => onClick?.(learningPath), className: "cursor-pointer", children: [_jsxs("div", { className: "flex items-start justify-between mb-4", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx(AcademicCapIcon, { className: "h-6 w-6 text-blue-600" }), _jsx("span", { className: "text-sm font-medium text-blue-600", children: "Learning Path" })] }), _jsxs("span", { className: `px-2 py-1 rounded text-xs ${getDifficultyColor(learningPath.difficulty)}`, children: ["}", learningPath.difficulty] })] }), _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600", children: learningPath.title }), _jsx("p", { className: "text-gray-600 line-clamp-3 mb-4", children: learningPath.description })] }), _jsxs("div", { className: "flex items-center gap-4 text-sm text-gray-500 mb-4", children: [_jsxs("div", { className: "flex items-center gap-1", children: [_jsx(ClockIcon, { className: "h-4 w-4" }), _jsxs("span", { children: [learningPath.estimatedTime, "m"] })] }), _jsxs("div", { className: "flex items-center gap-1", children: [_jsx(DocumentIcon, { className: "h-4 w-4" }), _jsxs("span", { children: [learningPath.steps.length, " steps"] })] }), _jsxs("div", { className: "flex items-center gap-1", children: [_jsx(UserIcon, { className: "h-4 w-4" }), _jsxs("span", { children: [learningPath.enrolledCount, " enrolled"] })] })] }), showProgress && ()
+                    < div, " className=\"mb-4\">", _jsxs("div", { className: "flex items-center justify-between text-sm text-gray-700 mb-2", children: [_jsx("span", { children: "Your Progress" }), _jsxs("span", { children: [Math.round(progressPercentage), "% complete"] })] }), _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all", style: { width: `${progressPercentage}%` } }) }), _jsxs("div", { className: "text-xs text-gray-500 mt-1", children: [completedSteps, " of ", learningPath.steps.length, " steps completed"] })] });
+    }
+    _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("div", { className: "flex flex-wrap gap-1", children: learningPath.tags.slice(0, 3).map(tag => ()
+                    < span, key = { tag }, className = "px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs" >
+                    #, { tag }) }), "))}"] })
+        ,
+            _jsxs("div", { className: "flex items-center gap-2", children: [progressPercentage === 0 && onEnroll && ()
+                        < button, "onClick=", (e) => { e.stopPropagation(); onEnroll(learningPath); }, "className=\"px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700\" > Enroll"] });
 }
-_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("div", { className: "flex flex-wrap gap-1", children: learningPath.tags.slice(0, 3).map(tag => ()
-                < span, key = { tag }, className = "px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs" >
-                #, { tag }) }), "))}"] })
-    ,
-        _jsxs("div", { className: "flex items-center gap-2", children: [progressPercentage === 0 && onEnroll && ()
-                    < button, "onClick=", (e) => { e.stopPropagation(); onEnroll(learningPath); }, "className=\"px-3 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700\" > Enroll"] });
 {
     progressPercentage > 0 && progressPercentage < 100 && ()
         < button;
@@ -305,6 +297,9 @@ div >
 ;
 ;
 ;
+onSelectArticle: (article) => void ;
+onSelectLearningPath ?  : (path) => void ;
+className ?  : string;
 export const KnowledgeBaseLayout = ({
     articles,
     categories,
@@ -314,9 +309,8 @@ export const KnowledgeBaseLayout = ({
     onSearch,
     onSelectCategory,
     onSelectArticle,
-    onSelectLearningPath,
-    className = ''
-});
+    onSelectLearningPath });
+className = '';
 {
     const [viewMode, setViewMode] = useState(layout === 'list' ? 'list' : 'grid');
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -328,35 +322,29 @@ export const KnowledgeBaseLayout = ({
             icon: PlayIcon,
             articles: articles.filter(a => a.tags.includes('getting-started')),
             color: 'blue',
-            featured: true,
+            featured: true
         },
-        {
-            id: 'templates',
+        { id: 'templates',
             title: 'Template Creation',
             description: 'Learn to create effective templates',
             icon: DocumentIcon,
             articles: articles.filter(a => a.category.slug === 'templates'),
             color: 'green',
-            featured: true,
-        },
-        {
-            id: 'best-practices',
+            featured: true },
+        { id: 'best-practices',
             title: 'Best Practices',
             description: 'Proven strategies and techniques',
             icon: LightBulbIcon,
             articles: articles.filter(a => a.tags.includes('best-practices')),
             color: 'purple',
-            featured: true,
-        },
-        {
-            id: 'advanced',
+            featured: true },
+        { id: 'advanced',
             title: 'Advanced Topics',
             description: 'Deep dives for experienced users',
             icon: AcademicCapIcon,
             articles: articles.filter(a => a.difficulty === 'advanced'),
-            color: 'orange',
-            featured: true
-        }
+            color: 'orange' },
+        featured, true
     ], [articles]);
     const filteredArticles = useMemo(() => {
         if (!selectedCategory)

@@ -191,7 +191,7 @@ export const KeyboardShortcutsManager = ({ onCommandPalette, onUndo, onRedo, onS
             category: 'navigation',
             enabled: true,
             global: true,
-        }
+        },
     ];
     // Initialize shortcuts
     useEffect(() => {
@@ -269,7 +269,7 @@ export const KeyboardShortcutsManager = ({ onCommandPalette, onUndo, onRedo, onS
         };
         const parts = [
             ...shortcut.modifiers.map(mod => modifierSymbols[mod]),
-            shortcut.key === ' ' ? 'Space' : shortcut.key.toUpperCase()
+            shortcut.key === ' ' ? 'Space' : shortcut.key.toUpperCase(),
         ];
         return parts.join(isMac ? '' : '+');
     }, []);

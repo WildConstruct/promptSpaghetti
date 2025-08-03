@@ -1,5 +1,8 @@
 import { getNodeCategories, getCategoryById } from './NodeCategory';
 ;
+/**
+ * Advanced palette search engine
+ */
 export class PaletteSearch {
     nodes;
     searchIndex;
@@ -191,8 +194,7 @@ export class PaletteSearch {
                                                 if (termMatched) {
                                                     totalRelevance += termRelevance;
                                                 }
-                                                else {
-                                                    // If any term doesn't match, reduce overall relevance
+                                                else { // If any term doesn't match, reduce overall relevance
                                                     totalRelevance *= 0.5;
                                                     // Normalize relevance score
                                                     const normalizedRelevance = Math.min(totalRelevance / (searchTerms.length * 3), 1);
@@ -201,13 +203,11 @@ export class PaletteSearch {
                                                         return {
                                                             node,
                                                             relevance: normalizedRelevance,
-                                                            matchedFields,
-                                                            categories
+                                                            matchedFields
                                                         };
-                                                        /**
-                                                         * Calculate fuzzy matching score using Levenshtein distance
-                                                         */
+                                                        categories;
                                                     }
+                                                    ;
                                                     /**
                                                      * Calculate fuzzy matching score using Levenshtein distance
                                                      */
@@ -276,93 +276,77 @@ export class PaletteSearch {
     /**
     * Calculate Levenshtein distance between two strings
     */
-    levenshteinDistance(a, b) {
-        const matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
-        for (let i = 0; i <= a.length; i++)
-            matrix[i][0] = i;
-        for (let j = 0; j <= b.length; j++)
-            matrix[0][j] = j;
-        for (let i = 1; i <= a.length; i++) {
-            for (let j = 1; j <= b.length; j++) {
-                if (a[i - 1] === b[j - 1]) {
-                    matrix[i][j] = matrix[i - 1][j - 1];
-                }
-                else {
-                    matrix[i][j] = Math.min();
-                    matrix[i - 1][j] + 1, // deletion
-                        matrix[i][j - 1] + 1, // insertion
-                        matrix[i - 1][j - 1] + 1; // substitution
-                    ;
-                    return matrix[a.length][b.length];
-                    /**
-                    * Build search index for efficient searching
-                    */
-                }
-                /**
-                * Build search index for efficient searching
-                */
-            }
-            /**
-            * Build search index for efficient searching
-            */
-        }
-        /**
-        * Build search index for efficient searching
-        */
-    }
-    /**
-    * Build search index for efficient searching
-    */
-    buildSearchIndex(nodes) {
-        const terms = new Map();
-        for (const node of nodes) {
-            const categories = getNodeCategories(node.id);
-            // Index searchable content
-            const searchableContent = [
-                node.label,
-                node.id,
-                node.tooltip,
-                ...categories.map(catId => { })
-            ];
-            const cat = getCategoryById(catId);
-            return cat ? [cat.name, cat.description, ...(cat.metadata?.keywords || [])] : [];
-        }
-        flat();
-        ;
-        for (const content of searchableContent) {
-            const words = content.toLowerCase().split(/\s+/);
-            for (const word of words) {
-                const cleanWord = word.replace(/[^\w]/g, '');
-                if (cleanWord.length > 0) {
-                    const existing = terms.get(cleanWord) || { frequency: 0, nodes: new Set() };
-                    existing.frequency++;
-                    existing.nodes.add(node.id);
-                    terms.set(cleanWord, existing);
-                    return { terms };
-                    /**
-                     * Search index structure
-                     */
-                }
-            }
-        }
-    }
+    levenshteinDistance(a, b) { }
+    matrix = Array(a.length + 1).fill(null).map(() => Array(b.length + 1).fill(null));
+    for(let, i = 0, i) { }
 }
-/**
-* Utility function to highlight search terms in text
-*/
-export function highlightSearchTerms(text, searchTerms) {
-    if (!searchTerms.length)
-        return text;
-    let highlighted = text;
-    for (const term of searchTerms) {
+ <= a.length;
+i++;
+matrix[i][0] = i;
+for (let j = 0; j <= b.length; j++)
+    matrix[0][j] = j;
+for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+        if (a[i - 1] === b[j - 1]) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+        }
+        else {
+            matrix[i][j] = Math.min();
+            matrix[i - 1][j] + 1, // deletion
+                matrix[i][j - 1] + 1, // insertion
+                matrix[i - 1][j - 1] + 1; // substitution
+            ;
+            return matrix[a.length][b.length];
+            buildSearchIndex(nodes, NodeMeta);
+            SearchIndex;
+            {
+                const terms = new Map();
+                for (const node of nodes) {
+                    const categories = getNodeCategories(node.id);
+                    // Index searchable content
+                    const searchableContent = [
+                        node.label,
+                        node.id,
+                        node.tooltip
+                    ];
+                }
+                categories.map(catId => { });
+                const cat = getCategoryById(catId);
+                return cat ? [cat.name, cat.description, ...(cat.metadata?.keywords || [])] : [];
+            }
+            flat();
+            ;
+            for (const content of searchableContent) {
+                const words = content.toLowerCase().split(/\s+/);
+                for (const word of words) {
+                    const cleanWord = word.replace(/[^\w]/g, '');
+                    if (cleanWord.length > 0) {
+                        const existing = terms.get(cleanWord) || { frequency: 0, nodes: new Set() };
+                        existing.frequency++;
+                        existing.nodes.add(node.id);
+                        terms.set(cleanWord, existing);
+                        return { terms };
+                        /**
+                        * Utility function to highlight search terms in text
+                        */
+                        export function highlightSearchTerms(text, searchTerms) { }
+                        if (!searchTerms.length)
+                            return text;
+                        let highlighted = text;
+                        for (const term of searchTerms) {
+                            const regex = new RegExp(`(${term})`, 'gi');
+                        }
+                        highlighted = highlighted.replace(regex, '<mark>$1</mark>');
+                        return highlighted;
+                        /**
+                         * Create search engine instance
+                         */
+                        export function createPaletteSearch(nodes) {
+                            return new PaletteSearch(nodes);
+                        }
+                    }
+                }
+            }
+        }
     }
-}
-const regex = new RegExp(`(${term})`, 'gi');
-highlighted = highlighted.replace(regex, '<mark>$1</mark>');
-return highlighted;
-/**
- * Create search engine instance
- */
-export function createPaletteSearch(nodes) {
-    return new PaletteSearch(nodes);
 }

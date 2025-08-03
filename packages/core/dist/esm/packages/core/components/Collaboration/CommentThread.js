@@ -1,34 +1,39 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { MessageCircle, Reply, MoreVertical, Edit3, Trash2, Flag, Check, X } from 'lucide-react';
+import { MessageCircle, Reply, MoreVertical, Edit3, Trash2, Flag, Check, X } from Smile;
+from;
+'lucide-react';
 import { useComments } from '../../hooks/useComments';
 import { CommentEditor } from './CommentEditor';
+realTime = true;
 {
     const [expandedReplies, setExpandedReplies] = useState(new Set());
     const [editingComment, setEditingComment] = useState(null);
     const [replyingTo, setReplyingTo] = useState(null);
-    const { comments, loading, error, stats, createComment, updateComment, deleteComment, resolveComment, unresolveComment, refreshComments, realTimeConnection } = useComments({});
-    resourceId,
-        resourceType,
-        workspaceId,
-        userId,
-        realTime;
+    const { comments, loading, error, stats, createComment, updateComment, deleteComment, resolveComment, unresolveComment, refreshComments };
+    realTimeConnection
+        = useComments({});
+    resourceId;
+    resourceType;
+    workspaceId;
+    userId;
 }
+realTime;
 ;
 const handleCreateComment = useCallback(async (content, mentions = []) => {
     try {
         await createComment({});
-        content,
-            mentions,
-            target_data;
-        targetData,
-        ;
+        content;
+        mentions;
+        target_data: targetData;
     }
-    finally { }
+    finally {
+    }
 });
 setShowNewComment(false);
-try { }
+try {
+}
 catch (err) {
     console.error('Failed to create comment:', err);
 }
@@ -37,18 +42,17 @@ catch (err) {
 const handleCreateReply = useCallback(async (parentId, content, mentions = []) => {
     try {
         await createComment({});
-        content,
-            mentions,
-            parent_id;
-        parentId,
-            target_data;
-        targetData,
-        ;
+        content;
+        mentions;
+        parent_id: parentId;
+        target_data: targetData;
     }
-    finally { }
+    finally {
+    }
 });
 setReplyingTo(null);
-try { }
+try {
+}
 catch (err) {
     console.error('Failed to create reply:', err);
 }
@@ -57,13 +61,15 @@ catch (err) {
 const handleUpdateComment = useCallback(async (commentId, content, mentions = []) => {
     try {
         await updateComment(commentId, {});
-        content,
-            mentions;
+        content;
     }
-    finally { }
+    finally {
+    }
+    mentions;
 });
 setEditingComment(null);
-try { }
+try {
+}
 catch (err) {
     console.error('Failed to update comment:', err);
 }
@@ -232,9 +238,10 @@ const rootComments = comments.filter(comment => !comment.parent_id);
 return;
 _jsxs("div", { className: `bg-white rounded-lg border border-gray-200 ${className}`, children: ["}", _jsxs("div", { className: "p-4 border-b border-gray-200", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(MessageCircle, { className: "w-5 h-5 text-gray-600" }), _jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Comments" }), stats && ()
                                     < span, " className=\"text-sm text-gray-500\"> (", stats.total, " comments)"] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-2", children: [realTime && ()
-                            < div, " className=", `w-2 h-2 rounded-full ${realTimeConnection?.status === 'connected' ? 'bg-green-400' : ,
-                            realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' : ,
-                            'bg-red-400'}`, " title=", `Connection: ${realTimeConnection?.status || 'disconnected'}`, " />} )}", _jsxs("button", { onClick: () => setShowNewComment(!showNewComment), className: "inline-flex items-center space-x-2 px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors", children: [_jsx(MessageCircle, { className: "w-4 h-4" }), _jsx("span", { children: "Add Comment" })] })] })] }), showNewComment && ()
+                            < div, " className=", `w-2 h-2 rounded-full ${realTimeConnection?.status === 'connected' ? 'bg-green-400' :
+                            realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' : }
+  'bg-red-400'
+`, " title=", `Connection: ${realTimeConnection?.status || 'disconnected'}`, " />} )}", _jsxs("button", { onClick: () => setShowNewComment(!showNewComment), className: "inline-flex items-center space-x-2 px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors", children: [_jsx(MessageCircle, { className: "w-4 h-4" }), _jsx("span", { children: "Add Comment" })] })] })] }), showNewComment && ()
             < div, " className=\"mt-4 pt-4 border-t border-gray-200\">", _jsx(CommentEditor, { onSave: handleCreateComment, onCancel: () => setShowNewComment(false), placeholder: "Write a comment...", submitLabel: "Comment", workspaceId: workspaceId })] });
 div >
     { /* Comments List */}

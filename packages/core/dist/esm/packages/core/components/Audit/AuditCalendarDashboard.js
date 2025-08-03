@@ -5,37 +5,34 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Interactive calendar interface for managing audit schedules, viewing upcoming activities,
  * and monitoring compliance deadlines in PromptScape.
  */
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Card, Calendar, Badge, Timeline, Table, Select, DatePicker, Button, Space, Tag, Statistic, Row, Col, Alert, Modal, Form, Input, Tabs, Progress, Tooltip, Drawer, List, Avatar } from 'antd';
-import { CalendarOutlined, ClockCircleOutlined, ExclamationTriangleOutlined, CheckCircleOutlined, PlusOutlined, EditOutlined, BellOutlined, TeamOutlined, FileTextOutlined, WarningOutlined, SyncOutlined, FilterOutlined } from '@ant-design/icons';
+import { useState, useEffect, useMemo } from 'react';
+import { Card, Calendar, Badge, Timeline, Table, Select, DatePicker, Button, Space, Tag, Statistic, Row, Col, Alert, Modal, Form, Input, Tabs, Progress, Tooltip, Drawer, List } from Avatar;
+from;
+'antd';
+import { CalendarOutlined, ClockCircleOutlined, ExclamationTriangleOutlined, CheckCircleOutlined, PlusOutlined, EditOutlined, BellOutlined, TeamOutlined, FileTextOutlined, WarningOutlined, SyncOutlined } from FilterOutlined;
+from;
+'@ant-design/icons';
 import moment from 'moment';
-import { AuditActivityType, SchedulePriority, ScheduleStatus, RecurrencePattern, auditCalendarSystem } from '../audit/AuditCalendarSystem';
+import { AuditActivityType, SchedulePriority, ScheduleStatus, RecurrencePattern } from auditCalendarSystem;
+from;
+'../audit/AuditCalendarSystem';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 ;
 const [filters, setFilters] = useState({});
-activityTypes: [],
-    priorities;
-[],
-    statuses;
-[],
-    assignees;
-[],
-    dateRange;
-[undefined, undefined],
-    showCompleted;
-true,
-    showCancelled;
-false,
-;
+activityTypes: [];
+priorities: [];
+statuses: [];
+assignees: [];
+dateRange: [undefined, undefined];
+showCompleted: true;
+showCancelled: false;
 ;
 const [activeTab, setActiveTab] = useState('calendar');
 const [drawerVisible, setDrawerVisible] = useState(false);
 // Load calendar data
-useEffect(() => {
-    loadCalendarData();
-}, [calendarState.selectedDate, filters, calendarState.currentView]);
+useEffect(() => { loadCalendarData(); }, [calendarState.selectedDate, filters, calendarState.currentView]);
 // Load schedule monitoring data
 useEffect(() => {
     loadMonitoringData();
@@ -56,26 +53,23 @@ const loadCalendarData = async () => {
                 activity_types: filters.activityTypes.length > 0 ? filters.activityTypes : undefined,
                 priorities: filters.priorities.length > 0 ? filters.priorities : undefined,
                 statuses: filters.statuses.length > 0 ? filters.statuses : undefined,
-                assignees: filters.assignees.length > 0 ? filters.assignees : undefined,
+                assignees: filters.assignees.length > 0 ? filters.assignees : undefined
             },
             display_options: {
                 show_completed: filters.showCompleted,
                 show_cancelled: filters.showCancelled,
-                color_by: 'priority',
-            },
-            // Generate calendar view
-            const: calendarData = auditCalendarSystem.generateCalendarView(viewConfig),
-            setCalendarState(prev) { } };
+                color_by: 'priority'
+            }
+        };
+        // Generate calendar view
+        const calendarData = auditCalendarSystem.generateCalendarView(viewConfig);
+        setCalendarState(prev => ({}), ...prev, calendarEvents, calendarData.events, loading, false);
     }
-    finally { }
+    finally {
+    }
 };
-({
-    ...prev,
-    calendarEvents: calendarData.events,
-    loading: false,
-});
-;
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to load calendar data:', error);
     setCalendarState(prev => ({ ...prev, loading: false }));
@@ -86,12 +80,14 @@ const loadMonitoringData = () => {
         const _monitoring = auditCalendarSystem.processScheduleMonitoring();
         const upcomingDeadlines = auditCalendarSystem.getUpcomingDeadlines(7);
         const overdueSchedules = auditCalendarSystem.getOverdueSchedules();
-        setCalendarState(prev => ({}), ...prev, upcomingDeadlines, overdueSchedules);
+        setCalendarState(prev => ({}), ...prev, upcomingDeadlines);
     }
-    finally { }
-    ;
+    finally {
+    }
+    overdueSchedules;
 };
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to load monitoring data:', error);
 }
@@ -123,18 +119,15 @@ ul >
 ;
 ;
 const monthCellRender = (_value) => {
-    // Month view cell rendering if needed
     return null;
 };
 const handleEventClick = (event) => {
-    // Find the full schedule data
     const schedule = auditCalendarSystem.querySchedules({});
     page: 1,
         limit;
-    1,
-    ;
-}, schedules, find;
-(s => s.id === event.id);
+    1;
+};
+schedules.find(s => s.id === event.id);
 if (schedule) {
     setCalendarState(prev => ({ ...prev, selectedSchedule: schedule }));
     setDrawerVisible(true);
@@ -160,12 +153,16 @@ const handleCreateSchedule = (values) => {
             deliverables: [],
             tags: values.tags ? values.tags.split(',').map((t) => t.trim()) : [],
             created_by: 'current_user', // Would be from auth context,
-            updated_by: 'current_user',
+            updated_by: 'current_user'
         };
-        const newSchedule = auditCalendarSystem.createSchedule(scheduleData);
-        setCalendarState(prev => ({ ...prev, showCreateModal: false }));
-        loadCalendarData();
-        console.log('Schedule created:', newSchedule);
+    }
+    finally { }
+    ;
+    const newSchedule = auditCalendarSystem.createSchedule(scheduleData);
+    setCalendarState(prev => ({ ...prev, showCreateModal: false }));
+    loadCalendarData();
+    console.log('Schedule created:', newSchedule);
+    try {
     }
     catch (error) {
         console.error('Failed to create schedule:', error);
@@ -176,34 +173,38 @@ const handleCreateSchedule = (values) => {
             auditCalendarSystem.updateSchedule(scheduleId, updates);
             loadCalendarData();
             setCalendarState(prev => ({ ...prev, showEditModal: false, selectedSchedule: null }));
-        }
-        catch (error) {
-            console.error('Failed to update schedule:', error);
-        }
-        ;
-        const handleCompleteSchedule = (scheduleId) => {
             try {
-                auditCalendarSystem.completeSchedule(scheduleId, {});
-                actual_end: new Date(),
-                    completion_notes;
-                'Completed via dashboard',
-                ;
             }
-            finally { }
+            catch (error) {
+                console.error('Failed to update schedule:', error);
+            }
             ;
+            const handleCompleteSchedule = (scheduleId) => {
+                try {
+                    auditCalendarSystem.completeSchedule(scheduleId, {});
+                    actual_end: new Date(),
+                        completion_notes;
+                    'Completed via dashboard';
+                }
+                finally {
+                }
+            };
             loadCalendarData();
             setDrawerVisible(false);
-        };
-        try { }
-        catch (error) {
-            console.error('Failed to complete schedule:', error);
+            try {
+            }
+            catch (error) {
+                console.error('Failed to complete schedule:', error);
+            }
+            ;
+            // Render main calendar view
+            const renderCalendarView = () => ();
+            ;
+            _jsxs(Card, { title: _jsxs(Space, { children: [_jsx(CalendarOutlined, {}), _jsx("span", { children: "Audit Calendar" }), _jsxs(Select, { value: calendarState.currentView, onChange: (view) => setCalendarState(prev => ({ ...prev, currentView: view })), style: { marginLeft: 16 }, children: [_jsx(Select.Option, { value: "month", children: "Month View" }), _jsx(Select.Option, { value: "week", children: "Week View" }), _jsx(Select.Option, { value: "day", children: "Day View" }), _jsx(Select.Option, { value: "agenda", children: "Agenda View" })] })] }), extra: _jsxs(Space, { children: [_jsx(Button, { type: "primary", icon: _jsx(PlusOutlined, {}), onClick: () => setCalendarState(prev => ({ ...prev, showCreateModal: true })), children: "Schedule Audit" }), _jsx(Button, { icon: _jsx(FilterOutlined, {}), onClick: () => setDrawerVisible(true), children: "Filters" })] }), loading: calendarState.loading, children: [calendarState.currentView === 'agenda' ? ()
+                        < AgendaView : , " events=", calendarState.calendarEvents, " onEventClick=", handleEventClick, " /> ) : ()", _jsx(Calendar, { value: calendarState.selectedDate, onSelect: (date) => setCalendarState(prev => ({ ...prev, selectedDate: date })), dateCellRender: dateCellRender, monthCellRender: monthCellRender }), ")}"] });
         }
-        ;
-        // Render main calendar view
-        const renderCalendarView = () => ();
-        ;
-        _jsxs(Card, { title: _jsxs(Space, { children: [_jsx(CalendarOutlined, {}), _jsx("span", { children: "Audit Calendar" }), _jsxs(Select, { value: calendarState.currentView, onChange: (view) => setCalendarState(prev => ({ ...prev, currentView: view })), style: { marginLeft: 16 }, children: [_jsx(Select.Option, { value: "month", children: "Month View" }), _jsx(Select.Option, { value: "week", children: "Week View" }), _jsx(Select.Option, { value: "day", children: "Day View" }), _jsx(Select.Option, { value: "agenda", children: "Agenda View" })] })] }), extra: _jsxs(Space, { children: [_jsx(Button, { type: "primary", icon: _jsx(PlusOutlined, {}), onClick: () => setCalendarState(prev => ({ ...prev, showCreateModal: true })), children: "Schedule Audit" }), _jsx(Button, { icon: _jsx(FilterOutlined, {}), onClick: () => setDrawerVisible(true), children: "Filters" })] }), loading: calendarState.loading, children: [calendarState.currentView === 'agenda' ? ()
-                    < AgendaView : , " events=", calendarState.calendarEvents, " onEventClick=", handleEventClick, " /> ) : ()", _jsx(Calendar, { value: calendarState.selectedDate, onSelect: (date) => setCalendarState(prev => ({ ...prev, selectedDate: date })), dateCellRender: dateCellRender, monthCellRender: monthCellRender }), ")}"] });
+        finally {
+        }
     };
 };
 ;
@@ -351,83 +352,67 @@ div >
 ;
 // Schedule List View Component  
 const ScheduleListView, unknown;
-onScheduleClick: (schedule) => void ;
-onScheduleUpdate: (scheduleId, updates) => void ;
+onScheduleClick: (schedule) => void onScheduleUpdate;
+(scheduleId, updates) => void ;
 loading: boolean;
- > ;
+    > ;
 ({ schedules, onScheduleClick, onScheduleUpdate, loading }) => {
     const columns = [
         {
             title: 'Title',
             dataIndex: 'title',
-            key: 'title',
-            render: (title, record) => ()
-                < Button, type = "link", onClick = {}()
-        }
+            key: 'title'
+        },
+        render, (title, record) => ()
+            < Button, type = "link", onClick = {}()
     ];
     onScheduleClick(record);
 };
  >
     { title };
 Button >
-;
-{
-    title: 'Activity Type',
-        dataIndex;
-    'type',
-        key;
-    'type',
-        render;
-    (type) => (),
-        _jsx(Tag, { children: type.replace('_', ' ').toUpperCase() });
-}
-{
-    title: 'Priority',
-        dataIndex;
-    'priority',
-        key;
-    'priority',
-        render;
-    (priority) => (),
-        _jsx(Tag, { color: getPriorityColor(priority), children: priority.toUpperCase() });
-}
-{
-    title: 'Status',
-        dataIndex;
-    'status',
-        key;
-    'status',
-        render;
-    (status) => (),
-        _jsx(Tag, { color: getStatusColor(status), children: status.replace('_', ' ').toUpperCase() });
-}
-{
-    title: 'Scheduled Start',
-        dataIndex;
-    'start',
-        key;
-    'start',
-        render;
-    (start) => moment(start).format('MMM DD, YYYY HH:mm'),
-    ;
-}
+    { title: 'Activity Type',
+        dataIndex: 'type',
+        key: 'type',
+        render: (type) => () }
+    < Tag > { type, : .replace('_', ' ').toUpperCase() };
+Tag >
+    { title: 'Priority',
+        dataIndex: 'priority',
+        key: 'priority',
+        render: (priority) => () }
+    < Tag;
+color = {} >
+    { priority, : .toUpperCase() };
+Tag >
+    { title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        render: (status) => () }
+    < Tag;
+color = {} >
+    { status, : .replace('_', ' ').toUpperCase() };
+Tag >
+    { title: 'Scheduled Start',
+        dataIndex: 'start',
+        key: 'start',
+        render: (start) => moment(start).format('MMM DD, YYYY HH:mm') };
 {
     title: 'Assignee',
         dataIndex;
     'assignee',
         key;
-    'assignee',
-        render;
-    (assignee) => assignee ? _jsx(Tag, { icon: _jsx(TeamOutlined, {}), children: assignee }) : 'Unassigned';
-    ;
-    return;
-    _jsx(Card, { title: "All Schedules", children: _jsx(Table, { columns: columns, dataSource: schedules, loading: loading, rowKey: "id", pagination: {
-                pageSize: 20,
-                showSizeChanger: true,
-                showQuickJumper: true,
-            } }) });
-    ;
+    'assignee';
 }
+render: (assignee) => assignee ? _jsx(Tag, { icon: _jsx(TeamOutlined, {}), children: assignee }) : 'Unassigned';
+;
+return;
+_jsx(Card, { title: "All Schedules", children: _jsx(Table, { columns: columns, dataSource: schedules, loading: loading, rowKey: "id", pagination: {
+            pageSize: 20,
+            showSizeChanger: true,
+            showQuickJumper: true
+        } }) });
+;
 ;
 // Additional components would be implemented here...
 const CalendarFiltersPanel = ({ filters, onFiltersChange }) => ()
@@ -476,27 +461,25 @@ const getViewDateRange = (view, selectedDate) => {
         case 'week':
             return {
                 startDate: selectedDate.clone().startOf('week'),
-                endDate: selectedDate.clone().endOf('week'),
-            };
-        case 'day':
-            return {
-                startDate: selectedDate.clone().startOf('day'),
-                endDate: selectedDate.clone().endOf('day'),
-            };
-        default: // month,
-            return {
-                startDate: selectedDate.clone().startOf('month'),
-                endDate: selectedDate.clone().endOf('month'),
+                endDate: selectedDate.clone().endOf('week')
             };
     }
     ;
-    const getEventBadgeStatus = ();
-    ;
-    priority: SchedulePriority,
-        status;
-    ScheduleStatus;
-    'error' | 'success' | 'processing' | 'warning' | 'default';
 };
+'day';
+return { startDate: selectedDate.clone().startOf('day'),
+    endDate: selectedDate.clone().endOf('day') };
+;
+return { startDate: selectedDate.clone().startOf('month'),
+    endDate: selectedDate.clone().endOf('month') };
+;
+;
+const getEventBadgeStatus = ();
+;
+priority: SchedulePriority,
+    status;
+ScheduleStatus;
+'error' | 'success' | 'processing' | 'warning' | 'default';
 {
     if (status === ScheduleStatus.OVERDUE)
         return 'error';
@@ -517,10 +500,11 @@ const getPriorityColor = (priority) => {
         [SchedulePriority.MEDIUM]: 'blue',
         [SchedulePriority.HIGH]: 'orange',
         [SchedulePriority.CRITICAL]: 'red',
-        [SchedulePriority.REGULATORY]: 'purple',
+        [SchedulePriority.REGULATORY]: 'purple'
     };
-    return colors[priority] || 'blue';
 };
+return colors[priority] || 'blue';
+;
 const getStatusColor = (status) => {
     const colors = {
         [ScheduleStatus.SCHEDULED]: 'blue',
@@ -529,16 +513,17 @@ const getStatusColor = (status) => {
         [ScheduleStatus.CANCELLED]: 'gray',
         [ScheduleStatus.DELAYED]: 'yellow',
         [ScheduleStatus.FAILED]: 'red',
-        [ScheduleStatus.OVERDUE]: 'red',
+        [ScheduleStatus.OVERDUE]: 'red'
     };
-    return colors[status] || 'blue';
 };
+return colors[status] || 'blue';
+;
 // Edit Schedule Modal Component
 const EditScheduleModal, boolean;
 schedule: AuditSchedule | null;
 onCancel: () => void ;
 onSubmit: (updates) => void ;
- > ;
+    > ;
 ({ visible, schedule, onCancel, onSubmit }) => {
     const [form] = Form.useForm();
     useEffect(() => {
@@ -564,8 +549,7 @@ onSubmit: (updates) => void ;
                 mandatory;
             schedule.mandatory,
                 tags;
-            schedule.tags.join(', '),
-            ;
+            schedule.tags.join(', ');
         }
     });
 }, [schedule, visible, form];
@@ -577,11 +561,12 @@ const handleSubmit = () => {
         scheduled_start: values.date_range[0].toDate(),
         scheduled_end: values.date_range[1].toDate(),
         tags: values.tags ? values.tags.split(',').map((t) => t.trim()) : [],
-        updated_by: 'current_user',
+        updated_by: 'current_user'
     };
-    onSubmit(updates);
-    form.resetFields();
 };
+onSubmit(updates);
+form.resetFields();
+;
 ;
 return;
 _jsxs(Modal, { title: `Edit Schedule: ${schedule?.title || ''}`, visible: visible, onCancel: onCancel, onOk: handleSubmit, width: 900, destroyOnClose: true, children: [_jsx(Form, { form: form, layout: "vertical", children: _jsxs(Row, { gutter: 16, children: [_jsx(Col, { span: 12, children: _jsx(Form.Item, { name: "title", label: "Title", rules: [{ required: true }], children: _jsx(Input, {}) }) }), _jsx(Col, { span: 12, children: _jsxs(Form.Item, { name: "activity_type", label: "Activity Type", rules: [{ required: true }], children: [_jsx(Select, { children: Object.values(AuditActivityType).map(type => ()
@@ -609,16 +594,16 @@ Modal >
 const OverdueSchedulesView, AuditSchedule;
 onScheduleClick: (schedule) => void ;
 onScheduleUpdate: (scheduleId, updates) => void ;
- > ;
+    > ;
 ({ schedules, onScheduleClick, onScheduleUpdate }) => {
     const columns = [
         {
             title: 'Title',
             dataIndex: 'title',
-            key: 'title',
-            render: (title, record) => ()
-                < Button, type = "link", onClick = {}()
-        }
+            key: 'title'
+        },
+        render, (title, record) => ()
+            < Button, type = "link", onClick = {}()
     ];
     onScheduleClick(record);
 };
@@ -629,71 +614,61 @@ style = {};
  >
     _jsxs(Space, { children: [_jsx(WarningOutlined, { style: { color: '#f5222d' } }), title] });
 Button >
+    { title: 'Activity Type',
+        dataIndex: 'activity_type',
+        key: 'activity_type',
+        render: (type) => () }
+    < Tag > { type, : .replace('_', ' ').toUpperCase() };
+Tag >
+    { title: 'Priority',
+        dataIndex: 'priority',
+        key: 'priority',
+        render: (priority) => () }
+    < Tag;
+color = {} >
+    { priority, : .toUpperCase() };
+Tag >
+    { title: 'Original Due Date',
+        dataIndex: 'scheduled_end',
+        key: 'scheduled_end',
+        render: (date) => () }
+    < Space >
+    _jsx(ClockCircleOutlined, {});
+{
+    moment(date).format('MMM DD, YYYY HH:mm');
+}
+Space >
 ;
-{
-    title: 'Activity Type',
-        dataIndex;
-    'activity_type',
-        key;
-    'activity_type',
-        render;
-    (type) => (),
-        _jsx(Tag, { children: type.replace('_', ' ').toUpperCase() });
-}
-{
-    title: 'Priority',
-        dataIndex;
-    'priority',
-        key;
-    'priority',
-        render;
-    (priority) => (),
-        _jsx(Tag, { color: getPriorityColor(priority), children: priority.toUpperCase() });
-}
-{
-    title: 'Original Due Date',
-        dataIndex;
-    'scheduled_end',
-        key;
-    'scheduled_end',
-        render;
-    (date) => (),
-        _jsxs(Space, { children: [_jsx(ClockCircleOutlined, {}), moment(date).format('MMM DD, YYYY HH:mm')] });
-    sorter: (a, b) => moment(a.scheduled_end).valueOf() - moment(b.scheduled_end).valueOf();
-}
+sorter: (a, b) => moment(a.scheduled_end).valueOf() - moment(b.scheduled_end).valueOf();
 {
     title: 'Days Overdue',
         key;
-    'days_overdue',
-        render;
-    (_, record) => {
-        const daysOverdue = moment().diff(moment(record.scheduled_end), 'days');
-        return;
-        _jsxs(Tag, { color: "red", children: [_jsx(ExclamationTriangleOutlined, {}), " ", daysOverdue, " days"] });
-        ;
-    },
-        sorter;
-    (a, b) => {
+    'days_overdue';
+}
+render: (_, record) => {
+    const daysOverdue = moment().diff(moment(record.scheduled_end), 'days');
+    return;
+    _jsxs(Tag, { color: "red", children: [_jsx(ExclamationTriangleOutlined, {}), " ", daysOverdue, " days"] });
+    sorter: (a, b) => {
         const aDays = moment().diff(moment(a.scheduled_end), 'days');
         const bDays = moment().diff(moment(b.scheduled_end), 'days');
         return bDays - aDays; // Most overdue first
-    };
-    {
-        title: 'Assignee',
-            dataIndex;
-        'assignee_id',
-            key;
-        'assignee_id',
-            render;
-        (assignee) => (),
-            assignee ? _jsx(Tag, { icon: _jsx(TeamOutlined, {}), children: assignee }) : 'Unassigned';
-    }
-    {
-        title: 'Actions',
-            key;
-        'actions',
-            render;
-        (_, record) => ()
+        {
+            title: 'Assignee',
+                dataIndex;
+            'assignee_id',
+                key;
+            'assignee_id',
+                render;
+            (assignee) => ();
+        }
+        assignee ? _jsx(Tag, { icon: _jsx(TeamOutlined, {}), children: assignee }) : 'Unassigned';
+        {
+            title: 'Actions',
+                key;
+            'actions';
+        }
+        render: (_, record) => ()
             < Space >
             (_jsx(Button, { size: "small", type: "primary", icon: _jsx(SyncOutlined, {}), onClick: () => onScheduleUpdate(record.id, { status: ScheduleStatus.IN_PROGRESS }), children: "Resume" })
                 ,
@@ -706,7 +681,7 @@ Button >
                             // Bulk action to mark all as high priority
                             schedules.forEach(schedule => { });
                             onScheduleUpdate(schedule.id, { priority: SchedulePriority.HIGH });
-                        } }) }), "); }} > Mark All High Priority"] })
+                        } }) }), "); } > Mark All High Priority"] })
             >
                 { schedules, : .length === 0 ? ()
                         < div : , style = {} };
@@ -714,7 +689,7 @@ Button >
             textAlign: 'center', padding;
             '40px';
         }
-    }
+    };
      >
         (_jsx(CheckCircleOutlined, { style: { fontSize: '48px', color: '#52c41a', marginBottom: '16px' } })
             ,
@@ -730,10 +705,10 @@ Button >
                 _jsx(Table, { columns: columns, dataSource: schedules, rowKey: "id", pagination: {
                         pageSize: 10,
                         showSizeChanger: true,
-                        showQuickJumper: true,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} overdue schedules`
-                    } }));
-}
+                        showQuickJumper: true
+                    }, "showTotal:": true }));
+    (total, range) => `${range[0]}-${range[1]} of ${total} overdue schedules`;
+};
 defaultSortOrder = "descend";
 defaultSortColumnKey = "days_overdue"
     /  >
@@ -747,30 +722,10 @@ div >
 ;
 ;
 // Calendar Analytics View Component
-const CalendarAnalyticsView = () => {
-    const [analyticsData, setAnalyticsData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [dateRange, setDateRange] = useState([]);
-    moment().subtract(30, 'days'),
-        moment();
-};
-;
-useEffect(() => {
-    loadAnalyticsData();
-}, [dateRange, loadAnalyticsData]);
-const loadAnalyticsData = useCallback(() => {
-    setLoading(true);
-    try {
-        const analytics = auditCalendarSystem.generateScheduleAnalytics({});
-        start: dateRange[0].toDate(),
-            end;
-        dateRange[1].toDate(),
-        ;
-    }
-    finally { }
-});
+const CalendarAnalyticsView = () => { return null; };
 setAnalyticsData(analytics);
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to load analytics:', error);
 }
@@ -785,8 +740,10 @@ if (loading) {
     ;
     return;
     _jsxs("div", { children: [_jsx(Card, { title: "\uD83D\uDCCA Audit Calendar Analytics", extra: _jsxs(Space, { children: [_jsx(RangePicker, { value: dateRange, onChange: (dates) => dates && setDateRange(dates), style: { marginRight: 8 } }), _jsx(Button, { icon: _jsx(SyncOutlined, {}), onClick: loadAnalyticsData, children: "Refresh" })] }), style: { marginBottom: 16 }, children: _jsxs(Row, { gutter: 16, children: [_jsx(Col, { span: 6, children: _jsx(Statistic, { title: "Total Schedules", value: analyticsData?.summary.total_schedules || 0, prefix: _jsx(CalendarOutlined, {}), valueStyle: { color: '#1890ff' } }) }), _jsx(Col, { span: 6, children: _jsx(Statistic, { title: "Completion Rate", value: analyticsData?.summary.completion_rate || 0, suffix: "%", prefix: _jsx(CheckCircleOutlined, {}), valueStyle: {
-                                    color: (analyticsData?.summary.completion_rate || 0) >= 80 ? '#52c41a' : '#faad14',
-                                } }) }), _jsx(Col, { span: 6, children: _jsx(Statistic, { title: "Overdue Count", value: analyticsData?.summary.overdue_schedules || 0, prefix: _jsx(ExclamationTriangleOutlined, {}), valueStyle: { color: '#f5222d' } }) }), _jsx(Col, { span: 6, children: _jsx(Statistic, { title: "Avg Duration", value: analyticsData?.summary.average_duration || 0, suffix: "hrs", prefix: _jsx(ClockCircleOutlined, {}), precision: 1 }) })] }) }), _jsxs(Row, { gutter: 16, children: [_jsx(Col, { span: 12, children: _jsx(Card, { title: "Activity Type Distribution", style: { marginBottom: 16 }, children: _jsxs("div", { style: { height: 300 }, children: [analyticsData?.activity_breakdown ? ()
+                                    color: (analyticsData?.summary.completion_rate || 0) >= 80 ? '#52c41a' : '#faad14'
+                                }
+                                    /  >
+                             }) }), _jsx(Col, { span: 6, children: _jsx(Statistic, { title: "Overdue Count", value: analyticsData?.summary.overdue_schedules || 0, prefix: _jsx(ExclamationTriangleOutlined, {}), valueStyle: { color: '#f5222d' } }) }), _jsx(Col, { span: 6, children: _jsx(Statistic, { title: "Avg Duration", value: analyticsData?.summary.average_duration || 0, suffix: "hrs", prefix: _jsx(ClockCircleOutlined, {}), precision: 1 }) })] }) }), _jsxs(Row, { gutter: 16, children: [_jsx(Col, { span: 12, children: _jsx(Card, { title: "Activity Type Distribution", style: { marginBottom: 16 }, children: _jsxs("div", { style: { height: 300 }, children: [analyticsData?.activity_breakdown ? ()
                                         :
                                     , "Object.entries(analyticsData.activity_breakdown).map(([type, count]) => ()", _jsxs("div", { style: { marginBottom: 8 }, children: [_jsxs("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: 4 }, children: [_jsx("span", { children: type.replace('_', ' ').toUpperCase() }), _jsx("span", { children: count })] }), _jsx(Progress, { percent: (count / analyticsData.summary.total_schedules) * 100, showInfo: false, size: "small" })] }, type), ")) ) : ()", _jsxs("div", { style: { textAlign: 'center', padding: '40px' }, children: [_jsx(FileTextOutlined, { style: { fontSize: '48px', color: '#d9d9d9' } }), _jsx("p", { children: "No data available" })] }), ")}"] }) }) }), _jsx(Col, { span: 12, children: _jsx(Card, { title: "Priority Distribution", style: { marginBottom: 16 }, children: _jsxs("div", { style: { height: 300 }, children: [analyticsData?.priority_distribution ? ()
                                         :

@@ -21,53 +21,52 @@ import { Bell, Clock, Lock, AlertTriangle, Check, Filter } from 'lucide-react';
             case 'expiring':
                 return _jsx(Clock, { className: "h-4 w-4 text-amber-500" });
             default:
-                return _jsx(Bell, { className: "h-4 w-4 text-gray-500" });
         }
-        ;
-        const getNotificationColor = (type) => {
-            switch (type) {
-                case 'acquired':
-                    return 'border-l-green-500 bg-green-50';
-                case 'released':
-                    return 'border-l-blue-500 bg-blue-50';
-                case 'broken':
-                    return 'border-l-red-500 bg-red-50';
-                case 'conflict':
-                    return 'border-l-orange-500 bg-orange-50';
-                case 'queue_position':
-                    return 'border-l-blue-500 bg-blue-50';
-                case 'expiring':
-                    return 'border-l-amber-500 bg-amber-50';
-                default:
-                    return 'border-l-gray-500 bg-gray-50';
-            }
-            ;
-            const filteredNotifications = notifications.filter(notification => { });
-            if (filter === 'unread' && notification.read_at)
-                return false;
-            if (typeFilter !== 'all' && notification.notification_type !== typeFilter)
-                return false;
-            return true;
-        };
-        const unreadCount = notifications.filter(n => !n.read_at).length;
-        const notificationTypes = Array.from(new Set(notifications.map(n => n.notification_type)));
-        const formatRelativeTime = (dateString) => {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diff = now.getTime() - date.getTime();
-            const minutes = Math.floor(diff / (1000 * 60));
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            if (minutes < 1)
-                return 'Just now';
-            if (minutes < 60)
-                return `${minutes}m ago`;
-        };
-        if (hours < 24)
-            return `${hours}h ago`;
+        return _jsx(Bell, { className: "h-4 w-4 text-gray-500" });
     };
-    return `${days}d ago`;
+    const getNotificationColor = (type) => {
+        switch (type) {
+            case 'acquired':
+                return 'border-l-green-500 bg-green-50';
+            case 'released':
+                return 'border-l-blue-500 bg-blue-50';
+            case 'broken':
+                return 'border-l-red-500 bg-red-50';
+            case 'conflict':
+                return 'border-l-orange-500 bg-orange-50';
+            case 'queue_position':
+                return 'border-l-blue-500 bg-blue-50';
+            case 'expiring':
+                return 'border-l-amber-500 bg-amber-50';
+            default:
+        }
+        return 'border-l-gray-500 bg-gray-50';
+    };
+    const filteredNotifications = notifications.filter(notification => { });
+    if (filter === 'unread' && notification.read_at)
+        return false;
+    if (typeFilter !== 'all' && notification.notification_type !== typeFilter)
+        return false;
+    return true;
 }
+;
+const unreadCount = notifications.filter(n => !n.read_at).length;
+const notificationTypes = Array.from(new Set(notifications.map(n => n.notification_type)));
+const formatRelativeTime = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    if (minutes < 1)
+        return 'Just now';
+    if (minutes < 60)
+        return `${minutes}m ago`;
+};
+if (hours < 24)
+    return `${hours}h ago`;
+return `${days}d ago`;
 ;
 if (notifications.length === 0) {
     return;

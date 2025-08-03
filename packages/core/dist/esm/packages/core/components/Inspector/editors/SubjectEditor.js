@@ -5,14 +5,10 @@ import { ProgressiveDisclosureSection } from '../ProgressiveDisclosureSection';
         < div;
     style = {};
     {
-        marginTop: 8,
-            padding;
-        8,
-            background;
-        'rgba(34, 197, 94, 0.1)',
-            borderRadius;
-        2,
-        ;
+        marginTop: 8;
+        padding: 8;
+        background: 'rgba(34, 197, 94, 0.1)';
+        borderRadius: 2;
     }
 }
  >

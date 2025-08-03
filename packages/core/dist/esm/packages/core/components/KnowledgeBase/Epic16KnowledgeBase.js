@@ -7,43 +7,35 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Marketplace & Community features.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { KnowledgeCategory, ArticleType, Epic16KnowledgeBaseService } from '../../services/Epic16KnowledgeBaseService';
+import { KnowledgeCategory, ArticleType } from Epic16KnowledgeBaseService;
+from;
+'../../services/Epic16KnowledgeBaseService';
 import { KnowledgeBaseSearch } from './KnowledgeBaseSearch';
 import { KnowledgeBaseArticleViewer } from './KnowledgeBaseArticleViewer';
-{
-    // Service initialization
+{ // Service initialization
     const knowledgeService = useMemo(() => new Epic16KnowledgeBaseService(), []);
     // State management
     const [kbState, setKbState] = useState({});
-    currentView: initialView,
-        selectedArticle;
-    null,
-        popularArticles;
-    [],
-        recentArticles;
-    [],
-        loading;
-    true,
-        error;
-    null,
-        searchQuery;
-    '',
-        selectedCategory;
-    null,
-    ;
+    currentView: initialView;
+    selectedArticle: null;
+    popularArticles: [];
+    recentArticles: [];
+    loading: true;
+    error: null;
+    searchQuery: '';
+    selectedCategory: null;
 }
 ;
 // Initialize knowledge base data
 useEffect(() => {
     const initializeKnowledgeBase = async () => {
         setKbState(prev => ({ ...prev, loading: true, error: null }));
-        try {
-            // Create sample articles for demonstration
+        try { // Create sample articles for demonstration
             await createSampleArticles(knowledgeService);
             // Load popular and recent articles
             const [popularArticles, recentArticles] = await Promise.all([]);
-            knowledgeService.getPopularArticles(undefined, 6),
-                knowledgeService.getRecentArticles(6);
+            knowledgeService.getPopularArticles(undefined, 6);
+            knowledgeService.getRecentArticles(6);
         }
         finally {
         }
@@ -57,34 +49,27 @@ if (initialArticleId) {
     if (article) {
         setKbState(prev => ({}), ...prev, selectedArticle, article, currentView, 'article');
     }
-    ;
-    // Set up analytics tracking
-    knowledgeService.on('searchPerformed', (data) => {
-        onAnalytics?.({});
-        type: 'knowledge_base_search',
-            query;
-        data.query,
-            results;
-        data.results,
-            userId;
-        data.userId,
-        ;
-    });
 }
+;
+// Set up analytics tracking
+knowledgeService.on('searchPerformed', (data) => {
+    onAnalytics?.({});
+    type: 'knowledge_base_search';
+    query: data.query;
+    results: data.results;
+    userId: data.userId;
+});
 ;
 knowledgeService.on('articleViewed', (data) => {
     onAnalytics?.({});
-    type: 'knowledge_base_article_view',
-        articleId;
-    data.articleId,
-        userId;
-    data.userId,
-        analytics;
-    data.analytics,
-    ;
+    type: 'knowledge_base_article_view';
+    articleId: data.articleId;
+    userId: data.userId;
+    analytics: data.analytics;
 });
 ;
-try { }
+try {
+}
 catch (error) {
     setKbState(prev => ({}), ...prev, error, error instanceof Error ? error.message : 'Failed to initialize knowledge base', loading, false);
 }
@@ -92,9 +77,7 @@ catch (error) {
 ;
 initializeKnowledgeBase();
 // Cleanup
-return () => {
-    knowledgeService.removeAllListeners();
-};
+return () => { knowledgeService.removeAllListeners(); };
 [knowledgeService, userId, initialArticleId, onAnalytics];
 ;
 // Handle article selection
@@ -112,7 +95,8 @@ const handleArticleSelect = useCallback(async (articleId) => {
     setKbState(prev => ({}), ...prev, error, 'Article not found', loading, false);
 }
 ;
-try { }
+try {
+}
 catch (error) {
     setKbState(prev => ({}), ...prev, error, error instanceof Error ? error.message : 'Failed to load article', loading, false);
 }
@@ -131,33 +115,20 @@ const handleCategorySelect = useCallback((category) => {
 const handleBackToSearch = useCallback(() => {
     setKbState(prev => ({}), ...prev, currentView, 'search', selectedArticle, null, selectedCategory, null);
 });
+;
 [];
 ;
 // Format category name
-const formatCategoryName = useCallback((category) => {
-    return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-}, []);
+const formatCategoryName = useCallback((category) => { return category.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); }, []);
 // Get category icon
 const getCategoryIcon = useCallback((category) => {
     const icons = {
-        [KnowledgeCategory.GETTING_STARTED]: '🚀',
-        [KnowledgeCategory.MARKETPLACE_GUIDE]: '🏪',
-        [KnowledgeCategory.TEMPLATE_CREATION]: '🎨',
-        [KnowledgeCategory.SELLING_BUYING]: '💰',
-        [KnowledgeCategory.COMMUNITY_HELP]: '👥',
-        [KnowledgeCategory.TECHNICAL_DOCS]: '⚙️',
-        [KnowledgeCategory.API_REFERENCE]: '📝',
-        [KnowledgeCategory.TROUBLESHOOTING]: '🔧',
-        [KnowledgeCategory.BEST_PRACTICES]: '✨',
-        [KnowledgeCategory.POLICIES_LEGAL]: '📋',
-        [KnowledgeCategory.BILLING_PAYMENTS]: '💳',
-        [KnowledgeCategory.ACCOUNT_SECURITY]: '🔒',
-        [KnowledgeCategory.INTEGRATIONS]: '🔗',
-        [KnowledgeCategory.MOBILE_APP]: '📱',
-        [KnowledgeCategory.ADVANCED_FEATURES]: '🎯',
+        [KnowledgeCategory.GETTING_STARTED]: '🚀'[KnowledgeCategory.MARKETPLACE_GUIDE], '🏪': [KnowledgeCategory.TEMPLATE_CREATION], '🎨': [KnowledgeCategory.SELLING_BUYING], '💰': [KnowledgeCategory.COMMUNITY_HELP], '👥': [KnowledgeCategory.TECHNICAL_DOCS], '⚙️': [KnowledgeCategory.API_REFERENCE], '📝': [KnowledgeCategory.TROUBLESHOOTING], '🔧': [KnowledgeCategory.BEST_PRACTICES], '✨': [KnowledgeCategory.POLICIES_LEGAL], '📋': [KnowledgeCategory.BILLING_PAYMENTS], '💳': [KnowledgeCategory.ACCOUNT_SECURITY], '🔒': [KnowledgeCategory.INTEGRATIONS], '🔗': [KnowledgeCategory.MOBILE_APP], '📱': [KnowledgeCategory.ADVANCED_FEATURES], '🎯': 
     };
-    return icons[category] || '📄';
-}, []);
+});
+return icons[category] || '📄';
+[];
+;
 // Render loading state
 if (kbState.loading && !kbState.selectedArticle) {
     return;
@@ -174,7 +145,7 @@ if (kbState.loading && !kbState.selectedArticle) {
                     _jsx(KnowledgeBaseSearch, { knowledgeService: knowledgeService, userId: userId, onArticleSelect: handleArticleSelect, onSearchPerformed: handleSearchPerformed }), _jsx("div", { className: "max-w-6xl mx-auto px-6 py-12", children: _jsxs("div", { className: "mb-12", children: [_jsx("h2", { className: "text-2xl font-bold text-gray-900 mb-6", children: "Browse by Category" }), _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4", children: [Object.values(KnowledgeCategory).map(category => ()
                                         < button, key = { category }, onClick = {}()), " => handleCategorySelect(category)} className=\"flex flex-col items-center p-4 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-md transition-all\" >", _jsx("div", { className: "text-3xl mb-2", children: getCategoryIcon(category) }), _jsx("div", { className: "text-sm font-medium text-gray-900 text-center", children: formatCategoryName(category) })] }), "))}"] }) }), _jsxs("div", { className: "mb-12", children: [_jsxs("div", { className: "flex items-center justify-between mb-6", children: [_jsx("h2", { className: "text-2xl font-bold text-gray-900", children: "Popular Articles" }), _jsx("button", { onClick: () => setKbState(prev => ({ ...prev, currentView: 'browse' })), className: "text-blue-600 hover:text-blue-800 text-sm font-medium", children: "View All \u2192" })] }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: [kbState.popularArticles.map(article => ()
                                     < div, key = { article, : .id }, className = "bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer", onClick = {}()), " => handleArticleSelect(article.id)} >", _jsxs("div", { className: "flex items-start justify-between mb-3", children: [_jsx("span", { className: "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800", children: formatCategoryName(article.category) }), _jsxs("span", { className: "text-xs text-gray-500", children: [article.views, " views"] })] }), _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2 line-clamp-2", children: article.title }), _jsx("p", { className: "text-gray-600 text-sm mb-4 line-clamp-3", children: article.excerpt || article.content.substring(0, 150) + '...' }), _jsxs("div", { className: "flex items-center justify-between text-sm text-gray-500", children: [_jsxs("span", { children: [article.estimatedReadTime, " min read"] }), _jsxs("div", { className: "flex items-center", children: [[...Array(5)].map((_, i) => ()
-                                                    < svg, key = { i }, className = {} `w-4 h-4 ${i < Math.round(), article.ratings.reduce((sum), r)), " => sum + r.rating, 0) / article.ratings.length || 0) ? 'text-yellow-400' : 'text-gray-300', }`} fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}"] })] })] }), "))}"] });
+                                                    < svg, key = { i }, className = {} `w-4 h-4 ${i < Math.round(), article.ratings.reduce((sum), r)), " => sum + r.rating, 0) / article.ratings.length || 0) ? 'text-yellow-400' : 'text-gray-300' } `} fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}"] })] })] }), "))}"] });
         div >
             { /* Recent Articles */}
             < div >
@@ -182,7 +153,7 @@ if (kbState.loading && !kbState.selectedArticle) {
                 ,
                     _jsxs("div", { className: "space-y-4", children: [kbState.recentArticles.map(article => ()
                                 < div, key = { article, : .id }, className = "bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer", onClick = {}()), " => handleArticleSelect(article.id)} >", _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex-1", children: [_jsxs("div", { className: "flex items-center space-x-3 mb-2", children: [_jsx("h3", { className: "text-lg font-semibold text-gray-900", children: article.title }), _jsx("span", { className: "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800", children: "Updated" })] }), _jsx("p", { className: "text-gray-600 text-sm mb-2 line-clamp-2", children: article.excerpt || article.content.substring(0, 200) + '...' }), _jsxs("div", { className: "flex items-center space-x-4 text-sm text-gray-500", children: [_jsx("span", { className: "bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs", children: formatCategoryName(article.category) }), _jsxs("span", { children: [article.estimatedReadTime, " min read"] }), _jsxs("span", { children: ["Updated ", new Date(article.lastUpdated).toLocaleDateString()] })] })] }), _jsxs("div", { className: "text-right", children: [_jsxs("div", { className: "flex items-center mb-1", children: [[...Array(5)].map((_, i) => ()
-                                                        < svg, key = { i }, className = {} `w-4 h-4 ${i < Math.round(), article.ratings.reduce((sum), r)), " => sum + r.rating, 0) / article.ratings.length || 0) ? 'text-yellow-400' : 'text-gray-300', }`} fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}"] }), _jsxs("div", { className: "text-xs text-gray-500", children: [article.views, " views"] })] })] }));
+                                                        < svg, key = { i }, className = {} `w-4 h-4 ${i < Math.round(), article.ratings.reduce((sum), r)), " => sum + r.rating, 0) / article.ratings.length || 0) ? 'text-yellow-400' : 'text-gray-300' } `} fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}"] }), _jsxs("div", { className: "text-xs text-gray-500", children: [article.views, " views"] })] })] }));
         div >
         ;
     }
@@ -216,7 +187,7 @@ if (kbState.loading && !kbState.selectedArticle) {
     _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6", children: [(kbState.selectedCategory)
                 ? [...kbState.popularArticles, ...kbState.recentArticles].filter(article => article.category === kbState.selectedCategory)
                 : [...kbState.popularArticles, ...kbState.recentArticles], ").map(article => ()", _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow cursor-pointer", onClick: () => handleArticleSelect(article.id), children: [_jsxs("div", { className: "flex items-start justify-between mb-3", children: [_jsx("span", { className: "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800", children: formatCategoryName(article.category) }), _jsxs("span", { className: "text-xs text-gray-500", children: [article.views, " views"] })] }), _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-2 line-clamp-2", children: article.title }), _jsx("p", { className: "text-gray-600 text-sm mb-4 line-clamp-3", children: article.excerpt || article.content.substring(0, 150) + '...' }), _jsxs("div", { className: "flex items-center justify-between text-sm text-gray-500", children: [_jsxs("span", { children: [article.estimatedReadTime, " min read"] }), _jsxs("div", { className: "flex items-center", children: [[...Array(5)].map((_, i) => ()
-                                        < svg, key = { i }, className = {} `w-4 h-4 ${i < Math.round(), article.ratings.reduce((sum), r)), " => sum + r.rating, 0) / article.ratings.length || 0) ? 'text-yellow-400' : 'text-gray-300', }`} fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}"] })] }, article.id)] });
+                                        < svg, key = { i }, className = {} `w-4 h-4 ${i < Math.round(), article.ratings.reduce((sum), r)), " => sum + r.rating, 0) / article.ratings.length || 0) ? 'text-yellow-400' : 'text-gray-300' } `} fill=\"currentColor\" viewBox=\"0 0 20 20\" >", _jsx("path", { d: "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" })] }), "))}"] })] }, article.id)] });
 }
 div >
 ;
@@ -247,19 +218,17 @@ async function createSampleArticles(knowledgeService) {
                     order: 1,
                     type: 'text',
                     anchor: 'creating-account',
-                    isCollapsible: false,
-                    metadata: {}
+                    isCollapsible: false
                 },
-                {
-                    id: 'section-2',
+                metadata, {},
+                { id: 'section-2',
                     title: 'Browsing Templates',
                     content: 'Use our advanced search and filtering tools to find the perfect templates for your needs.',
                     order: 2,
                     type: 'text',
                     anchor: 'browsing-templates',
-                    isCollapsible: false,
-                    metadata: {}
-                }
+                    isCollapsible: false },
+                metadata, {}
             ],
             attachments: [],
             relatedArticles: [],
@@ -290,8 +259,7 @@ async function createSampleArticles(knowledgeService) {
             videos: [],
             images: []
         },
-        {
-            title: 'How to Create and Sell Templates',
+        { title: 'How to Create and Sell Templates',
             slug: 'create-sell-templates',
             content: 'This guide covers the complete process of creating high-quality templates and successfully selling them on our marketplace.',
             excerpt: 'Learn how to create professional templates and maximize your sales.',
@@ -308,19 +276,17 @@ async function createSampleArticles(knowledgeService) {
                     order: 1,
                     type: 'text',
                     anchor: 'design-principles',
-                    isCollapsible: false,
-                    metadata: {}
+                    isCollapsible: false
                 },
-                {
-                    id: 'section-2',
+                metadata, {},
+                { id: 'section-2',
                     title: 'File Requirements',
                     content: 'Ensure your templates meet our technical requirements for quality and compatibility.',
                     order: 2,
                     type: 'text',
                     anchor: 'file-requirements',
-                    isCollapsible: false,
-                    metadata: {}
-                }
+                    isCollapsible: false },
+                metadata, {}
             ],
             attachments: [],
             relatedArticles: [],
@@ -349,18 +315,15 @@ async function createSampleArticles(knowledgeService) {
             translations: {},
             interactiveElements: [],
             codeExamples: [
-                {
-                    id: 'code-1',
+                { id: 'code-1',
                     language: 'javascript',
                     title: 'Template Validation',
-                    description: 'Basic validation for template files',
-                    code: 'function validateTemplate(template) {\n  return template.name && template.files.length > 0;\n}',
-                    runnable: false
-                }
+                    description: 'Basic validation for template files' },
+                code, 'function validateTemplate(template) {\n  return template.name && template.files.length > 0;\n}',
+                runnable, false
             ],
             videos: [],
-            images: []
-        }
+            images: [] }
     ];
     for (const articleData of sampleArticles) {
         await knowledgeService.createArticle(articleData);

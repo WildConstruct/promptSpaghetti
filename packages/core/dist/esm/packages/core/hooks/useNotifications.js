@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+from;
+'../types/NotificationTypes';
 userId: string;
 workspaceId ?  : string;
 UseNotificationsReturn => {
@@ -13,10 +15,8 @@ UseNotificationsReturn => {
     const [cursor, setCursor] = useState();
     // Real-time connection state
     const [realTimeConnection, setRealTimeConnection] = useState({});
-    status: 'disconnected',
-        reconnectAttempts;
-    0,
-    ;
+    status: 'disconnected';
+    reconnectAttempts: 0;
 };
 ;
 const wsRef = useRef(null);
@@ -30,8 +30,7 @@ const fetchNotifications = useCallback(async (reset = false) => {
             setLoading(true);
             setCursor(undefined);
             const params = new URLSearchParams({});
-            userId,
-            ;
+            userId;
         }
     }
     finally {
@@ -67,8 +66,7 @@ finally {
 const fetchStats = useCallback(async () => {
     try {
         const params = new URLSearchParams({});
-        userId,
-        ;
+        userId;
     }
     finally {
     }
@@ -92,8 +90,11 @@ const markAsRead = useCallback(async (id) => {
     }
     finally {
     }
-}, method, 'POST', headers, {
-    'Content-Type': 'application/json',
+    method: 'POST';
+    headers: {
+        'Content-Type';
+        'application/json';
+    }
 });
 if (!response.ok) {
     throw new Error('Failed to mark notification as read');
@@ -105,32 +106,30 @@ if (!response.ok) {
         : notification;
     ;
     setUnreadCount(prev => Math.max(0, prev - 1));
-}
-try { }
-catch (err) {
-    console.error('Failed to mark notification as read:', err);
-    throw err;
-}
-[];
-;
-// Mark all notifications as read
-const markAllAsRead = useCallback(async () => {
     try {
-        const params = new URLSearchParams({});
-        userId,
-        ;
     }
-    finally {
+    catch (err) {
+        console.error('Failed to mark notification as read:', err);
+        throw err;
     }
-}, ...(workspaceId && { workspaceId }));
+    [];
+    ;
+    // Mark all notifications as read
+    const markAllAsRead = useCallback(async () => {
+        try {
+            const params = new URLSearchParams({});
+            userId;
+        }
+        finally {
+        }
+    }, ...(workspaceId && { workspaceId }));
+}
 ;
 const response = await fetch(`${apiBase}/read-all?${params}`, {});
-method: 'POST',
-    headers;
-{
+method: 'POST';
+headers: {
     'Content-Type';
-    'application/json',
-    ;
+    'application/json';
 }
 ;
 if (!response.ok) {
@@ -141,75 +140,69 @@ if (!response.ok) {
     prev.map(notification => ({ ...notification, read_at: now }));
     ;
     setUnreadCount(0);
-}
-try { }
-catch (err) {
-    console.error('Failed to mark all notifications as read:', err);
-    throw err;
-}
-[userId, workspaceId];
-;
-// Delete notification
-const deleteNotification = useCallback(async (id) => {
     try {
-        const response = await fetch(`${apiBase}/${id}`, {});
     }
-    finally {
-    }
-}, method, 'DELETE');
-;
-if (!response.ok) {
-    throw new Error('Failed to delete notification');
-    // Update local state
-    const deletedNotification = notifications.find(n => n.id === id);
-    setNotifications(prev => prev.filter(notification => notification.id !== id));
-    if (deletedNotification && !deletedNotification.read_at) {
-        setUnreadCount(prev => Math.max(0, prev - 1));
-    }
-    try { }
     catch (err) {
-        console.error('Failed to delete notification:', err);
+        console.error('Failed to mark all notifications as read:', err);
         throw err;
     }
-    [notifications];
+    [userId, workspaceId];
     ;
-    // Refresh notifications
-    const refreshNotifications = useCallback(async () => {
-        await fetchNotifications(true);
-        await fetchStats();
-    }, [fetchNotifications, fetchStats]);
-    // Load more notifications
-    const loadMore = useCallback(async () => {
-        if (!hasMore || loading)
-            return;
-        await fetchNotifications(false);
-    }, [hasMore, loading, fetchNotifications]);
-    // Set filter
-    const setFilter = useCallback((newFilter) => {
-        setFilterState(newFilter);
-    }, []);
-    // Set unread only
-    const setUnreadOnly = useCallback((newUnreadOnly) => {
-        setUnreadOnlyState(newUnreadOnly);
-    }, []);
-    // WebSocket connection management
-    const connectWebSocket = useCallback(() => {
-        if (wsRef.current?.readyState === WebSocket.OPEN) {
-            return;
-            setRealTimeConnection(prev => ({}), ...prev, status, 'connecting');
+    // Delete notification
+    const deleteNotification = useCallback(async (id) => {
+        try {
+            const response = await fetch(`${apiBase}/${id}`, {});
         }
+        finally {
+        }
+        method: 'DELETE';
     });
-    const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/notifications`;
+    if (!response.ok) {
+        throw new Error('Failed to delete notification');
+        // Update local state
+        const deletedNotification = notifications.find(n => n.id === id);
+        setNotifications(prev => prev.filter(notification => notification.id !== id));
+        if (deletedNotification && !deletedNotification.read_at) {
+            setUnreadCount(prev => Math.max(0, prev - 1));
+        }
+        try { }
+        catch (err) {
+            console.error('Failed to delete notification:', err);
+            throw err;
+        }
+        [notifications];
+        ;
+        // Refresh notifications
+        const refreshNotifications = useCallback(async () => {
+            await fetchNotifications(true);
+            await fetchStats();
+        }, [fetchNotifications, fetchStats]);
+        // Load more notifications
+        const loadMore = useCallback(async () => {
+            if (!hasMore || loading)
+                return;
+            await fetchNotifications(false);
+        }, [hasMore, loading, fetchNotifications]);
+        // Set filter
+        const setFilter = useCallback((newFilter) => { setFilterState(newFilter); }, []);
+        // Set unread only
+        const setUnreadOnly = useCallback((newUnreadOnly) => { setUnreadOnlyState(newUnreadOnly); }, []);
+        // WebSocket connection management
+        const connectWebSocket = useCallback(() => {
+            if (wsRef.current?.readyState === WebSocket.OPEN) {
+                return;
+                setRealTimeConnection(prev => ({}), ...prev, status, 'connecting');
+            }
+        });
+        const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/notifications`;
+    }
+    const ws = new WebSocket(`${wsUrl}?userId=${userId}${workspaceId ? `&workspaceId=${workspaceId}` : ''}`);
 }
-const ws = new WebSocket(`${wsUrl}?userId=${userId}${workspaceId ? `&workspaceId=${workspaceId}` : ''}`);
 ws.onopen = () => {
     setRealTimeConnection({});
-    status: 'connected',
-        lastConnected;
-    new Date(),
-        reconnectAttempts;
-    0,
-    ;
+    status: 'connected';
+    lastConnected: new Date();
+    reconnectAttempts: 0;
 };
 ;
 // Clear any pending reconnect timeout
@@ -237,43 +230,45 @@ ws.onmessage = (event) => {
                 ;
                 break;
             case 'notification_deleted':
-                const deletedNotification = notifications.find(n => n.id === notificationEvent.notification.id);
-                setNotifications(prev => );
-                prev.filter(n => n.id !== notificationEvent.notification.id);
-                ;
-                if (deletedNotification && !deletedNotification.read_at) {
-                    setUnreadCount(prev => Math.max(0, prev - 1));
-                    break;
-                    // Refresh stats
-                    fetchStats();
-                }
-                try { }
-                catch (err) {
-                    console.error('Failed to parse WebSocket message:', err);
-                }
-                ;
-                ws.onclose = () => {
-                    setRealTimeConnection(prev => ({}), ...prev, status, 'disconnected');
-                };
-                ;
-                // Attempt to reconnect with exponential backoff
-                const reconnectDelay = Math.min(1000 * Math.pow(2, realTimeConnection.reconnectAttempts), 30000);
-                reconnectTimeoutRef.current = setTimeout(() => {
-                    setRealTimeConnection(prev => ({}), ...prev, reconnectAttempts, prev.reconnectAttempts + 1);
-                });
-                ;
-                connectWebSocket();
         }
-        reconnectDelay;
+        const deletedNotification = notifications.find(n => n.id === notificationEvent.notification.id);
+        setNotifications(prev => );
+        prev.filter(n => n.id !== notificationEvent.notification.id);
         ;
+        if (deletedNotification && !deletedNotification.read_at) {
+            setUnreadCount(prev => Math.max(0, prev - 1));
+            break;
+            // Refresh stats
+            fetchStats();
+        }
+        try { }
+        catch (err) {
+            console.error('Failed to parse WebSocket message:', err);
+        }
+        ;
+        ws.onclose = () => {
+            setRealTimeConnection(prev => ({}), ...prev, status, 'disconnected');
+        };
     }
-    finally { }
+    finally // Attempt to reconnect with exponential backoff
+     { }
     ;
-    ws.onerror = (error) => {
-        setRealTimeConnection(prev => ({}), ...prev, status, 'error', error, 'WebSocket connection error');
-    };
-    ;
+    // Attempt to reconnect with exponential backoff
+    const reconnectDelay = Math.min(1000 * Math.pow(2, realTimeConnection.reconnectAttempts), 30000);
+    reconnectTimeoutRef.current = setTimeout(() => {
+        setRealTimeConnection(prev => ({}), ...prev, reconnectAttempts, prev.reconnectAttempts + 1);
+    });
 };
+;
+connectWebSocket();
+reconnectDelay;
+;
+;
+ws.onerror = (error) => {
+    setRealTimeConnection(prev => ({}), ...prev, status, 'error', error, 'WebSocket connection error');
+};
+;
+;
 wsRef.current = ws;
 [userId, workspaceId, realTimeConnection.reconnectAttempts, notifications, fetchStats];
 ;
@@ -293,11 +288,8 @@ useEffect(() => {
     };
 });
 // Refetch when filter or unreadOnly changes
-useEffect(() => {
-    fetchNotifications(true);
-}, [filter, unreadOnly]);
-return {
-    notifications,
+useEffect(() => { fetchNotifications(true); }, [filter, unreadOnly]);
+return { notifications,
     unreadCount,
     loading,
     error,
@@ -308,7 +300,7 @@ return {
     deleteNotification,
     refreshNotifications,
     loadMore,
-    setFilter,
-    setUnreadOnly
-};
+    setFilter };
+setUnreadOnly;
+;
 ;

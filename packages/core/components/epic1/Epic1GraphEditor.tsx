@@ -102,6 +102,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [nodePaletteCollapsed, setNodePaletteCollapsed] = useState(false);
   
   // Context menu and save-as-preset state
   const [contextMenuPosition, setContextMenuPosition] = useState<ContextMenuPosition | null>(null);
@@ -740,7 +741,18 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           <Controls />
           <MiniMap 
             position="top-left"
-            style={{ left: 10, top: 70 }}
+            style={{ 
+              left: nodePaletteCollapsed ? 50 : 210,
+              top: 70,
+              transition: 'left 0.3s ease-in-out',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              borderRadius: '4px',
+              backgroundColor: 'rgba(26, 26, 26, 0.95)',
+              width: '150px',
+              height: '100px'
+            }}
+            zoomable
+            pannable
             nodeColor={(node) => {
               switch (node.type) {
                 case 'textBlock': return '#7c7ff2';
@@ -751,6 +763,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
                 default: return '#666';
               }
             }}
+            maskColor="rgba(0, 0, 0, 0.1)"
           />
           
           {/* Epic 1 specific controls */}
@@ -816,7 +829,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         ))}
       
       {/* Node Palette for creating new nodes */}
-      <NodePalette position="left" defaultCollapsed={false} />
+      <NodePalette 
+        position="left" 
+        defaultCollapsed={false} 
+        onCollapsedChange={setNodePaletteCollapsed}
+      />
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />

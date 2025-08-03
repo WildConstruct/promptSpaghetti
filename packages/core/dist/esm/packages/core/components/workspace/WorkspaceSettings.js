@@ -5,23 +5,21 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  */
 import { useState } from 'react';
 onUpdate: (updates) => void ;
-onArchive: () => void ;
-onCancel: () => void ;
+onArchive: () => void onCancel;
+() => void ;
 canArchive: boolean;
 export const WorkspaceSettings = ({
     workspace,
     onUpdate,
     onArchive,
-    onCancel,
-    canArchive
-});
+    onCancel });
+canArchive;
 {
     const [activeTab, setActiveTab] = useState('general');
     const [formData, setFormData] = useState({});
     name: workspace.name,
         description;
-    workspace.description || '',
-    ;
+    workspace.description || '';
 }
 ;
 const [errors, setErrors] = useState({});
@@ -59,13 +57,14 @@ const validateForm = () => {
                         await onUpdate({});
                         name: formData.name.trim(),
                             description;
-                        formData.description.trim() || undefined,
-                        ;
+                        formData.description.trim() || undefined;
                     }
-                    finally { }
-                    ;
+                    finally {
+                    }
                 }
-                try { }
+                ;
+                try {
+                }
                 catch (error) {
                     console.error('Failed to update workspace:', error);
                 }

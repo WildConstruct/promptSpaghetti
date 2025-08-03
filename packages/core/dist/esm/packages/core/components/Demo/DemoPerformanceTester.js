@@ -10,23 +10,18 @@ import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 export const DemoPerformanceTester = ({
     onTestComplete,
     onGraphGenerated,
-    targetFPS = 30,
-    maxRenderTime = 16
-});
+    targetFPS = 30 });
+maxRenderTime = 16;
 {
     const [isRunning, setIsRunning] = useState(false);
     const [currentTest, setCurrentTest] = useState('');
     const [results, setResults] = useState([]);
     const performanceObserverRef = useRef(null);
     const metricsRef = useRef({});
-    frameCount: 0,
-        renderTimeSum;
-    0,
-        lastFrameTime;
-    0,
-        startTime;
-    0,
-    ;
+    frameCount: 0;
+    renderTimeSum: 0;
+    lastFrameTime: 0;
+    startTime: 0;
 }
 ;
 // Generate complex demo graph for testing
@@ -44,23 +39,19 @@ const generateComplexDemoGraph = useCallback((nodeCount) => {
         id: `demo-node-${i}`;
     }
 }, type, 'default', position, { x, y }, data, {
-    nodeType: category,
-    label: `${category} ${i + 1}` }
-// Add realistic data for different node types
-, 
-// Add realistic data for different node types
-...(category === 'WeightedChoice' && {}), choices, [
-    { text: 'Option A', weight: 0.4 },
-    { text: 'Option B', weight: 0.3 },
-    { text: 'Option C', weight: 0.3 }
-]);
-(category === 'Subject' && {
-    variations: ['Character A', 'Character B', 'Character C'],
+    nodeType: category }, label, `${category} ${i + 1}`);
+(category === 'WeightedChoice' && {
+    choices: [
+        { text: 'Option A', weight: 0.4 },
+        { text: 'Option B', weight: 0.3 },
+        { text: 'Option C', weight: 0.3 }
+    ]
 }),
 ;
+(category === 'Subject' && {
+    variations: ['Character A', 'Character B', 'Character C'] });
 (category === 'Action' && {
-    variations: ['runs', 'walks', 'jumps', 'dances'],
-});
+    variations: ['runs', 'walks', 'jumps', 'dances'] });
 ;
 // Generate edges to create realistic connections
 for (let i = 0; i < nodes.length - 1; i++) {
@@ -107,36 +98,35 @@ const startPerformanceMonitoring = useCallback(() => {
         frameCount: 0,
         renderTimeSum: 0,
         lastFrameTime: performance.now(),
-        startTime: performance.now(),
-    };
-    // Monitor frame rate
-    const measureFrame = (timestamp) => {
-        const metrics = metricsRef.current;
-        if (metrics.lastFrameTime) {
-            metrics.frameCount++;
-            const delta = timestamp - metrics.lastFrameTime;
-            metrics.renderTimeSum += delta;
-            metrics.lastFrameTime = timestamp;
-            requestAnimationFrame(measureFrame);
-        }
-        ;
-        requestAnimationFrame(measureFrame);
-        // Monitor render performance with PerformanceObserver
-        if ('PerformanceObserver' in window) {
-            performanceObserverRef.current = new PerformanceObserver((list) => {
-                const entries = list.getEntries();
-                entries.forEach((entry) => {
-                    if (entry.name.includes('react-flow') || entry.entryType === 'measure') {
-                        // Track rendering performance
-                    }
-                });
-            });
-            performanceObserverRef.current.observe({});
-            entryTypes: ['measure', 'navigation'],
-            ;
-        }
+        startTime: performance.now()
     };
 });
+// Monitor frame rate
+const measureFrame = (timestamp) => {
+    const metrics = metricsRef.current;
+    if (metrics.lastFrameTime) {
+        metrics.frameCount++;
+        const delta = timestamp - metrics.lastFrameTime;
+        metrics.renderTimeSum += delta;
+        metrics.lastFrameTime = timestamp;
+        requestAnimationFrame(measureFrame);
+    }
+    ;
+    requestAnimationFrame(measureFrame);
+    // Monitor render performance with PerformanceObserver
+    if ('PerformanceObserver' in window) {
+        performanceObserverRef.current = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach((entry) => {
+                if (entry.name.includes('react-flow') || entry.entryType === 'measure') {
+                    // Track rendering performance
+                }
+            });
+        });
+        performanceObserverRef.current.observe({});
+        entryTypes: ['measure', 'navigation'];
+    }
+};
 [];
 ;
 // Stop performance monitoring and calculate results
@@ -176,12 +166,13 @@ const stopPerformanceMonitoring = useCallback((nodeCount, edgeCount) => {
                                     fps: avgFPS,
                                     memoryUsage,
                                     testDuration,
-                                    passedThreshold,
-                                    recommendations
+                                    passedThreshold
                                 };
+                                recommendations;
                             }
-                            [targetFPS, maxRenderTime];
+                            ;
                         }
+                        [targetFPS, maxRenderTime];
                     }
                 }
             }
@@ -222,15 +213,18 @@ const runFullTestSuite = useCallback(async () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
         setResults(testResults);
         setCurrentTest('Test suite completed');
+        try {
+        }
+        catch (error) {
+            console.error('Performance test failed:', error);
+            setCurrentTest('Test failed');
+        }
+        finally {
+            setIsRunning(false);
+        }
+        [runTest];
     }
-    catch (error) {
-        console.error('Performance test failed:', error);
-        setCurrentTest('Test failed');
-    }
-    finally {
-        setIsRunning(false);
-    }
-    [runTest];
+    finally { }
 });
 // Quick demo graph generation for presentations
 const generateDemoScenarios = useCallback(() => {
@@ -238,23 +232,17 @@ const generateDemoScenarios = useCallback(() => {
         {
             name: 'Simple Film Prompt',
             nodeCount: 15,
-            description: 'Basic character + action + setting workflow',
+            description: 'Basic character + action + setting workflow'
         },
-        {
-            name: 'Complex Scene Builder',
+        { name: 'Complex Scene Builder',
             nodeCount: 50,
-            description: 'Multiple characters, actions, and weighted choices',
-        },
-        {
-            name: 'Enterprise Workflow',
+            description: 'Multiple characters, actions, and weighted choices' },
+        { name: 'Enterprise Workflow',
             nodeCount: 100,
-            description: 'Full production pipeline with multiple outputs',
-        },
-        {
-            name: 'Stress Test',
-            nodeCount: 200,
-            description: 'Maximum complexity for performance validation'
-        }
+            description: 'Full production pipeline with multiple outputs' },
+        { name: 'Stress Test',
+            nodeCount: 200 },
+        description, 'Maximum complexity for performance validation'
     ];
     return scenarios;
 }, []);
@@ -273,30 +261,48 @@ _jsxs("div", { style: {
         backdropFilter: 'blur(16px)',
         minWidth: '280px',
         maxHeight: '70vh',
-        overflow: 'auto',
+        overflow: 'auto'
     }, className: "development-only", children: [_jsx("div", { style: { fontWeight: 600, marginBottom: 12, fontSize: 14 }, children: "\uD83D\uDE80 Demo Performance Tester" }), isRunning && ()
             < div, " style=", { marginBottom: 16, textAlign: 'center' }, ">", _jsx(ProfessionalSpinner, { size: "small", variant: "cinema4d", type: "dots" }), _jsx("div", { style: { marginTop: 8, fontSize: 11 }, children: currentTest })] });
-_jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }, children: [_jsx("button", { onClick: runFullTestSuite, disabled: isRunning, style: {
-                background: '#4CAF50',
-                border: 'none',
-                borderRadius: '4px',
-                color: 'white',
-                padding: '8px 12px',
-                cursor: isRunning ? 'not-allowed' : 'pointer',
-                fontSize: '12px',
-                opacity: isRunning ? 0.6 : 1,
-            }, children: "Run Full Test Suite" }), _jsx("div", { style: { fontWeight: 500, marginTop: 8 }, children: "Quick Demo Scenarios:" }), generateDemoScenarios().map((scenario, index) => ()
-            < button, key = { index }, onClick = {}()), " => runTest(scenario.nodeCount)} disabled=", isRunning, "style=", {
-            background: 'rgba(59, 130, 246, 0.1)',
-            border: '1px solid rgba(59, 130, 246, 0.3)',
+_jsx("div", { style: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }, children: _jsx("button", { onClick: runFullTestSuite, disabled: isRunning, style: {
+            background: '#4CAF50',
+            border: 'none',
             borderRadius: '4px',
-            color: '#93c5fd',
+            color: 'white',
             padding: '8px 12px',
             cursor: isRunning ? 'not-allowed' : 'pointer',
-            fontSize: '11px',
-            textAlign: 'left',
-            opacity: isRunning ? 0.6 : 1,
-        }, ">", _jsx("div", { style: { fontWeight: 500 }, children: scenario.name }), _jsx("div", { style: { fontSize: 10, opacity: 0.8 }, children: scenario.description }), _jsxs("div", { style: { fontSize: 10, color: '#60a5fa' }, children: [scenario.nodeCount, " nodes"] })] });
+            fontSize: '12px',
+            opacity: isRunning ? 0.6 : 1
+        }
+            >
+                Run, Full: true, Test: true, Suite: true }) })
+    ,
+        _jsx("div", { style: { fontWeight: 500, marginTop: 8 }, children: "Quick Demo Scenarios:" });
+{
+    generateDemoScenarios().map((scenario, index) => ()
+        < button, key = { index }, onClick = {}(), runTest(scenario.nodeCount));
+}
+disabled = { isRunning };
+style = {};
+{
+    background: 'rgba(59, 130, 246, 0.1)';
+    border: '1px solid rgba(59, 130, 246, 0.3)';
+    borderRadius: '4px';
+    color: '#93c5fd';
+    padding: '8px 12px';
+    cursor: isRunning ? 'not-allowed' : 'pointer';
+    fontSize: '11px';
+    textAlign: 'left';
+    opacity: isRunning ? 0.6 : 1;
+}
+    >
+        (_jsx("div", { style: { fontWeight: 500 }, children: scenario.name })
+            ,
+                _jsx("div", { style: { fontSize: 10, opacity: 0.8 }, children: scenario.description })
+                    ,
+                        _jsxs("div", { style: { fontSize: 10, color: '#60a5fa' }, children: [scenario.nodeCount, " nodes"] }));
+button >
+;
 div >
     { results, : .length > 0 && ()
             < div >
@@ -304,11 +310,10 @@ div >
                 ,
                     _jsxs("div", { style: { maxHeight: '200px', overflow: 'auto' }, children: [results.map((result, index) => ()
                                 < div, key = { index }, style = {}, {
-                                background: result.passedThreshold ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)',
-                                border: `1px solid ${result.passedThreshold ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)'}`
-                            }), ", borderRadius: '4px', padding: '8px', marginBottom: '8px', fontSize: '10px'; }} >", _jsxs("div", { style: { fontWeight: 500, marginBottom: 4 }, children: [result.nodeCount, " nodes (", result.edgeCount, " edges)", _jsx("span", { style: {
+                                background: result.passedThreshold ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)'
+                            }, border), ": `1px solid $", result.passedThreshold ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)', "`} borderRadius: '4px' padding: '8px' marginBottom: '8px' fontSize: '10px'; >", _jsxs("div", { style: { fontWeight: 500, marginBottom: 4 }, children: [result.nodeCount, " nodes (", result.edgeCount, " edges)", _jsx("span", { style: {
                                             float: 'right',
-                                            color: result.passedThreshold ? '#4CAF50' : '#f44336',
+                                            color: result.passedThreshold ? '#4CAF50' : '#f44336'
                                         }, children: result.passedThreshold ? '✓' : '✗' })] }), _jsxs("div", { children: ["FPS: ", result.fps.toFixed(1), " | Render: ", result.renderTime.toFixed(1), "ms"] }), _jsxs("div", { children: ["Memory: ", (result.memoryUsage * 100).toFixed(1), "%"] }), result.recommendations.length > 0 && ()
                                 < div, " style=", { marginTop: 4, fontSize: 9, opacity: 0.8 }, "> \uD83D\uDCA1 ", result.recommendations[0]] }))
     };

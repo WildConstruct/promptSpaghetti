@@ -4,7 +4,13 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Integrates client-side provider hooking into the GraphEditor
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import { useEditorProviders } from '../hooks/useEditorProviders';
+import { useEditorProviders, ProviderHook, ProviderRegistry, EditorStateContext } from EditorActions;
+from;
+'../hooks/useEditorProviders';
+registry: ProviderRegistry;
+editorContext: EditorStateContext;
+editorActions: EditorActions;
+isLoading: boolean;
 React.ReactNode;
 // Initial state
 initialNodes: Node;
@@ -30,10 +36,10 @@ export const EditorProviderWrapper = ({
     selectedNodeId,
     validationErrors = [],
     enableBuiltInProviders = {
-        consoleLogger: true,
-        autoSave: { interval: 30000 },
-        validation: true
+        consoleLogger: true
     },
+    autoSave: { interval: 30000 },
+    validation: true,
     providers = [],
     onProviderRegistered,
     onProviderUnregistered,
@@ -42,46 +48,41 @@ export const EditorProviderWrapper = ({
 {
     const [providerErrors, setProviderErrors] = useState(new Map());
     // Initialize the provider hook system
-    const { registry, editorContext, editorActions, isLoading } = useEditorProviders();
-    initialNodes,
-        initialEdges,
-        selectedNodeId,
-        validationErrors;
+    const { registry, editorContext, editorActions };
+    isLoading
+        = useEditorProviders();
+    initialNodes;
+    initialEdges;
+    selectedNodeId;
+    validationErrors;
     ;
     // Register built-in providers
     useEffect(() => {
-        const registerBuiltInProvider = async (hookFactory) => {
-            try {
-                const hook = hookFactory();
-                registry.register(hook);
-                onProviderRegistered?.(hook);
-            }
-            catch (error) {
-                const errorObj = error instanceof Error ? error : new Error('Unknown error');
-                console.error('[EditorProvider] Failed to register built-in provider:', errorObj);
-                onProviderError?.(errorObj, 'built-in');
-            }
-            ;
-            if (enableBuiltInProviders.consoleLogger) {
-                import('../hooks/useEditorProviders').then(({ createConsoleLoggerHook }) => {
-                    registerBuiltInProvider(createConsoleLoggerHook);
-                });
-                if (enableBuiltInProviders.autoSave) {
-                    const interval = typeof enableBuiltInProviders.autoSave === 'object';
-                }
-            }
-        };
-        enableBuiltInProviders.autoSave.interval;
-        30000;
-        import('../hooks/useEditorProviders').then(({ createAutoSaveHook }) => {
-            registerBuiltInProvider(() => createAutoSaveHook(interval));
-        });
-        if (enableBuiltInProviders.validation) {
-            import('../hooks/useEditorProviders').then(({ createValidationHook }) => {
-                registerBuiltInProvider(createValidationHook);
-            });
+        const registerBuiltInProvider = async (hookFactory) => { };
+        try {
+            const hook = hookFactory();
+            registry.register(hook);
+            onProviderRegistered?.(hook);
         }
-        [registry, enableBuiltInProviders, onProviderRegistered, onProviderError];
+        catch (error) {
+            const errorObj = error instanceof Error ? error : new Error('Unknown error');
+            console.error('[EditorProvider] Failed to register built-in provider:', errorObj);
+            onProviderError?.(errorObj, 'built-in');
+        }
+        ;
+        if (enableBuiltInProviders.consoleLogger) {
+            import('../hooks/useEditorProviders').then(({ createConsoleLoggerHook }) => { registerBuiltInProvider(createConsoleLoggerHook); });
+            if (enableBuiltInProviders.autoSave) {
+                const interval = typeof enableBuiltInProviders.autoSave === 'object';
+                enableBuiltInProviders.autoSave.interval;
+                30000;
+                import('../hooks/useEditorProviders').then(({ createAutoSaveHook }) => { registerBuiltInProvider(() => createAutoSaveHook(interval)); });
+                if (enableBuiltInProviders.validation) {
+                    import('../hooks/useEditorProviders').then(({ createValidationHook }) => { registerBuiltInProvider(createValidationHook); });
+                }
+                [registry, enableBuiltInProviders, onProviderRegistered, onProviderError];
+            }
+        }
     });
     // Register custom providers
     useEffect(() => {
@@ -113,27 +114,26 @@ export const EditorProviderWrapper = ({
 [providers, registry, onProviderRegistered, onProviderUnregistered, onProviderError];
 ;
 // Error boundary for provider execution
-const safeRegistry = useMemo(() => ({}), ...registry, register, (hook) => {
-    try {
-        registry.register(hook);
-        setProviderErrors(prev => { });
-        const newErrors = new Map(prev);
-        newErrors.delete(hook.id);
-        return newErrors;
-    }
-    finally { }
-});
-try { }
+const safeRegistry = useMemo(() => ({}), ...registry, register, (hook) => { });
+try {
+    registry.register(hook);
+    setProviderErrors(prev => { });
+    const newErrors = new Map(prev);
+    newErrors.delete(hook.id);
+    return newErrors;
+}
+finally { }
+;
+try {
+}
 catch (error) {
     const errorObj = error instanceof Error ? error : new Error('Unknown error');
     setProviderErrors(prev => new Map(prev).set(hook.id, errorObj));
     onProviderError?.(errorObj, hook.id);
     throw error;
 }
-executeHooks: async () => ,
-    hookName;
-T,
-;
+executeHooks: async () => hookName;
+T;
 args: unknown;
 {
     const hooks = registry.getHooks();
@@ -151,24 +151,22 @@ args: unknown;
             setProviderErrors(prev => new Map(prev).set(hook.id, errorObj));
             onProviderError?.(errorObj, hook.id);
             // Continue executing other hooks
-        }
-        finally { }
-        executeCustomAction: (hookId, actionName, ...args) => {
-            try {
-                return registry.executeCustomAction(hookId, actionName, ...args);
-            }
-            catch (error) {
-                const errorObj = error instanceof Error ? error : new Error('Unknown error');
-                console.error(`[EditorProvider] Error executing custom action ${actionName} in provider ${hookId}:`, errorObj);
-            }
-            setProviderErrors(prev => new Map(prev).set(hookId, errorObj));
-            onProviderError?.(errorObj, hookId);
-            throw error;
-        };
-        [registry, onProviderError];
-        ;
-        // Enhanced editor actions with error handling
-        const safeEditorActions = useMemo(() => ({}), ...editorActions, addNode, async (node) => {
+            executeCustomAction: (hookId, actionName, ...args) => {
+                try {
+                    return registry.executeCustomAction(hookId, actionName, ...args);
+                }
+                catch (error) {
+                    const errorObj = error instanceof Error ? error : new Error('Unknown error');
+                    console.error(`[EditorProvider] Error executing custom action ${actionName} in provider ${hookId}:`, errorObj);
+                }
+                setProviderErrors(prev => new Map(prev).set(hookId, errorObj));
+                onProviderError?.(errorObj, hookId);
+                throw error;
+            };
+            [registry, onProviderError];
+            ;
+            // Enhanced editor actions with error handling
+            const safeEditorActions = useMemo(() => ({}), ...editorActions, addNode, async (node) => { });
             try {
                 await editorActions.addNode(node);
             }
@@ -208,64 +206,50 @@ args: unknown;
                             onProviderError?.(errorObj, 'executeGraph');
                             throw error;
                         }
+                        [editorActions, onProviderError];
+                        ;
+                        return;
+                        _jsxs(_Fragment, { children: [children({}), "registry: safeRegistry, editorContext: ", ...(editorContext,
+                                    // Add provider error information to context
+                                    providerErrors), ": Array.from(providerErrors.entries()).map(([id, error]) => (", , "), providerId: id, error: error.message } })) as EditorStateContext & ", providerErrors, ": Array", _jsx(, { ...providerId }), ": string; error: string }> }, editorActions: safeEditorActions, isLoading })}", providerErrors.size > 0 && ()
+                                    < div, " className=\"provider-errors\" style=", {
+                                    position: 'fixed',
+                                    top: '10px',
+                                    right: '10px',
+                                    background: '#fee2e2',
+                                    border: '1px solid #fca5a5',
+                                    borderRadius: '6px',
+                                    padding: '12px',
+                                    maxWidth: '300px',
+                                    fontSize: '14px',
+                                    zIndex: 9999
+                                }, ">", _jsxs("div", { style: { fontWeight: 'bold', marginBottom: '8px' }, children: ["Provider Errors (", providerErrors.size, ")"] }), Array.from(providerErrors.entries()).map(([id, error]) => ()
+                                    < div, key = { id }, style = {}, { marginBottom: '4px' }), ">", _jsxs("strong", { children: [id, ":"] }), " ", error.message] });
+                        div >
+                        ;
                     };
+                    _jsx("button", { onClick: () => setProviderErrors(new Map()), style: {
+                            marginTop: '8px',
+                            padding: '4px 8px',
+                            backgroundColor: '#dc2626',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '12px'
+                        }
+                            >
+                                Clear, Errors: true, button: true });
                 };
+                 >
+                ;
+                ;
             };
-        }), [editorActions, onProviderError];
-        return;
-        _jsxs(_Fragment, { children: [children({}), "registry: safeRegistry, editorContext: ", ...(editorContext,
-                    // Add provider error information to context
-                    providerErrors), ": Array.from(providerErrors.entries()).map(([id, error]) => (", , "), providerId: id, error: error.message, })) } as EditorStateContext & ", providerErrors, ": Array", _jsx(, { ...providerId }), ": string; error: string }> }, editorActions: safeEditorActions, isLoading })}", providerErrors.size > 0 && ()
-                    < div, " className=\"provider-errors\" style=", {
-                    position: 'fixed',
-                    top: '10px',
-                    right: '10px',
-                    background: '#fee2e2',
-                    border: '1px solid #fca5a5',
-                    borderRadius: '6px',
-                    padding: '12px',
-                    maxWidth: '300px',
-                    fontSize: '14px',
-                    zIndex: 9999,
-                }, ">", _jsxs("div", { style: { fontWeight: 'bold', marginBottom: '8px' }, children: ["Provider Errors (", providerErrors.size, ")"] }), Array.from(providerErrors.entries()).map(([id, error]) => ()
-                    < div, key = { id }, style = {}, { marginBottom: '4px' }), ">", _jsxs("strong", { children: [id, ":"] }), " ", error.message] });
-        div >
-        ;
+            // HOC for easier integration with existing GraphEditor
+            export const withEditorProviders = () => Component, React, ComponentType;
+            _jsxs(T, { children: ["providerConfig?: Omit", _jsx(EditorProviderWrapperProps, {}), ", 'children' | 'initialNodes' | 'initialEdges' | 'selectedNodeId'> ) => ", , " return React.forwardRef", _jsx("any", {}), ", T & ", initialNodes, ": Node; initialEdges: Edge; selectedNodeId: string | null; validationErrors?: unknown }>((props, ref) => ", , " const ", initialNodes, "initialEdges selectedNodeId validationErrors } ...componentProps = props; return;", _jsxs(EditorProviderWrapper, { initialNodes: initialNodes, initialEdges: initialEdges, selectedNodeId: selectedNodeId, validationErrors: validationErrors, ...providerConfig, children: [({ registry, editorContext, editorActions, isLoading }) => ()
+                                < Component, ...componentProps, "ref=", ref, "registry=", registry, "editorContext=", editorContext, "editorActions=", editorActions, "isProviderLoading=", isLoading, "/> )}"] }), "); }); };"] });
+        }
+        finally { }
     }
-    _jsx("button", { onClick: () => setProviderErrors(new Map()), style: {
-            marginTop: '8px',
-            padding: '4px 8px',
-            backgroundColor: '#dc2626',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontSize: '12px',
-        }, children: "Clear Errors" });
-    div >
-    ;
 }
-;
- >
-;
-;
-;
-;
-;
-// HOC for easier integration with existing GraphEditor
-export const withEditorProviders = () => Component, React, ComponentType, T, providerConfig, Omit, EditorProviderWrapperProps;
-;
-() => {
-    return React.forwardRef < any, T & {
-        initialNodes: Node,
-        initialEdges: Edge,
-        selectedNodeId: string | null,
-        validationErrors: unknown
-    } > ((props, ref) => {
-        const { initialNodes, initialEdges, selectedNodeId, validationErrors, ...componentProps } = props;
-        return;
-        _jsxs(EditorProviderWrapper, { initialNodes: initialNodes, initialEdges: initialEdges, selectedNodeId: selectedNodeId, validationErrors: validationErrors, ...providerConfig, children: [({ registry, editorContext, editorActions, isLoading }) => ()
-                    < Component, ...componentProps, "ref=", ref, "registry=", registry, "editorContext=", editorContext, "editorActions=", editorActions, "isProviderLoading=", isLoading, "/> )}"] });
-        ;
-    });
-};

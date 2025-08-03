@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Manages help content, onboarding state, and contextual help delivery
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { BUILT_IN_HELP_CONTENT } from './ContextualHelpSystem';
+resetHelpSystem: () => void ;
 const HelpContext = createContext(undefined);
 export const useHelpSystem = () => {
     const context = useContext(HelpContext);
@@ -12,75 +13,68 @@ export const useHelpSystem = () => {
         return context;
     }
     ;
+    export const HelpProvider = ({
+        children,
+        customHelpContent = [],
+        enableOnboarding = true });
+    enableHelpHints = true;
 };
-export const HelpProvider = ({
-    children,
-    customHelpContent = [],
-    enableOnboarding = true,
-    enableHelpHints = true
-});
-{
-    // Core state
+{ // Core state
     const [helpContent, setHelpContent] = useState([]);
-    BUILT_IN_HELP_CONTENT,
-    ;
-    customHelpContent;
-    ;
-    // Onboarding state
-    const [onboardingEnabled, setOnboardingEnabled] = useState(enableOnboarding);
-    const [onboardingStep, setOnboardingStep] = useState(0);
-    const [onboardingComplete, setOnboardingComplete] = useState(false);
-    const [showHelpHints, setShowHelpHints] = useState(enableHelpHints);
-    // Load onboarding state from localStorage
-    useEffect(() => {
-        const savedState = localStorage.getItem('wildConstruct_helpSystem');
-        if (savedState) {
-            try {
-                const parsed = JSON.parse(savedState);
-                setOnboardingComplete(parsed.onboardingComplete || false);
-                setShowHelpHints(parsed.showHelpHints !== undefined ? parsed.showHelpHints : enableHelpHints);
-                setOnboardingStep(parsed.onboardingStep || 0);
-            }
-            catch (error) {
-                console.warn('Failed to parse help system state:', error);
-            }
-            [enableHelpHints];
-        }
-    });
-    // Save state to localStorage
-    const saveState = () => {
-        const state = {
-            onboardingComplete,
-            showHelpHints,
-            onboardingStep,
-            lastUpdated: Date.now(),
-        };
-        localStorage.setItem('wildConstruct_helpSystem', JSON.stringify(state));
-    };
-    // Save state when it changes
-    useEffect(() => {
-        saveState();
-    }, [onboardingComplete, showHelpHints, onboardingStep]);
-    // Content management functions
-    const getHelpContent = (id) => {
-        return helpContent.find(content => content.id === id);
-    };
-    const addHelpContent = React.useCallback((content) => {
-        setHelpContent(prev => { });
-        // Check if content already exists
-        const existingIndex = prev.findIndex(c => c.id === content.id);
-        if (existingIndex >= 0) {
-            // Update existing content
-            const updated = [...prev];
-            updated[existingIndex] = content;
-            return updated;
-        }
-        else {
-            // Add new content
-            return [...prev, content];
-        }
-    });
+    BUILT_IN_HELP_CONTENT;
 }
+customHelpContent;
+;
+// Onboarding state
+const [onboardingEnabled, setOnboardingEnabled] = useState(enableOnboarding);
+const [onboardingStep, setOnboardingStep] = useState(0);
+const [onboardingComplete, setOnboardingComplete] = useState(false);
+const [showHelpHints, setShowHelpHints] = useState(enableHelpHints);
+// Load onboarding state from localStorage
+useEffect(() => {
+    const savedState = localStorage.getItem('wildConstruct_helpSystem');
+    if (savedState) {
+        try {
+            const parsed = JSON.parse(savedState);
+            setOnboardingComplete(parsed.onboardingComplete || false);
+            setShowHelpHints(parsed.showHelpHints !== undefined ? parsed.showHelpHints : enableHelpHints);
+            setOnboardingStep(parsed.onboardingStep || 0);
+        }
+        catch (error) {
+            console.warn('Failed to parse help system state:', error);
+        }
+        [enableHelpHints];
+    }
+});
+// Save state to localStorage
+const saveState = () => {
+    const state = {
+        onboardingComplete,
+        showHelpHints,
+        onboardingStep,
+        lastUpdated: Date.now()
+    };
+};
+localStorage.setItem('wildConstruct_helpSystem', JSON.stringify(state));
+;
+// Save state when it changes
+useEffect(() => { saveState(); }, [onboardingComplete, showHelpHints, onboardingStep]);
+// Content management functions
+const getHelpContent = (id) => { return helpContent.find(content => content.id === id); };
+const addHelpContent = React.useCallback((content) => {
+    setHelpContent(prev => { });
+    // Check if content already exists
+    const existingIndex = prev.findIndex(c => c.id === content.id);
+    if (existingIndex >= 0) {
+        // Update existing content
+        const updated = [...prev];
+        updated[existingIndex] = content;
+        return updated;
+    }
+    else { // Add new content
+        return [...prev, content];
+    }
+});
 [];
 ;
 const updateHelpContent = React.useCallback((id, updates) => {
@@ -88,9 +82,7 @@ const updateHelpContent = React.useCallback((id, updates) => {
 });
 [];
 ;
-const removeHelpContent = React.useCallback((id) => {
-    setHelpContent(prev => prev.filter(content => content.id !== id));
-}, []);
+const removeHelpContent = React.useCallback((id) => { setHelpContent(prev => prev.filter(content => content.id !== id)); }, []);
 // Onboarding functions
 const getOnboardingSteps = () => {
     return helpContent
@@ -125,9 +117,7 @@ const nextOnboardingStep = () => {
             setOnboardingComplete(true);
             setOnboardingStep(0);
         };
-        const toggleHelpHints = () => {
-            setShowHelpHints(prev => !prev);
-        };
+        const toggleHelpHints = () => { setShowHelpHints(prev => !prev); };
         const resetHelpSystem = () => {
             setOnboardingComplete(false);
             setOnboardingStep(0);
@@ -135,8 +125,7 @@ const nextOnboardingStep = () => {
             setShowHelpHints(enableHelpHints);
             localStorage.removeItem('wildConstruct_helpSystem');
         };
-        const contextValue = {
-            helpContent,
+        const contextValue = { helpContent,
             onboardingEnabled: onboardingEnabled && !onboardingComplete,
             onboardingStep,
             onboardingComplete,
@@ -150,12 +139,11 @@ const nextOnboardingStep = () => {
             previousOnboardingStep,
             skipOnboarding,
             completeOnboarding,
-            toggleHelpHints,
-            resetHelpSystem
-        };
-        return;
-        _jsx(HelpContext.Provider, { value: contextValue, children: children });
+            toggleHelpHints };
+        resetHelpSystem;
     };
+    return;
+    _jsx(HelpContext.Provider, { value: contextValue, children: children });
 };
 ;
 ;
@@ -185,29 +173,28 @@ const registerHelpContent = (content) => {
             }, [];
         });
     };
-    return {
-        registerHelpContent,
+    return { registerHelpContent,
         useHelpContent,
-        updateHelpContent,
-        removeHelpContent
-    };
+        updateHelpContent };
+    removeHelpContent;
 };
+;
 // Specialized hooks for common help scenarios
 React.useEffect(() => {
     const content = {
         ...stableHelpContent,
-        id: fieldId,
-    };
-    addHelpContent(content);
-}, [fieldId, stableHelpContent, addHelpContent]);
+        id: fieldId };
+});
+addHelpContent(content);
+[fieldId, stableHelpContent, addHelpContent];
+;
 return getHelpContent(fieldId);
 ;
 const onboardingSteps = helpContent;
 filter(content => content.category === 'onboarding')
     .sort((a, b) => (a.priority === 'high' ? -1 : 1));
 const currentStepData = onboardingSteps[onboardingStep];
-return {
-    isOnboardingActive: onboardingEnabled && !onboardingComplete,
+return { isOnboardingActive: onboardingEnabled && !onboardingComplete,
     currentStep: currentStepData,
     currentStepIndex: onboardingStep,
     totalSteps: onboardingSteps.length,
@@ -217,25 +204,22 @@ return {
     skipOnboarding,
     completeOnboarding,
     startOnboarding,
-    isComplete: onboardingComplete,
-};
+    isComplete: onboardingComplete };
+;
 ;
 // Component for managing help system settings
 return;
 _jsx("div", { className: `help-system-settings ${className}`, style: ({}, ), "background:": true });
-'#2d3748',
-    border;
-'1px solid #4a5568',
-    borderRadius;
-6,
-    padding;
-12;
+'#2d3748';
+border: '1px solid #4a5568';
+borderRadius: 6;
+padding: 12;
  >
     (_jsx("h4", { style: {
             margin: '0 0 12px 0',
             fontSize: 12,
             fontWeight: 600,
-            color: '#e2e8f0',
+            color: '#e2e8f0'
         }, children: "Help System Settings" })
         ,
             _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: [_jsxs("label", { style: {
@@ -244,13 +228,13 @@ _jsx("div", { className: `help-system-settings ${className}`, style: ({}, ), "ba
                             gap: 8,
                             cursor: 'pointer',
                             fontSize: 11,
-                            color: '#e2e8f0',
+                            color: '#e2e8f0'
                         }, children: [_jsx("input", { type: "checkbox", checked: showHelpHints, onChange: toggleHelpHints, style: { cursor: 'pointer' } }), "Show help tooltips and hints"] }), _jsxs("div", { style: {
                             fontSize: 11,
                             color: '#a0aec0',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 8,
+                            gap: 8
                         }, children: [_jsxs("span", { children: ["Onboarding: ", onboardingComplete ? '✅ Complete' : '🔄 Available'] }), onboardingComplete && ()
                                 < button, "onClick=", startOnboarding, "style=", {
                                 padding: '2px 6px',
@@ -259,7 +243,7 @@ _jsx("div", { className: `help-system-settings ${className}`, style: ({}, ), "ba
                                 border: 'none',
                                 borderRadius: 2,
                                 color: 'white',
-                                cursor: 'pointer',
+                                cursor: 'pointer'
                             }, "> Restart Tour"] }), ")}"] }));
 { /* Reset Button */ }
 _jsx("button", { onClick: resetHelpSystem, style: {
@@ -270,7 +254,7 @@ _jsx("button", { onClick: resetHelpSystem, style: {
         borderRadius: 3,
         color: 'white',
         cursor: 'pointer',
-        alignSelf: 'flex-start',
+        alignSelf: 'flex-start'
     }, children: "Reset Help System" });
 div >
 ;

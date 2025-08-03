@@ -10,19 +10,24 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { useReactFlow, useEdges } from 'reactflow';
 import { ConnectionLabel } from './ConnectionLabel';
 import { useGraphStore } from '../../graphStore';
-export const ConnectionAnnotationsLayer = ({ canEdit = true, showTooltips = true, visible = true, onSelectionChange }) => {
+import { ConnectionLabelPosition } from DEFAULT_CONNECTION_ANNOTATION_PREFERENCES;
+from;
+'../../types/CollaborationTypes';
+export const ConnectionAnnotationsLayer = ({ canEdit = true,
+    showTooltips = true,
+    visible = true });
+onSelectionChange;
+{
     const reactFlowInstance = useReactFlow();
     const edges = useEdges();
-    const { annotations, connectionAnnotationPreferences, addConnectionLabel, updateConnectionLabel, removeConnectionLabel, addConnectionAnnotation, updateConnectionAnnotation } = useGraphStore();
+    const { annotations, connectionAnnotationPreferences, addConnectionLabel, updateConnectionLabel, removeConnectionLabel, addConnectionAnnotation };
+    updateConnectionAnnotation
+        = useGraphStore();
     const [selectedAnnotations, setSelectedAnnotations] = useState(new Set());
     const [highlightedConnection, setHighlightedConnection] = useState(null);
     const [isCreatingLabel, setIsCreatingLabel] = useState(false);
     const [pendingConnection, setPendingConnection] = useState(null);
-    const [contextMenu, setContextMenu] = useState < {
-        x: number,
-        y: number,
-        connectionId: string
-    } | null > (null);
+    const [contextMenu, setContextMenu] = useState(null);
     const layerRef = useRef(null);
     const svgRef = useRef(null);
     // Get connection path coordinates for label positioning
@@ -37,27 +42,25 @@ export const ConnectionAnnotationsLayer = ({ canEdit = true, showTooltips = true
         // Calculate connection path points
         const sourceCenter = {
             x: sourceNode.position.x + (sourceNode.width || 150) / 2,
-            y: sourceNode.position.y + (sourceNode.height || 40) / 2,
-        };
-        const targetCenter = {
-            x: targetNode.position.x + (targetNode.width || 150) / 2,
-            y: targetNode.position.y + (targetNode.height || 40) / 2,
-        };
-        return {
-            source: sourceCenter,
-            target: targetCenter,
-            path: `M ${sourceCenter.x},${sourceCenter.y} L ${targetCenter.x},${targetCenter.y}`
+            y: sourceNode.position.y + (sourceNode.height || 40) / 2
         };
     });
-}, [edges, reactFlowInstance];
+    const targetCenter = { x: targetNode.position.x + (targetNode.width || 150) / 2,
+        y: targetNode.position.y + (targetNode.height || 40) / 2 };
+}
+;
+return { source: sourceCenter,
+    target: targetCenter };
+path: `M ${sourceCenter.x},${sourceCenter.y} L ${targetCenter.x},${targetCenter.y}`;
+;
+[edges, reactFlowInstance];
+;
 // Calculate position along connection path
 const calculateLabelPosition = useCallback(());
 ;
-connectionId: string,
-    positionType;
-ConnectionLabelPosition,
-    offset;
-number = 0.5;
+connectionId: string;
+positionType: ConnectionLabelPosition;
+offset: number = 0.5;
 {
     const pathData = getConnectionPath(connectionId);
     if (!pathData)
@@ -93,31 +96,23 @@ number = 0.5;
                 }
         }
     });
-    action.connectionId,
-        'middle',
-        0.5;
+    action.connectionId;
+    'middle';
+    0.5;
     ;
-    const newLabel = {
-        id: `label-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+    const newLabel = {};
+    id: `label-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
-connectionId: action.connectionId,
-    content;
-action.content,
-    position,
-    positionType;
-'middle',
-    positionOffset;
-0.5,
-    style;
-connectionAnnotationPreferences?.defaultLabelStyle || 'default',
-    visible;
-true,
-    author;
-'Current User',
-    timestamp;
-new Date().toISOString(),
-    lastModified;
-new Date().toISOString();
+connectionId: action.connectionId;
+content: action.content;
+position;
+positionType: 'middle';
+positionOffset: 0.5;
+style: connectionAnnotationPreferences?.defaultLabelStyle || 'default';
+visible: true;
+author: 'Current User';
+timestamp: new Date().toISOString();
+lastModified: new Date().toISOString();
 ;
 addConnectionLabel(newLabel);
 break;
@@ -132,44 +127,40 @@ if (action.labelId && action.label) {
         'move';
         if (action.labelId && action.position) {
             updateConnectionLabel(action.labelId, {});
-            position: action.position,
-                positionType;
-            'custom',
-                lastModified;
-            new Date().toISOString(),
-            ;
+            position: action.position;
+            positionType: 'custom';
+            lastModified: new Date().toISOString();
         }
-        ;
-        break;
-        'startEdit';
-        // Handle edit state if needed
-        break;
-        'stopEdit';
-        // Handle edit state if needed
-        break;
     }
-    [
-        addConnectionLabel,
-        updateConnectionLabel,
-        removeConnectionLabel,
-        calculateLabelPosition,
-        connectionAnnotationPreferences
-    ];
     ;
-    // Handle connection right-click for context menu
-    const handleConnectionContextMenu = useCallback((e, connectionId) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const rect = layerRef.current?.getBoundingClientRect();
-        if (!rect)
-            return;
-        setContextMenu({});
-        x: e.clientX - rect.left,
-            y;
-        e.clientY - rect.top,
-            connectionId;
-    });
+    break;
+    'startEdit';
+    // Handle edit state if needed
+    break;
+    'stopEdit';
+    // Handle edit state if needed
+    break;
 }
+[
+    addConnectionLabel,
+    updateConnectionLabel,
+    removeConnectionLabel,
+    calculateLabelPosition,
+    connectionAnnotationPreferences
+];
+;
+// Handle connection right-click for context menu
+const handleConnectionContextMenu = useCallback((e, connectionId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = layerRef.current?.getBoundingClientRect();
+    if (!rect)
+        return;
+    setContextMenu({});
+    x: e.clientX - rect.left;
+    y: e.clientY - rect.top;
+}, connectionId);
+;
 [];
 ;
 // Handle context menu actions
@@ -178,11 +169,9 @@ const handleContextMenuAction = useCallback((action, connectionId) => {
     switch (action) {
         case 'addLabel':
             handleLabelAction({});
-            type: 'create',
-                connectionId,
-                content;
-            'New Label',
-            ;
+            type: 'create';
+            connectionId;
+            content: 'New Label';
     }
 });
 break;
@@ -209,17 +198,14 @@ useEffect(() => {
     const handleKeyDown = (e) => {
         if (!canEdit)
             return;
-        // Ctrl/Cmd + L: Add label to selected connection,
+        // Ctrl/Cmd + L: Add label to selected connection
         if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
             e.preventDefault();
             if (highlightedConnection) {
                 handleLabelAction({});
-                type: 'create',
-                    connectionId;
-                highlightedConnection,
-                    content;
-                'New Label',
-                ;
+                type: 'create';
+                connectionId: highlightedConnection;
+                content: 'New Label';
             }
         }
     };
@@ -248,17 +234,17 @@ _jsxs("div", { ref: layerRef, "data-testid": "connection-annotations-layer", sty
         position: 'absolute',
         inset: 0,
         pointerEvents: 'none',
-        zIndex: 50,
+        zIndex: 50
     }, children: [_jsxs("svg", { ref: svgRef, style: {
                 position: 'absolute',
                 inset: 0,
                 width: '100%',
                 height: '100%',
-                pointerEvents: 'none',
+                pointerEvents: 'none'
             }, children: [_jsxs("defs", { children: [_jsxs("linearGradient", { id: "connection-gradient-blue", x1: "0%", y1: "0%", x2: "100%", y2: "0%", children: [_jsx("stop", { offset: "0%", stopColor: "#3b82f6", stopOpacity: "0.8" }), _jsx("stop", { offset: "100%", stopColor: "#1d4ed8", stopOpacity: "0.4" })] }), _jsx("style", { children: `
               @keyframes connection-flow {
-                0% { stroke-dashoffset: 0; }
-                100% { stroke-dashoffset: -20; }
+                0% { stroke-dashoffset: 0 }
+                100% { stroke-dashoffset: -20 }
               .connection-animated {
                 animation: connection-flow 2s linear infinite;
               .connection-highlighted {
@@ -269,7 +255,7 @@ _jsxs("div", { ref: layerRef, "data-testid": "connection-annotations-layer", sty
                   ${annotation.visualStyle === 'animated' ? 'connection-animated' : ''}
                   ${isHighlighted ? 'connection-highlighted' : ''}
                 `, fill: "none", style: { pointerEvents: 'stroke' }, onContextMenu: (e) => handleConnectionContextMenu(e, edge.id) }), annotation.showDirection && ()
-                            < polygon, "points=\"0,-4 8,0 0,4\" fill=", annotation.color || '#6b7280', "transform=", `translate(${pathData.target.x - 8}, ${pathData.target.y}) rotate(${, ")} } Math.atan2() pathData.target.y - pathData.source.y, pathData.target.x - pathData.source.x ) * 180 / Math.PI })`} /> )}"] }, `enhanced-${edge.id}`), "); })}"] }), annotations.connectionLabels?.map(label => ()
+                            < polygon, "points=\"0,-4 8,0 0,4\" fill=", annotation.color || '#6b7280', "transform=", `translate(${pathData.target.x - 8}, ${pathData.target.y}) rotate(${, ")} Math.atan2() pathData.target.y - pathData.source.y pathData.target.x - pathData.source.x ) * 180 / Math.PI })`} /> )}"] }, `enhanced-${edge.id}`), "); })}"] }), annotations.connectionLabels?.map(label => ()
             < ConnectionLabel, key = { label, : .id }, label = { label }, onAction = { handleLabelAction }, canEdit = { canEdit }, showTooltip = { showTooltips }, isHighlighted = { selectedAnnotations, : .has(label.id) }, connectionPath = { getConnectionPath(label) { }, : .connectionId })?.path, "/> ))}", contextMenu && ()
             < div, "data-testid=\"connection-context-menu\" style=", {
             position: 'absolute',
@@ -282,8 +268,27 @@ _jsxs("div", { ref: layerRef, "data-testid": "connection-annotations-layer", sty
             padding: '8px 0',
             minWidth: '180px',
             zIndex: 1000,
-            pointerEvents: 'all',
-        }, ">", _jsx("button", { onClick: () => handleContextMenuAction('addLabel', contextMenu.connectionId), style: {
+            pointerEvents: 'all'
+        }
+            >
+                _jsx("button", { onClick: () => handleContextMenuAction('addLabel', contextMenu.connectionId), style: {
+                        width: '100%',
+                        padding: '8px 16px',
+                        border: 'none',
+                        background: 'none',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        color: '#374151'
+                    }, onMouseEnter: (e) => {
+                        e.currentTarget.style.background = '#f3f4f6';
+                    }, onMouseLeave: (e) => {
+                        e.currentTarget.style.background = 'none'
+                            >
+                        ;
+                    } }), "\uD83D\uDCDD Add Label"] })
+    ,
+        _jsx("button", { onClick: () => handleContextMenuAction('highlight', contextMenu.connectionId), style: {
                 width: '100%',
                 padding: '8px 16px',
                 border: 'none',
@@ -291,82 +296,58 @@ _jsxs("div", { ref: layerRef, "data-testid": "connection-annotations-layer", sty
                 textAlign: 'left',
                 cursor: 'pointer',
                 fontSize: '14px',
-                color: '#374151',
+                color: '#374151'
             }, onMouseEnter: (e) => {
                 e.currentTarget.style.background = '#f3f4f6';
             }, onMouseLeave: (e) => {
-                e.currentTarget.style.background = 'none';
-            }, children: "\uD83D\uDCDD Add Label" }), _jsx("button", { onClick: () => handleContextMenuAction('highlight', contextMenu.connectionId), style: {
-                width: '100%',
-                padding: '8px 16px',
-                border: 'none',
-                background: 'none',
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: '#374151',
-            }, onMouseEnter: (e) => {
-                e.currentTarget.style.background = '#f3f4f6';
-            }, onMouseLeave: (e) => {
-                e.currentTarget.style.background = 'none';
-            }, children: "\u2728 Highlight" }), _jsx("button", { onClick: () => handleContextMenuAction('editStyle', contextMenu.connectionId), style: {
-                width: '100%',
-                padding: '8px 16px',
-                border: 'none',
-                background: 'none',
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: '#374151',
-            }, onMouseEnter: (e) => {
-                e.currentTarget.style.background = '#f3f4f6';
-            }, onMouseLeave: (e) => {
-                e.currentTarget.style.background = 'none';
-            }, children: "\uD83C\uDFA8 Edit Style" })] });
-{ /* Instructions overlay when no labels exist */ }
-{
-    (!annotations.connectionLabels || annotations.connectionLabels.length === 0) && canEdit && ()
-        < div;
-    style = {};
-    {
-        position: 'absolute',
-            top;
-        '50%',
-            left;
-        '50%',
-            transform;
-        'translate(-50%, -50%)',
-            background;
-        'rgba(255, 255, 255, 0.95)',
-            border;
-        '2px dashed #d1d5db',
-            borderRadius;
-        '12px',
-            padding;
-        '24px',
-            textAlign;
-        'center',
-            maxWidth;
-        '300px',
-            boxShadow;
-        '0 4px 12px rgba(0, 0, 0, 0.1)',
-            pointerEvents;
-        'all',
-        ;
-    }
-}
-    >
-        (_jsx("div", { style: { fontSize: '24px', marginBottom: '8px' }, children: "\uD83D\uDD17" })
-            ,
-                _jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px', color: '#374151' }, children: "Connection Annotations" })
-                    ,
-                        _jsx("div", { style: { fontSize: '14px', color: '#6b7280', lineHeight: '1.4' }, children: "Right-click on connections to add labels and visual enhancements" })
-                            ,
-                                _jsx("div", { style: { fontSize: '12px', color: '#9ca3af', marginTop: '8px' }, children: "Keyboard: Ctrl+L to add label," }));
-div >
-;
-div >
-;
-;
-;
-export default ConnectionAnnotationsLayer;
+                e.currentTarget.style.background = 'none'
+                    >
+                ;
+                Highlight;
+                button >
+                    _jsx("button", { onClick: () => handleContextMenuAction('editStyle', contextMenu.connectionId), style: {
+                            width: '100%',
+                            padding: '8px 16px',
+                            border: 'none',
+                            background: 'none',
+                            textAlign: 'left',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            color: '#374151'
+                        }, onMouseEnter: (e) => {
+                            e.currentTarget.style.background = '#f3f4f6';
+                        }, onMouseLeave: (e) => {
+                            e.currentTarget.style.background = 'none'
+                                >
+                            ;
+                            Edit;
+                            Style;
+                            button >
+                            ;
+                            div >
+                            ;
+                        }, ..., ...(!annotations.connectionLabels || annotations.connectionLabels.length === 0) && canEdit && ()
+                            < div, style: {
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            background: 'rgba(255, 255, 255, 0.95)',
+                            border: '2px dashed #d1d5db',
+                            borderRadius: '12px',
+                            padding: '24px',
+                            textAlign: 'center',
+                            maxWidth: '300px',
+                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                            pointerEvents: 'all'
+                        }
+                            >
+                                (_jsx("div", { style: { fontSize: '24px', marginBottom: '8px' }, children: "\uD83D\uDD17" })
+                                    ,
+                                        _jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px', color: '#374151' }, children: "Connection Annotations" })
+                                            ,
+                                                _jsx("div", { style: { fontSize: '14px', color: '#6b7280', lineHeight: '1.4' }, children: "Right-click on connections to add labels and visual enhancements" })
+                                                    ,
+                                                        _jsx("div", { style: { fontSize: '12px', color: '#9ca3af', marginTop: '8px' }, children: "Keyboard: Ctrl+L to add label" })), div: true, children: ")}" });
+                ;
+            }, export: true, default: true, ConnectionAnnotationsLayer: true });

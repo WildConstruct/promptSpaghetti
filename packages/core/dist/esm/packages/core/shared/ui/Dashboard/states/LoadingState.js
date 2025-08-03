@@ -5,9 +5,8 @@ export const LoadingState = ({
     message = 'Loading...',
     size = 'medium',
     overlay = false,
-    showSpinner = true,
-    className = ''
-});
+    showSpinner = true });
+className = '';
 {
     const sizeConfig = {
         small: { spinner: 16, fontSize: '14px', padding: '16px' },

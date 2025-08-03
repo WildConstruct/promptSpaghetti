@@ -6,9 +6,18 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * Extends existing EmbeddableContent system with advanced customization capabilities.
  */
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { PaintBrushIcon, EyeIcon, CodeBracketIcon, SwatchIcon, CubeIcon, SparklesIcon, BoltIcon, PhotoIcon, Squares2X2Icon, ListBulletIcon, SunIcon, MoonIcon, ComputerDesktopIcon as AutoIcon, CheckIcon, XMarkIcon, ClipboardDocumentIcon, ShareIcon, Cog6ToothIcon, UserIcon, TagIcon, FlagIcon } from '@heroicons/react/24/outline';
+import { PaintBrushIcon, EyeIcon, CodeBracketIcon, SwatchIcon, CubeIcon, SparklesIcon, BoltIcon, PhotoIcon, Squares2X2Icon, ListBulletIcon, SunIcon, MoonIcon, ComputerDesktopIcon as AutoIcon, CheckIcon, XMarkIcon, ClipboardDocumentIcon, ShareIcon, Cog6ToothIcon, UserIcon, TagIcon } from FlagIcon;
+from;
+'@heroicons/react/24/outline';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { PREVIEW_SIZES } from './EmbeddedTemplatePreview';
+import { EmbedCustomization, PREVIEW_SIZES } from './EmbeddedTemplatePreview';
+onExport: (customization, format) => string;
+className ?  : string;
+presets ?  : EmbedPreset;
+customization: EmbedCustomization;
+popular: boolean;
+configurable: boolean;
+required: boolean;
 position: {
     x: number;
     y: number;
@@ -47,8 +56,7 @@ shadows: {
 ;
 // Predefined embed presets
 const DEFAULT_PRESETS = [
-    {
-        id: 'social-card',
+    { id: 'social-card',
         name: 'Social Media Card',
         description: 'Perfect for Twitter, LinkedIn, and Facebook posts',
         thumbnail: '/presets/social-card.png',
@@ -57,346 +65,235 @@ const DEFAULT_PRESETS = [
         customization: {},
         size: { width: 600, height: 315, responsive: true },
         theme: { name: 'light', colors: {}, fonts: {} },
-        features: {},
-        showPreview: true,
-        showMetadata: true,
-        showActions: true,
-        showComments: false,
-        enableInteraction: true,
-        enableSharing: true,
-        enablePurchase: false,
-        showRating: true,
-    },
-    layout, {},
-    orientation, 'horizontal',
-    showHeader, true,
-    showFooter, false,
-    showSidebar, false,
-    contentAlignment, 'left',
-    spacing, 'tight',
-    borderRadius, 12,
-    shadow, 'md',
-];
-branding: {
-    showLogo: false,
-        showTitle;
-    true,
-        showAuthor;
-    true,
-        showPoweredBy;
-    false,
-    ;
-}
-social: {
-    showLikes: true,
-        showShares;
-    true,
-        showComments;
-    false,
-        showRating;
-    true,
-        showDownloads;
-    false,
-        enableInteraction;
-    true,
-        showAuthorInfo;
-    true,
-        showStats;
-    true,
-    ;
-}
-{
-    id: 'blog-embed',
-        name;
-    'Blog Embed',
-        description;
-    'Great for embedding in blog posts and articles',
-        thumbnail;
-    '/presets/blog-embed.png',
-        category;
-    'blog',
-        popular;
-    true,
-        customization;
-    {
-        size: {
-            width: 800, height;
-            400, responsive;
-            true;
-        }
-        theme: {
-            name: 'light', colors;
-            { }
-            fonts: { }
-        }
         features: {
             showPreview: true,
-                showMetadata;
-            true,
-                showActions;
-            true,
-                showComments;
-            true,
-                enableInteraction;
-            true,
-                enableSharing;
-            true,
-                enablePurchase;
-            true,
-                showRating;
-            true,
-            ;
-        }
+            showMetadata: true,
+            showActions: true,
+            showComments: false,
+            enableInteraction: true,
+            enableSharing: true,
+            enablePurchase: false,
+            showRating: true
+        },
         layout: {
-            orientation: 'vertical',
-                showHeader;
-            true,
-                showFooter;
-            true,
-                showSidebar;
-            false,
-                contentAlignment;
-            'center',
-                spacing;
-            'normal',
-                borderRadius;
-            8,
-                shadow;
-            'lg',
-            ;
-        }
+            orientation: 'horizontal',
+            showHeader: true,
+            showFooter: false,
+            showSidebar: false,
+            contentAlignment: 'left',
+            spacing: 'tight',
+            borderRadius: 12,
+            shadow: 'md'
+        },
         branding: {
-            showLogo: true,
-                showTitle;
-            true,
-                showAuthor;
-            true,
-                showPoweredBy;
-            true,
-            ;
-        }
+            showLogo: false,
+            showTitle: true,
+            showAuthor: true,
+            showPoweredBy: false
+        },
         social: {
             showLikes: true,
-                showShares;
-            true,
-                showComments;
-            true,
-                showRating;
-            true,
-                showDownloads;
-            true,
-                enableInteraction;
-            true,
-                showAuthorInfo;
-            true,
-                showStats;
-            true,
-            ;
-        }
-        {
-            id: 'sidebar-widget',
-                name;
-            'Sidebar Widget',
-                description;
-            'Compact widget for website sidebars',
-                thumbnail;
-            '/presets/sidebar-widget.png',
-                category;
-            'blog',
-                popular;
-            false,
-                customization;
-            {
-                size: {
-                    width: 300, height;
-                    400, responsive;
-                    true;
-                }
-                theme: {
-                    name: 'light', colors;
-                    { }
-                    fonts: { }
-                }
-                features: {
-                    showPreview: true,
-                        showMetadata;
-                    false,
-                        showActions;
-                    true,
-                        showComments;
-                    false,
-                        enableInteraction;
-                    true,
-                        enableSharing;
-                    false,
-                        enablePurchase;
-                    true,
-                        showRating;
-                    false,
-                    ;
-                }
-                layout: {
-                    orientation: 'vertical',
-                        showHeader;
-                    true,
-                        showFooter;
-                    false,
-                        showSidebar;
-                    false,
-                        contentAlignment;
-                    'center',
-                        spacing;
-                    'tight',
-                        borderRadius;
-                    6,
-                        shadow;
-                    'sm',
-                    ;
-                }
-                branding: {
-                    showLogo: false,
-                        showTitle;
-                    true,
-                        showAuthor;
-                    false,
-                        showPoweredBy;
-                    false,
-                    ;
-                }
-                social: {
-                    showLikes: false,
-                        showShares;
-                    false,
-                        showComments;
-                    false,
-                        showRating;
-                    false,
-                        showDownloads;
-                    true,
-                        enableInteraction;
-                    true,
-                        showAuthorInfo;
-                    false,
-                        showStats;
-                    false;
-                    ;
-                    // Widget library for drag and drop
-                    const WIDGET_LIBRARY = [
-                        {
-                            id: 'header',
-                            type: 'header',
-                            name: 'Header',
-                            description: 'Template title and branding',
-                            icon: TagIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'preview',
-                            type: 'preview',
-                            name: 'Preview',
-                            description: 'Template preview content',
-                            icon: PhotoIcon,
-                            configurable: true,
-                            required: true,
-                        },
-                        {
-                            id: 'metadata',
-                            type: 'metadata',
-                            name: 'Metadata',
-                            description: 'Template description and details',
-                            icon: ListBulletIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'actions',
-                            type: 'actions',
-                            name: 'Action Buttons',
-                            description: 'Like, share, purchase buttons',
-                            icon: BoltIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'stats',
-                            type: 'stats',
-                            name: 'Statistics',
-                            description: 'Downloads, likes, ratings',
-                            icon: BarChart3,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'author',
-                            type: 'author',
-                            name: 'Author Info',
-                            description: 'Template creator information',
-                            icon: UserIcon,
-                            configurable: true,
-                            required: false,
-                        },
-                        {
-                            id: 'footer',
-                            type: 'footer',
-                            name: 'Footer',
-                            description: 'Powered by and additional links',
-                            icon: FlagIcon,
-                            configurable: true,
-                            required: false
-                        }
-                    ];
-                    // Preset selector component
-                }
-                export const PresetSelector, EmbedPreset;
-                selectedPreset ?  : string;
-                onPresetSelect: (preset) => void ;
-            }
-             > ;
-            ({ presets, selectedPreset, onPresetSelect }) => {
-                const [activeCategory, setActiveCategory] = useState('all');
-                const categories = useMemo(() => {
-                    const cats = ['all', ...new Set(presets.map(p => p.category))];
-                    return cats.map(cat => ({}), id, cat, label, cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1), count, cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length);
-                });
-            }, [presets];
-            ;
-            const filteredPresets = useMemo(() => {
-                return activeCategory === 'all'
-                    ? presets
-                    : presets.filter(preset => preset.category === activeCategory);
-            }, [presets, activeCategory]);
-            return;
-            _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-4", children: [_jsx("h3", { className: "font-semibold text-gray-900 mb-4", children: "Choose a Preset" }), _jsxs("div", { className: "flex items-center gap-2 mb-4 border-b border-gray-200", children: [categories.map((category) => ()
-                                < button, key = { category, : .id }, onClick = {}()), " => setActiveCategory(category.id)} className=", `px-3 py-2 text-sm font-medium border-b-2 ${activeCategory === category.id
-                                ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                            }`, ">", category.label, " (", category.count, ")"] }), "))}"] });
-            { /* Preset grid */ }
-            _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [filteredPresets.map((preset) => ()
-                        < button, key = { preset, : .id }, onClick = {}()), " => onPresetSelect(preset)} className=", `text-left p-4 border rounded-lg hover:shadow-md transition-shadow ${selectedPreset === preset.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300',
-                    }`, ">", _jsx("div", { className: "aspect-video bg-gray-100 rounded mb-3 flex items-center justify-center", children: _jsx(PhotoIcon, { className: "h-8 w-8 text-gray-400" }) }), _jsxs("div", { className: "flex items-start justify-between mb-2", children: [_jsx("h4", { className: "font-medium text-gray-900", children: preset.name }), preset.popular && ()
-                                < span, " className=\"px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full\"> Popular"] }), ")}"] })
-                ,
-                    _jsx("p", { className: "text-sm text-gray-600", children: preset.description })
-                        ,
-                            _jsxs("div", { className: "flex items-center gap-2 mt-2 text-xs text-gray-500", children: [_jsx("span", { className: "capitalize", children: preset.category }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [preset.customization.size.width, "\u00D7", preset.customization.size.height] })] });
-            button >
-            ;
-        }
-        div >
-        ;
-        div >
-        ;
-        ;
-    }
-    ;
-    // Visual layout builder component
-    export const VisualLayoutBuilder, EmbedWidget;
-    onWidgetsChange: (widgets) => void ;
-    previewSize: PreviewSize;
-}
+            showShares: true,
+            showComments: false,
+            showRating: true,
+            showDownloads: false,
+            enableInteraction: true,
+            showAuthorInfo: true,
+            showStats: true
+        } },
+    { id: 'blog-embed',
+        name: 'Blog Embed',
+        description: 'Great for embedding in blog posts and articles',
+        thumbnail: '/presets/blog-embed.png',
+        category: 'blog',
+        popular: true,
+        customization: {},
+        size: { width: 800, height: 400, responsive: true },
+        theme: { name: 'light', colors: {}, fonts: {} },
+        features: {
+            showPreview: true,
+            showMetadata: true,
+            showActions: true,
+            showComments: true,
+            enableInteraction: true,
+            enableSharing: true,
+            enablePurchase: true,
+            showRating: true
+        },
+        layout: {
+            orientation: 'vertical',
+            showHeader: true,
+            showFooter: true,
+            showSidebar: false,
+            contentAlignment: 'center',
+            spacing: 'normal',
+            borderRadius: 8,
+            shadow: 'lg'
+        },
+        branding: {
+            showLogo: true,
+            showTitle: true,
+            showAuthor: true,
+            showPoweredBy: true
+        },
+        social: {
+            showLikes: true,
+            showShares: true,
+            showComments: true,
+            showRating: true,
+            showDownloads: true,
+            enableInteraction: true,
+            showAuthorInfo: true,
+            showStats: true
+        } },
+    { id: 'sidebar-widget',
+        name: 'Sidebar Widget',
+        description: 'Compact widget for website sidebars',
+        thumbnail: '/presets/sidebar-widget.png',
+        category: 'blog',
+        popular: false,
+        customization: {},
+        size: { width: 300, height: 400, responsive: true },
+        theme: { name: 'light', colors: {}, fonts: {} },
+        features: {
+            showPreview: true,
+            showMetadata: false,
+            showActions: true,
+            showComments: false,
+            enableInteraction: true,
+            enableSharing: false,
+            enablePurchase: true,
+            showRating: false
+        },
+        layout: {
+            orientation: 'vertical',
+            showHeader: true,
+            showFooter: false,
+            showSidebar: false,
+            contentAlignment: 'center',
+            spacing: 'tight',
+            borderRadius: 6,
+            shadow: 'sm'
+        },
+        branding: {
+            showLogo: false,
+            showTitle: true,
+            showAuthor: false,
+            showPoweredBy: false
+        },
+        social: {
+            showLikes: false,
+            showShares: false,
+            showComments: false,
+            showRating: false,
+            showDownloads: true,
+            enableInteraction: true,
+            showAuthorInfo: false,
+            showStats: false
+        } }
+];
+// Widget library for drag and drop
+const WIDGET_LIBRARY = [
+    {
+        id: 'header',
+        type: 'header',
+        name: 'Header',
+        description: 'Template title and branding',
+        icon: TagIcon,
+        configurable: true,
+        required: false
+    },
+    { id: 'preview',
+        type: 'preview',
+        name: 'Preview',
+        description: 'Template preview content',
+        icon: PhotoIcon,
+        configurable: true,
+        required: true },
+    { id: 'metadata',
+        type: 'metadata',
+        name: 'Metadata',
+        description: 'Template description and details',
+        icon: ListBulletIcon,
+        configurable: true,
+        required: false },
+    { id: 'actions',
+        type: 'actions',
+        name: 'Action Buttons',
+        description: 'Like, share, purchase buttons',
+        icon: BoltIcon,
+        configurable: true,
+        required: false },
+    { id: 'stats',
+        type: 'stats',
+        name: 'Statistics',
+        description: 'Downloads, likes, ratings',
+        icon: BarChart3,
+        configurable: true,
+        required: false },
+    { id: 'author',
+        type: 'author',
+        name: 'Author Info',
+        description: 'Template creator information',
+        icon: UserIcon,
+        configurable: true,
+        required: false },
+    { id: 'footer',
+        type: 'footer',
+        name: 'Footer',
+        description: 'Powered by and additional links',
+        icon: FlagIcon,
+        configurable: true },
+    required, false
+];
+// Preset selector component
+export const PresetSelector, EmbedPreset;
+selectedPreset ?  : string;
+onPresetSelect: (preset) => void ;
  > ;
+({ presets, selectedPreset, onPresetSelect }) => {
+    const [activeCategory, setActiveCategory] = useState('all');
+    const categories = useMemo(() => {
+        const cats = ['all', ...new Set(presets.map(p => p.category))];
+        return cats.map(cat => ({}), id, cat, label, cat === 'all' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1), count, cat === 'all' ? presets.length : presets.filter(p => p.category === cat).length);
+    });
+};
+;
+[presets];
+;
+const filteredPresets = useMemo(() => {
+    return activeCategory === 'all'
+        ? presets
+        : presets.filter(preset => preset.category === activeCategory);
+}, [presets, activeCategory]);
+return;
+_jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-4", children: [_jsx("h3", { className: "font-semibold text-gray-900 mb-4", children: "Choose a Preset" }), _jsxs("div", { className: "flex items-center gap-2 mb-4 border-b border-gray-200", children: [categories.map((category) => ()
+                    < button, key = { category, : .id }, onClick = {}()), " => setActiveCategory(category.id)} className=", `px-3 py-2 text-sm font-medium border-b-2 ${activeCategory === category.id
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, ">", category.label, " (", category.count, ")"] }), "))}"] });
+{ /* Preset grid */ }
+_jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [filteredPresets.map((preset) => ()
+            < button, key = { preset, : .id }, onClick = {}()), " => onPresetSelect(preset)} className=", `text-left p-4 border rounded-lg hover:shadow-md transition-shadow ${selectedPreset === preset.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}
+`, ">", _jsx("div", { className: "aspect-video bg-gray-100 rounded mb-3 flex items-center justify-center", children: _jsx(PhotoIcon, { className: "h-8 w-8 text-gray-400" }) }), _jsxs("div", { className: "flex items-start justify-between mb-2", children: [_jsx("h4", { className: "font-medium text-gray-900", children: preset.name }), preset.popular && ()
+                    < span, " className=\"px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full\"> Popular"] }), ")}"] })
+    ,
+        _jsx("p", { className: "text-sm text-gray-600", children: preset.description })
+            ,
+                _jsxs("div", { className: "flex items-center gap-2 mt-2 text-xs text-gray-500", children: [_jsx("span", { className: "capitalize", children: preset.category }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [preset.customization.size.width, "\u00D7", preset.customization.size.height] })] });
+button >
+;
+div >
+;
+div >
+;
+;
+;
+// Visual layout builder component
+export const VisualLayoutBuilder, EmbedWidget;
+onWidgetsChange: (widgets) => void ;
+previewSize: PreviewSize;
+    > ;
 ({ widgets, onWidgetsChange, previewSize }) => {
     const [selectedWidget, setSelectedWidget] = useState(null);
     const _____canvasRef = useRef(null);
@@ -409,9 +306,9 @@ social: {
             // Add widget from library to canvas
             const widgetTemplate = WIDGET_LIBRARY[sourceIndex];
             const newWidget = {
-                ...widgetTemplate,
-                id: `${widgetTemplate.type}-${Date.now()}`
+                ...widgetTemplate
             };
+            id: `${widgetTemplate.type}-${Date.now()}`;
         }
         position: {
             x: 20, y;
@@ -421,25 +318,22 @@ social: {
             width: 200, height;
             50;
         }
-        visible: true,
-            config;
-        { }
+        visible: true;
+        config: { }
     });
     onWidgetsChange([...widgets, newWidget]);
-};
-if (result.source.droppableId === result.destination.droppableId) {
-    // Reorder widgets
-    const items = Array.from(widgets);
-    const [reorderedItem] = items.splice(sourceIndex, 1);
-    items.splice(destIndex, 0, reorderedItem);
-    onWidgetsChange(items);
-}
-[widgets, onWidgetsChange];
-;
-const updateWidget = useCallback((widgetId, updates) => {
-    onWidgetsChange(widgets.map(widget => ), widget.id === widgetId ? { ...widget, ...updates } : widget);
-});
-[widgets, onWidgetsChange];
+    if (result.source.droppableId === result.destination.droppableId) { // Reorder widgets
+        const items = Array.from(widgets);
+        const [reorderedItem] = items.splice(sourceIndex, 1);
+        items.splice(destIndex, 0, reorderedItem);
+        onWidgetsChange(items);
+    }
+    [widgets, onWidgetsChange];
+    ;
+    const updateWidget = useCallback((widgetId, updates) => {
+        onWidgetsChange(widgets.map(widget => ), widget.id === widgetId ? { ...widget, ...updates } : widget);
+    });
+}, [widgets, onWidgetsChange];
 ;
 const removeWidget = useCallback((widgetId) => {
     onWidgetsChange(widgets.filter(widget => widget.id !== widgetId));
@@ -454,27 +348,27 @@ _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg", children
                                         const Icon = widget.icon;
                                         return;
                                         _jsxs(Draggable, { draggableId: widget.id, index: index, children: [(provided, snapshot) => ()
-                                                    < div, "ref=", provided.innerRef, ...provided.draggableProps, ...provided.dragHandleProps, "className=", `p-3 border border-gray-200 rounded-lg cursor-move hover:shadow-md transition-shadow ${snapshot.isDragging ? 'opacity-50' : '',
-                                                }`, ">", _jsxs("div", { className: "flex items-center gap-2 mb-1", children: [_jsx(Icon, { className: "h-4 w-4 text-gray-600" }), _jsx("span", { className: "font-medium text-gray-900 text-sm", children: widget.name })] }), _jsx("p", { className: "text-xs text-gray-600", children: widget.description })] }, widget.id);
+                                                    < div, "ref=", provided.innerRef, ...provided.draggableProps, ...provided.dragHandleProps, "className=", `p-3 border border-gray-200 rounded-lg cursor-move hover:shadow-md transition-shadow ${snapshot.isDragging ? 'opacity-50' : ''}
+`, ">", _jsxs("div", { className: "flex items-center gap-2 mb-1", children: [_jsx(Icon, { className: "h-4 w-4 text-gray-600" }), _jsx("span", { className: "font-medium text-gray-900 text-sm", children: widget.name })] }), _jsx("p", { className: "text-xs text-gray-600", children: widget.description })] }, widget.id);
                                     })] }), "); })}", provided.placeholder] }), ")}"] }) })] });
 { /* Canvas */ }
 _jsxs("div", { className: "lg:col-span-2", children: [_jsxs("div", { className: "flex items-center justify-between mb-3", children: [_jsx("h4", { className: "font-medium text-gray-700", children: "Canvas" }), _jsxs("div", { className: "text-sm text-gray-600", children: [previewSize.width, " \u00D7 ", previewSize.height] })] }), _jsxs(Droppable, { droppableId: "canvas", children: [(provided) => ()
                     < div, "ref=", provided.innerRef, ...provided.droppableProps, "className=\"relative bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg overflow-hidden\" style=", {
                     width: Math.min(previewSize.width * 0.5, 400),
                     height: Math.min(previewSize.height * 0.5, 300),
-                    minHeight: '200px',
+                    minHeight: '200px'
                 }, ">", widgets.map((widget, index) => {
                     const Icon = widget.icon;
                     return;
                     _jsxs(Draggable, { draggableId: widget.id, index: index, children: [(provided, snapshot) => ()
-                                < div, "ref=", provided.innerRef, ...provided.draggableProps, ...provided.dragHandleProps, "className=", `absolute bg-white border border-gray-300 rounded p-2 cursor-move ${selectedWidget === widget.id ? 'border-blue-500 shadow-md' : 'hover:border-gray-400',
-                            } ${snapshot.isDragging ? 'opacity-50' : ''}`, "style=", {
+                                < div, "ref=", provided.innerRef, ...provided.draggableProps, ...provided.dragHandleProps, "className=", `absolute bg-white border border-gray-300 rounded p-2 cursor-move ${selectedWidget === widget.id ? 'border-blue-500 shadow-md' : 'hover:border-gray-400'}
+ ${snapshot.isDragging ? 'opacity-50' : ''}`, "style=", {
                                 left: widget.position.x * 0.5,
                                 top: widget.position.y * 0.5,
                                 width: widget.size.width * 0.5,
                                 height: widget.size.height * 0.5,
                                 minWidth: '80px',
-                                minHeight: '30px',
+                                minHeight: '30px'
                             }, "onClick=", () => setSelectedWidget(widget.id), ">", _jsxs("div", { className: "flex items-center gap-1", children: [_jsx(Icon, { className: "h-3 w-3 text-gray-600" }), _jsx("span", { className: "text-xs font-medium text-gray-900 truncate", children: widget.name }), _jsx("button", { onClick: (e) => {
                                             e.stopPropagation();
                                             removeWidget(widget.id);
@@ -532,9 +426,8 @@ export const EmbedCustomizationInterface = ({
     onCancel,
     onPreview,
     onExport,
-    className = '',
-    presets = DEFAULT_PRESETS
-});
+    className = '' });
+presets = DEFAULT_PRESETS;
 {
     const [activeTab, setActiveTab] = useState('presets');
     const [customization, setCustomization] = useState();
@@ -565,9 +458,7 @@ export const EmbedCustomizationInterface = ({
         }
         [customization, onSave];
     });
-    const handleExport = useCallback((format) => {
-        return onExport(customization, format);
-    }, [customization, onExport]);
+    const handleExport = useCallback((format) => { return onExport(customization, format); }, [customization, onExport]);
     return;
     _jsxs("div", { className: `bg-gray-50 min-h-screen ${className}`, children: ["}", _jsx("div", { className: "max-w-7xl mx-auto px-4 py-6", children: _jsxs("div", { className: "flex items-center justify-between mb-6", children: [_jsxs("div", { children: [_jsx("h1", { className: "text-2xl font-bold text-gray-900", children: "Embed Customization" }), _jsxs("p", { className: "text-gray-600", children: ["Create a custom embed for \"", template.title, "\""] })] }), _jsxs("div", { className: "flex items-center gap-3", children: [_jsxs("button", { onClick: () => onPreview(customization), className: "flex items-center gap-2 px-4 py-2 text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-md", children: [_jsx(EyeIcon, { className: "h-5 w-5" }), "Preview"] }), _jsx("button", { onClick: onCancel, className: "px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md", children: "Cancel" }), _jsxs("button", { onClick: handleSave, disabled: isSaving, className: "flex items-center gap-2 px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md disabled:opacity-50", children: [isSaving ? ()
                                             <  >
@@ -584,8 +475,8 @@ export const EmbedCustomizationInterface = ({
                             return;
                             _jsxs("button", { onClick: () => setActiveTab(tab.id), className: `flex items-center gap-2 py-4 px-1 border-b-2 font-medium text-sm ${activeTab === tab.id
                                     ? 'border-blue-500 text-blue-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                                }`, children: [_jsx(Icon, { className: "h-5 w-5" }), tab.label] }, tab.id);
+                                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, children: [_jsx(Icon, { className: "h-5 w-5" }), tab.label] }, tab.id);
                         }), "; })}"] }) }), _jsxs("div", { className: "space-y-6", children: [activeTab === 'presets' && ()
                         < PresetSelector, "presets=", presets, "selectedPreset=", selectedPreset, "onPresetSelect=", handlePresetSelect, "/> )}", activeTab === 'layout' && ()
                         < VisualLayoutBuilder, "widgets=", widgets, "onWidgetsChange=", setWidgets, "previewSize=", previewSize, "/> )}", activeTab === 'design' && ()
@@ -599,17 +490,13 @@ export const EmbedCustomizationInterface = ({
                                                     _jsx("button", { onClick: () => updateCustomization({}), "theme:": true, ...(customization.theme, name) }, theme.value);
                                                 }), ": theme.value as any } })} className=", `flex items-center gap-2 px-4 py-2 border rounded-md ${customization.theme.name === theme.value
                                                     ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                                    : 'border-gray-300 hover:bg-gray-50',
-                                                }`, ">", _jsx(Icon, { className: "h-4 w-4" }), theme.label] }), "); })}"] }) }), customization.branding.customColors && ()
+                                                    : 'border-gray-300 hover:bg-gray-50'}
+`, ">", _jsx(Icon, { className: "h-4 w-4" }), theme.label] }), "); })}"] }) }), customization.branding.customColors && ()
                                 < div, " className=\"space-y-3\">", _jsx("label", { className: "block text-sm font-medium text-gray-700", children: "Custom Colors" }), Object.entries(customization.branding.customColors).map(([key, value]) => ()
                                 < div, key = { key }, className = "flex items-center gap-3" >
                                 (_jsx("label", { className: "w-20 text-sm text-gray-600 capitalize", children: key })
                                     ,
-                                        _jsx("input", { type: "color", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...(customization.branding,
-                                                customColors) }))), ": ", (,
-                            ), "...customization.branding.customColors, [key]: e.target.value, })} className=\"w-12 h-8 border border-gray-300 rounded cursor-pointer\" />", _jsx("input", { type: "text", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...(customization.branding,
-                                    customColors) }), ": ", (,
-                            ), "...customization.branding.customColors, [key]: e.target.value, })} className=\"flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm\" />"] }), "))}"] }), ")}"] });
+                                        _jsx("input", { type: "color", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...customization.branding, "customColors:": true, ...customization.branding.customColors[key] }))), ": e.target.value } })} className=\"w-12 h-8 border border-gray-300 rounded cursor-pointer\" />", _jsx("input", { type: "text", value: value, onChange: (e) => updateCustomization({}), "branding:": true, ...customization.branding, "customColors:": true, ...customization.branding.customColors[key] }), ": e.target.value } })} className=\"flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm\" />"] }), "))}"] }), ")}"] });
     div >
         { /* Typography & Spacing */}
         < div;
@@ -619,16 +506,16 @@ export const EmbedCustomizationInterface = ({
                 _jsx("div", { className: "space-y-4", children: _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Spacing" }), _jsxs("div", { className: "flex gap-2", children: [['tight', 'normal', 'loose'].map((spacing) => ()
                                         < button, key = { spacing }, onClick = {}()), " => updateCustomization(", , ") layout: ", ...(customization.layout, spacing), ": spacing as any } })} className=", `px-4 py-2 border rounded-md capitalize ${customization.layout.spacing === spacing
                                         ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                        : 'border-gray-300 hover:bg-gray-50',
-                                    }`, ">", spacing] }), "))}"] }) })
+                                        : 'border-gray-300 hover:bg-gray-50'}
+`, ">", spacing] }), "))}"] }) })
                     ,
                         _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Border Radius" }), _jsx("input", { type: "range", min: "0", max: "24", value: customization.layout.borderRadius, onChange: (e) => updateCustomization({}), "layout:": true, ...(customization.layout, borderRadius) }), ": parseInt(e.target.value) } })} className=\"w-full\" />", _jsxs("div", { className: "flex justify-between text-xs text-gray-500 mt-1", children: [_jsx("span", { children: "0px" }), _jsxs("span", { children: [customization.layout.borderRadius, "px"] }), _jsx("span", { children: "24px" })] })] })
                             ,
                                 _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Shadow" }), _jsxs("div", { className: "flex gap-2", children: [['none', 'sm', 'md', 'lg', 'xl'].map((shadow) => ()
                                                     < button, key = { shadow }, onClick = {}()), " => updateCustomization(", , ") layout: ", ...(customization.layout, shadow), ": shadow as any } })} className=", `px-3 py-2 border rounded-md text-sm ${customization.layout.shadow === shadow
                                                     ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                                    : 'border-gray-300 hover:bg-gray-50',
-                                                }`, ">", shadow] }), "))}"] }));
+                                                    : 'border-gray-300 hover:bg-gray-50'}
+`, ">", shadow] }), "))}"] }));
     div >
     ;
     div >

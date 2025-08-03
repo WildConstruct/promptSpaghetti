@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Displays list of user's workspaces with search and filtering
  */
 import { useState, useMemo } from 'react';
+loading = false;
 {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterBy, setFilterBy] = useState('all');

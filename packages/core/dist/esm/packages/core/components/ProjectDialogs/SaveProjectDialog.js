@@ -5,19 +5,21 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState } from 'react';
 import { useGraphStore } from '../../graphStore';
 onSave ?  : (result) => void ;
-export const SaveProjectDialog = ({ isOpen, onClose, onSave }) => {
+export const SaveProjectDialog = ({ isOpen,
+    onClose });
+onSave;
+{
     const { saveProject, currentProject } = useGraphStore();
-    const [formData, setFormData] = useState({
-        name: currentProject?.name || '',
+    const [formData, setFormData] = useState({ name: currentProject?.name || '',
         description: currentProject?.description || '',
         author: currentProject?.author || '',
-        tags: currentProject?.tags?.join(', ') || '',
-    });
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const handleInputChange = (field) => ();
-    e: React.ChangeEvent;
-};
+        tags: currentProject?.tags?.join(', ') || '' });
+}
+;
+const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState(null);
+const handleInputChange = (field) => ();
+e: React.ChangeEvent;
 {
     setFormData(prev => ({ ...prev, [field]: e.target.value }));
     if (error)
@@ -37,15 +39,19 @@ const handleSubmit = async (e) => {
             name: formData.name.trim(),
             description: formData.description.trim() || undefined,
             author: formData.author.trim() || undefined,
-            tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+            tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
         });
-        onSave?.(result);
-        if (result.success) {
-            onClose();
-        }
-        else {
-            setError(result.error || 'Failed to save project');
-        }
+    }
+    finally { }
+    ;
+    onSave?.(result);
+    if (result.success) {
+        onClose();
+    }
+    else {
+        setError(result.error || 'Failed to save project');
+    }
+    try {
     }
     catch (err) {
         setError('An unexpected error occurred');
@@ -66,24 +72,24 @@ return (_jsx("div", { style: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 1000,
+        zIndex: 1000
     }, children: _jsxs("div", { style: {
             backgroundColor: 'white',
             borderRadius: '8px',
             padding: '24px',
             width: '90%',
             maxWidth: '500px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
         }, children: [_jsxs("div", { style: {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '24px',
+                    marginBottom: '24px'
                 }, children: [_jsx("h2", { style: {
                             margin: 0,
                             fontSize: '20px',
                             fontWeight: '600',
-                            color: '#333',
+                            color: '#333'
                         }, children: "Save Project" }), _jsx("button", { onClick: onClose, style: {
                             background: 'none',
                             border: 'none',
@@ -95,26 +101,26 @@ return (_jsx("div", { style: {
                             height: '32px',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
+                            justifyContent: 'center'
                         }, disabled: isLoading, children: "\u00D7" })] }), _jsxs("form", { onSubmit: handleSubmit, children: [_jsxs("div", { style: { marginBottom: '16px' }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     marginBottom: '6px',
                                     fontSize: '14px',
                                     fontWeight: '500',
-                                    color: '#333',
+                                    color: '#333'
                                 }, children: "Project Name *" }), _jsx("input", { type: "text", value: formData.name, onChange: handleInputChange('name'), placeholder: "Enter project name...", required: true, disabled: isLoading, style: {
                                     width: '100%',
                                     padding: '10px',
                                     border: '1px solid #ddd',
                                     borderRadius: '4px',
                                     fontSize: '14px',
-                                    boxSizing: 'border-box',
+                                    boxSizing: 'border-box'
                                 } })] }), _jsxs("div", { style: { marginBottom: '16px' }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     marginBottom: '6px',
                                     fontSize: '14px',
                                     fontWeight: '500',
-                                    color: '#333',
+                                    color: '#333'
                                 }, children: "Description" }), _jsx("textarea", { value: formData.description, onChange: handleInputChange('description'), placeholder: "Optional project description...", disabled: isLoading, rows: 3, style: {
                                     width: '100%',
                                     padding: '10px',
@@ -122,37 +128,39 @@ return (_jsx("div", { style: {
                                     borderRadius: '4px',
                                     fontSize: '14px',
                                     resize: 'vertical',
-                                    boxSizing: 'border-box',
-                                } })] }), _jsxs("div", { style: { marginBottom: '16px' }, children: [_jsx("label", { style: {
+                                    boxSizing: 'border-box'
+                                }
+                                    /  >
+                             })] }), _jsxs("div", { style: { marginBottom: '16px' }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     marginBottom: '6px',
                                     fontSize: '14px',
                                     fontWeight: '500',
-                                    color: '#333',
+                                    color: '#333'
                                 }, children: "Author" }), _jsx("input", { type: "text", value: formData.author, onChange: handleInputChange('author'), placeholder: "Your name...", disabled: isLoading, style: {
                                     width: '100%',
                                     padding: '10px',
                                     border: '1px solid #ddd',
                                     borderRadius: '4px',
                                     fontSize: '14px',
-                                    boxSizing: 'border-box',
+                                    boxSizing: 'border-box'
                                 } })] }), _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsx("label", { style: {
                                     display: 'block',
                                     marginBottom: '6px',
                                     fontSize: '14px',
                                     fontWeight: '500',
-                                    color: '#333',
+                                    color: '#333'
                                 }, children: "Tags" }), _jsx("input", { type: "text", value: formData.tags, onChange: handleInputChange('tags'), placeholder: "Enter tags separated by commas...", disabled: isLoading, style: {
                                     width: '100%',
                                     padding: '10px',
                                     border: '1px solid #ddd',
                                     borderRadius: '4px',
                                     fontSize: '14px',
-                                    boxSizing: 'border-box',
+                                    boxSizing: 'border-box'
                                 } }), _jsx("div", { style: {
                                     fontSize: '12px',
                                     color: '#666',
-                                    marginTop: '4px',
+                                    marginTop: '4px'
                                 }, children: "Example: prompt-engineering, workflow, automation" })] }), error && (_jsx("div", { style: {
                             backgroundColor: '#fee',
                             border: '1px solid #fcc',
@@ -160,11 +168,11 @@ return (_jsx("div", { style: {
                             padding: '10px',
                             borderRadius: '4px',
                             marginBottom: '16px',
-                            fontSize: '14px',
+                            fontSize: '14px'
                         }, children: error })), _jsxs("div", { style: {
                             display: 'flex',
                             gap: '12px',
-                            justifyContent: 'flex-end',
+                            justifyContent: 'flex-end'
                         }, children: [_jsx("button", { type: "button", onClick: onClose, disabled: isLoading, style: {
                                     padding: '10px 20px',
                                     border: '1px solid #ddd',
@@ -172,7 +180,7 @@ return (_jsx("div", { style: {
                                     color: '#666',
                                     borderRadius: '4px',
                                     cursor: isLoading ? 'not-allowed' : 'pointer',
-                                    fontSize: '14px',
+                                    fontSize: '14px'
                                 }, children: "Cancel" }), _jsx("button", { type: "submit", disabled: isLoading, style: {
                                     padding: '10px 20px',
                                     border: 'none',
@@ -180,7 +188,14 @@ return (_jsx("div", { style: {
                                     color: 'white',
                                     borderRadius: '4px',
                                     cursor: isLoading ? 'not-allowed' : 'pointer',
-                                    fontSize: '14px',
-                                }, children: isLoading ? 'Saving...' : 'Save Project' })] })] })] }) }));
+                                    fontSize: '14px'
+                                }
+                                    >
+                                        { isLoading, 'Saving...': 'Save Project' } })] })] })] }) }));
+div >
+;
+div >
+;
+;
 ;
 export default SaveProjectDialog;

@@ -32,9 +32,8 @@ export const DashboardHeader = ({
     timeRange = '7d',
     timeRangeOptions = [],
     onTimeRangeChange,
-    showTimeRange = true,
-    className = ''
-});
+    showTimeRange = true });
+className = '';
 {
     const [showExportMenu, setShowExportMenu] = useState(false);
     const [refreshing, setRefreshing] = useState(false);

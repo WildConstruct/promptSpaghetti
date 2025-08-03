@@ -5,12 +5,18 @@
  */
 import { NodeMetadataManager } from '../historical/NodeMetadataManager';
 import { DataSourceManager } from '../external-data/DataSourceManager';
-;
-regions: string;
-seasonality: 'all' | 'spring' | 'summer' | 'autumn' | 'winter';
-occasions: string;
-historicalAccuracy: 'high' | 'medium' | 'low';
-sources: string;
+tradingSources: string;
+primaryUses: string;
+historicalNotes: string;
+geographicalRegion: string;
+politicalContext: string;
+age: number;
+description: string;
+typicalClothing: string;
+skills: string;
+possessions: string;
+socialConnections: string;
+historicalContext: string;
 ;
 activities: string;
 socialDynamics: string;
@@ -65,59 +71,53 @@ export class MedievalDemo {
                 socialClass: 'peasant',
                 gender: 'unisex',
                 materials: ['rough wool', 'linen'],
-                colors: ['brown', 'gray', 'undyed'],
-                period: { start: 1000, end: 1500 },
-                regions: ['England', 'France', 'Germanic regions'],
-                seasonality: 'all',
-                occasions: ['daily work', 'farming', 'labor'],
-                historicalAccuracy: 'high',
-                sources: ['Medieval Archaeology', 'Textile remnants']
+                colors: ['brown', 'gray', 'undyed']
             },
-            {
-                id: 'chainmail_knight',
+            period, { start: 1000, end: 1500 },
+            regions, ['England', 'France', 'Germanic regions'],
+            seasonality, 'all',
+            occasions, ['daily work', 'farming', 'labor'],
+            historicalAccuracy, 'high',
+            sources, ['Medieval Archaeology', 'Textile remnants'],
+            { id: 'chainmail_knight',
                 name: 'Knight Chainmail',
                 description: 'Interlocked metal rings forming protective armor',
                 socialClass: 'noble',
                 gender: 'male',
                 materials: ['iron', 'steel'],
-                colors: ['metallic gray', 'silver'],
-                period: { start: 1100, end: 1400 },
-                regions: ['Europe-wide'],
-                seasonality: 'all',
-                occasions: ['warfare', 'tournaments', 'ceremonial'],
-                historicalAccuracy: 'high',
-                sources: ['Archaeological finds', 'Medieval manuscripts']
-            },
-            {
-                id: 'gown_noble_lady',
+                colors: ['metallic gray', 'silver'] },
+            period, { start: 1100, end: 1400 },
+            regions, ['Europe-wide'],
+            seasonality, 'all',
+            occasions, ['warfare', 'tournaments', 'ceremonial'],
+            historicalAccuracy, 'high',
+            sources, ['Archaeological finds', 'Medieval manuscripts'],
+            { id: 'gown_noble_lady',
                 name: 'Noble Lady Gown',
                 description: 'Floor-length gown with fitted bodice and flowing skirt',
                 socialClass: 'noble',
                 gender: 'female',
                 materials: ['silk', 'velvet', 'fine wool'],
-                colors: ['deep blue', 'burgundy', 'emerald', 'gold'],
-                period: { start: 1200, end: 1500 },
-                regions: ['French courts', 'English nobility'],
-                seasonality: 'all',
-                occasions: ['court events', 'formal gatherings', 'religious ceremonies'],
-                historicalAccuracy: 'high',
-                sources: ['Illuminated manuscripts', 'Effigy sculptures']
-            },
-            {
-                id: 'monks_habit',
+                colors: ['deep blue', 'burgundy', 'emerald', 'gold'] },
+            period, { start: 1200, end: 1500 },
+            regions, ['French courts', 'English nobility'],
+            seasonality, 'all',
+            occasions, ['court events', 'formal gatherings', 'religious ceremonies'],
+            historicalAccuracy, 'high',
+            sources, ['Illuminated manuscripts', 'Effigy sculptures'],
+            { id: 'monks_habit',
                 name: 'Monk Habit',
                 description: 'Simple brown robe with hood, belt of rope',
                 socialClass: 'clergy',
                 gender: 'male',
                 materials: ['rough wool', 'coarse linen'],
-                colors: ['brown', 'black', 'gray'],
-                period: { start: 800, end: 1600 },
-                regions: ['European monasteries'],
-                seasonality: 'all',
-                occasions: ['daily religious life', 'prayer', 'work'],
-                historicalAccuracy: 'high',
-                sources: ['Monastic rules', 'Religious artwork']
-            }
+                colors: ['brown', 'black', 'gray'] },
+            period, { start: 800, end: 1600 },
+            regions, ['European monasteries'],
+            seasonality, 'all',
+            occasions, ['daily religious life', 'prayer', 'work'],
+            historicalAccuracy, 'high',
+            sources, ['Monastic rules', 'Religious artwork']
         ];
         clothingData.forEach(clothing => { });
         this.clothingDatabase.set(clothing.id, clothing);
@@ -138,10 +138,9 @@ export class MedievalDemo {
                 socialStatus: 'any',
                 tradingSources: ['Local sheep farms', 'Rural markets'],
                 primaryUses: ['peasant clothing', 'blankets', 'everyday wear'],
-                historicalNotes: 'Most common fabric for lower classes',
+                historicalNotes: 'Most common fabric for lower classes'
             },
-            {
-                id: 'silk_imported',
+            { id: 'silk_imported',
                 name: 'Imported Silk',
                 type: 'fabric',
                 availability: 'rare',
@@ -150,10 +149,8 @@ export class MedievalDemo {
                 socialStatus: 'royal',
                 tradingSources: ['Byzantine Empire', 'Silk Road traders'],
                 primaryUses: ['royal garments', 'ceremonial dress', 'church vestments'],
-                historicalNotes: 'Symbol of ultimate luxury and status',
-            },
-            {
-                id: 'leather_tanned',
+                historicalNotes: 'Symbol of ultimate luxury and status' },
+            { id: 'leather_tanned',
                 name: 'Tanned Leather',
                 type: 'leather',
                 availability: 'common',
@@ -162,10 +159,8 @@ export class MedievalDemo {
                 socialStatus: 'any',
                 tradingSources: ['Local tanners', 'Town markets'],
                 primaryUses: ['shoes', 'belts', 'armor components', 'bags'],
-                historicalNotes: 'Essential material for practical items',
-            },
-            {
-                id: 'steel_quality',
+                historicalNotes: 'Essential material for practical items' },
+            { id: 'steel_quality',
                 name: 'Quality Steel',
                 type: 'metal',
                 availability: 'uncommon',
@@ -173,9 +168,8 @@ export class MedievalDemo {
                 durability: 10,
                 socialStatus: 'noble',
                 tradingSources: ['Master smiths', 'Castle forges'],
-                primaryUses: ['weapons', 'armor', 'tools'],
-                historicalNotes: 'Superior to iron, mark of quality craftsmanship'
-            }
+                primaryUses: ['weapons', 'armor', 'tools'] },
+            historicalNotes, 'Superior to iron, mark of quality craftsmanship'
         ];
         materialData.forEach(material => { });
         this.materialDatabase.set(material.id, material);
@@ -197,10 +191,9 @@ export class MedievalDemo {
                 timeOfDay: 'any',
                 season: 'any',
                 geographicalRegion: 'Northern Europe',
-                politicalContext: 'Feudal stronghold',
+                politicalContext: 'Feudal stronghold'
             },
-            {
-                id: 'village_market',
+            { id: 'village_market',
                 name: 'Village Market Square',
                 type: 'village',
                 description: 'Open area with wooden stalls, dirt ground, central well',
@@ -210,10 +203,8 @@ export class MedievalDemo {
                 timeOfDay: 'morning',
                 season: 'any',
                 geographicalRegion: 'Rural England',
-                politicalContext: 'Village under manor lord',
-            },
-            {
-                id: 'monastery_scriptorium',
+                politicalContext: 'Village under manor lord' },
+            { id: 'monastery_scriptorium',
                 name: 'Monastery Scriptorium',
                 type: 'monastery',
                 description: 'Quiet chamber with writing desks, illuminated manuscripts, inkwells',
@@ -222,9 +213,8 @@ export class MedievalDemo {
                 socialClasses: ['clergy', 'scholarly monks'],
                 timeOfDay: 'morning',
                 season: 'any',
-                geographicalRegion: 'European monasteries',
-                politicalContext: 'Religious institution'
-            }
+                geographicalRegion: 'European monasteries' },
+            politicalContext, 'Religious institution'
         ];
         locationData.forEach(location => { });
         this.locationDatabase.set(location.id, location);
@@ -248,10 +238,9 @@ export class MedievalDemo {
                 skills: ['swordsmanship', 'horsemanship', 'military tactics'],
                 possessions: ['destrier warhorse', 'sword', 'shield', 'land grant'],
                 socialConnections: ['feudal lord', 'fellow knights', 'squire'],
-                historicalContext: 'Serves local baron in territorial disputes',
+                historicalContext: 'Serves local baron in territorial disputes'
             },
-            {
-                id: 'elena_weaver',
+            { id: 'elena_weaver',
                 name: 'Elena the Weaver',
                 profession: 'Textile artisan',
                 socialClass: 'craftsman',
@@ -262,10 +251,8 @@ export class MedievalDemo {
                 skills: ['weaving', 'spinning', 'dyeing', 'business'],
                 possessions: ['loom', 'spinning wheel', 'dye pots', 'finished textiles'],
                 socialConnections: ['guild members', 'merchants', 'apprentices'],
-                historicalContext: 'Prosperous artisan in growing cloth trade',
-            },
-            {
-                id: 'brother_aldric',
+                historicalContext: 'Prosperous artisan in growing cloth trade' },
+            { id: 'brother_aldric',
                 name: 'Brother Aldric',
                 profession: 'Monk scribe',
                 socialClass: 'clergy',
@@ -275,9 +262,8 @@ export class MedievalDemo {
                 typicalClothing: ['monks_habit', 'sandals'],
                 skills: ['Latin', 'illumination', 'copying', 'theology'],
                 possessions: ['quills', 'ink', 'parchment', 'personal psalter'],
-                socialConnections: ['abbot', 'fellow monks', 'visiting scholars'],
-                historicalContext: 'Preserves ancient knowledge in monastery'
-            }
+                socialConnections: ['abbot', 'fellow monks', 'visiting scholars'] },
+            historicalContext, 'Preserves ancient knowledge in monastery'
         ];
         characterData.forEach(character => { });
         this.characterDatabase.set(character.id, character);
@@ -296,68 +282,52 @@ export class MedievalDemo {
                     this.characterDatabase.get('sir_gareth'),
                     this.characterDatabase.get('elena_weaver')
                 ],
-                timeContext: {},
-                season: 'autumn',
-                timeOfDay: 'afternoon',
-                weather: 'crisp and clear',
+                timeContext: {
+                    season: 'autumn',
+                    timeOfDay: 'afternoon',
+                    weather: 'crisp and clear'
+                },
+                activities: ['setting tables', 'arranging tapestries', 'preparing entertainment'],
+                socialDynamics: ['noble-servant hierarchy', 'guest protocols', 'honor displays'],
+                historicalElements: ['feudal obligations', 'seasonal harvest celebration', 'alliance building'],
+                sensoryDetails: {
+                    sights: ['colorful banners', 'polished armor', 'golden candlelight'],
+                    sounds: ['bustling servants', 'clanking metal', 'minstrel practice'],
+                    smells: ['roasting meat', 'wood smoke', 'fresh rushes'],
+                    textures: ['rough stone walls', 'smooth wooden tables', 'soft fabric draping']
+                },
+                narrativeHooks: ['unexpected guest arrival', 'political tension', 'romance brewing']
             },
-            activities, ['setting tables', 'arranging tapestries', 'preparing entertainment'],
-            socialDynamics, ['noble-servant hierarchy', 'guest protocols', 'honor displays'],
-            historicalElements, ['feudal obligations', 'seasonal harvest celebration', 'alliance building'],
-            sensoryDetails, {},
-            sights, ['colorful banners', 'polished armor', 'golden candlelight'],
-            sounds, ['bustling servants', 'clanking metal', 'minstrel practice'],
-            smells, ['roasting meat', 'wood smoke', 'fresh rushes'],
-            textures, ['rough stone walls', 'smooth wooden tables', 'soft fabric draping'],
+            { id: 'monastery_dawn',
+                title: 'Dawn Prayer in Monastery',
+                setting: this.locationDatabase.get('monastery_scriptorium'),
+                characters: [this.characterDatabase.get('brother_aldric')],
+                timeContext: {
+                    season: 'winter',
+                    timeOfDay: 'dawn',
+                    weather: 'frost on windows'
+                },
+                activities: ['morning prayers', 'manuscript copying', 'contemplation'],
+                socialDynamics: ['religious hierarchy', 'scholarly pursuit', 'spiritual discipline'],
+                historicalElements: ['preservation of knowledge', 'religious devotion', 'intellectual tradition'],
+                sensoryDetails: {
+                    sights: ['candlelit pages', 'frost patterns', 'illuminated letters'],
+                    sounds: ['chanted prayers', 'scratching quills', 'turning pages'],
+                    smells: ['incense', 'parchment', 'cold stone'],
+                    textures: ['smooth parchment', 'wooden writing desk', 'wool robes']
+                },
+                narrativeHooks: ['ancient text discovery', 'visiting scholar', 'theological debate'] }
         ];
+        sceneData.forEach(scene => { });
+        this.sceneDatabase.set(scene.id, scene);
     }
-    narrativeHooks;
-}
-{
-    id: 'monastery_dawn',
-        title;
-    'Dawn Prayer in Monastery',
-        setting;
-    this.locationDatabase.get('monastery_scriptorium'),
-        characters;
-    [this.characterDatabase.get('brother_aldric')],
-        timeContext;
-    {
-        season: 'winter',
-            timeOfDay;
-        'dawn',
-            weather;
-        'frost on windows',
-        ;
-    }
-    activities: ['morning prayers', 'manuscript copying', 'contemplation'],
-        socialDynamics;
-    ['religious hierarchy', 'scholarly pursuit', 'spiritual discipline'],
-        historicalElements;
-    ['preservation of knowledge', 'religious devotion', 'intellectual tradition'],
-        sensoryDetails;
-    {
-        sights: ['candlelit pages', 'frost patterns', 'illuminated letters'],
-            sounds;
-        ['chanted prayers', 'scratching quills', 'turning pages'],
-            smells;
-        ['incense', 'parchment', 'cold stone'],
-            textures;
-        ['smooth parchment', 'wooden writing desk', 'wool robes'],
-        ;
-    }
-    narrativeHooks: ['ancient text discovery', 'visiting scholar', 'theological debate'];
     ;
-    sceneData.forEach(scene => { });
-    this.sceneDatabase.set(scene.id, scene);
+    socialClass;
+    location;
+    timeOfDay;
+    season;
+    theme;
 }
-;
-generateMedievalScene(options, {});
-socialClass ?  : string;
-location ?  : string;
-timeOfDay ?  : string;
-season ?  : string;
-theme ?  : string;
 { }
 MedievalScene | null;
 {
@@ -380,176 +350,171 @@ MedievalScene | null;
                     filteredScenes = availableScenes;
                     const randomIndex = Math.floor(Math.random() * filteredScenes.length);
                     return filteredScenes[randomIndex];
-                    getAppropriateClothing(character, MedievalCharacter, context, {}),
-                        occasion ?  : string;
-                    season ?  : string;
-                    socialSetting ?  : string;
+                    getAppropriateClothing(character, MedievalCharacter, context, {});
                 }
-                MedievalClothing;
-                {
-                    const availableClothing = Array.from(this.clothingDatabase.values());
-                    return availableClothing.filter(clothing => { });
-                    // Match social class
-                    if (clothing.socialClass !== character.socialClass && clothing.socialClass !== 'peasant') {
+                occasion ?  : string;
+                season ?  : string;
+                socialSetting ?  : string;
+            }
+            MedievalClothing;
+            {
+                const availableClothing = Array.from(this.clothingDatabase.values());
+                return availableClothing.filter(clothing => { });
+                // Match social class
+                if (clothing.socialClass !== character.socialClass && clothing.socialClass !== 'peasant') {
+                    return false;
+                    // Match gender
+                    if (clothing.gender !== 'unisex' && clothing.gender !== character.gender) {
                         return false;
-                        // Match gender
-                        if (clothing.gender !== 'unisex' && clothing.gender !== character.gender) {
+                        // Match season if specified
+                        if (context.season && clothing.seasonality !== 'all' && )
+                            clothing.seasonality !== context.season;
+                        {
                             return false;
-                            // Match season if specified
-                            if (context.season && clothing.seasonality !== 'all' && )
-                                clothing.seasonality !== context.season;
-                            {
+                            // Match occasion if specified
+                            if (context.occasion && !clothing.occasions.includes(context.occasion)) {
                                 return false;
-                                // Match occasion if specified
-                                if (context.occasion && !clothing.occasions.includes(context.occasion)) {
-                                    return false;
-                                    return true;
-                                }
-                                ;
-                                validateHistoricalAccuracy(content, {});
-                                era ?  : string;
-                                materials ?  : string;
-                                socialClasses ?  : string;
-                                activities ?  : string;
+                                return true;
                             }
-                            {
-                                isValid: boolean;
-                                violations: string;
-                                suggestions: string;
-                                const violations = [];
-                                const suggestions = [];
-                                // Validate materials for time period
-                                if (content.materials) {
-                                    content.materials.forEach(material => { });
-                                    const materialData = this.materialDatabase.get(material);
-                                    if (!materialData) {
-                                        violations.push(`Unknown material: ${material}`);
-                                    }
-                                    suggestions.push(`Consider using common medieval materials like wool, linen, or leather`);
+                            ;
+                            validateHistoricalAccuracy(content, {});
+                            era ?  : string;
+                            materials ?  : string;
+                            socialClasses ?  : string;
+                            activities ?  : string;
+                        }
+                        {
+                            isValid: boolean;
+                            violations: string;
+                            suggestions: string;
+                            const violations = [];
+                            const suggestions = [];
+                            // Validate materials for time period
+                            if (content.materials) {
+                                content.materials.forEach(material => { });
+                                const materialData = this.materialDatabase.get(material);
+                                if (!materialData) {
+                                    violations.push(`Unknown material: ${material}`);
                                 }
-                                ;
-                                // Validate social class interactions
-                                if (content.socialClasses) {
-                                    const hasRoyal = content.socialClasses.includes('royal');
-                                    const hasPeasant = content.socialClasses.includes('peasant');
-                                    if (hasRoyal && hasPeasant) {
-                                        violations.push('Direct royal-peasant interaction unlikely without intermediaries');
-                                        suggestions.push('Add noble or clergy intermediary for historical accuracy');
-                                        // Validate activities for historical context
-                                        if (content.activities) {
-                                            const modernActivities = ['printing', 'banking', 'university'];
-                                            content.activities.forEach(activity => { });
-                                            if (modernActivities.includes(activity)) {
-                                                violations.push(`Activity "${activity}" may be anachronistic for early medieval period`);
-                                            }
-                                            suggestions.push('Consider period-appropriate alternatives like manuscript copying or monastery schools');
+                                suggestions.push(`Consider using common medieval materials like wool, linen, or leather`);
+                            }
+                            ;
+                            // Validate social class interactions
+                            if (content.socialClasses) {
+                                const hasRoyal = content.socialClasses.includes('royal');
+                                const hasPeasant = content.socialClasses.includes('peasant');
+                                if (hasRoyal && hasPeasant) {
+                                    violations.push('Direct royal-peasant interaction unlikely without intermediaries');
+                                    suggestions.push('Add noble or clergy intermediary for historical accuracy');
+                                    // Validate activities for historical context
+                                    if (content.activities) {
+                                        const modernActivities = ['printing', 'banking', 'university'];
+                                        content.activities.forEach(activity => { });
+                                        if (modernActivities.includes(activity)) {
+                                            violations.push(`Activity "${activity}" may be anachronistic for early medieval period`);
                                         }
-                                        ;
-                                        return {
-                                            isValid: violations.length === 0,
-                                            violations,
-                                            suggestions
-                                        };
-                                        generatePromptElements(category, 'character' | 'setting' | 'object' | 'activity');
-                                        string;
-                                        {
-                                            switch (category) {
-                                                case 'character':
-                                                    return Array.from(this.characterDatabase.values()).map(char => ) `${char.name}, ${char.profession} (${char.socialClass}): ${char.description}`;
-                                            }
-                                            ;
-                                            'setting';
-                                            return Array.from(this.locationDatabase.values()).map(loc => ) `${loc.name}: ${loc.description} - ${loc.socialContext}`;
-                                        }
-                                        ;
-                                        'object';
-                                        return Array.from(this.clothingDatabase.values()).map(clothing => ) `${clothing.name}: ${clothing.description} (${clothing.socialClass})`;
+                                        suggestions.push('Consider period-appropriate alternatives like manuscript copying or monastery schools');
                                     }
                                     ;
-                                    'activity';
-                                    const activities = [];
-                                    this.sceneDatabase.forEach(scene => { });
-                                    activities.push(...scene.activities);
+                                    return { isValid: violations.length === 0,
+                                        violations };
+                                    suggestions;
                                 }
                                 ;
-                                return [...new Set(activities)]; // Remove duplicates
-                                return [];
-                                createDemoScenario(theme, string = 'daily_life');
+                                generatePromptElements(category, 'character' | 'setting' | 'object' | 'activity');
+                                string;
                                 {
-                                    scene: MedievalScene;
-                                    characters: MedievalCharacter;
-                                    clothing: MedievalClothing;
-                                    materials: MedievalMaterial;
-                                    historicalContext: string;
-                                    promptSuggestions: string;
-                                    const scene = this.generateMedievalScene({ theme }) || Array.from(this.sceneDatabase.values())[0];
-                                    const characters = scene.characters;
-                                    const clothing = [];
-                                    characters.forEach(character => { });
-                                    const charClothing = this.getAppropriateClothing(character, {});
-                                    season: scene.timeContext.season,
-                                        socialSetting;
-                                    scene.setting.type,
+                                    switch (category) {
+                                        case 'character':
+                                            return Array.from(this.characterDatabase.values()).map(char => ) `${char.name}, ${char.profession} (${char.socialClass}): ${char.description}`;
+                                    }
                                     ;
+                                    'setting';
+                                    return Array.from(this.locationDatabase.values()).map(loc => ) `${loc.name}: ${loc.description} - ${loc.socialContext}`;
                                 }
                                 ;
-                                clothing.push(...charClothing);
+                                'object';
+                                return Array.from(this.clothingDatabase.values()).map(clothing => ) `${clothing.name}: ${clothing.description} (${clothing.socialClass})`;
                             }
                             ;
-                            const materials = Array.from(this.materialDatabase.values()).filter(material => );
-                            ;
-                            clothing.some(c => c.materials.includes(material.name));
-                            ;
-                            const historicalContext = this.generateHistoricalContext(scene);
-                            const promptSuggestions = this.generatePromptSuggestions(scene);
-                            return {
-                                scene,
-                                characters,
-                                clothing,
-                                materials,
-                                historicalContext,
-                                promptSuggestions
-                            };
-                            generateHistoricalContext(scene, MedievalScene);
-                            string;
-                            {
-                                return `
-Medieval Context (${scene.timeContext.season} ${scene.timeContext.timeOfDay}):},},
+                            'activity';
+                            const activities = [];
+                            this.sceneDatabase.forEach(scene => { });
+                            activities.push(...scene.activities);
+                        }
+                        ;
+                        return [...new Set(activities)]; // Remove duplicates
+                        return [];
+                        createDemoScenario(theme, string = 'daily_life');
+                        {
+                            scene: MedievalScene;
+                            characters: MedievalCharacter;
+                            clothing: MedievalClothing;
+                            materials: MedievalMaterial;
+                            historicalContext: string;
+                            promptSuggestions: string;
+                            const scene = this.generateMedievalScene({ theme }) || Array.from(this.sceneDatabase.values())[0];
+                            const characters = scene.characters;
+                            const clothing = [];
+                            characters.forEach(character => { });
+                            const charClothing = this.getAppropriateClothing(character, {});
+                            season: scene.timeContext.season;
+                            socialSetting: scene.setting.type;
+                        }
+                    }
+                    ;
+                    clothing.push(...charClothing);
+                }
+                ;
+                const materials = Array.from(this.materialDatabase.values()).filter(material => );
+                ;
+                clothing.some(c => c.materials.includes(material.name));
+                ;
+                const historicalContext = this.generateHistoricalContext(scene);
+                const promptSuggestions = this.generatePromptSuggestions(scene);
+                return { scene,
+                    characters,
+                    clothing,
+                    materials,
+                    historicalContext };
+                promptSuggestions;
+            }
+            ;
+            generateHistoricalContext(scene, MedievalScene);
+            string;
+            {
+                return `
+Medieval Context (${scene.timeContext.season} ${scene.timeContext.timeOfDay}):},}
   Setting: ${scene.setting.name} - ${scene.setting.description}
 Political Context: ${scene.setting.politicalContext}
 Social Dynamics: ${scene.socialDynamics.join(', ')}
 Historical Elements: ${scene.historicalElements.join(', ')}
-This scene represents authentic medieval life, incorporating period-appropriate social hierarchies, 
-material culture, and daily activities based on historical evidence from archaeological finds, 
+This scene represents authentic medieval life, incorporating period-appropriate social hierarchies
+material culture, and daily activities based on historical evidence from archaeological finds
 manuscript illustrations, and documented practices of the time.
     `.trim();
-                                generatePromptSuggestions(scene, MedievalScene);
-                                string;
-                                {
-                                    return [
-                                        `Write a scene set in ${scene.setting.name} during ${scene.timeContext.season} ${scene.timeContext.timeOfDay}, featuring ${scene.characters.map(c => c.name).join(' and ')}.`
-                                    ];
-                                }
-                            }
-                            `Describe the sensory experience of ${scene.title}: the ${scene.sensoryDetails.sights.join()}
-        ',
+                generatePromptSuggestions(scene, MedievalScene);
+                string;
+                {
+                    return [
+                        `Write a scene set in ${scene.setting.name} during ${scene.timeContext.season} ${scene.timeContext.timeOfDay}, featuring ${scene.characters.map(c => c.name).join(' and ')}.`
+                    ];
+                }
+                `Describe the sensory experience of ${scene.title}: the ${scene.sensoryDetails.sights.join()}
+        '
         '
       )}, sounds of ${scene.sensoryDetails.sounds.join(', ')}, and scents of ${scene.sensoryDetails.smells.join(', ')}.`;
-                        }
-                    }
-                    `Explore the social dynamics when ${scene.characters[0]?.name} (${scene.characters[0]?.socialClass}) interacts with others in ${scene.setting.name}.`;
-                }
             }
-            `Create dialogue that reveals the historical context of ${scene.historicalElements.join(' and ')} through character interactions.`;
+            `Explore the social dynamics when ${scene.characters[0]?.name} (${scene.characters[0]?.socialClass}) interacts with others in ${scene.setting.name}.`;
         }
+        `Create dialogue that reveals the historical context of ${scene.historicalElements.join(' and ')} through character interactions.`;
     }
     `Develop one of these narrative hooks: ${scene.narrativeHooks.join(' OR ')}.`;
 }
 ;
 async;
 integrateWithMetadata(nodeId, string, sceneId, string);
-Promise < void  > {
-    const: scene = this.sceneDatabase.get(sceneId),
+Promise < void  > { const: scene = this.sceneDatabase.get(sceneId),
     if(, scene) { },
     : .metadataManager.setNodeEra(nodeId, 'medieval'),
     // Add appropriate tags
@@ -558,17 +523,16 @@ Promise < void  > {
         scene.setting.type,
         scene.timeContext.season,
         scene.timeContext.timeOfDay,
-        ...scene.characters.map(c => c.socialClass),
-        ...scene.activities.map(a => a.replace(/ /g, '_'))
-    ],
-    await, this: .metadataManager.addNodeTags(nodeId, tags),
-    // Set genre based on scene content
-    if(scene) { }, : .narrativeHooks.some(hook => hook.includes('romance'))
-};
-{
+        ...scene.characters.map(c => c.socialClass)
+    ] };
+scene.activities.map(a => a.replace(/ /g, '_'));
+;
+await this.metadataManager.addNodeTags(nodeId, tags);
+// Set genre based on scene content
+if (scene.narrativeHooks.some(hook => hook.includes('romance'))) {
     await this.metadataManager.setNodeGenre(nodeId, 'romance');
 }
-if (scene.activities.some(activity => activity.includes('war') || activity.includes('battle'))) {
+else if (scene.activities.some(activity => activity.includes('war') || activity.includes('battle'))) {
     await this.metadataManager.setNodeGenre(nodeId, 'adventure');
 }
 else {
@@ -585,8 +549,9 @@ else {
             materials: Array.from(this.materialDatabase.values()),
             locations: Array.from(this.locationDatabase.values()),
             characters: Array.from(this.characterDatabase.values()),
-            scenes: Array.from(this.sceneDatabase.values()),
+            scenes: Array.from(this.sceneDatabase.values())
         };
-        export default MedievalDemo;
     }
+    ;
+    export default MedievalDemo;
 }

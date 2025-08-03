@@ -11,6 +11,9 @@ import { DiffNodeRenderer } from './DiffNodeRenderer';
 import { DiffEdgeRenderer } from './DiffEdgeRenderer';
 import { useDiffSession } from '../../hooks/useDiffSession';
 import { useGraphVersions } from '../../hooks/useGraphVersions';
+from;
+'../../types/comparison';
+className = '';
 {
     const [targetVersionId, setTargetVersionId] = useState(initialTargetVersionId || '');
     const [viewMode, setViewMode] = useState('side-by-side');
@@ -20,21 +23,18 @@ import { useGraphVersions } from '../../hooks/useGraphVersions';
     const [zoomLevel, setZoomLevel] = useState(1.0);
     // Hooks
     const { versions, loading: versionsLoading } = useGraphVersions(graphId);
-    const { session, comparison, loading: sessionLoading, error: sessionError, createSession, updateSession } = useDiffSession();
+    const { session, comparison, loading: sessionLoading, error: sessionError, createSession };
+    updateSession
+        = useDiffSession();
     // Effects
     useEffect(() => {
         if (sourceVersionId && targetVersionId && sourceVersionId !== targetVersionId) {
             createSession({});
-            graph_id: graphId,
-                source_version_id;
-            sourceVersionId,
-                target_version_id;
-            targetVersionId,
-                view_mode;
-            viewMode,
-                highlight_mode;
-            highlightMode,
-            ;
+            graph_id: graphId;
+            source_version_id: sourceVersionId;
+            target_version_id: targetVersionId;
+            view_mode: viewMode;
+            highlight_mode: highlightMode;
         }
     });
 }
@@ -43,16 +43,11 @@ import { useGraphVersions } from '../../hooks/useGraphVersions';
 useEffect(() => {
     if (session) {
         updateSession(session.id, {});
-        view_mode: viewMode,
-            highlight_mode;
-        highlightMode,
-            show_unchanged;
-        showUnchanged,
-            show_metadata;
-        showMetadata,
-            zoom_level;
-        zoomLevel,
-        ;
+        view_mode: viewMode;
+        highlight_mode: highlightMode;
+        show_unchanged: showUnchanged;
+        show_metadata: showMetadata;
+        zoom_level: zoomLevel;
     }
 });
 [viewMode, highlightMode, showUnchanged, showMetadata, zoomLevel, session?.id];
@@ -62,15 +57,9 @@ const handleVersionChange = useCallback((source, target) => {
     setSourceVersionId(source);
     setTargetVersionId(target);
 }, []);
-const handleViewModeChange = useCallback((mode) => {
-    setViewMode(mode);
-}, []);
-const handleHighlightModeChange = useCallback((mode) => {
-    setHighlightMode(mode);
-}, []);
-const handleZoomChange = useCallback((zoom) => {
-    setZoomLevel(zoom);
-}, []);
+const handleViewModeChange = useCallback((mode) => { setViewMode(mode); }, []);
+const handleHighlightModeChange = useCallback((mode) => { setHighlightMode(mode); }, []);
+const handleZoomChange = useCallback((zoom) => { setZoomLevel(zoom); }, []);
 // Prepare nodes and edges for visualization
 const prepareVisualizationData = useCallback(() => {
     if (!comparison)
@@ -83,11 +72,9 @@ const prepareVisualizationData = useCallback(() => {
 }, [comparison, highlightMode, showUnchanged]);
 const prepareNodes = useCallback(());
 ;
-nodes: unknown,
-    nodeMatches;
-unknown,
-    side;
-'source' | 'target';
+nodes: unknown;
+nodeMatches: unknown;
+side: 'source' | 'target';
 Node => {
     if (!comparison)
         return [];
@@ -133,134 +120,133 @@ Node => {
                                 break;
                                 return {
                                     id: node.id,
-                                    type: 'diffNode',
-                                    position: node.position || { x: 0, y: 0 },
-                                    data: {
-                                        ...node.data,
-                                        originalNode: node,
-                                        diffState,
-                                        changeDetails,
-                                        showMetadata,
-                                        side
-                                    },
-                                    style: getDiffNodeStyle(diffState, highlightMode)
+                                    type: 'diffNode'
                                 };
+                                position: node.position || { x: 0, y: 0 };
+                                data: {
+                                    node.data;
+                                    originalNode: node;
+                                    diffState;
+                                    changeDetails;
+                                    showMetadata;
+                                }
+                                side;
+                                style: getDiffNodeStyle(diffState, highlightMode);
                         }
-                        filter(Boolean);
+                        ;
                     }
-                    [comparison, highlightMode, showUnchanged, showMetadata];
+                    filter(Boolean);
+                }
+                [comparison, highlightMode, showUnchanged, showMetadata];
+                ;
+                const prepareEdges = useCallback(());
+                ;
+                edges: unknown;
+                edgeMatches: unknown;
+                side: 'source' | 'target';
+                Edge => {
+                    if (!comparison)
+                        return [];
+                    return edges.map(edge => { });
+                    const match = edgeMatches.find(m => );
                     ;
-                    const prepareEdges = useCallback(());
+                    side === 'source' ? m.source_edge_id === edge.id : m.target_edge_id === edge.id;
                     ;
-                    edges: unknown,
-                        edgeMatches;
-                    unknown,
-                        side;
-                    'source' | 'target';
-                    Edge => {
-                        if (!comparison)
-                            return [];
-                        return edges.map(edge => { });
-                        const match = edgeMatches.find(m => );
-                        ;
-                        side === 'source' ? m.source_edge_id === edge.id : m.target_edge_id === edge.id;
-                        ;
-                        let diffState = 'unchanged';
-                        let changeDetails = {};
-                        if (match) {
-                            switch (match.match_type) {
-                                case 'added':
-                                    diffState = 'added';
-                                    break;
-                                case 'removed':
-                                    diffState = 'removed';
-                                    break;
-                                case 'modified':
-                                case 'similar':
-                                    diffState = 'modified';
-                                    changeDetails = match.property_changes;
-                                    break;
-                                case 'exact':
-                                    diffState = 'unchanged';
-                                    break;
-                                    // Filter based on highlight mode and show unchanged setting
-                                    if (!showUnchanged && diffState === 'unchanged') {
-                                        return null;
-                                        if (highlightMode !== 'all') {
-                                            switch (highlightMode) {
-                                                case 'changes':
-                                                    if (diffState === 'unchanged')
-                                                        return null;
-                                                    break;
-                                                case 'additions':
-                                                    if (diffState !== 'added')
-                                                        return null;
-                                                    break;
-                                                case 'deletions':
-                                                    if (diffState !== 'removed')
-                                                        return null;
-                                                    break;
-                                                    return {
-                                                        id: edge.id,
-                                                        source: edge.source,
-                                                        target: edge.target,
-                                                        type: 'diffEdge',
-                                                        data: {
-                                                            ...edge.data,
-                                                            originalEdge: edge,
-                                                            diffState,
-                                                            changeDetails,
-                                                            side
-                                                        },
-                                                        style: getDiffEdgeStyle(diffState, highlightMode)
-                                                    };
-                                            }
-                                            filter(Boolean);
-                                        }
-                                        [comparison, highlightMode, showUnchanged];
-                                        ;
-                                        // Get node styling based on diff state
-                                        const getDiffNodeStyle = (diffState, __highlightMode) => {
-                                            const baseStyle = {
-                                                border: '2px solid',
-                                                borderRadius: '6px',
-                                                transition: 'all 0.2s ease',
-                                            };
-                                            switch (diffState) {
-                                                case 'added':
-                                                    return { ...baseStyle, borderColor: '#10b981', backgroundColor: '#ecfdf5' };
-                                                case 'removed':
-                                                    return { ...baseStyle, borderColor: '#ef4444', backgroundColor: '#fef2f2', opacity: 0.7 };
-                                                case 'modified':
-                                                    return { ...baseStyle, borderColor: '#f59e0b', backgroundColor: '#fffbeb' };
-                                                default:
-                                                    return { ...baseStyle, borderColor: '#6b7280', backgroundColor: '#f9fafb' };
-                                            }
-                                            ;
-                                            // Get edge styling based on diff state
-                                            const getDiffEdgeStyle = (diffState, __highlightMode) => {
-                                                const baseStyle = {
-                                                    strokeWidth: 2,
-                                                    transition: 'all 0.2s ease',
+                    let diffState = 'unchanged';
+                    let changeDetails = {};
+                    if (match) {
+                        switch (match.match_type) {
+                            case 'added':
+                                diffState = 'added';
+                                break;
+                            case 'removed':
+                                diffState = 'removed';
+                                break;
+                            case 'modified':
+                            case 'similar':
+                                diffState = 'modified';
+                                changeDetails = match.property_changes;
+                                break;
+                            case 'exact':
+                                diffState = 'unchanged';
+                                break;
+                                // Filter based on highlight mode and show unchanged setting
+                                if (!showUnchanged && diffState === 'unchanged') {
+                                    return null;
+                                    if (highlightMode !== 'all') {
+                                        switch (highlightMode) {
+                                            case 'changes':
+                                                if (diffState === 'unchanged')
+                                                    return null;
+                                                break;
+                                            case 'additions':
+                                                if (diffState !== 'added')
+                                                    return null;
+                                                break;
+                                            case 'deletions':
+                                                if (diffState !== 'removed')
+                                                    return null;
+                                                break;
+                                                return {
+                                                    id: edge.id,
+                                                    source: edge.source,
+                                                    target: edge.target,
+                                                    type: 'diffEdge',
+                                                    data: {
+                                                        ...edge.data,
+                                                        originalEdge: edge,
+                                                        diffState,
+                                                        changeDetails
+                                                    },
+                                                    side,
+                                                    style: getDiffEdgeStyle(diffState, highlightMode)
                                                 };
-                                                switch (diffState) {
-                                                    case 'added':
-                                                        return { ...baseStyle, stroke: '#10b981' };
-                                                    case 'removed':
-                                                        return { ...baseStyle, stroke: '#ef4444', opacity: 0.7, strokeDasharray: '5,5' };
-                                                    case 'modified':
-                                                        return { ...baseStyle, stroke: '#f59e0b' };
-                                                    default:
-                                                        return { ...baseStyle, stroke: '#6b7280' };
-                                                }
-                                                ;
-                                                // Render loading state
-                                                if (versionsLoading || sessionLoading) {
-                                                    return;
-                                                    _jsxs("div", { className: `visual-diff-panel ${className}`, children: ["}", _jsxs("div", { className: "flex items-center justify-center h-64", children: [_jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" }), _jsx("span", { className: "ml-2", children: "Loading comparison..." })] })] });
-                                                }
-                                            };
+                                        }
+                                        filter(Boolean);
+                                    }
+                                    [comparison, highlightMode, showUnchanged];
+                                    ;
+                                    // Get node styling based on diff state
+                                    const getDiffNodeStyle = (diffState, __highlightMode) => {
+                                        const baseStyle = {
+                                            border: '2px solid',
+                                            borderRadius: '6px',
+                                            transition: 'all 0.2s ease'
                                         };
+                                    };
+                                    switch (diffState) {
+                                        case 'added':
+                                            return { ...baseStyle, borderColor: '#10b981', backgroundColor: '#ecfdf5' };
+                                        case 'removed':
+                                            return { ...baseStyle, borderColor: '#ef4444', backgroundColor: '#fef2f2', opacity: 0.7 };
+                                        case 'modified':
+                                            return { ...baseStyle, borderColor: '#f59e0b', backgroundColor: '#fffbeb' };
+                                        default:
+                                            return { ...baseStyle, borderColor: '#6b7280', backgroundColor: '#f9fafb' };
+                                    }
+                                    ;
+                                    // Get edge styling based on diff state
+                                    const getDiffEdgeStyle = (diffState, __highlightMode) => {
+                                        const baseStyle = {
+                                            strokeWidth: 2,
+                                            transition: 'all 0.2s ease'
+                                        };
+                                    };
+                                    switch (diffState) {
+                                        case 'added':
+                                            return { ...baseStyle, stroke: '#10b981' };
+                                        case 'removed':
+                                            return { ...baseStyle, stroke: '#ef4444', opacity: 0.7, strokeDasharray: '5,5' };
+                                        case 'modified':
+                                            return { ...baseStyle, stroke: '#f59e0b' };
+                                        default:
+                                            return { ...baseStyle, stroke: '#6b7280' };
+                                    }
+                                    ;
+                                    // Render loading state
+                                    if (versionsLoading || sessionLoading) {
+                                        return;
+                                        _jsxs("div", { className: `visual-diff-panel ${className}`, children: ["}", _jsxs("div", { className: "flex items-center justify-center h-64", children: [_jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" }), _jsx("span", { className: "ml-2", children: "Loading comparison..." })] })] });
                                         ;
                                         // Render error state
                                         if (sessionError) {
@@ -269,63 +255,61 @@ Node => {
                                             ;
                                             const { sourceNodes, sourceEdges, targetNodes, targetEdges } = prepareVisualizationData();
                                             // Custom node types
-                                            const nodeTypes = {
-                                                diffNode: DiffNodeRenderer,
-                                            };
-                                            // Custom edge types
-                                            const edgeTypes = {
-                                                diffEdge: DiffEdgeRenderer,
-                                            };
-                                            return;
-                                            _jsxs("div", { className: `visual-diff-panel ${className}`, children: ["}", _jsxs("div", { className: "border-b border-gray-200 bg-white px-4 py-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: "Visual Diff" }), onClose && ()
-                                                                        < button, "onClick=", onClose, "className=\"text-gray-400 hover:text-gray-600 transition-colors\" >", _jsx("svg", { className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) })] }), ")}"] }), _jsx(VersionSelector, { graphId: graphId, versions: versions, sourceVersionId: sourceVersionId, targetVersionId: targetVersionId, onVersionChange: handleVersionChange, className: "mt-3" }), comparison && ()
-                                                        < ComparisonStats, "comparison=", comparison, "className=\"mt-3\" /> )}"] });
-                                            { /* Toolbar */ }
-                                            _jsx(ComparisonToolbar, { viewMode: viewMode, highlightMode: highlightMode, showUnchanged: showUnchanged, showMetadata: showMetadata, zoomLevel: zoomLevel, onViewModeChange: handleViewModeChange, onHighlightModeChange: handleHighlightModeChange, onShowUnchangedChange: setShowUnchanged, onShowMetadataChange: setShowMetadata, onZoomChange: handleZoomChange, className: "border-b border-gray-200" });
-                                            { /* Main Content */ }
-                                            _jsxs("div", { className: "flex-1 relative", children: [viewMode === 'side-by-side' && ()
-                                                        < div, " className=\"flex h-full\">", _jsx("div", { className: "flex-1 border-r border-gray-200", children: _jsxs("div", { className: "h-full relative", children: [_jsx("div", { className: "absolute top-2 left-2 z-10 bg-white rounded px-2 py-1 shadow-sm text-sm font-medium text-gray-700", children: "Source Version" }), _jsxs(ReactFlow, { nodes: sourceNodes, edges: sourceEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] })] }) }), _jsx("div", { className: "flex-1", children: _jsxs("div", { className: "h-full relative", children: [_jsx("div", { className: "absolute top-2 left-2 z-10 bg-white rounded px-2 py-1 shadow-sm text-sm font-medium text-gray-700", children: "Target Version" }), _jsxs(ReactFlow, { nodes: targetNodes, edges: targetEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] })] }) })] });
+                                            const nodeTypes = { diffNode: DiffNodeRenderer };
                                         }
-                                        {
-                                            viewMode === 'unified' && ()
-                                                < div;
-                                            className = "h-full" >
-                                                _jsxs(ReactFlow, { nodes: [...sourceNodes, ...targetNodes], edges: [...sourceEdges, ...targetEdges], nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] });
-                                            div >
-                                            ;
-                                        }
-                                        {
-                                            viewMode === 'overlay' && ()
-                                                < div;
-                                            className = "h-full relative" >
-                                                { /* Base layer - source */}
-                                                < div;
-                                            className = "absolute inset-0" >
-                                                _jsxs(ReactFlow, { nodes: sourceNodes, edges: sourceEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] });
-                                            div >
-                                                { /* Overlay layer - target */}
-                                                < div;
-                                            className = "absolute inset-0 opacity-70" >
-                                                _jsx(ReactFlow, { nodes: targetNodes, edges: targetEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: _jsx(Background, {}) });
-                                            div >
-                                            ;
-                                            div >
-                                            ;
-                                        }
-                                        { /* Legend */ }
-                                        _jsx(DiffLegend, { highlightMode: highlightMode, className: "absolute bottom-4 right-4 z-10" });
-                                        div >
                                         ;
-                                        div >
-                                        ;
-                                        ;
+                                        // Custom edge types
+                                        const edgeTypes = { diffEdge: DiffEdgeRenderer };
                                     }
                                     ;
-                            }
-                            export default VisualDiffPanel;
+                                    return;
+                                    _jsxs("div", { className: `visual-diff-panel ${className}`, children: ["}", _jsxs("div", { className: "border-b border-gray-200 bg-white px-4 py-3", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: "Visual Diff" }), onClose && ()
+                                                                < button, "onClick=", onClose, "className=\"text-gray-400 hover:text-gray-600 transition-colors\" >", _jsx("svg", { className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) })] }), ")}"] }), _jsx(VersionSelector, { graphId: graphId, versions: versions, sourceVersionId: sourceVersionId, targetVersionId: targetVersionId, onVersionChange: handleVersionChange, className: "mt-3" }), comparison && ()
+                                                < ComparisonStats, "comparison=", comparison, "className=\"mt-3\" /> )}"] });
+                                    { /* Toolbar */ }
+                                    _jsx(ComparisonToolbar, { viewMode: viewMode, highlightMode: highlightMode, showUnchanged: showUnchanged, showMetadata: showMetadata, zoomLevel: zoomLevel, onViewModeChange: handleViewModeChange, onHighlightModeChange: handleHighlightModeChange, onShowUnchangedChange: setShowUnchanged, onShowMetadataChange: setShowMetadata, onZoomChange: handleZoomChange, className: "border-b border-gray-200" });
+                                    { /* Main Content */ }
+                                    _jsxs("div", { className: "flex-1 relative", children: [viewMode === 'side-by-side' && ()
+                                                < div, " className=\"flex h-full\">", _jsx("div", { className: "flex-1 border-r border-gray-200", children: _jsxs("div", { className: "h-full relative", children: [_jsx("div", { className: "absolute top-2 left-2 z-10 bg-white rounded px-2 py-1 shadow-sm text-sm font-medium text-gray-700", children: "Source Version" }), _jsxs(ReactFlow, { nodes: sourceNodes, edges: sourceEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] })] }) }), _jsx("div", { className: "flex-1", children: _jsxs("div", { className: "h-full relative", children: [_jsx("div", { className: "absolute top-2 left-2 z-10 bg-white rounded px-2 py-1 shadow-sm text-sm font-medium text-gray-700", children: "Target Version" }), _jsxs(ReactFlow, { nodes: targetNodes, edges: targetEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] })] }) })] });
+                                }
+                                {
+                                    viewMode === 'unified' && ()
+                                        < div;
+                                    className = "h-full" >
+                                        _jsxs(ReactFlow, { nodes: [...sourceNodes, ...targetNodes], edges: [...sourceEdges, ...targetEdges], nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] });
+                                    div >
+                                    ;
+                                }
+                                {
+                                    viewMode === 'overlay' && ()
+                                        < div;
+                                    className = "h-full relative" >
+                                        { /* Base layer - source */}
+                                        < div;
+                                    className = "absolute inset-0" >
+                                        _jsxs(ReactFlow, { nodes: sourceNodes, edges: sourceEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: [_jsx(Background, {}), _jsx(Controls, { showInteractive: false })] });
+                                    div >
+                                        { /* Overlay layer - target */}
+                                        < div;
+                                    className = "absolute inset-0 opacity-70" >
+                                        _jsx(ReactFlow, { nodes: targetNodes, edges: targetEdges, nodeTypes: nodeTypes, edgeTypes: edgeTypes, fitView: true, zoomOnScroll: false, panOnScroll: true, defaultZoom: zoomLevel, children: _jsx(Background, {}) });
+                                    div >
+                                    ;
+                                    div >
+                                    ;
+                                }
+                                { /* Legend */ }
+                                _jsx(DiffLegend, { highlightMode: highlightMode, className: "absolute bottom-4 right-4 z-10" });
+                                div >
+                                ;
+                                div >
+                                ;
+                                ;
                         }
-                    };
-                }
+                        ;
+                        export default VisualDiffPanel;
+                    }
+                };
         }
     }
 };

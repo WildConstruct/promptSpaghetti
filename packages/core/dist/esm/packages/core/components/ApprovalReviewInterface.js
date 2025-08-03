@@ -2,7 +2,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 9.4.2 - Approval Review Interface Component
 // Detailed interface for reviewing approval requests with diff view
 import { useState, useEffect } from 'react';
-import { CheckCircleIcon, XCircleIcon, EyeIcon, ClockIcon, UserIcon, DocumentTextIcon, ChevronDownIcon, ChevronRightIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, XCircleIcon, EyeIcon, ClockIcon, UserIcon, DocumentTextIcon, ChevronDownIcon, ChevronRightIcon } from ClipboardDocumentListIcon;
+from;
+'@heroicons/react/24/outline';
+readOnly = false;
 {
     const [reviewerAssignments, setReviewerAssignments] = useState([]);
     const [approvalCriteria, setApprovalCriteria] = useState([]);
@@ -16,9 +19,7 @@ import { CheckCircleIcon, XCircleIcon, EyeIcon, ClockIcon, UserIcon, DocumentTex
     const currentUserAssignment = reviewerAssignments.find(a => a.reviewer_id === currentUserId);
     const canReview = !readOnly && currentUserAssignment?.status === 'pending' && ;
     ['pending', 'in_review'].includes(request.status);
-    useEffect(() => {
-        loadReviewData();
-    }, [request.id, workspaceId]);
+    useEffect(() => { loadReviewData(); }, [request.id, workspaceId]);
     const loadReviewData = async () => {
         try {
             setLoading(true);
@@ -43,12 +44,14 @@ import { CheckCircleIcon, XCircleIcon, EyeIcon, ClockIcon, UserIcon, DocumentTex
                     criteria_id: criterion.id,
                     passed: false,
                     score: 0,
-                    comment: '',
+                    comment: ''
                 };
             });
-            setCriteriaEvaluations(initialEvaluations);
         }
-        try { }
+        ;
+        setCriteriaEvaluations(initialEvaluations);
+        try {
+        }
         catch (error) {
             setError('Failed to load review data');
         }
@@ -62,58 +65,56 @@ import { CheckCircleIcon, XCircleIcon, EyeIcon, ClockIcon, UserIcon, DocumentTex
             onReviewSubmit(selectedDecision, reviewComment, criteriaEvaluations);
         };
         const handleCriteriaEvaluation = (criteriaId, field, value) => {
-            setCriteriaEvaluations(prev => ({}), ...prev, [criteriaId], {
-                ...prev[criteriaId],
-                [field]: value,
+            setCriteriaEvaluations(prev => ({}), ...prev[criteriaId], {
+                ...prev[criteriaId][field], value
             });
-            ;
         };
-        const toggleSection = (section) => {
-            const newExpanded = new Set(expandedSections);
-            if (newExpanded.has(section)) {
-                newExpanded.delete(section);
-            }
-            else {
-                newExpanded.add(section);
-                setExpandedSections(newExpanded);
+    };
+    const toggleSection = (section) => {
+        const newExpanded = new Set(expandedSections);
+        if (newExpanded.has(section)) {
+            newExpanded.delete(section);
+        }
+        else {
+            newExpanded.add(section);
+            setExpandedSections(newExpanded);
+        }
+        ;
+        const getUrgencyColor = (urgency) => {
+            switch (urgency) {
+                case 'critical': return 'bg-red-100 text-red-800 border-red-200';
+                case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
+                case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                case 'low': return 'bg-green-100 text-green-800 border-green-200';
+                default: return 'bg-gray-100 text-gray-800 border-gray-200';
             }
             ;
-            const getUrgencyColor = (urgency) => {
-                switch (urgency) {
-                    case 'critical': return 'bg-red-100 text-red-800 border-red-200';
-                    case 'high': return 'bg-orange-100 text-orange-800 border-orange-200';
-                    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-                    case 'low': return 'bg-green-100 text-green-800 border-green-200';
-                    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+            const getStatusIcon = (status) => {
+                switch (status) {
+                    case 'approved': return _jsx(CheckCircleIcon, { className: "h-4 w-4 text-green-500" });
+                    case 'rejected': return _jsx(XCircleIcon, { className: "h-4 w-4 text-red-500" });
+                    case 'reviewing': return _jsx(EyeIcon, { className: "h-4 w-4 text-blue-500" });
+                    case 'pending': return _jsx(ClockIcon, { className: "h-4 w-4 text-yellow-500" });
+                    default: return _jsx(ClockIcon, { className: "h-4 w-4 text-gray-500" });
                 }
                 ;
-                const getStatusIcon = (status) => {
-                    switch (status) {
-                        case 'approved': return _jsx(CheckCircleIcon, { className: "h-4 w-4 text-green-500" });
-                        case 'rejected': return _jsx(XCircleIcon, { className: "h-4 w-4 text-red-500" });
-                        case 'reviewing': return _jsx(EyeIcon, { className: "h-4 w-4 text-blue-500" });
-                        case 'pending': return _jsx(ClockIcon, { className: "h-4 w-4 text-yellow-500" });
-                        default: return _jsx(ClockIcon, { className: "h-4 w-4 text-gray-500" });
-                    }
-                    ;
-                    const calculateOverallScore = () => {
-                        const totalWeight = approvalCriteria.reduce((sum, c) => sum + c.weight, 0);
-                        const weightedScore = approvalCriteria.reduce((sum, c) => {
-                            const evaluation = criteriaEvaluations[c.id];
-                            return sum + (evaluation?.score || 0) * c.weight;
-                        }, 0);
-                        return totalWeight > 0 ? Math.round((weightedScore / totalWeight) * 100) : 0;
-                    };
-                    const getRequiredCriteriaPassed = () => {
-                        const requiredCriteria = approvalCriteria.filter(c => c.is_required);
-                        const passedRequired = requiredCriteria.filter(c => criteriaEvaluations[c.id]?.passed).length;
-                        return { passed: passedRequired, total: requiredCriteria.length };
-                    };
-                    if (loading) {
-                        return;
-                        _jsx("div", { className: "flex items-center justify-center p-8", children: _jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" }) });
-                    }
+                const calculateOverallScore = () => {
+                    const totalWeight = approvalCriteria.reduce((sum, c) => sum + c.weight, 0);
+                    const weightedScore = approvalCriteria.reduce((sum, c) => {
+                        const evaluation = criteriaEvaluations[c.id];
+                        return sum + (evaluation?.score || 0) * c.weight;
+                    }, 0);
+                    return totalWeight > 0 ? Math.round((weightedScore / totalWeight) * 100) : 0;
                 };
+                const getRequiredCriteriaPassed = () => {
+                    const requiredCriteria = approvalCriteria.filter(c => c.is_required);
+                    const passedRequired = requiredCriteria.filter(c => criteriaEvaluations[c.id]?.passed).length;
+                    return { passed: passedRequired, total: requiredCriteria.length };
+                };
+                if (loading) {
+                    return;
+                    _jsx("div", { className: "flex items-center justify-center p-8", children: _jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" }) });
+                }
             };
         };
     };
@@ -154,9 +155,10 @@ className = "border border-gray-200 rounded-lg" >
     className = "border-t border-gray-200 p-4" >
         (_jsx("div", { className: "space-y-3", children: reviewerAssignments.map((assignment) => ()
                 < div, key = { assignment, : .id }, className = "flex items-center justify-between p-3 bg-gray-50 rounded" >
-                _jsxs("div", { className: "flex items-center space-x-3", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [getStatusIcon(assignment.status), _jsx("span", { className: "font-medium", children: assignment.reviewer_id })] }), _jsx("span", { className: `px-2 py-1 rounded text-xs font-medium ${assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' : ,
-                                assignment.assignment_type === 'secondary' ? 'bg-blue-100 text-blue-800' : ,
-                                'bg-gray-100 text-gray-800'}`, children: assignment.assignment_type }), assignment.reviewer_id === currentUserId && ()
+                _jsxs("div", { className: "flex items-center space-x-3", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [getStatusIcon(assignment.status), _jsx("span", { className: "font-medium", children: assignment.reviewer_id })] }), _jsx("span", { className: `px-2 py-1 rounded text-xs font-medium ${assignment.assignment_type === 'escalated' ? 'bg-orange-100 text-orange-800' :
+                                assignment.assignment_type === 'secondary' ? 'bg-blue-100 text-blue-800' : }
+  'bg-gray-100 text-gray-800'
+`, children: assignment.assignment_type }), assignment.reviewer_id === currentUserId && ()
                             < span, " className=\"px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800\"> You"] })) })
             ,
                 _jsxs("div", { className: "text-sm text-gray-600", children: [assignment.reviewed_at ? ()

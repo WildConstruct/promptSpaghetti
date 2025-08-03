@@ -9,9 +9,7 @@ import { useLockingStore } from '../stores/lockingStore';
     const [editingPolicy, setEditingPolicy] = useState(null);
     const [hasChanges, setHasChanges] = useState(false);
     const [validationErrors, setValidationErrors] = useState({});
-    useEffect(() => {
-        fetchPolicy(workspaceId);
-    }, [workspaceId]);
+    useEffect(() => { fetchPolicy(workspaceId); }, [workspaceId]);
     useEffect(() => {
         if (policy) {
             setEditingPolicy(policy);
@@ -106,8 +104,8 @@ import { useLockingStore } from '../stores/lockingStore';
             ;
         }
         { /* Basic Settings */ }
-        _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "text-md font-medium text-gray-900 mb-4", children: "Basic Settings" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Policy Name" }), _jsx("input", { type: "text", value: editingPolicy.name || '', onChange: (e) => handleInputChange('name', e.target.value), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.name ? 'border-red-300' : 'border-gray-300',
-                                    }` }), validationErrors.name && ()
+        _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h4", { className: "text-md font-medium text-gray-900 mb-4", children: "Basic Settings" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Policy Name" }), _jsx("input", { type: "text", value: editingPolicy.name || '', onChange: (e) => handleInputChange('name', e.target.value), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.name ? 'border-red-300' : 'border-gray-300'}
+` }), validationErrors.name && ()
                                     < p, " className=\"text-sm text-red-600 mt-1\">", validationErrors.name] }), ")}"] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Description" }), _jsx("input", { type: "text", value: editingPolicy.description || '', onChange: (e) => handleInputChange('description', e.target.value), className: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" })] })] });
         div >
             { /* Lock Limits */}
@@ -115,12 +113,12 @@ import { useLockingStore } from '../stores/lockingStore';
         className = "bg-white border border-gray-200 rounded-lg p-6" >
             (_jsxs("div", { className: "flex items-center space-x-2 mb-4", children: [_jsx(Users, { className: "h-5 w-5 text-gray-500" }), _jsx("h4", { className: "text-md font-medium text-gray-900", children: "Lock Limits" })] })
                 ,
-                    _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Max Locks Per User" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.max_locks_per_user || '', onChange: (e) => handleInputChange('max_locks_per_user', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.max_locks_per_user ? 'border-red-300' : 'border-gray-300',
-                                        }` }), validationErrors.max_locks_per_user && ()
+                    _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Max Locks Per User" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.max_locks_per_user || '', onChange: (e) => handleInputChange('max_locks_per_user', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.max_locks_per_user ? 'border-red-300' : 'border-gray-300'}
+` }), validationErrors.max_locks_per_user && ()
                                         < p, " className=\"text-sm text-red-600 mt-1\">", validationErrors.max_locks_per_user] }), ")}"] })
                         ,
-                            _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Max Locks Per Resource" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.max_locks_per_resource || '', onChange: (e) => handleInputChange('max_locks_per_resource', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.max_locks_per_resource ? 'border-red-300' : 'border-gray-300',
-                                        }` }), validationErrors.max_locks_per_resource && ()
+                            _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Max Locks Per Resource" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.max_locks_per_resource || '', onChange: (e) => handleInputChange('max_locks_per_resource', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.max_locks_per_resource ? 'border-red-300' : 'border-gray-300'}
+` }), validationErrors.max_locks_per_resource && ()
                                         < p, " className=\"text-sm text-red-600 mt-1\">", validationErrors.max_locks_per_resource] }));
     }
     div >
@@ -133,12 +131,12 @@ import { useLockingStore } from '../stores/lockingStore';
     className = "bg-white border border-gray-200 rounded-lg p-6" >
         (_jsxs("div", { className: "flex items-center space-x-2 mb-4", children: [_jsx(Clock, { className: "h-5 w-5 text-gray-500" }), _jsx("h4", { className: "text-md font-medium text-gray-900", children: "Duration Settings" })] })
             ,
-                _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Default Duration (minutes)" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.default_duration_minutes || '', onChange: (e) => handleInputChange('default_duration_minutes', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.default_duration_minutes ? 'border-red-300' : 'border-gray-300',
-                                    }` }), validationErrors.default_duration_minutes && ()
+                _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Default Duration (minutes)" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.default_duration_minutes || '', onChange: (e) => handleInputChange('default_duration_minutes', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.default_duration_minutes ? 'border-red-300' : 'border-gray-300'}
+` }), validationErrors.default_duration_minutes && ()
                                     < p, " className=\"text-sm text-red-600 mt-1\">", validationErrors.default_duration_minutes] }), ")}"] })
                     ,
-                        _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Maximum Duration (minutes)" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.max_duration_minutes || '', onChange: (e) => handleInputChange('max_duration_minutes', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.max_duration_minutes ? 'border-red-300' : 'border-gray-300',
-                                    }` }), validationErrors.max_duration_minutes && ()
+                        _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-1", children: "Maximum Duration (minutes)" }), _jsx("input", { type: "number", min: "1", value: editingPolicy.max_duration_minutes || '', onChange: (e) => handleInputChange('max_duration_minutes', parseInt(e.target.value)), className: `w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.max_duration_minutes ? 'border-red-300' : 'border-gray-300'}
+` }), validationErrors.max_duration_minutes && ()
                                     < p, " className=\"text-sm text-red-600 mt-1\">", validationErrors.max_duration_minutes] }));
 }
 div >

@@ -10,8 +10,16 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Award, AlertTriangle, CheckCircle, Users, Clock, Target, Lightbulb, Download, Refresh } from 'lucide-react';
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from LabelList;
+from;
+'recharts';
+import { TrendingUp, TrendingDown, Award, AlertTriangle, CheckCircle, Users, Clock, Target, Lightbulb, Download, Refresh } from Filter;
+from;
+'lucide-react';
+from;
+'../../types/experiment';
+refreshing: boolean;
+showDetails: boolean;
 const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7c7c', '#8dd1e1'];
 export const ExperimentResults = ({
     experiment,
@@ -19,21 +27,15 @@ export const ExperimentResults = ({
     onRefresh,
     onExport,
     onStopExperiment,
-    onImplementWinner,
-    className = ''
-});
+    onImplementWinner });
+className = '';
 {
     const [state, setState] = useState({});
-    selectedSegment: 'all',
-        selectedMetric;
-    'primary',
-        timeRange;
-    '7d',
-        refreshing;
-    false,
-        showDetails;
-    false,
-    ;
+    selectedSegment: 'all';
+    selectedMetric: 'primary';
+    timeRange: '7d';
+    refreshing: false;
+    showDetails: false;
 }
 ;
 const primaryMetric = experiment.metrics.find(m => m.isPrimary);
@@ -70,8 +72,9 @@ return {
     value: metricResult?.value || 0,
     improvement: variant.variantId === controlVariant.variantId ? 0 : improvement,
     sampleSize: variant.sampleSize,
-    confidenceInterval: metricResult?.confidenceInterval || [0, 0],
+    confidenceInterval: metricResult?.confidenceInterval || [0, 0]
 };
+;
 ;
 [results.variants, primaryMetric, controlVariant];
 ;
@@ -79,23 +82,23 @@ return {
  * Get time series data for trend chart
  */
 const getTimeSeriesData = useCallback(() => {
-    // Mock time series data - in practice, this would come from the results
     const days = 7;
     const data = [];
     for (let i = days - 1; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
         const dayData = {
-            date: date.toISOString().split('T')[0],
-            day: date.toLocaleDateString('en-US', { weekday: 'short' })
+            date: date.toISOString().split('T')[0]
         };
-        results.variants.forEach(variant => { });
-        const metricResult = variant.metrics.find(m => m.metricId === primaryMetric?.id);
-        // Add some realistic variance
-        const baseValue = metricResult?.value || 0;
-        const variance = 0.1 * baseValue * (Math.random() - 0.5);
-        dayData[variant.variantId] = Math.max(0, baseValue + variance);
+        day: date.toLocaleDateString('en-US', { weekday: 'short' });
     }
+    ;
+    results.variants.forEach(variant => { });
+    const metricResult = variant.metrics.find(m => m.metricId === primaryMetric?.id);
+    // Add some realistic variance
+    const baseValue = metricResult?.value || 0;
+    const variance = 0.1 * baseValue * (Math.random() - 0.5);
+    dayData[variant.variantId] = Math.max(0, baseValue + variance);
 });
 data.push(dayData);
 return data;
@@ -115,7 +118,7 @@ const formatMetricValue = useCallback((value, metricType) => {
 'latency';
 return `${value.toFixed(0)}ms`;
 'cost';
-return `$${value.toFixed(4)}`;
+return `${value.toFixed(4)}`;
 return value.toFixed(2);
 [];
 ;
@@ -156,9 +159,9 @@ div >
             ,
                 _jsx(CardContent, { children: _jsx("div", { className: "space-y-3", children: results.insights.slice(0, 3).map((insight, index) => ()
                             < div, key = { index }, className = "flex items-start space-x-3" >
-                            (_jsx("div", { className: `w-2 h-2 rounded-full mt-2 ${insight.severity === 'high' ? 'bg-red-500' : ,
-                                    insight.severity === 'medium' ? 'bg-yellow-500' : 'bg-blue-500',
-                                }` })
+                            (_jsx("div", { className: `w-2 h-2 rounded-full mt-2 ${insight.severity === 'high' ? 'bg-red-500' :
+                                    insight.severity === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'}
+` })
                                 ,
                                     _jsxs("div", { children: [_jsx("div", { className: "font-medium", children: insight.title }), _jsx("div", { className: "text-sm text-gray-600", children: insight.description }), insight.recommendations && insight.recommendations.length > 0 && ()
                                                 < div, " className=\"text-xs text-gray-500 mt-1\"> \uD83D\uDCA1 ", insight.recommendations[0]] }))) }) }));
@@ -180,7 +183,7 @@ _jsxs(Tabs, { defaultValue: "overview", className: "results-tabs", children: [_j
                                                         ? ((metricResult.value - controlMetricResult.value) / controlMetricResult.value) * 100
                                                         : null, "; return;", _jsxs("tr", { className: "border-b", children: [_jsxs("td", { className: "p-2", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("span", { className: "font-medium", children: variant.variantId }), variant.variantId === controlVariant.variantId && ()
                                                                                 < Badge, " variant=\"secondary\" className=\"text-xs\">Control"] }), ")}", variant.variantId === winningVariant && ()
-                                                                        < Badge, " variant=\"default\" className=\"text-xs bg-green-500\">Winner"] }), ")}"] }, variant.variantId)] }), _jsx("td", { className: "p-2", children: variant.sampleSize.toLocaleString() }), _jsx("td", { className: "p-2", children: metricResult && formatMetricValue(metricResult.value, primaryMetric?.type || 'conversion') }), _jsxs("td", { className: "p-2 text-xs text-gray-600", children: [metricResult && getConfidenceInterval(), "metricResult.confidenceInterval, primaryMetric?.type || 'conversion' )}"] }), _jsxs("td", { className: "p-2", children: [improvement !== null && ()
+                                                                        < Badge, " variant=\"default\" className=\"text-xs bg-green-500\">Winner"] }), ")}"] }, variant.variantId)] }), _jsx("td", { className: "p-2", children: variant.sampleSize.toLocaleString() }), _jsx("td", { className: "p-2", children: metricResult && formatMetricValue(metricResult.value, primaryMetric?.type || 'conversion') }), _jsxs("td", { className: "p-2 text-xs text-gray-600", children: [metricResult && getConfidenceInterval(), "metricResult.confidenceInterval } primaryMetric?.type || 'conversion' )}"] }), _jsxs("td", { className: "p-2", children: [improvement !== null && ()
                                                         < div, " className=", `flex items-center ${improvement > 0 ? 'text-green-600' : 'text-red-600'}`, ">}", improvement > 0 ? _jsx(TrendingUp, { className: "w-3 h-3 mr-1" }) : _jsx(TrendingDown, { className: "w-3 h-3 mr-1" }), improvement.toFixed(2), "%"] }), ")}"] }), _jsxs("td", { className: "p-2", children: [variant.variantId === winningVariant && ()
                                                 < Badge, " variant=\"default\" className=\"bg-green-500\">Significant"] }), ")}"] }) }), "); })}"] })] })] });
 CardContent >

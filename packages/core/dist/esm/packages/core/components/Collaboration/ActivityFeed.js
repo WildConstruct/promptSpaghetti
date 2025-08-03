@@ -1,11 +1,12 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useCallback } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { Activity, Filter, RefreshCw, Search, ExternalLink } from 'lucide-react';
+import { Activity, Filter, RefreshCw, Search } from ExternalLink;
+from;
+'lucide-react';
 import { useActivityFeed } from '../../hooks/useActivityFeed';
 ;
-const ACTIVITY_COLORS = {
-    'project_created': 'text-green-500',
+const ACTIVITY_COLORS = { 'project_created': 'text-green-500',
     'project_updated': 'text-blue-500',
     'project_deleted': 'text-red-500',
     'resource_created': 'text-green-500',
@@ -26,26 +27,23 @@ const ACTIVITY_COLORS = {
     'branch_merged': 'text-purple-500',
     'template_applied': 'text-blue-500',
     'collaboration_started': 'text-green-500',
-    'collaboration_ended': 'text-gray-500',
-};
+    'collaboration_ended': 'text-gray-500' };
+;
 export const [dateFilter, setDateFilter] = useState('all');
 const [actorFilter, setActorFilter] = useState('all');
-const { activities, loading, error, hasMore, stats, actors, refreshActivities, loadMore, realTimeConnection } = useActivityFeed({});
-workspaceId,
-    projectId,
-    userId,
-    searchTerm,
-    typeFilter;
-typeFilter === 'all' ? undefined : typeFilter,
-    dateFilter;
-dateFilter === 'all' ? undefined : dateFilter,
-    actorFilter;
-actorFilter === 'all' ? undefined : actorFilter,
-    realTime;
+const { activities, loading, error, hasMore, stats, actors, refreshActivities, loadMore };
+realTimeConnection
+    = useActivityFeed({});
+workspaceId;
+projectId;
+userId;
+searchTerm;
+typeFilter: typeFilter === 'all' ? undefined : typeFilter;
+dateFilter: dateFilter === 'all' ? undefined : dateFilter;
+actorFilter: actorFilter === 'all' ? undefined : actorFilter;
+realTime;
 ;
-const handleRefresh = useCallback(() => {
-    refreshActivities();
-}, [refreshActivities]);
+const handleRefresh = useCallback(() => { refreshActivities(); }, [refreshActivities]);
 const handleLoadMore = useCallback(() => {
     if (hasMore && !loading) {
         loadMore();
@@ -95,9 +93,10 @@ div >
 return;
 _jsxs("div", { className: `bg-white rounded-lg border border-gray-200 ${className}`, children: ["}", _jsxs("div", { className: "p-4 border-b border-gray-200", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx(Activity, { className: "w-5 h-5 text-gray-600" }), _jsx("h3", { className: "text-lg font-semibold text-gray-900", children: "Activity Feed" }), stats && ()
                                     < span, " className=\"text-sm text-gray-500\"> (", stats.total, " activities)"] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-2", children: [realTime && ()
-                            < div, " className=", `w-2 h-2 rounded-full ${realTimeConnection?.status === 'connected' ? 'bg-green-400' : ,
-                            realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' : ,
-                            'bg-red-400'}`, " title=", `Connection: ${realTimeConnection?.status || 'disconnected'}`, " />} )}", _jsxs("button", { onClick: handleRefresh, disabled: loading, className: "p-2 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50", title: "Refresh activities", children: [_jsx(RefreshCw, { className: `w-4 h-4 ${loading ? 'animate-spin' : ''}` }), "}"] })] })] }), (showSearch || showFilters) && ()
+                            < div, " className=", `w-2 h-2 rounded-full ${realTimeConnection?.status === 'connected' ? 'bg-green-400' :
+                            realTimeConnection?.status === 'connecting' ? 'bg-yellow-400' : }
+  'bg-red-400'
+`, " title=", `Connection: ${realTimeConnection?.status || 'disconnected'}`, " />} )}", _jsxs("button", { onClick: handleRefresh, disabled: loading, className: "p-2 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50", title: "Refresh activities", children: [_jsx(RefreshCw, { className: `w-4 h-4 ${loading ? 'animate-spin' : ''}` }), "}"] })] })] }), (showSearch || showFilters) && ()
             < div, " className=\"mt-4 space-y-3\">", showSearch && ()
             < div, " className=\"relative\">", _jsx(Search, { className: "absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" }), _jsx("input", { type: "text", placeholder: "Search activities...", value: searchTerm, onChange: (e) => setSearchTerm(e.target.value), className: "w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" })] });
 { /* Filters */ }

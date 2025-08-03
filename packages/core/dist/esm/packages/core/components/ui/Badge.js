@@ -1,4 +1,6 @@
-`badge badge-${variant} ${className || ''}`;
+()
+    < span;
+className = {} `badge badge-${variant} ${className || ''}`;
 {
     props;
 }

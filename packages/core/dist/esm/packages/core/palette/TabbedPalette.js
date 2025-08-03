@@ -2,41 +2,24 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // packages/core/palette/TabbedPalette.tsx
 // Enhanced tabbed palette for Epic 7.2 Palette Categorization
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { NODE_CATEGORIES, SPECIAL_CATEGORIES, getAllCategories, getNodeCategories, getCategoryColor } from './NodeCategory';
+import { NODE_CATEGORIES, SPECIAL_CATEGORIES, getAllCategories, getNodeCategories } from getCategoryColor;
+from;
+'./NodeCategory';
 import { getFavoritesManager } from './FavoritesManager';
 import { createPaletteSearch } from './PaletteSearch';
-import { FiSearch, FiStar, FiX, FiChevronDown, FiChevronRight } from 'react-icons/fi';
-import { professionalColors } from '../styles/professional-design-system';
+import { FiSearch, FiStar, FiX, FiChevronDown, FiChevronRight } from FiMoreHorizontal;
+from;
+'react-icons/fi';
 // Enhanced color palette for better UI consistency
-const uiColors = {
-    ...professionalColors,
-    accent: {
-        ...professionalColors.accent,
-        primary: professionalColors.accent.orange,
-        secondary: professionalColors.accent.blue,
-    },
-    ui: {
-        ...professionalColors.ui,
-        selected: '#353535',
-        disabled: '#6b7280',
-    },
-    text: {
-        ...professionalColors.text,
-        disabled: '#6b7280',
-    }
-};
-export const TabbedPalette = ({
-    nodes,
-    collapsed,
-    onToggle,
-    onDragStart,
-    defaultActiveTab = 'content',
-    showSearch = true,
-    showFavorites = true,
-    maxSearchResults = 20
-});
-{
-    // State management
+const uiColors = {}, ui, professionalColors, ui, selected, disabled;
+text: {
+    professionalColors.text,
+        disabled;
+    '#6b7280';
+}
+;
+maxSearchResults = 20;
+{ // State management
     const [activeTab, setActiveTab] = useState(defaultActiveTab);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -62,145 +45,158 @@ export const TabbedPalette = ({
     useEffect(() => {
         if (searchQuery.trim()) {
             const results = searchEngine.search(searchQuery, {});
-            maxResults: maxSearchResults,
-                fuzzyThreshold;
-            0.5,
-                sortByRelevance;
-            true,
-            ;
+            maxResults: maxSearchResults;
+            fuzzyThreshold: 0.5;
+            sortByRelevance: true;
         }
     });
     setSearchResults(results);
     setActiveTab(SPECIAL_CATEGORIES.SEARCH_RESULTS);
-}
-{
-    setSearchResults([]);
-    if (activeTab === SPECIAL_CATEGORIES.SEARCH_RESULTS) {
-        setActiveTab('content');
-    }
-    [searchQuery, searchEngine, maxSearchResults, activeTab];
-    ;
-    // Get available categories
-    const availableCategories = useMemo(() => {
-        const categories = getAllCategories();
-        // Add special categories if enabled
-        const specialCats = [];
-        if (showFavorites && favorites.length > 0) {
-            specialCats.push(NODE_CATEGORIES[SPECIAL_CATEGORIES.FAVORITES]);
-            if (searchQuery.trim() && searchResults.length > 0) {
-                specialCats.push(NODE_CATEGORIES[SPECIAL_CATEGORIES.SEARCH_RESULTS]);
-                return [...specialCats, ...categories];
-            }
-            [favorites, searchResults, searchQuery, showFavorites];
+    {
+        setSearchResults([]);
+        if (activeTab === SPECIAL_CATEGORIES.SEARCH_RESULTS) {
+            setActiveTab('content');
         }
-    });
-    // Get nodes for active category
-    const getNodesForCategory = useCallback((categoryId) => {
-        if (categoryId === SPECIAL_CATEGORIES.FAVORITES) {
-            return nodes.filter(node => favorites.includes(node.id));
-            if (categoryId === SPECIAL_CATEGORIES.SEARCH_RESULTS) {
-                return searchResults.map(result => result.node);
-                if (categoryId === SPECIAL_CATEGORIES.ALL) {
-                    return nodes;
-                    return nodes.filter(node => { });
-                    const nodeCategories = getNodeCategories(node.id);
-                    return nodeCategories.includes(categoryId);
+        [searchQuery, searchEngine, maxSearchResults, activeTab];
+        ;
+        // Get available categories
+        const availableCategories = useMemo(() => {
+            const categories = getAllCategories();
+            // Add special categories if enabled
+            const specialCats = [];
+            if (showFavorites && favorites.length > 0) {
+                specialCats.push(NODE_CATEGORIES[SPECIAL_CATEGORIES.FAVORITES]);
+                if (searchQuery.trim() && searchResults.length > 0) {
+                    specialCats.push(NODE_CATEGORIES[SPECIAL_CATEGORIES.SEARCH_RESULTS]);
+                    return [...specialCats, ...categories];
+                }
+                [favorites, searchResults, searchQuery, showFavorites];
+            }
+        });
+        // Get nodes for active category
+        const getNodesForCategory = useCallback((categoryId) => {
+            if (categoryId === SPECIAL_CATEGORIES.FAVORITES) {
+                return nodes.filter(node => favorites.includes(node.id));
+                if (categoryId === SPECIAL_CATEGORIES.SEARCH_RESULTS) {
+                    return searchResults.map(result => result.node);
+                    if (categoryId === SPECIAL_CATEGORIES.ALL) {
+                        return nodes;
+                        return nodes.filter(node => { });
+                        const nodeCategories = getNodeCategories(node.id);
+                        return nodeCategories.includes(categoryId);
+                    }
                 }
             }
+        });
+    }
+    [nodes, favorites, searchResults];
+    ;
+    // Handle favorite toggle
+    const handleFavoriteToggle = useCallback((nodeId, event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        favoritesManager.toggleFavorite(nodeId);
+    }, [favoritesManager]);
+    // Handle category collapse toggle
+    const handleCategoryToggle = useCallback((categoryId) => {
+        const newCollapsed = new Set(collapsedCategories);
+        if (newCollapsed.has(categoryId)) {
+            newCollapsed.delete(categoryId);
         }
+        else {
+            newCollapsed.add(categoryId);
+            setCollapsedCategories(newCollapsed);
+        }
+        [collapsedCategories];
     });
-}
-[nodes, favorites, searchResults];
-;
-// Handle favorite toggle
-const handleFavoriteToggle = useCallback((nodeId, event) => {
-    event.stopPropagation();
-    event.preventDefault();
-    favoritesManager.toggleFavorite(nodeId);
-}, [favoritesManager]);
-// Handle category collapse toggle
-const handleCategoryToggle = useCallback((categoryId) => {
-    const newCollapsed = new Set(collapsedCategories);
-    if (newCollapsed.has(categoryId)) {
-        newCollapsed.delete(categoryId);
-    }
-    else {
-        newCollapsed.add(categoryId);
-        setCollapsedCategories(newCollapsed);
-    }
-    [collapsedCategories];
-});
-// Render node item
-const renderNodeItem = useCallback((node, showCategory = false) => {
-    const isFavorited = favorites.includes(node.id);
-    const nodeCategories = getNodeCategories(node.id);
-    const primaryCategory = nodeCategories[0];
-    const categoryColor = getCategoryColor(primaryCategory, 0.6);
-    return;
-    _jsxs("div", { role: "button", tabIndex: 0, draggable: true, "aria-label": `${node.label} - ${node.tooltip}`.trim(), "aria-describedby": `tooltip-${node.id}`, "aria-grabbed": "false", onDragStart: (e) => {
-            e.dataTransfer?.setData?.('application/node-type', node.id);
-            onDragStart?.(node.id);
-        }, title: node.tooltip, style: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: collapsed ? 0 : 8,
-            padding: collapsed ? '8px 4px' : '8px 12px',
-            marginBottom: 2,
-            borderRadius: 4,
-            background: 'none',
-            cursor: 'grab',
-            outline: 'none',
-            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-            position: 'relative',
-        }, onMouseEnter: (e) => {
-            e.currentTarget.style.backgroundColor = uiColors.ui.hover;
-        }, onMouseLeave: (e) => {
-            e.currentTarget.style.backgroundColor = 'none';
-        }, onKeyDown: (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+    // Render node item
+    const renderNodeItem = useCallback((node, showCategory = false) => {
+        const isFavorited = favorites.includes(node.id);
+        const nodeCategories = getNodeCategories(node.id);
+        const primaryCategory = nodeCategories[0];
+        const categoryColor = getCategoryColor(primaryCategory, 0.6);
+        return;
+        _jsx("div", { role: "button", tabIndex: 0, draggable: true, "aria-label": `${node.label} - ${node.tooltip}`.trim(), "aria-describedby": `tooltip-${node.id}`, "aria-grabbed": "false", onDragStart: (e) => {
+                e.dataTransfer?.setData?.('application/node-type', node.id);
                 onDragStart?.(node.id);
-            }
-        }, children: [_jsx("span", { id: `tooltip-${node.id}` }), " } style=", {
-                position: 'absolute',
-                left: '-9999px',
-                width: 1,
-                height: 1,
-                overflow: 'hidden',
-            }, ">", node.tooltip] }, node.id);
-    { /* Node icon */ }
-    _jsx("span", { style: {
-            fontSize: collapsed ? 18 : 20,
-            width: collapsed ? 20 : 24,
-            textAlign: 'center',
-            flexShrink: 0,
-        }, children: node.icon });
-    { /* Node details (expanded view only) */ }
+            }, title: node.tooltip, style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: collapsed ? 0 : 8,
+                padding: collapsed ? '8px 4px' : '8px 12px',
+                marginBottom: 2,
+                borderRadius: 4,
+                background: 'none',
+                cursor: 'grab',
+                outline: 'none',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                position: 'relative'
+            }, onMouseEnter: (e) => {
+                e.currentTarget.style.backgroundColor = uiColors.ui.hover;
+            }, onMouseLeave: (e) => {
+                e.currentTarget.style.backgroundColor = 'none';
+                onKeyDown = {}(e);
+            } }, node.id);
+    });
     {
-        !collapsed && ()
-            < div;
-        style = {};
-        {
-            flex: 1, minWidth;
-            0;
+        if (e.key === 'Enter' || e.key === ' ') {
+            onDragStart?.(node.id);
         }
     }
-     >
-        (_jsx("div", { style: {
-                fontSize: 12,
-                fontWeight: 500,
-                color: uiColors.text.primary,
-                marginBottom: 2,
-            }, children: node.label })
-            ,
-                _jsx("div", { style: {
-                        fontSize: 10,
-                        color: uiColors.text.secondary,
-                        lineHeight: 1.2,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                    }, children: node.tooltip }));
-});
+        >
+            { /* Hidden tooltip for accessibility */}
+        < span;
+    id = {} `tooltip-${node.id}`;
+}
+style = {};
+{
+    position: 'absolute';
+    left: '-9999px';
+    width: 1;
+    height: 1;
+    overflow: 'hidden';
+}
+    >
+        { node, : .tooltip };
+span >
+    { /* Node icon */}
+    < span;
+style = {};
+{
+    fontSize: collapsed ? 18 : 20;
+    width: collapsed ? 20 : 24;
+    textAlign: 'center';
+    flexShrink: 0;
+}
+    >
+        { node, : .icon };
+span >
+    { /* Node details (expanded view only) */};
+{
+    !collapsed && ()
+        < div;
+    style = {};
+    {
+        flex: 1, minWidth;
+        0;
+    }
+}
+ >
+    (_jsx("div", { style: {
+            fontSize: 12,
+            fontWeight: 500,
+            color: uiColors.text.primary,
+            marginBottom: 2
+        }, children: node.label })
+        ,
+            _jsx("div", { style: {
+                    fontSize: 10,
+                    color: uiColors.text.secondary,
+                    lineHeight: 1.2,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                }, children: node.tooltip }));
 div >
 ;
 { /* Category badge (when showing search results) */ }
@@ -209,22 +205,14 @@ div >
         < div;
     style = {};
     {
-        padding: '2px 6px',
-            borderRadius;
-        3,
-            backgroundColor;
-        categoryColor,
-            fontSize;
-        9,
-            fontWeight;
-        500,
-            color;
-        'white',
-            textTransform;
-        'uppercase',
-            letterSpacing;
-        '0.3px',
-        ;
+        padding: '2px 6px';
+        borderRadius: 3;
+        backgroundColor: categoryColor;
+        fontSize: 9;
+        fontWeight: 500;
+        color: 'white';
+        textTransform: 'uppercase';
+        letterSpacing: '0.3px';
     }
 }
  >
@@ -240,26 +228,16 @@ div >
 }
 style = {};
 {
-    background: 'none',
-        border;
-    'none',
-        padding;
-    4,
-        cursor;
-    'pointer',
-        color;
-    isFavorited ? '#fbbf24' : uiColors.text.secondary,
-        display;
-    'flex',
-        alignItems;
-    'center',
-        justifyContent;
-    'center',
-        borderRadius;
-    3,
-        transition;
-    'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-    ;
+    background: 'none';
+    border: 'none';
+    padding: 4;
+    cursor: 'pointer';
+    color: isFavorited ? '#fbbf24' : uiColors.text.secondary;
+    display: 'flex';
+    alignItems: 'center';
+    justifyContent: 'center';
+    borderRadius: 3;
+    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
 }
 onMouseEnter = {}(e);
 {
@@ -300,7 +278,7 @@ const renderCategorySection = useCallback((category) => {
                     marginBottom: isCollapsed ? 0 : 8,
                     cursor: category.collapsible ? 'pointer' : 'default',
                     borderRadius: 4,
-                    transition: 'background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transition: 'background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                 }, onMouseEnter: (e) => {
                     if (category.collapsible) {
                         e.currentTarget.style.backgroundColor = uiColors.ui.hover;
@@ -315,7 +293,7 @@ const renderCategorySection = useCallback((category) => {
                     color: uiColors.text.secondary,
                     textTransform: 'uppercase',
                     letterSpacing: '0.5px',
-                    flex: 1,
+                    flex: 1
                 }, children: category.name }), _jsx("div", { style: {
                     fontSize: 9,
                     color: uiColors.text.secondary,
@@ -323,7 +301,7 @@ const renderCategorySection = useCallback((category) => {
                     padding: '2px 5px',
                     borderRadius: 3,
                     minWidth: 16,
-                    textAlign: 'center',
+                    textAlign: 'center'
                 }, children: categoryNodes.length })] }, category.id);
     { /* Category nodes */ }
     {
@@ -348,33 +326,25 @@ return;
 _jsx("aside", { "aria-label": "Enhanced Node Palette", style: {
         width: collapsed ? 56 : 240,
         background: uiColors.background.primary,
-        color: uiColors.text.primary,
-        borderRight: `1px solid ${uiColors.ui.border}`
-    }, "padding:": true });
-0,
-    height;
-'100%',
-    transition;
-'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-    overflow;
-'hidden',
-    display;
-'flex',
-    flexDirection;
-'column';
+        color: uiColors.text.primary
+    }, "borderRight:": true });
+`1px solid ${uiColors.ui.border}`;
+padding: 0;
+height: '100%';
+transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+overflow: 'hidden';
+display: 'flex';
+flexDirection: 'column';
     >
         { /* Header with collapse button */}
     < div;
 style = {};
 {
-    display: 'flex',
-        alignItems;
-    'center',
-        padding;
-    '8px',
-        borderBottom;
-    `1px solid ${uiColors.ui.border}`;
+    display: 'flex';
+    alignItems: 'center';
+    padding: '8px';
 }
+borderBottom: `1px solid ${uiColors.ui.border}`;
 background: uiColors.background.secondary;
  >
     _jsx("button", { "aria-label": collapsed ? 'Expand palette' : 'Collapse palette', "aria-expanded": !collapsed, onClick: onToggle, style: {
@@ -386,7 +356,7 @@ background: uiColors.background.secondary;
             cursor: 'pointer',
             outline: 'none',
             borderRadius: 4,
-            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
         }, onMouseEnter: (e) => {
             e.currentTarget.style.backgroundColor = uiColors.ui.hover;
         }, onMouseLeave: (e) => {
@@ -397,16 +367,11 @@ background: uiColors.background.secondary;
         < div;
     style = {};
     {
-        flex: 1,
-            marginLeft;
-        8,
-            fontSize;
-        12,
-            fontWeight;
-        600,
-            color;
-        uiColors.text.primary,
-        ;
+        flex: 1;
+        marginLeft: 8;
+        fontSize: 12;
+        fontWeight: 600;
+        color: uiColors.text.primary;
     }
 }
  >
@@ -421,26 +386,26 @@ div >
         < div;
     style = {};
     {
-        padding: '8px',
-            borderBottom;
-        `1px solid ${uiColors.ui.border}`;
+        padding: '8px';
     }
+    borderBottom: `1px solid ${uiColors.ui.border}`;
 }
 background: uiColors.background.secondary;
  >
     _jsxs("div", { style: {
             position: 'relative',
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'center'
         }, children: [_jsx(FiSearch, { size: 14, color: uiColors.text.secondary, style: {
                     position: 'absolute',
                     left: 8,
-                    zIndex: 1,
-                } }), _jsx("input", { type: "text", placeholder: "Search nodes...", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), style: {
-                    width: '100%',
-                    padding: '6px 28px 6px 28px',
-                    border: `1px solid ${uiColors.ui.border}`
-                } }), ", borderRadius: 4, backgroundColor: uiColors.background.primary, color: uiColors.text.primary, fontSize: 11, outline: 'none', transition: 'border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)' }} onFocus=", (e) => {
+                    zIndex: 1
+                }
+                    /  >
+                    _jsx("input", { type: "text", placeholder: "Search nodes...", value: searchQuery, onChange: (e) => setSearchQuery(e.target.value), style: {
+                            width: '100%',
+                            padding: '6px 28px 6px 28px'
+                        }, "border:": true }) }), " `1px solid $", uiColors.ui.border, "`} borderRadius: 4 backgroundColor: uiColors.background.primary color: uiColors.text.primary fontSize: 11 outline: 'none' transition: 'border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)' onFocus=", (e) => {
                 e.target.style.borderColor = uiColors.accent.primary;
             }, "onBlur=", (e) => {
                 e.target.style.borderColor = uiColors.ui.border;
@@ -456,8 +421,10 @@ background: uiColors.background.secondary;
                 borderRadius: 3,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-            }, ">", _jsx(FiX, { size: 12 })] });
+                justifyContent: 'center'
+            }
+                >
+                    _jsx(FiX, { size: 12 })] });
 div >
 ;
 div >
@@ -468,16 +435,13 @@ div >
         < div;
     style = {};
     {
-        display: 'flex',
-            overflowX;
-        'auto',
-            borderBottom;
-        `1px solid ${uiColors.ui.border}`;
+        display: 'flex';
+        overflowX: 'auto';
     }
+    borderBottom: `1px solid ${uiColors.ui.border}`;
 }
-background: uiColors.background.secondary,
-    scrollbarWidth;
-'thin';
+background: uiColors.background.secondary;
+scrollbarWidth: 'thin';
  >
     { availableCategories, : .slice(0, 4).map((category) => {
             const isActive = activeTab === category.id;
@@ -493,19 +457,17 @@ background: uiColors.background.secondary,
                     color: isActive ? category.color : uiColors.text.secondary,
                     fontSize: 10,
                     fontWeight: 500,
-                    cursor: 'pointer',
-                    borderBottom: isActive ? `2px solid ${category.color}` : '2px solid transparent'
-                }, "transition:": true }, category.id);
-            'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                whiteSpace;
-            'nowrap';
-        }) };
-title = { category, : .description }
-    >
-        (_jsx(CategoryIcon, { size: 12 })
-            ,
-                _jsx("span", { children: category.name.split(' ')[0] }));
-button >
+                    cursor: 'pointer'
+                }, "borderBottom:isActive": true }, category.id);
+            `2px solid ${category.color}`;
+            '2px solid transparent';
+        }, transition, 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', whiteSpace, 'nowrap'),
+        title = { category, : .description }
+            >
+                (_jsx(CategoryIcon, { size: 12 })
+                    ,
+                        _jsx("span", { children: category.name.split(' ')[0] })),
+        button } >
 ;
 ;
 div >
@@ -514,7 +476,7 @@ div >
 _jsxs("div", { style: {
         flex: 1,
         overflowY: 'auto',
-        padding: collapsed ? '4px 2px' : '8px',
+        padding: collapsed ? '4px 2px' : '8px'
     }, children: [collapsed ? ()
             :
         // Collapsed view - show all nodes as icons

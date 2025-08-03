@@ -14,7 +14,9 @@ import { useWorkspaces } from '../../hooks/useWorkspaces';
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
-    const { workspaces, loading, error, createWorkspace, updateWorkspace, archiveWorkspace, inviteUser, refreshWorkspaces } = useWorkspaces(userId);
+    const { workspaces, loading, error, createWorkspace, updateWorkspace, archiveWorkspace, inviteUser };
+    refreshWorkspaces
+        = useWorkspaces(userId);
     const handleWorkspaceSelect = (workspace) => {
         setSelectedWorkspace(workspace);
         onWorkspaceSelect?.(workspace);
@@ -37,45 +39,49 @@ import { useWorkspaces } from '../../hooks/useWorkspaces';
                 await inviteUser(selectedWorkspace.id, data.userId, data.role);
                 setShowInviteModal(false);
                 // Optionally refresh or show success message
-            }
-            catch (error) {
-                console.error('Failed to invite user:', error);
-            }
-            ;
-            const handleWorkspaceUpdate = async (updates) => {
-                if (!selectedWorkspace)
-                    return;
                 try {
-                    const updatedWorkspace = await updateWorkspace(selectedWorkspace.id, updates);
-                    setSelectedWorkspace(updatedWorkspace);
-                    setShowSettings(false);
                 }
                 catch (error) {
-                    console.error('Failed to update workspace:', error);
+                    console.error('Failed to invite user:', error);
                 }
                 ;
-                const handleWorkspaceArchive = async () => {
+                const handleWorkspaceUpdate = async (updates) => {
                     if (!selectedWorkspace)
                         return;
                     try {
-                        await archiveWorkspace(selectedWorkspace.id);
-                        setSelectedWorkspace(null);
+                        const updatedWorkspace = await updateWorkspace(selectedWorkspace.id, updates);
+                        setSelectedWorkspace(updatedWorkspace);
                         setShowSettings(false);
-                        refreshWorkspaces();
                     }
                     catch (error) {
-                        console.error('Failed to archive workspace:', error);
+                        console.error('Failed to update workspace:', error);
                     }
                     ;
-                    const canManageWorkspace = selectedWorkspace?.role_permissions && ;
-                    (selectedWorkspace.role_permissions & (1 << 2)) !== 0; // WORKSPACE_ADMIN
-                    const canInviteUsers = selectedWorkspace?.role_permissions && ;
-                    (selectedWorkspace.role_permissions & (1 << 15)) !== 0; // USER_INVITE
-                    return;
-                    _jsxs("div", { className: "workspace-manager", children: [_jsxs("div", { className: "workspace-manager__header", children: [_jsx("h2", { children: "Workspaces" }), _jsx("button", { className: "btn btn--primary", onClick: () => setShowCreateModal(true), children: "Create Workspace" })] }), error && ()
-                                < div, " className=\"alert alert--error\">", _jsxs("p", { children: ["Error loading workspaces: ", error] }), _jsx("button", { onClick: refreshWorkspaces, children: "Retry" })] });
+                    const handleWorkspaceArchive = async () => {
+                        if (!selectedWorkspace)
+                            return;
+                        try {
+                            await archiveWorkspace(selectedWorkspace.id);
+                            setSelectedWorkspace(null);
+                            setShowSettings(false);
+                            refreshWorkspaces();
+                        }
+                        catch (error) {
+                            console.error('Failed to archive workspace:', error);
+                        }
+                        ;
+                        const canManageWorkspace = selectedWorkspace?.role_permissions && ;
+                        (selectedWorkspace.role_permissions & (1 << 2)) !== 0; // WORKSPACE_ADMIN
+                        const canInviteUsers = selectedWorkspace?.role_permissions && ;
+                        (selectedWorkspace.role_permissions & (1 << 15)) !== 0; // USER_INVITE
+                        return;
+                        _jsxs("div", { className: "workspace-manager", children: [_jsxs("div", { className: "workspace-manager__header", children: [_jsx("h2", { children: "Workspaces" }), _jsx("button", { className: "btn btn--primary", onClick: () => setShowCreateModal(true), children: "Create Workspace" })] }), error && ()
+                                    < div, " className=\"alert alert--error\">", _jsxs("p", { children: ["Error loading workspaces: ", error] }), _jsx("button", { onClick: refreshWorkspaces, children: "Retry" })] });
+                    };
                 };
-            };
+            }
+            finally {
+            }
         };
     };
 }

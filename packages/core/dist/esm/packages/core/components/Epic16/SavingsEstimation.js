@@ -37,39 +37,24 @@ productivity: {
 ;
 {
     const [inputs, setInputs] = useState({});
-    monthlyUsage: 25,
-        projectDuration;
-    12,
-        templateTokens;
-    1200,
-        templateAccuracy;
-    95,
-        templateSetupTime;
-    5,
-        manualTokens;
-    2000,
-        manualAccuracy;
-    75,
-        manualCreationTime;
-    45,
-        manualIterations;
-    2.5,
-        claudeTokenCost;
-    0.015,
-        hourlyLabourCost;
-    75,
-        revisionCost;
-    25,
-        templateQualityScore;
-    8.5,
-        manualQualityScore;
-    6.5,
-    ;
+    monthlyUsage: 25;
+    projectDuration: 12;
+    templateTokens: 1200;
+    templateAccuracy: 95;
+    templateSetupTime: 5;
+    manualTokens: 2000;
+    manualAccuracy: 75;
+    manualCreationTime: 45;
+    manualIterations: 2.5;
+    claudeTokenCost: 0.015;
+    hourlyLabourCost: 75;
+    revisionCost: 25;
+    templateQualityScore: 8.5;
+    manualQualityScore: 6.5;
 }
 ;
 // Industry presets
-const industryPresets = {
-    content: {
+const industryPresets = { content: {
         monthlyUsage: 40,
         templateTokens: 800,
         templateAccuracy: 92,
@@ -80,7 +65,7 @@ const industryPresets = {
         manualIterations: 3,
         hourlyLabourCost: 65,
         templateQualityScore: 8.2,
-        manualQualityScore: 6.0,
+        manualQualityScore: 6.0
     },
     development: {
         monthlyUsage: 60,
@@ -93,7 +78,7 @@ const industryPresets = {
         manualIterations: 2,
         hourlyLabourCost: 95,
         templateQualityScore: 9.0,
-        manualQualityScore: 7.0,
+        manualQualityScore: 7.0
     },
     marketing: {
         monthlyUsage: 30,
@@ -106,7 +91,7 @@ const industryPresets = {
         manualIterations: 3.5,
         hourlyLabourCost: 70,
         templateQualityScore: 8.0,
-        manualQualityScore: 5.5,
+        manualQualityScore: 5.5
     },
     research: {
         monthlyUsage: 20,
@@ -119,18 +104,17 @@ const industryPresets = {
         manualIterations: 2,
         hourlyLabourCost: 85,
         templateQualityScore: 9.2,
-        manualQualityScore: 7.5,
-    },
-    // Load industry preset
-    useEffect() { }
-}();
-{
+        manualQualityScore: 7.5
+    }
+};
+// Load industry preset
+useEffect(() => {
     if (industryPreset && industryPresets[industryPreset]) {
         const preset = industryPresets[industryPreset];
-        setInputs(prev => ({}), ...prev, ...preset);
+        setInputs(prev => ({}), ...prev);
     }
-    ;
-}
+}, ...preset);
+;
 [industryPreset];
 ;
 // Calculate savings breakdown
@@ -165,54 +149,43 @@ const savingsBreakdown = useMemo(() => {
         tokenSavings: {
             templateTokenCost,
             manualTokenCost,
-            netTokenSavings,
-            tokenEfficiency
+            netTokenSavings
         },
+        tokenEfficiency,
         timeSavings: {
             templateTimeSpent: templateTimeCost,
             manualTimeSpent: manualTimeCost,
-            netTimeSavings,
-            timeEfficiency
+            netTimeSavings
         },
-        qualitySavings: {
-            templateQualityValue,
-            manualQualityValue,
-            qualityImprovement
-        },
-        totalSavings: {
-            monthlySavings,
+        timeEfficiency,
+        qualitySavings: { templateQualityValue,
+            manualQualityValue },
+        qualityImprovement,
+        totalSavings: { monthlySavings,
             yearlySavings,
-            totalProjectSavings,
-            savingsPerUse
-        },
-        productivity: {
-            productivityGain,
-            capacityIncrease,
-            errorReduction
-        },
-        return: breakdown
-    }, [inputs];
-});
+            totalProjectSavings },
+        savingsPerUse,
+        productivity: { productivityGain,
+            capacityIncrease },
+        errorReduction
+    };
+    return breakdown;
+}, [inputs]);
 // Notify parent of changes
-useEffect(() => {
-    onSavingsChange?.(savingsBreakdown);
-}, [savingsBreakdown, onSavingsChange]);
+useEffect(() => { onSavingsChange?.(savingsBreakdown); }, [savingsBreakdown, onSavingsChange]);
 const handleInputChange = (field, value) => {
-    setInputs(prev => ({}), ...prev, [field], value);
+    setInputs(prev => ({}), ...prev[field], value);
 };
+;
 ;
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat('en-US', {});
-    style: 'currency',
-        currency;
-    'USD',
-        minimumFractionDigits;
-    2,
-        maximumFractionDigits;
-    2,
-    ;
-}, format;
-(amount);
+    style: 'currency';
+    currency: 'USD';
+    minimumFractionDigits: 2;
+    maximumFractionDigits: 2;
+};
+format(amount);
 ;
 const formatPercentage = (value) => {
     return `${value.toFixed(1)}%`;

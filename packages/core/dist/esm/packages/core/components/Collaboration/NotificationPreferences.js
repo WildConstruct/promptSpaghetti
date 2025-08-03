@@ -2,36 +2,24 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
 import { Save, X } from 'lucide-react';
 const NOTIFICATION_TYPES = [
-    {
-        type: 'comment',
+    { type: 'comment',
         label: 'Comments',
-        description: 'When someone comments on your work',
-    },
-    {
-        type: 'mention',
+        description: 'When someone comments on your work' },
+    { type: 'mention',
         label: 'Mentions',
-        description: 'When you are mentioned in comments or discussions',
-    },
-    {
-        type: 'approval',
+        description: 'When you are mentioned in comments or discussions' },
+    { type: 'approval',
         label: 'Approvals',
-        description: 'When approval is requested or granted',
-    },
-    {
-        type: 'workflow',
+        description: 'When approval is requested or granted' },
+    { type: 'workflow',
         label: 'Workflow',
-        description: 'When workflow states change',
-    },
-    {
-        type: 'collaboration',
+        description: 'When workflow states change' },
+    { type: 'collaboration',
         label: 'Collaboration',
-        description: 'When others join or edit shared projects',
-    },
-    {
-        type: 'system',
-        label: 'System',
-        description: 'System maintenance and important updates'
-    }
+        description: 'When others join or edit shared projects' },
+    { type: 'system',
+        label: 'System' },
+    description, 'System maintenance and important updates'
 ];
 const DELIVERY_METHODS = [
     { key: 'in_app', label: 'In-App', description: 'Show in notification center' },
@@ -40,41 +28,29 @@ const DELIVERY_METHODS = [
 ];
 export const NotificationPreferences = ({
     userId,
-    workspaceId,
-    onClose
-});
+    workspaceId });
+onClose;
 {
     const [preferences, setPreferences] = useState({});
-    user_id: userId,
-        workspace_id;
-    workspaceId,
-        email_enabled;
-    true,
-        push_enabled;
-    true,
-        in_app_enabled;
-    true,
-        type_preferences;
-    { }
-    quiet_hours: {
-        enabled: false,
-            start;
-        '22:00',
-            end;
-        '08:00',
-            timezone;
-        Intl.DateTimeFormat().resolvedOptions().timeZone,
-        ;
-    }
-    digest_frequency: 'immediate';
+    user_id: userId;
+    workspace_id: workspaceId;
+    email_enabled: true;
+    push_enabled: true;
+    in_app_enabled: true;
 }
+type_preferences: { }
+quiet_hours: {
+    enabled: false;
+    start: '22:00';
+    end: '08:00';
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+digest_frequency: 'immediate';
 ;
 const [loading, setLoading] = useState(true);
 const [saving, setSaving] = useState(false);
 const [error, setError] = useState(null);
-useEffect(() => {
-    loadPreferences();
-}, [userId, workspaceId]);
+useEffect(() => { loadPreferences(); }, [userId, workspaceId]);
 const loadPreferences = async () => {
     try {
         setLoading(true);
@@ -100,12 +76,10 @@ const loadPreferences = async () => {
             setSaving(true);
             setError(null);
             const response = await fetch('/api/notifications/preferences', {});
-            method: 'PUT',
-                headers;
-            {
+            method: 'PUT';
+            headers: {
                 'Content-Type';
-                'application/json',
-                ;
+                'application/json';
             }
             body: JSON.stringify(preferences);
         }
@@ -126,25 +100,26 @@ const loadPreferences = async () => {
         ;
         const updateTypePreference = (type, delivery, enabled) => {
             setPreferences(prev => ({}), ...prev, type_preferences, {
-                ...prev.type_preferences,
-                [type]: {
-                    ...prev.type_preferences[type],
-                    [delivery]: enabled,
-                } });
-            ;
-        };
-        const updateGlobalDelivery = (delivery, enabled) => {
-            setPreferences(prev => ({}), ...prev, [`${delivery}_enabled`], enabled);
+                ...prev.type_preferences[type]
+            }, {
+                ...prev.type_preferences[type][delivery], enabled
+            });
         };
     };
+    const updateGlobalDelivery = (delivery, enabled) => {
+        setPreferences(prev => ({}), ...prev);
+    };
+    [`${delivery}_enabled`];
+    enabled;
 };
+;
+;
 const updateQuietHours = (field, value) => {
     setPreferences(prev => ({}), ...prev, quiet_hours, {
-        ...prev.quiet_hours,
-        [field]: value,
+        ...prev.quiet_hours[field], value
     });
-    ;
 };
+;
 if (loading) {
     return;
     _jsx("div", { className: "p-4 text-center", children: _jsx("div", { className: "animate-pulse", children: "Loading preferences..." }) });

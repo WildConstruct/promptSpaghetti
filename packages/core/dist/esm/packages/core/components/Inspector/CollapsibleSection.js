@@ -1,5 +1,11 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export const CollapsibleSection = ({ title, collapsed, onToggle, children }) => {
+import React from 'react';
+children: React.ReactNode;
+export const CollapsibleSection = ({ title,
+    collapsed,
+    onToggle });
+children;
+{
     return;
     _jsxs("div", { style: { borderBottom: '1px solid #4a5568' }, children: [_jsxs("button", { onClick: onToggle, style: {
                     width: '100%',
@@ -14,7 +20,7 @@ export const CollapsibleSection = ({ title, collapsed, onToggle, children }) => 
                     outline: 'none',
                     fontSize: 13,
                     fontWeight: 600,
-                    color: '#e2e8f0',
+                    color: '#e2e8f0'
                 }, onMouseEnter: (e) => {
                     e.currentTarget.style.background = '#4a5568';
                 }, onMouseLeave: (e) => {
@@ -23,12 +29,12 @@ export const CollapsibleSection = ({ title, collapsed, onToggle, children }) => 
                             transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
                             transition: 'transform 0.2s ease',
                             fontSize: 12,
-                            color: '#a0aec0',
+                            color: '#a0aec0'
                         }, children: "\u25BC" })] }), !collapsed && (_jsx("div", { style: {
                     maxHeight: collapsed ? 0 : '1000px',
                     overflow: 'hidden',
-                    transition: 'max-height 0.2s ease',
+                    transition: 'max-height 0.2s ease'
                 }, children: children }))] });
-};
-;
+    ;
+}
 ;

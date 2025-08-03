@@ -26,9 +26,8 @@ export const CommandPaletteIntegration = ({
     onTemplateApply,
     onSave,
     selectedNodes = [],
-    customActions = [],
-    disabled = false
-});
+    customActions = [] });
+disabled = false;
 {
     const [isOpen, setIsOpen] = useState(false);
     const [recentCommands, setRecentCommands] = useState([]);
@@ -43,9 +42,7 @@ export const CommandPaletteIntegration = ({
             return;
         setIsOpen(true);
     }, [disabled]);
-    const handleClose = useCallback(() => {
-        setIsOpen(false);
-    }, []);
+    const handleClose = useCallback(() => { setIsOpen(false); }, []);
     // Set up keyboard shortcuts
     useCommandPaletteShortcuts(handleOpen, handleClose, isOpen);
     // Generation flow handler
@@ -95,23 +92,23 @@ const executeGenerationFlow = async (flow, params) => {
     // Character development chain generation
     const generateCharacterDevelopmentChain = async();
     ;
-    params: (Record),
-        startPosition;
-    {
+    params: Record;
+    startPosition: {
         x: number;
         y: number;
     }
 };
 {
-    const { 'character-name': name, 'character-role': role, 'genre': genre, 'personality-traits': traits = [], 'character-flaws': flaws = [], 'complexity-level': complexity = 'moderate', 'include-dialogue': includeDialogue = true, } = params;
-    const spacing = 200;
-    const currentPosition = { ...startPosition };
-    // 1. Character Name Generator
-    const nameNode = createCharacterNode('Character Name', {});
-    choices: [
-        { text: name || 'Main Character', weight: 100 }
-    ];
+    const { 'character-name': name, 'character-role': role, 'genre': genre, 'personality-traits': traits = [], 'character-flaws': flaws = [], 'complexity-level': complexity = 'moderate', 'include-dialogue': includeDialogue = true };
 }
+params;
+const spacing = 200;
+const currentPosition = { ...startPosition };
+// 1. Character Name Generator
+const nameNode = createCharacterNode('Character Name', {});
+choices: [
+    { text: name || 'Main Character', weight: 100 }
+];
 currentPosition;
 ;
 addNode(nameNode);
@@ -143,8 +140,7 @@ currentPosition.x = startPosition.x;
 if (complexity !== 'simple') {
     const backgroundChoices = generateBackgroundChoices(role, genre);
     const backgroundNode = createCharacterNode('Background', {});
-    choices: backgroundChoices,
-    ;
+    choices: backgroundChoices;
 }
 currentPosition;
 ;
@@ -154,8 +150,7 @@ currentPosition.x += spacing;
 if (includeDialogue && complexity === 'advanced') {
     const dialogueChoices = generateDialogueChoices(genre, traits);
     const dialogueNode = createCharacterNode('Dialogue Style', {});
-    choices: dialogueChoices,
-    ;
+    choices: dialogueChoices;
 }
 currentPosition;
 ;
@@ -172,9 +167,8 @@ setTimeout(() => {
 // Story structure generation
 const generateStoryStructure = async();
 ;
-params: (Record),
-    startPosition;
-{
+params: Record;
+startPosition: {
     x: number;
     y: number;
 }
@@ -200,9 +194,8 @@ currentPosition.y += spacing;
 if (logline) {
     const loglineNode = createOutputNode(`Logline: ${logline}`, {});
 }
-x: startPosition.x + spacing,
-    y;
-startPosition.y;
+x: startPosition.x + spacing;
+y: startPosition.y;
 ;
 addNode(loglineNode);
 setTimeout(() => {
@@ -212,17 +205,17 @@ setTimeout(() => {
 // Dialogue generator
 const generateDialogueNode = async();
 ;
-params: (Record),
-    startPosition;
-{
+params: Record;
+startPosition: {
     x: number;
     y: number;
 }
 {
-    const { 'scene-description': description, 'characters-present': characters, 'scene-tone': tone, } = params;
-    const dialogueStyles = generateDialogueStylesForTone(tone);
-    const dialogueNode = createCharacterNode(`${tone} Dialogue`, {});
+    const { 'scene-description': description, 'characters-present': characters, 'scene-tone': tone };
 }
+params;
+const dialogueStyles = generateDialogueStylesForTone(tone);
+const dialogueNode = createCharacterNode(`${tone} Dialogue`, {});
 choices: dialogueStyles.map((style, index) => ({}), text, style, weight, 100 - (index * 10));
 startPosition;
 ;
@@ -238,10 +231,8 @@ if (description) {
 ;
 addNode(contextNode);
 const outputNode = createOutputNode('Generated Dialogue', {});
-x: startPosition.x + 200,
-    y;
-startPosition.y,
-;
+x: startPosition.x + 200;
+y: startPosition.y;
 ;
 addNode(outputNode);
 setTimeout(() => {
@@ -251,27 +242,21 @@ setTimeout(() => {
 // Helper functions for node creation
 const createCharacterNode = (title, data, position) => ({
     id: `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` });
-type: 'default',
-    position,
-    data;
-{
-    nodeType: 'WeightedChoice',
-        title;
-    title,
-    ;
-    data;
+type: 'default';
+position;
+data: {
+    nodeType: 'WeightedChoice';
+    title: title;
 }
+data;
 ;
 const createOutputNode = (title, position) => ({
     id: `output-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` });
-type: 'default',
-    position,
-    data;
-{
-    nodeType: 'Output',
-        title;
-    title,
-    ;
+type: 'default';
+position;
+data: {
+    nodeType: 'Output';
+    title: title;
 }
 ;
 // Content generation helpers
@@ -283,21 +268,24 @@ const generateBackgroundChoices = (role, genre) => {
             comedy: ['Failed comedian turned office worker', 'Overprotective parent', 'Aspiring influencer'],
             thriller: ['Former intelligence operative', 'Witness protection program', 'Investigative journalist'],
             'sci-fi': ['Space colony researcher', 'AI developer', 'Time travel experiment subject'],
-            fantasy: ['Chosen one prophecy', 'Royal bloodline secret', 'Ancient magic wielder'],
-        },
-        antagonist: {
-            drama: ['Corrupt corporate executive', 'Manipulative family member', 'Fallen mentor figure'],
-            action: ['International arms dealer', 'Rogue government agent', 'Criminal mastermind'],
-            comedy: ['Uptight boss', 'Rival love interest', 'Overzealous HOA president'],
-            thriller: ['Serial killer with pattern', 'Government conspiracy leader', 'Blackmail specialist'],
-            'sci-fi': ['AI overlord', 'Alien invasion commander', 'Mad scientist'],
-            fantasy: ['Dark lord seeking power', 'Corrupted wizard', 'Ancient evil awakening'],
-        },
-        const: roleBackgrounds = backgrounds[role],
-        const: genreBackgrounds = roleBackgrounds?.[genre] || ['Mysterious past', 'Hidden identity', 'Secret motivation'],
-        return: genreBackgrounds.map((bg, index) => ({}), text, bg, weight, 100 - (index * 15))
+            fantasy: ['Chosen one prophecy', 'Royal bloodline secret', 'Ancient magic wielder']
+        }
     };
+    antagonist: {
+        drama: ['Corrupt corporate executive', 'Manipulative family member', 'Fallen mentor figure'];
+        action: ['International arms dealer', 'Rogue government agent', 'Criminal mastermind'];
+        comedy: ['Uptight boss', 'Rival love interest', 'Overzealous HOA president'];
+        thriller: ['Serial killer with pattern', 'Government conspiracy leader', 'Blackmail specialist'];
+        'sci-fi';
+        ['AI overlord', 'Alien invasion commander', 'Mad scientist'];
+        fantasy: ['Dark lord seeking power', 'Corrupted wizard', 'Ancient evil awakening'];
+    }
 };
+const roleBackgrounds = backgrounds[role];
+const genreBackgrounds = roleBackgrounds?.[genre] || ['Mysterious past', 'Hidden identity', 'Secret motivation'];
+return genreBackgrounds.map((bg, index) => ({}), text, bg, weight, 100 - (index * 15));
+;
+;
 const generateDialogueChoices = (genre, _____traits) => {
     const baseStyles = {
         drama: ['Introspective and thoughtful', 'Emotionally charged', 'Philosophical undertones'],
@@ -305,12 +293,11 @@ const generateDialogueChoices = (genre, _____traits) => {
         comedy: ['Self-deprecating humor', 'Timing-based delivery', 'Absurd observations'],
         thriller: ['Cryptic and mysterious', 'Tension-building questions', 'Paranoid implications'],
         'sci-fi': ['Technical jargon usage', 'Future-oriented thinking', 'Scientific speculation'],
-        fantasy: ['Archaic speech patterns', 'Mystical references', 'Honor-based declarations'],
+        fantasy: ['Archaic speech patterns', 'Mystical references', 'Honor-based declarations']
     };
-    const genreStyles = baseStyles[genre] || ['Natural conversation', 'Character-driven speech', 'Situation-appropriate tone'];
-    return genreStyles.map((style, index) => ({}), text, `${style} dialogue`);
 };
-weight: 100 - (index * 12);
+const genreStyles = baseStyles[genre] || ['Natural conversation', 'Character-driven speech', 'Situation-appropriate tone'];
+return genreStyles.map((style, index) => ({}), text, `${style} dialogue`, weight, 100 - (index * 12));
 ;
 ;
 const generateDialogueStylesForTone = (tone) => {
@@ -348,21 +335,22 @@ const generateDialogueStylesForTone = (tone) => {
         emotional: [
             'Characters struggle to find the right words',
             'Dialogue reveals character growth and change',
-            'Honest admissions of fear or hope',
-            'Conversations that heal or wound deeply'
+            'Honest admissions of fear or hope'
         ]
     };
-    return toneStyles[tone] || [
-        'Natural, character-appropriate dialogue',
-        'Situation-driven conversation',
-        'Authentic character voices',
-        'Purpose-driven exchanges'
-    ];
+    'Conversations that heal or wound deeply';
 };
+;
+return toneStyles[tone] || [
+    'Natural, character-appropriate dialogue',
+    'Situation-driven conversation',
+    'Authentic character voices',
+    'Purpose-driven exchanges'
+];
+;
 // Enhanced custom actions for film industry
 const filmIndustryActions = [
-    {
-        id: 'quick-character',
+    { id: 'quick-character',
         title: 'Quick Character Generator',
         description: 'Rapidly generate a basic character with random traits',
         category: 'generation',
@@ -380,68 +368,45 @@ const filmIndustryActions = [
 ];
 ;
 await handleGenerationStart({});
-id: 'character-development',
-    name;
-'Quick Character',
-    description;
-'Fast character generation',
-    icon;
-'⚡',
-    category;
-'Character',
-    estimatedTime;
-'30 seconds',
-    complexity;
-'simple',
-    outputType;
-'node_chain',
-    steps;
-[],
-;
+id: 'character-development';
+name: 'Quick Character';
+description: 'Fast character generation';
+icon: '⚡';
+category: 'Character';
+estimatedTime: '30 seconds';
+complexity: 'simple';
+outputType: 'node_chain';
+steps: [];
 quickCharacterData;
 ;
 {
-    id: 'scene-starter',
-        title;
-    'Scene Starter Pack',
-        description;
-    'Generate a complete scene setup with location, characters, and conflict',
-        category;
-    'generation',
-        icon;
-    '🎬',
-        keywords;
-    ['scene', 'setup', 'location', 'conflict'],
-        action;
-    () => {
-        // This would open a simplified scene generation flow
-        console.log('Scene starter pack generation');
-    };
-    {
-        id: 'export-screenplay',
-            title;
-        'Export as Screenplay Format',
-            description;
-        'Export the generated content in standard screenplay format',
-            category;
-        'export',
-            icon;
-        '📝',
-            keywords;
-        ['screenplay', 'format', 'industry', 'standard'],
-            action;
-        () => {
-            onExport?.('pdf'); // Assuming PDF export formats as screenplay
-            ;
-            const allCustomActions = [...customActions, ...filmIndustryActions];
-            if (!isOpen) {
-                return null;
-                return;
-                _jsx(CommandPalette, { isOpen: isOpen, onClose: handleClose, nodes: nodes, edges: edges, selectedNodes: selectedNodes, onGenerationStart: handleGenerationStart, onNodeCreate: onNodeCreate || (() => { }), onNodeDelete: onNodesDelete || (() => { }), onExport: onExport || (() => { }), onTemplateApply: onTemplateApply || (() => { }), theme: theme, recentCommands: recentCommands, customActions: allCustomActions });
-                ;
-            }
-            ;
-            export default CommandPaletteIntegration;
-        };
+    id: 'scene-starter';
+    title: 'Scene Starter Pack';
+    description: 'Generate a complete scene setup with location, characters, and conflict';
+    category: 'generation';
+    icon: '🎬';
+    keywords: ['scene', 'setup', 'location', 'conflict'];
+    action: () => { };
+    // This would open a simplified scene generation flow
+    console.log('Scene starter pack generation');
+}
+{
+    id: 'export-screenplay';
+    title: 'Export as Screenplay Format';
+    description: 'Export the generated content in standard screenplay format';
+    category: 'export';
+    icon: '📝';
+    keywords: ['screenplay', 'format', 'industry', 'standard'];
+    action: () => { };
+    onExport?.('pdf'); // Assuming PDF export formats as screenplay
+    ;
+    const allCustomActions = [...customActions, ...filmIndustryActions];
+    if (!isOpen) {
+        return null;
+        return;
+        _jsx(CommandPalette, { isOpen: isOpen, onClose: handleClose, nodes: nodes, edges: edges, selectedNodes: selectedNodes, onGenerationStart: handleGenerationStart, onNodeCreate: onNodeCreate || (() => { }), onNodeDelete: onNodesDelete || (() => { }), onExport: onExport || (() => { }), onTemplateApply: onTemplateApply || (() => { }), theme: theme, recentCommands: recentCommands, customActions: allCustomActions });
+        ;
     }
+    ;
+    export default CommandPaletteIntegration;
 }

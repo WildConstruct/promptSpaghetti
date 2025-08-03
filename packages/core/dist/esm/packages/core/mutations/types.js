@@ -6,7 +6,6 @@
  */
 export var OperationType;
 (function (OperationType) {
-    // Node Operations
     OperationType["NODE_ADD"] = "NODE_ADD";
     OperationType["NODE_DELETE"] = "NODE_DELETE";
     OperationType["NODE_UPDATE"] = "NODE_UPDATE";
@@ -29,28 +28,19 @@ export var OperationType;
     // Graph Structure Operations
     OperationType["GRAPH_CLEAR"] = "GRAPH_CLEAR";
     OperationType["GRAPH_IMPORT"] = "GRAPH_IMPORT";
-    OperationType["GRAPH_MERGE"] = "GRAPH_MERGE";
-    /**
-    * Base interface for all graph mutation operations
-    */
-    OperationType[OperationType["export"] = void 0] = "export";
-    OperationType[OperationType["interface"] = void 0] = "interface";
-    OperationType[OperationType["GraphOperation"] = void 0] = "GraphOperation";
 })(OperationType || (OperationType = {}));
-{
-    id: string;
-    type: OperationType;
-    timestamp: Date;
-    userId ?  : string;
-    sessionId ?  : string;
-    metadata ?  : Record;
-    // =============================================================================
-    // NODE OPERATIONS
-    // =============================================================================
-    /**
-    * Node addition operation
-    */
-}
+GRAPH_MERGE = 'GRAPH_MERGE';
+;
+;
+;
+;
+;
+;
+;
+;
+/**
+* Types of conflicts that can occur
+*/
 export var ConflictType;
 (function (ConflictType) {
     ConflictType["CONCURRENT_EDIT"] = "CONCURRENT_EDIT";
@@ -66,102 +56,107 @@ export var ConflictType;
     ConflictType[ConflictType["ConflictResolutionStrategy"] = void 0] = "ConflictResolutionStrategy";
 })(ConflictType || (ConflictType = {}));
 {
-    LAST_WRITER_WINS = 'LAST_WRITER_WINS',
-        FIRST_WRITER_WINS = 'FIRST_WRITER_WINS',
-        MERGE = 'MERGE',
-        MANUAL = 'MANUAL',
-        OPERATIONAL_TRANSFORM = 'OPERATIONAL_TRANSFORM';
-}
-GraphOperation,
-    state;
-GraphState;
-(Promise) | ValidationError;
-/**
- * Type guard to check if operation is a node operation
- */
-export function isNodeOperation(operation) {
-    return operation.type.startsWith('NODE_');
-    EdgeAddOperation | EdgeDeleteOperation | EdgeUpdateOperation;
-    {
-        return operation.type.startsWith('EDGE_');
-        VariationAddOperation | VariationDeleteOperation | VariationUpdateOperation | VariationReorderOperation;
-        {
-            return operation.type.startsWith('VARIATION_');
+    LAST_WRITER_WINS = 'LAST_WRITER_WINS';
+    FIRST_WRITER_WINS = 'FIRST_WRITER_WINS';
+    MERGE = 'MERGE';
+    MANUAL = 'MANUAL';
+    OPERATIONAL_TRANSFORM = 'OPERATIONAL_TRANSFORM';
+    GraphOperation;
+    state: GraphState;
+    (Promise) | ValidationError;
+    maxBatchSize: number;
+    // Performance settings
+    enableSnapshots: boolean;
+    snapshotInterval: number;
+    enableCompression: boolean;
+    // Collaborative features
+    enableCollaboration: boolean;
+    syncDelay: number;
+    maxCollaborators: number;
+    // Debug and monitoring
+    enableLogging: boolean;
+    enableMetrics: boolean;
+    logLevel: 'error' | 'warn' | 'info' | 'debug';
+    /**
+     * Type guard to check if operation is a node operation
+     */
+    export function isNodeOperation(operation) {
+        return operation.type.startsWith('NODE_');
+        /**
+        * Type guard to check if operation is an edge operation
+        */
+        export function isEdgeOperation(operation) {
+            return operation.type.startsWith('EDGE_');
             /**
-            * Type guard to check if operation is a batch operation
+            * Type guard to check if operation is a variation operation
             */
-            export function isBatchOperation(operation) {
-                return operation.type === OperationType.BATCH_OPERATION;
-                // =============================================================================
-                // EVENTS
-                // =============================================================================
+            export function isVariationOperation(operation) {
+                return operation.type.startsWith('VARIATION_');
                 /**
-                 * Events emitted by the mutation engine
-                 */
+                * Type guard to check if operation is a batch operation
+                */
+                export function isBatchOperation(operation) { }
+                return operation.type === OperationType.BATCH_OPERATION;
+                ;
+                'operation_failed';
+                {
+                    operation: GraphOperation;
+                    error: string;
+                    validationErrors ?  : ValidationError;
+                }
+                ;
+                'batch_executed';
+                {
+                    batchId: string;
+                    results: OperationResult;
+                    success: boolean;
+                }
+                ;
+                'undo_executed';
+                {
+                    operation: GraphOperation;
+                    success: boolean;
+                }
+                ;
+                'redo_executed';
+                {
+                    operation: GraphOperation;
+                    success: boolean;
+                }
+                ;
+                'conflict_detected';
+                {
+                    conflict: OperationConflict;
+                    resolutionStrategy: ConflictResolutionStrategy;
+                }
+                ;
+                'conflict_resolved';
+                {
+                    conflict: OperationConflict;
+                    resolution: GraphOperation;
+                    strategy: ConflictResolutionStrategy;
+                }
+                ;
+                'snapshot_created';
+                {
+                    snapshot: GraphSnapshot;
+                    reason: 'operation' | 'interval' | 'manual';
+                }
             }
+            ;
+            'validation_error';
+            {
+                operation: GraphOperation;
+                errors: ValidationError;
+            }
+            ;
+            'state_changed';
+            {
+                previousState: GraphState;
+                newState: GraphState;
+                operation: GraphOperation;
+            }
+            ;
         }
     }
-    ;
-    'operation_failed';
-    {
-        operation: GraphOperation;
-        error: string;
-        validationErrors ?  : ValidationError;
-    }
-    ;
-    'batch_executed';
-    {
-        batchId: string;
-        results: OperationResult;
-        success: boolean;
-    }
-    ;
-    'undo_executed';
-    {
-        operation: GraphOperation;
-        success: boolean;
-    }
-    ;
-    'redo_executed';
-    {
-        operation: GraphOperation;
-        success: boolean;
-    }
-    ;
-    'conflict_detected';
-    {
-        conflict: OperationConflict;
-        resolutionStrategy: ConflictResolutionStrategy;
-    }
-    ;
-    'conflict_resolved';
-    {
-        conflict: OperationConflict;
-        resolution: GraphOperation;
-        strategy: ConflictResolutionStrategy;
-    }
-    ;
-    'snapshot_created';
-    {
-        snapshot: GraphSnapshot;
-        reason: 'operation' | 'interval' | 'manual',
-        ;
-    }
-    ;
-    'validation_error';
-    {
-        operation: GraphOperation;
-        errors: ValidationError;
-    }
-    ;
-    'state_changed';
-    {
-        previousState: GraphState;
-        newState: GraphState;
-        operation: GraphOperation;
-    }
-    ;
-    /**
-     * Event listener type for mutation engine
-     */
 }

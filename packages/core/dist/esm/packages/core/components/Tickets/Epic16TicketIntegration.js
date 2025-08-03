@@ -6,67 +6,62 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
  * management functionality including dashboard, details view, and service integration.
  */
 import { useState, useEffect, useMemo } from 'react';
-import { Epic16TicketIntegrationService } from '../../services/Epic16TicketIntegrationService';
+import { Epic16TicketIntegrationService } from TicketIntegrationConfig;
+from;
+'../../services/Epic16TicketIntegrationService';
 import TicketManagementDashboard from './TicketManagementDashboard';
 import TicketDetailsView from './TicketDetailsView';
-{
-    // Service instance
+{ // Service instance
     const ticketService = useMemo(() => {
         return new Epic16TicketIntegrationService(config);
     }, [config]);
     // State management
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [view, setView] = useState('dashboard');
-    const [notifications, setNotifications] = useState < Array < {
-        id: string,
-        type: 'success' | 'error' | 'info' | 'warning',
-        message: string,
-        timestamp: Date
-    } >> ([]);
+    const [notifications, setNotifications] = useState([]);
     // Set up event listeners for service events
     useEffect(() => {
         const handleTicketCreated = (data) => {
             setNotifications(prev => [...prev, {}]);
             id: `created-${data.ticket.id}`;
         };
-    }, type, 'success', message, `Ticket ${data.ticket.id} has been created`);
+        type: 'success';
+        message: `Ticket ${data.ticket.id} has been created`;
+    }, timestamp, new Date());
+    ;
 }
-timestamp: new Date();
 ;
-;
-const handleTicketStatusChanged = (data) => , ticket;
+const handleTicketStatusChanged = (data) => ticket, MarketplaceTicket;
 oldStatus: string;
 newStatus: string;
 {
     setNotifications(prev => [...prev, {}]);
     id: `status-${data.ticket.id}-${Date.now()}`;
 }
-type: 'info',
-    message;
-`Ticket ${data.ticket.id} status changed from ${data.oldStatus} to ${data.newStatus}`;
+type: 'info';
+message: `Ticket ${data.ticket.id} status changed from ${data.oldStatus} to ${data.newStatus}`;
 timestamp: new Date();
 ;
 ;
-const handleTicketEscalated = (data) => , ticket;
+const handleTicketEscalated = (data) => ticket, MarketplaceTicket;
 reason: string;
 {
     setNotifications(prev => [...prev, {}]);
     id: `escalated-${data.ticket.id}`;
 }
-type: 'warning',
-    message;
-`Ticket ${data.ticket.id} has been escalated: ${data.reason}`;
+type: 'warning';
+message: `Ticket ${data.ticket.id} has been escalated: ${data.reason}`;
 timestamp: new Date();
 ;
 ;
-const handleCommentAdded = (data) => , ticket;
+const handleCommentAdded = (data) => ;
+ticket: MarketplaceTicket;
 {
     setNotifications(prev => [...prev, {}]);
     id: `comment-${data.ticket.id}-${Date.now()}`;
 }
-type: 'info',
-    message;
-`New comment added to ticket ${data.ticket.id}`;
+type: 'info';
+message: `New comment added to ticket ${data.ticket.id}`;
 timestamp: new Date();
 ;
 ;
@@ -76,7 +71,6 @@ ticketService.on('ticket_status_changed', handleTicketStatusChanged);
 ticketService.on('ticket_escalated', handleTicketEscalated);
 ticketService.on('comment_added', handleCommentAdded);
 return () => {
-    // Cleanup listeners
     ticketService.off('ticket_created', handleTicketCreated);
     ticketService.off('ticket_status_changed', handleTicketStatusChanged);
     ticketService.off('ticket_escalated', handleTicketEscalated);
@@ -97,9 +91,7 @@ const handleTicketSelect = (ticket) => {
     setView('details');
 };
 // Handle ticket update
-const handleTicketUpdate = (updatedTicket) => {
-    setSelectedTicket(updatedTicket);
-};
+const handleTicketUpdate = (updatedTicket) => { setSelectedTicket(updatedTicket); };
 // Handle view navigation
 const handleViewChange = (newView) => {
     setView(newView);
@@ -110,16 +102,16 @@ const handleViewChange = (newView) => {
     return;
     _jsxs("div", { className: "epic16-ticket-integration h-full flex flex-col relative", children: [_jsxs("div", { className: "bg-white border-b border-gray-200 px-6 py-4", children: [_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("nav", { className: "flex space-x-8", children: [_jsx("button", { onClick: () => handleViewChange('dashboard'), className: `py-2 px-1 border-b-2 font-medium text-sm ${view === 'dashboard'
                                             ? 'border-blue-500 text-blue-600'
-                                            : 'border-transparent text-gray-500 hover:text-gray-700',
-                                        }`, children: "Dashboard" }), selectedTicket && ()
+                                            : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Dashboard" }), selectedTicket && ()
                                         < button, "onClick=", () => handleViewChange('details'), "className=", `py-2 px-1 border-b-2 font-medium text-sm ${view === 'details'
                                         ? 'border-blue-500 text-blue-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700',
-                                    }`, "> Ticket Details"] }), ")}", userRole === 'admin' && ()
+                                        : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, "> Ticket Details"] }), ")}", userRole === 'admin' && ()
                                 < button, "onClick=", () => handleViewChange('settings'), "className=", `py-2 px-1 border-b-2 font-medium text-sm ${view === 'settings'
                                 ? 'border-blue-500 text-blue-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700',
-                            }`, "> Settings"] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("div", { className: "text-sm text-gray-600", children: ["User: ", _jsx("span", { className: "font-medium", children: userId })] }), _jsxs("div", { className: "text-sm text-gray-600", children: ["Role: ", _jsx("span", { className: "font-medium capitalize", children: userRole })] })] })] });
+                                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, "> Settings"] }), ")}"] }), _jsxs("div", { className: "flex items-center space-x-4", children: [_jsxs("div", { className: "text-sm text-gray-600", children: ["User: ", _jsx("span", { className: "font-medium", children: userId })] }), _jsxs("div", { className: "text-sm text-gray-600", children: ["Role: ", _jsx("span", { className: "font-medium capitalize", children: userRole })] })] })] });
 };
 div >
     { /* Main Content Area */}
@@ -167,11 +159,11 @@ div >
 ;
 {
     return;
-    _jsxs("div", { className: "p-6", children: [_jsx("h2", { className: "text-2xl font-bold text-gray-900 mb-6", children: "Integration Settings" }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "Epic 16 Configuration" }), _jsxs("div", { className: "space-y-4", children: [_jsx("div", { className: "bg-blue-50 border border-blue-200 rounded-md p-4", children: _jsxs("div", { className: "flex", children: [_jsx("div", { className: "flex-shrink-0", children: _jsx("svg", { className: "h-5 w-5 text-blue-400", viewBox: "0 0 20 20", fill: "currentColor", children: _jsx("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z", clipRule: "evenodd" }) }) }), _jsxs("div", { className: "ml-3", children: [_jsx("p", { className: "text-sm text-blue-700", children: "Epic 16 ticket integration is now active. This system provides comprehensive marketplace and community support ticket management with:," }), _jsxs("ul", { className: "mt-2 text-sm text-blue-700 list-disc list-inside space-y-1", children: [_jsx("li", { children: "12 marketplace ticket types with specialized workflows" }), _jsx("li", { children: "SLA tracking and automated escalation" }), _jsx("li", { children: "External system integrations (GitHub, Jira, Slack, Discord)" }), _jsx("li", { children: "Advanced comment system with visibility controls" }), _jsx("li", { children: "Real-time metrics and analytics" }), _jsx("li", { children: "Attachment management with security scanning" })] })] })] }) }), _jsxs("div", { className: "grid grid-cols-2 gap-6", children: [_jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 mb-2", children: "Service Status" }), _jsx("div", { className: "bg-green-50 border border-green-200 rounded-md p-3", children: _jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "h-4 w-4 text-green-400 mr-2", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z", clipRule: "evenodd" }) }), _jsx("span", { className: "text-sm font-medium text-green-800", children: "Active" })] }) })] }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 mb-2", children: "Integrations" }), _jsx("div", { className: "bg-yellow-50 border border-yellow-200 rounded-md p-3", children: _jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "h-4 w-4 text-yellow-400 mr-2", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z", clipRule: "evenodd" }) }), _jsx("span", { className: "text-sm font-medium text-yellow-800", children: "Configuration Required" })] }) })] })] }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 mb-2", children: "Features Overview" }), _jsx("div", { className: "bg-gray-50 border border-gray-200 rounded-md p-4", children: _jsxs("div", { className: "grid grid-cols-3 gap-4 text-sm", children: [_jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: "Ticket Types" }), _jsx("div", { className: "text-gray-600 mt-1", children: "Template Submission, Billing Disputes, Community Support, Technical Issues" })] }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: "Workflow Automation" }), _jsx("div", { className: "text-gray-600 mt-1", children: "Auto-assignment, SLA tracking, Escalation rules" })] }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: "External Systems" }), _jsx("div", { className: "text-gray-600 mt-1", children: "GitHub, Jira, Zendesk, Slack, Discord integrations" })] })] }) })] })] })] })] });
+    _jsxs("div", { className: "p-6", children: [_jsx("h2", { className: "text-2xl font-bold text-gray-900 mb-6", children: "Integration Settings" }), _jsxs("div", { className: "bg-white border border-gray-200 rounded-lg p-6", children: [_jsx("h3", { className: "text-lg font-medium text-gray-900 mb-4", children: "Epic 16 Configuration" }), _jsxs("div", { className: "space-y-4", children: [_jsx("div", { className: "bg-blue-50 border border-blue-200 rounded-md p-4", children: _jsxs("div", { className: "flex", children: [_jsx("div", { className: "flex-shrink-0", children: _jsx("svg", { className: "h-5 w-5 text-blue-400", viewBox: "0 0 20 20", fill: "currentColor", children: _jsx("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z", clipRule: "evenodd" }) }) }), _jsxs("div", { className: "ml-3", children: [_jsx("p", { className: "text-sm text-blue-700", children: "Epic 16 ticket integration is now active. This system provides comprehensive marketplace and community support ticket management with: }" }), _jsxs("ul", { className: "mt-2 text-sm text-blue-700 list-disc list-inside space-y-1", children: [_jsx("li", { children: "12 marketplace ticket types with specialized workflows" }), _jsx("li", { children: "SLA tracking and automated escalation" }), _jsx("li", { children: "External system integrations (GitHub, Jira, Slack, Discord)" }), _jsx("li", { children: "Advanced comment system with visibility controls" }), _jsx("li", { children: "Real-time metrics and analytics" }), _jsx("li", { children: "Attachment management with security scanning" })] })] })] }) }), _jsxs("div", { className: "grid grid-cols-2 gap-6", children: [_jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 mb-2", children: "Service Status" }), _jsx("div", { className: "bg-green-50 border border-green-200 rounded-md p-3", children: _jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "h-4 w-4 text-green-400 mr-2", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z", clipRule: "evenodd" }) }), _jsx("span", { className: "text-sm font-medium text-green-800", children: "Active" })] }) })] }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 mb-2", children: "Integrations" }), _jsx("div", { className: "bg-yellow-50 border border-yellow-200 rounded-md p-3", children: _jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "h-4 w-4 text-yellow-400 mr-2", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z", clipRule: "evenodd" }) }), _jsx("span", { className: "text-sm font-medium text-yellow-800", children: "Configuration Required" })] }) })] })] }), _jsxs("div", { children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 mb-2", children: "Features Overview" }), _jsx("div", { className: "bg-gray-50 border border-gray-200 rounded-md p-4", children: _jsxs("div", { className: "grid grid-cols-3 gap-4 text-sm", children: [_jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: "Ticket Types" }), _jsx("div", { className: "text-gray-600 mt-1", children: "Template Submission, Billing Disputes, Community Support, Technical Issues" })] }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: "Workflow Automation" }), _jsx("div", { className: "text-gray-600 mt-1", children: "Auto-assignment, SLA tracking, Escalation rules" })] }), _jsxs("div", { children: [_jsx("div", { className: "font-medium text-gray-900", children: "External Systems" }), _jsx("div", { className: "text-gray-600 mt-1", children: "GitHub, Jira, Zendesk, Slack, Discord integrations" })] })] }) })] })] })] })] });
     ;
 }
 ;
- > ;
+    > ;
 const NotificationSystem = ({ notifications }) => {
     if (notifications.length === 0)
         return null;
@@ -181,14 +173,12 @@ const NotificationSystem = ({ notifications }) => {
                     success: 'bg-green-50 border-green-200 text-green-700',
                     error: 'bg-red-50 border-red-200 text-red-700',
                     info: 'bg-blue-50 border-blue-200 text-blue-700',
-                    warning: 'bg-yellow-50 border-yellow-200 text-yellow-700',
+                    warning: 'bg-yellow-50 border-yellow-200 text-yellow-700'
                 };
-                return;
-                _jsxs("div", { className: `max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`, children: [_jsxs("div", { className: "flex", children: [_jsxs("div", { className: "flex-shrink-0", children: [notification.type === 'success' && ()
-                                            < svg, " className=\"h-5 w-5 text-green-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z", clipRule: "evenodd" })] }), ")}", notification.type === 'error' && ()
-                                    < svg, " className=\"h-5 w-5 text-red-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z", clipRule: "evenodd" })] }), ")}", notification.type === 'info' && ()
-                            < svg, " className=\"h-5 w-5 text-blue-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z", clipRule: "evenodd" })] }, notification.id);
-            }), notification.type === 'warning' && ()
+            }), "; return;", _jsxs("div", { className: `max-w-sm w-full border rounded-md p-4 shadow-lg ${colors[notification.type]}`, children: [_jsxs("div", { className: "flex", children: [_jsxs("div", { className: "flex-shrink-0", children: [notification.type === 'success' && ()
+                                        < svg, " className=\"h-5 w-5 text-green-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z", clipRule: "evenodd" })] }), ")}", notification.type === 'error' && ()
+                                < svg, " className=\"h-5 w-5 text-red-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z", clipRule: "evenodd" })] }), ")}", notification.type === 'info' && ()
+                        < svg, " className=\"h-5 w-5 text-blue-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z", clipRule: "evenodd" })] }, notification.id), ")}", notification.type === 'warning' && ()
                 < svg, " className=\"h-5 w-5 text-yellow-400\" viewBox=\"0 0 20 20\" fill=\"currentColor\">", _jsx("path", { fillRule: "evenodd", d: "M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z", clipRule: "evenodd" })] });
 };
 div >

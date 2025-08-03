@@ -2,6 +2,18 @@
  * Continuous Compliance Monitoring Service
  * Provides real-time compliance checking for security, privacy, and regulatory requirements
  */
+severity: 'low' | 'medium' | 'high' | 'critical';
+autoFix: boolean;
+frequency: 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly';
+check: (context) => Promise;
+source: string;
+content: string;
+timestamp: Date;
+description: string;
+detectedAt: Date;
+status: 'open' | 'investigating' | 'resolved' | 'accepted';
+assignedTo ?  : string;
+dueDate ?  : Date;
 export class ComplianceMonitor {
     checks = new Map();
     results = [];
@@ -29,10 +41,9 @@ export class ComplianceMonitor {
                 severity: 'critical',
                 autoFix: false,
                 frequency: 'hourly',
-                check: this.checkDataEncryption.bind(this),
+                check: this.checkDataEncryption.bind(this)
             },
-            {
-                id: 'gdpr_consent_management',
+            { id: 'gdpr_consent_management',
                 name: 'Consent Management',
                 description: 'Verify valid consent exists for data processing',
                 category: 'privacy',
@@ -40,10 +51,8 @@ export class ComplianceMonitor {
                 severity: 'high',
                 autoFix: false,
                 frequency: 'realtime',
-                check: this.checkConsentManagement.bind(this),
-            },
-            {
-                id: 'gdpr_data_retention',
+                check: this.checkConsentManagement.bind(this) },
+            { id: 'gdpr_data_retention',
                 name: 'Data Retention Compliance',
                 description: 'Ensure data is not retained beyond permitted periods',
                 category: 'privacy',
@@ -51,10 +60,8 @@ export class ComplianceMonitor {
                 severity: 'medium',
                 autoFix: true,
                 frequency: 'daily',
-                check: this.checkDataRetention.bind(this),
-            },
-            {
-                id: 'gdpr_data_portability',
+                check: this.checkDataRetention.bind(this) },
+            { id: 'gdpr_data_portability',
                 name: 'Data Portability Support',
                 description: 'Verify data export capabilities for user requests',
                 category: 'privacy',
@@ -62,13 +69,11 @@ export class ComplianceMonitor {
                 severity: 'medium',
                 autoFix: false,
                 frequency: 'weekly',
-                check: this.checkDataPortability.bind(this),
-            }
+                check: this.checkDataPortability.bind(this) }
             // SOC 2 Compliance Checks
             ,
             // SOC 2 Compliance Checks
-            {
-                id: 'soc2_access_controls',
+            { id: 'soc2_access_controls',
                 name: 'Access Control Implementation',
                 description: 'Verify proper access controls and authentication',
                 category: 'security',
@@ -76,10 +81,8 @@ export class ComplianceMonitor {
                 severity: 'critical',
                 autoFix: false,
                 frequency: 'hourly',
-                check: this.checkAccessControls.bind(this),
-            },
-            {
-                id: 'soc2_audit_logging',
+                check: this.checkAccessControls.bind(this) },
+            { id: 'soc2_audit_logging',
                 name: 'Comprehensive Audit Logging',
                 description: 'Ensure all security-relevant events are logged',
                 category: 'security',
@@ -87,10 +90,8 @@ export class ComplianceMonitor {
                 severity: 'high',
                 autoFix: false,
                 frequency: 'realtime',
-                check: this.checkAuditLogging.bind(this),
-            },
-            {
-                id: 'soc2_encryption_standards',
+                check: this.checkAuditLogging.bind(this) },
+            { id: 'soc2_encryption_standards',
                 name: 'Encryption Standards Compliance',
                 description: 'Verify encryption meets SOC 2 requirements',
                 category: 'security',
@@ -98,13 +99,11 @@ export class ComplianceMonitor {
                 severity: 'high',
                 autoFix: false,
                 frequency: 'daily',
-                check: this.checkEncryptionStandards.bind(this),
-            }
+                check: this.checkEncryptionStandards.bind(this) }
             // MPA Content Security Checks
             ,
             // MPA Content Security Checks
-            {
-                id: 'mpa_content_encryption',
+            { id: 'mpa_content_encryption',
                 name: 'Pre-Release Content Protection',
                 description: 'Verify pre-release content is properly encrypted',
                 category: 'security',
@@ -112,10 +111,8 @@ export class ComplianceMonitor {
                 severity: 'critical',
                 autoFix: false,
                 frequency: 'realtime',
-                check: this.checkContentEncryption.bind(this),
-            },
-            {
-                id: 'mpa_access_tracking',
+                check: this.checkContentEncryption.bind(this) },
+            { id: 'mpa_access_tracking',
                 name: 'Content Access Tracking',
                 description: 'Ensure all content access is tracked and auditable',
                 category: 'security',
@@ -123,13 +120,11 @@ export class ComplianceMonitor {
                 severity: 'high',
                 autoFix: false,
                 frequency: 'realtime',
-                check: this.checkContentAccessTracking.bind(this),
-            }
+                check: this.checkContentAccessTracking.bind(this) }
             // Internal Security Checks
             ,
             // Internal Security Checks
-            {
-                id: 'internal_ssl_certificates',
+            { id: 'internal_ssl_certificates',
                 name: 'SSL Certificate Validity',
                 description: 'Verify SSL certificates are valid and not expiring soon',
                 category: 'security',
@@ -137,10 +132,8 @@ export class ComplianceMonitor {
                 severity: 'high',
                 autoFix: true,
                 frequency: 'daily',
-                check: this.checkSSLCertificates.bind(this),
-            },
-            {
-                id: 'internal_security_headers',
+                check: this.checkSSLCertificates.bind(this) },
+            { id: 'internal_security_headers',
                 name: 'Security Headers Implementation',
                 description: 'Verify proper security headers are configured',
                 category: 'security',
@@ -148,19 +141,16 @@ export class ComplianceMonitor {
                 severity: 'medium',
                 autoFix: true,
                 frequency: 'hourly',
-                check: this.checkSecurityHeaders.bind(this),
-            },
-            {
-                id: 'internal_rate_limiting',
+                check: this.checkSecurityHeaders.bind(this) },
+            { id: 'internal_rate_limiting',
                 name: 'Rate Limiting Active',
                 description: 'Verify rate limiting is properly configured and active',
                 category: 'security',
                 framework: 'INTERNAL',
                 severity: 'medium',
                 autoFix: false,
-                frequency: 'hourly',
-                check: this.checkRateLimiting.bind(this)
-            }
+                frequency: 'hourly' },
+            check, this.checkRateLimiting.bind(this)
         ];
         checks.forEach(check => { });
         this.checks.set(check.id, check);
@@ -225,45 +215,43 @@ export class ComplianceMonitor {
         const defaultContext = {
             timestamp: new Date(),
             systemComponent: 'compliance_monitor',
-            environment: process.env.NODE_ENV || 'development',
+            environment: process.env.NODE_ENV || 'development'
         };
-        const checkContext = { ...defaultContext, ...context };
-        try {
-            console.log(`🔍 Running compliance check: ${check.name}`);
-        }
-        finally {
-        }
-        const result = await check.check(checkContext);
-        this.results.push(result);
-        // Handle non-compliant results
-        if (result.status === 'non_compliant') {
-            await this.handleComplianceViolation(result, check);
-            // Auto-fix if available and appropriate
-            if (result.status === 'non_compliant' && check.autoFix && result.remediation) {
-                await this.attemptAutoRemediation(result, check);
-                return result;
-            }
-            try { }
-            catch (error) {
-                console.error(`❌ Error running compliance check ${checkId}:`, error);
-            }
-            const errorResult = {
-                checkId,
-                status: 'error',
-                score: 0,
-                message: `Check execution failed: ${error instanceof Error ? error.message : String(error)}`
-            };
-        }
-        timestamp: new Date();
     }
     ;
+    checkContext = { ...defaultContext, ...context };
 }
+try {
+    console.log(`🔍 Running compliance check: ${check.name}`);
+}
+finally {
+}
+const result = await check.check(checkContext);
+this.results.push(result);
+// Handle non-compliant results
+if (result.status === 'non_compliant') {
+    await this.handleComplianceViolation(result, check);
+    // Auto-fix if available and appropriate
+    if (result.status === 'non_compliant' && check.autoFix && result.remediation) {
+        await this.attemptAutoRemediation(result, check);
+        return result;
+    }
+    try { }
+    catch (error) {
+        console.error(`❌ Error running compliance check ${checkId}:`, error);
+    }
+    const errorResult = { checkId,
+        status: 'error',
+        score: 0 };
+    message: `Check execution failed: ${error instanceof Error ? error.message : String(error)}`;
+}
+timestamp: new Date();
+;
 this.results.push(errorResult);
 return errorResult;
 async;
 runFullComplianceScan();
-Promise < ComplianceDashboard > {
-    console, : .log('🔍 Running full compliance scan...'),
+Promise < ComplianceDashboard > { console, : .log('🔍 Running full compliance scan...'),
     const: scanResults, ComplianceResult = [],
     // Run all checks in parallel
     const: checkPromises = Array.from(this.checks.keys()).map(async (checkId) => { }),
@@ -300,64 +288,51 @@ ComplianceDashboard;
             frameworkGroups[check.framework].push(result);
         }
         ;
-        Object.entries(frameworkGroups).forEach(([framework, results]) => {
-            frameworkScores[framework] = results.reduce((sum, r) => sum + r.score, 0) / results.length;
-        });
+        Object.entries(frameworkGroups).forEach(([framework, results]) => { frameworkScores[framework] = results.reduce((sum, r) => sum + r.score, 0) / results.length; });
         // Get recent violations
         const recentViolations = this.violations;
         filter(v => Date.now() - v.detectedAt.getTime() < 7 * 24 * 60 * 60 * 1000) // Last 7 days
             .sort((a, b) => b.detectedAt.getTime() - a.detectedAt.getTime())
             .slice(0, 10);
-        return {
-            overallScore,
+        return { overallScore,
             frameworkScores,
             recentViolations,
             trendData: this.calculateTrendData(),
-            upcomingAudits: this.getUpcomingAudits(),
-        };
-        async;
-        handleComplianceViolation(result, ComplianceResult, check, ComplianceCheck);
-        Promise < void  > {
-            const: violation, ComplianceViolation = {
-                id: `violation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` }
-        },
-            checkId;
-        result.checkId,
-            severity;
-        check.severity,
-            description;
-        result.message,
-            detectedAt;
-        new Date(),
-            status;
-        'open';
+            upcomingAudits: this.getUpcomingAudits() };
     }
     ;
-    this.violations.push(violation);
-    // Send alerts for critical violations
-    if (check.severity === 'critical') {
-        await this.sendCriticalComplianceAlert(violation, result);
-        console.log(`⚠️ Compliance violation detected: ${check.name} - ${result.message}`);
-    }
     async;
-    attemptAutoRemediation(result, ComplianceResult, check, ComplianceCheck);
-    Promise < void  > {
-        if(, result) { }, : .remediation || result.remediation.length === 0
-    };
-    {
-        return;
-        console.log(`🔧 Attempting auto-remediation for: ${check.name}`);
-    }
-    for (const action of result.remediation) {
-        if (action.automated && action.execute) {
-            try {
-                await action.execute();
-                console.log(`✅ Auto-remediation successful: ${action.description}`);
-            }
-            finally {
-            }
+    handleComplianceViolation(result, ComplianceResult, check, ComplianceCheck);
+    Promise < void  > { const: violation, ComplianceViolation = {},
+        id: `violation_${Date.now()}_${Math.random().toString(36).substr(2, 9)}` };
+    checkId: result.checkId;
+    severity: check.severity;
+    description: result.message;
+    detectedAt: new Date();
+    status: 'open';
+}
+;
+this.violations.push(violation);
+// Send alerts for critical violations
+if (check.severity === 'critical') {
+    await this.sendCriticalComplianceAlert(violation, result);
+    console.log(`⚠️ Compliance violation detected: ${check.name} - ${result.message}`);
+}
+async;
+attemptAutoRemediation(result, ComplianceResult, check, ComplianceCheck);
+Promise < void  > {
+    if(, result) { }, : .remediation || result.remediation.length === 0
+};
+{
+    return;
+    console.log(`🔧 Attempting auto-remediation for: ${check.name}`);
+}
+for (const action of result.remediation) {
+    if (action.automated && action.execute) {
+        try {
+            await action.execute();
+            console.log(`✅ Auto-remediation successful: ${action.description}`);
         }
-        try { }
         catch (error) {
             console.error(`❌ Auto-remediation failed: ${action.description}`, error);
         }
@@ -382,8 +357,7 @@ ComplianceDashboard;
 console.error(`Time: ${violation.detectedAt.toISOString()}`);
 calculateTrendData();
 ComplianceTrend;
-{
-    // Implementation would analyze historical compliance data
+{ // Implementation would analyze historical compliance data
     // For now, return mock trend data
     return [
         {
@@ -391,22 +365,18 @@ ComplianceTrend;
             period: '30d',
             score: 92,
             previousScore: 89,
-            trend: 'improving',
+            trend: 'improving'
         },
-        {
-            framework: 'SOC2',
+        { framework: 'SOC2',
             period: '30d',
             score: 88,
             previousScore: 91,
-            trend: 'declining',
-        },
-        {
-            framework: 'MPA',
+            trend: 'declining' },
+        { framework: 'MPA',
             period: '30d',
             score: 95,
             previousScore: 94,
-            trend: 'stable'
-        }
+            trend: 'stable' }
     ];
     getUpcomingAudits();
     UpcomingAudit;
@@ -444,129 +414,117 @@ ComplianceTrend;
                                 score -= 30;
                                 issues.push('Database encryption not enabled');
                                 evidence.push({});
-                                type: 'configuration',
-                                    source;
-                                'database',
-                                    content;
-                                `Database encryption: ${dbEncrypted ? 'enabled' : 'disabled'}`;
-                            }
+                                type: 'configuration';
+                                source: 'database';
+                            },
+                            content: `Database encryption: ${dbEncrypted ? 'enabled' : 'disabled'}`
                         },
                         timestamp: new Date()
                     };
                     ;
-            }
-            try { }
-            catch {
-                score -= 50;
-                issues.push('Unable to verify database encryption');
-                // Check file storage encryption
-                const fileEncrypted = true; // Mock check;
-                if (!fileEncrypted) {
-                    score -= 30;
-                    issues.push('File storage encryption not enabled');
-                    // Check TLS/SSL for data in transit
-                    const tlsEnabled = true; // Mock check;
-                    if (!tlsEnabled) {
-                        score -= 40;
-                        issues.push('TLS encryption not properly configured');
-                        const status = score >= 90 ? 'compliant' :
-                            score >= 70 ? 'warning' : 'non_compliant';
-                        return {
-                            checkId: 'gdpr_data_encryption',
-                            status,
-                            score,
-                            message: issues.length === 0 ? 'All data encryption requirements met' : ,
-                        } `Data encryption issues found: ${issues.join(', ')}`;
+                    try {
                     }
-                }
-                evidence,
-                    timestamp;
-                new Date();
+                    catch {
+                        score -= 50;
+                        issues.push('Unable to verify database encryption');
+                        // Check file storage encryption
+                        const fileEncrypted = true; // Mock check;
+                        if (!fileEncrypted) {
+                            score -= 30;
+                            issues.push('File storage encryption not enabled');
+                            // Check TLS/SSL for data in transit
+                            const tlsEnabled = true; // Mock check;
+                            if (!tlsEnabled) {
+                                score -= 40;
+                                issues.push('TLS encryption not properly configured');
+                                const status = score >= 90 ? 'compliant' :
+                                    score >= 70 ? 'warning' : 'non_compliant';
+                                return {
+                                    checkId: 'gdpr_data_encryption',
+                                    status,
+                                    score,
+                                    message: issues.length === 0 ? 'All data encryption requirements met' : 
+                                } `Data encryption issues found: ${issues.join(', ')}`;
+                            }
+                            evidence;
+                            timestamp: new Date();
+                        }
+                        ;
+                        async;
+                        checkConsentManagement(context, ComplianceContext);
+                        Promise < ComplianceResult > {
+                            let, score = 100,
+                            const: issues, string = [],
+                            const: evidence, ComplianceEvidence = [],
+                            // Check if user has valid consent (if userId provided)
+                            if(context) { }, : .userId
+                        };
+                        {
+                            const hasValidConsent = true; // Mock check - would query consent database;
+                            if (!hasValidConsent) {
+                                score -= 50;
+                                issues.push(`No valid consent found for user ${context.userId}`);
+                            }
+                            evidence.push({});
+                            type: 'data';
+                            source: 'consent_database';
+                        }
+                        content: `User ${context.userId} consent status: ${hasValidConsent ? 'valid' : 'invalid'}`;
+                    }
+                    timestamp: new Date();
             }
             ;
-            async;
-            checkConsentManagement(context, ComplianceContext);
-            Promise < ComplianceResult > {
-                let, score = 100,
-                const: issues, string = [],
-                const: evidence, ComplianceEvidence = [],
-                // Check if user has valid consent (if userId provided)
-                if(context) { }, : .userId
-            };
-            {
-                const hasValidConsent = true; // Mock check - would query consent database;
-                if (!hasValidConsent) {
-                    score -= 50;
-                    issues.push(`No valid consent found for user ${context.userId}`);
-                }
-                evidence.push({});
-                type: 'data',
-                    source;
-                'consent_database',
-                    content;
-                `User ${context.userId} consent status: ${hasValidConsent ? 'valid' : 'invalid'}`;
+            // Check consent recording mechanism
+            const consentMechanismActive = true; // Mock check;
+            if (!consentMechanismActive) {
+                score -= 30;
+                issues.push('Consent recording mechanism not active');
+                const status = score >= 95 ? 'compliant' : 'non_compliant';
+                return {
+                    checkId: 'gdpr_consent_management',
+                    status,
+                    score,
+                    message: issues.length === 0 ? 'Consent management compliant' : 
+                } `Consent issues: ${issues.join(', ')}`;
             }
+            evidence;
+            timestamp: new Date();
         }
-        timestamp: new Date();
+        ;
+        async;
+        checkDataRetention();
+        Promise < ComplianceResult > {
+            let, score = 100,
+            const: issues, string = [],
+            const: remediation, RemediationAction = [],
+            // Check for data older than retention period
+            const: expiredDataCount = 0, // Mock check - would query database for old data;
+            if(expiredDataCount) { }
+        } > 0;
+        {
+            score -= 20;
+            issues.push(`${expiredDataCount} records exceed retention period`);
+        }
+        remediation.push({});
+        id: 'purge_expired_data';
     }
-    ;
-    // Check consent recording mechanism
-    const consentMechanismActive = true; // Mock check;
-    if (!consentMechanismActive) {
-        score -= 30;
-        issues.push('Consent recording mechanism not active');
-        const status = score >= 95 ? 'compliant' : 'non_compliant';
-        return {
-            checkId: 'gdpr_consent_management',
-            status,
-            score,
-            message: issues.length === 0 ? 'Consent management compliant' : ,
-        } `Consent issues: ${issues.join(', ')}`;
-    }
+    description: `Purge ${expiredDataCount} expired records`;
 }
-evidence,
-    timestamp;
-new Date();
-;
-async;
-checkDataRetention();
-Promise < ComplianceResult > {
-    let, score = 100,
-    const: issues, string = [],
-    const: remediation, RemediationAction = [],
-    // Check for data older than retention period
-    const: expiredDataCount = 0, // Mock check - would query database for old data;
-    if(expiredDataCount) { }
-} > 0;
-{
-    score -= 20;
-    issues.push(`${expiredDataCount} records exceed retention period`);
-}
-remediation.push({});
-id: 'purge_expired_data',
-    description;
-`Purge ${expiredDataCount} expired records`;
-automated: true,
-    priority;
-'medium',
-    estimatedTime;
-'30 minutes',
-    execute;
-async () => {
+automated: true;
+priority: 'medium';
+estimatedTime: '30 minutes';
+execute: async () => {
     // Implementation would actually purge expired data
     console.log(`Purging ${expiredDataCount} expired records...`);
 };
 ;
 const status = score >= 90 ? 'compliant' : 'non_compliant';
-return {
-    checkId: 'gdpr_data_retention',
+return { checkId: 'gdpr_data_retention',
     status,
     score,
-    message: issues.length === 0 ? 'Data retention compliant' : ,
-} `Data retention issues: ${issues.join(', ')}`;
-remediation: remediation.length > 0 ? remediation : undefined,
-    timestamp;
-new Date();
+    message: issues.length === 0 ? 'Data retention compliant' :  } `Data retention issues: ${issues.join(', ')}`;
+remediation: remediation.length > 0 ? remediation : undefined;
+timestamp: new Date();
 ;
 async;
 checkDataPortability(context, ComplianceContext);
@@ -587,21 +545,16 @@ Promise < ComplianceResult > {
             issues.push(`Missing export formats: ${missingFormats.join(', ')}`);
         }
         const status = score >= 80 ? 'compliant' : 'non_compliant';
-        return {
-            checkId: 'gdpr_data_portability',
+        return { checkId: 'gdpr_data_portability',
             status,
             score,
-            message: issues.length === 0 ? 'Data portability requirements met' : ,
-        } `Data portability issues: ${issues.join(', ')}`;
-    }
-},
-    timestamp;
-new Date();
-;
+            message: issues.length === 0 ? 'Data portability requirements met' :  } `Data portability issues: ${issues.join(', ')}`;
+    },
+    timestamp: new Date()
+};
 async;
 checkAccessControls(context, ComplianceContext);
-Promise < ComplianceResult > {
-    let, score = 100,
+Promise < ComplianceResult > { let, score = 100,
     const: issues, string = [],
     const: evidence, ComplianceEvidence = [],
     // Check MFA enforcement
@@ -620,26 +573,20 @@ Promise < ComplianceResult > {
                 score -= 20;
                 issues.push('Password policy not meeting minimum requirements');
                 evidence.push({});
-                type: 'configuration',
-                    source;
-                'auth_service',
-                    content;
-                `MFA: ${mfaEnabled}, Session timeout: ${sessionTimeout}min, Strong passwords: ${strongPasswordPolicy}`;
+                type: 'configuration';
+                source: 'auth_service';
             }
+            content: `MFA: ${mfaEnabled}, Session timeout: ${sessionTimeout}min, Strong passwords: ${strongPasswordPolicy}`;
         }
         timestamp: new Date();
     },
     const: status = score >= 85 ? 'compliant' : score >= 70 ? 'warning' : 'non_compliant',
-    return: {
-        checkId: 'soc2_access_controls',
+    return: { checkId: 'soc2_access_controls',
         status,
         score,
-        message: issues.length === 0 ? 'Access controls compliant' : ,
-    } `Access control issues: ${issues.join(', ')}`
-};
-evidence,
-    timestamp;
-new Date();
+        message: issues.length === 0 ? 'Access controls compliant' :  } `Access control issues: ${issues.join(', ')}` };
+evidence;
+timestamp: new Date();
 ;
 async;
 checkAuditLogging(context, ComplianceContext);
@@ -667,7 +614,7 @@ Promise < ComplianceResult > {
                 checkId: 'soc2_audit_logging',
                 status,
                 score,
-                message: issues.length === 0 ? 'Audit logging compliant' : ,
+                message: issues.length === 0 ? 'Audit logging compliant' : 
             } `Audit logging issues: ${issues.join(', ')}`;
         }
     },
@@ -702,11 +649,11 @@ if (!properKeyManagement) {
             checkId: 'soc2_encryption_standards',
             status,
             score,
-            message: issues.length === 0 ? 'Encryption standards met' : ,
+            message: issues.length === 0 ? 'Encryption standards met' : 
         } `Encryption issues: ${issues.join(', ')}`;
     }
+    timestamp: new Date();
 }
-timestamp: new Date();
 ;
 async;
 checkContentEncryption(context, ComplianceContext);
@@ -728,69 +675,77 @@ Promise < ComplianceResult > {
                 issues.push(`Insufficient encryption strength: ${encryptionStrength}`);
             }
             const status = score >= 95 ? 'compliant' : 'non_compliant';
-            return {
-                checkId: 'mpa_content_encryption',
+            return { checkId: 'mpa_content_encryption',
                 status,
                 score,
-                message: issues.length === 0 ? 'Content encryption compliant' : ,
-            } `Content encryption issues: ${issues.join(', ')}`;
+                message: issues.length === 0 ? 'Content encryption compliant' :  } `Content encryption issues: ${issues.join(', ')}`;
+        }
+        timestamp: new Date();
+    },
+    /**
+     * Check content access tracking (MPA)
+     */
+    async checkContentAccessTracking(context) {
+        let score = 100;
+        const issues = [];
+        // Check if access is being tracked
+        const accessTracked = context.data?.accessTracked || false;
+        if (!accessTracked) {
+            score -= 50;
+            issues.push('Content access not being tracked');
+            // Check audit trail completeness
+            const auditTrailComplete = context.data?.auditTrailComplete || false;
+            if (!auditTrailComplete) {
+                score -= 30;
+                issues.push('Incomplete audit trail for content access');
+                const status = score >= 80 ? 'compliant' : 'non_compliant';
+                return {
+                    checkId: 'mpa_access_tracking',
+                    status,
+                    score,
+                    message: issues.length === 0 ? 'Content access tracking compliant' : 
+                } `Access tracking issues: ${issues.join(', ')}`;
+            }
+            timestamp: new Date();
+        }
+        ;
+        /**
+         * Check SSL certificates (Internal)
+         */
+    }
+    /**
+     * Check SSL certificates (Internal)
+     */
+    ,
+    /**
+     * Check SSL certificates (Internal)
+     */
+    async checkSSLCertificates(context) {
+        let score = 100;
+        const issues = [];
+        const remediation = [];
+        // Mock SSL certificate check
+        const certificates = [
+            { domain: 'wildConstruct.com', expiresAt: new Date('2025-12-31'), valid: true },
+            { domain: 'api.wildConstruct.com', expiresAt: new Date('2025-11-15'), valid: true }
+        ];
+        const now = new Date();
+        const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+        for (const cert of certificates) {
+            if (!cert.valid) {
+                score -= 40;
+                issues.push(`Invalid certificate for ${cert.domain}`);
+            }
+            else if (cert.expiresAt < thirtyDaysFromNow) {
+                score -= 20;
+                issues.push(`Certificate for ${cert.domain} expires soon (${cert.expiresAt.toDateString()})`);
+            }
+            remediation.push({});
+            id: `renew_cert_${cert.domain}`;
         }
     },
-    timestamp: new Date()
+    description: `Renew SSL certificate for ${cert.domain}`
 };
-async;
-checkContentAccessTracking(context, ComplianceContext);
-Promise < ComplianceResult > {
-    let, score = 100,
-    const: issues, string = [],
-    // Check if access is being tracked
-    const: accessTracked = context.data?.accessTracked || false,
-    if(, accessTracked) {
-        score -= 50;
-        issues.push('Content access not being tracked');
-        // Check audit trail completeness
-        const auditTrailComplete = context.data?.auditTrailComplete || false;
-        if (!auditTrailComplete) {
-            score -= 30;
-            issues.push('Incomplete audit trail for content access');
-            const status = score >= 80 ? 'compliant' : 'non_compliant';
-            return {
-                checkId: 'mpa_access_tracking',
-                status,
-                score,
-                message: issues.length === 0 ? 'Content access tracking compliant' : ,
-            } `Access tracking issues: ${issues.join(', ')}`;
-        }
-    },
-    timestamp: new Date()
-};
-async;
-checkSSLCertificates(context, ComplianceContext);
-Promise < ComplianceResult > {
-    let, score = 100,
-    const: issues, string = [],
-    const: remediation, RemediationAction = [],
-    // Mock SSL certificate check
-    const: certificates = [
-        { domain: 'wildConstruct.com', expiresAt: new Date('2025-12-31'), valid: true },
-        { domain: 'api.wildConstruct.com', expiresAt: new Date('2025-11-15'), valid: true }
-    ],
-    const: now = new Date(),
-    const: thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
-    for(, cert, of, certificates) {
-        if (!cert.valid) {
-            score -= 40;
-            issues.push(`Invalid certificate for ${cert.domain}`);
-        }
-    }, else: , if(cert) { }, : .expiresAt < thirtyDaysFromNow
-};
-{
-    score -= 20;
-    issues.push(`Certificate for ${cert.domain} expires soon (${cert.expiresAt.toDateString()})`);
-}
-remediation.push({});
-id: `renew_cert_${cert.domain}`;
-description: `Renew SSL certificate for ${cert.domain}`;
 automated: true,
     priority;
 'high',
@@ -802,20 +757,17 @@ async () => {
 };
 ;
 const status = score >= 90 ? 'compliant' : score >= 70 ? 'warning' : 'non_compliant';
-return {
-    checkId: 'internal_ssl_certificates',
+return { checkId: 'internal_ssl_certificates',
     status,
     score,
-    message: issues.length === 0 ? 'All SSL certificates valid' : ,
-} `SSL certificate issues: ${issues.join(', ')}`;
+    message: issues.length === 0 ? 'All SSL certificates valid' :  } `SSL certificate issues: ${issues.join(', ')}`;
 remediation: remediation.length > 0 ? remediation : undefined,
     timestamp;
 new Date();
 ;
 async;
 checkSecurityHeaders(context, ComplianceContext);
-Promise < ComplianceResult > {
-    let, score = 100,
+Promise < ComplianceResult > { let, score = 100,
     const: issues, string = [],
     const: remediation, RemediationAction = [],
     // Mock security headers check
@@ -828,42 +780,34 @@ Promise < ComplianceResult > {
     ],
     const: presentHeaders = [
         'Strict-Transport-Security',
-        'X-Frame-Options',
-        'X-Content-Type-Options'
-    ], // Mock current headers
-    const: missingHeaders = requiredHeaders.filter(h => !presentHeaders.includes(h)),
-    if(missingHeaders) { }, : .length > 0
-};
-{
+        'X-Frame-Options'
+    ] };
+'X-Content-Type-Options';
+; // Mock current headers
+const missingHeaders = requiredHeaders.filter(h => !presentHeaders.includes(h));
+if (missingHeaders.length > 0) {
     const pointsPerHeader = 100 / requiredHeaders.length;
     score -= pointsPerHeader * missingHeaders.length;
     issues.push(`Missing security headers: ${missingHeaders.join(', ')}`);
 }
 remediation.push({});
-id: 'add_security_headers',
-    description;
-`Add missing security headers: ${missingHeaders.join(', ')}`;
-automated: true,
-    priority;
-'medium',
-    estimatedTime;
-'5 minutes',
-    execute;
-async () => {
+id: 'add_security_headers';
+description: `Add missing security headers: ${missingHeaders.join(', ')}`;
+automated: true;
+priority: 'medium';
+estimatedTime: '5 minutes';
+execute: async () => {
     console.log('Adding missing security headers...');
     // Implementation would update server configuration
 };
 ;
 const status = score >= 85 ? 'compliant' : score >= 60 ? 'warning' : 'non_compliant';
-return {
-    checkId: 'internal_security_headers',
+return { checkId: 'internal_security_headers',
     status,
     score,
-    message: issues.length === 0 ? 'All required security headers present' : ,
-} `Security header issues: ${issues.join(', ')}`;
-remediation: remediation.length > 0 ? remediation : undefined,
-    timestamp;
-new Date();
+    message: issues.length === 0 ? 'All required security headers present' :  } `Security header issues: ${issues.join(', ')}`;
+remediation: remediation.length > 0 ? remediation : undefined;
+timestamp: new Date();
 ;
 async;
 checkRateLimiting(context, ComplianceContext);
@@ -891,318 +835,299 @@ Promise < ComplianceResult > {
                     checkId: 'internal_rate_limiting',
                     status,
                     score,
-                    message: issues.length === 0 ? 'Rate limiting properly configured' : ,
+                    message: issues.length === 0 ? 'Rate limiting properly configured' : 
                 } `Rate limiting issues: ${issues.join(', ')}`;
             }
+            timestamp: new Date();
         }
-        timestamp: new Date();
-    }
-};
- > ;
-;
-historicalTrends: {
-    improvingMetrics: number;
-    decliningMetrics: number;
-    stableMetrics: number;
-    forecastAlerts: {
-        metric: string;
-        framework: string;
-        predictedIssue: string;
-        timeframe: string;
-        risk: 'low' | 'medium' | 'high',
         ;
-    }
-    [];
-}
-;
-auditReadiness: {
-    overallReadiness: number; // 0-100,
-    frameworkReadiness: Record < string, {
-        score: number,
-        status: 'ready' | 'needs_preparation' | 'not_ready',
-        missingEvidence: string,
-        nextAuditDue: Date
-    } > ;
-}
-;
-/**
- * Enhanced Compliance Monitor with Baseline Tracking Integration
- */
-export class EnhancedComplianceMonitor extends ComplianceMonitor {
-    baselineTracker; // Will be imported dynamically
-    historicalAnalyzer; // Will be imported dynamically
-    constructor() {
+            > ;
+    },
+    /**
+     * Enhanced Compliance Monitor with Baseline Tracking Integration
+     */
+    class: EnhancedComplianceMonitor, extends: ComplianceMonitor
+};
+{
+    baselineTracker: unknown; // Will be imported dynamically
+    historicalAnalyzer: unknown; // Will be imported dynamically
+    constructor();
+    {
         super();
         this.initializeIntegration();
-    }
-    async initializeIntegration() {
-        try {
-            // Dynamic imports to avoid circular dependencies
-            const { complianceBaselineTracker } = await import('./ComplianceBaselineTracker');
-            const { complianceHistoricalAnalyzer } = await import('./ComplianceHistoricalAnalyzer');
-            this.baselineTracker = complianceBaselineTracker;
-            this.historicalAnalyzer = complianceHistoricalAnalyzer;
-            console.log('✅ Enhanced compliance monitoring with baseline tracking initialized');
-        }
-        catch (error) {
-            console.warn('⚠️ Baseline tracking integration not available:', error);
-            /**
-             * Generate enhanced compliance dashboard with baseline tracking
-             */
-            async;
-            generateEnhancedDashboard();
-            Promise < EnhancedComplianceDashboard > {
-                const: baseDashboard = this.generateComplianceDashboard(),
-                : .baselineTracker || !this.historicalAnalyzer
-            };
-            {
-                // Return basic dashboard if integration not available
-                return {
-                    ...baseDashboard,
-                    baselineTracking: {
-                        overallBaselineHealth: 0,
-                        baselinesMet: 0,
-                        totalBaselines: 0,
-                        criticalDeviations: 0,
-                        frameworkBaselines: {}
-                    },
-                    historicalTrends: {
-                        improvingMetrics: 0,
-                        decliningMetrics: 0,
-                        stableMetrics: 0,
-                        forecastAlerts: [],
-                    },
-                    auditReadiness: {
-                        overallReadiness: 0,
-                        frameworkReadiness: {}
-                    },
-                    try: {
-                        // Get baseline dashboard
-                        const: baselineDashboard = await this.baselineTracker.generateDashboard(),
-                        // Generate baseline tracking data
-                        const: baselineTracking = {
-                            overallBaselineHealth: baselineDashboard.overallHealthScore,
-                            baselinesMet: Object.values(baselineDashboard.frameworkHealth),
-                            : 
-                                .reduce((sum, fh) => sum + fh.baselinesMet, 0),
-                            totalBaselines: Object.values(baselineDashboard.frameworkHealth),
-                            : 
-                                .reduce((sum, fh) => sum + fh.baselinesTracked, 0),
-                            criticalDeviations: Object.values(baselineDashboard.frameworkHealth),
-                            : 
-                                .reduce((sum, fh) => sum + fh.criticalDeviations, 0),
-                            frameworkBaselines: Object.entries(baselineDashboard.frameworkHealth),
-                            : 
-                                .reduce((acc, [framework, data]) => {
-                                acc[framework] = {
-                                    baselinesMet: data.baselinesMet,
-                                    totalBaselines: data.baselinesTracked,
-                                    averagePerformance: data.score,
-                                    status: data.status,
-                                };
-                                return acc;
-                            }, {})
-                        },
-                        // Generate historical trends
-                        const: frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'],
-                        const: trendReports = await Promise.all(),
-                        frameworks, : .map(framework => ),
-                        this: .historicalAnalyzer.generateTrendReport(),
-                        framework,
-                        new: Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
-                        new: Date(),
-                        : .catch(() => null),
-                        const: validReports = trendReports.filter(report => report !== null),
-                        const: allMetrics = validReports.flatMap(report => report.metrics),
-                        const: historicalTrends = {
-                            improvingMetrics: allMetrics.filter(m => m.trendDirection === 'up').length,
-                            decliningMetrics: allMetrics.filter(m => m.trendDirection === 'down').length,
-                            stableMetrics: allMetrics.filter(m => m.trendDirection === 'stable').length,
-                            forecastAlerts: await this.generateForecastAlerts(),
-                        },
-                        // Calculate audit readiness
-                        const: auditReadiness = await this.calculateAuditReadiness(baselineDashboard),
-                        return: {
-                            ...baseDashboard,
-                            baselineTracking,
-                            historicalTrends,
-                            auditReadiness
-                        }
-                    }, catch(error) {
-                        console.error('Error generating enhanced dashboard:', error);
+        async;
+        initializeIntegration();
+        Promise < void  > {
+            try: {
+                // Dynamic imports to avoid circular dependencies
+                const: { complianceBaselineTracker } = await import('./ComplianceBaselineTracker'),
+                const: { complianceHistoricalAnalyzer } = await import('./ComplianceHistoricalAnalyzer'),
+                this: .baselineTracker = complianceBaselineTracker,
+                this: .historicalAnalyzer = complianceHistoricalAnalyzer,
+                console, : .log('✅ Enhanced compliance monitoring with baseline tracking initialized'),
+                catch(error) {
+                    console.warn('⚠️ Baseline tracking integration not available:', error);
+                    /**
+                     * Generate enhanced compliance dashboard with baseline tracking
+                     */
+                    async;
+                    generateEnhancedDashboard();
+                    Promise < EnhancedComplianceDashboard > {
+                        const: baseDashboard = this.generateComplianceDashboard(),
+                        : .baselineTracker || !this.historicalAnalyzer
+                    };
+                    {
+                        // Return basic dashboard if integration not available
                         return {
                             ...baseDashboard,
                             baselineTracking: {
                                 overallBaselineHealth: 0,
                                 baselinesMet: 0,
                                 totalBaselines: 0,
-                                criticalDeviations: 0,
-                                frameworkBaselines: {}
+                                criticalDeviations: 0
                             },
+                            frameworkBaselines: {},
                             historicalTrends: {
                                 improvingMetrics: 0,
                                 decliningMetrics: 0,
                                 stableMetrics: 0,
-                                forecastAlerts: [],
+                                forecastAlerts: []
                             },
                             auditReadiness: {
-                                overallReadiness: 0,
-                                frameworkReadiness: {}
+                                overallReadiness: 0
                             },
-                            metricName: string,
-                            actualValue: number,
-                            context: (Record),
-                            void:  > {
-                                : .baselineTracker, return: ,
-                                try: {
-                                    // Find matching baseline
-                                    const: baselines = this.baselineTracker.getActiveBaselines(),
-                                    const: matchingBaseline = baselines.find(b => ),
-                                    b, : .framework === framework && b.name.toLowerCase().includes(metricName.toLowerCase()),
-                                    if(matchingBaseline) {
-                                        await this.baselineTracker.recordMeasurement();
-                                        matchingBaseline.id,
-                                            actualValue,
-                                            context,
-                                            'Automated measurement from compliance monitor';
-                                        ;
-                                    }, catch(error) {
-                                        console.error('Error recording baseline measurement:', error);
-                                        /**
-                                        * Get compliance trend analysis for a specific framework
-                                        */
-                                        async;
-                                        getFrameworkTrendAnalysis(framework, string, daysPeriod, number = 30);
-                                        Promise < any > {
-                                            : .historicalAnalyzer, return: null,
-                                            try: {
-                                                const: endDate = new Date(),
-                                                const: startDate = new Date(endDate.getTime() - daysPeriod * 24 * 60 * 60 * 1000),
-                                                return: await this.historicalAnalyzer.generateTrendReport(framework, startDate, endDate)
-                                            }, catch(error) {
-                                                console.error('Error generating trend analysis:', error);
-                                                return null;
-                                            },
-                                            async generateForecastAlerts() {
-                                                if (!this.baselineTracker || !this.historicalAnalyzer)
-                                                    return [];
-                                                try {
-                                                    const baselines = this.baselineTracker.getActiveBaselines();
-                                                    const alerts = [];
-                                                    // Generate forecasts for critical baselines
-                                                    const criticalBaselines = baselines.filter(b => );
-                                                    ;
-                                                    b.framework === 'GDPR' || b.framework === 'SOC2' || b.framework === 'MPA';
-                                                }
-                                                finally { }
-                                            }, : .slice(0, 3), // Limit to prevent too many forecasts
-                                            for(, baseline, of, criticalBaselines) {
-                                                try {
-                                                    const forecast = await this.historicalAnalyzer.generateForecast(baseline.id, 7);
-                                                    const riskPredictions = forecast.predictedValues.filter(p => p.riskLevel === 'high');
-                                                    if (riskPredictions.length > 0) {
-                                                        const nextRisk = riskPredictions[0];
-                                                        alerts.push({});
-                                                        metric: baseline.name,
-                                                            framework;
-                                                        baseline.framework,
-                                                            predictedIssue;
-                                                        `Performance may drop to ${nextRisk.predictedValue}% (below target of ${baseline.targetValue}%)`;
-                                                    }
-                                                }
-                                                finally { }
-                                                timeframe: `${Math.ceil((nextRisk.date.getTime() - Date.now()) / (24 * 60 * 60 * 1000))} days`;
-                                            } },
-                                            risk;
-                                        nextRisk.riskLevel;
-                                    }
-                                }, catch(error) {
-                                    console.warn(`Could not generate forecast for ${baseline.name}:`, error);
-                                },
-                                return: alerts.slice(0, 5)
-                            }, catch(error) {
-                                console.error('Error generating forecast alerts:', error);
-                                return [];
-                            },
-                            async calculateAuditReadiness(baselineDashboard) {
-                                const frameworkReadiness = {};
-                                const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
-                                let overallReadinessTotal = 0;
-                                let frameworkCount = 0;
-                                for (const framework of frameworks) {
-                                    const frameworkHealth = baselineDashboard.frameworkHealth[framework];
-                                    if (frameworkHealth) {
-                                        let readinessScore = frameworkHealth.score;
-                                        // Adjust score based on critical deviations
-                                        if (frameworkHealth.criticalDeviations > 0) {
-                                            readinessScore -= frameworkHealth.criticalDeviations * 10;
-                                            // Adjust score based on baseline compliance
-                                            const complianceRate = frameworkHealth.baselinesMet / frameworkHealth.baselinesTracked;
-                                            readinessScore = Math.min(readinessScore, complianceRate * 100);
-                                            const status = readinessScore >= 90 ? 'ready' : ;
-                                            readinessScore >= 70 ? 'needs_preparation' : 'not_ready';
-                                            const missingEvidence = this.identifyMissingEvidence(framework, frameworkHealth);
-                                            const nextAuditDue = this.getNextAuditDate(framework);
-                                            frameworkReadiness[framework] = {
-                                                score: Math.max(0, Math.round(readinessScore)),
-                                                status,
-                                                missingEvidence,
-                                                nextAuditDue
-                                            };
-                                            overallReadinessTotal += frameworkReadiness[framework].score;
-                                            frameworkCount++;
-                                            const overallReadiness = frameworkCount > 0 ? Math.round(overallReadinessTotal / frameworkCount) : 0;
-                                            return {
-                                                overallReadiness,
-                                                frameworkReadiness
-                                            };
-                                        }
-                                    }
-                                }
-                            },
-                            identifyMissingEvidence(framework, frameworkHealth) {
-                                const missingEvidence = [];
-                                if (frameworkHealth.score < 90) {
-                                    switch (framework) {
-                                        case 'GDPR':
-                                            if (frameworkHealth.criticalDeviations > 0) {
-                                                missingEvidence.push('Data processing records', 'Consent management documentation');
-                                                break;
-                                            }
-                                        case 'SOC2':
-                                            if (frameworkHealth.criticalDeviations > 0) {
-                                                missingEvidence.push('Access control logs', 'Security monitoring reports');
-                                                break;
-                                            }
-                                        case 'MPA':
-                                            if (frameworkHealth.criticalDeviations > 0) {
-                                                missingEvidence.push('Content encryption certificates', 'Access audit trails');
-                                                break;
-                                            }
-                                        default:
-                                            if (frameworkHealth.criticalDeviations > 0) {
-                                                missingEvidence.push('Security configuration documentation', 'Monitoring evidence');
-                                                return missingEvidence;
-                                            }
-                                    }
-                                }
-                            },
-                            getNextAuditDate(framework) {
-                                // Mock audit dates - in practice, these would come from audit scheduling system
-                                const auditDates = {
-                                    'GDPR': new Date('2025-09-15'),
-                                    'SOC2': new Date('2025-10-15'),
-                                    'MPA': new Date('2025-11-01'),
-                                    'INTERNAL': new Date('2025-08-01'),
-                                };
-                                return auditDates[framework];
-                                // Export singleton instance
-                                export const enhancedComplianceMonitor = new EnhancedComplianceMonitor();
-                            }
+                            frameworkReadiness: {}
                         };
+                        try { // Get baseline dashboard
+                            const baselineDashboard = await this.baselineTracker.generateDashboard();
+                            // Generate baseline tracking data
+                            const baselineTracking = {
+                                overallBaselineHealth: baselineDashboard.overallHealthScore,
+                                baselinesMet: Object.values(baselineDashboard.frameworkHealth)
+                                    .reduce((sum, fh) => sum + fh.baselinesMet, 0),
+                                totalBaselines: Object.values(baselineDashboard.frameworkHealth)
+                                    .reduce((sum, fh) => sum + fh.baselinesTracked, 0),
+                                criticalDeviations: Object.values(baselineDashboard.frameworkHealth)
+                                    .reduce((sum, fh) => sum + fh.criticalDeviations, 0),
+                                frameworkBaselines: Object.entries(baselineDashboard.frameworkHealth)
+                                    .reduce((acc, [framework, data]) => {
+                                    acc[framework] = {
+                                        baselinesMet: data.baselinesMet,
+                                        totalBaselines: data.baselinesTracked,
+                                        averagePerformance: data.score,
+                                        status: data.status
+                                    };
+                                }),
+                                return: acc
+                            }, {};
+                        }
+                        finally // Generate historical trends
+                         { }
+                        ;
+                        // Generate historical trends
+                        const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
+                        const trendReports = await Promise.all();
+                        ;
+                        frameworks.map(framework => );
+                        this.historicalAnalyzer.generateTrendReport();
+                        framework;
+                        new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // Last 7 days
+                            new Date();
                     }
-                };
-            }
+                }, : .catch(() => null),
+                const: validReports = trendReports.filter(report => report !== null),
+                const: allMetrics = validReports.flatMap(report => report.metrics),
+                const: historicalTrends = { improvingMetrics: allMetrics.filter(m => m.trendDirection === 'up').length,
+                    decliningMetrics: allMetrics.filter(m => m.trendDirection === 'down').length,
+                    stableMetrics: allMetrics.filter(m => m.trendDirection === 'stable').length,
+                    forecastAlerts: await this.generateForecastAlerts() }
+            },
+            // Calculate audit readiness
+            const: auditReadiness = await this.calculateAuditReadiness(baselineDashboard),
+            return: { ...baseDashboard,
+                baselineTracking,
+                historicalTrends },
+            auditReadiness
+        };
+        try {
+        }
+        catch (error) {
+            console.error('Error generating enhanced dashboard:', error);
+            return {
+                ...baseDashboard,
+                baselineTracking: {
+                    overallBaselineHealth: 0,
+                    baselinesMet: 0,
+                    totalBaselines: 0,
+                    criticalDeviations: 0
+                },
+                frameworkBaselines: {},
+                historicalTrends: {
+                    improvingMetrics: 0,
+                    decliningMetrics: 0,
+                    stableMetrics: 0,
+                    forecastAlerts: []
+                },
+                auditReadiness: {
+                    overallReadiness: 0
+                },
+                frameworkReadiness: {}
+            };
+            /**
+             * Record compliance measurement and update baselines
+             */
+            async;
+            recordComplianceMeasurement(framework, 'GDPR' | 'CCPA' | 'SOC2' | 'ISO27001' | 'MPA' | 'INTERNAL');
+            metricName: string;
+            actualValue: number;
+            context ?  : Record;
+            Promise < void  > { : .baselineTracker, return: ,
+                try: {
+                    // Find matching baseline
+                    const: baselines = this.baselineTracker.getActiveBaselines(),
+                    const: matchingBaseline = baselines.find(b => ),
+                    b, : .framework === framework && b.name.toLowerCase().includes(metricName.toLowerCase()),
+                    if(matchingBaseline) {
+                        await this.baselineTracker.recordMeasurement();
+                        matchingBaseline.id;
+                        actualValue;
+                        context;
+                    },
+                    'Automated measurement from compliance monitor': ,
+                    catch(error) {
+                        console.error('Error recording baseline measurement:', error);
+                        /**
+                        * Get compliance trend analysis for a specific framework
+                        */
+                        async;
+                        getFrameworkTrendAnalysis(framework, string, daysPeriod, number = 30);
+                        Promise < any > {};
+                        if (!this.historicalAnalyzer)
+                            return null;
+                        try {
+                            const endDate = new Date();
+                            const startDate = new Date(endDate.getTime() - daysPeriod * 24 * 60 * 60 * 1000);
+                            return await this.historicalAnalyzer.generateTrendReport(framework, startDate, endDate);
+                        }
+                        catch (error) {
+                            console.error('Error generating trend analysis:', error);
+                            return null;
+                        }
+                    },
+                    async generateForecastAlerts() {
+                        if (!this.baselineTracker || !this.historicalAnalyzer)
+                            return [];
+                        try {
+                            const baselines = this.baselineTracker.getActiveBaselines();
+                            const alerts = [];
+                            // Generate forecasts for critical baselines
+                            const criticalBaselines = baselines.filter(b => );
+                            ;
+                            b.framework === 'GDPR' || b.framework === 'SOC2' || b.framework === 'MPA';
+                        }
+                        finally { }
+                    }, : .slice(0, 3), // Limit to prevent too many forecasts
+                    for(, baseline, of, criticalBaselines) {
+                        try {
+                            const forecast = await this.historicalAnalyzer.generateForecast(baseline.id, 7);
+                            const riskPredictions = forecast.predictedValues.filter(p => p.riskLevel === 'high');
+                            if (riskPredictions.length > 0) {
+                                const nextRisk = riskPredictions[0];
+                                alerts.push({});
+                                metric: baseline.name;
+                                framework: baseline.framework;
+                            }
+                            predictedIssue: `Performance may drop to ${nextRisk.predictedValue}% (below target of ${baseline.targetValue}%)`;
+                        }
+                        finally {
+                        }
+                        timeframe: `${Math.ceil((nextRisk.date.getTime() - Date.now()) / (24 * 60 * 60 * 1000))} days`;
+                    },
+                    risk: nextRisk.riskLevel
+                },
+                catch(error) {
+                    console.warn(`Could not generate forecast for ${baseline.name}:`, error);
+                },
+                return: alerts.slice(0, 5), // Top 5 alerts
+                catch(error) {
+                    console.error('Error generating forecast alerts:', error);
+                    return [];
+                },
+                async calculateAuditReadiness(baselineDashboard) {
+                    const frameworkReadiness = {};
+                    const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
+                    let overallReadinessTotal = 0;
+                    let frameworkCount = 0;
+                    for (const framework of frameworks) {
+                        const frameworkHealth = baselineDashboard.frameworkHealth[framework];
+                        if (frameworkHealth) {
+                            let readinessScore = frameworkHealth.score;
+                            // Adjust score based on critical deviations
+                            if (frameworkHealth.criticalDeviations > 0) {
+                                readinessScore -= frameworkHealth.criticalDeviations * 10;
+                                // Adjust score based on baseline compliance
+                                const complianceRate = frameworkHealth.baselinesMet / frameworkHealth.baselinesTracked;
+                                readinessScore = Math.min(readinessScore, complianceRate * 100);
+                                const status = readinessScore >= 90 ? 'ready' : ;
+                                readinessScore >= 70 ? 'needs_preparation' : 'not_ready';
+                                const missingEvidence = this.identifyMissingEvidence(framework, frameworkHealth);
+                                const nextAuditDue = this.getNextAuditDate(framework);
+                                frameworkReadiness[framework] = {
+                                    score: Math.max(0, Math.round(readinessScore)),
+                                    status,
+                                    missingEvidence
+                                };
+                                nextAuditDue;
+                            }
+                            ;
+                            overallReadinessTotal += frameworkReadiness[framework].score;
+                            frameworkCount++;
+                            const overallReadiness = frameworkCount > 0 ? Math.round(overallReadinessTotal / frameworkCount) : 0;
+                            return { overallReadiness };
+                            frameworkReadiness;
+                        }
+                        ;
+                    }
+                },
+                identifyMissingEvidence(framework, frameworkHealth) {
+                    const missingEvidence = [];
+                    if (frameworkHealth.score < 90) {
+                        switch (framework) {
+                            case 'GDPR':
+                                if (frameworkHealth.criticalDeviations > 0) {
+                                    missingEvidence.push('Data processing records', 'Consent management documentation');
+                                    break;
+                                }
+                            case 'SOC2':
+                                if (frameworkHealth.criticalDeviations > 0) {
+                                    missingEvidence.push('Access control logs', 'Security monitoring reports');
+                                    break;
+                                }
+                            case 'MPA':
+                                if (frameworkHealth.criticalDeviations > 0) {
+                                    missingEvidence.push('Content encryption certificates', 'Access audit trails');
+                                    break;
+                                }
+                            default:
+                                if (frameworkHealth.criticalDeviations > 0) {
+                                    missingEvidence.push('Security configuration documentation', 'Monitoring evidence');
+                                    return missingEvidence;
+                                }
+                        }
+                    }
+                },
+                getNextAuditDate(framework) {
+                    // Mock audit dates - in practice, these would come from audit scheduling system
+                    const auditDates = {
+                        'GDPR': new Date('2025-09-15'),
+                        'SOC2': new Date('2025-10-15'),
+                        'MPA': new Date('2025-11-01'),
+                        'INTERNAL': new Date('2025-08-01')
+                    };
+                },
+                return: auditDates[framework],
+                // Export singleton instance
+                const: enhancedComplianceMonitor = new EnhancedComplianceMonitor() };
         }
     }
 }

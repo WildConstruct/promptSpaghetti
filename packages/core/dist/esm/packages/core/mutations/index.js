@@ -11,9 +11,8 @@ export { GraphMutationEngine } from './GraphMutationEngine';
 export { GraphValidator } from './GraphValidator';
 export { ConflictResolver } from './ConflictResolver';
 export { OperationHistory } from './OperationHistory';
-// Import GraphMutationEngine for local use
-import { GraphMutationEngine } from './GraphMutationEngine';
-export { CollaborativeSync, SimpleWebSocketService } from './CollaborativeSync';
+export { CollaborativeSync, SimpleWebSocketService };
+'./CollaborativeSync';
 // Default Configuration
 // Utility Functions
 export const createOperationId = () => {
@@ -44,46 +43,16 @@ any => {
         timestamp: new Date(),
         userId,
         payload: {
-            node,
-            position
-        }
+            node },
+        position
     };
-    // Validation Helpers
-    // (Validation helper functions would be exported here)
-    // Error Types for Better Error Handling
-    export class MutationEngineError extends Error {
-        message;
-        operation;
-        validationErrors;
-    }
-    this.name = 'MutationEngineError';
-    export class ValidationError extends Error {
-        message;
-        field;
-        nodeId;
-        edgeId;
-    }
-    this.name = 'ValidationError';
-    export class ConflictError extends Error {
-        message;
-        conflicts;
-        operation;
-    }
-    this.name = 'ConflictError';
-    // Integration Helpers for Existing Codebase
-    export const engine = new GraphMutationEngine(finalConfig);
-    // Setup state synchronization
-    engine.on('state_changed', (data) => {
-        // Update the store with the new state
-        if (store.setState) {
-            store.setState({});
-            nodes: data.newState.nodes,
-                edges;
-            data.newState.edges,
-            ;
-        }
-    });
 };
+// Validation Helpers
+// (Validation helper functions would be exported here)
+// Error Types for Better Error Handling
+export class MutationEngineError {
+}
+;
 ;
 return engine;
 ;

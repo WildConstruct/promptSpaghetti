@@ -6,8 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * progress tracking, interactive content, and assessments.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-{
-    // State management
+from;
+'../../services/Epic16LearningPathService';
+{ // State management
     const [currentModule, setCurrentModule] = useState(null);
     const [currentActivity, setCurrentActivity] = useState(null);
     const [moduleProgress, setModuleProgress] = useState(null);
@@ -47,9 +48,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
         [enrollment];
     });
     // Handle activity selection
-    const handleActivitySelect = useCallback((activity) => {
-        setCurrentActivity(activity);
-    }, []);
+    const handleActivitySelect = useCallback((activity) => { setCurrentActivity(activity); }, []);
     // Handle activity completion
     const handleActivityComplete = useCallback(async (activityId) => {
         if (!currentModule || !enrollment)
@@ -61,99 +60,97 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
         }
         finally { }
     });
-    userId,
-        path.id,
-        currentModule.id,
-        activityId;
-    ;
-    if (updatedProgress) {
-        // Update local progress
-        setModuleProgress(updatedProgress.moduleProgress[currentModule.id] || null);
-        onProgress?.(updatedProgress.overallProgress);
-        // Check if path is completed
-        if (updatedProgress.overallProgress >= 100) {
-            onComplete?.();
-        }
-        try { }
-        catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to update progress');
-        }
-        finally {
-            setLoading(false);
-        }
-        [currentModule, enrollment, learningService, userId, path.id, onProgress, onComplete];
-        ;
-        // Get module status
-        const getModuleStatus = useCallback((module) => {
-            if (!enrollment)
-                return 'not_started';
-            const completed = enrollment.progress.completedModules.includes(module.id);
-            const current = enrollment.progress.currentModule === module.id;
-            const progress = enrollment.progress.moduleProgress[module.id];
-            if (completed)
-                return 'completed';
-            if (current || (progress && progress.progress > 0))
-                return 'in_progress';
-            // Check if prerequisites are met
-            const prerequisitesMet = module.prerequisites.every(prereqId => );
-        });
-        enrollment.progress.completedModules.includes(prereqId);
-        ;
-        return prerequisitesMet ? 'available' : 'locked',
-        ;
+    userId;
+    path.id;
+    currentModule.id;
+}
+activityId;
+;
+if (updatedProgress) { // Update local progress
+    setModuleProgress(updatedProgress.moduleProgress[currentModule.id] || null);
+    onProgress?.(updatedProgress.overallProgress);
+    // Check if path is completed
+    if (updatedProgress.overallProgress >= 100) {
+        onComplete?.();
     }
-    [enrollment];
+    try { }
+    catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to update progress');
+    }
+    finally {
+        setLoading(false);
+    }
+    [currentModule, enrollment, learningService, userId, path.id, onProgress, onComplete];
     ;
-    // Get activity status
-    const getActivityStatus = useCallback((activity) => {
-        if (!enrollment || !currentModule)
+    // Get module status
+    const getModuleStatus = useCallback((module) => {
+        if (!enrollment)
             return 'not_started';
-        const completed = enrollment.progress.completedActivities.includes(activity.id);
+        const completed = enrollment.progress.completedModules.includes(module.id);
+        const current = enrollment.progress.currentModule === module.id;
+        const progress = enrollment.progress.moduleProgress[module.id];
         if (completed)
             return 'completed';
-        return 'available';
-    }, [enrollment, currentModule]);
-    // Render module sidebar
-    const renderModuleSidebar = () => ();
+        if (current || (progress && progress.progress > 0))
+            return 'in_progress';
+        // Check if prerequisites are met
+        const prerequisitesMet = module.prerequisites.every(prereqId => );
+    });
+    enrollment.progress.completedModules.includes(prereqId);
     ;
-    _jsxs("div", { className: "w-80 bg-white border-r border-gray-200 flex flex-col", children: [_jsxs("div", { className: "p-6 border-b border-gray-200", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: path.title }), _jsx("button", { onClick: () => setSidebarOpen(false), className: "md:hidden p-2 text-gray-400 hover:text-gray-600", children: _jsx("svg", { className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) }) })] }), _jsxs("div", { className: "mb-4", children: [_jsxs("div", { className: "flex items-center justify-between mb-2", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Overall Progress" }), _jsxs("span", { className: "text-sm text-gray-500", children: [Math.round(overallProgress), "%"] })] }), _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all duration-300", style: { width: `${overallProgress}%` } }) })] }), _jsxs("div", { className: "flex items-center space-x-4 text-sm text-gray-500", children: [_jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "w-4 h-4 mr-1", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" }) }), Math.floor(path.estimatedDuration / 60), "h ", path.estimatedDuration % 60, "m"] }), _jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "w-4 h-4 mr-1", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }) }), path.modules.length, " modules"] })] })] }), _jsxs("div", { className: "flex-1 overflow-y-auto", children: [_jsxs("div", { className: "p-4 space-y-2", children: [path.modules.map((module, index) => {
-                                const status = getModuleStatus(module);
-                                const isActive = currentModule?.id === module.id;
-                                const progress = enrollment?.progress.moduleProgress[module.id];
-                                return;
-                                _jsxs("div", { className: `rounded-lg border p-4 cursor-pointer transition-all ${isActive
-                                        ? 'bg-blue-50 border-blue-200'
-                                        : status === 'locked',
-                                            ? 'bg-gray-50 border-gray-200 opacity-50 cursor-not-allowed'
-                                            : 'bg-white border-gray-200 hover:border-gray-300',
-                                    }`, onClick: () => status !== 'locked' && handleModuleSelect(module), children: [_jsxs("div", { className: "flex items-start space-x-3", children: [_jsxs("div", { className: "flex-shrink-0 mt-1", children: [status === 'completed' && ()
-                                                            < div, " className=\"w-6 h-6 bg-green-500 rounded-full flex items-center justify-center\">", _jsx("svg", { className: "w-4 h-4 text-white", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z", clipRule: "evenodd" }) })] }), ")}", status === 'in_progress' && ()
-                                                    < div, " className=\"w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center\">", _jsx("div", { className: "w-2 h-2 bg-white rounded-full" })] }), ")}", status === 'available' && ()
-                                            < div, " className=\"w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center\">", _jsx("span", { className: "text-sm font-medium text-gray-500", children: index + 1 })] }, module.id);
-                            }), status === 'locked' && ()
-                                < div, " className=\"w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center\">", _jsx("svg", { className: "w-4 h-4 text-gray-500", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z", clipRule: "evenodd" }) })] }), ")}"] }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 truncate", children: module.title }), _jsx("p", { className: "text-xs text-gray-500 mt-1 line-clamp-2", children: module.description }), _jsxs("div", { className: "flex items-center justify-between mt-2", children: [_jsxs("div", { className: "flex items-center space-x-2 text-xs text-gray-500", children: [_jsxs("span", { children: [module.duration, "min"] }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [module.activities.length, " activities"] }), module.quiz && ()
-                                        <  >
-                                        (_jsx("span", { children: "\u2022" })
-                                            ,
-                                                _jsx("span", { children: "Quiz" }))] }), ")}"] }), progress && ()
-                        < span, " className=\"text-xs text-gray-500\">", Math.round(progress.progress), "%"] }), ")}"] });
-    { /* Progress bar */ }
-    {
-        progress && progress.progress > 0 && ()
-            < div;
-        className = "mt-2" >
-            _jsx("div", { className: "w-full bg-gray-200 rounded-full h-1", children: _jsx("div", { className: "bg-blue-600 h-1 rounded-full transition-all duration-300", style: { width: `${progress.progress}%` } }) });
-        div >
-        ;
-    }
+    return prerequisitesMet ? 'available' : 'locked';
+}
+[enrollment];
+;
+// Get activity status
+const getActivityStatus = useCallback((activity) => {
+    if (!enrollment || !currentModule)
+        return 'not_started';
+    const completed = enrollment.progress.completedActivities.includes(activity.id);
+    if (completed)
+        return 'completed';
+    return 'available';
+}, [enrollment, currentModule]);
+// Render module sidebar
+const renderModuleSidebar = () => ();
+;
+_jsxs("div", { className: "w-80 bg-white border-r border-gray-200 flex flex-col", children: [_jsxs("div", { className: "p-6 border-b border-gray-200", children: [_jsxs("div", { className: "flex items-center justify-between mb-4", children: [_jsx("h2", { className: "text-lg font-semibold text-gray-900", children: path.title }), _jsx("button", { onClick: () => setSidebarOpen(false), className: "md:hidden p-2 text-gray-400 hover:text-gray-600", children: _jsx("svg", { className: "h-5 w-5", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) }) })] }), _jsxs("div", { className: "mb-4", children: [_jsxs("div", { className: "flex items-center justify-between mb-2", children: [_jsx("span", { className: "text-sm font-medium text-gray-700", children: "Overall Progress" }), _jsxs("span", { className: "text-sm text-gray-500", children: [Math.round(overallProgress), "%"] })] }), _jsx("div", { className: "w-full bg-gray-200 rounded-full h-2", children: _jsx("div", { className: "bg-blue-600 h-2 rounded-full transition-all duration-300", style: { width: `${overallProgress}%` } }) })] }), _jsxs("div", { className: "flex items-center space-x-4 text-sm text-gray-500", children: [_jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "w-4 h-4 mr-1", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" }) }), Math.floor(path.estimatedDuration / 60), "h ", path.estimatedDuration % 60, "m"] }), _jsxs("div", { className: "flex items-center", children: [_jsx("svg", { className: "w-4 h-4 mr-1", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }) }), path.modules.length, " modules"] })] })] }), _jsxs("div", { className: "flex-1 overflow-y-auto", children: [_jsxs("div", { className: "p-4 space-y-2", children: [path.modules.map((module, index) => {
+                            const status = getModuleStatus(module);
+                            const isActive = currentModule?.id === module.id;
+                            const progress = enrollment?.progress.moduleProgress[module.id];
+                            return;
+                            _jsxs("div", { className: `rounded-lg border p-4 cursor-pointer transition-all ${isActive
+                                    ? 'bg-blue-50 border-blue-200'
+                                    : status === 'locked'
+                                        ? 'bg-gray-50 border-gray-200 opacity-50 cursor-not-allowed'
+                                        : 'bg-white border-gray-200 hover:border-gray-300'}
+`, onClick: () => status !== 'locked' && handleModuleSelect(module), children: [_jsxs("div", { className: "flex items-start space-x-3", children: [_jsxs("div", { className: "flex-shrink-0 mt-1", children: [status === 'completed' && ()
+                                                        < div, " className=\"w-6 h-6 bg-green-500 rounded-full flex items-center justify-center\">", _jsx("svg", { className: "w-4 h-4 text-white", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z", clipRule: "evenodd" }) })] }), ")}", status === 'in_progress' && ()
+                                                < div, " className=\"w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center\">", _jsx("div", { className: "w-2 h-2 bg-white rounded-full" })] }), ")}", status === 'available' && ()
+                                        < div, " className=\"w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center\">", _jsx("span", { className: "text-sm font-medium text-gray-500", children: index + 1 })] }, module.id);
+                        }), status === 'locked' && ()
+                            < div, " className=\"w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center\">", _jsx("svg", { className: "w-4 h-4 text-gray-500", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z", clipRule: "evenodd" }) })] }), ")}"] }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 truncate", children: module.title }), _jsx("p", { className: "text-xs text-gray-500 mt-1 line-clamp-2", children: module.description }), _jsxs("div", { className: "flex items-center justify-between mt-2", children: [_jsxs("div", { className: "flex items-center space-x-2 text-xs text-gray-500", children: [_jsxs("span", { children: [module.duration, "min"] }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [module.activities.length, " activities"] }), module.quiz && ()
+                                    <  >
+                                    (_jsx("span", { children: "\u2022" })
+                                        ,
+                                            _jsx("span", { children: "Quiz" }))] }), ")}"] }), progress && ()
+                    < span, " className=\"text-xs text-gray-500\">", Math.round(progress.progress), "%"] }), ")}"] });
+{ /* Progress bar */ }
+{
+    progress && progress.progress > 0 && ()
+        < div;
+    className = "mt-2" >
+        _jsx("div", { className: "w-full bg-gray-200 rounded-full h-1", children: _jsx("div", { className: "bg-blue-600 h-1 rounded-full transition-all duration-300", style: { width: `${progress.progress}%` } }) });
     div >
-    ;
-    div >
-    ;
-    div >
-    ;
     ;
 }
+div >
+;
+div >
+;
+div >
+;
+;
 div >
 ;
 div >
@@ -208,8 +205,8 @@ className = "w-80 bg-gray-50 border-r border-gray-200 overflow-y-auto" >
                 return;
                 _jsxs("div", { className: `border rounded-md p-3 cursor-pointer transition-all ${isActive
                         ? 'bg-blue-50 border-blue-200'
-                        : 'bg-white border-gray-200 hover:border-gray-300',
-                    }`, onClick: () => handleActivitySelect(activity), children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsxs("div", { className: "flex-shrink-0", children: [status === 'completed' ? ()
+                        : 'bg-white border-gray-200 hover:border-gray-300'}
+`, onClick: () => handleActivitySelect(activity), children: [_jsxs("div", { className: "flex items-center space-x-3", children: [_jsxs("div", { className: "flex-shrink-0", children: [status === 'completed' ? ()
                                             < div : , " className=\"w-6 h-6 bg-green-500 rounded-full flex items-center justify-center\">", _jsx("svg", { className: "w-4 h-4 text-white", fill: "currentColor", viewBox: "0 0 20 20", children: _jsx("path", { fillRule: "evenodd", d: "M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z", clipRule: "evenodd" }) })] }), ") : ()", _jsx("div", { className: "w-6 h-6 border-2 border-gray-300 rounded-full flex items-center justify-center", children: _jsx("div", { className: "w-2 h-2 bg-gray-300 rounded-full" }) }), ")}"] }), _jsxs("div", { className: "flex-1 min-w-0", children: [_jsx("h4", { className: "text-sm font-medium text-gray-900 truncate", children: activity.title }), _jsxs("p", { className: "text-xs text-gray-500", children: [activity.type.replace('_', ' '), " \u2022 ", activity.estimatedTime, "min"] })] })] }, activity.id);
             })] });
 ;
@@ -252,13 +249,14 @@ div >
 ;
 ;
 return;
-_jsxs("div", { className: "learning-path-viewer h-full flex", children: [_jsxs("div", { className: `${sidebarOpen ? 'block' : 'hidden'},},
+_jsxs("div", { className: "learning-path-viewer h-full flex", children: [_jsxs("div", { className: `${sidebarOpen ? 'block' : 'hidden'},}
   md:block`, children: ["}", renderModuleSidebar()] }), _jsxs("div", { className: "flex-1", children: [error && ()
                     < div, " className=\"bg-red-50 border border-red-200 rounded-md p-4 m-6\">", _jsxs("div", { className: "flex", children: [_jsx("div", { className: "flex-shrink-0", children: _jsx("svg", { className: "h-5 w-5 text-red-400", viewBox: "0 0 20 20", fill: "currentColor", children: _jsx("path", { fillRule: "evenodd", d: "M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z", clipRule: "evenodd" }) }) }), _jsx("div", { className: "ml-3", children: _jsx("p", { className: "text-sm text-red-700", children: error }) })] })] }), ")}", renderMainContent()] });
 div >
 ;
 ;
 ;
+loading = false;
 {
     const [completed, setCompleted] = useState(false);
     const handleComplete = () => {
@@ -273,7 +271,7 @@ div >
     ;
 }
 { /* Activity content */ }
-_jsx("div", { className: "mb-6", children: _jsx("div", { className: "bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-64", children: _jsxs("div", { className: "text-center text-gray-500", children: [_jsx("svg", { className: "mx-auto h-12 w-12 text-gray-400", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a9 9 0 117.072 0l-.548.547A3.374 3.374 0 0014.846 21H9.154a3.374 3.374 0 00-2.322-1.1l-.548-.547z" }) }), _jsx("p", { className: "mt-2", children: "Interactive activity content would be rendered here" }), _jsx("p", { className: "text-sm mt-1", children: "Implementation would include multimedia content, interactive exercises, code editors, simulations, and assessment tools based on activity type." })] }) }) });
+_jsx("div", { className: "mb-6", children: _jsx("div", { className: "bg-gray-50 border border-gray-200 rounded-lg p-6 min-h-64", children: _jsxs("div", { className: "text-center text-gray-500", children: [_jsx("svg", { className: "mx-auto h-12 w-12 text-gray-400", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a9 9 0 117.072 0l-.548.547A3.374 3.374 0 0014.846 21H9.154a3.374 3.374 0 00-2.322-1.1l-.548-.547z" }) }), _jsx("p", { className: "mt-2", children: "Interactive activity content would be rendered here" }), _jsx("p", { className: "text-sm mt-1", children: "Implementation would include multimedia content, interactive exercises code editors, simulations, and assessment tools based on activity type." })] }) }) });
 { /* Resources */ }
 {
     activity.resources.length > 0 && ()
@@ -295,10 +293,10 @@ _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs(
     ,
         _jsx("button", { onClick: handleComplete, disabled: completed || loading, className: `px-6 py-2 text-sm font-medium rounded-md ${completed
                 ? 'bg-green-100 text-green-800 cursor-not-allowed'
-                : loading,
+                : loading
                     ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700',
-            }`, children: completed ? 'Completed ✓' : loading ? 'Saving...' : 'Mark as Complete' });
+                    : 'bg-blue-600 text-white hover:bg-blue-700'}
+`, children: completed ? 'Completed ✓' : loading ? 'Saving...' : 'Mark as Complete' });
 div >
 ;
 div >

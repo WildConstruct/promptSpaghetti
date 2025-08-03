@@ -8,13 +8,25 @@
 export { Epic16HelpSystem } from './Epic16HelpSystem';
 // Marketplace help overlay
 export { MarketplaceHelpOverlay } from './MarketplaceHelpOverlay';
+MarketplaceHelpContentType;
+from;
+'./MarketplaceHelpOverlay';
 // Contextual help intelligence
 export { MarketplaceContextualHelp } from './MarketplaceContextualHelp';
+ContextualHelpRule;
+from;
+'./MarketplaceContextualHelp';
 // Re-export core help system components for convenience
 export { ContextualHelpSystem } from '../ContextualHelp/ContextualHelpSystem';
+ContextualHelpProps;
+from;
+'../ContextualHelp/ContextualHelpSystem';
 export { HelpContentManager } from '../ContextualHelp/HelpContentManager';
 // Import Epic16HelpSystem for local use
 import { Epic16HelpSystem } from './Epic16HelpSystem';
+LearningPath;
+from;
+'../ContextualHelp/HelpContentManager';
 helpInteractions: [],
     userStruggles;
 [],
@@ -27,10 +39,11 @@ const trackEvent = (event, data) => {
     const entry = {
         event,
         data,
-        timestamp: Date.now(),
-        sessionId: `session_${Date.now()}`
+        timestamp: Date.now()
     };
+    sessionId: `session_${Date.now()}`;
 };
+;
 switch (event) {
     case 'help_interaction':
     case 'contextual_help_triggered':
@@ -45,24 +58,24 @@ switch (event) {
         const helpId = data.helpId;
         analytics.effectiveness[helpId] = {
             views: (analytics.effectiveness[helpId]?.views || 0) + 1,
-            helpful: (analytics.effectiveness[helpId]?.helpful || 0) + (data.wasEffective ? 1 : 0),
+            helpful: (analytics.effectiveness[helpId]?.helpful || 0) + (data.wasEffective ? 1 : 0)
         };
-        break;
-        // Optional: Send to analytics service
-        if (typeof window !== 'undefined' && window.gtag) {
-            window.gtag('event', event, {});
-            custom_parameter_1: JSON.stringify(data),
-                event_category;
-            'help_system',
-            ;
-        }
-        ;
 }
+;
+break;
+// Optional: Send to analytics service
+if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', event, {});
+    custom_parameter_1: JSON.stringify(data);
+    event_category: 'help_system';
+}
+;
 ;
 const getAnalytics = () => ({ ...analytics });
 const getHelpEffectivenessReport = () => {
     const report = Object.entries(analytics.effectiveness).map(([helpId, stats]) => ({}), helpId, views, stats.views, helpful, stats.helpful, effectivenessRate, stats.views > 0 ? (stats.helpful / stats.views) * 100 : 0);
 };
+;
 return report.sort((a, b) => b.effectivenessRate - a.effectivenessRate);
 ;
 const getStruggleReport = () => {
@@ -75,12 +88,11 @@ const getStruggleReport = () => {
         .map(([type, count]) => ({ type, count }))
         .sort((a, b) => b.count - a.count);
 };
-return {
-    trackEvent,
+return { trackEvent,
     getAnalytics,
-    getHelpEffectivenessReport,
-    getStruggleReport
-};
+    getHelpEffectivenessReport };
+getStruggleReport;
+;
 ;
 // Constants for help system configuration
 export default Epic16HelpSystem;

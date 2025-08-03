@@ -10,50 +10,47 @@ import { X, AlertTriangle, Shield, Clock, User, FileText } from 'lucide-react';
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
     const [locks, setLocks] = useState([]);
-    const [userPermissions, setUserPermissions] = useState < {
-        canBreakLocks: boolean,
-        requiresJustification: boolean,
-        roles: string
-    } > ({
-        canBreakLocks: false,
-        requiresJustification: true,
-        roles: [],
-    });
-    // Mock data - in real implementation, this would come from API
-    useEffect(() => {
-        if (isOpen && resourceId) {
-            // Mock locks data
-            setLocks([]);
-            {
-                id: 'lock-1',
-                    resource_id;
-                resourceId,
-                    locked_by;
-                'user-456',
-                    lock_type;
-                'edit',
-                    lock_reason;
-                'Working on content updates',
-                    locked_at;
-                new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-                    expires_at;
-                new Date(Date.now() + 30 * 60 * 1000).toISOString(),
-                    auto_release;
-                true,
-                    workspace_id;
-                'workspace-123';
-            }
-        }
-    });
-    // Mock user permissions
-    setUserPermissions({});
-    canBreakLocks: true,
+    const [userPermissions, setUserPermissions] = useState({});
+    canBreakLocks: false,
         requiresJustification;
     true,
         roles;
-    ['admin', 'editor'],
-    ;
+    [];
 }
+;
+// Mock data - in real implementation, this would come from API
+useEffect(() => {
+    if (isOpen && resourceId) {
+        // Mock locks data
+        setLocks([]);
+        {
+            id: 'lock-1',
+                resource_id;
+            resourceId,
+                locked_by;
+            'user-456',
+                lock_type;
+            'edit',
+                lock_reason;
+            'Working on content updates',
+                locked_at;
+            new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+                expires_at;
+            new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+                auto_release;
+            true,
+                workspace_id;
+            'workspace-123';
+        }
+    }
+});
+// Mock user permissions
+setUserPermissions({});
+canBreakLocks: true,
+    requiresJustification;
+true,
+    roles;
+['admin', 'editor'];
 ;
 [isOpen, resourceId];
 ;

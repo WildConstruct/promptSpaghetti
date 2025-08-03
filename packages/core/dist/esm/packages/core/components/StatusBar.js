@@ -8,14 +8,14 @@ const encryptionDetailsRef = useRef(null);
 const errorCount = errors.length;
 // Close details when clicking outside
 useEffect(() => {
-    const handleClickOutside = (event) => {
-        if (wsDetailsRef.current && !wsDetailsRef.current.contains(event.target)) {
-            setShowWebSocketDetails(false);
-            if (encryptionDetailsRef.current && !encryptionDetailsRef.current.contains(event.target)) {
-                setShowEncryptionDetails(false);
-            }
+    const handleClickOutside = (event) => { };
+    if (wsDetailsRef.current && !wsDetailsRef.current.contains(event.target)) {
+        setShowWebSocketDetails(false);
+        if (encryptionDetailsRef.current && !encryptionDetailsRef.current.contains(event.target)) {
+            setShowEncryptionDetails(false);
         }
-    };
+    }
+    ;
     if (showWebSocketDetails || showEncryptionDetails) {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
@@ -34,7 +34,7 @@ _jsxs("div", { style: {
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     }, children: [_jsxs("div", { "aria-live": "polite", children: [statusMessage && _jsx("span", { style: { marginRight: 16 }, children: statusMessage }), currentProjectName && ()
                     < span, " style=", {
                     marginRight: 16,
@@ -43,7 +43,7 @@ _jsxs("div", { style: {
                     border: '1px solid #dee2e6',
                     borderRadius: 3,
                     fontSize: '13px',
-                    color: '#495057',
+                    color: '#495057'
                 }, "> \uD83D\uDCC1 ", currentProjectName, hasUnsavedChanges ? ' •' : ''] }), ")}", _jsx("button", { onClick: onPreview, style: {
                 marginRight: 16,
                 padding: '6px 16px',
@@ -52,7 +52,7 @@ _jsxs("div", { style: {
                 border: '1px solid #ccc',
                 borderRadius: 4,
                 fontWeight: 500,
-                cursor: 'pointer',
+                cursor: 'pointer'
             }, children: "Preview" }), onNewProject && ()
             < button, "onClick=", onNewProject, "title=\"Create a new project\" style=", {
             marginRight: 16,
@@ -62,7 +62,7 @@ _jsxs("div", { style: {
             border: '1px solid #ccc',
             borderRadius: 4,
             fontWeight: 500,
-            cursor: 'pointer',
+            cursor: 'pointer'
         }, "> \uD83D\uDCC4 New"] });
 {
     onSaveProject && ()
@@ -71,33 +71,25 @@ _jsxs("div", { style: {
     title = "Save project as .psg file";
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        hasUnsavedChanges ? '#4CAF50' : '#eee',
-            color;
-        hasUnsavedChanges ? 'white' : '#23272f',
-            border;
-        hasUnsavedChanges ? '1px solid #45a049' : '1px solid #ccc',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: hasUnsavedChanges ? '#4CAF50' : '#eee';
+        color: hasUnsavedChanges ? 'white' : '#23272f';
+        border: hasUnsavedChanges ? '1px solid #45a049' : '1px solid #ccc';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
+        >
+    ;
+    Save;
+    Project;
+    {
+        hasUnsavedChanges ? ' *' : '';
+    }
+    button >
+    ;
 }
-    >
-;
-Save;
-Project;
-{
-    hasUnsavedChanges ? ' *' : '';
-}
-button >
-;
 {
     onLoadProject && ()
         < div;
@@ -115,7 +107,7 @@ button >
             border: '1px solid #ccc',
             borderRadius: '4px 0 0 4px',
             fontWeight: 500,
-            cursor: 'pointer',
+            cursor: 'pointer'
         }, children: "\uD83D\uDCC2 Load Project" });
 {
     onLoadRecentProject && ()
@@ -133,7 +125,7 @@ _jsx("button", { onClick: onSaveJson, style: {
         border: '1px solid #ccc',
         borderRadius: 4,
         fontWeight: 500,
-        cursor: 'pointer',
+        cursor: 'pointer'
     }, children: "\uD83D\uDCCB Share Template" });
 {
     onExportBundle && ()
@@ -142,22 +134,14 @@ _jsx("button", { onClick: onSaveJson, style: {
     title = "Export for use in production pipeline";
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        '#4CAF50',
-            color;
-        'white',
-            border;
-        '1px solid #45a049',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: '#4CAF50';
+        color: 'white';
+        border: '1px solid #45a049';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
 }
     >
@@ -175,22 +159,14 @@ button >
     title = "Save current workflow as reusable template";
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        '#8b5cf6',
-            color;
-        'white',
-            border;
-        '1px solid #7c3aed',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: '#8b5cf6';
+        color: 'white';
+        border: '1px solid #7c3aed';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
 }
     >
@@ -206,22 +182,14 @@ button >
     title = "Browse and apply workflow templates";
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        '#06b6d4',
-            color;
-        'white',
-            border;
-        '1px solid #0891b2',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: '#06b6d4';
+        color: 'white';
+        border: '1px solid #0891b2';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
 }
     >
@@ -235,86 +203,62 @@ button >
     onClick = { onCorrections };
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        correctionsOpen ? '#4a5568' : '#eee',
-            color;
-        correctionsOpen ? '#fff' : '#23272f',
-            border;
-        '1px solid #ccc',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: correctionsOpen ? '#4a5568' : '#eee';
+        color: correctionsOpen ? '#fff' : '#23272f';
+        border: '1px solid #ccc';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
+        >
+            Corrections;
+    button >
+    ;
 }
-    >
-        Corrections;
-button >
-;
 {
     correctionsEnabled && onStats && ()
         < button;
     onClick = { onStats };
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        statsOpen ? '#4a5568' : '#eee',
-            color;
-        statsOpen ? '#fff' : '#23272f',
-            border;
-        '1px solid #ccc',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: statsOpen ? '#4a5568' : '#eee';
+        color: statsOpen ? '#fff' : '#23272f';
+        border: '1px solid #ccc';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
+        >
+    ;
+    Stats;
+    button >
+    ;
 }
-    >
-;
-Stats;
-button >
-;
 {
     onExtensions && ()
         < button;
     onClick = { onExtensions };
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        extensionsOpen ? '#4a5568' : '#eee',
-            color;
-        extensionsOpen ? '#fff' : '#23272f',
-            border;
-        '1px solid #ccc',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: extensionsOpen ? '#4a5568' : '#eee';
+        color: extensionsOpen ? '#fff' : '#23272f';
+        border: '1px solid #ccc';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
+        >
+    ;
+    Extensions;
+    button >
+    ;
 }
-    >
-;
-Extensions;
-button >
-;
 {
     onOptimization && ()
         < button;
@@ -323,29 +267,21 @@ button >
     title = "Open workflow optimization and performance tools";
     style = {};
     {
-        marginRight: 16,
-            padding;
-        '6px 16px',
-            background;
-        optimizationEnabled ? '#17a2b8' : '#eee',
-            color;
-        optimizationEnabled ? 'white' : '#23272f',
-            border;
-        optimizationEnabled ? '1px solid #138496' : '1px solid #ccc',
-            borderRadius;
-        4,
-            fontWeight;
-        500,
-            cursor;
-        'pointer',
-        ;
+        marginRight: 16;
+        padding: '6px 16px';
+        background: optimizationEnabled ? '#17a2b8' : '#eee';
+        color: optimizationEnabled ? 'white' : '#23272f';
+        border: optimizationEnabled ? '1px solid #138496' : '1px solid #ccc';
+        borderRadius: 4;
+        fontWeight: 500;
+        cursor: 'pointer';
     }
+        >
+    ;
+    Optimize;
+    button >
+    ;
 }
-    >
-;
-Optimize;
-button >
-;
 {
     errorCount === 0 ? 'No errors' : `${errorCount} error${errorCount > 1 ? 's' : ''}`;
 }
@@ -389,16 +325,11 @@ style = {};
         ref = { encryptionDetailsRef };
         style = {};
         {
-            position: 'absolute',
-                bottom;
-            '100%',
-                right;
-            '50%',
-                marginBottom;
-            8,
-                zIndex;
-            1000,
-            ;
+            position: 'absolute';
+            bottom: '100%';
+            right: '50%';
+            marginBottom: 8;
+            zIndex: 1000;
         }
     }
         >
@@ -419,16 +350,11 @@ style = {};
         ref = { wsDetailsRef };
         style = {};
         {
-            position: 'absolute',
-                bottom;
-            '100%',
-                right;
-            0,
-                marginBottom;
-            8,
-                zIndex;
-            1000,
-            ;
+            position: 'absolute';
+            bottom: '100%';
+            right: 0;
+            marginBottom: 8;
+            zIndex: 1000;
         }
     }
         >

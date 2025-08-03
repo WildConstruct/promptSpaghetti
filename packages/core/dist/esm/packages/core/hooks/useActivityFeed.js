@@ -3,6 +3,9 @@
  * React hook for activity feed management
  */
 import { useState, useEffect, useCallback } from 'react';
+import { ActivityEventFilter } from PaginatedResponse;
+from;
+'../types/workspace';
 const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:8000/api';
 events_by_day: Array;
 most_active_users: Array;
@@ -25,11 +28,10 @@ const [eventTypes, setEventTypes] = useState([]);
 // Build query string from filters
 const buildQueryString = useCallback((filters, page) => {
     const params = new URLSearchParams({});
-    page: page.toString(),
-        limit;
-    limit.toString(),
-    ;
+    page: page.toString();
+    limit: limit.toString();
 });
+;
 if (filters.project_id)
     params.append('project_id', filters.project_id);
 if (filters.actor_id)
@@ -46,11 +48,9 @@ return params.toString();
 // Fetch activity feed
 const fetchActivities = useCallback(async());
 ;
-filters: ActivityEventFilter,
-    page;
-number = 1,
-    append;
-boolean = false;
+filters: ActivityEventFilter;
+page: number = 1;
+append: boolean = false;
 {
     try {
         if (!append) {
@@ -62,15 +62,14 @@ boolean = false;
             const queryString = buildQueryString(filters, page);
             const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity?${queryString}`, {});
         }
+        headers: {
+            'Content-Type';
+            'application/json';
+            'X-User-Id';
+            userId;
+        }
     }
     finally { }
-    headers: {
-        'Content-Type';
-        'application/json',
-            'X-User-Id';
-        userId,
-        ;
-    }
     ;
     if (!response.ok) {
         throw new Error(`Failed to fetch activity: ${response.statusText}`);
@@ -103,125 +102,133 @@ boolean = false;
         }
         finally {
         }
-    }, headers, {
-        'Content-Type': 'application/json',
-        'X-User-Id': userId,
+        headers: {
+            'Content-Type';
+            'application/json';
+            'X-User-Id';
+            userId;
+        }
     });
     if (!response.ok) {
         throw new Error(`Failed to fetch stats: ${response.statusText}`);
     }
     const statsData = await response.json();
     setStats(statsData);
-}
-try { }
-catch (err) {
-    console.error('Failed to fetch activity stats:', err);
-}
-[workspaceId, userId];
-;
-// Fetch event types
-const fetchEventTypes = useCallback(async () => {
     try {
-        const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/types`, {});
     }
-    finally {
+    catch (err) {
+        console.error('Failed to fetch activity stats:', err);
     }
-}, headers, {
-    'Content-Type': 'application/json',
-    'X-User-Id': userId,
-});
-if (!response.ok) {
-    throw new Error(`Failed to fetch event types: ${response.statusText}`);
-}
-const types = await response.json();
-setEventTypes(types);
-try { }
-catch (err) {
-    console.error('Failed to fetch event types:', err);
-}
-[workspaceId, userId];
-;
-// Load more activities (pagination)
-const loadMore = useCallback(() => {
-    if (!hasMore || loadingMore)
-        return;
-    fetchActivities(filters, page + 1, true);
-}, [filters, page, hasMore, loadingMore, fetchActivities]);
-// Refresh activities (reset to first page)
-const refresh = useCallback(() => {
-    setPage(1);
-    fetchActivities(filters, 1, false);
-}, [filters, fetchActivities]);
-// Fetch single activity event
-const fetchActivityEvent = useCallback(async (eventId) => {
-    try {
-        const response = await fetch(`${API_BASE}/activity/${eventId}`, {});
-    }
-    finally {
-    }
-}, headers, {
-    'Content-Type': 'application/json',
-    'X-User-Id': userId,
-});
-if (!response.ok) {
-    if (response.status === 404)
-        return null;
-    throw new Error(`Failed to fetch activity event: ${response.statusText}`);
-}
-return await response.json();
-try { }
-catch (err) {
-    console.error('Failed to fetch activity event:', err);
-    return null;
-}
-[userId];
-;
-// Initial fetch and setup
-useEffect(() => {
-    fetchActivities(filters, 1, false);
-    fetchStats();
-    fetchEventTypes();
-}, [fetchActivities, fetchStats, fetchEventTypes, filters]);
-// Auto-refresh interval
-useEffect(() => {
-    if (!autoRefresh)
-        return;
-    const interval = setInterval(() => {
-        refresh();
-    }, refreshInterval);
-    return () => clearInterval(interval);
-}, [autoRefresh, refreshInterval, refresh]);
-// Real-time updates (placeholder for WebSocket integration)
-useEffect(() => {
-    // TODO: Integrate with WebSocket for real-time activity updates,
-    // This would listen for workspace activity events and update the feed accordingly
-    const handleVisibilityChange = () => {
-        if (!document.hidden && autoRefresh) {
-            refresh();
+    [workspaceId, userId];
+    ;
+    // Fetch event types
+    const fetchEventTypes = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_BASE}/workspaces/${workspaceId}/activity/types`, {});
         }
-        ;
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-    }, [autoRefresh, refresh];
-});
-return {
-    activities,
-    loading,
-    loadingMore,
-    error,
-    hasMore,
-    page,
-    stats,
-    eventTypes,
-    loadMore,
-    refresh,
-    fetchActivityEvent
-};
-projectId: string,
-    userId;
-string,
-    options;
-UseActivityFeedOptions = {};
+        finally {
+        }
+        headers: {
+            'Content-Type';
+            'application/json';
+            'X-User-Id';
+            userId;
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to fetch event types: ${response.statusText}`);
+    }
+    const types = await response.json();
+    setEventTypes(types);
+    try {
+    }
+    catch (err) {
+        console.error('Failed to fetch event types:', err);
+    }
+    [workspaceId, userId];
+    ;
+    // Load more activities (pagination)
+    const loadMore = useCallback(() => {
+        if (!hasMore || loadingMore)
+            return;
+        fetchActivities(filters, page + 1, true);
+    }, [filters, page, hasMore, loadingMore, fetchActivities]);
+    // Refresh activities (reset to first page)
+    const refresh = useCallback(() => {
+        setPage(1);
+        fetchActivities(filters, 1, false);
+    }, [filters, fetchActivities]);
+    // Fetch single activity event
+    const fetchActivityEvent = useCallback(async (eventId) => {
+        try {
+            const response = await fetch(`${API_BASE}/activity/${eventId}`, {});
+        }
+        finally {
+        }
+        headers: {
+            'Content-Type';
+            'application/json';
+            'X-User-Id';
+            userId;
+        }
+    });
+    if (!response.ok) {
+        if (response.status === 404)
+            return null;
+        throw new Error(`Failed to fetch activity event: ${response.statusText}`);
+    }
+    return await response.json();
+    try {
+    }
+    catch (err) {
+        console.error('Failed to fetch activity event:', err);
+        return null;
+    }
+    [userId];
+    ;
+    // Initial fetch and setup
+    useEffect(() => {
+        fetchActivities(filters, 1, false);
+        fetchStats();
+        fetchEventTypes();
+    }, [fetchActivities, fetchStats, fetchEventTypes, filters]);
+    // Auto-refresh interval
+    useEffect(() => {
+        if (!autoRefresh)
+            return;
+        const interval = setInterval(() => {
+            refresh();
+        }, refreshInterval);
+        return () => clearInterval(interval);
+    }, [autoRefresh, refreshInterval, refresh]);
+    // Real-time updates (placeholder for WebSocket integration)
+    useEffect(() => {
+        // This would listen for workspace activity events and update the feed accordingly
+        const handleVisibilityChange = () => {
+            if (!document.hidden && autoRefresh) {
+                refresh();
+            }
+            ;
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+        }, [autoRefresh, refresh];
+    });
+    return { activities,
+        loading,
+        loadingMore,
+        error,
+        hasMore,
+        page,
+        stats,
+        eventTypes,
+        loadMore,
+        refresh };
+    fetchActivityEvent;
+}
+;
+projectId: string;
+userId: string;
+options: UseActivityFeedOptions = {};
 const { limit = 20, autoRefresh = false, refreshInterval = 30000 } = options;
 const [activities, setActivities] = useState([]);
 const [loading, setLoading] = useState(true);
@@ -238,10 +245,8 @@ const fetchProjectActivities = useCallback(async (page = 1, append = false) => {
             setLoadingMore(true);
             setError(null);
             const params = new URLSearchParams({});
-            page: page.toString(),
-                limit;
-            limit.toString(),
-            ;
+            page: page.toString();
+            limit: limit.toString();
         }
     }
     finally { }
@@ -249,10 +254,9 @@ const fetchProjectActivities = useCallback(async (page = 1, append = false) => {
 const response = await fetch(`${API_BASE}/projects/${projectId}/activity?${params}`, {});
 headers: {
     'Content-Type';
-    'application/json',
-        'X-User-Id';
-    userId,
-    ;
+    'application/json';
+    'X-User-Id';
+    userId;
 }
 ;
 if (!response.ok) {
@@ -288,9 +292,7 @@ const refresh = useCallback(() => {
     setPage(1);
     fetchProjectActivities(1, false);
 }, [fetchProjectActivities]);
-useEffect(() => {
-    fetchProjectActivities(1, false);
-}, [fetchProjectActivities]);
+useEffect(() => { fetchProjectActivities(1, false); }, [fetchProjectActivities]);
 useEffect(() => {
     if (!autoRefresh)
         return;
@@ -299,13 +301,12 @@ useEffect(() => {
     }, refreshInterval);
     return () => clearInterval(interval);
 }, [autoRefresh, refreshInterval, refresh]);
-return {
-    activities,
+return { activities,
     loading,
     loadingMore,
     error,
     hasMore,
     page,
-    loadMore,
-    refresh
-};
+    loadMore };
+refresh;
+;

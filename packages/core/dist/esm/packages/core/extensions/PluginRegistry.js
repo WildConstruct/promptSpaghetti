@@ -30,27 +30,24 @@ export class PluginRegistry extends EventEmitter {
             autoUpdateCheck: true,
             allowRemoteSources: false,
             remoteRegistries: ['https://registry.npmjs.org'],
-            updateCheckInterval: 24 * 60 * 60 * 1000, // 24 hours,
-            maxCacheAge: 7 * 24 * 60 * 60 * 1000, // 7 days,
+            updateCheckInterval: 24 * 60 * 60 * 1000, // 24 hours
+            maxCacheAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             enableTelemetry: false,
-            developmentMode: process.env.NODE_ENV === 'development',
-            ...config
+            developmentMode: process.env.NODE_ENV === 'development'
         };
-        this.baseRegistry = ExtensionPointRegistry.getInstance();
-        this.versionManager = new ExtensionVersionManager();
-        this.dependencyResolver = new DependencyResolver(this.versionManager);
-        this.pluginLoader = new PluginLoader({});
-        enableSandbox: !this.config.developmentMode,
-            allowRemoteSources;
-        this.config.allowRemoteSources,
-            cacheDirectory;
-        this.config.cacheDirectory,
-            developmentMode;
-        this.config.developmentMode,
-        ;
+        config;
     }
     ;
 }
+this.baseRegistry = ExtensionPointRegistry.getInstance();
+this.versionManager = new ExtensionVersionManager();
+this.dependencyResolver = new DependencyResolver(this.versionManager);
+this.pluginLoader = new PluginLoader({});
+enableSandbox: !this.config.developmentMode;
+allowRemoteSources: this.config.allowRemoteSources;
+cacheDirectory: this.config.cacheDirectory;
+developmentMode: this.config.developmentMode;
+;
 this.installedPlugins = new Map();
 this.remotePluginCache = new Map();
 this.initializeRegistry();
@@ -79,31 +76,32 @@ installPlugin(((pluginIdentifier, options = {}) => {
                 await this.saveInstallationRecord(plugin);
                 this.emit('plugin:install:success', { plugin });
                 return plugin;
-            }
-            try { }
-            catch (error) {
-                this.emit('plugin:install:error', { pluginIdentifier, error });
-                throw new Error(`Failed to install plugin ${pluginIdentifier}: ${error.message}`);
-            }
-            /**
-             * Uninstall a plugin
-             */
-            async;
-            uninstallPlugin(pluginId, string, removeData, boolean = false);
-            Promise < void  > {
-                try: {
-                    this: .emit('plugin:uninstall:start', { pluginId }),
-                    const: plugin = this.installedPlugins.get(pluginId),
-                    if(, plugin) {
-                        throw new Error(`Plugin ${pluginId} is not installed`);
-                    }
-                    // Check for dependents
-                    ,
-                    // Check for dependents
-                    const: dependents = this.findDependentPlugins(pluginId),
-                    if(dependents) { }, : .length > 0
+                try {
                 }
-            };
+                catch (error) {
+                    this.emit('plugin:install:error', { pluginIdentifier, error });
+                    throw new Error(`Failed to install plugin ${pluginIdentifier}: ${error.message}`);
+                }
+                /**
+                 * Uninstall a plugin
+                 */
+                async;
+                uninstallPlugin(pluginId, string, removeData, boolean = false);
+                Promise < void  > {
+                    try: {
+                        this: .emit('plugin:uninstall:start', { pluginId }),
+                        const: plugin = this.installedPlugins.get(pluginId),
+                        if(, plugin) {
+                            throw new Error(`Plugin ${pluginId} is not installed`);
+                        }
+                        // Check for dependents
+                        ,
+                        // Check for dependents
+                        const: dependents = this.findDependentPlugins(pluginId),
+                        if(dependents) { }, : .length > 0
+                    }
+                };
+            }
         }
     }
     finally { }
@@ -120,182 +118,184 @@ await this.removeInstallationRecord(pluginId);
 if (removeData) {
     await this.removePluginData(pluginId);
     this.emit('plugin:uninstall:success', { pluginId });
-}
-try { }
-catch (error) {
-    this.emit('plugin:uninstall:error', { pluginId, error });
-    throw error;
-    /**
-     * Update a plugin to latest version
-     */
-    async;
-    updatePlugin(pluginId, string);
-    Promise < LoadedPlugin > {
-        try: {
-            this: .emit('plugin:update:start', { pluginId }),
-            const: plugin = this.installedPlugins.get(pluginId),
-            if(, plugin) {
-                throw new Error(`Plugin ${pluginId} is not installed`);
-            },
-            const: updates = await this.pluginLoader.checkForUpdates(),
-            const: update = updates.find(u => u.pluginId === pluginId),
-            if(, update) {
-                return plugin; // No update available
-                // Create backup
-                await this.createPluginBackup(plugin);
-                try {
-                    // Update plugin
-                    const updatedPlugin = await this.pluginLoader.updatePlugin(pluginId);
-                    this.installedPlugins.set(pluginId, updatedPlugin);
-                    // Update installation record
-                    await this.saveInstallationRecord(updatedPlugin);
-                    this.emit('plugin:update:success', { pluginId, updatedPlugin });
-                    return updatedPlugin;
-                }
-                catch (updateError) {
-                    // Restore backup on failure
-                    await this.restorePluginBackup(pluginId);
-                    throw updateError;
-                }
-                try { }
-                catch (error) {
-                    this.emit('plugin:update:error', { pluginId, error });
-                    throw error;
-                    /**
-                     * Search for plugins in remote registries
-                     */
-                    async;
-                    searchPlugins(options, PluginSearchOptions = {});
-                    Promise < RemotePlugin > {
-                        try: {
-                            const: results, RemotePlugin = [],
-                            : .remotePluginCache
+    try {
+    }
+    catch (error) {
+        this.emit('plugin:uninstall:error', { pluginId, error });
+        throw error;
+        /**
+         * Update a plugin to latest version
+         */
+        async;
+        updatePlugin(pluginId, string);
+        Promise < LoadedPlugin > {
+            try: {
+                this: .emit('plugin:update:start', { pluginId }),
+                const: plugin = this.installedPlugins.get(pluginId),
+                if(, plugin) {
+                    throw new Error(`Plugin ${pluginId} is not installed`);
+                },
+                const: updates = await this.pluginLoader.checkForUpdates(),
+                const: update = updates.find(u => u.pluginId === pluginId),
+                if(, update) {
+                    return plugin; // No update available
+                    // Create backup
+                    await this.createPluginBackup(plugin);
+                    try {
+                        // Update plugin
+                        const updatedPlugin = await this.pluginLoader.updatePlugin(pluginId);
+                        this.installedPlugins.set(pluginId, updatedPlugin);
+                        // Update installation record
+                        await this.saveInstallationRecord(updatedPlugin);
+                        this.emit('plugin:update:success', { pluginId, updatedPlugin });
+                        return updatedPlugin;
+                        try {
                         }
-                    };
-                    {
-                        let filtered = plugins;
-                        if (options.query) {
-                            filtered = filtered.filter(p => );
-                            p.name.toLowerCase().includes(options.query.toLowerCase()) ||
-                                p.description.toLowerCase().includes(options.query.toLowerCase()) ||
-                                p.keywords.some(k => k.toLowerCase().includes(options.query.toLowerCase()));
-                            ;
-                            if (options.verified !== undefined) {
-                                filtered = filtered.filter(p => p.verified === options.verified);
-                                if (options.minRating) {
-                                    filtered = filtered.filter(p => p.rating >= options.minRating);
-                                    results.push(...filtered);
-                                    // Sort results
-                                    if (options.sortBy) {
-                                        results.sort((a, b) => {
-                                            let aValue, bValue;
-                                            switch (options.sortBy) {
-                                                case 'name':
-                                                    aValue = a.name;
-                                                    bValue = b.name;
-                                                    break;
-                                                case 'downloads':
-                                                    aValue = a.downloads;
-                                                    bValue = b.downloads;
-                                                    break;
-                                                case 'rating':
-                                                    aValue = a.rating;
-                                                    bValue = b.rating;
-                                                    break;
-                                                case 'updated':
-                                                    aValue = a.updatedAt;
-                                                    bValue = b.updatedAt;
-                                                    break;
-                                                default:
+                        catch (updateError) { // Restore backup on failure
+                            await this.restorePluginBackup(pluginId);
+                            throw updateError;
+                        }
+                        try { }
+                        catch (error) {
+                            this.emit('plugin:update:error', { pluginId, error });
+                            throw error;
+                            /**
+                             * Search for plugins in remote registries
+                             */
+                            async;
+                            searchPlugins(options, PluginSearchOptions = {});
+                            Promise < RemotePlugin > { try: {
+                                    const: results, RemotePlugin = [],
+                                    : .remotePluginCache
+                                } };
+                            {
+                                let filtered = plugins;
+                                if (options.query) {
+                                    filtered = filtered.filter(p => );
+                                    p.name.toLowerCase().includes(options.query.toLowerCase()) ||
+                                        p.description.toLowerCase().includes(options.query.toLowerCase()) ||
+                                        p.keywords.some(k => k.toLowerCase().includes(options.query.toLowerCase()));
+                                    ;
+                                    if (options.verified !== undefined) {
+                                        filtered = filtered.filter(p => p.verified === options.verified);
+                                        if (options.minRating) {
+                                            filtered = filtered.filter(p => p.rating >= options.minRating);
+                                            results.push(...filtered);
+                                            // Sort results
+                                            if (options.sortBy) {
+                                                results.sort((a, b) => {
+                                                    let aValue, bValue;
+                                                    switch (options.sortBy) {
+                                                        case 'name':
+                                                            aValue = a.name;
+                                                            bValue = b.name;
+                                                            break;
+                                                        case 'downloads':
+                                                            aValue = a.downloads;
+                                                            bValue = b.downloads;
+                                                            break;
+                                                        case 'rating':
+                                                            aValue = a.rating;
+                                                            bValue = b.rating;
+                                                            break;
+                                                        case 'updated':
+                                                            aValue = a.updatedAt;
+                                                            bValue = b.updatedAt;
+                                                            break;
+                                                        default:
+                                                    }
                                                     return 0;
                                                     const comparison = aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
                                                     return options.sortOrder === 'desc' ? -comparison : comparison;
-                                            }
-                                        });
-                                        // Apply pagination
-                                        const offset = options.offset || 0;
-                                        const limit = options.limit || 50;
-                                        return results.slice(offset, offset + limit);
-                                    }
-                                    try { }
-                                    catch (error) {
-                                        throw new Error(`Plugin search failed: ${error.message}`);
-                                    }
-                                    /**
-                                     * Check for plugin updates
-                                     */
-                                    async;
-                                    checkForUpdates();
-                                    Promise < PluginUpdate > {
-                                        const: updates = await this.pluginLoader.checkForUpdates(),
-                                        return: updates.map(update => ({}), ...update, updateType, this.getUpdateType(update.currentVersion, update.availableVersion), breaking, semver.major(update.availableVersion) > semver.major(update.currentVersion))
-                                    };
-                                    ;
-                                    /**
-                                     * Get plugin registry statistics
-                                     */
-                                    getStats();
-                                    PluginRegistryStats;
-                                    {
-                                        const plugins = Array.from(this.installedPlugins.values());
-                                        return {
-                                            totalPlugins: plugins.length,
-                                            activePlugins: plugins.filter(p => p.status === 'active').length,
-                                            inactivePlugins: plugins.filter(p => p.status === 'inactive').length,
-                                            errorPlugins: plugins.filter(p => p.status === 'error').length,
-                                            totalDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0),
-                                            resolvedDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0),
-                                            unresolvedDependencies: 0, // Simplified,
-                                            availableUpdates: 0, // Would be populated by checkForUpdates,
-                                            cacheSize: this.remotePluginCache.size,
-                                        };
-                                        /**
-                                         * Get all installed plugins
-                                         */
-                                        getInstalledPlugins();
-                                        LoadedPlugin;
-                                        {
-                                            return Array.from(this.installedPlugins.values());
-                                            /**
-                                             * Get a specific plugin
-                                             */
-                                            getPlugin(pluginId, string);
-                                            LoadedPlugin | undefined;
-                                            {
-                                                return this.installedPlugins.get(pluginId);
+                                                });
+                                                // Apply pagination
+                                                const offset = options.offset || 0;
+                                                const limit = options.limit || 50;
+                                                return results.slice(offset, offset + limit);
+                                                try {
+                                                }
+                                                catch (error) {
+                                                    throw new Error(`Plugin search failed: ${error.message}`);
+                                                }
                                                 /**
-                                                 * Enable auto-update checking
+                                                 * Check for plugin updates
                                                  */
-                                                enableAutoUpdateCheck();
-                                                void {
-                                                    : .updateCheckTimer
+                                                async;
+                                                checkForUpdates();
+                                                Promise < PluginUpdate > { const: updates = await this.pluginLoader.checkForUpdates(),
+                                                    return: updates.map(update => ({}), ...update, updateType, this.getUpdateType(update.currentVersion, update.availableVersion), breaking, semver.major(update.availableVersion) > semver.major(update.currentVersion)) };
+                                            }
+                                            ;
+                                            /**
+                                             * Get plugin registry statistics
+                                             */
+                                            getStats();
+                                            PluginRegistryStats;
+                                            {
+                                                const plugins = Array.from(this.installedPlugins.values());
+                                                return {
+                                                    totalPlugins: plugins.length,
+                                                    activePlugins: plugins.filter(p => p.status === 'active').length,
+                                                    inactivePlugins: plugins.filter(p => p.status === 'inactive').length,
+                                                    errorPlugins: plugins.filter(p => p.status === 'error').length,
+                                                    totalDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0),
+                                                    resolvedDependencies: plugins.reduce((sum, p) => sum + p.dependencies.length, 0),
+                                                    unresolvedDependencies: 0, // Simplified
+                                                    availableUpdates: 0, // Would be populated by checkForUpdates
+                                                    cacheSize: this.remotePluginCache.size
                                                 };
+                                            }
+                                            ;
+                                            /**
+                                             * Get all installed plugins
+                                             */
+                                            getInstalledPlugins();
+                                            LoadedPlugin;
+                                            {
+                                                return Array.from(this.installedPlugins.values());
+                                                /**
+                                                 * Get a specific plugin
+                                                 */
+                                                getPlugin(pluginId, string);
+                                                LoadedPlugin | undefined;
                                                 {
-                                                    clearInterval(this.updateCheckTimer);
-                                                    this.updateCheckTimer = setInterval(async () => {
-                                                        try {
-                                                            const updates = await this.checkForUpdates();
-                                                            if (updates.length > 0) {
-                                                                this.emit('updates:available', { updates });
-                                                            }
-                                                            try { }
-                                                            catch (error) {
-                                                                this.emit('update-check:error', { error });
-                                                            }
-                                                            this.config.updateCheckInterval;
-                                                        }
-                                                        finally { }
-                                                    });
+                                                    return this.installedPlugins.get(pluginId);
                                                     /**
-                                                     * Disable auto-update checking
+                                                     * Enable auto-update checking
                                                      */
-                                                    disableAutoUpdateCheck();
+                                                    enableAutoUpdateCheck();
                                                     void {
                                                         : .updateCheckTimer
                                                     };
                                                     {
                                                         clearInterval(this.updateCheckTimer);
-                                                        this.updateCheckTimer = undefined;
+                                                        this.updateCheckTimer = setInterval(async () => {
+                                                            try {
+                                                                const updates = await this.checkForUpdates();
+                                                                if (updates.length > 0) {
+                                                                    this.emit('updates:available', { updates });
+                                                                    try {
+                                                                    }
+                                                                    catch (error) {
+                                                                        this.emit('update-check:error', { error });
+                                                                    }
+                                                                    this.config.updateCheckInterval;
+                                                                }
+                                                            }
+                                                            finally { }
+                                                        });
+                                                        /**
+                                                         * Disable auto-update checking
+                                                         */
+                                                        disableAutoUpdateCheck();
+                                                        void {
+                                                            : .updateCheckTimer
+                                                        };
+                                                        {
+                                                            clearInterval(this.updateCheckTimer);
+                                                            this.updateCheckTimer = undefined;
+                                                            // Private methods
+                                                        }
                                                         // Private methods
                                                     }
                                                     // Private methods
@@ -315,156 +315,161 @@ catch (error) {
                         // Private methods
                     }
                     // Private methods
+                    finally {
+                    }
+                    // Private methods
                 }
                 // Private methods
-            }
-            // Private methods
-            ,
-            // Private methods
-            async initializeRegistry() {
-                try {
-                    // Ensure cache directory exists
-                    await fs.mkdir(this.config.cacheDirectory, { recursive: true });
-                    // Load installed plugins from disk
-                    await this.loadInstalledPlugins();
-                    // Enable auto-update check if configured
-                    if (this.config.autoUpdateCheck) {
-                        this.enableAutoUpdateCheck();
-                        this.emit('registry:initialized');
-                    }
-                    try { }
-                    catch (error) {
-                        this.emit('registry:error', { error });
-                        console.error('Failed to initialize plugin registry:', error);
-                    }
-                }
-                finally {
-                }
-            },
-            async resolvePluginSource(identifier, version) {
-                // Try different resolution strategies
-                // 1. File system path
-                if (identifier.startsWith('./') || identifier.startsWith('/')) {
-                    return { type: 'filesystem', location: identifier };
-                    // 2. Git repository
-                    if (identifier.startsWith('git+') || identifier.includes('github.com')) {
-                        return { type: 'git', location: identifier, version };
-                        // 3. NPM package
-                        if (identifier.includes('@') && !identifier.startsWith('@')) {
-                            const [name, ver] = identifier.split('@');
-                            return { type: 'npm', location: name, version: ver };
-                            // 4. Default to npm
-                            return { type: 'npm', location: identifier, version };
+                ,
+                // Private methods
+                async initializeRegistry() {
+                    try {
+                        // Ensure cache directory exists
+                        await fs.mkdir(this.config.cacheDirectory, { recursive: true });
+                        // Load installed plugins from disk
+                        await this.loadInstalledPlugins();
+                        // Enable auto-update check if configured
+                        if (this.config.autoUpdateCheck) {
+                            this.enableAutoUpdateCheck();
+                            this.emit('registry:initialized');
+                        }
+                        try { }
+                        catch (error) {
+                            this.emit('registry:error', { error });
+                            console.error('Failed to initialize plugin registry:', error);
                         }
                     }
-                }
-            },
-            async checkForConflicts(plugin) {
-                const existing = this.installedPlugins.get(plugin.manifest.id);
-                if (existing && existing !== plugin) {
-                    throw new Error() `Plugin ${plugin.manifest.id} is already installed (version ${existing.manifest.version})`;
-                }
-                ;
-            },
-            async installDependencies(manifest) {
-                if (!manifest.dependencies)
-                    return;
-                for (const [depId, versionRange] of Object.entries(manifest.dependencies)) {
-                    if (!this.installedPlugins.has(depId)) {
-                        await this.installPlugin(depId, { version: versionRange });
+                    finally {
                     }
-                }
-            },
-            findDependentPlugins(pluginId) {
-                const dependents = [];
-                for (const [id, plugin] of this.installedPlugins) {
-                    if (plugin.dependencies.includes(pluginId)) {
-                        dependents.push(id);
-                        return dependents;
+                },
+                async resolvePluginSource(identifier, version) {
+                    // Try different resolution strategies
+                    // 1. File system path
+                    if (identifier.startsWith('./') || identifier.startsWith('/')) {
+                        return { type: 'filesystem', location: identifier };
+                        // 2. Git repository
+                        if (identifier.startsWith('git+') || identifier.includes('github.com')) {
+                            return { type: 'git', location: identifier, version };
+                            // 3. NPM package
+                            if (identifier.includes('@') && !identifier.startsWith('@')) {
+                                const [name, ver] = identifier.split('@');
+                                return { type: 'npm', location: name, version: ver };
+                                // 4. Default to npm
+                                return { type: 'npm', location: identifier, version };
+                            }
+                        }
                     }
-                }
-            },
-            getUpdateType(currentVersion, availableVersion) {
-                const diff = semver.diff(currentVersion, availableVersion);
-                return diff || 'patch';
-            },
-            async saveInstallationRecord(plugin) {
-                const recordPath = join(this.config.cacheDirectory, 'installed.json');
-                try {
-                    let records = {};
+                },
+                async checkForConflicts(plugin) {
+                    const existing = this.installedPlugins.get(plugin.manifest.id);
+                    if (existing && existing !== plugin) {
+                        throw new Error() `Plugin ${plugin.manifest.id} is already installed (version ${existing.manifest.version})`;
+                    }
+                    ;
+                },
+                async installDependencies(manifest) {
+                    if (!manifest.dependencies)
+                        return;
+                    for (const [depId, versionRange] of Object.entries(manifest.dependencies)) {
+                        if (!this.installedPlugins.has(depId)) {
+                            await this.installPlugin(depId, { version: versionRange });
+                        }
+                    }
+                },
+                findDependentPlugins(pluginId) {
+                    const dependents = [];
+                    for (const [id, plugin] of this.installedPlugins) {
+                        if (plugin.dependencies.includes(pluginId)) {
+                            dependents.push(id);
+                            return dependents;
+                        }
+                    }
+                },
+                getUpdateType(currentVersion, availableVersion) {
+                    const diff = semver.diff(currentVersion, availableVersion);
+                    return diff || 'patch';
+                },
+                async saveInstallationRecord(plugin) {
+                    const recordPath = join(this.config.cacheDirectory, 'installed.json');
                     try {
-                        const content = await fs.readFile(recordPath, 'utf-8');
-                        records = JSON.parse(content);
-                    }
-                    catch {
-                        // File doesn't exist yet
-                        records[plugin.manifest.id] = {
-                            version: plugin.manifest.version,
-                            installedAt: plugin.loadedAt,
-                            source: plugin.source,
-                        };
-                        await fs.writeFile(recordPath, JSON.stringify(records, null, 2));
-                    }
-                    try { }
-                    catch (error) {
-                        console.warn(`Failed to save installation record for ${plugin.manifest.id}:`, error);
-                    }
-                }
-                finally {
-                }
-            },
-            async removeInstallationRecord(pluginId) {
-                const recordPath = join(this.config.cacheDirectory, 'installed.json');
-                try {
-                    const content = await fs.readFile(recordPath, 'utf-8');
-                    const records = JSON.parse(content);
-                    delete records[pluginId];
-                    await fs.writeFile(recordPath, JSON.stringify(records, null, 2));
-                }
-                catch (error) {
-                    console.warn(`Failed to remove installation record for ${pluginId}:`, error);
-                }
-            },
-            async loadInstalledPlugins() {
-                const recordPath = join(this.config.cacheDirectory, 'installed.json');
-                try {
-                    const content = await fs.readFile(recordPath, 'utf-8');
-                    const records = JSON.parse(content);
-                    for (const [pluginId, record] of Object.entries(records)) {
+                        let records = {};
                         try {
-                            const plugin = await this.pluginLoader.loadPlugin(record.source);
-                            this.installedPlugins.set(pluginId, plugin);
+                            const content = await fs.readFile(recordPath, 'utf-8');
+                            records = JSON.parse(content);
+                        }
+                        catch { // File doesn't exist yet
+                            records[plugin.manifest.id] = {
+                                version: plugin.manifest.version,
+                                installedAt: plugin.loadedAt,
+                                source: plugin.source
+                            };
+                        }
+                        ;
+                        await fs.writeFile(recordPath, JSON.stringify(records, null, 2));
+                        try {
                         }
                         catch (error) {
-                            console.warn(`Failed to load installed plugin ${pluginId}:`, error);
+                            console.warn(`Failed to save installation record for ${plugin.manifest.id}:`, error);
                         }
                     }
-                    try { }
+                    finally {
+                    }
+                },
+                async removeInstallationRecord(pluginId) {
+                    const recordPath = join(this.config.cacheDirectory, 'installed.json');
+                    try {
+                        const content = await fs.readFile(recordPath, 'utf-8');
+                        const records = JSON.parse(content);
+                        delete records[pluginId];
+                        await fs.writeFile(recordPath, JSON.stringify(records, null, 2));
+                    }
                     catch (error) {
+                        console.warn(`Failed to remove installation record for ${pluginId}:`, error);
+                    }
+                },
+                async loadInstalledPlugins() {
+                    const recordPath = join(this.config.cacheDirectory, 'installed.json');
+                    try {
+                        const content = await fs.readFile(recordPath, 'utf-8');
+                        const records = JSON.parse(content);
+                        for (const [pluginId, record] of Object.entries(records)) {
+                            try {
+                                const plugin = await this.pluginLoader.loadPlugin(record.source);
+                                this.installedPlugins.set(pluginId, plugin);
+                            }
+                            catch (error) {
+                                console.warn(`Failed to load installed plugin ${pluginId}:`, error);
+                            }
+                            try {
+                            }
+                            catch (error) {
+                                // No installed plugins record exists yet
+                            }
+                            // No installed plugins record exists yet
+                        }
                         // No installed plugins record exists yet
+                    }
+                    // No installed plugins record exists yet
+                    finally {
                     }
                     // No installed plugins record exists yet
                 }
                 // No installed plugins record exists yet
-                finally {
-                }
+                ,
                 // No installed plugins record exists yet
+                async createPluginBackup(plugin) {
+                    // Simplified backup implementation
+                    console.log(`Creating backup for plugin ${plugin.manifest.id}`);
+                },
+                async restorePluginBackup(pluginId) {
+                    // Simplified restore implementation
+                    console.log(`Restoring backup for plugin ${pluginId}`);
+                },
+                async removePluginData(pluginId) {
+                    // Remove plugin-specific data directories
+                    console.log(`Removing data for plugin ${pluginId}`);
+                }
             }
-            // No installed plugins record exists yet
-            ,
-            // No installed plugins record exists yet
-            async createPluginBackup(plugin) {
-                // Simplified backup implementation
-                console.log(`Creating backup for plugin ${plugin.manifest.id}`);
-            },
-            async restorePluginBackup(pluginId) {
-                // Simplified restore implementation
-                console.log(`Restoring backup for plugin ${pluginId}`);
-            },
-            async removePluginData(pluginId) {
-                // Remove plugin-specific data directories
-                console.log(`Removing data for plugin ${pluginId}`);
-            }
-        }
-    };
+        };
+    }
 }

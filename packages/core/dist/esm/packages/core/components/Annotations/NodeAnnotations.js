@@ -12,7 +12,9 @@ import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 // import { Switch } from '../ui/Switch';
-import { MessageCircle, CheckCircle, Clock, User, Camera, Zap, Settings, FileText, Link, Image as ImageIcon, Pause, X, Eye, EyeOff, Edit3, Save, MoreHorizontal } from 'lucide-react';
+import { MessageCircle, CheckCircle, Clock, User, Camera, Zap, Settings, FileText, Link, Image as ImageIcon, Pause, X, Eye, EyeOff, Edit3, Save } from MoreHorizontal;
+from;
+'lucide-react';
 reactions: {
     [emoji, string];
     VFXUser;
@@ -20,84 +22,54 @@ reactions: {
 ;
 // Annotation type configurations
 const ANNOTATION_TYPES = {
-    performance: {
-        icon: _jsx(Zap, { className: "w-4 h-4" }),
-        color: '#f59e0b',
-        bgColor: 'bg-amber-50',
-        borderColor: 'border-amber-200',
-        label: 'Performance', }
+    performance: {},
+    icon: _jsx(Zap, { className: "w-4 h-4" }),
+    color: '#f59e0b',
+    bgColor: 'bg-amber-50',
+    borderColor: 'border-amber-200',
+    label: 'Performance'
 };
 creative: {
-    icon: _jsx(Camera, { className: "w-4 h-4" }),
-        color;
-    '#8b5cf6',
-        bgColor;
-    'bg-purple-50',
-        borderColor;
-    'border-purple-200',
-        label;
-    'Creative',
-    ;
+    icon: _jsx(Camera, { className: "w-4 h-4" });
+    color: '#8b5cf6';
+    bgColor: 'bg-purple-50';
+    borderColor: 'border-purple-200';
+    label: 'Creative';
 }
 technical: {
-    icon: _jsx(Settings, { className: "w-4 h-4" }),
-        color;
-    '#6b7280',
-        bgColor;
-    'bg-gray-50',
-        borderColor;
-    'border-gray-200',
-        label;
-    'Technical',
-    ;
+    icon: _jsx(Settings, { className: "w-4 h-4" });
+    color: '#6b7280';
+    bgColor: 'bg-gray-50';
+    borderColor: 'border-gray-200';
+    label: 'Technical';
 }
 review: {
-    icon: _jsx(Eye, { className: "w-4 h-4" }),
-        color;
-    '#3b82f6',
-        bgColor;
-    'bg-blue-50',
-        borderColor;
-    'border-blue-200',
-        label;
-    'Review',
-    ;
+    icon: _jsx(Eye, { className: "w-4 h-4" });
+    color: '#3b82f6';
+    bgColor: 'bg-blue-50';
+    borderColor: 'border-blue-200';
+    label: 'Review';
 }
 approval: {
-    icon: _jsx(CheckCircle, { className: "w-4 h-4" }),
-        color;
-    '#10b981',
-        bgColor;
-    'bg-green-50',
-        borderColor;
-    'border-green-200',
-        label;
-    'Approval',
-    ;
+    icon: _jsx(CheckCircle, { className: "w-4 h-4" });
+    color: '#10b981';
+    bgColor: 'bg-green-50';
+    borderColor: 'border-green-200';
+    label: 'Approval';
 }
 question: {
-    icon: _jsx(MessageCircle, { className: "w-4 h-4" }),
-        color;
-    '#06b6d4',
-        bgColor;
-    'bg-cyan-50',
-        borderColor;
-    'border-cyan-200',
-        label;
-    'Question',
-    ;
+    icon: _jsx(MessageCircle, { className: "w-4 h-4" });
+    color: '#06b6d4';
+    bgColor: 'bg-cyan-50';
+    borderColor: 'border-cyan-200';
+    label: 'Question';
 }
 reference: {
-    icon: _jsx(FileText, { className: "w-4 h-4" }),
-        color;
-    '#84cc16',
-        bgColor;
-    'bg-lime-50',
-        borderColor;
-    'border-lime-200',
-        label;
-    'Reference',
-    ;
+    icon: _jsx(FileText, { className: "w-4 h-4" });
+    color: '#84cc16';
+    bgColor: 'bg-lime-50';
+    borderColor: 'border-lime-200';
+    label: 'Reference';
 }
 ;
 const STATUS_CONFIGS = {
@@ -124,9 +96,8 @@ export const NodeAnnotationSystem = ({
     onAnnotationUpdate,
     onAnnotationDelete,
     onReplyCreate,
-    className = '',
-    compact = false
-});
+    className = '' });
+compact = false;
 {
     const [_____isCreating, setIsCreating] = useState(false);
     const [_____editingId, _____setEditingId] = useState(null);
@@ -152,8 +123,7 @@ export const NodeAnnotationSystem = ({
         deadline;
     undefined,
         assignee;
-    undefined,
-    ;
+    undefined;
 }
 ;
 // Filter and sort annotations
@@ -210,28 +180,21 @@ const handleCreateAnnotation = useCallback(() => {
         linkedAnnotations: [],
         estimatedTime: newAnnotation.estimatedTime,
         deadline: newAnnotation.deadline,
-        assignee: newAnnotation.assignee,
+        assignee: newAnnotation.assignee
     };
-    onAnnotationCreate(annotation);
-    // Reset form
-    setNewAnnotation({});
-    type: 'review',
-        content;
-    '',
-        priority;
-    'medium',
-        visibility;
-    'public',
-        tags;
-    [],
-        estimatedTime;
-    undefined,
-        deadline;
-    undefined,
-        assignee;
-    undefined,
-    ;
 });
+onAnnotationCreate(annotation);
+// Reset form
+setNewAnnotation({});
+type: 'review';
+content: '';
+priority: 'medium';
+visibility: 'public';
+tags: [];
+estimatedTime: undefined;
+deadline: undefined;
+assignee: undefined;
+;
 setIsCreating(false);
 [newAnnotation, nodeId, currentUser, onAnnotationCreate];
 ;
@@ -243,9 +206,8 @@ const _____handlePriorityChange = useCallback((annotationId, priority) => {
 }, [onAnnotationUpdate]);
 // Single Annotation Component
 const AnnotationCard = ({
-    annotation,
-    expanded = false
-});
+    annotation });
+expanded = false;
 {
     const [showReplies, setShowReplies] = useState(false);
     const [replyContent, setReplyContent] = useState('');
@@ -258,11 +220,11 @@ const AnnotationCard = ({
         onReplyCreate(annotation.id, {});
         content: replyContent.trim(),
             author;
-        currentUser,
-        ;
+        currentUser;
     };
-    setReplyContent('');
 }
+;
+setReplyContent('');
 ;
 return;
 _jsxs(Card, { className: `annotation-card ${typeConfig.borderColor} ${expanded ? 'ring-2 ring-blue-200' : ''}`, children: ["}", _jsxs(CardHeader, { className: "pb-3", children: [_jsx("div", { className: "flex items-start justify-between", children: _jsxs("div", { className: "flex items-center gap-2", children: [_jsx("div", { className: "p-1.5 rounded-full", style: { backgroundColor: `${typeConfig.color}20`, color: typeConfig.color }, children: typeConfig.icon }), _jsxs("div", { children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("span", { className: "font-medium text-gray-900", children: typeConfig.label }), _jsx(Badge, { variant: "secondary", className: `text-xs ${priorityConfig.bg}`, style: { color: priorityConfig.color }, children: priorityConfig.label })] }), _jsxs("div", { className: "flex items-center gap-2 text-xs text-gray-500 mt-1", children: [_jsx("span", { children: annotation.author.name }), _jsx("span", { children: "\u2022" }), _jsx("span", { children: new Date(annotation.timestamp).toLocaleDateString() }), annotation.estimatedTime && ()

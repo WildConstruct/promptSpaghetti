@@ -6,10 +6,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useRef } from 'react';
 import { parseExtensionManifest } from '../../extensions/ExtensionManifest-simple';
 import { extensionCompatibilityChecker } from '../../extensions/ExtensionCompatibilityChecker';
+onCancel: () => void ;
 export const ExtensionInstallDialog = ({
-    onInstall,
-    onCancel
-});
+    onInstall });
+onCancel;
 {
     const [installMethod, setInstallMethod] = useState('file');
     const [manifestUrl, setManifestUrl] = useState('');
@@ -21,150 +21,161 @@ export const ExtensionInstallDialog = ({
     const [error, setError] = useState(null);
     const [step, setStep] = useState('select');
     const fileInputRef = useRef(null);
-    const handleFileSelect = async (event) => {
-        const file = event.target.files?.[0];
-        if (!file)
+    const handleFileSelect = async (event) => { };
+    const file = event.target.files?.[0];
+    if (!file)
+        return;
+    setError(null);
+    try {
+        if (file.name.endsWith('.json')) {
+            // Direct manifest file
+            const content = await file.text();
+            setManifestContent(content);
+            await validateManifest(content);
+        }
+        else if (file.name.endsWith('.zip') || file.name.endsWith('.tar.gz')) { // Extension package
+            setError('Extension packages are not yet supported. Please select a manifest.json file.');
+        }
+        else {
+            setError('Please select a valid manifest.json file or extension package.');
+        }
+        try { }
+        catch (err) {
+            setError(`Failed to read file: ${err}`);
+        }
+    }
+    finally { }
+    ;
+    const handleUrlInstall = async () => {
+        if (!manifestUrl.trim()) {
+            setError('Please enter a valid URL');
             return;
-        setError(null);
-        try {
-            if (file.name.endsWith('.json')) {
-                // Direct manifest file
-                const content = await file.text();
+            setError(null);
+            setIsValidating(true);
+            try {
+                const response = await fetch(manifestUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const content = await response.text();
                 setManifestContent(content);
                 await validateManifest(content);
-            }
-            else if (file.name.endsWith('.zip') || file.name.endsWith('.tar.gz')) {
-                // Extension package
-                setError('Extension packages are not yet supported. Please select a manifest.json file.');
-            }
-            else {
-                setError('Please select a valid manifest.json file or extension package.');
-            }
-            try { }
-            catch (err) {
-                setError(`Failed to read file: ${err}`);
-            }
-        }
-        finally { }
-        ;
-        const handleUrlInstall = async () => {
-            if (!manifestUrl.trim()) {
-                setError('Please enter a valid URL');
-                return;
-                setError(null);
-                setIsValidating(true);
                 try {
-                    const response = await fetch(manifestUrl);
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-                    const content = await response.text();
-                    setManifestContent(content);
-                    await validateManifest(content);
                 }
                 catch (err) {
                     setError(`Failed to fetch manifest: ${err}`);
                 }
-            }
-            try { }
-            finally {
-                setIsValidating(false);
-            }
-            ;
-            const handleDevInstall = async () => {
-                if (!devPath.trim()) {
-                    setError('Please enter a valid path');
-                    return;
-                    setError(null);
-                    setIsValidating(true);
-                    try {
-                        // In a real implementation, this would use a file system API
-                        // For now, simulate loading a development extension
-                        const mockManifest = {
-                            manifest_version: '1.0',
-                            id: 'dev-extension',
-                            name: 'Development Extension',
-                            version: '0.1.0',
-                            description: 'Development extension loaded from local path',
-                            author: 'Developer',
-                            extension_type: 'node',
-                            capabilities: {
-                                provides: ['test-functionality'],
-                                requires: ['runtime-nodes'],
-                            },
-                            dependencies: {
-                                system_version: '^1.0.0',
-                            },
-                            permissions: ['data-processing'],
-                            runtime: {
-                                entry_point: 'dist/index',
-                                node_types: ['TestNode'],
-                            },
-                            development: {
-                                path: devPath,
-                                auto_reload: true,
-                            },
-                            const: content = JSON.stringify(mockManifest, null, 2),
-                            await: validateManifest(content)
-                        };
-                        try { }
-                        catch (err) {
-                            setError(`Failed to load development extension: ${err}`);
-                        }
-                    }
-                    finally {
-                        setIsValidating(false);
-                    }
-                    ;
-                    const validateManifest = async (content) => {
-                        setIsValidating(true);
-                        setError(null);
-                        try {
-                            // Parse and validate manifest
-                            const manifest = parseExtensionManifest(content);
-                            setParsedManifest(manifest);
-                            // Check compatibility
-                            const compatibility = extensionCompatibilityChecker.checkExtensionCompatibility();
-                            ;
-                            manifest,
-                                {
-                                    systemVersion: '1.0.0',
-                                    platform: 'web',
-                                    availableExtensions: new Map(),
-                                    grantedPermissions: ['data-processing', 'ui-components']
-                                };
-                            setCompatibilityResult(compatibility);
-                            setStep('validate');
-                        }
-                        catch (err) {
-                            setError(`Invalid manifest: ${err}`);
-                        }
-                        setParsedManifest(null);
-                        setCompatibilityResult(null);
-                    };
-                    try { }
-                    finally {
-                        setIsValidating(false);
-                    }
-                    ;
-                    const handleInstall = async () => {
-                        if (!parsedManifest)
-                            return;
-                        try {
-                            await onInstall(parsedManifest);
-                        }
-                        catch (err) {
-                            setError(`Installation failed: ${err}`);
-                        }
-                    };
-                    const renderSelectStep = () => ();
-                    ;
-                    _jsxs("div", { className: "install-step select-step", children: [_jsx("h3", { children: "Choose Installation Method" }), _jsxs("div", { className: "install-methods", children: [_jsxs("div", { className: `install-method ${installMethod === 'file' ? 'active' : ''}`, onClick: () => setInstallMethod('file'), children: [_jsx("div", { className: "method-icon", children: "\uD83D\uDCC1" }), _jsxs("div", { className: "method-info", children: [_jsx("h4", { children: "From File" }), _jsx("p", { children: "Install from a local manifest.json or extension package" })] })] }), _jsxs("div", { className: `install-method ${installMethod === 'url' ? 'active' : ''}`, onClick: () => setInstallMethod('url'), children: [_jsx("div", { className: "method-icon", children: "\uD83C\uDF10" }), _jsxs("div", { className: "method-info", children: [_jsx("h4", { children: "From URL" }), _jsx("p", { children: "Install directly from a manifest URL" })] })] }), _jsxs("div", { className: `install-method ${installMethod === 'dev' ? 'active' : ''}`, onClick: () => setInstallMethod('dev'), children: [_jsx("div", { className: "method-icon", children: "\uD83D\uDEE0\uFE0F" }), _jsxs("div", { className: "method-info", children: [_jsx("h4", { children: "Development Mode" }), _jsx("p", { children: "Load an extension from a local development path" })] })] })] }), _jsxs("div", { className: "install-input-section", children: [installMethod === 'file' && ()
-                                        < div, " className=\"file-input-section\">", _jsx("input", { ref: fileInputRef, type: "file", accept: ".json,.zip,.tar.gz", onChange: handleFileSelect, style: { display: 'none' } }), _jsx("button", { className: "file-select-btn", onClick: () => fileInputRef.current?.click(), children: "\uD83D\uDCC1 Select File" }), _jsx("p", { className: "input-help", children: "Select a manifest.json file or extension package (.zip, .tar.gz)" })] }), ")}", installMethod === 'url' && ()
-                                < div, " className=\"url-input-section\">", _jsx("input", { type: "url", className: "url-input", placeholder: "https://example.com/extension/manifest.json", value: manifestUrl, onChange: (e) => setManifestUrl(e.target.value) }), _jsx("button", { className: "url-install-btn", onClick: handleUrlInstall, disabled: !manifestUrl.trim() || isValidating, children: isValidating ? '⏳ Loading...' : '📥 Load Manifest' }), _jsx("p", { className: "input-help", children: "Enter the URL to an extension manifest.json file" })] });
+                finally {
+                    setIsValidating(false);
                 }
-            };
-        };
+                ;
+                const handleDevInstall = async () => {
+                    if (!devPath.trim()) {
+                        setError('Please enter a valid path');
+                        return;
+                        setError(null);
+                        setIsValidating(true);
+                        try {
+                            // In a real implementation, this would use a file system API
+                            // For now, simulate loading a development extension
+                            const mockManifest = {
+                                manifest_version: '1.0',
+                                id: 'dev-extension',
+                                name: 'Development Extension',
+                                version: '0.1.0',
+                                description: 'Development extension loaded from local path',
+                                author: 'Developer',
+                                extension_type: 'node',
+                                capabilities: {
+                                    provides: ['test-functionality'],
+                                    requires: ['runtime-nodes']
+                                },
+                                dependencies: {
+                                    system_version: '^1.0.0'
+                                },
+                                permissions: ['data-processing'],
+                                runtime: {
+                                    entry_point: 'dist/index',
+                                    node_types: ['TestNode']
+                                },
+                                development: {
+                                    path: devPath,
+                                    auto_reload: true
+                                }
+                            };
+                            const content = JSON.stringify(mockManifest, null, 2);
+                            setManifestContent(content);
+                            await validateManifest(content);
+                            try {
+                            }
+                            catch (err) {
+                                setError(`Failed to load development extension: ${err}`);
+                            }
+                            finally {
+                                setIsValidating(false);
+                            }
+                            ;
+                            const validateManifest = async (content) => {
+                                setIsValidating(true);
+                                setError(null);
+                                try {
+                                    // Parse and validate manifest
+                                    const manifest = parseExtensionManifest(content);
+                                    setParsedManifest(manifest);
+                                    // Check compatibility
+                                    const compatibility = extensionCompatibilityChecker.checkExtensionCompatibility();
+                                    ;
+                                    manifest;
+                                    {
+                                        systemVersion: '1.0.0';
+                                        platform: 'web';
+                                        availableExtensions: new Map();
+                                    }
+                                    grantedPermissions: ['data-processing', 'ui-components'];
+                                    ;
+                                    setCompatibilityResult(compatibility);
+                                    setStep('validate');
+                                    try {
+                                    }
+                                    catch (err) {
+                                        setError(`Invalid manifest: ${err}`);
+                                    }
+                                    setParsedManifest(null);
+                                    setCompatibilityResult(null);
+                                    try {
+                                    }
+                                    finally {
+                                        setIsValidating(false);
+                                    }
+                                    ;
+                                    const handleInstall = async () => {
+                                        if (!parsedManifest)
+                                            return;
+                                        try {
+                                            await onInstall(parsedManifest);
+                                        }
+                                        catch (err) {
+                                            setError(`Installation failed: ${err}`);
+                                        }
+                                    };
+                                    const renderSelectStep = () => ();
+                                    ;
+                                    _jsxs("div", { className: "install-step select-step", children: [_jsx("h3", { children: "Choose Installation Method" }), _jsxs("div", { className: "install-methods", children: [_jsxs("div", { className: `install-method ${installMethod === 'file' ? 'active' : ''}`, onClick: () => setInstallMethod('file'), children: [_jsx("div", { className: "method-icon", children: "\uD83D\uDCC1" }), _jsxs("div", { className: "method-info", children: [_jsx("h4", { children: "From File" }), _jsx("p", { children: "Install from a local manifest.json or extension package" })] })] }), _jsxs("div", { className: `install-method ${installMethod === 'url' ? 'active' : ''}`, onClick: () => setInstallMethod('url'), children: [_jsx("div", { className: "method-icon", children: "\uD83C\uDF10" }), _jsxs("div", { className: "method-info", children: [_jsx("h4", { children: "From URL" }), _jsx("p", { children: "Install directly from a manifest URL" })] })] }), _jsxs("div", { className: `install-method ${installMethod === 'dev' ? 'active' : ''}`, onClick: () => setInstallMethod('dev'), children: [_jsx("div", { className: "method-icon", children: "\uD83D\uDEE0\uFE0F" }), _jsxs("div", { className: "method-info", children: [_jsx("h4", { children: "Development Mode" }), _jsx("p", { children: "Load an extension from a local development path" })] })] })] }), _jsxs("div", { className: "install-input-section", children: [installMethod === 'file' && ()
+                                                        < div, " className=\"file-input-section\">", _jsx("input", { ref: fileInputRef, type: "file", accept: ".json,.zip,.tar.gz", onChange: handleFileSelect, style: { display: 'none' } }), _jsx("button", { className: "file-select-btn", onClick: () => fileInputRef.current?.click(), children: "\uD83D\uDCC1 Select File" }), _jsx("p", { className: "input-help", children: "Select a manifest.json file or extension package (.zip, .tar.gz)" })] }), ")}", installMethod === 'url' && ()
+                                                < div, " className=\"url-input-section\">", _jsx("input", { type: "url", className: "url-input", placeholder: "https://example.com/extension/manifest.json", value: manifestUrl, onChange: (e) => setManifestUrl(e.target.value) }), _jsx("button", { className: "url-install-btn", onClick: handleUrlInstall, disabled: !manifestUrl.trim() || isValidating, children: isValidating ? '⏳ Loading...' : '📥 Load Manifest' }), _jsx("p", { className: "input-help", children: "Enter the URL to an extension manifest.json file" })] });
+                                }
+                                finally {
+                                }
+                            };
+                        }
+                        finally {
+                        }
+                    }
+                };
+            }
+            finally {
+            }
+        }
     };
 }
 {

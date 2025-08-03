@@ -5,9 +5,8 @@ div >
 ;
 ;
 export const DialogTrigger = ({
-    children,
-    ...props
-});
+    children });
+props;
 ()
     < button;
 className = "dialog-trigger";
@@ -20,9 +19,8 @@ button >
 ;
 export const DialogContent = ({
     children,
-    className,
-    ...props
-});
+    className });
+props;
 ()
     < div;
 className = {} `dialog-content ${className || ''}`;
@@ -38,9 +36,8 @@ div >
 ;
 export const DialogHeader = ({
     children,
-    className,
-    ...props
-});
+    className });
+props;
 ()
     < div;
 className = {} `dialog-header ${className || ''}`;
@@ -56,9 +53,8 @@ div >
 ;
 export const DialogTitle = ({
     children,
-    className,
-    ...props
-});
+    className });
+props;
 ()
     < h2;
 className = {} `dialog-title ${className || ''}`;
@@ -74,9 +70,8 @@ h2 >
 ;
 export const DialogDescription = ({
     children,
-    className,
-    ...props
-});
+    className });
+props;
 ()
     < p;
 className = {} `dialog-description ${className || ''}`;
@@ -91,9 +86,8 @@ p >
 ;
 ;
 export const DialogClose = ({
-    children,
-    ...props
-});
+    children });
+props;
 ()
     < button;
 className = "dialog-close";

@@ -8,10 +8,22 @@
 // Core Epic 1 Performance Monitoring
 export { PerformanceMonitor } from './PerformanceMonitor';
 export { PerformanceAnalytics } from './PerformanceAnalytics';
+PerformanceMonitorConfig;
+from;
+'./PerformanceMonitor';
+PerformanceInsight;
+from;
+'./PerformanceAnalytics';
 // Security Analytics Monitoring (Epic 31)
 export { default as SecurityAnalyticsMonitor } from './SecurityAnalyticsMonitor';
+SecurityAnalyticsConfig;
+from;
+'./SecurityAnalyticsMonitor';
 // Epic 1 & Epic 17 Security Integration
 export { default as Epic1Epic17SecurityIntegration } from './Epic1Epic17SecurityIntegration';
+IntegrationConfig;
+from;
+'./Epic1Epic17SecurityIntegration';
 ;
 return new SecurityAnalyticsMonitor({ ...defaultConfig, ...config });
 ;
@@ -34,8 +46,8 @@ export const createDefaultSecuritySystemHealth = (((systemId, systemType) => ({
     networkLatency: 50,
     configurationVersion: '1.0.0',
     lastConfigUpdate: Date.now() - 86400000, // 24 hours ago,
-    pendingUpdates: 0,
-})));
+    pendingUpdates: 0 })));
+;
 systems: Array;
 void ;
 {
@@ -74,11 +86,12 @@ recommendations: string;
                     epic1Health,
                     epic17Health,
                     securityHealth,
-                    overallHealth,
-                    recommendations
+                    overallHealth
                 };
+                recommendations;
             }
             ;
         }
+        ;
     }
 }

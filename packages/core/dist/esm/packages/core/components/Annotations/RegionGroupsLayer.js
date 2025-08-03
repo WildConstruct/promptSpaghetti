@@ -10,7 +10,9 @@ import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-run
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { RegionGroup } from './RegionGroup';
 import { DragSelectBox } from './DragSelectBox';
-import { DEFAULT_REGION_GROUP_PREFERENCES, REGION_GROUP_COLORS } from '../../types/CollaborationTypes';
+import { RegionGroup as RegionGroupType, DEFAULT_REGION_GROUP_PREFERENCES } from REGION_GROUP_COLORS;
+from;
+'../../types/CollaborationTypes';
 canvasOffset ?  : { x: number, y: number };
 zoom ?  : number;
 export const RegionGroupsLayer = ({
@@ -21,10 +23,9 @@ export const RegionGroupsLayer = ({
     selectedGroupId = null,
     hoveredGroupId = null,
     author = 'Anonymous',
-    readOnly = false,
-    canvasOffset = { x: 0, y: 0 },
-    zoom = 1
-});
+    readOnly = false });
+canvasOffset = { x: 0, y: 0 };
+zoom = 1;
 {
     const [isDragSelecting, setIsDragSelecting] = useState(false);
     const [contextMenu, setContextMenu] = useState(null);
@@ -67,13 +68,12 @@ const calculateGroupBounds = useCallback((nodeIds, padding = groupPreferences.de
     maxX = Math.max(maxX, node.position.x + nodeWidth);
     maxY = Math.max(maxY, node.position.y + nodeHeight);
 });
-return {
-    x: minX - padding,
+return { x: minX - padding,
     y: minY - padding,
     width: maxX - minX + (padding * 2),
-    height: maxY - minY + (padding * 2),
-    padding
-};
+    height: maxY - minY + (padding * 2) };
+padding;
+;
 [nodes, groupPreferences.defaultPadding];
 ;
 // Create region group
@@ -90,8 +90,8 @@ string;
     const defaultColorKey = colorKeys[regionGroups.length % colorKeys.length];
     const defaultColor = REGION_GROUP_COLORS[defaultColorKey];
     const newGroup = {
-        id: generateGroupId(),
-        label: `Group ${regionGroups.length + 1}` };
+        id: generateGroupId() };
+    label: `Group ${regionGroups.length + 1}`;
 }
 description: `Contains ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`;
 color: groupPreferences.defaultColor || defaultColor.primary,
@@ -150,8 +150,10 @@ const handleGroupAction = useCallback((action) => {
                     id: action.groupId || generateGroupId(),
                     author,
                     timestamp: new Date().toISOString(),
-                    lastModified: new Date().toISOString(),
+                    lastModified: new Date().toISOString()
                 };
+                as;
+                RegionGroupType;
                 updatedGroups.push(newGroup);
                 break;
             }
@@ -160,10 +162,11 @@ const handleGroupAction = useCallback((action) => {
                 updatedGroups[groupIndex] = {
                     ...updatedGroups[groupIndex],
                     ...action.group,
-                    lastModified: new Date().toISOString(),
+                    lastModified: new Date().toISOString()
                 };
-                break;
             }
+            ;
+            break;
         case 'delete':
             if (groupIndex >= 0) {
                 updatedGroups.splice(groupIndex, 1);
@@ -176,39 +179,43 @@ const handleGroupAction = useCallback((action) => {
                     bounds: {
                         ...updatedGroups[groupIndex].bounds,
                         x: action.position.x,
-                        y: action.position.y,
-                    },
-                    lastModified: new Date().toISOString()
-                };
-                break;
+                        y: action.position.y }
+                },
+                    lastModified;
+                new Date().toISOString();
             }
+            ;
+            break;
         case 'resize':
             if (groupIndex >= 0 && action.bounds) {
                 updatedGroups[groupIndex] = {
                     ...updatedGroups[groupIndex],
                     bounds: action.bounds,
-                    lastModified: new Date().toISOString(),
+                    lastModified: new Date().toISOString()
                 };
-                break;
             }
+            ;
+            break;
         case 'collapse':
             if (groupIndex >= 0) {
                 updatedGroups[groupIndex] = {
                     ...updatedGroups[groupIndex],
                     collapsed: true,
-                    lastModified: new Date().toISOString(),
+                    lastModified: new Date().toISOString()
                 };
-                break;
             }
+            ;
+            break;
         case 'expand':
             if (groupIndex >= 0) {
                 updatedGroups[groupIndex] = {
                     ...updatedGroups[groupIndex],
                     collapsed: false,
-                    lastModified: new Date().toISOString(),
+                    lastModified: new Date().toISOString()
                 };
-                break;
             }
+            ;
+            break;
         case 'addNodes':
             if (groupIndex >= 0 && action.nodeIds) {
                 const existingNodeIds = updatedGroups[groupIndex].nodeIds;
@@ -217,10 +224,11 @@ const handleGroupAction = useCallback((action) => {
                     ...updatedGroups[groupIndex],
                     nodeIds: newNodeIds,
                     bounds: calculateGroupBounds(newNodeIds),
-                    lastModified: new Date().toISOString(),
+                    lastModified: new Date().toISOString()
                 };
-                break;
             }
+            ;
+            break;
         case 'removeNodes':
             if (groupIndex >= 0 && action.nodeIds) {
                 const remainingNodeIds = updatedGroups[groupIndex].nodeIds.filter();
@@ -238,11 +246,12 @@ else {
         ...updatedGroups[groupIndex],
         nodeIds: remainingNodeIds,
         bounds: calculateGroupBounds(remainingNodeIds),
-        lastModified: new Date().toISOString(),
+        lastModified: new Date().toISOString()
     };
-    break;
-    onRegionGroupsChange(updatedGroups);
 }
+;
+break;
+onRegionGroupsChange(updatedGroups);
 [regionGroups, onRegionGroupsChange, author, generateGroupId, calculateGroupBounds];
 ;
 // Handle drag selection completion
@@ -251,9 +260,7 @@ const handleSelectionComplete = useCallback((bounds) => {
     createRegionGroup(bounds);
 }, [createRegionGroup]);
 // Handle drag selection cancel
-const handleSelectionCancel = useCallback(() => {
-    setIsDragSelecting(false);
-}, []);
+const handleSelectionCancel = useCallback(() => { setIsDragSelecting(false); }, []);
 // Handle context menu
 const handleContextMenu = useCallback((e) => {
     if (readOnly)
@@ -263,9 +270,9 @@ const handleContextMenu = useCallback((e) => {
     setContextMenu({});
     x: e.clientX,
         y;
-    e.clientY,
-    ;
+    e.clientY;
 });
+;
 [readOnly];
 ;
 // Close context menu on outside click
@@ -281,25 +288,24 @@ useEffect(() => {
 });
 // Keyboard shortcuts
 useEffect(() => {
-    const handleKeyDown = (e) => {
-        if (readOnly)
-            return;
-        // G key to start group selection
-        if (e.key === 'g' || e.key === 'G') {
-            if (!e.ctrlKey && !e.metaKey && !e.altKey && !isDragSelecting) {
-                e.preventDefault();
-                setIsDragSelecting(true);
-                // Escape to cancel selection
-                if (e.key === 'Escape' && isDragSelecting) {
-                    setIsDragSelecting(false);
-                }
-                ;
-                document.addEventListener('keydown', handleKeyDown);
-                return () => document.removeEventListener('keydown', handleKeyDown);
+    const handleKeyDown = (e) => { };
+    if (readOnly)
+        return;
+    // G key to start group selection
+    if (e.key === 'g' || e.key === 'G') {
+        if (!e.ctrlKey && !e.metaKey && !e.altKey && !isDragSelecting) {
+            e.preventDefault();
+            setIsDragSelecting(true);
+            // Escape to cancel selection
+            if (e.key === 'Escape' && isDragSelecting) {
+                setIsDragSelecting(false);
             }
-            [readOnly, isDragSelecting];
+            ;
+            document.addEventListener('keydown', handleKeyDown);
+            return () => document.removeEventListener('keydown', handleKeyDown);
         }
-    };
+        [readOnly, isDragSelecting];
+    }
 });
 // Get node count for a group
 const getNodeCountForGroup = useCallback((groupId) => {
@@ -313,9 +319,9 @@ _jsx(_Fragment, { children: _jsxs("div", { ref: layerRef, "data-testid": "region
             left: 0,
             width: '100%',
             height: '100%',
-            pointerEvents: 'none', // Allow graph interactions to pass through,
-            zIndex: 500, // Below sticky notes and node labels,
-            overflow: 'visible',
+            pointerEvents: 'none', // Allow graph interactions to pass through
+            zIndex: 500, // Below sticky notes and node labels
+            overflow: 'visible'
         }, onContextMenu: handleContextMenu, children: [regionGroups.map(group => ()
                 < RegionGroup, key = { group, : .id }, group = { group }, onAction = { handleGroupAction }, selected = { selectedGroupId } === group.id), "canEdit=", !readOnly, "canMove=", !readOnly && !group.isLocked, "canResize=", !readOnly && !group.isLocked, "showLabel=", groupPreferences.showLabels, "showNodeCount=", groupPreferences.showNodeCounts, "nodeCount=", getNodeCountForGroup(group.id), "zoom=", zoom, "/> ))}", regionGroups.length === 0 && !readOnly && !isDragSelecting && ()
                 < div, "style=", {
@@ -332,16 +338,14 @@ _jsx(_Fragment, { children: _jsxs("div", { ref: layerRef, "data-testid": "region
                 pointerEvents: 'all',
                 zIndex: 2000,
                 opacity: 0.7,
-                transition: 'opacity 0.3s ease',
+                transition: 'opacity 0.3s ease'
             }, "onMouseEnter=", (e) => {
                 e.currentTarget.style.opacity = '1';
-            }, "onMouseLeave=", (e) => {
-                e.currentTarget.style.opacity = '0.7';
-            }, ">", _jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px' }, children: "\uD83C\uDFAF Region Groups" }), _jsxs("div", { style: { lineHeight: 1.4 }, children: ["\u2022 Press ", _jsx("kbd", { style: { background: 'rgba(),
+                onMouseLeave = {}(e);
+            }, " => ", e.currentTarget.style.opacity = '0.7', "} >", _jsx("div", { style: { fontWeight: 'bold', marginBottom: '4px' }, children: "\uD83C\uDFAF Region Groups" }), _jsxs("div", { style: { lineHeight: 1.4 }, children: ["\u2022 Press ", _jsx("kbd", { style: { background: 'rgba(),
                             255: ,
                             255: ,
-                            255: ,
-                            0.2:  } }), ")', padding: '2px 4px', borderRadius: '3px' }}>G"] }), " to start group selection", _jsx("br", {}), "\u2022 Drag to select multiple nodes", _jsx("br", {}), "\u2022 Right-click for group options"] }) });
+                            255:  } }), "0.2 )', padding: '2px 4px', borderRadius: '3px' }}>G"] }), " to start group selection", _jsx("br", {}), "\u2022 Drag to select multiple nodes", _jsx("br", {}), "\u2022 Right-click for group options"] }) });
 div >
 ;
 div >
@@ -351,52 +355,41 @@ div >
         < div;
     style = {};
     {
-        position: 'fixed',
-            left;
-        contextMenu.x,
-            top;
-        contextMenu.y,
-            background;
-        'white',
-            border;
-        '1px solid #e5e7eb',
-            borderRadius;
-        '8px',
-            boxShadow;
-        '0 10px 25px rgba(0, 0, 0, 0.15)',
-            padding;
-        '4px 0',
-            zIndex;
-        10000,
-            minWidth;
-        '160px',
-            fontFamily;
-        'system-ui, -apple-system, sans-serif',
-        ;
+        position: 'fixed';
+        left: contextMenu.x;
+        top: contextMenu.y;
+        background: 'white';
+        border: '1px solid #e5e7eb';
+        borderRadius: '8px';
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)';
+        padding: '4px 0';
+        zIndex: 10000;
+        minWidth: '160px';
+        fontFamily: 'system-ui, -apple-system, sans-serif';
     }
+        >
+            _jsx("button", { onClick: () => {
+                    setIsDragSelecting(true);
+                    setContextMenu(null);
+                }, style: {
+                    width: '100%',
+                    padding: '8px 12px',
+                    border: 'none',
+                    background: 'transparent',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                }, onMouseEnter: (e) => {
+                    e.currentTarget.style.backgroundColor = '#f3f4f6';
+                }, onMouseLeave: (e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                }, children: "\uD83C\uDFAF Create Region Group" });
+    div >
+    ;
 }
-    >
-        _jsx("button", { onClick: () => {
-                setIsDragSelecting(true);
-                setContextMenu(null);
-            }, style: {
-                width: '100%',
-                padding: '8px 12px',
-                border: 'none',
-                background: 'transparent',
-                textAlign: 'left',
-                cursor: 'pointer',
-                fontSize: '13px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-            }, onMouseEnter: (e) => {
-                e.currentTarget.style.backgroundColor = '#f3f4f6';
-            }, onMouseLeave: (e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-            }, children: "\uD83C\uDFAF Create Region Group" });
-div >
-;
 { /* Drag selection overlay */ }
 _jsx(DragSelectBox, { isActive: isDragSelecting, onSelectionComplete: handleSelectionComplete, onSelectionCancel: handleSelectionCancel, canvasOffset: canvasOffset, zoom: zoom });
  >

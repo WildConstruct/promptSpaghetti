@@ -8,7 +8,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useMemo } from 'react';
 import { AlertTriangle, CheckCircle, Info, X, Eye, EyeOff, Settings } from 'lucide-react';
 import { ConstraintValidator } from '../../historical/ConstraintValidator';
-import { HISTORICAL_ERAS } from '../../types/UTDG';
+from;
+'../../types/UTDG';
 import './ConstraintValidationPanel.css';
 {
     const [validator] = useState(() => new ConstraintValidator());
@@ -32,20 +33,20 @@ import './ConstraintValidationPanel.css';
                     source: 'graph_editor',
                     tags: extractTags(node),
                     social_class: extractSocialClass(node),
-                    daily_use: true,
-                },
-                relationships: {
-                    compatible: node.inputs || [],
-                    incompatible: [],
-                    variations: [],
-                },
-                constraints: []
-            };
-            converted.push(utdgNode);
+                    daily_use: true }
+            }, relationships;
+             || [],
+                incompatible;
+            [],
+                variations;
+            [];
         }
-    });
-    return converted;
+    }, constraints, []);
 }
+;
+converted.push(utdgNode);
+;
+return converted;
 [nodes, utdgNodes, selectedEra];
 ;
 // Run validation when nodes or era changes
@@ -59,9 +60,7 @@ useEffect(() => {
     }
     [convertedNodes, selectedEra, validator, enforcementLevels];
 });
-const handleNodeClick = (nodeIds) => {
-    onNodeHighlight?.(nodeIds);
-};
+const handleNodeClick = (nodeIds) => { onNodeHighlight?.(nodeIds); };
 const handleConstraintOverride = (constraintId) => {
     onConstraintOverride?.(constraintId);
     // Re-run validation after override
@@ -73,9 +72,7 @@ validator.validateForEra(convertedNodes, selectedEra);
 validator.validateNodes(convertedNodes);
 setValidationResult(result);
 ;
-const handleEnforcementChange = (level, enabled) => {
-    const newLevels = enabled;
-};
+const handleEnforcementChange = (level, enabled) => { const newLevels = enabled; };
 [...enforcementLevels, level];
 enforcementLevels.filter(l => l !== level);
 setEnforcementLevels(newLevels);
@@ -105,7 +102,7 @@ _jsxs("div", { className: "constraint-validation-content", children: [validation
             _jsxs("div", { className: "validation-summary", children: [validationResult.valid ? ()
                         < div : , " className=\"validation-status valid\">", _jsx(CheckCircle, { size: 16 }), _jsx("span", { children: "All constraints satisfied" })] })
             :
-        , ") : ()", _jsxs("div", { className: "validation-status invalid", children: [_jsx(AlertTriangle, { size: 16 }), _jsxs("span", { children: [validationResult.violations.length, " violation", validationResult.violations.length !== 1 ? 's' : '', ",", validationResult.warnings.length, " warning", validationResult.warnings.length !== 1 ? 's' : ''] })] }), ")}"] });
+        , ") : ()", _jsxs("div", { className: "validation-status invalid", children: [_jsx(AlertTriangle, { size: 16 }), _jsxs("span", { children: [validationResult.violations.length, " violation", validationResult.violations.length !== 1 ? 's' : '', validationResult.warnings.length, " warning", validationResult.warnings.length !== 1 ? 's' : ''] })] }), ")}"] });
 { /* Violations */ }
 {
     validationResult.violations.length > 0 && ()

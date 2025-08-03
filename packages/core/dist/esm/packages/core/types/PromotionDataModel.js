@@ -1,7 +1,8 @@
+from;
+'./PlacementTypes';
 ;
 export var PromotionType;
 (function (PromotionType) {
-    // Content-Based Promotions
     PromotionType["FEATURED_TEMPLATES"] = "featured_templates";
     PromotionType["NEW_RELEASES"] = "new_releases";
     PromotionType["TRENDING_NOW"] = "trending_now";
@@ -74,99 +75,85 @@ export var PromotionType;
         contentId: string;
         templateId: string;
         // Content Details
-        contentInfo: {
-            title: string;
-            description: string;
-            creatorId: string;
-            categoryId: string;
-            tags: string;
-            thumbnailUrl ?  : string;
-            previewUrl ?  : string;
-        }
+        contentInfo: { }
+        title: string;
+        description: string;
+        creatorId: string;
+        categoryId: string;
+        tags: string;
+        thumbnailUrl ?  : string;
+        previewUrl ?  : string;
     }
-}
-;
-// Promotion Configuration
-promotionConfig: {
-    priority: number;
-    weight ?  : number;
-    customMessage ?  : string;
-    callToAction ?  : string;
-    promotionalBadges ?  : PromotionalBadge;
-    customStyling ?  : Partial;
-}
-;
-// Performance Data
-performanceScore: number;
-metrics: ContentPromotionMetrics;
-// Scheduling
-startTime ?  : Date;
-endTime ?  : Date;
-timezone ?  : string;
-// Targeting Overrides
-targetingOverrides ?  : Partial;
-// Status and Lifecycle
-status: ContentPromotionStatus;
-addedAt: Date;
-lastPromoted ?  : Date;
-promotionCount: number;
-// A/B Testing
-experimentVariant ?  : string;
-controlGroup ?  : boolean;
-export var BadgeType;
-(function (BadgeType) {
-    BadgeType["NEW"] = "new";
-    BadgeType["FEATURED"] = "featured";
-    BadgeType["TRENDING"] = "trending";
-    BadgeType["BESTSELLER"] = "bestseller";
-    BadgeType["EDITOR_CHOICE"] = "editor_choice";
-    BadgeType["LIMITED_TIME"] = "limited_time";
-    BadgeType["EXCLUSIVE"] = "exclusive";
-    BadgeType["PREMIUM"] = "premium";
-    BadgeType["DISCOUNT"] = "discount";
-    BadgeType["CUSTOM"] = "custom";
-    BadgeType[BadgeType["export"] = void 0] = "export";
-    BadgeType[BadgeType["interface"] = void 0] = "interface";
-    BadgeType[BadgeType["BadgeStyle"] = void 0] = "BadgeStyle";
-})(BadgeType || (BadgeType = {}));
-{
-    backgroundColor: string;
-    textColor: string;
-    borderColor ?  : string;
-    fontSize ?  : string;
-    fontWeight ?  : string;
-    borderRadius ?  : number;
-    animation ?  : 'pulse' | 'glow' | 'bounce' | 'none',
     ;
-}
-export var BadgePosition;
-(function (BadgePosition) {
-    BadgePosition["TOP_LEFT"] = "top_left";
-    BadgePosition["TOP_RIGHT"] = "top_right";
-    BadgePosition["BOTTOM_LEFT"] = "bottom_left";
-    BadgePosition["BOTTOM_RIGHT"] = "bottom_right";
-    BadgePosition["CENTER"] = "center";
-    BadgePosition["OVERLAY"] = "overlay";
-    BadgePosition[BadgePosition["export"] = void 0] = "export";
-    BadgePosition[BadgePosition["interface"] = void 0] = "interface";
-    BadgePosition[BadgePosition["BadgeVisibility"] = void 0] = "BadgeVisibility";
-})(BadgePosition || (BadgePosition = {}));
-{
-    showOnHover ?  : boolean;
-    showAlways ?  : boolean;
-    showOnMobile ?  : boolean;
-    minScreenWidth ?  : number;
+    // Promotion Configuration
+    promotionConfig: {
+        priority: number;
+        weight ?  : number;
+        customMessage ?  : string;
+        callToAction ?  : string;
+        promotionalBadges ?  : PromotionalBadge;
+        customStyling ?  : Partial;
+    }
+    ;
+    // Performance Data
+    performanceScore: number;
+    metrics: ContentPromotionMetrics;
+    // Scheduling
+    startTime ?  : Date;
+    endTime ?  : Date;
+    timezone ?  : string;
+    // Targeting Overrides
+    targetingOverrides ?  : Partial;
+    // Status and Lifecycle
+    status: ContentPromotionStatus;
+    addedAt: Date;
+    lastPromoted ?  : Date;
+    promotionCount: number;
+    // A/B Testing
+    experimentVariant ?  : string;
+    controlGroup ?  : boolean;
+    export let BadgeType;
+    (function (BadgeType) {
+        BadgeType["NEW"] = "new";
+        BadgeType["FEATURED"] = "featured";
+        BadgeType["TRENDING"] = "trending";
+        BadgeType["BESTSELLER"] = "bestseller";
+        BadgeType["EDITOR_CHOICE"] = "editor_choice";
+        BadgeType["LIMITED_TIME"] = "limited_time";
+        BadgeType["EXCLUSIVE"] = "exclusive";
+        BadgeType["PREMIUM"] = "premium";
+        BadgeType["DISCOUNT"] = "discount";
+        BadgeType["CUSTOM"] = "custom";
+        BadgeType[BadgeType["export"] = void 0] = "export";
+        BadgeType[BadgeType["interface"] = void 0] = "interface";
+        BadgeType[BadgeType["BadgeStyle"] = void 0] = "BadgeStyle";
+    })(BadgeType || (BadgeType = {}));
+    {
+        backgroundColor: string;
+        textColor: string;
+        borderColor ?  : string;
+        fontSize ?  : string;
+        fontWeight ?  : string;
+        borderRadius ?  : number;
+        animation ?  : 'pulse' | 'glow' | 'bounce' | 'none';
+    }
+    export let BadgePosition;
+    (function (BadgePosition) {
+        BadgePosition["TOP_LEFT"] = "top_left";
+        BadgePosition["TOP_RIGHT"] = "top_right";
+        BadgePosition["BOTTOM_LEFT"] = "bottom_left";
+        BadgePosition["BOTTOM_RIGHT"] = "bottom_right";
+        BadgePosition["CENTER"] = "center";
+    })(BadgePosition || (BadgePosition = {}));
+    OVERLAY = 'overlay';
+    ;
+    performanceThreshold ?  : { metric: string,
+        value: number,
+        operator: 'gt' | 'lt' | 'eq' };
 }
 ;
-performanceThreshold ?  : {
-    metric: string,
-    value: number,
-    operator: 'gt' | 'lt' | 'eq',
-};
-userConditions ?  : {
-    segments: string,
-    excludeSegments: string
-};
+userConditions ?  : { segments: string,
+    excludeSegments: string };
 export var ContentPromotionStatus;
 (function (ContentPromotionStatus) {
     ContentPromotionStatus["ELIGIBLE"] = "eligible";
@@ -185,6 +172,7 @@ export var ContentPromotionStatus;
 {
     // Template Attributes
     templateCriteria: {
+        ;
         categories ?  : string;
         excludeCategories ?  : string;
         tags ?  : string;
@@ -193,13 +181,12 @@ export var ContentPromotionStatus;
         createdBefore ?  : Date;
         creatorIds ?  : string;
         excludeCreatorIds ?  : string;
-        priceRange ?  : {
-            min: number,
-            max: number
-        };
+        priceRange ?  : {};
+        min: number;
+        max: number;
     }
+    ;
 }
-;
 ;
 // Performance Requirements
 performanceCriteria: {
@@ -208,11 +195,11 @@ performanceCriteria: {
     minRevenue ?  : number;
     maxAge ?  : number; // days,
     performancePercentile ?  : number; // top X%,
-    engagementScore ?  : {
-        min: number,
-        max: number
-    };
+    engagementScore ?  : {};
+    min: number;
+    max ?  : number;
 }
+;
 ;
 // Quality Standards
 qualityCriteria: {
@@ -220,17 +207,17 @@ qualityCriteria: {
     hasDocumentation ?  : boolean;
     isVerified ?  : boolean;
     moderationStatus ?  : 'approved' | 'pending' | 'rejected';
-    qualityScore ?  : {
-        min: number,
-        max: number
-    };
+    qualityScore ?  : {};
+    min: number;
+    max ?  : number;
 }
+;
 ;
 // Content Freshness
 freshnessCriteria: {
     preferNew ?  : boolean;
     newThresholdDays ?  : number;
-    updateRecency ?  : number; // days,
+    updateRecency ?  : number; // days }
     trendingWeight ?  : number;
     seasonalRelevance ?  : string;
 }
@@ -240,12 +227,12 @@ diversityCriteria: {
     maxPerCreator ?  : number;
     maxPerCategory ?  : number;
     ensureVariety ?  : boolean;
-    balancePopularAndNiche ?  : number; // ratio,
+    balancePopularAndNiche ?  : number; // ratio }
 }
 ;
 // Exclusion Rules
 exclusionRules: {
-    recentlyPromoted ?  : number; // days,
+    recentlyPromoted ?  : number; // days }
     currentlyPromoted ?  : boolean;
     userPurchaseHistory ?  : boolean;
     competitorTemplates ?  : boolean;
@@ -272,363 +259,411 @@ export var ScheduleType;
     excludeDays ?  : number;
     // Special Time Periods
     peakHours ?  : {
-        start: string, // "09:00",
-        end: string, // "17:00",
+        start: string, // "09:00";
+        end: string, // "17:00" }
         multiplier: number
     };
-}
-;
-// Geographic Time Zones
-primaryTimezones ?  : string;
-followUserTimezone ?  : boolean;
-// Seasonal Adjustments
-seasonalPatterns ?  : SeasonalPattern;
-;
-action: {
-    type: 'extend' | 'pause' | 'rotate' | 'boost' | 'end';
-    parameters: Record;
-}
-;
-priority: number;
-isActive: boolean;
-export var RotationStrategy;
-(function (RotationStrategy) {
-    RotationStrategy["ROUND_ROBIN"] = "round_robin";
-    RotationStrategy["WEIGHTED_RANDOM"] = "weighted_random";
-    RotationStrategy["PERFORMANCE_OPTIMIZED"] = "performance_optimized";
-    RotationStrategy["TIME_BASED"] = "time_based";
-    RotationStrategy["USER_BEHAVIOR_DRIVEN"] = "user_behavior_driven";
-    RotationStrategy["MACHINE_LEARNING"] = "machine_learning";
-    RotationStrategy[RotationStrategy["export"] = void 0] = "export";
-    RotationStrategy[RotationStrategy["interface"] = void 0] = "interface";
-    RotationStrategy[RotationStrategy["RotationFrequency"] = void 0] = "RotationFrequency";
-})(RotationStrategy || (RotationStrategy = {}));
-{
-    type: 'fixed_interval' | 'performance_based' | 'traffic_based' | 'hybrid';
-    interval ?  : number; // minutes,
-    minInterval ?  : number;
-    maxInterval ?  : number;
-    conditions ?  : RotationCondition;
-}
-;
-priority: number;
-isActive: boolean;
-lastTriggered ?  : Date;
-export var UserLifeCycleStage;
-(function (UserLifeCycleStage) {
-    UserLifeCycleStage["NEW_VISITOR"] = "new_visitor";
-    UserLifeCycleStage["FIRST_PURCHASE"] = "first_purchase";
-    UserLifeCycleStage["REPEAT_CUSTOMER"] = "repeat_customer";
-    UserLifeCycleStage["VIP_CUSTOMER"] = "vip_customer";
-    UserLifeCycleStage["DORMANT_USER"] = "dormant_user";
-    UserLifeCycleStage["CHURNED_USER"] = "churned_user";
-    UserLifeCycleStage[UserLifeCycleStage["export"] = void 0] = "export";
-    UserLifeCycleStage[UserLifeCycleStage["enum"] = void 0] = "enum";
-    UserLifeCycleStage[UserLifeCycleStage["UserValueTier"] = void 0] = "UserValueTier";
-})(UserLifeCycleStage || (UserLifeCycleStage = {}));
-{
-    LOW_VALUE = 'low_value',
-        MEDIUM_VALUE = 'medium_value',
-        HIGH_VALUE = 'high_value',
-        VIP_VALUE = 'vip_value';
-    export let UserEngagementLevel;
-    (function (UserEngagementLevel) {
-        UserEngagementLevel["PASSIVE"] = "passive";
-        UserEngagementLevel["CASUAL"] = "casual";
-        UserEngagementLevel["ENGAGED"] = "engaged";
-        UserEngagementLevel["HIGHLY_ENGAGED"] = "highly_engaged";
-        UserEngagementLevel["POWER_USER"] = "power_user";
-        UserEngagementLevel[UserEngagementLevel["export"] = void 0] = "export";
-        UserEngagementLevel[UserEngagementLevel["interface"] = void 0] = "interface";
-        UserEngagementLevel[UserEngagementLevel["PurchaseHistoryTargeting"] = void 0] = "PurchaseHistoryTargeting";
-    })(UserEngagementLevel || (UserEngagementLevel = {}));
+    // Geographic Time Zones
+    primaryTimezones ?  : string;
+    followUserTimezone ?  : boolean;
+    // Seasonal Adjustments
+    seasonalPatterns ?  : SeasonalPattern;
+    adjustmentFactor: number;
+    specificDates ?  : Date;
+    geographicRegions ?  : string;
+    endValue: Date | number;
+    exceptions ?  : Date;
+    export let RotationStrategy;
+    (function (RotationStrategy) {
+        RotationStrategy["ROUND_ROBIN"] = "round_robin";
+        RotationStrategy["WEIGHTED_RANDOM"] = "weighted_random";
+        RotationStrategy["PERFORMANCE_OPTIMIZED"] = "performance_optimized";
+        RotationStrategy["TIME_BASED"] = "time_based";
+        RotationStrategy["USER_BEHAVIOR_DRIVEN"] = "user_behavior_driven";
+        RotationStrategy["MACHINE_LEARNING"] = "machine_learning";
+        RotationStrategy[RotationStrategy["export"] = void 0] = "export";
+        RotationStrategy[RotationStrategy["interface"] = void 0] = "interface";
+        RotationStrategy[RotationStrategy["RotationFrequency"] = void 0] = "RotationFrequency";
+    })(RotationStrategy || (RotationStrategy = {}));
     {
-        totalPurchases ?  : {
-            min: number,
-            max: number
-        };
-    }
-}
-;
-recentPurchases ?  : {
-    days: number,
-    count: number
-};
-categoryPurchases ?  : string;
-avgOrderValue ?  : {
-    min: number,
-    max: number
-};
-purchaseFrequency ?  : {
-    min: number, // purchases per month,
-    max: number
-};
-export var UserIntent;
-(function (UserIntent) {
-    UserIntent["BROWSING"] = "browsing";
-    UserIntent["RESEARCHING"] = "researching";
-    UserIntent["COMPARING"] = "comparing";
-    UserIntent["PURCHASING"] = "purchasing";
-    UserIntent["LEARNING"] = "learning";
-    UserIntent["EXPLORING"] = "exploring";
-    UserIntent[UserIntent["export"] = void 0] = "export";
-    UserIntent[UserIntent["enum"] = void 0] = "enum";
-    UserIntent[UserIntent["SessionStage"] = void 0] = "SessionStage";
-})(UserIntent || (UserIntent = {}));
-{
-    ENTRY = 'entry',
-        EXPLORATION = 'exploration',
-        CONSIDERATION = 'consideration',
-        DECISION = 'decision',
-        CHECKOUT = 'checkout',
-        POST_PURCHASE = 'post_purchase';
-}
-;
-export var PersonalizationRuleType;
-(function (PersonalizationRuleType) {
-    PersonalizationRuleType["CONTENT_BOOST"] = "content_boost";
-    PersonalizationRuleType["CONTENT_SUPPRESS"] = "content_suppress";
-    PersonalizationRuleType["LAYOUT_MODIFICATION"] = "layout_modification";
-    PersonalizationRuleType["TIMING_ADJUSTMENT"] = "timing_adjustment";
-    PersonalizationRuleType["MESSAGING_CUSTOMIZATION"] = "messaging_customization";
-    PersonalizationRuleType["TARGETING_REFINEMENT"] = "targeting_refinement";
-    PersonalizationRuleType[PersonalizationRuleType["export"] = void 0] = "export";
-    PersonalizationRuleType[PersonalizationRuleType["interface"] = void 0] = "interface";
-    PersonalizationRuleType[PersonalizationRuleType["PersonalizationCondition"] = void 0] = "PersonalizationCondition";
-})(PersonalizationRuleType || (PersonalizationRuleType = {}));
-{
-    conditionId: string;
-    type: 'user_attribute' | 'behavior' | 'context' | 'performance' | 'time';
-    attribute: string;
-    operator: 'eq' | 'neq' | 'gt' | 'lt' | 'in' | 'contains' | 'matches';
-    value: any;
-    weight: number;
-}
-export var GoalType;
-(function (GoalType) {
-    GoalType["VISIBILITY"] = "visibility";
-    GoalType["ENGAGEMENT"] = "engagement";
-    GoalType["CONVERSION"] = "conversion";
-    GoalType["REVENUE"] = "revenue";
-    GoalType["RETENTION"] = "retention";
-    GoalType["BRAND_AWARENESS"] = "brand_awareness";
-    GoalType[GoalType["export"] = void 0] = "export";
-    GoalType[GoalType["interface"] = void 0] = "interface";
-    GoalType[GoalType["GoalTimeframe"] = void 0] = "GoalTimeframe";
-})(GoalType || (GoalType = {}));
-{
-    type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'campaign_duration';
-    duration ?  : number;
-    endDate ?  : Date;
-    milestone ?  : boolean;
-}
-export var GoalPriority;
-(function (GoalPriority) {
-    GoalPriority["LOW"] = "low";
-    GoalPriority["MEDIUM"] = "medium";
-    GoalPriority["HIGH"] = "high";
-    GoalPriority["CRITICAL"] = "critical";
-    GoalPriority[GoalPriority["export"] = void 0] = "export";
-    GoalPriority[GoalPriority["enum"] = void 0] = "enum";
-    GoalPriority[GoalPriority["GoalStatus"] = void 0] = "GoalStatus";
-})(GoalPriority || (GoalPriority = {}));
-{
-    ACTIVE = 'active',
-        ACHIEVED = 'achieved',
-        PAUSED = 'paused',
-        FAILED = 'failed',
-        ARCHIVED = 'archived';
-}
-export var OptimizationStrategy;
-(function (OptimizationStrategy) {
-    OptimizationStrategy["MANUAL_CONTROL"] = "manual_control";
-    OptimizationStrategy["RULE_BASED"] = "rule_based";
-    OptimizationStrategy["MACHINE_LEARNING"] = "machine_learning";
-    OptimizationStrategy["HYBRID_APPROACH"] = "hybrid_approach";
-    OptimizationStrategy["MULTI_ARMED_BANDIT"] = "multi_armed_bandit";
-    OptimizationStrategy["BAYESIAN_OPTIMIZATION"] = "bayesian_optimization";
-    OptimizationStrategy[OptimizationStrategy["export"] = void 0] = "export";
-    OptimizationStrategy[OptimizationStrategy["interface"] = void 0] = "interface";
-    OptimizationStrategy[OptimizationStrategy["MachineLearningConfig"] = void 0] = "MachineLearningConfig";
-})(OptimizationStrategy || (OptimizationStrategy = {}));
-{
-    algorithm: 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'ensemble';
-    features: MLFeature;
-    trainingData: MLTrainingConfig;
-    modelUpdate: MLModelUpdateConfig;
-    explainability: boolean;
-}
-export var ABTestType;
-(function (ABTestType) {
-    ABTestType["SIMPLE_AB"] = "simple_ab";
-    ABTestType["MULTIVARIATE"] = "multivariate";
-    ABTestType["MULTI_ARMED_BANDIT"] = "multi_armed_bandit";
-    ABTestType["SEQUENTIAL"] = "sequential";
-    ABTestType[ABTestType["export"] = void 0] = "export";
-    ABTestType[ABTestType["interface"] = void 0] = "interface";
-    ABTestType[ABTestType["ABTestVariant"] = void 0] = "ABTestVariant";
-})(ABTestType || (ABTestType = {}));
-{
-    variantId: string;
-    name: string;
-    description: string;
-    configuration: Record;
-    trafficPercentage: number;
-    isControl: boolean;
-}
-export var ABTestStatus;
-(function (ABTestStatus) {
-    ABTestStatus["DRAFT"] = "draft";
-    ABTestStatus["SCHEDULED"] = "scheduled";
-    ABTestStatus["RUNNING"] = "running";
-    ABTestStatus["PAUSED"] = "paused";
-    ABTestStatus["COMPLETED"] = "completed";
-    ABTestStatus["FAILED"] = "failed";
-    ABTestStatus[ABTestStatus["export"] = void 0] = "export";
-    ABTestStatus[ABTestStatus["interface"] = void 0] = "interface";
-    ABTestStatus[ABTestStatus["ABTestResult"] = void 0] = "ABTestResult";
-})(ABTestStatus || (ABTestStatus = {}));
-{
-    variantId: string;
-    metric: string;
-    value: number;
-    sampleSize: number;
-    confidenceInterval: {
-        lower: number;
-        upper: number;
-    }
-}
-;
-pValue: number;
-effect: number;
-significance: boolean;
-export var BudgetType;
-(function (BudgetType) {
-    BudgetType["LIFETIME"] = "lifetime";
-    BudgetType["DAILY"] = "daily";
-    BudgetType["WEEKLY"] = "weekly";
-    BudgetType["MONTHLY"] = "monthly";
-    BudgetType["CAMPAIGN_DURATION"] = "campaign_duration";
-    BudgetType[BudgetType["export"] = void 0] = "export";
-    BudgetType[BudgetType["enum"] = void 0] = "enum";
-    BudgetType[BudgetType["SpendingPace"] = void 0] = "SpendingPace";
-})(BudgetType || (BudgetType = {}));
-{
-    EVEN = 'even',
-        ACCELERATED = 'accelerated',
-        FRONT_LOADED = 'front_loaded',
-        BACK_LOADED = 'back_loaded';
-}
-export var InsightCategory;
-(function (InsightCategory) {
-    InsightCategory["PERFORMANCE"] = "performance";
-    InsightCategory["AUDIENCE"] = "audience";
-    InsightCategory["CONTENT"] = "content";
-    InsightCategory["TIMING"] = "timing";
-    InsightCategory["BUDGET"] = "budget";
-    InsightCategory["COMPETITION"] = "competition";
-    InsightCategory["TECHNICAL"] = "technical";
-    InsightCategory["CREATIVE"] = "creative";
-    InsightCategory[InsightCategory["export"] = void 0] = "export";
-    InsightCategory[InsightCategory["enum"] = void 0] = "enum";
-    InsightCategory[InsightCategory["InsightType"] = void 0] = "InsightType";
-})(InsightCategory || (InsightCategory = {}));
-{
-    ANOMALY = 'anomaly',
-        TREND = 'trend',
-        PATTERN = 'pattern',
-        OPPORTUNITY = 'opportunity',
-        RISK = 'risk',
-        OPTIMIZATION = 'optimization',
-        ALERT = 'alert';
-    export let InsightPriority;
-    (function (InsightPriority) {
-        InsightPriority["LOW"] = "low";
-        InsightPriority["MEDIUM"] = "medium";
-        InsightPriority["HIGH"] = "high";
-        InsightPriority["CRITICAL"] = "critical";
-        InsightPriority[InsightPriority["export"] = void 0] = "export";
-        InsightPriority[InsightPriority["interface"] = void 0] = "interface";
-        InsightPriority[InsightPriority["InsightFinding"] = void 0] = "InsightFinding";
-    })(InsightPriority || (InsightPriority = {}));
-    {
-        metric: string;
-        observation: string;
+        type: 'fixed_interval' | 'performance_based' | 'traffic_based' | 'hybrid';
+        interval ?  : number; // minutes }
+        minInterval ?  : number;
+        maxInterval ?  : number;
+        conditions ?  : RotationCondition;
+        ;
+        priority: number;
+        isActive: boolean;
+        lastTriggered ?  : Date;
         value: number;
-        context: string;
-        timeframe: string;
+        timeWindow: number;
+        ;
+        // Contextual Targeting
+        contextualTargeting: {
+            currentPage ?  : string;
+            referrerSource ?  : string;
+            searchQuery ?  : string;
+            userIntent ?  : UserIntent;
+            sessionStage ?  : SessionStage;
+            deviceCapabilities ?  : DeviceCapability;
+        }
+        ;
+        // Behavioral Targeting
+        behavioralTargeting: {
+            browsingPatterns: BrowsingPattern;
+            interactionHistory: InteractionPattern;
+            purchasePatterns: PurchasePattern;
+            contentPreferences: ContentPreference;
+            temporalPatterns: TemporalPattern;
+        }
+        ;
+        // Performance-Based Targeting
+        performanceTargeting: {
+            highValueUsers ?  : boolean;
+            likelyConverters ?  : boolean;
+            activeEngagers ?  : boolean;
+            newUserFocus ?  : boolean;
+            retentionRisk ?  : boolean;
+        }
+        ;
+        // Social and Network Targeting
+        socialTargeting ?  : { socialConnections: string,
+            communityMembership: string,
+            influencerFollowers: string,
+            viralContent: boolean };
+        export let UserLifeCycleStage;
+        (function (UserLifeCycleStage) {
+            UserLifeCycleStage["NEW_VISITOR"] = "new_visitor";
+            UserLifeCycleStage["FIRST_PURCHASE"] = "first_purchase";
+            UserLifeCycleStage["REPEAT_CUSTOMER"] = "repeat_customer";
+            UserLifeCycleStage["VIP_CUSTOMER"] = "vip_customer";
+            UserLifeCycleStage["DORMANT_USER"] = "dormant_user";
+            UserLifeCycleStage["CHURNED_USER"] = "churned_user";
+            UserLifeCycleStage[UserLifeCycleStage["export"] = void 0] = "export";
+            UserLifeCycleStage[UserLifeCycleStage["enum"] = void 0] = "enum";
+            UserLifeCycleStage[UserLifeCycleStage["UserValueTier"] = void 0] = "UserValueTier";
+        })(UserLifeCycleStage || (UserLifeCycleStage = {}));
+        {
+            LOW_VALUE = 'low_value',
+                MEDIUM_VALUE = 'medium_value',
+                HIGH_VALUE = 'high_value',
+                VIP_VALUE = 'vip_value';
+            export let UserEngagementLevel;
+            (function (UserEngagementLevel) {
+                UserEngagementLevel["PASSIVE"] = "passive";
+                UserEngagementLevel["CASUAL"] = "casual";
+                UserEngagementLevel["ENGAGED"] = "engaged";
+                UserEngagementLevel["HIGHLY_ENGAGED"] = "highly_engaged";
+                UserEngagementLevel["POWER_USER"] = "power_user";
+                UserEngagementLevel[UserEngagementLevel["export"] = void 0] = "export";
+                UserEngagementLevel[UserEngagementLevel["interface"] = void 0] = "interface";
+                UserEngagementLevel[UserEngagementLevel["PurchaseHistoryTargeting"] = void 0] = "PurchaseHistoryTargeting";
+            })(UserEngagementLevel || (UserEngagementLevel = {}));
+            {
+                totalPurchases ?  : {};
+                min: number;
+                max ?  : number;
+            }
+            ;
+            recentPurchases ?  : { days: number,
+                count: number };
+            categoryPurchases ?  : string;
+            avgOrderValue ?  : { min: number,
+                max: number };
+            purchaseFrequency ?  : { min: number, // purchases per month }
+                max: number
+            };
+            export let UserIntent;
+            (function (UserIntent) {
+                UserIntent["BROWSING"] = "browsing";
+                UserIntent["RESEARCHING"] = "researching";
+                UserIntent["COMPARING"] = "comparing";
+                UserIntent["PURCHASING"] = "purchasing";
+                UserIntent["LEARNING"] = "learning";
+                UserIntent["EXPLORING"] = "exploring";
+                UserIntent[UserIntent["export"] = void 0] = "export";
+                UserIntent[UserIntent["enum"] = void 0] = "enum";
+                UserIntent[UserIntent["SessionStage"] = void 0] = "SessionStage";
+            })(UserIntent || (UserIntent = {}));
+            {
+                ENTRY = 'entry',
+                    EXPLORATION = 'exploration',
+                    CONSIDERATION = 'consideration',
+                    DECISION = 'decision',
+                    CHECKOUT = 'checkout',
+                    POST_PURCHASE = 'post_purchase';
+                categoryDepth: number;
+                sessionDuration: number;
+                pageViews: number;
+                bounceRate: number;
+                ;
+                export let PersonalizationRuleType;
+                (function (PersonalizationRuleType) {
+                    PersonalizationRuleType["CONTENT_BOOST"] = "content_boost";
+                    PersonalizationRuleType["CONTENT_SUPPRESS"] = "content_suppress";
+                    PersonalizationRuleType["LAYOUT_MODIFICATION"] = "layout_modification";
+                    PersonalizationRuleType["TIMING_ADJUSTMENT"] = "timing_adjustment";
+                    PersonalizationRuleType["MESSAGING_CUSTOMIZATION"] = "messaging_customization";
+                })(PersonalizationRuleType || (PersonalizationRuleType = {}));
+                TARGETING_REFINEMENT = 'targeting_refinement';
+                export let GoalType;
+                (function (GoalType) {
+                    GoalType["VISIBILITY"] = "visibility";
+                    GoalType["ENGAGEMENT"] = "engagement";
+                    GoalType["CONVERSION"] = "conversion";
+                    GoalType["REVENUE"] = "revenue";
+                    GoalType["RETENTION"] = "retention";
+                })(GoalType || (GoalType = {}));
+                BRAND_AWARENESS = 'brand_awareness';
+                export let GoalPriority;
+                (function (GoalPriority) {
+                    GoalPriority["LOW"] = "low";
+                    GoalPriority["MEDIUM"] = "medium";
+                    GoalPriority["HIGH"] = "high";
+                    GoalPriority["CRITICAL"] = "critical";
+                    GoalPriority[GoalPriority["export"] = void 0] = "export";
+                    GoalPriority[GoalPriority["enum"] = void 0] = "enum";
+                    GoalPriority[GoalPriority["GoalStatus"] = void 0] = "GoalStatus";
+                })(GoalPriority || (GoalPriority = {}));
+                {
+                    ACTIVE = 'active',
+                        ACHIEVED = 'achieved',
+                        PAUSED = 'paused',
+                        FAILED = 'failed',
+                        ARCHIVED = 'archived';
+                    export let OptimizationStrategy;
+                    (function (OptimizationStrategy) {
+                        OptimizationStrategy["MANUAL_CONTROL"] = "manual_control";
+                        OptimizationStrategy["RULE_BASED"] = "rule_based";
+                        OptimizationStrategy["MACHINE_LEARNING"] = "machine_learning";
+                        OptimizationStrategy["HYBRID_APPROACH"] = "hybrid_approach";
+                        OptimizationStrategy["MULTI_ARMED_BANDIT"] = "multi_armed_bandit";
+                        OptimizationStrategy["BAYESIAN_OPTIMIZATION"] = "bayesian_optimization";
+                        OptimizationStrategy[OptimizationStrategy["export"] = void 0] = "export";
+                        OptimizationStrategy[OptimizationStrategy["interface"] = void 0] = "interface";
+                        OptimizationStrategy[OptimizationStrategy["MachineLearningConfig"] = void 0] = "MachineLearningConfig";
+                    })(OptimizationStrategy || (OptimizationStrategy = {}));
+                    {
+                        algorithm: 'collaborative_filtering' | 'content_based' | 'deep_learning' | 'ensemble';
+                    }
+                    features: MLFeature;
+                    trainingData: MLTrainingConfig;
+                    modelUpdate: MLModelUpdateConfig;
+                    explainability: boolean;
+                    performanceDrift: number;
+                    retrainingTrigger: number;
+                    modelVersion: boolean;
+                    export let ABTestType;
+                    (function (ABTestType) {
+                        ABTestType["SIMPLE_AB"] = "simple_ab";
+                        ABTestType["MULTIVARIATE"] = "multivariate";
+                        ABTestType["MULTI_ARMED_BANDIT"] = "multi_armed_bandit";
+                    })(ABTestType || (ABTestType = {}));
+                    SEQUENTIAL = 'sequential';
+                    totalTrafficPercentage: number;
+                    segments ?  : string;
+                    exclusionRules ?  : string;
+                    export let ABTestStatus;
+                    (function (ABTestStatus) {
+                        ABTestStatus["DRAFT"] = "draft";
+                        ABTestStatus["SCHEDULED"] = "scheduled";
+                        ABTestStatus["RUNNING"] = "running";
+                        ABTestStatus["PAUSED"] = "paused";
+                        ABTestStatus["COMPLETED"] = "completed";
+                        ABTestStatus["FAILED"] = "failed";
+                        ABTestStatus[ABTestStatus["export"] = void 0] = "export";
+                        ABTestStatus[ABTestStatus["interface"] = void 0] = "interface";
+                        ABTestStatus[ABTestStatus["ABTestResult"] = void 0] = "ABTestResult";
+                    })(ABTestStatus || (ABTestStatus = {}));
+                    {
+                        variantId: string;
+                        metric: string;
+                        value: number;
+                        sampleSize: number;
+                        confidenceInterval: { }
+                        lower: number;
+                        upper: number;
+                    }
+                    ;
+                    pValue: number;
+                    effect: number;
+                    significance: boolean;
+                    status: 'pass' | 'fail' | 'warning';
+                    details: string;
+                    export let BudgetType;
+                    (function (BudgetType) {
+                        BudgetType["LIFETIME"] = "lifetime";
+                        BudgetType["DAILY"] = "daily";
+                        BudgetType["WEEKLY"] = "weekly";
+                        BudgetType["MONTHLY"] = "monthly";
+                        BudgetType["CAMPAIGN_DURATION"] = "campaign_duration";
+                        BudgetType[BudgetType["export"] = void 0] = "export";
+                        BudgetType[BudgetType["enum"] = void 0] = "enum";
+                        BudgetType[BudgetType["SpendingPace"] = void 0] = "SpendingPace";
+                    })(BudgetType || (BudgetType = {}));
+                    {
+                        EVEN = 'even';
+                        ACCELERATED = 'accelerated';
+                        FRONT_LOADED = 'front_loaded';
+                        BACK_LOADED = 'back_loaded';
+                        baseRate: number;
+                        multipliers ?  : CostMultiplier;
+                        value: number;
+                        conditions ?  : Record;
+                        alertType: 'email' | 'dashboard' | 'webhook';
+                        recipients: string;
+                        isActive: boolean;
+                        triggered ?  : boolean;
+                        lastTriggered ?  : Date;
+                        ranking: number;
+                        seasonality: number;
+                        export let InsightCategory;
+                        (function (InsightCategory) {
+                            InsightCategory["PERFORMANCE"] = "performance";
+                            InsightCategory["AUDIENCE"] = "audience";
+                            InsightCategory["CONTENT"] = "content";
+                            InsightCategory["TIMING"] = "timing";
+                            InsightCategory["BUDGET"] = "budget";
+                            InsightCategory["COMPETITION"] = "competition";
+                            InsightCategory["TECHNICAL"] = "technical";
+                            InsightCategory["CREATIVE"] = "creative";
+                            InsightCategory[InsightCategory["export"] = void 0] = "export";
+                            InsightCategory[InsightCategory["enum"] = void 0] = "enum";
+                            InsightCategory[InsightCategory["InsightType"] = void 0] = "InsightType";
+                        })(InsightCategory || (InsightCategory = {}));
+                        {
+                            ANOMALY = 'anomaly';
+                            TREND = 'trend';
+                            PATTERN = 'pattern';
+                            OPPORTUNITY = 'opportunity';
+                            RISK = 'risk';
+                            OPTIMIZATION = 'optimization';
+                            ALERT = 'alert';
+                            export let InsightPriority;
+                            (function (InsightPriority) {
+                                InsightPriority["LOW"] = "low";
+                                InsightPriority["MEDIUM"] = "medium";
+                                InsightPriority["HIGH"] = "high";
+                            })(InsightPriority || (InsightPriority = {}));
+                            CRITICAL = 'critical';
+                            data: any;
+                            description: string;
+                            export let ImpactLevel;
+                            (function (ImpactLevel) {
+                                ImpactLevel["LOW"] = "low";
+                                ImpactLevel["MEDIUM"] = "medium";
+                                ImpactLevel["HIGH"] = "high";
+                                ImpactLevel["CRITICAL"] = "critical";
+                                ImpactLevel[ImpactLevel["export"] = void 0] = "export";
+                                ImpactLevel[ImpactLevel["interface"] = void 0] = "interface";
+                                ImpactLevel[ImpactLevel["InsightRecommendation"] = void 0] = "InsightRecommendation";
+                            })(ImpactLevel || (ImpactLevel = {}));
+                            {
+                                recommendationId: string;
+                                action: string;
+                                description: string;
+                                expectedImpact: string;
+                                effort: 'low' | 'medium' | 'high';
+                            }
+                            timeframe: string;
+                            priority: number;
+                            impactMeasured: number;
+                            notes: string;
+                            // ==========================================
+                            // STATUS AND LIFECYCLE MANAGEMENT
+                            // ==========================================
+                            export let PromotionStatus;
+                            (function (PromotionStatus) {
+                                PromotionStatus["DRAFT"] = "draft";
+                                PromotionStatus["PENDING_APPROVAL"] = "pending_approval";
+                                PromotionStatus["APPROVED"] = "approved";
+                                PromotionStatus["SCHEDULED"] = "scheduled";
+                                PromotionStatus["ACTIVE"] = "active";
+                                PromotionStatus["PAUSED"] = "paused";
+                                PromotionStatus["COMPLETED"] = "completed";
+                                PromotionStatus["CANCELLED"] = "cancelled";
+                            })(PromotionStatus || (PromotionStatus = {}));
+                            ARCHIVED = 'archived';
+                            export let LifecycleStage;
+                            (function (LifecycleStage) {
+                                LifecycleStage["PLANNING"] = "planning";
+                                LifecycleStage["APPROVAL"] = "approval";
+                                LifecycleStage["SETUP"] = "setup";
+                                LifecycleStage["LAUNCH"] = "launch";
+                                LifecycleStage["OPTIMIZATION"] = "optimization";
+                                LifecycleStage["MONITORING"] = "monitoring";
+                                LifecycleStage["COMPLETION"] = "completion";
+                                LifecycleStage["ANALYSIS"] = "analysis";
+                                LifecycleStage["ARCHIVAL"] = "archival";
+                                LifecycleStage[LifecycleStage["export"] = void 0] = "export";
+                                LifecycleStage[LifecycleStage["interface"] = void 0] = "interface";
+                                LifecycleStage[LifecycleStage["LifecycleStageHistory"] = void 0] = "LifecycleStageHistory";
+                            })(LifecycleStage || (LifecycleStage = {}));
+                            {
+                                stage: LifecycleStage;
+                                enteredAt: Date;
+                                exitedAt ?  : Date;
+                                duration ?  : number; // minutes }
+                                status: 'completed' | 'in_progress' | 'failed' | 'skipped';
+                                notes ?  : string;
+                                performedBy: string;
+                                condition: string;
+                                value ?  : any;
+                                isMet: boolean;
+                                timestamp: Date;
+                                comments ?  : string;
+                                conditions ?  : string;
+                                accountId: string;
+                                campaignSync: boolean;
+                                bidSync: boolean;
+                                audienceSync: boolean;
+                                conversionSync: boolean;
+                                apiCredentials: Record;
+                                parameters: Record;
+                                frequency: 'once' | 'session' | 'always';
+                                conditions ?  : Record;
+                                ;
+                                performance ?  : { metric: string,
+                                    threshold: number,
+                                    operator: 'gt' | 'lt' | 'eq' };
+                            }
+                            ;
+                            tags ?  : string;
+                            createdBy ?  : string;
+                            approvalStatus ?  : string;
+                            direction: 'asc' | 'desc';
+                            secondarySort ?  : PromotionSortOptions;
+                            campaignIds: string;
+                            parameters ?  : Record;
+                            dryRun ?  : boolean;
+                            usageCount: number;
+                            averagePerformance: Record;
+                            isPublic: boolean;
+                            createdBy: string;
+                            createdAt: Date;
+                            // ==========================================
+                            // DATA MODEL EXPORTS
+                            // ==========================================
+                            export type { // Core Entities
+                            PromotionCampaign, PromotionContent, PromotionSchedule, RotationConfiguration, PromotionTargeting, PersonalizationRule, PromotionGoal, OptimizationSettings, ABTestConfiguration, PromotionBudget, ResourceAllocation, PromotionMetrics, ContentPromotionMetrics, PromotionInsight, PromotionLifecycle
+                            // Configuration Objects
+                            , 
+                            // Configuration Objects
+                            ContentSelectionCriteria, PromotionalBadge, TimeBasedRules, RecurrenceConfig, DynamicSchedulingRule, RotationTrigger, PerformanceThreshold, WeightingFactor, MachineLearningConfig, ABTestVariant, TrafficAllocation, CostModel, BidStrategy
+                            // Analytics and Performance
+                            , 
+                            // Analytics and Performance
+                            PerformanceComparison, GoalComparison, CompetitiveBenchmark, SegmentPerformance, SlotPerformance, TimePerformance, InsightFinding, InsightEvidence, InsightRecommendation
+                            // Utility Types
+                            , 
+                            // Utility Types
+                            PromotionFilterCriteria, PromotionSortOptions, PromotionBulkOperation, PromotionValidationError };
+                            PromotionTemplate;
+                        }
+                        ;
+                    }
+                }
+            }
+        }
     }
 }
-export var ImpactLevel;
-(function (ImpactLevel) {
-    ImpactLevel["LOW"] = "low";
-    ImpactLevel["MEDIUM"] = "medium";
-    ImpactLevel["HIGH"] = "high";
-    ImpactLevel["CRITICAL"] = "critical";
-    ImpactLevel[ImpactLevel["export"] = void 0] = "export";
-    ImpactLevel[ImpactLevel["interface"] = void 0] = "interface";
-    ImpactLevel[ImpactLevel["InsightRecommendation"] = void 0] = "InsightRecommendation";
-})(ImpactLevel || (ImpactLevel = {}));
-{
-    recommendationId: string;
-    action: string;
-    description: string;
-    expectedImpact: string;
-    effort: 'low' | 'medium' | 'high';
-    timeframe: string;
-    priority: number;
-}
-export var PromotionStatus;
-(function (PromotionStatus) {
-    PromotionStatus["DRAFT"] = "draft";
-    PromotionStatus["PENDING_APPROVAL"] = "pending_approval";
-    PromotionStatus["APPROVED"] = "approved";
-    PromotionStatus["SCHEDULED"] = "scheduled";
-    PromotionStatus["ACTIVE"] = "active";
-    PromotionStatus["PAUSED"] = "paused";
-    PromotionStatus["COMPLETED"] = "completed";
-    PromotionStatus["CANCELLED"] = "cancelled";
-    PromotionStatus["ARCHIVED"] = "archived";
-    PromotionStatus[PromotionStatus["export"] = void 0] = "export";
-    PromotionStatus[PromotionStatus["interface"] = void 0] = "interface";
-    PromotionStatus[PromotionStatus["PromotionLifecycle"] = void 0] = "PromotionLifecycle";
-})(PromotionStatus || (PromotionStatus = {}));
-{
-    currentStage: LifecycleStage;
-    stages: LifecycleStageHistory;
-    nextStage ?  : LifecycleStage;
-    stageTransitionRules: StageTransitionRule;
-}
-export var LifecycleStage;
-(function (LifecycleStage) {
-    LifecycleStage["PLANNING"] = "planning";
-    LifecycleStage["APPROVAL"] = "approval";
-    LifecycleStage["SETUP"] = "setup";
-    LifecycleStage["LAUNCH"] = "launch";
-    LifecycleStage["OPTIMIZATION"] = "optimization";
-    LifecycleStage["MONITORING"] = "monitoring";
-    LifecycleStage["COMPLETION"] = "completion";
-    LifecycleStage["ANALYSIS"] = "analysis";
-    LifecycleStage["ARCHIVAL"] = "archival";
-    LifecycleStage[LifecycleStage["export"] = void 0] = "export";
-    LifecycleStage[LifecycleStage["interface"] = void 0] = "interface";
-    LifecycleStage[LifecycleStage["LifecycleStageHistory"] = void 0] = "LifecycleStageHistory";
-})(LifecycleStage || (LifecycleStage = {}));
-{
-    stage: LifecycleStage;
-    enteredAt: Date;
-    exitedAt ?  : Date;
-    duration ?  : number; // minutes,
-    status: 'completed' | 'in_progress' | 'failed' | 'skipped';
-    notes ?  : string;
-    performedBy: string;
-}
-;
-performance ?  : {
-    metric: string,
-    threshold: number,
-    operator: 'gt' | 'lt' | 'eq',
-};
-tags ?  : string;
-createdBy ?  : string;
-approvalStatus ?  : string;

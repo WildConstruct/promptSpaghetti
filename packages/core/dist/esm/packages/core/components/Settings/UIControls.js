@@ -4,84 +4,60 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback } from 'react';
 import { FiEye, FiSun, FiMoon, FiMonitor, FiHelpCircle, FiKeyboard, FiZap, FiContrast } from 'react-icons/fi';
 // Enhanced color palette for better UI consistency
-const uiColors = {
-    ...uiColors,
-    accent: {
-        ...uiColors.accent,
-        primary: uiColors.accent.orange,
-        secondary: uiColors.accent.blue,
-    },
-    ui: {
-        ...uiColors.ui,
-        selected: '#353535',
-        disabled: '#6b7280',
-    },
-    text: {
-        ...uiColors.text,
-        disabled: '#6b7280',
-    }
-};
-export const UIControls = ({
-    settings,
-    onChange
-});
-{
-    // Handle theme change
+const uiColors = {}, ui, uiColors, ui, selected, disabled;
+text: {
+    uiColors.text,
+        disabled;
+    '#6b7280';
+}
+;
+{ // Handle theme change
     const handleThemeChange = useCallback((theme) => {
         onChange({});
-    }, ...settings, theme);
+    }, ...settings);
 }
+theme;
 ;
 [settings, onChange];
 ;
 // Handle tooltips toggle
-const handleShowTooltipsChange = useCallback((showTooltips) => {
-    onChange({});
-}, ...settings, showTooltips);
+const handleShowTooltipsChange = useCallback((showTooltips) => { onChange({}); }, ...settings);
+showTooltips;
 ;
 [settings, onChange];
 ;
 // Handle keyboard shortcuts toggle
-const handleEnableKeyboardShortcutsChange = useCallback((enableKeyboardShortcuts) => {
-    onChange({});
-}, ...settings, enableKeyboardShortcuts);
+const handleEnableKeyboardShortcutsChange = useCallback((enableKeyboardShortcuts) => { onChange({}); }, ...settings);
+enableKeyboardShortcuts;
 ;
 [settings, onChange];
 ;
 // Handle animations toggle
-const handleReduceAnimationsChange = useCallback((reduceAnimations) => {
-    onChange({});
-}, ...settings, reduceAnimations);
+const handleReduceAnimationsChange = useCallback((reduceAnimations) => { onChange({}); }, ...settings);
+reduceAnimations;
 ;
 [settings, onChange];
 ;
 // Handle high contrast toggle
-const handleHighContrastChange = useCallback((highContrast) => {
-    onChange({});
-}, ...settings, highContrast);
+const handleHighContrastChange = useCallback((highContrast) => { onChange({}); }, ...settings);
+highContrast;
 ;
 [settings, onChange];
 ;
 // Theme options
 const themeOptions = [
-    {
-        value: 'light',
+    { value: 'light',
         label: 'Light Theme',
         description: 'Bright interface for well-lit environments',
-        icon: FiSun,
-    },
-    {
-        value: 'dark',
+        icon: FiSun },
+    { value: 'dark',
         label: 'Dark Theme',
         description: 'Dark interface for low-light environments',
-        icon: FiMoon,
-    },
-    {
-        value: 'auto',
+        icon: FiMoon },
+    { value: 'auto',
         label: 'System Theme',
         description: 'Follow your system theme preference',
-        icon: FiMonitor
-    }
+        icon: FiMonitor }
 ];
 // UI features sections
 const uiSections = [
@@ -89,10 +65,9 @@ const uiSections = [
         id: 'appearance',
         title: 'Theme & Appearance',
         icon: FiEye,
-        content: 'theme-selector',
+        content: 'theme-selector'
     },
-    {
-        id: 'interaction',
+    { id: 'interaction',
         title: 'User Interaction',
         icon: FiHelpCircle,
         settings: [
@@ -102,20 +77,16 @@ const uiSections = [
                 description: 'Display helpful tooltips when hovering over elements',
                 enabled: settings.showTooltips,
                 handler: handleShowTooltipsChange,
-                icon: FiHelpCircle,
+                icon: FiHelpCircle
             },
-            {
-                key: 'enableKeyboardShortcuts',
+            { key: 'enableKeyboardShortcuts',
                 label: 'Enable keyboard shortcuts',
                 description: 'Allow keyboard shortcuts for faster navigation',
                 enabled: settings.enableKeyboardShortcuts,
-                handler: handleEnableKeyboardShortcutsChange,
-                icon: FiKeyboard
-            }
-        ]
-    },
-    {
-        id: 'accessibility',
+                handler: handleEnableKeyboardShortcutsChange },
+            icon, FiKeyboard
+        ] },
+    { id: 'accessibility',
         title: 'Accessibility',
         icon: FiContrast,
         settings: [
@@ -125,39 +96,37 @@ const uiSections = [
                 description: 'Minimize motion for users with vestibular disorders',
                 enabled: settings.reduceAnimations,
                 handler: handleReduceAnimationsChange,
-                icon: FiZap,
+                icon: FiZap
             },
-            {
-                key: 'highContrast',
+            { key: 'highContrast',
                 label: 'High contrast mode',
                 description: 'Increase contrast for better visibility',
                 enabled: settings.highContrast,
                 handler: handleHighContrastChange,
-                icon: FiContrast
-            }
-        ]
-    }
+                icon: FiContrast }
+        ] }
 ];
 // Get theme icon and color
 const getThemeInfo = (theme) => {
     const option = themeOptions.find(opt => opt.value === theme);
     return {
         Icon: option?.icon || FiMonitor,
-        color: theme === 'light' ? '#f59e0b' : theme === 'dark' ? '#6366f1' : uiColors.accent.primary,
+        color: theme === 'light' ? '#f59e0b' : theme === 'dark' ? '#6366f1' : uiColors.accent.primary
     };
 };
+;
 const currentThemeInfo = getThemeInfo(settings.theme);
 return;
 _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style: {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                marginBottom: '16px',
+                marginBottom: '16px'
             }, children: [_jsx(FiEye, { size: 18, color: uiColors.accent.primary }), _jsx("h3", { style: {
                         margin: 0,
                         fontSize: '16px',
                         fontWeight: 600,
-                        color: uiColors.text.primary,
+                        color: uiColors.text.primary
                     }, children: "Interface & Accessibility Settings" })] }), _jsx("div", { style: {
                 display: 'flex',
                 alignItems: 'center',
@@ -165,16 +134,15 @@ _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style:
                 marginBottom: '20px',
                 padding: '12px',
                 backgroundColor: uiColors.ui.hover,
-                borderRadius: '8px',
-                border: `1px solid ${uiColors.ui.border}`
-            } }), "}>", _jsx(currentThemeInfo.Icon, { size: 16, color: currentThemeInfo.color }), _jsxs("div", { style: {
+                borderRadius: '8px'
+            }, "border:": true }), " `1px solid $", uiColors.ui.border, "`} }>", _jsx(currentThemeInfo.Icon, { size: 16, color: currentThemeInfo.color }), _jsxs("div", { style: {
                 fontSize: '14px',
                 fontWeight: 500,
-                color: uiColors.text.primary,
+                color: uiColors.text.primary
             }, children: ["Current Theme: ", themeOptions.find(opt => opt.value === settings.theme)?.label] }), _jsxs("div", { style: {
                 fontSize: '12px',
                 color: uiColors.text.secondary,
-                marginLeft: 'auto',
+                marginLeft: 'auto'
             }, children: [settings.highContrast && ()
                     < span, " style=", {
                     display: 'inline-flex',
@@ -185,7 +153,7 @@ _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style:
                     backgroundColor: '#6366f1' + '20',
                     color: '#6366f1',
                     fontSize: '10px',
-                    fontWeight: 500,
+                    fontWeight: 500
                 }, ">", _jsx(FiContrast, { size: 10 }), "High Contrast"] }), ")}"] });
 div >
     { /* UI Settings Sections */};
@@ -197,33 +165,34 @@ div >
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
-                        marginBottom: '12px',
+                        marginBottom: '12px'
                     }, children: [_jsx(SectionIcon, { size: 16, color: uiColors.accent.primary }), _jsx("h4", { style: {
                                 margin: 0,
                                 fontSize: '14px',
                                 fontWeight: 600,
-                                color: uiColors.text.primary,
+                                color: uiColors.text.primary
                             }, children: section.title })] }), section.content === 'theme-selector' && ()
                     < div, " style=", {
                     marginLeft: '24px',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                    gap: '8px',
+                    gap: '8px'
                 }, ">", themeOptions.map((option) => {
                     const Icon = option.icon;
                     const isSelected = settings.theme === option.value;
                     return;
-                    _jsx("button", { onClick: () => handleThemeChange(option.value), style: ({
+                    _jsx("button", { onClick: () => handleThemeChange(option.value), style: {
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             padding: '12px',
-                            backgroundColor: isSelected,
+                            backgroundColor: isSelected
+                                ? uiColors.accent.primary + '20'
+                                : uiColors.ui.hover,
+                            border: isSelected
                         }
-                            ? uiColors.accent.primary + '20'
-                            : uiColors.ui.hover,
-                            border) }, option.value);
-                }), ": isSelected, ? `1px solid $", uiColors.accent.primary, "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', textAlign: 'center'; }} onMouseEnter=", (e) => {
+                            ? `1px solid ${uiColors.accent.primary}` :  }, option.value);
+                }), ": `1px solid $", uiColors.ui.border, "`} borderRadius: '6px' cursor: 'pointer' transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)' textAlign: 'center'; onMouseEnter=", (e) => {
                     if (!isSelected) {
                         e.currentTarget.style.backgroundColor = uiColors.ui.selected;
                     }
@@ -235,11 +204,11 @@ div >
                         fontSize: '13px',
                         fontWeight: 500,
                         color: isSelected ? uiColors.accent.primary : uiColors.text.primary,
-                        marginBottom: '4px',
+                        marginBottom: '4px'
                     }, children: option.label }), _jsx("div", { style: {
                         fontSize: '10px',
                         color: isSelected ? uiColors.accent.primary : uiColors.text.secondary,
-                        lineHeight: 1.3,
+                        lineHeight: 1.3
                     }, children: option.description })] }, section.id);
     });
 }
@@ -251,14 +220,10 @@ div >
         < div;
     style = {};
     {
-        marginLeft: '24px',
-            display;
-        'flex',
-            flexDirection;
-        'column',
-            gap;
-        '12px',
-        ;
+        marginLeft: '24px';
+        display: 'flex';
+        flexDirection: 'column';
+        gap: '12px';
     }
 }
  >
@@ -270,19 +235,15 @@ div >
                     alignItems: 'flex-start',
                     gap: '12px',
                     padding: '12px',
-                    backgroundColor: setting.enabled,
-                    uiColors, : .accent.primary + '10',
-                    uiColors, : .ui.hover,
-                    border: setting.enabled,
-                } `1px solid ${uiColors.accent.primary}` }, setting.key);
+                    backgroundColor: setting.enabled
+                        ? uiColors.accent.primary + '10'
+                        : uiColors.ui.hover,
+                    border: setting.enabled
+                }
+                    ? `1px solid ${uiColors.accent.primary}` :  }, setting.key);
             `1px solid ${uiColors.ui.border}`;
-        })
-    },
-    borderRadius;
-'6px',
-    transition;
-'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)';
- >
+        }, borderRadius, '6px', transition, 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)')
+    } >
     { /* Setting Icon */}
     < SettingIcon;
 size = { 16:  };
@@ -295,28 +256,23 @@ color = { setting, : .enabled
 }
 />;
 { /* Setting Content */ }
-_jsx("div", { style: { flex: 1 }, children: _jsxs("label", { style: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: 500,
-            marginBottom: '4px',
-        }, children: [_jsx("input", { type: "checkbox", checked: setting.enabled, onChange: (e) => setting.handler(e.target.checked), style: { accentColor: uiColors.accent.primary } }), _jsx("span", { style: ({
-                    color: setting.enabled,
-                }
-                    ? uiColors.accent.primary
-                    : uiColors.text.primary,
-                ) }), "}>", setting.label] }) })
-    ,
-        _jsx("div", { style: {
+_jsxs("div", { style: { flex: 1 }, children: [_jsxs("label", { style: {
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: 500,
+                marginBottom: '4px'
+            }, children: [_jsx("input", { type: "checkbox", checked: setting.enabled, onChange: (e) => setting.handler(e.target.checked), style: { accentColor: uiColors.accent.primary } }), _jsx("span", { style: {
+                        color: setting.enabled
+                            ? uiColors.accent.primary
+                            : uiColors.text.primary
+                    }, children: setting.label })] }), _jsx("div", { style: {
                 fontSize: '11px',
                 color: uiColors.text.secondary,
-                marginLeft: '24px',
-            }, children: setting.description });
-div >
-;
+                marginLeft: '24px'
+            }, children: setting.description })] });
 div >
 ;
 ;
@@ -331,16 +287,11 @@ div >
         < div;
     style = {};
     {
-        padding: '12px',
-            backgroundColor;
-        '#6366f1' + '10',
-            border;
-        '1px solid #6366f1',
-            borderRadius;
-        '6px',
-            marginTop;
-        '16px',
-        ;
+        padding: '12px';
+        backgroundColor: '#6366f1' + '10';
+        border: '1px solid #6366f1';
+        borderRadius: '6px';
+        marginTop: '16px';
     }
 }
  >
@@ -351,13 +302,13 @@ div >
             fontSize: '12px',
             fontWeight: 500,
             color: '#6366f1',
-            marginBottom: '6px',
+            marginBottom: '6px'
         }, children: [_jsx(FiContrast, { size: 14 }), "Accessibility Mode Active"] })
         ,
             _jsx("div", { style: {
                     fontSize: '11px',
                     color: uiColors.text.secondary,
-                    lineHeight: 1.4,
+                    lineHeight: 1.4
                 }, children: "You have accessibility options enabled. The interface has been optimized for better visibility and reduced motion." }));
 div >
 ;
@@ -365,10 +316,10 @@ div >
 _jsx("div", { style: {
         padding: '12px',
         backgroundColor: uiColors.ui.hover,
-        borderRadius: '6px',
-        border: `1px solid ${uiColors.ui.border}`
-    }, "marginTop:": true });
-'16px';
+        borderRadius: '6px'
+    }, "border:": true });
+`1px solid ${uiColors.ui.border}`;
+marginTop: '16px';
  >
     (_jsxs("div", { style: {
             display: 'flex',
@@ -377,7 +328,7 @@ _jsx("div", { style: {
             marginBottom: '8px',
             fontSize: '12px',
             fontWeight: 500,
-            color: uiColors.text.primary,
+            color: uiColors.text.primary
         }, children: [_jsx(FiEye, { size: 14 }), "Interface Configuration Summary"] })
         ,
             _jsxs("div", { style: {
@@ -385,7 +336,7 @@ _jsx("div", { style: {
                     gridTemplateColumns: 'auto 1fr',
                     gap: '4px 12px',
                     fontSize: '11px',
-                    color: uiColors.text.secondary,
+                    color: uiColors.text.secondary
                 }, children: [_jsx("span", { children: "Theme:" }), _jsx("span", { children: themeOptions.find(opt => opt.value === settings.theme)?.label }), _jsx("span", { children: "Tooltips:" }), _jsx("span", { children: settings.showTooltips ? 'Enabled' : 'Disabled' }), _jsx("span", { children: "Keyboard Shortcuts:" }), _jsx("span", { children: settings.enableKeyboardShortcuts ? 'Enabled' : 'Disabled' }), _jsx("span", { children: "Animations:" }), _jsx("span", { children: settings.reduceAnimations ? 'Reduced' : 'Full' }), _jsx("span", { children: "Contrast:" }), _jsx("span", { children: settings.highContrast ? 'High' : 'Standard' })] }));
 div >
 ;

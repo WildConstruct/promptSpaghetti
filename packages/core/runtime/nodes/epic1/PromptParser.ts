@@ -5,16 +5,13 @@
  * inline-editable nodes based on semantic understanding.
  */
 
-import {
-  TextBlockNode,
-  WeightedChoiceNode,
-  ConcatNode,
-  VariableNode,
-  OutputNode,
-  BaseInlineEditableNode,
-  Epic1NodeType,
-  WeightedOption
-} from './index';
+import { TextBlockNode } from './TextBlockNode';
+import { WeightedChoiceNode, WeightedOption } from './WeightedChoiceNode';
+import { ConcatNode } from './ConcatNode';
+import { VariableNode } from './VariableNode';
+import { OutputNode } from './OutputNode';
+import { BaseInlineEditableNode } from './BaseInlineEditableNode';
+import { Epic1NodeType } from './nodeTypes';
 import { smartNodePositioner, NodePosition } from './SmartNodePositioning';
 
 /**

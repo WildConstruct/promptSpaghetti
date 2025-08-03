@@ -8,17 +8,16 @@
 ;
 metrics: {
     [key, string];
-    {
-        count: number;
-        average: number;
-        min: number;
-        max: number;
-        p95: number;
-        p99: number;
-        values: number;
-    }
-    ;
+    { }
+    count: number;
+    average: number;
+    min: number;
+    max: number;
+    p95: number;
+    p99: number;
+    values: number;
 }
+;
 ;
 alerts: PerformanceAlert;
 export class PerformanceMonitor {
@@ -72,75 +71,67 @@ void {
         this.reportToExternalSystems(name, value, context);
         startMeasurement(name, string);
         () => void {
-            const: startTime = performance.now() };
-        {
-            const duration = performance.now() - startTime;
-            this.recordMetric(name, duration, context);
+            const: startTime = performance.now()
+        };
+        { }
+        const duration = performance.now() - startTime;
+        this.recordMetric(name, duration, context);
+    }
+    ;
+    measureExecution();
+    name: string;
+    fn: () => T;
+    context ?  : Record;
+    T;
+    {
+        const finishMeasurement = this.startMeasurement(name);
+        const result = fn();
+        finishMeasurement(context);
+        return result;
+        async;
+        measureAsyncExecution();
+        name: string;
+        fn: () => Promise;
+        context ?  : Record;
+        Promise < T > {
+            const: finishMeasurement = this.startMeasurement(name),
+            const: result = await fn(),
+            return: result,
+            count: number,
+            average: number,
+            min: number,
+            max: number,
+            p95: number,
+            p99: number,
+            recent: number
         }
-        ;
-        measureExecution();
-        name: string,
-            fn;
-        () => T,
-            context ?  : Record;
-        T;
+            | null;
         {
-            const finishMeasurement = this.startMeasurement(name);
-            const result = fn();
-            finishMeasurement(context);
-            return result;
-            async;
-            measureAsyncExecution();
-            name: string,
-                fn;
-            () => Promise,
-                context ?  : Record;
-            Promise < T > {
-                const: finishMeasurement = this.startMeasurement(name),
-                const: result = await fn(),
-                return: result,
-                /**
-                * Get performance statistics for a metric
-                */
-                getMetricStats(name) {
-                    const values = this.metrics.get(name);
-                    if (!values || values.length === 0) {
-                        return null;
-                        const sorted = [...values].sort((a, b) => a - b);
-                        const count = values.length;
-                        const sum = values.reduce((a, b) => a + b, 0);
-                        return {
-                            count,
-                            average: sum / count,
-                            min: sorted[0],
-                            max: sorted[sorted.length - 1],
-                            p95: sorted[Math.floor(count * 0.95)],
-                            p99: sorted[Math.floor(count * 0.99)],
-                            recent: values.slice(-10) // Last 10 measurements,
-                        };
-                        /**
-                         * Generate comprehensive performance report
-                         */
-                    }
-                    /**
-                     * Generate comprehensive performance report
-                     */
-                }
-                /**
-                 * Generate comprehensive performance report
-                 */
-                ,
-                /**
-                 * Generate comprehensive performance report
-                 */
-                generateReport(periodMinutes = 60) {
+            const values = this.metrics.get(name);
+            if (!values || values.length === 0) {
+                return null;
+                const sorted = [...values].sort((a, b) => a - b);
+                const count = values.length;
+                const sum = values.reduce((a, b) => a + b, 0);
+                return {
+                    count,
+                    average: sum / count,
+                    min: sorted[0],
+                    max: sorted[sorted.length - 1],
+                    p95: sorted[Math.floor(count * 0.95)],
+                    p99: sorted[Math.floor(count * 0.99)],
+                    recent: values.slice(-10) // Last 10 measurements }
+                };
+                generateReport(periodMinutes, number = 60);
+                PerformanceReport;
+                {
                     const now = Date.now();
                     const start = now - (periodMinutes * 60 * 1000);
                     const report = {
                         period: {
                             start,
                             end: now,
-                            duration: periodMinutes * 60 * 1000,
+                            duration: periodMinutes * 60 * 1000
                         },
                         metrics: {},
                         alerts: this.alerts.filter(alert => alert.timestamp >= start)
@@ -158,183 +149,161 @@ void {
                                 max: sorted[sorted.length - 1],
                                 p95: sorted[Math.floor(count * 0.95)],
                                 p99: sorted[Math.floor(count * 0.99)],
-                                values: [...values],
+                                values: [...values]
                             };
-                            return report;
-                            /**
-                             * Monitor UI performance specifically
-                             */
-                        }
-                        /**
-                         * Monitor UI performance specifically
-                         */
-                    }
-                    /**
-                     * Monitor UI performance specifically
-                     */
-                }
-                /**
-                 * Monitor UI performance specifically
-                 */
-                ,
-                /**
-                 * Monitor UI performance specifically
-                 */
-                monitorUIPerformance() {
-                    // Monitor frame rate
-                    let frameCount = 0;
-                    let lastTime = performance.now();
-                    const measureFrameRate = () => {
-                        const now = performance.now();
-                        frameCount++;
-                        if (now - lastTime >= 1000) { // Every second
-                            const fps = frameCount;
-                            this.recordMetric('fps', fps);
-                            frameCount = 0;
-                            lastTime = now;
-                            requestAnimationFrame(measureFrameRate);
                         }
                         ;
-                        requestAnimationFrame(measureFrameRate);
-                        // Monitor long tasks (> 50ms)
-                        if ('PerformanceObserver' in window) {
-                            const observer = new PerformanceObserver((list) => {
-                                for (const entry of list.getEntries()) {
-                                    if (entry.duration > 50) {
-                                        this.recordMetric('long-task', entry.duration, {});
-                                        name: entry.name,
-                                            startTime;
-                                        entry.startTime,
-                                        ;
+                        return report;
+                        monitorUIPerformance();
+                        void {
+                            let, frameCount = 0,
+                            let, lastTime = performance.now(),
+                            const: measureFrameRate = () => {
+                                const now = performance.now();
+                                frameCount++;
+                                if (now - lastTime >= 1000) { // Every second
+                                    const fps = frameCount;
+                                    this.recordMetric('fps', fps);
+                                    frameCount = 0;
+                                    lastTime = now;
+                                    requestAnimationFrame(measureFrameRate);
+                                }
+                                ;
+                                requestAnimationFrame(measureFrameRate);
+                                // Monitor long tasks (> 50ms)
+                                if ('PerformanceObserver' in window) {
+                                    const observer = new PerformanceObserver((list) => {
+                                        for (const entry of list.getEntries()) {
+                                            if (entry.duration > 50) {
+                                                this.recordMetric('long-task', entry.duration, {});
+                                                name: entry.name;
+                                                startTime: entry.startTime;
+                                            }
+                                        }
+                                    });
+                                }
+                                ;
+                                observer.observe({ entryTypes: ['longtask'] });
+                                /**
+                                 * Monitor memory usage
+                                 */
+                            }
+                            /**
+                             * Monitor memory usage
+                             */
+                            ,
+                            /**
+                             * Monitor memory usage
+                             */
+                            monitorMemoryUsage() {
+                                const checkMemory = () => {
+                                    if ('memory' in performance) {
+                                        const memory = performance.memory;
+                                        this.recordMetric('memory-usage', memory.usedJSHeapSize / 1024 / 1024); // MB
+                                        this.recordMetric('memory-limit', memory.jsHeapSizeLimit / 1024 / 1024); // MB
+                                    }
+                                    ;
+                                    // Check memory every 30 seconds
+                                    setInterval(checkMemory, 30000);
+                                    checkMemory();
+                                    /**
+                                     * Monitor network performance
+                                     */
+                                };
+                                /**
+                                 * Monitor network performance
+                                 */
+                            } // Initial check
+                            /**
+                             * Monitor network performance
+                             */
+                            , // Initial check
+                            /**
+                             * Monitor network performance
+                             */
+                            monitorNetworkPerformance() {
+                                if ('PerformanceObserver' in window) {
+                                    const observer = new PerformanceObserver((list) => {
+                                        for (const entry of list.getEntries()) {
+                                            if (entry.entryType === 'navigation') {
+                                                this.recordMetric('page-load-time', entry.duration);
+                                                this.recordMetric('dns-lookup', entry.domainLookupEnd - entry.domainLookupStart);
+                                                this.recordMetric('tcp-connect', entry.connectEnd - entry.connectStart);
+                                            }
+                                            else if (entry.entryType === 'resource') {
+                                                this.recordMetric('resource-load-time', entry.duration, {});
+                                                name: entry.name;
+                                                type: entry.initiatorType;
+                                            }
+                                        }
+                                    });
+                                }
+                                ;
+                                observer.observe({ entryTypes: ['navigation', 'resource'] });
+                                /**
+                                 * Add performance alert listener
+                                 */
+                            }
+                            /**
+                             * Add performance alert listener
+                             */
+                            ,
+                            /**
+                             * Add performance alert listener
+                             */
+                            onAlert(metricName, callback) {
+                                if (!this.listeners.has(metricName)) {
+                                    this.listeners.set(metricName, []);
+                                    this.listeners.get(metricName).push(callback);
+                                    /**
+                                    * Remove performance alert listener
+                                    */
+                                }
+                                /**
+                                * Remove performance alert listener
+                                */
+                            }
+                            /**
+                            * Remove performance alert listener
+                            */
+                            ,
+                            /**
+                            * Remove performance alert listener
+                            */
+                            offAlert(metricName, callback) {
+                                const callbacks = this.listeners.get(metricName);
+                                if (callbacks) {
+                                    const index = callbacks.indexOf(callback);
+                                    if (index > -1) {
+                                        callbacks.splice(index, 1);
                                     }
                                 }
-                            });
+                            },
+                            checkThresholds(name, value, context) { },
+                            const: threshold = this.thresholds.get(name),
+                            if(, threshold) { }, return: ,
+                            let, level: 'warning' | 'critical' | null, null: ,
+                            let, thresholdValue: number,
+                            if(value) { }
+                        } >= threshold.critical;
+                        {
+                            level = 'critical';
+                            thresholdValue = threshold.critical;
                         }
-                        ;
-                        observer.observe({ entryTypes: ['longtask'] });
-                        /**
-                         * Monitor memory usage
-                         */
-                    };
-                    /**
-                     * Monitor memory usage
-                     */
-                }
-                /**
-                 * Monitor memory usage
-                 */
-                ,
-                /**
-                 * Monitor memory usage
-                 */
-                monitorMemoryUsage() {
-                    const checkMemory = () => {
-                        if ('memory' in performance) {
-                            const memory = performance.memory;
-                            this.recordMetric('memory-usage', memory.usedJSHeapSize / 1024 / 1024); // MB
-                            this.recordMetric('memory-limit', memory.jsHeapSizeLimit / 1024 / 1024); // MB
-                        }
-                        ;
-                        // Check memory every 30 seconds
-                        setInterval(checkMemory, 30000);
-                        checkMemory();
-                        /**
-                         * Monitor network performance
-                         */
-                    };
-                    /**
-                     * Monitor network performance
-                     */
-                } // Initial check
-                /**
-                 * Monitor network performance
-                 */
-                , // Initial check
-                /**
-                 * Monitor network performance
-                 */
-                monitorNetworkPerformance() {
-                    if ('PerformanceObserver' in window) {
-                        const observer = new PerformanceObserver((list) => {
-                            for (const entry of list.getEntries()) {
-                                if (entry.entryType === 'navigation') {
-                                    this.recordMetric('page-load-time', entry.duration);
-                                    this.recordMetric('dns-lookup', entry.domainLookupEnd - entry.domainLookupStart);
-                                    this.recordMetric('tcp-connect', entry.connectEnd - entry.connectStart);
-                                }
-                                else if (entry.entryType === 'resource') {
-                                    this.recordMetric('resource-load-time', entry.duration, {});
-                                    name: entry.name,
-                                        type;
-                                    entry.initiatorType,
-                                    ;
-                                }
+                        if (value >= threshold.warning) {
+                            level = 'warning';
+                            thresholdValue = threshold.warning;
+                            if (level) {
+                                const alert = {
+                                    metric: name,
+                                    level,
+                                    value,
+                                    threshold: thresholdValue,
+                                    timestamp: Date.now()
+                                };
+                                context;
                             }
-                        });
-                    }
-                    ;
-                    observer.observe({ entryTypes: ['navigation', 'resource'] });
-                    /**
-                     * Add performance alert listener
-                     */
-                }
-                /**
-                 * Add performance alert listener
-                 */
-                ,
-                /**
-                 * Add performance alert listener
-                 */
-                onAlert(metricName, callback) {
-                    if (!this.listeners.has(metricName)) {
-                        this.listeners.set(metricName, []);
-                        this.listeners.get(metricName).push(callback);
-                        /**
-                        * Remove performance alert listener
-                        */
-                    }
-                    /**
-                    * Remove performance alert listener
-                    */
-                }
-                /**
-                * Remove performance alert listener
-                */
-                ,
-                /**
-                * Remove performance alert listener
-                */
-                offAlert(metricName, callback) {
-                    const callbacks = this.listeners.get(metricName);
-                    if (callbacks) {
-                        const index = callbacks.indexOf(callback);
-                        if (index > -1) {
-                            callbacks.splice(index, 1);
-                        }
-                    }
-                },
-                checkThresholds(name, value, context) {
-                    const threshold = this.thresholds.get(name);
-                    if (!threshold)
-                        return;
-                    let level = null;
-                    let thresholdValue;
-                    if (value >= threshold.critical) {
-                        level = 'critical';
-                        thresholdValue = threshold.critical;
-                    }
-                    else if (value >= threshold.warning) {
-                        level = 'warning';
-                        thresholdValue = threshold.warning;
-                        if (level) {
-                            const alert = {
-                                metric: name,
-                                level,
-                                value,
-                                threshold: thresholdValue,
-                                timestamp: Date.now(),
-                                context
-                            };
+                            ;
                             this.alerts.push(alert);
                             // Limit alert history
                             if (this.alerts.length > 1000) {
@@ -345,117 +314,118 @@ void {
                                 // Global alert listeners
                                 const globalCallbacks = this.listeners.get('*') || [];
                                 globalCallbacks.forEach(callback => callback(alert));
+                                reportToExternalSystems(name, string, value, number, context ?  : Record);
+                                void {
+                                    // Integration points for external monitoring systems
+                                    // This could be extended to send to DataDog, New Relic, etc.
+                                    if(, window) { }
+                                } !== 'undefined' && window.gtag;
+                                {
+                                    // Google Analytics custom event
+                                    window.gtag('event', 'performance_metric', {});
+                                    custom_parameter_1: name;
+                                    custom_parameter_2: value;
+                                }
+                            }
+                            ;
+                            // Console logging for development
+                            if (process.env.NODE_ENV === 'development') {
+                                const stats = this.getMetricStats(name);
+                                if (stats && stats.count % 100 === 0) { // Every 100th measurement
+                                    console.log(`Performance Metric [${name}]: ${value.toFixed(2)}ms (avg: ${stats.average.toFixed(2)}ms, p95: ${stats.p95.toFixed(2)}ms)`);
+                                }
+                                startReporting();
+                                void {
+                                    setInterval() { }
+                                }();
+                                {
+                                    const report = this.generateReport(1); // 1 minute report;
+                                    // Could send to monitoring service
+                                    if (process.env.NODE_ENV === 'development') {
+                                        const alertCount = report.alerts.length;
+                                        const metricCount = Object.keys(report.metrics).length;
+                                        if (alertCount > 0 || metricCount > 0) {
+                                            console.log(`Performance Report: ${metricCount} metrics tracked, ${alertCount} alerts in last minute`);
+                                        }
+                                    }
+                                    this.reportingInterval;
+                                    ;
+                                    initializeAllMonitoring();
+                                    void { if(, window) { } } !== 'undefined';
+                                    {
+                                        this.monitorUIPerformance();
+                                        this.monitorMemoryUsage();
+                                        this.monitorNetworkPerformance();
+                                        getDashboardData();
+                                        {
+                                            overview: {
+                                                totalMetrics: number;
+                                                activeAlerts: number;
+                                                healthScore: number; // 0-100 }
+                                            }
+                                            ;
+                                            keyMetrics: {
+                                                name: string;
+                                                current: number;
+                                                average: number;
+                                                trend: 'improving' | 'stable' | 'degrading';
+                                            }
+                                            [];
+                                            recentAlerts: PerformanceAlert;
+                                            const totalMetrics = this.metrics.size;
+                                            const recentAlerts = this.alerts.filter(alert => );
+                                            ;
+                                            alert.timestamp > Date.now() - 60000; // Last minute
+                                            ;
+                                            // Calculate health score based on recent alerts
+                                            const criticalAlerts = recentAlerts.filter(a => a.level === 'critical').length;
+                                            const warningAlerts = recentAlerts.filter(a => a.level === 'warning').length;
+                                            const healthScore = Math.max(0, 100 - (criticalAlerts * 20) - (warningAlerts * 5));
+                                            // Key metrics with trends
+                                            const keyMetricNames = ['canvas-render', 'preview-generation', 'api-response-time', 'memory-usage'];
+                                            const keyMetrics = keyMetricNames;
+                                            map(name => { });
+                                            const stats = this.getMetricStats(name);
+                                            if (!stats)
+                                                return null;
+                                            // Simple trend analysis based on recent vs overall average
+                                            const recentAvg = stats.recent.reduce((a, b) => a + b, 0) / stats.recent.length;
+                                            let trend = 'stable';
+                                            const difference = (recentAvg - stats.average) / stats.average;
+                                            if (difference > 0.1)
+                                                trend = 'degrading';
+                                            else if (difference < -0.1)
+                                                trend = 'improving';
+                                            return {
+                                                name,
+                                                current: recentAvg,
+                                                average: stats.average
+                                            };
+                                            trend;
+                                        }
+                                        ;
+                                        filter(Boolean);
+                                        return { overview: {
+                                                totalMetrics,
+                                                activeAlerts: recentAlerts.length },
+                                            healthScore,
+                                            keyMetrics,
+                                            recentAlerts: recentAlerts.slice(-10) // Last 10 alerts;
+                                        };
+                                        // Global instance
+                                        export const performanceMonitor = new PerformanceMonitor();
+                                        // Auto-initialize in browser environment
+                                        if (typeof window !== 'undefined') {
+                                            performanceMonitor.initializeAllMonitoring();
+                                            export default performanceMonitor;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
-                },
-                reportToExternalSystems(name, value, context) {
-                    // Integration points for external monitoring systems
-                    // This could be extended to send to DataDog, New Relic, etc.
-                    if (typeof window !== 'undefined' && window.gtag) {
-                        // Google Analytics custom event
-                        window.gtag('event', 'performance_metric', {});
-                        custom_parameter_1: name,
-                            custom_parameter_2;
-                        value,
-                        ;
-                    }
-                    ;
-                    // Console logging for development
-                    if (process.env.NODE_ENV === 'development') {
-                        const stats = this.getMetricStats(name);
-                        if (stats && stats.count % 100 === 0) { // Every 100th measurement
-                            console.log(`Performance Metric [${name}]: ${value.toFixed(2)}ms (avg: ${stats.average.toFixed(2)}ms, p95: ${stats.p95.toFixed(2)}ms)`);
-                        }
-                    }
-                },
-                startReporting() {
-                    setInterval(() => {
-                        const report = this.generateReport(1); // 1 minute report;
-                        // Could send to monitoring service
-                        if (process.env.NODE_ENV === 'development') {
-                            const alertCount = report.alerts.length;
-                            const metricCount = Object.keys(report.metrics).length;
-                            if (alertCount > 0 || metricCount > 0) {
-                                console.log(`Performance Report: ${metricCount} metrics tracked, ${alertCount} alerts in last minute`);
-                            }
-                        }
-                        this.reportingInterval;
-                    });
-                    /**
-                     * Initialize all performance monitoring
-                     */
                 }
-                /**
-                 * Initialize all performance monitoring
-                 */
-                ,
-                /**
-                 * Initialize all performance monitoring
-                 */
-                initializeAllMonitoring() {
-                    if (typeof window !== 'undefined') {
-                        this.monitorUIPerformance();
-                        this.monitorMemoryUsage();
-                        this.monitorNetworkPerformance();
-                        /**
-                        * Get current performance dashboard data
-                        */
-                    }
-                    /**
-                    * Get current performance dashboard data
-                    */
-                }
-                /**
-                * Get current performance dashboard data
-                */
-                ,
-                const: totalMetrics = this.metrics.size,
-                const: recentAlerts = this.alerts.filter(alert => ),
-                alert, : .timestamp > Date.now() - 60000 // Last minute
-                ,
-                // Calculate health score based on recent alerts
-                const: criticalAlerts = recentAlerts.filter(a => a.level === 'critical').length,
-                const: warningAlerts = recentAlerts.filter(a => a.level === 'warning').length,
-                const: healthScore = Math.max(0, 100 - (criticalAlerts * 20) - (warningAlerts * 5)),
-                // Key metrics with trends
-                const: keyMetricNames = ['canvas-render', 'preview-generation', 'api-response-time', 'memory-usage'],
-                const: keyMetrics = keyMetricNames,
-                : 
-                    .map(name => { }),
-                const: stats = this.getMetricStats(name),
-                if(, stats) { }, return: null,
-                // Simple trend analysis based on recent vs overall average
-                const: recentAvg = stats.recent.reduce((a, b) => a + b, 0) / stats.recent.length,
-                let, trend: 'improving' | 'stable' | 'degrading', 'stable': ,
-                const: difference = (recentAvg - stats.average) / stats.average,
-                if(difference) { } } > 0.1;
-            trend = 'degrading';
-            if (difference < -0.1)
-                trend = 'improving';
-            return {
-                name,
-                current: recentAvg,
-                average: stats.average,
-                trend
-            };
-        }
-        filter(Boolean);
-        return {
-            overview: {
-                totalMetrics,
-                activeAlerts: recentAlerts.length,
-                healthScore
-            },
-            keyMetrics,
-            recentAlerts: recentAlerts.slice(-10) // Last 10 alerts;
-        };
-        // Global instance
-        export const performanceMonitor = new PerformanceMonitor();
-        // Auto-initialize in browser environment
-        if (typeof window !== 'undefined') {
-            performanceMonitor.initializeAllMonitoring();
-            export default performanceMonitor;
+            }
         }
     }
 }

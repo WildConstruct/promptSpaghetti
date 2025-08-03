@@ -97,6 +97,11 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                         value={option.weight}
                         onChange={(e) => updateOptionWeight(index, parseInt(e.target.value))}
                         onClick={(e) => e.stopPropagation()}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onMouseUp={(e) => e.stopPropagation()}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onPointerUp={(e) => e.stopPropagation()}
+                        onPointerMove={(e) => e.stopPropagation()}
                         style={{ '--value': `${option.weight}%` } as React.CSSProperties}
                       />
                       <span className="epic1-weight-value">{option.weight}%</span>
@@ -121,8 +126,11 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                   className="epic1-add-option"
                   onClick={(e) => {
                     e.stopPropagation();
+                    e.preventDefault();
                     addOption();
                   }}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  type="button"
                 >
                   + Add Option
                 </button>
@@ -131,8 +139,11 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                     className="epic1-confirm"
                     onClick={(e) => {
                       e.stopPropagation();
+                      e.preventDefault();
                       confirmEdit();
                     }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    type="button"
                   >
                     ✓
                   </button>
@@ -140,8 +151,11 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                     className="epic1-cancel"
                     onClick={(e) => {
                       e.stopPropagation();
+                      e.preventDefault();
                       cancelEdit();
                     }}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    type="button"
                   >
                     ×
                   </button>

@@ -11,8 +11,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { X, Settings, Shield, Eye, Target, MessageSquare, Cookie } from 'lucide-react';
 ;
 const consentPurposes = [
-    {
-        id: 'essential',
+    { id: 'essential',
         category: 'essential',
         name: 'Essential Cookies',
         description: 'Necessary for the website to function properly',
@@ -20,10 +19,8 @@ const consentPurposes = [
         examples: ['Authentication', 'Security', 'Session management'],
         dataTypes: ['Session ID', 'Security tokens', 'User preferences'],
         retention: '30 days',
-        thirdParties: [],
-    },
-    {
-        id: 'functional',
+        thirdParties: [] },
+    { id: 'functional',
         category: 'functional',
         name: 'Functional Cookies',
         description: 'Enable enhanced functionality and personalization',
@@ -31,10 +28,8 @@ const consentPurposes = [
         examples: ['Language preferences', 'Region selection', 'Theme settings'],
         dataTypes: ['Language code', 'Timezone', 'UI preferences'],
         retention: '1 year',
-        thirdParties: [],
-    },
-    {
-        id: 'analytics',
+        thirdParties: [] },
+    { id: 'analytics',
         category: 'analytics',
         name: 'Analytics Cookies',
         description: 'Help us understand how visitors interact with our website',
@@ -42,10 +37,8 @@ const consentPurposes = [
         examples: ['Page views', 'Click tracking', 'Performance metrics'],
         dataTypes: ['Usage statistics', 'Performance data', 'Error logs'],
         retention: '2 years',
-        thirdParties: ['Google Analytics', 'Adobe Analytics'],
-    },
-    {
-        id: 'marketing',
+        thirdParties: ['Google Analytics', 'Adobe Analytics'] },
+    { id: 'marketing',
         category: 'marketing',
         name: 'Marketing Cookies',
         description: 'Used to deliver relevant advertisements and track campaigns',
@@ -53,10 +46,8 @@ const consentPurposes = [
         examples: ['Ad targeting', 'Campaign tracking', 'Email marketing'],
         dataTypes: ['Interests', 'Demographics', 'Campaign interactions'],
         retention: '1 year',
-        thirdParties: ['Google Ads', 'Facebook Pixel', 'LinkedIn Insight'],
-    },
-    {
-        id: 'advertising',
+        thirdParties: ['Google Ads', 'Facebook Pixel', 'LinkedIn Insight'] },
+    { id: 'advertising',
         category: 'advertising',
         name: 'Advertising Cookies',
         description: 'Used by advertising networks to deliver targeted ads',
@@ -64,10 +55,8 @@ const consentPurposes = [
         examples: ['Ad personalization', 'Frequency capping', 'Cross-site tracking'],
         dataTypes: ['Browsing history', 'Ad interactions', 'Device info'],
         retention: '1 year',
-        thirdParties: ['Google AdSense', 'Amazon DSP', 'The Trade Desk'],
-    },
-    {
-        id: 'socialMedia',
+        thirdParties: ['Google AdSense', 'Amazon DSP', 'The Trade Desk'] },
+    { id: 'socialMedia',
         category: 'socialMedia',
         name: 'Social Media Cookies',
         description: 'Enable social media features and track social sharing',
@@ -75,10 +64,8 @@ const consentPurposes = [
         examples: ['Social login', 'Share buttons', 'Social widgets'],
         dataTypes: ['Social profile', 'Sharing activity', 'Social connections'],
         retention: '1 year',
-        thirdParties: ['Facebook', 'Twitter', 'LinkedIn', 'YouTube'],
-    },
-    {
-        id: 'personalization',
+        thirdParties: ['Facebook', 'Twitter', 'LinkedIn', 'YouTube'] },
+    { id: 'personalization',
         category: 'personalization',
         name: 'Personalization Cookies',
         description: 'Customize content and user experience based on preferences',
@@ -86,8 +73,7 @@ const consentPurposes = [
         examples: ['Content recommendations', 'Layout preferences', 'Personal dashboard'],
         dataTypes: ['Content preferences', 'Behavior patterns', 'Personal settings'],
         retention: '2 years',
-        thirdParties: ['Recommendation engines', 'Content platforms']
-    }
+        thirdParties: ['Recommendation engines', 'Content platforms'] }
 ];
 const ConsentBanner = ({
     onConsentUpdate,
@@ -98,9 +84,8 @@ const ConsentBanner = ({
     position = 'bottom',
     showRejectButton = true,
     showCustomizeButton = true,
-    autoHide = false,
-    respectDoNotTrack = true
-});
+    autoHide = false });
+respectDoNotTrack = true;
 {
     const [isVisible, setIsVisible] = useState(true);
     const [showDetails, setShowDetails] = useState(false);
@@ -136,40 +121,45 @@ const ConsentBanner = ({
             marketing: true,
             advertising: true,
             socialMedia: true,
-            personalization: true,
+            personalization: true
         };
-        setConsents(allConsents);
-        onConsentUpdate?.(allConsents);
-        setIsVisible(false);
-        onClose?.();
-    }, [onConsentUpdate, onClose]);
-    const handleRejectAll = useCallback(() => {
-        const minimalConsents = {
-            essential: true,
-            functional: false,
-            analytics: false,
-            marketing: false,
-            advertising: false,
-            socialMedia: false,
-            personalization: false,
-        };
-        setConsents(minimalConsents);
-        onConsentUpdate?.(minimalConsents);
-        setIsVisible(false);
-        onClose?.();
-    }, [onConsentUpdate, onClose]);
-    const handleSavePreferences = useCallback(() => {
-        onConsentUpdate?.(consents);
-        setIsVisible(false);
-        setShowDetails(false);
-        onClose?.();
-    }, [consents, onConsentUpdate, onClose]);
-    const handleConsentChange = useCallback((category, value) => {
-        if (category === 'essential')
-            return; // Essential cookies cannot be disabled
-        setConsents(prev => ({}), ...prev, [category], value);
     });
+    setConsents(allConsents);
+    onConsentUpdate?.(allConsents);
+    setIsVisible(false);
+    onClose?.();
 }
+[onConsentUpdate, onClose];
+;
+const handleRejectAll = useCallback(() => {
+    const minimalConsents = {
+        essential: true,
+        functional: false,
+        analytics: false,
+        marketing: false,
+        advertising: false,
+        socialMedia: false,
+        personalization: false
+    };
+});
+setConsents(minimalConsents);
+onConsentUpdate?.(minimalConsents);
+setIsVisible(false);
+onClose?.();
+[onConsentUpdate, onClose];
+;
+const handleSavePreferences = useCallback(() => {
+    onConsentUpdate?.(consents);
+    setIsVisible(false);
+    setShowDetails(false);
+    onClose?.();
+}, [consents, onConsentUpdate, onClose]);
+const handleConsentChange = useCallback((category, value) => {
+    if (category === 'essential')
+        return; // Essential cookies cannot be disabled
+    setConsents(prev => ({}), ...prev[category], value);
+});
+;
 [];
 ;
 const getThemeClasses = () => {
@@ -191,39 +181,37 @@ const getThemeClasses = () => {
                 case 'modal':
                     return 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4';
                 default:
-                    return 'bottom-0 left-0 right-0';
             }
-            ;
-            const getCategoryIcon = (category) => {
-                switch (category) {
-                    case 'essential':
-                        return _jsx(Shield, { className: "w-5 h-5 text-green-600" });
-                    case 'functional':
-                        return _jsx(Settings, { className: "w-5 h-5 text-blue-600" });
-                    case 'analytics':
-                        return _jsx(Eye, { className: "w-5 h-5 text-purple-600" });
-                    case 'marketing':
-                        return _jsx(Target, { className: "w-5 h-5 text-orange-600" });
-                    case 'advertising':
-                        return _jsx(MessageSquare, { className: "w-5 h-5 text-red-600" });
-                    case 'socialMedia':
-                        return _jsx(MessageSquare, { className: "w-5 h-5 text-indigo-600" });
-                    case 'personalization':
-                        return _jsx(Cookie, { className: "w-5 h-5 text-pink-600" });
-                    default:
-                        return _jsx(Cookie, { className: "w-5 h-5 text-gray-600" });
-                }
-                ;
-                if (!isVisible)
-                    return null;
-                return;
-                _jsxs("div", { className: `fixed z-50 ${getPositionClasses()}`, children: ["}", _jsxs("div", { className: `border-2 shadow-2xl ${getThemeClasses()} ${position === 'overlay' || position === 'modal' ? 'max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-lg' : 'w-full'}`, children: ["}", !showDetails ? ()
-                                    // Simple Banner View
-                                    < div : , " className=\"p-4 md:p-6\">", _jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex-1 mr-4", children: [_jsxs("div", { className: "flex items-center mb-2", children: [_jsx(Cookie, { className: "w-6 h-6 mr-2 text-blue-600" }), _jsx("h3", { className: "text-lg font-semibold", children: "We value your privacy" })] }), _jsxs("p", { className: "text-sm opacity-90 mb-4", children: ["We and our partners use technologies like cookies to store and access device information. This helps us provide and improve our services. ", isGDPRApplicable && 'You have the right to withdraw consent at any time.', isCCPAApplicable && ' California residents have additional privacy rights.'] }), _jsxs("div", { className: "flex flex-wrap gap-2", children: [_jsx("button", { onClick: handleAcceptAll, className: "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium", children: "Accept All" }), showRejectButton && ()
-                                                            < button, "onClick=", handleRejectAll, "className=\"px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium\" > Reject All"] }), ")}", showCustomizeButton && ()
-                                                    < button, "onClick=", () => setShowDetails(true), "className=\"px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium\" > Manage Preferences"] }), ")}", _jsx("a", { href: "/privacy-policy", target: "_blank", rel: "noopener noreferrer", className: "px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors text-sm underline", children: "Privacy Policy" }), _jsx("a", { href: "/cookie-policy", target: "_blank", rel: "noopener noreferrer", className: "px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors text-sm underline", children: "Cookie Policy" })] })] }), _jsx("button", { onClick: () => setIsVisible(false), className: "p-1 rounded-md hover:bg-gray-100 transition-colors", "aria-label": "Close banner", children: _jsx(X, { className: "w-5 h-5" }) })] });
-            };
+            return 'bottom-0 left-0 right-0';
         };
+        const getCategoryIcon = (category) => {
+            switch (category) {
+                case 'essential':
+                    return _jsx(Shield, { className: "w-5 h-5 text-green-600" });
+                case 'functional':
+                    return _jsx(Settings, { className: "w-5 h-5 text-blue-600" });
+                case 'analytics':
+                    return _jsx(Eye, { className: "w-5 h-5 text-purple-600" });
+                case 'marketing':
+                    return _jsx(Target, { className: "w-5 h-5 text-orange-600" });
+                case 'advertising':
+                    return _jsx(MessageSquare, { className: "w-5 h-5 text-red-600" });
+                case 'socialMedia':
+                    return _jsx(MessageSquare, { className: "w-5 h-5 text-indigo-600" });
+                case 'personalization':
+                    return _jsx(Cookie, { className: "w-5 h-5 text-pink-600" });
+                default:
+            }
+            return _jsx(Cookie, { className: "w-5 h-5 text-gray-600" });
+        };
+        if (!isVisible)
+            return null;
+        return;
+        _jsxs("div", { className: `fixed z-50 ${getPositionClasses()}`, children: ["}", _jsxs("div", { className: `border-2 shadow-2xl ${getThemeClasses()} ${position === 'overlay' || position === 'modal' ? 'max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-lg' : 'w-full'}`, children: ["}", !showDetails ? ()
+                            // Simple Banner View
+                            < div : , " className=\"p-4 md:p-6\">", _jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex-1 mr-4", children: [_jsxs("div", { className: "flex items-center mb-2", children: [_jsx(Cookie, { className: "w-6 h-6 mr-2 text-blue-600" }), _jsx("h3", { className: "text-lg font-semibold", children: "We value your privacy" })] }), _jsxs("p", { className: "text-sm opacity-90 mb-4", children: ["We and our partners use technologies like cookies to store and access device information. This helps us provide and improve our services. ", isGDPRApplicable && 'You have the right to withdraw consent at any time.', isCCPAApplicable && ' California residents have additional privacy rights.'] }), _jsxs("div", { className: "flex flex-wrap gap-2", children: [_jsx("button", { onClick: handleAcceptAll, className: "px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium", children: "Accept All" }), showRejectButton && ()
+                                                    < button, "onClick=", handleRejectAll, "className=\"px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium\" > Reject All"] }), ")}", showCustomizeButton && ()
+                                            < button, "onClick=", () => setShowDetails(true), "className=\"px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors text-sm font-medium\" > Manage Preferences"] }), ")}", _jsx("a", { href: "/privacy-policy", target: "_blank", rel: "noopener noreferrer", className: "px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors text-sm underline", children: "Privacy Policy" }), _jsx("a", { href: "/cookie-policy", target: "_blank", rel: "noopener noreferrer", className: "px-4 py-2 text-blue-600 hover:text-blue-800 transition-colors text-sm underline", children: "Cookie Policy" })] })] }), _jsx("button", { onClick: () => setIsVisible(false), className: "p-1 rounded-md hover:bg-gray-100 transition-colors", "aria-label": "Close banner", children: _jsx(X, { className: "w-5 h-5" }) })] });
     }
 };
 div >
@@ -236,25 +224,25 @@ className = "p-4 md:p-6" >
 { /* Tab Navigation */ }
 _jsxs("div", { className: "flex border-b border-gray-200 mb-6", children: [_jsx("button", { onClick: () => setActiveTab('overview'), className: `px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'overview'
                 ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            }`, children: "Overview" }), _jsx("button", { onClick: () => setActiveTab('categories'), className: `px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'categories'
+                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Overview" }), _jsx("button", { onClick: () => setActiveTab('categories'), className: `px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'categories'
                 ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            }`, children: "Categories" }), _jsx("button", { onClick: () => setActiveTab('vendors'), className: `px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'vendors'
+                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Categories" }), _jsx("button", { onClick: () => setActiveTab('vendors'), className: `px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'vendors'
                 ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700',
-            }`, children: "Third Parties" })] });
+                : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: "Third Parties" })] });
 { /* Tab Content */ }
 _jsxs("div", { className: "max-h-96 overflow-y-auto", children: [activeTab === 'overview' && ()
             < div, " className=\"space-y-4\">", _jsx("p", { className: "text-sm opacity-90 mb-4", children: "We respect your privacy and give you control over how your data is used. Choose which types of cookies and data processing you're comfortable with." }), isGDPRApplicable && ()
-            < div, " className=\"p-3 bg-blue-50 border border-blue-200 rounded-md\">", _jsx("h4", { className: "font-medium text-blue-900 mb-1", children: "GDPR Rights" }), _jsx("p", { className: "text-sm text-blue-800", children: "You have the right to access, rectify, erase, restrict processing, data portability, and to object to processing of your personal data." })] });
+            < div, " className=\"p-3 bg-blue-50 border border-blue-200 rounded-md\">", _jsx("h4", { className: "font-medium text-blue-900 mb-1", children: "GDPR Rights" }), _jsx("p", { className: "text-sm text-blue-800", children: "You have the right to access, rectify, erase, restrict processing, data portability } and to object to processing of your personal data." })] });
 {
     isCCPAApplicable && ()
         < div;
     className = "p-3 bg-yellow-50 border border-yellow-200 rounded-md" >
         (_jsx("h4", { className: "font-medium text-yellow-900 mb-1", children: "CCPA Rights" })
             ,
-                _jsx("p", { className: "text-sm text-yellow-800", children: "California residents have the right to know, delete, opt-out of sale, and non-discrimination for exercising privacy rights." }));
+                _jsx("p", { className: "text-sm text-yellow-800", children: "California residents have the right to know, delete, opt-out of sale } and non-discrimination for exercising privacy rights." }));
     div >
     ;
 }

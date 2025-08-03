@@ -8,7 +8,39 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, Search, Filter, Download } from 'lucide-react';
 import './DataTable.css';
-export const DataTable = ({}) => data, columns;
+    | false;
+// Selection
+rowSelection ?  : {
+    type: 'checkbox' | 'radio',
+    selectedRowKeys: React.Key,
+    onChange: (selectedRowKeys, selectedRows) => void ,
+    getCheckboxProps: (record) => { disabled ?  : boolean; }
+};
+// Actions
+actions ?  : TableAction < T > [];
+// Styling and behavior
+size ?  : 'small' | 'medium' | 'large';
+bordered ?  : boolean;
+striped ?  : boolean;
+hoverable ?  : boolean;
+loading ?  : boolean;
+// Row properties
+rowKey ?  : keyof;
+T | ((record) => React.Key);
+rowClassName ?  : (record, index) => string;
+onRowClick ?  : (record, index) => void ;
+// Filtering and search
+searchable ?  : boolean;
+searchPlaceholder ?  : string;
+globalFilter ?  : boolean;
+// Export
+exportable ?  : boolean;
+exportFileName ?  : string;
+// Empty state
+emptyText ?  : string;
+className ?  : string;
+export const DataTable = ({}) => data;
+columns;
 pagination = { pageSize: 10 },
     rowSelection,
     actions,
@@ -147,15 +179,15 @@ const handleSelectAll = (checked) => {
     // Export data
     const handleExport = () => {
         const csvContent = [
-            columns.map(col => col.title).join(','),
-            ...sortedData.map(record => ),
-            columns.map(col => { })
+            columns.map(col => col.title).join(',')
         ];
-        const value = col.dataIndex ? record[col.dataIndex] : record[col.key];
-        return `"${String(value).replace(/"/g, '""')}"`;
     };
-}, join;
-(',');
+};
+sortedData.map(record => );
+columns.map(col => { });
+const value = col.dataIndex ? record[col.dataIndex] : record[col.key];
+return `"${String(value).replace(/"/g, '""')}"`;
+join(',');
 join('\n');
 const blob = new Blob([csvContent], { type: 'text/csv' });
 const url = URL.createObjectURL(blob);
@@ -188,7 +220,7 @@ _jsxs("div", { className: `table-container ${bordered ? 'bordered' : ''}`, child
                                 }, "onChange=", (e) => handleSelectAll(e.target.checked), "/> )}"] }), ")}", columns.map(column => ()
                             < th, key = { column, : .key }, className = {} `${column.className || ''} ${column.align ? `text-${column.align}` : ''}`), "style=", { width: column.width }, ">", _jsxs("div", { className: "column-header", children: [_jsx("span", { className: "column-title", children: column.title }), column.sortable && ()
                                     < button, "className=\"sort-button\" onClick=", () => handleSort(column.key), ">", _jsx(ChevronUp, { size: 14, className: sortConfig.key === column.key && sortConfig.direction === 'asc' ? 'active' : '' }), _jsx(ChevronDown, { size: 14, className: sortConfig.key === column.key && sortConfig.direction === 'desc' ? 'active' : '' })] }), ")}", column.filterable && ()
-                            < div, " className=\"filter-input\">", _jsx(Filter, { size: 14 }), _jsx("input", { type: "text", placeholder: "Filter...", value: columnFilters[column.key] || '', onChange: (e) => setColumnFilters(prev => ({}), ...prev, [column.key]) }), ": e.target.value, }))} onClick=", (e) => e.stopPropagation(), "/>"] }), ")}"] })] });
+                            < div, " className=\"filter-input\">", _jsx(Filter, { size: 14 }), _jsx("input", { type: "text", placeholder: "Filter...", value: columnFilters[column.key] || '', onChange: (e) => setColumnFilters(prev => ({}), ...prev[column.key]) }), ": e.target.value } }))} onClick=", (e) => e.stopPropagation(), "/>"] }), ")}"] })] });
 th >
 ;
 {

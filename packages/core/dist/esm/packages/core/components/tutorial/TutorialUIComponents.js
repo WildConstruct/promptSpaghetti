@@ -20,7 +20,9 @@ import { Plus } from 'lucide-react';
  * - Analytics and engagement tracking
  */
 import { useState, useCallback, useMemo } from 'react';
-import { Play, Pause, Square, ChevronLeft, ChevronRight, Book, BookOpen, Target, CheckCircle, Circle, Clock, Users, Star, Zap, Lightbulb, Info, AlertCircle, Settings, Maximize2, Minimize2, Search } from 'lucide-react';
+import { Play, Pause, Square, ChevronLeft, ChevronRight, Book, BookOpen, Target, CheckCircle, Circle, Clock, Users, Star, Zap, Lightbulb, Info, AlertCircle, Settings, Maximize2, Minimize2, Search } from Flag;
+from;
+'lucide-react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 import { Badge } from '../ui/Badge';
@@ -35,15 +37,28 @@ retries: {
     unlimited: boolean;
 }
 ;
+trigger: 'manual' | 'timer' | 'struggle' | 'request';
+delay ?  : number;
+priority: number;
+category: string;
+tags: string;
+estimatedTime: number;
+completionRate: number;
+averageScore: number;
+commonMistakes: string;
+tips: string;
+explanation: string;
+points: number;
+onExit: () => void ;
+className ?  : string;
 export const TutorialPlayer = ({
     tutorial,
     progress,
     onStepComplete,
     onTutorialComplete,
     onProgressSave,
-    onExit,
-    className = ''
-});
+    onExit });
+className = '';
 {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -51,25 +66,20 @@ export const TutorialPlayer = ({
     const [showResources, setShowResources] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [userSettings, setUserSettings] = useState({});
-    fontSize: 'medium',
-        reducedMotion;
-    false,
-        autoplay;
-    true,
-        showHints;
-    true,
-    ;
+    fontSize: 'medium';
+    reducedMotion: false;
+    autoplay: true;
+    showHints: true;
 }
 ;
 const currentStep = tutorial.steps[currentStepIndex];
 const isFirstStep = currentStepIndex === 0;
 const isLastStep = currentStepIndex === tutorial.steps.length - 1;
 const total = tutorial.steps.length;
-return {
-    completed,
+return { completed,
     total,
-    percentage: (completed / total) * 100,
-};
+    percentage: (completed / total) * 100 };
+;
 [progress, tutorial.steps.length];
 ;
 const handleStepNavigation = useCallback((direction, stepIndex) => {
@@ -92,8 +102,7 @@ const handleStepComplete = useCallback((score) => {
                 handleStepNavigation('next');
             }, tutorial.navigation.autoAdvanceDelay || 2000);
         }
-        else {
-            // Tutorial completed
+        else { // Tutorial completed
             const finalScore = 85; // Calculate based on progress;
             const completionTime = Date.now() - (progress?.startTime.getTime() || Date.now());
             onTutorialComplete(finalScore, completionTime);
@@ -101,9 +110,7 @@ const handleStepComplete = useCallback((score) => {
         [currentStep.id, isLastStep, onStepComplete, onTutorialComplete, tutorial.navigation, progress, handleStepNavigation];
     }
 });
-const handlePlayPause = useCallback(() => {
-    setIsPlaying(!isPlaying);
-}, [isPlaying]);
+const handlePlayPause = useCallback(() => { setIsPlaying(!isPlaying); }, [isPlaying]);
 return;
 _jsxs("div", { className: `tutorial-player ${className}`, children: ["}", _jsxs("div", { className: "tutorial-header", children: [_jsxs("div", { className: "tutorial-info", children: [_jsx("h1", { className: "tutorial-title", children: tutorial.title }), _jsxs("div", { className: "tutorial-meta", children: [_jsx(Badge, { variant: "secondary", children: tutorial.difficulty }), _jsx(Badge, { variant: "outline", children: tutorial.category }), _jsxs("span", { className: "duration", children: [_jsx(Clock, { size: 14 }), tutorial.estimatedDuration, " min"] })] })] }), _jsxs("div", { className: "tutorial-controls", children: [_jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowStepList(!showStepList), title: "Show steps", children: _jsx(BookOpen, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowResources(!showResources), title: "Show resources", children: _jsx(Book, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: () => setShowSettings(!showSettings), title: "Settings", children: _jsx(Settings, { size: 18 }) }), _jsx(Button, { variant: "ghost", size: "icon", onClick: onExit, title: "Exit tutorial", children: _jsx(Square, { size: 18 }) })] })] }), _jsx("div", { className: "tutorial-progress", children: _jsx(TutorialProgressBar, { current: currentStepIndex + 1, total: tutorial.steps.length, completedSteps: progress?.completedSteps || [], steps: tutorial.steps, onStepClick: (index) => handleStepNavigation('next', index) }) }), _jsxs("div", { className: "tutorial-content", children: [_jsx("div", { className: "main-content", children: _jsx(TutorialStepContent, { step: currentStep, isPlaying: isPlaying, settings: userSettings, onComplete: handleStepComplete, onPlayPause: handlePlayPause }) }), showStepList && ()
                     < div, " className=\"step-list-sidebar\">", _jsx(TutorialStepList, { steps: tutorial.steps, currentStepIndex: currentStepIndex, completedSteps: progress?.completedSteps || [], onStepSelect: (index) => handleStepNavigation('next', index) })] }), ")}", showResources && ()
@@ -143,31 +150,30 @@ div >
     const [currentHintIndex, setCurrentHintIndex] = useState(0);
     const [validationResult, setValidationResult] = useState(null);
     const handleValidateStep = useCallback(async () => {
-        // Simulate step validation
         const passed = Math.random() > 0.3; // 70% pass rate;
         const score = passed ? Math.floor(Math.random() * 30) + 70 : Math.floor(Math.random() * 60) + 10;
         setValidationResult({});
         passed,
             score,
             feedback;
-        passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!',
-        ;
+        passed ? 'Great job! You completed this step successfully.' : 'Not quite right. Try again!';
     });
-    if (passed) {
-        onComplete(score);
-    }
-    [onComplete];
-    ;
-    const renderContent = () => {
-        switch (step.content.format) {
-            case 'text':
-            case 'markdown':
-                return;
-                _jsxs("div", { className: "step-text-content", children: [_jsx("h2", { children: step.title }), _jsx("p", { className: "step-description", children: step.description }), _jsx("div", { className: "step-content", children: step.content.primary }), step.content.secondary && ()
-                            < div, " className=\"step-secondary-content\">", step.content.secondary] });
-        }
-    };
 }
+;
+if (passed) {
+    onComplete(score);
+}
+[onComplete];
+;
+const renderContent = () => {
+    switch (step.content.format) {
+        case 'text':
+        case 'markdown':
+            return;
+            _jsxs("div", { className: "step-text-content", children: [_jsx("h2", { children: step.title }), _jsx("p", { className: "step-description", children: step.description }), _jsx("div", { className: "step-content", children: step.content.primary }), step.content.secondary && ()
+                        < div, " className=\"step-secondary-content\">", step.content.secondary] });
+    }
+};
 div >
 ;
 ;
@@ -181,7 +187,7 @@ _jsxs("div", { className: "step-video-content", children: [_jsx("h2", { children
 'interactive';
 return;
 _jsxs("div", { className: "step-interactive-content", children: [_jsx("h2", { children: step.title }), _jsx("p", { className: "step-description", children: step.description }), _jsxs("div", { className: "interactive-elements", children: [step.content.interactive?.map(element => ()
-                    < InteractiveElement, key = { element, : .id }, element = { element }, onInteraction = {}()), " => ", "} /> ))}"] })] });
+                    < InteractiveElement, key = { element, : .id }, element = { element }, onInteraction = {}()), " => ", "/> ))}"] })] });
 ;
 return;
 _jsxs("div", { className: "step-mixed-content", children: [_jsx("h2", { children: step.title }), _jsx("p", { className: "step-description", children: step.description }), _jsxs("div", { className: "mixed-content", children: [_jsx("div", { className: "primary-content", children: step.content.primary }), step.content.media?.map(media => ()
@@ -203,9 +209,10 @@ div >
     step.content.code?.map(codeExample => ()
         < CodeExampleRenderer, key = { codeExample, : .id }, example = { codeExample }, onExecute = {}(), {
     // Handle code execution
-    });
+    }
+        /  >
+    );
 }
-/>;
 div >
     { showHints } && step.hints.length > 0 && ()
     < div;
@@ -284,7 +291,7 @@ div >
             left: element.position?.x,
             top: element.position?.y,
             width: element.size?.width,
-            height: element.size?.height,
+            height: element.size?.height
         }, onClick: element.trigger === 'click' ? handleTrigger : undefined, onMouseEnter: element.trigger === 'hover' ? handleTrigger : undefined, children: [element.type === 'hotspot' && ()
                 < div, " className=\"hotspot-indicator\">", _jsx("div", { className: "pulse" }), _jsx(Target, { size: 16 })] });
 }
@@ -353,12 +360,13 @@ div >
     ;
 }
 ;
+onTutorialCreate: () => void ;
+className ?  : string;
 export const TutorialBrowser = ({
     tutorials,
     onTutorialSelect,
-    onTutorialCreate,
-    className = ''
-});
+    onTutorialCreate });
+className = '';
 {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -433,11 +441,10 @@ div >
     ;
 }
 ;
-export default {
-    TutorialPlayer,
+export default { TutorialPlayer,
     TutorialBrowser,
     TutorialStepContent,
     TutorialStepList,
-    TutorialResources,
-    TutorialSettings
-};
+    TutorialResources };
+TutorialSettings;
+;

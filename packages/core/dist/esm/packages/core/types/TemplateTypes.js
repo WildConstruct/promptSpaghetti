@@ -23,5 +23,13 @@ bounds: {
 nodeIds: string;
 collapsed: boolean;
 ;
+importSharedTemplate: (shareUrl) => Promise;
+// Reviews
+addReview: (templateId, review) => Promise;
+getReviews: (templateId) => Promise;
+// Validation
+validateTemplate: (template) => Promise;
+showOnlyMyTemplates: boolean;
+previewTemplate: Template | null;
 ;
 export {};

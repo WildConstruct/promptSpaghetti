@@ -6,7 +6,23 @@
  *
  * Part of Epic 19 - Data Protection & Privacy Controls
  */
-import { DataClassificationLevel } from '../types/DataClassification';
+import { DataClassificationLevel, OperationContext } from ValidationResult;
+from;
+'../types/DataClassification';
+classification: DataClassificationLevel;
+userId: string;
+dataId: string;
+operation: string;
+result: 'SUCCESS' | 'FAILURE' | 'WARNING';
+details: Record;
+context: OperationContext;
+metrics ?  : MonitoringMetrics;
+type: 'THRESHOLD_EXCEEDED' | 'UNUSUAL_PATTERN' | 'COMPLIANCE_VIOLATION' | 'SECURITY_RISK';
+message: string;
+details: Record;
+resolved: boolean;
+resolvedAt ?  : Date;
+resolvedBy ?  : string;
 ;
 classificationBreakdown: ClassificationStats;
 topUsers: UserActivity;
@@ -44,51 +60,43 @@ export class ClassificationMonitoringService {
                 description: 'High rate of access violations',
                 metric: 'violationRate',
                 operator: '>',
-                value: 0.1, // 10% violation rate,
+                value: 0.1, // 10% violation rate
                 severity: 'HIGH',
                 enabled: true,
-                cooldownMinutes: 30,
+                cooldownMinutes: 30
             },
-            {
-                name: 'low-compliance-score',
+            { name: 'low-compliance-score',
                 description: 'Compliance score below threshold',
                 metric: 'complianceScore',
                 operator: '<',
                 value: 80,
                 severity: 'MEDIUM',
                 enabled: true,
-                cooldownMinutes: 60,
-            },
-            {
-                name: 'restricted-data-surge',
+                cooldownMinutes: 60 },
+            { name: 'restricted-data-surge',
                 description: 'Unusual spike in restricted data access',
                 metric: 'restrictedAccessRate',
                 operator: '>',
                 value: 50, // 50 accesses per hour,
                 severity: 'CRITICAL',
                 enabled: true,
-                cooldownMinutes: 15,
-            },
-            {
-                name: 'processing-time-exceeded',
+                cooldownMinutes: 15 },
+            { name: 'processing-time-exceeded',
                 description: 'Average processing time too high',
                 metric: 'averageProcessingTime',
                 operator: '>',
                 value: 1000, // 1 second,
                 severity: 'LOW',
                 enabled: true,
-                cooldownMinutes: 120,
-            },
-            {
-                name: 'user-violation-threshold',
+                cooldownMinutes: 120 },
+            { name: 'user-violation-threshold',
                 description: 'User exceeded violation threshold',
                 metric: 'userViolationCount',
                 operator: '>',
                 value: 5,
                 severity: 'HIGH',
-                enabled: true,
-                cooldownMinutes: 60
-            }
+                enabled: true },
+            cooldownMinutes, 60
         ];
         defaultThresholds.forEach(threshold => { });
         this.thresholds.set(threshold.name, threshold);
@@ -117,21 +125,18 @@ export class ClassificationMonitoringService {
             complianceRate;
         100,
             lastUpdated;
-        new Date(),
-        ;
+        new Date();
     }
-    ;
 }
+;
 ;
 /**
  * Record a monitoring event
  */
 async;
 recordEvent(event, (Omit));
-Promise < void  > {
-    const: monitoringEvent, MonitoringEvent = {
-        id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }
-};
+Promise < void  > { const: monitoringEvent, MonitoringEvent = {},
+    id: `event-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
 event;
 ;
 // Store event
@@ -152,7 +157,8 @@ if (this.events.length > 10000) {
         const: stats = this.classificationStats.get(event.classification),
         if(, stats) { }, return: ,
         stats, : .totalEvents++,
-        switch(event) { }, : .result };
+        switch(event) { }, : .result
+    };
     {
         'SUCCESS';
         stats.successCount++;
@@ -188,7 +194,7 @@ if (this.events.length > 10000) {
                                     PUBLIC: 0,
                                     INTERNAL: 0,
                                     CONFIDENTIAL: 0,
-                                    RESTRICTED: 0,
+                                    RESTRICTED: 0
                                 },
                                 violationCount: 0,
                                 lastActivity: new Date(),
@@ -228,7 +234,8 @@ if (this.events.length > 10000) {
                                 e.classification === 'RESTRICTED' &&
                                 e.timestamp.getTime() > Date.now() - 3600000; // Last hour
                         }, : .length,
-                        if(recentRestrictedAccess) { } } > 10;
+                        if(recentRestrictedAccess) { }
+                    } > 10;
                     {
                         activity.suspiciousActivities.push('Rapid access to restricted data');
                         // Multiple violations in short time
@@ -248,22 +255,21 @@ if (this.events.length > 10000) {
                                 activity.suspiciousActivities = [...new Set(activity.suspiciousActivities)];
                                 calculateUserRiskScore(activity, UserActivity);
                                 number;
-                                {
-                                    let riskScore = 0;
-                                    // Violation rate contribution (0-30 points)
-                                    const violationRate = activity.violationCount / activity.totalEvents;
-                                    riskScore += Math.min(violationRate * 100, 30);
-                                    // Restricted data access contribution (0-30 points)
-                                    const restrictedRate = activity.classificationCounts.RESTRICTED / activity.totalEvents;
-                                    riskScore += Math.min(restrictedRate * 60, 30);
-                                    // Suspicious activities contribution (0-20 points)
-                                    riskScore += Math.min(activity.suspiciousActivities.length * 5, 20);
-                                    // Recent activity contribution (0-20 points)
-                                    const minutesSinceLastActivity = (Date.now() - activity.lastActivity.getTime()) / 60000;
-                                    if (minutesSinceLastActivity < 5) {
-                                        riskScore += 20; // Very recent activity
-                                    }
-                                    else if (minutesSinceLastActivity < 60) {
+                                { }
+                                let riskScore = 0;
+                                // Violation rate contribution (0-30 points)
+                                const violationRate = activity.violationCount / activity.totalEvents;
+                                riskScore += Math.min(violationRate * 100, 30);
+                                // Restricted data access contribution (0-30 points)
+                                const restrictedRate = activity.classificationCounts.RESTRICTED / activity.totalEvents;
+                                riskScore += Math.min(restrictedRate * 60, 30);
+                                // Suspicious activities contribution (0-20 points)
+                                riskScore += Math.min(activity.suspiciousActivities.length * 5, 20);
+                                // Recent activity contribution (0-20 points)
+                                const minutesSinceLastActivity = (Date.now() - activity.lastActivity.getTime()) / 60000;
+                                if (minutesSinceLastActivity < 5) {
+                                    riskScore += 20; // Very recent activity
+                                    if (minutesSinceLastActivity < 60) {
                                         riskScore += 10; // Recent activity
                                         return Math.min(Math.round(riskScore), 100);
                                         async;
@@ -286,324 +292,310 @@ if (this.events.length > 10000) {
                                                     await this.createAlert({});
                                                     severity: threshold.severity,
                                                         type;
-                                                    'THRESHOLD_EXCEEDED',
-                                                        message;
-                                                    `${threshold.description}: ${threshold.metric} ${threshold.operator} ${threshold.value}`;
+                                                    'THRESHOLD_EXCEEDED';
                                                 }
+                                                message: `${threshold.description}: ${threshold.metric} ${threshold.operator} ${threshold.value}`;
                                             }
-                                            details: {
-                                                threshold: name,
-                                                    metric;
-                                                threshold.metric,
-                                                    actualValue;
-                                                metricValue,
-                                                    expectedValue;
-                                                threshold.value,
-                                                    event;
-                                                event,
+                                        }
+                                        details: {
+                                            threshold: name,
+                                                metric;
+                                            threshold.metric,
+                                                actualValue;
+                                            metricValue,
+                                                expectedValue;
+                                            threshold.value,
+                                                event;
+                                            event;
+                                        }
+                                    }
+                                    ;
+                                    threshold.lastTriggered = new Date();
+                                    getMetricValue(metric, string, event, MonitoringEvent);
+                                    number | null;
+                                    {
+                                        switch (metric) {
+                                            case 'violationRate':
+                                                const stats = this.classificationStats.get(event.classification);
+                                                return stats ? stats.violationRate : null;
+                                            case 'complianceScore':
+                                                return event.metrics?.complianceScore ?? null;
+                                            case 'restrictedAccessRate':
+                                                const recentRestrictedEvents = this.events.filter(e => );
                                                 ;
-                                            }
-                                            ;
-                                            threshold.lastTriggered = new Date();
-                                            getMetricValue(metric, string, event, MonitoringEvent);
-                                            number | null;
-                                            {
-                                                switch (metric) {
-                                                    case 'violationRate':
-                                                        const stats = this.classificationStats.get(event.classification);
-                                                        return stats ? stats.violationRate : null;
-                                                    case 'complianceScore':
-                                                        return event.metrics?.complianceScore ?? null;
-                                                    case 'restrictedAccessRate':
-                                                        const recentRestrictedEvents = this.events.filter(e => );
+                                                e.classification === 'RESTRICTED' &&
+                                                    e.timestamp.getTime() > Date.now() - 3600000; // Last hour
+                                                length;
+                                                return recentRestrictedEvents;
+                                            case 'averageProcessingTime':
+                                                const classStats = this.classificationStats.get(event.classification);
+                                                return classStats ? classStats.averageProcessingTime : null;
+                                            case 'userViolationCount':
+                                                const userActivity = this.userActivities.get(event.userId);
+                                                return userActivity ? userActivity.violationCount : null;
+                                            default:
+                                                return null;
+                                                evaluateThreshold(value, number, operator, string, threshold, number);
+                                                boolean;
+                                                {
+                                                    switch (operator) {
+                                                        case '>': return value > threshold;
+                                                        case '<': return value < threshold;
+                                                        case '>=': return value >= threshold;
+                                                        case '<=': return value <= threshold;
+                                                        case '==': return value === threshold;
+                                                        case '!=': return value !== threshold;
+                                                        default:
+                                                            return false;
+                                                            async;
+                                                            createAlert(alert, (Omit));
+                                                            Promise < void  > {
+                                                                const: monitoringAlert, MonitoringAlert = {},
+                                                                id: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                                                            };
+                                                            timestamp: new Date();
+                                                            resolved: false;
+                                                            alert;
+                                                    }
+                                                    ;
+                                                    this.alerts.push(monitoringAlert);
+                                                    // Notify alert handlers
+                                                    this.notifyAlertHandlers(monitoringAlert);
+                                                    // Cleanup old alerts (keep last 1000)
+                                                    if (this.alerts.length > 1000) {
+                                                        this.alerts = this.alerts.slice(-1000);
+                                                        notifyRealTimeHandlers(event, MonitoringEvent);
+                                                        void {};
+                                                        this.realTimeHandlers.forEach(handler => { });
+                                                        try {
+                                                            handler(event);
+                                                        }
+                                                        catch (error) {
+                                                            console.error('Error in real-time handler:', error);
+                                                        }
                                                         ;
-                                                        e.classification === 'RESTRICTED' &&
-                                                            e.timestamp.getTime() > Date.now() - 3600000; // Last hour
-                                                        length;
-                                                        return recentRestrictedEvents;
-                                                    case 'averageProcessingTime':
-                                                        const classStats = this.classificationStats.get(event.classification);
-                                                        return classStats ? classStats.averageProcessingTime : null;
-                                                    case 'userViolationCount':
-                                                        const userActivity = this.userActivities.get(event.userId);
-                                                        return userActivity ? userActivity.violationCount : null;
-                                                    default:
-                                                        return null;
-                                                        evaluateThreshold(value, number, operator, string, threshold, number);
-                                                        boolean;
-                                                        {
-                                                            switch (operator) {
-                                                                case '>': return value > threshold;
-                                                                case '<': return value < threshold;
-                                                                case '>=': return value >= threshold;
-                                                                case '<=': return value <= threshold;
-                                                                case '==': return value === threshold;
-                                                                case '!=': return value !== threshold;
-                                                                default:
-                                                                    return false;
-                                                                    async;
-                                                                    createAlert(alert, (Omit));
-                                                                    Promise < void  > {
-                                                                        const: monitoringAlert, MonitoringAlert = {
-                                                                            id: `alert-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }
-                                                                    },
-                                                                        timestamp;
-                                                                    new Date(),
-                                                                        resolved;
-                                                                    false,
-                                                                    ;
-                                                                    alert;
-                                                            }
-                                                            ;
-                                                            this.alerts.push(monitoringAlert);
-                                                            // Notify alert handlers
-                                                            this.notifyAlertHandlers(monitoringAlert);
-                                                            // Cleanup old alerts (keep last 1000)
-                                                            if (this.alerts.length > 1000) {
-                                                                this.alerts = this.alerts.slice(-1000);
-                                                                notifyRealTimeHandlers(event, MonitoringEvent);
+                                                        notifyAlertHandlers(alert, MonitoringAlert);
+                                                        void { this: .alertHandlers.forEach(handler => { }),
+                                                            try: {}, catch(error) { console.error('Error in alert handler:', error); },
+                                                            /**
+                                                             * Register real-time event handler
+                                                             */
+                                                            onEvent(handler) {
+                                                                this.realTimeHandlers.push(handler);
+                                                                /**
+                                                                * Register alert handler
+                                                                */
+                                                                onAlert(handler, (alert) => void );
                                                                 void {
-                                                                    this: .realTimeHandlers.forEach(handler => { }),
-                                                                    try: {}, catch(error) {
-                                                                        console.error('Error in real-time handler:', error);
-                                                                    },
+                                                                    this: .alertHandlers.push(handler),
                                                                     /**
-                                                                     * Notify alert handlers
-                                                                     */
-                                                                    notifyAlertHandlers(alert) {
-                                                                        this.alertHandlers.forEach(handler => { });
-                                                                        try {
-                                                                            handler(alert);
-                                                                        }
-                                                                        catch (error) {
-                                                                            console.error('Error in alert handler:', error);
-                                                                        }
-                                                                        ;
-                                                                        /**
-                                                                         * Register real-time event handler
-                                                                         */
-                                                                        onEvent(handler, (event) => void );
-                                                                        void {
-                                                                            this: .realTimeHandlers.push(handler),
-                                                                            /**
-                                                                            * Register alert handler
-                                                                            */
-                                                                            onAlert(handler) {
-                                                                                this.alertHandlers.push(handler);
-                                                                                /**
-                                                                                * Get monitoring dashboard data
-                                                                                */
-                                                                                getDashboard();
-                                                                                MonitoringDashboard;
-                                                                                {
-                                                                                    const now = Date.now();
-                                                                                    const oneHourAgo = now - 3600000;
-                                                                                    // Calculate overall stats
-                                                                                    const recentEvents = this.events.filter(e => e.timestamp.getTime() > oneHourAgo);
-                                                                                    const successEvents = recentEvents.filter(e => e.result === 'SUCCESS');
-                                                                                    const activeUsers = new Set(recentEvents.map(e => e.userId)).size;
-                                                                                    const violationCount = recentEvents.filter(e => e.eventType === 'VIOLATION').length;
-                                                                                    // Calculate average compliance score
-                                                                                    const complianceScores = recentEvents;
-                                                                                }
-                                                                            },
-                                                                            : 
-                                                                                .filter(e => e.metrics?.complianceScore !== undefined)
-                                                                                .map(e => e.metrics.complianceScore),
-                                                                            const: avgComplianceScore = complianceScores.length > 0,
-                                                                            complianceScores, : .reduce((a, b) => a + b, 0) / complianceScores.length,
-                                                                            100: ,
-                                                                            // Get top users by activity
-                                                                            const: topUsers = Array.from(this.userActivities.values()),
-                                                                            : 
-                                                                                .sort((a, b) => b.totalEvents - a.totalEvents)
-                                                                                .slice(0, 10),
-                                                                            // Get recent alerts
-                                                                            const: recentAlerts = this.alerts,
-                                                                            : 
-                                                                                .filter(a => !a.resolved)
-                                                                                .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-                                                                                .slice(0, 10),
-                                                                            // Generate trend data (last 24 hours, hourly)
-                                                                            const: trendData = [],
-                                                                            for(let, i = 23, i) { }
-                                                                        } >= 0;
-                                                                        i--;
-                                                                        {
-                                                                            const hourStart = now - (i + 1) * 3600000;
-                                                                            const hourEnd = now - i * 3600000;
-                                                                            const hourEvents = this.events.filter(e => );
-                                                                            ;
-                                                                            e.timestamp.getTime() >= hourStart &&
-                                                                                e.timestamp.getTime() < hourEnd;
-                                                                            ;
-                                                                            const hourViolations = hourEvents.filter(e => e.eventType === 'VIOLATION').length;
-                                                                            const hourComplianceScores = hourEvents;
-                                                                        }
+                                                                    * Get monitoring dashboard data
+                                                                    */
+                                                                    getDashboard() {
+                                                                        const now = Date.now();
+                                                                        const oneHourAgo = now - 3600000;
+                                                                        // Calculate overall stats
+                                                                        const recentEvents = this.events.filter(e => e.timestamp.getTime() > oneHourAgo);
+                                                                        const successEvents = recentEvents.filter(e => e.result === 'SUCCESS');
+                                                                        const activeUsers = new Set(recentEvents.map(e => e.userId)).size;
+                                                                        const violationCount = recentEvents.filter(e => e.eventType === 'VIOLATION').length;
+                                                                        // Calculate average compliance score
+                                                                        const complianceScores = recentEvents;
                                                                     },
                                                                     : 
                                                                         .filter(e => e.metrics?.complianceScore !== undefined)
                                                                         .map(e => e.metrics.complianceScore),
-                                                                    trendData, : .push({}),
-                                                                    timestamp: new Date(hourEnd),
-                                                                    eventCount: hourEvents.length,
-                                                                    violationCount: hourViolations,
-                                                                    complianceScore: hourComplianceScores.length > 0,
-                                                                    hourComplianceScores, : .reduce((a, b) => a + b, 0) / hourComplianceScores.length,
-                                                                    100: , };
-                                                                ;
-                                                                return {
-                                                                    overallStats: {
-                                                                        totalEvents: recentEvents.length,
-                                                                        successRate: recentEvents.length > 0 ? (successEvents.length / recentEvents.length) * 100 : 100,
-                                                                        averageProcessingTime: this.calculateAverageProcessingTime(recentEvents),
-                                                                        activeUsers,
-                                                                        violationCount,
-                                                                        complianceScore: avgComplianceScore,
-                                                                    },
-                                                                    classificationBreakdown: Array.from(this.classificationStats.values()),
-                                                                    topUsers,
-                                                                    recentAlerts,
-                                                                    trendData
-                                                                };
-                                                                calculateAverageProcessingTime(events, MonitoringEvent);
-                                                                number;
+                                                                    const: avgComplianceScore = complianceScores.length > 0,
+                                                                    complianceScores, : .reduce((a, b) => a + b, 0) / complianceScores.length,
+                                                                    100: ,
+                                                                    // Get top users by activity
+                                                                    const: topUsers = Array.from(this.userActivities.values()),
+                                                                    : 
+                                                                        .sort((a, b) => b.totalEvents - a.totalEvents)
+                                                                        .slice(0, 10),
+                                                                    // Get recent alerts
+                                                                    const: recentAlerts = this.alerts,
+                                                                    : 
+                                                                        .filter(a => !a.resolved)
+                                                                        .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
+                                                                        .slice(0, 10),
+                                                                    // Generate trend data (last 24 hours, hourly)
+                                                                    const: trendData = [],
+                                                                    for(let, i = 23, i) { }
+                                                                } >= 0;
+                                                                i--;
                                                                 {
-                                                                    const times = events;
-                                                                    filter(e => e.metrics?.processingTimeMs !== undefined)
-                                                                        .map(e => e.metrics.processingTimeMs);
-                                                                    return times.length > 0
-                                                                        ? times.reduce((a, b) => a + b, 0) / times.length
-                                                                        : 0;
-                                                                    /**
-                                                                    * Get events by criteria
-                                                                    */
-                                                                    getEvents(criteria ?  : {}),
-                                                                        classification ?  : DataClassificationLevel;
-                                                                    userId ?  : string;
-                                                                    eventType ?  : string;
-                                                                    startDate ?  : Date;
-                                                                    endDate ?  : Date;
-                                                                    result ?  : 'SUCCESS' | 'FAILURE' | 'WARNING',
+                                                                    const hourStart = now - (i + 1) * 3600000;
+                                                                    const hourEnd = now - i * 3600000;
+                                                                    const hourEvents = this.events.filter(e => );
                                                                     ;
+                                                                    e.timestamp.getTime() >= hourStart &&
+                                                                        e.timestamp.getTime() < hourEnd;
+                                                                    ;
+                                                                    const hourViolations = hourEvents.filter(e => e.eventType === 'VIOLATION').length;
+                                                                    const hourComplianceScores = hourEvents;
                                                                 }
-                                                                MonitoringEvent;
-                                                                {
-                                                                    let filteredEvents = this.events;
-                                                                    if (criteria) {
-                                                                        if (criteria.classification) {
-                                                                            filteredEvents = filteredEvents.filter(e => e.classification === criteria.classification);
-                                                                            if (criteria.userId) {
-                                                                                filteredEvents = filteredEvents.filter(e => e.userId === criteria.userId);
-                                                                                if (criteria.eventType) {
-                                                                                    filteredEvents = filteredEvents.filter(e => e.eventType === criteria.eventType);
-                                                                                    if (criteria.startDate) {
-                                                                                        filteredEvents = filteredEvents.filter(e => e.timestamp >= criteria.startDate);
-                                                                                        if (criteria.endDate) {
-                                                                                            filteredEvents = filteredEvents.filter(e => e.timestamp <= criteria.endDate);
-                                                                                            if (criteria.result) {
-                                                                                                filteredEvents = filteredEvents.filter(e => e.result === criteria.result);
-                                                                                                return filteredEvents;
+                                                            },
+                                                            : 
+                                                                .filter(e => e.metrics?.complianceScore !== undefined)
+                                                                .map(e => e.metrics.complianceScore),
+                                                            trendData, : .push({}),
+                                                            timestamp: new Date(hourEnd),
+                                                            eventCount: hourEvents.length,
+                                                            violationCount: hourViolations,
+                                                            complianceScore: hourComplianceScores.length > 0,
+                                                            hourComplianceScores, : .reduce((a, b) => a + b, 0) / hourComplianceScores.length,
+                                                            100:  };
+                                                    }
+                                                    ;
+                                                    return { overallStats: {
+                                                            totalEvents: recentEvents.length,
+                                                            successRate: recentEvents.length > 0 ? (successEvents.length / recentEvents.length) * 100 : 100,
+                                                            averageProcessingTime: this.calculateAverageProcessingTime(recentEvents),
+                                                            activeUsers,
+                                                            violationCount,
+                                                            complianceScore: avgComplianceScore }
+                                                    },
+                                                        classificationBreakdown;
+                                                    Array.from(this.classificationStats.values()),
+                                                        topUsers,
+                                                        recentAlerts,
+                                                        trendData;
+                                                }
+                                                ;
+                                                calculateAverageProcessingTime(events, MonitoringEvent);
+                                                number;
+                                                {
+                                                    const times = events;
+                                                    filter(e => e.metrics?.processingTimeMs !== undefined)
+                                                        .map(e => e.metrics.processingTimeMs);
+                                                    return times.length > 0
+                                                        ? times.reduce((a, b) => a + b, 0) / times.length
+                                                        : 0;
+                                                    /**
+                                                    * Get events by criteria
+                                                    */
+                                                    getEvents(criteria ?  : {}),
+                                                        classification ?  : DataClassificationLevel;
+                                                    userId ?  : string;
+                                                    eventType ?  : string;
+                                                    startDate ?  : Date;
+                                                    endDate ?  : Date;
+                                                    result ?  : 'SUCCESS' | 'FAILURE' | 'WARNING';
+                                                }
+                                        }
+                                        MonitoringEvent;
+                                        {
+                                            let filteredEvents = this.events;
+                                            if (criteria) {
+                                                if (criteria.classification) {
+                                                    filteredEvents = filteredEvents.filter(e => e.classification === criteria.classification);
+                                                    if (criteria.userId) {
+                                                        filteredEvents = filteredEvents.filter(e => e.userId === criteria.userId);
+                                                        if (criteria.eventType) {
+                                                            filteredEvents = filteredEvents.filter(e => e.eventType === criteria.eventType);
+                                                            if (criteria.startDate) {
+                                                                filteredEvents = filteredEvents.filter(e => e.timestamp >= criteria.startDate);
+                                                                if (criteria.endDate) {
+                                                                    filteredEvents = filteredEvents.filter(e => e.timestamp <= criteria.endDate);
+                                                                    if (criteria.result) {
+                                                                        filteredEvents = filteredEvents.filter(e => e.result === criteria.result);
+                                                                        return filteredEvents;
+                                                                        /**
+                                                                        * Get alerts
+                                                                        */
+                                                                        getAlerts(unresolved ?  : boolean);
+                                                                        MonitoringAlert;
+                                                                        {
+                                                                            if (unresolved) {
+                                                                                return this.alerts.filter(a => !a.resolved);
+                                                                                return this.alerts;
+                                                                                /**
+                                                                                * Resolve alert
+                                                                                */
+                                                                                resolveAlert(alertId, string, resolvedBy, string);
+                                                                                void {
+                                                                                    const: alert = this.alerts.find(a => a.id === alertId),
+                                                                                    if(alert) { } } && !alert.resolved;
+                                                                                {
+                                                                                    alert.resolved = true;
+                                                                                    alert.resolvedAt = new Date();
+                                                                                    alert.resolvedBy = resolvedBy;
+                                                                                    /**
+                                                                                    * Get or update threshold
+                                                                                    */
+                                                                                    getThreshold(name, string);
+                                                                                    MonitoringThreshold | undefined;
+                                                                                    {
+                                                                                        return this.thresholds.get(name);
+                                                                                        updateThreshold(name, string, updates, (Partial));
+                                                                                        void {
+                                                                                            const: threshold = this.thresholds.get(name),
+                                                                                            if(threshold) {
+                                                                                                Object.assign(threshold, updates);
                                                                                                 /**
-                                                                                                * Get alerts
+                                                                                                * Get user activity
                                                                                                 */
-                                                                                                getAlerts(unresolved ?  : boolean);
-                                                                                                MonitoringAlert;
+                                                                                                getUserActivity(userId, string);
+                                                                                                UserActivity | undefined;
                                                                                                 {
-                                                                                                    if (unresolved) {
-                                                                                                        return this.alerts.filter(a => !a.resolved);
-                                                                                                        return this.alerts;
-                                                                                                        /**
-                                                                                                        * Resolve alert
-                                                                                                        */
-                                                                                                        resolveAlert(alertId, string, resolvedBy, string);
-                                                                                                        void {
-                                                                                                            const: alert = this.alerts.find(a => a.id === alertId),
-                                                                                                            if(alert) { } } && !alert.resolved;
-                                                                                                        {
-                                                                                                            alert.resolved = true;
-                                                                                                            alert.resolvedAt = new Date();
-                                                                                                            alert.resolvedBy = resolvedBy;
+                                                                                                    return this.userActivities.get(userId);
+                                                                                                    /**
+                                                                                                    * Get classification statistics
+                                                                                                    */
+                                                                                                    getClassificationStats(classification ?  : DataClassificationLevel);
+                                                                                                    ClassificationStats;
+                                                                                                    {
+                                                                                                        if (classification) {
+                                                                                                            const stats = this.classificationStats.get(classification);
+                                                                                                            return stats ? [stats] : [];
+                                                                                                            return Array.from(this.classificationStats.values());
                                                                                                             /**
-                                                                                                            * Get or update threshold
+                                                                                                            * Export monitoring data
                                                                                                             */
-                                                                                                            getThreshold(name, string);
-                                                                                                            MonitoringThreshold | undefined;
+                                                                                                            exportData(format, 'json' | 'csv');
+                                                                                                            string;
                                                                                                             {
-                                                                                                                return this.thresholds.get(name);
-                                                                                                                updateThreshold(name, string, updates, (Partial));
-                                                                                                                void {
-                                                                                                                    const: threshold = this.thresholds.get(name),
-                                                                                                                    if(threshold) {
-                                                                                                                        Object.assign(threshold, updates);
-                                                                                                                        /**
-                                                                                                                        * Get user activity
-                                                                                                                        */
-                                                                                                                        getUserActivity(userId, string);
-                                                                                                                        UserActivity | undefined;
-                                                                                                                        {
-                                                                                                                            return this.userActivities.get(userId);
-                                                                                                                            /**
-                                                                                                                            * Get classification statistics
-                                                                                                                            */
-                                                                                                                            getClassificationStats(classification ?  : DataClassificationLevel);
-                                                                                                                            ClassificationStats;
-                                                                                                                            {
-                                                                                                                                if (classification) {
-                                                                                                                                    const stats = this.classificationStats.get(classification);
-                                                                                                                                    return stats ? [stats] : [];
-                                                                                                                                    return Array.from(this.classificationStats.values());
-                                                                                                                                    /**
-                                                                                                                                    * Export monitoring data
-                                                                                                                                    */
-                                                                                                                                    exportData(format, 'json' | 'csv');
-                                                                                                                                    string;
-                                                                                                                                    {
-                                                                                                                                        const data = {
-                                                                                                                                            events: this.events,
-                                                                                                                                            alerts: this.alerts,
-                                                                                                                                            statistics: Array.from(this.classificationStats.values()),
-                                                                                                                                            userActivities: Array.from(this.userActivities.values()),
-                                                                                                                                            exportDate: new Date(),
-                                                                                                                                        };
-                                                                                                                                        if (format === 'json') {
-                                                                                                                                            return JSON.stringify(data, null, 2);
-                                                                                                                                        }
-                                                                                                                                        else {
-                                                                                                                                            // Simple CSV export of events
-                                                                                                                                            const headers = ['timestamp', 'eventType', 'classification', 'userId', 'result', 'operation'];
-                                                                                                                                            const rows = this.events.map(e => []);
-                                                                                                                                            e.timestamp.toISOString(),
-                                                                                                                                                e.eventType,
-                                                                                                                                                e.classification,
-                                                                                                                                                e.userId,
-                                                                                                                                                e.result,
-                                                                                                                                                e.operation;
-                                                                                                                                            ;
-                                                                                                                                            return [headers, ...rows].map(row => row.join(',')).join('\n');
-                                                                                                                                            /**
-                                                                                                                                             * Clear monitoring data
-                                                                                                                                             */
-                                                                                                                                            clearData();
-                                                                                                                                            void {
-                                                                                                                                                this: .events = [],
-                                                                                                                                                this: .alerts = [],
-                                                                                                                                                this: .userActivities.clear(),
-                                                                                                                                                this: .initializeClassificationStats(),
-                                                                                                                                                export: , default: ClassificationMonitoringService
-                                                                                                                                            };
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    } };
+                                                                                                                const data = {
+                                                                                                                    events: this.events,
+                                                                                                                    alerts: this.alerts,
+                                                                                                                    statistics: Array.from(this.classificationStats.values()),
+                                                                                                                    userActivities: Array.from(this.userActivities.values()),
+                                                                                                                    exportDate: new Date()
+                                                                                                                };
                                                                                                             }
+                                                                                                            ;
+                                                                                                            if (format === 'json') {
+                                                                                                                return JSON.stringify(data, null, 2);
+                                                                                                            }
+                                                                                                            else { // Simple CSV export of events
+                                                                                                                const headers = ['timestamp', 'eventType', 'classification', 'userId', 'result', 'operation'];
+                                                                                                                const rows = this.events.map(e => []);
+                                                                                                                e.timestamp.toISOString();
+                                                                                                                e.eventType;
+                                                                                                                e.classification;
+                                                                                                                e.userId;
+                                                                                                                e.result;
+                                                                                                            }
+                                                                                                            e.operation;
+                                                                                                            ;
+                                                                                                            return [headers, ...rows].map(row => row.join(',')).join('\n');
+                                                                                                            /**
+                                                                                                             * Clear monitoring data
+                                                                                                             */
+                                                                                                            clearData();
+                                                                                                            void {
+                                                                                                                this: .events = [],
+                                                                                                                this: .alerts = [],
+                                                                                                                this: .userActivities.clear(),
+                                                                                                                this: .initializeClassificationStats(),
+                                                                                                                export: , default: ClassificationMonitoringService
+                                                                                                            };
                                                                                                         }
                                                                                                     }
                                                                                                 }
                                                                                             }
-                                                                                        }
+                                                                                        };
                                                                                     }
                                                                                 }
                                                                             }
@@ -612,6 +604,7 @@ if (this.events.length > 10000) {
                                                                 }
                                                             }
                                                         }
+                                                    }
                                                 }
                                             }
                                         }

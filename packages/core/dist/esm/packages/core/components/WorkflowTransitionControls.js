@@ -2,10 +2,15 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 9.4 - Workflow Transition Controls Component
 // Component for managing state transitions and approvals
 import { useState, useEffect } from 'react';
-import { ArrowRightIcon, ClockIcon, LockClosedIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, ClockIcon, LockClosedIcon } from ExclamationTriangleIcon;
+from;
+'@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
+disabled = false;
 {
-    const { states, transitions, loading, error, fetchStates, fetchTransitions, transitionResourceState, validateStateTransition, canUserTransitionState, isResourceLocked } = useWorkflowStore();
+    const { states, transitions, loading, error, fetchStates, fetchTransitions, transitionResourceState, validateStateTransition, canUserTransitionState };
+    isResourceLocked
+        = useWorkflowStore();
     const [selectedTransition, setSelectedTransition] = useState(null);
     const [comment, setComment] = useState('');
     const [showCommentDialog, setShowCommentDialog] = useState(false);
@@ -37,16 +42,16 @@ import { useWorkflowStore } from '../stores/workflowStore';
                 const canTransition = await canUserTransitionState(currentUserId, resourceId, transition.to_state_id);
                 results[transition.id] = {
                     ...validation,
-                    can_transition: canTransition,
+                    can_transition: canTransition
                 };
-                setValidationResults(results);
             }
             ;
-            if (availableTransitions.length > 0) {
-                validateTransitions();
-            }
-            [availableTransitions, resourceId, currentUserId, validateStateTransition, canUserTransitionState];
+            setValidationResults(results);
         };
+        if (availableTransitions.length > 0) {
+            validateTransitions();
+        }
+        [availableTransitions, resourceId, currentUserId, validateStateTransition, canUserTransitionState];
     });
     const handleTransitionClick = (transition) => {
         setSelectedTransition(transition);
@@ -64,71 +69,72 @@ import { useWorkflowStore } from '../stores/workflowStore';
             try {
                 const result = await transitionResourceState();
                 ;
-                resourceId,
-                    transition.to_state_id,
-                    currentUserId,
-                    {
-                        comment: transitionComment,
-                        metadata: {
-                            transition_id: transition.id,
-                            transition_name: transition.name },
-                        if(result) { }, : .success
-                    };
+                resourceId;
+                transition.to_state_id;
+                currentUserId;
                 {
-                    if (result.approval_required) {
-                        onApprovalRequested?.(result.approval_id);
+                    comment: transitionComment;
+                    metadata: {
+                        transition_id: transition.id;
                     }
-                    else {
-                        onTransitionComplete?.(result.new_state_id);
-                    }
-                    try { }
-                    catch (error) {
-                        console.error('Transition failed:', error);
-                    }
-                    finally {
-                        setSelectedTransition(null);
-                        setComment('');
-                        setShowCommentDialog(false);
-                    }
+                    transition_name: transition.name;
                     ;
-                    const handleCommentSubmit = () => {
-                        if (selectedTransition) {
-                            executeTransition(selectedTransition, comment);
+                    if (result.success) {
+                        if (result.approval_required) {
+                            onApprovalRequested?.(result.approval_id);
+                        }
+                        else {
+                            onTransitionComplete?.(result.new_state_id);
+                        }
+                        try { }
+                        catch (error) {
+                            console.error('Transition failed:', error);
+                        }
+                        finally {
+                            setSelectedTransition(null);
+                            setComment('');
+                            setShowCommentDialog(false);
                         }
                         ;
-                        const getTransitionIcon = (transition) => {
-                            if (transition.requires_approval) {
-                                return _jsx(ClockIcon, { className: "h-4 w-4 text-yellow-500" });
-                                return _jsx(ArrowRightIcon, { className: "h-4 w-4 text-blue-500" });
+                        const handleCommentSubmit = () => {
+                            if (selectedTransition) {
+                                executeTransition(selectedTransition, comment);
                             }
                             ;
-                            const getTransitionButton = (transition) => {
-                                const validation = validationResults[transition.id];
-                                const toState = states.find(s => s.id === transition.to_state_id);
-                                if (!validation || !toState)
-                                    return null;
-                                const isDisabled = disabled || ;
-                                loading ||
-                                    !validation.valid ||
-                                    !validation.can_transition ||
-                                    resourceLocked ||
-                                    (toState.is_locked && !validation.can_transition);
-                                let buttonClass = 'flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ';
-                                if (isDisabled) {
-                                    buttonClass += 'bg-gray-100 text-gray-400 cursor-not-allowed';
+                            const getTransitionIcon = (transition) => {
+                                if (transition.requires_approval) {
+                                    return _jsx(ClockIcon, { className: "h-4 w-4 text-yellow-500" });
+                                    return _jsx(ArrowRightIcon, { className: "h-4 w-4 text-blue-500" });
                                 }
-                                else if (transition.requires_approval) {
-                                    buttonClass += 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
-                                }
-                                else {
-                                    buttonClass += 'bg-blue-100 text-blue-800 hover:bg-blue-200';
-                                    return;
-                                    _jsxs("button", { onClick: () => handleTransitionClick(transition), disabled: isDisabled, className: buttonClass, title: validation.error || transition.description || `Transition to ${toState.name}`, children: [getTransitionIcon(transition), _jsx("span", { children: transition.name }), _jsx(ArrowRightIcon, { className: "h-3 w-3" }), _jsx("span", { className: "px-2 py-1 rounded text-xs", style: { backgroundColor: `${toState.color}20`, color: toState.color }, children: toState.name }), transition.requires_approval && ()
-                                                < span, " className=\"text-xs bg-yellow-200 text-yellow-800 px-1 rounded\"> Approval Required"] }, transition.id);
-                                }
+                                ;
+                                const getTransitionButton = (transition) => {
+                                    const validation = validationResults[transition.id];
+                                    const toState = states.find(s => s.id === transition.to_state_id);
+                                    if (!validation || !toState)
+                                        return null;
+                                    const isDisabled = disabled || ;
+                                    loading ||
+                                        !validation.valid ||
+                                        !validation.can_transition ||
+                                        resourceLocked ||
+                                        (toState.is_locked && !validation.can_transition);
+                                    let buttonClass = 'flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ';
+                                    if (isDisabled) {
+                                        buttonClass += 'bg-gray-100 text-gray-400 cursor-not-allowed';
+                                    }
+                                    else if (transition.requires_approval) {
+                                        buttonClass += 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
+                                    }
+                                    else {
+                                        buttonClass += 'bg-blue-100 text-blue-800 hover:bg-blue-200';
+                                        return;
+                                        _jsxs("button", { onClick: () => handleTransitionClick(transition), disabled: isDisabled, className: buttonClass, title: validation.error || transition.description || `Transition to ${toState.name}`, children: [getTransitionIcon(transition), _jsx("span", { children: transition.name }), _jsx(ArrowRightIcon, { className: "h-3 w-3" }), _jsx("span", { className: "px-2 py-1 rounded text-xs", style: { backgroundColor: `${toState.color}20`, color: toState.color }, children: toState.name }), transition.requires_approval && ()
+                                                    < span, " className=\"text-xs bg-yellow-200 text-yellow-800 px-1 rounded\"> Approval Required"] }, transition.id);
+                                    }
+                                };
                             };
                         };
-                    };
+                    }
                 }
             }
             finally {

@@ -2,22 +2,23 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 9.4.4 - Audit Trail Viewer Component
 // UI component for viewing and filtering audit trail records
 import { useState, useEffect, useMemo } from 'react';
-import { ClipboardDocumentListIcon, FunnelIcon, UserIcon, CogIcon, ArrowDownTrayIcon, MagnifyingGlassIcon, ChevronDownIcon, ClockIcon, CheckCircleIcon, XCircleIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
+import { ClipboardDocumentListIcon, FunnelIcon, UserIcon, CogIcon, ArrowDownTrayIcon, MagnifyingGlassIcon, ChevronDownIcon, ClockIcon, CheckCircleIcon, XCircleIcon, LockClosedIcon } from LockOpenIcon;
+from;
+'@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
 {
-    const { auditHistory, loading, error, fetchAuditHistory, exportAuditHistory } = useWorkflowStore();
+    const { auditHistory, loading, error, fetchAuditHistory };
+    exportAuditHistory
+        = useWorkflowStore();
     const [filters, setFilters] = useState({});
-    resource_id: resourceId,
-    ;
+    resource_id: resourceId;
 }
 ;
 const [showFilters, setShowFilters] = useState(false);
 const [_____selectedEntries, _____setSelectedEntries] = useState(new Set());
 const [showExportDialog, setShowExportDialog] = useState(false);
 // Load audit history
-useEffect(() => {
-    fetchAuditHistory(workspaceId, filters);
-}, [workspaceId, filters, fetchAuditHistory]);
+useEffect(() => { fetchAuditHistory(workspaceId, filters); }, [workspaceId, filters, fetchAuditHistory]);
 // Filter audit entries
 const filteredEntries = useMemo(() => {
     let entries = auditHistory;
@@ -65,6 +66,7 @@ if (filters.end_date) {
     };
 }
 ;
+;
 const handleExport = async (format) => {
     try {
         await exportAuditHistory(workspaceId, filters, format);
@@ -74,9 +76,7 @@ const handleExport = async (format) => {
         console.error('Failed to export audit history:', error);
     }
     ;
-    const formatTimestamp = (timestamp) => {
-        return new Date(timestamp).toLocaleString();
-    };
+    const formatTimestamp = (timestamp) => { return new Date(timestamp).toLocaleString(); };
     const getActionTypeIcon = (actionType) => {
         switch (actionType) {
             case 'state_change':
@@ -92,25 +92,24 @@ const handleExport = async (format) => {
             case 'unlocked':
                 return _jsx(LockOpenIcon, { className: "h-4 w-4 text-gray-600" });
             default:
-                return _jsx(ClipboardDocumentListIcon, { className: "h-4 w-4 text-gray-600" });
+        }
+        return _jsx(ClipboardDocumentListIcon, { className: "h-4 w-4 text-gray-600" });
+    };
+    const getActionTypeColor = (actionType) => {
+        switch (actionType) {
+            case 'state_change': return 'bg-blue-50 text-blue-800';
+            case 'approval_requested': return 'bg-yellow-50 text-yellow-800';
+            case 'approved': return 'bg-green-50 text-green-800';
+            case 'rejected': return 'bg-red-50 text-red-800';
+            case 'locked': return 'bg-orange-50 text-orange-800';
+            case 'unlocked': return 'bg-gray-50 text-gray-800';
+            default: return 'bg-gray-50 text-gray-800';
         }
         ;
-        const getActionTypeColor = (actionType) => {
-            switch (actionType) {
-                case 'state_change': return 'bg-blue-50 text-blue-800';
-                case 'approval_requested': return 'bg-yellow-50 text-yellow-800';
-                case 'approved': return 'bg-green-50 text-green-800';
-                case 'rejected': return 'bg-red-50 text-red-800';
-                case 'locked': return 'bg-orange-50 text-orange-800';
-                case 'unlocked': return 'bg-gray-50 text-gray-800';
-                default: return 'bg-gray-50 text-gray-800';
-            }
-            ;
-            if (loading) {
-                return;
-                _jsx("div", { className: "flex items-center justify-center h-64", children: _jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" }) });
-            }
-        };
+        if (loading) {
+            return;
+            _jsx("div", { className: "flex items-center justify-center h-64", children: _jsx("div", { className: "animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" }) });
+        }
     };
 };
 ;

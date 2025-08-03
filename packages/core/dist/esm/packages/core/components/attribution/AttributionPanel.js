@@ -1,68 +1,71 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useEffect } from 'react';
-import { Card, Avatar, Typography, Tag, Tooltip, Space, Button, Drawer, List, Badge, Switch, Alert, Empty } from 'antd';
-import { UserOutlined, SettingOutlined, TeamOutlined, ClockCircleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, NodeIndexOutlined, ShareAltOutlined } from '@ant-design/icons';
-import { CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS } from '../../types/attribution';
-import { useAttribution } from '../../hooks/useAttribution';
+import { Card, Avatar, Typography, Tag, Tooltip, Space, Button, Drawer, List, Badge, Switch, Alert } from Empty;
+from;
+'antd';
+import { UserOutlined, SettingOutlined, TeamOutlined, ClockCircleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, NodeIndexOutlined } from ShareAltOutlined;
+from;
+'@ant-design/icons';
+import { ChangeAttribution, AttributionPrivacySettings, CHANGE_TYPE_DESCRIPTIONS, RESOURCE_TYPE_DESCRIPTIONS } from AUTHOR_TYPE_DESCRIPTIONS;
+from;
+'../../types/attribution';
 import { ContributorVisualization } from './ContributorVisualization';
 const { Text, _____Title } = Typography;
 const AuthorIndicator = ({ attribution, showDetails = true, onClick }) => {
-    const getAuthorInitials = (name) => {
-        if (!name)
-            return '?';
-        return name.split(' ').map(n => n[0]).join('').toUpperCase();
-    };
-    const getAuthorColor = (authorType) => {
-        switch (authorType) {
-            case 'user':
-                return '#1890ff';
-            case 'anonymous':
-                return '#d9d9d9';
-            case 'guest':
-                return '#faad14';
-            case 'system':
-                return '#52c41a';
-            case 'api':
-                return '#722ed1';
-            default:
-                return '#8c8c8c';
-        }
-        ;
-        const getChangeTypeIcon = (changeType) => {
-            switch (changeType) {
-                case 'create':
-                    return _jsx(PlusOutlined, { style: { color: '#52c41a' } });
-                case 'update':
-                    return _jsx(EditOutlined, { style: { color: '#1890ff' } });
-                case 'delete':
-                    return _jsx(DeleteOutlined, { style: { color: '#ff4d4f' } });
-                case 'move':
-                    return _jsx(NodeIndexOutlined, { style: { color: '#722ed1' } });
-                case 'connection_change':
-                    return _jsx(ShareAltOutlined, { style: { color: '#fa8c16' } });
-                default:
-                    return _jsx(EditOutlined, {});
-            }
-            ;
-            const formatTime = (date) => {
-                const now = new Date();
-                const diff = now.getTime() - date.getTime();
-                const minutes = Math.floor(diff / (1000 * 60));
-                const hours = Math.floor(minutes / 60);
-                const days = Math.floor(hours / 24);
-                if (minutes < 1)
-                    return 'Just now';
-                if (minutes < 60)
-                    return `${minutes}m ago`;
-            };
-            if (hours < 24)
-                return `${hours}h ago`;
-        };
-        if (days < 7)
-            return `${days}d ago`;
-    };
-    return date.toLocaleDateString();
+    const getAuthorInitials = (name) => { };
+    if (!name)
+        return '?';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
 };
+const getAuthorColor = (authorType) => {
+    switch (authorType) {
+        case 'user':
+            return '#1890ff';
+        case 'anonymous':
+            return '#d9d9d9';
+        case 'guest':
+            return '#faad14';
+        case 'system':
+            return '#52c41a';
+        case 'api':
+            return '#722ed1';
+        default:
+    }
+    return '#8c8c8c';
+};
+const getChangeTypeIcon = (changeType) => {
+    switch (changeType) {
+        case 'create':
+            return _jsx(PlusOutlined, { style: { color: '#52c41a' } });
+        case 'update':
+            return _jsx(EditOutlined, { style: { color: '#1890ff' } });
+        case 'delete':
+            return _jsx(DeleteOutlined, { style: { color: '#ff4d4f' } });
+        case 'move':
+            return _jsx(NodeIndexOutlined, { style: { color: '#722ed1' } });
+        case 'connection_change':
+            return _jsx(ShareAltOutlined, { style: { color: '#fa8c16' } });
+        default:
+            return _jsx(EditOutlined, {});
+    }
+    ;
+    const formatTime = (date) => {
+        const now = new Date();
+        const diff = now.getTime() - date.getTime();
+        const minutes = Math.floor(diff / (1000 * 60));
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        if (minutes < 1)
+            return 'Just now';
+        if (minutes < 60)
+            return `${minutes}m ago`;
+    };
+    if (hours < 24)
+        return `${hours}h ago`;
+};
+if (days < 7)
+    return `${days}d ago`;
+return date.toLocaleDateString();
+;
 const content = ();
 ;
 _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '8px' }, children: [_jsx(Avatar, { size: 24, style: { backgroundColor: getAuthorColor(attribution.authorType) }, icon: _jsx(UserOutlined, {}), children: getAuthorInitials(attribution.authorName) }), _jsxs("div", { style: { flex: 1 }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '4px' }, children: [_jsx(Text, { strong: true, style: { fontSize: '12px' }, children: attribution.authorName || 'Anonymous' }), _jsx(Tag, { color: getAuthorColor(attribution.authorType), size: "small", children: attribution.authorType })] }), showDetails && ()
@@ -74,168 +77,38 @@ div >
 if (onClick) {
     return;
     _jsx("div", { style: { cursor: 'pointer', padding: '4px', borderRadius: '4px' }, onClick: onClick, onMouseEnter: (e) => { e.currentTarget.style.backgroundColor = '#f5f5f5'; }, onMouseLeave: (e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-        }, children: content });
+            e.currentTarget.style.backgroundColor = 'transparent'
+                >
+                    { content };
+            div >
+            ;
+            ;
+            return content;
+        }, export: true, const: true, "AttributionPanel:React": true, FC: true }), _jsxs(AttributionPanelProps, { children: [" = (", , " ) projectId selectedResourceType selectedResourceId visible onClose } onAttributionRecord }) => ", , " const [attributions, setAttributions] = useState", _jsxs(ChangeAttribution, { children: ["([]); const [showContributors, setShowContributors] = useState(false); const [privacySettings, setPrivacySettings] = useState", _jsx(AttributionPrivacySettings, {}), " | null>(null); const [showPrivacySettings, setShowPrivacySettings] = useState(false); const [selectedAttribution, setSelectedAttribution] = useState", _jsx(ChangeAttribution, {}), " | null>(null); const ", listAttributions, "getResourceAttribution getPrivacySettings updatePrivacySettings loading } error = useAttribution(); useEffect(() => ", , " if (visible) ", loadPrivacySettings(), "; if (selectedResourceType && selectedResourceId) ", loadResourceAttributions(), " else ", loadRecentAttributions(), ", [visible, projectId, selectedResourceType, selectedResourceId]); const loadPrivacySettings = async () => ", , " try ", , "const settings = await getPrivacySettings(projectId); setPrivacySettings(settings) } catch (error) ", console.error('Failed to load privacy settings:', error), "; const loadResourceAttributions = async () => ", , " if (!selectedResourceType || !selectedResourceId) return; try ", , "const resourceAttributions = await getResourceAttribution(;); projectId selectedResourceType } selectedResourceId ); setAttributions(resourceAttributions); catch (error) ", console.error('Failed to load resource attributions:', error), "; const loadRecentAttributions = async () => ", , " try ", , "const recentAttributions = await listAttributions(", , ") projectId limit: 50 offset: 0 sortBy: 'created_at' sortOrder: 'desc' } }); setAttributions(recentAttributions); catch (error) ", console.error('Failed to load recent attributions:', error), "; const handlePrivacySettingsChange = async (settings: Partial", _jsxs(AttributionPrivacySettings, { children: [") => ", , " try ", , "const updatedSettings = await updatePrivacySettings(", , ") projectId } settings: ", ...(privacySettings, ), " ...settings } as any }); setPrivacySettings(updatedSettings); catch (error) ", console.error('Failed to update privacy settings:', error), "; const handleAttributionClick = (attribution: ChangeAttribution) => ", setSelectedAttribution(attribution), "; const groupedAttributions = attributions.reduce((groups, attribution) => ", , "const key = `$", attribution.resourceType, ":$", attribution.resourceId, "`;} if (!groups[key]) ", groups[key] = [], "; groups[key].push(attribution); return groups }, ", " as Record", _jsx("string", {}), ", ChangeAttribution>); const renderAttributionList = () => ", , "if (selectedResourceType && selectedResourceId) ", 
+                            // Show attributions for specific resource
+                            , "// Show attributions for specific resource return;", _jsxs("div", { children: [_jsx("div", { style: { marginBottom: '12px' }, children: _jsxs(Text, { strong: true, children: ["Changes to ", selectedResourceType, " ", selectedResourceId] }) }), _jsx(List, { size: "small", dataSource: attributions, renderItem: (attribution) => ()
+                                            < List.Item, style: { padding: '8px 0' }, children: _jsx(AuthorIndicator, { attribution: attribution, onClick: () => handleAttributionClick(attribution) }) }), ")} />"] }), "); else ", 
+                            // Show recent attributions grouped by resource
+                            , "// Show recent attributions grouped by resource return;", _jsxs("div", { children: [_jsx("div", { style: { marginBottom: '12px' }, children: _jsx(Text, { strong: true, children: "Recent Changes" }) }), Object.entries(groupedAttributions).map(([resourceKey, resourceAttributions]) => {
+                                        const [resourceType, resourceId] = resourceKey.split(':');
+                                        const _____latestAttribution = resourceAttributions[0];
+                                        return;
+                                        _jsxs(Card, { size: "small", style: { marginBottom: '8px' }, hoverable: true, children: [_jsx("div", { style: { marginBottom: '8px' }, children: _jsxs(Space, { children: [_jsx(Text, { strong: true, style: { fontSize: '12px' }, children: RESOURCE_TYPE_DESCRIPTIONS[resourceType] }), _jsx(Text, { code: true, style: { fontSize: '11px' }, children: resourceId }), _jsx(Badge, { count: resourceAttributions.length, size: "small" })] }) }), _jsx("div", { style: { display: 'flex', gap: '4px', flexWrap: 'wrap' }, children: resourceAttributions.slice(0, 3).map((attribution) => ()
+                                                        < Tooltip, key = { attribution, : .id }, title = {}
+                                                        < div >
+                                                        (_jsx("div", { children: attribution.authorName || 'Anonymous' })
+                                                            ,
+                                                                _jsx("div", { children: CHANGE_TYPE_DESCRIPTIONS[attribution.changeType] })
+                                                                    ,
+                                                                        _jsx("div", { children: attribution.createdAt.toLocaleString() }))) }), ">", _jsx(Avatar, { size: 20, style: {
+                                                        backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
+                                                        fontSize: '10px',
+                                                        cursor: 'pointer'
+                                                    }, onClick: () => handleAttributionClick(attribution), children: attribution.authorName?.[0] || '?' })] }, resourceKey);
+                                    }), ")}", resourceAttributions.length > 3 && ()
+                                        < Avatar, " size=", 20, " style=", { backgroundColor: '#f0f0f0', fontSize: '10px' }, "> +", resourceAttributions.length - 3] }), ")}"] })] }), "); })}"] });
     ;
-    return content;
 }
-;
-export const AttributionPanel = ({
-    projectId,
-    selectedResourceType,
-    selectedResourceId,
-    visible,
-    onClose,
-    onAttributionRecord
-});
-{
-    const [attributions, setAttributions] = useState([]);
-    const [showContributors, setShowContributors] = useState(false);
-    const [privacySettings, setPrivacySettings] = useState(null);
-    const [showPrivacySettings, setShowPrivacySettings] = useState(false);
-    const [selectedAttribution, setSelectedAttribution] = useState(null);
-    const { listAttributions, getResourceAttribution, getPrivacySettings, updatePrivacySettings, loading, error } = useAttribution();
-    useEffect(() => {
-        if (visible) {
-            loadPrivacySettings();
-            if (selectedResourceType && selectedResourceId) {
-                loadResourceAttributions();
-            }
-            else {
-                loadRecentAttributions();
-            }
-            [visible, projectId, selectedResourceType, selectedResourceId];
-        }
-    });
-    const loadPrivacySettings = async () => {
-        try {
-            const settings = await getPrivacySettings(projectId);
-            setPrivacySettings(settings);
-        }
-        catch (error) {
-            console.error('Failed to load privacy settings:', error);
-        }
-        ;
-        const loadResourceAttributions = async () => {
-            if (!selectedResourceType || !selectedResourceId)
-                return;
-            try {
-                const resourceAttributions = await getResourceAttribution();
-                ;
-                projectId,
-                    selectedResourceType,
-                    selectedResourceId;
-            }
-            finally {
-            }
-        };
-    };
-    ;
-    setAttributions(resourceAttributions);
-}
-try { }
-catch (error) {
-    console.error('Failed to load resource attributions:', error);
-}
-;
-const loadRecentAttributions = async () => {
-    try {
-        const recentAttributions = await listAttributions({});
-        projectId,
-            limit;
-        50,
-            offset;
-        0,
-            sortBy;
-        'created_at',
-            sortOrder;
-        'desc',
-        ;
-    }
-    finally { }
-    ;
-    setAttributions(recentAttributions);
-};
-try { }
-catch (error) {
-    console.error('Failed to load recent attributions:', error);
-}
-;
-const handlePrivacySettingsChange = async (settings) => {
-    try {
-        const updatedSettings = await updatePrivacySettings({});
-        projectId,
-            settings;
-        {
-            privacySettings, ;
-            settings;
-        }
-        as;
-        any;
-    }
-    finally { }
-    ;
-    setPrivacySettings(updatedSettings);
-};
-try { }
-catch (error) {
-    console.error('Failed to update privacy settings:', error);
-}
-;
-const handleAttributionClick = (attribution) => {
-    setSelectedAttribution(attribution);
-};
-const groupedAttributions = attributions.reduce((groups, attribution) => {
-    const key = `${attribution.resourceType}:${attribution.resourceId}`;
-});
-if (!groups[key]) {
-    groups[key] = [];
-    groups[key].push(attribution);
-    return groups;
-}
-{ }
-as;
-Record;
-;
-const renderAttributionList = () => {
-    if (selectedResourceType && selectedResourceId) {
-        // Show attributions for specific resource
-        return;
-        _jsxs("div", { children: [_jsx("div", { style: { marginBottom: '12px' }, children: _jsxs(Text, { strong: true, children: ["Changes to ", selectedResourceType, " ", selectedResourceId] }) }), _jsx(List, { size: "small", dataSource: attributions, renderItem: (attribution) => ()
-                        < List.Item, style: { padding: '8px 0' }, children: _jsx(AuthorIndicator, { attribution: attribution, onClick: () => handleAttributionClick(attribution) }) }), ")} />"] });
-    }
-};
-;
-{
-    // Show recent attributions grouped by resource
-    return;
-    _jsxs("div", { children: [_jsx("div", { style: { marginBottom: '12px' }, children: _jsx(Text, { strong: true, children: "Recent Changes" }) }), Object.entries(groupedAttributions).map(([resourceKey, resourceAttributions]) => {
-                const [resourceType, resourceId] = resourceKey.split(':');
-                const _____latestAttribution = resourceAttributions[0];
-                return;
-                _jsxs(Card, { size: "small", style: { marginBottom: '8px' }, hoverable: true, children: [_jsx("div", { style: { marginBottom: '8px' }, children: _jsxs(Space, { children: [_jsx(Text, { strong: true, style: { fontSize: '12px' }, children: RESOURCE_TYPE_DESCRIPTIONS[resourceType] }), _jsx(Text, { code: true, style: { fontSize: '11px' }, children: resourceId }), _jsx(Badge, { count: resourceAttributions.length, size: "small" })] }) }), _jsx("div", { style: { display: 'flex', gap: '4px', flexWrap: 'wrap' }, children: resourceAttributions.slice(0, 3).map((attribution) => ()
-                                < Tooltip, key = { attribution, : .id }, title = {}
-                                < div >
-                                (_jsx("div", { children: attribution.authorName || 'Anonymous' })
-                                    ,
-                                        _jsx("div", { children: CHANGE_TYPE_DESCRIPTIONS[attribution.changeType] })
-                                            ,
-                                                _jsx("div", { children: attribution.createdAt.toLocaleString() }))) }), ">", _jsx(Avatar, { size: 20, style: {
-                                backgroundColor: attribution.authorType === 'user' ? '#1890ff' : '#d9d9d9',
-                                fontSize: '10px',
-                                cursor: 'pointer',
-                            }, onClick: () => handleAttributionClick(attribution), children: attribution.authorName?.[0] || '?' })] }, resourceKey);
-            }), ")}", resourceAttributions.length > 3 && ()
-                < Avatar, " size=", 20, " style=", { backgroundColor: '#f0f0f0', fontSize: '10px' }, "> +", resourceAttributions.length - 3] });
-}
-div >
-;
-Card >
-;
-;
-div >
-;
-;
 ;
 const renderPrivacySettings = () => ();
 ;

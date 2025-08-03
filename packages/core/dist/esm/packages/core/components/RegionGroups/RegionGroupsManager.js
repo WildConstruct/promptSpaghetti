@@ -15,13 +15,13 @@ import { useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
 {
-    const { nodes, annotations, setRegionGroups } = useGraphStore();
+    const { nodes, annotations };
+    setRegionGroups
+        = useGraphStore();
     const viewport = useViewport();
     const [hoveredGroupId, setHoveredGroupId] = useState(null);
     // Handle region groups changes from the layer
-    const handleRegionGroupsChange = useCallback((groups) => {
-        setRegionGroups(groups);
-    }, [setRegionGroups]);
+    const handleRegionGroupsChange = useCallback((groups) => { setRegionGroups(groups); }, [setRegionGroups]);
     // Handle group hover state
 }
 [onGroupHover];
@@ -29,10 +29,9 @@ import { RegionGroupsLayer } from '../Annotations/RegionGroupsLayer';
 [onGroupSelect];
 ;
 // Get canvas size and offset from ReactFlow
-const canvasOffset = {
-    x: viewport.x,
-    y: viewport.y,
-};
+const canvasOffset = { x: viewport.x,
+    y: viewport.y };
+;
 // Don't render if disabled
 if (disabled) {
     return null;

@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * User interface for managing notification settings and preferences
  */
 import React, { useState, useEffect } from 'react';
+className = '';
 {
     const [preferences, setPreferences] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -47,37 +48,35 @@ import React, { useState, useEffect } from 'react';
                 if (!preferences)
                     return;
                 const newPrefs = {
-                    ...preferences,
-                    [type]: { ...preferences[type], ...updates }
-                };
-                setPreferences(newPrefs);
-                setHasChanges(true);
+                    ...preferences
+                }[type], { ...preferences, [type]: , ...updates };
             };
-            const savePreferences = async () => {
-                if (!preferences || !hasChanges)
-                    return;
-                try {
-                    setSaving(true);
-                    await notificationManager.updatePreferences(preferences);
-                    setHasChanges(false);
-                }
-                catch (error) {
-                    console.error('Failed to save preferences:', error);
-                }
-                finally {
-                    setSaving(false);
-                }
-                ;
-                const resetToDefaults = () => {
-                    // This would reset to default preferences
-                    loadPreferences();
-                    setHasChanges(false);
-                };
-                if (loading || !preferences) {
-                    return;
-                    _jsxs("div", { className: `notification-preferences ${className}`, children: ["}", _jsx("div", { className: "flex justify-center items-center py-8", children: _jsx("div", { className: "animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500" }) })] });
-                }
+            setPreferences(newPrefs);
+            setHasChanges(true);
+        };
+        const savePreferences = async () => {
+            if (!preferences || !hasChanges)
+                return;
+            try {
+                setSaving(true);
+                await notificationManager.updatePreferences(preferences);
+                setHasChanges(false);
+            }
+            catch (error) {
+                console.error('Failed to save preferences:', error);
+            }
+            finally {
+                setSaving(false);
+            }
+            ;
+            const resetToDefaults = () => {
+                loadPreferences();
+                setHasChanges(false);
             };
+            if (loading || !preferences) {
+                return;
+                _jsxs("div", { className: `notification-preferences ${className}`, children: ["}", _jsx("div", { className: "flex justify-center items-center py-8", children: _jsx("div", { className: "animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500" }) })] });
+            }
         };
     };
     ;
@@ -128,9 +127,8 @@ const NotificationTypeSection = ({
     description,
     icon,
     preferences,
-    onChange,
-    extraOptions
-});
+    onChange });
+extraOptions;
 {
     const toggleChannel = (channel) => {
         const newChannels = preferences.channels.includes(channel);

@@ -1,4 +1,4 @@
-import { jsxs as _jsxs } from "react/jsx-runtime";
+import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 /**
  * Canvas Performance Optimization Utilities
  * Epic 8.1: Task 4 - Optimize canvas rendering for smooth 60fps interactions
@@ -17,116 +17,84 @@ export class CanvasOptimizer {
     constructor(config = {}) {
         this.config = {
             maxVisibleNodes: 150,
-            cullingThreshold: 0.1, // Viewport threshold for culling,
-            animationFrameThrottle: 16, // ~60fps,
+            cullingThreshold: 0.1, // Viewport threshold for culling
+            animationFrameThrottle: 16, // ~60fps
             renderDebounce: 100,
-            memoryCleanupInterval: 30000, // 30 seconds,
+            memoryCleanupInterval: 30000, // 30 seconds }
             ...config
         };
-        this.metrics = {
-            fps: 0,
+        this.metrics = { fps: 0,
             renderTime: 0,
             nodeCount: 0,
             visibleNodes: 0,
             memoryUsage: 0,
-            lastUpdateTime: Date.now(),
-        };
-        this.initializePerformanceMonitoring();
-        this.startMemoryCleanup();
-        /**
-         * Initialize performance monitoring
-         */
+            lastUpdateTime: Date.now() };
     }
-    /**
-     * Initialize performance monitoring
-     */
-    initializePerformanceMonitoring() {
-        // Monitor React Flow performance
-        if ('PerformanceObserver' in window) {
-            this.performanceObserver = new PerformanceObserver((list) => {
-                const entries = list.getEntries();
-                entries.forEach((entry) => {
-                    if (entry.name.includes('react-flow')) {
-                        this.updateRenderMetrics(entry.duration);
-                    }
-                });
-            });
-            this.performanceObserver.observe({});
-            entryTypes: ['measure', 'navigation', 'resource'],
-            ;
-        }
-        ;
-        // FPS monitoring
-        this.monitorFPS();
-        /**
-         * Monitor FPS with RAF
-         */
-    }
-    /**
-     * Monitor FPS with RAF
-     */
-    monitorFPS() {
-        const measureFrame = (timestamp) => {
-            if (this.lastFrameTime) {
-                this.frameCount++;
-                const delta = timestamp - this.lastFrameTime;
-                this.renderTimeSum += delta;
-                // Update FPS every second
-                if (this.frameCount % 60 === 0) {
-                    this.metrics.fps = Math.round(1000 / (this.renderTimeSum / this.frameCount));
-                    this.frameCount = 0;
-                    this.renderTimeSum = 0;
-                    this.lastFrameTime = timestamp;
-                    requestAnimationFrame(measureFrame);
+    ;
+}
+this.initializePerformanceMonitoring();
+this.startMemoryCleanup();
+initializePerformanceMonitoring();
+void {
+    if(, window) {
+        this.performanceObserver = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach((entry) => {
+                if (entry.name.includes('react-flow')) {
+                    this.updateRenderMetrics(entry.duration);
                 }
-                ;
-                requestAnimationFrame(measureFrame);
-                /**
-                 * Update render metrics
-                 */
-            }
-            /**
-             * Update render metrics
-             */
-        };
-        /**
-         * Update render metrics
-         */
+            });
+        });
+        this.performanceObserver.observe({});
+        entryTypes: ['measure', 'navigation', 'resource'];
     }
-    /**
-     * Update render metrics
-     */
-    updateRenderMetrics(renderTime) {
-        this.metrics.renderTime = renderTime;
-        this.metrics.lastUpdateTime = Date.now();
+};
+;
+// FPS monitoring
+this.monitorFPS();
+monitorFPS();
+void { const: measureFrame = (timestamp) => { },
+    : .lastFrameTime };
+{
+    this.frameCount++;
+    const delta = timestamp - this.lastFrameTime;
+    this.renderTimeSum += delta;
+    // Update FPS every second
+    if (this.frameCount % 60 === 0) {
+        this.metrics.fps = Math.round(1000 / (this.renderTimeSum / this.frameCount));
+        this.frameCount = 0;
+        this.renderTimeSum = 0;
+        this.lastFrameTime = timestamp;
+        requestAnimationFrame(measureFrame);
+    }
+    ;
+    requestAnimationFrame(measureFrame);
+    updateRenderMetrics(renderTime, number);
+    void { this: .metrics.renderTime = renderTime,
+        this: .metrics.lastUpdateTime = Date.now(),
         /**
         * Start memory cleanup interval
         */
-    }
-    /**
-    * Start memory cleanup interval
-    */
-    startMemoryCleanup() {
-        this.memoryCleanupTimer = setInterval(() => {
+        startMemoryCleanup() { },
+        this: .memoryCleanupTimer = setInterval(() => {
             this.cleanupMemory();
             this.updateMemoryMetrics();
-        }, this.config.memoryCleanupInterval);
+        }, this.config.memoryCleanupInterval),
         /**
          * Cleanup memory and unused resources
          */
-    }
-    /**
-     * Cleanup memory and unused resources
-     */
-    cleanupMemory() {
-        // Force garbage collection if available (Chrome DevTools)
-        if ('gc' in window && typeof window.gc === 'function') {
-            window.gc();
-            // Clear RAF callbacks that might be queued
-            if (typeof cancelAnimationFrame !== 'undefined') {
-                // Cancel any pending animation frames
-                for (let i = 1; i < 1000; i++) {
-                    cancelAnimationFrame(i);
+        cleanupMemory() {
+            if ('gc' in window && typeof window.gc === 'function') {
+                window.gc();
+                // Clear RAF callbacks that might be queued
+                if (typeof cancelAnimationFrame !== 'undefined') {
+                    // Cancel any pending animation frames
+                    for (let i = 1; i < 1000; i++) {
+                        cancelAnimationFrame(i);
+                        /**
+                         * Update memory usage metrics
+                         */
+                    }
                     /**
                      * Update memory usage metrics
                      */
@@ -142,23 +110,23 @@ export class CanvasOptimizer {
         /**
          * Update memory usage metrics
          */
-    }
-    /**
-     * Update memory usage metrics
-     */
-    updateMemoryMetrics() {
-        if ('performance' in window && 'memory' in performance) {
-            const memory = performance.memory;
-            this.metrics.memoryUsage = memory.usedJSHeapSize / memory.totalJSHeapSize;
-            /**
-             * Optimize node visibility based on viewport
-             */
-            optimizeNodeVisibility();
-            nodes: Node,
-                viewport;
-            Viewport,
-                canvasSize;
-            {
+        ,
+        /**
+         * Update memory usage metrics
+         */
+        updateMemoryMetrics() {
+            if ('performance' in window && 'memory' in performance) {
+                const memory = performance.memory;
+                this.metrics.memoryUsage = memory.usedJSHeapSize / memory.totalJSHeapSize;
+                /**
+                 * Optimize node visibility based on viewport
+                 */
+                optimizeNodeVisibility();
+                nodes: Node,
+                    viewport;
+                Viewport;
+            }
+            canvasSize: {
                 width: number;
                 height: number;
             }
@@ -187,29 +155,32 @@ export class CanvasOptimizer {
         /**
          * Cull nodes outside viewport
          */
-    }
+    }(viewport, Viewport);
 }
-(viewport, canvasSize) => {
+canvasSize: {
+    width: number;
+    height: number;
+}
+Node;
+{
     const { x, y, zoom } = viewport;
     const threshold = this.config.cullingThreshold;
-    const viewportBounds = {
-        left: -x / zoom - threshold * canvasSize.width,
+    const viewportBounds = { left: -x / zoom - threshold * canvasSize.width,
         top: -y / zoom - threshold * canvasSize.height,
         right: (-x + canvasSize.width) / zoom + threshold * canvasSize.width,
-        bottom: (-y + canvasSize.height) / zoom + threshold * canvasSize.height,
-    };
-    return nodes.filter(node => { });
-    const nodeX = node.position.x;
-    const nodeY = node.position.y;
-    const nodeWidth = node.width || 200;
-    const nodeHeight = node.height || 100;
-    return;
-    nodeX + nodeWidth >= viewportBounds.left &&
-        nodeX <= viewportBounds.right &&
-        nodeY + nodeHeight >= viewportBounds.top &&
-        nodeY <= viewportBounds.bottom;
-    ;
-};
+        bottom: (-y + canvasSize.height) / zoom + threshold * canvasSize.height };
+}
+;
+return nodes.filter(node => { });
+const nodeX = node.position.x;
+const nodeY = node.position.y;
+const nodeWidth = node.width || 200;
+const nodeHeight = node.height || 100;
+return;
+nodeX + nodeWidth >= viewportBounds.left &&
+    nodeX <= viewportBounds.right &&
+    nodeY + nodeHeight >= viewportBounds.top &&
+    nodeY <= viewportBounds.bottom;
 ;
 prioritizeNodes(nodes, Node);
 Node;
@@ -287,153 +258,158 @@ Node;
                                 // Connection line settings
                                 connectionLineType: zoom > 0.5 ? 'smoothstep' : 'straight',
                                 // Quality settings
-                                quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low',
+                                quality: zoom > 0.8 ? 'high' : zoom > 0.4 ? 'medium' : 'low'
                             };
+                        }
+                        ;
+                        /**
+                         * Throttled render function
+                         */
+                        createThrottledRenderer(());
+                        (fn, delay = this.config.renderDebounce) => {
+                            let timeoutId;
+                            let lastArgs;
+                            return ((...args) => { });
+                            lastArgs = args;
+                            if (timeoutId) {
+                                clearTimeout(timeoutId);
+                                timeoutId = setTimeout(() => {
+                                    fn(...lastArgs);
+                                }, delay);
+                            }
+                            as;
+                            T;
                             /**
-                             * Throttled render function
+                             * Performance-aware animation frame scheduler
                              */
-                            createThrottledRenderer(());
-                            (fn, delay = this.config.renderDebounce) => {
-                                let timeoutId;
-                                let lastArgs;
-                                return ((...args) => {
-                                    lastArgs = args;
-                                    if (timeoutId) {
-                                        clearTimeout(timeoutId);
-                                        timeoutId = setTimeout(() => {
-                                            fn(...lastArgs);
-                                        }, delay);
-                                    }
-                                    as;
-                                    T;
+                            scheduleAnimation(callback, () => void );
+                            void {
+                                : .metrics.fps < 30
+                            };
+                            {
+                                setTimeout(callback, this.config.animationFrameThrottle * 2);
+                                return;
+                                requestAnimationFrame(() => {
+                                    const startTime = performance.now();
+                                    callback();
+                                    const endTime = performance.now();
+                                    this.updateRenderMetrics(endTime - startTime);
+                                });
+                                /**
+                                 * Get current performance metrics
+                                 */
+                                getMetrics();
+                                CanvasMetrics;
+                                {
+                                    return { ...this.metrics };
                                     /**
-                                     * Performance-aware animation frame scheduler
+                                     * Check if performance is acceptable
                                      */
-                                    scheduleAnimation(callback, () => void );
-                                    void {
-                                        : .metrics.fps < 30
-                                    };
+                                    isPerformanceGood();
+                                    boolean;
                                     {
-                                        setTimeout(callback, this.config.animationFrameThrottle * 2);
-                                        return;
-                                        requestAnimationFrame(() => {
-                                            const startTime = performance.now();
-                                            callback();
-                                            const endTime = performance.now();
-                                            this.updateRenderMetrics(endTime - startTime);
-                                        });
+                                        return this.metrics.fps >= 30 && this.metrics.renderTime < 16;
                                         /**
-                                         * Get current performance metrics
-                                         */
-                                        getMetrics();
-                                        CanvasMetrics;
+                                        * Get performance recommendations
+                                        */
+                                        getPerformanceRecommendations();
+                                        string;
                                         {
-                                            return { ...this.metrics };
-                                            /**
-                                             * Check if performance is acceptable
-                                             */
-                                            isPerformanceGood();
-                                            boolean;
-                                            {
-                                                return this.metrics.fps >= 30 && this.metrics.renderTime < 16;
-                                                /**
-                                                * Get performance recommendations
-                                                */
-                                                getPerformanceRecommendations();
-                                                string;
-                                                {
-                                                    const recommendations = [];
-                                                    if (this.metrics.fps < 30) {
-                                                        recommendations.push('Reduce number of visible nodes');
-                                                        recommendations.push('Disable expensive animations');
-                                                        if (this.metrics.renderTime > 16) {
-                                                            recommendations.push('Optimize node rendering complexity');
-                                                            recommendations.push('Use viewport culling');
-                                                            if (this.metrics.memoryUsage > 0.8) {
-                                                                recommendations.push('Clear unused node data');
-                                                                recommendations.push('Reduce node history/cache');
-                                                                if (this.metrics.visibleNodes > this.config.maxVisibleNodes) {
-                                                                    recommendations.push('Implement aggressive viewport culling');
-                                                                    recommendations.push('Use node clustering for distant elements');
-                                                                    return recommendations;
+                                            const recommendations = [];
+                                            if (this.metrics.fps < 30) {
+                                                recommendations.push('Reduce number of visible nodes');
+                                                recommendations.push('Disable expensive animations');
+                                                if (this.metrics.renderTime > 16) {
+                                                    recommendations.push('Optimize node rendering complexity');
+                                                    recommendations.push('Use viewport culling');
+                                                    if (this.metrics.memoryUsage > 0.8) {
+                                                        recommendations.push('Clear unused node data');
+                                                        recommendations.push('Reduce node history/cache');
+                                                        if (this.metrics.visibleNodes > this.config.maxVisibleNodes) {
+                                                            recommendations.push('Implement aggressive viewport culling');
+                                                            recommendations.push('Use node clustering for distant elements');
+                                                            return recommendations;
+                                                            /**
+                                                            * Cleanup resources
+                                                            */
+                                                            cleanup();
+                                                            void {
+                                                                : .memoryCleanupTimer };
+                                                            {
+                                                                clearInterval(this.memoryCleanupTimer);
+                                                                if (this.performanceObserver) {
+                                                                    this.performanceObserver.disconnect();
+                                                                    this.cleanupMemory();
                                                                     /**
-                                                                    * Cleanup resources
+                                                                    * Hook for using canvas optimization
                                                                     */
-                                                                    cleanup();
-                                                                    void {
-                                                                        : .memoryCleanupTimer };
-                                                                    {
-                                                                        clearInterval(this.memoryCleanupTimer);
-                                                                        if (this.performanceObserver) {
-                                                                            this.performanceObserver.disconnect();
-                                                                            this.cleanupMemory();
-                                                                            /**
-                                                                            * Hook for using canvas optimization
-                                                                            */
-                                                                            export function useCanvasOptimization(config) {
-                                                                                const [optimizer] = React.useState(() => new CanvasOptimizer(config));
-                                                                                const [metrics, setMetrics] = React.useState(optimizer.getMetrics());
-                                                                                React.useEffect(() => {
-                                                                                    const interval = setInterval(() => {
-                                                                                        setMetrics(optimizer.getMetrics());
-                                                                                    }, 1000);
-                                                                                    return () => {
-                                                                                        clearInterval(interval);
-                                                                                        optimizer.cleanup();
-                                                                                    };
-                                                                                }, [optimizer]);
-                                                                                return {
-                                                                                    optimizer,
-                                                                                    metrics,
-                                                                                    isPerformanceGood: optimizer.isPerformanceGood(),
-                                                                                    recommendations: optimizer.getPerformanceRecommendations(),
-                                                                                };
-                                                                                /**
-                                                                                 * Performance monitoring component
-                                                                                 */
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    export const PerformanceMonitor = ({ optimizer, visible = true }) => {
-                                                                        const [metrics, setMetrics] = React.useState(optimizer.getMetrics());
-                                                                        React.useEffect(() => {
-                                                                            if (!visible)
-                                                                                return;
-                                                                            const interval = setInterval(() => {
-                                                                                setMetrics(optimizer.getMetrics());
-                                                                            }, 100);
-                                                                            return () => clearInterval(interval);
-                                                                        }, [optimizer, visible]);
-                                                                        if (!visible)
-                                                                            return null;
-                                                                        return;
-                                                                        _jsxs("div", { style: {
-                                                                                position: 'fixed',
-                                                                                top: 10,
-                                                                                left: 10,
-                                                                                background: 'rgba(0, 0, 0, 0.8)',
-                                                                                color: 'white',
-                                                                                padding: 12,
-                                                                                borderRadius: 6,
-                                                                                fontFamily: 'monospace',
-                                                                                fontSize: 12,
-                                                                                zIndex: 10000,
-                                                                                backdropFilter: 'blur(4px)',
-                                                                            }, children: [_jsxs("div", { children: ["FPS: ", metrics.fps] }), _jsxs("div", { children: ["Render: ", metrics.renderTime.toFixed(1), "ms"] }), _jsxs("div", { children: ["Visible: ", metrics.visibleNodes, "/", metrics.nodeCount] }), _jsxs("div", { children: ["Memory: ", (metrics.memoryUsage * 100).toFixed(1), "%"] })] });
-                                                                    };
-                                                                    ;
+                                                                    export function useCanvasOptimization(config) { }
+                                                                    const [optimizer] = React.useState(() => new CanvasOptimizer(config));
+                                                                    const [metrics, setMetrics] = React.useState(optimizer.getMetrics());
+                                                                    React.useEffect(() => {
+                                                                        const interval = setInterval(() => {
+                                                                            setMetrics(optimizer.getMetrics());
+                                                                        }, 1000);
+                                                                        return () => {
+                                                                            clearInterval(interval);
+                                                                            optimizer.cleanup();
+                                                                        };
+                                                                    }, [optimizer]);
+                                                                    return { optimizer,
+                                                                        metrics,
+                                                                        isPerformanceGood: optimizer.isPerformanceGood(),
+                                                                        recommendations: optimizer.getPerformanceRecommendations() };
                                                                 }
                                                                 ;
+                                                                export const PerformanceMonitor = ({ optimizer, visible = true }) => {
+                                                                    const [metrics, setMetrics] = React.useState(optimizer.getMetrics());
+                                                                    React.useEffect(() => {
+                                                                        if (!visible)
+                                                                            return;
+                                                                        const interval = setInterval(() => {
+                                                                            setMetrics(optimizer.getMetrics());
+                                                                        }, 100);
+                                                                        return () => clearInterval(interval);
+                                                                    }, [optimizer, visible]);
+                                                                    if (!visible)
+                                                                        return null;
+                                                                    return;
+                                                                    _jsx("div", { style: {
+                                                                            position: 'fixed',
+                                                                            top: 10,
+                                                                            left: 10,
+                                                                            background: 'rgba(0, 0, 0, 0.8)',
+                                                                            color: 'white',
+                                                                            padding: 12,
+                                                                            borderRadius: 6,
+                                                                            fontFamily: 'monospace',
+                                                                            fontSize: 12,
+                                                                            zIndex: 10000,
+                                                                            backdropFilter: 'blur(4px)'
+                                                                        }
+                                                                            >
+                                                                                (_jsxs("div", { children: ["FPS: ", metrics.fps] })
+                                                                                    ,
+                                                                                        _jsxs("div", { children: ["Render: ", metrics.renderTime.toFixed(1), "ms"] })
+                                                                                            ,
+                                                                                                _jsxs("div", { children: ["Visible: ", metrics.visibleNodes, "/", metrics.nodeCount] })
+                                                                                                    ,
+                                                                                                        _jsxs("div", { children: ["Memory: ", (metrics.memoryUsage * 100).toFixed(1), "%"] })) });
+                                                                };
+                                                                div >
+                                                                ;
+                                                                ;
                                                             }
+                                                            ;
                                                         }
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                });
-                            };
-                        }
+                                }
+                            }
+                        };
                     }
                 }
             }

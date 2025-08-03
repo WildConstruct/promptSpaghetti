@@ -3,7 +3,14 @@
  * Tracks and analyzes compliance metrics against established baselines
  * for GDPR, SOC2, MPA, and internal security standards
  */
- > ;
+measurementFrequency: 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly';
+baselineEstablishedAt: Date;
+lastUpdatedAt: Date;
+isActive: boolean;
+measuredAt: Date;
+context ?  : Record;
+notes ?  : string;
+    > ;
 recentDeviations: ComplianceMeasurement;
 trendAnalysis: BaselineTrend;
 improvementOpportunities: {
@@ -18,11 +25,11 @@ improvementOpportunities: {
 alerts: {
     id: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
-    message: string;
-    baselineId: string;
-    triggeredAt: Date;
-    acknowledged: boolean;
 }
+message: string;
+baselineId: string;
+triggeredAt: Date;
+acknowledged: boolean;
 [];
 export class ComplianceBaselineTracker {
     baselines = new Map();
@@ -47,29 +54,26 @@ export class ComplianceBaselineTracker {
                 name: 'Data Protection Compliance Score',
                 description: 'Overall GDPR data protection compliance percentage',
                 targetValue: 95,
-                toleranceThreshold: 5, // 90-100% acceptable,
+                toleranceThreshold: 5, // 90-100% acceptable
                 measurementUnit: 'percentage',
                 measurementFrequency: 'daily',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
+                isActive: true
             },
-            {
-                id: 'gdpr_consent_coverage',
+            { id: 'gdpr_consent_coverage',
                 framework: 'GDPR',
                 category: 'privacy',
                 name: 'User Consent Coverage',
                 description: 'Percentage of user data processing activities with valid consent',
                 targetValue: 100,
-                toleranceThreshold: 2, // 98-100% acceptable,
+                toleranceThreshold: 2, // 98-100% acceptable
                 measurementUnit: 'percentage',
                 measurementFrequency: 'realtime',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'gdpr_data_retention_compliance',
+                isActive: true },
+            { id: 'gdpr_data_retention_compliance',
                 framework: 'GDPR',
                 category: 'privacy',
                 name: 'Data Retention Policy Compliance',
@@ -80,27 +84,23 @@ export class ComplianceBaselineTracker {
                 measurementFrequency: 'daily',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'gdpr_breach_response_time',
+                isActive: true },
+            { id: 'gdpr_breach_response_time',
                 framework: 'GDPR',
                 category: 'regulatory',
                 name: 'Data Breach Response Time',
                 description: 'Average time to detect and respond to data breaches (hours)',
-                targetValue: 24, // Within 24 hours for GDPR compliance,
-                toleranceThreshold: 20, // Up to 29 hours acceptable,
+                targetValue: 24, // Within 24 hours for GDPR compliance
+                toleranceThreshold: 20, // Up to 29 hours acceptable
                 measurementUnit: 'time',
                 measurementFrequency: 'realtime',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            }
+                isActive: true }
             // SOC 2 Baselines
             ,
             // SOC 2 Baselines
-            {
-                id: 'soc2_security_score',
+            { id: 'soc2_security_score',
                 framework: 'SOC2',
                 category: 'security',
                 name: 'SOC 2 Security Controls Score',
@@ -111,10 +111,8 @@ export class ComplianceBaselineTracker {
                 measurementFrequency: 'daily',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'soc2_access_control_effectiveness',
+                isActive: true },
+            { id: 'soc2_access_control_effectiveness',
                 framework: 'SOC2',
                 category: 'security',
                 name: 'Access Control Effectiveness',
@@ -125,10 +123,8 @@ export class ComplianceBaselineTracker {
                 measurementFrequency: 'hourly',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'soc2_audit_log_completeness',
+                isActive: true },
+            { id: 'soc2_audit_log_completeness',
                 framework: 'SOC2',
                 category: 'security',
                 name: 'Audit Log Completeness',
@@ -139,41 +135,35 @@ export class ComplianceBaselineTracker {
                 measurementFrequency: 'hourly',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'soc2_incident_response_time',
+                isActive: true },
+            { id: 'soc2_incident_response_time',
                 framework: 'SOC2',
                 category: 'operational',
                 name: 'Security Incident Response Time',
                 description: 'Average time to respond to security incidents (minutes)',
                 targetValue: 30,
-                toleranceThreshold: 33, // Up to 40 minutes acceptable,
+                toleranceThreshold: 33, // Up to 40 minutes acceptable
                 measurementUnit: 'time',
                 measurementFrequency: 'realtime',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            }
+                isActive: true }
             // MPA Content Security Baselines
             ,
             // MPA Content Security Baselines
-            {
-                id: 'mpa_content_encryption_rate',
+            { id: 'mpa_content_encryption_rate',
                 framework: 'MPA',
                 category: 'security',
                 name: 'Pre-Release Content Encryption Rate',
                 description: 'Percentage of pre-release content properly encrypted',
                 targetValue: 100,
-                toleranceThreshold: 0, // Zero tolerance for unencrypted pre-release content,
+                toleranceThreshold: 0, // Zero tolerance for unencrypted pre-release content
                 measurementUnit: 'percentage',
                 measurementFrequency: 'realtime',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'mpa_access_audit_coverage',
+                isActive: true },
+            { id: 'mpa_access_audit_coverage',
                 framework: 'MPA',
                 category: 'security',
                 name: 'Content Access Audit Coverage',
@@ -184,27 +174,23 @@ export class ComplianceBaselineTracker {
                 measurementFrequency: 'hourly',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'mpa_unauthorized_access_incidents',
+                isActive: true },
+            { id: 'mpa_unauthorized_access_incidents',
                 framework: 'MPA',
                 category: 'security',
                 name: 'Unauthorized Content Access Incidents',
                 description: 'Number of unauthorized access attempts per month',
                 targetValue: 0,
-                toleranceThreshold: 200, // Up to 2 incidents per month acceptable,
+                toleranceThreshold: 200, // Up to 2 incidents per month acceptable
                 measurementUnit: 'count',
                 measurementFrequency: 'daily',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            }
+                isActive: true }
             // Internal Security Baselines
             ,
             // Internal Security Baselines
-            {
-                id: 'internal_ssl_certificate_health',
+            { id: 'internal_ssl_certificate_health',
                 framework: 'INTERNAL',
                 category: 'security',
                 name: 'SSL Certificate Health Score',
@@ -215,10 +201,8 @@ export class ComplianceBaselineTracker {
                 measurementFrequency: 'daily',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'internal_security_patch_compliance',
+                isActive: true },
+            { id: 'internal_security_patch_compliance',
                 framework: 'INTERNAL',
                 category: 'security',
                 name: 'Security Patch Compliance',
@@ -229,22 +213,19 @@ export class ComplianceBaselineTracker {
                 measurementFrequency: 'daily',
                 baselineEstablishedAt: new Date('2025-01-01'),
                 lastUpdatedAt: new Date(),
-                isActive: true,
-            },
-            {
-                id: 'internal_vulnerability_remediation_time',
+                isActive: true },
+            { id: 'internal_vulnerability_remediation_time',
                 framework: 'INTERNAL',
                 category: 'operational',
                 name: 'Vulnerability Remediation Time',
                 description: 'Average time to remediate critical vulnerabilities (days)',
                 targetValue: 7,
-                toleranceThreshold: 43, // Up to 10 days acceptable,
+                toleranceThreshold: 43, // Up to 10 days acceptable
                 measurementUnit: 'time',
                 measurementFrequency: 'daily',
                 baselineEstablishedAt: new Date('2025-01-01'),
-                lastUpdatedAt: new Date(),
-                isActive: true
-            }
+                lastUpdatedAt: new Date() },
+            isActive, true
         ];
         defaultBaselines.forEach(baseline => { });
         this.baselines.set(baseline.id, baseline);
@@ -257,9 +238,9 @@ baselines `);}
   /**
    * Record a new measurement against a baseline
    */
-  async recordMeasurement(baselineId: string),
-  actualValue: number,
-    context?: Record<string, any>,
+  async recordMeasurement(baselineId: string)
+  actualValue: number
+    context?: Record<string, any>
     notes?: string
   ): Promise<ComplianceMeasurement> {
 
@@ -275,7 +256,7 @@ found: $;
 `);}
     const deviation = this.calculateDeviation(actualValue, baseline.targetValue);
     const status = this.determineStatus(deviation, baseline.toleranceThreshold);
-    const measurement: ComplianceMeasurement = {,
+    const measurement: ComplianceMeasurement = {
   id: `;
 measurement_$;
 {
@@ -286,21 +267,20 @@ _$;
     Math.random().toString(36).substr(2, 9);
 }
 `}
-}
-      baselineId,
-      actualValue,
-      targetValue: baseline.targetValue,
-      deviation,
-      status,
-      measuredAt: new Date(),
-      context,
+
+      baselineId
+      actualValue
+      targetValue: baseline.targetValue
+      deviation
+      status
+      measuredAt: new Date()
+      context
       notes
     };
     this.measurements.push(measurement);
     // Check for alerts
-    if (status === 'critical_deviation') {
-      await this.createAlert({)
-  severity: 'critical',
+    if (status === 'critical_deviation') { await this.createAlert({)
+  severity: 'critical' }
         message: `;
 Critical;
 deviation;
@@ -317,13 +297,12 @@ $;
 (target, { baseline, targetValue }, $, { this: , getUnitSymbol }) => ;
 (baseline.measurementUnit);
 `}
-}
-        baselineId,
+
+        baselineId
         measurement
       });
-    } else if (status === 'below_baseline' && Math.abs(deviation) > baseline.toleranceThreshold / 2) {
-      await this.createAlert({)
-  severity: 'medium',
+ else if (status === 'below_baseline' && Math.abs(deviation) > baseline.toleranceThreshold / 2) { await this.createAlert({)
+  severity: 'medium' }
         message: `;
 Below;
 baseline;
@@ -340,8 +319,8 @@ $;
 (target, { baseline, targetValue }, $, { this: , getUnitSymbol }) => ;
 (baseline.measurementUnit);
 `}
-}
-        baselineId,
+
+        baselineId
         measurement
       });
     console.log(`;
@@ -365,8 +344,7 @@ $;
   /**
    * Get baseline trend analysis
    */
-  getBaselineTrend(baselineId: string, daysPeriod: number = 30): BaselineTrend | null {
-  const baseline = this.baselines.get(baselineId);
+  getBaselineTrend(baselineId: string, daysPeriod: number = 30): BaselineTrend | null { const baseline = this.baselines.get(baselineId);
   if (!baseline) {
   return null;
   const cutoffDate = new Date(Date.now() - daysPeriod * 24 * 60 * 60 * 1000);
@@ -380,15 +358,15 @@ $;
   const trendDirection = this.analyzeTrendDirection(measurements);
   const recommendedActions = this.generateRecommendations(baseline, measurements, trendDirection);
   return {
-  baselineId,
-  framework: baseline.framework,
-  category: baseline.category,
-  name: baseline.name,
-  measurements,
-  trendDirection,
-  averageDeviation,
-  consistencyScore,
-  lastMeasurement: measurements[measurements.length - 1],
+  baselineId
+  framework: baseline.framework
+  category: baseline.category
+  name: baseline.name
+  measurements
+  trendDirection
+  averageDeviation
+  consistencyScore
+  lastMeasurement: measurements[measurements.length - 1] }
   recommendedActions
 };
   /**
@@ -401,8 +379,7 @@ $;
     const recentDeviations: ComplianceMeasurement = [];
     // Calculate framework health scores
     const frameworks = ['GDPR', 'SOC2', 'MPA', 'INTERNAL'];
-    for (const framework of frameworks) {
-  const frameworkBaselines = Array.from(this.baselines.values());
+    for (const framework of frameworks) { const frameworkBaselines = Array.from(this.baselines.values());
   .filter(b => b.framework === framework && b.isActive);
   let totalScore = 0;
   let baselinesMet = 0;
@@ -425,10 +402,10 @@ $;
   const status = averageScore >= 90 ? 'healthy' :,;
   averageScore >= 70 ? 'warning' : 'critical';
   frameworkHealth[framework] = {
-  score: Math.round(averageScore),
-  status,
-  baselinesTracked: frameworkBaselines.length,
-  baselinesMet,
+  score: Math.round(averageScore)
+  status
+  baselinesTracked: frameworkBaselines.length
+  baselinesMet }
   criticalDeviations
 };
     // Calculate overall health score
@@ -441,8 +418,7 @@ $;
       .filter(a => Date.now() - a.triggeredAt.getTime() < 7 * 24 * 60 * 60 * 1000) // Last 7 days
       .sort((a, b) => b.triggeredAt.getTime() - a.triggeredAt.getTime())
       .slice(0, 10);
-    return {
-  overallHealthScore: Math.round(overallHealthScore),
+    return { overallHealthScore: Math.round(overallHealthScore),
   frameworkHealth,
   recentDeviations: recentDeviations,
   .sort((a, b) => b.measuredAt.getTime() - a.measuredAt.getTime())
@@ -451,7 +427,7 @@ $;
   .sort((a, b) => Math.abs(b.averageDeviation) - Math.abs(a.averageDeviation))
   .slice(0, 20),
   improvementOpportunities,
-  alerts: recentAlerts,
+  alerts: recentAlerts }
 };
   /**
    * Update baseline target or tolerance
@@ -470,10 +446,9 @@ found: $;
     baselineId;
 }
 `);}
-    const updatedBaseline = {
-  ...baseline,
-  ...updates,
-  lastUpdatedAt: new Date(),
+    const updatedBaseline = { ...baseline
+  ...updates
+  lastUpdatedAt: new Date() }
 };
     this.baselines.set(baselineId, updatedBaseline);
     console.log(`;
@@ -488,10 +463,8 @@ $;
    * Create custom baseline
    */
   async createCustomBaseline(baseline: Omit<ComplianceBaseline, 'id' | 'baselineEstablishedAt' | 'lastUpdatedAt'>)
-  ): Promise<ComplianceBaseline> {
-
-    const customBaseline: ComplianceBaseline = {
-      ...baseline,
+  ): Promise<ComplianceBaseline> { const customBaseline: ComplianceBaseline = {
+      ...baseline }
       id: `;
 custom_$;
 {
@@ -502,8 +475,8 @@ _$;
     Math.random().toString(36).substr(2, 9);
 }
 `}
-},
-  baselineEstablishedAt: new Date(),
+
+  baselineEstablishedAt: new Date()
       lastUpdatedAt: new Date();
   };
     this.baselines.set(customBaseline.id, customBaseline);
@@ -519,53 +492,48 @@ baseline: $;
   /**
    * Get all active baselines
    */
-  getActiveBaselines(): ComplianceBaseline {
-  return Array.from(this.baselines.values())
+  getActiveBaselines(): ComplianceBaseline { return Array.from(this.baselines.values())
   .filter(b => b.isActive)
   .sort((a, b) => a.framework.localeCompare(b.framework));
   /**
   * Export baseline data for reporting
   */
-  exportBaselineData(framework?: string, daysPeriod: number = 30): {,
-  baselines: ComplianceBaseline;,
+  exportBaselineData(framework?: string, daysPeriod: number = 30): { }
+  baselines: ComplianceBaseline;
   measurements: ComplianceMeasurement;
   summary: Record<string, any>;
   const baselines = Array.from(this.baselines.values());
   .filter(b => b.isActive && (!framework || b.framework === framework));
   const cutoffDate = new Date(Date.now() - daysPeriod * 24 * 60 * 60 * 1000);
   const measurements = this.measurements;
-  .filter(m => {)
+  .filter(m => { )
   const baseline = this.baselines.get(m.baselineId);
-  return baseline && baselines.includes(baseline) && m.measuredAt >= cutoffDate;
-});
-    const summary = {
-      totalBaselines: baselines.length,
-      totalMeasurements: measurements.length,
-      averageCompliance: measurements.length > 0 ,
+  return baseline && baselines.includes(baseline) && m.measuredAt >= cutoffDate });
+    const summary = { totalBaselines: baselines.length
+      totalMeasurements: measurements.length
+      averageCompliance: measurements.length > 0 
         ? measurements.reduce((sum, m) => sum + (100 - Math.abs(m.deviation)), 0) / measurements.length 
-        : 0,
-      criticalDeviations: measurements.filter(m => m.status === 'critical_deviation').length,
+        : 0
+      criticalDeviations: measurements.filter(m => m.status === 'critical_deviation').length }
       period: `;
 $;
 {
     daysPeriod;
 }
 days `}
-},
+
   generatedAt: new Date();
   };
     return { baselines, measurements, summary };
   // Private helper methods
-  private calculateDeviation(actualValue: number, targetValue: number): number {
-  return ((actualValue - targetValue) / targetValue) * 100;
-  private determineStatus(deviation: number, toleranceThreshold: number): ComplianceMeasurement['status'] {,
+  private calculateDeviation(actualValue: number, targetValue: number): number { return ((actualValue - targetValue) / targetValue) * 100;
+  private determineStatus(deviation: number, toleranceThreshold: number): ComplianceMeasurement['status'] {
   const absDeviation = Math.abs(deviation);
   if (absDeviation <= toleranceThreshold) {
-  return deviation >= 0 ? 'above_baseline' : 'at_baseline',
-} else if (absDeviation <= toleranceThreshold * 2) {
+  return deviation >= 0 ? 'above_baseline' : 'at_baseline' }
+ else if (absDeviation <= toleranceThreshold * 2) {
       return 'below_baseline'
-  } else {
-  return 'critical_deviation';
+ else { return 'critical_deviation';
   private calculateConsistencyScore(measurements: ComplianceMeasurement): number {,
   if (measurements.length < 2) return 100;
   const deviations = measurements.map(m => Math.abs(m.deviation));
@@ -574,7 +542,7 @@ days `}
   const standardDeviation = Math.sqrt(variance);
   // Convert to 0-100 score (lower std deviation = higher consistency)
   return Math.max(0, 100 - standardDeviation * 2);
-  private analyzeTrendDirection(measurements: ComplianceMeasurement): BaselineTrend['trendDirection'] {,
+  private analyzeTrendDirection(measurements: ComplianceMeasurement): BaselineTrend['trendDirection'] { }
   if (measurements.length < 3) return 'stable';
   const recentMeasurements = measurements.slice(-5); // Last 5 measurements;
   const first = recentMeasurements[0];
@@ -583,15 +551,14 @@ days `}
   const criticalCount = recentMeasurements.filter(m => m.status === 'critical_deviation').length;
   if (criticalCount >= recentMeasurements.length / 2) {
   return 'critical'
-} else if (Math.abs(trendValue) < first.targetValue * 0.02) { // Less than 2% change
+ else if (Math.abs(trendValue) < first.targetValue * 0.02) { // Less than 2% change
       return 'stable'
-  } else if (trendValue > 0) {
+ else if (trendValue > 0) {
       return 'improving'
-  } else {
-      return 'declining';
+ else { return 'declining';
   private generateRecommendations(baseline: ComplianceBaseline);
   measurements: ComplianceMeasurement, 
-    trend: BaselineTrend['trendDirection']): string {,
+    trend: BaselineTrend['trendDirection']): string { }
     const recommendations: string = [];
     const lastMeasurement = measurements[measurements.length - 1];
     switch (trend) {
@@ -634,7 +601,7 @@ exceed;
 baseline;
 targets `);}
         recommendations.push('Implement continuous improvement initiatives');
-      } else {
+ else {
         recommendations.push(`;
 Maintain;
 current;
@@ -651,8 +618,7 @@ for ($; { baseline, : .name } `);}
       recommendations.push('Consider raising baseline targets to drive further improvement');
       break;
     // Framework-specific recommendations
-    switch (baseline.framework) {
-    case 'GDPR':
+    switch (baseline.framework) { case 'GDPR':
       if (lastMeasurement.status !== 'at_baseline' && lastMeasurement.status !== 'above_baseline') {
         recommendations.push('Review data processing activities and consent mechanisms');
         recommendations.push('Audit data retention and deletion procedures');
@@ -681,7 +647,7 @@ for ($; { baseline, : .name } `);}
         return {
           baselineId: trend.baselineId,
           name: trend.name,
-          currentGap: Math.round(gap),
+          currentGap: Math.round(gap) }
           potentialImpact: `; Improve)
     $;
 {
@@ -694,16 +660,16 @@ $;
     Math.round(gap);
 }
  % `}
-}
+
           difficulty,
           estimatedTimeframe: timeframe;
   };
-  }
+
       .sort((a, b) => b.currentGap - a.currentGap)
       .slice(0, 10);
-  private async createAlert(alertData: {),
+  private async createAlert(alertData: { ) }
   severity: 'low' | 'medium' | 'high' | 'critical';
-  message: string;,
+  message: string;
   baselineId: string;
   measurement: ComplianceMeasurement;
 }): Promise<void> {
@@ -719,11 +685,11 @@ _$;
     Math.random().toString(36).substr(2, 9);
 }
 `}
-},
-  severity: alertData.severity,
-      message: alertData.message,
-      baselineId: alertData.baselineId,
-      triggeredAt: new Date(),
+
+  severity: alertData.severity
+      message: alertData.message
+      baselineId: alertData.baselineId
+      triggeredAt: new Date()
       acknowledged: false;
   };
     this.alerts.push(alert);

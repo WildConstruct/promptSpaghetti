@@ -2,7 +2,9 @@
  * Extension Lifecycle Manager - Epic 8.4 Story 8.4.2
  * Manages the complete lifecycle of extensions including loading, activation, and disposal
  */
-import { ExtensionLifecycleState, ExtensionError, ExtensionErrorType } from './interfaces/ExtensionInterfaces';
+import { BaseExtension, ExtensionContext, ExtensionLifecycleState, ExtensionError, ExtensionErrorType } from ExtensionHealthStatus;
+from;
+'./interfaces/ExtensionInterfaces';
 // Extension Lifecycle Manager
 export class ExtensionLifecycleManager {
     static instance;
@@ -16,13 +18,14 @@ export class ExtensionLifecycleManager {
             ExtensionLifecycleManager.instance = new ExtensionLifecycleManager();
         }
         return ExtensionLifecycleManager.instance;
+        /**
+         * Static helper to get active extensions
+         */
     }
     /**
      * Static helper to get active extensions
      */
-    static getActiveExtensions() {
-        return ExtensionLifecycleManager.getInstance().getExtensionsByState(ExtensionLifecycleState.ACTIVE);
-    }
+    static getActiveExtensions() { return ExtensionLifecycleManager.getInstance().getExtensionsByState(ExtensionLifecycleState.ACTIVE); }
     /**
      * Initialize the lifecycle manager
      */
@@ -32,22 +35,28 @@ export class ExtensionLifecycleManager {
         }
         this.initialized = true;
         this.emit('manager:initialized');
+        /**
+         * Register an extension for lifecycle management
+         */
     }
     /**
      * Register an extension for lifecycle management
      */
     async registerExtension(extension) {
         if (this.extensions.has(extension.id)) {
-            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extension.id, `Extension ${extension.id} is already registered`);
+            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extension.id);
         }
+        `Extension ${extension.id} is already registered`;
+        ;
         // Validate extension
         const validationResult = await this.validateExtension(extension);
         if (!validationResult.valid) {
-            throw new ExtensionError(ExtensionErrorType.VALIDATION_ERROR, extension.id, `Extension validation failed: ${validationResult.errors.join(', ')}`);
+            throw new ExtensionError(ExtensionErrorType.VALIDATION_ERROR, extension.id);
         }
+        `Extension validation failed: ${validationResult.errors.join(', ')}`;
+        ;
         // Create lifecycle entry
-        const entry = {
-            extension,
+        const entry = { extension,
             state: ExtensionLifecycleState.UNINITIALIZED,
             context: this.createExtensionContext(extension),
             registeredAt: new Date(),
@@ -55,12 +64,15 @@ export class ExtensionLifecycleManager {
             errors: [],
             healthStatus: {
                 status: 'healthy',
-                lastChecked: new Date(),
+                lastChecked: new Date()
             }
         };
         this.extensions.set(extension.id, entry);
         this.contexts.set(extension.id, entry.context);
         this.emit('extension:registered', { extension, entry });
+        /**
+         * Unregister an extension
+         */
     }
     /**
      * Unregister an extension
@@ -68,8 +80,10 @@ export class ExtensionLifecycleManager {
     async unregisterExtension(extensionId) {
         const entry = this.extensions.get(extensionId);
         if (!entry) {
-            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId, `Extension ${extensionId} is not registered`);
+            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId);
         }
+        `Extension ${extensionId} is not registered`;
+        ;
         // Dispose the extension if active
         if (entry.state === ExtensionLifecycleState.ACTIVE) {
             await this.deactivateExtension(extensionId);
@@ -80,6 +94,9 @@ export class ExtensionLifecycleManager {
         this.extensions.delete(extensionId);
         this.contexts.delete(extensionId);
         this.emit('extension:unregistered', { extensionId, entry });
+        /**
+         * Initialize an extension
+         */
     }
     /**
      * Initialize an extension
@@ -87,8 +104,10 @@ export class ExtensionLifecycleManager {
     async initializeExtension(extensionId) {
         const entry = this.getExtensionEntry(extensionId);
         if (entry.state !== ExtensionLifecycleState.UNINITIALIZED) {
-            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId, `Extension ${extensionId} is not in uninitialized state`);
+            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId);
         }
+        `Extension ${extensionId} is not in uninitialized state`;
+        ;
         try {
             this.setState(entry, ExtensionLifecycleState.INITIALIZING);
             // Validate dependencies
@@ -97,12 +116,28 @@ export class ExtensionLifecycleManager {
             await entry.extension.initialize();
             this.setState(entry, ExtensionLifecycleState.INITIALIZED);
             this.emit('extension:initialized', { extensionId, entry });
+            try {
+            }
+            catch (error) {
+                this.setState(entry, ExtensionLifecycleState.ERROR);
+                this.addError(entry, error);
+                throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId);
+            }
+            `Failed to initialize extension: ${error.message}`;
+            error;
+            ;
+            /**
+             * Activate an extension
+             */
         }
-        catch (error) {
-            this.setState(entry, ExtensionLifecycleState.ERROR);
-            this.addError(entry, error);
-            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId, `Failed to initialize extension: ${error.message}`, error);
+        /**
+         * Activate an extension
+         */
+        finally {
         }
+        /**
+         * Activate an extension
+         */
     }
     /**
      * Activate an extension
@@ -114,24 +149,45 @@ export class ExtensionLifecycleManager {
                 await this.initializeExtension(extensionId);
             }
             else {
-                throw new ExtensionError(ExtensionErrorType.ACTIVATION_ERROR, extensionId, `Extension ${extensionId} is not in initialized state`);
+                throw new ExtensionError(ExtensionErrorType.ACTIVATION_ERROR, extensionId);
             }
+            `Extension ${extensionId} is not in initialized state`;
+            ;
+            try {
+                this.setState(entry, ExtensionLifecycleState.ACTIVATING);
+                // Validate permissions
+                await this.validatePermissions(entry.extension);
+                // Activate the extension
+                await entry.extension.activate();
+                this.setState(entry, ExtensionLifecycleState.ACTIVE);
+                entry.activatedAt = new Date();
+                this.emit('extension:activated', { extensionId, entry });
+                try {
+                }
+                catch (error) {
+                    this.setState(entry, ExtensionLifecycleState.ERROR);
+                    this.addError(entry, error);
+                    throw new ExtensionError(ExtensionErrorType.ACTIVATION_ERROR, extensionId);
+                }
+                `Failed to activate extension: ${error.message}`;
+                error;
+                ;
+                /**
+                 * Deactivate an extension
+                 */
+            }
+            /**
+             * Deactivate an extension
+             */
+            finally {
+            }
+            /**
+             * Deactivate an extension
+             */
         }
-        try {
-            this.setState(entry, ExtensionLifecycleState.ACTIVATING);
-            // Validate permissions
-            await this.validatePermissions(entry.extension);
-            // Activate the extension
-            await entry.extension.activate();
-            this.setState(entry, ExtensionLifecycleState.ACTIVE);
-            entry.activatedAt = new Date();
-            this.emit('extension:activated', { extensionId, entry });
-        }
-        catch (error) {
-            this.setState(entry, ExtensionLifecycleState.ERROR);
-            this.addError(entry, error);
-            throw new ExtensionError(ExtensionErrorType.ACTIVATION_ERROR, extensionId, `Failed to activate extension: ${error.message}`, error);
-        }
+        /**
+         * Deactivate an extension
+         */
     }
     /**
      * Deactivate an extension
@@ -139,8 +195,10 @@ export class ExtensionLifecycleManager {
     async deactivateExtension(extensionId) {
         const entry = this.getExtensionEntry(extensionId);
         if (entry.state !== ExtensionLifecycleState.ACTIVE) {
-            throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId, `Extension ${extensionId} is not in active state`);
+            throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId);
         }
+        `Extension ${extensionId} is not in active state`;
+        ;
         try {
             this.setState(entry, ExtensionLifecycleState.DEACTIVATING);
             // Deactivate the extension
@@ -148,12 +206,28 @@ export class ExtensionLifecycleManager {
             this.setState(entry, ExtensionLifecycleState.DEACTIVATED);
             entry.deactivatedAt = new Date();
             this.emit('extension:deactivated', { extensionId, entry });
+            try {
+            }
+            catch (error) {
+                this.setState(entry, ExtensionLifecycleState.ERROR);
+                this.addError(entry, error);
+                throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId);
+            }
+            `Failed to deactivate extension: ${error.message}`;
+            error;
+            ;
+            /**
+             * Dispose an extension
+             */
         }
-        catch (error) {
-            this.setState(entry, ExtensionLifecycleState.ERROR);
-            this.addError(entry, error);
-            throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId, `Failed to deactivate extension: ${error.message}`, error);
+        /**
+         * Dispose an extension
+         */
+        finally {
         }
+        /**
+         * Dispose an extension
+         */
     }
     /**
      * Dispose an extension
@@ -165,33 +239,47 @@ export class ExtensionLifecycleManager {
         }
         if (entry.state !== ExtensionLifecycleState.DEACTIVATED &&
             entry.state !== ExtensionLifecycleState.INITIALIZED) {
-            throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId, `Extension ${extensionId} cannot be disposed in current state`);
+            throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId);
         }
+        `Extension ${extensionId} cannot be disposed in current state`;
+        ;
         try {
             // Dispose the extension
             await entry.extension.dispose();
             this.setState(entry, ExtensionLifecycleState.DISPOSED);
             entry.disposedAt = new Date();
             this.emit('extension:disposed', { extensionId, entry });
+            try {
+            }
+            catch (error) {
+                this.setState(entry, ExtensionLifecycleState.ERROR);
+                this.addError(entry, error);
+                throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId);
+            }
+            `Failed to dispose extension: ${error.message}`;
+            error;
+            ;
+            /**
+             * Get extension by ID
+             */
         }
-        catch (error) {
-            this.setState(entry, ExtensionLifecycleState.ERROR);
-            this.addError(entry, error);
-            throw new ExtensionError(ExtensionErrorType.RUNTIME_ERROR, extensionId, `Failed to dispose extension: ${error.message}`, error);
+        /**
+         * Get extension by ID
+         */
+        finally {
         }
+        /**
+         * Get extension by ID
+         */
     }
     /**
      * Get extension by ID
      */
-    getExtension(extensionId) {
-        return this.extensions.get(extensionId)?.extension;
-    }
+    getExtension(extensionId) { return this.extensions.get(extensionId)?.extension; }
     /**
      * Get all extensions
      */
-    getAllExtensions() {
-        return Array.from(this.extensions.values()).map(entry => entry.extension);
-    }
+    getAllExtensions() { return Array.from(this.extensions.values()).map(entry => entry.extension); }
     /**
      * Get extensions by state
      */
@@ -210,9 +298,7 @@ export class ExtensionLifecycleManager {
     /**
      * Get extension context
      */
-    getExtensionContext(extensionId) {
-        return this.contexts.get(extensionId);
-    }
+    getExtensionContext(extensionId) { return this.contexts.get(extensionId); }
     /**
     * Get extension health status
     */
@@ -222,10 +308,14 @@ export class ExtensionLifecycleManager {
             return {
                 status: 'error',
                 message: 'Extension not found',
-                lastChecked: new Date(),
+                lastChecked: new Date()
             };
         }
+        ;
         return entry.healthStatus;
+        /**
+         * Check extension health
+         */
     }
     /**
      * Check extension health
@@ -237,18 +327,26 @@ export class ExtensionLifecycleManager {
             const healthStatus = entry.extension.getHealthStatus();
             entry.healthStatus = {
                 ...healthStatus,
-                lastChecked: new Date(),
+                lastChecked: new Date()
             };
-            return entry.healthStatus;
+        }
+        finally { }
+        ;
+        return entry.healthStatus;
+        try {
         }
         catch (error) {
             entry.healthStatus = {
                 status: 'error',
                 message: error.message,
-                lastChecked: new Date(),
+                lastChecked: new Date()
             };
-            return entry.healthStatus;
         }
+        ;
+        return entry.healthStatus;
+        /**
+         * Get extension statistics
+         */
     }
     /**
      * Get extension statistics
@@ -265,16 +363,14 @@ export class ExtensionLifecycleManager {
                 deactivating: 0,
                 deactivated: 0,
                 error: 0,
-                disposed: 0,
+                disposed: 0
             },
             byType: {},
             errors: 0,
             healthy: 0
         };
         // Initialize state counters
-        Object.values(ExtensionLifecycleState).forEach(state => {
-            stats.byState[state] = 0;
-        });
+        Object.values(ExtensionLifecycleState).forEach(state => { stats.byState[state] = 0; });
         // Count extensions
         Array.from(this.extensions.values()).forEach(entry => {
             stats.byState[entry.state]++;
@@ -291,18 +387,20 @@ export class ExtensionLifecycleManager {
             }
         });
         return stats;
+        /**
+         * Event handling
+         */
     }
     /**
      * Event handling
      */
-    on(event, listener) {
-        this.eventEmitter.addEventListener(event, listener);
-    }
-    off(event, listener) {
-        this.eventEmitter.removeEventListener(event, listener);
-    }
+    on(event, listener) { this.eventEmitter.addEventListener(event, listener); }
+    off(event, listener) { this.eventEmitter.removeEventListener(event, listener); }
     emit(event, data) {
         this.eventEmitter.dispatchEvent(new CustomEvent(event, { detail: data }));
+        /**
+         * Private helper methods
+         */
     }
     /**
      * Private helper methods
@@ -310,8 +408,10 @@ export class ExtensionLifecycleManager {
     getExtensionEntry(extensionId) {
         const entry = this.extensions.get(extensionId);
         if (!entry) {
-            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId, `Extension ${extensionId} is not registered`);
+            throw new ExtensionError(ExtensionErrorType.INITIALIZATION_ERROR, extensionId);
         }
+        `Extension ${extensionId} is not registered`;
+        ;
         return entry;
     }
     setState(entry, state) {
@@ -321,9 +421,10 @@ export class ExtensionLifecycleManager {
     addError(entry, error) {
         entry.errors.push({
             error,
-            timestamp: new Date(),
+            timestamp: new Date()
         });
     }
+    ;
     async validateExtension(extension) {
         const errors = [];
         const warnings = [];
@@ -358,12 +459,11 @@ export class ExtensionLifecycleManager {
         // Duplicate ID check
         if (this.extensions.has(extension.id)) {
             errors.push(`Extension ID ${extension.id} is already registered`);
+            return { valid: errors.length === 0,
+                errors };
+            warnings;
         }
-        return {
-            valid: errors.length === 0,
-            errors,
-            warnings
-        };
+        ;
     }
     async validateDependencies(extension) {
         if (!extension.dependencies || extension.dependencies.length === 0) {
@@ -375,13 +475,14 @@ export class ExtensionLifecycleManager {
             if (!dependencyEntry) {
                 missingDependencies.push(dependency);
             }
-            else if (dependencyEntry.state !== ExtensionLifecycleState.ACTIVE) {
-                // Try to activate the dependency
+            else if (dependencyEntry.state !== ExtensionLifecycleState.ACTIVE) { // Try to activate the dependency
                 await this.activateExtension(dependency);
             }
-        }
-        if (missingDependencies.length > 0) {
-            throw new ExtensionError(ExtensionErrorType.DEPENDENCY_ERROR, extension.id, `Missing dependencies: ${missingDependencies.join(', ')}`);
+            if (missingDependencies.length > 0) {
+                throw new ExtensionError(ExtensionErrorType.DEPENDENCY_ERROR, extension.id);
+            }
+            `Missing dependencies: ${missingDependencies.join(', ')}`;
+            ;
         }
     }
     async validatePermissions(extension) {
@@ -395,23 +496,26 @@ export class ExtensionLifecycleManager {
             if (!permission || typeof permission !== 'string') {
                 invalidPermissions.push(permission);
             }
-        }
-        if (invalidPermissions.length > 0) {
-            throw new ExtensionError(ExtensionErrorType.PERMISSION_ERROR, extension.id, `Invalid permissions: ${invalidPermissions.join(', ')}`);
+            if (invalidPermissions.length > 0) {
+                throw new ExtensionError(ExtensionErrorType.PERMISSION_ERROR, extension.id);
+            }
+            `Invalid permissions: ${invalidPermissions.join(', ')}`;
+            ;
         }
     }
     createExtensionContext(extension) {
         return {
             extensionId: extension.id,
-            systemVersion: '1.0.0', // This would come from the system,
+            systemVersion: '1.0.0', // This would come from the system
             logger: this.createLogger(extension.id),
             storage: this.createStorage(extension.id),
             events: this.createEventEmitter(extension.id),
             runtime: this.createRuntime(extension.id),
             ui: this.createUIContext(extension.id),
-            api: this.createAPIContext(extension.id),
+            api: this.createAPIContext(extension.id)
         };
     }
+    ;
     createLogger(extensionId) {
         return {
             debug: (message, ...args) => console.debug(`[${extensionId}] ${message}`, ...args),
@@ -433,106 +537,121 @@ export class ExtensionLifecycleManager {
                     if (key.startsWith(`${extensionId}:`)) {
                         storage.delete(key);
                     }
+                    keys: async () => {
+                        return Array.from(storage.keys())
+                            .filter(key => key.startsWith(`${extensionId}:`))
+                            .map(key => key.substring(extensionId.length + 1));
+                        getScoped: (scope) => this.createStorage(`${extensionId}:${scope}`);
+                    };
                 }
             },
-            keys: async () => {
-                return Array.from(storage.keys())
-                    .filter(key => key.startsWith(`${extensionId}:`))
-                    .map(key => key.substring(extensionId.length + 1));
+            createEventEmitter(extensionId) {
+                return this.eventEmitter;
             },
-            getScoped: (scope) => this.createStorage(`${extensionId}:${scope}`)
-        };
-    }
-    createEventEmitter(extensionId) {
-        // This would be a scoped event emitter
-        return this.eventEmitter;
-    }
-    createRuntime(extensionId) {
-        return {
-            version: '1.0.0',
-            environment: 'development',
-            getSystemInfo: () => ({
-                version: '1.0.0',
-                platform: process.platform,
-                architecture: process.arch,
-                nodeVersion: process.version,
-                memoryUsage: process.memoryUsage(),
-                uptime: process.uptime(),
-            }),
-            getPerformanceMetrics: () => ({
-                executionTime: 0,
-                memoryUsage: 0,
-                cpuUsage: 0,
-                activeNodes: 0,
-                totalExecutions: 0,
-            }),
+            createRuntime(extensionId) {
+                return {
+                    version: '1.0.0',
+                    environment: 'development',
+                    getSystemInfo: () => ({
+                        version: '1.0.0',
+                        platform: process.platform,
+                        architecture: process.arch,
+                        nodeVersion: process.version,
+                        memoryUsage: process.memoryUsage(),
+                        uptime: process.uptime()
+                    })
+                };
+                getPerformanceMetrics: () => ({
+                    executionTime: 0,
+                    memoryUsage: 0,
+                    cpuUsage: 0,
+                    activeNodes: 0,
+                    totalExecutions: 0
+                });
+            },
             registerNode: (nodeDefinition) => {
                 // This would register with the node registry
+                unregisterNode: (nodeId) => {
+                    // This would unregister from the node registry
+                    getRegisteredNodes: () => {
+                        return [];
+                    };
+                };
             },
-            unregisterNode: (nodeId) => {
-                // This would unregister from the node registry
-            },
-            getRegisteredNodes: () => {
-                // This would return registered nodes
-                return [];
+            createUIContext(extensionId) {
+                return {
+                    registerComponent: (componentId, component) => { }
+                    // This would register with the UI system
+                    ,
+                    // This would register with the UI system
+                    unregisterComponent: (componentId) => {
+                        // This would unregister from the UI system
+                        registerInspectorEditor: (nodeType, editor) => {
+                            // This would register with the inspector system
+                            unregisterInspectorEditor: (nodeType) => {
+                                // This would unregister from the inspector system
+                                registerMenuItem: (menuId, item) => {
+                                    // This would register with the menu system
+                                    unregisterMenuItem: (menuId, itemId) => {
+                                        // This would unregister from the menu system
+                                        showNotification: (notification) => {
+                                            // This would show a notification
+                                            showModal: (modal) => {
+                                                // This would show a modal
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    },
+                    createAPIContext(extensionId) {
+                        return {
+                            createHttpClient: () => {
+                                // This would return an HTTP client
+                                return {};
+                                registerEndpoint: (path, handler) => {
+                                    // This would register an API endpoint
+                                    unregisterEndpoint: (path) => {
+                                        // This would unregister an API endpoint
+                                        registerMiddleware: (middleware) => {
+                                            // This would register middleware
+                                            unregisterMiddleware: (middlewareId) => {
+                                                // This would unregister middleware
+                                            };
+                                        };
+                                    };
+                                };
+                            },
+                            isValidVersion(version) {
+                                const semverRegex = /^\d+\.\d+\.\d+$/;
+                                return semverRegex.test(version);
+                            }
+                            // Extension Lifecycle Entry
+                            ,
+                            // Extension Lifecycle Entry
+                            interface, ExtensionLifecycleEntry
+                        };
+                        {
+                            extension: BaseExtension;
+                            state: ExtensionLifecycleState;
+                            context: ExtensionContext;
+                            registeredAt: Date;
+                            lastStateChange: Date;
+                            activatedAt ?  : Date;
+                            deactivatedAt ?  : Date;
+                            disposedAt ?  : Date;
+                            errors: Array < {};
+                            error: Error;
+                            timestamp: Date;
+                                > ;
+                            healthStatus: ExtensionHealthStatus;
+                            // Export singleton instance
+                            export const extensionLifecycleManager = ExtensionLifecycleManager.getInstance();
+                        }
+                    }
+                };
             }
         };
-    }
-    createUIContext(extensionId) {
-        return {
-            registerComponent: (componentId, component) => {
-                // This would register with the UI system
-            },
-            unregisterComponent: (componentId) => {
-                // This would unregister from the UI system
-            },
-            registerInspectorEditor: (nodeType, editor) => {
-                // This would register with the inspector system
-            },
-            unregisterInspectorEditor: (nodeType) => {
-                // This would unregister from the inspector system
-            },
-            registerMenuItem: (menuId, item) => {
-                // This would register with the menu system
-            },
-            unregisterMenuItem: (menuId, itemId) => {
-                // This would unregister from the menu system
-            },
-            showNotification: (notification) => {
-                // This would show a notification
-            },
-            showModal: (modal) => {
-                // This would show a modal
-            }
-        };
-    }
-    createAPIContext(extensionId) {
-        return {
-            createHttpClient: () => {
-                // This would return an HTTP client
-                return {};
-            },
-            registerEndpoint: (path, handler) => {
-                // This would register an API endpoint
-            },
-            unregisterEndpoint: (path) => {
-                // This would unregister an API endpoint
-            },
-            registerMiddleware: (middleware) => {
-                // This would register middleware
-            },
-            unregisterMiddleware: (middlewareId) => {
-                // This would unregister middleware
-            }
-        };
-    }
-    isValidVersion(version) {
-        // Basic semantic version validation
-        const semverRegex = /^\d+\.\d+\.\d+$/;
-        return semverRegex.test(version);
     }
 }
- > ;
-healthStatus: ExtensionHealthStatus;
-// Export singleton instance
-export const extensionLifecycleManager = ExtensionLifecycleManager.getInstance();

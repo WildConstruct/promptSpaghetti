@@ -1,3 +1,22 @@
+factors: RiskFactor;
+mlPrediction ?  : MLRiskPrediction;
+manualReview ?  : boolean;
+severity: 'low' | 'medium' | 'high' | 'critical';
+description: string;
+triggeredAt: Date;
+resolvedAt ?  : Date;
+resolvedBy ?  : string;
+resolution ?  : string;
+isPrivate: boolean;
+createdAt: Date;
+updatedAt ?  : Date;
+priority: 'low' | 'medium' | 'high' | 'urgent';
+reason: string;
+flaggedBy: string;
+flaggedAt: Date;
+resolvedBy ?  : string;
+resolvedAt ?  : Date;
+resolutionNotes ?  : string;
 ;
 // Party filters
 buyerId ?  : string;
@@ -24,28 +43,40 @@ filters: AppliedFilters;
 topTemplates: Array;
 topSellers: Array;
 dailyVolume: Array;
- > ;
+    > ;
 ;
+target: string;
+conditions: string;
+throttleMinutes: number;
+title: string;
+description: string;
+affectedTransactions: string;
+triggeredAt: Date;
+acknowledgedBy ?  : string;
+acknowledgedAt ?  : Date;
+resolvedAt ?  : Date;
+metadata: Record;
+query: TransactionSearchQuery;
+fields ?  : string;
+includeNotes ?  : boolean;
+includeLifecycle ?  : boolean;
+title: string;
+description: string;
+data: ChartDataPoint;
+xAxis: string;
+yAxis: string;
+color ?  : string;
+y: number;
+label ?  : string;
+color ?  : string;
+metadata ?  : Record;
+title: string;
+description: string;
+impact: 'low' | 'medium' | 'high';
+confidence: number;
+data: Record;
+recommendedActions: string;
+relatedTransactions ?  : string;
 ;
 metrics: string;
-;
-alertSettings: {
-    enabled: boolean;
-    channels: AlertChannel;
-    thresholds: MonitoringThresholds;
-}
-;
-riskSettings: {
-    enableMLDetection: boolean;
-    manualReviewThreshold: number;
-    autoFlagThreshold: number;
-}
-;
-integrations: {
-    stripe: boolean;
-    paypal: boolean;
-    analytics: boolean;
-    crm: boolean;
-}
-;
 export {};

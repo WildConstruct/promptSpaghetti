@@ -1,31 +1,32 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+isLast = false;
 {
-    const getActivityIcon = (eventType) => {
-        if (eventType.includes('created'))
-            return '✨';
-        if (eventType.includes('updated'))
-            return '✏️';
-        if (eventType.includes('deleted'))
-            return '🗑️';
-        if (eventType.includes('invited'))
-            return '👥';
-        if (eventType.includes('comment'))
-            return '💬';
-        if (eventType.includes('archived'))
-            return '📦';
-        return '📝';
-    };
-    const getActivityTitle = () => {
-        const { event_type, event_data, actor_name, actor_id } = activity;
-        const actorDisplay = actor_name || actor_id;
-        switch (event_type) {
-            case 'workspace.created':
-                return `${actorDisplay} created the workspace`;
-        }
-    };
-    'workspace.updated';
-    return `${actorDisplay} updated workspace settings`;
+    const getActivityIcon = (eventType) => { };
+    if (eventType.includes('created'))
+        return '✨';
+    if (eventType.includes('updated'))
+        return '✏️';
+    if (eventType.includes('deleted'))
+        return '🗑️';
+    if (eventType.includes('invited'))
+        return '👥';
+    if (eventType.includes('comment'))
+        return '💬';
+    if (eventType.includes('archived'))
+        return '📦';
+    return '📝';
 }
+;
+const getActivityTitle = () => {
+    const { event_type, event_data, actor_name, actor_id } = activity;
+    const actorDisplay = actor_name || actor_id;
+    switch (event_type) {
+        case 'workspace.created':
+            return `${actorDisplay} created the workspace`;
+    }
+};
+'workspace.updated';
+return `${actorDisplay} updated workspace settings`;
 'workspace.archived';
 return `${actorDisplay} archived the workspace`;
 'project.created';

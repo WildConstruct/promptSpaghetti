@@ -1,7 +1,12 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { Card, Alert, Typography, Space, Button, Divider, Row, Col, Statistic, Tag, List, Tooltip } from 'antd';
-import { WarningOutlined, InfoCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, SafetyOutlined, ClockCircleOutlined, EditOutlined } from '@ant-design/icons';
-import { CONFLICT_DESCRIPTIONS } from '../../types/restoration';
+import { Card, Alert, Typography, Space, Button, Divider, Row, Col, Statistic, Tag, List } from Tooltip;
+from;
+'antd';
+import { WarningOutlined, InfoCircleOutlined, CheckCircleOutlined, CloseCircleOutlined, SafetyOutlined, ClockCircleOutlined } from EditOutlined;
+from;
+'@ant-design/icons';
+from;
+'../../types/restoration';
 const { Title, Text } = Typography;
 {
     const hasConflicts = preview.summary.totalConflicts > 0;
@@ -33,59 +38,59 @@ const { Title, Text } = Typography;
                             };
                         }
                         ;
-                        const getActionIcon = (type) => {
+                    }
+                    ;
+                    const getActionIcon = (type) => {
+                        switch (type) {
+                            case 'add':
+                                return _jsx(CheckCircleOutlined, { style: { color: '#52c41a' } });
+                            case 'update':
+                                return _jsx(EditOutlined, { style: { color: '#1890ff' } });
+                            case 'delete':
+                                return _jsx(CloseCircleOutlined, { style: { color: '#ff4d4f' } });
+                            default:
+                                return _jsx(InfoCircleOutlined, {});
+                        }
+                        ;
+                        const _____getActionColor = (type) => {
                             switch (type) {
                                 case 'add':
-                                    return _jsx(CheckCircleOutlined, { style: { color: '#52c41a' } });
+                                    return 'success';
                                 case 'update':
-                                    return _jsx(EditOutlined, { style: { color: '#1890ff' } });
+                                    return 'processing';
                                 case 'delete':
-                                    return _jsx(CloseCircleOutlined, { style: { color: '#ff4d4f' } });
+                                    return 'error';
                                 default:
-                                    return _jsx(InfoCircleOutlined, {});
                             }
-                            ;
-                            const _____getActionColor = (type) => {
-                                switch (type) {
-                                    case 'add':
-                                        return 'success';
-                                    case 'update':
-                                        return 'processing';
-                                    case 'delete':
-                                        return 'error';
-                                    default:
-                                        return 'default';
-                                }
-                                ;
-                                const formatDuration = (milliseconds) => {
-                                    if (milliseconds < 1000) {
-                                        return `${milliseconds}ms`;
-                                    }
-                                    const seconds = Math.floor(milliseconds / 1000);
-                                    if (seconds < 60) {
-                                        return `${seconds}s`;
-                                    }
-                                    const minutes = Math.floor(seconds / 60);
-                                    return `${minutes}m ${seconds % 60}s`;
-                                };
-                            };
-                            return;
-                            _jsxs("div", { children: [isHighRisk && ()
-                                        < Alert, "type=\"error\" message=\"High Risk Operation\" description=\"This restoration operation has been classified as high risk due to the number of conflicts and changes involved. Please review carefully before proceeding.\" showIcon style=", { marginBottom: '16px' }, "/> )}", hasConflicts && ()
-                                        < Alert, "type=\"warning\" message=\"Conflicts Require Resolution\" description=", `${preview.summary.totalConflicts} conflicts were detected and must be resolved before the restoration can proceed.`, "showIcon style=", { marginBottom: '16px' }, "/> )}", _jsxs(Row, { gutter: 16, style: { marginBottom: '24px' }, children: [_jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Total Changes", value: totalChanges, prefix: _jsx(EditOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Conflicts", value: preview.summary.totalConflicts, prefix: _jsx(WarningOutlined, {}), valueStyle: { color: hasConflicts ? '#ff4d4f' : '#3f8600' } }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Estimated Duration", value: formatDuration(preview.summary.estimatedDuration), prefix: _jsx(ClockCircleOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Risk Level", value: preview.summary.riskLevel.toUpperCase(), prefix: _jsx(SafetyOutlined, {}), valueStyle: {
-                                                            color: preview.summary.riskLevel === 'high' ? '#ff4d4f' : ,
-                                                            preview, : .summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600',
-                                                        } }) }) })] }), _jsxs(Row, { gutter: 16, children: [_jsxs(Col, { span: 12, children: [_jsx(Card, { title: "Actions to be Performed", style: { marginBottom: '16px' }, children: _jsx(List, { size: "small", dataSource: getActionSummary(), renderItem: (action) => ()
-                                                                < List.Item >
-                                                                _jsxs(Space, { children: [getActionIcon(action.type), _jsx(Text, { strong: true, children: action.type.toUpperCase() }), _jsx(Text, { children: action.count }), _jsx(Text, { type: "secondary", children: action.item })] }) }) }), ")} />", totalChanges === 0 && ()
-                                                        < Text, " type=\"secondary\">No changes will be made."] }), ")}"] }), _jsx(Card, { title: "Configuration", style: { marginBottom: '16px' }, children: _jsxs(Space, { direction: "vertical", size: "small", style: { width: '100%' }, children: [_jsxs("div", { children: [_jsx(Text, { strong: true, children: "Restoration Type: " }), _jsx(Tag, { color: "blue", children: config.restorationType })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Strategy: " }), _jsx(Tag, { color: "green", children: config.restorationStrategy })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Preserve Changes: " }), _jsx(Tag, { color: config.preserveCurrentChanges ? 'success' : 'default', children: config.preserveCurrentChanges ? 'Yes' : 'No' })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Create Backup: " }), _jsx(Tag, { color: config.createBackup ? 'success' : 'default', children: config.createBackup ? 'Yes' : 'No' })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Notify on Completion: " }), _jsx(Tag, { color: config.notifyOnCompletion ? 'success' : 'default', children: config.notifyOnCompletion ? 'Yes' : 'No' })] })] }) })] })
-                                ,
-                                    _jsxs(Col, { span: 12, children: [hasConflicts && ()
-                                                < Card, " title=\"Conflicts Detected\" style=", { marginBottom: '16px' }, ">", _jsx(List, { size: "small", dataSource: getConflictSummary(), renderItem: (conflict) => ()
-                                                    < List.Item >
-                                                    _jsxs(Space, { children: [_jsx(WarningOutlined, { style: { color: '#fa8c16' } }), _jsx(Text, { strong: true, children: conflict.count }), _jsx(Tooltip, { title: conflict.description, children: _jsx(Text, { children: conflict.type.replace('_', ' ') }) })] }) })] });
+                            return 'default';
                         };
-                    }
+                        const formatDuration = (milliseconds) => {
+                            if (milliseconds < 1000) {
+                                return `${milliseconds}ms`;
+                            }
+                            const seconds = Math.floor(milliseconds / 1000);
+                            if (seconds < 60) {
+                                return `${seconds}s`;
+                            }
+                            const minutes = Math.floor(seconds / 60);
+                            return `${minutes}m ${seconds % 60}s`;
+                        };
+                    };
+                    return;
+                    _jsxs("div", { children: [isHighRisk && ()
+                                < Alert, "type=\"error\" message=\"High Risk Operation\" description=\"This restoration operation has been classified as high risk due to the number of conflicts and changes involved. Please review carefully before proceeding.\" showIcon style=", { marginBottom: '16px' }, "/> )}", hasConflicts && ()
+                                < Alert, "type=\"warning\" message=\"Conflicts Require Resolution\" description=", `${preview.summary.totalConflicts} conflicts were detected and must be resolved before the restoration can proceed.`, "showIcon style=", { marginBottom: '16px' }, "/> )}", _jsxs(Row, { gutter: 16, style: { marginBottom: '24px' }, children: [_jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Total Changes", value: totalChanges, prefix: _jsx(EditOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Conflicts", value: preview.summary.totalConflicts, prefix: _jsx(WarningOutlined, {}), valueStyle: { color: hasConflicts ? '#ff4d4f' : '#3f8600' } }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Estimated Duration", value: formatDuration(preview.summary.estimatedDuration), prefix: _jsx(ClockCircleOutlined, {}) }) }) }), _jsx(Col, { span: 6, children: _jsx(Card, { children: _jsx(Statistic, { title: "Risk Level", value: preview.summary.riskLevel.toUpperCase(), prefix: _jsx(SafetyOutlined, {}), valueStyle: {
+                                                    color: preview.summary.riskLevel === 'high' ? '#ff4d4f' :
+                                                        preview.summary.riskLevel === 'medium' ? '#fa8c16' : '#3f8600'
+                                                } }) }) })] }), _jsxs(Row, { gutter: 16, children: [_jsxs(Col, { span: 12, children: [_jsx(Card, { title: "Actions to be Performed", style: { marginBottom: '16px' }, children: _jsx(List, { size: "small", dataSource: getActionSummary(), renderItem: (action) => ()
+                                                        < List.Item >
+                                                        _jsxs(Space, { children: [getActionIcon(action.type), _jsx(Text, { strong: true, children: action.type.toUpperCase() }), _jsx(Text, { children: action.count }), _jsx(Text, { type: "secondary", children: action.item })] }) }) }), ")} />", totalChanges === 0 && ()
+                                                < Text, " type=\"secondary\">No changes will be made."] }), ")}"] }), _jsx(Card, { title: "Configuration", style: { marginBottom: '16px' }, children: _jsxs(Space, { direction: "vertical", size: "small", style: { width: '100%' }, children: [_jsxs("div", { children: [_jsx(Text, { strong: true, children: "Restoration Type: " }), _jsx(Tag, { color: "blue", children: config.restorationType })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Strategy: " }), _jsx(Tag, { color: "green", children: config.restorationStrategy })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Preserve Changes: " }), _jsx(Tag, { color: config.preserveCurrentChanges ? 'success' : 'default', children: config.preserveCurrentChanges ? 'Yes' : 'No' })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Create Backup: " }), _jsx(Tag, { color: config.createBackup ? 'success' : 'default', children: config.createBackup ? 'Yes' : 'No' })] }), _jsxs("div", { children: [_jsx(Text, { strong: true, children: "Notify on Completion: " }), _jsx(Tag, { color: config.notifyOnCompletion ? 'success' : 'default', children: config.notifyOnCompletion ? 'Yes' : 'No' })] })] }) })] })
+                        ,
+                            _jsxs(Col, { span: 12, children: [hasConflicts && ()
+                                        < Card, " title=\"Conflicts Detected\" style=", { marginBottom: '16px' }, ">", _jsx(List, { size: "small", dataSource: getConflictSummary(), renderItem: (conflict) => ()
+                                            < List.Item >
+                                            _jsxs(Space, { children: [_jsx(WarningOutlined, { style: { color: '#fa8c16' } }), _jsx(Text, { strong: true, children: conflict.count }), _jsx(Tooltip, { title: conflict.description, children: _jsx(Text, { children: conflict.type.replace('_', ' ') }) })] }) })] });
                 }
             }
         }
@@ -95,30 +100,24 @@ const { Title, Text } = Typography;
 Card >
 ;
 { /* Safety Measures */ }
-_jsx(Card, { title: "Safety Measures", style: { marginBottom: '16px' }, children: _jsx(List, { size: "small", dataSource: [
-            {
-                text: 'Backup will be created before restoration',
-                enabled: config.createBackup,
-                icon: _jsx(SafetyOutlined, {}),
-            },
-            {
-                text: 'Current changes will be preserved where possible',
-                enabled: config.preserveCurrentChanges,
-                icon: _jsx(CheckCircleOutlined, {}),
-            },
-            {
-                text: 'Operation can be monitored in real-time',
-                enabled: true,
-                icon: _jsx(InfoCircleOutlined, {}),
-            },
-            {
-                text: 'Notification will be sent on completion',
-                enabled: config.notifyOnCompletion,
-                icon: _jsx(InfoCircleOutlined, {})
-            }
-        ], renderItem: (item) => ()
+_jsxs(Card, { title: "Safety Measures", style: { marginBottom: '16px' }, children: [_jsx(List, { size: "small", dataSource: [
+                {
+                    text: 'Backup will be created before restoration',
+                    enabled: config.createBackup,
+                    icon: _jsx(SafetyOutlined, {})
+                },
+                { text: 'Current changes will be preserved where possible',
+                    enabled: config.preserveCurrentChanges,
+                    icon: _jsx(CheckCircleOutlined, {}) },
+                { text: 'Operation can be monitored in real-time',
+                    enabled: true,
+                    icon: _jsx(InfoCircleOutlined, {}) },
+                { text: 'Notification will be sent on completion',
+                    enabled: config.notifyOnCompletion },
+                icon
+            ] }), ": ", _jsx(InfoCircleOutlined, {}), "]} renderItem=", (item) => ()
             < List.Item >
-            _jsxs(Space, { children: [item.icon, _jsx(Text, { type: item.enabled ? 'default' : 'secondary', style: { textDecoration: item.enabled ? 'none' : 'line-through' }, children: item.text }), _jsx(Tag, { color: item.enabled ? 'success' : 'default', size: "small", children: item.enabled ? 'ENABLED' : 'DISABLED' })] }) }) });
+            _jsxs(Space, { children: [item.icon, _jsx(Text, { type: item.enabled ? 'default' : 'secondary', style: { textDecoration: item.enabled ? 'none' : 'line-through' }, children: item.text }), _jsx(Tag, { color: item.enabled ? 'success' : 'default', size: "small", children: item.enabled ? 'ENABLED' : 'DISABLED' })] })] });
 />;
 Card >
 ;

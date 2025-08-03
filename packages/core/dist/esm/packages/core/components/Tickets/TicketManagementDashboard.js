@@ -6,43 +6,34 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * Provides full CRUD operations, filtering, status management, and real-time updates.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { MarketplaceTicketType, TicketStatus, TicketPriority } from '../../services/Epic16TicketIntegrationService';
+import { MarketplaceTicketType, TicketStatus, TicketPriority } from Epic16TicketIntegrationService;
+from;
+'../../services/Epic16TicketIntegrationService';
 dateRange ?  : { start: Date, end: Date };
 searchQuery: string;
 export const TicketManagementDashboard = ({
     ticketService,
     userId,
-    userRole,
-    onTicketSelect
-});
-{
-    // State management
+    userRole });
+onTicketSelect;
+{ // State management
     const [tickets, setTickets] = useState([]);
     const [selectedTicket, setSelectedTicket] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filters, setFilters] = useState({});
-    status: [],
-        type;
-    [],
-        priority;
-    [],
-        category;
-    [],
-        searchQuery;
-    '',
-    ;
+    status: [];
+    type: [];
+    priority: [];
+    category: [];
+    searchQuery: '';
 }
 ;
 const [pagination, setPagination] = useState({});
-page: 0,
-    limit;
-25,
-    total;
-0,
-    hasMore;
-false,
-;
+page: 0;
+limit: 25;
+total: 0;
+hasMore: false;
 ;
 const [_____showCreateModal, setShowCreateModal] = useState(false);
 const [metrics, setMetrics] = useState(null);
@@ -59,15 +50,18 @@ const loadTickets = useCallback(async () => {
             assignedTo: filters.assignedTo,
             dateRange: filters.dateRange,
             limit: pagination.limit,
-            offset: pagination.page * pagination.limit,
+            offset: pagination.page * pagination.limit
         };
-        const result = await ticketService.getTickets(filterCriteria);
-        setTickets(result.tickets);
-        setPagination(prev => ({}), ...prev, total, result.total, hasMore, result.hasMore);
     }
     finally { }
+    ;
+    const result = await ticketService.getTickets(filterCriteria);
+    setTickets(result.tickets);
+    setPagination(prev => ({}), ...prev, total, result.total, hasMore, result.hasMore);
 });
-try { }
+;
+try {
+}
 catch (err) {
     setError(err instanceof Error ? err.message : 'Failed to load tickets');
 }
@@ -80,11 +74,15 @@ finally {
 const loadMetrics = useCallback(async () => {
     try {
         const timeRange = {
-            start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
-            end: new Date(),
+            start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
+            end: new Date()
         };
-        const metricsData = await ticketService.getTicketMetrics(timeRange);
-        setMetrics(metricsData);
+    }
+    finally { }
+    ;
+    const metricsData = await ticketService.getTicketMetrics(timeRange);
+    setMetrics(metricsData);
+    try {
     }
     catch (err) {
         console.error('Failed to load metrics:', err);
@@ -92,12 +90,8 @@ const loadMetrics = useCallback(async () => {
     [ticketService];
 });
 // Effects
-useEffect(() => {
-    loadTickets();
-}, [loadTickets]);
-useEffect(() => {
-    loadMetrics();
-}, [loadMetrics]);
+useEffect(() => { loadTickets(); }, [loadTickets]);
+useEffect(() => { loadMetrics(); }, [loadMetrics]);
 // Filter tickets based on search query
 const filteredTickets = useMemo(() => {
     if (!filters.searchQuery)
@@ -120,67 +114,53 @@ const handleStatusUpdate = async (ticketId, newStatus) => {
             const updatedTicket = tickets.find(t => t.id === ticketId);
             if (updatedTicket) {
                 setSelectedTicket({ ...updatedTicket, status: newStatus });
-            }
-            try { }
-            catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to update ticket status');
-            }
-            ;
-            // Handle ticket assignment
-            const handleAssignment = async (ticketId, assigneeId) => {
                 try {
-                    await ticketService.assignTicket(ticketId, assigneeId, userId);
-                    await loadTickets();
                 }
                 catch (err) {
-                    setError(err instanceof Error ? err.message : 'Failed to assign ticket');
+                    setError(err instanceof Error ? err.message : 'Failed to update ticket status');
                 }
                 ;
-                // Handle ticket escalation
-                const handleEscalation = async (ticketId, reason) => {
+                // Handle ticket assignment
+                const handleAssignment = async (ticketId, assigneeId) => {
                     try {
-                        await ticketService.escalateTicket(ticketId, reason, userId);
+                        await ticketService.assignTicket(ticketId, assigneeId, userId);
                         await loadTickets();
                     }
                     catch (err) {
-                        setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
+                        setError(err instanceof Error ? err.message : 'Failed to assign ticket');
                     }
                     ;
-                    // Reset filters
-                    const resetFilters = () => {
-                        setFilters({});
-                        status: [],
-                            type;
-                        [],
-                            priority;
-                        [],
-                            category;
-                        [],
-                            searchQuery;
-                        '',
+                    // Handle ticket escalation
+                    const handleEscalation = async (ticketId, reason) => {
+                        try {
+                            await ticketService.escalateTicket(ticketId, reason, userId);
+                            await loadTickets();
+                        }
+                        catch (err) {
+                            setError(err instanceof Error ? err.message : 'Failed to escalate ticket');
+                        }
                         ;
+                        // Reset filters
+                        const resetFilters = () => {
+                            setFilters({});
+                            status: [];
+                            type: [];
+                            priority: [];
+                            category: [];
+                            searchQuery: '';
+                        };
                     };
                     setPagination(prev => ({ ...prev, page: 0 }));
                 };
                 // Render status badge
                 const renderStatusBadge = (status) => {
                     const colors = {
-                        [TicketStatus.NEW]: 'bg-blue-100 text-blue-800',
-                        [TicketStatus.OPEN]: 'bg-green-100 text-green-800',
-                        [TicketStatus.IN_PROGRESS]: 'bg-yellow-100 text-yellow-800',
-                        [TicketStatus.PENDING_USER]: 'bg-orange-100 text-orange-800',
-                        [TicketStatus.PENDING_REVIEW]: 'bg-purple-100 text-purple-800',
-                        [TicketStatus.PENDING_APPROVAL]: 'bg-indigo-100 text-indigo-800',
-                        [TicketStatus.RESOLVED]: 'bg-emerald-100 text-emerald-800',
-                        [TicketStatus.CLOSED]: 'bg-gray-100 text-gray-800',
-                        [TicketStatus.REOPENED]: 'bg-red-100 text-red-800',
-                        [TicketStatus.ESCALATED]: 'bg-red-500 text-white',
-                        [TicketStatus.ON_HOLD]: 'bg-gray-300 text-gray-700',
+                        [TicketStatus.NEW]: 'bg-blue-100 text-blue-800'[TicketStatus.OPEN], 'bg-green-100 text-green-800': [TicketStatus.IN_PROGRESS], 'bg-yellow-100 text-yellow-800': [TicketStatus.PENDING_USER], 'bg-orange-100 text-orange-800': [TicketStatus.PENDING_REVIEW], 'bg-purple-100 text-purple-800': [TicketStatus.PENDING_APPROVAL], 'bg-indigo-100 text-indigo-800': [TicketStatus.RESOLVED], 'bg-emerald-100 text-emerald-800': [TicketStatus.CLOSED], 'bg-gray-100 text-gray-800': [TicketStatus.REOPENED], 'bg-red-100 text-red-800': [TicketStatus.ESCALATED], 'bg-red-500 text-white': [TicketStatus.ON_HOLD], 'bg-gray-300 text-gray-700': 
                     };
-                    return;
-                    _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`, children: ["}", status.replace('_', ' ').toUpperCase()] });
                 };
-            };
+                return;
+                _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`, children: ["}", status.replace('_', ' ').toUpperCase()] });
+            }
         }
     }
     finally {
@@ -195,11 +175,11 @@ const renderPriorityBadge = (priority) => {
         [TicketPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
         [TicketPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
         [TicketPriority.URGENT]: 'bg-orange-100 text-orange-800',
-        [TicketPriority.CRITICAL]: 'bg-red-500 text-white',
+        [TicketPriority.CRITICAL]: 'bg-red-500 text-white'
     };
-    return;
-    _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: ["}", priority.toUpperCase()] });
 };
+return;
+_jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: ["}", priority.toUpperCase()] });
 ;
 ;
 if (loading && tickets.length === 0) {
@@ -219,13 +199,13 @@ div >
                                                 const newStatus = e.target.checked;
                                             } })
                                         ? [...filters.status, status]
-                                        : filters.status.filter(s => s !== status)), "; setFilters(", ...(filters, status), ": newStatus }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: status.replace('_', ' ') })] }), "))}"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Priority" }), _jsxs("div", { className: "space-y-1", children: [Object.values(TicketPriority).map((priority) => ()
+                                        : filters.status.filter(s => s !== status)), "; setFilters(", ...(filters, status), ": newStatus }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: status.replace('_', ' ') })] }), "))}"] })] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Priority" }), _jsxs("div", { className: "space-y-1", children: [Object.values(TicketPriority).map((priority) => ()
                                 < label, key = { priority }, className = "flex items-center" >
                                 _jsx("input", { type: "checkbox", checked: filters.priority.includes(priority), onChange: (e) => {
                                         const newPriority = e.target.checked;
                                     } })
                                 ? [...filters.priority, priority]
-                                : filters.priority.filter(p => p !== priority)), "; setFilters(", ...(filters, priority), ": newPriority }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: priority })] }), "))}"] })] })
+                                : filters.priority.filter(p => p !== priority)), "; setFilters(", ...(filters, priority), ": newPriority }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: priority })] }), "))}"] })] })
         ,
             _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Type" }), _jsxs("div", { className: "space-y-1 max-h-32 overflow-y-auto", children: [Object.values(MarketplaceTicketType).map((type) => ()
                                 < label, key = { type }, className = "flex items-center" >
@@ -233,7 +213,7 @@ div >
                                         const newType = e.target.checked;
                                     } })
                                 ? [...filters.type, type]
-                                : filters.type.filter(t => t !== type)), "; setFilters(", ...(filters, type), ": newType }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: type.replace('_', ' ') })] }), "))}"] }));
+                                : filters.type.filter(t => t !== type)), "; setFilters(", ...(filters, type), ": newType }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: type.replace('_', ' ') })] }), "))}"] }));
 div >
 ;
 div >
@@ -267,8 +247,7 @@ className = "divide-y divide-gray-200" >
     { filteredTickets, : .map((ticket) => ()
             < TicketListItem, key = { ticket, : .id }, ticket = { ticket }, onSelect = {}(), {
             onTicketSelect
-        }(ticket))
-    };
+        }(ticket)) };
 onStatusUpdate = { handleStatusUpdate };
 onAssign = { handleAssignment };
 onEscalate = { handleEscalation };

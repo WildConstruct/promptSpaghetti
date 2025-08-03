@@ -6,34 +6,60 @@
  * in the PSG v2 file format specification.
  */
 
+import { Epic1NodeType } from './nodeTypes';
+import { TextBlockNode } from './TextBlockNode';
+import { WeightedChoiceNode } from './WeightedChoiceNode';
+import { ConcatNode } from './ConcatNode';
+import { VariableNode } from './VariableNode';
+import { OutputNode } from './OutputNode';
+import { BaseInlineEditableNode } from './BaseInlineEditableNode';
+
 // Base class
 export { 
-  BaseInlineEditableNode,
-  InlineEditableConfig,
-  InlineEditableData,
-  type EditState
+  BaseInlineEditableNode
 } from './BaseInlineEditableNode';
+
+// Export interfaces explicitly
+export type { 
+  InlineEditableConfig,
+  InlineEditableData
+} from './BaseInlineEditableNode';
+
+// Re-export EditState from its original location
+export type { EditState } from '../../schemas/psgSchemaV2';
 
 // Node implementations
 export { 
-  TextBlockNode,
+  TextBlockNode
+} from './TextBlockNode';
+
+export type {
   TextBlockConfig
 } from './TextBlockNode';
 
 export { 
-  WeightedChoiceNode,
+  WeightedChoiceNode
+} from './WeightedChoiceNode';
+
+export type {
   WeightedOption,
   WeightedChoiceValue,
   WeightedChoiceConfig
 } from './WeightedChoiceNode';
 
 export { 
-  ConcatNode,
+  ConcatNode
+} from './ConcatNode';
+
+export type {
   ConcatConfig
 } from './ConcatNode';
 
 export { 
-  VariableNode,
+  VariableNode
+} from './VariableNode';
+
+export type {
   VariableConfig,
   VariableNodeConfig,
   VariableMode,
@@ -44,14 +70,8 @@ export {
   OutputNode
 } from './OutputNode';
 
-// Node type enum for consistency
-export enum Epic1NodeType {
-  TextBlock = 'TextBlock',
-  WeightedChoice = 'WeightedChoice',
-  Concat = 'Concat',
-  Variable = 'Variable',
-  Output = 'Output'
-}
+// Node type enum (moved to separate file to avoid circular deps)
+export { Epic1NodeType } from './nodeTypes';
 
 // Factory function for creating nodes from serialized data
 export function createNodeFromData(data: any): BaseInlineEditableNode {

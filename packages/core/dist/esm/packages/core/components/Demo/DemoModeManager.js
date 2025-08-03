@@ -10,15 +10,13 @@ import { ProfessionalSpinner } from '../LoadingStates/ProfessionalSpinner';
 ;
 export const DemoModeManager = ({
     children,
-    onModeChange,
-    initialConfig = {}
-});
+    onModeChange });
+initialConfig = {};
 {
     const [config, setConfig] = useState({});
-    DEFAULT_CONFIG,
-    ;
-    initialConfig;
+    DEFAULT_CONFIG;
 }
+initialConfig;
 ;
 const [isTransitioning, setIsTransitioning] = useState(false);
 // Auto-detect screen resolution and apply appropriate scaling
@@ -129,36 +127,24 @@ div >
         < div;
     style = {};
     {
-        position: 'fixed',
-            top;
-        0,
-            left;
-        0,
-            right;
-        0,
-            bottom;
-        0,
-            background;
-        'rgba(0, 0, 0, 0.3)',
-            backdropFilter;
-        'blur(4px)',
-            display;
-        'flex',
-            alignItems;
-        'center',
-            justifyContent;
-        'center',
-            zIndex;
-        9999,
-            pointerEvents;
-        'none',
-        ;
+        position: 'fixed';
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 'rgba(0, 0, 0, 0.3)';
+        backdropFilter: 'blur(4px)';
+        display: 'flex';
+        alignItems: 'center';
+        justifyContent: 'center';
+        zIndex: 9999;
+        pointerEvents: 'none';
     }
+        >
+            _jsx(ProfessionalSpinner, { size: "medium", variant: "cinema4d", type: "pulse", message: "Switching demo mode..." });
+    div >
+    ;
 }
-    >
-        _jsx(ProfessionalSpinner, { size: "medium", variant: "cinema4d", type: "pulse", message: "Switching demo mode..." });
-div >
-;
 { /* Demo control panel (hidden in screenshot mode) */ }
 {
     !config.screenshotMode && process.env.NODE_ENV === 'development' && ()
@@ -187,7 +173,7 @@ const DemoControlPanel = ({ config, onConfigChange }) => {
                     fontSize: '12px',
                     zIndex: 10001,
                     backdropFilter: 'blur(8px)',
-                    transition: 'all 0.2s ease',
+                    transition: 'all 0.2s ease'
                 }, className: "development-only", title: "Demo Controls (Alt+Shift+[key])", children: "\uD83C\uDFAD Demo" }), panelVisible && ()
                 < div, "style=", {
                 position: 'fixed',
@@ -202,7 +188,7 @@ const DemoControlPanel = ({ config, onConfigChange }) => {
                 zIndex: 10000,
                 backdropFilter: 'blur(16px)',
                 minWidth: '220px',
-                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
+                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)'
             }, "className=\"development-only\" >", _jsx("div", { style: { fontWeight: 600, marginBottom: 12, fontSize: 14 }, children: "Demo Mode Controls" }), _jsxs("div", { style: { display: 'flex', flexDirection: 'column', gap: 8 }, children: [_jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: config.screenshotMode, onChange: (e) => onConfigChange({ screenshotMode: e.target.checked }), style: { cursor: 'pointer' } }), _jsx("span", { children: "Screenshot Mode (Alt+Shift+S)" })] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: config.presentationFocus, onChange: (e) => onConfigChange({ presentationFocus: e.target.checked }), style: { cursor: 'pointer' } }), _jsx("span", { children: "Focus Mode (Alt+Shift+F)" })] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: config.performanceMode, onChange: (e) => onConfigChange({ performanceMode: e.target.checked }), style: { cursor: 'pointer' } }), _jsx("span", { children: "Performance Mode (Alt+Shift+P)" })] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: config.accessibilityMode, onChange: (e) => onConfigChange({ accessibilityMode: e.target.checked }), style: { cursor: 'pointer' } }), _jsx("span", { children: "High Contrast (Alt+Shift+A)" })] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: config.debugElementsHidden, onChange: (e) => onConfigChange({ debugElementsHidden: e.target.checked }), style: { cursor: 'pointer' } }), _jsx("span", { children: "Hide Debug (Alt+Shift+D)" })] }), _jsxs("label", { style: { display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }, children: [_jsx("input", { type: "checkbox", checked: config.brandingVisible, onChange: (e) => onConfigChange({ brandingVisible: e.target.checked }), style: { cursor: 'pointer' } }), _jsx("span", { children: "Show Branding" })] })] }), _jsxs("div", { style: { marginTop: 12, fontSize: 10, opacity: 0.7, lineHeight: 1.4 }, children: ["Screen: ", window.screen.width, "\u00D7", window.screen.height, " (", window.devicePixelRatio, "x DPI)"] })] });
     div >
     ;

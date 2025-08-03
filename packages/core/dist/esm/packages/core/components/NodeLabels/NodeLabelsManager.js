@@ -15,15 +15,15 @@ import { useReactFlow, useViewport } from 'reactflow';
 import { useGraphStore } from '../../graphStore';
 import { NodeLabelsLayer } from '../Annotations/NodeLabelsLayer';
 {
-    const { nodes, annotations, setNodeLabelConfigs } = useGraphStore();
+    const { nodes, annotations };
+    setNodeLabelConfigs
+        = useGraphStore();
     const reactFlowInstance = useReactFlow();
     const viewport = useViewport();
     const [hoveredNodeId, setHoveredNodeId] = useState(null);
     const [focusedNodeId, setFocusedNodeId] = useState(null);
     // Handle label config changes from the layer
-    const handleLabelConfigsChange = useCallback((configs) => {
-        setNodeLabelConfigs(configs);
-    }, [setNodeLabelConfigs]);
+    const handleLabelConfigsChange = useCallback((configs) => { setNodeLabelConfigs(configs); }, [setNodeLabelConfigs]);
     // Handle node hover state
     const handleNodeHover = useCallback((nodeId) => {
         setHoveredNodeId(nodeId);
@@ -49,10 +49,9 @@ return () => {
 [reactFlowInstance, handleNodeHover];
 ;
 // Get canvas size and offset from ReactFlow
-const canvasOffset = {
-    x: viewport.x,
-    y: viewport.y,
-};
+const canvasOffset = { x: viewport.x,
+    y: viewport.y };
+;
 // Don't render if disabled
 if (disabled) {
     return null;

@@ -2,10 +2,15 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Epic 9.4 - Workflow History Visualization Component
 // Component for displaying workflow history and audit trail
 import { useState, useEffect } from 'react';
-import { ClockIcon, UserIcon, ArrowRightIcon, CheckCircleIcon, XCircleIcon, ChatBubbleLeftIcon, LockClosedIcon, LockOpenIcon, DocumentTextIcon, CalendarIcon, FunnelIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, UserIcon, ArrowRightIcon, CheckCircleIcon, XCircleIcon, ChatBubbleLeftIcon, LockClosedIcon, LockOpenIcon, DocumentTextIcon, CalendarIcon } from FunnelIcon;
+from;
+'@heroicons/react/24/outline';
 import { useWorkflowStore } from '../stores/workflowStore';
+compact = false;
 {
-    const { states, history, loading, error, fetchStates, fetchHistory } = useWorkflowStore();
+    const { states, history, loading, error, fetchStates };
+    fetchHistory
+        = useWorkflowStore();
     const [filters, setFilters] = useState({});
     resource_id: resourceId || '',
         actor_id;
@@ -15,8 +20,7 @@ import { useWorkflowStore } from '../stores/workflowStore';
         date_from;
     '',
         date_to;
-    '',
-    ;
+    '';
 }
 ;
 const [showFilterPanel, setShowFilterPanel] = useState(false);
@@ -29,9 +33,9 @@ const getStateName = (stateId) => {
     if (!stateId)
         return 'Unknown';
     const state = states.find(s => s.id === stateId);
-    return state ? state.name : 'Unknown',
-    ;
+    return state ? state.name : 'Unknown';
 };
+;
 const getStateColor = (stateId) => {
     if (!stateId)
         return '#6B7280';
@@ -53,15 +57,14 @@ const getActionIcon = (actionType) => {
         case 'lock_released':
             return _jsx(LockOpenIcon, { className: "h-4 w-4 text-orange-500" });
         default:
-            return _jsx(DocumentTextIcon, { className: "h-4 w-4 text-gray-500" });
     }
-    ;
-    const getActionDescription = (entry) => {
-        switch (entry.action_type) {
-            case 'state_changed':
-                return `Changed state from ${getStateName(entry.previous_state_id)} to ${getStateName(entry.new_state_id)}`;
-        }
-    };
+    return _jsx(DocumentTextIcon, { className: "h-4 w-4 text-gray-500" });
+};
+const getActionDescription = (entry) => {
+    switch (entry.action_type) {
+        case 'state_changed':
+            return `Changed state from ${getStateName(entry.previous_state_id)} to ${getStateName(entry.new_state_id)}`;
+    }
 };
 'approval_requested';
 return `Requested approval for transition to ${getStateName(entry.new_state_id)}`;
@@ -85,29 +88,28 @@ const formatTimestamp = (timestamp) => {
     else if (diffInHours < 24) {
         return `${diffInHours}h ago`;
     }
-};
-if (diffInHours < 168) {
-    return `${Math.floor(diffInHours / 24)}d ago`;
-}
-{
-    return date.toLocaleDateString();
-}
-;
-const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-};
-const clearFilters = () => {
-    setFilters({});
-    resource_id: resourceId || '',
-        actor_id;
-    '',
-        action_type;
-    '',
-        date_from;
-    '',
-        date_to;
-    '',
+    else if (diffInHours < 168) {
+        return `${Math.floor(diffInHours / 24)}d ago`;
+    }
+    else {
+        return date.toLocaleDateString();
+    }
     ;
+    const handleFilterChange = (key, value) => {
+        setFilters(prev => ({ ...prev, [key]: value }));
+    };
+    const clearFilters = () => {
+        setFilters({});
+        resource_id: resourceId || '',
+            actor_id;
+        '',
+            action_type;
+        '',
+            date_from;
+        '',
+            date_to;
+        '';
+    };
 };
 ;
 if (loading) {
@@ -150,7 +152,7 @@ if (loading) {
                 { history, : .map((entry, index) => ()
                         < div, key = { entry, : .id }, className = {} `flex items-start space-x-4 ${compact ? 'py-2' : 'py-4'} ${}
                 index < history.length - 1 ? 'border-b border-gray-200' : ''
-              }`) }
+`) }
                 >
                     { /* Timeline indicator */}
                 < div;
@@ -170,7 +172,7 @@ if (loading) {
                 (_jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("span", { className: "text-sm font-medium text-gray-900", children: getActionDescription(entry) }), entry.action_type === 'state_changed' && entry.new_state_id && ()
                                     < span, "className=\"inline-flex items-center px-2 py-1 rounded-full text-xs font-medium\" style=", {
                                     backgroundColor: `${getStateColor(entry.new_state_id)}20`
-                                }, ", color: getStateColor(entry.new_state_id); }} >", getStateName(entry.new_state_id)] }), ")}"] })
+                                }, "color: getStateColor(entry.new_state_id); } >", getStateName(entry.new_state_id)] }), ")}"] })
                     ,
                         _jsx("time", { className: "text-xs text-gray-500", children: formatTimestamp(entry.action_timestamp) }));
             div >

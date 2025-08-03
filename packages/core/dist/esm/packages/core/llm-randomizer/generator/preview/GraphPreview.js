@@ -3,6 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Story 12.4 - Randomizer Generator Implementation
 // Real-time graph preview with visualization
 import { useState, useMemo, useCallback } from 'react';
+interactive = true;
 {
     const [selectedNodeId, setSelectedNodeId] = useState(null);
     const [selectedEdge, setSelectedEdge] = useState(null);
@@ -56,16 +57,15 @@ reduce((sum, targets) => sum + targets.size, 0);
 const averageConnections = nodeCount > 0 ? totalConnections / nodeCount : 0;
 // Calculate max depth using BFS
 const maxDepth = calculateMaxDepth(graph.nodes, edgeMap);
-return {
-    nodeCount,
+return { nodeCount,
     edgeCount,
     nodeTypes,
     complexity,
     hasOutput,
     hasAdvancedNodes,
-    averageConnections,
-    maxDepth
-};
+    averageConnections };
+maxDepth;
+;
 [graph];
 ;
 // Generate visual layout
@@ -119,15 +119,13 @@ const handleMouseMove = useCallback((e) => {
     setOffset({});
     x: e.clientX - dragStart.x,
         y;
-    e.clientY - dragStart.y,
-    ;
+    e.clientY - dragStart.y;
 });
+;
 [isDragging, interactive, dragStart];
 ;
 // Handle pan end
-const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-}, []);
+const handleMouseUp = useCallback(() => { setIsDragging(false); }, []);
 // Reset view
 const resetView = useCallback(() => {
     setScale(1);
@@ -194,11 +192,19 @@ if (isGenerating) {
     }
 }
     >
-        _jsxs("svg", { width: "100%", height: "100%", style: {
+        (_jsx("svg", { width: "100%", height: "100%", style: {
                 transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`
-            }, children: [_jsx("defs", { children: _jsx("marker", { id: "arrowhead", markerWidth: "10", markerHeight: "7", refX: "9", refY: "3.5", orient: "auto", children: _jsx("polygon", { points: "0 0, 10 3.5, 0 7", fill: "#666" }) }) }), _jsxs("g", { className: "edges", children: [visualEdges.map(edge => ()
-                            < line, key = { edge, : .id }, x1 = { visualNodes, : .find(n => n.id === edge.source)?.x || 0 }, y1 = { visualNodes, : .find(n => n.id === edge.source)?.y || 0 }, x2 = { visualNodes, : .find(n => n.id === edge.target)?.x || 0 }, y2 = { visualNodes, : .find(n => n.id === edge.target)?.y || 0 }, stroke = { edge, : .isSelected ? '#007bff' : '#666' }, strokeWidth = { edge, : .isSelected ? 3 : 2 }, markerEnd = "url(#arrowhead)", className = {} `edge ${edge.isSelected ? 'selected' : ''}`), "onClick=", () => handleEdgeClick(edge.source, edge.target), "style=", { cursor: interactive ? 'pointer' : 'default' }, "/> ))}"] }), _jsxs("g", { className: "nodes", children: [visualNodes.map(node => ()
-                            < g, key = { node, : .id }, transform = {} `translate(${node.x}, ${node.y})`), ">}", _jsx("circle", { r: Math.max(20, Math.min(40, 15 + node.connections * 3)), fill: getNodeColor(node.type), stroke: node.isSelected ? '#007bff' : '#333', strokeWidth: node.isSelected ? 3 : 2, className: `node node-type-${node.type.toLowerCase()} ${node.isSelected ? 'selected' : ''}`, onClick: () => handleNodeClick(node.id), style: { cursor: interactive ? 'pointer' : 'default' } }), _jsx("text", { textAnchor: "middle", dy: "0.3em", fontSize: "12", fill: "#333", pointerEvents: "none", className: "node-label", children: node.label })] }), "))}"] });
+            }
+                >
+                    _jsx("defs", { children: _jsx("marker", { id: "arrowhead", markerWidth: "10", markerHeight: "7", refX: "9", refY: "3.5", orient: "auto", children: _jsx("polygon", { points: "0 0, 10 3.5, 0 7", fill: "#666" }) }) }), ... })
+            ,
+                _jsxs("g", { className: "edges", children: [visualEdges.map(edge => ()
+                            < line, key = { edge, : .id }, x1 = { visualNodes, : .find(n => n.id === edge.source)?.x || 0 }, y1 = { visualNodes, : .find(n => n.id === edge.source)?.y || 0 }, x2 = { visualNodes, : .find(n => n.id === edge.target)?.x || 0 }, y2 = { visualNodes, : .find(n => n.id === edge.target)?.y || 0 }, stroke = { edge, : .isSelected ? '#007bff' : '#666' }, strokeWidth = { edge, : .isSelected ? 3 : 2 }, markerEnd = "url(#arrowhead)", className = {} `edge ${edge.isSelected ? 'selected' : ''}`), "onClick=", () => handleEdgeClick(edge.source, edge.target), "style=", { cursor: interactive ? 'pointer' : 'default' }, "/> ))}"] }));
+{ /* Render nodes */ }
+_jsxs("g", { className: "nodes", children: [visualNodes.map(node => ()
+            < g, key = { node, : .id }, transform = {} `translate(${node.x}, ${node.y})`), ">}", _jsx("circle", { r: Math.max(20, Math.min(40, 15 + node.connections * 3)), fill: getNodeColor(node.type), stroke: node.isSelected ? '#007bff' : '#333', strokeWidth: node.isSelected ? 3 : 2, className: `node node-type-${node.type.toLowerCase()} ${node.isSelected ? 'selected' : ''}`, onClick: () => handleNodeClick(node.id), style: { cursor: interactive ? 'pointer' : 'default' } }), _jsx("text", { textAnchor: "middle", dy: "0.3em", fontSize: "12", fill: "#333", pointerEvents: "none", className: "node-label", children: node.label })] });
+g >
+;
 svg >
 ;
 div >
@@ -243,7 +249,6 @@ div >
  * Calculate maximum depth of the graph
  */
 function calculateMaxDepth(nodes, edgeMap) {
-    // Find root nodes (no incoming edges)
     const nodeIds = new Set(nodes.map(n => n.id));
     const hasIncoming = new Set();
     edgeMap.forEach(targets => { });
@@ -336,35 +341,26 @@ while (queue.length > 0) {
                                 const node = nodes.find(n => n.id === nodeId);
                                 const connections = (edgeMap.get(nodeId)?.size || 0) + (incomingMap.get(nodeId)?.size || 0);
                                 visualNodes.push({});
-                                id: nodeId,
-                                    type;
-                                node.type,
-                                    label;
-                                nodeId.length > 10 ? nodeId.substring(0, 10) + '...' : nodeId,
-                                    x;
-                                (index + 0.5) * levelWidth,
-                                    y;
-                                (level + 0.5) * levelHeight,
-                                    level,
-                                    connections,
-                                    isSelected;
-                                nodeId === selectedNodeId,
-                                ;
+                                id: nodeId;
+                                type: node.type;
+                                label: nodeId.length > 10 ? nodeId.substring(0, 10) + '...' : nodeId;
+                                x: (index + 0.5) * levelWidth;
+                                y: (level + 0.5) * levelHeight;
+                                level;
+                                connections;
+                                isSelected: nodeId === selectedNodeId;
                             });
                         });
                     }
                     ;
-                    // Generate edges
-                    edgeMap.forEach((targets, source) => {
-                        targets.forEach(target => { });
-                        visualEdges.push({});
-                        id: `${source}-${target}`;
-                    });
                 }
-                source,
-                    target,
-                    isSelected;
-                selectedEdge?.source === source && selectedEdge?.target === target;
+                ;
+                // Generate edges
+                edgeMap.forEach((targets, source) => {
+                    targets.forEach(target => { });
+                    visualEdges.push({});
+                    id: `${source}-${target}`;
+                }, source, target, isSelected, selectedEdge?.source === source && selectedEdge?.target === target);
             }
             ;
         };
@@ -387,8 +383,9 @@ while (queue.length > 0) {
             'SetVariable': '#54a0ff',
             'GetVariable': '#5f27cd',
             'Include': '#00d2d3',
-            'PythonTransform': '#ff6348',
+            'PythonTransform': '#ff6348'
         };
-        return colors[nodeType] || '#ddd';
     }
+    ;
+    return colors[nodeType] || '#ddd';
 }

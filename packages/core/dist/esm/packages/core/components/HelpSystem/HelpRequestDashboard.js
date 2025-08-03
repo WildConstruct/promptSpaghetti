@@ -6,43 +6,34 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * knowledge base integration, and real-time analytics.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { HelpCategory, HelpPriority, HelpRequestStatus } from '../../services/Epic16HelpRequestService';
+import { HelpCategory, HelpPriority, HelpRequestStatus } from KnowledgeBaseArticle;
+from;
+'../../services/Epic16HelpRequestService';
 dateRange ?  : { start: Date, end: Date };
 searchQuery: string;
 export const HelpRequestDashboard = ({
     helpService,
     userId,
-    userRole,
-    onRequestSelect
-});
-{
-    // State management
+    userRole });
+onRequestSelect;
+{ // State management
     const [requests, setRequests] = useState([]);
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filters, setFilters] = useState({});
-    status: [],
-        category;
-    [],
-        priority;
-    [],
-        type;
-    [],
-        searchQuery;
-    '',
-    ;
+    status: [];
+    category: [];
+    priority: [];
+    type: [];
+    searchQuery: '';
 }
 ;
 const [pagination, setPagination] = useState({});
-page: 0,
-    limit;
-25,
-    total;
-0,
-    hasMore;
-false,
-;
+page: 0;
+limit: 25;
+total: 0;
+hasMore: false;
 ;
 const [_____showCreateModal, setShowCreateModal] = useState(false);
 const [analytics, setAnalytics] = useState(null);
@@ -59,15 +50,18 @@ const loadRequests = useCallback(async () => {
             assignedTo: filters.assignedTo,
             dateRange: filters.dateRange,
             limit: pagination.limit,
-            offset: pagination.page * pagination.limit,
+            offset: pagination.page * pagination.limit
         };
-        const result = await helpService.getHelpRequests(filterCriteria);
-        setRequests(result.requests);
-        setPagination(prev => ({}), ...prev, total, result.total, hasMore, result.hasMore);
     }
     finally { }
+    ;
+    const result = await helpService.getHelpRequests(filterCriteria);
+    setRequests(result.requests);
+    setPagination(prev => ({}), ...prev, total, result.total, hasMore, result.hasMore);
 });
-try { }
+;
+try {
+}
 catch (err) {
     setError(err instanceof Error ? err.message : 'Failed to load help requests');
 }
@@ -80,11 +74,15 @@ finally {
 const loadAnalytics = useCallback(async () => {
     try {
         const timeRange = {
-            start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days,
-            end: new Date(),
+            start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Last 30 days
+            end: new Date()
         };
-        const analyticsData = await helpService.getAnalytics(timeRange);
-        setAnalytics(analyticsData);
+    }
+    finally { }
+    ;
+    const analyticsData = await helpService.getAnalytics(timeRange);
+    setAnalytics(analyticsData);
+    try {
     }
     catch (err) {
         console.error('Failed to load analytics:', err);
@@ -95,24 +93,22 @@ const loadAnalytics = useCallback(async () => {
 const loadKnowledgeBase = useCallback(async () => {
     try {
         const articles = await helpService.searchKnowledgeBase({});
-        query: '',
-            limit;
-        10,
-        ;
+        query: '';
+        limit: 10;
     }
-    finally { }
+    finally {
+    }
 });
 setKnowledgeBase(articles);
-try { }
+try {
+}
 catch (err) {
     console.error('Failed to load knowledge base:', err);
 }
 [helpService];
 ;
 // Effects
-useEffect(() => {
-    loadRequests();
-}, [loadRequests]);
+useEffect(() => { loadRequests(); }, [loadRequests]);
 useEffect(() => {
     loadAnalytics();
     loadKnowledgeBase();
@@ -139,65 +135,57 @@ const handleStatusUpdate = async (requestId, newStatus) => {
             const updatedRequest = requests.find(r => r.id === requestId);
             if (updatedRequest) {
                 setSelectedRequest({ ...updatedRequest, status: newStatus });
-            }
-            try { }
-            catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to update request status');
-            }
-            ;
-            // Handle request escalation
-            const handleEscalation = async (requestId, reason) => {
                 try {
-                    await helpService.escalateRequest(requestId, reason, userId);
-                    await loadRequests();
                 }
                 catch (err) {
-                    setError(err instanceof Error ? err.message : 'Failed to escalate request');
+                    setError(err instanceof Error ? err.message : 'Failed to update request status');
                 }
                 ;
-                // Handle knowledge base search
-                const searchKnowledgeBase = async (query) => {
+                // Handle request escalation
+                const handleEscalation = async (requestId, reason) => {
                     try {
-                        const results = await helpService.searchKnowledgeBase({ query, limit: 5 });
-                        setKnowledgeBase(results);
+                        await helpService.escalateRequest(requestId, reason, userId);
+                        await loadRequests();
                     }
                     catch (err) {
-                        console.error('Knowledge base search failed:', err);
+                        setError(err instanceof Error ? err.message : 'Failed to escalate request');
                     }
                     ;
-                    // Reset filters
-                    const resetFilters = () => {
-                        setFilters({});
-                        status: [],
-                            category;
-                        [],
-                            priority;
-                        [],
-                            type;
-                        [],
-                            searchQuery;
-                        '',
+                    // Handle knowledge base search
+                    const searchKnowledgeBase = async (query) => {
+                        try {
+                            const results = await helpService.searchKnowledgeBase({ query, limit: 5 });
+                            setKnowledgeBase(results);
+                            try {
+                            }
+                            catch (err) {
+                                console.error('Knowledge base search failed:', err);
+                            }
+                            ;
+                            // Reset filters
+                            const resetFilters = () => {
+                                setFilters({});
+                                status: [];
+                                category: [];
+                                priority: [];
+                                type: [];
+                                searchQuery: '';
+                            };
+                        }
+                        finally { }
                         ;
+                        setPagination(prev => ({ ...prev, page: 0 }));
                     };
-                    setPagination(prev => ({ ...prev, page: 0 }));
-                };
-                // Render status badge
-                const renderStatusBadge = (status) => {
-                    const colors = {
-                        [HelpRequestStatus.SUBMITTED]: 'bg-blue-100 text-blue-800',
-                        [HelpRequestStatus.TRIAGED]: 'bg-purple-100 text-purple-800',
-                        [HelpRequestStatus.AUTO_SUGGESTED]: 'bg-yellow-100 text-yellow-800',
-                        [HelpRequestStatus.IN_PROGRESS]: 'bg-orange-100 text-orange-800',
-                        [HelpRequestStatus.PENDING_USER]: 'bg-gray-100 text-gray-800',
-                        [HelpRequestStatus.ESCALATED]: 'bg-red-500 text-white',
-                        [HelpRequestStatus.RESOLVED]: 'bg-green-100 text-green-800',
-                        [HelpRequestStatus.CLOSED]: 'bg-gray-300 text-gray-700',
-                        [HelpRequestStatus.REOPENED]: 'bg-red-100 text-red-800',
+                    // Render status badge
+                    const renderStatusBadge = (status) => {
+                        const colors = {
+                            [HelpRequestStatus.SUBMITTED]: 'bg-blue-100 text-blue-800'[HelpRequestStatus.TRIAGED], 'bg-purple-100 text-purple-800': [HelpRequestStatus.AUTO_SUGGESTED], 'bg-yellow-100 text-yellow-800': [HelpRequestStatus.IN_PROGRESS], 'bg-orange-100 text-orange-800': [HelpRequestStatus.PENDING_USER], 'bg-gray-100 text-gray-800': [HelpRequestStatus.ESCALATED], 'bg-red-500 text-white': [HelpRequestStatus.RESOLVED], 'bg-green-100 text-green-800': [HelpRequestStatus.CLOSED], 'bg-gray-300 text-gray-700': [HelpRequestStatus.REOPENED], 'bg-red-100 text-red-800': 
+                        };
                     };
                     return;
                     _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[status]}`, children: ["}", status.replace('_', ' ').toUpperCase()] });
                 };
-            };
+            }
         }
     }
     finally {
@@ -212,11 +200,11 @@ const renderPriorityBadge = (priority) => {
         [HelpPriority.MEDIUM]: 'bg-blue-100 text-blue-800',
         [HelpPriority.HIGH]: 'bg-yellow-100 text-yellow-800',
         [HelpPriority.URGENT]: 'bg-orange-100 text-orange-800',
-        [HelpPriority.CRITICAL]: 'bg-red-500 text-white',
+        [HelpPriority.CRITICAL]: 'bg-red-500 text-white'
     };
-    return;
-    _jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: ["}", priority.toUpperCase()] });
 };
+return;
+_jsxs("span", { className: `px-2 py-1 rounded-full text-xs font-medium ${colors[priority]}`, children: ["}", priority.toUpperCase()] });
 ;
 ;
 if (loading && requests.length === 0) {
@@ -244,7 +232,7 @@ _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx
                                     const newStatus = e.target.checked;
                                 } })
                             ? [...filters.status, status]
-                            : filters.status.filter(s => s !== status)), "; setFilters(", ...(filters, status), ": newStatus }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: status.replace('_', ' ') })] }), "))}"] })] })
+                            : filters.status.filter(s => s !== status)), "; setFilters(", ...(filters, status), ": newStatus }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: status.replace('_', ' ') })] }), "))}"] })] })
     ,
         _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Priority" }), _jsxs("div", { className: "space-y-1", children: [Object.values(HelpPriority).map((priority) => ()
                             < label, key = { priority }, className = "flex items-center" >
@@ -252,7 +240,7 @@ _jsxs("div", { className: "space-y-4", children: [_jsxs("div", { children: [_jsx
                                     const newPriority = e.target.checked;
                                 } })
                             ? [...filters.priority, priority]
-                            : filters.priority.filter(p => p !== priority)), "; setFilters(", ...(filters, priority), ": newPriority }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: priority })] }), "))}"] });
+                            : filters.priority.filter(p => p !== priority)), "; setFilters(", ...(filters, priority), ": newPriority }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600 capitalize", children: priority })] }), "))}"] });
 div >
     _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium text-gray-700 mb-2", children: "Category" }), _jsxs("div", { className: "space-y-1 max-h-32 overflow-y-auto", children: [Object.values(HelpCategory).map((category) => ()
                         < label, key = { category }, className = "flex items-center" >
@@ -260,7 +248,7 @@ div >
                                 const newCategory = e.target.checked;
                             } })
                         ? [...filters.category, category]
-                        : filters.category.filter(c => c !== category)), "; setFilters(", ...(filters, category), ": newCategory }); }} className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: category.replace('_', ' ') })] }), "))}"] });
+                        : filters.category.filter(c => c !== category)), "; setFilters(", ...(filters, category), ": newCategory }); className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\" />", _jsx("span", { className: "ml-2 text-sm text-gray-600", children: category.replace('_', ' ') })] }), "))}"] });
 div >
 ;
 div >
@@ -294,8 +282,7 @@ className = "divide-y divide-gray-200" >
     { filteredRequests, : .map((request) => ()
             < HelpRequestListItem, key = { request, : .id }, request = { request }, onSelect = {}(), {
             onRequestSelect
-        }(request))
-    };
+        }(request)) };
 onStatusUpdate = { handleStatusUpdate };
 onEscalate = { handleEscalation };
 currentUserId = { userId };
@@ -336,7 +323,7 @@ div >
         'knowledge_base': '📚',
         'community': '👥',
         'support_agent': '👨‍💼',
-        'specialist': '🎯',
+        'specialist': '🎯'
     }[routingStrategy] || '❓';
     return;
     _jsxs("div", { className: `relative p-4 hover:bg-gray-50 cursor-pointer ${selected ? 'bg-blue-50 border-l-4 border-blue-500' : ''} ${isOverdue ? 'bg-red-50' : isSLAWarning ? 'bg-yellow-50' : ''}`, onClick: onSelect, children: [_jsxs("div", { className: "flex items-start justify-between", children: [_jsxs("div", { className: "flex-1 min-w-0", children: [_jsxs("div", { className: "flex items-center space-x-2 mb-2", children: [_jsxs("span", { className: "text-sm font-medium text-blue-600", children: ["#", request.id.split('-').pop()] }), renderStatusBadge(request.status), renderPriorityBadge(request.priority), _jsxs("span", { className: "px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded", title: `Routing: ${routingStrategy}`, children: ["}", routingIcon, " ", routingStrategy.replace('_', ' ')] }), request.autoResolvedBy && ()

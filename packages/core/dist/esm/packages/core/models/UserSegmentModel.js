@@ -16,11 +16,11 @@
  * - Real-time segment updates
  */
 import { z } from 'zod';
- > ;
+    > ;
 // Behavioral attributes
 clickThroughRates: Record;
 conversionRates: Record;
-engagementScore: number; // 0-100,
+engagementScore: number; // 0-100
 churnRisk: 'low' | 'medium' | 'high' | 'critical';
 // Business attributes
 customerLifetimeValue: number;
@@ -30,11 +30,11 @@ paymentMethod ?  : string;
 billingCycle ?  : 'monthly' | 'yearly' | 'custom';
 // Experimental attributes
 experimentGroups: Record; // experiment_id -> variant
-abTestParticipation: string; // active A/B test IDs,
+abTestParticipation: string; // active A/B test IDs
 betaFeatures: string;
 // Computed attributes (updated in real-time)
-riskOfChurn: number; // 0-1 probability,
-upsellProbability: number; // 0-1 probability,
+riskOfChurn: number; // 0-1 probability
+upsellProbability: number; // 0-1 probability
 supportTicketCount: number;
 lastSupportInteraction ?  : Date;
 npsScore ?  : number; // Net Promoter Score
@@ -46,13 +46,12 @@ healthScore: number; // 0-100 account health
     'moving_average' | 'trend_up' | 'trend_down' | 'custom_function';
 value: any;
 logicalOperator ?  : 'AND' | 'OR' | 'NOT';
-weight: number; // for weighted conditions,
+weight: number; // for weighted conditions;
 isEnabled: boolean;
 // Advanced condition properties
 timeWindow ?  : {
     value: number,
-    unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months',
-};
+    unit: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' };
 ;
 aggregation ?  : 'sum' | 'avg' | 'count' | 'min' | 'max' | 'distinct' | 'percentile';
 threshold ?  : number;
@@ -65,12 +64,11 @@ matchRate: number; // percentage of users matching this condition
 'revenue' | 'lifecycle' | 'experimental' | 'custom';
 // Segment metrics
 userCount: number;
-estimatedUserCount ?  : number; // for complex segments where real count is expensive,
-userCountHistory: Array < {
-    date: Date,
-    count: number
-};
- > ;
+estimatedUserCount ?  : number; // for complex segments where real count is expensive;
+userCountHistory: Array < {};
+date: Date;
+count: number;
+    > ;
 // Performance metrics
 conversionRate ?  : number;
 averageLifetimeValue ?  : number;
@@ -90,37 +88,26 @@ allowedUsers: string;
 allowedRoles: string;
 // Integration settings
 syncToExternalSystems: boolean;
-externalSystemMappings: Record < string, {
-    systemId: string,
-    segmentId: string,
-    lastSync: Date,
-    syncStatus: 'pending' | 'syncing' | 'synced' | 'failed',
-} > ;
+externalSystemMappings: Record;
 // Validation and quality
 validationRules: Array < {
     rule: string,
     description: string,
-    isRequired: boolean
-} > ;
+    isRequired: boolean } > ;
 qualityScore: number; // 0-100 based on data completeness, accuracy, etc.
 // Advanced features
 parentSegmentId ?  : string; // for hierarchical segments
 childSegmentIds: string;
 dependencies: string; // other segments this one depends on
 // A/B testing integration
-treatmentVariants ?  : Record < string, {
-    name: string,
-    allocation: number, // percentage 0-100,
-    isControl: boolean
-} > ;
+treatmentVariants ?  : Record;
 // Scheduling and lifecycle
-schedule ?  : {
-    startDate: Date,
+schedule ?  : { startDate: Date,
     endDate: Date,
-    activeDays: number, // 0-6 (Sunday-Saturday),
+    activeDays: number, // 0-6 (Sunday-Saturday)
     activeHours: {
-        start: string, // "HH:MM",
-        end: string, // "HH:MM",
+        start: string, // "HH:MM"
+        end: string, // "HH:MM" }
         timezone: string
     }
 };
@@ -129,10 +116,10 @@ insights: Array < {
     type: 'trend' | 'anomaly' | 'opportunity' | 'risk',
     title: string,
     description: string,
-    severity: 'low' | 'medium' | 'high',
-    actionable: boolean,
-    generatedAt: Date
-} > ;
+    severity: 'low' | 'medium' | 'high' };
+actionable: boolean;
+generatedAt: Date;
+    > ;
 ;
 // Analysis settings
 analysisMetric: 'retention' | 'revenue' | 'engagement' | 'conversion' | 'churn';
@@ -149,9 +136,9 @@ cohortData: Array < {
     periodData: Array < {
         period: number, // 0, 1, 2, ... representing time periods,
         value: number, // metric value for this period,
-        userCount: number
-    } > 
-} > ;
+        userCount: number } // users still active in this period }
+        >  }
+    > ;
 // Metadata
 createdAt: Date;
 lastCalculated: Date;
@@ -170,25 +157,15 @@ averageSessionDuration: number;
 bounceRate: number;
 pageViewsPerSession: number;
 // Conversion metrics
-conversionEvents: Record < string, {
-    eventCount: number,
-    uniqueUsers: number,
-    conversionRate: number
-} > ;
+conversionEvents: Record;
 // Revenue metrics
 totalRevenue: number;
 averageRevenuePerUser: number;
 customerLifetimeValue: number;
 // Geographic distribution
-geographicBreakdown: Record < string, {
-    userCount: number,
-    percentage: number
-} > ;
+geographicBreakdown: Record;
 // Device and platform distribution
-platformBreakdown: Record < string, {
-    userCount: number,
-    percentage: number
-} > ;
+platformBreakdown: Record;
 // Temporal patterns
 activityHeatmap: Record; // hour -> activity level
 weeklyPattern: Record; // day -> activity level
@@ -198,8 +175,7 @@ benchmarkComparison: {
     segmentValue: number;
     benchmarkValue: number;
     percentageDifference: number;
-    significance: 'higher' | 'lower' | 'similar',
-    ;
+    significance: 'higher' | 'lower' | 'similar';
 }
 [];
 ;
@@ -221,6 +197,7 @@ onError: 'ignore' | 'retry' | 'fail_rule';
 executionCount: number;
 successCount: number;
 lastExecuted ?  : Date;
+// Zod Schemas for Validation
 export const UserAttributesSchema = z.object({});
 userId: z.string().min(1),
     email;
@@ -341,8 +318,7 @@ z.boolean().default(true),
 z.object({});
 value: z.number().positive(),
     unit;
-z.enum(['minutes', 'hours', 'days', 'weeks', 'months']),
-;
+z.enum(['minutes', 'hours', 'days', 'weeks', 'months']);
 optional(),
     aggregation;
 z.enum(['sum', 'avg', 'count', 'min', 'max', 'distinct', 'percentile']).optional(),
@@ -376,9 +352,8 @@ z.boolean().default(true),
     isDynamic;
 z.boolean().default(true),
     isPrivate;
-z.boolean().default(false),
-    color;
-z.string().regex(/^#[0-9A-F]{6}$/i),
+z.boolean().default(false);
+color: z.string().regex(/^#[0-9A-F]{6}$/i),
     icon;
 z.string().optional(),
     tags;
@@ -447,8 +422,7 @@ start: z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/),
     end;
 z.string().regex(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/),
     timezone;
-z.string(),
-;
+z.string();
 optional(),
     insights;
 z.array(z.object({}), type, z.enum(['trend', 'anomaly', 'opportunity', 'risk']), title, z.string().min(1), description, z.string(), severity, z.enum(['low', 'medium', 'high']), actionable, z.boolean(), generatedAt, z.date());
@@ -491,150 +465,149 @@ export class SegmentUtils {
                     segmentMatches = false;
                     return {
                         matches: segmentMatches,
-                        matchingConditions,
-                        score
+                        matchingConditions
                     };
-                    evaluateCondition(userAttributes, UserAttributes),
-                        condition;
-                    SegmentCondition,
-                        behaviorHistory ?  : BehaviorEvent;
-                    boolean;
-                    {
-                        const fieldValue = this.getFieldValue(userAttributes, condition.field, behaviorHistory);
-                        switch (condition.operator) {
-                            case 'equals':
-                                return fieldValue === condition.value;
-                            case 'not_equals':
-                                return fieldValue !== condition.value;
-                            case 'in':
-                                return Array.isArray(condition.value) && condition.value.includes(fieldValue);
-                            case 'not_in':
-                                return !(Array.isArray(condition.value) && condition.value.includes(fieldValue));
-                            case 'greater_than':
-                                return typeof fieldValue === 'number' && fieldValue > condition.value;
-                            case 'less_than':
-                                return typeof fieldValue === 'number' && fieldValue < condition.value;
-                            case 'greater_equal':
-                                return typeof fieldValue === 'number' && fieldValue >= condition.value;
-                            case 'less_equal':
-                                return typeof fieldValue === 'number' && fieldValue <= condition.value;
-                            case 'contains':
-                                return typeof fieldValue === 'string' && fieldValue.includes(condition.value);
-                            case 'not_contains':
-                                return typeof fieldValue === 'string' && !fieldValue.includes(condition.value);
-                            case 'starts_with':
-                                return typeof fieldValue === 'string' && fieldValue.startsWith(condition.value);
-                            case 'ends_with':
-                                return typeof fieldValue === 'string' && fieldValue.endsWith(condition.value);
-                            case 'regex':
-                                return typeof fieldValue === 'string' && new RegExp(condition.value).test(fieldValue);
-                            case 'exists':
-                                return fieldValue !== null && fieldValue !== undefined;
-                            case 'not_exists':
-                                return fieldValue === null || fieldValue === undefined;
-                            default:
-                                return false;
-                                getFieldValue(userAttributes, UserAttributes),
-                                    field;
-                                string,
-                                    behaviorHistory ?  : BehaviorEvent;
-                                any;
-                                {
-                                    // Handle nested field access (e.g., "featureUsage.loginButton.count")
-                                    const fieldParts = field.split('.');
-                                    let value = userAttributes;
-                                    for (const part of fieldParts) {
-                                        if (value && typeof value === 'object') {
-                                            value = value[part];
-                                        }
-                                        else {
-                                            return undefined;
-                                            return value;
-                                            evaluateComplexLogic(expression, string),
-                                                conditions;
-                                            SegmentCondition,
-                                                matchingConditionIds;
-                                            string;
-                                            boolean;
-                                            {
-                                                // This is a simplified implementation
-                                                // In a real system, you'd use a proper expression parser
-                                                let result = expression;
-                                                for (const condition of conditions) {
-                                                    const matches = matchingConditionIds.includes(condition.id);
-                                                    result = result.replace(condition.id, matches.toString());
-                                                    // Replace logical operators
-                                                    result = result.replace(/AND/g, '&&');
-                                                    result = result.replace(/OR/g, '||');
-                                                    result = result.replace(/NOT/g, '!');
-                                                    try {
-                                                        return eval(result);
-                                                    }
-                                                    catch (e) {
-                                                        console.error('Failed to evaluate complex logic expression:', e);
-                                                        return false;
-                                                        generateSegmentInsights(((segment, analytics) => {
-                                                            const insights = [];
-                                                            // Growth trend analysis
-                                                            if (analytics.growthRate > 20) {
-                                                                insights.push({});
-                                                                type: 'trend',
-                                                                    title;
-                                                                'High Growth Rate',
-                                                                    description;
-                                                                `This segment is growing rapidly at ${analytics.growthRate.toFixed(1)}% rate`;
-                                                            }
-                                                        },
-                                                            severity), 'medium', actionable, true, generatedAt, new Date());
-                                                    }
-                                                    ;
-                                                    // Churn risk analysis
-                                                    if (segment.churnRate && segment.churnRate > 0.15) {
-                                                        insights.push({});
-                                                        type: 'risk',
-                                                            title;
-                                                        'High Churn Risk',
-                                                            description;
-                                                        `Churn rate of ${(segment.churnRate * 100).toFixed(1)}% is above healthy threshold`;
-                                                    }
-                                                }
-                                                severity: 'high',
-                                                    actionable;
-                                                true,
-                                                    generatedAt;
-                                                new Date();
-                                            }
-                                            ;
-                                            // Revenue opportunity
-                                            if (analytics.averageRevenuePerUser > analytics.customerLifetimeValue * 0.8) {
-                                                insights.push({});
-                                                type: 'opportunity',
-                                                    title;
-                                                'Revenue Opportunity',
-                                                    description;
-                                                'Users in this segment have high near-term revenue potential',
-                                                    severity;
-                                                'medium',
-                                                    actionable;
-                                                true,
-                                                    generatedAt;
-                                                new Date(),
-                                                ;
-                                            }
-                                            ;
-                                            return insights;
-                                            export default {
-                                                UserAttributesSchema,
-                                                SegmentConditionSchema,
-                                                UserSegmentSchema,
-                                                SegmentUtils
-                                            };
-                                        }
-                                    }
-                                }
-                        }
-                    }
+                    score;
             }
+            ;
+            evaluateCondition(userAttributes, UserAttributes),
+                condition;
+            SegmentCondition,
+                behaviorHistory ?  : BehaviorEvent;
+            boolean;
+            {
+                const fieldValue = this.getFieldValue(userAttributes, condition.field, behaviorHistory);
+                switch (condition.operator) {
+                    case 'equals':
+                        return fieldValue === condition.value;
+                    case 'not_equals':
+                        return fieldValue !== condition.value;
+                    case 'in':
+                        return Array.isArray(condition.value) && condition.value.includes(fieldValue);
+                    case 'not_in':
+                        return !(Array.isArray(condition.value) && condition.value.includes(fieldValue));
+                    case 'greater_than':
+                        return typeof fieldValue === 'number' && fieldValue > condition.value;
+                    case 'less_than':
+                        return typeof fieldValue === 'number' && fieldValue < condition.value;
+                    case 'greater_equal':
+                        return typeof fieldValue === 'number' && fieldValue >= condition.value;
+                    case 'less_equal':
+                        return typeof fieldValue === 'number' && fieldValue <= condition.value;
+                    case 'contains':
+                        return typeof fieldValue === 'string' && fieldValue.includes(condition.value);
+                    case 'not_contains':
+                        return typeof fieldValue === 'string' && !fieldValue.includes(condition.value);
+                    case 'starts_with':
+                        return typeof fieldValue === 'string' && fieldValue.startsWith(condition.value);
+                    case 'ends_with':
+                        return typeof fieldValue === 'string' && fieldValue.endsWith(condition.value);
+                    case 'regex':
+                        return typeof fieldValue === 'string' && new RegExp(condition.value).test(fieldValue);
+                    case 'exists':
+                        return fieldValue !== null && fieldValue !== undefined;
+                    case 'not_exists':
+                        return fieldValue === null || fieldValue === undefined;
+                    default:
+                        return false;
+                        getFieldValue(userAttributes, UserAttributes),
+                            field;
+                        string,
+                            behaviorHistory ?  : BehaviorEvent;
+                        any;
+                        { }
+                        // Handle nested field access (e.g., "featureUsage.loginButton.count")
+                        const fieldParts = field.split('.');
+                        let value = userAttributes;
+                        for (const part of fieldParts) {
+                            if (value && typeof value === 'object') {
+                                value = value[part];
+                            }
+                            else {
+                                return undefined;
+                                return value;
+                                evaluateComplexLogic(expression, string),
+                                    conditions;
+                                SegmentCondition,
+                                    matchingConditionIds;
+                                string;
+                                boolean;
+                                { }
+                                // This is a simplified implementation
+                                // In a real system, you'd use a proper expression parser
+                                let result = expression;
+                                for (const condition of conditions) {
+                                    const matches = matchingConditionIds.includes(condition.id);
+                                    result = result.replace(condition.id, matches.toString());
+                                    // Replace logical operators
+                                    result = result.replace(/AND/g, '&&');
+                                    result = result.replace(/OR/g, '||');
+                                    result = result.replace(/NOT/g, '!');
+                                    try {
+                                        return eval(result);
+                                    }
+                                    catch (e) {
+                                        console.error('Failed to evaluate complex logic expression:', e);
+                                        return false;
+                                        generateSegmentInsights(((segment, analytics) => {
+                                            const insights = [];
+                                            // Growth trend analysis
+                                            if (analytics.growthRate > 20) {
+                                                insights.push({});
+                                                type: 'trend',
+                                                    title;
+                                                'High Growth Rate';
+                                            }
+                                            description: `This segment is growing rapidly at ${analytics.growthRate.toFixed(1)}% rate`;
+                                        }));
+                                    }
+                                    severity: 'medium',
+                                        actionable;
+                                    true,
+                                        generatedAt;
+                                    new Date();
+                                }
+                                ;
+                                // Churn risk analysis
+                                if (segment.churnRate && segment.churnRate > 0.15) {
+                                    insights.push({});
+                                    type: 'risk',
+                                        title;
+                                    'High Churn Risk';
+                                }
+                                description: `Churn rate of ${(segment.churnRate * 100).toFixed(1)}% is above healthy threshold`;
+                            }
+                        }
+                        severity: 'high',
+                            actionable;
+                        true,
+                            generatedAt;
+                        new Date();
+                }
+                ;
+                // Revenue opportunity
+                if (analytics.averageRevenuePerUser > analytics.customerLifetimeValue * 0.8) {
+                    insights.push({});
+                    type: 'opportunity',
+                        title;
+                    'Revenue Opportunity',
+                        description;
+                    'Users in this segment have high near-term revenue potential',
+                        severity;
+                    'medium',
+                        actionable;
+                    true,
+                        generatedAt;
+                    new Date();
+                }
+            }
+            ;
+            return insights;
+            export default { UserAttributesSchema,
+                SegmentConditionSchema,
+                UserSegmentSchema };
+            SegmentUtils;
         }
+        ;
     }
 }

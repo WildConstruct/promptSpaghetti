@@ -7,7 +7,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * and color coding for team collaboration.
  */
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { STICKY_NOTE_COLORS, STICKY_NOTE_CONSTRAINTS } from '../../types/CollaborationTypes';
+import { STICKY_NOTE_COLORS, STICKY_NOTE_CONSTRAINTS } from StickyNoteAction;
+from;
+'../../types/CollaborationTypes';
+canResize = true;
 {
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
@@ -28,11 +31,10 @@ const handleContentChange = useCallback((content) => {
         onAction({});
         type: 'update',
             noteId;
-        note.id,
-            note;
-        {
-            content;
-        }
+        note.id;
+    }
+    note: {
+        content;
     }
 });
 [note.id, onAction];
@@ -42,12 +44,9 @@ const handleColorChange = useCallback((color) => {
     onAction({});
     type: 'update',
         noteId;
-    note.id,
-        note;
-    {
-        color;
-    }
-});
+    note.id;
+}, note, { color });
+;
 [note.id, onAction];
 ;
 // Start editing mode
@@ -56,8 +55,7 @@ const startEditing = useCallback(() => {
         onAction({});
         type: 'startEdit',
             noteId;
-        note.id,
-        ;
+        note.id;
     }
 });
 [note.id, onAction, canEdit];
@@ -67,9 +65,9 @@ const stopEditing = useCallback(() => {
     onAction({});
     type: 'stopEdit',
         noteId;
-    note.id,
-    ;
+    note.id;
 });
+;
 [note.id, onAction];
 ;
 // Handle mouse down for dragging
@@ -83,8 +81,7 @@ const handleMouseDown = useCallback((e) => {
         setDragOffset({});
         x: e.clientX - rect.left,
             y;
-        e.clientY - rect.top,
-        ;
+        e.clientY - rect.top;
     }
 });
 setIsDragging(true);
@@ -103,9 +100,9 @@ const handleResizeMouseDown = useCallback((e) => {
         width;
     note.size.width,
         height;
-    note.size.height,
-    ;
+    note.size.height;
 });
+;
 setIsResizing(true);
 [canResize, note.size];
 ;
@@ -115,16 +112,16 @@ useEffect(() => {
         if (isDragging) {
             const newPosition = {
                 x: e.clientX - dragOffset.x,
-                y: e.clientY - dragOffset.y,
+                y: e.clientY - dragOffset.y
             };
-            onAction({});
-            type: 'move',
-                noteId;
-            note.id,
-                position;
-            newPosition,
-            ;
         }
+        ;
+        onAction({});
+        type: 'move',
+            noteId;
+        note.id,
+            position;
+        newPosition;
     };
 });
 if (isResizing) {
@@ -143,12 +140,11 @@ if (isResizing) {
     onAction({});
     type: 'resize',
         noteId;
-    note.id,
-        size;
-    {
-        width: newWidth, height;
-        newHeight;
-    }
+    note.id;
+}
+size: {
+    width: newWidth, height;
+    newHeight;
 }
 ;
 ;
@@ -197,25 +193,18 @@ _jsx("div", { ref: noteRef, className: "sticky-note", style: {
         top: note.position.y,
         width: note.size.width,
         height: note.size.height,
-        background: colorInfo.background,
-        border: `2px solid ${selected ? '#4d7cff' : colorInfo.border}`
-    }, "borderRadius:": true });
-8,
-    boxShadow;
-`0 4px 12px ${colorInfo.shadow}, 0 2px 4px rgba(0,0,0,0.1)`;
-cursor: isDragging ? 'grabbing' : (canMove && !note.isEditing ? 'grab' : 'default'),
-    zIndex;
-note.zIndex || 1000,
-    userSelect;
-'none',
-    fontFamily;
-'system-ui, -apple-system, sans-serif',
-    transition;
-isDragging || isResizing ? 'none' : 'all 0.2s ease',
-    transform;
-selected ? 'scale(1.02)' : 'scale(1)',
-    opacity;
-isDragging ? 0.8 : 1;
+        background: colorInfo.background
+    }, "border:": true });
+`2px solid ${selected ? '#4d7cff' : colorInfo.border}`;
+borderRadius: 8;
+boxShadow: `0 4px 12px ${colorInfo.shadow}, 0 2px 4px rgba(0,0,0,0.1)`;
+cursor: isDragging ? 'grabbing' : (canMove && !note.isEditing ? 'grab' : 'default');
+zIndex: note.zIndex || 1000;
+userSelect: 'none';
+fontFamily: 'system-ui, -apple-system, sans-serif';
+transition: isDragging || isResizing ? 'none' : 'all 0.2s ease';
+transform: selected ? 'scale(1.02)' : 'scale(1)';
+opacity: isDragging ? 0.8 : 1;
 onMouseDown = { handleMouseDown };
 onContextMenu = { handleContextMenu };
 onDoubleClick = { startEditing }
@@ -224,39 +213,31 @@ onDoubleClick = { startEditing }
     < div;
 style = {};
 {
-    display: 'flex',
-        alignItems;
-    'center',
-        justifyContent;
-    'space-between',
-        padding;
-    '8px 10px',
-        borderBottom;
-    `1px solid ${colorInfo.border}20`;
+    display: 'flex';
+    alignItems: 'center';
+    justifyContent: 'space-between';
+    padding: '8px 10px';
 }
-fontSize: 11,
-    fontWeight;
-500,
-    color;
-colorInfo.text,
-    opacity;
-0.8;
+borderBottom: `1px solid ${colorInfo.border}20`;
+fontSize: 11;
+fontWeight: 500;
+color: colorInfo.text;
+opacity: 0.8;
  >
     (_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: 6 }, children: [_jsx("div", { style: {
                     width: 8,
                     height: 8,
                     borderRadius: '50%',
-                    background: colorInfo.border,
+                    background: colorInfo.border
                 } }), _jsx("span", { children: colorInfo.category })] })
         ,
             _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: 4 }, children: [_jsxs("div", { style: { display: 'flex', gap: 2 }, children: [Object.entries(STICKY_NOTE_COLORS).map(([color, info]) => ()
-                                < button, key = { color }, onClick = {}(e)), " => ", e.stopPropagation(), "; handleColorChange(color as StickyNoteColor); }} style=", {
+                                < button, key = { color }, onClick = {}(e)), " => ", e.stopPropagation(), "; handleColorChange(color as StickyNoteColor) }} style=", {
                                 width: 12,
                                 height: 12,
                                 borderRadius: '50%',
-                                background: info.background,
-                                border: `1px solid ${info.border}`
-                            }, ", cursor: 'pointer', opacity: note.color === color ? 1 : 0.6, transform: note.color === color ? 'scale(1.2)' : 'scale(1)', transition: 'all 0.15s ease'; }} title=", info.description, "/> ))}"] }), canDelete && ()
+                                background: info.background
+                            }, "border: `1px solid $", info.border, "`} cursor: 'pointer' opacity: note.color === color ? 1 : 0.6 transform: note.color === color ? 'scale(1.2)' : 'scale(1)' transition: 'all 0.15s ease'; title=", info.description, "/> ))}"] }), canDelete && ()
                         < button, "onClick=", (e) => {
                         e.stopPropagation();
                         onAction({ type: 'delete', noteId: note.id });
@@ -273,7 +254,7 @@ colorInfo.text,
                         alignItems: 'center',
                         justifyContent: 'center',
                         opacity: 0.6,
-                        transition: 'opacity 0.15s ease',
+                        transition: 'opacity 0.15s ease'
                     }, "onMouseEnter=", (e) => e.currentTarget.style.opacity = '1', "onMouseLeave=", (e) => e.currentTarget.style.opacity = '0.6', "title=\"Delete note\" > \u00D7"] }));
 div >
 ;
@@ -282,12 +263,9 @@ div >
     < div;
 style = {};
 {
-    padding: '8px 12px',
-        height;
-    'calc(100% - 40px)',
-        overflow;
-    'hidden',
-    ;
+    padding: '8px 12px';
+    height: 'calc(100% - 40px)';
+    overflow: 'hidden';
 }
  >
     { note, : .isEditing ? ()
@@ -302,48 +280,30 @@ onKeyDown = { handleKeyDown };
 placeholder = "Enter your note here... (Ctrl+Enter to save, Esc to cancel)";
 style = {};
 {
-    width: '100%',
-        height;
-    '100%',
-        border;
-    'none',
-        outline;
-    'none',
-        background;
-    'transparent',
-        color;
-    colorInfo.text,
-        fontSize;
-    13,
-        fontFamily;
-    'inherit',
-        resize;
-    'none',
-        lineHeight;
-    1.4,
-    ;
+    width: '100%';
+    height: '100%';
+    border: 'none';
+    outline: 'none';
+    background: 'transparent';
+    color: colorInfo.text;
+    fontSize: 13;
+    fontFamily: 'inherit';
+    resize: 'none';
+    lineHeight: 1.4;
 }
 />;
 ()
     < div;
 style = {};
 {
-    width: '100%',
-        height;
-    '100%',
-        color;
-    colorInfo.text,
-        fontSize;
-    13,
-        lineHeight;
-    1.4,
-        wordWrap;
-    'break-word',
-        overflow;
-    'auto',
-        cursor;
-    canEdit ? 'text' : 'default',
-    ;
+    width: '100%';
+    height: '100%';
+    color: colorInfo.text;
+    fontSize: 13;
+    lineHeight: 1.4;
+    wordWrap: 'break-word';
+    overflow: 'auto';
+    cursor: canEdit ? 'text' : 'default';
 }
 onClick = { canEdit, startEditing: undefined }
     >
@@ -370,30 +330,20 @@ div >
     onMouseDown = { handleResizeMouseDown };
     style = {};
     {
-        position: 'absolute',
-            bottom;
-        0,
-            right;
-        0,
-            width;
-        16,
-            height;
-        16,
-            cursor;
-        'nw-resize',
-            background;
-        colorInfo.border,
-            borderRadius;
-        '8px 0 6px 0',
-            opacity;
-        0.6,
-            transition;
-        'opacity 0.15s ease',
-        ;
+        position: 'absolute';
+        bottom: 0;
+        right: 0;
+        width: 16;
+        height: 16;
+        cursor: 'nw-resize';
+        background: colorInfo.border;
+        borderRadius: '8px 0 6px 0';
+        opacity: 0.6;
+        transition: 'opacity 0.15s ease';
     }
+    onMouseEnter = {}(e);
+    e.currentTarget.style.opacity = '1';
 }
-onMouseEnter = {}(e);
-e.currentTarget.style.opacity = '1';
 onMouseLeave = {}(e);
 e.currentTarget.style.opacity = '0.6';
     >
@@ -404,7 +354,7 @@ e.currentTarget.style.opacity = '0.6';
                 width: 3,
                 height: 3,
                 background: 'white',
-                borderRadius: '50%',
+                borderRadius: '50%'
             } });
 div >
 ;
@@ -416,7 +366,7 @@ _jsxs("div", { style: {
         fontSize: 9,
         color: '#6b7280',
         opacity: selected ? 1 : 0,
-        transition: 'opacity 0.2s ease',
+        transition: 'opacity 0.2s ease'
     }, children: [note.author, " \u2022 ", new Date(note.timestamp).toLocaleString()] });
 div >
 ;

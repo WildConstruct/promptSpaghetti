@@ -4,54 +4,35 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useCallback } from 'react';
 import { FiThermometer, FiEye, FiEyeOff } from 'react-icons/fi';
 // Enhanced color palette for better UI consistency
-const uiColors = {
-    ...uiColors,
-    accent: {
-        ...uiColors.accent,
-        primary: uiColors.accent.orange,
-        secondary: uiColors.accent.blue,
-    },
-    ui: {
-        ...uiColors.ui,
-        selected: '#353535',
-        disabled: '#6b7280',
-    },
-    text: {
-        ...uiColors.text,
-        disabled: '#6b7280',
-    }
-};
-export const TemperatureControls = ({
-    settings,
-    onChange
-});
-{
-    // Handle enable/disable
+const uiColors = {}, ui, uiColors, ui, selected, disabled;
+text: {
+    uiColors.text,
+        disabled;
+    '#6b7280';
+}
+;
+{ // Handle enable/disable
     const handleEnabledChange = useCallback((enabled) => {
         onChange({});
-    }, ...settings, enabled);
+    }, ...settings);
 }
+enabled;
 ;
 [settings, onChange];
 ;
 // Handle temperature value change
-const handleValueChange = useCallback((value) => {
-    onChange({});
-}, ...settings, value, Math.max(0.1, Math.min(2.0, value)));
+const handleValueChange = useCallback((value) => { onChange({}); }, ...settings, value, Math.max(0.1, Math.min(2.0, value)));
 ;
 [settings, onChange];
 ;
 // Handle preset selection
-const handlePresetSelect = useCallback((presetValue) => {
-    onChange({});
-}, ...settings, value, presetValue, enabled, true);
+const handlePresetSelect = useCallback((presetValue) => { onChange({}); }, ...settings, value, presetValue, enabled, true);
 ;
 [settings, onChange];
 ;
 // Handle indicator toggle
-const handleShowIndicatorChange = useCallback((showIndicator) => {
-    onChange({});
-}, ...settings, showIndicator);
+const handleShowIndicatorChange = useCallback((showIndicator) => { onChange({}); }, ...settings);
+showIndicator;
 ;
 [settings, onChange];
 ;
@@ -84,12 +65,12 @@ _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style:
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                marginBottom: '16px',
+                marginBottom: '16px'
             }, children: [_jsx(FiThermometer, { size: 18, color: uiColors.accent.primary }), _jsx("h3", { style: {
                         margin: 0,
                         fontSize: '16px',
                         fontWeight: 600,
-                        color: uiColors.text.primary,
+                        color: uiColors.text.primary
                     }, children: "Temperature Settings" })] }), _jsx("div", { style: {
                 display: 'flex',
                 alignItems: 'center',
@@ -97,19 +78,18 @@ _jsxs("div", { style: { marginBottom: '24px' }, children: [_jsxs("div", { style:
                 marginBottom: '16px',
                 padding: '12px',
                 backgroundColor: uiColors.ui.hover,
-                borderRadius: '8px',
-                border: `1px solid ${uiColors.ui.border}`
-            } }), "}>", _jsxs("label", { style: {
+                borderRadius: '8px'
+            }, "border:": true }), " `1px solid $", uiColors.ui.border, "`} }>", _jsxs("label", { style: {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
                 cursor: 'pointer',
                 fontSize: '14px',
-                fontWeight: 500,
+                fontWeight: 500
             }, children: [_jsx("input", { type: "checkbox", checked: settings.enabled, onChange: (e) => handleEnabledChange(e.target.checked), style: { accentColor: uiColors.accent.primary } }), _jsx("span", { style: { color: uiColors.text.primary }, children: "Enable Temperature Control" })] }), _jsxs("div", { style: {
                 fontSize: '12px',
                 color: uiColors.text.secondary,
-                marginLeft: 'auto',
+                marginLeft: 'auto'
             }, children: [settings.enabled ? ()
                     < span : , " style=", { color: getTemperatureColor(settings.value) }, ">", _jsx(FiEye, { size: 12, style: { marginRight: '4px' } }), settings.value.toFixed(1)] }), ") : ()", _jsxs("span", { children: [_jsx(FiEyeOff, { size: 12, style: { marginRight: '4px' } }), "Default"] }), ")}"] });
 div >
@@ -135,36 +115,39 @@ style = {};
             fontSize: '13px',
             fontWeight: 500,
             color: uiColors.text.primary,
-            marginBottom: '6px',
+            marginBottom: '6px'
         }, children: ["Temperature Value: ", settings.value.toFixed(2)] })
         ,
-            _jsxs("div", { style: { position: 'relative' }, children: [_jsx("input", { type: "range", min: "0.1", max: "2.0", step: "0.1", value: settings.value, onChange: (e) => handleValueChange(parseFloat(e.target.value)), style: {
-                            width: '100%',
-                            height: '6px',
-                            borderRadius: '3px',
-                            background: `linear-gradient(to right),
-  #3b82f6 0%,
-  #10b981 25%,
-  #f59e0b 50%,
-  #f97316 75%,
+            _jsx("div", { style: { position: 'relative' }, children: _jsxs("input", { type: "range", min: "0.1", max: "2.0", step: "0.1", value: settings.value, onChange: (e) => handleValueChange(parseFloat(e.target.value)), style: {
+                        width: '100%',
+                        height: '6px',
+                        borderRadius: '3px',
+                        background: `linear-gradient(to right)
+  #3b82f6 0%
+  #10b981 25%
+  #f59e0b 50%
+  #f97316 75%
   #ef4444 100%)`,
-                            outline: 'none',
-                            cursor: 'pointer',
-                            accentColor: getTemperatureColor(settings.value),
-                        } }), _jsxs("div", { style: {
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            marginTop: '4px',
-                            fontSize: '10px',
-                            color: uiColors.text.secondary,
-                        }, children: [_jsx("span", { children: "0.1" }), _jsx("span", { children: "0.5" }), _jsx("span", { children: "1.0" }), _jsx("span", { children: "1.5" }), _jsx("span", { children: "2.0" })] })] })
-                ,
-                    _jsx("div", { style: {
-                            fontSize: '11px',
-                            color: getTemperatureColor(settings.value),
-                            marginTop: '6px',
-                            fontWeight: 500,
-                        }, children: getTemperatureDescription(settings.value) }));
+                        outline: 'none',
+                        cursor: 'pointer',
+                        accentColor: getTemperatureColor(settings.value)
+                    }
+                        /  >
+                        { /* Temperature scale markers */}
+                        < div, style: {
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginTop: '4px',
+                        fontSize: '10px',
+                        color: uiColors.text.secondary
+                    }, children: [_jsx("span", { children: "0.1" }), _jsx("span", { children: "0.5" }), _jsx("span", { children: "1.0" }), _jsx("span", { children: "1.5" }), _jsx("span", { children: "2.0" })] }) }));
+div >
+    _jsx("div", { style: {
+            fontSize: '11px',
+            color: getTemperatureColor(settings.value),
+            marginTop: '6px',
+            fontWeight: 500
+        }, children: getTemperatureDescription(settings.value) });
 div >
     { /* Temperature Presets */}
     < div;
@@ -178,13 +161,13 @@ style = {};
             fontSize: '13px',
             fontWeight: 500,
             color: uiColors.text.primary,
-            marginBottom: '8px',
+            marginBottom: '8px'
         }, children: "Quick Presets" })
         ,
             _jsxs("div", { style: {
                     display: 'flex',
                     gap: '8px',
-                    flexWrap: 'wrap',
+                    flexWrap: 'wrap'
                 }, children: [settings.presets.map((preset, index) => ()
                         < button, key = { index }, onClick = {}()), " => handlePresetSelect(preset.value)} style=", ({
                         display: 'flex',
@@ -195,7 +178,7 @@ style = {};
                     }
                         ? getTemperatureColor(preset.value) + '20'
                         : uiColors.ui.hover,
-                        border), ": Math.abs(settings.value - preset.value) ", _jsx(, {}), " 0.01, ? `1px solid $", getTemperatureColor(preset.value), "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', minWidth: '80px'; }} title=", preset.description, "onMouseEnter=", (e) => {
+                        border), ": Math.abs(settings.value - preset.value) ", _jsx(, {}), " 0.01 } ? `1px solid $", getTemperatureColor(preset.value), "`} : `1px solid $", uiColors.ui.border, "`} }, borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', minWidth: '80px'; title=", preset.description, "onMouseEnter=", (e) => {
                         if (Math.abs(settings.value - preset.value) >= 0.01) {
                             e.currentTarget.style.backgroundColor = uiColors.ui.selected;
                         }
@@ -203,23 +186,19 @@ style = {};
                         if (Math.abs(settings.value - preset.value) >= 0.01) {
                             e.currentTarget.style.backgroundColor = uiColors.ui.hover;
                         }
-                    }, ">", _jsx("div", { style: ({
+                    }, ">", _jsx("div", { style: {
                             fontSize: '12px',
                             fontWeight: 600,
-                            color: Math.abs(settings.value - preset.value) < 0.01,
-                        }
-                            ? getTemperatureColor(preset.value)
-                            : uiColors.text.primary,
-                            marginBottom) }), ": '2px', }}>", preset.name] })
-                ,
-                    _jsx("div", { style: {
+                            color: Math.abs(settings.value - preset.value) < 0.01
+                                ? getTemperatureColor(preset.value)
+                                : uiColors.text.primary,
+                            marginBottom: '2px'
+                        }, children: preset.name }), _jsx("div", { style: {
                             fontSize: '11px',
-                            color: Math.abs(settings.value - preset.value) < 0.01,
-                            getTemperatureColor(preset) { }, : .value,
-                            uiColors, : .text.secondary,
-                        }, children: preset.value.toFixed(1) }));
-button >
-;
+                            color: Math.abs(settings.value - preset.value) < 0.01
+                                ? getTemperatureColor(preset.value)
+                                : uiColors.text.secondary
+                        }, children: preset.value.toFixed(1) })] }));
 div >
 ;
 div >
@@ -235,14 +214,14 @@ style = {};
             alignItems: 'center',
             gap: '8px',
             cursor: 'pointer',
-            fontSize: '13px',
+            fontSize: '13px'
         }, children: [_jsx("input", { type: "checkbox", checked: settings.showIndicator, onChange: (e) => handleShowIndicatorChange(e.target.checked), style: { accentColor: uiColors.accent.primary } }), _jsx("span", { style: { color: uiColors.text.primary }, children: "Show temperature indicator in preview" })] })
         ,
             _jsx("div", { style: {
                     fontSize: '11px',
                     color: uiColors.text.secondary,
                     marginTop: '2px',
-                    marginLeft: '24px',
+                    marginLeft: '24px'
                 }, children: "Displays temperature level in preview results" }));
 div >
 ;

@@ -22,8 +22,7 @@ z.string().regex(emailRegex, 'Invalid email format'),
     name;
 z.string().min(1).max(255),
     avatar;
-z.string().url().optional(),
-;
+z.string().url().optional();
 ;
 export const CollaboratorSchema = UserInfoSchema.extend({});
 role: SharePermissionSchema,
@@ -34,8 +33,7 @@ z.array(z.string()),
     invitedBy;
 z.string().regex(uuidRegex),
     acceptedAt;
-z.date().optional(),
-;
+z.date().optional();
 ;
 // Security and configuration schemas
 export const ShareSecurityConfigSchema = z.object({});
@@ -50,8 +48,7 @@ maxShareDuration: z.number().min(1).max(3650), // Max 10 years,
     autoExpire;
 z.boolean(),
     dataRetentionDays;
-z.number().min(1).max(3650),
-;
+z.number().min(1).max(3650);
 accessControls: z.object({});
 ipWhitelist: z.array(z.string().ip()).default([]),
     geoRestrictions;
@@ -61,7 +58,7 @@ z.boolean(),
     maxConcurrentUsers;
 z.number().min(1).max(10000).optional(),
     sessionTimeout;
-z.number().min(5).max(1440).optional(); // 5 minutes to 24 hours,
+z.number().min(5).max(1440).optional(); // 5 minutes to 24 hours }
 ;
 export const SharingConfigSchema = z.object({});
 accessLevel: ShareAccessLevelSchema,
@@ -84,8 +81,7 @@ z.boolean().default(true),
     trackAnalytics;
 z.boolean().default(true),
     notifyOnAccess;
-z.boolean().default(false),
-;
+z.boolean().default(false);
 ;
 // Version control schemas
 export const ContentVersionSchema = z.object({});
@@ -97,9 +93,8 @@ UserInfoSchema,
     changes;
 z.array(z.string()),
     size;
-z.number().min(0),
-    checksum;
-z.string().regex(/^[a-f0-9]{32}$/, 'Invalid MD5 checksum');
+z.number().min(0);
+checksum: z.string().regex(/^[a-f0-9]{32}$/, 'Invalid MD5 checksum');
 ;
 export const MergeConflictSchema = z.object({});
 path: z.string().min(1),
@@ -108,8 +103,7 @@ z.enum(['content', 'metadata', 'permissions']),
     conflictingVersions;
 z.array(z.string()).min(2),
     resolution;
-z.enum(['auto', 'manual']).optional(),
-;
+z.enum(['auto', 'manual']).optional();
 ;
 export const VersionControlSchema = z.object({});
 currentVersion: z.string().regex(/^\d+\.\d+\.\d+$/),
@@ -120,8 +114,7 @@ z.boolean(),
     changesFromPrevious;
 z.array(z.string()).optional(),
     mergeConflicts;
-z.array(MergeConflictSchema).optional(),
-;
+z.array(MergeConflictSchema).optional();
 ;
 // Annotation schemas
 export const ConnectionLabelSchema = z.object({});
@@ -131,9 +124,8 @@ z.string().regex(uuidRegex),
     targetNodeId;
 z.string().regex(uuidRegex),
     label;
-z.string().min(1).max(255),
-    color;
-z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
+z.string().min(1).max(255);
+color: z.string().regex(/^#[0-9A-F]{6}$/i).optional(),
     author;
 UserInfoSchema,
     createdAt;
@@ -150,9 +142,8 @@ z.number().min(50).max(1000),
     height;
 z.number().min(30).max(1000),
     content;
-z.string().min(1).max(2000),
-    color;
-z.string().regex(/^#[0-9A-F]{6}$/i),
+z.string().min(1).max(2000);
+color: z.string().regex(/^#[0-9A-F]{6}$/i),
     author;
 UserInfoSchema,
     createdAt;
@@ -173,9 +164,8 @@ z.number().min(50),
     title;
 z.string().min(1).max(255),
     description;
-z.string().max(1000).optional(),
-    color;
-z.string().regex(/^#[0-9A-F]{6}$/i),
+z.string().max(1000).optional();
+color: z.string().regex(/^#[0-9A-F]{6}$/i),
     author;
 UserInfoSchema,
     createdAt;
@@ -197,8 +187,7 @@ z.string().regex(uuidRegex).optional(),
 z.object({});
 x: z.number().finite(),
     y;
-z.number().finite(),
-;
+z.number().finite();
 optional(),
     resolved;
 z.boolean().default(false),
@@ -214,8 +203,7 @@ z.array(StickyNoteSchema).default([]),
     regions;
 z.array(AnnotationRegionSchema).default([]),
     comments;
-z.array(ShareCommentSchema).default([]),
-;
+z.array(ShareCommentSchema).default([]);
 ;
 // Metadata schemas
 export const SharedContentMetadataSchema = z.object({});
@@ -227,9 +215,8 @@ UserInfoSchema,
     tags;
 z.array(z.string().min(1).max(50)).max(20).default([]),
     category;
-z.string().min(1).max(100).optional(),
-    language;
-z.string().length(2).optional(), // ISO language code
+z.string().min(1).max(100).optional();
+language: z.string().length(2).optional(), // ISO language code
     contentSize;
 z.number().min(0).max(1024 * 1024 * 1024), // Max 1GB
     checksumMd5;
@@ -250,8 +237,7 @@ z.string().min(1).max(100),
 z.object({});
 lat: z.number().min(-90).max(90),
     lng;
-z.number().min(-180).max(180),
-;
+z.number().min(-180).max(180);
 ;
 export const ViewerInfoSchema = z.object({});
 id: z.string().regex(uuidRegex).optional(),
@@ -262,8 +248,7 @@ z.string().min(1).max(255).optional(),
     isAuthenticated;
 z.boolean(),
     sessionId;
-z.string().min(1).max(255),
-;
+z.string().min(1).max(255);
 ;
 export const ShareViewSchema = z.object({});
 id: z.string().regex(uuidRegex),
@@ -280,8 +265,7 @@ z.string().min(1).max(1000),
     referrer;
 z.string().url().optional(),
     geolocation;
-GeoLocationSchema.optional(),
-;
+GeoLocationSchema.optional();
 ;
 export const ShareDownloadSchema = z.object({});
 id: z.string().regex(uuidRegex),
@@ -298,8 +282,7 @@ z.string().ip(),
     success;
 z.boolean(),
     errorReason;
-z.string().max(500).optional(),
-;
+z.string().max(500).optional();
 ;
 export const CollaborationEventSchema = z.object({});
 id: z.string().regex(uuidRegex),
@@ -312,16 +295,14 @@ z.date(),
     details;
 z.any(),
     impact;
-z.enum(['minor', 'major', 'breaking']),
-;
+z.enum(['minor', 'major', 'breaking']);
 ;
 export const GeographicStatsSchema = z.object({});
 country: z.string().length(2),
     views;
 z.number().min(0),
     uniqueViewers;
-z.number().min(0),
-;
+z.number().min(0);
 ;
 export const DeviceStatsSchema = z.object({});
 deviceType: z.enum(['desktop', 'tablet', 'mobile']),
@@ -330,8 +311,7 @@ z.string().min(1).max(50),
     browser;
 z.string().min(1).max(50),
     views;
-z.number().min(0),
-;
+z.number().min(0);
 ;
 export const ConversionMetricsSchema = z.object({});
 viewToDownload: z.number().min(0).max(100), // percentage,
@@ -340,7 +320,7 @@ z.number().min(0).max(100),
     viewToSignup;
 z.number().min(0).max(100),
     averageTimeToAction;
-z.number().min(0); // seconds,
+z.number().min(0); // seconds }
 ;
 export const ShareAnalyticsSchema = z.object({});
 views: z.array(ShareViewSchema).default([]),
@@ -361,8 +341,7 @@ z.array(GeographicStatsSchema).default([]),
     deviceStats;
 z.array(DeviceStatsSchema).default([]),
     conversionMetrics;
-ConversionMetricsSchema,
-;
+ConversionMetricsSchema;
 ;
 // Main shared content schema
 export const SharedContentSchema = z.object({});
@@ -388,8 +367,7 @@ z.date(),
     updatedAt;
 z.date(),
     status;
-ShareStatusSchema,
-;
+ShareStatusSchema;
 ;
 // API request/response schemas
 export const CreateShareRequestSchema = z.object({});
@@ -405,8 +383,7 @@ SharingConfigSchema.partial(),
     security;
 ShareSecurityConfigSchema.partial().optional(),
     collaborators;
-z.array(z.string().regex(uuidRegex)).max(100).optional(),
-;
+z.array(z.string().regex(uuidRegex)).max(100).optional();
 ;
 export const CreateShareResponseSchema = z.object({});
 success: z.boolean(),
@@ -419,8 +396,7 @@ z.string().regex(shareTokenRegex),
     expiresAt;
 z.date().optional(),
     error;
-z.string().optional(),
-;
+z.string().optional();
 ;
 export const UpdateShareRequestSchema = z.object({});
 title: z.string().min(1).max(255).optional(),
@@ -429,8 +405,7 @@ z.string().max(2000).optional(),
     sharing;
 SharingConfigSchema.partial().optional(),
     security;
-ShareSecurityConfigSchema.partial().optional(),
-;
+ShareSecurityConfigSchema.partial().optional();
 ;
 export const ShareAccessRequestSchema = z.object({});
 shareToken: z.string().regex(shareTokenRegex),
@@ -439,8 +414,7 @@ z.string().min(1).max(255).optional(),
     userAgent;
 z.string().min(1).max(1000),
     ipAddress;
-z.string().ip(),
-;
+z.string().ip();
 ;
 export const ShareAccessResponseSchema = z.object({});
 success: z.boolean(),
@@ -456,8 +430,7 @@ z.string().optional(),
 z.object({});
 viewCount: z.number().min(0),
     lastAccessed;
-z.date(),
-;
+z.date();
 optional();
 ;
 export const SharePermissionRequestSchema = z.object({});
@@ -467,8 +440,7 @@ z.string().regex(uuidRegex),
     permission;
 SharePermissionSchema,
     message;
-z.string().max(500).optional(),
-;
+z.string().max(500).optional();
 ;
 export const ShareAnalyticsRequestSchema = z.object({});
 shareId: z.string().regex(uuidRegex),
@@ -476,8 +448,7 @@ shareId: z.string().regex(uuidRegex),
 z.object({});
 start: z.date(),
     end;
-z.date(),
-;
+z.date();
 optional(),
     metrics;
 z.array(z.enum(['views', 'downloads', 'collaborations'])).optional();
@@ -487,8 +458,7 @@ success: z.boolean(),
     analytics;
 ShareAnalyticsSchema,
     error;
-z.string().optional(),
-;
+z.string().optional();
 ;
 // Configuration schema
 export const SharingSystemConfigSchema = z.object({});
@@ -512,8 +482,7 @@ z.number().min(1024).max(1024 * 1024 * 1024), // 1KB to 1GB,
     supportedFormats;
 z.array(z.string()).default(['json', 'csv', 'pdf']),
     encryptionRequired;
-z.boolean(),
-;
+z.boolean();
 ;
 // Event schema
 export const ShareEventSchema = z.object({});
@@ -535,8 +504,7 @@ z.date(),
     user;
 UserInfoSchema.optional(),
     data;
-z.any(),
-;
+z.any();
 ;
 // Validation helper functions
 export function validateShareContent(content, type) {
@@ -546,36 +514,33 @@ export function validateShareContent(content, type) {
                 return z.object({});
                 nodes: z.array(z.any()),
                     edges;
-                z.array(z.any()),
-                ;
+                z.array(z.any());
         }
-        parse(content) !== null;
-        'template';
-        return z.object({});
-        template: z.string(),
-            variables;
-        z.record(z.any()),
-        ;
     }
     finally { }
     parse(content) !== null;
-    'bundle';
+    'template';
     return z.object({});
-    version: z.string(),
-        generators;
-    z.array(z.any()),
-    ;
+    template: z.string(),
+        variables;
+    z.record(z.any());
 }
+parse(content) !== null;
+'bundle';
+return z.object({});
+version: z.string(),
+    generators;
+z.array(z.any());
 parse(content) !== null;
 'dataset';
 return z.object({});
 format: z.string(),
     data;
-z.any(),
-;
+z.any();
 parse(content) !== null;
 return false;
-try { }
+try {
+}
 catch {
     return false;
     export function validateShareToken(token) {
@@ -590,48 +555,48 @@ catch {
                 const score = [hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
                 if (score < 3) {
                     return { valid: false, strength: 'weak' };
-                }
-                else if (score === 3) {
-                    return { valid: true, strength: 'medium' };
-                }
-                else {
-                    return { valid: true, strength: 'strong' };
-                    // Export all schemas as a single object for convenience
-                    export const SharingSchemas = {
-                        // Core types
-                        ShareAccessLevel: ShareAccessLevelSchema,
-                        SharePermission: SharePermissionSchema,
-                        ShareStatus: ShareStatusSchema,
-                        ContentType: ContentTypeSchema,
-                        // User and collaboration
-                        UserInfo: UserInfoSchema,
-                        Collaborator: CollaboratorSchema,
-                        // Configuration
-                        SharingConfig: SharingConfigSchema,
-                        ShareSecurityConfig: ShareSecurityConfigSchema,
-                        SharingSystemConfig: SharingSystemConfigSchema,
-                        // Content and metadata
-                        SharedContent: SharedContentSchema,
-                        SharedContentMetadata: SharedContentMetadataSchema,
-                        VersionControl: VersionControlSchema,
-                        ContentAnnotations: ContentAnnotationsSchema,
-                        // Analytics
-                        ShareAnalytics: ShareAnalyticsSchema,
-                        ShareView: ShareViewSchema,
-                        ShareDownload: ShareDownloadSchema,
-                        CollaborationEvent: CollaborationEventSchema,
-                        // API
-                        CreateShareRequest: CreateShareRequestSchema,
-                        CreateShareResponse: CreateShareResponseSchema,
-                        UpdateShareRequest: UpdateShareRequestSchema,
-                        ShareAccessRequest: ShareAccessRequestSchema,
-                        ShareAccessResponse: ShareAccessResponseSchema,
-                        SharePermissionRequest: SharePermissionRequestSchema,
-                        ShareAnalyticsRequest: ShareAnalyticsRequestSchema,
-                        ShareAnalyticsResponse: ShareAnalyticsResponseSchema,
-                        // Events
-                        ShareEvent: ShareEventSchema,
-                    };
+                    if (score === 3) {
+                        return { valid: true, strength: 'medium' };
+                        {
+                            return { valid: true, strength: 'strong' };
+                            // Export all schemas as a single object for convenience
+                            export const SharingSchemas = {
+                                ShareAccessLevel: ShareAccessLevelSchema,
+                                SharePermission: SharePermissionSchema,
+                                ShareStatus: ShareStatusSchema,
+                                ContentType: ContentTypeSchema,
+                                // User and collaboration
+                                UserInfo: UserInfoSchema,
+                                Collaborator: CollaboratorSchema,
+                                // Configuration
+                                SharingConfig: SharingConfigSchema,
+                                ShareSecurityConfig: ShareSecurityConfigSchema,
+                                SharingSystemConfig: SharingSystemConfigSchema,
+                                // Content and metadata
+                                SharedContent: SharedContentSchema,
+                                SharedContentMetadata: SharedContentMetadataSchema,
+                                VersionControl: VersionControlSchema,
+                                ContentAnnotations: ContentAnnotationsSchema,
+                                // Analytics
+                                ShareAnalytics: ShareAnalyticsSchema,
+                                ShareView: ShareViewSchema,
+                                ShareDownload: ShareDownloadSchema,
+                                CollaborationEvent: CollaborationEventSchema,
+                                // API
+                                CreateShareRequest: CreateShareRequestSchema,
+                                CreateShareResponse: CreateShareResponseSchema,
+                                UpdateShareRequest: UpdateShareRequestSchema,
+                                ShareAccessRequest: ShareAccessRequestSchema,
+                                ShareAccessResponse: ShareAccessResponseSchema,
+                                SharePermissionRequest: SharePermissionRequestSchema,
+                                ShareAnalyticsRequest: ShareAnalyticsRequestSchema,
+                                ShareAnalyticsResponse: ShareAnalyticsResponseSchema,
+                                // Events
+                                ShareEvent: ShareEventSchema
+                            };
+                        }
+                        ;
+                    }
                 }
             }
         }

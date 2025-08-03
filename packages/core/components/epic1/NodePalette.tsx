@@ -25,17 +25,20 @@ const nodeTypes: NodeTypeInfo[] = [
 export interface NodePaletteProps {
   position?: 'left' | 'right';
   defaultCollapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 export const NodePalette: React.FC<NodePaletteProps> = ({
   position = 'left',
   defaultCollapsed = false,
+  onCollapsedChange,
 }) => {
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
   
   React.useEffect(() => {
     console.log('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
-  }, [position, collapsed]);
+    onCollapsedChange?.(collapsed);
+  }, [position, collapsed, onCollapsedChange]);
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     console.log('[NodePalette] Drag started for node type:', nodeType);

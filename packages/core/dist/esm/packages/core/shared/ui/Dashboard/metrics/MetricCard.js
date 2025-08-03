@@ -1,27 +1,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-/**
- * MetricCard - Individual metric display component
- * REFACTOR-003: Dashboard Component Architecture Consolidation
- *
- * Standardized metric card with trends, targets, and formatting
- */
-import React from 'react';
 import { Target, Info } from 'lucide-react';
 import { TrendIndicator } from './TrendIndicator';
 import './MetricCard.css';
-icon ?  : React.ComponentType;
-trend ?  : MetricTrend;
-// Styling and behavior
-variant ?  : 'default' | 'success' | 'warning' | 'error' | 'info';
-size ?  : 'small' | 'medium' | 'large';
-loading ?  : boolean;
-onClick ?  : () => void ;
-// Additional content
-helpText ?  : string;
-badge ?  : {
-    text: string,
-    variant: 'default' | 'success' | 'warning' | 'error',
-};
+;
 className ?  : string;
 const formatValue = ();
 ;
@@ -44,8 +25,7 @@ switch (format) {
             minimumFractionDigits;
         precision,
             maximumFractionDigits;
-        precision,
-        ;
+        precision;
 }
 format(value);
 break;
@@ -66,10 +46,10 @@ break;
 if (value < 60) {
     formattedValue = `${value.toFixed(precision)}s`;
 }
-if (value < 3600) {
+else if (value < 3600) {
     formattedValue = `${(value / 60).toFixed(precision)}m`;
 }
-{
+else {
     formattedValue = `${(value / 3600).toFixed(precision)}h`;
 }
 break;
@@ -77,8 +57,7 @@ break;
 formattedValue = new Intl.NumberFormat('en-US', {});
 minimumFractionDigits: precision,
     maximumFractionDigits;
-precision,
-;
+precision;
 format(value);
 break;
 return `${prefix}${formattedValue}${suffix}`;
@@ -94,17 +73,16 @@ export const MetricCard = ({
     loading = false,
     onClick,
     helpText,
-    badge,
-    className = ''
-});
+    badge });
+className = '';
 {
     const formattedValue = formatValue();
     ;
-    value.current,
-        value.format,
-        value.precision,
-        value.prefix,
-        value.suffix;
+    value.current;
+    value.format;
+    value.precision;
+    value.prefix;
+    value.suffix;
     ;
     const hasTarget = value.target !== undefined;
     const targetProgress = hasTarget && typeof value.current === 'number';
@@ -113,17 +91,18 @@ export const MetricCard = ({
     const sizeClasses = {
         small: 'metric-card-small',
         medium: 'metric-card-medium',
-        large: 'metric-card-large',
+        large: 'metric-card-large'
     };
-    const variantClasses = {
-        default: 'metric-card-default',
-        success: 'metric-card-success',
-        warning: 'metric-card-warning',
-        error: 'metric-card-error',
-        info: 'metric-card-info',
-    };
-    return;
-    _jsxs("div", { className: `
+}
+;
+const variantClasses = { default: 'metric-card-default',
+    success: 'metric-card-success',
+    warning: 'metric-card-warning',
+    error: 'metric-card-error',
+    info: 'metric-card-info' };
+;
+return;
+_jsxs("div", { className: `
         metric-card 
         ${sizeClasses[size]} }
         ${variantClasses[variant]}
@@ -131,8 +110,7 @@ export const MetricCard = ({
         ${loading ? 'loading' : ''}
         ${className}
       `, onClick: onClick, children: [loading && ()
-                < div, " className=\"metric-card-loading\">", _jsx("div", { className: "loading-shimmer" })] });
-}
+            < div, " className=\"metric-card-loading\">", _jsx("div", { className: "loading-shimmer" })] });
 {
     !loading && ();
     { /* Header */ }

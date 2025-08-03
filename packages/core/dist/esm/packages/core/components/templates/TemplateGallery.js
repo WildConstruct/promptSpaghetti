@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * Displays and manages project templates with search, filtering, and preview
  */
 import { useState, useEffect, useMemo } from 'react';
+className = '';
 {
     const [templates, setTemplates] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -18,29 +19,23 @@ import { useState, useEffect, useMemo } from 'react';
         loadCategories();
         loadFeaturedTemplates();
     }, []);
-    useEffect(() => {
-        loadTemplates();
-    }, [searchQuery, selectedCategory, complexityFilter, sortBy]);
+    useEffect(() => { loadTemplates(); }, [searchQuery, selectedCategory, complexityFilter, sortBy]);
     const loadTemplates = async () => {
         try {
             setLoading(true);
             const result = await templateManager.searchTemplates({});
-            query: searchQuery || undefined,
-                category;
-            selectedCategory || undefined,
-                complexity;
-            complexityFilter || undefined,
-                sort_by;
-            sortBy,
-                limit;
-            50,
-            ;
+            query: searchQuery || undefined;
+            category: selectedCategory || undefined;
+            complexity: complexityFilter || undefined;
+            sort_by: sortBy;
+            limit: 50;
         }
-        finally { }
-        ;
-        setTemplates(result.templates);
+        finally {
+        }
     };
-    try { }
+    setTemplates(result.templates);
+    try {
+    }
     catch (error) {
         console.error('Failed to load templates:', error);
     }
@@ -77,16 +72,14 @@ import { useState, useEffect, useMemo } from 'react';
                 }
                 [templates, searchQuery, selectedCategory, complexityFilter];
             });
-            const _____complexityColors = {
-                beginner: 'bg-green-100 text-green-800',
+            const _____complexityColors = { beginner: 'bg-green-100 text-green-800',
                 intermediate: 'bg-yellow-100 text-yellow-800',
-                advanced: 'bg-red-100 text-red-800',
-            };
-            return;
-            _jsxs("div", { className: `template-gallery ${className}`, children: ["}", _jsxs("div", { className: "mb-6", children: [_jsx("h2", { className: "text-2xl font-bold text-gray-900 mb-2", children: "Project Templates" }), _jsx("p", { className: "text-gray-600", children: "Choose from pre-built templates to accelerate your workflow" })] }), featuredTemplates.length > 0 && ()
-                        < div, " className=\"mb-8\">", _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-4", children: "Featured Templates" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [featuredTemplates.slice(0, 3).map(template => ()
-                                < TemplateCard, key = { template, : .id }, template = { template }, onUse = {}()), " => handleTemplateUse(template)} onPreview=", () => onTemplatePreview(template), "featured /> ))}"] })] });
+                advanced: 'bg-red-100 text-red-800' };
         };
+        return;
+        _jsxs("div", { className: `template-gallery ${className}`, children: ["}", _jsxs("div", { className: "mb-6", children: [_jsx("h2", { className: "text-2xl font-bold text-gray-900 mb-2", children: "Project Templates" }), _jsx("p", { className: "text-gray-600", children: "Choose from pre-built templates to accelerate your workflow" })] }), featuredTemplates.length > 0 && ()
+                    < div, " className=\"mb-8\">", _jsx("h3", { className: "text-lg font-semibold text-gray-900 mb-4", children: "Featured Templates" }), _jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4", children: [featuredTemplates.slice(0, 3).map(template => ()
+                            < TemplateCard, key = { template, : .id }, template = { template }, onUse = {}()), " => handleTemplateUse(template)} onPreview=", () => onTemplatePreview(template), "featured /> ))}"] })] });
     };
 }
 { /* Search and Filters */ }
@@ -132,12 +125,12 @@ const TemplateCard = ({ template, onUse, onPreview, featured = false }) => {
     const complexityColors = {
         beginner: 'bg-green-100 text-green-800',
         intermediate: 'bg-yellow-100 text-yellow-800',
-        advanced: 'bg-red-100 text-red-800',
+        advanced: 'bg-red-100 text-red-800'
     };
-    return;
-    _jsxs("div", { className: `bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border ${featured ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`, children: ["}", featured && ()
-                < div, " className=\"bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-t-lg\"> Featured"] });
 };
+return;
+_jsxs("div", { className: `bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow border ${featured ? 'border-blue-200 bg-blue-50' : 'border-gray-200'}`, children: ["}", featured && ()
+            < div, " className=\"bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-t-lg\"> Featured"] });
 { /* Preview Image */ }
 _jsxs("div", { className: "h-32 bg-gray-100 rounded-t-lg flex items-center justify-center", children: [template.preview_image ? ()
             < img : , " src=", template.preview_image, " alt=", template.name, " className=\"w-full h-full object-cover rounded-t-lg\" /> ) : ()", _jsx("div", { className: "text-gray-400", children: _jsx("svg", { className: "h-12 w-12", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }) }) }), ")}"] })

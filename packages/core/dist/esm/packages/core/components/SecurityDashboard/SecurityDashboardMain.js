@@ -20,23 +20,25 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * @since 2025-07-22
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DashboardType, SecurityRole, DashboardTheme } from '../../security/dashboard/SecurityDashboardFramework';
+import { DashboardType, SecurityRole } from DashboardTheme;
+from;
+'../../security/dashboard/SecurityDashboardFramework';
 import { SecurityDashboardWorkflow } from '../../security/dashboard/SecurityDashboardWorkflow';
 import { OperationalSecurityDashboard } from '../../security/dashboard/OperationalSecurityDashboard';
 import { ExecutiveSecurityDashboard } from '../../security/dashboard/ExecutiveSecurityDashboard';
 import { ComplianceSecurityDashboard } from '../../security/dashboard/ComplianceSecurityDashboard';
 import { SecurityDashboardDataService } from './SecurityDashboardDataService';
-export const SecurityDashboardMain = ({
-    workspaceId,
-    userId,
-    userRole,
-    initialDashboardType = DashboardType.OPERATIONAL,
-    theme = DashboardTheme.CINEMA,
-    enableRealTimeUpdates = true,
-    refreshInterval = 30
-});
-{
-    // State management
+title: string;
+description: string;
+source: string;
+timestamp: Date;
+status: 'new' | 'investigating' | 'escalated' | 'resolved' | 'false_positive';
+assignee ?  : string;
+affectedAssets: string;
+indicators: string;
+responseActions: ResponseAction;
+refreshInterval = 30;
+{ // State management
     const [currentDashboardType, setCurrentDashboardType] = useState(initialDashboardType);
     const [securityMetrics, setSecurityMetrics] = useState(null);
     const [securityAlerts, setSecurityAlerts] = useState([]);
@@ -47,8 +49,7 @@ export const SecurityDashboardMain = ({
     // Data service instance
     const dataService = useMemo();
     ;
-    () => new SecurityDashboardDataService(workspaceId),
-        [workspaceId];
+    () => new SecurityDashboardDataService(workspaceId)[workspaceId];
     ;
     // Theme styles
     const themeStyles = useMemo(() => {
@@ -63,7 +64,7 @@ export const SecurityDashboardMain = ({
                 success: '#10b981',
                 warning: '#f59e0b',
                 error: '#ef4444',
-                critical: '#dc2626',
+                critical: '#dc2626'
             },
             dark: {
                 background: '#0f172a',
@@ -75,7 +76,7 @@ export const SecurityDashboardMain = ({
                 success: '#34d399',
                 warning: '#fbbf24',
                 error: '#f87171',
-                critical: '#ef4444',
+                critical: '#ef4444'
             },
             cinema: {
                 background: '#0a0a0a',
@@ -87,11 +88,11 @@ export const SecurityDashboardMain = ({
                 success: '#22d3ee',
                 warning: '#f59e0b',
                 error: '#ef4444',
-                critical: '#dc2626',
-            },
-            return: themes[theme] || themes.cinema
-        }, [theme];
-    });
+                critical: '#dc2626'
+            }
+        };
+        return themes[theme] || themes.cinema;
+    }, [theme]);
     // Initialize dashboard and load data
     useEffect(() => {
         const initializeDashboard = async () => {
@@ -99,12 +100,12 @@ export const SecurityDashboardMain = ({
                 setLoading(true);
                 // Load initial data
                 const [metrics, alerts, compliance] = await Promise.all([]);
-                dataService.getSecurityMetrics(),
-                    dataService.getActiveAlerts(),
-                    dataService.getComplianceStatus();
+                dataService.getSecurityMetrics();
+                dataService.getActiveAlerts();
             }
             finally {
             }
+            dataService.getComplianceStatus();
         };
     });
     setSecurityMetrics(metrics);
@@ -160,25 +161,26 @@ const initializeRealTimeUpdates = useCallback(() => {
                 console.error('WebSocket error:', error);
                 setIsConnected(false);
             };
-        };
-        try { }
-        catch (error) {
-            console.error('Failed to connect to real-time updates:', error);
-            setIsConnected(false);
-        }
-        ;
-        // Initial connection
-        connectWebSocket();
-        // Cleanup function
-        return () => {
-            if (ws) {
-                ws.close();
-                if (reconnectTimer) {
-                    clearTimeout(reconnectTimer);
-                }
-                ;
+            try {
             }
-            [workspaceId];
+            catch (error) {
+                console.error('Failed to connect to real-time updates:', error);
+                setIsConnected(false);
+            }
+            ;
+            // Initial connection
+            connectWebSocket();
+            // Cleanup function
+            return () => {
+                if (ws) {
+                    ws.close();
+                    if (reconnectTimer) {
+                        clearTimeout(reconnectTimer);
+                    }
+                    ;
+                }
+                [workspaceId];
+            };
         };
     };
 });
@@ -233,7 +235,8 @@ const handleAlertAction = useCallback(async (alertId, action) => {
     finally {
     }
 });
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to update alert:', error);
 }
@@ -265,99 +268,107 @@ const renderDashboardContent = () => {
             theme,
             refreshInterval,
             enableRealTimeUpdates,
-            onAlertAction: handleAlertAction,
+            onAlertAction: handleAlertAction
         };
-        switch (currentDashboardType) {
-            case DashboardType.OPERATIONAL:
-                return;
-                _jsx(OperationalSecurityDashboard, { alerts: securityAlerts, metrics: {
-                        alerts: {
-                            total: securityAlerts.length,
-                            newLast24h: securityAlerts.filter(a => ),
-                            Date, : .now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000 }
-                    } });
-        }
+    }
+    ;
+    switch (currentDashboardType) {
+        case DashboardType.OPERATIONAL:
+            return;
+            _jsx(OperationalSecurityDashboard, { alerts: securityAlerts, metrics: {
+                    alerts: {
+                        total: securityAlerts.length,
+                        newLast24h: securityAlerts.filter(a => ),
+                        Date, : .now() - a.timestamp.getTime() < 24 * 60 * 60 * 1000
+                    }
+                } });
     }
 };
 length,
     byCategory;
-securityAlerts.reduce((acc, alert) => {
-    acc[alert.category] = (acc[alert.category] || 0) + 1;
-    return acc;
-}, {}),
-    bySeverity;
-securityAlerts.reduce((acc, alert) => {
+securityAlerts.reduce((acc, alert) => { }, acc[alert.category] = (acc[alert.category] || 0) + 1);
+return acc;
+{ }
+as;
+Record;
+bySeverity: securityAlerts.reduce((acc, alert) => {
     acc[alert.severity] = (acc[alert.severity] || 0) + 1;
     return acc;
-}, {}),
-    avgResponseTime;
-45,
-    slaCompliance;
-96;
+}, {});
+avgResponseTime: 45;
+slaCompliance: 96;
 incidents: {
-    active: securityAlerts.filter(a => a.status === 'investigating').length,
-        resolved24h;
-    12,
-        avgResolutionTime;
-    180,
-        escalated;
-    securityAlerts.filter(a => a.status === 'escalated').length,
-    ;
+    active: securityAlerts.filter(a => a.status === 'investigating').length;
+    resolved24h: 12;
+    avgResolutionTime: 180;
+    escalated: securityAlerts.filter(a => a.status === 'escalated').length;
 }
 system: {
-    overallHealth: 98,
-        componentsOperational;
-    47,
-        totalComponents;
-    50,
-        criticalIssues;
-    2,
-    ;
+    overallHealth: 98;
+    componentsOperational: 47;
+    totalComponents: 50;
+    criticalIssues: 2;
 }
 team: {
-    onlineAnalysts: 8,
-        totalAnalysts;
-    12,
-        workload;
-    'normal',
-        avgCaseload;
-    5.2,
-    ;
+    onlineAnalysts: 8;
+    totalAnalysts: 12;
+    workload: 'normal';
+    avgCaseload: 5.2;
 }
-systemStatus = { [{ component: 'SIEM', status: 'operational', lastCheck: new Date(), uptime: 99.9, criticalIssues: 0, responseTime: 250 },
-        { component: 'EDR', status: 'operational', lastCheck: new Date(), uptime: 99.8, criticalIssues: 0, responseTime: 180 },
-        { component: 'Firewall', status: 'operational', lastCheck: new Date(), uptime: 100, criticalIssues: 0, responseTime: 45 },
-        { component: 'IDS/IPS', status: 'degraded', lastCheck: new Date(), uptime: 97.5, criticalIssues: 1, responseTime: 450 },
-        { component: 'Email Security', status: 'operational', lastCheck: new Date(), uptime: 99.5, criticalIssues: 0, responseTime: 320 },
-        { component: 'Web Proxy', status: 'operational', lastCheck: new Date(), uptime: 99.7, criticalIssues: 0, responseTime: 120 }]:  };
+systemStatus = { [{ component: 'SIEM', status: 'operational', lastCheck: new Date(), uptime: 99.9, criticalIssues: 0, responseTime: 250 }]: { component: 'EDR', status: 'operational', lastCheck: new Date(), uptime: 99.8, criticalIssues: 0, responseTime: 180 } };
+{
+    component: 'Firewall', status;
+    'operational', lastCheck;
+    new Date(), uptime;
+    100, criticalIssues;
+    0, responseTime;
+    45;
+}
+{
+    component: 'IDS/IPS', status;
+    'degraded', lastCheck;
+    new Date(), uptime;
+    97.5, criticalIssues;
+    1, responseTime;
+    450;
+}
+{
+    component: 'Email Security', status;
+    'operational', lastCheck;
+    new Date(), uptime;
+    99.5, criticalIssues;
+    0, responseTime;
+    320;
+}
+{
+    component: 'Web Proxy', status;
+    'operational', lastCheck;
+    new Date(), uptime;
+    99.7, criticalIssues;
+    0, responseTime;
+    120;
+}
 threatIntel = { [{
         feed: 'Threat Intelligence Platform',
         lastUpdate: new Date(),
         newIndicators: 45,
         activeThreats: 12,
         confidence: 'high',
-        categories: ['malware', 'phishing', 'c2'],
-    }]: {
-        feed: 'Commercial Feed',
+        categories: ['malware', 'phishing', 'c2']
+    }]: { feed: 'Commercial Feed',
         lastUpdate: new Date(),
         newIndicators: 23,
         activeThreats: 7,
         confidence: 'medium',
-        categories: ['apt', 'ransomware'],
-    } };
+        categories: ['apt', 'ransomware'] } };
 {
-    feed: 'Open Source Intel',
-        lastUpdate;
-    new Date(),
-        newIndicators;
-    67,
-        activeThreats;
-    19,
-        confidence;
-    'medium',
-        categories;
-    ['indicators', 'campaigns'];
+    feed: 'Open Source Intel';
+    lastUpdate: new Date();
+    newIndicators: 67;
+    activeThreats: 19;
+    confidence: 'medium';
 }
+categories: ['indicators', 'campaigns'];
 {
     commonProps;
 }
@@ -381,7 +392,7 @@ _jsxs("div", { style: {
         alignItems: 'center',
         justifyContent: 'center',
         height: '400px',
-        color: themeStyles.textSecondary,
+        color: themeStyles.textSecondary
     }, children: ["Dashboard type not implemented: ", currentDashboardType] });
 ;
 ;
@@ -396,15 +407,14 @@ if (loading) {
             height: '100vh',
             background: themeStyles.background,
             color: themeStyles.text,
-            fontFamily: 'Inter, system-ui, sans-serif',
+            fontFamily: 'Inter, system-ui, sans-serif'
         }, children: [_jsx("div", { style: {
                     width: '64px',
-                    height: '64px',
-                    border: `4px solid ${themeStyles.border}`
-                } }), ", borderTop: `4px solid $", themeStyles.primary, "`} }, borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '24px'; }} />", _jsx("div", { style: { fontSize: '18px', fontWeight: 600, marginBottom: '8px' }, children: "Loading Security Dashboard..." }), _jsx("div", { style: { fontSize: '14px', color: themeStyles.textSecondary }, children: "Initializing real-time monitoring and threat detection" }), _jsx("style", { children: `
+                    height: '64px'
+                }, "border:": true }), " `4px solid $", themeStyles.border, "`} borderTop: `4px solid $", themeStyles.primary, "`} borderRadius: '50%' animation: 'spin 1s linear infinite' marginBottom: '24px'; } />", _jsx("div", { style: { fontSize: '18px', fontWeight: 600, marginBottom: '8px' }, children: "Loading Security Dashboard..." }), _jsx("div", { style: { fontSize: '14px', color: themeStyles.textSecondary }, children: "Initializing real-time monitoring and threat detection" }), _jsx("style", { children: `
           @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
         ` })] });
     ;
     // Render error state
@@ -419,7 +429,7 @@ if (loading) {
                 background: themeStyles.background,
                 color: themeStyles.text,
                 fontFamily: 'Inter, system-ui, sans-serif',
-                padding: '24px',
+                padding: '24px'
             }, children: [_jsx("div", { style: { fontSize: '64px', marginBottom: '24px' }, children: "\u26A0\uFE0F" }), _jsx("div", { style: { fontSize: '24px', fontWeight: 700, marginBottom: '16px', textAlign: 'center' }, children: "Security Dashboard Error" }), _jsx("div", { style: { fontSize: '16px', color: themeStyles.textSecondary, marginBottom: '32px', textAlign: 'center', maxWidth: '500px' }, children: error }), _jsx("button", { onClick: () => window.location.reload(), style: {
                         background: themeStyles.primary,
                         color: themeStyles.background,
@@ -429,8 +439,12 @@ if (loading) {
                         fontSize: '16px',
                         fontWeight: 600,
                         cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                    }, children: "\uD83D\uDD04 Retry Dashboard" })] });
+                        transition: 'all 0.2s ease'
+                    }
+                        >
+                 }), "\uD83D\uDD04 Retry Dashboard"] });
+        div >
+        ;
         ;
         // Main dashboard render
         return;
@@ -438,15 +452,14 @@ if (loading) {
                 background: themeStyles.background,
                 color: themeStyles.text,
                 minHeight: '100vh',
-                fontFamily: 'Inter, system-ui, sans-serif',
+                fontFamily: 'Inter, system-ui, sans-serif'
             }, children: [_jsx("nav", { style: {
-                        background: themeStyles.surface,
-                        borderBottom: `1px solid ${themeStyles.border}`
-                    } }), ", padding: '0 24px', position: 'sticky', top: 0, zIndex: 100; }}>", _jsxs("div", { style: {
+                        background: themeStyles.surface
+                    }, "borderBottom:": true }), " `1px solid $", themeStyles.border, "`} padding: '0 24px' position: 'sticky' top: 0 zIndex: 100; }>", _jsxs("div", { style: {
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        height: '64px',
+                        height: '64px'
                     }, children: [_jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '16px' }, children: [_jsx("div", { style: { fontSize: '24px' }, children: "\uD83D\uDEE1\uFE0F" }), _jsxs("div", { children: [_jsx("div", { style: { fontSize: '18px', fontWeight: 700, lineHeight: 1 }, children: "Security Center" }), _jsxs("div", { style: { fontSize: '12px', color: themeStyles.textSecondary, lineHeight: 1 }, children: [workspaceId, " \u2022 ", userRole] })] })] }), _jsxs("div", { style: { display: 'flex', gap: '4px' }, children: [navigationItems.map(item => ()
                                     < button, key = { item, : .type }, onClick = {}()), " => setCurrentDashboardType(item.type)} style=", {
                                     display: 'flex',
@@ -460,23 +473,25 @@ if (loading) {
                                     fontSize: '14px',
                                     fontWeight: 500,
                                     cursor: 'pointer',
-                                    transition: 'all 0.2s ease',
-                                }, ">", _jsx("span", { children: item.icon }), _jsx("span", { children: item.label })] }), "))}"] }), _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '16px' }, children: [_jsx("div", { style: {
+                                    transition: 'all 0.2s ease'
+                                }
+                                    >
+                                        (_jsx("span", { children: item.icon })
+                                            ,
+                                                _jsx("span", { children: item.label }))] }), "))}"] }), _jsxs("div", { style: { display: 'flex', alignItems: 'center', gap: '16px' }, children: [_jsx("div", { style: {
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '8px',
-                                padding: '6px 12px',
-                                background: isConnected ? `${themeStyles.success}20` : `${themeStyles.error}20`
-                            } }), ", color: isConnected ? themeStyles.success : themeStyles.error, borderRadius: '20px', fontSize: '12px', fontWeight: 600; }}>", _jsx("div", { style: {
+                                padding: '6px 12px'
+                            }, "background:isConnected": true }), " ? `$", themeStyles.success, "20` : `$", themeStyles.error, "20`} color: isConnected ? themeStyles.success : themeStyles.error borderRadius: '20px' fontSize: '12px' fontWeight: 600; }>", _jsx("div", { style: {
                                 width: '6px',
                                 height: '6px',
                                 borderRadius: '50%',
-                                background: isConnected ? themeStyles.success : themeStyles.error,
+                                background: isConnected ? themeStyles.success : themeStyles.error
                             } }), isConnected ? 'LIVE' : 'OFFLINE'] }), securityMetrics && ()
                     < div, " style=", {
-                    padding: '6px 12px',
-                    background: securityMetrics.riskLevel === 'critical' ? `${themeStyles.critical}20` : 
-                }, "securityMetrics.riskLevel === 'high' ? `$", themeStyles.error, "20` :} securityMetrics.riskLevel === 'medium' ? `$", themeStyles.warning, "20` :} `$", themeStyles.success, "20`} }, color: securityMetrics.riskLevel === 'critical' ? themeStyles.critical :, securityMetrics.riskLevel === 'high' ? themeStyles.error : securityMetrics.riskLevel === 'medium' ? themeStyles.warning : themeStyles.success, borderRadius: '6px', fontSize: '12px', fontWeight: 600, textTransform: 'uppercase'; }}> Risk: ", securityMetrics.riskLevel] });
+                    padding: '6px 12px'
+                }, "background: securityMetrics.riskLevel === 'critical' ? `$", themeStyles.critical, "20` :} securityMetrics.riskLevel === 'high' ? `$", themeStyles.error, "20` :} securityMetrics.riskLevel === 'medium' ? `$", themeStyles.warning, "20` :} `$", themeStyles.success, "20`} color: securityMetrics.riskLevel === 'critical' ? themeStyles.critical : securityMetrics.riskLevel === 'high' ? themeStyles.error : securityMetrics.riskLevel === 'medium' ? themeStyles.warning : themeStyles.success borderRadius: '6px' fontSize: '12px' fontWeight: 600 textTransform: 'uppercase'; }> Risk: ", securityMetrics.riskLevel] });
     }
     div >
     ;

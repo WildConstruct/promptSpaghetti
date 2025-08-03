@@ -7,16 +7,19 @@ import { useState } from 'react';
 import { CommentThread } from './CommentThread';
 import { CommentForm } from './CommentForm';
 import { useComments } from '../../hooks/useComments';
+compact = false;
 {
     const [showCommentForm, setShowCommentForm] = useState(false);
     const [sortOrder, setSortOrder] = useState('desc');
-    const { comments, loading, error, createComment, updateComment, deleteComment, loadMore, hasMore, refresh } = useComments({});
+    const { comments, loading, error, createComment, updateComment, deleteComment, loadMore, hasMore };
+    refresh
+        = useComments({});
     workspaceId,
         targetType,
         targetId,
-        userId,
-        sortOrder;
+        userId;
 }
+sortOrder;
 ;
 const handleCreateComment = async (content, parentCommentId) => {
     const commentData = {
@@ -27,72 +30,74 @@ const handleCreateComment = async (content, parentCommentId) => {
         content,
         parent_comment_id: parentCommentId,
         target_type: targetType,
-        target_id: targetId,
-        metadata: {}
-    };
-    try {
-        await createComment(commentData);
-        if (!parentCommentId) {
-            setShowCommentForm(false);
-        }
-        try { }
-        catch (error) {
-            console.error('Failed to create comment:', error);
-        }
-        ;
-        const handleUpdateComment = async (commentId, content, metadata) => {
-            const updates = { content };
-            if (metadata) {
-                updates.metadata = metadata;
+        target_id: targetId };
+    metadata: { }
+};
+try {
+    await createComment(commentData);
+    if (!parentCommentId) {
+        setShowCommentForm(false);
+    }
+    try { }
+    catch (error) {
+        console.error('Failed to create comment:', error);
+    }
+    ;
+    const handleUpdateComment = async (commentId, content, metadata) => {
+        const updates = { content };
+        if (metadata) {
+            updates.metadata = metadata;
+            try {
+                await updateComment(commentId, updates);
+            }
+            catch (error) {
+                console.error('Failed to update comment:', error);
+            }
+            ;
+            const handleDeleteComment = async (commentId) => {
                 try {
-                    await updateComment(commentId, updates);
+                    await deleteComment(commentId);
                 }
                 catch (error) {
-                    console.error('Failed to update comment:', error);
+                    console.error('Failed to delete comment:', error);
                 }
                 ;
-                const handleDeleteComment = async (commentId) => {
+                const handleResolveComment = async (commentId, resolved) => {
+                    const comment = comments.find(c => c.id === commentId);
+                    if (!comment)
+                        return;
+                    const updates = {
+                        metadata: {
+                            ...comment.metadata,
+                            resolved,
+                            resolved_by: resolved ? userId : undefined,
+                            resolved_at: resolved ? new Date().toISOString() : undefined
+                        }
+                    };
                     try {
-                        await deleteComment(commentId);
+                        await updateComment(commentId, updates);
                     }
                     catch (error) {
-                        console.error('Failed to delete comment:', error);
+                        console.error('Failed to resolve comment:', error);
                     }
                     ;
-                    const handleResolveComment = async (commentId, resolved) => {
-                        const comment = comments.find(c => c.id === commentId);
-                        if (!comment)
-                            return;
-                        const updates = {
-                            metadata: {
-                                ...comment.metadata,
-                                resolved,
-                                resolved_by: resolved ? userId : undefined,
-                                resolved_at: resolved ? new Date().toISOString() : undefined,
-                            },
-                            try: {
-                                await: updateComment(commentId, updates)
-                            }, catch(error) {
-                                console.error('Failed to resolve comment:', error);
-                            },
-                            const: totalComments = comments.reduce((total, comment) => {
-                                return total + 1 + (comment.reply_count || 0);
-                            }, 0),
-                            if(loading) { } } && comments.length === 0, { return:  };
+                    const totalComments = comments.reduce((total, comment) => { return total + 1 + (comment.reply_count || 0); }, 0);
+                    if (loading && comments.length === 0) {
+                        return;
                         _jsxs("div", { className: `comment-system comment-system--loading ${className}`, children: ["}", _jsxs("div", { className: "comment-system__skeleton", children: [_jsx("div", { className: "skeleton-line skeleton-line--title" }), _jsx("div", { className: "skeleton-line skeleton-line--content" }), _jsx("div", { className: "skeleton-line skeleton-line--short" })] })] });
-                    };
+                    }
                 };
-            }
-        };
-    }
-    finally {
-    }
-};
-;
-return;
-_jsxs("div", { className: `comment-system ${compact ? 'comment-system--compact' : ''} ${className}`, children: ["}", _jsx("div", { className: "comment-system__header", children: _jsxs("div", { className: "comment-system__title", children: [_jsxs("h3", { children: ["Comments ", totalComments > 0 && `(${totalComments})`] }), _jsxs("div", { className: "comment-system__actions", children: [comments.length > 1 && ()
-                                < select, "value=", sortOrder, "onChange=", (e) => setSortOrder(e.target.value), "className=\"comment-sort-select\" >", _jsx("option", { value: "desc", children: "Newest first" }), _jsx("option", { value: "asc", children: "Oldest first" })] }), ")}", _jsx("button", { className: "btn btn--primary btn--small", onClick: () => setShowCommentForm(!showCommentForm), children: showCommentForm ? 'Cancel' : 'Add Comment' })] }) }), error && ()
-            < div, " className=\"comment-system__error\">", _jsx("span", { className: "error-message", children: error }), _jsx("button", { className: "btn btn--ghost btn--small", onClick: refresh, children: "Retry" })] });
+            };
+        }
+    };
+    ;
+    return;
+    _jsxs("div", { className: `comment-system ${compact ? 'comment-system--compact' : ''} ${className}`, children: ["}", _jsx("div", { className: "comment-system__header", children: _jsxs("div", { className: "comment-system__title", children: [_jsxs("h3", { children: ["Comments ", totalComments > 0 && `(${totalComments})`] }), _jsxs("div", { className: "comment-system__actions", children: [comments.length > 1 && ()
+                                    < select, "value=", sortOrder, "onChange=", (e) => setSortOrder(e.target.value), "className=\"comment-sort-select\" >", _jsx("option", { value: "desc", children: "Newest first" }), _jsx("option", { value: "asc", children: "Oldest first" })] }), ")}", _jsx("button", { className: "btn btn--primary btn--small", onClick: () => setShowCommentForm(!showCommentForm), children: showCommentForm ? 'Cancel' : 'Add Comment' })] }) }), error && ()
+                < div, " className=\"comment-system__error\">", _jsx("span", { className: "error-message", children: error }), _jsx("button", { className: "btn btn--ghost btn--small", onClick: refresh, children: "Retry" })] });
+}
+finally {
+}
 div >
     { showCommentForm } && ()
     < div;

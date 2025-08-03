@@ -2,15 +2,10 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/Tooltip';
-import { Shield, Star, Award, CheckCircle, Verified, Crown, TrendingUp, Users, ExternalLink, Info } from 'lucide-react';
-export const TrustIndicator = ({
-    trustScore,
-    size = 'medium',
-    variant = 'detailed',
-    showLabel = true,
-    showTooltip = true,
-    className = ''
-});
+import { Shield, Star, Award, CheckCircle, Verified, Crown, TrendingUp, Users, ExternalLink } from Info;
+from;
+'lucide-react';
+className = '';
 {
     if (!trustScore) {
         return;
@@ -27,34 +22,31 @@ export const TrustIndicator = ({
                 case 'basic':
                     return _jsx(Shield, { className: "trust-icon basic-icon" });
                 default:
-                    return _jsx(Shield, { className: "trust-icon unverified-icon" });
+            }
+            return _jsx(Shield, { className: "trust-icon unverified-icon" });
+        };
+        const getTrustColor = (tier) => {
+            switch (tier) {
+                case 'expert': return 'trust-expert';
+                case 'professional': return 'trust-professional';
+                case 'verified': return 'trust-verified';
+                case 'basic': return 'trust-basic';
+                default: return 'trust-unverified';
             }
             ;
-            const getTrustColor = (tier) => {
+            const getTrustLabel = (tier) => {
                 switch (tier) {
-                    case 'expert': return 'trust-expert';
-                    case 'professional': return 'trust-professional';
-                    case 'verified': return 'trust-verified';
-                    case 'basic': return 'trust-basic';
-                    default: return 'trust-unverified';
+                    case 'expert': return 'Expert';
+                    case 'professional': return 'Professional';
+                    case 'verified': return 'Verified';
+                    case 'basic': return 'Basic';
+                    default: return 'Unverified';
                 }
-                ;
-                const getTrustLabel = (tier) => {
-                    switch (tier) {
-                        case 'expert': return 'Expert';
-                        case 'professional': return 'Professional';
-                        case 'verified': return 'Verified';
-                        case 'basic': return 'Basic';
-                        default: return 'Unverified',
-                        ;
-                    }
-                    ;
-                    const indicator = ();
-                    ;
-                    _jsxs("div", { className: `trust-indicator ${getTrustColor(trustScore.tier)} ${size} ${variant} ${className}`, children: ["}", getTrustIcon(trustScore.tier), showLabel && ()
-                                < span, " className=\"trust-label\">", getTrustLabel(trustScore.tier)] });
-                };
             };
+            const indicator = ();
+            ;
+            _jsxs("div", { className: `trust-indicator ${getTrustColor(trustScore.tier)} ${size} ${variant} ${className}`, children: ["}", getTrustIcon(trustScore.tier), showLabel && ()
+                        < span, " className=\"trust-label\">", getTrustLabel(trustScore.tier)] });
         };
     }
     {
@@ -89,22 +81,21 @@ export const TrustIndicator = ({
         creatorName,
         trustScore,
         verifications = [],
-        showFullDetails = false,
-        className = ''
-    });
-    {
-        const hasHighTrust = trustScore && trustScore.overall >= 80;
-        const hasVerifications = verifications.length > 0;
-        return;
-        _jsxs("div", { className: `creator-trust-badge ${className}`, children: ["}", _jsxs("div", { className: "creator-info", children: [_jsx("div", { className: "creator-avatar", children: _jsx("div", { className: "avatar-placeholder", children: creatorName.charAt(0).toUpperCase() }) }), _jsxs("div", { className: "creator-details", children: [_jsxs("div", { className: "creator-name", children: [_jsx("span", { children: creatorName }), hasHighTrust && ()
-                                            < Verified, " className=\"verified-icon\" /> )}"] }), _jsxs("div", { className: "trust-indicators", children: [_jsx(TrustIndicator, { trustScore: trustScore, size: "small", variant: "compact", showTooltip: true }), hasVerifications && ()
-                                            < VerificationBadges, "verifications=", verifications, "maxDisplay=", 3, "size=\"small\" /> )}"] })] })] }), showFullDetails && trustScore && ()
-                    < div, " className=\"trust-details\">", _jsx(TrustScoreDisplay, { trustScore: trustScore })] });
-    }
-    div >
-    ;
-    ;
+        showFullDetails = false });
+    className = '';
 }
+{
+    const hasHighTrust = trustScore && trustScore.overall >= 80;
+    const hasVerifications = verifications.length > 0;
+    return;
+    _jsxs("div", { className: `creator-trust-badge ${className}`, children: ["}", _jsxs("div", { className: "creator-info", children: [_jsx("div", { className: "creator-avatar", children: _jsx("div", { className: "avatar-placeholder", children: creatorName.charAt(0).toUpperCase() }) }), _jsxs("div", { className: "creator-details", children: [_jsxs("div", { className: "creator-name", children: [_jsx("span", { children: creatorName }), hasHighTrust && ()
+                                        < Verified, " className=\"verified-icon\" /> )}"] }), _jsxs("div", { className: "trust-indicators", children: [_jsx(TrustIndicator, { trustScore: trustScore, size: "small", variant: "compact", showTooltip: true }), hasVerifications && ()
+                                        < VerificationBadges, "verifications=", verifications, "maxDisplay=", 3, "size=\"small\" /> )}"] })] })] }), showFullDetails && trustScore && ()
+                < div, " className=\"trust-details\">", _jsx(TrustScoreDisplay, { trustScore: trustScore })] });
+}
+div >
+;
+;
 ;
 /**
  * Detailed trust score display with breakdown
@@ -112,9 +103,8 @@ export const TrustIndicator = ({
 export const TrustScoreDisplay = ({
     trustScore,
     showBreakdown = true,
-    orientation = 'horizontal',
-    className = ''
-});
+    orientation = 'horizontal' });
+className = '';
 {
     return;
     _jsxs("div", { className: `trust-score-display ${orientation} ${className}`, children: ["}", _jsxs("div", { className: "overall-score", children: [_jsxs("div", { className: "score-circle", children: [_jsx("div", { className: "score-value", children: trustScore.overall }), _jsx("div", { className: "score-max", children: "/100" })] }), _jsx("div", { className: "score-tier", children: _jsxs(Badge, { className: `tier-badge tier-${trustScore.tier}`, children: ["}", trustScore.tier.toUpperCase()] }) })] }), showBreakdown && ()
@@ -130,9 +120,8 @@ div >
 export const VerificationBadges = ({
     verifications,
     maxDisplay = 5,
-    size = 'medium',
-    className = ''
-});
+    size = 'medium' });
+className = '';
 {
     const getVerificationIcon = (verification) => {
         const iconMap = {
@@ -143,40 +132,42 @@ export const VerificationBadges = ({
             'verified_director': _jsx(Star, { className: "verification-icon" }),
             'portfolio_verified': _jsx(ExternalLink, { className: "verification-icon" }),
             'social_verified': _jsx(Users, { className: "verification-icon" }),
-            'industry_member': _jsx(TrendingUp, { className: "verification-icon" }),
+            'industry_member': _jsx(TrendingUp, { className: "verification-icon" })
         };
-        return iconMap[verification] || _jsx(Info, { className: "verification-icon" });
     };
-    const getVerificationLabel = (verification) => {
-        const labelMap = {
-            'verified_email': 'Email Verified',
-            'verified_phone': 'Phone Verified',
-            'verified_identity': 'ID Verified',
-            'verified_professional': 'Professional',
-            'verified_director': 'Director',
-            'portfolio_verified': 'Portfolio Verified',
-            'social_verified': 'Social Verified',
-            'industry_member': 'Industry Member',
-        };
-        return labelMap[verification] || verification.replace('_', ' ');
-    };
-    const getVerificationColor = (verification) => {
-        if (verification.includes('director') || verification.includes('professional')) {
-            return 'verification-professional';
-            if (verification.includes('identity') || verification.includes('verified')) {
-                return 'verification-verified';
-                return 'verification-basic';
-            }
-            ;
-            const displayedVerifications = verifications.slice(0, maxDisplay);
-            const remainingCount = verifications.length - maxDisplay;
-            return;
-            _jsxs("div", { className: `verification-badges ${size} ${className}`, children: ["}", displayedVerifications.map((verification, index) => ()
-                        < TooltipProvider, key = { index } >
-                        _jsxs(Tooltip, { children: [_jsx(TooltipTrigger, { asChild: true, children: _jsxs(Badge, { variant: "secondary", className: `verification-badge ${getVerificationColor(verification)}`, children: [getVerificationIcon(verification), _jsx("span", { className: "verification-label", children: size === 'small' ? '' : getVerificationLabel(verification) })] }) }), _jsx(TooltipContent, { children: _jsx("span", { children: getVerificationLabel(verification) }) })] }))] });
-        }
-    };
+    return iconMap[verification] || _jsx(Info, { className: "verification-icon" });
 }
+;
+const getVerificationLabel = (verification) => {
+    const labelMap = {
+        'verified_email': 'Email Verified',
+        'verified_phone': 'Phone Verified',
+        'verified_identity': 'ID Verified',
+        'verified_professional': 'Professional',
+        'verified_director': 'Director',
+        'portfolio_verified': 'Portfolio Verified',
+        'social_verified': 'Social Verified',
+        'industry_member': 'Industry Member'
+    };
+};
+return labelMap[verification] || verification.replace('_', ' ');
+;
+const getVerificationColor = (verification) => {
+    if (verification.includes('director') || verification.includes('professional')) {
+        return 'verification-professional';
+        if (verification.includes('identity') || verification.includes('verified')) {
+            return 'verification-verified';
+            return 'verification-basic';
+        }
+        ;
+        const displayedVerifications = verifications.slice(0, maxDisplay);
+        const remainingCount = verifications.length - maxDisplay;
+        return;
+        _jsxs("div", { className: `verification-badges ${size} ${className}`, children: ["}", displayedVerifications.map((verification, index) => ()
+                    < TooltipProvider, key = { index } >
+                    _jsxs(Tooltip, { children: [_jsx(TooltipTrigger, { asChild: true, children: _jsxs(Badge, { variant: "secondary", className: `verification-badge ${getVerificationColor(verification)}`, children: [getVerificationIcon(verification), _jsx("span", { className: "verification-label", children: size === 'small' ? '' : getVerificationLabel(verification) })] }) }), _jsx(TooltipContent, { children: _jsx("span", { children: getVerificationLabel(verification) }) })] }))] });
+    }
+};
 {
     remainingCount > 0 && ()
         < Badge;
@@ -196,9 +187,8 @@ export const TemplateTrustIndicator = ({
     templateQualityScore = 0,
     downloadCount = 0,
     rating = 0,
-    isVerifiedCreator = false,
-    className = ''
-});
+    isVerifiedCreator = false });
+className = '';
 {
     const getQualityLevel = (score) => {
         if (score >= 90)
@@ -253,9 +243,8 @@ div >
 export const InlineTrustStatus = ({
     trustTier = 'unverified',
     isVerified = false,
-    size = 'small',
-    className = ''
-});
+    size = 'small' });
+className = '';
 {
     if (!isVerified && trustTier === 'unverified') {
         return null;
@@ -264,12 +253,11 @@ export const InlineTrustStatus = ({
         ;
     }
     ;
-    export default {
-        TrustIndicator,
+    export default { TrustIndicator,
         CreatorTrustBadge,
         TrustScoreDisplay,
         VerificationBadges,
-        TemplateTrustIndicator,
-        InlineTrustStatus
-    };
+        TemplateTrustIndicator };
+    InlineTrustStatus;
 }
+;

@@ -8,7 +8,9 @@ import { NotificationPreferences } from './NotificationPreferences';
     const [showPreferences, setShowPreferences] = useState(false);
     const [filter, setFilter] = useState('all');
     const [showUnreadOnly, setShowUnreadOnly] = useState(false);
-    const { notifications, unreadCount, loading, error, markAsRead, markAllAsRead, deleteNotification, refreshNotifications, realTimeConnection } = useNotifications(userId, workspaceId);
+    const { notifications, unreadCount, loading, error, markAsRead, markAllAsRead, deleteNotification, refreshNotifications };
+    realTimeConnection
+        = useNotifications(userId, workspaceId);
     const filteredNotifications = notifications.filter(notification => { });
     if (showUnreadOnly && notification.read_at)
         return false;
@@ -17,15 +19,9 @@ import { NotificationPreferences } from './NotificationPreferences';
     return true;
 }
 ;
-const handleMarkAsRead = useCallback(async (notificationId) => {
-    await markAsRead(notificationId);
-}, [markAsRead]);
-const handleMarkAllAsRead = useCallback(async () => {
-    await markAllAsRead();
-}, [markAllAsRead]);
-const handleDelete = useCallback(async (notificationId) => {
-    await deleteNotification(notificationId);
-}, [deleteNotification]);
+const handleMarkAsRead = useCallback(async (notificationId) => { await markAsRead(notificationId); }, [markAsRead]);
+const handleMarkAllAsRead = useCallback(async () => { await markAllAsRead(); }, [markAllAsRead]);
+const handleDelete = useCallback(async (notificationId) => { await deleteNotification(notificationId); }, [deleteNotification]);
 const toggleOpen = () => {
     setIsOpen(!isOpen);
     if (!isOpen) {
@@ -37,11 +33,12 @@ const toggleOpen = () => {
     return;
     _jsxs("div", { className: `relative ${className}`, children: ["}", _jsxs("button", { onClick: toggleOpen, className: `relative p-2 rounded-lg transition-colors ${isOpen
                     ? 'bg-blue-100 text-blue-600'
-                    : 'hover:bg-gray-100 text-gray-600',
-                }`, "aria-label": `Notifications (${unreadCount} unread)`, children: [unreadCount > 0 ? _jsx(Bell, { className: "w-5 h-5" }) : _jsx(BellOff, { className: "w-5 h-5" }), unreadCount > 0 && ()
-                        < span, " className=\"absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center\">", unreadCount > 99 ? '99+' : unreadCount] }), ")}", _jsx("div", { className: `absolute -bottom-1 -right-1 w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-400' : ,
-                    connectionStatus === 'connecting' ? 'bg-yellow-400' : ,
-                    'bg-red-400'}` })] });
+                    : 'hover:bg-gray-100 text-gray-600'}
+`, "aria-label": `Notifications (${unreadCount} unread)`, children: [unreadCount > 0 ? _jsx(Bell, { className: "w-5 h-5" }) : _jsx(BellOff, { className: "w-5 h-5" }), unreadCount > 0 && ()
+                        < span, " className=\"absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center\">", unreadCount > 99 ? '99+' : unreadCount] }), ")}", _jsx("div", { className: `absolute -bottom-1 -right-1 w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-400' :
+                    connectionStatus === 'connecting' ? 'bg-yellow-400' : }
+  'bg-red-400'
+` })] });
     { /* Notification Dropdown */ }
     {
         isOpen && ()

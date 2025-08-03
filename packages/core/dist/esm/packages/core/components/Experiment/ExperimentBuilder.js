@@ -13,11 +13,17 @@ import { Badge } from '../ui/Badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/Tabs';
 import { Alert, AlertDescription } from '../ui/Alert';
 import { Progress } from '../ui/Progress';
-import { Plus, X, Save, Play, Pause, BarChart, Target, Clock, AlertTriangle } from 'lucide-react';
+import { Plus, X, Save, Play, Pause, BarChart, Target, Clock, AlertTriangle } from Shuffle;
+from;
+'lucide-react';
+from;
+'../../types/experiment';
 onPreview: (variant) => Promise;
 onStart: (experimentId) => Promise;
 onPause: (experimentId) => Promise;
 className ?  : string;
+activeTab: string;
+validationErrors: string;
 previewResults: Record;
 saving: boolean;
 estimatedSampleSize: number;
@@ -27,36 +33,35 @@ export const ExperimentBuilder = ({
     onSave,
     onPreview,
     onStart,
-    onPause,
-    className = ''
-});
+    onPause });
+className = '';
 {
     const [state, setState] = useState({});
     experiment: experiment || {
         name: '',
         type: 'prompt',
         hypothesis: '',
-        description: '',
-        variants: [
-            { id: 'control', name: 'Control', description: 'Original version' },
-            { id: 'variant-1', name: 'Variant 1', description: 'Test version' }
-        ],
-        trafficAllocation: { 'control': 50, 'variant-1': 50 },
-        metrics: [],
-        status: 'draft',
-        schedule: {},
-        tags: [] },
-        activeTab;
-    'setup',
-        validationErrors;
-    [],
-        previewResults;
-    { }
-    saving: false,
-        estimatedSampleSize;
-    0,
-        estimatedDuration;
-    0;
+        description: ''
+    };
+    variants: [
+        { id: 'control', name: 'Control', description: 'Original version' },
+        { id: 'variant-1', name: 'Variant 1', description: 'Test version' }
+    ];
+    trafficAllocation: {
+        'control';
+        50, 'variant-1';
+        50;
+    }
+    metrics: [];
+    status: 'draft';
+    schedule: { }
+    tags: [];
+    activeTab: 'setup';
+    validationErrors: [];
+    previewResults: { }
+    saving: false;
+    estimatedSampleSize: 0;
+    estimatedDuration: 0;
 }
 ;
 /**
@@ -64,8 +69,7 @@ export const ExperimentBuilder = ({
  */
 const updateExperiment = useCallback((field, value) => {
     setState(prev => ({}), ...prev, experiment, {
-        ...prev.experiment,
-        [field]: value,
+        ...prev.experiment[field], value
     });
 });
 [];
@@ -77,8 +81,9 @@ const addVariant = useCallback(() => {
     const newVariantId = `variant-${Date.now()}`;
 });
 const newVariant = {
-    id: newVariantId,
-    name: `Variant ${state.experiment.variants?.length || 1}` };
+    id: newVariantId
+};
+name: `Variant ${state.experiment.variants?.length || 1}`;
 description: '';
 ;
 const updatedVariants = [...(state.experiment.variants || []), newVariant];
@@ -95,10 +100,10 @@ if (remainder > 0) {
     setState(prev => ({}), ...prev, experiment, {
         ...prev.experiment,
         variants: updatedVariants,
-        trafficAllocation: updatedAllocation,
+        trafficAllocation: updatedAllocation
     });
-    ;
 }
+;
 [state.experiment.variants, state.experiment.trafficAllocation];
 ;
 /**
@@ -121,10 +126,10 @@ if (remainder > 0) {
     setState(prev => ({}), ...prev, experiment, {
         ...prev.experiment,
         variants: updatedVariants,
-        trafficAllocation: updatedAllocation,
+        trafficAllocation: updatedAllocation
     });
-    ;
 }
+;
 [state.experiment.variants, state.experiment.trafficAllocation];
 ;
 /**
@@ -139,7 +144,7 @@ variant.id === variantId
  || [];
 setState(prev => ({}), ...prev, experiment, {
     ...prev.experiment,
-    variants: updatedVariants,
+    variants: updatedVariants
 });
 ;
 [state.experiment.variants];
@@ -149,28 +154,28 @@ setState(prev => ({}), ...prev, experiment, {
  */
 const updateAllocation = useCallback((variantId, percentage) => {
     const updatedAllocation = {
-        ...state.experiment.trafficAllocation,
-        [variantId]: percentage,
+        ...state.experiment.trafficAllocation[variantId], percentage
     };
-    setState(prev => ({}), ...prev, experiment, {
-        ...prev.experiment,
-        trafficAllocation: updatedAllocation,
-    });
 });
+setState(prev => ({}), ...prev, experiment, {
+    ...prev.experiment,
+    trafficAllocation: updatedAllocation
+});
+;
 [state.experiment.trafficAllocation];
 ;
 /**
  * Add metric
  */
 const addMetric = useCallback(() => {
-    const newMetric = {
-        id: `metric-${Date.now()}` };
+    const newMetric = {};
+    id: `metric-${Date.now()}`;
 }, name, '', type, 'conversion', isPrimary, state.experiment.metrics?.length === 0, isGuardrail, false, expectedDirection, 'increase');
 ;
 const updatedMetrics = [...(state.experiment.metrics || []), newMetric];
 setState(prev => ({}), ...prev, experiment, {
     ...prev.experiment,
-    metrics: updatedMetrics,
+    metrics: updatedMetrics
 });
 ;
 [state.experiment.metrics];
@@ -187,7 +192,7 @@ metric.id === metricId
  || [];
 setState(prev => ({}), ...prev, experiment, {
     ...prev.experiment,
-    metrics: updatedMetrics,
+    metrics: updatedMetrics
 });
 ;
 [state.experiment.metrics];
@@ -199,13 +204,13 @@ const previewVariant = useCallback(async (variant) => {
     try {
         const result = await onPreview(variant);
         setState(prev => ({}), ...prev, previewResults, {
-            ...prev.previewResults,
-            [variant.id]: result,
+            ...prev.previewResults[variant.id], result
         });
     }
     finally { }
 });
-try { }
+try {
+}
 catch (error) {
     console.error('Preview failed:', error);
 }
@@ -273,11 +278,15 @@ const handleStart = useCallback(async () => {
         return;
     try {
         await onStart(state.experiment.id);
-        setState(prev => ({}), ...prev, experiment, { ...prev.experiment, status: 'running' });
+        setState(prev => ({}), ...prev);
     }
-    finally { }
-});
-try { }
+    finally {
+    }
+    experiment: { }
+}, ...prev.experiment, status, 'running');
+;
+try {
+}
 catch (error) {
     console.error('Start failed:', error);
 }
@@ -298,7 +307,7 @@ useEffect(() => {
 });
 2 * Math.pow(1.96 + 0.84, 2) * baselineRate * (1 - baselineRate) / Math.pow(mde, 2);
 ;
-setState(prev => ({}), ...prev, estimatedSampleSize, sampleSize, estimatedDuration, Math.ceil(sampleSize / 100) // Assume 100 users/hour,
+setState(prev => ({}), ...prev, estimatedSampleSize, sampleSize, estimatedDuration, Math.ceil(sampleSize / 100) // Assume 100 users/hour }
 );
 ;
 [state.experiment.metrics];
@@ -370,11 +379,9 @@ TabsContent >
     < TabsContent;
 value = "configuration";
 className = "space-y-4" >
-    (_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center", children: [_jsx(Clock, { className: "w-5 h-5 mr-2" }), "Scheduling"] }) }), _jsx(CardContent, { className: "space-y-4", children: _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "Start Date (Optional)" }), _jsx(Input, { type: "datetime-local", value: state.experiment.schedule?.startAt?.toISOString().slice(0, 16) || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule, startAt: e.target.value ? new Date(e.target.value) : undefined, })} />"] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "End Date (Optional)" }), _jsx(Input, { type: "datetime-local", value: state.experiment.schedule?.endAt?.toISOString().slice(0, 16) || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule, endAt: e.target.value ? new Date(e.target.value) : undefined, })} />"] })] }) })] })
+    (_jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center", children: [_jsx(Clock, { className: "w-5 h-5 mr-2" }), "Scheduling"] }) }), _jsx(CardContent, { className: "space-y-4", children: _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "Start Date (Optional)" }), _jsx(Input, { type: "datetime-local", value: state.experiment.schedule?.startAt?.toISOString().slice(0, 16) || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule startAt: e.target.value ? new Date(e.target.value) : undefined } })} />"] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "End Date (Optional)" }), _jsx(Input, { type: "datetime-local", value: state.experiment.schedule?.endAt?.toISOString().slice(0, 16) || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule endAt: e.target.value ? new Date(e.target.value) : undefined } })} />"] })] }) })] })
         ,
-            _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center", children: [_jsx(Target, { className: "w-5 h-5 mr-2" }), "Auto-Stop Conditions"] }) }), _jsx(CardContent, { className: "space-y-4", children: _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "Minimum Sample Size" }), _jsx(Input, { type: "number", min: "0", value: state.experiment.schedule?.autoStop?.minSampleSize || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule, autoStop: ", ...(state.experiment.schedule?.autoStop,
-                                            minSampleSize), ": parseInt(e.target.value) || undefined, })} placeholder=\"1000\" />"] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "Max P-Value" }), _jsx(Input, { type: "number", min: "0", max: "1", step: "0.01", value: state.experiment.schedule?.autoStop?.maxPValue || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule, autoStop: ", ...(state.experiment.schedule?.autoStop,
-                                            maxPValue), ": parseFloat(e.target.value) || undefined, })} placeholder=\"0.05\" />"] })] }) })] }));
+            _jsxs(Card, { children: [_jsx(CardHeader, { children: _jsxs(CardTitle, { className: "flex items-center", children: [_jsx(Target, { className: "w-5 h-5 mr-2" }), "Auto-Stop Conditions"] }) }), _jsx(CardContent, { className: "space-y-4", children: _jsxs("div", { className: "grid grid-cols-2 gap-4", children: [_jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "Minimum Sample Size" }), _jsx(Input, { type: "number", min: "0", value: state.experiment.schedule?.autoStop?.minSampleSize || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule autoStop: ", ...state.experiment.schedule?.autoStop, "minSampleSize: parseInt(e.target.value) || undefined } })} placeholder=\"1000\" />"] }), _jsxs("div", { children: [_jsx("label", { className: "block text-sm font-medium mb-1", children: "Max P-Value" }), _jsx(Input, { type: "number", min: "0", max: "1", step: "0.01", value: state.experiment.schedule?.autoStop?.maxPValue || '', onChange: (e) => updateExperiment('schedule', {}) }), "...state.experiment.schedule autoStop: ", ...state.experiment.schedule?.autoStop, "maxPValue: parseFloat(e.target.value) || undefined } })} placeholder=\"0.05\" />"] })] }) })] }));
 TabsContent >
 ;
 Tabs >

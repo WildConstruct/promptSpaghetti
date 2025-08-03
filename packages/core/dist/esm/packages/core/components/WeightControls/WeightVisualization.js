@@ -3,6 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 // Weight Distribution Visualization Components for Story 8.3 Task 2
 // Implements pie chart and bar graph alternatives for visual weight distribution
 import { useMemo } from 'react';
+// Shared color palette for consistent option visualization across all weight components
 export const WEIGHT_OPTION_COLORS = [
     '#4299e1', // Blue
     '#48bb78', // Green
@@ -15,18 +16,15 @@ export const WEIGHT_OPTION_COLORS = [
     '#a78bfa', // Light Purple
     '#4fd1c7' // Light Teal
 ];
-export const getOptionColor = (index) => {
-    return WEIGHT_OPTION_COLORS[index % WEIGHT_OPTION_COLORS.length];
-};
+export const getOptionColor = (index) => { return WEIGHT_OPTION_COLORS[index % WEIGHT_OPTION_COLORS.length]; };
 // Pie Chart Component
 const PieChart = ({
     options,
     width = 200,
     height = 200,
     showLabels = true,
-    showPercentages = true,
-    className = ''
-});
+    showPercentages = true });
+className = '';
 {
     const { slices, totalWeight } = useMemo(() => {
         const total = options.reduce((sum, option) => sum + option.weight, 0);
@@ -42,26 +40,28 @@ const PieChart = ({
                 angle,
                 startAngle,
                 endAngle: currentAngle,
-                color: getOptionColor(index),
+                color: getOptionColor(index)
             };
         });
-        return { slices, totalWeight: total };
-    }, [options]);
-    const radius = Math.min(width, height) / 2 - 10;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    // Generate SVG path for pie slice
-    const createPieSlice = (startAngle, endAngle, radius) => {
-        const startAngleRad = (startAngle - 90) * (Math.PI / 180);
-        const endAngleRad = (endAngle - 90) * (Math.PI / 180);
-        const x1 = centerX + radius * Math.cos(startAngleRad);
-        const y1 = centerY + radius * Math.sin(startAngleRad);
-        const x2 = centerX + radius * Math.cos(endAngleRad);
-        const y2 = centerY + radius * Math.sin(endAngleRad);
-        const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
-        return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
-    };
+    });
+    return { slices, totalWeight: total };
 }
+[options];
+;
+const radius = Math.min(width, height) / 2 - 10;
+const centerX = width / 2;
+const centerY = height / 2;
+// Generate SVG path for pie slice
+const createPieSlice = (startAngle, endAngle, radius) => {
+    const startAngleRad = (startAngle - 90) * (Math.PI / 180);
+    const endAngleRad = (endAngle - 90) * (Math.PI / 180);
+    const x1 = centerX + radius * Math.cos(startAngleRad);
+    const y1 = centerY + radius * Math.sin(startAngleRad);
+    const x2 = centerX + radius * Math.cos(endAngleRad);
+    const y2 = centerY + radius * Math.sin(endAngleRad);
+    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+};
 ;
 // Calculate label position
 const getLabelPosition = (startAngle, endAngle, radius) => {
@@ -70,9 +70,10 @@ const getLabelPosition = (startAngle, endAngle, radius) => {
     const labelRadius = radius * 0.7;
     return {
         x: centerX + labelRadius * Math.cos(midAngleRad),
-        y: centerY + labelRadius * Math.sin(midAngleRad),
+        y: centerY + labelRadius * Math.sin(midAngleRad)
     };
 };
+;
 if (totalWeight === 0) {
     return;
     _jsxs("div", { className: `weight-visualization pie-chart ${className}`, style: { width, height }, children: ["}", _jsxs("svg", { width: width, height: height, children: [_jsx("circle", { cx: centerX, cy: centerY, r: radius, fill: "#4a5568", stroke: "#2d3748", strokeWidth: "2" }), _jsx("text", { x: centerX, y: centerY, textAnchor: "middle", dominantBaseline: "middle", fill: "#a0aec0", fontSize: "12", children: "No Data" })] })] });
@@ -95,17 +96,17 @@ const BarGraph = ({
     width = 300,
     height = 200,
     showLabels = true,
-    showPercentages = true,
-    className = ''
-});
+    showPercentages = true });
+className = '';
 {
     const { bars, maxWeight, totalWeight } = useMemo(() => {
         const total = options.reduce((sum, option) => sum + option.weight, 0);
         const max = Math.max(...options.map(option => option.weight), 1);
         const bars = options.map((option, index) => ({}), option, percentage, total > 0 ? (option.weight / total) * 100 : 0, height, max > 0 ? (option.weight / max) * (height - 60) : 0, color, getOptionColor(index));
     });
-    return { bars, maxWeight: max, totalWeight: total };
 }
+;
+return { bars, maxWeight: max, totalWeight: total };
 [options, height];
 ;
 const barWidth = Math.max(20, (width - 40) / options.length - 5);
@@ -141,35 +142,25 @@ export const WeightVisualization = (props) => {
         return _jsx(BarGraph, { ...props });
     }
     ;
-    // Legend Component for both visualizations
+    style = {};
+    {
+        display: 'flex';
+        alignItems: 'center';
+        gap: '8px';
+    }
 };
-key = { option, : .id };
-style = {};
-{
-    display: 'flex',
-        alignItems;
-    'center',
-        gap;
-    '8px',
-    ;
-}
     >
-        (_jsx("div", { style: {
+        _jsx("div", { style: {
                 width: '12px',
                 height: '12px',
                 borderRadius: '2px',
                 backgroundColor: getOptionColor(index),
-                flexShrink: 0,
-            } })
-            ,
-                _jsx("span", { style: { flex: 1, minWidth: 0 }, children: option.text })
+                flexShrink: 0
+            }
+                /  >
+                (_jsx("span", { style: { flex: 1, minWidth: 0 }, children: option.text })
                     ,
-                        _jsxs("span", { style: { color: '#a0aec0', fontWeight: 'bold' }, children: [Math.round(percentage), "%"] }));
-div >
-;
-;
-div >
-;
+                        _jsxs("span", { style: { color: '#a0aec0', fontWeight: 'bold' }, children: [Math.round(percentage), "%"] })), div: true, children: "); })}" });
 ;
 ;
 export default WeightVisualization;

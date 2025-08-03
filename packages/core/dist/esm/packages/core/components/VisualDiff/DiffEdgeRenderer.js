@@ -3,7 +3,15 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 // Story 9.3.2 - Visual Diff Tool
 import { memo } from 'react';
 import { getSmoothStepPath } from 'reactflow';
-export const DiffEdgeRenderer = memo(({}), id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data, selected);
+export const DiffEdgeRenderer = memo(({}), id);
+sourceX;
+sourceY;
+targetX;
+targetY;
+sourcePosition;
+targetPosition;
+data;
+selected;
 {
     const { diffState, changeDetails } = data || {};
     // Calculate path
@@ -15,55 +23,50 @@ export const DiffEdgeRenderer = memo(({}), id, sourceX, sourceY, targetX, target
         targetY,
         targetPosition,
         borderRadius;
-    8,
-    ;
+    8;
 }
 ;
 // Get styling based on diff state
 const getEdgeStyle = () => {
     const baseStyle = {
         strokeWidth: 2,
-        transition: 'all 0.2s ease',
-    };
-    const stateStyles = {
-        added: {
-            stroke: '#10b981',
-            strokeDasharray: 'none',
-        },
-        removed: {
-            stroke: '#ef4444',
-            strokeDasharray: '5,5',
-            opacity: 0.7,
-        },
-        modified: {
-            stroke: '#f59e0b',
-            strokeDasharray: 'none',
-        },
-        unchanged: {
-            stroke: '#6b7280',
-            strokeDasharray: 'none',
-        },
-        return: {
-            ...baseStyle,
-            ...stateStyles[diffState || 'unchanged'],
-            ...(selected && {
-                stroke: '#3b82f6',
-                strokeWidth: 3,
-            })
-        }
-    };
-    // Get marker end style
-    const getMarkerEnd = () => {
-        const colors = {
-            added: '#10b981',
-            removed: '#ef4444',
-            modified: '#f59e0b',
-            unchanged: '#6b7280',
-        };
-        const _____color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
-        return `url(#arrow-${diffState || 'unchanged'})`;
+        transition: 'all 0.2s ease'
     };
 };
+const stateStyles = { added: {
+        stroke: '#10b981',
+        strokeDasharray: 'none' }
+}, removed;
+modified: {
+    stroke: '#f59e0b',
+        strokeDasharray;
+    'none';
+}
+unchanged: {
+    stroke: '#6b7280',
+        strokeDasharray;
+    'none';
+}
+;
+return { ...baseStyle,
+    ...stateStyles[diffState || 'unchanged'],
+    ...(selected && {
+        stroke: '#3b82f6',
+        strokeWidth: 3 })
+};
+;
+// Get marker end style
+const getMarkerEnd = () => {
+    const colors = {
+        added: '#10b981',
+        removed: '#ef4444',
+        modified: '#f59e0b',
+        unchanged: '#6b7280'
+    };
+};
+const _____color = selected ? '#3b82f6' : colors[diffState || 'unchanged'];
+return `url(#arrow-${diffState || 'unchanged'})`;
+;
 // Get label content
 const getLabel = () => {
     if (diffState === 'modified' && changeDetails && Object.keys(changeDetails).length > 0) {
@@ -78,7 +81,7 @@ _jsxs(_Fragment, { children: [_jsx("defs", { children: _jsx("marker", { id: `arr
             < g, " transform=", `translate(${labelX}, ${labelY})`, ">}", _jsx("rect", { x: "-25", y: "-10", width: "50", height: "20", rx: "10", fill: "white", stroke: getEdgeStyle().stroke, strokeWidth: "1" }), _jsx("text", { x: "0", y: "0", textAnchor: "middle", dominantBaseline: "middle", style: {
                 fontSize: '10px',
                 fontWeight: '500',
-                fill: getEdgeStyle().stroke,
+                fill: getEdgeStyle().stroke
             }, children: label })] });
 g >
 ;
@@ -94,7 +97,7 @@ _jsx("circle", { r: "4", fill: "#f59e0b", stroke: "white", strokeWidth: "1" })
         _jsx("text", { x: "0", y: "1", textAnchor: "middle", dominantBaseline: "middle", style: {
                 fontSize: '8px',
                 fontWeight: 'bold',
-                fill: 'white',
+                fill: 'white'
             }, children: "!" });
 g >
 ;

@@ -24,8 +24,7 @@ z.string().optional(),
     tags;
 z.array(z.string()).default([]),
     fileFormatVersion;
-z.string().default(PSG_FORMAT_VERSION),
-;
+z.string().default(PSG_FORMAT_VERSION);
 ;
 // Project settings schema
 export const ProjectSettingsSchema = z.object({});
@@ -43,8 +42,7 @@ z.enum(['light', 'dark', 'auto']).default('auto'),
     showMinimap;
 z.boolean().default(true),
     autoLayout;
-z.boolean().default(false),
-;
+z.boolean().default(false);
 ;
 // Collaboration data schema (Epic 8.7 compatibility)
 export const CollaborationDataSchema = z.object({});
@@ -63,7 +61,6 @@ z.record(z.string()).default({});
     regionGroups: [],
     connectionLabels: {}
 });
-;
 // Main .psg file format schema
 export const PsgFileSchema = z.object({});
 // Format identification and versioning
@@ -87,8 +84,7 @@ z.record(z.unknown()).optional().describe('Extension data for future features'),
     checksum;
 z.string().optional().describe('File integrity checksum'),
     exportedAt;
-z.string().datetime().describe('Timestamp when file was created'),
-;
+z.string().datetime().describe('Timestamp when file was created');
 ;
 // Validation functions
 export function validatePsgFile(data) {
@@ -96,21 +92,24 @@ export function validatePsgFile(data) {
         const result = PsgFileSchema.safeParse(data);
         if (result.success) {
             return { success: true, data: result.data };
-        }
-        else {
-            return {
-                success: false,
-                error: 'Invalid .psg file format',
-                issues: result.error.issues,
-            };
-        }
-        try { }
-        catch (error) {
-            return {
-                success: false,
-                error: error instanceof Error ? error.message : 'Unknown validation error',
-                issues: [],
-            };
+            {
+                return {
+                    success: false,
+                    error: 'Invalid .psg file format',
+                    issues: result.error.issues
+                };
+            }
+            ;
+            try {
+            }
+            catch (error) {
+                return {
+                    success: false,
+                    error: error instanceof Error ? error.message : 'Unknown validation error',
+                    issues: []
+                };
+            }
+            ;
             // Version compatibility checking
             export function isVersionCompatible(fileVersion) {
                 const [fileMajor, fileMinor] = fileVersion.split('.').map(Number);
@@ -120,51 +119,54 @@ export function validatePsgFile(data) {
                     return {
                         compatible: true,
                         requiresMigration: fileMinor < currentMinor,
-                        message: fileMinor < currentMinor ? 'File will be upgraded to current format version' : undefined,
+                        message: fileMinor < currentMinor ? 'File will be upgraded to current format version' : undefined
                     };
-                    // Future major version is not compatible
-                    if (fileMajor > currentMajor) {
-                        return {
-                            compatible: false,
-                            requiresMigration: false,
-                            message: 'This file was created with a newer version of the application. Please update to the latest version.',
-                        };
-                        // Older major version requires migration
-                        return {
-                            compatible: true,
-                            requiresMigration: true,
-                            message: 'This file format is outdated and will be automatically upgraded.',
-                        };
-                        // Helper to create default project metadata
-                        export function createDefaultMetadata(name, author) {
-                            const now = new Date().toISOString();
-                            return {
-                                name,
-                                description: '',
-                                version: '1.0.0',
-                                createdAt: now,
-                                lastModified: now,
-                                author: author || 'Anonymous',
-                                tags: [],
-                                fileFormatVersion: PSG_FORMAT_VERSION,
-                            };
-                            // Helper to create default project settings
-                            export function createDefaultSettings() {
-                                return {
-                                    autoSave: true,
-                                    backupInterval: 5,
-                                    maxBackups: 10,
-                                    gridSnapping: false,
-                                    gridSize: 20,
-                                    theme: 'auto',
-                                    showMinimap: true,
-                                    autoLayout: false,
-                                };
-                            }
-                        }
-                    }
                 }
+                ;
+                // Future major version is not compatible
+                if (fileMajor > currentMajor) {
+                    return {
+                        compatible: false,
+                        requiresMigration: false,
+                        message: 'This file was created with a newer version of the application. Please update to the latest version.'
+                    };
+                }
+                ;
+                // Older major version requires migration
+                return { compatible: true,
+                    requiresMigration: true,
+                    message: 'This file format is outdated and will be automatically upgraded.' };
             }
+            ;
+            // Helper to create default project metadata
+            export function createDefaultMetadata(name, author) {
+                const now = new Date().toISOString();
+                return {
+                    name,
+                    description: '',
+                    version: '1.0.0',
+                    createdAt: now,
+                    lastModified: now,
+                    author: author || 'Anonymous',
+                    tags: [],
+                    fileFormatVersion: PSG_FORMAT_VERSION
+                };
+            }
+            ;
+            // Helper to create default project settings
+            export function createDefaultSettings() {
+                return {
+                    autoSave: true,
+                    backupInterval: 5,
+                    maxBackups: 10,
+                    gridSnapping: false,
+                    gridSize: 20,
+                    theme: 'auto',
+                    showMinimap: true,
+                    autoLayout: false
+                };
+            }
+            ;
         }
     }
     finally { }

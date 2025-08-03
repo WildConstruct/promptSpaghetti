@@ -7,11 +7,11 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * & Community learning system.
  */
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Epic16LearningPathService } from '../../services/Epic16LearningPathService';
+from;
+'../../services/Epic16LearningPathService';
 import { LearningPathDashboard } from './LearningPathDashboard';
 import { LearningPathViewer } from './LearningPathViewer';
-{
-    // Service initialization
+{ // Service initialization
     const learningService = useMemo(() => new Epic16LearningPathService(), []);
     // State management
     const [currentView, setCurrentView] = useState('dashboard');
@@ -29,9 +29,7 @@ import { LearningPathViewer } from './LearningPathViewer';
                 learningService.on('certificateEarned', (certificate) => {
                     onCertification?.(certificate);
                 });
-                learningService.on('analyticsUpdate', (analytics) => {
-                    onAnalytics?.(analytics);
-                });
+                learningService.on('analyticsUpdate', (analytics) => { onAnalytics?.(analytics); });
                 learningService.on('pathCompleted', async (data) => {
                     const { userId: completedUserId, pathId } = data;
                     if (completedUserId === userId) {
@@ -40,23 +38,24 @@ import { LearningPathViewer } from './LearningPathViewer';
                     }
                 });
                 learningService.on('skillUnlocked', (skill) => {
-                    // Handle skill unlock notifications
                     console.log('Skill unlocked:', skill);
                 });
+                try {
+                }
+                catch (err) {
+                    setError(err instanceof Error ? err.message : 'Failed to initialize learning service');
+                }
+                finally {
+                    setLoading(false);
+                }
+                ;
+                initializeService();
+                // Cleanup event listeners
+                return () => { learningService.removeAllListeners(); };
             }
-            catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to initialize learning service');
-            }
-            finally {
-                setLoading(false);
-            }
-            ;
-            initializeService();
-            // Cleanup event listeners
-            return () => {
-                learningService.removeAllListeners();
-            };
-        }, [learningService, userId, onAnalytics, onCertification];
+            finally { }
+            [learningService, userId, onAnalytics, onCertification];
+        };
     });
     // Handle path selection from dashboard
     const handlePathSelect = useCallback(async (path) => {
@@ -92,14 +91,14 @@ import { LearningPathViewer } from './LearningPathViewer';
         }
     }, ...userEnrollment, progress, {
         ...userEnrollment.progress,
-        overallProgress: progress,
+        overallProgress: progress
     });
 }
+;
 [userEnrollment];
 ;
 // Handle path completion
 const handlePathComplete = useCallback(() => {
-    // Show completion celebration or navigate back to dashboard
     setCurrentView('dashboard');
     setSelectedPath(null);
     setUserEnrollment(null);

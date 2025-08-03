@@ -12,7 +12,9 @@ import { Badge } from '../ui/Badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/Select';
 import { Switch } from '../ui/Switch';
 // import { Slider } from '../ui/Slider';
-import { Square, Circle, Polygon, Paintbrush, Edit3, Save, Target, Settings, AlertTriangle, Clock, Camera, Zap } from 'lucide-react';
+import { Square, Circle, Polygon, Paintbrush, Edit3, Save, Target, Settings, AlertTriangle, Clock, Camera } from Zap;
+from;
+'lucide-react';
 ;
 points: Array; // For polygons and freehand
 center ?  : { x: number, y: number };
@@ -27,63 +29,67 @@ readonly ?  : boolean;
 showGrid ?  : boolean;
 className ?  : string;
 // Region type configurations for VFX workflow
-const REGION_TYPES = {
-    selection: {
+const REGION_TYPES = { selection: {
         icon: _jsx(Square, { className: "w-4 h-4" }),
         label: 'Selection',
         color: '#3b82f6',
         fillOpacity: 0.1,
-        description: 'Basic node selection area', },
+        description: 'Basic node selection area' },
     highlight: {
         icon: _jsx(Target, { className: "w-4 h-4" }),
         label: 'Highlight',
         color: '#f59e0b',
         fillOpacity: 0.2,
-        description: 'Important area highlighting', },
+        description: 'Important area highlighting'
+    },
     problem_area: {
         icon: _jsx(AlertTriangle, { className: "w-4 h-4" }),
         label: 'Problem Area',
         color: '#ef4444',
         fillOpacity: 0.15,
-        description: 'Issues or problems requiring attention', },
+        description: 'Issues or problems requiring attention'
+    },
     optimization_zone: {
         icon: _jsx(Zap, { className: "w-4 h-4" }),
         label: 'Optimization Zone',
         color: '#10b981',
         fillOpacity: 0.12,
-        description: 'Areas for performance optimization', },
+        description: 'Areas for performance optimization'
+    },
     mars_zone: {
         icon: _jsx(Camera, { className: "w-4 h-4" }),
         label: 'MARS Zone',
         color: '#8b5cf6',
         fillOpacity: 0.18,
-        description: 'MARS methodology zone annotation', },
+        description: 'MARS methodology zone annotation'
+    },
     performance_area: {
         icon: _jsx(Clock, { className: "w-4 h-4" }),
         label: 'Performance Area',
         color: '#06b6d4',
         fillOpacity: 0.14,
-        description: 'Performance monitoring region', },
-    // MARS zone configurations for VFX directors
-    const: MARS_ZONES = {
-        motion_source: { color: '#ef4444', label: 'Motion Source', icon: '🎬' },
-        action_trigger: { color: '#f97316', label: 'Action Trigger', icon: '⚡' },
-        reaction_output: { color: '#eab308', label: 'Reaction Output', icon: '💥' },
-        subject_focus: { color: '#22c55e', label: 'Subject Focus', icon: '🎯' },
-        camera_influence: { color: '#3b82f6', label: 'Camera Zone', icon: '📹' },
-        lighting_zone: { color: '#8b5cf6', label: 'Lighting Zone', icon: '💡' },
-        effects_region: { color: '#ec4899', label: 'Effects Region', icon: '✨' },
-        audio_sync: { color: '#06b6d4', label: 'Audio Sync', icon: '🔊' },
-        timing_critical: { color: '#dc2626', label: 'Timing Critical', icon: '⏰' },
-        creative_decision: { color: '#7c3aed', label: 'Creative Decision', icon: '🎨' }
-    },
-    // Drawing tools for region creation
-    const: REGION_TOOLS = {
-        rectangle: { icon: _jsx(Square, { className: "w-4 h-4" }), label: 'Rectangle' },
-        circle: { icon: _jsx(Circle, { className: "w-4 h-4" }), label: 'Circle' },
-        polygon: { icon: _jsx(Polygon, { className: "w-4 h-4" }), label: 'Polygon' },
-        freehand: { icon: _jsx(Paintbrush, { className: "w-4 h-4" }), label: 'Freehand' }
+        description: 'Performance monitoring region'
     }
+};
+// MARS zone configurations for VFX directors
+const MARS_ZONES = {
+    motion_source: { color: '#ef4444', label: 'Motion Source', icon: '🎬' },
+    action_trigger: { color: '#f97316', label: 'Action Trigger', icon: '⚡' },
+    reaction_output: { color: '#eab308', label: 'Reaction Output', icon: '💥' },
+    subject_focus: { color: '#22c55e', label: 'Subject Focus', icon: '🎯' },
+    camera_influence: { color: '#3b82f6', label: 'Camera Zone', icon: '📹' },
+    lighting_zone: { color: '#8b5cf6', label: 'Lighting Zone', icon: '💡' },
+    effects_region: { color: '#ec4899', label: 'Effects Region', icon: '✨' },
+    audio_sync: { color: '#06b6d4', label: 'Audio Sync', icon: '🔊' },
+    timing_critical: { color: '#dc2626', label: 'Timing Critical', icon: '⏰' },
+    creative_decision: { color: '#7c3aed', label: 'Creative Decision', icon: '🎨' }
+};
+// Drawing tools for region creation
+const REGION_TOOLS = {
+    rectangle: { icon: _jsx(Square, { className: "w-4 h-4" }), label: 'Rectangle' },
+    circle: { icon: _jsx(Circle, { className: "w-4 h-4" }), label: 'Circle' },
+    polygon: { icon: _jsx(Polygon, { className: "w-4 h-4" }), label: 'Polygon' },
+    freehand: { icon: _jsx(Paintbrush, { className: "w-4 h-4" }), label: 'Freehand' }
 };
 export const RegionAnnotationSystem = ({
     width,
@@ -96,9 +102,8 @@ export const RegionAnnotationSystem = ({
     onNodesInRegion,
     selectedRegion,
     readonly = false,
-    showGrid = false,
-    className = ''
-});
+    showGrid = false });
+className = '';
 {
     const canvasRef = useRef(null);
     const overlayRef = useRef(null);
@@ -107,12 +112,9 @@ export const RegionAnnotationSystem = ({
     const [creationTool, setCreationTool] = useState('rectangle');
     const [creationPoints, setCreationPoints] = useState([]);
     const [newRegion, setNewRegion] = useState({});
-    type: 'selection',
-        priority;
-    'medium',
-        marsZone;
-    undefined,
-    ;
+    type: 'selection';
+    priority: 'medium';
+    marsZone: undefined;
 }
 ;
 // UI state
@@ -136,11 +138,11 @@ const getCanvasCoordinates = useCallback((event) => {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    return {
-        x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
-        y: (event.clientY - rect.top) * scaleY / zoom - pan.y,
-    };
-}, [zoom, pan]);
+    return { x: (event.clientX - rect.left) * scaleX / zoom - pan.x,
+        y: (event.clientY - rect.top) * scaleY / zoom - pan.y };
+});
+[zoom, pan];
+;
 // Check if point is inside region
 const isPointInRegion = useCallback((point, region) => {
     switch (region.area.shape) {
@@ -169,21 +171,20 @@ const isPointInRegion = useCallback((point, region) => {
                 }
             }
         default:
-            return false;
     }
-    [];
-});
+    return false;
+}, []);
 // Find nodes within a region
 const getNodesInRegion = useCallback((region) => {
     return nodes
         .filter(node => { });
     const nodeCenter = {
         x: node.x + node.width / 2,
-        y: node.y + node.height / 2,
+        y: node.y + node.height / 2
     };
-    return isPointInRegion(nodeCenter, region);
-})
-    .map(node => node.id);
+});
+return isPointInRegion(nodeCenter, region);
+map(node => node.id);
 [nodes, isPointInRegion];
 ;
 // Draw grid on canvas
@@ -270,21 +271,22 @@ const drawRegion = useCallback((ctx, region) => {
                                     x: region.area.bounds.x - 5,
                                     y: region.area.bounds.y - 5,
                                     width: region.area.bounds.width + 10,
-                                    height: region.area.bounds.height + 10,
+                                    height: region.area.bounds.height + 10
                                 };
-                                ctx.strokeRect(selectionBounds.x, selectionBounds.y, selectionBounds.width, selectionBounds.height);
-                                // Draw corner handles
-                                const handleSize = 8;
-                                const handles = [
-                                    { x: selectionBounds.x, y: selectionBounds.y },
-                                    { x: selectionBounds.x + selectionBounds.width, y: selectionBounds.y },
-                                    { x: selectionBounds.x + selectionBounds.width, y: selectionBounds.y + selectionBounds.height },
-                                    { x: selectionBounds.x, y: selectionBounds.y + selectionBounds.height }
-                                ];
-                                ctx.fillStyle = '#3b82f6';
-                                handles.forEach(handle => { });
-                                ctx.fillRect(handle.x - handleSize / 2, handle.y - handleSize / 2, handleSize, handleSize);
                             }
+                            ;
+                            ctx.strokeRect(selectionBounds.x, selectionBounds.y, selectionBounds.width, selectionBounds.height);
+                            // Draw corner handles
+                            const handleSize = 8;
+                            const handles = [
+                                { x: selectionBounds.x, y: selectionBounds.y },
+                                { x: selectionBounds.x + selectionBounds.width, y: selectionBounds.y },
+                                { x: selectionBounds.x + selectionBounds.width, y: selectionBounds.y + selectionBounds.height },
+                                { x: selectionBounds.x, y: selectionBounds.y + selectionBounds.height }
+                            ];
+                            ctx.fillStyle = '#3b82f6';
+                            handles.forEach(handle => { });
+                            ctx.fillRect(handle.x - handleSize / 2, handle.y - handleSize / 2, handleSize, handleSize);
                         }
                     }
             }
@@ -305,16 +307,16 @@ if (region.marsZone) {
     ctx.font = '16px system-ui, sans-serif';
     ctx.fillText();
     marsConfig.icon,
-        region.area.bounds.x + region.area.bounds.width - 20,
-        region.area.bounds.y + 20;
-    ;
-    // Draw node count
-    const nodeCount = region.metadata.nodeCount;
-    if (nodeCount > 0) {
-        ctx.fillStyle = '#6b7280';
-        ctx.font = '10px system-ui, sans-serif';
-        ctx.fillText() `${nodeCount} nodes`;
-    }
+        region.area.bounds.x + region.area.bounds.width - 20;
+}
+region.area.bounds.y + 20;
+;
+// Draw node count
+const nodeCount = region.metadata.nodeCount;
+if (nodeCount > 0) {
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '10px system-ui, sans-serif';
+    ctx.fillText() `${nodeCount} nodes`;
 }
 region.area.bounds.x + 5,
     region.area.bounds.y + region.area.bounds.height - 5;
@@ -369,8 +371,7 @@ const handleMouseDown = useCallback((event) => {
             // Complete rectangle creation on second click
             return;
         }
-        else {
-            // Check if clicking on existing region
+        else { // Check if clicking on existing region
             const clickedRegion = regions.find(region => isPointInRegion(point, region));
             if (clickedRegion) {
                 onRegionSelect?.(clickedRegion.id);
@@ -407,27 +408,34 @@ const completeRegionCreation = useCallback(() => {
         const rectWidth = Math.abs(creationPoints[1].x - creationPoints[0].x);
         const rectHeight = Math.abs(creationPoints[1].y - creationPoints[0].y);
         area = {
-            shape: 'rectangle',
-            bounds: { x: startX, y: startY, width: rectWidth, height: rectHeight },
-            points: creationPoints
+            shape: 'rectangle'
         };
+        bounds: {
+            x: startX, y;
+            startY, width;
+            rectWidth, height;
+            rectHeight;
+        }
+        points: creationPoints;
     }
-    else {
-        area = {
-            shape: creationTool,
-            bounds: {
-                x: Math.min(...creationPoints.map(p => p.x)),
-                y: Math.min(...creationPoints.map(p => p.y)),
-                width: Math.max(...creationPoints.map(p => p.x)) - Math.min(...creationPoints.map(p => p.x)),
-                height: Math.max(...creationPoints.map(p => p.y)) - Math.min(...creationPoints.map(p => p.y)),
-            },
-            points: creationPoints
-        };
-        const region = {
-            id: `region-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
-    }
-    name: newRegion.name || `${regionConfig.label} ${regions.length + 1}`;
+    ;
 });
+{
+    area = {
+        shape: creationTool,
+        bounds: {
+            x: Math.min(...creationPoints.map(p => p.x)),
+            y: Math.min(...creationPoints.map(p => p.y)),
+            width: Math.max(...creationPoints.map(p => p.x)) - Math.min(...creationPoints.map(p => p.x)),
+            height: Math.max(...creationPoints.map(p => p.y)) - Math.min(...creationPoints.map(p => p.y)) }
+    },
+        points;
+    creationPoints;
+}
+;
+const region = {
+    id: `region-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` };
+name: newRegion.name || `${regionConfig.label} ${regions.length + 1}`;
 type: newRegion.type || 'selection',
     shape;
 creationTool,
@@ -442,8 +450,7 @@ creationTool,
         fillColor;
     regionConfig.color,
         fillOpacity;
-    regionConfig.fillOpacity,
-    ;
+    regionConfig.fillOpacity;
 }
 description: newRegion.description || '',
     author;
@@ -468,7 +475,7 @@ getNodesInRegion({ ...newRegion, area }),
 [],
     metadata;
 {
-    nodeCount: 0; // Will be updated after creation,
+    nodeCount: 0; // Will be updated after creation }
 }
 ;
 // Update node count
@@ -500,24 +507,21 @@ const stats = useMemo(() => {
     return { total, active, critical, totalNodes };
 }, [regions]);
 // Re-render when regions change
-useEffect(() => {
-    renderRegions();
-}, [renderRegions]);
+useEffect(() => { renderRegions(); }, [renderRegions]);
 // Keyboard shortcuts
 useEffect(() => {
-    const handleKeyDown = (event) => {
-        if (event.key === 'Escape' && isCreating) {
-            setIsCreating(false);
-            setCreationPoints([]);
-        }
-        else if (event.key === 'Enter' && isCreating && creationPoints.length >= 2) {
-            completeRegionCreation();
-        }
-        ;
-        document.addEventListener('keydown', handleKeyDown);
-        return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [isCreating, creationPoints, completeRegionCreation];
-});
+    const handleKeyDown = (event) => { };
+    if (event.key === 'Escape' && isCreating) {
+        setIsCreating(false);
+        setCreationPoints([]);
+    }
+    else if (event.key === 'Enter' && isCreating && creationPoints.length >= 2) {
+        completeRegionCreation();
+    }
+    ;
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+}, [isCreating, creationPoints, completeRegionCreation]);
 return;
 _jsxs("div", { className: `region-annotation-system ${className}`, children: ["}", _jsxs(Card, { children: [_jsxs(CardHeader, { children: [_jsxs(CardTitle, { className: "flex items-center justify-between", children: [_jsxs("div", { className: "flex items-center gap-3", children: [_jsx(Square, { className: "w-5 h-5 text-purple-600" }), _jsx("span", { children: "Region Annotations" }), _jsxs(Badge, { variant: "secondary", children: [filteredRegions.length, " regions"] })] }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Button, { variant: "outline", size: "sm", onClick: () => setShowRegionDetails(!showRegionDetails), children: _jsx(Settings, { className: "w-4 h-4" }) }), _jsxs(Button, { variant: isCreating ? 'default' : 'outline', size: "sm", onClick: () => setIsCreating(!isCreating), disabled: readonly, children: [_jsx(Edit3, { className: "w-4 h-4 mr-2" }), isCreating ? 'Cancel' : 'Create Region'] })] })] }), _jsxs("div", { className: "grid grid-cols-2 md:grid-cols-4 gap-3 mt-4", children: [_jsxs("div", { className: "bg-blue-50 p-3 rounded-lg text-center", children: [_jsx("div", { className: "text-lg font-bold text-blue-900", children: stats.total }), _jsx("div", { className: "text-xs text-blue-700", children: "Total Regions" })] }), _jsxs("div", { className: "bg-green-50 p-3 rounded-lg text-center", children: [_jsx("div", { className: "text-lg font-bold text-green-900", children: stats.active }), _jsx("div", { className: "text-xs text-green-700", children: "Active" })] }), _jsxs("div", { className: "bg-red-50 p-3 rounded-lg text-center", children: [_jsx("div", { className: "text-lg font-bold text-red-900", children: stats.critical }), _jsx("div", { className: "text-xs text-red-700", children: "Critical" })] }), _jsxs("div", { className: "bg-purple-50 p-3 rounded-lg text-center", children: [_jsx("div", { className: "text-lg font-bold text-purple-900", children: stats.totalNodes }), _jsx("div", { className: "text-xs text-purple-700", children: "Nodes in Regions" })] })] })] }), _jsx(CardContent, { children: _jsxs("div", { className: "space-y-4", children: [isCreating && ()
                                 < Card >
@@ -600,10 +604,10 @@ div >
         < Card >
         (_jsx(CardHeader, { children: _jsx(CardTitle, { className: "text-sm", children: "Region Details" }) })
             ,
-                _jsxs(CardContent, { children: [_jsxs("div", { className: "space-y-2 max-h-64 overflow-y-auto", children: [filteredRegions.map(region => { }), "const typeConfig = REGION_TYPES[region.type]; return;", _jsxs("div", { className: `p-3 border rounded cursor-pointer transition-colors ${selectedRegion === region.id ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50',
-                                    }`, onClick: () => onRegionSelect?.(region.id), children: [_jsxs("div", { className: "flex items-center justify-between mb-2", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("div", { style: { color: typeConfig.color }, children: typeConfig.icon }), _jsx("span", { className: "font-medium", children: region.name })] }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Badge, { variant: "secondary", className: "text-xs", style: { backgroundColor: `${typeConfig.color}20`, color: typeConfig.color }, children: region.priority }), _jsx(Switch, { checked: region.visible, onCheckedChange: (checked) => {
+                _jsxs(CardContent, { children: [_jsxs("div", { className: "space-y-2 max-h-64 overflow-y-auto", children: [filteredRegions.map(region => { }), "const typeConfig = REGION_TYPES[region.type]; return;", _jsxs("div", { className: `p-3 border rounded cursor-pointer transition-colors ${selectedRegion === region.id ? 'border-blue-300 bg-blue-50' : 'border-gray-200 hover:bg-gray-50'}
+`, onClick: () => onRegionSelect?.(region.id), children: [_jsxs("div", { className: "flex items-center justify-between mb-2", children: [_jsxs("div", { className: "flex items-center gap-2", children: [_jsx("div", { style: { color: typeConfig.color }, children: typeConfig.icon }), _jsx("span", { className: "font-medium", children: region.name })] }), _jsxs("div", { className: "flex items-center gap-2", children: [_jsx(Badge, { variant: "secondary", className: "text-xs", style: { backgroundColor: `${typeConfig.color}20`, color: typeConfig.color }, children: region.priority }), _jsx(Switch, { checked: region.visible, onCheckedChange: (checked) => {
                                                                 const updatedRegions = regions.map(r => );
-                                                            } }), "); r.id === region.id ? ", ...(r, visible), ": checked } : r ); onRegionsChange(updatedRegions); }} size=\"sm\" />"] })] }), _jsxs("div", { className: "text-xs text-gray-600", children: [_jsx("div", { children: region.description }), _jsxs("div", { className: "mt-1 flex items-center gap-4", children: [_jsxs("span", { children: [region.metadata.nodeCount, " nodes"] }), _jsx("span", { children: region.author.name }), _jsx("span", { children: new Date(region.timestamp).toLocaleDateString() })] })] }), region.marsZone && ()
+                                                            } }), "); r.id === region.id ? ", ...(r, visible), ": checked } : r ); onRegionsChange(updatedRegions); size=\"sm\" />"] })] }), _jsxs("div", { className: "text-xs text-gray-600", children: [_jsx("div", { children: region.description }), _jsxs("div", { className: "mt-1 flex items-center gap-4", children: [_jsxs("span", { children: [region.metadata.nodeCount, " nodes"] }), _jsx("span", { children: region.author.name }), _jsx("span", { children: new Date(region.timestamp).toLocaleDateString() })] })] }), region.marsZone && ()
                                             < div, " className=\"mt-2\">", _jsxs(Badge, { variant: "outline", className: "text-xs", children: [MARS_ZONES[region.marsZone].icon, " ", MARS_ZONES[region.marsZone].label] })] }, region.id), ")}"] }), "); })}", filteredRegions.length === 0 && ()
                             < div, " className=\"text-center py-8 text-gray-500\">", _jsx(Square, { className: "w-8 h-8 mx-auto mb-2 opacity-50" }), _jsx("div", { children: "No regions found" }), _jsx("div", { className: "text-sm", children: "Try adjusting your filters or create a new region" })] }));
 }

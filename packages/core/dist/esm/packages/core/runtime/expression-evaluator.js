@@ -20,19 +20,8 @@ var TokenType;
     TokenType["RBRACKET"] = "RBRACKET";
     TokenType["DOT"] = "DOT";
     TokenType["COMMA"] = "COMMA";
-    TokenType["EOF"] = "EOF";
-    /**
-     * Token interface
-     */
 })(TokenType || (TokenType = {}));
-    | { type: 'Literal', value: number | string | boolean | null }
-    | { type: 'Identifier', name: string }
-    | { type: 'BinaryExpression', operator: string, left: ASTNode, right: ASTNode }
-    | { type: 'UnaryExpression', operator: string, argument: ASTNode }
-    | { type: 'MemberExpression', object: ASTNode, property: ASTNode, computed: boolean }
-    | { type: 'CallExpression', callee: ASTNode, arguments: ASTNode }
-    | { type: 'ConditionalExpression', test: ASTNode, consequent: ASTNode, alternate: ASTNode }
-    | { type: 'LogicalExpression', operator: string, left: ASTNode, right: ASTNode };
+EOF = 'EOF';
 /**
  * Tokenizer for expression parsing
  */
@@ -298,26 +287,26 @@ class Tokenizer {
                                                                 if (property.type !== 'Identifier') {
                                                                     throw new Error('Expected identifier after dot');
                                                                     node = { type: 'MemberExpression', object: node, property, computed: false };
-                                                                }
-                                                                else if (this.currentToken().type === TokenType.LBRACKET) {
-                                                                    this.consumeToken();
-                                                                    const property = this.parseExpression();
-                                                                    this.consumeToken(TokenType.RBRACKET);
-                                                                    node = { type: 'MemberExpression', object: node, property, computed: true };
-                                                                }
-                                                                else if (this.currentToken().type === TokenType.LPAREN) {
-                                                                    this.consumeToken();
-                                                                    const args = [];
-                                                                    while (this.currentToken().type !== TokenType.RPAREN) {
-                                                                        args.push(this.parseExpression());
-                                                                        if (this.currentToken().type === TokenType.COMMA) {
+                                                                    if (this.currentToken().type === TokenType.LBRACKET) {
+                                                                        this.consumeToken();
+                                                                        const property = this.parseExpression();
+                                                                        this.consumeToken(TokenType.RBRACKET);
+                                                                        node = { type: 'MemberExpression', object: node, property, computed: true };
+                                                                        if (this.currentToken().type === TokenType.LPAREN) {
                                                                             this.consumeToken();
-                                                                            this.consumeToken(TokenType.RPAREN);
-                                                                            node = { type: 'CallExpression', callee: node, arguments: args };
-                                                                        }
-                                                                        else {
-                                                                            break;
-                                                                            return node;
+                                                                            const args = [];
+                                                                            while (this.currentToken().type !== TokenType.RPAREN) {
+                                                                                args.push(this.parseExpression());
+                                                                                if (this.currentToken().type === TokenType.COMMA) {
+                                                                                    this.consumeToken();
+                                                                                    this.consumeToken(TokenType.RPAREN);
+                                                                                    node = { type: 'CallExpression', callee: node, arguments: args };
+                                                                                    {
+                                                                                        break;
+                                                                                        return node;
+                                                                                    }
+                                                                                }
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
@@ -348,24 +337,21 @@ class Tokenizer {
                                                                 throw new Error(`Unexpected token ${token.type} at position ${token.position}`);
                                                         }
                                                         /**
-                                                         * Extended acorn Node type to include all necessary AST node types
+                                                         * Acorn parser configuration for safe expression parsing
                                                          */
+                                                        const ACORN_OPTIONS = {
+                                                            ecmaVersion: 2020,
+                                                            sourceType: 'script',
+                                                            allowReserved: false,
+                                                            allowReturnOutsideFunction: false,
+                                                            allowImportExportEverywhere: false,
+                                                            allowAwaitOutsideFunction: false,
+                                                            allowHashBang: false,
+                                                            locations: true,
+                                                            ranges: true };
                                                     }
+                                                    ;
                                                 }
-                                                /**
-                                                 * Acorn parser configuration for safe expression parsing
-                                                 */
-                                                const ACORN_OPTIONS = {
-                                                    ecmaVersion: 2020,
-                                                    sourceType: 'script',
-                                                    allowReserved: false,
-                                                    allowReturnOutsideFunction: false,
-                                                    allowImportExportEverywhere: false,
-                                                    allowAwaitOutsideFunction: false,
-                                                    allowHashBang: false,
-                                                    locations: true,
-                                                    ranges: true,
-                                                };
                                                 /**
                                                  * Enhanced safe expression evaluator with AST node filtering
                                                  */
@@ -499,103 +485,30 @@ class Tokenizer {
                                                                         const dangerousProps = ['constructor', 'prototype', '__proto__', '__defineGetter__', '__defineSetter__', '__lookupGetter__', '__lookupSetter__'];
                                                                         if (dangerousProps.includes(property)) {
                                                                             securityAudit.logPrototypePollutionAttempt(property, {});
-                                                                            nodeType: 'MemberExpression',
-                                                                                expression;
-                                                                            `[object].${property}`;
+                                                                            nodeType: 'MemberExpression';
                                                                         }
-                                                                    }
-                                                                    ;
-                                                                    throw new Error(`Access to property '${property}' is not allowed`);
-                                                                }
-                                                                return object[property];
-                                                            case 'CallExpression':
-                                                                const callee = this.evaluateAST(node.callee, context);
-                                                                if (typeof callee !== 'function') {
-                                                                    throw new Error('Attempted to call a non-function');
-                                                                    const args = node.arguments.map(arg => this.evaluateAST(arg, context));
-                                                                    // Security: Only allow whitelisted functions
-                                                                    if (!this.isSafeFunction(callee, context)) {
-                                                                        throw new Error('Function call not allowed');
-                                                                        return callee(...args);
+                                                                        expression: `[object].${property}`;
                                                                     }
                                                                 }
-                                                            default:
-                                                                throw new Error(`Unknown AST node type: ${node?.type || 'undefined'}`);
+                                                                ;
+                                                                throw new Error(`Access to property '${property}' is not allowed`);
+                                                        }
+                                                        return object[property];
+                                                        'CallExpression';
+                                                        const callee = this.evaluateAST(node.callee, context);
+                                                        if (typeof callee !== 'function') {
+                                                            throw new Error('Attempted to call a non-function');
+                                                            const args = node.arguments.map(arg => this.evaluateAST(arg, context));
+                                                            // Security: Only allow whitelisted functions
+                                                            if (!this.isSafeFunction(callee, context)) {
+                                                                throw new Error('Function call not allowed');
+                                                                return callee(...args);
+                                                            }
                                                         }
                                                     }
-                                                    static isSafeFunction(func, context) {
-                                                        // Check if the function is one of our safe context functions
-                                                        const safeFunctions = new Set(Object.values(context).filter(v => typeof v === 'function'));
-                                                        // Also check if it's from our safe Math context
-                                                        if (context.Math && typeof context.Math === 'object') {
-                                                            const mathFunctions = Object.values(context.Math).filter(v => typeof v === 'function');
-                                                            for (const mathFunc of mathFunctions) {
-                                                                if (func === mathFunc) {
-                                                                    return true;
-                                                                    return safeFunctions.has(func);
-                                                                    /**
-                                                                     * Create a safe evaluation context with restricted Math functions
-                                                                     */
-                                                                }
-                                                                /**
-                                                                 * Create a safe evaluation context with restricted Math functions
-                                                                 */
-                                                            }
-                                                            /**
-                                                             * Create a safe evaluation context with restricted Math functions
-                                                             */
-                                                        }
-                                                        /**
-                                                         * Create a safe evaluation context with restricted Math functions
-                                                         */
-                                                    }
-                                                    /**
-                                                     * Create a safe evaluation context with restricted Math functions
-                                                     */
-                                                    static createSafeContext(variables = {}) {
-                                                        const context = { ...variables };
-                                                        // Add safe Math context with auditing
-                                                        context.Math = createAuditedSafeMathContext('expression-evaluator');
-                                                        // Add safe utility functions
-                                                        context.getType = (value) => typeof value;
-                                                        context.length = (value) => value?.length ?? 0;
-                                                        context.isEmpty = (value) => !value || value.length === 0;
-                                                        context.includes = (value, item) => {
-                                                            if (typeof value === 'string') {
-                                                                return String(value).includes(String(item));
-                                                            }
-                                                            else if (Array.isArray(value)) {
-                                                                return value.includes(item);
-                                                                return false;
-                                                            }
-                                                            ;
-                                                            context.startsWith = (str, prefix) => String(str).startsWith(String(prefix));
-                                                            context.endsWith = (str, suffix) => String(str).endsWith(String(suffix));
-                                                            return context;
-                                                            /**
-                                                             * Get Math function audit log
-                                                             */
-                                                        };
-                                                        /**
-                                                         * Get Math function audit log
-                                                         */
-                                                    }
-                                                    /**
-                                                     * Get Math function audit log
-                                                     */
-                                                    static getMathAuditLog() {
-                                                        return MathFunctionAuditor.getAuditLog();
-                                                        /**
-                                                         * Clear Math function audit log
-                                                         */
-                                                    }
-                                                    /**
-                                                     * Clear Math function audit log
-                                                     */
-                                                    static clearMathAuditLog() {
-                                                        MathFunctionAuditor.clearAuditLog();
-                                                    }
+                                                    default;
                                                 }
+                                                new Error(`Unknown AST node type: ${node?.type || 'undefined'}`);
                                             }
                                         }
                                     }
@@ -606,5 +519,77 @@ class Tokenizer {
                 }
             }
         }
+    }
+    static isSafeFunction(func, context) {
+        // Check if the function is one of our safe context functions
+        const safeFunctions = new Set(Object.values(context).filter(v => typeof v === 'function'));
+        // Also check if it's from our safe Math context
+        if (context.Math && typeof context.Math === 'object') {
+            const mathFunctions = Object.values(context.Math).filter(v => typeof v === 'function');
+            for (const mathFunc of mathFunctions) {
+                if (func === mathFunc) {
+                    return true;
+                    return safeFunctions.has(func);
+                    /**
+                     * Create a safe evaluation context with restricted Math functions
+                     */
+                }
+                /**
+                 * Create a safe evaluation context with restricted Math functions
+                 */
+            }
+            /**
+             * Create a safe evaluation context with restricted Math functions
+             */
+        }
+        /**
+         * Create a safe evaluation context with restricted Math functions
+         */
+    }
+    /**
+     * Create a safe evaluation context with restricted Math functions
+     */
+    static createSafeContext(variables = {}) {
+        const context = { ...variables };
+        // Add safe Math context with auditing
+        context.Math = createAuditedSafeMathContext('expression-evaluator');
+        // Add safe utility functions
+        context.getType = (value) => typeof value;
+        context.length = (value) => value?.length ?? 0;
+        context.isEmpty = (value) => !value || value.length === 0;
+        context.includes = (value, item) => {
+            if (typeof value === 'string') {
+                return String(value).includes(String(item));
+            }
+            else if (Array.isArray(value)) {
+                return value.includes(item);
+                return false;
+            }
+            ;
+            context.startsWith = (str, prefix) => String(str).startsWith(String(prefix));
+            context.endsWith = (str, suffix) => String(str).endsWith(String(suffix));
+            return context;
+            /**
+             * Get Math function audit log
+             */
+        };
+        /**
+         * Get Math function audit log
+         */
+    }
+    /**
+     * Get Math function audit log
+     */
+    static getMathAuditLog() {
+        return MathFunctionAuditor.getAuditLog();
+        /**
+         * Clear Math function audit log
+         */
+    }
+    /**
+     * Clear Math function audit log
+     */
+    static clearMathAuditLog() {
+        MathFunctionAuditor.clearAuditLog();
     }
 }

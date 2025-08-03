@@ -7,7 +7,9 @@ import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
  * positioning options, and professional styling.
  */
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { NODE_LABEL_STYLES } from '../../types/CollaborationTypes';
+from;
+'../../types/CollaborationTypes';
+showTooltip = true;
 {
     const [isEditing, setIsEditing] = useState(config.isEditing || false);
     const [editValue, setEditValue] = useState(config.customLabel);
@@ -28,10 +30,9 @@ import { NODE_LABEL_STYLES } from '../../types/CollaborationTypes';
             case 'never':
                 return false;
             default:
-                return true;
         }
-        [displayMode, config.displayMode, isNodeHovered, isNodeFocused, isNodeSelected];
-    });
+        return true;
+    }, [displayMode, config.displayMode, isNodeHovered, isNodeFocused, isNodeSelected]);
     // Get effective label to display
     const getEffectiveLabel = useCallback(() => {
         const customLabel = config.customLabel?.trim();
@@ -46,13 +47,12 @@ import { NODE_LABEL_STYLES } from '../../types/CollaborationTypes';
         setIsEditing(true);
         setEditValue(config.customLabel);
         onAction({});
-        type: 'startEdit',
-            nodeId,
-            labelId;
-        config.id,
-        ;
+        type: 'startEdit';
+        nodeId;
+        labelId: config.id;
     });
 }
+;
 [canEdit, config.customLabel, config.id, nodeId, onAction];
 ;
 // Handle input changes
@@ -79,16 +79,14 @@ const saveLabel = useCallback(() => {
     {
         customLabel: newLabel,
             isEditing;
-        false,
-        ;
+        false;
     }
 });
 onAction({});
 type: 'stopEdit',
     nodeId,
     labelId;
-config.id,
-;
+config.id;
 ;
 [editValue, nodeId, config.id, onAction];
 ;
@@ -100,9 +98,9 @@ const cancelEdit = useCallback(() => {
     type: 'stopEdit',
         nodeId,
         labelId;
-    config.id,
-    ;
+    config.id;
 });
+;
 [config.customLabel, config.id, nodeId, onAction];
 ;
 // Handle key events
@@ -113,16 +111,13 @@ const handleKeyDown = useCallback((e) => {
             saveLabel();
             break;
         case 'Escape':
-            e.preventDefault();
-            cancelEdit();
-            break;
     }
-    [saveLabel, cancelEdit];
-});
+    e.preventDefault();
+    cancelEdit();
+    break;
+}, [saveLabel, cancelEdit]);
 // Handle blur
-const handleBlur = useCallback(() => {
-    saveLabel();
-}, [saveLabel]);
+const handleBlur = useCallback(() => { saveLabel(); }, [saveLabel]);
 // Focus input when editing starts
 useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -137,79 +132,64 @@ const getPositionStyles = useCallback(() => {
     const baseStyles = {
         position: 'absolute',
         zIndex: 2000,
-        pointerEvents: 'all',
-    };
-    switch (position) {
-        case 'top':
-            return {
-                ...baseStyles,
-                bottom: '100%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                marginBottom: '8px',
-            };
-        case 'bottom':
-            return {
-                ...baseStyles,
-                top: '100%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                marginTop: '8px',
-            };
-        case 'left':
-            return {
-                ...baseStyles,
-                right: '100%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                marginRight: '8px',
-            };
-        case 'right':
-            return {
-                ...baseStyles,
-                left: '100%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                marginLeft: '8px',
-            };
-        case 'center':
-            return {
-                ...baseStyles,
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-            };
-        default:
-            return {
-                ...baseStyles,
-                top: '100%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                marginTop: '8px',
-            };
-    }
-    [config.position];
+        pointerEvents: 'all' };
 });
+switch (position) {
+    case 'top':
+        return {
+            ...baseStyles,
+            bottom: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            marginBottom: '8px'
+        };
+}
+;
+'bottom';
+return { ...baseStyles,
+    top: '100%',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    marginTop: '8px' };
+;
+'left';
+return { ...baseStyles,
+    right: '100%',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    marginRight: '8px' };
+;
+'right';
+return { ...baseStyles,
+    left: '100%',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    marginLeft: '8px' };
+;
+'center';
+return { ...baseStyles,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)' };
+;
+return { ...baseStyles,
+    top: '100%',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    marginTop: '8px' };
+;
+[config.position];
+;
 // Get label styles
 const getLabelStyles = useCallback(() => {
     const baseStyle = NODE_LABEL_STYLES[config.style] || NODE_LABEL_STYLES.default;
     return {
-        ...baseStyle,
-        ...(config.color && { color: config.color }),
-        ...(config.backgroundColor && { background: config.backgroundColor }),
-        ...(config.fontSize && { fontSize: config.fontSize }),
-        ...(config.fontWeight && { fontWeight: config.fontWeight }),
-        cursor: canEdit ? 'pointer' : 'default',
-        userSelect: 'none',
-        maxWidth: '200px',
-        wordBreak: 'break-word',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        transition: 'all 0.2s ease',
-        fontFamily: 'system-ui, -apple-system, sans-serif'
+        ...baseStyle
     };
-}, [config, canEdit]);
+}, ...(config.color && { color: config.color }), ...(config.backgroundColor && { background: config.backgroundColor }), ...(config.fontSize && { fontSize: config.fontSize }), ...(config.fontWeight && { fontWeight: config.fontWeight }), cursor, canEdit ? 'pointer' : 'default', userSelect, 'none', maxWidth, '200px', wordBreak, 'break-word', whiteSpace, 'nowrap', overflow, 'hidden', textOverflow, 'ellipsis', transition, 'all 0.2s ease', fontFamily, 'system-ui, -apple-system, sans-serif');
+;
+[config, canEdit];
+;
 // Don't render if not visible
 if (!shouldShowLabel()) {
     return null;
@@ -226,7 +206,7 @@ if (!shouldShowLabel()) {
                 border: '2px solid #3b82f6',
                 cursor: 'text',
                 minWidth: '100px',
-                maxWidth: '200px',
+                maxWidth: '200px'
             }, "placeholder=\"Enter label...\" maxLength=", config.truncateLength || 50, "/> ) : ()", _jsxs("div", { style: labelStyles, onDoubleClick: handleDoubleClick, onMouseEnter: (e) => {
                     if (canEdit) {
                         e.currentTarget.style.opacity = '0.8';
@@ -239,8 +219,10 @@ if (!shouldShowLabel()) {
                 marginLeft: '6px',
                 fontSize: '10px',
                 opacity: 0.6,
-                fontStyle: 'italic',
-            }, "> \u270F\uFE0F"] });
+                fontStyle: 'italic'
+            }
+                >
+            , "\u270F\uFE0F"] });
 }
 div >
 ;
@@ -250,49 +232,31 @@ div >
         < button;
     style = {};
     {
-        position: 'absolute',
-            top;
-        '-6px',
-            right;
-        '-6px',
-            width;
-        '16px',
-            height;
-        '16px',
-            borderRadius;
-        '50%',
-            background;
-        '#ef4444',
-            color;
-        'white',
-            border;
-        'none',
-            fontSize;
-        '10px',
-            cursor;
-        'pointer',
-            display;
-        'flex',
-            alignItems;
-        'center',
-            justifyContent;
-        'center',
-            opacity;
-        0.8,
-            transition;
-        'opacity 0.2s ease',
-        ;
+        position: 'absolute';
+        top: '-6px';
+        right: '-6px';
+        width: '16px';
+        height: '16px';
+        borderRadius: '50%';
+        background: '#ef4444';
+        color: 'white';
+        border: 'none';
+        fontSize: '10px';
+        cursor: 'pointer';
+        display: 'flex';
+        alignItems: 'center';
+        justifyContent: 'center';
+        opacity: 0.8;
+        transition: 'opacity 0.2s ease';
     }
-}
-onClick = {}(e);
-{
-    e.stopPropagation();
-    onAction({});
-    type: 'delete',
-        nodeId,
-        labelId;
-    config.id,
-    ;
+    onClick = {}(e);
+    {
+        e.stopPropagation();
+        onAction({});
+        type: 'delete';
+        nodeId;
+        labelId: config.id;
+    }
 }
 ;
 onMouseEnter = {}(e);
@@ -314,10 +278,10 @@ _jsx("style", { children: `
           animation: nodeLabelFadeIn 0.2s ease-out;
         @keyframes nodeLabelFadeIn {
           from {
-            opacity: 0;,
+            opacity: 0;
   transform: translateX(-50%) scale(0.9);
           to {
-            opacity: 1;,
+            opacity: 1;
   transform: translateX(-50%) scale(1);
       ` });
 div >

@@ -6,9 +6,9 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
  * zoom, download, sharing, and detailed information display.
  */
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { InteractionType } from '../../services/Epic16InteractiveElementsService';
-{
-    // Configuration
+from;
+'../../services/Epic16InteractiveElementsService';
+{ // Configuration
     const previewConfig = element.config.preview_config;
     const theme = element.config.theme;
     // State management
@@ -26,47 +26,30 @@ import { InteractionType } from '../../services/Epic16InteractiveElementsService
     useEffect(() => {
         const trackView = async () => {
             await interactiveService.trackInteraction(element.id, {});
-            type: InteractionType.CUSTOM,
-                user_id;
-            userId,
-                timestamp;
-            new Date(),
-                context;
-            {
-                page_url: window.location.href,
-                    referrer;
-                document.referrer,
-                    user_agent;
-                navigator.userAgent,
-                    screen_resolution;
-                `${screen.width}x${screen.height}`;
+            type: InteractionType.CUSTOM;
+            user_id: userId;
+            timestamp: new Date();
+            context: {
+                page_url: window.location.href;
+                referrer: document.referrer;
+                user_agent: navigator.userAgent;
             }
-        }, viewport_size;
-    });
-}
-device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
-    session_id;
-'session-' + Date.now(),
-    ab_test_variant;
-null;
-data: {
-    action: 'preview_opened',
-        template_id;
-    templateId,
-        template_category;
-    templateData.category,
-        template_price;
-    templateData.price,
-    ;
+            screen_resolution: `${screen.width}x${screen.height}`;
+        };
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`;
+    }, device_type, window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop', session_id, 'session-' + Date.now(), ab_test_variant, null, data, {
+        action: 'preview_opened',
+        template_id: templateId,
+        template_category: templateData.category,
+        template_price: templateData.price });
 }
 result: {
     success: true,
         conversion;
-    false,
-        data;
-    {
-        template_id: templateId;
-    }
+    false;
+}
+data: {
+    template_id: templateId;
 }
 duration: 0;
 ;
@@ -84,12 +67,8 @@ const prevImage = useCallback(() => {
     setImageLoaded(false);
 }, [templateData.thumbnails.length]);
 // Handle zoom
-const handleZoomIn = useCallback(() => {
-    setZoomLevel(prev => Math.min(prev + 0.5, 3));
-}, []);
-const handleZoomOut = useCallback(() => {
-    setZoomLevel(prev => Math.max(prev - 0.5, 0.5));
-}, []);
+const handleZoomIn = useCallback(() => { setZoomLevel(prev => Math.min(prev + 0.5, 3)); }, []);
+const handleZoomOut = useCallback(() => { setZoomLevel(prev => Math.max(prev - 0.5, 0.5)); }, []);
 const toggleZoom = useCallback(() => {
     if (isZoomed) {
         setIsZoomed(false);
@@ -119,14 +98,13 @@ const handleWishlistToggle = useCallback(async () => {
                 referrer;
             document.referrer,
                 user_agent;
-            navigator.userAgent,
-                screen_resolution;
-            `${screen.width}x${screen.height}`;
+            navigator.userAgent;
         }
+        screen_resolution: `${screen.width}x${screen.height}`;
     }
-    finally { }
-    viewport_size: `${window.innerWidth}x${window.innerHeight}`;
-});
+    finally {
+    }
+}, viewport_size, `${window.innerWidth}x${window.innerHeight}`);
 device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
     session_id;
 'session-' + Date.now(),
@@ -135,23 +113,22 @@ null;
 data: {
     action: templateData.isInWishlist ? 'wishlist_remove' : 'wishlist_add',
         template_id;
-    templateId,
-    ;
+    templateId;
 }
 result: {
     success: true,
         conversion;
-    !templateData.isInWishlist,
-        data;
-    {
-        wishlist_status: !templateData.isInWishlist;
-    }
+    !templateData.isInWishlist;
+}
+data: {
+    wishlist_status: !templateData.isInWishlist;
 }
 duration: 500;
 ;
 // Update local state (in real app, this would be managed by global state)
 templateData.isInWishlist = !templateData.isInWishlist;
-try { }
+try {
+}
 catch (error) {
     console.error('Failed to update wishlist:', error);
 }
@@ -176,11 +153,11 @@ const handleShare = useCallback(async (platform) => {
             referrer;
         document.referrer,
             user_agent;
-        navigator.userAgent,
-            screen_resolution;
-        `${screen.width}x${screen.height}`;
+        navigator.userAgent;
     }
-}, viewport_size, `${window.innerWidth}x${window.innerHeight}`);
+    screen_resolution: `${screen.width}x${screen.height}`;
+});
+viewport_size: `${window.innerWidth}x${window.innerHeight}`;
 device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
     session_id;
 'session-' + Date.now(),
@@ -191,17 +168,15 @@ data: {
         template_id;
     templateId,
         share_platform;
-    platform,
-    ;
+    platform;
 }
 result: {
     success: true,
         conversion;
-    true,
-        data;
-    {
-        platform;
-    }
+    true;
+}
+data: {
+    platform;
 }
 duration: 0;
 ;
@@ -222,11 +197,11 @@ const handleDownload = useCallback(async () => {
             referrer;
         document.referrer,
             user_agent;
-        navigator.userAgent,
-            screen_resolution;
-        `${screen.width}x${screen.height}`;
+        navigator.userAgent;
     }
-}, viewport_size, `${window.innerWidth}x${window.innerHeight}`);
+    screen_resolution: `${screen.width}x${screen.height}`;
+});
+viewport_size: `${window.innerWidth}x${window.innerHeight}`;
 device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
     session_id;
 'session-' + Date.now(),
@@ -237,17 +212,15 @@ data: {
         template_id;
     templateId,
         was_purchased;
-    templateData.isPurchased,
-    ;
+    templateData.isPurchased;
 }
 result: {
     success: true,
         conversion;
-    true,
-        data;
-    {
-        template_id: templateId;
-    }
+    true;
+}
+data: {
+    template_id: templateId;
 }
 duration: 0;
 ;
@@ -268,11 +241,11 @@ const handlePurchase = useCallback(async () => {
             referrer;
         document.referrer,
             user_agent;
-        navigator.userAgent,
-            screen_resolution;
-        `${screen.width}x${screen.height}`;
+        navigator.userAgent;
     }
-}, viewport_size, `${window.innerWidth}x${window.innerHeight}`);
+    screen_resolution: `${screen.width}x${screen.height}`;
+});
+viewport_size: `${window.innerWidth}x${window.innerHeight}`;
 device_type: window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop',
     session_id;
 'session-' + Date.now(),
@@ -285,8 +258,7 @@ data: {
         price;
     templateData.price,
         currency;
-    templateData.currency,
-    ;
+    templateData.currency;
 }
 result: {
     success: true,
@@ -298,11 +270,10 @@ result: {
             price;
         templateData.price,
             currency;
-        templateData.currency,
-        ;
+        templateData.currency;
     }
-    duration: 0;
 }
+duration: 0;
 ;
 [element.id, interactiveService, userId, templateId, templateData.price, templateData.currency, onPurchase];
 ;
@@ -311,9 +282,9 @@ const formatPrice = useCallback((price, currency) => {
     return new Intl.NumberFormat('en-US', {});
     style: 'currency',
         currency;
-    currency,
-    ;
-}).format(price);
+    currency;
+});
+format(price);
 [];
 ;
 // Render stars for rating
@@ -328,12 +299,11 @@ const renderStars = useCallback((rating, size = 'sm') => {
 });
 return;
 _jsxs("div", { className: "fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4", children: [_jsx("div", { ref: containerRef, className: "bg-white rounded-lg shadow-2xl max-w-6xl w-full max-h-full overflow-hidden flex", style: {
-                backgroundColor: theme.background_color,
-                borderRadius: `${theme.border_radius}px`
-            } }), "} >", _jsxs("div", { className: "flex-1 relative bg-gray-100", children: [_jsxs("div", { className: "relative h-full flex items-center justify-center overflow-hidden", children: [_jsx("img", { ref: imageRef, src: templateData.thumbnails[currentImageIndex], alt: `${templateData.title} preview ${currentImageIndex + 1}`, className: `max-w-full max-h-full object-contain transition-all duration-300 ${isZoomed ? 'cursor-move' : 'cursor-zoom-in',
-                            }`, style: {
+                backgroundColor: theme.background_color
+            }, "borderRadius:": true }), " `$", theme.border_radius, "px`} >", _jsxs("div", { className: "flex-1 relative bg-gray-100", children: [_jsxs("div", { className: "relative h-full flex items-center justify-center overflow-hidden", children: [_jsx("img", { ref: imageRef, src: templateData.thumbnails[currentImageIndex], alt: `${templateData.title} preview ${currentImageIndex + 1}`, className: `max-w-full max-h-full object-contain transition-all duration-300 ${isZoomed ? 'cursor-move' : 'cursor-zoom-in'}
+`, style: {
                                 transform: `scale(${zoomLevel})`
-                            } }), ", filter: imageLoaded ? 'none' : 'blur(4px)'; }} onLoad=", () => setImageLoaded(true), "onClick=", previewConfig.zoom_enabled ? toggleZoom : undefined, "/>", !imageLoaded && ()
+                            }, "filter:imageLoaded": true }), " ? 'none' : 'blur(4px)'; onLoad=", () => setImageLoaded(true), "onClick=", previewConfig.zoom_enabled ? toggleZoom : undefined, "/>", !imageLoaded && ()
                             < div, " className=\"absolute inset-0 flex items-center justify-center\">", _jsx("div", { className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" })] }), ")}"] }), templateData.thumbnails.length > 1 && ()
             <  >
             (_jsx("button", { onClick: prevImage, className: "absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-all", children: _jsx("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M15 19l-7-7 7-7" }) }) })
@@ -385,30 +355,13 @@ _jsxs("div", { className: "flex items-center justify-between", children: [_jsx("
          }), ") : ()", _jsx("span", { className: "text-lg font-bold text-gray-900", children: templateData.price === 0 ? 'Free' : formatPrice(templateData.price, templateData.currency) }), ")}"] })
     ,
         _jsxs("div", { className: "flex items-center space-x-2", children: [_jsx("button", { onClick: handleWishlistToggle, disabled: wishlistLoading, className: `p-2 rounded-full transition-all ${templateData.isInWishlist
-                        ? 'text-red-500 bg-red-50 hover:bg-red-100' : ,
-                 }), ": 'text-gray-400 hover:text-red-500 hover:bg-red-50', }`} title=", templateData.isInWishlist ? 'Remove from wishlist' : 'Add to wishlist', ">", _jsx("svg", { className: "w-5 h-5", fill: templateData.isInWishlist ? 'currentColor' : 'none', stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" }) })] });
-{
-    previewConfig.sharing_enabled && ()
-        < div;
-    className = "relative" >
-        _jsx("button", { onClick: () => setShowShareMenu(!showShareMenu), className: "p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all", title: "Share template", children: _jsx("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" }) }) });
-    {
-        showShareMenu && ()
-            < div;
-        className = "absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-10" >
-            (_jsx("button", { onClick: () => handleShare('twitter'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "Twitter" })
-                ,
-                    _jsx("button", { onClick: () => handleShare('facebook'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "Facebook" })
-                        ,
-                            _jsx("button", { onClick: () => handleShare('linkedin'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "LinkedIn" })
-                                ,
-                                    _jsx("button", { onClick: () => handleShare('copy'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "Copy Link" }));
-        div >
-        ;
-    }
-    div >
-    ;
-}
+                        ? 'text-red-500 bg-red-50 hover:bg-red-100'
+                        : 'text-gray-400 hover:text-red-500 hover:bg-red-50'}
+`, title: templateData.isInWishlist ? 'Remove from wishlist' : 'Add to wishlist', children: _jsx("svg", { className: "w-5 h-5", fill: templateData.isInWishlist ? 'currentColor' : 'none', stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" }) }) }), previewConfig.sharing_enabled && ()
+                    < div, " className=\"relative\">", _jsx("button", { onClick: () => setShowShareMenu(!showShareMenu), className: "p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all", title: "Share template", children: _jsx("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" }) }) }), showShareMenu && ()
+                    < div, " className=\"absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-10\">", _jsx("button", { onClick: () => handleShare('twitter'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "Twitter" }), _jsx("button", { onClick: () => handleShare('facebook'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "Facebook" }), _jsx("button", { onClick: () => handleShare('linkedin'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "LinkedIn" }), _jsx("button", { onClick: () => handleShare('copy'), className: "block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded", children: "Copy Link" })] });
+div >
+;
 div >
 ;
 div >
@@ -420,8 +373,8 @@ className = "border-b border-gray-200" >
     _jsxs("nav", { className: "flex -mb-px", children: [['overview', 'details', 'reviews'].map((tab) => ()
                 < button, key = { tab }, onClick = {}()), " => setActiveTab(tab as any)} className=", `flex-1 py-3 px-4 text-sm font-medium border-b-2 transition-all ${activeTab === tab
                 ? 'border-blue-500 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-            }`, ">", tab.charAt(0).toUpperCase() + tab.slice(1)] });
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
+`, ">", tab.charAt(0).toUpperCase() + tab.slice(1)] });
 nav >
 ;
 div >

@@ -32,9 +32,8 @@ initialParameters = {};
     // Handle parameter changes
     const updateParameter = useCallback(() => );
     ;
-    key: K,
-        value;
-    RandomizerParameters[K];
+    key: K;
+    value: RandomizerParameters[K];
     {
         setParameters(prev => ({ ...prev, [key]: value }));
     }
@@ -59,24 +58,23 @@ initialParameters = {};
             const completeParameters = parameterManager.createCompleteParameters(parameters);
             setGenerationProgress('Generating with LLM...');
             const result = await workflow.generateGraph(completeParameters, {});
-            onProgress: (message) => setGenerationProgress(message),
-            ;
+            onProgress: (message) => setGenerationProgress(message);
         }
-        finally { }
+        finally {
+        }
     });
-    if (result.success && result.graph) {
-        // Add to history
+    if (result.success && result.graph) { // Add to history
         parameterManager.addToHistory();
-        completeParameters,
-            true,
-            result.metadata?.generationTime,
-            result.errors?.length || 0;
-        ;
-        onGraphGenerated?.(result.graph);
-        setGenerationProgress('Generation complete!');
-        setTimeout(() => setGenerationProgress(''), 2000);
+        completeParameters;
+        true;
+        result.metadata?.generationTime;
     }
-    else {
+    result.errors?.length || 0;
+    ;
+    onGraphGenerated?.(result.graph);
+    setGenerationProgress('Generation complete!');
+    setTimeout(() => setGenerationProgress(''), 2000);
+    {
         throw new Error(result.errors?.[0]?.message || 'Generation failed');
     }
     try { }
@@ -97,9 +95,7 @@ initialParameters = {};
         [parameters, validation, parameterManager, workflow, onGraphGenerated, onError];
         ;
         // Get suggestions
-        const suggestions = useMemo(() => {
-            return parameterManager.getSuggestions(parameters);
-        }, [parameters, parameterManager]);
+        const suggestions = useMemo(() => { return parameterManager.getSuggestions(parameters); }, [parameters, parameterManager]);
         return;
         _jsxs("div", { className: `randomizer-panel ${className}`, children: ["}", _jsxs("div", { className: "randomizer-header", children: [_jsx("h2", { children: "LLM Graph Randomizer" }), _jsxs("div", { className: "header-controls", children: [_jsxs("button", { onClick: () => setShowPresets(!showPresets), className: `preset-btn ${showPresets ? 'active' : ''}`, children: ["Presets (", presets.length, ")"] }), _jsxs("button", { onClick: () => setShowHistory(!showHistory), className: `history-btn ${showHistory ? 'active' : ''}`, children: ["History (", history.length, ")"] }), _jsx("button", { onClick: () => setShowAdvanced(!showAdvanced), className: `advanced-btn ${showAdvanced ? 'active' : ''}`, children: "Advanced" })] })] }), showPresets && ()
                     < div, " className=\"presets-panel\">", _jsx("h3", { children: "Parameter Presets" }), Object.entries(presetsByCategory).map(([category, categoryPresets]) => ()

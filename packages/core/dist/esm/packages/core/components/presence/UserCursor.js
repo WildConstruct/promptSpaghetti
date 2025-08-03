@@ -9,9 +9,8 @@ export const UserCursor = ({
     visible = true,
     showLabel = true,
     isFollowing = false,
-    nodeId,
-    className = ''
-});
+    nodeId });
+className = '';
 {
     if (!visible)
         return null;
@@ -21,7 +20,7 @@ export const UserCursor = ({
     _jsxs("div", { className: `absolute pointer-events-none z-50 transition-all duration-200 ${className}`, style: {
             left: x,
             top: y,
-            transform: 'translate(-2px, -2px)',
+            transform: 'translate(-2px, -2px)'
         }, children: [_jsx("svg", { width: "20", height: "20", viewBox: "0 0 20 20", fill: "none", className: "drop-shadow-md", children: _jsx("path", { d: "M2 2L8 18L10.5 11.5L18 9L2 2Z", fill: cursorColor, stroke: "white", strokeWidth: "1" }) }), showLabel && ()
                 < div, "className=\"absolute top-5 left-3 px-2 py-1 rounded text-white text-xs font-medium whitespace-nowrap shadow-lg\" style=", { backgroundColor: cursorColor }, ">", _jsxs("div", { className: "flex items-center space-x-1", children: [userAvatar && ()
                         < img, "src=", userAvatar, "alt=", displayName, "className=\"w-3 h-3 rounded-full\" /> )}", _jsx("span", { children: displayName }), isFollowing && ()
@@ -44,16 +43,15 @@ div >
 ;
 ;
 ;
- > ;
+    > ;
 followingUserId ?  : string;
 showLabels ?  : boolean;
 className ?  : string;
 export const UserCursorOverlay = ({
     cursors,
     followingUserId,
-    showLabels = true,
-    className = ''
-});
+    showLabels = true });
+className = '';
 {
     return;
     _jsxs("div", { className: `absolute inset-0 pointer-events-none ${className}`, children: ["}", cursors.map(cursor => ()
@@ -66,9 +64,8 @@ export const UserSelection = ({
     userName,
     nodeIds,
     color,
-    opacity = 0.3,
-    showLabel = false
-});
+    opacity = 0.3 });
+showLabel = false;
 {
     const selectionColor = color || getUserColor(userId);
     return;
@@ -77,9 +74,8 @@ export const UserSelection = ({
                     top: rect.top,
                     width: rect.width,
                     height: rect.height,
-                    borderColor: selectionColor,
-                    backgroundColor: `${selectionColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`
-                } }, `${userId}-${nodeId}`), ", zIndex: 10; }} >", showLabel && ()
+                    borderColor: selectionColor
+                }, "backgroundColor:": true }, `${userId}-${nodeId}`), " `$", selectionColor, "$", Math.round(opacity * 255).toString(16).padStart(2, '0'), "`} zIndex: 10; >", showLabel && ()
                 < div, "className=\"absolute -top-6 left-0 px-2 py-1 rounded text-white text-xs font-medium whitespace-nowrap\" style=", { backgroundColor: selectionColor }, ">", userName || userId] });
     div >
     ;
@@ -91,12 +87,11 @@ div >
 ;
 ;
 ;
- > ;
+    > ;
 className ?  : string;
 export const TypingIndicator = ({
-    users,
-    className = ''
-});
+    users });
+className = '';
 {
     if (users.length === 0)
         return null;

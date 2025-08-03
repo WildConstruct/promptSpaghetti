@@ -5,10 +5,6 @@
 import { corePerformanceKPIs, calculateKPIStatus, calculateKPITrend } from './PerformanceKPIs';
 import { measureExecution, PerformanceTracker } from '../utils/performance';
 import { EventEmitter } from 'events';
-viewport ?  : { width: number, height: number };
-connection ?  : string;
-deviceMemory ?  : number;
-hardwareConcurrency ?  : number;
 ;
 kpiSnapshots: KPISnapshot;
 systemInfo: {
@@ -20,8 +16,8 @@ systemInfo: {
 testConditions: {
     graphComplexity: 'simple' | 'medium' | 'complex';
     dataSize: 'small' | 'medium' | 'large';
-    concurrentUsers: number;
 }
+concurrentUsers: number;
 ;
 ;
 averageScores: {
@@ -35,6 +31,10 @@ averageScores: {
 }
 ;
 recommendations: string;
+/**
+ * Performance Baseline Measurement System
+ * Captures and manages performance baselines for comparison and improvement tracking
+ */
 export class PerformanceBaseline extends EventEmitter {
     snapshots = [];
     performanceTracker;
@@ -54,8 +54,7 @@ export class PerformanceBaseline extends EventEmitter {
         console.log(`📊 Capturing performance baseline: ${baselineId}`);
     }
 }
-try {
-    // Gather environment information
+try { // Gather environment information
     const environment = this.getEnvironmentInfo();
     // Gather system information
     const systemInfo = this.getSystemInfo();
@@ -63,27 +62,33 @@ try {
     const conditions = {
         graphComplexity: 'medium',
         dataSize: 'medium',
-        concurrentUsers: 1,
-        ...testConditions
+        concurrentUsers: 1
     };
-    // Capture KPI measurements
-    const kpiSnapshots = await this.captureAllKPIs(conditions);
-    const baseline = {
-        id: baselineId,
-        timestamp,
-        environment,
-        systemInfo,
-        testConditions: conditions,
-        kpiSnapshots
-    };
-    // Store baseline
-    this.snapshots.push(baseline);
-    if (this.snapshots.length > this.maxSnapshots) {
-        this.snapshots = this.snapshots.slice(-this.maxSnapshots);
-        console.log(`✅ Baseline captured with ${kpiSnapshots.length} KPI measurements`);
-    }
-    this.emit('baseline-captured', baseline);
-    return baseline;
+    testConditions;
+}
+finally // Capture KPI measurements
+ { }
+;
+// Capture KPI measurements
+const kpiSnapshots = await this.captureAllKPIs(conditions);
+const baseline = {
+    id: baselineId,
+    timestamp,
+    environment,
+    systemInfo,
+    testConditions: conditions
+};
+kpiSnapshots;
+;
+// Store baseline
+this.snapshots.push(baseline);
+if (this.snapshots.length > this.maxSnapshots) {
+    this.snapshots = this.snapshots.slice(-this.maxSnapshots);
+    console.log(`✅ Baseline captured with ${kpiSnapshots.length} KPI measurements`);
+}
+this.emit('baseline-captured', baseline);
+return baseline;
+try {
 }
 catch (error) {
     console.error('❌ Failed to capture baseline:', error);
@@ -103,16 +108,17 @@ catch (error) {
                     value,
                     timestamp: Date.now(),
                     status,
-                    trend: 'stable', // Will be calculated after adding to history,
+                    trend: 'stable', // Will be calculated after adding to history
                     metadata: {
                         testConditions,
-                        measurementMethod: kpi.measurement.method,
-                    },
-                    // Calculate trend with updated history
-                    const: trendSnapshots = [...historicalSnapshots, currentSnapshot],
-                    currentSnapshot, : .trend = calculateKPITrend(trendSnapshots),
-                    kpiSnapshots, : .push(currentSnapshot),
-                    console, : .log(`📈 ${kpi.name}: ${value}${kpi.unit} (${status})`) };
+                        measurementMethod: kpi.measurement.method
+                    }
+                };
+                // Calculate trend with updated history
+                const trendSnapshots = [...historicalSnapshots, currentSnapshot];
+                currentSnapshot.trend = calculateKPITrend(trendSnapshots);
+                kpiSnapshots.push(currentSnapshot);
+                console.log(`📈 ${kpi.name}: ${value}${kpi.unit} (${status})`);
             }
             catch (error) {
                 console.warn(`⚠️ Failed to measure KPI ${kpi.id}:`, error);
@@ -212,7 +218,6 @@ catch (error) {
         // === API Performance Measurements ===
         async measureGraphExecution(complexity) {
             const { metrics } = await measureExecution(async () => {
-                // Simulate graph execution based on complexity
                 const delay = complexity === 'simple' ? 300 : complexity === 'medium' ? 600 : 1200;
                 await this.simulateAsyncWork(delay);
             });
@@ -220,7 +225,6 @@ catch (error) {
         },
         async measurePreviewGeneration(dataSize) {
             const { metrics } = await measureExecution(async () => {
-                // Simulate preview generation based on data size
                 const delay = dataSize === 'small' ? 150 : dataSize === 'medium' ? 300 : 600;
                 await this.simulateAsyncWork(delay);
             });
@@ -228,7 +232,6 @@ catch (error) {
         },
         async measureValidation() {
             const { metrics } = await measureExecution(async () => {
-                // Simulate graph validation
                 await this.simulateAsyncWork(50);
             });
             return metrics.duration;
@@ -337,21 +340,22 @@ catch (error) {
                 env.userAgent = window.navigator.userAgent;
                 env.viewport = {
                     width: window.innerWidth,
-                    height: window.innerHeight,
+                    height: window.innerHeight
                 };
+            }
+            ;
+            // @ts-ignore - Web API
+            if (window.navigator.connection) {
+                // @ts-ignore
+                env.connection = window.navigator.connection.effectiveType;
                 // @ts-ignore - Web API
-                if (window.navigator.connection) {
+                if (window.navigator.deviceMemory) {
                     // @ts-ignore
-                    env.connection = window.navigator.connection.effectiveType;
+                    env.deviceMemory = window.navigator.deviceMemory;
                     // @ts-ignore - Web API
-                    if (window.navigator.deviceMemory) {
-                        // @ts-ignore
-                        env.deviceMemory = window.navigator.deviceMemory;
-                        // @ts-ignore - Web API
-                        if (window.navigator.hardwareConcurrency) {
-                            env.hardwareConcurrency = window.navigator.hardwareConcurrency;
-                            return env;
-                        }
+                    if (window.navigator.hardwareConcurrency) {
+                        env.hardwareConcurrency = window.navigator.hardwareConcurrency;
+                        return env;
                     }
                 }
             }
@@ -398,12 +402,13 @@ catch (error) {
                                 excellent: target.kpiSnapshots.filter(k => k.status === 'excellent').length,
                                 good: target.kpiSnapshots.filter(k => k.status === 'good').length,
                                 warning: target.kpiSnapshots.filter(k => k.status === 'warning').length,
-                                critical: target.kpiSnapshots.filter(k => k.status === 'critical').length,
+                                critical: target.kpiSnapshots.filter(k => k.status === 'critical').length
                             };
-                            const criticalKPIs = target.kpiSnapshots.filter(k => { });
-                            const kpi = corePerformanceKPIs.find(def => def.id === k.kpiId);
-                            return kpi?.priority === 'critical';
                         }
+                        ;
+                        const criticalKPIs = target.kpiSnapshots.filter(k => { });
+                        const kpi = corePerformanceKPIs.find(def => def.id === k.kpiId);
+                        return kpi?.priority === 'critical';
                     }
                 }
             }
@@ -412,127 +417,129 @@ catch (error) {
         const: averageScores = this.calculateCategoryAverages(target.kpiSnapshots),
         // Generate recommendations for poor-performing KPIs
         const: recommendations = this.generateBaselineRecommendations(target.kpiSnapshots),
-        return: {
-            capturedAt: target.timestamp,
+        return: { capturedAt: target.timestamp,
             totalKPIs: target.kpiSnapshots.length,
             criticalKPIs,
             kpisByStatus,
-            averageScores,
-            recommendations
-        },
-        calculateCategoryAverages(snapshots) {
-            const categories = ['runtime', 'api', 'bundle', 'memory', 'network', 'build', 'user-experience'];
-            const averages = {};
-            for (const category of categories) {
-                const categoryKPIs = corePerformanceKPIs.filter(kpi => kpi.category === category);
-                const categorySnapshots = snapshots.filter(snapshot => );
-                ;
-                categoryKPIs.some(kpi => kpi.id === snapshot.kpiId);
-                ;
-                if (categorySnapshots.length > 0) {
-                    // Convert status to numeric score for averaging
-                    const scores = categorySnapshots.map(snapshot => { });
-                    switch (snapshot.status) {
-                        case 'excellent': return 100;
-                        case 'good': return 80;
-                        case 'warning': return 60;
-                        case 'critical': return 30;
-                        default: return 70;
-                    }
-                    ;
-                    averages[category.replace('-', '')] = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
+            averageScores },
+        recommendations
+    };
+    calculateCategoryAverages(snapshots, KPISnapshot);
+    BaselineSummary['averageScores'];
+    {
+        const categories = ['runtime', 'api', 'bundle', 'memory', 'network', 'build', 'user-experience'];
+        const averages = {};
+        for (const category of categories) {
+            const categoryKPIs = corePerformanceKPIs.filter(kpi => kpi.category === category);
+            const categorySnapshots = snapshots.filter(snapshot => );
+            ;
+            categoryKPIs.some(kpi => kpi.id === snapshot.kpiId);
+            ;
+            if (categorySnapshots.length > 0) {
+                // Convert status to numeric score for averaging
+                const scores = categorySnapshots.map(snapshot => { });
+                switch (snapshot.status) {
+                    case 'excellent': return 100;
+                    case 'good': return 80;
+                    case 'warning': return 60;
+                    case 'critical': return 30;
+                    default: return 70;
                 }
-                else {
+                ;
+                averages[category.replace('-', '')] = Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
+                {
                     averages[category.replace('-', '')] = 0;
                     return averages;
-                }
-            }
-        },
-        generateBaselineRecommendations(snapshots) {
-            const recommendations = new Set();
-            const criticalSnapshots = snapshots.filter(s => s.status === 'critical');
-            const warningSnapshots = snapshots.filter(s => s.status === 'warning');
-            if (criticalSnapshots.length > 0) {
-                recommendations.add('🚨 Critical performance issues detected - immediate attention required');
-                recommendations.add('Focus on critical KPIs first: ' + ),
-                    criticalSnapshots.map(s => corePerformanceKPIs.find(k => k.id === s.kpiId)?.name).join(', ');
-                ;
-                if (warningSnapshots.length > 0) {
-                    recommendations.add('⚠️ Performance warnings detected - plan optimization efforts');
-                    // Category-specific recommendations
-                    const runtimeIssues = snapshots.filter(s => s.status !== 'excellent' && s.kpiId.startsWith('runtime_'));
-                    if (runtimeIssues.length > 0) {
-                        recommendations.add('Consider frontend performance optimizations (bundle splitting, lazy loading)');
-                        const apiIssues = snapshots.filter(s => s.status !== 'excellent' && s.kpiId.startsWith('api_'));
-                        if (apiIssues.length > 0) {
-                            recommendations.add('Review API performance and consider caching strategies');
-                            const memoryIssues = snapshots.filter(s => s.status !== 'excellent' && s.kpiId.startsWith('memory_'));
-                            if (memoryIssues.length > 0) {
-                                recommendations.add('Investigate memory usage patterns and implement cleanup strategies');
-                                return Array.from(recommendations);
-                                /**
-                                * Compare two baselines
-                                */
-                                compareBaselines(baseline1, BaselineSnapshot, baseline2, BaselineSnapshot);
-                                {
-                                    improved: string;
-                                    degraded: string;
-                                    unchanged: string;
-                                    const improved = [];
-                                    const degraded = [];
-                                    const unchanged = [];
-                                    for (const kpi of corePerformanceKPIs) {
-                                        const snapshot1 = baseline1.kpiSnapshots.find(s => s.kpiId === kpi.id);
-                                        const snapshot2 = baseline2.kpiSnapshots.find(s => s.kpiId === kpi.id);
-                                        if (snapshot1 && snapshot2) {
-                                            const isLowerBetter = kpi.category === 'runtime' || kpi.category === 'api' || ;
-                                            kpi.category === 'memory' || kpi.category === 'network' ||
-                                                kpi.id === 'ux_error_rate';
-                                            const improvement = isLowerBetter ?  : ;
-                                            snapshot1.value - snapshot2.value;
-                                            snapshot2.value - snapshot1.value;
-                                            const changeThreshold = kpi.target * 0.05; // 5% change threshold;
-                                            if (improvement > changeThreshold) {
-                                                improved.push(kpi.name);
-                                            }
-                                            else if (improvement < -changeThreshold) {
-                                                degraded.push(kpi.name);
-                                            }
-                                            else {
-                                                unchanged.push(kpi.name);
-                                                return { improved, degraded, unchanged };
-                                                /**
-                                                 * Export baseline data
-                                                 */
-                                                exportBaseline(baseline ?  : BaselineSnapshot);
-                                                string;
-                                                {
-                                                    const data = baseline || this.getLatestBaseline();
-                                                    if (!data) {
-                                                        throw new Error('No baseline data to export');
-                                                        return JSON.stringify(data, null, 2);
+                    generateBaselineRecommendations(snapshots, KPISnapshot);
+                    string;
+                    {
+                        const recommendations = new Set();
+                        const criticalSnapshots = snapshots.filter(s => s.status === 'critical');
+                        const warningSnapshots = snapshots.filter(s => s.status === 'warning');
+                        if (criticalSnapshots.length > 0) {
+                            recommendations.add('🚨 Critical performance issues detected - immediate attention required');
+                            recommendations.add('Focus on critical KPIs first: ' + );
+                            criticalSnapshots.map(s => corePerformanceKPIs.find(k => k.id === s.kpiId)?.name).join(', ');
+                            ;
+                            if (warningSnapshots.length > 0) {
+                                recommendations.add('⚠️ Performance warnings detected - plan optimization efforts');
+                                // Category-specific recommendations
+                                const runtimeIssues = snapshots.filter(s => s.status !== 'excellent' && s.kpiId.startsWith('runtime_'));
+                                if (runtimeIssues.length > 0) {
+                                    recommendations.add('Consider frontend performance optimizations (bundle splitting, lazy loading)');
+                                    const apiIssues = snapshots.filter(s => s.status !== 'excellent' && s.kpiId.startsWith('api_'));
+                                    if (apiIssues.length > 0) {
+                                        recommendations.add('Review API performance and consider caching strategies');
+                                        const memoryIssues = snapshots.filter(s => s.status !== 'excellent' && s.kpiId.startsWith('memory_'));
+                                        if (memoryIssues.length > 0) {
+                                            recommendations.add('Investigate memory usage patterns and implement cleanup strategies');
+                                            return Array.from(recommendations);
+                                            /**
+                                            * Compare two baselines
+                                            */
+                                            compareBaselines(baseline1, BaselineSnapshot, baseline2, BaselineSnapshot);
+                                            {
+                                                improved: string;
+                                                degraded: string;
+                                                unchanged: string;
+                                                const improved = [];
+                                                const degraded = [];
+                                                const unchanged = [];
+                                                for (const kpi of corePerformanceKPIs) {
+                                                    const snapshot1 = baseline1.kpiSnapshots.find(s => s.kpiId === kpi.id);
+                                                    const snapshot2 = baseline2.kpiSnapshots.find(s => s.kpiId === kpi.id);
+                                                    if (snapshot1 && snapshot2) {
+                                                        const isLowerBetter = kpi.category === 'runtime' || kpi.category === 'api' || ;
+                                                        kpi.category === 'memory' || kpi.category === 'network' ||
+                                                            kpi.id === 'ux_error_rate';
+                                                        const improvement = isLowerBetter ?  : ;
+                                                        snapshot1.value - snapshot2.value;
+                                                    }
+                                                    snapshot2.value - snapshot1.value;
+                                                    const changeThreshold = kpi.target * 0.05; // 5% change threshold;
+                                                    if (improvement > changeThreshold) {
+                                                        improved.push(kpi.name);
+                                                    }
+                                                    else if (improvement < -changeThreshold) {
+                                                        degraded.push(kpi.name);
+                                                    }
+                                                    else {
+                                                        unchanged.push(kpi.name);
+                                                        return { improved, degraded, unchanged };
                                                         /**
-                                                         * Import baseline data
+                                                         * Export baseline data
                                                          */
-                                                        importBaseline(data, string);
-                                                        BaselineSnapshot;
+                                                        exportBaseline(baseline ?  : BaselineSnapshot);
+                                                        string;
                                                         {
-                                                            const baseline = JSON.parse(data);
-                                                            this.snapshots.push(baseline);
-                                                            if (this.snapshots.length > this.maxSnapshots) {
-                                                                this.snapshots = this.snapshots.slice(-this.maxSnapshots);
-                                                                this.emit('baseline-imported', baseline);
-                                                                return baseline;
+                                                            const data = baseline || this.getLatestBaseline();
+                                                            if (!data) {
+                                                                throw new Error('No baseline data to export');
+                                                                return JSON.stringify(data, null, 2);
                                                                 /**
-                                                                 * Clear all baseline data
+                                                                 * Import baseline data
                                                                  */
-                                                                clearBaselines();
-                                                                void {
-                                                                    this: .snapshots = [],
-                                                                    this: .performanceTracker.clear(),
-                                                                    this: .emit('baselines-cleared'),
-                                                                    export: , default: PerformanceBaseline
-                                                                };
+                                                                importBaseline(data, string);
+                                                                BaselineSnapshot;
+                                                                {
+                                                                    const baseline = JSON.parse(data);
+                                                                    this.snapshots.push(baseline);
+                                                                    if (this.snapshots.length > this.maxSnapshots) {
+                                                                        this.snapshots = this.snapshots.slice(-this.maxSnapshots);
+                                                                        this.emit('baseline-imported', baseline);
+                                                                        return baseline;
+                                                                        /**
+                                                                         * Clear all baseline data
+                                                                         */
+                                                                        clearBaselines();
+                                                                        void {
+                                                                            this: .snapshots = [],
+                                                                            this: .performanceTracker.clear(),
+                                                                            this: .emit('baselines-cleared'),
+                                                                            export: , default: PerformanceBaseline
+                                                                        };
+                                                                    }
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -546,5 +553,6 @@ catch (error) {
                     }
                 }
             }
-        } };
+        }
+    }
 }

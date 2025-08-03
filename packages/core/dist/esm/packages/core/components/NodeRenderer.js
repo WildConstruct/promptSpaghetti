@@ -2,7 +2,12 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { memo, useState, useRef, useEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import { useSmoothHover, globalAnimationManager } from '../utils/smoothAnimations';
-export const NodeRenderer = memo(({}), id, data, selected = false, onSelect, getNodeMeta, getCategoryColor);
+export const NodeRenderer = memo(({}), id);
+data;
+selected = false;
+onSelect;
+getNodeMeta;
+getCategoryColor;
 {
     const [_____isCreating, setIsCreating] = useState(false);
     const [isDeleting, _____setIsDeleting] = useState(false);
@@ -49,70 +54,73 @@ export const NodeRenderer = memo(({}), id, data, selected = false, onSelect, get
                     onSelect(id);
                 }
             }, style: {
-                cursor: 'pointer',
+                cursor: 'pointer'
                 // Professional gradient background inspired by Cinema 4D panels
-                background: `linear-gradient(),
-  135deg,
+                ,
+                // Professional gradient background inspired by Cinema 4D panels
+                background: `linear-gradient()
+  135deg
   var(--bg-tertiary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%)`,
-                border: selected,
-                '2px solid var(--accent-orange)': '1px solid var(--border)',
+                border: selected
+                    ? '2px solid var(--accent-orange)'
+                    : '1px solid var(--border)',
                 borderRadius: 'var(--radius-md)',
-                minWidth: 180, // Slightly larger for professional appearance,
+                minWidth: 180, // Slightly larger for professional appearance
                 minHeight: 90,
-                boxShadow: (() => {
-                    if (selected)
-                        return 'var(--shadow-node-selected)';
-                    if (isHovered)
-                        return 'var(--shadow-node-hover)';
-                    return 'var(--shadow-node)';
-                })(),
-                position: 'relative',
-                overflow: 'visible',
-                fontFamily: 'var(--font-primary)',
-                // 60fps optimized transition using will-change and GPU acceleration
-                transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
-                willChange: 'transform, box-shadow, filter',
-                // Transform for selected/hover states with hardware acceleration
-                transform: (() => {
-                    if (selected)
-                        return 'translateY(-2px) translateZ(0) scale(1.02)';
-                    if (isHovered && !selected)
-                        return 'translateY(-3px) translateZ(0)';
-                    return 'translateY(0) translateZ(0)';
-                })(),
-                // Filter effects for enhanced visual feedback
-                filter: (() => {
-                    if (selected)
-                        return 'brightness(1.08) contrast(1.02)';
-                    if (isHovered && !selected)
-                        return 'brightness(1.05)';
-                    return 'brightness(1)';
-                })(),
-                zIndex: (() => {
-                    if (selected)
-                        return 3;
-                    if (isHovered)
-                        return 2;
-                    return 1;
-                })(),
-                pointerEvents: 'auto',
-                display: 'block',
-                // Force GPU acceleration for smoother animations
-                WebkitBackfaceVisibility: 'hidden',
-                backfaceVisibility: 'hidden',
-                WebkitPerspective: 1000,
-                perspective: 1000
-            }, "aria-label": (() => {
+                boxShadow: (() => { }),
+                if(selected) { }, return: 'var(--shadow-node-selected)',
+                if(isHovered) { }, return: 'var(--shadow-node-hover)',
+                return: 'var(--shadow-node)'
+            } });
+        ();
+        position: 'relative';
+        overflow: 'visible';
+        fontFamily: 'var(--font-primary)';
+        // 60fps optimized transition using will-change and GPU acceleration
+        transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)';
+        willChange: 'transform, box-shadow, filter';
+        // Transform for selected/hover states with hardware acceleration
+        transform: (() => {
+            if (selected)
+                return 'translateY(-2px) translateZ(0) scale(1.02)';
+            if (isHovered && !selected)
+                return 'translateY(-3px) translateZ(0)';
+            return 'translateY(0) translateZ(0)';
+        })();
+        // Filter effects for enhanced visual feedback
+        filter: (() => {
+            if (selected)
+                return 'brightness(1.08) contrast(1.02)';
+            if (isHovered && !selected)
+                return 'brightness(1.05)';
+            return 'brightness(1)';
+        })();
+        zIndex: (() => {
+            if (selected)
+                return 3;
+            if (isHovered)
+                return 2;
+            return 1;
+        })();
+        pointerEvents: 'auto';
+        display: 'block';
+        // Force GPU acceleration for smoother animations
+        WebkitBackfaceVisibility: 'hidden';
+        backfaceVisibility: 'hidden';
+        WebkitPerspective: 1000;
+        perspective: 1000;
+        aria - label;
+        {
+            (() => {
                 const label = data?.label ?? nodeMeta.label;
                 const summary = properties.map(([k, v]) => `${k}: ${String(v)}`).join(', ');
-            }), return: true, summary: true });
-        `${label}. ${summary}`;
-        label;
+            });
+            return summary ? `${label}. ${summary}` : label;
+        }
     }
-    finally {
-    }
+    finally { }
+    ();
 }
-();
     >
         { /* Header Section */}
     < div;
@@ -121,31 +129,22 @@ style = {};
     // Cinema 4D inspired header gradient
     background: `linear-gradient(135deg, ${categoryColor} 0%, ${categoryColor}dd 100%)`;
 }
-color: '#ffffff',
-    padding;
-'var(--space-2) var(--space-3)',
-    fontSize;
-'var(--font-size-xs)',
-    fontWeight;
-600,
-    display;
-'flex',
-    alignItems;
-'center',
-    gap;
-'var(--space-2)',
-    borderRadius;
-'var(--radius-md) var(--radius-md) 0 0',
-    // Subtle text shadow for better readability
-    textShadow;
-'0 1px 2px rgba(0,0,0,0.3)',
-    // Inner highlight for professional appearance
-    boxShadow;
-'inset 0 1px 0 rgba(255,255,255,0.2)';
+color: '#ffffff';
+padding: 'var(--space-2) var(--space-3)';
+fontSize: 'var(--font-size-xs)';
+fontWeight: 600;
+display: 'flex';
+alignItems: 'center';
+gap: 'var(--space-2)';
+borderRadius: 'var(--radius-md) var(--radius-md) 0 0';
+// Subtle text shadow for better readability
+textShadow: '0 1px 2px rgba(0,0,0,0.3)';
+// Inner highlight for professional appearance
+boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2)'
     >
         (_jsx("span", { style: {
                 fontSize: 16,
-                filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))',
+                filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.3))'
             }, children: typeof nodeMeta.icon === 'string' ? nodeMeta.icon : '🔧' })
             ,
                 _jsx("span", { style: { letterSpacing: '0.01em' }, children: nodeMeta.label }));
@@ -154,33 +153,21 @@ color: '#ffffff',
         < div;
     style = {};
     {
-        marginLeft: 'auto',
-            width;
-        20,
-            height;
-        20,
-            backgroundColor;
-        'rgba(255,255,255,0.25)',
-            borderRadius;
-        '50%',
-            display;
-        'flex',
-            alignItems;
-        'center',
-            justifyContent;
-        'center',
-            fontSize;
-        10,
-            fontWeight;
-        'bold',
-            boxShadow;
-        'inset 0 1px 2px rgba(0,0,0,0.2)',
-            transition;
-        'all 0.2s ease',
-        ;
+        marginLeft: 'auto';
+        width: 20;
+        height: 20;
+        backgroundColor: 'rgba(255,255,255,0.25)';
+        borderRadius: '50%';
+        display: 'flex';
+        alignItems: 'center';
+        justifyContent: 'center';
+        fontSize: 10;
+        fontWeight: 'bold';
+        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.2)';
+        transition: 'all 0.2s ease';
     }
+    title = {} `${data.variations.length} variations`;
 }
-title = {} `${data.variations.length} variations`;
     >
         { data, : .variations.length };
 div >
@@ -190,33 +177,23 @@ div >
     < div;
 style = {};
 {
-    padding: 'var(--space-3)',
-        color;
-    'var(--text-primary)',
-        minHeight;
-    '50px',
-        background;
-    'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)',
-    ;
+    padding: 'var(--space-3)';
+    color: 'var(--text-primary)';
+    minHeight: '50px';
+    background: 'linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 100%)';
 }
  >
     { /* Node Title */}
     < div;
 style = {};
 {
-    fontWeight: 600,
-        fontSize;
-    'var(--font-size-base)',
-        marginBottom;
-    properties.length > 0 ? 'var(--space-2)' : 0,
-        color;
-    'var(--text-primary)',
-        lineHeight;
-    1.3,
-    ;
+    fontWeight: 600;
+    fontSize: 'var(--font-size-base)';
+    marginBottom: properties.length > 0 ? 'var(--space-2)' : 0;
+    color: 'var(--text-primary)';
+    lineHeight: 1.3;
     (selected && {
-        textShadow: '0 0 8px var(--accent-orange)40',
-    });
+        textShadow: '0 0 8px var(--accent-orange)40' });
 }
  >
     { data, label } || nodeMeta.label || nodeType || id;
@@ -227,31 +204,29 @@ div >
         < div;
     style = {};
     {
-        fontSize: 'var(--font-size-xs)',
-            color;
-        'var(--text-secondary)',
-            lineHeight;
-        1.4,
-            fontFamily;
-        'var(--font-mono)'; // Monospace for technical properties,
+        fontSize: 'var(--font-size-xs)';
+        color: 'var(--text-secondary)';
+        lineHeight: 1.4;
+        fontFamily: 'var(--font-mono)'; // Monospace for technical properties }
     }
+     >
+        { properties, : .map(([k, v], idx) => ()
+                < div, key = { k }, style = {}, {
+                marginBottom: idx < properties.length - 1 ? '3px' : 0,
+                opacity: 0.8
+            })
+        } >
+        _jsxs("span", { style: {
+                color: 'var(--text-tertiary)',
+                fontWeight: 500
+            }, children: [k, ":"] });
+    {
+        ' ';
+    }
+    _jsx("span", { style: { color: 'var(--text-secondary)' }, children: String(v).length > 22 ? String(v).slice(0, 22) + '…' : String(v) });
+    div >
+    ;
 }
- >
-    { properties, : .map(([k, v], idx) => ()
-            < div, key = { k }, style = {}, {
-            marginBottom: idx < properties.length - 1 ? '3px' : 0,
-            opacity: 0.8,
-        }) } >
-    _jsxs("span", { style: {
-            color: 'var(--text-tertiary)',
-            fontWeight: 500,
-        }, children: [k, ":"] });
-{
-    ' ';
-}
-_jsx("span", { style: { color: 'var(--text-secondary)' }, children: String(v).length > 22 ? String(v).slice(0, 22) + '…' : String(v) });
-div >
-;
 div >
 ;
 div >
@@ -263,32 +238,20 @@ id = "target";
 className = "animate-hover-scale";
 style = {};
 {
-    width: 14,
-        height;
-    14,
-        borderRadius;
-    '50%',
-        background;
-    'var(--border)',
-        border;
-    '2px solid var(--bg-secondary)',
-        cursor;
-    'crosshair',
-        zIndex;
-    10,
-        // 60fps optimized transition
-        transition;
-    'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
-        willChange;
-    'transform, box-shadow, background-color',
-        boxShadow;
-    'var(--shadow-sm)',
-        // Force hardware acceleration
-        WebkitBackfaceVisibility;
-    'hidden',
-        backfaceVisibility;
-    'hidden',
-    ;
+    width: 14;
+    height: 14;
+    borderRadius: '50%';
+    background: 'var(--border)';
+    border: '2px solid var(--bg-secondary)';
+    cursor: 'crosshair';
+    zIndex: 10;
+    // 60fps optimized transition
+    transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)';
+    willChange: 'transform, box-shadow, background-color';
+    boxShadow: 'var(--shadow-sm)';
+    // Force hardware acceleration
+    WebkitBackfaceVisibility: 'hidden';
+    backfaceVisibility: 'hidden';
 }
 onMouseEnter = {}(e);
 {
@@ -314,32 +277,20 @@ id = "source";
 className = "animate-hover-scale";
 style = {};
 {
-    width: 14,
-        height;
-    14,
-        borderRadius;
-    '50%',
-        background;
-    categoryColor,
-        border;
-    '2px solid var(--bg-secondary)',
-        cursor;
-    'crosshair',
-        zIndex;
-    10,
-        // 60fps optimized transition
-        transition;
-    'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)',
-        willChange;
-    'transform, box-shadow',
-        boxShadow;
-    'var(--shadow-sm)',
-        // Force hardware acceleration
-        WebkitBackfaceVisibility;
-    'hidden',
-        backfaceVisibility;
-    'hidden',
-    ;
+    width: 14;
+    height: 14;
+    borderRadius: '50%';
+    background: categoryColor;
+    border: '2px solid var(--bg-secondary)';
+    cursor: 'crosshair';
+    zIndex: 10;
+    // 60fps optimized transition
+    transition: 'all 0.15s cubic-bezier(0.4, 0, 0.2, 1)';
+    willChange: 'transform, box-shadow';
+    boxShadow: 'var(--shadow-sm)';
+    // Force hardware acceleration
+    WebkitBackfaceVisibility: 'hidden';
+    backfaceVisibility: 'hidden';
 }
 onMouseEnter = {}(e);
 {
@@ -359,7 +310,8 @@ isConnectable = { true:  }
 div >
 ;
 ;
-try { }
+try {
+}
 catch (error) {
     console.error('NodeRenderer error:', error, 'Props:', { id, data });
     // Professional error state
@@ -378,13 +330,12 @@ catch (error) {
             justifyContent: 'center',
             fontFamily: 'var(--font-primary)',
             boxShadow: 'var(--shadow-md)',
-            textAlign: 'center',
-        }, children: _jsxs("div", { children: [_jsx("div", { style: {
-                        fontSize: 'var(--font-size-lg)',
-                        marginBottom: 'var(--space-2)',
-                        color: 'var(--accent-red)',
-                    }, children: "\u26A0\uFE0F" }), _jsxs("div", { style: { fontSize: 'var(--font-size-sm)' }, children: ["Error: ", data?.nodeType || data?.type || 'Unknown'] })] }) });
-    ;
+            textAlign: 'center'
+        }
+            >
+                _jsxs("div", { children: [_jsx("div", { style: {
+                                fontSize: 'var(--font-size-lg)',
+                                marginBottom: 'var(--space-2)',
+                                color: 'var(--accent-red)'
+                            }, children: "\u26A0\uFE0F" }), _jsxs("div", { style: { fontSize: 'var(--font-size-sm)' }, children: ["Error: ", data?.nodeType || data?.type || 'Unknown'] })] }), div: true, children: "); }); NodeRenderer.displayName = 'NodeRenderer';" });
 }
-;
-NodeRenderer.displayName = 'NodeRenderer';

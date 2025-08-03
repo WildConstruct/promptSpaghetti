@@ -1,6 +1,8 @@
 // packages/core/settings/SettingsManager.ts
 // Settings management system for Epic 7.3 Advanced Settings Modal
-import { AdvancedSettingsSchema } from './types';
+import { AdvancedSettings, AdvancedSettingsSchema, SettingsValidationResult } from UISettings;
+from;
+'./types';
 /**
  * LocalStorage key for settings persistence
  */
@@ -13,45 +15,52 @@ const DEFAULT_SETTINGS = {
     seed: {
         enabled: false,
         history: [],
-        autoGenerate: true,
-    },
-    temperature: {
-        enabled: false,
-        value: 1.0,
-        showIndicator: true,
-        presets: [
-            { name: 'Conservative', value: 0.3, description: 'More predictable results' },
-            { name: 'Balanced', value: 1.0, description: 'Standard randomness' },
-            { name: 'Creative', value: 1.7, description: 'More varied results' }
-        ]
-    },
-    runCount: {
-        value: 5,
-        showPerformanceWarning: true,
-        presets: [1, 3, 5, 10, 20],
-    },
-    batch: {
-        batchSize: 5,
-        outputFormat: 'individual',
-        namingPattern: 'result-{seed}-{timestamp}',
-        includeMetadata: true,
-        autoDownload: false
-    },
-    performance: {
-        showExecutionTimes: false,
-        enableCaching: true,
-        showMemoryUsage: false,
-        logExecutionSteps: false,
-    },
-    ui: {
-        theme: 'auto',
-        showTooltips: true,
-        enableKeyboardShortcuts: true,
-        reduceAnimations: false,
-        highContrast: false,
-    },
-    version: SETTINGS_VERSION
-};
+        autoGenerate: true }
+}, temperature;
+presets: [
+    { name: 'Conservative', value: 0.3, description: 'More predictable results' },
+    { name: 'Balanced', value: 1.0, description: 'Standard randomness' },
+    { name: 'Creative', value: 1.7, description: 'More varied results' }
+];
+runCount: {
+    value: 5,
+        showPerformanceWarning;
+    true,
+        presets;
+    [1, 3, 5, 10, 20];
+}
+batch: {
+    batchSize: 5,
+        outputFormat;
+    'individual';
+}
+namingPattern: 'result-{seed}-{timestamp}',
+    includeMetadata;
+true,
+    autoDownload;
+false;
+performance: {
+    showExecutionTimes: false,
+        enableCaching;
+    true,
+        showMemoryUsage;
+    false,
+        logExecutionSteps;
+    false;
+}
+ui: {
+    theme: 'auto',
+        showTooltips;
+    true,
+        enableKeyboardShortcuts;
+    true,
+        reduceAnimations;
+    false,
+        highContrast;
+    false;
+}
+version: SETTINGS_VERSION;
+;
 /**
  * Singleton settings manager class
  */
@@ -95,8 +104,7 @@ export class SettingsManager {
     /**
      * Get specific setting value
      */
-    getSetting(key) {
-        return this.settings[key];
+    getSetting(key) { return this.settings[key]; 
         /**
          * Update settings with validation
          */
@@ -120,114 +128,115 @@ export class SettingsManager {
                 key,
                 value: newSettings[typedKey],
                 previousValue: previousSettings[typedKey],
-                timestamp: new Date(),
-                source
-            });
+                timestamp: new Date()
+            }, source);
         }
         ;
-        // Auto-save if enabled
-        if (this.autoSaveEnabled && source !== 'import') {
-            this.debouncedSave();
-            return { valid: true, errors: [], warnings: [] };
-            updateSetting(key, K);
-            value: AdvancedSettings[K],
-                source;
-            'user' | 'system' | 'import';
-            'user';
+    }
+    ;
+    // Auto-save if enabled
+    if (this.autoSaveEnabled && source !== 'import') {
+        this.debouncedSave();
+        return { valid: true, errors: [], warnings: [] };
+        updateSetting(key, K);
+        value: AdvancedSettings[K];
+        source: 'user' | 'system' | 'import';
+        'user';
+        SettingsValidationResult;
+        {
+            return this.updateSettings({ [key]: value }, source);
+            resetSettings();
             SettingsValidationResult;
             {
-                return this.updateSettings({ [key]: value }, source);
-                resetSettings();
-                SettingsValidationResult;
-                {
-                    const previousSettings = { ...this.settings };
-                    this.settings = { ...DEFAULT_SETTINGS };
-                    this.settings.lastModified = new Date().toISOString();
-                    // Notify listeners
-                    Object.keys(DEFAULT_SETTINGS).forEach(key => { });
-                    const typedKey = key;
-                    this.notifyChange({
-                        key,
-                        value: DEFAULT_SETTINGS[typedKey],
-                        previousValue: previousSettings[typedKey],
-                        timestamp: new Date(),
-                        source: 'system',
-                    });
+                const previousSettings = { ...this.settings };
+                this.settings = { ...DEFAULT_SETTINGS };
+                this.settings.lastModified = new Date().toISOString();
+                // Notify listeners
+                Object.keys(DEFAULT_SETTINGS).forEach(key => { });
+                const typedKey = key;
+                this.notifyChange({
+                    key,
+                    value: DEFAULT_SETTINGS[typedKey],
+                    previousValue: previousSettings[typedKey],
+                    timestamp: new Date(),
+                    source: 'system'
+                });
+            }
+            ;
+        }
+        ;
+        this.saveSettings();
+        return { valid: true, errors: [], warnings: [] };
+        addChangeListener(listener, SettingsChangeListener);
+        () => void { this: .listeners.add(listener),
+            return() { }, this: .listeners.delete(listener),
+            /**
+            * Remove all listeners
+            */
+            clearListeners() {
+                this.listeners.clear();
+                /**
+                * Save settings to localStorage
+                */
+            }
+            /**
+            * Save settings to localStorage
+            */
+            ,
+            /**
+            * Save settings to localStorage
+            */
+            saveSettings() {
+                try {
+                    const settingsData = {
+                        settings: this.settings,
+                        timestamp: new Date().toISOString(),
+                        version: SETTINGS_VERSION
+                    };
                 }
+                finally { }
                 ;
-                this.saveSettings();
-                return { valid: true, errors: [], warnings: [] };
-                addChangeListener(listener, SettingsChangeListener);
-                () => void {
-                    this: .listeners.add(listener),
-                    return() { }, this: .listeners.delete(listener),
-                    /**
-                    * Remove all listeners
-                    */
-                    clearListeners() {
-                        this.listeners.clear();
-                        /**
-                        * Save settings to localStorage
-                        */
-                    }
-                    /**
-                    * Save settings to localStorage
-                    */
-                    ,
-                    /**
-                    * Save settings to localStorage
-                    */
-                    saveSettings() {
-                        try {
-                            const settingsData = {
-                                settings: this.settings,
-                                timestamp: new Date().toISOString(),
-                                version: SETTINGS_VERSION,
-                            };
-                            localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settingsData));
-                            return true;
-                        }
-                        catch (error) {
-                            console.error('Failed to save settings:', error);
-                            return false;
-                            /**
-                             * Load settings from localStorage
-                             */
-                        }
-                        /**
-                         * Load settings from localStorage
-                         */
-                    }
+                localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settingsData));
+                return true;
+                try {
+                }
+                catch (error) {
+                    console.error('Failed to save settings:', error);
+                    return false;
                     /**
                      * Load settings from localStorage
                      */
-                    ,
-                    /**
-                     * Load settings from localStorage
-                     */
-                    loadSettings() {
-                        try {
-                            const savedData = localStorage.getItem(SETTINGS_STORAGE_KEY);
-                            if (!savedData) {
+                }
+                /**
+                 * Load settings from localStorage
+                 */
+            }
+            /**
+             * Load settings from localStorage
+             */
+            ,
+            /**
+             * Load settings from localStorage
+             */
+            loadSettings() {
+                try {
+                    const savedData = localStorage.getItem(SETTINGS_STORAGE_KEY);
+                    if (!savedData) {
+                        return { ...DEFAULT_SETTINGS };
+                        const parsedData = JSON.parse(savedData);
+                        const loadedSettings = parsedData.settings || parsedData;
+                        // Validate loaded settings
+                        const validation = AdvancedSettingsSchema.safeParse(loadedSettings);
+                        if (!validation.success) {
+                            console.warn('Invalid settings loaded, using defaults:', validation.error);
+                            return { ...DEFAULT_SETTINGS };
+                            // Merge with defaults to handle missing fields from version upgrades
+                            return { ...DEFAULT_SETTINGS, ...validation.data };
+                            try {
+                            }
+                            catch (error) {
+                                console.error('Failed to load settings:', error);
                                 return { ...DEFAULT_SETTINGS };
-                                const parsedData = JSON.parse(savedData);
-                                const loadedSettings = parsedData.settings || parsedData;
-                                // Validate loaded settings
-                                const validation = AdvancedSettingsSchema.safeParse(loadedSettings);
-                                if (!validation.success) {
-                                    console.warn('Invalid settings loaded, using defaults:', validation.error);
-                                    return { ...DEFAULT_SETTINGS };
-                                    // Merge with defaults to handle missing fields from version upgrades
-                                    return { ...DEFAULT_SETTINGS, ...validation.data };
-                                }
-                                try { }
-                                catch (error) {
-                                    console.error('Failed to load settings:', error);
-                                    return { ...DEFAULT_SETTINGS };
-                                    /**
-                                     * Validate settings object
-                                     */
-                                }
                                 /**
                                  * Validate settings object
                                  */
@@ -239,282 +248,266 @@ export class SettingsManager {
                         /**
                          * Validate settings object
                          */
+                    }
+                    /**
+                     * Validate settings object
+                     */
+                }
+                /**
+                 * Validate settings object
+                 */
+                finally {
+                }
+                /**
+                 * Validate settings object
+                 */
+            }
+            /**
+             * Validate settings object
+             */
+            ,
+            /**
+             * Validate settings object
+             */
+            validateSettings(settings) {
+                const validation = AdvancedSettingsSchema.safeParse(settings);
+                if (validation.success) {
+                    return { valid: true, errors: [], warnings: [] };
+                    const errors = validation.error.errors.map(err => );
+                    ;
+                    `${err.path.join('.')}: ${err.message}`;
+                }
+                ;
+                return { valid: false, errors, warnings: [] };
+                /**
+                 * Notify change listeners
+                 */
+            }
+            /**
+             * Notify change listeners
+             */
+            ,
+            /**
+             * Notify change listeners
+             */
+            notifyChange(event) {
+                this.listeners.forEach(listener => { });
+                try {
+                    listener(event);
+                }
+                catch (error) {
+                    console.error('Settings change listener error:', error);
+                }
+                ;
+                /**
+                 * Debounced save to avoid excessive localStorage writes
+                 */
+            }
+            /**
+             * Debounced save to avoid excessive localStorage writes
+             */
+            ,
+            /**
+             * Debounced save to avoid excessive localStorage writes
+             */
+            debouncedSave() {
+                if (this.debounceTimer) {
+                    clearTimeout(this.debounceTimer);
+                    this.debounceTimer = setTimeout(() => {
+                        this.saveSettings();
+                        this.debounceTimer = null;
+                    }, 1000);
+                    /**
+                     * Setup beforeunload handler to save settings
+                     */
+                }
+                /**
+                 * Setup beforeunload handler to save settings
+                 */
+            }
+            /**
+             * Setup beforeunload handler to save settings
+             */
+            ,
+            /**
+             * Setup beforeunload handler to save settings
+             */
+            setupBeforeUnloadHandler() {
+                if (typeof window !== 'undefined') {
+                    window.addEventListener('beforeunload', () => {
+                        if (this.debounceTimer) {
+                            clearTimeout(this.debounceTimer);
+                            this.saveSettings();
+                        }
+                    });
+                    /**
+                     * Export settings for backup/sharing
+                     */
+                }
+                /**
+                 * Export settings for backup/sharing
+                 */
+            }
+            /**
+             * Export settings for backup/sharing
+             */
+            ,
+            /**
+             * Export settings for backup/sharing
+             */
+            exportSettings() {
+                return {
+                    settings: this.getSettings(),
+                    metadata: {
+                        exportedAt: new Date().toISOString(),
+                        version: SETTINGS_VERSION,
+                        appVersion: '1.0.0' // TODO: Get from package.json }
+                    },
+                    /**
+                     * Import settings from export
+                     */
+                    importSettings(exportData) {
+                        try {
+                            // Validate export format
+                            if (!exportData.settings || !exportData.metadata) {
+                                return { valid: false, errors: ['Invalid export format'], warnings: [] };
+                                // Check version compatibility
+                                const warnings = [];
+                                if (exportData.metadata.version !== SETTINGS_VERSION) {
+                                    warnings.push(`Settings version mismatch: expected ${SETTINGS_VERSION}, got ${exportData.metadata.version}`);
+                                }
+                                // Import settings
+                                const result = this.updateSettings(exportData.settings, 'import');
+                                result.warnings.push(...warnings);
+                                return result;
+                                try {
+                                }
+                                catch (error) {
+                                    return {
+                                        valid: false
+                                    };
+                                    errors: [`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`];
+                                }
+                                warnings: [];
+                            }
+                            ;
+                            /**
+                             * Get settings for executor integration
+                             */
+                        }
+                        /**
+                         * Get settings for executor integration
+                         */
                         finally {
                         }
                         /**
-                         * Validate settings object
+                         * Get settings for executor integration
                          */
                     }
                     /**
-                     * Validate settings object
+                     * Get settings for executor integration
                      */
                     ,
                     /**
-                     * Validate settings object
+                     * Get settings for executor integration
                      */
-                    validateSettings(settings) {
-                        const validation = AdvancedSettingsSchema.safeParse(settings);
-                        if (validation.success) {
-                            return { valid: true, errors: [], warnings: [] };
-                            const errors = validation.error.errors.map(err => );
-                            ;
-                            `${err.path.join('.')}: ${err.message}`;
-                        }
-                        ;
-                        return { valid: false, errors, warnings: [] };
-                        /**
-                         * Notify change listeners
-                         */
-                    }
-                    /**
-                     * Notify change listeners
-                     */
-                    ,
-                    /**
-                     * Notify change listeners
-                     */
-                    notifyChange(event) {
-                        this.listeners.forEach(listener => { });
-                        try {
-                            listener(event);
-                        }
-                        catch (error) {
-                            console.error('Settings change listener error:', error);
-                        }
-                        ;
-                        /**
-                         * Debounced save to avoid excessive localStorage writes
-                         */
-                    }
-                    /**
-                     * Debounced save to avoid excessive localStorage writes
-                     */
-                    ,
-                    /**
-                     * Debounced save to avoid excessive localStorage writes
-                     */
-                    debouncedSave() {
-                        if (this.debounceTimer) {
-                            clearTimeout(this.debounceTimer);
-                            this.debounceTimer = setTimeout(() => {
-                                this.saveSettings();
-                                this.debounceTimer = null;
-                            }, 1000);
-                            /**
-                             * Setup beforeunload handler to save settings
-                             */
-                        }
-                        /**
-                         * Setup beforeunload handler to save settings
-                         */
-                    }
-                    /**
-                     * Setup beforeunload handler to save settings
-                     */
-                    ,
-                    /**
-                     * Setup beforeunload handler to save settings
-                     */
-                    setupBeforeUnloadHandler() {
-                        if (typeof window !== 'undefined') {
-                            window.addEventListener('beforeunload', () => {
-                                if (this.debounceTimer) {
-                                    clearTimeout(this.debounceTimer);
-                                    this.saveSettings();
-                                }
-                            });
-                            /**
-                             * Export settings for backup/sharing
-                             */
-                        }
-                        /**
-                         * Export settings for backup/sharing
-                         */
-                    }
-                    /**
-                     * Export settings for backup/sharing
-                     */
-                    ,
-                    /**
-                     * Export settings for backup/sharing
-                     */
-                    exportSettings() {
+                    getExecutorSettings() {
                         return {
-                            settings: this.getSettings(),
-                            metadata: {
-                                exportedAt: new Date().toISOString(),
-                                version: SETTINGS_VERSION,
-                                appVersion: '1.0.0' // TODO: Get from package.json,
-                            },
-                            /**
-                             * Import settings from export
-                             */
-                            importSettings(exportData) {
-                                try {
-                                    // Validate export format
-                                    if (!exportData.settings || !exportData.metadata) {
-                                        return { valid: false, errors: ['Invalid export format'], warnings: [] };
-                                        // Check version compatibility
-                                        const warnings = [];
-                                        if (exportData.metadata.version !== SETTINGS_VERSION) {
-                                            warnings.push(`Settings version mismatch: expected ${SETTINGS_VERSION}, got ${exportData.metadata.version}`);
-                                        }
-                                        // Import settings
-                                        const result = this.updateSettings(exportData.settings, 'import');
-                                        result.warnings.push(...warnings);
-                                        return result;
-                                    }
-                                    try { }
-                                    catch (error) {
-                                        return {
-                                            valid: false,
-                                            errors: [`Import failed: ${error instanceof Error ? error.message : 'Unknown error'}`]
-                                        };
-                                    }
-                                    warnings: [];
-                                }
-                                finally { }
-                                ;
-                                /**
-                                 * Get settings for executor integration
-                                 */
-                            }
-                            /**
-                             * Get settings for executor integration
-                             */
-                            ,
-                            /**
-                             * Get settings for executor integration
-                             */
-                            getExecutorSettings() {
-                                return {
-                                    seed: this.settings.seed.enabled ? this.settings.seed.value : undefined,
-                                    temperature: this.settings.temperature.enabled ? this.settings.temperature.value : undefined,
-                                    runCount: this.settings.runCount.value,
-                                    batchSize: this.settings.batch.batchSize,
-                                    enableCaching: this.settings.performance.enableCaching,
-                                    logExecutionSteps: this.settings.performance.logExecutionSteps,
-                                    showExecutionTimes: this.settings.performance.showExecutionTimes,
-                                    showMemoryUsage: this.settings.performance.showMemoryUsage,
-                                    outputFormat: this.settings.batch.outputFormat,
-                                    includeMetadata: this.settings.batch.includeMetadata,
-                                    autoDownload: this.settings.batch.autoDownload,
-                                    namingPattern: this.settings.batch.namingPattern,
-                                };
-                                /**
-                                 * Get UI-specific settings for interface customization
-                                 */
-                            }
-                            /**
-                             * Get UI-specific settings for interface customization
-                             */
-                            ,
-                            /**
-                             * Get UI-specific settings for interface customization
-                             */
-                            getUISettings() {
-                                return {
-                                    theme: this.settings.ui.theme,
-                                    showTooltips: this.settings.ui.showTooltips,
-                                    enableKeyboardShortcuts: this.settings.ui.enableKeyboardShortcuts,
-                                    reduceAnimations: this.settings.ui.reduceAnimations,
-                                    highContrast: this.settings.ui.highContrast,
-                                };
-                                /**
-                                 * Check if performance monitoring is enabled
-                                 */
-                            }
-                            /**
-                             * Check if performance monitoring is enabled
-                             */
-                            ,
-                            /**
-                             * Check if performance monitoring is enabled
-                             */
-                            isPerformanceMonitoringEnabled() {
-                                return this.settings.performance.showExecutionTimes ||
-                                    this.settings.performance.showMemoryUsage ||
-                                    this.settings.performance.logExecutionSteps;
-                                /**
-                                * Get performance monitoring configuration
-                                */
-                            }
-                            /**
-                            * Get performance monitoring configuration
-                            */
-                            ,
-                            /**
-                            * Get performance monitoring configuration
-                            */
-                            getPerformanceConfig() {
-                                return {
-                                    monitoring: this.isPerformanceMonitoringEnabled(),
-                                    executionTimes: this.settings.performance.showExecutionTimes,
-                                    memoryUsage: this.settings.performance.showMemoryUsage,
-                                    detailedLogging: this.settings.performance.logExecutionSteps,
-                                    caching: this.settings.performance.enableCaching,
-                                };
-                                /**
-                                 * Add seed to history
-                                 */
-                            }
-                            /**
-                             * Add seed to history
-                             */
-                            ,
-                            /**
-                             * Add seed to history
-                             */
-                            addSeedToHistory(seed) {
-                                const currentHistory = [...this.settings.seed.history];
-                                // Remove if already exists
-                                const existingIndex = currentHistory.indexOf(seed);
-                                if (existingIndex !== -1) {
-                                    currentHistory.splice(existingIndex, 1);
-                                    // Add to beginning
-                                    currentHistory.unshift(seed);
-                                    // Keep only last 10
-                                    const newHistory = currentHistory.slice(0, 10);
-                                    this.updateSetting('seed', {});
-                                }
-                            },
-                            ...this.settings.seed,
-                            history: newHistory,
-                        }, 'system';
-                        ;
+                            seed: this.settings.seed.enabled ? this.settings.seed.value : undefined,
+                            temperature: this.settings.temperature.enabled ? this.settings.temperature.value : undefined,
+                            runCount: this.settings.runCount.value,
+                            batchSize: this.settings.batch.batchSize,
+                            enableCaching: this.settings.performance.enableCaching,
+                            logExecutionSteps: this.settings.performance.logExecutionSteps,
+                            showExecutionTimes: this.settings.performance.showExecutionTimes,
+                            showMemoryUsage: this.settings.performance.showMemoryUsage,
+                            outputFormat: this.settings.batch.outputFormat,
+                            includeMetadata: this.settings.batch.includeMetadata,
+                            autoDownload: this.settings.batch.autoDownload,
+                            namingPattern: this.settings.batch.namingPattern
+                        };
+                    },
+                    /**
+                     * Get UI-specific settings for interface customization
+                     */
+                    getUISettings() {
+                        return {
+                            theme: this.settings.ui.theme,
+                            showTooltips: this.settings.ui.showTooltips,
+                            enableKeyboardShortcuts: this.settings.ui.enableKeyboardShortcuts,
+                            reduceAnimations: this.settings.ui.reduceAnimations,
+                            highContrast: this.settings.ui.highContrast
+                        };
+                    },
+                    /**
+                     * Check if performance monitoring is enabled
+                     */
+                    isPerformanceMonitoringEnabled() {
+                        return this.settings.performance.showExecutionTimes ||
+                            this.settings.performance.showMemoryUsage ||
+                            this.settings.performance.logExecutionSteps;
                         /**
-                         * Generate random seed
-                         */
+                        * Get performance monitoring configuration
+                        */
                     }
                     /**
-                     * Generate random seed
-                     */
+                    * Get performance monitoring configuration
+                    */
                     ,
                     /**
-                     * Generate random seed
-                     */
-                    generateRandomSeed() {
-                        const seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-                        this.addSeedToHistory(seed);
-                        return seed;
-                        /**
-                         * Enable/disable auto-save
-                         */
-                    }
+                    * Get performance monitoring configuration
+                    */
+                    getPerformanceConfig() {
+                        return {
+                            monitoring: this.isPerformanceMonitoringEnabled(),
+                            executionTimes: this.settings.performance.showExecutionTimes,
+                            memoryUsage: this.settings.performance.showMemoryUsage,
+                            detailedLogging: this.settings.performance.logExecutionSteps,
+                            caching: this.settings.performance.enableCaching
+                        };
+                    },
                     /**
-                     * Enable/disable auto-save
+                     * Add seed to history
                      */
-                    ,
-                    /**
-                     * Enable/disable auto-save
-                     */
-                    setAutoSave(enabled) {
-                        this.autoSaveEnabled = enabled;
-                        // Export singleton instance getter
-                        export const getSettingsManager = () => SettingsManager.getInstance();
-                    }
+                    addSeedToHistory(seed) {
+                        const currentHistory = [...this.settings.seed.history];
+                        // Remove if already exists
+                        const existingIndex = currentHistory.indexOf(seed);
+                        if (existingIndex !== -1) {
+                            currentHistory.splice(existingIndex, 1);
+                            // Add to beginning
+                            currentHistory.unshift(seed);
+                            // Keep only last 10
+                            const newHistory = currentHistory.slice(0, 10);
+                            this.updateSetting('seed', {});
+                        }
+                    },
+                    ...this.settings.seed,
+                    history: newHistory
                 };
+            }, 'system': ,
+            /**
+             * Generate random seed
+             */
+            generateRandomSeed() {
+                const seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
+                this.addSeedToHistory(seed);
+                return seed;
+                /**
+                 * Enable/disable auto-save
+                 */
             }
-        }
+            /**
+             * Enable/disable auto-save
+             */
+            ,
+            /**
+             * Enable/disable auto-save
+             */
+            setAutoSave(enabled) {
+                this.autoSaveEnabled = enabled;
+                // Export singleton instance getter
+                export const getSettingsManager = () => SettingsManager.getInstance();
+            } };
     }
 });

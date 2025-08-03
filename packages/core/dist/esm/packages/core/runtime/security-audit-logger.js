@@ -55,52 +55,51 @@ export var SecuritySeverity;
         // General security
         SECURITY_POLICY_VIOLATION = 'SECURITY_POLICY_VIOLATION',
         AUDIT_LOG_OVERFLOW = 'AUDIT_LOG_OVERFLOW';
-}
-topBlockedPatterns: Array;
-recentCriticalEvents: SecurityAuditEvent;
-export class SecurityAuditLogger {
-    static instance;
-    events = [];
-    config;
-    eventCounter = 0;
-    blockedPatterns = new Map();
-    uniqueExpressions = new Set();
-    cleanupInterval;
-    constructor(config = {}) {
-        this.config = {
-            maxEvents: 10000,
-            enableConsoleLogging: true,
-            enableStackTraces: false,
-            eventRetentionMs: 24 * 60 * 60 * 1000, // 24 hours,
-            aggregationInterval: 60 * 1000, // 1 minute,
-            ...config
-        };
-        // Start periodic cleanup
-        this.startPeriodicCleanup();
+    topBlockedPatterns: Array;
+    recentCriticalEvents: SecurityAuditEvent;
+    /**
+    * Main security audit logger class
+    */
+    export class SecurityAuditLogger {
+        static instance;
+        events = [];
+        config;
+        eventCounter = 0;
+        blockedPatterns = new Map();
+        uniqueExpressions = new Set();
+        cleanupInterval;
+        constructor(config = {}) {
+            this.config = {
+                maxEvents: 10000,
+                enableConsoleLogging: true,
+                enableStackTraces: false,
+                eventRetentionMs: 24 * 60 * 60 * 1000, // 24 hours
+                aggregationInterval: 60 * 1000, // 1 minute }
+                ...config
+            };
+            // Start periodic cleanup
+            this.startPeriodicCleanup();
+            /**
+             * Get singleton instance
+             */
+        }
         /**
          * Get singleton instance
          */
-    }
-    /**
-     * Get singleton instance
-     */
-    static getInstance(config) {
-        if (!SecurityAuditLogger.instance) {
-            SecurityAuditLogger.instance = new SecurityAuditLogger(config);
-            return SecurityAuditLogger.instance;
-            /**
-             * Log a security event
-             */
-            logEvent();
-            severity: SecuritySeverity,
-                category;
-            SecurityEventCategory,
-                message;
-            string,
-                context;
-            SecurityEventContext = {},
-                blocked;
-            boolean = false;
+        static getInstance(config) {
+            if (!SecurityAuditLogger.instance) {
+                SecurityAuditLogger.instance = new SecurityAuditLogger(config);
+                return SecurityAuditLogger.instance;
+                /**
+                 * Log a security event
+                 */
+                logEvent();
+                severity: SecuritySeverity;
+                category: SecurityEventCategory;
+                message: string;
+            }
+            context: SecurityEventContext = {};
+            blocked: boolean = false;
             string;
             {
                 const eventId = this.generateEventId();
@@ -112,7 +111,7 @@ export class SecurityAuditLogger {
                     message,
                     context: {
                         ...context,
-                        stackTrace: this.config.enableStackTraces ? this.captureStackTrace() : undefined,
+                        stackTrace: this.config.enableStackTraces ? this.captureStackTrace() : undefined
                     },
                     blocked
                 };
@@ -134,104 +133,95 @@ export class SecurityAuditLogger {
                              * Log helper methods for common scenarios
                              */
                             logExpressionBlocked(expression, string, reason, string, context, SecurityEventContext = {});
-                            void {
-                                this: .logEvent(),
+                            void { this: .logEvent(),
                                 SecuritySeverity, : .ERROR,
-                                SecurityEventCategory, : .EXPRESSION_VALIDATION,
-                            } `Expression blocked: ${reason}`;
+                                SecurityEventCategory, : .EXPRESSION_VALIDATION } `Expression blocked: ${reason}`;
                         }
+                        {
+                            context, expression;
+                        }
+                        true;
+                        ;
+                        logASTNodeBlocked(nodeType, string, reason, string, context, SecurityEventContext = {});
+                        void { this: .logEvent(),
+                            SecuritySeverity, : .ERROR,
+                            SecurityEventCategory, : .AST_NODE_BLOCKED } `AST node '${nodeType}' blocked: ${reason}`;
                     }
                     {
-                        context, expression;
+                        context, nodeType;
                     }
                     true;
                     ;
-                    logASTNodeBlocked(nodeType, string, reason, string, context, SecurityEventContext = {});
-                    void {
-                        this: .logEvent(),
-                        SecuritySeverity, : .ERROR,
-                        SecurityEventCategory, : .AST_NODE_BLOCKED,
-                    } `AST node '${nodeType}' blocked: ${reason}`;
+                    logMathFunctionBlocked(functionName, string, reason, string, context, SecurityEventContext = {});
+                    void { this: .logEvent(),
+                        SecuritySeverity, : .WARNING,
+                        SecurityEventCategory, : .MATH_FUNCTION_BLOCKED } `Math.${functionName},}
+  blocked: ${reason}`;
                 }
+                {
+                    context, functionName;
+                }
+                true;
+                ;
+                logPrototypePollutionAttempt(propertyName, string, context, SecurityEventContext = {});
+                void { this: .logEvent(),
+                    SecuritySeverity, : .CRITICAL,
+                    SecurityEventCategory, : .PROTOTYPE_POLLUTION_ATTEMPT } `Prototype pollution attempt via property '${propertyName}'`;
             }
             {
-                context, nodeType;
+                context, propertyName;
             }
             true;
             ;
-            logMathFunctionBlocked(functionName, string, reason, string, context, SecurityEventContext = {});
-            void {
-                this: .logEvent(),
-                SecuritySeverity, : .WARNING,
-                SecurityEventCategory, : .MATH_FUNCTION_BLOCKED,
-            } `Math.${functionName},},
-  blocked: ${reason}`;
+            logSecurityPolicyViolation(policy, string, details, string, context, SecurityEventContext = {});
+            void { this: .logEvent(),
+                SecuritySeverity, : .CRITICAL,
+                SecurityEventCategory, : .SECURITY_POLICY_VIOLATION } `Security policy '${policy}' violated: ${details}`;
         }
+        context;
+        true;
+        ;
+        severity;
+        category;
+        startTime;
+        endTime;
+        blocked;
     }
-}
-{
-    context, functionName;
-}
-true;
-;
-logPrototypePollutionAttempt(propertyName, string, context, SecurityEventContext = {});
-void {
-    this: .logEvent(),
-    SecuritySeverity, : .CRITICAL,
-    SecurityEventCategory, : .PROTOTYPE_POLLUTION_ATTEMPT,
-} `Prototype pollution attempt via property '${propertyName}'`;
-{
-    context, propertyName;
-}
-true;
-;
-logSecurityPolicyViolation(policy, string, details, string, context, SecurityEventContext = {});
-void {
-    this: .logEvent(),
-    SecuritySeverity, : .CRITICAL,
-    SecurityEventCategory, : .SECURITY_POLICY_VIOLATION,
-} `Security policy '${policy}' violated: ${details}`;
-context,
-    true;
-;
-/**
- * Get all events
- */
-getEvents(filter ?  : {});
-severity ?  : SecuritySeverity;
-category ?  : SecurityEventCategory;
-startTime ?  : number;
-endTime ?  : number;
-blocked ?  : boolean;
-SecurityAuditEvent;
-{
-    let filtered = [...this.events];
-    if (filter) {
-        if (filter.severity) {
-            filtered = filtered.filter(e => e.severity === filter.severity);
-            if (filter.category) {
-                filtered = filtered.filter(e => e.category === filter.category);
-                if (filter.startTime !== undefined) {
-                    filtered = filtered.filter(e => e.timestamp >= filter.startTime);
-                    if (filter.endTime !== undefined) {
-                        filtered = filtered.filter(e => e.timestamp <= filter.endTime);
-                        if (filter.blocked !== undefined) {
-                            filtered = filtered.filter(e => e.blocked === filter.blocked);
-                            return filtered;
-                            /**
-                             * Get event statistics
-                             */
-                            getStatistics();
-                            SecurityEventStats;
-                            {
-                                const stats = {
-                                    totalEvents: this.events.length,
-                                    eventsByCategory: {},
-                                    eventsBySeverity: {},
-                                    blockedOperations: 0,
-                                    uniqueExpressions: this.uniqueExpressions.size,
-                                    topBlockedPatterns: [],
-                                    recentCriticalEvents: [] };
+    SecurityAuditEvent;
+    {
+        let filtered = [...this.events];
+        if (filter) {
+            if (filter.severity) {
+                filtered = filtered.filter(e => e.severity === filter.severity);
+                if (filter.category) {
+                    filtered = filtered.filter(e => e.category === filter.category);
+                    if (filter.startTime !== undefined) {
+                        filtered = filtered.filter(e => e.timestamp >= filter.startTime);
+                        if (filter.endTime !== undefined) {
+                            filtered = filtered.filter(e => e.timestamp <= filter.endTime);
+                            if (filter.blocked !== undefined) {
+                                filtered = filtered.filter(e => e.blocked === filter.blocked);
+                                return filtered;
+                                /**
+                                 * Get event statistics
+                                 */
+                                getStatistics();
+                                SecurityEventStats;
+                                {
+                                    const stats = {
+                                        totalEvents: this.events.length };
+                                    eventsByCategory: { }
+                                    as;
+                                    Record;
+                                    eventsBySeverity: { }
+                                    as;
+                                    Record;
+                                    blockedOperations: 0;
+                                    uniqueExpressions: this.uniqueExpressions.size;
+                                    topBlockedPatterns: [];
+                                    recentCriticalEvents: [];
+                                }
+                                ;
                                 // Initialize counters
                                 Object.values(SecurityEventCategory).forEach(cat => { });
                                 stats.eventsByCategory[cat] = 0;
@@ -266,55 +256,51 @@ SecurityAuditEvent;
                                     if (format === 'json') {
                                         return JSON.stringify(this.events, null, 2);
                                     }
-                                    else {
-                                        // CSV export
+                                    else { // CSV export
                                         const headers = ['id', 'timestamp', 'severity', 'category', 'message', 'blocked', 'expression', 'nodeType'];
                                         const rows = this.events.map(e => []);
-                                        e.id,
-                                            new Date(e.timestamp).toISOString(),
-                                            e.severity,
-                                            e.category,
-                                            e.message,
-                                            e.blocked,
-                                            e.context.expression || '',
-                                            e.context.nodeType || '';
-                                        ;
-                                        return [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+                                        e.id;
+                                        new Date(e.timestamp).toISOString();
+                                        e.severity;
+                                        e.category;
+                                        e.message;
+                                        e.blocked;
+                                        e.context.expression || '';
                                     }
+                                    e.context.nodeType || '';
+                                    ;
+                                    return [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+                                }
+                                /**
+                                 * Clear all events
+                                 */
+                                clearEvents();
+                                void {
+                                    this: .events = [],
+                                    this: .blockedPatterns.clear(),
+                                    this: .uniqueExpressions.clear(),
+                                    this: .eventCounter = 0,
                                     /**
-                                     * Clear all events
+                                     * Stop periodic cleanup (for testing)
                                      */
-                                    clearEvents();
-                                    void {
-                                        this: .events = [],
-                                        this: .blockedPatterns.clear(),
-                                        this: .uniqueExpressions.clear(),
-                                        this: .eventCounter = 0,
-                                        /**
-                                         * Stop periodic cleanup (for testing)
-                                         */
-                                        stopPeriodicCleanup() {
-                                            if (this.cleanupInterval) {
-                                                clearInterval(this.cleanupInterval);
-                                                this.cleanupInterval = undefined;
+                                    stopPeriodicCleanup() {
+                                        if (this.cleanupInterval) {
+                                            clearInterval(this.cleanupInterval);
+                                            this.cleanupInterval = undefined;
+                                            /**
+                                             * Get events for a specific expression
+                                             */
+                                            getEventsForExpression(expression, string);
+                                            SecurityAuditEvent;
+                                            {
+                                                return this.events.filter(e => e.context.expression === expression);
                                                 /**
-                                                 * Get events for a specific expression
+                                                 * Check if an expression has been blocked before
                                                  */
-                                                getEventsForExpression(expression, string);
-                                                SecurityAuditEvent;
+                                                hasExpressionBeenBlocked(expression, string);
+                                                boolean;
                                                 {
-                                                    return this.events.filter(e => e.context.expression === expression);
-                                                    /**
-                                                     * Check if an expression has been blocked before
-                                                     */
-                                                    hasExpressionBeenBlocked(expression, string);
-                                                    boolean;
-                                                    {
-                                                        return this.events.some(e => e.context.expression === expression && e.blocked);
-                                                        /**
-                                                         * Private helper methods
-                                                         */
-                                                    }
+                                                    return this.events.some(e => e.context.expression === expression && e.blocked);
                                                     /**
                                                      * Private helper methods
                                                      */
@@ -330,136 +316,130 @@ SecurityAuditEvent;
                                         /**
                                          * Private helper methods
                                          */
-                                        ,
-                                        /**
-                                         * Private helper methods
-                                         */
-                                        generateEventId() {
-                                            return `SEC-${Date.now()}-${++this.eventCounter}`;
-                                        },
-                                        captureStackTrace() {
-                                            const stack = new Error().stack || '';
-                                            // Remove internal frames
-                                            return stack.split('\n').slice(3).join('\n');
-                                        },
-                                        extractPattern(expression) {
-                                            // Extract a simplified pattern from expression for aggregation
-                                            return expression
-                                                .replace(/["'].*?["']/g, '"..."') // Replace string literals
-                                                .replace(/\d+/g, 'N') // Replace numbers
-                                                .replace(/\s+/g, ' ') // Normalize whitespace
-                                                .trim();
-                                        },
-                                        logToConsole(event) {
-                                            const icon = {
-                                                [SecuritySeverity.INFO]: 'ℹ️',
-                                                [SecuritySeverity.WARNING]: '⚠️',
-                                                [SecuritySeverity.ERROR]: '❌',
-                                                [SecuritySeverity.CRITICAL]: '🚨',
-                                            }[event.severity];
-                                            const color = {
-                                                [SecuritySeverity.INFO]: '\x1b[36m', // Cyan,
-                                                [SecuritySeverity.WARNING]: '\x1b[33m', // Yellow,
-                                                [SecuritySeverity.ERROR]: '\x1b[31m', // Red,
-                                                [SecuritySeverity.CRITICAL]: '\x1b[35m' // Magenta,
-                                            }[event.severity];
-                                            const reset = '\x1b[0m';
-                                            console.log() `${icon} ${color}[SECURITY ${event.severity}]${reset} ${event.message}`;
+                                    }
+                                    /**
+                                     * Private helper methods
+                                     */
+                                    ,
+                                    /**
+                                     * Private helper methods
+                                     */
+                                    generateEventId() {
+                                        return `SEC-${Date.now()}-${++this.eventCounter}`;
+                                    },
+                                    captureStackTrace() {
+                                        const stack = new Error().stack || '';
+                                        // Remove internal frames
+                                        return stack.split('\n').slice(3).join('\n');
+                                    },
+                                    extractPattern(expression) {
+                                        // Extract a simplified pattern from expression for aggregation
+                                        return expression
+                                            .replace(/["'].*?["']/g, '"..."') // Replace string literals
+                                            .replace(/\d+/g, 'N') // Replace numbers
+                                            .replace(/\s+/g, ' ') // Normalize whitespace
+                                            .trim();
+                                    },
+                                    logToConsole(event) {
+                                        const icon = {
+                                            [SecuritySeverity.INFO]: 'ℹ️'[SecuritySeverity.WARNING], '⚠️': [SecuritySeverity.ERROR], '❌': [SecuritySeverity.CRITICAL], '🚨': 
+                                        }[event.severity];
+                                        const color = { [SecuritySeverity.INFO]: '\x1b[36m', // Cyan
+                                            [SecuritySeverity.WARNING]: '\x1b[33m', // Yellow
+                                            [SecuritySeverity.ERROR]: '\x1b[31m', // Red
+                                            [SecuritySeverity.CRITICAL]: '\x1b[35m' // Magenta }
+                                            [event.severity],
+                                            const: reset = '\x1b[0m',
+                                            console, : .log() `${icon} ${color}[SECURITY ${event.severity}]${reset} ${event.message}` };
+                                        event.context.expression ? `\n   Expression: ${event.context.expression}` : '';
+                                    },
+                                    enforceEventLimit() {
+                                        if (this.events.length > this.config.maxEvents) {
+                                            const eventsToRemove = this.events.length - this.config.maxEvents;
+                                            this.events.splice(0, eventsToRemove);
+                                            // Log that we hit the limit
+                                            this.logEvent();
+                                            SecuritySeverity.WARNING;
+                                            SecurityEventCategory.AUDIT_LOG_OVERFLOW;
                                         }
-                                    };
-                                    event.context.expression ? `\n   Expression: ${event.context.expression}` : '';
-                                }
-                                ;
-                                enforceEventLimit();
-                                void {
-                                    : .events.length > this.config.maxEvents
+                                        `Audit log limit reached. Removed ${eventsToRemove} oldest events.`;
+                                    }
                                 };
                                 {
-                                    const eventsToRemove = this.events.length - this.config.maxEvents;
-                                    this.events.splice(0, eventsToRemove);
-                                    // Log that we hit the limit
-                                    this.logEvent();
-                                    SecuritySeverity.WARNING,
-                                        SecurityEventCategory.AUDIT_LOG_OVERFLOW,
-                                        `Audit log limit reached. Removed ${eventsToRemove} oldest events.`;
-                                }
-                            }
-                            {
-                                additionalData: {
-                                    maxEvents: this.config.maxEvents;
-                                }
-                            }
-                            ;
-                            startPeriodicCleanup();
-                            void {
-                                this: .cleanupInterval = setInterval(() => {
-                                    const cutoffTime = Date.now() - this.config.eventRetentionMs;
-                                    const originalLength = this.events.length;
-                                    this.events = this.events.filter(e => e.timestamp > cutoffTime);
-                                    if (originalLength > this.events.length) {
-                                        console.log(`[SecurityAudit] Cleaned up ${originalLength - this.events.length} expired events`);
+                                    additionalData: {
+                                        maxEvents: this.config.maxEvents;
                                     }
-                                }, this.config.aggregationInterval),
-                                /**
-                                 * Global security audit logger instance
-                                 */
-                                const: securityAudit = SecurityAuditLogger.getInstance(),
-                                /**
-                                 * Decorator for automatic security logging
-                                 */
-                                function: auditSecurityEvent(((severity = SecuritySeverity.INFO, category = SecurityEventCategory.EXPRESSION_VALIDATION) => {
-                                    return ,
-                                        propertyName;
-                                    string | symbol,
-                                        descriptor;
-                                    PropertyDescriptor;
-                                }), PropertyDescriptor, {
-                                    const: method = descriptor.value,
-                                    descriptor, : .value = function (...args) {
-                                        const startTime = Date.now();
-                                        const context = {
-                                            functionName: `${target.constructor.name}.${String(propertyName)}` };
-                                    },
-                                    executionTime: 0 }),
-                                try: {
-                                    const: result = method.apply(this, args),
-                                    context, : .executionTime = Date.now() - startTime,
-                                    // Log successful execution (only for INFO level)
-                                    if(severity) { }
-                                } === SecuritySeverity.INFO
-                            };
-                            {
-                                securityAudit.logEvent();
-                                severity,
-                                    category,
-                                    `${String(propertyName)} executed successfully`;
+                                }
+                                ;
+                                startPeriodicCleanup();
+                                void {
+                                    this: .cleanupInterval = setInterval(() => {
+                                        const cutoffTime = Date.now() - this.config.eventRetentionMs;
+                                        const originalLength = this.events.length;
+                                        this.events = this.events.filter(e => e.timestamp > cutoffTime);
+                                        if (originalLength > this.events.length) {
+                                            console.log(`[SecurityAudit] Cleaned up ${originalLength - this.events.length} expired events`);
+                                        }
+                                    }, this.config.aggregationInterval),
+                                    /**
+                                     * Global security audit logger instance
+                                     */
+                                    const: securityAudit = SecurityAuditLogger.getInstance(),
+                                    /**
+                                     * Decorator for automatic security logging
+                                     */
+                                    function: auditSecurityEvent(((severity = SecuritySeverity.INFO, category = SecurityEventCategory.EXPRESSION_VALIDATION) => {
+                                        return ;
+                                        propertyName: string | symbol;
+                                        descriptor: PropertyDescriptor;
+                                    }), PropertyDescriptor, {
+                                        const: method = descriptor.value,
+                                        descriptor, : .value = function (...args) {
+                                            const startTime = Date.now();
+                                            const context = {};
+                                            functionName: `${target.constructor.name}.${String(propertyName)}`;
+                                        },
+                                        executionTime: 0
+                                    }),
+                                    try: { const: result = method.apply(this, args),
+                                        context, : .executionTime = Date.now() - startTime,
+                                        // Log successful execution (only for INFO level)
+                                        if(severity) { } } === SecuritySeverity.INFO
+                                };
+                                {
+                                    securityAudit.logEvent();
+                                    severity;
+                                    category;
+                                }
+                                `${String(propertyName)} executed successfully`;
                             }
-                        }
-                        context,
+                            context;
                             false;
-                        ;
-                        return result;
-                    }
-                    try { }
-                    catch (error) {
-                        context.executionTime = Date.now() - startTime;
-                        // Log error
-                        securityAudit.logEvent();
-                        SecuritySeverity.ERROR,
-                            category,
-                            `${String(propertyName)},},
+                            ;
+                            return result;
+                            try {
+                            }
+                            catch (error) {
+                                context.executionTime = Date.now() - startTime;
+                                // Log error
+                                securityAudit.logEvent();
+                                SecuritySeverity.ERROR;
+                                category;
+                            }
+                            `${String(propertyName)},}
   failed: ${error}`;
+                        }
+                        context;
+                        true;
+                        ;
+                        throw error;
                     }
+                    ;
+                    return descriptor;
                 }
-                context,
-                    true;
                 ;
-                throw error;
+                export default SecurityAuditLogger;
             }
-            ;
-            return descriptor;
         }
-        ;
-        export default SecurityAuditLogger;
     }
 }

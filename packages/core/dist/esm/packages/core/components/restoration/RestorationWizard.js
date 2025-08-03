@@ -1,88 +1,50 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect } from 'react';
 import { Modal, Steps, Button, Form, Select, Checkbox, Alert, Typography } from 'antd';
-import { ExclamationCircleOutlined, CheckCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+from;
+'@ant-design/icons';
+from;
+'../../types/restoration';
 import { useRestoration } from '../../hooks/useRestoration';
 const { Step } = Steps;
 const { Title, Text } = Typography;
 const { Option } = Select;
 {
-    title: 'Preview',
-        description;
-    'Review changes',
-        icon;
-    _jsx(ExclamationCircleOutlined, {}),
-    ;
+    const [currentStep, setCurrentStep] = useState(0);
+    const [form] = Form.useForm();
+    const [config, setConfig] = useState({});
+    restorationType: 'full';
+    restorationStrategy: 'replace';
+    preserveCurrentChanges: false;
+    createBackup: true;
+    notifyOnCompletion: true;
 }
-{
-    title: 'Confirm',
-        description;
-    'Confirm restoration',
-        icon;
-    _jsx(CheckCircleOutlined, {}),
-    ;
-}
-{
-    title: 'Progress',
-        description;
-    'Monitor progress',
-        icon;
-    _jsx(LoadingOutlined, {});
-    ;
-    export const RestorationWizard = ({
-        visible,
-        onClose,
-        projectId,
-        sourceSnapshotId,
-        targetSnapshotId,
-        onSuccess,
-        onError
-    });
-    {
-        const [currentStep, setCurrentStep] = useState(0);
-        const [form] = Form.useForm();
-        const [config, setConfig] = useState({});
-        restorationType: 'full',
-            restorationStrategy;
-        'replace',
-            preserveCurrentChanges;
-        false,
-            createBackup;
-        true,
-            notifyOnCompletion;
-        true,
-        ;
+;
+const [preview, setPreview] = useState(null);
+const [restorationAttempt, setRestorationAttempt] = useState(null);
+const [progress, setProgress] = useState(null);
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
+const { generatePreview, createRestoration, getProgress };
+cancelRestoration
+    = useRestoration();
+// Reset state when modal opens/closes
+useEffect(() => {
+    if (visible) {
+        setCurrentStep(0);
+        setConfig({});
+        restorationType: 'full';
+        restorationStrategy: 'replace';
+        preserveCurrentChanges: false;
+        createBackup: true;
+        notifyOnCompletion: true;
     }
-    ;
-    const [preview, setPreview] = useState(null);
-    const [restorationAttempt, setRestorationAttempt] = useState(null);
-    const [progress, setProgress] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const { generatePreview, createRestoration, getProgress, cancelRestoration } = useRestoration();
-    // Reset state when modal opens/closes
-    useEffect(() => {
-        if (visible) {
-            setCurrentStep(0);
-            setConfig({});
-            restorationType: 'full',
-                restorationStrategy;
-            'replace',
-                preserveCurrentChanges;
-            false,
-                createBackup;
-            true,
-                notifyOnCompletion;
-            true,
-            ;
-        }
-    });
-    setPreview(null);
-    setRestorationAttempt(null);
-    setProgress(null);
-    setError(null);
-    form.resetFields();
-}
+});
+setPreview(null);
+setRestorationAttempt(null);
+setProgress(null);
+setError(null);
+form.resetFields();
 [visible, form];
 ;
 // Poll for progress updates
@@ -110,10 +72,8 @@ useEffect(() => {
             }
             finally { }
         });
-        return () => {
-            if (interval)
-                clearInterval(interval);
-        };
+        return () => { if (interval)
+            clearInterval(interval); };
     }
     [restorationAttempt, currentStep, getProgress, onSuccess, onError];
 });
@@ -126,19 +86,19 @@ const handleNext = async () => {
             setConfig(updatedConfig);
             setLoading(true);
             const previewData = await generatePreview({});
-            projectId,
-                sourceSnapshotId,
-                targetSnapshotId,
-                config;
-            updatedConfig,
-            ;
+            projectId;
+            sourceSnapshotId;
+            targetSnapshotId;
+            config: updatedConfig;
         }
-        finally { }
-        ;
-        setPreview(previewData);
-        setCurrentStep(1);
+        finally {
+        }
     }
-    try { }
+    ;
+    setPreview(previewData);
+    setCurrentStep(1);
+    try {
+    }
     catch (error) {
         console.error('Failed to generate preview:', error);
         setError('Failed to generate preview. Please try again.');
@@ -146,26 +106,26 @@ const handleNext = async () => {
     finally {
         setLoading(false);
     }
-    if (currentStep === 1) {
-        // Preview step - move to confirmation
+    if (currentStep === 1) { // Preview step - move to confirmation
         setCurrentStep(2);
     }
-    else if (currentStep === 2) {
-        // Confirmation step - start restoration
+    else if (currentStep === 2) { // Confirmation step - start restoration
         try {
             setLoading(true);
             const attempt = await createRestoration({});
-            projectId,
-                sourceSnapshotId,
-                targetSnapshotId,
-                config;
+            projectId;
+            sourceSnapshotId;
+            targetSnapshotId;
         }
-        finally { }
-        ;
-        setRestorationAttempt(attempt);
-        setCurrentStep(3);
+        finally {
+        }
+        config;
     }
-    try { }
+    ;
+    setRestorationAttempt(attempt);
+    setCurrentStep(3);
+    try {
+    }
     catch (error) {
         console.error('Failed to start restoration:', error);
         setError('Failed to start restoration. Please try again.');
@@ -197,9 +157,7 @@ const handleNext = async () => {
                     return true;
                 return false;
             };
-            const canGoPrevious = () => {
-                return currentStep > 0 && currentStep < 3;
-            };
+            const canGoPrevious = () => { return currentStep > 0 && currentStep < 3; };
             const renderStepContent = () => {
                 switch (currentStep) {
                     case 0:
@@ -288,11 +246,13 @@ const getModalTitle = () => {
     const stepTitles = [
         'Configure Restoration',
         'Preview Changes',
-        'Confirm Restoration',
-        'Restoration in Progress'
+        'Confirm Restoration'
     ];
-    return stepTitles[currentStep] || 'Version Restoration';
 };
+'Restoration in Progress';
+;
+return stepTitles[currentStep] || 'Version Restoration';
+;
 const getModalWidth = () => {
     switch (currentStep) {
         case 1:
@@ -301,17 +261,16 @@ const getModalWidth = () => {
         case 3:
             return 700;
         default:
-            return 600;
     }
-    ;
-    return;
-    _jsxs(Modal, { title: getModalTitle(), visible: visible, onCancel: handleCancel, width: getModalWidth(), footer: null, destroyOnClose: true, maskClosable: false, children: [_jsx("div", { style: { marginBottom: '24px' }, children: _jsxs(Steps, { current: currentStep, size: "small", children: [wizardSteps.map((step, index) => ()
-                            < Step, key = { index }, title = { step, : .title }, description = { step, : .description }, icon = { step, : .icon }
-                            /  >
-                        ), ")}"] }) }), error && ()
-                < Alert, "type=\"error\" message=\"Error\" description=", error, "showIcon closable onClose=", () => setError(null), "style=", { marginBottom: '16px' }, "/> )}", _jsx("div", { style: { minHeight: '400px' }, children: renderStepContent() }), currentStep < 3 && ()
-                < div, " style=", { display: 'flex', justifyContent: 'space-between', marginTop: '24px' }, ">", _jsx(Button, { onClick: handlePrevious, disabled: !canGoPrevious(), children: "Previous" }), _jsxs("div", { children: [_jsx(Button, { onClick: handleCancel, style: { marginRight: '8px' }, children: "Cancel" }), _jsx(Button, { type: "primary", onClick: handleNext, disabled: !canGoNext(), loading: loading, children: currentStep === 2 ? 'Start Restoration' : 'Next' })] })] });
+    return 600;
 };
+return;
+_jsxs(Modal, { title: getModalTitle(), visible: visible, onCancel: handleCancel, width: getModalWidth(), footer: null, destroyOnClose: true, maskClosable: false, children: [_jsx("div", { style: { marginBottom: '24px' }, children: _jsxs(Steps, { current: currentStep, size: "small", children: [wizardSteps.map((step, index) => ()
+                        < Step, key = { index }, title = { step, : .title }, description = { step, : .description }, icon = { step, : .icon }
+                        /  >
+                    ), ")}"] }) }), error && ()
+            < Alert, "type=\"error\" message=\"Error\" description=", error, "showIcon closable onClose=", () => setError(null), "style=", { marginBottom: '16px' }, "/> )}", _jsx("div", { style: { minHeight: '400px' }, children: renderStepContent() }), currentStep < 3 && ()
+            < div, " style=", { display: 'flex', justifyContent: 'space-between', marginTop: '24px' }, ">", _jsx(Button, { onClick: handlePrevious, disabled: !canGoPrevious(), children: "Previous" }), _jsxs("div", { children: [_jsx(Button, { onClick: handleCancel, style: { marginRight: '8px' }, children: "Cancel" }), _jsx(Button, { type: "primary", onClick: handleNext, disabled: !canGoNext(), loading: loading, children: currentStep === 2 ? 'Start Restoration' : 'Next' })] })] });
 Modal >
 ;
 ;

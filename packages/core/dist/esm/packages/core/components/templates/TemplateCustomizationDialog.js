@@ -40,36 +40,37 @@ const validateCustomizations = () => {
             if (isNaN(numValue)) {
                 newErrors[variable.id] = `${variable.label} must be a number`;
             }
+            else if (validation.min !== undefined && numValue < validation.min) {
+                newErrors[variable.id] = `${variable.label} must be at least ${validation.min}`;
+            }
+            else if (validation.max !== undefined && numValue > validation.max) {
+                newErrors[variable.id] = `${variable.label} must be at most ${validation.max}`;
+            }
+            if (variable.type === 'text' && validation.pattern) {
+                const regex = new RegExp(validation.pattern);
+                if (!regex.test(String(value))) {
+                    newErrors[variable.id] = `${variable.label} format is invalid`;
+                }
+            }
+            ;
+            setErrors(newErrors);
+            return Object.keys(newErrors).length === 0;
         }
-        else if (validation.min !== undefined && numValue < validation.min) {
-            newErrors[variable.id] = `${variable.label} must be at least ${validation.min}`;
-        }
-    }
-    else if (validation.max !== undefined && numValue > validation.max) {
-        newErrors[variable.id] = `${variable.label} must be at most ${validation.max}`;
-    }
-    if (variable.type === 'text' && validation.pattern) {
-        const regex = new RegExp(validation.pattern);
-        if (!regex.test(String(value))) {
-            newErrors[variable.id] = `${variable.label} format is invalid`;
-        }
+        ;
+        const handleCustomizationChange = (id, value) => {
+            setCustomizations(prev => ({}), ...prev, [id], value);
+        };
     }
     ;
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // Clear error for this field
+    if (errors[id]) {
+        setErrors(prev => { });
+        const newErrors = { ...prev };
+        delete newErrors[id];
+        return newErrors;
+    }
+    ;
 };
-const handleCustomizationChange = (id, value) => {
-    setCustomizations(prev => ({}), ...prev, [id], value);
-};
-// Clear error for this field
-if (errors[id]) {
-    setErrors(prev => { });
-    const newErrors = { ...prev };
-    delete newErrors[id];
-    return newErrors;
-}
-;
-;
 const handlePreview = () => {
     if (validateCustomizations()) {
         onPreview(customizations);
@@ -85,11 +86,11 @@ const handlePreview = () => {
         return;
         _jsxs("div", { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4", children: [_jsxs("div", { className: "bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden", children: [_jsx("div", { className: "border-b border-gray-200 px-6 py-4", children: _jsxs("div", { className: "flex items-center justify-between", children: [_jsxs("div", { children: [_jsx("h2", { className: "text-xl font-semibold text-gray-900", children: "Customize Template" }), _jsx("p", { className: "text-sm text-gray-600 mt-1", children: template.name })] }), _jsx("button", { onClick: onClose, className: "text-gray-400 hover:text-gray-500 transition-colors", children: _jsx("svg", { className: "h-6 w-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", children: _jsx("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }) }) })] }) }), _jsx("div", { className: "border-b border-gray-200", children: _jsxs("nav", { className: "flex px-6", children: [_jsxs("button", { onClick: () => setActiveTab('variables'), className: `py-3 px-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'variables'
                                             ? 'border-blue-500 text-blue-600'
-                                            : 'border-transparent text-gray-500 hover:text-gray-700',
-                                        }`, children: ["Variables (", template.variables.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('customization'), className: `py-3 px-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'customization'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: ["Variables (", template.variables.length, ")"] }), _jsxs("button", { onClick: () => setActiveTab('customization'), className: `py-3 px-4 text-sm font-medium border-b-2 transition-colors ${activeTab === 'customization'
                                             ? 'border-blue-500 text-blue-600'
-                                            : 'border-transparent text-gray-500 hover:text-gray-700',
-                                        }`, children: ["Customization (", template.customization_points.length, ")"] })] }) }), _jsxs("div", { className: "px-6 py-4 overflow-y-auto max-h-[60vh]", children: [activeTab === 'variables' && ()
+                                            : 'border-transparent text-gray-500 hover:text-gray-700'}
+`, children: ["Customization (", template.customization_points.length, ")"] })] }) }), _jsxs("div", { className: "px-6 py-4 overflow-y-auto max-h-[60vh]", children: [activeTab === 'variables' && ()
                                     < div, " className=\"space-y-6\">", _jsx("p", { className: "text-sm text-gray-600", children: "Configure the variables that will be used throughout the template." }), template.variables.map(variable => ()
                                     < VariableEditor, key = { variable, : .id }, variable = { variable }, value = { customizations, [variable.id]:  }, error = { errors, [variable.id]:  }, onChange = {}(value)), " => handleCustomizationChange(variable.id, value)} /> ))}", template.variables.length === 0 && ()
                                     < div, " className=\"text-center py-8 text-gray-500\"> This template has no configurable variables."] }), ")}"] }), ")}", activeTab === 'customization' && ()
@@ -120,21 +121,21 @@ const VariableEditor = ({ variable, value, error, onChange }) => {
         switch (variable.type) {
             case 'text':
                 return;
-                _jsx("input", { type: "text", value: value || '', onChange: (e) => onChange(e.target.value), placeholder: variable.description, className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300',
-                    }` });
+                _jsx("input", { type: "text", value: value || '', onChange: (e) => onChange(e.target.value), placeholder: variable.description, className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300'}
+` });
         }
     };
 };
 ;
 'textarea';
 return;
-_jsx("textarea", { value: value || '', onChange: (e) => onChange(e.target.value), placeholder: variable.description, rows: 3, className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300',
-    }` });
+_jsx("textarea", { value: value || '', onChange: (e) => onChange(e.target.value), placeholder: variable.description, rows: 3, className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300'}
+` });
 ;
 'number';
 return;
-_jsx("input", { type: "number", value: value || '', onChange: (e) => onChange(e.target.value ? Number(e.target.value) : undefined), placeholder: variable.description, min: variable.validation?.min, max: variable.validation?.max, className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300',
-    }` });
+_jsx("input", { type: "number", value: value || '', onChange: (e) => onChange(e.target.value ? Number(e.target.value) : undefined), placeholder: variable.description, min: variable.validation?.min, max: variable.validation?.max, className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300'}
+` });
 ;
 'boolean';
 return;
@@ -142,8 +143,8 @@ _jsxs("label", { className: "flex items-center", children: [_jsx("input", { type
 ;
 'select';
 return;
-_jsxs("select", { value: value || '', onChange: (e) => onChange(e.target.value), className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300',
-    }`, children: [_jsx("option", { value: "", children: "Select an option" }), variable.validation?.options?.map(option => ()
+_jsxs("select", { value: value || '', onChange: (e) => onChange(e.target.value), className: `w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-300' : 'border-gray-300'}
+`, children: [_jsx("option", { value: "", children: "Select an option" }), variable.validation?.options?.map(option => ()
             < option, key = { option }, value = { option } > { option })] });
 select >
 ;

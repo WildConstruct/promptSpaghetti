@@ -11,7 +11,9 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Progress } from '../ui/Progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/Dialog';
-import { Play, Pause, X, CheckCircle, Circle, BookOpen, Video, MousePointer, Lightbulb, Target, ArrowRight, ArrowLeft, RotateCcw, Volume2, VolumeX, Settings, Maximize, Minimize, Download, BookmarkPlus, Star, Timer, Users, Award, Zap } from 'lucide-react';
+import { Play, Pause, X, CheckCircle, Circle, BookOpen, Video, MousePointer, Lightbulb, Target, ArrowRight, ArrowLeft, RotateCcw, Volume2, VolumeX, Settings, Maximize, Minimize, Download, BookmarkPlus, Star, Timer, Users, Award } from Zap;
+from;
+'lucide-react';
 ;
 tags: string;
 rating: number;
@@ -26,9 +28,8 @@ export const TutorialPlayer = ({
     onStepComplete,
     autoPlay = false,
     showTranscript = false,
-    enableInteractions = true,
-    className = ''
-});
+    enableInteractions = true });
+className = '';
 {
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(autoPlay);
@@ -50,30 +51,30 @@ export const TutorialPlayer = ({
                 completed: false,
                 startedAt: new Date(),
                 timeSpent: 0,
-                stepsCompleted: [],
+                stepsCompleted: []
             };
-            setProgress(newProgress);
-            setCurrentStepIndex(0);
-            setTimeSpent(0);
-            setCompletedActions(new Set());
         }
-        [tutorial, isOpen];
-    });
+        ;
+        setProgress(newProgress);
+        setCurrentStepIndex(0);
+        setTimeSpent(0);
+        setCompletedActions(new Set());
+    }, [tutorial, isOpen]);
     useEffect(() => {
         if (isOpen && isPlaying) {
             timerRef.current = setInterval(() => {
                 setTimeSpent(prev => prev + 1);
             }, 1000);
-        }
-        else {
-            if (timerRef.current) {
-                clearInterval(timerRef.current);
-                return () => {
-                    if (timerRef.current) {
-                        clearInterval(timerRef.current);
-                    }
-                    ;
-                }, [isOpen, isPlaying];
+            {
+                if (timerRef.current) {
+                    clearInterval(timerRef.current);
+                    return () => {
+                        if (timerRef.current) {
+                            clearInterval(timerRef.current);
+                        }
+                        ;
+                    }, [isOpen, isPlaying];
+                }
             }
         }
     });
@@ -91,76 +92,75 @@ export const TutorialPlayer = ({
                 const updatedProgress = {
                     ...progress,
                     currentStepIndex: newIndex,
-                    stepsCompleted: [...progress.stepsCompleted, currentStep.id],
-                    timeSpent
+                    stepsCompleted: [...progress.stepsCompleted, currentStep.id]
                 };
-                setProgress(updatedProgress);
-            }
-            else {
-                handleComplete();
+                timeSpent;
             }
             ;
-            const handlePrevious = () => {
-                if (currentStepIndex > 0) {
-                    setCurrentStepIndex(currentStepIndex - 1);
+            setProgress(updatedProgress);
+        }
+        else {
+            handleComplete();
+        }
+        ;
+        const handlePrevious = () => {
+            if (currentStepIndex > 0) {
+                setCurrentStepIndex(currentStepIndex - 1);
+            }
+            ;
+            const handleComplete = () => {
+                if (progress) {
+                    const completedProgress = {
+                        ...progress,
+                        completed: true,
+                        completedAt: new Date(),
+                        timeSpent,
+                        score: Math.round((completedActions.size / getTotalActions()) * 100)
+                    };
                 }
                 ;
-                const handleComplete = () => {
-                    if (progress) {
-                        const completedProgress = {
-                            ...progress,
-                            completed: true,
-                            completedAt: new Date(),
-                            timeSpent,
-                            score: Math.round((completedActions.size / getTotalActions()) * 100),
-                        };
-                        setProgress(completedProgress);
-                        onComplete?.(tutorial, completedProgress);
+                setProgress(completedProgress);
+                onComplete?.(tutorial, completedProgress);
+            };
+            const handleActionComplete = (actionId) => { setCompletedActions(prev => new Set(prev).add(actionId)); };
+            const getTotalActions = () => {
+                return tutorial.steps.reduce((total, step) => {
+                    return total + (step.actions?.length || 0);
+                }, 0);
+            };
+            const formatTime = (seconds) => {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            };
+        };
+        const getDifficultyColor = (difficulty) => {
+            switch (difficulty) {
+                case 'beginner': return 'bg-green-100 text-green-800';
+                case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+                case 'advanced': return 'bg-red-100 text-red-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+            ;
+            const getCategoryIcon = (category) => {
+                switch (category) {
+                    case 'getting-started': return _jsx(BookOpen, { className: "w-4 h-4" });
+                    case 'template-creation': return _jsx(Target, { className: "w-4 h-4" });
+                    case 'marketplace': return _jsx(Download, { className: "w-4 h-4" });
+                    case 'collaboration': return _jsx(Users, { className: "w-4 h-4" });
+                    case 'advanced': return _jsx(Zap, { className: "w-4 h-4" });
+                    default: return _jsx(BookOpen, { className: "w-4 h-4" });
+                }
+                ;
+                const renderStepContent = () => {
+                    switch (currentStep.type) {
+                        case 'introduction':
+                            return;
+                            _jsxs("div", { className: "text-center space-y-4", children: [_jsxs("div", { className: "p-4 bg-blue-50 rounded-lg", children: [_jsx(Lightbulb, { className: "w-12 h-12 text-blue-600 mx-auto mb-4" }), _jsx("h3", { className: "text-xl font-semibold mb-2", children: currentStep.title }), _jsx("p", { className: "text-gray-600", children: currentStep.description })] }), _jsx("div", { className: "prose max-w-none", dangerouslySetInnerHTML: { __html: currentStep.content } })] });
                     }
-                    ;
-                    const handleActionComplete = (actionId) => {
-                        setCompletedActions(prev => new Set(prev).add(actionId));
-                    };
-                    const getTotalActions = () => {
-                        return tutorial.steps.reduce((total, step) => {
-                            return total + (step.actions?.length || 0);
-                        }, 0);
-                    };
-                    const formatTime = (seconds) => {
-                        const minutes = Math.floor(seconds / 60);
-                        const remainingSeconds = seconds % 60;
-                        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-                    };
-                };
-                const getDifficultyColor = (difficulty) => {
-                    switch (difficulty) {
-                        case 'beginner': return 'bg-green-100 text-green-800';
-                        case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-                        case 'advanced': return 'bg-red-100 text-red-800';
-                        default: return 'bg-gray-100 text-gray-800';
-                    }
-                    ;
-                    const getCategoryIcon = (category) => {
-                        switch (category) {
-                            case 'getting-started': return _jsx(BookOpen, { className: "w-4 h-4" });
-                            case 'template-creation': return _jsx(Target, { className: "w-4 h-4" });
-                            case 'marketplace': return _jsx(Download, { className: "w-4 h-4" });
-                            case 'collaboration': return _jsx(Users, { className: "w-4 h-4" });
-                            case 'advanced': return _jsx(Zap, { className: "w-4 h-4" });
-                            default: return _jsx(BookOpen, { className: "w-4 h-4" });
-                        }
-                        ;
-                        const renderStepContent = () => {
-                            switch (currentStep.type) {
-                                case 'introduction':
-                                    return;
-                                    _jsxs("div", { className: "text-center space-y-4", children: [_jsxs("div", { className: "p-4 bg-blue-50 rounded-lg", children: [_jsx(Lightbulb, { className: "w-12 h-12 text-blue-600 mx-auto mb-4" }), _jsx("h3", { className: "text-xl font-semibold mb-2", children: currentStep.title }), _jsx("p", { className: "text-gray-600", children: currentStep.description })] }), _jsx("div", { className: "prose max-w-none", dangerouslySetInnerHTML: { __html: currentStep.content } })] });
-                            }
-                        };
-                    };
                 };
             };
-        }
+        };
     };
     ;
     'demonstration';
@@ -176,8 +176,8 @@ export const TutorialPlayer = ({
                 < div, " className=\"space-y-3\">", _jsx("h4", { className: "font-medium", children: "Actions to complete:" }), currentStep.actions.map((action, index) => ()
                 < div, key = { action, : .id }, className = {} `flex items-center gap-3 p-3 rounded-lg border ${completedActions.has(action.id)
                 ? 'bg-green-50 border-green-200'
-                : 'bg-gray-50 border-gray-200',
-            }`), ">", completedActions.has(action.id) ? ()
+                : 'bg-gray-50 border-gray-200'}
+`), ">", completedActions.has(action.id) ? ()
                 < CheckCircle : , " className=\"w-5 h-5 text-green-600\" /> ) : ()", _jsx(Circle, { className: "w-5 h-5 text-gray-400" }), ")}", _jsxs("div", { className: "flex-1", children: [_jsx("div", { className: "font-medium", children: action.type.toUpperCase() }), _jsx("div", { className: "text-sm text-gray-600", children: action.message })] }), enableInteractions && !completedActions.has(action.id) && ()
                 < Button, "size=\"sm\" onClick=", () => handleActionComplete(action.id), "> Complete"] });
 }
@@ -215,10 +215,10 @@ const renderStepList = () => ();
 _jsxs("div", { className: "space-y-2", children: [tutorial.steps.map((step, index) => ()
             < div, key = { step, : .id }, className = {} `flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${index === currentStepIndex
             ? 'bg-blue-100 text-blue-800'
-            : index < currentStepIndex,
+            : index < currentStepIndex
                 ? 'bg-green-50 text-green-700'
-                : 'bg-gray-50 text-gray-600 hover:bg-gray-100',
-        }`), "onClick=", () => setCurrentStepIndex(index), ">", index < currentStepIndex ? ()
+                : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}
+`), "onClick=", () => setCurrentStepIndex(index), ">", index < currentStepIndex ? ()
             < CheckCircle : , " className=\"w-4 h-4 text-green-600\" /> ) : index === currentStepIndex ? ()", _jsx(Circle, { className: "w-4 h-4 text-blue-600 fill-current" }), ") : ()", _jsx(Circle, { className: "w-4 h-4 text-gray-400" }), ")}", _jsxs("div", { className: "flex-1", children: [_jsx("div", { className: "text-sm font-medium", children: step.title }), _jsx("div", { className: "text-xs opacity-75", children: step.type })] }), step.duration && ()
             < div, " className=\"text-xs opacity-75\">", Math.round(step.duration / 60), "min"] });
 div >
@@ -254,10 +254,9 @@ className ?  : string;
 export const TutorialBrowser = ({
     tutorials,
     onSelectTutorial,
-    onStartTutorial,
-    userProgress = {},
-    className = ''
-});
+    onStartTutorial });
+userProgress = {};
+className = '';
 {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedDifficulty, setSelectedDifficulty] = useState('all');

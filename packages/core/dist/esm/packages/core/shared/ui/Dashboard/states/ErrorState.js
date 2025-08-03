@@ -8,9 +8,8 @@ export const ErrorState = ({
     onRetry,
     retryText = 'Try Again',
     showIcon = true,
-    variant = 'default',
-    className = ''
-});
+    variant = 'default' });
+className = '';
 {
     const errorMessage = error instanceof Error ? error.message : error;
     const getDescription = () => {
@@ -60,7 +59,7 @@ switch (variant) {
     case 'detailed':
         return renderDetailed();
     default:
-        return renderDefault();
 }
+return renderDefault();
 ;
 export default ErrorState;

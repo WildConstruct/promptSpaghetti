@@ -17,34 +17,26 @@ import { X, Lock, Clock, AlertTriangle, Info } from 'lucide-react';
         [resourceId];
     });
     const lockTypes = [
-        {
-            value: 'edit',
+        { value: 'edit',
             label: 'Edit Lock',
             description: 'Prevents others from editing this resource',
             icon: Lock,
-            color: 'text-blue-500',
-        },
-        {
-            value: 'state_change',
+            color: 'text-blue-500' },
+        { value: 'state_change',
             label: 'State Change Lock',
             description: 'Prevents workflow state changes',
             icon: Clock,
-            color: 'text-orange-500',
-        },
-        {
-            value: 'delete',
+            color: 'text-orange-500' },
+        { value: 'delete',
             label: 'Delete Lock',
             description: 'Prevents resource deletion',
             icon: AlertTriangle,
-            color: 'text-red-500',
-        },
-        {
-            value: 'admin',
+            color: 'text-red-500' },
+        { value: 'admin',
             label: 'Admin Lock',
             description: 'Administrative lock with full restrictions',
-            icon: AlertTriangle,
-            color: 'text-purple-500'
-        }
+            icon: AlertTriangle },
+        color, 'text-purple-500'
     ];
     const durationOptions = [
         { value: 15, label: '15 minutes' },
