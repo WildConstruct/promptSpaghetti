@@ -3,7 +3,7 @@
 .epic1-editable-node {
   background: #1a1a1a;
   border: 2px solid #333333;
-  border-radius: 8px;
+  border-radius: 12px;  /* Increased for smoother corners */
   padding: 12px;
   cursor: grab;
   position: relative;
@@ -33,7 +33,11 @@
 
 /* Editing state - glow effect */
 .epic1-editable-node.editing {
-  box-shadow: 0 0 20px rgba(91, 158, 255, 0.7), 0 0 40px rgba(91, 158, 255, 0.3);
+  box-shadow: 
+    0 0 0 2px rgba(91, 158, 255, 0.4),  /* Inner ring */
+    0 0 0 4px rgba(91, 158, 255, 0.2),  /* Outer ring */
+    0 0 30px rgba(91, 158, 255, 1),     /* Inner glow - more saturated */
+    0 0 60px rgba(91, 158, 255, 0.6);   /* Outer glow - more saturated */
   border-color: #5b9eff;
   border-width: 2px; /* Keep same border width to avoid layout shift */
   cursor: text;
@@ -45,7 +49,9 @@
 /* Selected state - subtle highlight */
 .epic1-editable-node.selected:not(.editing) {
   border-color: #5b9eff;
-  box-shadow: 0 4px 8px rgba(91, 158, 255, 0.3);
+  box-shadow: 
+    0 0 0 1px rgba(91, 158, 255, 0.2),  /* Subtle outer ring */
+    0 4px 8px rgba(91, 158, 255, 0.3);
   background: #202020;
 }
 
@@ -73,7 +79,7 @@
 .epic1-handle:hover {
   background: #4a8ee6;
   border-color: #0f0f0f;
-  box-shadow: 0 0 8px rgba(91, 158, 255, 0.6);
+  box-shadow: 0 0 12px rgba(91, 158, 255, 1);  /* More saturated glow */
   /* Keep same size to avoid layout shift */
   width: 12px;
   height: 12px;
@@ -175,7 +181,11 @@
 }
 
 .epic1-editable-node.text-block.editing {
-  box-shadow: 0 0 20px rgba(124, 127, 242, 0.7);
+  box-shadow: 
+    0 0 0 2px rgba(124, 127, 242, 0.5),  /* Inner ring */
+    0 0 0 4px rgba(124, 127, 242, 0.2),  /* Outer ring */
+    0 0 30px rgba(124, 127, 242, 1),     /* Inner glow - saturated purple */
+    0 0 60px rgba(124, 127, 242, 0.7);   /* Outer glow - saturated purple */
 }
 
 .epic1-editable-node.weighted-choice {
@@ -183,7 +193,11 @@
 }
 
 .epic1-editable-node.weighted-choice.editing {
-  box-shadow: 0 0 20px rgba(246, 167, 35, 0.7);
+  box-shadow: 
+    0 0 0 2px rgba(246, 167, 35, 0.5),  /* Inner ring */
+    0 0 0 4px rgba(246, 167, 35, 0.2),  /* Outer ring */
+    0 0 30px rgba(246, 167, 35, 1),     /* Inner glow - saturated orange */
+    0 0 60px rgba(246, 167, 35, 0.7);   /* Outer glow - saturated orange */
 }
 
 .epic1-editable-node.concat {
@@ -191,7 +205,11 @@
 }
 
 .epic1-editable-node.concat.editing {
-  box-shadow: 0 0 20px rgba(34, 196, 147, 0.7);
+  box-shadow: 
+    0 0 0 2px rgba(34, 196, 147, 0.5),  /* Inner ring */
+    0 0 0 4px rgba(34, 196, 147, 0.2),  /* Outer ring */
+    0 0 30px rgba(34, 196, 147, 1),     /* Inner glow - saturated green */
+    0 0 60px rgba(34, 196, 147, 0.7);   /* Outer glow - saturated green */
 }
 
 .epic1-editable-node.variable {
@@ -199,7 +217,11 @@
 }
 
 .epic1-editable-node.variable.editing {
-  box-shadow: 0 0 20px rgba(157, 112, 247, 0.7);
+  box-shadow: 
+    0 0 0 2px rgba(157, 112, 247, 0.5),  /* Inner ring */
+    0 0 0 4px rgba(157, 112, 247, 0.2),  /* Outer ring */
+    0 0 30px rgba(157, 112, 247, 1),     /* Inner glow - saturated violet */
+    0 0 60px rgba(157, 112, 247, 0.7);   /* Outer glow - saturated violet */
 }
 
 .epic1-editable-node.output {
@@ -207,5 +229,9 @@
 }
 
 .epic1-editable-node.output.editing {
-  box-shadow: 0 0 20px rgba(241, 86, 86, 0.7);
+  box-shadow: 
+    0 0 0 2px rgba(241, 86, 86, 0.5),   /* Inner ring */
+    0 0 0 4px rgba(241, 86, 86, 0.2),   /* Outer ring */
+    0 0 30px rgba(241, 86, 86, 1),      /* Inner glow - saturated red */
+    0 0 60px rgba(241, 86, 86, 0.7);    /* Outer glow - saturated red */
 }
