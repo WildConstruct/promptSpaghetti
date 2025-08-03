@@ -80,29 +80,35 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 4px;
-  /* Custom scrollbar styling */
+  /* Ensure scrolling works */
+  pointer-events: auto;
+  touch-action: pan-y;
+  /* Custom scrollbar styling - Firefox */
   scrollbar-width: thin;
-  scrollbar-color: rgba(245, 158, 11, 0.3) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.3);
 }
 
-/* Webkit scrollbar styling */
+/* Webkit scrollbar styling - Dark theme */
 .epic1-options-list::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .epic1-options-list::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  margin: 4px 0;
 }
 
 .epic1-options-list::-webkit-scrollbar-thumb {
-  background: rgba(245, 158, 11, 0.3);
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   transition: background 0.2s;
 }
 
 .epic1-options-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.6);
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
 .epic1-option-row {
@@ -110,12 +116,19 @@
   flex-direction: column;
   gap: 6px;
   padding: 8px;
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   position: relative;
   /* Prevent overflow */
   overflow: hidden;
   flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.epic1-option-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
 }
 
 .epic1-option-text {
@@ -123,15 +136,23 @@
   max-width: 100%;
   box-sizing: border-box;
   padding: 6px 8px;
-  border: 1px solid #ddd;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
   border-radius: 4px;
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .epic1-option-text:focus {
   border-color: #f59e0b;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.2);
+}
+
+.epic1-option-text::placeholder {
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .epic1-weight-controls {
@@ -146,10 +167,11 @@
   height: 6px;
   -webkit-appearance: none;
   appearance: none;
-  background: #e0e0e0;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
   outline: none;
   cursor: pointer;
+  position: relative;
 }
 
 .epic1-weight-slider::-webkit-slider-thumb {
@@ -187,7 +209,7 @@
   min-width: 35px;
   font-size: 12px;
   font-weight: 600;
-  color: #666;
+  color: rgba(245, 158, 11, 0.9);
   text-align: right;
 }
 
