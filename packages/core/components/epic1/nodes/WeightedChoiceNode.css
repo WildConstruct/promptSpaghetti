@@ -105,19 +105,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  position: relative;
-  pointer-events: auto;
-}
-
-.epic1-slider-wrapper {
-  flex: 1;
-  position: relative;
-  pointer-events: auto;
-  isolation: isolate;
 }
 
 .epic1-weight-slider {
-  width: 100%;
+  flex: 1;
   height: 6px;
   -webkit-appearance: none;
   appearance: none;
@@ -125,11 +116,6 @@
   border-radius: 3px;
   outline: none;
   cursor: pointer;
-  pointer-events: auto;
-  touch-action: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .epic1-weight-slider::-webkit-slider-thumb {

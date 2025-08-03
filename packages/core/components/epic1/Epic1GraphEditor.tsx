@@ -178,6 +178,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       data: createNodeData(node.data, node.id),
       // Preserve the original selected state from nodes, don't override
       selected: node.selected || node.id === selectedNodeId,
+      // Make node non-draggable when it's being edited
+      draggable: !node.data?.isEditing,
     }));
   }, [nodes, selectedNodeId, createNodeData]);
 
