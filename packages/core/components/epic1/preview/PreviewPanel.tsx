@@ -59,6 +59,28 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   // Subscribe to preview engine updates
   useEffect(() => {
     const unsubscribe = previewEngine.subscribe((update) => {
+      console.log('[PreviewPanel] Received update:', {
+        state: update.state,
+        hasResults: !!update.results,
+        resultCount: update.results?.length,
+        results: update.results?.map(r => ({
+          success: r.success,
+          output: r.output,
+          hasOutput: !!r.output,
+          outputLength: r.output?.length || 0
+        }))
+      });
+      
+      // Log the actual output values for debugging
+      if (update.results && update.state === PreviewState.IDLE) {
+        update.results.forEach((result, idx) => {
+          console.log(`[PreviewPanel] Result ${idx}: "${result.output || '(empty)'}"`, {
+            success: result.success,
+            hasStats: !!result.stats,
+            errors: result.stats?.errors?.length || 0
+          });
+        });
+      }
       setPreviewUpdate(update);
       
       // Track changes when we have results

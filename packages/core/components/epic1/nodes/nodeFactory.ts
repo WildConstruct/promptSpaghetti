@@ -16,6 +16,8 @@ import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
  */
 export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInlineEditableNode | null {
   const { id, type, data } = flowNode;
+  
+  console.log('[nodeFactory] Converting node:', { id, type, data });
 
   try {
     switch (type) {
@@ -74,7 +76,8 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
 
       case 'output': {
         // OutputNode constructor takes (id, initialValue, config)
-        const node = new OutputNode(id, data.label || 'Output');
+        const node = new OutputNode(id, data.label || data.value || 'Output');
+        console.log('[nodeFactory] Created output node:', id, 'with label:', data.label || data.value || 'Output');
         return node;
       }
 

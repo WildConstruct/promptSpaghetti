@@ -5,7 +5,7 @@
 
 import { BaseInlineEditableNode } from './BaseInlineEditableNode';
 import { Epic1ExecutionContext } from './Epic1ExecutionContext';
-import { Epic1NodeType } from './index';
+import { Epic1NodeType } from './nodeTypes';
 import { TextBlockNode } from './TextBlockNode';
 import { WeightedChoiceNode } from './WeightedChoiceNode';
 import { ConcatNode } from './ConcatNode';
@@ -83,6 +83,8 @@ export class Epic1ExecutionEngine {
     const startTime = Date.now();
 
     try {
+      console.log('[ExecutionEngine] Starting execution with', this.graph.nodes.size, 'nodes');
+      
       // Validate the graph first
       const validation = await validateGraph(this.graph.nodes, this.graph.edges);
       if (!validation.valid) {
@@ -98,8 +100,11 @@ export class Epic1ExecutionEngine {
       const outputNodes = Array.from(this.graph.nodes.entries())
         .filter(([_, node]) => node.getNodeType() === Epic1NodeType.Output);
 
+      console.log('[ExecutionEngine] Found output nodes:', outputNodes.map(([id]) => id));
+      console.log('[ExecutionEngine] Graph edges:', this.graph.edges.length, 'edges:', this.graph.edges);
 
       if (outputNodes.length === 0) {
+        console.warn('[ExecutionEngine] No output node found in graph - skipping execution');
         throw new Error('No output node found in graph');
       }
 
@@ -108,6 +113,7 @@ export class Epic1ExecutionEngine {
 
       // Build execution order (topological sort)
       this.buildExecutionOrder();
+      console.log('[ExecutionEngine] Execution order:', this.executionOrder);
 
       // Execute nodes in order
       for (const nodeId of this.executionOrder) {
@@ -117,6 +123,7 @@ export class Epic1ExecutionEngine {
       // Get final output
       const outputResult = this.results.get(this.outputNodeId);
       const finalOutput = outputResult?.output || null;
+      console.log('[ExecutionEngine] Final output from node', this.outputNodeId, ':', finalOutput);
 
       // Finalize stats
       const stats = this.context.finalize();
@@ -169,6 +176,7 @@ export class Epic1ExecutionEngine {
 
       // Get inputs for this node
       const inputs = this.getNodeInputs(nodeId);
+      console.log(`[ExecutionEngine] Executing node ${nodeId} of type ${node.getNodeType()} with ${inputs.length} inputs:`, inputs);
 
       // Execute based on node type
       let output: any = null;
@@ -204,6 +212,7 @@ export class Epic1ExecutionEngine {
         output,
         duration: Date.now() - startTime
       });
+      console.log(`[ExecutionEngine] Node ${nodeId} produced output:`, output);
 
       this.context.decrementDepth();
 
@@ -336,6 +345,7 @@ export class Epic1ExecutionEngine {
    */
   private async executeOutput(node: OutputNode, inputs: any[]): Promise<any> {
     const input = inputs.length > 0 ? inputs[0] : '';
+    console.log('[ExecutionEngine] Output node receiving input:', input, 'from', inputs.length, 'sources');
     
     // Set the input on the node for display
     node.setInput(input);

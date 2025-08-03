@@ -79,8 +79,26 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 }) => {
   // Use droppable node types if asset library is shown
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
+  console.log('[Epic1GraphEditor] Using nodeTypes:', showAssetLibrary ? 'droppable' : 'regular', 'showAssetLibrary:', showAssetLibrary);
+  console.log('[Epic1GraphEditor] Initial nodes:', initialNodes.length, 'nodes');
   const [nodes, setNodes, onNodesChange] = useNodesState<EditableNodeData>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  
+  // Debug: Log nodes whenever they change
+  useEffect(() => {
+    console.log('[Epic1GraphEditor] Nodes state changed:', nodes.length, 'nodes');
+    console.log('[Epic1GraphEditor] Node details:', nodes.map(n => ({ 
+      id: n.id, 
+      type: n.type,
+      position: n.position
+    })));
+    // Check for duplicate IDs
+    const ids = nodes.map(n => n.id);
+    const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+    if (duplicates.length > 0) {
+      console.warn('[Epic1GraphEditor] DUPLICATE NODE IDS FOUND:', duplicates);
+    }
+  }, [nodes]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
@@ -154,15 +172,23 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const enhancedNodes = useMemo(() => {
     return nodes.map((node) => ({
       ...node,
+      type: node.type || 'textBlock', // Ensure type is always defined
+      position: node.position || { x: 0, y: 0 }, // Ensure position is always defined
       data: createNodeData(node.data, node.id),
-      selected: node.id === selectedNodeId,
+      // Preserve the original selected state from nodes, don't override
+      selected: node.selected || node.id === selectedNodeId,
     }));
   }, [nodes, selectedNodeId, createNodeData]);
 
   // Handle new connections
   const onConnect = useCallback(
     (params: Connection) => {
-      setEdges((eds) => addEdge(params, eds));
+      console.log('[Epic1GraphEditor] Connection attempt:', params);
+      setEdges((eds) => {
+        const newEdges = addEdge(params, eds);
+        console.log('[Epic1GraphEditor] Edges after connection:', newEdges.length, 'edges');
+        return newEdges;
+      });
       
       // Highlight the new connection
       if (params.source && params.target) {
@@ -183,7 +209,15 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     try {
       const runtimeNodes = new Map();
       
+      console.log('[convertToRuntimeGraph] Input nodes:', flowNodes.length, 'nodes');
+      console.log('[convertToRuntimeGraph] Node IDs:', flowNodes.map(n => n.id));
+      
       for (const node of flowNodes) {
+        // Skip nodes without proper type or position
+        if (!node.type || !node.position) {
+          console.warn('Skipping invalid node:', node.id, 'type:', node.type, 'position:', node.position);
+          continue;
+        }
         const runtimeNode = nodeDataToRuntimeNode(node);
         if (runtimeNode) {
           runtimeNodes.set(node.id, runtimeNode);
@@ -212,6 +246,15 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
     const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
     if (runtimeGraph) {
+      console.log('[Epic1GraphEditor] Updating preview with graph:', {
+        nodeCount: runtimeGraph.nodes.size,
+        edgeCount: runtimeGraph.edges.length,
+        nodes: Array.from(runtimeGraph.nodes.entries()).map(([id, node]) => ({
+          id,
+          type: node.getNodeType()
+        })),
+        edges: runtimeGraph.edges
+      });
       previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
     }
   }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph]);
@@ -264,12 +307,21 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     showToast('success', 'Graph exported!');
   }, [enhancedNodes, edges, showToast]);
 
-  const handleDelete = useCallback((nodesToDelete: Node[]) => {
-    const nodeIds = nodesToDelete.map(n => n.id);
+  const handleDelete = useCallback((nodesToDelete?: Node[]) => {
+    // If no nodes provided, get selected nodes
+    const targetNodes = nodesToDelete || nodes.filter(n => n.selected);
+    
+    if (targetNodes.length === 0) {
+      console.log('[Epic1GraphEditor] No nodes selected to delete');
+      return;
+    }
+    
+    console.log('[Epic1GraphEditor] Deleting nodes:', targetNodes.map(n => n.id));
+    const nodeIds = targetNodes.map(n => n.id);
     setNodes((nds) => nds.filter(n => !nodeIds.includes(n.id)));
     setEdges((eds) => eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
     showToast('info', `Deleted ${nodeIds.length} node(s)`);
-  }, [setNodes, setEdges, showToast]);
+  }, [nodes, setNodes, setEdges, showToast]);
 
   const handleDuplicate = useCallback((nodesToDuplicate: Node[]) => {
     const newNodes = nodesToDuplicate.map(node => ({
@@ -293,6 +345,28 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const handlePaneClick = useCallback(() => {
     setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
     setSelectedNodeId(null);
+  }, [setNodes]);
+  
+  // Handle node click to select it
+  const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    console.log('[Epic1GraphEditor] Node clicked:', node.id, 'Shift:', event.shiftKey);
+    
+    if (event.shiftKey) {
+      // Multi-select with shift key
+      setNodes((nds) => nds.map(n => {
+        if (n.id === node.id) {
+          return { ...n, selected: !n.selected }; // Toggle selection
+        }
+        return n; // Keep other selections
+      }));
+    } else {
+      // Single select without shift
+      setNodes((nds) => nds.map(n => ({ 
+        ...n, 
+        selected: n.id === node.id 
+      })));
+      setSelectedNodeId(node.id);
+    }
   }, [setNodes]);
 
   // Toggle preview panel
@@ -319,6 +393,147 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       previewEngineRef.current?.dispose();
     };
   }, []);
+  
+  // Add direct keyboard handler for delete
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if delete or backspace was pressed
+      if (event.key === 'Delete' || event.key === 'Backspace') {
+        // Check if we're not in an input field
+        const target = event.target as HTMLElement;
+        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+          return;
+        }
+        
+        event.preventDefault();
+        const selectedNodes = nodes.filter(n => n.selected);
+        if (selectedNodes.length > 0) {
+          console.log('[Epic1GraphEditor] Delete key pressed, deleting selected nodes');
+          handleDelete(selectedNodes);
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [nodes, handleDelete]);
+  
+  // Listen for prompt paste events from tutorial
+  useEffect(() => {
+    const handlePromptPasted = async (event: CustomEvent) => {
+      const { prompt } = event.detail;
+      if (!prompt) return;
+      
+      try {
+        // Import the prompt parser
+        const { PromptParser } = await import('../../runtime/nodes/epic1/PromptParser');
+        const parser = new PromptParser();
+        const parsed = parser.parse(prompt);
+        
+        // Create nodes from parsed prompt
+        const newNodes: Node<EditableNodeData>[] = [];
+        const newEdges: Edge[] = [];
+        let xPos = 100;
+        let yPos = 100;
+        let lastNodeId: string | null = null;
+        
+        parsed.segments.forEach((segment, index) => {
+          const nodeId = `parsed-${Date.now()}-${index}`;
+          
+          if (segment.type === 'text') {
+            newNodes.push({
+              id: nodeId,
+              type: 'textBlock',
+              position: { x: xPos, y: yPos },
+              data: {
+                nodeType: 'textBlock',
+                text: segment.content,
+                value: segment.content
+              }
+            });
+          } else if (segment.type === 'choice') {
+            const options = segment.options.map(opt => ({
+              text: opt,
+              weight: Math.floor(100 / segment.options.length)
+            }));
+            
+            newNodes.push({
+              id: nodeId,
+              type: 'weightedChoice',
+              position: { x: xPos, y: yPos },
+              data: {
+                nodeType: 'weightedChoice',
+                options,
+                value: JSON.stringify(options, null, 2)
+              }
+            });
+          }
+          
+          // Create edge from previous node
+          if (lastNodeId) {
+            newEdges.push({
+              id: `edge-${lastNodeId}-${nodeId}`,
+              source: lastNodeId,
+              target: nodeId,
+              animated: true
+            });
+          }
+          
+          lastNodeId = nodeId;
+          xPos += 250;
+          if (xPos > 800) {
+            xPos = 100;
+            yPos += 150;
+          }
+        });
+        
+        // Add output node at the end
+        const outputId = `output-${Date.now()}`;
+        newNodes.push({
+          id: outputId,
+          type: 'output',
+          position: { x: 400, y: yPos + 150 },
+          data: {
+            nodeType: 'output',
+            label: 'output',
+            value: 'output'
+          }
+        });
+        
+        if (lastNodeId) {
+          newEdges.push({
+            id: `edge-${lastNodeId}-${outputId}`,
+            source: lastNodeId,
+            target: outputId,
+            animated: true
+          });
+        }
+        
+        // Set the new nodes and edges
+        setNodes(newNodes);
+        setEdges(newEdges);
+        
+        // Fit view to show all nodes
+        if (reactFlowInstance) {
+          setTimeout(() => {
+            reactFlowInstance.fitView({ padding: 0.2 });
+          }, 100);
+        }
+        
+        showToast('success', 'Prompt parsed and nodes created!');
+      } catch (error) {
+        console.error('Failed to parse prompt:', error);
+        showToast('error', 'Failed to parse prompt');
+      }
+    };
+    
+    window.addEventListener('epic1:promptPasted', handlePromptPasted as EventListener);
+    return () => {
+      window.removeEventListener('epic1:promptPasted', handlePromptPasted as EventListener);
+    };
+  }, [setNodes, setEdges, reactFlowInstance, showToast]);
 
   const editorStyle = useMemo(() => {
     // Simple full height container - tabbed panel handles its own positioning
@@ -335,15 +550,29 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Handle ReactFlow initialization
   const onInit = useCallback((instance: ReactFlowInstance) => {
+    console.log('ReactFlow initialized:', instance);
     setReactFlowInstance(instance);
+    // Don't auto-fit view on init to prevent zoom changes
+    // Force a re-render to ensure drag-drop knows about the instance
+    setTimeout(() => {
+      setReactFlowInstance(instance);
+    }, 100);
   }, []);
 
   // Handle node drop from toolbar
   const handleNodeDrop = useCallback((nodeType: string, position: { x: number; y: number }) => {
+    // Ensure position has valid x and y values
+    const validPosition = {
+      x: typeof position?.x === 'number' ? position.x : 250,
+      y: typeof position?.y === 'number' ? position.y : 250
+    };
+    
+    console.log('[Epic1GraphEditor] Creating node at position:', validPosition);
+    
     const newNode: Node<EditableNodeData> = {
       id: createNodeId(),
-      type: nodeType,
-      position,
+      type: nodeType || 'textBlock', // Ensure type is never undefined
+      position: validPosition,
       data: {
         nodeType: nodeType, // CRITICAL: This is required for the runtime to identify the node type
         // Default data based on node type - set both value AND the specific properties expected by nodeFactory
@@ -365,9 +594,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           value: ' ',
           separator: ' ' 
         }),
-        ...(nodeType === 'variable' && { 
+        ...((nodeType === 'variable' || nodeType === 'setVariable' || nodeType === 'getVariable') && { 
           value: 'myVariable',
-          variableName: 'myVariable' 
+          variableName: 'myVariable',
+          mode: nodeType === 'setVariable' ? 'set' : (nodeType === 'getVariable' ? 'get' : 'both')
         }),
         ...(nodeType === 'output' && { 
           value: 'output',
@@ -378,10 +608,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
     setNodes((nds) => nds.concat(newNode));
     
-    // Add bounce effect - wrap in try-catch to prevent breaking
+    // Add bounce effect - pass the whole node, not just ID
     try {
       if (addNodeWithBounce) {
-        addNodeWithBounce(newNode.id);
+        addNodeWithBounce(newNode);
       }
     } catch (bounceError) {
       console.warn('Bounce animation failed:', bounceError);
@@ -420,27 +650,56 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Handle drag over for new nodes
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
+    event.dataTransfer.dropEffect = 'copy';
+    // Don't log on every dragover to avoid spam
   }, []);
 
   // Handle drop for new nodes
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
+      event.stopPropagation();
 
-      // Try both data types for compatibility with different palette implementations
-      const nodeType = event.dataTransfer.getData('application/reactflow') || 
-                      event.dataTransfer.getData('application/node-type');
+      // Try multiple data types for compatibility
+      let nodeType = event.dataTransfer.getData('application/reactflow');
+      if (!nodeType) {
+        nodeType = event.dataTransfer.getData('application/node-type');
+      }
+      if (!nodeType) {
+        nodeType = event.dataTransfer.getData('text/plain');
+      }
+      if (!nodeType) {
+        nodeType = event.dataTransfer.getData('text');
+      }
       
-      if (!nodeType || !reactFlowInstance) {
+      console.log('[Epic1GraphEditor] Drop event detected!');
+      console.log('  - Node type:', nodeType);
+      console.log('  - ReactFlow instance ready:', !!reactFlowInstance);
+      console.log('  - Drop position:', event.clientX, event.clientY);
+      console.log('  - Available data types:', Array.from(event.dataTransfer.types));
+      
+      if (!nodeType) {
+        console.error('Drop failed: no nodeType found in any data transfer format');
+        console.log('Available types were:', Array.from(event.dataTransfer.types));
         return;
       }
 
-      const bounds = event.currentTarget.getBoundingClientRect();
-      const position = reactFlowInstance.project({
-        x: event.clientX - bounds.left,
-        y: event.clientY - bounds.top,
-      });
+      // Calculate position using the new screenToFlowPosition API
+      let position;
+      if (reactFlowInstance) {
+        // Use the new non-deprecated method
+        position = reactFlowInstance.screenToFlowPosition({
+          x: event.clientX,
+          y: event.clientY,
+        });
+      } else {
+        // Fallback to a default position if instance not ready
+        position = {
+          x: 250,
+          y: 250
+        };
+        console.warn('ReactFlow instance not ready, using default position');
+      }
 
       handleNodeDrop(nodeType, position);
     },
@@ -449,7 +708,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Wrap with DndProvider if using droppable nodes
   const content = (
-    <div className="epic1-graph-editor" style={editorStyle}>
+    <div className="epic1-graph-editor" style={editorStyle}
+         onDrop={onDrop}
+         onDragOver={onDragOver}>
         <ReactFlow
             nodes={enhancedNodes}
             edges={edges}
@@ -457,13 +718,14 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onPaneClick={handlePaneClick}
+            onNodeClick={handleNodeClick}
             onInit={onInit}
             nodeTypes={nodeTypes}
             isValidConnection={isValidConnection}
             connectionMode={ConnectionMode.Loose}
-            fitView
+            fitView={false}
             attributionPosition="bottom-left"
-            panOnScroll={false}
+            panOnScroll={true}
             zoomOnScroll={true}
             zoomOnPinch={true}
             panOnDrag={true}
@@ -471,8 +733,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             nodesDraggable={true}
             nodesConnectable={true}
             elementsSelectable={true}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
+            deleteKeyCode={null}
+            multiSelectionKeyCode="Shift"
           >
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
@@ -554,7 +816,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         ))}
       
       {/* Node Palette for creating new nodes */}
-      <NodePalette position="left" />
+      <NodePalette position="left" defaultCollapsed={false} />
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />
@@ -602,6 +864,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
 // Export the main component
 export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
+  console.log('[Epic1GraphEditor] Wrapper mounting with props:', { showAssetLibrary: props.showAssetLibrary });
   return (
     <ReactFlowProvider>
       <Epic1GraphEditorInner {...props} />

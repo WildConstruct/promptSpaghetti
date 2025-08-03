@@ -15,6 +15,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Prevent layout shift on interactions */
+  box-sizing: border-box;
 }
 
 /* Dragging state */
@@ -33,13 +35,11 @@
 .epic1-editable-node.editing {
   box-shadow: 0 0 20px rgba(91, 158, 255, 0.7), 0 0 40px rgba(91, 158, 255, 0.3);
   border-color: #5b9eff;
-  border-width: 3px;
+  border-width: 2px; /* Keep same border width to avoid layout shift */
   cursor: text;
   z-index: 100;
   background: #252525;
-  /* Add subtle outline instead of transform for visual feedback */
-  outline: 2px solid rgba(91, 158, 255, 0.2);
-  outline-offset: 4px;
+  /* Remove outline to avoid expanding the node */
 }
 
 /* Selected state - subtle highlight */
@@ -74,9 +74,11 @@
   background: #4a8ee6;
   border-color: #0f0f0f;
   box-shadow: 0 0 8px rgba(91, 158, 255, 0.6);
-  /* Use width/height instead of transform to avoid positioning issues */
-  width: 14px;
-  height: 14px;
+  /* Keep same size to avoid layout shift */
+  width: 12px;
+  height: 12px;
+  /* Remove scale transform to prevent resizing issues */
+  transform: translateY(-50%) !important;
 }
 
 .epic1-handle.target {
@@ -87,14 +89,7 @@
   right: -6px !important;
 }
 
-/* Adjust position on hover to keep handles centered */
-.epic1-handle.target:hover {
-  left: -7px !important;
-}
-
-.epic1-handle.source:hover {
-  right: -7px !important;
-}
+/* No position adjustment needed on hover since we're using scale transform */
 
 /* Visual indicators */
 .epic1-edit-indicator {

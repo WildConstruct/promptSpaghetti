@@ -66,7 +66,7 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
    * Get the node type
    */
   getNodeType(): string {
-    return 'output';
+    return 'Output';
   }
 
   /**
