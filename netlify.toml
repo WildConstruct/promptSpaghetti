@@ -1,8 +1,8 @@
 [build]
   # Build from root to handle monorepo properly
   base = ""
-  # Install pnpm and build the client
-  command = "npm install -g pnpm && pnpm install && pnpm --filter client build"
+  # pnpm is auto-detected and installed by Netlify, just run the build
+  command = "pnpm install && pnpm --filter client build"
   publish = "client/dist"
 
 [build.environment]
