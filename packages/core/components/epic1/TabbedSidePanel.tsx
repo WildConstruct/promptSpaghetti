@@ -6,6 +6,7 @@
 import React, { useState, useCallback } from 'react';
 import { PreviewPanel } from './preview/PreviewPanel';
 import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
+import { AssetLibraryErrorBoundary } from './asset-library/AssetLibraryErrorBoundary';
 import { PreviewEngine } from './preview/PreviewEngine';
 import { Preset } from './asset-library/types';
 import './TabbedSidePanel.css';
@@ -77,12 +78,14 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         
         {activeTab === 'assets' && (
           <div className="assets-container">
-            <AssetLibraryV2
-              position="right"
-              onPresetDrag={onPresetDrag}
-              onPresetSelect={onPresetSelect}
-              defaultExpanded={true}
-            />
+            <AssetLibraryErrorBoundary>
+              <AssetLibraryV2
+                position="right"
+                onPresetDrag={onPresetDrag}
+                onPresetSelect={onPresetSelect}
+                defaultExpanded={true}
+              />
+            </AssetLibraryErrorBoundary>
           </div>
         )}
         

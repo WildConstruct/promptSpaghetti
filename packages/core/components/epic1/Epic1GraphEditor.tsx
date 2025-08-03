@@ -873,12 +873,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     </div>
   );
   
-  // Conditionally wrap with DndProvider when using droppable nodes
-  if (showAssetLibrary) {
-    return <DndProvider backend={HTML5Backend}>{content}</DndProvider>;
-  }
-  
-  return content;
+  // Always wrap with DndProvider since TabbedSidePanel includes asset browser that uses drag-and-drop
+  // The asset browser tab can be clicked regardless of showAssetLibrary prop
+  return <DndProvider backend={HTML5Backend}>{content}</DndProvider>;
 };
 
 // Export the main component

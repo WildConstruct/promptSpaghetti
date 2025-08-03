@@ -30,11 +30,12 @@ const PresetListItem: React.FC<{
   onSelect: () => void;
   isSelected: boolean;
 }> = ({ preset, onSelect, isSelected }) => {
+  // Safely initialize drag hook with error handling
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'preset',
     item: { preset } as DraggedPreset,
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+      isDragging: monitor?.isDragging() || false,
     }),
   }), [preset]);
 
