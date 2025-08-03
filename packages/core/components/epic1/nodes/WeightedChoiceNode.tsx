@@ -80,7 +80,13 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
               className="epic1-weighted-choice-editor"
             >
               <div className="epic1-node-type-label">Weighted Choice</div>
-              <div className="epic1-options-list">
+              <div 
+                className="epic1-options-list nodrag"
+                onWheel={(e) => {
+                  // Stop propagation to prevent canvas panning
+                  e.stopPropagation();
+                }}
+              >
                 {options.map((option, index) => (
                   <div key={index} className="epic1-option-row">
                     <input

@@ -66,6 +66,9 @@
   width: 100%;
   user-select: none;
   -webkit-user-select: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .epic1-options-list {
@@ -73,8 +76,33 @@
   flex-direction: column;
   gap: 12px;
   margin-bottom: 12px;
-  max-height: 300px;
+  max-height: 240px;
   overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  /* Custom scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.3) transparent;
+}
+
+/* Webkit scrollbar styling */
+.epic1-options-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.epic1-options-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.epic1-options-list::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.3);
+  border-radius: 3px;
+  transition: background 0.2s;
+}
+
+.epic1-options-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.5);
 }
 
 .epic1-option-row {
@@ -85,10 +113,15 @@
   background: #f8f9fa;
   border-radius: 6px;
   position: relative;
+  /* Prevent overflow */
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .epic1-option-text {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 6px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -109,6 +142,7 @@
 
 .epic1-weight-slider {
   flex: 1;
+  min-width: 0; /* Allow slider to shrink */
   height: 6px;
   -webkit-appearance: none;
   appearance: none;
@@ -184,6 +218,8 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 8px;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
 .epic1-add-option {
