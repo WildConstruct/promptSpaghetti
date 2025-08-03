@@ -21,7 +21,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
-import { DroppableCanvas } from './DroppableCanvas';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
@@ -183,27 +182,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     try {
       const runtimeNodes = new Map();
       
-      // Debug: Log nodes being converted
-      console.log('Converting nodes to runtime:', flowNodes.map(n => ({
-        id: n.id,
-        type: n.type,
-        data: n.data
-      })));
-      
       for (const node of flowNodes) {
         const runtimeNode = nodeDataToRuntimeNode(node);
         if (runtimeNode) {
           runtimeNodes.set(node.id, runtimeNode);
-        } else {
-          console.warn(`Failed to convert node ${node.id} of type ${node.type}`);
         }
       }
-
-      // Debug: Check for output nodes
-      const outputNodes = Array.from(runtimeNodes.entries()).filter(([id, node]) => 
-        node.getNodeType() === 'output'
-      );
-      console.log('Output nodes found:', outputNodes.length);
 
       return {
         nodes: runtimeNodes,
@@ -223,18 +207,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Update preview when graph changes
   useEffect(() => {
-    if (!isPreviewVisible || !previewEngineRef.current) {
-      console.log('Preview not visible or engine not ready');
-      return;
-    }
+    if (!isPreviewVisible || !previewEngineRef.current) return;
 
-    console.log('Updating preview with nodes:', enhancedNodes.length, 'edges:', edges.length);
     const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
     if (runtimeGraph) {
-      console.log('Runtime graph created, updating preview...');
       previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
-    } else {
-      console.error('Failed to create runtime graph');
     }
   }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph]);
 
@@ -400,9 +377,13 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
     setNodes((nds) => nds.concat(newNode));
     
-    // Add bounce effect
-    if (addNodeWithBounce) {
-      addNodeWithBounce(newNode.id);
+    // Add bounce effect - wrap in try-catch to prevent breaking
+    try {
+      if (addNodeWithBounce) {
+        addNodeWithBounce(newNode.id);
+      }
+    } catch (bounceError) {
+      console.warn('Bounce animation failed:', bounceError);
     }
     
     // Show success toast
@@ -466,7 +447,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Wrap with DndProvider if using droppable nodes
   const content = (
     <div className="epic1-graph-editor" style={editorStyle}>
-      <DroppableCanvas onDrop={handleNodeDrop} reactFlowInstance={reactFlowInstance}>
         <ReactFlow
             nodes={enhancedNodes}
             edges={edges}
@@ -569,7 +549,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             onDismiss={() => dismissToast(toast.id)}
           />
         ))}
-      </DroppableCanvas>
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />
