@@ -81,13 +81,18 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
             >
               <div className="epic1-node-type-label">Weighted Choice</div>
               <div 
-                className="epic1-options-list nodrag nopan"
+                className="epic1-options-list nodrag nopan nowheel"
                 onWheel={(e) => {
                   // Stop propagation to prevent canvas panning
                   e.stopPropagation();
+                  // Allow default scrolling behavior
                 }}
                 onPointerDown={(e) => {
                   // Prevent dragging when clicking in the scroll area
+                  e.stopPropagation();
+                }}
+                onMouseDown={(e) => {
+                  // Also stop mouse down for better compatibility
                   e.stopPropagation();
                 }}
               >
