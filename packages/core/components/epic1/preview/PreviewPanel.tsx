@@ -238,9 +238,12 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
     if (!previewUpdate?.results || previewUpdate.results.length === 0) {
       return (
         <div className="preview-empty">
-          <div className="preview-empty-icon">📝</div>
+          <div className="preview-empty-icon">🔗</div>
           <div className="preview-empty-text">
-            Edit your graph to see preview results
+            Connect an Output node to see results
+          </div>
+          <div className="preview-empty-hint">
+            Drag an Output node from the palette and connect it to your graph
           </div>
         </div>
       );
