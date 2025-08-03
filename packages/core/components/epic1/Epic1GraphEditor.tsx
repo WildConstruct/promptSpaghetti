@@ -34,6 +34,7 @@ import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
 import { TabbedSidePanel } from './TabbedSidePanel';
 import { NodeToolbar } from './NodeToolbar';
+import { NodePalette } from './NodePalette';
 import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
@@ -427,7 +428,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     (event: React.DragEvent) => {
       event.preventDefault();
 
-      const nodeType = event.dataTransfer.getData('application/reactflow');
+      // Try both data types for compatibility with different palette implementations
+      const nodeType = event.dataTransfer.getData('application/reactflow') || 
+                      event.dataTransfer.getData('application/node-type');
       
       if (!nodeType || !reactFlowInstance) {
         return;
@@ -549,6 +552,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             onDismiss={() => dismissToast(toast.id)}
           />
         ))}
+      
+      {/* Node Palette for creating new nodes */}
+      <NodePalette position="left" />
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />
