@@ -18,6 +18,27 @@ export interface WeightedChoiceNodeData extends EditableNodeData {
  */
 export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>) => {
   const [options, setOptions] = useState<WeightedOption[]>(props.data.options || []);
+  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
+
+  // Effect to handle cleanup when leaving edit mode or unmounting
+  useEffect(() => {
+    const handleMouseUp = () => {
+      if (isDraggingSlider) {
+        setIsDraggingSlider(false);
+      }
+    };
+
+    // Add global mouse up listener to catch mouse up outside the component
+    if (isDraggingSlider) {
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('pointerup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('pointerup', handleMouseUp);
+    };
+  }, [isDraggingSlider]);
 
   // Normalize weights to ensure they sum to 100
   const normalizeWeights = (opts: WeightedOption[]): WeightedOption[] => {
@@ -75,7 +96,11 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
       {({ isEditing, confirmEdit, cancelEdit }) => {
         if (isEditing) {
           return (
-            <div className="epic1-weighted-choice-editor">
+            <div 
+              className="epic1-weighted-choice-editor"
+              onMouseDown={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+            >
               <div className="epic1-node-type-label">Weighted Choice</div>
               <div className="epic1-options-list">
                 {options.map((option, index) => (
@@ -88,22 +113,46 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                       placeholder="Option text..."
                       onClick={(e) => e.stopPropagation()}
                     />
-                    <div className="epic1-weight-controls">
-                      <input
-                        type="range"
-                        className="epic1-weight-slider"
-                        min="0"
-                        max="100"
-                        value={option.weight}
-                        onChange={(e) => updateOptionWeight(index, parseInt(e.target.value))}
-                        onClick={(e) => e.stopPropagation()}
-                        onMouseDown={(e) => e.stopPropagation()}
-                        onMouseUp={(e) => e.stopPropagation()}
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onPointerUp={(e) => e.stopPropagation()}
-                        onPointerMove={(e) => e.stopPropagation()}
-                        style={{ '--value': `${option.weight}%` } as React.CSSProperties}
-                      />
+                    <div className="epic1-weight-controls"
+                      onMouseDown={(e) => e.stopPropagation()}
+                      onPointerDown={(e) => e.stopPropagation()}
+                    >
+                      <div className="epic1-slider-wrapper"
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                        }}
+                        onPointerDown={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                        }}
+                      >
+                        <input
+                          type="range"
+                          className="epic1-weight-slider"
+                          min="0"
+                          max="100"
+                          value={option.weight}
+                          onChange={(e) => {
+                            updateOptionWeight(index, parseInt(e.target.value));
+                          }}
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setIsDraggingSlider(true);
+                          }}
+                          onMouseUp={(e) => {
+                            e.stopPropagation();
+                            setIsDraggingSlider(false);
+                          }}
+                          onMouseLeave={() => {
+                            if (isDraggingSlider) {
+                              setIsDraggingSlider(false);
+                            }
+                          }}
+                          style={{ '--value': `${option.weight}%` } as React.CSSProperties}
+                        />
+                      </div>
                       <span className="epic1-weight-value">{option.weight}%</span>
                       {options.length > 1 && (
                         <button
