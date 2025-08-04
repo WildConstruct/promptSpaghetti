@@ -46,6 +46,10 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
     e.preventDefault();
     e.stopPropagation();
     
+    // CRITICAL: Stop the event from bubbling to the node drag handler
+    const event = e.nativeEvent;
+    event.stopImmediatePropagation();
+    
     const svg = e.currentTarget;
     const rect = svg.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -267,11 +271,10 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     e.stopPropagation();
-    e.preventDefault(); // Prevent default to avoid conflicts
-    // Set drag data to prevent node dragging
+    // DO NOT preventDefault() here - it breaks HTML5 drag and drop!
+    // Set drag data
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', index.toString());
-    e.dataTransfer.setDragImage(e.currentTarget, 0, 0); // Set drag image
     setDraggedIndex(index);
     // Add visual feedback
     (e.currentTarget as HTMLElement).style.opacity = '0.5';
@@ -293,7 +296,6 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
 
   const handleDragEnd = (e: React.DragEvent) => {
     e.stopPropagation();
-    e.preventDefault();
     setDraggedIndex(null);
     // Reset visual feedback
     (e.currentTarget as HTMLElement).style.opacity = '1';
@@ -404,28 +406,17 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                       e.stopPropagation();
                     }}
                     onMouseDown={(e) => {
-                      // Allow dragging when clicking on drag handle
+                      // Stop propagation for everything except the drag handle
                       const isDragHandle = (e.target as HTMLElement).closest('.enhanced-drag-handle');
                       if (!isDragHandle) {
                         e.stopPropagation();
                       }
                     }}
-                    style={{ cursor: draggedIndex === index ? 'grabbing' : 'grab' }}
                   >
                     {/* Drag handle - initiate option dragging */}
                     <div 
                       className="enhanced-drag-handle"
-                      draggable="false"
-                      onMouseDown={(e) => {
-                        // Prevent text selection but allow drag to start from parent
-                        e.preventDefault();
-                        // Add visual feedback
-                        (e.currentTarget as HTMLElement).style.cursor = 'grabbing';
-                      }}
-                      onMouseUp={(e) => {
-                        // Reset cursor
-                        (e.currentTarget as HTMLElement).style.cursor = 'grab';
-                      }}
+                      style={{ cursor: 'grab' }}
                       title="Drag to reorder"
                     >
                       <DragHandleIcon />
@@ -447,7 +438,13 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                     />
                     
                     {/* Simplified radio dial with proper event handling */}
-                    <div onMouseDown={(e) => e.stopPropagation()}>
+                    <div 
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        e.nativeEvent.stopImmediatePropagation();
+                      }}
+                      style={{ pointerEvents: 'all', position: 'relative', zIndex: 20 }}
+                    >
                       <RadioDial
                         value={option.weight}
                         onChange={(val) => updateOptionWeight(index, val)}

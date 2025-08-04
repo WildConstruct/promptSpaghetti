@@ -107,3 +107,16 @@
 .epic1-editable-node.output .epic1-edit-indicator {
   display: none;
 }
+
+/* Show hidden handle on hover or when connecting */
+.epic1-editable-node.output:hover .epic1-handle.hidden-handle,
+.epic1-editable-node.output .epic1-handle.hidden-handle:hover,
+.react-flow__handle-connecting {
+  opacity: 0.5 !important;
+  transition: opacity 0.2s ease;
+}
+
+/* Always show handle when dragging a connection */
+.react-flow__container.react-flow__connectionline .epic1-handle.hidden-handle {
+  opacity: 0.5 !important;
+}

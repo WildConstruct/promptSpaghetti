@@ -140,7 +140,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   position: relative;
-  cursor: grab; /* Change to grab cursor */
+  cursor: default; /* Default cursor, will change to grab on hover */
   min-height: 48px;
   height: 48px;
   transition: all 0.2s;
@@ -167,7 +167,14 @@
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
-/* When dragging, show grabbing cursor */
+/* When dragging, show grabbing cursor and style */
+.enhanced-option-row.dragging {
+  opacity: 0.5;
+  cursor: grabbing !important;
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
 .enhanced-option-row.dragging .enhanced-drag-handle {
   cursor: grabbing !important;
 }

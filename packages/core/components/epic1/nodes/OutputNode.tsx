@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { NodeProps, Handle, Position } from 'reactflow';
+import { NodeProps, Handle, Position, useStore } from 'reactflow';
 import { EditableNodeData } from './BaseEditableNode';
 import { SaveIndicator } from './SaveIndicator';
 import { useEditTransitions } from '../hooks/useEditTransitions';
@@ -17,11 +17,17 @@ export interface OutputNodeData extends EditableNodeData {
  * Only has input handle (target) since outputs can't have outputs
  */
 export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
-  const { data, selected } = props;
+  const { data, selected, id } = props;
   const [isEditing, setIsEditing] = React.useState(data.isEditing || false);
   const [editBuffer, setEditBuffer] = React.useState(data.editBuffer || data.value || '');
   const [saveTrigger, setSaveTrigger] = React.useState(0);
   const nodeRef = React.useRef<HTMLDivElement>(null);
+  
+  // Check if the node has any incoming connections
+  const hasConnection = useStore((state) => {
+    const edges = state.edges;
+    return edges.some(edge => edge.target === id);
+  });
   
   // Animation state management
   const {
@@ -138,7 +144,11 @@ export const OutputNode = memo((props: NodeProps<OutputNodeData>) => {
       <Handle
         type="target"
         position={Position.Left}
-        className="epic1-handle target"
+        className={`epic1-handle target ${!hasConnection ? 'hidden-handle' : ''}`}
+        style={{
+          opacity: hasConnection ? 1 : 0,
+          pointerEvents: 'all'
+        }}
       />
       
       <div className="epic1-node-content">

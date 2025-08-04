@@ -29,7 +29,6 @@ describe('NodePalette', () => {
     items.forEach((item, i) => {
       expect(item.tabIndex).toBe(0);
       expect(item).toHaveAttribute('aria-label', `Add ${NODE_TYPES[i]} node`);
-    }
     });
   });
   // 3. Test drag events are triggered correctly for each node type

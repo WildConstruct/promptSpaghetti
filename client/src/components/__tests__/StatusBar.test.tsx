@@ -16,7 +16,8 @@ describe('StatusBar Component', () => {
   test('shows correct error count when errors exist', () => {
     const errorCount = 3;
     render(<StatusBar errorCount={errorCount} />);
-    expect(screen.getByText(`⚠️ Validation Errors: ${errorCount}`)).toBeInTheDocument();}
+    expect(screen.getByText(`⚠️ Validation Errors: ${errorCount}`)).toBeInTheDocument();
+  });
   });
   /**
    * Tests if StatusBar shows correct styling (background, border) 

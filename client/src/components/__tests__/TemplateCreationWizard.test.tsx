@@ -107,7 +107,6 @@ describe('TemplateCreationWizard', () => {
           language: 'en',
           license: 'MIT',
           dependencies: []
-
         }
       },
       { 
@@ -130,7 +129,6 @@ describe('TemplateCreationWizard', () => {
           language: 'en',
           license: 'MIT',
           dependencies: []
-
         }
       },
       { 
@@ -349,7 +347,7 @@ describe('TemplateCreationWizard', () => {
       );
       // Act: Type long template name
       const nameInput = screen.getByLabelText(/template name/i);
-      const longName = 'a'.repeat(300); // Exceeds 255 character limit;
+      const longName = 'a'.repeat(300); // Exceeds 255 character limit
       await user.type(nameInput, longName);
       // Assert: Should show character limit warning
       expect(screen.getByText(/character limit exceeded/i)).toBeInTheDocument();
@@ -393,16 +391,16 @@ describe('TemplateCreationWizard', () => {
       expect(screen.getByText('Conditional Node')).toBeInTheDocument();
     });
     it('should add nodes to the graph when dragged from palette', async () => {
-  // Act: Simulate dragging input node to canvas,
-  const inputNode = screen.getByTestId('palette-node-input');
-  const canvas = screen.getByTestId('react-flow');
-  // Simulate drag and drop
-  fireEvent.dragStart(inputNode);
-  fireEvent.dragOver(canvas);
-  fireEvent.drop(canvas, {
-  clientX: 200,
-  clientY: 200
-});
+      // Act: Simulate dragging input node to canvas
+      const inputNode = screen.getByTestId('palette-node-input');
+      const canvas = screen.getByTestId('react-flow');
+      // Simulate drag and drop
+      fireEvent.dragStart(inputNode);
+      fireEvent.dragOver(canvas);
+      fireEvent.drop(canvas, {
+        clientX: 200,
+        clientY: 200
+      });
       // Assert: Node should be added to canvas
       await waitFor(() => {
         const nodesData = screen.getByTestId('flow-nodes');
@@ -419,16 +417,16 @@ describe('TemplateCreationWizard', () => {
       expect(screen.getByText('Step 2 of 5')).toBeInTheDocument(); // Should stay on current step
     });
     it('should allow node property editing', async () => {
-  // Arrange: Add a node first,
-  const inputNode = screen.getByTestId('palette-node-input');
-  const canvas = screen.getByTestId('react-flow');
-  fireEvent.dragStart(inputNode);
-  fireEvent.drop(canvas);
-  // Act: Click on node to select it,
-  await waitFor(() => {
-  const nodeElement = screen.getByTestId('graph-node-input-1');
-  fireEvent.click(nodeElement);
-});
+      // Arrange: Add a node first
+      const inputNode = screen.getByTestId('palette-node-input');
+      const canvas = screen.getByTestId('react-flow');
+      fireEvent.dragStart(inputNode);
+      fireEvent.drop(canvas);
+      // Act: Click on node to select it
+      await waitFor(() => {
+        const nodeElement = screen.getByTestId('graph-node-input-1');
+        fireEvent.click(nodeElement);
+      });
       // Assert: Properties panel should appear
       expect(screen.getByTestId('node-properties-panel')).toBeInTheDocument();
       expect(screen.getByLabelText(/node label/i)).toBeInTheDocument();
@@ -641,45 +639,45 @@ describe('TemplateCreationWizard', () => {
       // Skip through remaining steps
       for (let step = 2; step <= 4; step++) {
         await waitFor(() => screen.getByText(`Step ${step} of 5`));
-      }
         await user.click(screen.getByRole('button', { name: /next/i }));
+      }
       await waitFor(() => {
         expect(screen.getByText('Step 5 of 5')).toBeInTheDocument();
         expect(screen.getByText('Review & Submit')).toBeInTheDocument();
       });
     });
     it('should display template summary for review', () => {
-  // Assert: Should show template details,
-  expect(screen.getByText('Complete Template')).toBeInTheDocument();
-  expect(screen.getByText('A complete test template')).toBeInTheDocument();
-  expect(screen.getByText('AI & Analytics')).toBeInTheDocument();
-  // Should show graph summary
-  expect(screen.getByText(/nodes:/i)).toBeInTheDocument();
-  expect(screen.getByText(/variables:/i)).toBeInTheDocument();
-  expect(screen.getByText(/customization points:/i)).toBeInTheDocument();
-});
+      // Assert: Should show template details
+      expect(screen.getByText('Complete Template')).toBeInTheDocument();
+      expect(screen.getByText('A complete test template')).toBeInTheDocument();
+      expect(screen.getByText('AI & Analytics')).toBeInTheDocument();
+      // Should show graph summary
+      expect(screen.getByText(/nodes:/i)).toBeInTheDocument();
+      expect(screen.getByText(/variables:/i)).toBeInTheDocument();
+      expect(screen.getByText(/customization points:/i)).toBeInTheDocument();
+    });
     it('should allow editing from review step', async () => {
-  // Act: Click edit basic info,
-  await user.click(screen.getByTestId('edit-basic-info'));
-  // Assert: Should navigate back to step 1,
-  await waitFor(() => {
-  expect(screen.getByText('Step 1 of 5')).toBeInTheDocument();
-});
+      // Act: Click edit basic info
+      await user.click(screen.getByTestId('edit-basic-info'));
+      // Assert: Should navigate back to step 1
+      await waitFor(() => {
+        expect(screen.getByText('Step 1 of 5')).toBeInTheDocument();
+      });
       // Verify form is populated with existing data
       expect(screen.getByDisplayValue('Complete Template')).toBeInTheDocument();
     });
     it('should submit template successfully', async () => {
-  // Arrange
-  const mockOnComplete = jest.fn();
-  const createdTemplate = {
-  id: 1,
-  name: 'Complete Template',
-  description: 'A complete test template',
-  category_id: 1,
-  author_id: 123,
-  created_at: new Date().toISOString()
-};
-      mockTemplateService.createFromGraph.mockResolvedValue(createdTemplate    });
+      // Arrange
+      const mockOnComplete = jest.fn();
+      const createdTemplate = {
+        id: 1,
+        name: 'Complete Template',
+        description: 'A complete test template',
+        category_id: 1,
+        author_id: 123,
+        created_at: new Date().toISOString()
+      };
+      mockTemplateService.createFromGraph.mockResolvedValue(createdTemplate);
       render(
         <TestWrapper>
           <TemplateCreationWizard 
@@ -894,8 +892,8 @@ describe('TemplateCreationWizard', () => {
       await user.click(screen.getByRole('button', { name: /next/i }));
       // Assert: Should have live region for announcements
       await waitFor(() => {
-  expect(screen.getByTestId('step-announcement')).toHaveTextContent('Step 2 of 5: Graph Design');
-});
+        expect(screen.getByTestId('step-announcement')).toHaveTextContent('Step 2 of 5: Graph Design');
+      });
     });
   });
 });

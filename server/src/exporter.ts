@@ -672,8 +672,7 @@ export function graphToBundle(
 
   
   return bundle;
-
-
+}
 /**
  * Epic 8.6: Enhanced VFX-focused export function
  * Creates a ControlNet-compatible export with full VFX metadata
@@ -913,8 +912,7 @@ export function graphToSceneAwareBundle(
 
   
   return bundle;
-
-
+}
 /**
  * Convert a node to its corresponding grammar rule in the GeneratorBundle format
  */
@@ -1181,22 +1179,15 @@ export interface ExportRequest {
   data: Record<string, unknown>;
   options: Record<string, unknown>;
   filename: string;
-
-
-
-
-
-
+}
 
 export interface ExportResult {
   type: 'text' | 'binary';
-  data: Record<string, unknown>;
+  data: Record<string, unknown> | string;
   mimeType: string;
   shouldDownload?: boolean;
-
-
-
-
+  filename?: string;
+}
 
 export async function exportResults(request: ExportRequest): Promise<ExportResult> {
 
@@ -1247,9 +1238,8 @@ export async function exportResults(request: ExportRequest): Promise<ExportResul
     
   default:
     throw new Error(`Unsupported export format: ${format}`);
-
-
-
+  }
+}
 // Fountain Script Export
 function exportFountainScript(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
   const { results } = data;
@@ -1269,8 +1259,8 @@ FADE IN:
       
       if (options.filmOptions?.includeDirectorNotes) {
         fountainContent += `[[Director's Note: Generated with seed ${result.seed}]]\n\n`;
-
-
+      }
+    }
   });
 
   fountainContent += 'FADE OUT.\n\nTHE END';
@@ -1281,7 +1271,7 @@ FADE IN:
     mimeType: 'text/plain',
     shouldDownload: true
   };
-
+}
 
 // Final Draft Export
 function exportFinalDraftScript(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1305,11 +1295,11 @@ function exportFinalDraftScript(data: Record<string, unknown>, options: Record<s
       
       if (options.filmOptions?.includeDirectorNotes) {
         fdxContent += `    <Paragraph Type="General">
-      <Text>[[Director's Note: Generated with seed ${result.seed}]]</Text>
+      <Text>[[Director's Note: Generated with seed ${(result as any).seed}]]</Text>
     </Paragraph>
 `;
-
-
+      }
+    }
   });
 
   fdxContent += `  </Content>
@@ -1321,7 +1311,7 @@ function exportFinalDraftScript(data: Record<string, unknown>, options: Record<s
     mimeType: 'application/xml',
     shouldDownload: true
   };
-
+}
 
 // ControlNet JSON Export
 function exportControlNetJSON(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1351,7 +1341,7 @@ function exportControlNetJSON(data: Record<string, unknown>, options: Record<str
         processor_res: 512,
         threshold_a: 100,
         threshold_b: 200
-
+      },
       metadata: result.metadata || {}
     })),
     exportedAt: new Date().toISOString()
@@ -1363,7 +1353,7 @@ function exportControlNetJSON(data: Record<string, unknown>, options: Record<str
     mimeType: 'application/json',
     shouldDownload: true
   };
-
+}
 
 // Stable Diffusion Bundle Export
 function exportStableDiffusionBundle(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1377,13 +1367,13 @@ function exportStableDiffusionBundle(data: Record<string, unknown>, options: Rec
         pipeline: data.vfxData?.pipeline,
         resolution: data.vfxData?.resolution,
         exportOptions: options
-
+      },
       'metadata.json': {
         exportedAt: new Date().toISOString(),
         resultCount: data.results.length,
         source: 'PromptScape Epic 8.5'
-
-
+      }
+    }
   };
 
   return {
@@ -1391,7 +1381,7 @@ function exportStableDiffusionBundle(data: Record<string, unknown>, options: Rec
     data: JSON.stringify(bundleData),
     mimeType: 'application/zip'
   };
-
+}
 
 // Scene Data Export
 function exportSceneData(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1406,11 +1396,11 @@ function exportSceneData(data: Record<string, unknown>, options: Record<string, 
         position: { x: 0, y: 0, z: 5 },
         angle: { pitch: 0, yaw: 0, roll: 0 },
         fov: 70
-
+      },
       lighting: {
         timeOfDay: 'noon',
         mood: 'cinematic'
-
+      },
       metadata: result.metadata || {}
     })),
     exportedAt: new Date().toISOString()
@@ -1422,7 +1412,7 @@ function exportSceneData(data: Record<string, unknown>, options: Record<string, 
     mimeType: 'application/json',
     shouldDownload: true
   };
-
+}
 
 // CSV Analysis Export
 function exportCSVAnalysis(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1443,7 +1433,7 @@ function exportCSVAnalysis(data: Record<string, unknown>, options: Record<string
     mimeType: 'text/csv',
     shouldDownload: true
   };
-
+}
 
 // Complete JSON Export
 function exportCompleteJSON(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1460,7 +1450,7 @@ function exportCompleteJSON(data: Record<string, unknown>, options: Record<strin
     mimeType: 'application/json',
     shouldDownload: true
   };
-
+}
 
 // Professional Report Export (would generate PDF in real implementation)
 function exportProfessionalReport(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1479,8 +1469,8 @@ function exportProfessionalReport(data: Record<string, unknown>, options: Record
           (sum: number,
           r: any
         ) => sum + (r.executionTimeMs || 0), 0) / data.results.length
-
-
+      }
+    },
     results: data.results,
     recommendations: [
       'Results show consistent generation quality',
@@ -1494,7 +1484,7 @@ function exportProfessionalReport(data: Record<string, unknown>, options: Record
     data: JSON.stringify(reportData),
     mimeType: 'application/pdf'
   };
-
+}
 
 // Creative Brief Export (would generate DOCX in real implementation)
 function exportCreativeBrief(data: Record<string, unknown>, options: Record<string, unknown>): ExportResult {
@@ -1522,8 +1512,7 @@ function exportCreativeBrief(data: Record<string, unknown>, options: Record<stri
     data: JSON.stringify(briefData),
     mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   };
-
-
+}
 // === EPIC 8.6 TASK 7: HYBRID PROMPTING EXPORT FUNCTIONS ===
 
 /**
@@ -1536,7 +1525,8 @@ async function exportHybridPrompting(
   unknown>
 ): Promise<ExportResult> {
 
-  const hybridService = new HybridPromptExportService();
+  // Note: HybridPromptExportService would be a separate service class
+  // const hybridService = new HybridPromptExportService();
   
   try {
     // Convert data to graph format for hybrid export
@@ -1636,7 +1626,8 @@ async function exportMARSFramework(
   unknown>
 ): Promise<ExportResult> {
 
-  const hybridService = new HybridPromptExportService();
+  // Note: HybridPromptExportService would be a separate service class
+  // const hybridService = new HybridPromptExportService();
   
   try {
     const graph = {
@@ -1755,7 +1746,8 @@ async function exportZadaNaturalLanguage(
   unknown>
 ): Promise<ExportResult> {
 
-  const hybridService = new HybridPromptExportService();
+  // Note: HybridPromptExportService would be a separate service class
+  // const hybridService = new HybridPromptExportService();
   
   try {
     const graph = {
