@@ -153,3 +153,27 @@
   stroke: #ef4444;
   stroke-dasharray: 5;
 }
+
+/* Fix drag preview box issue - hide any ghost elements when dragging handles */
+.react-flow__container [draggable="true"] {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* Prevent large drag ghost box when dragging from handles */
+.react-flow__handle:active::after,
+.react-flow__handle:active::before {
+  display: none !important;
+}
+
+/* Clean up any drag preview artifacts */
+.react-flow__connectionline + * {
+  pointer-events: none;
+}
+
+/* Ensure handles don't create drag ghosts */
+.epic1-handle,
+.enhanced-handle {
+  -webkit-user-drag: none;
+  user-drag: none;
+}

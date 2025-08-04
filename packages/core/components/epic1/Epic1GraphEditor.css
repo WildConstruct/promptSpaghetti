@@ -45,6 +45,23 @@
   cursor: grabbing;
 }
 
+/* Prevent drag ghost/preview box when dragging connections */
+.epic1-graph-editor .react-flow__handle {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
+/* Hide any drag preview elements */
+.epic1-graph-editor .react-flow__handle:active {
+  outline: none;
+}
+
+/* Prevent browser drag preview on all draggable elements */
+.epic1-graph-editor [draggable="true"]:not(.epic1-drag-handle):not(.enhanced-drag-handle) {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
 .epic1-graph-editor .react-flow__handle {
   width: 12px;
   height: 12px;

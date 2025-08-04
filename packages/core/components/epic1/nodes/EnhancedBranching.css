@@ -360,11 +360,13 @@
   position: absolute !important;
 }
 
-/* Main output handle */
-.enhanced-handle.main-output {
+/* Main output handle - use standard green like other nodes */
+.enhanced-handle.main-output,
+.epic1-handle.source.main-output {
   background: #10b981 !important;
-  width: 14px !important;
-  height: 14px !important;
+  width: 12px !important;
+  height: 12px !important;
+  border: 2px solid #1a1a1a !important;
 }
 
 .enhanced-handle.branch-output {

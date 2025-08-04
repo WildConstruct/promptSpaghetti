@@ -154,15 +154,7 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         opacity="0.9"
       />
       
-      {/* Small indicator dot on the ring */}
-      <circle
-        cx={22 + 19 * Math.cos(((percentage / 100) * 270 + 135) * Math.PI / 180)}
-        cy={22 + 19 * Math.sin(((percentage / 100) * 270 + 135) * Math.PI / 180)}
-        r="3"
-        fill="#22d3ee"
-        stroke="#0a0a0a"
-        strokeWidth="1"
-      />
+      {/* Removed the indicator dot that animates around the dial */}
       
       {/* Number display in center */}
       <text
@@ -340,22 +332,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
         if (isEditing) {
           return (
             <div className="enhanced-branching-editor" onMouseDown={(e) => e.stopPropagation()}>
-              {/* Main output at top-right corner when branching enabled */}
-              {hasBranching && (
-                <Handle
-                  type="source"
-                  position={Position.Top}
-                  id="main-output"
-                  className="enhanced-handle main-output"
-                  style={{ 
-                    position: 'absolute',
-                    top: -8,
-                    right: -8,
-                    left: 'auto',
-                    transform: 'none'
-                  }}
-                />
-              )}
+              {/* Main output is handled by BaseEditableNode when no branching */}
 
               {/* Title section with edit capability */}
               <div className="enhanced-title-section">
@@ -527,21 +504,23 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 </div>
               </div>
 
-              {/* Main output at right when no branching */}
-              {!hasBranching && (
+              {/* Main output at top-right corner when branching enabled */}
+              {hasBranching && (
                 <Handle
                   type="source"
-                  position={Position.Right}
+                  position={Position.Top}
                   id="main-output"
                   className="enhanced-handle main-output"
                   style={{ 
                     position: 'absolute',
+                    top: -8,
                     right: -8,
-                    top: '50%',
-                    transform: 'translateY(-50%)'
+                    left: 'auto',
+                    transform: 'none'
                   }}
                 />
               )}
+              {/* Note: Main output when no branching is handled by BaseEditableNode */}
             </div>
           );
         }
@@ -549,21 +528,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
         // Display mode
         return (
           <div className="enhanced-branching-display">
-            {hasBranching && (
-              <Handle
-                type="source"
-                position={Position.Top}
-                id="main-output"
-                className="enhanced-handle main-output"
-                style={{ 
-                  position: 'absolute',
-                  top: -8,
-                  right: -8,
-                  left: 'auto',
-                  transform: 'none'
-                }}
-              />
-            )}
+            {/* Main output is handled by BaseEditableNode in display mode */}
 
             <div className="display-title">{title}</div>
             
@@ -594,20 +559,22 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               ))}
             </div>
 
-            {!hasBranching && (
+            {hasBranching && (
               <Handle
                 type="source"
-                position={Position.Right}
+                position={Position.Top}
                 id="main-output"
                 className="enhanced-handle main-output"
                 style={{ 
                   position: 'absolute',
+                  top: -8,
                   right: -8,
-                  top: '50%',
-                  transform: 'translateY(-50%)'
+                  left: 'auto',
+                  transform: 'none'
                 }}
               />
             )}
+            {/* Note: Main output when no branching is handled by BaseEditableNode */}
           </div>
         );
       }}

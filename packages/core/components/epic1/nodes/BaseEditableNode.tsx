@@ -186,11 +186,23 @@ export const BaseEditableNode = memo(({
         })}
       </div>
 
-      <Handle
-        type="source"
-        position={Position.Right}
-        className="epic1-handle source"
-      />
+      {/* Only show the default source handle if not an enhanced branching node without branching */}
+      {data.nodeType !== 'enhancedBranching' && (
+        <Handle
+          type="source"
+          position={Position.Right}
+          className="epic1-handle source"
+        />
+      )}
+      {/* For enhanced branching nodes without branching, show the standard green output */}
+      {data.nodeType === 'enhancedBranching' && !data.options?.some((opt: any) => opt.hasBranch) && (
+        <Handle
+          type="source"
+          position={Position.Right}
+          className="epic1-handle source main-output"
+          id="main-output"
+        />
+      )}
 
       {/* Visual feedback indicators */}
       {isEditing && <div className="epic1-edit-indicator" />}
