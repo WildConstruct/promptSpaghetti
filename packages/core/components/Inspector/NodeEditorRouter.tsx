@@ -2,6 +2,7 @@ import React from 'react';
 import { ZodSchema } from 'zod';
 // Import all node editors
 import { WeightedChoiceEditor } from './editors/WeightedChoiceEditor';
+import { ImprovedWeightedChoiceEditor } from './editors/ImprovedWeightedChoiceEditor';
 import { ConcatEditor } from './editors/ConcatEditor';
 import { OutputEditor } from './editors/OutputEditor';
 import { VariableEditor } from './editors/VariableEditor';
@@ -42,7 +43,8 @@ interface NodeEditorRouterProps { node: Record<string, unknown>;
   switch (nodeType) {
   // Basic Runtime Nodes
   case 'WeightedChoice':
-    return <WeightedChoiceEditor {...editorProps} onGlobalPreviewRequest={onGlobalPreviewRequest} />;
+    // Use the improved editor with raw weights and presets
+    return <ImprovedWeightedChoiceEditor {...editorProps} onGlobalPreviewRequest={onGlobalPreviewRequest} />;
   case 'Concat':
     return <ConcatEditor {...editorProps} />;
   case 'Output':

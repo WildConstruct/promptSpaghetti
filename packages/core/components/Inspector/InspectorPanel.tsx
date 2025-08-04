@@ -88,20 +88,22 @@ export const InspectorPanel = ({ node
     return (
       <aside
         className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
-        style={ {
-          width: collapsed ? 40 : width
-          minWidth: collapsed ? 40 : minWidth
-          borderLeft: '1px solid #4a5568'
-          background: '#1a202c'
-          height: '100%'
-          display: 'flex'
-          flexDirection: 'column' }
+        style={{
+          width: collapsed ? 40 : width,
+          minWidth: collapsed ? 40 : minWidth,
+          borderLeft: '1px solid #4a5568',
+          background: '#1a202c',
+          height: 'auto',
+          minHeight: '400px',
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
           // 60fps optimized transition
-          transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`
-          willChange: 'width'
+          transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+          willChange: 'width',
           overflow: 'hidden', // Prevent content spillover during animation
-          WebkitBackfaceVisibility: 'hidden'
-          backfaceVisibility: 'hidden';
+          WebkitBackfaceVisibility: 'hidden',
+          backfaceVisibility: 'hidden'
 
         onKeyDown={ (e) => {
           e.stopPropagation() }}
@@ -201,20 +203,22 @@ export const InspectorPanel = ({ node
   return (
     <aside
       className={`inspector-panel ${collapsed ? 'collapsed' : 'expanded'} animate-inspector-resize`}
-      style={ {
-        width: collapsed ? 40 : width
-        minWidth: collapsed ? 40 : minWidth
-        borderLeft: '1px solid #4a5568'
-        background: '#1a202c'
-        height: '100%'
-        display: 'flex'
-        flexDirection: 'column' }
+      style={{
+        width: collapsed ? 40 : width,
+        minWidth: collapsed ? 40 : minWidth,
+        borderLeft: '1px solid #4a5568',
+        background: '#1a202c',
+        height: 'auto',
+        minHeight: '400px',
+        maxHeight: '90vh',
+        display: 'flex',
+        flexDirection: 'column',
         // 60fps optimized transition
-        transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`
-        willChange: 'width'
-        overflow: 'hidden'
-        WebkitBackfaceVisibility: 'hidden'
-        backfaceVisibility: 'hidden';
+        transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+        willChange: 'width',
+        overflow: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        backfaceVisibility: 'hidden'
 
       onKeyDown={ (e) => {
         e.stopPropagation() }}
@@ -332,7 +336,16 @@ export const InspectorPanel = ({ node
         </div>
       </div>
       {!collapsed && (
-        <div style={{ flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ 
+          flex: 1, 
+          overflow: 'auto', 
+          display: 'flex', 
+          flexDirection: 'column',
+          minHeight: '300px',
+          maxHeight: 'calc(90vh - 150px)',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#4a5568 #2d3748'
+        }}>
           { showPreferences && (
             <div style={{
   padding: '0 16px 16px 16px'
