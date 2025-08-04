@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import ReactFlow, { ReactFlowProvider, Node, Edge } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, Node, Edge, Handle, Position } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { ToastContainer, useToast } from './Toast';
 import { ellipticalFrameLayout, type LayoutOptions } from '@promptscape/core/utils/frameLayouts';
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
 import '@promptscape/core/components/epic1/nodes/BaseEditableNode.css';
 import '@promptscape/core/components/epic1/nodes/NodeStyles.css';
+import './Epic1FrameEdgeFix.css';
 
 interface Epic1EditorContainerFixedProps {
   showPreview?: boolean;
@@ -27,10 +28,28 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
   const [loadError, setLoadError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   
-  // Calculate viewport dimensions for frame positioning
-  // Use the full viewport minus only the actual UI elements
-  const viewportWidth = window.innerWidth - 300; // Account for right preview panel
-  const viewportHeight = window.innerHeight - 50; // Account for menu bar
+  // Calculate actual viewport dimensions
+  // Use useEffect to ensure we get accurate dimensions after mount
+  const [viewportDimensions, setViewportDimensions] = useState({
+    width: window.innerWidth - 300,
+    height: window.innerHeight - 50
+  });
+  
+  useEffect(() => {
+    const updateDimensions = () => {
+      setViewportDimensions({
+        width: window.innerWidth - 300,
+        height: window.innerHeight - 50
+      });
+    };
+    
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+  
+  const viewportWidth = viewportDimensions.width;
+  const viewportHeight = viewportDimensions.height;
   
   // Layout options for frame positioning with minimal padding
   const layoutOptions: LayoutOptions = {
@@ -47,19 +66,23 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
       id: 'prompt-1',
       type: 'textBlock',
       position: ellipticalFrameLayout(0, 5, layoutOptions), // Top edge
+      draggable: false, // Prevent dragging to keep at edge
+      selectable: true,
       data: {
         nodeType: 'textBlock',
         content: 'Generate a character for a',
         text: 'Generate a character for a',
         label: 'Prompt Start',
-        // Add visual indicator for edge connection
-        showEdgeConnection: true
+        showEdgeConnection: true,
+        frameEdge: 'top' // Mark which edge this node is on
       }
     },
     {
       id: 'setting-1',
       type: 'weightedChoice',
       position: ellipticalFrameLayout(1, 5, layoutOptions), // Right edge
+      draggable: false,
+      selectable: true,
       data: {
         nodeType: 'weightedChoice',
         options: [
@@ -68,24 +91,31 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           { text: 'high fantasy', weight: 30 }
         ],
         label: 'Setting',
-        showEdgeConnection: true
+        showEdgeConnection: true,
+        frameEdge: 'right'
       }
     },
     {
       id: 'prompt-2',
       type: 'textBlock',
-      position: ellipticalFrameLayout(2, 5, layoutOptions), // Right position
+      position: ellipticalFrameLayout(2, 5, layoutOptions), // Bottom-right position
+      draggable: false,
+      selectable: true,
       data: {
         nodeType: 'textBlock',
         content: 'story. They are a',
         text: 'story. They are a',
-        label: 'Connector'
+        label: 'Connector',
+        showEdgeConnection: true,
+        frameEdge: 'bottom'
       }
     },
     {
       id: 'character-1',
       type: 'weightedChoice',
-      position: ellipticalFrameLayout(3, 5, layoutOptions), // Bottom edge
+      position: ellipticalFrameLayout(3, 5, layoutOptions), // Bottom-left edge
+      draggable: false,
+      selectable: true,
       data: {
         nodeType: 'weightedChoice',
         options: [
@@ -95,18 +125,22 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           { text: 'mysterious ranger', weight: 25 }
         ],
         label: 'Character Type',
-        showEdgeConnection: true
+        showEdgeConnection: true,
+        frameEdge: 'bottom'
       }
     },
     {
       id: 'output-1',
       type: 'output',
       position: ellipticalFrameLayout(4, 5, layoutOptions), // Left edge
+      draggable: false,
+      selectable: true,
       data: {
         nodeType: 'output',
         outputName: 'character_prompt',
         label: 'Character Prompt',
-        showEdgeConnection: true
+        showEdgeConnection: true,
+        frameEdge: 'left'
       }
     }
   ];
