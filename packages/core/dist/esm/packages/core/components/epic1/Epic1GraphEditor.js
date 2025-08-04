@@ -20,6 +20,7 @@ import { NodeContextMenu } from './nodes/NodeContextMenu';
 import { useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
+import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
@@ -112,16 +113,17 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
     }, [handleNodeEdit]);
     // Update nodes when selected
     const enhancedNodes = useMemo(() => {
-        return nodes.map((node) => ({
-            ...node,
-            type: node.type || 'textBlock', // Ensure type is always defined
-            position: node.position || { x: 0, y: 0 }, // Ensure position is always defined
-            data: createNodeData(node.data, node.id),
-            // Preserve the original selected state from nodes, don't override
-            selected: node.selected || node.id === selectedNodeId,
-            // Make node non-draggable when it's being edited
-            draggable: !node.data?.isEditing,
-        }));
+        return nodes.map((node) => {
+            const nodeData = createNodeData(node.data, node.id);
+            return {
+                ...node,
+                type: node.type || 'textBlock', // Ensure type is always defined
+                position: node.position || { x: 0, y: 0 }, // Ensure position is always defined
+                data: nodeData,
+                // Preserve the original selected state from nodes, don't override
+                selected: node.selected || node.id === selectedNodeId,
+            };
+        });
     }, [nodes, selectedNodeId, createNodeData]);
     // Handle new connections
     const onConnect = useCallback((params) => {
@@ -590,7 +592,7 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
         handleNodeDrop(nodeType, position);
     }, [reactFlowInstance, handleNodeDrop]);
     // Wrap with DndProvider if using droppable nodes
-    const content = (_jsxs("div", { className: "epic1-graph-editor", style: editorStyle, onDrop: onDrop, onDragOver: onDragOver, children: [_jsxs(ReactFlow, { nodes: enhancedNodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onPaneClick: handlePaneClick, onNodeClick: handleNodeClick, onInit: onInit, nodeTypes: nodeTypes, isValidConnection: isValidConnection, connectionMode: ConnectionMode.Loose, fitView: false, attributionPosition: "bottom-left", panOnScroll: false, zoomOnScroll: true, zoomOnPinch: true, panOnDrag: true, selectionOnDrag: false, nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, deleteKeyCode: null, multiSelectionKeyCode: "Shift", children: [_jsx(Background, { variant: "dots", gap: 16, size: 1, color: "#333333" }), _jsx(Controls, {}), _jsx(MiniMap, { position: "top-left", style: {
+    const content = (_jsxs("div", { className: "epic1-graph-editor", style: editorStyle, onDrop: onDrop, onDragOver: onDragOver, children: [_jsxs(ReactFlow, { nodes: enhancedNodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onPaneClick: handlePaneClick, onNodeClick: handleNodeClick, onInit: onInit, nodeTypes: nodeTypes, isValidConnection: isValidConnection, connectionMode: ConnectionMode.Loose, fitView: false, attributionPosition: "bottom-left", panOnScroll: false, zoomOnScroll: true, zoomOnPinch: true, panOnDrag: true, selectionOnDrag: false, nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, deleteKeyCode: null, multiSelectionKeyCode: "Shift", nodeDragThreshold: 5, children: [_jsx(Background, { variant: "dots", gap: 16, size: 1, color: "#333333" }), _jsx(Controls, {}), _jsx(MiniMap, { position: "top-left", style: {
                             left: nodePaletteCollapsed ? 50 : 210,
                             top: 70,
                             transition: 'left 0.3s ease-in-out',

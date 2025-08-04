@@ -457,6 +457,8 @@
   padding: 12px;
   position: relative;
   overflow: visible;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .display-title {

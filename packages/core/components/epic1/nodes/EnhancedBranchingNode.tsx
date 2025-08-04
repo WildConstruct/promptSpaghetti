@@ -275,6 +275,21 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     // Set drag data
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', index.toString());
+    
+    // Create a custom drag image to prevent ghost text
+    const dragImage = document.createElement('div');
+    dragImage.style.width = '1px';
+    dragImage.style.height = '1px';
+    dragImage.style.opacity = '0';
+    dragImage.style.position = 'fixed';
+    dragImage.style.pointerEvents = 'none';
+    document.body.appendChild(dragImage);
+    e.dataTransfer.setDragImage(dragImage, 0, 0);
+    // Clean up the drag image after a short delay
+    setTimeout(() => {
+      document.body.removeChild(dragImage);
+    }, 0);
+    
     setDraggedIndex(index);
     // Add visual feedback
     (e.currentTarget as HTMLElement).style.opacity = '0.5';
@@ -333,10 +348,11 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   id="main-output"
                   className="enhanced-handle main-output"
                   style={{ 
-                    top: 0,
-                    right: 0,
+                    position: 'absolute',
+                    top: -8,
+                    right: -8,
                     left: 'auto',
-                    transform: 'translate(50%, -50%)'
+                    transform: 'none'
                   }}
                 />
               )}
@@ -484,7 +500,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                         className="enhanced-handle branch-output"
                         style={{ 
                           position: 'absolute',
-                          right: -6,
+                          right: -8,
                           top: '50%',
                           transform: 'translateY(-50%)',
                           zIndex: 1000
@@ -518,7 +534,12 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   position={Position.Right}
                   id="main-output"
                   className="enhanced-handle main-output"
-                  style={{ right: -10 }}
+                  style={{ 
+                    position: 'absolute',
+                    right: -8,
+                    top: '50%',
+                    transform: 'translateY(-50%)'
+                  }}
                 />
               )}
             </div>
@@ -535,10 +556,11 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 id="main-output"
                 className="enhanced-handle main-output"
                 style={{ 
-                  top: 0,
-                  right: 0,
+                  position: 'absolute',
+                  top: -8,
+                  right: -8,
                   left: 'auto',
-                  transform: 'translate(50%, -50%)'
+                  transform: 'none'
                 }}
               />
             )}
@@ -560,7 +582,12 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       position={Position.Right}
                       id={`branch-${index}`}
                       className="enhanced-handle branch-output"
-                      style={{ right: -10 }}
+                      style={{ 
+                        position: 'absolute',
+                        right: -8,
+                        top: '50%',
+                        transform: 'translateY(-50%)'
+                      }}
                     />
                   )}
                 </div>
@@ -573,7 +600,12 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 position={Position.Right}
                 id="main-output"
                 className="enhanced-handle main-output"
-                style={{ right: -10 }}
+                style={{ 
+                  position: 'absolute',
+                  right: -8,
+                  top: '50%',
+                  transform: 'translateY(-50%)'
+                }}
               />
             )}
           </div>

@@ -1,9 +1,10 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { memo } from 'react';
-import { Handle, Position } from 'reactflow';
+import { Handle, Position, useStore } from 'reactflow';
 import { SaveIndicator } from './SaveIndicator';
 import { useEditTransitions } from '../hooks/useEditTransitions';
 import './BaseEditableNode.css';
+import './OutputNode.css';
 import './VisualFeedbackEnhancements.css';
 import '../animations/EditTransitions.css';
 /**
@@ -11,11 +12,16 @@ import '../animations/EditTransitions.css';
  * Only has input handle (target) since outputs can't have outputs
  */
 export const OutputNode = memo((props) => {
-    const { data, selected } = props;
+    const { data, selected, id } = props;
     const [isEditing, setIsEditing] = React.useState(data.isEditing || false);
     const [editBuffer, setEditBuffer] = React.useState(data.editBuffer || data.value || '');
     const [saveTrigger, setSaveTrigger] = React.useState(0);
     const nodeRef = React.useRef(null);
+    // Check if the node has any incoming connections
+    const hasConnection = useStore((state) => {
+        const edges = state.edges;
+        return edges.some(edge => edge.target === id);
+    });
     // Animation state management
     const { transitionState, triggerValueConfirmed, triggerValueCancelled, animationClasses } = useEditTransitions({
         isEditing,
@@ -105,7 +111,10 @@ export const OutputNode = memo((props) => {
     return (_jsxs("div", { ref: nodeRef, className: `epic1-editable-node output ${isEditing ? 'editing' : ''} ${selected ? 'selected' : ''} ${animationClasses}`, onClick: !isEditing ? handleNodeClick : undefined, onContextMenu: handleContextMenu, onKeyDown: handleKeyDown, style: {
             minWidth: '120px',
             minHeight: '60px',
-        }, children: [_jsx(Handle, { type: "target", position: Position.Left, className: "epic1-handle target" }), _jsx("div", { className: "epic1-node-content", children: isEditing ? (_jsxs("div", { className: "epic1-output-editor", children: [_jsx("div", { className: "epic1-node-type-label", children: "Output" }), _jsx("input", { type: "text", className: "epic1-inline-input", value: editBuffer, onChange: (e) => updateBuffer(e.target.value), onKeyDown: (e) => {
+        }, children: [_jsx(Handle, { type: "target", position: Position.Left, className: `epic1-handle target ${!hasConnection ? 'hidden-handle' : ''}`, style: {
+                    opacity: hasConnection ? 1 : 0,
+                    pointerEvents: 'all'
+                } }), _jsx("div", { className: "epic1-node-content", children: isEditing ? (_jsxs("div", { className: "epic1-output-editor", children: [_jsx("div", { className: "epic1-node-type-label", children: "Output" }), _jsx("input", { type: "text", className: "epic1-inline-input", value: editBuffer, onChange: (e) => updateBuffer(e.target.value), onKeyDown: (e) => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault();
                                     confirmEdit();
