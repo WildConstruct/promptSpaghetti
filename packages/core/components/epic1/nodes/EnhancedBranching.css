@@ -125,6 +125,9 @@
   overflow-x: hidden; /* Prevent horizontal overflow */
   padding: 0 8px 0 4px;
   margin: 0;
+  /* Ensure scroll works */
+  pointer-events: all;
+  position: relative;
 }
 
 /* Option row */
@@ -155,19 +158,28 @@
 .enhanced-option-row.dragging {
   opacity: 0.5;
   background: rgba(245, 158, 11, 0.1);
+  cursor: grabbing !important;
+}
+
+/* When dragging, show grabbing cursor */
+.enhanced-option-row.dragging .enhanced-drag-handle {
+  cursor: grabbing !important;
 }
 
 /* Drag handle - brighter with less padding */
 .enhanced-drag-handle {
-  width: 16px;
-  height: 24px;
+  width: 20px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: rgba(255, 255, 255, 0.5); /* Brighter */
   cursor: grab;
-  margin-right: 2px; /* Reduced padding */
+  margin-right: 4px;
   flex-shrink: 0;
+  /* Make it the primary drag target */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .enhanced-drag-handle:hover {
@@ -214,6 +226,8 @@
   pointer-events: all !important;
   z-index: 5; /* Higher than other elements */
   cursor: pointer !important;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .radio-dial-simple:hover {

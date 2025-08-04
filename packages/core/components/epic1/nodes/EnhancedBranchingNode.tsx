@@ -27,7 +27,7 @@ const DragHandleIcon = () => (
   </svg>
 );
 
-// Simplified radio dial component
+// Simplified radio dial component - independent weight control
 const RadioDial = ({ value, onChange, percentage, disabled = false }: { 
   value: number; 
   onChange: (val: number) => void;
@@ -41,6 +41,8 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
   
   const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
     if (disabled) return;
+    // Only respond to left click
+    if (e.button !== 0) return;
     e.preventDefault();
     e.stopPropagation();
     
@@ -74,7 +76,8 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         }
       }
       
-      const newValue = Math.round(Math.max(0, Math.min(100, normalizedValue)));
+      // Allow values from 0 to 200 for more flexibility
+      const newValue = Math.round(Math.max(0, Math.min(200, normalizedValue * 2)));
       onChange(newValue);
     };
     
@@ -190,7 +193,8 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
   const calculatePercentages = useCallback((opts: WeightedOption[]) => {
     const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
     if (totalWeight === 0) return opts.map(() => 0);
-    return opts.map(opt => Math.round((opt.weight / totalWeight) * 100));
+    // Show actual weight values, not percentages
+    return opts.map(opt => opt.weight);
   }, []);
 
   const applyPreset = useCallback((preset: string) => {
@@ -201,13 +205,13 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
     
     switch (preset) {
       case 'equal':
-        newWeights = Array(count).fill(50);
+        newWeights = Array(count).fill(100);
         break;
       case 'favorFirst':
-        newWeights = [80, ...Array(count - 1).fill(20)];
+        newWeights = [150, ...Array(count - 1).fill(50)];
         break;
       case 'favorLast':
-        newWeights = [...Array(count - 1).fill(20), 80];
+        newWeights = [...Array(count - 1).fill(50), 150];
         break;
       case 'rampUp':
         const stepUp = 60 / (count - 1);
@@ -242,12 +246,13 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
 
   const updateOptionWeight = (index: number, weight: number) => {
     const newOptions = [...options];
+    // Set weight directly without affecting others
     newOptions[index] = { ...newOptions[index], weight };
     setOptions(newOptions);
   };
 
   const addOption = () => {
-    setOptions([...options, { text: '', weight: 50, hasBranch: false }]);
+    setOptions([...options, { text: '', weight: 100, hasBranch: false }]);
   };
 
   const removeOption = (index: number) => {
@@ -258,6 +263,9 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     e.stopPropagation();
+    // Set drag data to prevent node dragging
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index.toString());
     setDraggedIndex(index);
   };
 
@@ -364,20 +372,38 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                 </div>
               </div>
 
-              {/* Options list */}
-              <div className="enhanced-options-list">
+              {/* Options list with scroll support */}
+              <div 
+                className="enhanced-options-list"
+                onWheel={(e) => {
+                  e.stopPropagation();
+                  // Allow scrolling within the list
+                }}
+              >
                 {options.map((option, index) => (
                   <div 
                     key={index} 
                     className={`enhanced-option-row ${draggedIndex === index ? 'dragging' : ''}`}
-                    draggable
+                    draggable="true"
                     onDragStart={(e) => handleDragStart(e, index)}
                     onDragOver={(e) => handleDragOver(e, index)}
                     onDragEnd={handleDragEnd}
-                    onMouseDown={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => {
+                      // Only stop propagation if not dragging
+                      if (!(e.target as HTMLElement).closest('.enhanced-drag-handle')) {
+                        e.stopPropagation();
+                      }
+                    }}
                   >
-                    {/* Drag handle */}
-                    <div className="enhanced-drag-handle">
+                    {/* Drag handle - initiate option dragging */}
+                    <div 
+                      className="enhanced-drag-handle"
+                      draggable="false"
+                      onMouseDown={(e) => {
+                        // Don't stop propagation here - let parent handle drag
+                        e.preventDefault();
+                      }}
+                    >
                       <DragHandleIcon />
                     </div>
 
