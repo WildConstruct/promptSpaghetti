@@ -21,6 +21,8 @@
   /* Prevent text selection during drag */
   user-select: none;
   -webkit-user-select: none;
+  /* Prevent width from being overridden */
+  width: fit-content !important;
 }
 
 /* Dragging state */

@@ -27,54 +27,104 @@ const DragHandleIcon = () => (
   </svg>
 );
 
-// Radio dial component for weight control
+// Simplified radio dial component
 const RadioDial = ({ value, onChange, disabled = false }: { 
   value: number; 
   onChange: (val: number) => void;
   disabled?: boolean;
 }) => {
-  const angle = (value / 100) * 270 - 135; // -135 to 135 degrees
+  const percentage = Math.round((value / 100) * 100);
+  const angle = (value / 100) * 240 - 120; // -120 to 120 degrees for 3/4 circle
+  
+  const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
+    if (disabled) return;
+    
+    const svg = e.currentTarget;
+    const rect = svg.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    const updateValue = (clientX: number, clientY: number) => {
+      const dx = clientX - centerX;
+      const dy = clientY - centerY;
+      let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      
+      // Convert to 0-240 degree range (-120 to 120)
+      angle = angle + 120;
+      if (angle < 0) angle = 0;
+      if (angle > 240) angle = 240;
+      
+      const newValue = Math.round((angle / 240) * 100);
+      onChange(newValue);
+    };
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      updateValue(e.clientX, e.clientY);
+    };
+    
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+    
+    updateValue(e.clientX, e.clientY);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
   
   return (
-    <div className="radio-dial-container">
-      <svg width="40" height="40" viewBox="0 0 40 40" className="radio-dial">
-        {/* Background arc */}
-        <path
-          d="M 10 30 A 14 14 0 1 1 30 30"
-          stroke="rgba(255,255,255,0.1)"
-          strokeWidth="3"
-          fill="none"
-        />
-        {/* Value arc */}
-        <path
-          d="M 10 30 A 14 14 0 1 1 30 30"
-          stroke="#f59e0b"
-          strokeWidth="3"
-          fill="none"
-          strokeDasharray={`${(value / 100) * 44} 44`}
-          opacity="0.8"
-        />
-        {/* Dial pointer */}
-        <line
-          x1="20"
-          y1="20"
-          x2={20 + Math.cos((angle * Math.PI) / 180) * 12}
-          y2={20 + Math.sin((angle * Math.PI) / 180) * 12}
-          stroke="#f59e0b"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        {/* Center dot */}
-        <circle cx="20" cy="20" r="3" fill="#1a1a1a" stroke="#f59e0b" strokeWidth="1"/>
-      </svg>
-      <input
-        type="number"
-        className="dial-value"
-        value={value}
-        onChange={(e) => onChange(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)))}
-        disabled={disabled}
+    <svg 
+      width="44" 
+      height="44" 
+      viewBox="0 0 44 44" 
+      className="radio-dial-simple"
+      onMouseDown={handleMouseDown}
+      style={{ cursor: disabled ? 'default' : 'pointer' }}
+    >
+      {/* Background circle */}
+      <circle 
+        cx="22" 
+        cy="22" 
+        r="20" 
+        fill="#1a1a1a" 
+        stroke="rgba(255,255,255,0.1)" 
+        strokeWidth="2"
       />
-    </div>
+      
+      {/* Background arc track */}
+      <path
+        d="M 6 30 A 16 16 0 1 1 38 30"
+        stroke="rgba(255,255,255,0.15)"
+        strokeWidth="3"
+        fill="none"
+        strokeLinecap="round"
+      />
+      
+      {/* Filled arc based on value */}
+      <path
+        d="M 6 30 A 16 16 0 1 1 38 30"
+        stroke="#22d3ee"
+        strokeWidth="3"
+        fill="none"
+        strokeLinecap="round"
+        strokeDasharray={`${(value / 100) * 50.3} 50.3`}
+        opacity="0.9"
+      />
+      
+      {/* Center percentage text */}
+      <text
+        x="22"
+        y="22"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill="white"
+        fontSize="16"
+        fontWeight="600"
+        style={{ userSelect: 'none' }}
+      >
+        {percentage}
+      </text>
+    </svg>
   );
 };
 
@@ -195,6 +245,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
     <BaseEditableNode
       {...props}
       className="weighted-choice enhanced-branching"
+      style={{ width: '420px' }}
       minWidth={420}
       minHeight={180}
       data={{
@@ -292,16 +343,11 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                       onMouseDown={(e) => e.stopPropagation()}
                     />
                     
-                    {/* Radio dial for weight */}
+                    {/* Simplified radio dial */}
                     <RadioDial
                       value={option.weight}
                       onChange={(val) => updateOptionWeight(index, val)}
                     />
-                    
-                    {/* Percentage display */}
-                    <div className="percentage-display">
-                      <span className="percentage-value">{percentages[index]}%</span>
-                    </div>
                     
                     {/* Branch toggle */}
                     <button

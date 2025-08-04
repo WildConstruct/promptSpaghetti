@@ -9,6 +9,14 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-sizing: border-box;
+}
+
+/* Prevent ReactFlow from overriding width */
+.react-flow__node-default.selected .enhanced-branching-editor,
+.react-flow__node-default .enhanced-branching-editor {
+  width: 420px !important;
+  max-width: 420px !important;
 }
 
 /* Title section - taller with edit button */
@@ -131,9 +139,10 @@
   border-radius: 6px;
   position: relative;
   cursor: move;
-  min-height: 36px;
-  max-height: 36px;
+  min-height: 44px;
+  max-height: 44px;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .enhanced-option-row:hover {
@@ -170,15 +179,16 @@
 /* Text input - maximized width */
 .enhanced-option-text {
   flex: 1;
-  min-width: 140px;
-  height: 28px;
-  padding: 4px 8px;
+  min-width: 160px;
+  height: 32px;
+  padding: 6px 10px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
   color: #e0e0e0;
   font-size: 13px;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
 
 .enhanced-option-text:focus {
@@ -191,47 +201,18 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
-/* Radio dial styles */
-.radio-dial-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* Simplified radio dial styles */
+.radio-dial-simple {
   flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
-.radio-dial {
-  cursor: pointer;
+.radio-dial-simple:hover {
+  transform: scale(1.05);
 }
 
-.dial-value {
-  width: 35px;
-  height: 18px;
-  background: transparent;
-  border: none;
-  color: #f59e0b;
-  font-size: 11px;
-  font-weight: 600;
-  text-align: center;
-  margin-top: -4px;
-}
-
-.dial-value:focus {
-  outline: none;
-  background: rgba(245, 158, 11, 0.1);
-  border-radius: 3px;
-}
-
-/* Percentage display */
-.percentage-display {
-  min-width: 35px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.percentage-value {
-  font-size: 11px;
-  color: #60a5fa;
-  font-weight: 600;
+.radio-dial-simple:active {
+  transform: scale(0.98);
 }
 
 /* Branch toggle */
@@ -465,7 +446,19 @@
   width: 420px !important;
 }
 
+/* Base editable node override to prevent stretching */
+.epic1-editable-node.weighted-choice.enhanced-branching {
+  width: 420px !important;
+  max-width: 420px !important;
+  min-width: 420px !important;
+}
+
 /* Fix for handle positioning */
 .react-flow__node.selected .enhanced-branching-editor {
   overflow: visible !important;
+}
+
+/* Ensure node wrapper doesn't stretch */
+.react-flow__node-default {
+  width: auto !important;
 }
