@@ -45,7 +45,6 @@
 /* Editing state - glow effect */
 .epic1-editable-node.editing {
   box-shadow: 
-    0 0 0 1px rgba(91, 158, 255, 0.6),  /* Thin inner ring */
     0 0 12px rgba(91, 158, 255, 0.8),   /* Smaller, tighter glow */
     0 0 24px rgba(91, 158, 255, 0.4);   /* Subtle outer glow */
   border-color: #5b9eff;
@@ -55,16 +54,31 @@
   z-index: 1000 !important;
   background: #252525;
   position: relative;
-  /* Remove outline to avoid expanding the node */
+  outline: none !important;
 }
 
 /* Selected state - subtle highlight */
 .epic1-editable-node.selected:not(.editing) {
   border-color: #5b9eff;
-  box-shadow: 
-    0 0 0 1px rgba(91, 158, 255, 0.2),  /* Subtle outer ring */
-    0 4px 8px rgba(91, 158, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(91, 158, 255, 0.3);
   background: #202020;
+  /* No outer ring to avoid double border appearance */
+  outline: none !important;
+}
+
+/* Disable ReactFlow's default selection outline */
+.react-flow__node.selected .epic1-editable-node {
+  outline: none !important;
+  box-shadow: 0 4px 8px rgba(91, 158, 255, 0.3) !important;
+}
+
+/* Override ReactFlow's selection box */
+.react-flow__node.selected {
+  outline: none !important;
+}
+
+.react-flow__node-default.selected {
+  outline: none !important;
 }
 
 /* Node content container */

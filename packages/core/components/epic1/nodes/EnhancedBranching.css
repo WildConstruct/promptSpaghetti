@@ -1,10 +1,10 @@
 /* Enhanced Branching Node Styles */
 
 .enhanced-branching-editor {
-  width: 420px !important; /* Fixed width to prevent stretching */
-  max-width: 420px !important;
-  min-width: 420px !important;
-  overflow: hidden; /* Contain content */
+  width: 520px !important; /* Optimal width for all controls */
+  max-width: 520px !important;
+  min-width: 520px !important;
+  overflow: visible; /* Allow handles to extend */
   position: relative;
   display: flex;
   flex-direction: column;
@@ -16,8 +16,8 @@
 /* Prevent ReactFlow from overriding width */
 .react-flow__node-default.selected .enhanced-branching-editor,
 .react-flow__node-default .enhanced-branching-editor {
-  width: 420px !important;
-  max-width: 420px !important;
+  width: 520px !important;
+  max-width: 520px !important;
 }
 
 /* Title section - taller with edit button */
@@ -133,8 +133,8 @@
 .enhanced-option-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 4px;
+  gap: 8px; /* Slightly more spacing */
+  padding: 6px 8px; /* More horizontal padding */
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
@@ -144,6 +144,7 @@
   height: 48px;
   transition: all 0.2s;
   box-sizing: border-box;
+  overflow: visible; /* Allow handles to extend outside */
 }
 
 .enhanced-option-row:hover {
@@ -180,8 +181,8 @@
 /* Text input - maximized width */
 .enhanced-option-text {
   flex: 1;
-  min-width: 140px;
-  max-width: 180px;
+  min-width: 0; /* Allow shrinking */
+  width: 100%; /* Take all available space */
   height: 32px;
   padding: 6px 10px;
   background: rgba(0, 0, 0, 0.2);
@@ -283,6 +284,12 @@
   border: 2px solid #1a1a1a !important;
   z-index: 1000 !important;
   position: absolute !important;
+}
+
+/* Main output handle positioning for top-right */
+.enhanced-handle.main-output[style*="top"] {
+  position: absolute !important;
+  transform: none !important;
 }
 
 .enhanced-handle.main-output {
@@ -448,14 +455,14 @@
 .enhanced-branching-editor,
 .enhanced-branching-display {
   box-sizing: border-box !important;
-  width: 420px !important;
+  width: 520px !important;
 }
 
 /* Base editable node override to prevent stretching */
 .epic1-editable-node.weighted-choice.enhanced-branching {
-  width: 420px !important;
-  max-width: 420px !important;
-  min-width: 420px !important;
+  width: 520px !important;
+  max-width: 520px !important;
+  min-width: 520px !important;
 }
 
 /* Fix for handle positioning */

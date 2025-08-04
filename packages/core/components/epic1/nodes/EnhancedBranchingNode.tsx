@@ -271,8 +271,8 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
     <BaseEditableNode
       {...props}
       className="weighted-choice enhanced-branching"
-      style={{ width: '420px' }}
-      minWidth={420}
+      style={{ width: '520px' }}
+      minWidth={520}
       minHeight={180}
       data={{
         ...props.data,
@@ -287,14 +287,18 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
         if (isEditing) {
           return (
             <div className="enhanced-branching-editor">
-              {/* Main output at top when branching enabled */}
+              {/* Main output at top-right corner when branching enabled */}
               {hasBranching && (
                 <Handle
                   type="source"
                   position={Position.Top}
                   id="main-output"
                   className="enhanced-handle main-output"
-                  style={{ top: -10 }}
+                  style={{ 
+                    top: -8,
+                    right: -8,
+                    left: 'auto'
+                  }}
                 />
               )}
 
@@ -411,20 +415,19 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
 
                     {/* Branch output handle - positioned outside node bounds */}
                     {option.hasBranch && (
-                      <div className="branch-handle-container">
-                        <Handle
-                          type="source"
-                          position={Position.Right}
-                          id={`branch-${index}`}
-                          className="enhanced-handle branch-output"
-                          style={{ 
-                            position: 'absolute',
-                            right: -12,
-                            top: '50%',
-                            transform: 'translateY(-50%)'
-                          }}
-                        />
-                      </div>
+                      <Handle
+                        type="source"
+                        position={Position.Right}
+                        id={`branch-${index}`}
+                        className="enhanced-handle branch-output"
+                        style={{ 
+                          position: 'absolute',
+                          right: -8,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          zIndex: 1000
+                        }}
+                      />
                     )}
                   </div>
                 ))}
@@ -469,7 +472,11 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                 position={Position.Top}
                 id="main-output"
                 className="enhanced-handle main-output"
-                style={{ top: -10 }}
+                style={{ 
+                  top: -8,
+                  right: -8,
+                  left: 'auto'
+                }}
               />
             )}
 
