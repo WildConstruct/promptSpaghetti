@@ -154,8 +154,8 @@
   stroke-dasharray: 5;
 }
 
-/* Fix drag preview box issue - hide any ghost elements when dragging handles */
-.react-flow__container [draggable="true"] {
+/* Fix drag preview box issue - only for handles, not nodes */
+.react-flow__handle {
   -webkit-user-drag: none;
   user-drag: none;
 }

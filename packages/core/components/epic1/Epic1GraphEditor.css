@@ -56,8 +56,8 @@
   outline: none;
 }
 
-/* Prevent browser drag preview on all draggable elements */
-.epic1-graph-editor [draggable="true"]:not(.epic1-drag-handle):not(.enhanced-drag-handle) {
+/* Only prevent drag preview on specific draggable elements that aren't our drag handles */
+.epic1-graph-editor .enhanced-option-row[draggable="true"] {
   -webkit-user-drag: none;
   user-drag: none;
 }
