@@ -40,6 +40,7 @@ import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
+import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';

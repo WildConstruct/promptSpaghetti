@@ -51,6 +51,9 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     
+    // Add visual feedback for interaction
+    svg.style.cursor = 'grabbing';
+    
     const updateValue = (clientX: number, clientY: number) => {
       const dx = clientX - centerX;
       const dy = clientY - centerY;
@@ -88,6 +91,7 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
     
     const handleMouseUp = (e: MouseEvent) => {
       e.preventDefault();
+      svg.style.cursor = 'pointer'; // Reset cursor
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
@@ -263,10 +267,14 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
 
   const handleDragStart = (e: React.DragEvent, index: number) => {
     e.stopPropagation();
+    e.preventDefault(); // Prevent default to avoid conflicts
     // Set drag data to prevent node dragging
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', index.toString());
+    e.dataTransfer.setDragImage(e.currentTarget, 0, 0); // Set drag image
     setDraggedIndex(index);
+    // Add visual feedback
+    (e.currentTarget as HTMLElement).style.opacity = '0.5';
   };
 
   const handleDragOver = (e: React.DragEvent, index: number) => {
@@ -285,7 +293,10 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
 
   const handleDragEnd = (e: React.DragEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setDraggedIndex(null);
+    // Reset visual feedback
+    (e.currentTarget as HTMLElement).style.opacity = '1';
   };
 
   const percentages = calculatePercentages(options);
@@ -388,21 +399,34 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                     onDragStart={(e) => handleDragStart(e, index)}
                     onDragOver={(e) => handleDragOver(e, index)}
                     onDragEnd={handleDragEnd}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                     onMouseDown={(e) => {
-                      // Only stop propagation if not dragging
-                      if (!(e.target as HTMLElement).closest('.enhanced-drag-handle')) {
+                      // Allow dragging when clicking on drag handle
+                      const isDragHandle = (e.target as HTMLElement).closest('.enhanced-drag-handle');
+                      if (!isDragHandle) {
                         e.stopPropagation();
                       }
                     }}
+                    style={{ cursor: draggedIndex === index ? 'grabbing' : 'grab' }}
                   >
                     {/* Drag handle - initiate option dragging */}
                     <div 
                       className="enhanced-drag-handle"
                       draggable="false"
                       onMouseDown={(e) => {
-                        // Don't stop propagation here - let parent handle drag
+                        // Prevent text selection but allow drag to start from parent
                         e.preventDefault();
+                        // Add visual feedback
+                        (e.currentTarget as HTMLElement).style.cursor = 'grabbing';
                       }}
+                      onMouseUp={(e) => {
+                        // Reset cursor
+                        (e.currentTarget as HTMLElement).style.cursor = 'grab';
+                      }}
+                      title="Drag to reorder"
                     >
                       <DragHandleIcon />
                     </div>

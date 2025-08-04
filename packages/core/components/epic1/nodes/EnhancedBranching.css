@@ -140,7 +140,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   position: relative;
-  cursor: move;
+  cursor: grab; /* Change to grab cursor */
   min-height: 48px;
   height: 48px;
   transition: all 0.2s;
@@ -148,6 +148,9 @@
   overflow: visible; /* Allow handles to extend outside */
   pointer-events: all; /* Ensure row is interactive */
   z-index: 1; /* Above background but below handles */
+  /* Add drag-drop visual cue */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .enhanced-option-row:hover {
@@ -156,9 +159,12 @@
 }
 
 .enhanced-option-row.dragging {
-  opacity: 0.5;
-  background: rgba(245, 158, 11, 0.1);
+  opacity: 0.7; /* Less transparent */
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
   cursor: grabbing !important;
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
 /* When dragging, show grabbing cursor */
@@ -166,28 +172,44 @@
   cursor: grabbing !important;
 }
 
-/* Drag handle - brighter with less padding */
+/* Drag handle - more visible and interactive */
 .enhanced-drag-handle {
-  width: 20px;
-  height: 32px;
+  width: 24px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.5); /* Brighter */
+  color: rgba(255, 255, 255, 0.7); /* Much brighter */
   cursor: grab;
-  margin-right: 4px;
+  margin-right: 6px;
   flex-shrink: 0;
   /* Make it the primary drag target */
   user-select: none;
   -webkit-user-select: none;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .enhanced-drag-handle:hover {
-  color: rgba(255, 255, 255, 0.7);
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  transform: scale(1.1);
+}
+
+.enhanced-drag-handle:active {
+  cursor: grabbing;
+  transform: scale(0.95);
 }
 
 .enhanced-option-row:hover .enhanced-drag-handle {
   color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.enhanced-option-row.dragging .enhanced-drag-handle {
+  cursor: grabbing !important;
+  color: #f97316;
 }
 
 /* Text input - maximized width */
@@ -224,18 +246,29 @@
   transition: transform 0.2s ease;
   overflow: visible;
   pointer-events: all !important;
-  z-index: 5; /* Higher than other elements */
+  z-index: 10; /* Higher than other elements */
   cursor: pointer !important;
   user-select: none;
   -webkit-user-select: none;
+  /* Add drop shadow for depth */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .radio-dial-simple:hover {
-  transform: scale(1.05);
+  transform: scale(1.08);
+  filter: drop-shadow(0 3px 6px rgba(34, 211, 238, 0.4));
 }
 
 .radio-dial-simple:active {
-  transform: scale(0.98);
+  transform: scale(0.95);
+  cursor: grabbing !important;
+}
+
+/* Radio dial interaction state */
+.radio-dial-simple.adjusting {
+  cursor: grabbing !important;
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(34, 211, 238, 0.6));
 }
 
 /* Branch toggle */

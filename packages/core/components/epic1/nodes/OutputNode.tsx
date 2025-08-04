@@ -4,6 +4,7 @@ import { EditableNodeData } from './BaseEditableNode';
 import { SaveIndicator } from './SaveIndicator';
 import { useEditTransitions } from '../hooks/useEditTransitions';
 import './BaseEditableNode.css';
+import './OutputNode.css';
 import './VisualFeedbackEnhancements.css';
 import '../animations/EditTransitions.css';
 

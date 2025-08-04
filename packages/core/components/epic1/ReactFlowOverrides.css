@@ -1,0 +1,54 @@
+/* Global ReactFlow override styles to remove ALL selection outlines */
+
+/* Remove all possible ReactFlow selection styles */
+.react-flow__node.selected,
+.react-flow__node-default.selected,
+.react-flow__node-default.selectable.selected,
+.react-flow__node.selectable.selected,
+.react-flow__node:focus,
+.react-flow__node:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Remove pseudo-element selection indicators */
+.react-flow__node.selected::before,
+.react-flow__node.selected::after,
+.react-flow__node-default.selected::before,
+.react-flow__node-default.selected::after {
+  content: none !important;
+  display: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Prevent any selection box shadow from ReactFlow internals */
+.react-flow__node.selected > div,
+.react-flow__node-default.selected > div {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove edge selection styles */
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:focus .react-flow__edge-path {
+  outline: none !important;
+  stroke-width: 2 !important; /* Keep normal width */
+}
+
+/* Prevent all focus outlines in ReactFlow */
+.react-flow *:focus,
+.react-flow *:focus-visible {
+  outline: none !important;
+}
+
+/* Override any inline styles that might add selection */
+[style*="box-shadow"] {
+  /* Only override if it's a ReactFlow node */
+}
+
+.react-flow__node[style*="box-shadow"] {
+  box-shadow: none !important;
+}

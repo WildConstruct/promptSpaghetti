@@ -16,6 +16,24 @@
 /* Override React Flow defaults for Epic 1 styling */
 .epic1-graph-editor .react-flow__node {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Remove ALL selection outlines */
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove blue selection box completely */
+.epic1-graph-editor .react-flow__node.selected,
+.epic1-graph-editor .react-flow__node.selected::before,
+.epic1-graph-editor .react-flow__node.selected::after {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Override ReactFlow's selection styles */
+.epic1-graph-editor .react-flow__node.selectable.selected {
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 /* Smooth dragging state */
@@ -148,10 +166,15 @@
   background-color: #0f0f0f;
 }
 
-/* Selection box */
+/* Selection box - make it more subtle */
 .epic1-graph-editor .react-flow__selection {
-  background: rgba(91, 158, 255, 0.15);
-  border: 1px solid #5b9eff;
+  background: rgba(91, 158, 255, 0.08);
+  border: 1px solid rgba(91, 158, 255, 0.3);
+}
+
+/* Disable node selection outline */
+.epic1-graph-editor .react-flow__nodesselection {
+  display: none !important;
 }
 
 /* Connection line */

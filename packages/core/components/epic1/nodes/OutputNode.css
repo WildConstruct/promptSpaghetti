@@ -1,0 +1,109 @@
+/* Output Node Specific Styles */
+
+/* Base output node styling */
+.epic1-editable-node.output {
+  min-width: 100px !important;
+  max-width: 150px !important;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #222222 100%);
+  border-color: #22d3ee !important;
+  position: relative;
+  overflow: visible !important;
+}
+
+/* Output node content container */
+.epic1-editable-node.output .epic1-node-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Output node handle - properly aligned to border */
+.epic1-editable-node.output .epic1-handle.target {
+  position: absolute !important;
+  left: -7px !important; /* Perfectly align with rounded border edge */
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 10;
+  
+  /* Green dot style for output */
+  background: #22d3ee !important;
+  border: 2px solid #0a0a0a !important;
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  
+  /* Add glow effect */
+  box-shadow: 0 0 6px rgba(34, 211, 238, 0.6);
+}
+
+.epic1-editable-node.output .epic1-handle.target:hover {
+  background: #14b8a6 !important;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 1);
+  transform: translateY(-50%) scale(1.2) !important;
+}
+
+/* Output display styling */
+.epic1-output-display {
+  text-align: center;
+  width: 100%;
+}
+
+.epic1-output-display .epic1-node-type-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #22d3ee;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.epic1-output-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.epic1-output-icon {
+  color: #22d3ee;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Output editor styling */
+.epic1-output-editor {
+  width: 100%;
+}
+
+.epic1-output-editor .epic1-node-type-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #22d3ee;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+/* Output node selected state - no blue outline */
+.epic1-editable-node.output.selected:not(.editing) {
+  border-color: #22d3ee !important;
+  box-shadow: 0 0 8px rgba(34, 211, 238, 0.3) !important;
+  background: linear-gradient(135deg, #1f1f1f 0%, #282828 100%);
+}
+
+/* Output node editing state */
+.epic1-editable-node.output.editing {
+  border-color: #14b8a6 !important;
+  box-shadow: 
+    0 0 12px rgba(34, 211, 238, 0.8),
+    0 0 24px rgba(34, 211, 238, 0.4) !important;
+}
+
+/* Hide output indicators for output node */
+.epic1-editable-node.output .epic1-selected-indicator,
+.epic1-editable-node.output .epic1-edit-indicator {
+  display: none;
+}

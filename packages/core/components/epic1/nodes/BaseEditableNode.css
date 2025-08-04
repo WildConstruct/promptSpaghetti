@@ -25,9 +25,20 @@
   width: fit-content !important;
 }
 
-/* Remove all ReactFlow selection outlines */
+/* Remove ALL ReactFlow selection outlines and borders */
 .react-flow__node:focus,
-.react-flow__node:focus-visible {
+.react-flow__node:focus-visible,
+.react-flow__node.selected,
+.react-flow__node-default.selected,
+.react-flow__node.selectable.selected {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove blue selection box */
+.react-flow__node.selected .epic1-editable-node,
+.react-flow__node-default.selected .epic1-editable-node {
+  box-shadow: none !important;
   outline: none !important;
 }
 
@@ -63,28 +74,25 @@
   outline: none !important;
 }
 
-/* Selected state - subtle highlight */
+/* Selected state - NO blue outline, just subtle border */
 .epic1-editable-node.selected:not(.editing) {
-  border-color: #5b9eff;
-  box-shadow: 0 4px 8px rgba(91, 158, 255, 0.3);
-  background: #202020;
-  /* No outer ring to avoid double border appearance */
+  border-color: #4a4a4a; /* Subtle gray instead of blue */
+  box-shadow: none; /* Remove selection shadow */
+  background: #1e1e1e; /* Slightly lighter background */
   outline: none !important;
 }
 
-/* Disable ReactFlow's default selection outline completely */
-.react-flow__node.selected,
-.react-flow__node-default.selected,
-.react-flow__node.selected .epic1-editable-node {
-  outline: none !important;
-  outline-offset: 0 !important;
-}
-
-/* Remove any possible selection box from ReactFlow wrapper */
+/* Override ALL ReactFlow selection styles */
+.react-flow__node.selected::before,
+.react-flow__node.selected::after,
+.react-flow__node-default.selected::before,
+.react-flow__node-default.selected::after,
 .react-flow__node.selectable.selected::before,
 .react-flow__node.selectable.selected::after {
   content: none !important;
   display: none !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
 /* Node content container */
@@ -258,6 +266,23 @@
 
 .epic1-editable-node.output {
   border-color: #f15656;
+  /* Ensure output node handle aligns with border */
+  position: relative;
+  overflow: visible;
+}
+
+/* Fix output node handle positioning */
+.epic1-editable-node.output .epic1-handle.target {
+  position: absolute !important;
+  left: -8px !important; /* Align with the border edge */
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 10;
+  background: #5b9eff;
+  border: 2px solid #1a1a1a;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
 }
 
 .epic1-editable-node.output.editing {
