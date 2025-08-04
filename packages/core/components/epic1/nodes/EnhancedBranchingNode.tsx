@@ -107,30 +107,46 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
       <circle 
         cx="22" 
         cy="22" 
-        r="20" 
-        fill="#1a1a1a" 
-        stroke="rgba(255,255,255,0.1)" 
-        strokeWidth="2"
+        r="19" 
+        fill="#0a0a0a" 
+        stroke="none"
       />
       
-      {/* Background arc track */}
-      <path
-        d="M 6 30 A 16 16 0 1 1 38 30"
-        stroke="rgba(255,255,255,0.15)"
-        strokeWidth="3"
+      {/* Background ring track on outer edge - 3/4 circle */}
+      <circle
+        cx="22"
+        cy="22"
+        r="19"
         fill="none"
+        stroke="rgba(255,255,255,0.1)"
+        strokeWidth="4"
         strokeLinecap="round"
+        strokeDasharray={`${arcLength} 100`}
+        transform="rotate(135 22 22)"
       />
       
-      {/* Filled arc based on percentage */}
-      <path
-        d="M 6 30 A 16 16 0 1 1 38 30"
+      {/* Filled progress ring based on percentage */}
+      <circle
+        cx="22"
+        cy="22"
+        r="19"
+        fill="none"
         stroke="#22d3ee"
-        strokeWidth="3"
-        fill="none"
+        strokeWidth="4"
         strokeLinecap="round"
-        strokeDasharray={`${fillLength} ${arcLength}`}
+        strokeDasharray={`${fillLength} 100`}
+        transform="rotate(135 22 22)"
         opacity="0.9"
+      />
+      
+      {/* Small indicator dot on the ring */}
+      <circle
+        cx={22 + 19 * Math.cos(((percentage / 100) * 270 + 135) * Math.PI / 180)}
+        cy={22 + 19 * Math.sin(((percentage / 100) * 270 + 135) * Math.PI / 180)}
+        r="3"
+        fill="#22d3ee"
+        stroke="#0a0a0a"
+        strokeWidth="1"
       />
       
       {/* Center percentage text with % symbol */}
@@ -140,7 +156,7 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         textAnchor="middle"
         dominantBaseline="middle"
         fill="white"
-        fontSize="14"
+        fontSize="16"
         fontWeight="600"
         style={{ userSelect: 'none' }}
       >
