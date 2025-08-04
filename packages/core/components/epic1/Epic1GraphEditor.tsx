@@ -172,16 +172,24 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Update nodes when selected
   const enhancedNodes = useMemo(() => {
-    return nodes.map((node) => ({
-      ...node,
-      type: node.type || 'textBlock', // Ensure type is always defined
-      position: node.position || { x: 0, y: 0 }, // Ensure position is always defined
-      data: createNodeData(node.data, node.id),
-      // Preserve the original selected state from nodes, don't override
-      selected: node.selected || node.id === selectedNodeId,
+    return nodes.map((node) => {
+      const nodeData = createNodeData(node.data, node.id);
+      // Check if this is an enhancedBranching node
+      const isEnhancedBranching = node.type === 'enhancedBranching' || node.type === 'enhancedBranchingNode';
       // Make node non-draggable when it's being edited
-      draggable: !node.data?.isEditing,
-    }));
+      const isDraggable = !nodeData.isEditing && (!isEnhancedBranching || !nodeData.isEditing);
+      
+      return {
+        ...node,
+        type: node.type || 'textBlock', // Ensure type is always defined
+        position: node.position || { x: 0, y: 0 }, // Ensure position is always defined
+        data: nodeData,
+        // Preserve the original selected state from nodes, don't override
+        selected: node.selected || node.id === selectedNodeId,
+        // Disable dragging for enhanced branching nodes in edit mode
+        draggable: isDraggable,
+      };
+    });
   }, [nodes, selectedNodeId, createNodeData]);
 
   // Handle new connections
@@ -739,6 +747,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             elementsSelectable={true}
             deleteKeyCode={null}
             multiSelectionKeyCode="Shift"
+            nodeDragThreshold={5}
           >
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />

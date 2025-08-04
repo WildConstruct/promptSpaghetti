@@ -52,3 +52,24 @@
 .react-flow__node[style*="box-shadow"] {
   box-shadow: none !important;
 }
+
+/* Disable dragging for enhanced branching nodes when editing */
+.react-flow__node-enhancedBranching .epic1-editable-node.editing,
+.react-flow__node-enhancedBranchingNode .epic1-editable-node.editing {
+  pointer-events: all !important;
+  cursor: default !important;
+}
+
+/* Make interactive elements in enhanced branching node capture events */
+.react-flow__node-enhancedBranching .enhanced-drag-handle,
+.react-flow__node-enhancedBranching .radio-dial-simple,
+.react-flow__node-enhancedBranching input,
+.react-flow__node-enhancedBranching button,
+.react-flow__node-enhancedBranchingNode .enhanced-drag-handle,
+.react-flow__node-enhancedBranchingNode .radio-dial-simple,
+.react-flow__node-enhancedBranchingNode input,
+.react-flow__node-enhancedBranchingNode button {
+  pointer-events: all !important;
+  position: relative;
+  z-index: 1000;
+}

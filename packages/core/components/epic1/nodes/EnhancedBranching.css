@@ -1,5 +1,20 @@
 /* Enhanced Branching Node Styles */
 
+/* Disable node dragging when interacting with enhanced branching node */
+.epic1-editable-node.enhanced-branching.editing {
+  cursor: default !important;
+}
+
+/* Prevent ReactFlow from handling drag events on interactive elements */
+.enhanced-branching-editor .enhanced-drag-handle,
+.enhanced-branching-editor .radio-dial-simple,
+.enhanced-branching-editor input,
+.enhanced-branching-editor button {
+  pointer-events: all !important;
+  position: relative;
+  z-index: 1000;
+}
+
 .enhanced-branching-editor {
   width: 100% !important; /* Fill parent container */
   overflow: visible; /* Allow handles to extend */

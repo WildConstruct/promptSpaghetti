@@ -47,6 +47,16 @@
   overflow: visible !important;
 }
 
+/* Disable dragging for enhanced branching nodes in edit mode */
+.epic1-editable-node.no-drag {
+  cursor: default !important;
+}
+
+.epic1-editable-node.no-drag.editing {
+  cursor: default !important;
+  pointer-events: all !important;
+}
+
 /* Dragging state */
 .epic1-editable-node.dragging {
   cursor: grabbing;

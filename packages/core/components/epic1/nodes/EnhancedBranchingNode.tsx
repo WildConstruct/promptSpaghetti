@@ -313,6 +313,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
       minHeight={180}
       data={{
         ...props.data,
+        nodeType: 'enhancedBranching',
         options,
         title,
         onEdit: (value: string) => {
@@ -413,6 +414,11 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                       draggable="true"
                       onDragStart={(e) => handleDragStart(e, index)}
                       onDragEnd={handleDragEnd}
+                      onMouseDown={(e) => {
+                        // Prevent node dragging when using drag handle
+                        e.stopPropagation();
+                        // Don't prevent default - we need it for HTML5 drag
+                      }}
                       style={{ cursor: 'grab' }}
                       title="Drag to reorder"
                     >
