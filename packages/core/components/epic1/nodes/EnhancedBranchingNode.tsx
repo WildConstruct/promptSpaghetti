@@ -66,25 +66,26 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
       // Normalize angle: -180 to 180 -> 0 to 360
       if (angle < 0) angle += 360;
       
-      // Map the 3/4 circle (225° to -45° or 315°) to 0-100
-      // Valid range is from 225° to 315° going clockwise through bottom
+      // Map the 3/4 circle (225° to 135°) to 0-100
+      // The dial starts at 225° and goes clockwise to 135°
       let normalizedValue = 0;
       
-      if (angle >= 225 && angle <= 360) {
-        // From start to bottom (225° to 360°)
+      if (angle >= 225) {
+        // From 225° to 360° (start to bottom)
         normalizedValue = ((angle - 225) / 270) * 100;
-      } else if (angle >= 0 && angle <= 135) {
-        // From bottom to end (0° to 135°)
-        normalizedValue = ((angle + 135) / 270) * 100;
+      } else if (angle <= 135) {
+        // From 0° to 135° (bottom through to end)
+        normalizedValue = ((angle + 360 - 225) / 270) * 100;
       } else {
-        // Outside valid range - clamp to nearest endpoint
-        if (angle > 135 && angle < 225) {
-          normalizedValue = angle < 180 ? 100 : 0;
-        }
+        // Between 135° and 225° - dead zone
+        // Snap to nearest endpoint
+        const distToEnd = Math.abs(angle - 135);
+        const distToStart = Math.abs(angle - 225);
+        normalizedValue = distToEnd < distToStart ? 100 : 0;
       }
       
-      // Allow values from 0 to 200 for more flexibility
-      const newValue = Math.round(Math.max(0, Math.min(200, normalizedValue * 2)));
+      // Clamp to 0-100 range (changed from 0-200)
+      const newValue = Math.round(Math.max(0, Math.min(100, normalizedValue)));
       onChange(newValue);
     };
     
@@ -105,6 +106,18 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
     document.addEventListener('mouseup', handleMouseUp);
   };
   
+  // Add mouse wheel support
+  const handleWheel = (e: React.WheelEvent<SVGElement>) => {
+    if (disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // More responsive: 5 units per wheel tick (increased from typical 1-2)
+    const delta = e.deltaY > 0 ? -5 : 5;
+    const newValue = Math.round(Math.max(0, Math.min(100, value + delta)));
+    onChange(newValue);
+  };
+  
   return (
     <svg 
       width="44" 
@@ -112,6 +125,7 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
       viewBox="0 0 44 44" 
       className="radio-dial-simple nodrag"
       onMouseDown={handleMouseDown}
+      onWheel={handleWheel}
       style={{ 
         cursor: disabled ? 'default' : 'pointer',
         pointerEvents: 'all',
@@ -205,13 +219,13 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
     
     switch (preset) {
       case 'equal':
-        newWeights = Array(count).fill(100);
+        newWeights = Array(count).fill(50);
         break;
       case 'favorFirst':
-        newWeights = [150, ...Array(count - 1).fill(50)];
+        newWeights = [75, ...Array(count - 1).fill(25)];
         break;
       case 'favorLast':
-        newWeights = [...Array(count - 1).fill(50), 150];
+        newWeights = [...Array(count - 1).fill(25), 75];
         break;
       case 'rampUp':
         const stepUp = 60 / (count - 1);
@@ -225,7 +239,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
     setOptions(options.map((opt, i) => ({
       ...opt,
-      weight: newWeights[i] || 50
+      weight: newWeights[i] || 25
     })));
   }, [options]);
 
@@ -252,7 +266,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   };
 
   const addOption = () => {
-    setOptions([...options, { text: '', weight: 100, hasBranch: false }]);
+    setOptions([...options, { text: '', weight: 50, hasBranch: false }]);
   };
 
   const removeOption = (index: number) => {
