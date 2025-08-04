@@ -10,20 +10,22 @@ import ReactFlow, {
   MiniMap,
   Background,
   BackgroundVariant
-  from 'reactflow';
+} from 'reactflow';
 
-  interface BrowserSafeGraphEditorProps {
-    initialNodes ? unknown;
-    initialEdges ? unknown;
+interface BrowserSafeGraphEditorProps {
+  initialNodes?: unknown;
+  initialEdges?: unknown;
+}
 
-    interface NodeData {
-      label ? string;
-      description ? string;
+interface NodeData {
+  label?: string;
+  description?: string;
+}
 
 
 
-      // Sample node types for the basic editor
-      const nodeTypes = {
+// Sample node types for the basic editor
+const nodeTypes = {
         default: ({ data }: { data: NodeData }) => (
           <div style={{
             padding: '10px',
@@ -31,14 +33,14 @@ import ReactFlow, {
             borderRadius: '6px',
             background: 'white',
             minWidth: '150px'
-          }>
-        <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>
-        {data.label || 'Node'}
-        </div>
-        <div style={{ fontSize: '12px', color: '#666' }}>
-        {data.description || 'Basic node'}
-        </div>
-        </div>
+          }}>
+            <div style={{ fontWeight: 'bold', marginBottom: '5px' }}>
+              {data.label || 'Node'}
+            </div>
+            <div style={{ fontSize: '12px', color: '#666' }}>
+              {data.description || 'Basic node'}
+            </div>
+          </div>
       ),
       input: ({ data }: { data: NodeData }) => (
         <div style={{
@@ -47,14 +49,14 @@ import ReactFlow, {
           borderRadius: '6px',
           background: '#f9fff9',
           minWidth: '150px'
-        }>
-      <div style={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '5px' }}>
-      📥 {data.label || 'Input'}
-      </div>
-      <div style={{ fontSize: '12px', color: '#666' }}>
-      {data.description || 'Input node'}
-      </div>
-      </div>
+        }}>
+          <div style={{ fontWeight: 'bold', color: '#4CAF50', marginBottom: '5px' }}>
+            📥 {data.label || 'Input'}
+          </div>
+          <div style={{ fontSize: '12px', color: '#666' }}>
+            {data.description || 'Input node'}
+          </div>
+        </div>
     ),
     output: ({ data }: { data: NodeData }) => (
       <div style={{
@@ -63,14 +65,14 @@ import ReactFlow, {
         borderRadius: '6px',
         background: '#fff9f0',
         minWidth: '150px'
-      }>
-    <div style={{ fontWeight: 'bold', color: '#FF9800', marginBottom: '5px' }}>
-    📤 {data.label || 'Output'}
-    </div>
-    <div style={{ fontSize: '12px', color: '#666' }}>
-    {data.description || 'Output node'}
-    </div>
-    </div>
+      }}>
+        <div style={{ fontWeight: 'bold', color: '#FF9800', marginBottom: '5px' }}>
+          📤 {data.label || 'Output'}
+        </div>
+        <div style={{ fontSize: '12px', color: '#666' }}>
+          {data.description || 'Output node'}
+        </div>
+      </div>
   ),
   process: ({ data }: { data: NodeData }) => (
     <div style={{
@@ -79,70 +81,76 @@ import ReactFlow, {
       borderRadius: '6px',
       background: '#f0f9ff',
       minWidth: '150px'
-    }>
-  <div style={{ fontWeight: 'bold', color: '#2196F3', marginBottom: '5px' }}>
-  ⚙️ {data.label || 'Process'}
-  </div>
-  <div style={{ fontSize: '12px', color: '#666' }}>
-  {data.description || 'Processing node'}
-  </div>
-  </div>
+    }}>
+      <div style={{ fontWeight: 'bold', color: '#2196F3', marginBottom: '5px' }}>
+        ⚙️ {data.label || 'Process'}
+      </div>
+      <div style={{ fontSize: '12px', color: '#666' }}>
+        {data.description || 'Processing node'}
+      </div>
+    </div>
+  )
 };
-const defaultNodes: Node = [;
-{
-  id: '1',
-  type: 'input',
-  position: { x: 250, y: 25 },
-  data: { label: 'Start', description: 'Beginning of the graph' }
 
+const defaultNodes: Node[] = [
+  {
+    id: '1',
+    type: 'input',
+    position: { x: 250, y: 25 },
+    data: { label: 'Start', description: 'Beginning of the graph' }
+  },
   {
     id: '2',
     type: 'process',
     position: { x: 250, y: 125 },
     data: { label: 'Process', description: 'Main processing step' }
+  },
+  {
+    id: '3',
+    type: 'output',
+    position: { x: 250, y: 225 },
+    data: { label: 'End', description: 'Final output' }
+  }
+];
 
-    {
-      id: '3',
-      type: 'output',
-      position: { x: 250, y: 225 },
-      data: { label: 'End', description: 'Final output' }
-
-      ];
-      const defaultEdges: Edge = [;
-      { id: 'e1-2', source: '1', target: '2' },
-      { id: 'e2-3', source: '2', target: '3' }];
+const defaultEdges: Edge[] = [
+  { id: 'e1-2', source: '1', target: '2' },
+  { id: 'e2-3', source: '2', target: '3' }
+];
 
       export const BrowserSafeGraphEditor: React.FC<BrowserSafeGraphEditorProps> = ({
         initialNodes = [],
         initialEdges = []
       }) => {
-        const [nodes, setNodes, onNodesChange] = useNodesState(;
-        initialNodes.length > 0 ? (initialNodes as Node) : defaultNodes);
-        const [edges, setEdges, onEdgesChange] = useEdgesState(;
-        initialEdges.length > 0 ? (initialEdges as Edge) : defaultEdges);
-        const onConnect = useCallback(;
-        (params: Connection) => setEdges((eds) => addEdge(params, eds)),
-        [setEdges]
-      );
+  const [nodes, setNodes, onNodesChange] = useNodesState(
+    initialNodes.length > 0 ? (initialNodes as Node[]) : defaultNodes
+  );
+  const [edges, setEdges, onEdgesChange] = useEdgesState(
+    initialEdges.length > 0 ? (initialEdges as Edge[]) : defaultEdges
+  );
+  const onConnect = useCallback(
+    (params: Connection) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges]
+  );
       const [selectedNode, setSelectedNode] = useState<Node | null>(null);
-      const onNodeClick = useCallback(;
-      (_event: React.MouseEvent, node: Node) => {
-        setSelectedNode(node);
-      },
+  const onNodeClick = useCallback(
+    (_event: React.MouseEvent, node: Node) => {
+      setSelectedNode(node);
+    },
     []
   );
   const addNode = useCallback((type: string) => {
-    const newNode: Node ={{
+    const newNode: Node = {
       id: `node_${Date.now()}`,
       type,
       position: {
         x: Math.random() * 400 + 100,
         y: Math.random() * 300 + 100
       },
-    data: {
-      label: `New ${type}`,
-      description: `${type} node created ${new Date().toLocaleTimeString()}`
-
+      data: {
+        label: `New ${type}`,
+        description: `${type} node created ${new Date().toLocaleTimeString()}`
+      }
     };
   setNodes((nds) => [...nds, newNode]);
 }, [setNodes]);
@@ -150,9 +158,10 @@ const deleteSelectedNode = useCallback(() => {
   if (selectedNode) {
     setNodes((nds) => nds.filter((node) => node.id !== selectedNode.id));
     setEdges((eds) => eds.filter((edge) =>
-    edge.source !== selectedNode.id && edge.target !== selectedNode.id
-  ));
-  setSelectedNode(null);
+      edge.source !== selectedNode.id && edge.target !== selectedNode.id
+    ));
+    setSelectedNode(null);
+  }
 }, [selectedNode, setNodes, setEdges]);
 const clearGraph = useCallback(() => {
   setNodes([]);
@@ -193,7 +202,7 @@ return (
 <h4 style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>Add Nodes</h4>
 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
 <button
-onClick={() => {}} => addNode('input')}
+onClick={() => addNode('input')}
 style={{
   padding: '8px 12px',
   border: '1px solid #4CAF50',
@@ -202,12 +211,12 @@ style={{
   color: '#4CAF50',
   cursor: 'pointer',
   fontSize: '12px'
-}
+}}
 >
 📥 Input Node
 </button>
 <button
-onClick={() => {}} => addNode('process')}
+onClick={() => addNode('process')}
 style={{
   padding: '8px 12px',
   border: '1px solid #2196F3',
@@ -216,12 +225,12 @@ style={{
   color: '#2196F3',
   cursor: 'pointer',
   fontSize: '12px'
-}
+}}
 >
 ⚙️ Process Node
 </button>
 <button
-onClick={() => {}} => addNode('output')}
+onClick={() => addNode('output')}
 style={{
   padding: '8px 12px',
   border: '1px solid #FF9800',
@@ -230,7 +239,7 @@ style={{
   color: '#FF9800',
   cursor: 'pointer',
   fontSize: '12px'
-}
+}}
 >
 📤 Output Node
 </button>
@@ -251,8 +260,8 @@ style={{
   color: selectedNode ? '#f44336' : '#999',
   cursor: selectedNode ? 'pointer' : 'not-allowed',
   fontSize: '12px'
-
-  >
+}}
+>
   🗑️ Delete Selected
   </button>
   <button
@@ -265,7 +274,7 @@ style={{
     color: '#666',
     cursor: 'pointer',
     fontSize: '12px'
-  }
+  }}
 >
 🧹 Clear All
 </button>

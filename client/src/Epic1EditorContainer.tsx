@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import ReactFlow, { ReactFlowProvider, Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { ToastContainer, useToast } from './Toast';
+import { ellipticalFrameLayout, type LayoutOptions } from '@promptscape/core/utils/frameLayouts';
 
 // Import CSS files needed for Epic1
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
@@ -468,12 +469,25 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     );
   }
 
-  // Medieval demo initial data
+  // Medieval demo initial data - positioned at frame edges
+  // Get approximate viewport dimensions (will be adjusted by ReactFlow)
+  const viewportWidth = window.innerWidth - 400; // Account for side panels
+  const viewportHeight = window.innerHeight - 100; // Account for menu bar
+  
+  // Layout options for frame positioning
+  const layoutOptions: LayoutOptions = {
+    viewportWidth,
+    viewportHeight,
+    nodeWidth: 220,
+    nodeHeight: 120,
+    padding: 100
+  };
+  
   const initialNodes = [
     {
       id: 'prompt-1',
       type: 'textBlock',
-      position: { x: 100, y: 100 },
+      position: ellipticalFrameLayout(0, 5, layoutOptions), // Top position
       data: {
         nodeType: 'textBlock',
         content: 'Generate a character for a',
@@ -484,7 +498,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     {
       id: 'setting-1',
       type: 'weightedChoice',
-      position: { x: 400, y: 100 },
+      position: ellipticalFrameLayout(1, 5, layoutOptions), // Top-right position
       data: {
         nodeType: 'weightedChoice',
         options: [
@@ -498,7 +512,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     {
       id: 'prompt-2',
       type: 'textBlock',
-      position: { x: 700, y: 100 },
+      position: ellipticalFrameLayout(2, 5, layoutOptions), // Right position
       data: {
         nodeType: 'textBlock',
         content: 'story. They are a',
@@ -509,7 +523,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     {
       id: 'character-1',
       type: 'weightedChoice',
-      position: { x: 400, y: 250 },
+      position: ellipticalFrameLayout(3, 5, layoutOptions), // Bottom position
       data: {
         nodeType: 'weightedChoice',
         options: [
@@ -524,7 +538,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     {
       id: 'output-1',
       type: 'output',
-      position: { x: 400, y: 400 },
+      position: ellipticalFrameLayout(4, 5, layoutOptions), // Left position
       data: {
         nodeType: 'output',
         outputName: 'character_prompt',

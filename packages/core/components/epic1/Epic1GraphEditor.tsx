@@ -569,9 +569,14 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const onInit = useCallback((instance: ReactFlowInstance) => {
     console.log('ReactFlow initialized:', instance);
     setReactFlowInstance(instance);
-    // Don't auto-fit view on init to prevent zoom changes
-    // Force a re-render to ensure drag-drop knows about the instance
+    // Fit view to show all nodes properly positioned at frame edges
     setTimeout(() => {
+      instance.fitView({ 
+        padding: 0.1,
+        includeHiddenNodes: false,
+        minZoom: 0.5,
+        maxZoom: 1.5
+      });
       setReactFlowInstance(instance);
     }, 100);
   }, []);
@@ -746,7 +751,14 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               animated: false,
               style: { stroke: '#666', strokeWidth: 2 }
             }}
-            fitView={false}
+            fitView={true}
+            fitViewOptions={{
+              padding: 0.2,
+              includeHiddenNodes: false,
+              minZoom: 0.3,
+              maxZoom: 2
+            }}
+            defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
             attributionPosition="bottom-left"
             panOnScroll={false}
             zoomOnScroll={true}

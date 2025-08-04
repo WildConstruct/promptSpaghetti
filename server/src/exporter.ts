@@ -389,32 +389,32 @@ function extractSceneData(graph: Graph): Partial<SceneData> {
       if (key.includes('camera') || key.includes('position')) {
         if (key.includes('x') && typeof value === 'number') {
           sceneData.camera!.position.x = value;
-
+        }
         if (key.includes('y') && typeof value === 'number') {
           sceneData.camera!.position.y = value;
-
+        }
         if (key.includes('z') && typeof value === 'number') {
           sceneData.camera!.position.z = value;
-
-
+        }
+      }
 
       // Camera angles
       if (key.includes('angle') || key.includes('rotation')) {
         if (key.includes('pitch') && typeof value === 'number') {
           sceneData.camera!.angle.pitch = Math.max(-90, Math.min(90, value));
-
+        }
         if (key.includes('yaw') && typeof value === 'number') {
           sceneData.camera!.angle.yaw = Math.max(-180, Math.min(180, value));
-
+        }
         if (key.includes('roll') && typeof value === 'number') {
           sceneData.camera!.angle.roll = Math.max(-180, Math.min(180, value));
-
-
+        }
+      }
 
       // Distance
       if (key.includes('distance') && typeof value === 'number') {
         sceneData.camera!.distance = Math.max(0.1, Math.min(1000, value));
-
+      }
 
       // Lighting conditions
       if (key.includes('time') || key.includes('lighting')) {
