@@ -286,12 +286,7 @@
   position: absolute !important;
 }
 
-/* Main output handle positioning for top-right */
-.enhanced-handle.main-output[style*="top"] {
-  position: absolute !important;
-  transform: none !important;
-}
-
+/* Main output handle */
 .enhanced-handle.main-output {
   background: #10b981 !important;
   width: 14px !important;
@@ -458,11 +453,12 @@
   width: 520px !important;
 }
 
-/* Base editable node override to prevent stretching */
+/* Base editable node override with overflow for handles */
 .epic1-editable-node.weighted-choice.enhanced-branching {
   width: 520px !important;
   max-width: 520px !important;
   min-width: 520px !important;
+  overflow: visible !important;
 }
 
 /* Fix for handle positioning */

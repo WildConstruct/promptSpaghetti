@@ -25,6 +25,12 @@
   width: fit-content !important;
 }
 
+/* Remove all ReactFlow selection outlines */
+.react-flow__node:focus,
+.react-flow__node:focus-visible {
+  outline: none !important;
+}
+
 /* Special case for enhanced branching to allow handles */
 .epic1-editable-node.weighted-choice.enhanced-branching {
   overflow: visible !important;
@@ -66,19 +72,19 @@
   outline: none !important;
 }
 
-/* Disable ReactFlow's default selection outline */
+/* Disable ReactFlow's default selection outline completely */
+.react-flow__node.selected,
+.react-flow__node-default.selected,
 .react-flow__node.selected .epic1-editable-node {
   outline: none !important;
-  box-shadow: 0 4px 8px rgba(91, 158, 255, 0.3) !important;
+  outline-offset: 0 !important;
 }
 
-/* Override ReactFlow's selection box */
-.react-flow__node.selected {
-  outline: none !important;
-}
-
-.react-flow__node-default.selected {
-  outline: none !important;
+/* Remove any possible selection box from ReactFlow wrapper */
+.react-flow__node.selectable.selected::before,
+.react-flow__node.selectable.selected::after {
+  content: none !important;
+  display: none !important;
 }
 
 /* Node content container */

@@ -149,7 +149,18 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         strokeWidth="1"
       />
       
-      {/* No percentage display */}
+      {/* Percentage display in center */}
+      <text
+        x="22"
+        y="22"
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill="#e0e0e0"
+        fontSize="11"
+        fontWeight="600"
+      >
+        {percentage}%
+      </text>
     </svg>
   );
 };
@@ -295,9 +306,10 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                   id="main-output"
                   className="enhanced-handle main-output"
                   style={{ 
-                    top: -8,
-                    right: -8,
-                    left: 'auto'
+                    top: 0,
+                    right: 0,
+                    left: 'auto',
+                    transform: 'translate(50%, -50%)'
                   }}
                 />
               )}
@@ -413,7 +425,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                       </button>
                     )}
 
-                    {/* Branch output handle - positioned outside node bounds */}
+                    {/* Branch output handle - positioned at edge */}
                     {option.hasBranch && (
                       <Handle
                         type="source"
@@ -422,7 +434,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                         className="enhanced-handle branch-output"
                         style={{ 
                           position: 'absolute',
-                          right: -8,
+                          right: -6,
                           top: '50%',
                           transform: 'translateY(-50%)',
                           zIndex: 1000
@@ -473,9 +485,10 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                 id="main-output"
                 className="enhanced-handle main-output"
                 style={{ 
-                  top: -8,
-                  right: -8,
-                  left: 'auto'
+                  top: 0,
+                  right: 0,
+                  left: 'auto',
+                  transform: 'translate(50%, -50%)'
                 }}
               />
             )}
