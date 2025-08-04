@@ -149,19 +149,7 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         strokeWidth="1"
       />
       
-      {/* Center percentage text with % symbol */}
-      <text
-        x="22"
-        y="22"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill="white"
-        fontSize="16"
-        fontWeight="600"
-        style={{ userSelect: 'none' }}
-      >
-        {percentage}%
-      </text>
+      {/* No percentage display */}
     </svg>
   );
 };
@@ -365,6 +353,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                     onDragStart={(e) => handleDragStart(e, index)}
                     onDragOver={(e) => handleDragOver(e, index)}
                     onDragEnd={handleDragEnd}
+                    onMouseDown={(e) => e.stopPropagation()}
                   >
                     {/* Drag handle */}
                     <div className="enhanced-drag-handle">
@@ -378,7 +367,11 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                       value={option.text}
                       onChange={(e) => updateOptionText(index, e.target.value)}
                       placeholder="Option text..."
-                      onMouseDown={(e) => e.stopPropagation()}
+                      onMouseDown={(e) => {
+                        e.stopPropagation();
+                        e.currentTarget.focus();
+                      }}
+                      onClick={(e) => e.stopPropagation()}
                     />
                     
                     {/* Simplified radio dial */}
@@ -391,7 +384,11 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                     {/* Branch toggle */}
                     <button
                       className={`branch-toggle ${option.hasBranch ? 'active' : ''}`}
-                      onClick={() => toggleBranch(index)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleBranch(index);
+                      }}
+                      onMouseDown={(e) => e.stopPropagation()}
                       title="Toggle branch output"
                     >
                       ⚡
@@ -401,7 +398,11 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                     {options.length > 1 && (
                       <button
                         className="remove-btn"
-                        onClick={() => removeOption(index)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeOption(index);
+                        }}
+                        onMouseDown={(e) => e.stopPropagation()}
                         title="Remove option"
                       >
                         ×

@@ -25,9 +25,9 @@
   width: fit-content !important;
 }
 
-/* Special case for enhanced branching to contain content */
+/* Special case for enhanced branching to allow handles */
 .epic1-editable-node.weighted-choice.enhanced-branching {
-  overflow: hidden;
+  overflow: visible !important;
 }
 
 /* Dragging state */
@@ -51,9 +51,10 @@
   border-color: #5b9eff;
   border-width: 2px; /* Keep same border width to avoid layout shift */
   border-radius: 12px; /* Ensure radius is maintained */
-  cursor: text;
-  z-index: 100;
+  cursor: default;
+  z-index: 1000 !important;
   background: #252525;
+  position: relative;
   /* Remove outline to avoid expanding the node */
 }
 

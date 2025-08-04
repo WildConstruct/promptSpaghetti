@@ -158,7 +158,8 @@ export const BaseEditableNode = memo(({
     <div
       ref={nodeRef}
       className={`epic1-editable-node ${className} ${isEditing ? 'editing' : ''} ${selected ? 'selected' : ''} ${animationClasses}`}
-      onClick={!isEditing ? handleNodeClick : undefined}
+      onClick={handleNodeClick}
+      onMouseDown={isEditing ? (e) => e.stopPropagation() : undefined}
       onContextMenu={handleContextMenu}
       onKeyDown={handleKeyDown}
       style={{
