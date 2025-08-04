@@ -119,6 +119,7 @@
   height: 12px;
   background: #5b9eff;
   border: 2px solid #1a1a1a;
+  border-radius: 50%;
   transition: all 0.2s ease;
   position: absolute !important;
   top: 50% !important;
@@ -138,11 +139,11 @@
 }
 
 .epic1-handle.target {
-  left: -6px !important;
+  left: -10px !important; /* Position on the border edge (half of 12px width + 2px border + 2px node border) */
 }
 
 .epic1-handle.source {
-  right: -6px !important;
+  right: -10px !important; /* Position on the border edge (half of 12px width + 2px border + 2px node border) */
 }
 
 /* No position adjustment needed on hover since we're using scale transform */
@@ -284,7 +285,7 @@
 /* Fix output node handle positioning */
 .epic1-editable-node.output .epic1-handle.target {
   position: absolute !important;
-  left: -8px !important; /* Align with the border edge */
+  left: -12px !important; /* Align with the border edge (half of 16px width + 2px border + 2px node border) */
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 10;

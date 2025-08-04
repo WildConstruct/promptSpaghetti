@@ -565,7 +565,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       className="enhanced-handle branch-output"
                       style={{ 
                         position: 'absolute',
-                        right: -8,
+                        right: -10, // Position on frame edge in display mode
                         top: '50%',
                         transform: 'translateY(-50%)'
                       }}
@@ -584,7 +584,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 className="enhanced-handle main-output"
                 style={{ 
                   position: 'absolute',
-                  right: -8,
+                  right: -10, // Position on frame edge in display mode
                   top: '10%',
                   transform: 'translateY(-50%)'
                 }}

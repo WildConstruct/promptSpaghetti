@@ -371,7 +371,7 @@
 
 .enhanced-handle.branch-output {
   background: #f59e0b !important;
-  right: -6px !important;
+  /* right positioning is handled inline for proper display/edit mode control */
 }
 
 .enhanced-handle:hover {
