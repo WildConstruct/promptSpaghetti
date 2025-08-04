@@ -190,7 +190,7 @@ const WEIGHT_PRESETS = {
   rampDown: { icon: '📉', title: 'Ramp down' }
 };
 
-export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNodeData>) => {
+const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeData>) => {
   const [options, setOptions] = useState<WeightedOption[]>(props.data.options || []);
   const [title, setTitle] = useState(props.data.title || 'Weighted Choice');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -581,7 +581,9 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
       }}
     </BaseEditableNode>
   );
-});
+};
+
+export const EnhancedBranchingNode = memo(EnhancedBranchingNodeComponent);
 
 EnhancedBranchingNode.displayName = 'EnhancedBranchingNode';
 export default EnhancedBranchingNode;

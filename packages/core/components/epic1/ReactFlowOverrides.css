@@ -1,5 +1,25 @@
 /* Global ReactFlow override styles to remove ALL selection outlines */
 
+/* CRITICAL FIX: Completely disable dragging for weightedChoice nodes */
+.react-flow__node-weightedChoice {
+  pointer-events: none !important;
+}
+
+.react-flow__node-weightedChoice > div {
+  pointer-events: all !important;
+}
+
+/* Ensure the enhanced branching editor captures all events */
+.enhanced-branching-editor {
+  pointer-events: all !important;
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+.enhanced-branching-editor * {
+  pointer-events: all !important;
+}
+
 /* Remove all possible ReactFlow selection styles */
 .react-flow__node.selected,
 .react-flow__node-default.selected,
