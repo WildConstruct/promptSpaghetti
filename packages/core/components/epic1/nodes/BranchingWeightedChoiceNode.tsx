@@ -223,66 +223,72 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                       <DragHandleIcon />
                     </div>
 
-                    <div className="epic1-option-content">
-                      <input
-                        type="text"
-                        className="epic1-option-text nodrag"
-                        value={option.text}
-                        onChange={(e) => updateOptionText(index, e.target.value)}
-                        placeholder="Option text..."
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                      <div className="epic1-weight-controls">
-                        <input
-                          type="range"
-                          className="epic1-weight-slider nodrag"
-                          min="0"
-                          max="100"
-                          value={option.weight}
-                          onChange={(e) => updateOptionWeight(index, parseInt(e.target.value))}
-                          onMouseDown={(e) => e.stopPropagation()}
-                          style={{ '--value': `${option.weight}%` } as React.CSSProperties}
-                        />
-                        <div style={{ 
-                          display: 'flex', 
-                          flexDirection: 'column', 
-                          alignItems: 'flex-end',
-                          minWidth: '45px'
-                        }}>
-                          <span className="epic1-weight-value" style={{ fontSize: '11px', color: '#f59e0b' }}>
-                            {option.weight}
-                          </span>
-                          <span style={{ fontSize: '9px', color: '#60a5fa' }}>
-                            {percentages[index]}%
-                          </span>
-                        </div>
-                        
-                        {/* Branch toggle button */}
-                        <button
-                          className={`epic1-branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleBranch(index);
-                          }}
-                          title="Toggle branch output"
-                        >
-                          ⚡
-                        </button>
-
-                        {options.length > 1 && (
-                          <button
-                            className="epic1-remove-option nodrag"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              removeOption(index);
-                            }}
-                            title="Remove option"
-                          >
-                            ×
-                          </button>
-                        )}
-                      </div>
+                    <input
+                      type="text"
+                      className="epic1-option-text nodrag"
+                      value={option.text}
+                      onChange={(e) => updateOptionText(index, e.target.value)}
+                      placeholder="Option text..."
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ flex: '1', minWidth: '100px' }}
+                    />
+                    
+                    <input
+                      type="range"
+                      className="epic1-weight-slider nodrag"
+                      min="0"
+                      max="100"
+                      value={option.weight}
+                      onChange={(e) => updateOptionWeight(index, parseInt(e.target.value))}
+                      onMouseDown={(e) => e.stopPropagation()}
+                      style={{ 
+                        '--value': `${option.weight}%`,
+                        width: '80px',
+                        flexShrink: 0
+                      } as React.CSSProperties}
+                    />
+                    
+                    <div style={{ 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      alignItems: 'flex-end',
+                      minWidth: '45px',
+                      flexShrink: 0
+                    }}>
+                      <span className="epic1-weight-value" style={{ fontSize: '11px', color: '#f59e0b' }}>
+                        {option.weight}
+                      </span>
+                      <span style={{ fontSize: '9px', color: '#60a5fa' }}>
+                        {percentages[index]}%
+                      </span>
                     </div>
+                    
+                    {/* Branch toggle button */}
+                    <button
+                      className={`epic1-branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleBranch(index);
+                      }}
+                      title="Toggle branch output"
+                      style={{ flexShrink: 0 }}
+                    >
+                      ⚡
+                    </button>
+
+                    {options.length > 1 && (
+                      <button
+                        className="epic1-remove-option nodrag"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeOption(index);
+                        }}
+                        title="Remove option"
+                        style={{ flexShrink: 0 }}
+                      >
+                        ×
+                      </button>
+                    )}
 
                     {/* Branch output handle */}
                     {option.hasBranch && (

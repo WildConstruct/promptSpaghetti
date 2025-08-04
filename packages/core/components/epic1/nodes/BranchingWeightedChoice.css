@@ -3,20 +3,25 @@
 /* Wider node for branching */
 .epic1-weighted-choice-editor.branching {
   min-width: 400px;
+  max-width: 500px; /* Prevent excessive stretching */
+  width: 400px; /* Fixed width to prevent stretching bug */
 }
 
 /* Option row with drag handle space */
 .epic1-option-row.branching {
   display: flex;
+  flex-direction: row; /* Ensure horizontal layout */
   align-items: center;
   gap: 8px;
-  padding: 10px 8px;
+  padding: 8px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   position: relative;
   transition: all 0.2s ease;
   cursor: move;
+  min-height: 40px;
+  max-height: 50px; /* Prevent options from getting too tall */
 }
 
 .epic1-option-row.branching:hover {
@@ -60,8 +65,9 @@
 .epic1-option-content {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-direction: row; /* Changed from column to row for horizontal layout */
+  align-items: center;
+  gap: 8px;
   min-width: 0; /* Allow content to shrink */
 }
 
@@ -159,18 +165,19 @@
   margin-right: -4px; /* Compensate for scrollbar */
 }
 
-/* Weight controls adjustment for branch button */
-.epic1-option-row.branching .epic1-weight-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
+/* Style overrides for input fields in branching mode */
+.epic1-option-row.branching .epic1-option-text {
+  height: 30px;
+  padding: 4px 8px;
+  flex: 1;
+  min-width: 100px;
 }
 
-/* Ensure slider takes appropriate space */
+/* Ensure slider is properly sized */
 .epic1-option-row.branching .epic1-weight-slider {
-  flex: 1;
-  min-width: 120px;
+  width: 80px !important;
+  height: 6px;
+  flex-shrink: 0;
 }
 
 /* Hints for branching mode */
