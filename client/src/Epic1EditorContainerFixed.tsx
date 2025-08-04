@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import ReactFlow, { ReactFlowProvider, Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { ToastContainer, useToast } from './Toast';
+import { ellipticalFrameLayout, type LayoutOptions } from '@promptscape/core/utils/frameLayouts';
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
 import '@promptscape/core/components/epic1/nodes/BaseEditableNode.css';
 import '@promptscape/core/components/epic1/nodes/NodeStyles.css';
@@ -26,9 +27,94 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
   const [loadError, setLoadError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   
-  // Graph state - start with empty
-  const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
-  const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
+  // Calculate viewport dimensions for frame positioning
+  const viewportWidth = window.innerWidth - 400; // Account for side panels
+  const viewportHeight = window.innerHeight - 100; // Account for menu bar
+  
+  // Layout options for frame positioning
+  const layoutOptions: LayoutOptions = {
+    viewportWidth,
+    viewportHeight,
+    nodeWidth: 280,
+    nodeHeight: 140,
+    padding: 50
+  };
+  
+  // Demo initial data - positioned at frame edges
+  const demoNodes: Node[] = [
+    {
+      id: 'prompt-1',
+      type: 'textBlock',
+      position: ellipticalFrameLayout(0, 5, layoutOptions), // Top position
+      data: {
+        nodeType: 'textBlock',
+        content: 'Generate a character for a',
+        text: 'Generate a character for a',
+        label: 'Prompt Start'
+      }
+    },
+    {
+      id: 'setting-1',
+      type: 'weightedChoice',
+      position: ellipticalFrameLayout(1, 5, layoutOptions), // Top-right position
+      data: {
+        nodeType: 'weightedChoice',
+        options: [
+          { text: 'medieval fantasy', weight: 40 },
+          { text: 'dark medieval', weight: 30 },
+          { text: 'high fantasy', weight: 30 }
+        ],
+        label: 'Setting'
+      }
+    },
+    {
+      id: 'prompt-2',
+      type: 'textBlock',
+      position: ellipticalFrameLayout(2, 5, layoutOptions), // Right position
+      data: {
+        nodeType: 'textBlock',
+        content: 'story. They are a',
+        text: 'story. They are a',
+        label: 'Connector'
+      }
+    },
+    {
+      id: 'character-1',
+      type: 'weightedChoice',
+      position: ellipticalFrameLayout(3, 5, layoutOptions), // Bottom position
+      data: {
+        nodeType: 'weightedChoice',
+        options: [
+          { text: 'brave knight', weight: 25 },
+          { text: 'cunning rogue', weight: 25 },
+          { text: 'wise wizard', weight: 25 },
+          { text: 'mysterious ranger', weight: 25 }
+        ],
+        label: 'Character Type'
+      }
+    },
+    {
+      id: 'output-1',
+      type: 'output',
+      position: ellipticalFrameLayout(4, 5, layoutOptions), // Left position
+      data: {
+        nodeType: 'output',
+        outputName: 'character_prompt',
+        label: 'Character Prompt'
+      }
+    }
+  ];
+
+  const demoEdges: Edge[] = [
+    { id: 'e1', source: 'prompt-1', target: 'setting-1', animated: true },
+    { id: 'e2', source: 'setting-1', target: 'prompt-2', animated: true },
+    { id: 'e3', source: 'prompt-2', target: 'character-1', animated: true },
+    { id: 'e4', source: 'character-1', target: 'output-1', animated: true }
+  ];
+  
+  // Graph state - start with demo nodes at frame edges
+  const [currentNodes, setCurrentNodes] = useState<Node[]>(demoNodes);
+  const [currentEdges, setCurrentEdges] = useState<Edge[]>(demoEdges);
   
   // History for undo/redo
   const [history, setHistory] = useState<{ nodes: Node[], edges: Edge[] }[]>([{ nodes: [], edges: [] }]);
@@ -56,9 +142,9 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
   // File menu handlers
   const handleNew = useCallback(() => {
     if (window.confirm('Create a new graph? Any unsaved changes will be lost.')) {
-      setCurrentNodes([]);
-      setCurrentEdges([]);
-      setHistory([{ nodes: [], edges: [] }]);
+      setCurrentNodes(demoNodes);
+      setCurrentEdges(demoEdges);
+      setHistory([{ nodes: demoNodes, edges: demoEdges }]);
       setHistoryIndex(0);
       setEditorKey(prev => prev + 1);
       localStorage.removeItem('epic1-graph');
