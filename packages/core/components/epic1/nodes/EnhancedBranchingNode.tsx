@@ -110,7 +110,7 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
       width="44" 
       height="44" 
       viewBox="0 0 44 44" 
-      className="radio-dial-simple"
+      className="radio-dial-simple nodrag"
       onMouseDown={handleMouseDown}
       style={{ 
         cursor: disabled ? 'default' : 'pointer',
@@ -410,7 +410,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   >
                     {/* Drag handle - initiate option dragging */}
                     <div 
-                      className="enhanced-drag-handle"
+                      className="enhanced-drag-handle nodrag"
                       draggable="true"
                       onDragStart={(e) => handleDragStart(e, index)}
                       onDragEnd={handleDragEnd}
@@ -428,7 +428,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     {/* Text input - maximized width */}
                     <input
                       type="text"
-                      className="enhanced-option-text"
+                      className="enhanced-option-text nodrag"
                       value={option.text}
                       onChange={(e) => updateOptionText(index, e.target.value)}
                       placeholder="Option text..."
@@ -449,7 +449,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     
                     {/* Branch toggle */}
                     <button
-                      className={`branch-toggle ${option.hasBranch ? 'active' : ''}`}
+                      className={`branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleBranch(index);
@@ -463,7 +463,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     {/* Remove button */}
                     {options.length > 1 && (
                       <button
-                        className="remove-btn"
+                        className="remove-btn nodrag"
                         onClick={(e) => {
                           e.stopPropagation();
                           removeOption(index);
