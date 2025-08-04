@@ -4,6 +4,7 @@
 import { BaseEditableNode } from './BaseEditableNode';
 import { TextBlockNode } from './TextBlockNode';
 import { WeightedChoiceNode } from './WeightedChoiceNode';
+import { ImprovedWeightedChoiceNode } from './ImprovedWeightedChoiceNode';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
@@ -17,6 +18,7 @@ export { TextBlockNode };
 export type { TextBlockNodeData } from './TextBlockNode';
 
 export { WeightedChoiceNode };
+export { ImprovedWeightedChoiceNode };
 export type { WeightedChoiceNodeData, WeightedOption } from './WeightedChoiceNode';
 
 export { ConcatNode };
@@ -34,7 +36,7 @@ export type { ContextMenuPosition } from './NodeContextMenu';
 // Now we can safely create the node type mapping
 export const epic1NodeTypes = {
   textBlock: TextBlockNode,
-  weightedChoice: WeightedChoiceNode,
+  weightedChoice: ImprovedWeightedChoiceNode, // Use improved version with raw weights and presets
   concat: ConcatNode,
   variable: VariableNode,
   setVariable: VariableNode,

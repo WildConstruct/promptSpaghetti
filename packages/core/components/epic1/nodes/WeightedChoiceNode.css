@@ -76,7 +76,8 @@
   flex-direction: column;
   gap: 12px;
   margin-bottom: 12px;
-  max-height: 240px;
+  min-height: 120px;
+  max-height: 480px; /* Doubled from 240px to allow more options visible */
   overflow-y: auto;
   overflow-x: hidden;
   padding-right: 4px;

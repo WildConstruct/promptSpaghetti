@@ -4,7 +4,8 @@
   background: #1a1a1a;
   border: 2px solid #333333;
   border-radius: 12px;  /* Increased for smoother corners */
-  padding: 12px;
+  padding: 16px 20px;  /* Increased horizontal padding for drag space */
+  margin: 0 8px;  /* Add margin to create more space between nodes */
   cursor: grab;
   position: relative;
   overflow: visible;
