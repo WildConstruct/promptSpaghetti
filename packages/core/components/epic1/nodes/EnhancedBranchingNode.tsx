@@ -397,25 +397,22 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                   <div 
                     key={index} 
                     className={`enhanced-option-row ${draggedIndex === index ? 'dragging' : ''}`}
-                    draggable="true"
-                    onDragStart={(e) => handleDragStart(e, index)}
                     onDragOver={(e) => handleDragOver(e, index)}
-                    onDragEnd={handleDragEnd}
                     onDrop={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                     }}
                     onMouseDown={(e) => {
-                      // Stop propagation for everything except the drag handle
-                      const isDragHandle = (e.target as HTMLElement).closest('.enhanced-drag-handle');
-                      if (!isDragHandle) {
-                        e.stopPropagation();
-                      }
+                      // Always stop propagation to prevent node dragging
+                      e.stopPropagation();
                     }}
                   >
                     {/* Drag handle - initiate option dragging */}
                     <div 
                       className="enhanced-drag-handle"
+                      draggable="true"
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragEnd={handleDragEnd}
                       style={{ cursor: 'grab' }}
                       title="Drag to reorder"
                     >
@@ -438,19 +435,11 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                     />
                     
                     {/* Simplified radio dial with proper event handling */}
-                    <div 
-                      onMouseDown={(e) => {
-                        e.stopPropagation();
-                        e.nativeEvent.stopImmediatePropagation();
-                      }}
-                      style={{ pointerEvents: 'all', position: 'relative', zIndex: 20 }}
-                    >
-                      <RadioDial
-                        value={option.weight}
-                        onChange={(val) => updateOptionWeight(index, val)}
-                        percentage={percentages[index]}
-                      />
-                    </div>
+                    <RadioDial
+                      value={option.weight}
+                      onChange={(val) => updateOptionWeight(index, val)}
+                      percentage={percentages[index]}
+                    />
                     
                     {/* Branch toggle */}
                     <button
