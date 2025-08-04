@@ -28,16 +28,45 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
   const [loadError, setLoadError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   
-  // Simple viewport dimensions - same as working test
-  const viewportWidth = window.innerWidth - 400; // Account for panels
-  const viewportHeight = window.innerHeight - 100; // Account for menu
+  // Simple viewport dimensions - ensure valid numbers
+  const viewportWidth = Math.max(800, (window.innerWidth || 1200) - 400); // Account for panels, minimum 800
+  const viewportHeight = Math.max(600, (window.innerHeight || 800) - 100); // Account for menu, minimum 600
   
-  // Demo nodes - using EXACT positions that work in test component
+  // Debug: Log viewport dimensions
+  console.log('[Epic1EditorContainerFixed] Viewport dimensions:', {
+    viewportWidth,
+    viewportHeight,
+    windowWidth: window.innerWidth,
+    windowHeight: window.innerHeight,
+    isValid: !isNaN(viewportWidth) && !isNaN(viewportHeight)
+  });
+  
+  // Validate dimensions
+  if (isNaN(viewportWidth) || isNaN(viewportHeight)) {
+    console.error('[Epic1EditorContainerFixed] Invalid viewport dimensions!', { viewportWidth, viewportHeight });
+  }
+  
+  // Demo nodes - positioned at exact frame edges
+  // Using proper edge calculations without arbitrary offsets
+  const nodeWidth = 280; // Standard node width
+  const nodeHeight = 140; // Standard node height
+  const edgePadding = 20; // Padding from viewport edges
+  
+  const nodePositions = {
+    topCenter: { x: (viewportWidth - nodeWidth) / 2, y: edgePadding },
+    rightMiddle: { x: viewportWidth - nodeWidth - edgePadding, y: (viewportHeight - nodeHeight) / 2 },
+    bottomRight: { x: viewportWidth - nodeWidth - edgePadding, y: viewportHeight - nodeHeight - edgePadding },
+    bottomCenter: { x: (viewportWidth - nodeWidth) / 2, y: viewportHeight - nodeHeight - edgePadding },
+    leftMiddle: { x: edgePadding, y: (viewportHeight - nodeHeight) / 2 }
+  };
+  
+  console.log('[Epic1EditorContainerFixed] Node positions:', nodePositions);
+  
   const demoNodes: Node[] = [
     {
       id: 'prompt-1',
       type: 'textBlock',
-      position: { x: viewportWidth / 2 - 140, y: 10 }, // Top center, 10px from edge
+      position: nodePositions.topCenter, // Top center, 10px from edge
       draggable: false,
       selectable: true,
       data: {
@@ -51,7 +80,7 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
     {
       id: 'setting-1',
       type: 'weightedChoice',
-      position: { x: viewportWidth - 300, y: viewportHeight / 2 - 70 }, // Right edge
+      position: nodePositions.rightMiddle, // Right edge
       draggable: false,
       selectable: true,
       data: {
@@ -68,7 +97,7 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
     {
       id: 'prompt-2',
       type: 'textBlock',
-      position: { x: viewportWidth - 300, y: viewportHeight - 150 }, // Bottom-right
+      position: nodePositions.bottomRight, // Bottom-right
       draggable: false,
       selectable: true,
       data: {
@@ -82,7 +111,7 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
     {
       id: 'character-1',
       type: 'weightedChoice',
-      position: { x: viewportWidth / 2 - 140, y: viewportHeight - 150 }, // Bottom center
+      position: nodePositions.bottomCenter, // Bottom center
       draggable: false,
       selectable: true,
       data: {
@@ -100,7 +129,7 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
     {
       id: 'output-1',
       type: 'output',
-      position: { x: 10, y: viewportHeight / 2 - 70 }, // Left edge, 10px from edge
+      position: nodePositions.leftMiddle, // Left edge, 10px from edge
       draggable: false,
       selectable: true,
       data: {
@@ -581,10 +610,16 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           showAssetLibrary={false} // Hide left palette
           assetLibraryPosition={assetLibraryPosition}
           onNodesChange={(nodes) => {
+            console.log('[Epic1EditorContainerFixed] onNodesChange called with', nodes.length, 'nodes');
+            console.log('[Epic1EditorContainerFixed] Node positions before fix:', 
+              nodes.map(n => ({ id: n.id, position: n.position })));
+            
             // CRITICAL FIX: Force frame edge nodes to stay at edges!
             const fixedNodes = nodes.map(node => {
               const originalNode = demoNodes.find(n => n.id === node.id);
               if (originalNode && originalNode.position) {
+                console.log(`[Epic1EditorContainerFixed] Forcing node ${node.id} back to edge position:`, 
+                  originalNode.position);
                 // Override any position changes for frame edge nodes
                 return {
                   ...node,
@@ -594,6 +629,9 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
               }
               return node;
             });
+            
+            console.log('[Epic1EditorContainerFixed] Node positions after fix:', 
+              fixedNodes.map(n => ({ id: n.id, position: n.position })));
             
             if (JSON.stringify(fixedNodes) !== JSON.stringify(currentNodes)) {
               setCurrentNodes(fixedNodes);
