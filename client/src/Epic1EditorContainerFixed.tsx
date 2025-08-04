@@ -28,16 +28,17 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
   const [isLoading, setIsLoading] = useState(true);
   
   // Calculate viewport dimensions for frame positioning
-  const viewportWidth = window.innerWidth - 400; // Account for side panels
-  const viewportHeight = window.innerHeight - 100; // Account for menu bar
+  // Use the full viewport minus only the actual UI elements
+  const viewportWidth = window.innerWidth - 300; // Account for right preview panel
+  const viewportHeight = window.innerHeight - 50; // Account for menu bar
   
-  // Layout options for frame positioning
+  // Layout options for frame positioning with minimal padding
   const layoutOptions: LayoutOptions = {
     viewportWidth,
     viewportHeight,
     nodeWidth: 280,
     nodeHeight: 140,
-    padding: 50
+    padding: 20  // Very small padding to keep nodes just inside viewport edges
   };
   
   // Demo initial data - positioned at frame edges
@@ -45,18 +46,20 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
     {
       id: 'prompt-1',
       type: 'textBlock',
-      position: ellipticalFrameLayout(0, 5, layoutOptions), // Top position
+      position: ellipticalFrameLayout(0, 5, layoutOptions), // Top edge
       data: {
         nodeType: 'textBlock',
         content: 'Generate a character for a',
         text: 'Generate a character for a',
-        label: 'Prompt Start'
+        label: 'Prompt Start',
+        // Add visual indicator for edge connection
+        showEdgeConnection: true
       }
     },
     {
       id: 'setting-1',
       type: 'weightedChoice',
-      position: ellipticalFrameLayout(1, 5, layoutOptions), // Top-right position
+      position: ellipticalFrameLayout(1, 5, layoutOptions), // Right edge
       data: {
         nodeType: 'weightedChoice',
         options: [
@@ -64,7 +67,8 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           { text: 'dark medieval', weight: 30 },
           { text: 'high fantasy', weight: 30 }
         ],
-        label: 'Setting'
+        label: 'Setting',
+        showEdgeConnection: true
       }
     },
     {
@@ -81,7 +85,7 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
     {
       id: 'character-1',
       type: 'weightedChoice',
-      position: ellipticalFrameLayout(3, 5, layoutOptions), // Bottom position
+      position: ellipticalFrameLayout(3, 5, layoutOptions), // Bottom edge
       data: {
         nodeType: 'weightedChoice',
         options: [
@@ -90,17 +94,19 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           { text: 'wise wizard', weight: 25 },
           { text: 'mysterious ranger', weight: 25 }
         ],
-        label: 'Character Type'
+        label: 'Character Type',
+        showEdgeConnection: true
       }
     },
     {
       id: 'output-1',
       type: 'output',
-      position: ellipticalFrameLayout(4, 5, layoutOptions), // Left position
+      position: ellipticalFrameLayout(4, 5, layoutOptions), // Left edge
       data: {
         nodeType: 'output',
         outputName: 'character_prompt',
-        label: 'Character Prompt'
+        label: 'Character Prompt',
+        showEdgeConnection: true
       }
     }
   ];

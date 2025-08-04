@@ -71,7 +71,8 @@ export function rectangularFrameLayout(
 }
 
 /**
- * Creates an elliptical/circular frame layout
+ * Creates nodes positioned at the absolute edges of the viewport frame
+ * Nodes are pinned to the outer boundaries with minimal padding
  */
 export function ellipticalFrameLayout(
   index: number,
@@ -83,25 +84,51 @@ export function ellipticalFrameLayout(
     viewportHeight,
     nodeWidth = 200,
     nodeHeight = 100,
-    padding = 100
+    padding = 10  // Minimal padding from absolute edge
   } = options;
 
-  const centerX = viewportWidth / 2;
-  const centerY = viewportHeight / 2;
-  const radiusX = (viewportWidth / 2) - padding;
-  const radiusY = (viewportHeight / 2) - padding;
+  // Calculate angle for this node position
+  const angle = (index / total) * 2 * Math.PI - Math.PI / 2; // Start from top
   
-  // Start from top and go clockwise
-  const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
+  // Get normalized direction
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
   
-  const x = centerX + radiusX * Math.cos(angle) - nodeWidth / 2;
-  const y = centerY + radiusY * Math.sin(angle) - nodeHeight / 2;
+  // Determine which edge this node should be pinned to
+  // by checking which direction component is larger
+  const absX = Math.abs(cos);
+  const absY = Math.abs(sin);
   
-  // Ensure nodes stay within viewport bounds
-  return {
-    x: Math.max(padding / 2, Math.min(viewportWidth - nodeWidth - padding / 2, x)),
-    y: Math.max(padding / 2, Math.min(viewportHeight - nodeHeight - padding / 2, y))
-  };
+  let x: number;
+  let y: number;
+  
+  if (absX > absY) {
+    // Node belongs on left or right edge
+    if (cos > 0) {
+      // Right edge - pin to right boundary
+      x = viewportWidth - nodeWidth - padding;
+    } else {
+      // Left edge - pin to left boundary
+      x = padding;
+    }
+    // Position along the vertical axis based on angle
+    const normalizedY = (sin + 1) / 2; // Convert from -1,1 to 0,1
+    y = padding + normalizedY * (viewportHeight - nodeHeight - padding * 2);
+  } else {
+    // Node belongs on top or bottom edge
+    if (sin > 0) {
+      // Bottom edge - pin to bottom boundary
+      y = viewportHeight - nodeHeight - padding;
+    } else {
+      // Top edge - pin to top boundary  
+      y = padding;
+    }
+    // Position along the horizontal axis based on angle
+    const normalizedX = (cos + 1) / 2; // Convert from -1,1 to 0,1
+    x = padding + normalizedX * (viewportWidth - nodeWidth - padding * 2);
+  }
+  
+  return { x, y };
 }
 
 /**
