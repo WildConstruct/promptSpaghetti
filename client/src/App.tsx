@@ -1,11 +1,18 @@
 import React from 'react';
 import { Epic1EditorContainerFixed } from './Epic1EditorContainerFixed';
+import { FrameEdgeNodes } from './FrameEdgeNodes';
 import './App.css';
 
 function App() {
-  console.log('App component rendering with Epic 1 Editor...');
+  console.log('App component rendering with Frame Edge Nodes test...');
   
-  // Always render the real Epic1GraphEditor
+  // Switch back to Epic1 editor with fixed positioning
+  const testFrameEdges = false;
+  
+  if (testFrameEdges) {
+    return <FrameEdgeNodes />;
+  }
+  
   return (
     <div className="App" style={{ width: '100vw', height: '100vh' }}>
       <Epic1EditorContainerFixed 

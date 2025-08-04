@@ -28,59 +28,30 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
   const [loadError, setLoadError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   
-  // Calculate actual viewport dimensions
-  // Use useEffect to ensure we get accurate dimensions after mount
-  const [viewportDimensions, setViewportDimensions] = useState({
-    width: window.innerWidth - 300,
-    height: window.innerHeight - 50
-  });
+  // Simple viewport dimensions - same as working test
+  const viewportWidth = window.innerWidth - 400; // Account for panels
+  const viewportHeight = window.innerHeight - 100; // Account for menu
   
-  useEffect(() => {
-    const updateDimensions = () => {
-      setViewportDimensions({
-        width: window.innerWidth - 300,
-        height: window.innerHeight - 50
-      });
-    };
-    
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
-  
-  const viewportWidth = viewportDimensions.width;
-  const viewportHeight = viewportDimensions.height;
-  
-  // Layout options for frame positioning with minimal padding
-  const layoutOptions: LayoutOptions = {
-    viewportWidth,
-    viewportHeight,
-    nodeWidth: 280,
-    nodeHeight: 140,
-    padding: 20  // Very small padding to keep nodes just inside viewport edges
-  };
-  
-  // Demo initial data - positioned at frame edges
+  // Demo nodes - using EXACT positions that work in test component
   const demoNodes: Node[] = [
     {
       id: 'prompt-1',
       type: 'textBlock',
-      position: ellipticalFrameLayout(0, 5, layoutOptions), // Top edge
-      draggable: false, // Prevent dragging to keep at edge
+      position: { x: viewportWidth / 2 - 140, y: 10 }, // Top center, 10px from edge
+      draggable: false,
       selectable: true,
       data: {
         nodeType: 'textBlock',
         content: 'Generate a character for a',
         text: 'Generate a character for a',
         label: 'Prompt Start',
-        showEdgeConnection: true,
-        frameEdge: 'top' // Mark which edge this node is on
+        frameEdge: 'top'
       }
     },
     {
       id: 'setting-1',
       type: 'weightedChoice',
-      position: ellipticalFrameLayout(1, 5, layoutOptions), // Right edge
+      position: { x: viewportWidth - 300, y: viewportHeight / 2 - 70 }, // Right edge
       draggable: false,
       selectable: true,
       data: {
@@ -91,14 +62,13 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           { text: 'high fantasy', weight: 30 }
         ],
         label: 'Setting',
-        showEdgeConnection: true,
         frameEdge: 'right'
       }
     },
     {
       id: 'prompt-2',
       type: 'textBlock',
-      position: ellipticalFrameLayout(2, 5, layoutOptions), // Bottom-right position
+      position: { x: viewportWidth - 300, y: viewportHeight - 150 }, // Bottom-right
       draggable: false,
       selectable: true,
       data: {
@@ -106,14 +76,13 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
         content: 'story. They are a',
         text: 'story. They are a',
         label: 'Connector',
-        showEdgeConnection: true,
         frameEdge: 'bottom'
       }
     },
     {
       id: 'character-1',
       type: 'weightedChoice',
-      position: ellipticalFrameLayout(3, 5, layoutOptions), // Bottom-left edge
+      position: { x: viewportWidth / 2 - 140, y: viewportHeight - 150 }, // Bottom center
       draggable: false,
       selectable: true,
       data: {
@@ -125,21 +94,19 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           { text: 'mysterious ranger', weight: 25 }
         ],
         label: 'Character Type',
-        showEdgeConnection: true,
         frameEdge: 'bottom'
       }
     },
     {
       id: 'output-1',
       type: 'output',
-      position: ellipticalFrameLayout(4, 5, layoutOptions), // Left edge
+      position: { x: 10, y: viewportHeight / 2 - 70 }, // Left edge, 10px from edge
       draggable: false,
       selectable: true,
       data: {
         nodeType: 'output',
         outputName: 'character_prompt',
         label: 'Character Prompt',
-        showEdgeConnection: true,
         frameEdge: 'left'
       }
     }
