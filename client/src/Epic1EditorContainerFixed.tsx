@@ -581,10 +581,24 @@ export const Epic1EditorContainerFixed: React.FC<Epic1EditorContainerFixedProps>
           showAssetLibrary={false} // Hide left palette
           assetLibraryPosition={assetLibraryPosition}
           onNodesChange={(nodes) => {
-            if (JSON.stringify(nodes) !== JSON.stringify(currentNodes)) {
-              setCurrentNodes(nodes);
+            // CRITICAL FIX: Force frame edge nodes to stay at edges!
+            const fixedNodes = nodes.map(node => {
+              const originalNode = demoNodes.find(n => n.id === node.id);
+              if (originalNode && originalNode.position) {
+                // Override any position changes for frame edge nodes
+                return {
+                  ...node,
+                  position: originalNode.position,
+                  draggable: false
+                };
+              }
+              return node;
+            });
+            
+            if (JSON.stringify(fixedNodes) !== JSON.stringify(currentNodes)) {
+              setCurrentNodes(fixedNodes);
               if (nodes.length !== currentNodes.length) {
-                setTimeout(() => addToHistory(nodes, currentEdges), 300);
+                setTimeout(() => addToHistory(fixedNodes, currentEdges), 300);
               }
             }
           }}
