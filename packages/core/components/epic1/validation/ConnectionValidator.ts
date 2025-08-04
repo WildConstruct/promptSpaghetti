@@ -89,6 +89,20 @@ export class ConnectionValidator {
       return { isValid: false, error: 'Connection would create a cycle' };
     }
 
+    // Check if target already has an incoming connection (except for concat nodes)
+    const targetType = targetNode.type || 'default';
+    if (targetType !== 'concat' && targetType !== 'enhancedBranching') {
+      const hasIncomingConnection = edges.some(e => 
+        e.target === connection.target && 
+        e.targetHandle === connection.targetHandle
+      );
+      if (hasIncomingConnection) {
+        // Note: The connection will be replaced automatically in onConnect handler
+        // We allow this for better UX
+        return { isValid: true };
+      }
+    }
+    
     // Check against rules
     const validationResult = this.checkRules(sourceNode, targetNode, edges);
     

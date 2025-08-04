@@ -521,19 +521,18 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 </div>
               </div>
 
-              {/* Main output at top-right corner when branching enabled */}
+              {/* Main output stays on right edge when branching enabled */}
               {hasBranching && (
                 <Handle
                   type="source"
-                  position={Position.Top}
+                  position={Position.Right}
                   id="main-output"
                   className="enhanced-handle main-output"
                   style={{ 
                     position: 'absolute',
-                    top: -8,
                     right: -8,
-                    left: 'auto',
-                    transform: 'none'
+                    top: '10%',
+                    transform: 'translateY(-50%)'
                   }}
                 />
               )}
@@ -576,18 +575,18 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               ))}
             </div>
 
+            {/* Main output on right edge when branching is enabled */}
             {hasBranching && (
               <Handle
                 type="source"
-                position={Position.Top}
+                position={Position.Right}
                 id="main-output"
                 className="enhanced-handle main-output"
                 style={{ 
                   position: 'absolute',
-                  top: -8,
                   right: -8,
-                  left: 'auto',
-                  transform: 'none'
+                  top: '10%',
+                  transform: 'translateY(-50%)'
                 }}
               />
             )}

@@ -73,3 +73,23 @@
   position: relative;
   z-index: 1000;
 }
+
+/* Show handles when connecting */
+.react-flow__connectionline + .react-flow__nodes .epic1-handle.hidden-handle,
+.react-flow__container.connecting .epic1-handle.hidden-handle {
+  opacity: 0.5 !important;
+  transition: opacity 0.2s ease;
+}
+
+/* Ensure edge selection works */
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #22d3ee !important;
+  stroke-width: 3 !important;
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.6));
+}
+
+/* Edge hover state */
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 3 !important;
+  cursor: pointer;
+}

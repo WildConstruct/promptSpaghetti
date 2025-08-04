@@ -29,9 +29,12 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   const reactFlowInstance = useReactFlow();
   const [showHelp, setShowHelp] = useState(false);
   
-  // Get selected nodes from store with safety check
+  // Get selected nodes and edges from store with safety check
   const selectedNodes = useStore((state) => 
     state?.nodes?.filter(node => node.selected) || []
+  );
+  const selectedEdges = useStore((state) => 
+    state?.edges?.filter(edge => edge.selected) || []
   );
 
   // Pan shortcuts (Arrow keys)
@@ -120,12 +123,19 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
     }
   }, [reactFlowInstance]);
 
-  // Delete selected nodes
+  // Delete selected nodes and edges
   const handleDelete = useCallback(() => {
+    // Handle node deletion
     if (selectedNodes.length > 0 && onDelete) {
       onDelete(selectedNodes);
     }
-  }, [selectedNodes, onDelete]);
+    
+    // Handle edge deletion
+    if (selectedEdges.length > 0) {
+      const edgeIds = selectedEdges.map(e => e.id);
+      reactFlowInstance.setEdges((edges) => edges.filter(e => !edgeIds.includes(e.id)));
+    }
+  }, [selectedNodes, selectedEdges, onDelete, reactFlowInstance]);
 
   // Duplicate selected nodes
   const handleDuplicate = useCallback(() => {

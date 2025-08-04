@@ -186,12 +186,23 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     });
   }, [nodes, selectedNodeId, createNodeData]);
 
-  // Handle new connections
+  // Handle new connections with replacement for single input nodes
   const onConnect = useCallback(
     (params: Connection) => {
       console.log('[Epic1GraphEditor] Connection attempt:', params);
       setEdges((eds) => {
-        const newEdges = addEdge(params, eds);
+        // Check if target already has an incoming connection (single input constraint)
+        const existingIncomingEdge = eds.find(e => e.target === params.target && e.targetHandle === params.targetHandle);
+        
+        let newEdges = eds;
+        if (existingIncomingEdge) {
+          // Replace the existing incoming connection
+          console.log('[Epic1GraphEditor] Replacing existing connection to target:', params.target);
+          newEdges = eds.filter(e => e.id !== existingIncomingEdge.id);
+        }
+        
+        // Add the new edge
+        newEdges = addEdge(params, newEdges);
         console.log('[Epic1GraphEditor] Edges after connection:', newEdges.length, 'edges');
         return newEdges;
       });
@@ -729,6 +740,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             nodeTypes={nodeTypes}
             isValidConnection={isValidConnection}
             connectionMode={ConnectionMode.Loose}
+            connectionLineType="smoothstep"
+            defaultEdgeOptions={{
+              type: 'smoothstep',
+              animated: false,
+              style: { stroke: '#666', strokeWidth: 2 }
+            }}
             fitView={false}
             attributionPosition="bottom-left"
             panOnScroll={false}
@@ -739,7 +756,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             nodesDraggable={true}
             nodesConnectable={true}
             elementsSelectable={true}
-            deleteKeyCode={null}
+            deleteKeyCode={['Delete', 'Backspace']}
             multiSelectionKeyCode="Shift"
             nodeDragThreshold={5}
           >

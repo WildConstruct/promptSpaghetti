@@ -110,13 +110,21 @@
 
 /* Show hidden handle on hover or when connecting */
 .epic1-editable-node.output:hover .epic1-handle.hidden-handle,
-.epic1-editable-node.output .epic1-handle.hidden-handle:hover,
-.react-flow__handle-connecting {
-  opacity: 0.5 !important;
+.epic1-editable-node.output .epic1-handle.hidden-handle:hover {
+  opacity: 0.3 !important;
   transition: opacity 0.2s ease;
 }
 
-/* Always show handle when dragging a connection */
-.react-flow__container.react-flow__connectionline .epic1-handle.hidden-handle {
+/* Always show handle when dragging a connection - using React Flow's connecting class */
+.connecting .epic1-editable-node.output .epic1-handle.target,
+.connectionlineactive .epic1-editable-node.output .epic1-handle.target {
   opacity: 0.5 !important;
+}
+
+/* Also show during valid target state */
+.epic1-valid-target .epic1-handle.target {
+  opacity: 1 !important;
+  background: #10b981 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 1) !important;
+  transform: scale(1.2);
 }

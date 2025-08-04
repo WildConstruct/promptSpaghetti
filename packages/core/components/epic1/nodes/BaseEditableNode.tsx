@@ -186,15 +186,15 @@ export const BaseEditableNode = memo(({
         })}
       </div>
 
-      {/* Only show the default source handle if not an enhanced branching node without branching */}
-      {data.nodeType !== 'enhancedBranching' && (
+      {/* Only show the default source handle if not an enhanced branching node */}
+      {data.nodeType !== 'enhancedBranching' && data.nodeType !== 'output' && (
         <Handle
           type="source"
           position={Position.Right}
           className="epic1-handle source"
         />
       )}
-      {/* For enhanced branching nodes without branching, show the standard green output */}
+      {/* For enhanced branching nodes without branching, show the standard output on the right */}
       {data.nodeType === 'enhancedBranching' && !data.options?.some((opt: any) => opt.hasBranch) && (
         <Handle
           type="source"
