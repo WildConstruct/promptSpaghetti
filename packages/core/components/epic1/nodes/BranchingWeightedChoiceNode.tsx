@@ -170,16 +170,23 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
         if (isEditing) {
           return (
             <div className="epic1-weighted-choice-editor branching">
-              {/* Main output handle at top when branching is enabled */}
-              {hasBranching && (
-                <Handle
-                  type="source"
-                  position={Position.Top}
-                  id="main-output"
-                  className="epic1-handle epic1-handle-top main-output"
-                  style={{ top: -8, left: '50%', transform: 'translateX(-50%)' }}
-                />
-              )}
+              {/* Main output handle ALWAYS at top - consistent position */}
+              <Handle
+                type="source"
+                position={Position.Top}
+                id="main-output"
+                className="epic1-handle epic1-handle-top main-output"
+                style={{ 
+                  top: -8, 
+                  left: '50%', 
+                  transform: 'translateX(-50%)',
+                  width: '16px',
+                  height: '16px',
+                  background: '#ff6b35',
+                  border: '3px solid #1a1a2e',
+                  zIndex: 10
+                }}
+              />
 
               <div className="epic1-node-type-label">Weighted Choice (Branching)</div>
               
@@ -290,20 +297,42 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                       </button>
                     )}
 
-                    {/* Branch output handle */}
+                    {/* Branch output handle with visual connector */}
                     {option.hasBranch && (
-                      <Handle
-                        type="source"
-                        position={Position.Right}
-                        id={`branch-${index}`}
-                        className="epic1-handle epic1-handle-right branch-output"
-                        style={{ 
-                          top: '50%', 
-                          right: -8, 
-                          transform: 'translateY(-50%)',
-                          background: '#f59e0b'
-                        }}
-                      />
+                      <>
+                        {/* Visual line extending toward frame */}
+                        <div 
+                          className="branch-edge-indicator"
+                          style={{
+                            position: 'absolute',
+                            top: '50%',
+                            right: 0,
+                            width: '30px',
+                            height: '2px',
+                            background: 'linear-gradient(90deg, #f59e0b 0%, transparent 100%)',
+                            pointerEvents: 'none',
+                            transform: 'translateY(-50%)',
+                            opacity: 0.6
+                          }}
+                        />
+                        <Handle
+                          type="source"
+                          position={Position.Right}
+                          id={`branch-${index}`}
+                          className="epic1-handle epic1-handle-right branch-output"
+                          style={{ 
+                            top: '50%', 
+                            right: -10, 
+                            transform: 'translateY(-50%)',
+                            background: '#f59e0b',
+                            width: '14px',
+                            height: '14px',
+                            border: '2px solid #1a1a2e',
+                            borderRadius: '50%',
+                            zIndex: 10
+                          }}
+                        />
+                      </>
                     )}
                   </div>
                 ))}
@@ -348,15 +377,7 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                 </div>
               </div>
 
-              {/* Main output handle at right when no branching */}
-              {!hasBranching && (
-                <Handle
-                  type="source"
-                  position={Position.Right}
-                  id="main-output"
-                  className="epic1-handle epic1-handle-right main-output"
-                />
-              )}
+              {/* Removed - main output stays at top regardless of branching */}
             </div>
           );
         }
@@ -364,16 +385,23 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
         // Display mode
         return (
           <div className="epic1-weighted-choice-display branching">
-            {/* Main output handle positioning for display mode */}
-            {hasBranching && (
-              <Handle
-                type="source"
-                position={Position.Top}
-                id="main-output"
-                className="epic1-handle epic1-handle-top main-output"
-                style={{ top: -8, left: '50%', transform: 'translateX(-50%)' }}
-              />
-            )}
+            {/* Main output handle ALWAYS at top in display mode */}
+            <Handle
+              type="source"
+              position={Position.Top}
+              id="main-output"
+              className="epic1-handle epic1-handle-top main-output"
+              style={{ 
+                top: -8, 
+                left: '50%', 
+                transform: 'translateX(-50%)',
+                width: '16px',
+                height: '16px',
+                background: '#ff6b35',
+                border: '3px solid #1a1a2e',
+                zIndex: 10
+              }}
+            />
 
             <div className="epic1-node-type-label">
               Weighted Choice {hasBranching && '(Branching)'}
@@ -395,33 +423,46 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                     </div>
                   </div>
                   
-                  {/* Branch output handle in display mode */}
+                  {/* Branch output handle in display mode with visual indicator */}
                   {option.hasBranch && (
-                    <Handle
-                      type="source"
-                      position={Position.Right}
-                      id={`branch-${index}`}
-                      className="epic1-handle epic1-handle-right branch-output"
-                      style={{ 
-                        top: `${20 + index * 50}px`, 
-                        right: -8,
-                        background: '#f59e0b'
-                      }}
-                    />
+                    <>
+                      {/* Visual line for frame edge connection */}
+                      <div 
+                        className="branch-edge-indicator"
+                        style={{
+                          position: 'absolute',
+                          top: `${20 + index * 50}px`,
+                          right: 0,
+                          width: '25px',
+                          height: '2px',
+                          background: 'linear-gradient(90deg, #f59e0b 0%, transparent 100%)',
+                          pointerEvents: 'none',
+                          opacity: 0.6
+                        }}
+                      />
+                      <Handle
+                        type="source"
+                        position={Position.Right}
+                        id={`branch-${index}`}
+                        className="epic1-handle epic1-handle-right branch-output"
+                        style={{ 
+                          top: `${20 + index * 50}px`, 
+                          right: -10,
+                          background: '#f59e0b',
+                          width: '14px',
+                          height: '14px',
+                          border: '2px solid #1a1a2e',
+                          borderRadius: '50%',
+                          zIndex: 10
+                        }}
+                      />
+                    </>
                   )}
                 </div>
               ))}
             </div>
 
-            {/* Main output handle at right when no branching in display mode */}
-            {!hasBranching && (
-              <Handle
-                type="source"
-                position={Position.Right}
-                id="main-output"
-                className="epic1-handle epic1-handle-right main-output"
-              />
-            )}
+            {/* Removed - main output always stays at top */}
           </div>
         );
       }}
