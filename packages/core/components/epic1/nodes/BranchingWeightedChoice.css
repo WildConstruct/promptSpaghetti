@@ -1,0 +1,232 @@
+/* Branching Weighted Choice Node Styles */
+
+/* Wider node for branching */
+.epic1-weighted-choice-editor.branching {
+  min-width: 400px;
+}
+
+/* Option row with drag handle space */
+.epic1-option-row.branching {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.2s ease;
+  cursor: move;
+}
+
+.epic1-option-row.branching:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.epic1-option-row.branching.dragging {
+  opacity: 0.5;
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+/* Drag handle */
+.epic1-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 30px;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: grab;
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.epic1-drag-handle:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.epic1-option-row.branching:hover .epic1-drag-handle {
+  color: rgba(245, 158, 11, 0.6);
+}
+
+.epic1-option-row.branching.dragging .epic1-drag-handle {
+  cursor: grabbing;
+  color: rgba(245, 158, 11, 0.8);
+}
+
+/* Option content container */
+.epic1-option-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0; /* Allow content to shrink */
+}
+
+/* Branch toggle button */
+.epic1-branch-toggle {
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.epic1-branch-toggle:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.5);
+  color: #f59e0b;
+}
+
+.epic1-branch-toggle.active {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: #f59e0b;
+  color: #f59e0b;
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.4);
+}
+
+/* Branch output handles */
+.epic1-handle.branch-output {
+  background: #f59e0b !important;
+  border: 2px solid #1a1a1a !important;
+  width: 12px;
+  height: 12px;
+  transition: all 0.2s ease;
+}
+
+.epic1-handle.branch-output:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
+}
+
+/* Main output handle styling */
+.epic1-handle.main-output {
+  background: #10b981 !important;
+  border: 2px solid #1a1a1a !important;
+  width: 14px;
+  height: 14px;
+  z-index: 10;
+}
+
+.epic1-handle.main-output:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* Top handle positioning */
+.epic1-handle-top {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Display mode branching styles */
+.epic1-weighted-choice-display.branching {
+  position: relative;
+}
+
+.epic1-option-preview.branching {
+  position: relative;
+  padding-right: 30px; /* Space for branch indicator */
+}
+
+.branch-indicator {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #f59e0b;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Adjust options list for better branching layout */
+.epic1-options-list.branching {
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-right: -4px; /* Compensate for scrollbar */
+}
+
+/* Weight controls adjustment for branch button */
+.epic1-option-row.branching .epic1-weight-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Ensure slider takes appropriate space */
+.epic1-option-row.branching .epic1-weight-slider {
+  flex: 1;
+  min-width: 120px;
+}
+
+/* Hints for branching mode */
+.epic1-weighted-choice-editor.branching .epic1-weight-hints {
+  font-size: 10px;
+  color: #999;
+  text-align: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animation for branch activation */
+@keyframes branchActivate {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.epic1-branch-toggle.active {
+  animation: branchActivate 0.3s ease-out;
+}
+
+/* Handle connection lines visual hint */
+.epic1-handle.branch-output::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b, transparent);
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.epic1-handle.branch-output:hover::after {
+  opacity: 0.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .epic1-weighted-choice-editor.branching {
+    min-width: 350px;
+  }
+  
+  .epic1-option-row.branching {
+    padding: 8px 6px;
+  }
+}
