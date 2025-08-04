@@ -101,7 +101,11 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
       viewBox="0 0 44 44" 
       className="radio-dial-simple"
       onMouseDown={handleMouseDown}
-      style={{ cursor: disabled ? 'default' : 'pointer' }}
+      style={{ 
+        cursor: disabled ? 'default' : 'pointer',
+        pointerEvents: 'all',
+        zIndex: 10
+      }}
     >
       {/* Background circle */}
       <circle 
@@ -149,17 +153,18 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         strokeWidth="1"
       />
       
-      {/* Percentage display in center */}
+      {/* Number display in center */}
       <text
         x="22"
         y="22"
         textAnchor="middle"
         dominantBaseline="middle"
-        fill="#e0e0e0"
-        fontSize="11"
-        fontWeight="600"
+        fill="#ffffff"
+        fontSize="14"
+        fontWeight="700"
+        style={{ pointerEvents: 'none' }}
       >
-        {percentage}%
+        {percentage}
       </text>
     </svg>
   );
@@ -297,7 +302,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
       {({ isEditing, confirmEdit, cancelEdit }) => {
         if (isEditing) {
           return (
-            <div className="enhanced-branching-editor">
+            <div className="enhanced-branching-editor" onMouseDown={(e) => e.stopPropagation()}>
               {/* Main output at top-right corner when branching enabled */}
               {hasBranching && (
                 <Handle
@@ -388,14 +393,17 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                         e.currentTarget.focus();
                       }}
                       onClick={(e) => e.stopPropagation()}
+                      style={{ pointerEvents: 'all' }}
                     />
                     
-                    {/* Simplified radio dial */}
-                    <RadioDial
-                      value={option.weight}
-                      onChange={(val) => updateOptionWeight(index, val)}
-                      percentage={percentages[index]}
-                    />
+                    {/* Simplified radio dial with proper event handling */}
+                    <div onMouseDown={(e) => e.stopPropagation()}>
+                      <RadioDial
+                        value={option.weight}
+                        onChange={(val) => updateOptionWeight(index, val)}
+                        percentage={percentages[index]}
+                      />
+                    </div>
                     
                     {/* Branch toggle */}
                     <button

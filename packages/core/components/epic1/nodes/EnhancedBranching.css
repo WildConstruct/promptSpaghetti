@@ -1,9 +1,7 @@
 /* Enhanced Branching Node Styles */
 
 .enhanced-branching-editor {
-  width: 520px !important; /* Optimal width for all controls */
-  max-width: 520px !important;
-  min-width: 520px !important;
+  width: 100% !important; /* Fill parent container */
   overflow: visible; /* Allow handles to extend */
   position: relative;
   display: flex;
@@ -11,13 +9,13 @@
   gap: 12px;
   box-sizing: border-box;
   padding-bottom: 8px;
+  pointer-events: all; /* Ensure all interactions work */
 }
 
 /* Prevent ReactFlow from overriding width */
 .react-flow__node-default.selected .enhanced-branching-editor,
 .react-flow__node-default .enhanced-branching-editor {
-  width: 520px !important;
-  max-width: 520px !important;
+  width: 100% !important;
 }
 
 /* Title section - taller with edit button */
@@ -145,6 +143,8 @@
   transition: all 0.2s;
   box-sizing: border-box;
   overflow: visible; /* Allow handles to extend outside */
+  pointer-events: all; /* Ensure row is interactive */
+  z-index: 1; /* Above background but below handles */
 }
 
 .enhanced-option-row:hover {
@@ -180,9 +180,9 @@
 
 /* Text input - maximized width */
 .enhanced-option-text {
-  flex: 1;
-  min-width: 0; /* Allow shrinking */
-  width: 100%; /* Take all available space */
+  flex: 1 1 auto;
+  min-width: 200px; /* Minimum reasonable width */
+  max-width: calc(100% - 140px); /* Account for other controls */
   height: 32px;
   padding: 6px 10px;
   background: rgba(0, 0, 0, 0.2);
@@ -192,6 +192,8 @@
   font-size: 13px;
   transition: all 0.2s;
   box-sizing: border-box;
+  pointer-events: all;
+  z-index: 2;
 }
 
 .enhanced-option-text:focus {
@@ -209,6 +211,9 @@
   flex-shrink: 0;
   transition: transform 0.2s ease;
   overflow: visible;
+  pointer-events: all !important;
+  z-index: 5; /* Higher than other elements */
+  cursor: pointer !important;
 }
 
 .radio-dial-simple:hover {
@@ -450,14 +455,14 @@
 .enhanced-branching-editor,
 .enhanced-branching-display {
   box-sizing: border-box !important;
-  width: 520px !important;
+  width: 100% !important;
 }
 
 /* Base editable node override with overflow for handles */
 .epic1-editable-node.weighted-choice.enhanced-branching {
-  width: 520px !important;
-  max-width: 520px !important;
-  min-width: 520px !important;
+  width: 560px !important; /* Wider to accommodate all controls */
+  max-width: 560px !important;
+  min-width: 560px !important;
   overflow: visible !important;
 }
 
