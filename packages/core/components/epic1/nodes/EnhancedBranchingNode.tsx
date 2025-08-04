@@ -34,10 +34,11 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
   percentage: number;
   disabled?: boolean;
 }) => {
-  // Calculate the arc length based on percentage (not raw value)
-  // Arc starts at bottom-left (225°) and goes to bottom-right (-45°)
-  const arcLength = 50.3; // Total length of the 3/4 circle arc
-  const fillLength = (percentage / 100) * arcLength;
+  // Calculate the arc length for a full circle when value is 100
+  // Using 270° arc (3/4 circle) for the visual range
+  const circumference = 2 * Math.PI * 19; // Full circle circumference
+  const arcLength = circumference * 0.75; // 3/4 of circle for visual range
+  const fillLength = (value / 100) * arcLength;
   
   const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
     if (disabled) return;
@@ -111,6 +112,8 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
     if (disabled) return;
     e.preventDefault();
     e.stopPropagation();
+    // Stop ReactFlow from zooming
+    e.nativeEvent.stopImmediatePropagation();
     
     // More responsive: 5 units per wheel tick (increased from typical 1-2)
     const delta = e.deltaY > 0 ? -5 : 5;
@@ -181,7 +184,7 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         fontWeight="700"
         style={{ pointerEvents: 'none' }}
       >
-        {percentage}
+        {value}
       </text>
     </svg>
   );
