@@ -34,10 +34,15 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
   percentage: number;
   disabled?: boolean;
 }) => {
-  const angle = (value / 100) * 240 - 120; // -120 to 120 degrees for 3/4 circle
+  // Calculate the arc length based on percentage (not raw value)
+  // Arc starts at bottom-left (225°) and goes to bottom-right (-45°)
+  const arcLength = 50.3; // Total length of the 3/4 circle arc
+  const fillLength = (percentage / 100) * arcLength;
   
   const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
     if (disabled) return;
+    e.preventDefault();
+    e.stopPropagation();
     
     const svg = e.currentTarget;
     const rect = svg.getBoundingClientRect();
@@ -49,20 +54,37 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
       const dy = clientY - centerY;
       let angle = Math.atan2(dy, dx) * (180 / Math.PI);
       
-      // Convert to 0-240 degree range (-120 to 120)
-      angle = angle + 120;
-      if (angle < 0) angle = 0;
-      if (angle > 240) angle = 240;
+      // Normalize angle: -180 to 180 -> 0 to 360
+      if (angle < 0) angle += 360;
       
-      const newValue = Math.round((angle / 240) * 100);
+      // Map the 3/4 circle (225° to -45° or 315°) to 0-100
+      // Valid range is from 225° to 315° going clockwise through bottom
+      let normalizedValue = 0;
+      
+      if (angle >= 225 && angle <= 360) {
+        // From start to bottom (225° to 360°)
+        normalizedValue = ((angle - 225) / 270) * 100;
+      } else if (angle >= 0 && angle <= 135) {
+        // From bottom to end (0° to 135°)
+        normalizedValue = ((angle + 135) / 270) * 100;
+      } else {
+        // Outside valid range - clamp to nearest endpoint
+        if (angle > 135 && angle < 225) {
+          normalizedValue = angle < 180 ? 100 : 0;
+        }
+      }
+      
+      const newValue = Math.round(Math.max(0, Math.min(100, normalizedValue)));
       onChange(newValue);
     };
     
     const handleMouseMove = (e: MouseEvent) => {
+      e.preventDefault();
       updateValue(e.clientX, e.clientY);
     };
     
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: MouseEvent) => {
+      e.preventDefault();
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
@@ -100,29 +122,29 @@ const RadioDial = ({ value, onChange, percentage, disabled = false }: {
         strokeLinecap="round"
       />
       
-      {/* Filled arc based on value */}
+      {/* Filled arc based on percentage */}
       <path
         d="M 6 30 A 16 16 0 1 1 38 30"
         stroke="#22d3ee"
         strokeWidth="3"
         fill="none"
         strokeLinecap="round"
-        strokeDasharray={`${(value / 100) * 50.3} 50.3`}
+        strokeDasharray={`${fillLength} ${arcLength}`}
         opacity="0.9"
       />
       
-      {/* Center percentage text */}
+      {/* Center percentage text with % symbol */}
       <text
         x="22"
         y="22"
         textAnchor="middle"
         dominantBaseline="middle"
         fill="white"
-        fontSize="16"
+        fontSize="14"
         fontWeight="600"
         style={{ userSelect: 'none' }}
       >
-        {percentage}
+        {percentage}%
       </text>
     </svg>
   );
@@ -394,7 +416,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
               {/* Footer with hints and controls */}
               <div className="enhanced-footer">
                 <div className="hints">
-                  Drag to reorder • ⚡ = branch output • Raw weights (orange) • Actual % (blue)
+                  Drag to reorder • ⚡ = branch output • Click and drag dials to adjust weights
                 </div>
                 <div className="footer-controls">
                   <button className="add-option-btn" onClick={addOption}>
