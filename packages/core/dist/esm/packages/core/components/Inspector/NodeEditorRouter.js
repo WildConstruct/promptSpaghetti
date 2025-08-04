@@ -16,7 +16,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
     switch (nodeType) {
         // Basic Runtime Nodes
         case 'WeightedChoice':
-            return _jsx(WeightedChoiceEditor, { ...editorProps, onGlobalPreviewRequest: onGlobalPreviewRequest });
+            // Use the improved editor with raw weights and presets
+            return _jsx(ImprovedWeightedChoiceEditor, { ...editorProps, onGlobalPreviewRequest: onGlobalPreviewRequest });
         case 'Concat':
             return _jsx(ConcatEditor, { ...editorProps });
         case 'Output':

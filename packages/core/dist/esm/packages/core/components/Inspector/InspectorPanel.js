@@ -93,19 +93,19 @@ maxWidth = 600;
                 minWidth: collapsed ? 40 : minWidth,
                 borderLeft: '1px solid #4a5568',
                 background: '#1a202c',
-                height: '100%',
+                height: 'auto',
+                minHeight: '400px',
+                maxHeight: '90vh',
                 display: 'flex',
-                flexDirection: 'column'
-            }, "transition:": true })) `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`;
-        willChange: 'width';
-        overflow: 'hidden', // Prevent content spillover during animation
-            WebkitBackfaceVisibility;
-        'hidden';
-        backfaceVisibility: 'hidden';
-        onKeyDown = {}(e);
-        {
-            e.stopPropagation();
-        }
+                flexDirection: 'column',
+                // 60fps optimized transition
+                transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+                willChange: 'width',
+                overflow: 'hidden', // Prevent content spillover during animation
+                WebkitBackfaceVisibility: 'hidden',
+                backfaceVisibility: 'hidden',
+                onKeyDown = {}(e)
+            }, ...e.stopPropagation() }));
     }
     onKeyUp = {}(e);
     {
@@ -187,12 +187,19 @@ _jsxs("div", { ref: resizeRef, onMouseDown: handleMouseDown, style: {
                 minWidth: collapsed ? 40 : minWidth,
                 borderLeft: '1px solid #4a5568',
                 background: '#1a202c',
-                height: '100%',
+                height: 'auto',
+                minHeight: '400px',
+                maxHeight: '90vh',
                 display: 'flex',
-                flexDirection: 'column'
-            }, "transition:": true }), " `width $", animationDurations.panel, "ms $", easingFunctions.cinema4d.professional, "` willChange: 'width' overflow: 'hidden' WebkitBackfaceVisibility: 'hidden' backfaceVisibility: 'hidden'; onKeyDown=", (e) => {
-            e.stopPropagation();
-        }, "onKeyUp=", (e) => {
+                flexDirection: 'column',
+                // 60fps optimized transition
+                transition: `width ${animationDurations.panel}ms ${easingFunctions.cinema4d.professional}`,
+                willChange: 'width',
+                overflow: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                backfaceVisibility: 'hidden',
+                onKeyDown = {}(e)
+            } }), " => ", e.stopPropagation(), "} onKeyUp=", (e) => {
             e.stopPropagation();
         }, "onKeyPress=", (e) => {
             e.stopPropagation();
@@ -257,7 +264,16 @@ _jsxs("div", { ref: resizeRef, onMouseDown: handleMouseDown, style: {
             }, title: collapsed ? 'Expand Inspector' : 'Collapse Inspector', children: collapsed ? '◀' : '▶' })] });
 div >
     {};
-collapsed && (_jsxs("div", { style: { flex: 1, overflow: 'auto', display: 'flex', flexDirection: 'column' }, children: [showPreferences && (_jsx("div", { style: {
+collapsed && (_jsxs("div", { style: {
+        flex: 1,
+        overflow: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '300px',
+        maxHeight: 'calc(90vh - 150px)',
+        scrollbarWidth: 'thin',
+        scrollbarColor: '#4a5568 #2d3748'
+    }, children: [showPreferences && (_jsx("div", { style: {
                 padding: '0 16px 16px 16px',
                 borderBottom: '1px solid #4a5568',
                 background: 'rgba(66, 153, 225, 0.05)'

@@ -4,12 +4,13 @@
   width: 420px !important; /* Fixed width to prevent stretching */
   max-width: 420px !important;
   min-width: 420px !important;
-  overflow: visible; /* Allow handles to extend outside */
+  overflow: hidden; /* Contain content */
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
   box-sizing: border-box;
+  padding-bottom: 8px;
 }
 
 /* Prevent ReactFlow from overriding width */
@@ -121,11 +122,11 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 400px;
+  max-height: 360px;
   overflow-y: auto;
-  overflow-x: visible; /* Allow handles to extend outside */
-  padding: 0 8px;
-  margin: 0 -8px; /* Compensate for padding to allow handles outside */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  padding: 0 8px 0 4px;
+  margin: 0;
 }
 
 /* Option row */
@@ -139,8 +140,8 @@
   border-radius: 6px;
   position: relative;
   cursor: move;
-  min-height: 44px;
-  max-height: 44px;
+  min-height: 48px;
+  height: 48px;
   transition: all 0.2s;
   box-sizing: border-box;
 }
@@ -179,7 +180,8 @@
 /* Text input - maximized width */
 .enhanced-option-text {
   flex: 1;
-  min-width: 160px;
+  min-width: 140px;
+  max-width: 180px;
   height: 32px;
   padding: 6px 10px;
   background: rgba(0, 0, 0, 0.2);
@@ -205,6 +207,7 @@
 .radio-dial-simple {
   flex-shrink: 0;
   transition: transform 0.2s ease;
+  overflow: visible;
 }
 
 .radio-dial-simple:hover {
@@ -278,7 +281,8 @@
   width: 12px !important;
   height: 12px !important;
   border: 2px solid #1a1a1a !important;
-  z-index: 100 !important;
+  z-index: 1000 !important;
+  position: absolute !important;
 }
 
 .enhanced-handle.main-output {
@@ -289,6 +293,7 @@
 
 .enhanced-handle.branch-output {
   background: #f59e0b !important;
+  right: -6px !important;
 }
 
 .enhanced-handle:hover {

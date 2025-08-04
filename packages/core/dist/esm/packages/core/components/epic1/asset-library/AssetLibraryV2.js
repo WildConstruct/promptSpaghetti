@@ -9,11 +9,12 @@ import { medievalPresetCategories } from './medievalPresets';
 import './AssetLibraryV2.css';
 // Preset list item component
 const PresetListItem = ({ preset, onSelect, isSelected }) => {
+    // Safely initialize drag hook with error handling
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'preset',
         item: { preset },
         collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
+            isDragging: monitor?.isDragging() || false,
         }),
     }), [preset]);
     return (_jsxs("div", { ref: drag, className: `preset-list-item ${isSelected ? 'selected' : ''} ${isDragging ? 'dragging' : ''}`, onClick: onSelect, children: [_jsxs("div", { className: "preset-rating", children: ['★'.repeat(preset.metadata.rating || 4), _jsx("span", { className: "preset-rating-empty", children: '★'.repeat(5 - (preset.metadata.rating || 4)) })] }), _jsx("div", { className: "preset-name", children: preset.name })] }));

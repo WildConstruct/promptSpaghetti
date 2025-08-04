@@ -10,7 +10,7 @@ import '../animations/EditTransitions.css';
  * Base component for Epic 1 inline-editable React Flow nodes.
  * Provides edit state management and visual feedback.
  */
-export const BaseEditableNode = memo(({ data, selected, children, className = '', minWidth = 200, minHeight = 80, }) => {
+export const BaseEditableNode = memo(({ data, selected, children, className = '', minWidth = 200, minHeight = 80, style = {}, }) => {
     const [isEditing, setIsEditing] = useState(data.isEditing || false);
     const [editBuffer, setEditBuffer] = useState(data.editBuffer || data.value || '');
     const [saveTrigger, setSaveTrigger] = useState(0);
@@ -106,6 +106,7 @@ export const BaseEditableNode = memo(({ data, selected, children, className = ''
     return (_jsxs("div", { ref: nodeRef, className: `epic1-editable-node ${className} ${isEditing ? 'editing' : ''} ${selected ? 'selected' : ''} ${animationClasses}`, onClick: !isEditing ? handleNodeClick : undefined, onContextMenu: handleContextMenu, onKeyDown: handleKeyDown, style: {
             minWidth: `${minWidth}px`,
             minHeight: `${minHeight}px`,
+            ...style,
         }, children: [_jsx(Handle, { type: "target", position: Position.Left, className: "epic1-handle target" }), _jsx("div", { className: "epic1-node-content", children: children({
                     isEditing,
                     value: data.value,

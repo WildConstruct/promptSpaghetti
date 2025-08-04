@@ -28,12 +28,12 @@ const DragHandleIcon = () => (
 );
 
 // Simplified radio dial component
-const RadioDial = ({ value, onChange, disabled = false }: { 
+const RadioDial = ({ value, onChange, percentage, disabled = false }: { 
   value: number; 
   onChange: (val: number) => void;
+  percentage: number;
   disabled?: boolean;
 }) => {
-  const percentage = Math.round((value / 100) * 100);
   const angle = (value / 100) * 240 - 120; // -120 to 120 degrees for 3/4 circle
   
   const handleMouseDown = (e: React.MouseEvent<SVGElement>) => {
@@ -347,6 +347,7 @@ export const EnhancedBranchingNode = memo((props: NodeProps<EnhancedBranchingNod
                     <RadioDial
                       value={option.weight}
                       onChange={(val) => updateOptionWeight(index, val)}
+                      percentage={percentages[index]}
                     />
                     
                     {/* Branch toggle */}

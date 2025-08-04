@@ -13,11 +13,12 @@ const nodeTypes = [
     { type: 'getVariable', label: 'Get Variable', icon: '📥', category: 'Variables' },
     { type: 'output', label: 'Output', icon: '📤', category: 'Output' },
 ];
-export const NodePalette = ({ position = 'left', defaultCollapsed = false, }) => {
+export const NodePalette = ({ position = 'left', defaultCollapsed = false, onCollapsedChange, }) => {
     const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
     React.useEffect(() => {
         console.log('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
-    }, [position, collapsed]);
+        onCollapsedChange?.(collapsed);
+    }, [position, collapsed, onCollapsedChange]);
     const onDragStart = (event, nodeType) => {
         console.log('[NodePalette] Drag started for node type:', nodeType);
         // Use text/plain as primary for better compatibility

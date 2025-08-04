@@ -122,7 +122,7 @@ export const PreviewPanel = ({ previewEngine, className = '', onSeedChange, onCl
     // Render results
     const renderResults = () => {
         if (!previewUpdate?.results || previewUpdate.results.length === 0) {
-            return (_jsxs("div", { className: "preview-empty", children: [_jsx("div", { className: "preview-empty-icon", children: "\uD83D\uDCDD" }), _jsx("div", { className: "preview-empty-text", children: "Edit your graph to see preview results" })] }));
+            return (_jsxs("div", { className: "preview-empty", children: [_jsx("div", { className: "preview-empty-icon", children: "\uD83D\uDD17" }), _jsx("div", { className: "preview-empty-text", children: "Connect an Output node to see results" }), _jsx("div", { className: "preview-empty-hint", children: "Drag an Output node from the palette and connect it to your graph" })] }));
         }
         return (_jsx("div", { className: "preview-results", children: previewUpdate.results.map((result, index) => renderResult(result, index)) }));
     };

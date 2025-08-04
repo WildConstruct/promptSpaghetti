@@ -1,59 +1,68 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { professionalColors } from './styles/professional-design-system';
 export const Palette = ({ nodes, collapsed, onToggle, onDragStart }) => {
-    return (_jsx("aside", { "aria-label": "Node Palette", style: {
+    // Calculate dynamic height based on number of nodes
+    // Min height of 400px, max height of 80vh, grows with content
+    const calculateHeight = () => {
+        const baseHeight = 400;
+        const itemHeight = collapsed ? 50 : 40; // Approximate height per item
+        const categoryHeight = collapsed ? 0 : 40; // Category headers only in expanded view
+        const categoriesCount = new Set(nodes.map(n => n.category || 'other')).size;
+        const contentHeight = (nodes.length * itemHeight) + (categoriesCount * categoryHeight) + 100; // +100 for header/padding
+        const dynamicHeight = Math.max(baseHeight, Math.min(contentHeight, window.innerHeight * 0.8));
+        return `${dynamicHeight}px`;
+    };
+    return (_jsxs("aside", { "aria-label": "Node Palette", style: {
             width: collapsed ? 56 : 200,
             background: professionalColors.background.primary,
-            color: professionalColors.text.primary
-        }, "borderRight:": true })) `1px solid ${professionalColors.ui.border}`;
-    padding: 0;
-    height: '100%';
-    transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-    overflow: 'hidden';
-    display: 'flex';
-    flexDirection: 'column'
-        >
-            _jsx("button", { "aria-label": collapsed ? 'Expand palette' : 'Collapse palette', "aria-expanded": !collapsed, onClick: onToggle, style: {
+            color: professionalColors.text.primary,
+            borderRight: `1px solid ${professionalColors.ui.border}`,
+            padding: 0,
+            height: calculateHeight(),
+            maxHeight: '80vh',
+            minHeight: '400px',
+            transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column'
+        }, children: [_jsx("button", { "aria-label": collapsed ? 'Expand palette' : 'Collapse palette', "aria-expanded": !collapsed, onClick: onToggle, style: {
                     background: professionalColors.ui.hover
-                }, "border:": true });
-    `1px solid ${professionalColors.ui.border}`;
-    color: professionalColors.text.primary;
-    fontSize: 18;
-    width: '100%';
-    padding: '12px 0';
-    cursor: 'pointer';
-    outline: 'none';
-    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
-        >
-            { collapsed, '»': '«' };
+                }, "border:": true }), " `1px solid $", professionalColors.ui.border, "` color: professionalColors.text.primary fontSize: 18 width: '100%' padding: '12px 0' cursor: 'pointer' outline: 'none' transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)' >", collapsed ? '»' : '«'] })
+        ,
+            _jsx("div", { style: {
+                    flex: 1,
+                    overflowY: 'auto',
+                    overflowX: 'hidden',
+                    padding: collapsed ? 0 : 8,
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: `${professionalColors.ui.border} ${professionalColors.background.secondary}`
+                }, children: collapsed
+                    ? // Collapsed view - show icons only
+                        nodes.map(node => (_jsx("div", { role: "button", tabIndex: 0, draggable: true, "aria-label": `${node.label} - ${node.tooltip}`.trim(), "aria-describedby": `tooltip-${node.id}`, "aria-grabbed": "false", onDragStart: e => {
+                                e.dataTransfer?.setData?.('application/node-type', node.id);
+                                onDragStart?.(node.id);
+                            }, title: node.tooltip, style: {
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                padding: '10px 0',
+                                marginBottom: 4,
+                                borderRadius: 6,
+                                background: 'none',
+                                cursor: 'grab',
+                                outline: 'none'
+                            }, onKeyDown: e => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    onDragStart?.(node.id);
+                                }
+                                    >
+                                        (_jsx("span", { id: `tooltip-${node.id}`, style: { position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }, children: node.tooltip })
+                                            ,
+                                                _jsx("span", { style: { fontSize: 22, width: 28, textAlign: 'center' }, children: node.icon }));
+                            } }, node.id)))
+                    :
+             }));
 };
-button >
-    _jsx("div", { style: { flex: 1, overflowY: 'auto', padding: collapsed ? 0 : 8 }, children: collapsed
-            ? // Collapsed view - show icons only
-                nodes.map(node => (_jsx("div", { role: "button", tabIndex: 0, draggable: true, "aria-label": `${node.label} - ${node.tooltip}`.trim(), "aria-describedby": `tooltip-${node.id}`, "aria-grabbed": "false", onDragStart: e => {
-                        e.dataTransfer?.setData?.('application/node-type', node.id);
-                        onDragStart?.(node.id);
-                    }, title: node.tooltip, style: {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: '10px 0',
-                        marginBottom: 4,
-                        borderRadius: 6,
-                        background: 'none',
-                        cursor: 'grab',
-                        outline: 'none'
-                    }, onKeyDown: e => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            onDragStart?.(node.id);
-                        }
-                            >
-                                (_jsx("span", { id: `tooltip-${node.id}`, style: { position: 'absolute', left: '-9999px', width: 1, height: 1, overflow: 'hidden' }, children: node.tooltip })
-                                    ,
-                                        _jsx("span", { style: { fontSize: 22, width: 28, textAlign: 'center' }, children: node.icon }));
-                    } }, node.id)))
-            :
-     });
 (() => {
     const categories = nodes.reduce((acc, node) => {
         const category = node.category || 'other';

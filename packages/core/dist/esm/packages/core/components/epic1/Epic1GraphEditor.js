@@ -30,11 +30,29 @@ import './PanZoomControls.css';
 const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesChange: onNodesChangeProp, onEdgesChange: onEdgesChangeProp, onExecute, showPreview = true, previewPosition = 'right', previewWidth = '400px', previewDebounceDelay = 300, previewSeeds, showAssetLibrary = true, assetLibraryPosition = 'left', }) => {
     // Use droppable node types if asset library is shown
     const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
+    console.log('[Epic1GraphEditor] Using nodeTypes:', showAssetLibrary ? 'droppable' : 'regular', 'showAssetLibrary:', showAssetLibrary);
+    console.log('[Epic1GraphEditor] Initial nodes:', initialNodes.length, 'nodes');
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    // Debug: Log nodes whenever they change
+    useEffect(() => {
+        console.log('[Epic1GraphEditor] Nodes state changed:', nodes.length, 'nodes');
+        console.log('[Epic1GraphEditor] Node details:', nodes.map(n => ({
+            id: n.id,
+            type: n.type,
+            position: n.position
+        })));
+        // Check for duplicate IDs
+        const ids = nodes.map(n => n.id);
+        const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+        if (duplicates.length > 0) {
+            console.warn('[Epic1GraphEditor] DUPLICATE NODE IDS FOUND:', duplicates);
+        }
+    }, [nodes]);
     const [selectedNodeId, setSelectedNodeId] = useState(null);
     const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const [nodePaletteCollapsed, setNodePaletteCollapsed] = useState(false);
     // Context menu and save-as-preset state
     const [contextMenuPosition, setContextMenuPosition] = useState(null);
     const [contextMenuNodeId, setContextMenuNodeId] = useState(null);
@@ -101,6 +119,8 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
             data: createNodeData(node.data, node.id),
             // Preserve the original selected state from nodes, don't override
             selected: node.selected || node.id === selectedNodeId,
+            // Make node non-draggable when it's being edited
+            draggable: !node.data?.isEditing,
         }));
     }, [nodes, selectedNodeId, createNodeData]);
     // Handle new connections
@@ -125,6 +145,8 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
     const convertToRuntimeGraph = useCallback((flowNodes, flowEdges) => {
         try {
             const runtimeNodes = new Map();
+            console.log('[convertToRuntimeGraph] Input nodes:', flowNodes.length, 'nodes');
+            console.log('[convertToRuntimeGraph] Node IDs:', flowNodes.map(n => n.id));
             for (const node of flowNodes) {
                 // Skip nodes without proper type or position
                 if (!node.type || !node.position) {
@@ -568,7 +590,16 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
         handleNodeDrop(nodeType, position);
     }, [reactFlowInstance, handleNodeDrop]);
     // Wrap with DndProvider if using droppable nodes
-    const content = (_jsxs("div", { className: "epic1-graph-editor", style: editorStyle, onDrop: onDrop, onDragOver: onDragOver, children: [_jsxs(ReactFlow, { nodes: enhancedNodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onPaneClick: handlePaneClick, onNodeClick: handleNodeClick, onInit: onInit, nodeTypes: nodeTypes, isValidConnection: isValidConnection, connectionMode: ConnectionMode.Loose, fitView: false, attributionPosition: "bottom-left", panOnScroll: true, zoomOnScroll: true, zoomOnPinch: true, panOnDrag: true, selectionOnDrag: false, nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, deleteKeyCode: null, multiSelectionKeyCode: "Shift", children: [_jsx(Background, { variant: "dots", gap: 16, size: 1, color: "#333333" }), _jsx(Controls, {}), _jsx(MiniMap, { position: "top-left", style: { left: 10, top: 70 }, nodeColor: (node) => {
+    const content = (_jsxs("div", { className: "epic1-graph-editor", style: editorStyle, onDrop: onDrop, onDragOver: onDragOver, children: [_jsxs(ReactFlow, { nodes: enhancedNodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onPaneClick: handlePaneClick, onNodeClick: handleNodeClick, onInit: onInit, nodeTypes: nodeTypes, isValidConnection: isValidConnection, connectionMode: ConnectionMode.Loose, fitView: false, attributionPosition: "bottom-left", panOnScroll: false, zoomOnScroll: true, zoomOnPinch: true, panOnDrag: true, selectionOnDrag: false, nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, deleteKeyCode: null, multiSelectionKeyCode: "Shift", children: [_jsx(Background, { variant: "dots", gap: 16, size: 1, color: "#333333" }), _jsx(Controls, {}), _jsx(MiniMap, { position: "top-left", style: {
+                            left: nodePaletteCollapsed ? 50 : 210,
+                            top: 70,
+                            transition: 'left 0.3s ease-in-out',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '4px',
+                            backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                            width: '150px',
+                            height: '100px'
+                        }, zoomable: true, pannable: true, nodeColor: (node) => {
                             switch (node.type) {
                                 case 'textBlock': return '#7c7ff2';
                                 case 'weightedChoice': return '#f6a723';
@@ -577,22 +608,21 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                                 case 'output': return '#f15656';
                                 default: return '#666';
                             }
-                        } }), _jsx(Panel, { position: "top-right", children: _jsxs("div", { className: "epic1-controls", children: [_jsx("button", { className: "epic1-preview-toggle", onClick: handleTogglePreview, title: "Toggle preview (P)", children: isPreviewVisible ? '👁️' : '👁️‍🗨️' }), onExecute && (_jsx("button", { className: "epic1-execute-button", onClick: handleExecute, children: "Execute Graph" }))] }) }), _jsx(Panel, { position: "bottom-center", children: _jsx("div", { className: "epic1-instructions", children: "Click any node to edit \u2022 Tab/Shift+Tab to navigate \u2022 Enter to confirm \u2022 Escape to cancel \u2022 Press P for preview \u2022 Press ? for help" }) }), _jsx(ConnectionFeedback, { nodes: nodes, edges: edges }), _jsx(SafeReactFlowWrapper, { children: _jsx(PanZoomControls, { position: "bottom-right" }) })] }), _jsx(SafeReactFlowWrapper, { children: _jsx(KeyboardShortcuts, { onSave: handleSave, onLoad: handleLoad, onExport: handleExport, onDelete: handleDelete, onDuplicate: handleDuplicate, onSelectAll: handleSelectAll, additionalHandlers: {
+                        }, maskColor: "rgba(0, 0, 0, 0.1)" }), _jsx(Panel, { position: "top-right", children: _jsxs("div", { className: "epic1-controls", children: [_jsx("button", { className: "epic1-preview-toggle", onClick: handleTogglePreview, title: "Toggle preview (P)", children: isPreviewVisible ? '👁️' : '👁️‍🗨️' }), onExecute && (_jsx("button", { className: "epic1-execute-button", onClick: handleExecute, children: "Execute Graph" }))] }) }), _jsx(Panel, { position: "bottom-center", children: _jsx("div", { className: "epic1-instructions", children: "Click any node to edit \u2022 Tab/Shift+Tab to navigate \u2022 Enter to confirm \u2022 Escape to cancel \u2022 Press P for preview \u2022 Press ? for help" }) }), _jsx(ConnectionFeedback, { nodes: nodes, edges: edges }), _jsx(SafeReactFlowWrapper, { children: _jsx(PanZoomControls, { position: "bottom-right" }) })] }), _jsx(SafeReactFlowWrapper, { children: _jsx(KeyboardShortcuts, { onSave: handleSave, onLoad: handleLoad, onExport: handleExport, onDelete: handleDelete, onDuplicate: handleDuplicate, onSelectAll: handleSelectAll, additionalHandlers: {
                         'p': handleTogglePreview,
                         'P': handleTogglePreview
-                    } }) }), toasts.map((toast) => (_jsx(ConnectionToast, { message: toast, onDismiss: () => dismissToast(toast.id) }, toast.id))), _jsx(NodePalette, { position: "left", defaultCollapsed: false }), _jsx(NodeToolbar, { position: "top" }), _jsx(TabbedSidePanel, { previewEngine: previewEngineRef.current, onPresetDrag: (preset) => {
+                    } }) }), toasts.map((toast) => (_jsx(ConnectionToast, { message: toast, onDismiss: () => dismissToast(toast.id) }, toast.id))), _jsx(NodePalette, { position: "left", defaultCollapsed: false, onCollapsedChange: setNodePaletteCollapsed }), _jsx(NodeToolbar, { position: "top" }), _jsx(TabbedSidePanel, { previewEngine: previewEngineRef.current, onPresetDrag: (preset) => {
                     // TODO: Implement preset application to nodes
                 }, onPresetSelect: (preset) => {
                     // TODO: Implement preset selection
                 }, position: "right", defaultTab: isPreviewVisible ? 'preview' : null }), _jsx(NodeContextMenu, { nodeId: contextMenuNodeId || '', nodeType: nodes.find(n => n.id === contextMenuNodeId)?.type || 'textBlock', position: contextMenuPosition, onClose: () => setContextMenuPosition(null), onSaveAsPreset: handleSaveAsPreset }), _jsx(SaveAsPresetDialog, { isOpen: !!saveAsPresetNodeId, nodeData: saveAsPresetNode?.data || null, nodeType: saveAsPresetNode?.type || 'textBlock', onClose: () => setSaveAsPresetNodeId(null), onSave: handleSavePreset })] }));
-    // Conditionally wrap with DndProvider when using droppable nodes
-    if (showAssetLibrary) {
-        return _jsx(DndProvider, { backend: HTML5Backend, children: content });
-    }
-    return content;
+    // Always wrap with DndProvider since TabbedSidePanel includes asset browser that uses drag-and-drop
+    // The asset browser tab can be clicked regardless of showAssetLibrary prop
+    return _jsx(DndProvider, { backend: HTML5Backend, children: content });
 };
 // Export the main component
 export const Epic1GraphEditor = (props) => {
+    console.log('[Epic1GraphEditor] Wrapper mounting with props:', { showAssetLibrary: props.showAssetLibrary });
     return (_jsx(ReactFlowProvider, { children: _jsx(Epic1GraphEditorInner, { ...props }) }));
 };
 // Also export with provider for compatibility

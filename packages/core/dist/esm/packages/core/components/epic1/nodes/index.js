@@ -3,6 +3,9 @@
 import { BaseEditableNode } from './BaseEditableNode';
 import { TextBlockNode } from './TextBlockNode';
 import { WeightedChoiceNode } from './WeightedChoiceNode';
+import { ImprovedWeightedChoiceNode } from './ImprovedWeightedChoiceNode';
+import { BranchingWeightedChoiceNode } from './BranchingWeightedChoiceNode';
+import { EnhancedBranchingNode } from './EnhancedBranchingNode';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
@@ -11,6 +14,9 @@ import { NodeContextMenu } from './NodeContextMenu';
 export { BaseEditableNode };
 export { TextBlockNode };
 export { WeightedChoiceNode };
+export { ImprovedWeightedChoiceNode };
+export { BranchingWeightedChoiceNode };
+export { EnhancedBranchingNode };
 export { ConcatNode };
 export { VariableNode };
 export { OutputNode };
@@ -18,7 +24,7 @@ export { NodeContextMenu };
 // Now we can safely create the node type mapping
 export const epic1NodeTypes = {
     textBlock: TextBlockNode,
-    weightedChoice: WeightedChoiceNode,
+    weightedChoice: EnhancedBranchingNode, // Use enhanced version with radio dials and all fixes
     concat: ConcatNode,
     variable: VariableNode,
     setVariable: VariableNode,

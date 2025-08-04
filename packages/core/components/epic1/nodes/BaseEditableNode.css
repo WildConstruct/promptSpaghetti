@@ -25,6 +25,11 @@
   width: fit-content !important;
 }
 
+/* Special case for enhanced branching to contain content */
+.epic1-editable-node.weighted-choice.enhanced-branching {
+  overflow: hidden;
+}
+
 /* Dragging state */
 .epic1-editable-node.dragging {
   cursor: grabbing;
