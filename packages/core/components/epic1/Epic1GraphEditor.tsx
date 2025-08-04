@@ -174,10 +174,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const enhancedNodes = useMemo(() => {
     return nodes.map((node) => {
       const nodeData = createNodeData(node.data, node.id);
-      // Check if this is an enhancedBranching node
-      const isEnhancedBranching = node.type === 'enhancedBranching' || node.type === 'enhancedBranchingNode';
-      // Make node non-draggable when it's being edited
-      const isDraggable = !nodeData.isEditing && (!isEnhancedBranching || !nodeData.isEditing);
+      // Check if this is a weightedChoice node (which uses EnhancedBranchingNode)
+      const isWeightedChoice = node.type === 'weightedChoice';
+      // Make weightedChoice nodes completely non-draggable
+      const isDraggable = !isWeightedChoice;
       
       return {
         ...node,
@@ -186,7 +186,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         data: nodeData,
         // Preserve the original selected state from nodes, don't override
         selected: node.selected || node.id === selectedNodeId,
-        // Disable dragging for enhanced branching nodes in edit mode
+        // Disable dragging for weightedChoice nodes completely
         draggable: isDraggable,
       };
     });
