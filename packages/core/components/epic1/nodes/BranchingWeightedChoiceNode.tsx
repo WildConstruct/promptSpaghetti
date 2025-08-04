@@ -9,6 +9,7 @@ export interface WeightedOption {
   text: string;
   weight: number;
   hasBranch?: boolean;
+  id?: string; // Stable ID for consistent handle positioning
 }
 
 export interface BranchingWeightedChoiceNodeData extends EditableNodeData {
@@ -40,8 +41,46 @@ const WEIGHT_PRESETS = {
  * Branching WeightedChoice node with conditional outputs per option
  */
 export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeightedChoiceNodeData>) => {
-  const [options, setOptions] = useState<WeightedOption[]>(props.data.options || []);
+  // Initialize options with stable IDs
+  const initializeOptions = (opts: WeightedOption[]) => {
+    return opts.map((opt, index) => ({
+      ...opt,
+      // Use a more stable ID based on node ID and index
+      id: opt.id || `${props.id}-option-${index}`
+    }));
+  };
+  
+  const [options, setOptions] = useState<WeightedOption[]>(() => 
+    initializeOptions(props.data.options || [])
+  );
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  
+  // Update options when props change, but preserve stable IDs
+  useEffect(() => {
+    if (props.data.options) {
+      setOptions(currentOptions => {
+        // Map new options preserving existing IDs where possible
+        // More robust ID preservation based on index and content
+        return props.data.options.map((newOpt, index) => {
+          // First try to find by matching index and similar content
+          let existingOpt = currentOptions[index];
+          
+          // If not found by index, try to find by exact content match
+          if (!existingOpt || existingOpt.text !== newOpt.text || existingOpt.weight !== newOpt.weight) {
+            existingOpt = currentOptions.find(
+              opt => opt.text === newOpt.text && opt.weight === newOpt.weight
+            );
+          }
+          
+          // Preserve the ID if we found a match, otherwise use the new option's ID or generate one
+          return {
+            ...newOpt,
+            id: existingOpt?.id || newOpt.id || `option-${index}-${Date.now().toString(36)}`
+          };
+        });
+      });
+    }
+  }, [props.data.options]);
   
   // Check if any option has branching enabled
   const hasBranching = options.some(opt => opt.hasBranch);
@@ -115,7 +154,13 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
 
   // Add new option
   const addOption = () => {
-    const newOptions = [...options, { text: '', weight: 50, hasBranch: false }];
+    const newOption = { 
+      text: '', 
+      weight: 50, 
+      hasBranch: false,
+      id: `${props.id}-option-${options.length}`
+    };
+    const newOptions = [...options, newOption];
     setOptions(newOptions);
   };
 
@@ -162,6 +207,7 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
         ...props.data,
         options,
         onEdit: (value: string) => {
+          // Save options with their stable IDs
           props.data.onEdit?.(JSON.stringify(options));
         }
       }}
@@ -218,7 +264,7 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
               >
                 {options.map((option, index) => (
                   <div 
-                    key={index} 
+                    key={option.id} 
                     className={`epic1-option-row branching ${draggedIndex === index ? 'dragging' : ''}`}
                     draggable
                     onDragStart={() => handleDragStart(index)}
@@ -297,7 +343,7 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                       </button>
                     )}
 
-                    {/* Branch output handle with visual connector */}
+                    {/* Branch output handle with visual connector - use stable ID */}
                     {option.hasBranch && (
                       <>
                         {/* Visual line extending toward frame */}
@@ -307,7 +353,7 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                             position: 'absolute',
                             top: '50%',
                             right: 0,
-                            width: '30px',
+                            width: '50px',
                             height: '2px',
                             background: 'linear-gradient(90deg, #f59e0b 0%, transparent 100%)',
                             pointerEvents: 'none',
@@ -318,11 +364,12 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                         <Handle
                           type="source"
                           position={Position.Right}
-                          id={`branch-${index}`}
+                          id={`branch-${option.id}`} // Use stable ID instead of index
                           className="epic1-handle epic1-handle-right branch-output"
                           style={{ 
+                            position: 'absolute',
                             top: '50%', 
-                            right: -10, 
+                            right: -28, // Position on the node's outer frame edge (accounting for padding)
                             transform: 'translateY(-50%)',
                             background: '#f59e0b',
                             width: '14px',
@@ -406,9 +453,9 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
             <div className="epic1-node-type-label">
               Weighted Choice {hasBranching && '(Branching)'}
             </div>
-            <div className="epic1-options-preview">
+            <div className="epic1-options-preview" style={{ position: 'relative' }}>
               {options.map((option, index) => (
-                <div key={index} className="epic1-option-preview branching">
+                <div key={option.id} className="epic1-option-preview branching" style={{ position: 'relative' }}>
                   <div className="epic1-option-text-preview">
                     {option.text || <span className="epic1-placeholder">Empty option</span>}
                     {option.hasBranch && <span className="branch-indicator">⚡</span>}
@@ -423,7 +470,7 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                     </div>
                   </div>
                   
-                  {/* Branch output handle in display mode with visual indicator */}
+                  {/* Branch output handle in display mode - positioned relative to option container */}
                   {option.hasBranch && (
                     <>
                       {/* Visual line for frame edge connection */}
@@ -431,23 +478,26 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                         className="branch-edge-indicator"
                         style={{
                           position: 'absolute',
-                          top: `${20 + index * 50}px`,
+                          top: '50%',
                           right: 0,
-                          width: '25px',
+                          width: '45px',
                           height: '2px',
                           background: 'linear-gradient(90deg, #f59e0b 0%, transparent 100%)',
                           pointerEvents: 'none',
+                          transform: 'translateY(-50%)',
                           opacity: 0.6
                         }}
                       />
                       <Handle
                         type="source"
                         position={Position.Right}
-                        id={`branch-${index}`}
+                        id={`branch-${option.id}`} // Use stable ID
                         className="epic1-handle epic1-handle-right branch-output"
                         style={{ 
-                          top: `${20 + index * 50}px`, 
-                          right: -10,
+                          position: 'absolute',
+                          top: '50%', 
+                          right: -32, // Position on the node's outer frame edge
+                          transform: 'translateY(-50%)',
                           background: '#f59e0b',
                           width: '14px',
                           height: '14px',

@@ -20,8 +20,9 @@
   position: relative;
   transition: all 0.2s ease;
   cursor: move;
-  min-height: 40px;
-  max-height: 50px; /* Prevent options from getting too tall */
+  height: 48px; /* Fixed height for consistent handle positioning */
+  min-height: 48px;
+  max-height: 48px;
 }
 
 .epic1-option-row.branching:hover {
@@ -101,32 +102,41 @@
   box-shadow: 0 0 4px rgba(245, 158, 11, 0.4);
 }
 
-/* Branch output handles */
+/* Branch output handles - positioned on node's outer frame */
 .epic1-handle.branch-output {
   background: #f59e0b !important;
   border: 2px solid #1a1a1a !important;
-  width: 12px;
-  height: 12px;
+  width: 14px !important;
+  height: 14px !important;
   transition: all 0.2s ease;
+  position: absolute !important;
+  /* Override inline styles to ensure handles stay on frame edge */
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  /* Don't override right position - let inline style control it */
 }
 
 .epic1-handle.branch-output:hover {
-  transform: scale(1.2);
+  transform: translateY(-50%) scale(1.2) !important;
   box-shadow: 0 0 6px rgba(245, 158, 11, 0.6);
 }
 
 /* Main output handle styling */
 .epic1-handle.main-output {
-  background: #10b981 !important;
-  border: 2px solid #1a1a1a !important;
-  width: 14px;
-  height: 14px;
+  background: #ff6b35 !important; /* Changed to match the main node theme */
+  border: 3px solid #1a1a2e !important;
+  width: 16px !important;
+  height: 16px !important;
   z-index: 10;
+  position: absolute !important;
+  top: -8px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
 }
 
 .epic1-handle.main-output:hover {
-  transform: scale(1.2);
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  transform: translateX(-50%) scale(1.2) !important;
+  box-shadow: 0 0 6px rgba(255, 107, 53, 0.6);
 }
 
 /* Top handle positioning */
@@ -145,6 +155,12 @@
 .epic1-option-preview.branching {
   position: relative;
   padding-right: 30px; /* Space for branch indicator */
+  margin-bottom: 12px; /* Add spacing between options */
+  height: 48px; /* Fixed height matching edit mode for consistent handle positioning */
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .branch-indicator {
@@ -161,8 +177,16 @@
 .epic1-options-list.branching {
   max-height: 480px;
   overflow-y: auto;
+  overflow-x: visible; /* Allow handles to extend outside */
   padding-right: 8px;
   margin-right: -4px; /* Compensate for scrollbar */
+  position: relative;
+}
+
+/* Ensure options preview container allows handles to extend */
+.epic1-options-preview {
+  position: relative;
+  overflow: visible !important; /* Allow handles to extend outside */
 }
 
 /* Style overrides for input fields in branching mode */
