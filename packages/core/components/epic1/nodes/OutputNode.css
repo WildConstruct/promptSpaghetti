@@ -23,7 +23,7 @@
 /* Output node handle - properly aligned to border */
 .epic1-editable-node.output .epic1-handle.target {
   position: absolute !important;
-  left: -11px !important; /* Align with rounded border edge (half of 14px width + 2px border + 2px node border) */
+  left: -9px !important; /* Align exactly on border edge (half of 14px width + 2px border) */
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 10;
