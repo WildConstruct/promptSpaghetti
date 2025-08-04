@@ -14,21 +14,38 @@ export interface PaletteProps { nodes: NodeMeta;
   onDragStart?: (nodeId: string) => void }
 
 
-export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => { return (
+export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, onDragStart }) => {
+  // Calculate dynamic height based on number of nodes
+  // Min height of 400px, max height of 80vh, grows with content
+  const calculateHeight = () => {
+    const baseHeight = 400;
+    const itemHeight = collapsed ? 50 : 40; // Approximate height per item
+    const categoryHeight = collapsed ? 0 : 40; // Category headers only in expanded view
+    const categoriesCount = new Set(nodes.map(n => n.category || 'other')).size;
+    
+    const contentHeight = (nodes.length * itemHeight) + (categoriesCount * categoryHeight) + 100; // +100 for header/padding
+    const dynamicHeight = Math.max(baseHeight, Math.min(contentHeight, window.innerHeight * 0.8));
+    
+    return `${dynamicHeight}px`;
+  };
+
+  return (
     <aside
       aria-label="Node Palette"
       style={{
-        width: collapsed ? 56 : 200
-        background: professionalColors.background.primary
-        color: professionalColors.text.primary }
-        borderRight: `1px solid ${professionalColors.ui.border}`
-        padding: 0
-        height: '100%'
-        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-        overflow: 'hidden'
-        display: 'flex'
+        width: collapsed ? 56 : 200,
+        background: professionalColors.background.primary,
+        color: professionalColors.text.primary,
+        borderRight: `1px solid ${professionalColors.ui.border}`,
+        padding: 0,
+        height: calculateHeight(),
+        maxHeight: '80vh',
+        minHeight: '400px',
+        transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        overflow: 'hidden',
+        display: 'flex',
         flexDirection: 'column'
-
+      }}
     >
       <button
         aria-label={collapsed ? 'Expand palette' : 'Collapse palette'}
@@ -48,7 +65,14 @@ export const Palette: React.FC<PaletteProps> = ({ nodes, collapsed, onToggle, on
       >
         {collapsed ? '»' : '«'}
       </button>
-      <div style={{ flex: 1, overflowY: 'auto', padding: collapsed ? 0 : 8 }}>
+      <div style={{ 
+        flex: 1, 
+        overflowY: 'auto', 
+        overflowX: 'hidden',
+        padding: collapsed ? 0 : 8,
+        scrollbarWidth: 'thin',
+        scrollbarColor: `${professionalColors.ui.border} ${professionalColors.background.secondary}`
+      }}>
         {collapsed
           ? // Collapsed view - show icons only
             nodes.map(node => (
