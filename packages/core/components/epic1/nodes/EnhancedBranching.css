@@ -356,7 +356,6 @@
   width: 12px !important;
   height: 12px !important;
   border: 2px solid #1a1a1a !important;
-  border-radius: 50% !important;
   z-index: 1000 !important;
   position: absolute !important;
 }

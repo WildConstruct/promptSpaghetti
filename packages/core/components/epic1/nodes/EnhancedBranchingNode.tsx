@@ -521,18 +521,18 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 </div>
               </div>
 
-              {/* Main output on top-right corner when branching enabled */}
+              {/* Main output stays on right edge when branching enabled */}
               {hasBranching && (
                 <Handle
                   type="source"
-                  position={Position.Top}
+                  position={Position.Right}
                   id="main-output"
                   className="enhanced-handle main-output"
                   style={{ 
                     position: 'absolute',
-                    right: 20,
-                    top: -8,
-                    transform: 'none'
+                    right: -8,
+                    top: '10%',
+                    transform: 'translateY(-50%)'
                   }}
                 />
               )}
@@ -565,7 +565,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       className="enhanced-handle branch-output"
                       style={{ 
                         position: 'absolute',
-                        right: -8, // Position exactly on frame edge
+                        right: -10, // Position on frame edge in display mode
                         top: '50%',
                         transform: 'translateY(-50%)'
                       }}
@@ -575,18 +575,18 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
               ))}
             </div>
 
-            {/* Main output on top-right corner when branching is enabled */}
+            {/* Main output on right edge when branching is enabled */}
             {hasBranching && (
               <Handle
                 type="source"
-                position={Position.Top}
+                position={Position.Right}
                 id="main-output"
                 className="enhanced-handle main-output"
                 style={{ 
                   position: 'absolute',
-                  right: 20,
-                  top: -8, // Position exactly on frame edge
-                  transform: 'none'
+                  right: -10, // Position on frame edge in display mode
+                  top: '10%',
+                  transform: 'translateY(-50%)'
                 }}
               />
             )}

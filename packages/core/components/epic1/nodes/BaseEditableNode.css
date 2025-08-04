@@ -139,11 +139,11 @@
 }
 
 .epic1-handle.target {
-  left: -8px !important; /* Position exactly on the border edge (half of 12px width + 2px border) */
+  left: -10px !important; /* Position on the border edge (half of 12px width + 2px border + 2px node border) */
 }
 
 .epic1-handle.source {
-  right: -8px !important; /* Position exactly on the border edge (half of 12px width + 2px border) */
+  right: -10px !important; /* Position on the border edge (half of 12px width + 2px border + 2px node border) */
 }
 
 /* No position adjustment needed on hover since we're using scale transform */
