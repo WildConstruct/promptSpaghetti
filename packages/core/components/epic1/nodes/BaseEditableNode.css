@@ -18,6 +18,9 @@
   justify-content: center;
   /* Prevent layout shift on interactions */
   box-sizing: border-box;
+  /* Prevent text selection during drag */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Dragging state */

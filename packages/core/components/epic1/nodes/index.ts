@@ -6,6 +6,7 @@ import { TextBlockNode } from './TextBlockNode';
 import { WeightedChoiceNode } from './WeightedChoiceNode';
 import { ImprovedWeightedChoiceNode } from './ImprovedWeightedChoiceNode';
 import { BranchingWeightedChoiceNode } from './BranchingWeightedChoiceNode';
+import { EnhancedBranchingNode } from './EnhancedBranchingNode';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
@@ -21,8 +22,10 @@ export type { TextBlockNodeData } from './TextBlockNode';
 export { WeightedChoiceNode };
 export { ImprovedWeightedChoiceNode };
 export { BranchingWeightedChoiceNode };
+export { EnhancedBranchingNode };
 export type { WeightedChoiceNodeData, WeightedOption } from './WeightedChoiceNode';
 export type { BranchingWeightedChoiceNodeData } from './BranchingWeightedChoiceNode';
+export type { EnhancedBranchingNodeData } from './EnhancedBranchingNode';
 
 export { ConcatNode };
 export type { ConcatNodeData } from './ConcatNode';
@@ -39,7 +42,7 @@ export type { ContextMenuPosition } from './NodeContextMenu';
 // Now we can safely create the node type mapping
 export const epic1NodeTypes = {
   textBlock: TextBlockNode,
-  weightedChoice: BranchingWeightedChoiceNode, // Use branching version with drag handles and conditional outputs
+  weightedChoice: EnhancedBranchingNode, // Use enhanced version with radio dials and all fixes
   concat: ConcatNode,
   variable: VariableNode,
   setVariable: VariableNode,

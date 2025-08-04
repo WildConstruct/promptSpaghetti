@@ -1,0 +1,471 @@
+/* Enhanced Branching Node Styles */
+
+.enhanced-branching-editor {
+  width: 420px !important; /* Fixed width to prevent stretching */
+  max-width: 420px !important;
+  min-width: 420px !important;
+  overflow: visible; /* Allow handles to extend outside */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Title section - taller with edit button */
+.enhanced-title-section {
+  background: rgba(74, 158, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.title-text {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #4a9eff;
+  text-align: center;
+}
+
+.title-edit-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.title-edit-btn:hover {
+  background: rgba(74, 158, 255, 0.2);
+  color: #4a9eff;
+}
+
+.title-edit-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid #4a9eff;
+  border-radius: 4px;
+  padding: 6px 10px;
+  color: #e0e0e0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Presets row */
+.enhanced-presets {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.preset-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.preset-btn:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #f59e0b;
+  transform: translateY(-1px);
+}
+
+.total-weight {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Options list */
+.enhanced-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: visible; /* Allow handles to extend outside */
+  padding: 0 8px;
+  margin: 0 -8px; /* Compensate for padding to allow handles outside */
+}
+
+/* Option row */
+.enhanced-option-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 4px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  position: relative;
+  cursor: move;
+  min-height: 36px;
+  max-height: 36px;
+  transition: all 0.2s;
+}
+
+.enhanced-option-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.enhanced-option-row.dragging {
+  opacity: 0.5;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+/* Drag handle - brighter with less padding */
+.enhanced-drag-handle {
+  width: 16px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5); /* Brighter */
+  cursor: grab;
+  margin-right: 2px; /* Reduced padding */
+  flex-shrink: 0;
+}
+
+.enhanced-drag-handle:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.enhanced-option-row:hover .enhanced-drag-handle {
+  color: #f59e0b;
+}
+
+/* Text input - maximized width */
+.enhanced-option-text {
+  flex: 1;
+  min-width: 140px;
+  height: 28px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.enhanced-option-text:focus {
+  border-color: #4a9eff;
+  background: rgba(0, 0, 0, 0.3);
+  outline: none;
+}
+
+.enhanced-option-text::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Radio dial styles */
+.radio-dial-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.radio-dial {
+  cursor: pointer;
+}
+
+.dial-value {
+  width: 35px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  color: #f59e0b;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: -4px;
+}
+
+.dial-value:focus {
+  outline: none;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 3px;
+}
+
+/* Percentage display */
+.percentage-display {
+  min-width: 35px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.percentage-value {
+  font-size: 11px;
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+/* Branch toggle */
+.branch-toggle {
+  width: 24px;
+  height: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.branch-toggle:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.branch-toggle.active {
+  background: rgba(245, 158, 11, 0.3);
+  border-color: #f59e0b;
+  color: #f59e0b;
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.4);
+}
+
+/* Remove button */
+.remove-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+/* Branch handle container - extends outside node */
+.branch-handle-container {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+}
+
+/* Enhanced handles */
+.enhanced-handle {
+  width: 12px !important;
+  height: 12px !important;
+  border: 2px solid #1a1a1a !important;
+  z-index: 100 !important;
+}
+
+.enhanced-handle.main-output {
+  background: #10b981 !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.enhanced-handle.branch-output {
+  background: #f59e0b !important;
+}
+
+.enhanced-handle:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* Footer section */
+.enhanced-footer {
+  padding: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hints {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.footer-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-option-btn {
+  padding: 6px 12px;
+  border: 1px dashed #f59e0b;
+  background: transparent;
+  color: #f59e0b;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-option-btn:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-style: solid;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.confirm-btn,
+.cancel-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn {
+  background: #10b981;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: #059669;
+  transform: scale(1.05);
+}
+
+.cancel-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+/* Display mode styles */
+.enhanced-branching-display {
+  padding: 12px;
+  position: relative;
+  overflow: visible;
+}
+
+.display-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #4a9eff;
+  text-align: center;
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(74, 158, 255, 0.1);
+  border-radius: 4px;
+}
+
+.display-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.display-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  position: relative;
+}
+
+.option-text {
+  flex: 1;
+  font-size: 13px;
+  color: #e0e0e0;
+}
+
+.option-percentage {
+  font-size: 11px;
+  font-weight: 600;
+  color: #60a5fa;
+  margin-left: 8px;
+}
+
+/* Scrollbar styling */
+.enhanced-options-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.enhanced-options-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.enhanced-options-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.enhanced-options-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.4);
+}
+
+/* Prevent node stretching */
+.enhanced-branching-editor,
+.enhanced-branching-display {
+  box-sizing: border-box !important;
+  width: 420px !important;
+}
+
+/* Fix for handle positioning */
+.react-flow__node.selected .enhanced-branching-editor {
+  overflow: visible !important;
+}
