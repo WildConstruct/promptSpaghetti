@@ -11,6 +11,7 @@ import {
   enforceFrameEdgePositions 
 } from './utils/nodePositioning';
 import { validateGraph, formatValidationMessage } from './utils/graphValidation';
+import { Epic1GraphEditorProps, ProfessionalMenuBarProps } from './types';
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
 import '@promptscape/core/components/epic1/nodes/BaseEditableNode.css';
 import '@promptscape/core/components/epic1/nodes/NodeStyles.css';
@@ -32,8 +33,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   showOnboarding = false
 }) => {
   // Component loading state
-  const [EditorComponent, setEditorComponent] = useState<React.ComponentType<any> | null>(null);
-  const [MenuBarComponent, setMenuBarComponent] = useState<React.ComponentType<any> | null>(null);
+  const [EditorComponent, setEditorComponent] = useState<React.ComponentType<Epic1GraphEditorProps> | null>(null);
+  const [MenuBarComponent, setMenuBarComponent] = useState<React.ComponentType<ProfessionalMenuBarProps> | null>(null);
   const [loadError, setLoadError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   

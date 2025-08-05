@@ -1,4 +1,9 @@
 import { Node } from 'reactflow';
+import { 
+  TextBlockNodeData, 
+  WeightedChoiceNodeData, 
+  OutputNodeData 
+} from '../types';
 
 export interface ViewportDimensions {
   width: number;
@@ -17,6 +22,8 @@ export interface NodePositions {
   bottomCenter: { x: number; y: number };
   leftMiddle: { x: number; y: number };
 }
+
+export type TypedNode = Node<TextBlockNodeData | WeightedChoiceNodeData | OutputNodeData>;
 
 /**
  * Calculate viewport dimensions with sensible defaults
@@ -71,7 +78,7 @@ export const calculateNodePositions = (
 /**
  * Create demo nodes with proper positioning
  */
-export const createDemoNodes = (positions: NodePositions): Node[] => [
+export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
   {
     id: 'prompt-1',
     type: 'textBlock',
@@ -84,7 +91,7 @@ export const createDemoNodes = (positions: NodePositions): Node[] => [
       text: 'Generate a character for a',
       label: 'Prompt Start',
       frameEdge: 'top'
-    }
+    } as TextBlockNodeData
   },
   {
     id: 'setting-1',
@@ -101,7 +108,7 @@ export const createDemoNodes = (positions: NodePositions): Node[] => [
       ],
       label: 'Setting',
       frameEdge: 'right'
-    }
+    } as WeightedChoiceNodeData
   },
   {
     id: 'prompt-2',
@@ -115,7 +122,7 @@ export const createDemoNodes = (positions: NodePositions): Node[] => [
       text: 'story. They are a',
       label: 'Connector',
       frameEdge: 'bottom'
-    }
+    } as TextBlockNodeData
   },
   {
     id: 'character-1',
@@ -133,7 +140,7 @@ export const createDemoNodes = (positions: NodePositions): Node[] => [
       ],
       label: 'Character Type',
       frameEdge: 'bottom'
-    }
+    } as WeightedChoiceNodeData
   },
   {
     id: 'output-1',
@@ -146,7 +153,7 @@ export const createDemoNodes = (positions: NodePositions): Node[] => [
       outputName: 'character_prompt',
       label: 'Character Prompt',
       frameEdge: 'left'
-    }
+    } as OutputNodeData
   }
 ];
 

@@ -65,20 +65,23 @@ export const useEditOperations = ({
 
   const handleCopy = useCallback(() => {
     const selectedNodes = currentNodes.filter(n => n.selected);
-    const selectedNodeIds = selectedNodes.map(n => n.id);
+    
+    if (selectedNodes.length === 0) {
+      showToast('No nodes selected', 'warning');
+      return;
+    }
+    
+    // Optimize with Set for O(1) lookup
+    const selectedNodeIds = new Set(selectedNodes.map(n => n.id));
     const selectedEdges = currentEdges.filter(e => 
-      selectedNodeIds.includes(e.source) && selectedNodeIds.includes(e.target)
+      selectedNodeIds.has(e.source) && selectedNodeIds.has(e.target)
     );
     
-    if (selectedNodes.length > 0) {
-      setClipboard({ 
-        nodes: JSON.parse(JSON.stringify(selectedNodes)), 
-        edges: JSON.parse(JSON.stringify(selectedEdges))
-      });
-      showToast(`Copied ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`, 'success');
-    } else {
-      showToast('No nodes selected', 'warning');
-    }
+    setClipboard({ 
+      nodes: JSON.parse(JSON.stringify(selectedNodes)), 
+      edges: JSON.parse(JSON.stringify(selectedEdges))
+    });
+    showToast(`Copied ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`, 'success');
   }, [currentNodes, currentEdges, showToast]);
 
   const handlePaste = useCallback(() => {
@@ -105,19 +108,24 @@ export const useEditOperations = ({
       };
     });
     
-    const pastedEdges = clipboard.edges.map(edge => ({
-      ...edge,
-      id: `${edge.id}-paste-${timestamp}`,
-      source: idMap.get(edge.source) || edge.source,
-      target: idMap.get(edge.target) || edge.target
-    })).filter(edge => 
-      idMap.has(edge.source) && idMap.has(edge.target)
-    );
+    // Map and filter edges in a single pass
+    const pastedEdges: Edge[] = [];
+    for (const edge of clipboard.edges) {
+      const newSource = idMap.get(edge.source);
+      const newTarget = idMap.get(edge.target);
+      
+      if (newSource && newTarget) {
+        pastedEdges.push({
+          ...edge,
+          id: `${edge.id}-paste-${timestamp}`,
+          source: newSource,
+          target: newTarget
+        });
+      }
+    }
     
-    const allNodes = [
-      ...currentNodes.map(n => ({ ...n, selected: false })),
-      ...pastedNodes
-    ];
+    // Deselect existing nodes and add pasted ones
+    const allNodes = currentNodes.map(n => ({ ...n, selected: false })).concat(pastedNodes);
     const allEdges = [...currentEdges, ...pastedEdges];
     
     onNodesChange(allNodes);
