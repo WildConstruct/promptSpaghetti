@@ -40,6 +40,7 @@ import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
+import { edgeTypes } from './EdgeRenderingFix';
 import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
@@ -82,16 +83,24 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
   console.log('[Epic1GraphEditor] Using nodeTypes:', showAssetLibrary ? 'droppable' : 'regular', 'showAssetLibrary:', showAssetLibrary);
   console.log('[Epic1GraphEditor] Initial nodes:', initialNodes.length, 'nodes');
-  const [nodes, setNodes, onNodesChange] = useNodesState<EditableNodeData>(initialNodes);
+  const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [activatedEdges, setActivatedEdges] = useState<Set<string>>(new Set());
   
-  // Debug: Log nodes whenever they change
+  // Use onNodesChangeBase directly
+  const onNodesChange = onNodesChangeBase;
+  
+  // Debug: Log nodes and edges whenever they change
   useEffect(() => {
     console.log('[Epic1GraphEditor] Nodes state changed:', nodes.length, 'nodes');
+    console.log('[Epic1GraphEditor] Current edges:', edges.length, 'edges', edges);
     console.log('[Epic1GraphEditor] Node details:', nodes.map(n => ({ 
       id: n.id, 
       type: n.type,
-      position: n.position
+      position: n.position,
+      width: n.width,
+      height: n.height,
+      data: n.data
     })));
     // Check for duplicate IDs
     const ids = nodes.map(n => n.id);
@@ -99,7 +108,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     if (duplicates.length > 0) {
       console.warn('[Epic1GraphEditor] DUPLICATE NODE IDS FOUND:', duplicates);
     }
-  }, [nodes]);
+  }, [nodes, edges]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
@@ -182,6 +191,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         data: nodeData,
         // Preserve the original selected state from nodes, don't override
         selected: node.selected || node.id === selectedNodeId,
+        // Ensure dimensions are set
+        width: node.width || undefined,
+        height: node.height || undefined,
       };
     });
   }, [nodes, selectedNodeId, createNodeData]);
@@ -202,8 +214,16 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         }
         
         // Add the new edge
-        newEdges = addEdge(params, newEdges);
+        const edgeParams = {
+          ...params,
+          id: `${params.source || 'unknown'}-${params.target || 'unknown'}-${Date.now()}`,
+          type: 'smoothstep',
+          animated: false,
+          style: { stroke: '#9ca3af', strokeWidth: 3 }
+        };
+        newEdges = addEdge(edgeParams, newEdges);
         console.log('[Epic1GraphEditor] Edges after connection:', newEdges.length, 'edges');
+        console.log('[Epic1GraphEditor] New edge details:', newEdges);
         return newEdges;
       });
       
@@ -358,11 +378,13 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     setNodes((nds) => nds.map(n => ({ ...n, selected: true })));
   }, [setNodes]);
 
-  // Handle canvas click to deselect all nodes
+  // Handle canvas click to deselect all nodes and edges
   const handlePaneClick = useCallback(() => {
     setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
+    setEdges((eds) => eds.map(e => ({ ...e, selected: false })));
     setSelectedNodeId(null);
-  }, [setNodes]);
+    setActivatedEdges(new Set()); // Clear activated edges when clicking on canvas
+  }, [setNodes, setEdges]);
   
   // Handle node click to select it
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
@@ -385,6 +407,30 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       setSelectedNodeId(node.id);
     }
   }, [setNodes]);
+  
+  // Handle edge click to select and activate/deactivate
+  const handleEdgeClick = useCallback((event: React.MouseEvent, edge: Edge) => {
+    console.log('[Epic1GraphEditor] Edge clicked:', edge.id);
+    
+    // Select the edge
+    setEdges((eds) => eds.map(e => ({
+      ...e,
+      selected: e.id === edge.id
+    })));
+    
+    // Toggle activation
+    setActivatedEdges((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(edge.id)) {
+        newSet.delete(edge.id);
+        showToast('info', 'Edge deactivated');
+      } else {
+        newSet.add(edge.id);
+        showToast('success', 'Edge activated!');
+      }
+      return newSet;
+    });
+  }, [setEdges, showToast]);
 
   // Toggle preview panel
   const handleTogglePreview = useCallback(() => {
@@ -410,6 +456,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       previewEngineRef.current?.dispose();
     };
   }, []);
+  
   
   // Add direct keyboard handler for delete
   useEffect(() => {
@@ -735,21 +782,27 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
          onDragOver={onDragOver}>
         <ReactFlow
             nodes={enhancedNodes}
-            edges={edges}
+            edges={edges.map(edge => ({
+              ...edge,
+              animated: activatedEdges.has(edge.id),
+              className: activatedEdges.has(edge.id) ? 'activated' : ''
+            }))}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onPaneClick={handlePaneClick}
             onNodeClick={handleNodeClick}
+            onEdgeClick={handleEdgeClick}
             onInit={onInit}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
             isValidConnection={isValidConnection}
             connectionMode={ConnectionMode.Loose}
             connectionLineType="smoothstep"
             defaultEdgeOptions={{
               type: 'smoothstep',
               animated: false,
-              style: { stroke: '#666', strokeWidth: 2 }
+              style: { stroke: '#9ca3af', strokeWidth: 3 }
             }}
             fitView={true}
             fitViewOptions={{
@@ -763,11 +816,13 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             panOnScroll={false}
             zoomOnScroll={true}
             zoomOnPinch={true}
-            panOnDrag={true}
-            selectionOnDrag={false}
+            panOnDrag={[1, 2]}
+            selectionOnDrag={true}
+            selectionMode="partial"
             nodesDraggable={true}
             nodesConnectable={true}
             elementsSelectable={true}
+            selectNodesOnDrag={true}
             deleteKeyCode={['Delete', 'Backspace']}
             multiSelectionKeyCode="Shift"
             nodeDragThreshold={5}

@@ -1,43 +1,35 @@
 /* Professional Dark Theme (inspired by Cinema 4D & Substance Designer) */
 
+/* Import centralized color system */
+@import './styles/colors.css';
+
 /* CSS Custom Properties - Professional Design System */
 :root {
-  /* Background Colors */
-  --bg-primary: #1e1e1e;
-  --bg-secondary: #2a2a2a;
-  --bg-tertiary: #353535;
-  --bg-elevated: #404040;
-  --bg-hover: #2d2d2d;
+  /* Legacy color mappings for backward compatibility */
+  /* These map old variable names to the new centralized system */
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
+  --bg-tertiary: var(--color-bg-tertiary);
+  --bg-elevated: var(--color-bg-quaternary);
+  --bg-hover: var(--color-bg-hover);
 
-  /* Text Colors */
-  --text-primary: #e8e8e8;
-  --text-secondary: #b8b8b8;
-  --text-tertiary: #888888;
-  --text-accent: #ff7c00;
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-tertiary: var(--color-text-tertiary);
+  --text-accent: var(--color-text-accent);
 
-  /* Accent Colors */
-  --accent-orange: #ff7c00;
-  --accent-blue: #4a9eff;
-  --accent-cyan: #00d4ff;
-  --accent-purple: #b45cff;
-  --accent-green: #4ade80;
-  --accent-red: #ef4444;
+  --accent-orange: var(--color-accent-orange);
+  --accent-blue: var(--color-accent-blue);
+  --accent-cyan: var(--color-accent-cyan);
+  --accent-purple: var(--color-accent-purple);
+  --accent-green: var(--color-accent-green);
+  --accent-red: var(--color-accent-red);
 
-  /* UI Colors */
-  --border: #404040;
-  --border-hover: #5a5a5a;
-  --border-active: #ff7c00;
-  --focus: #4a9eff;
-  --selection: #ff7c0040;
-
-  /* Professional Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-  --shadow-node: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow-node-hover: 0 8px 25px rgba(0, 0, 0, 0.45), 0 4px 10px rgba(0, 0, 0, 0.25);
-  --shadow-node-selected: 0 0 0 2px #ff7c00, 0 8px 25px rgba(255, 124, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.4);
+  --border: var(--color-ui-border);
+  --border-hover: var(--color-ui-border-hover);
+  --border-active: var(--color-ui-border-active);
+  --focus: var(--color-ui-focus);
+  --selection: var(--color-ui-selection);
 
   /* Professional Spacing (8px grid) */
   --space-1: 4px;
@@ -192,50 +184,53 @@ body {
 
 /* Override React Flow default styles for dark mode */
 .react-flow__edge-path {
-  stroke: #666;
-  stroke-width: 2px;
+  stroke: var(--color-node-connection) !important;
+  stroke-width: 3px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  fill: none !important;
 }
 
 .react-flow__edge.selected .react-flow__edge-path {
-  stroke: #4caf50;
+  stroke: var(--color-node-connection-selected);
   stroke-width: 2px;
 }
 
 .react-flow__connection-path {
-  stroke: #666;
+  stroke: var(--color-node-connection);
   stroke-width: 2px;
 }
 
 .react-flow__controls {
-  background: rgba(42, 42, 42, 0.8);
-  border: 1px solid #444;
+  background: var(--color-bg-tooltip);
+  border: 1px solid var(--color-node-border);
 }
 
 .react-flow__controls button {
-  background: #2a2a2a;
+  background: var(--color-bg-secondary);
   border: none;
-  color: #e0e0e0;
+  color: var(--color-text-primary);
   border-bottom: 1px solid #444;
 }
 
 .react-flow__controls button:hover {
-  background: #3a3a3a;
+  background: var(--color-node-bg-selected);
 }
 
 .react-flow__minimap {
-  background: #2a2a2a;
-  border: 1px solid #444;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-node-border);
 }
 
 .react-flow__selection {
-  background: rgba(76, 175, 80, 0.1);
-  border: 1px solid #4caf50;
+  background: var(--color-status-success-bg);
+  border: 1px solid var(--color-status-success);
 }
 
 /* Selection box styling */
 .react-flow__nodesselection-rect {
-  background: rgba(76, 175, 80, 0.1);
-  border: 1px solid #4caf50;
+  background: var(--color-status-success-bg);
+  border: 1px solid var(--color-status-success);
 }
 
 /* Node styling - Safari-compatible overrides */
@@ -354,15 +349,13 @@ select:focus {
 }
 
 .react-flow__handle:hover {
-  -webkit-transform: scale(1.2) translateZ(0);
-  transform: scale(1.2) translateZ(0);
   border-color: #4caf50 !important;
   background: #5a6578 !important;
 }
 
 .react-flow__handle.connecting {
-  background: #4caf50 !important;
-  border-color: #4caf50 !important;
+  background: var(--color-status-success) !important;
+  border-color: var(--color-status-success) !important;
 }
 
 /* Connection line while dragging */
@@ -518,9 +511,9 @@ select:focus {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: rgba(31, 41, 55, 0.95);
+  background: var(--color-bg-overlay);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(55, 65, 81, 0.6);
+  border: 1px solid var(--color-ui-border);
   border-radius: 8px;
   padding: 12px 16px;
   font-size: 11px;
@@ -544,13 +537,13 @@ select:focus {
 
 .demo-mode .react-flow__node {
   /* Enhanced text contrast for demos */
-  color: #f8fafc !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  color: var(--color-text-primary) !important;
+  text-shadow: 0 1px 2px var(--shadow-sm);
 }
 
 .demo-mode .react-flow__edge-path {
   /* Enhanced edge visibility */
-  filter: drop-shadow(0 0 2px rgba(255, 124, 0, 0.3));
+  filter: drop-shadow(0 0 2px var(--color-accent-orange-alpha));
 }
 
 /* Presentation focus mode - highlights selected elements */
@@ -567,7 +560,7 @@ select:focus {
   opacity: 1;
   filter: none;
   box-shadow:
-    0 0 20px rgba(255, 124, 0, 0.4),
+    0 0 20px var(--color-accent-orange-alpha),
     var(--shadow-node-selected) !important;
   transform: scale(1.05);
   z-index: 100;
@@ -605,12 +598,12 @@ select:focus {
 /* Accessibility enhancements for presentations */
 .presentation-a11y {
   /* High contrast mode for accessibility */
-  --text-primary: #ffffff;
-  --text-secondary: #e2e8f0;
-  --bg-primary: #000000;
-  --bg-secondary: #1a1a1a;
-  --accent-orange: #ffa500;
-  --border: #666666;
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
+  --accent-orange: var(--color-accent-orange);
+  --border: var(--color-ui-border);
 }
 
 .presentation-a11y .react-flow__node {
@@ -652,7 +645,7 @@ select:focus {
 
   .react-flow__node {
     box-shadow: none !important;
-    border: 1px solid #333 !important;
+    border: 1px solid var(--color-ui-border) !important;
   }
 
   body {

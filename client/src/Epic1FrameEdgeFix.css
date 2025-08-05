@@ -11,24 +11,11 @@
   pointer-events: all !important;
 }
 
-/* Prevent nodes from jumping during connection */
-.react-flow__node.connecting {
-  transform: none !important;
-}
+/* Prevent nodes from jumping during connection - removed as it was causing issues */
+/* The .connecting class should not be applied to nodes */
 
 /* Style for connection handles at frame edges */
-.react-flow__handle {
-  width: 16px !important;
-  height: 16px !important;
-  background: #ff6b35 !important;
-  border: 3px solid #1a1a2e !important;
-  z-index: 10 !important;
-}
-
-.react-flow__handle:hover {
-  background: #ff8c42 !important;
-  transform: scale(1.2);
-}
+/* Removed - now handled in Epic1ReactFlowFix.css for consistency */
 
 /* Visual connection line to frame edge */
 .frame-edge-connector {
@@ -110,7 +97,7 @@
 
 /* Edge animation fix */
 .react-flow__edge-path {
-  stroke: #666 !important;
+  stroke: #9ca3af !important; /* Light gray for better visibility */
   stroke-width: 2 !important;
   fill: none !important;
 }

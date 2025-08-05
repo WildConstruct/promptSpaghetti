@@ -171,6 +171,7 @@ export const BaseEditableNode = memo(({
       <Handle
         type="target"
         position={Position.Left}
+        id="target"
         className="epic1-handle target"
       />
       
@@ -191,6 +192,7 @@ export const BaseEditableNode = memo(({
         <Handle
           type="source"
           position={Position.Right}
+          id="source"
           className="epic1-handle source"
         />
       )}

@@ -83,21 +83,20 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     id: 'prompt-1',
     type: 'textBlock',
     position: positions.topCenter,
-    draggable: false,
+    draggable: true,
     selectable: true,
     data: {
       nodeType: 'textBlock',
       content: 'Generate a character for a',
       text: 'Generate a character for a',
-      label: 'Prompt Start',
-      frameEdge: 'top'
+      label: 'Prompt Start'
     } as TextBlockNodeData
   },
   {
     id: 'setting-1',
     type: 'weightedChoice',
     position: positions.rightMiddle,
-    draggable: false,
+    draggable: true,
     selectable: true,
     data: {
       nodeType: 'weightedChoice',
@@ -106,29 +105,25 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
         { text: 'dark medieval', weight: 30 },
         { text: 'high fantasy', weight: 30 }
       ],
-      label: 'Setting',
-      frameEdge: 'right'
-    } as WeightedChoiceNodeData
+      label: 'Setting'    } as WeightedChoiceNodeData
   },
   {
     id: 'prompt-2',
     type: 'textBlock',
     position: positions.bottomRight,
-    draggable: false,
+    draggable: true,
     selectable: true,
     data: {
       nodeType: 'textBlock',
       content: 'story. They are a',
       text: 'story. They are a',
-      label: 'Connector',
-      frameEdge: 'bottom'
-    } as TextBlockNodeData
+      label: 'Connector'    } as TextBlockNodeData
   },
   {
     id: 'character-1',
     type: 'weightedChoice',
     position: positions.bottomCenter,
-    draggable: false,
+    draggable: true,
     selectable: true,
     data: {
       nodeType: 'weightedChoice',
@@ -138,42 +133,28 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
         { text: 'wise wizard', weight: 25 },
         { text: 'mysterious ranger', weight: 25 }
       ],
-      label: 'Character Type',
-      frameEdge: 'bottom'
-    } as WeightedChoiceNodeData
+      label: 'Character Type'    } as WeightedChoiceNodeData
   },
   {
     id: 'output-1',
     type: 'output',
     position: positions.leftMiddle,
-    draggable: false,
+    draggable: true,
     selectable: true,
     data: {
       nodeType: 'output',
       outputName: 'character_prompt',
-      label: 'Character Prompt',
-      frameEdge: 'left'
-    } as OutputNodeData
+      label: 'Character Prompt'    } as OutputNodeData
   }
 ];
 
 /**
- * Force frame edge nodes to stay at their designated positions
+ * Allow all nodes to be draggable - no longer enforcing frame edge positions
  */
 export const enforceFrameEdgePositions = (
   nodes: Node[], 
   originalNodes: Node[]
 ): Node[] => {
-  return nodes.map(node => {
-    const originalNode = originalNodes.find(n => n.id === node.id);
-    if (originalNode && originalNode.position && originalNode.data?.frameEdge) {
-      // Force frame edge nodes back to their original positions
-      return {
-        ...node,
-        position: originalNode.position,
-        draggable: false
-      };
-    }
-    return node;
-  });
+  // Simply return nodes as-is, allowing them to be dragged freely
+  return nodes;
 };

@@ -12,10 +12,12 @@ import {
 } from './utils/nodePositioning';
 import { validateGraph, formatValidationMessage } from './utils/graphValidation';
 import { Epic1GraphEditorProps, ProfessionalMenuBarProps } from './types';
+import { stylePresets, getConsoleStyle } from './utils/styleUtils';
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
 import '@promptscape/core/components/epic1/nodes/BaseEditableNode.css';
 import '@promptscape/core/components/epic1/nodes/NodeStyles.css';
-import '../Epic1FrameEdgeFix.css';
+import '../Epic1ReactFlowFix.css';
+import './styles/about-modal.css';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -43,10 +45,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const nodePositions = calculateNodePositions(viewport);
   const demoNodes = createDemoNodes(nodePositions);
   const demoEdges: Edge[] = [
-    { id: 'e1', source: 'prompt-1', target: 'setting-1', animated: true },
-    { id: 'e2', source: 'setting-1', target: 'prompt-2', animated: true },
-    { id: 'e3', source: 'prompt-2', target: 'character-1', animated: true },
-    { id: 'e4', source: 'character-1', target: 'output-1', animated: true }
+    { id: 'e1', source: 'prompt-1', sourceHandle: 'source', target: 'setting-1', targetHandle: 'target' },
+    { id: 'e2', source: 'setting-1', sourceHandle: 'source', target: 'prompt-2', targetHandle: 'target' },
+    { id: 'e3', source: 'prompt-2', sourceHandle: 'source', target: 'character-1', targetHandle: 'target' },
+    { id: 'e4', source: 'character-1', sourceHandle: 'source', target: 'output-1', targetHandle: 'target' }
   ];
   
   // Graph state
@@ -100,7 +102,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   }, [currentNodes, currentEdges, showToast]);
   
   const handleConsoleToggle = useCallback(() => {
-    console.log('%c=== Prompt Spaghetti Debug Console ===', 'color: #ff7c00; font-size: 16px; font-weight: bold');
+    console.log('%c=== Prompt Spaghetti Debug Console ===', getConsoleStyle());
     console.log('Graph Nodes:', currentNodes);
     console.log('Graph Edges:', currentEdges);
     console.log('Viewport:', viewport);
@@ -110,56 +112,24 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const handleAbout = useCallback(() => {
     const aboutDiv = document.createElement('div');
     aboutDiv.innerHTML = `
-      <div style="
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #1a1a1a;
-        border: 2px solid #333;
-        border-radius: 12px;
-        padding: 30px;
-        z-index: 10000;
-        box-shadow: 0 10px 50px rgba(0,0,0,0.8);
-        max-width: 400px;
-        color: #e0e0e0;
-        font-family: system-ui, -apple-system, sans-serif;
-      ">
-        <h2 style="margin: 0 0 20px 0; color: #ff7c00;">Prompt Spaghetti</h2>
-        <p style="margin: 10px 0; line-height: 1.6;">Version 1.0.0</p>
-        <p style="margin: 10px 0; line-height: 1.6; color: #b8b8b8;">
+      <div class="about-modal-container">
+        <h2 class="about-modal-heading">Prompt Spaghetti</h2>
+        <p class="about-modal-text">Version 1.0.0</p>
+        <p class="about-modal-description">
           A professional node-based editor for creating dynamic prompts with weighted choices, 
           variables, and conditional logic.
         </p>
-        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #333;">
-          <p style="margin: 5px 0; font-size: 14px; color: #888;">
+        <div class="about-modal-footer">
+          <p class="about-modal-footer-text">
             Built with React Flow, TypeScript, and ❤️
           </p>
-          <p style="margin: 5px 0; font-size: 14px; color: #888;">
+          <p class="about-modal-footer-text">
             © 2025 Prompt Spaghetti Team
           </p>
         </div>
-        <button onclick="this.parentElement.parentElement.remove()" style="
-          margin-top: 20px;
-          padding: 10px 20px;
-          background: #ff7c00;
-          border: none;
-          border-radius: 6px;
-          color: white;
-          font-weight: 600;
-          cursor: pointer;
-          font-size: 14px;
-        ">Close</button>
+        <button class="about-modal-button" onclick="this.parentElement.parentElement.remove()">Close</button>
       </div>
-      <div onclick="this.remove()" style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.5);
-        z-index: 9999;
-      "></div>
+      <div class="about-modal-overlay" onclick="this.remove()"></div>
     `;
     document.body.appendChild(aboutDiv);
   }, []);
@@ -225,11 +195,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   }, [showMenuBar]);
   
   if (loadError) {
-    return <div style={{ padding: '20px', color: 'red' }}>Error: {loadError}</div>;
+    return <div className="error-message">Error: {loadError}</div>;
   }
   
   if (isLoading || !EditorComponent) {
-    return <div style={{ padding: '20px' }}>Loading...</div>;
+    return <div className="loading-message">Loading...</div>;
   }
   
   return (

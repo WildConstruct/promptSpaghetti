@@ -1,39 +1,10 @@
 /* Epic 12 - LLM Randomizer Panel Styles - Professional UI Upgrade */
 
-/* Professional Color System - Cinema 4D Inspired */
+/* Import centralized color system */
+@import './styles/colors.css';
+
+/* Additional randomizer-specific variables */
 :root {
-  /* Professional Dark Theme */
-  --color-bg-primary: #2c2c2c; /* Cinema 4D main background */
-  --color-bg-secondary: #383838; /* Cinema 4D secondary panels */
-  --color-bg-tertiary: #404040; /* Elevated surfaces */
-  --color-bg-quaternary: #4a4a4a; /* Highest elevation */
-
-  /* Professional Accent Colors */
-  --color-accent-orange: #ff7800; /* Cinema 4D signature orange */
-  --color-accent-blue: #0ea5e9; /* Professional blue accent */
-  --color-accent-green: #10b981; /* Success states */
-  --color-accent-red: #ef4444; /* Error states */
-  --color-accent-purple: #8b5cf6; /* Advanced features */
-
-  /* Professional Text Colors */
-  --color-text-primary: #e5e7eb; /* High contrast text */
-  --color-text-secondary: #9ca3af; /* Medium contrast text */
-  --color-text-tertiary: #6b7280; /* Low contrast text */
-  --color-text-disabled: #4b5563; /* Disabled text */
-
-  /* Professional UI Colors */
-  --color-ui-border: #4a4a4a; /* Professional borders */
-  --color-ui-border-light: #525252; /* Lighter borders */
-  --color-ui-hover: #404040; /* Hover states */
-  --color-ui-selected: #525252; /* Selected states */
-  --color-ui-focus: #ff7800; /* Focus indicators */
-
-  /* Professional Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
-
   /* Professional Typography */
   --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', Helvetica, Arial, sans-serif;
   --font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
@@ -113,7 +84,7 @@ body {
 .preset-btn.active,
 .history-btn.active,
 .advanced-btn.active {
-  background: linear-gradient(145deg, var(--color-accent-orange), #e65100);
+  background: linear-gradient(145deg, var(--color-accent-orange), var(--color-accent-orange-dark));
   color: white;
   border-color: var(--color-accent-orange);
   box-shadow:
@@ -213,7 +184,7 @@ body {
   gap: 20px;
   margin-bottom: 20px;
   padding: 15px;
-  background: #f8f9fa;
+  background: var(--color-bg-tertiary);
   border-radius: 6px;
 }
 
@@ -371,7 +342,7 @@ body {
   color: #666;
   margin-top: 5px;
   padding: 8px;
-  background: #f8f9fa;
+  background: var(--color-bg-tertiary);
   border-radius: 4px;
 }
 
@@ -389,15 +360,15 @@ body {
 }
 
 .validation-errors {
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
+  background: var(--color-status-error-bg);
+  border: 1px solid var(--color-status-error-border);
+  color: var(--color-status-error);
 }
 
 .validation-warnings {
-  background: #fff3cd;
-  border: 1px solid #ffeaa7;
-  color: #856404;
+  background: var(--color-status-warning-bg);
+  border: 1px solid var(--color-status-warning-border);
+  color: var(--color-status-warning);
 }
 
 .validation-errors h4,
@@ -441,7 +412,7 @@ body {
 }
 
 .generate-btn.primary {
-  background: linear-gradient(145deg, var(--color-accent-orange), #e65100);
+  background: linear-gradient(145deg, var(--color-accent-orange), var(--color-accent-orange-dark));
   color: white;
   border: 1px solid var(--color-accent-orange);
 }

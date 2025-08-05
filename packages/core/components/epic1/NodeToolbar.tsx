@@ -28,11 +28,41 @@ const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
   const handleDragStart = (e: React.DragEvent) => {
     console.log('[NodeToolbar] Drag started for:', nodeInfo.type);
     setIsDragging(true);
+    
+    // Clear any existing data
+    e.dataTransfer.clearData();
+    
     // Set multiple data formats for compatibility
+    // CRITICAL: Set text/plain first as it's the most reliable
     e.dataTransfer.setData('text/plain', nodeInfo.type);
-    e.dataTransfer.setData('application/node-type', nodeInfo.type);
     e.dataTransfer.setData('application/reactflow', nodeInfo.type);
+    e.dataTransfer.setData('application/node-type', nodeInfo.type);
+    e.dataTransfer.setData('text', nodeInfo.type);
+    
+    // Set drag effect
     e.dataTransfer.effectAllowed = 'copy';
+    
+    // Create a custom drag image to show the correct node being dragged
+    const dragImage = e.currentTarget.cloneNode(true) as HTMLElement;
+    dragImage.style.position = 'absolute';
+    dragImage.style.top = '-1000px';
+    dragImage.style.opacity = '0.8';
+    dragImage.style.transform = 'scale(0.9)';
+    document.body.appendChild(dragImage);
+    
+    // Set the custom drag image
+    e.dataTransfer.setDragImage(dragImage, e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+    
+    // Remove the temporary element after a short delay
+    setTimeout(() => {
+      document.body.removeChild(dragImage);
+    }, 0);
+    
+    // Debug logging
+    console.log('[NodeToolbar] Data set for drag:', {
+      type: nodeInfo.type,
+      dataTypes: Array.from(e.dataTransfer.types || [])
+    });
   };
 
   const handleDragEnd = () => {

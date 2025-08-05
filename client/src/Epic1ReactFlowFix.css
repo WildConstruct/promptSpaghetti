@@ -1,0 +1,128 @@
+/* Epic1 React Flow Edge Rendering Fix - Simplified */
+
+/* Basic React Flow setup */
+.react-flow {
+  width: 100% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+/* Style edges with proper appearance */
+.react-flow__edges path,
+.react-flow__edge path,
+.react-flow__edge-path,
+.react-flow path.react-flow__edge-path {
+  stroke: #9ca3af !important;
+  stroke-width: 2px !important;
+  opacity: 1 !important;
+  fill: none !important;
+  visibility: visible !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  pointer-events: stroke !important;
+  cursor: pointer !important;
+}
+
+/* Hover effect for edges */
+.react-flow__edge:hover path {
+  stroke-width: 3px !important;
+  stroke: #6b7280 !important;
+}
+
+/* Ensure edges container is visible */
+.react-flow__edges,
+.react-flow__edge-renderer {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  pointer-events: none !important;
+}
+
+/* Ensure SVG element exists and is visible */
+.react-flow__edges svg,
+.react-flow__edge-renderer svg {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  overflow: visible !important;
+}
+
+/* Handle positioning */
+.react-flow__handle {
+  position: absolute !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: #3b82f6 !important;
+  border: 2px solid #1e293b !important;
+}
+
+.react-flow__handle-left {
+  left: -6px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.react-flow__handle-right {
+  right: -6px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Node dragging */
+.react-flow__node.dragging {
+  cursor: grabbing !important;
+  opacity: 0.8 !important;
+}
+
+/* Remove transitions for smooth dragging */
+.react-flow__viewport,
+.react-flow__node {
+  transition: none !important;
+}
+
+/* Activated edges - show animation */
+.react-flow__edge.activated path {
+  stroke: #3b82f6 !important;
+  stroke-width: 3px !important;
+  stroke-dasharray: 5;
+  animation: dashdraw 0.5s linear infinite;
+}
+
+@keyframes dashdraw {
+  0% {
+    stroke-dashoffset: 10;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Selection box styling */
+.react-flow__selectionpane {
+  background: rgba(59, 130, 246, 0.08) !important;
+  border: 1px solid rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Selected edge styling */
+.react-flow__edge.selected path {
+  stroke: #3b82f6 !important;
+  stroke-width: 3px !important;
+}
+
+/* Fix edge click detection */
+.react-flow__edges {
+  pointer-events: all !important;
+}
+
+.react-flow__edge {
+  pointer-events: all !important;
+}
+
+/* Ensure selection box is visible */
+.react-flow__selection {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border: 1px solid #3b82f6 !important;
+}

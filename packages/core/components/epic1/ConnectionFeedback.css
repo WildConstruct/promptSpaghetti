@@ -1,61 +1,33 @@
 /* Connection Feedback Styles */
 
-/* Valid drop targets - green glow */
+/* DISABLED: Connection feedback styles to prevent DOM manipulation and node jumping */
+/* These classes are no longer applied to nodes during connection dragging */
+
+/* Valid drop targets - green glow - DISABLED */
 .epic1-valid-target {
-  position: relative;
+  /* Class no longer applied to prevent DOM manipulation */
 }
 
-.epic1-valid-target::before {
-  content: '';
-  position: absolute;
-  top: -8px;
-  left: -8px;
-  right: -8px;
-  bottom: -8px;
-  border: 3px solid #22c493;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(34, 196, 147, 0.6);
-  animation: epic1-pulse-valid 1.5s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 10;
-}
-
-/* Invalid targets - reduced opacity */
+/* Invalid targets - reduced opacity - DISABLED */
 .epic1-invalid-target {
-  opacity: 0.3;
-  transition: opacity 0.2s ease;
+  /* Class no longer applied to prevent DOM manipulation */
 }
 
-/* Source node being connected from */
+/* Source node being connected from - DISABLED */
 .epic1-connecting-source {
-  position: relative;
-}
-
-.epic1-connecting-source::after {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  border: 2px solid #5b9eff;
-  border-radius: 10px;
-  pointer-events: none;
-  z-index: 10;
+  /* Class no longer applied to prevent DOM manipulation */
 }
 
 /* Pulse animation for valid targets */
+/* Removed pulse animation that causes node shift during connection */
 @keyframes epic1-pulse-valid {
   0% {
-    transform: scale(1);
     opacity: 0.8;
   }
   50% {
-    transform: scale(1.05);
     opacity: 0.5;
   }
   100% {
-    transform: scale(1);
     opacity: 0.8;
   }
 }
@@ -104,24 +76,17 @@
   transition: all 0.2s ease;
 }
 
-/* Valid target handles - highlight */
+/* DISABLED: Handle highlighting during connection - prevents DOM manipulation */
+/* These styles are no longer applied as the classes are not added to nodes */
+
+/* Valid target handles - highlight - DISABLED */
 .epic1-valid-target .react-flow__handle-left {
-  width: 18px;
-  height: 18px;
-  background: #10b981;
-  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
-  /* Adjust position to keep centered */
-  left: -9px;
+  /* Style no longer applied to prevent node jumping */
 }
 
-/* Source handle being dragged from */
+/* Source handle being dragged from - DISABLED */
 .epic1-connecting-source .react-flow__handle-right {
-  width: 16px;
-  height: 16px;
-  background: #4a9eff;
-  box-shadow: 0 0 10px rgba(74, 158, 255, 0.6);
-  /* Adjust position to keep centered */
-  right: -8px;
+  /* Style no longer applied to prevent node jumping */
 }
 
 /* Connection line styling */

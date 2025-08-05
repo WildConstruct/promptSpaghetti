@@ -21,8 +21,10 @@
   /* Prevent text selection during drag */
   user-select: none;
   -webkit-user-select: none;
-  /* Prevent width from being overridden */
-  width: fit-content !important;
+  /* Use auto width to prevent layout shifts */
+  width: auto !important;
+  /* Ensure minimum width for content */
+  min-width: fit-content;
 }
 
 /* Remove ALL ReactFlow selection outlines and borders */
@@ -134,16 +136,16 @@
   /* Keep same size to avoid layout shift */
   width: 12px;
   height: 12px;
-  /* Remove scale transform to prevent resizing issues */
+  /* Maintain exact position - no transform changes */
   transform: translateY(-50%) !important;
 }
 
 .epic1-handle.target {
-  left: -10px !important; /* Position on the border edge (half of 12px width + 2px border + 2px node border) */
+  left: -6px !important; /* Position centered on the border edge (half of 12px width) */
 }
 
 .epic1-handle.source {
-  right: -10px !important; /* Position on the border edge (half of 12px width + 2px border + 2px node border) */
+  right: -6px !important; /* Position centered on the border edge (half of 12px width) */
 }
 
 /* No position adjustment needed on hover since we're using scale transform */
@@ -285,14 +287,14 @@
 /* Fix output node handle positioning */
 .epic1-editable-node.output .epic1-handle.target {
   position: absolute !important;
-  left: -12px !important; /* Align with the border edge (half of 16px width + 2px border + 2px node border) */
+  left: -6px !important; /* Align with the border edge (half of 12px width) */
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 10;
   background: #5b9eff;
   border: 2px solid #1a1a1a;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
 }
 

@@ -70,38 +70,19 @@ export const ConnectionFeedback: React.FC<ConnectionFeedbackProps> = ({ nodes, e
     }
   }, [connectionNodeId, connectionHandleType, nodes, edges]);
 
-  // Apply visual indicators to nodes
+  // DISABLED: Direct DOM manipulation to prevent node jumping
+  // The visual feedback is now handled through React state and CSS without direct DOM queries
   useEffect(() => {
-    if (connectingNodeId) {
-      // Add classes to nodes for styling
-      nodes.forEach(node => {
-        const element = document.querySelector(`[data-id="${node.id}"]`);
-        if (element) {
-          element.classList.remove('epic1-valid-target', 'epic1-invalid-target', 'epic1-connecting-source');
-          
-          if (node.id === connectingNodeId) {
-            element.classList.add('epic1-connecting-source');
-          } else if (validTargets.has(node.id)) {
-            element.classList.add('epic1-valid-target');
-          } else {
-            element.classList.add('epic1-invalid-target');
-          }
-        }
-      });
-    } else {
-      // Clear all classes
-      document.querySelectorAll('.epic1-valid-target, .epic1-invalid-target, .epic1-connecting-source')
-        .forEach(el => {
-          el.classList.remove('epic1-valid-target', 'epic1-invalid-target', 'epic1-connecting-source');
-        });
-    }
-
+    // This effect has been disabled to prevent DOM manipulation that causes node position jumping
+    // The connection validation still works through the isValidConnection callback
+    
+    // Original functionality commented out:
+    // - Was adding/removing CSS classes directly to DOM elements
+    // - This caused React Flow to recalculate positions leading to node jumping
+    // - Visual feedback can be achieved through other means if needed
+    
     return () => {
-      // Cleanup on unmount
-      document.querySelectorAll('.epic1-valid-target, .epic1-invalid-target, .epic1-connecting-source')
-        .forEach(el => {
-          el.classList.remove('epic1-valid-target', 'epic1-invalid-target', 'epic1-connecting-source');
-        });
+      // Cleanup is also disabled
     };
   }, [connectingNodeId, validTargets, nodes]);
 
