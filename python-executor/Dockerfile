@@ -1,7 +1,7 @@
 # Multi-stage Docker build for Python Executor Service
 
 # Build stage
-FROM python:3.11-slim as builder
+FROM python:3.12-slim as builder
 
 # Set build arguments
 ARG BUILD_DATE
@@ -33,7 +33,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 # Production stage
-FROM python:3.11-slim as production
+FROM python:3.12-slim as production
 
 # Install runtime system dependencies
 RUN apt-get update && apt-get install -y \
