@@ -8,7 +8,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import { PSGFile } from '../../projectManager';
 
-export interface MenuBarProps {
+export interface ProfessionalMenuBarProps {
   // File operations
   onNew?: () => void;
   onOpen?: () => void;
@@ -51,26 +51,32 @@ export interface MenuBarProps {
   canUndo?: boolean;
   canRedo?: boolean;
   hasSelection?: boolean;
-  nodes?: Node;
-  edges?: Edge;
+  nodes?: Node[];
+  edges?: Edge[];
   theme?: 'light' | 'dark' | 'cinema';
   isFullscreen?: boolean;
   gridVisible?: boolean;
   minimapVisible?: boolean;
   inspectorVisible?: boolean;
-  recentFiles?: PSGFile }
+  recentFiles?: PSGFile[];
 
 
-interface MenuItemProps { label: string;
+}
+
+interface MenuItemProps { 
+  label: string;
   shortcut?: string;
   onClick?: () => void;
   disabled?: boolean;
   divider?: boolean;
-  submenu?: MenuItemProps }
+  submenu?: MenuItemProps[];
 
 
-interface MenuProps { label: string;
-  items: MenuItemProps;
+}
+
+interface MenuProps { 
+  label: string;
+  items: MenuItemProps[];
   isOpen: boolean;
   onToggle: () => void;
   onClose: () => void;
@@ -287,7 +293,7 @@ const Menu: React.FC<MenuProps> = ({ label, items, isOpen, onToggle, onClose }) 
   );
 };
 
-export const ProfessionalMenuBar: React.FC<MenuBarProps> = ({
+export const ProfessionalMenuBar: React.FC<ProfessionalMenuBarProps> = ({
   // File operations
   onNew,
   onOpen,

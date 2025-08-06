@@ -51,10 +51,16 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     { id: 'e4', source: 'character-1', sourceHandle: 'source', target: 'output-1', targetHandle: 'target' }
   ];
   
-  // Graph state
-  const [currentNodes, setCurrentNodes] = useState<Node[]>(demoNodes);
-  const [currentEdges, setCurrentEdges] = useState<Edge[]>(demoEdges);
+  // Graph state - start with empty graph
+  const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
+  const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
   const [editorKey, setEditorKey] = useState(0);
+  
+  // View state
+  const [gridVisible, setGridVisible] = useState(true);
+  const [minimapVisible, setMinimapVisible] = useState(false);
+  const [inspectorVisible, setInspectorVisible] = useState(true);
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'cinema'>('cinema');
   
   // Toast notifications
   const { toasts, showToast, dismissToast } = useToast();
@@ -134,25 +140,215 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     document.body.appendChild(aboutDiv);
   }, []);
   
+  // View operation handlers
+  const handleZoomIn = useCallback(() => {
+    const reactFlow = (window as any).reactFlowInstance;
+    if (reactFlow) {
+      reactFlow.zoomIn();
+      showToast('Zoomed in', 'info');
+    }
+  }, [showToast]);
+  
+  const handleZoomOut = useCallback(() => {
+    const reactFlow = (window as any).reactFlowInstance;
+    if (reactFlow) {
+      reactFlow.zoomOut();
+      showToast('Zoomed out', 'info');
+    }
+  }, [showToast]);
+  
+  const handleFitView = useCallback(() => {
+    const reactFlow = (window as any).reactFlowInstance;
+    if (reactFlow) {
+      reactFlow.fitView({ padding: 0.2 });
+      showToast('Fit to view', 'info');
+    }
+  }, [showToast]);
+  
+  const handleSelectAll = useCallback(() => {
+    const allNodeIds = currentNodes.map(n => n.id);
+    const allEdgeIds = currentEdges.map(e => e.id);
+    showToast(`Selected ${allNodeIds.length} nodes and ${allEdgeIds.length} edges`, 'info');
+  }, [currentNodes, currentEdges, showToast]);
+  
+  const handleCut = useCallback(() => {
+    handleCopy();
+    const selectedNodes = currentNodes.filter(n => n.selected);
+    const selectedNodeIds = selectedNodes.map(n => n.id);
+    const remainingNodes = currentNodes.filter(n => !n.selected);
+    const remainingEdges = currentEdges.filter(e => 
+      !selectedNodeIds.includes(e.source) && !selectedNodeIds.includes(e.target)
+    );
+    setCurrentNodes(remainingNodes);
+    setCurrentEdges(remainingEdges);
+    showToast(`Cut ${selectedNodes.length} nodes`, 'info');
+  }, [currentNodes, currentEdges, handleCopy, showToast]);
+  
+  const handleFind = useCallback(() => {
+    const searchTerm = prompt('Search for node by label or ID:');
+    if (searchTerm) {
+      const found = currentNodes.find(n => 
+        n.id.includes(searchTerm) || 
+        (n.data?.label && String(n.data.label).includes(searchTerm))
+      );
+      if (found) {
+        showToast(`Found node: ${found.id}`, 'success');
+      } else {
+        showToast('No matching nodes found', 'warning');
+      }
+    }
+  }, [currentNodes, showToast]);
+  
+  const handlePreferences = useCallback(() => {
+    showToast('Preferences panel coming soon!', 'info');
+  }, [showToast]);
+  
+  const handleImport = useCallback(() => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,.psg';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const data = JSON.parse(event.target?.result as string);
+            if (data.nodes && data.edges) {
+              setCurrentNodes(data.nodes);
+              setCurrentEdges(data.edges);
+              setEditorKey(prev => prev + 1);
+              showToast('Graph imported successfully', 'success');
+            }
+          } catch (error) {
+            showToast('Failed to import file', 'error');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  }, [showToast]);
+  
+  const handleExport = useCallback((format: 'json' | 'png' | 'svg' | 'pdf') => {
+    if (format === 'json') {
+      const data = JSON.stringify({ nodes: currentNodes, edges: currentEdges }, null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'graph.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Graph exported as JSON', 'success');
+    } else {
+      showToast(`Export as ${format.toUpperCase()} coming soon!`, 'info');
+    }
+  }, [currentNodes, currentEdges, showToast]);
+  
+  const handleToggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      showToast('Entered fullscreen mode', 'info');
+    } else {
+      document.exitFullscreen();
+      showToast('Exited fullscreen mode', 'info');
+    }
+  }, [showToast]);
+  
+  const handleDevTools = useCallback(() => {
+    showToast('Press F12 to open Developer Tools', 'info');
+  }, [showToast]);
+  
+  const handlePerformanceMonitor = useCallback(() => {
+    console.log('%c=== Performance Metrics ===', getConsoleStyle());
+    console.log('Nodes:', currentNodes.length);
+    console.log('Edges:', currentEdges.length);
+    console.log('Memory:', (performance as any).memory);
+    showToast('Performance metrics logged to console', 'info');
+  }, [currentNodes, currentEdges, showToast]);
+  
+  const handleDocumentation = useCallback(() => {
+    window.open('https://github.com/your-repo/prompt-spaghetti/wiki', '_blank');
+    showToast('Opening documentation...', 'info');
+  }, [showToast]);
+  
+  const handleKeyboardShortcuts = useCallback(() => {
+    const shortcutsDiv = document.createElement('div');
+    shortcutsDiv.innerHTML = `
+      <div class="about-modal-container" style="max-width: 600px;">
+        <h2 class="about-modal-heading">Keyboard Shortcuts</h2>
+        <div style="text-align: left; padding: 20px;">
+          <h3>File</h3>
+          <p>⌘N - New | ⌘O - Open | ⌘S - Save | ⌘⇧S - Save As</p>
+          <h3>Edit</h3>
+          <p>⌘Z - Undo | ⌘⇧Z - Redo | ⌘C - Copy | ⌘V - Paste | ⌘X - Cut</p>
+          <h3>View</h3>
+          <p>⌘+ - Zoom In | ⌘- - Zoom Out | ⌘0 - Fit View</p>
+          <h3>Debug</h3>
+          <p>F12 - DevTools | ⌘⇧V - Validate | ⌘⇧C - Console</p>
+        </div>
+        <button class="about-modal-button" onclick="this.parentElement.parentElement.remove()">Close</button>
+      </div>
+      <div class="about-modal-overlay" onclick="this.remove()"></div>
+    `;
+    document.body.appendChild(shortcutsDiv);
+  }, []);
+  
+  const handleSupport = useCallback(() => {
+    window.open('https://github.com/your-repo/prompt-spaghetti/issues', '_blank');
+    showToast('Opening support page...', 'info');
+  }, [showToast]);
+  
+  const handleReportBug = useCallback(() => {
+    window.open('https://github.com/your-repo/prompt-spaghetti/issues/new', '_blank');
+    showToast('Opening bug report form...', 'info');
+  }, [showToast]);
+  
+  // Toggle handlers for View menu
+  const handleToggleGrid = useCallback(() => {
+    setGridVisible(prev => !prev);
+    showToast(`Grid ${gridVisible ? 'hidden' : 'shown'}`, 'info');
+  }, [gridVisible, showToast]);
+  
+  const handleToggleMinimap = useCallback(() => {
+    setMinimapVisible(prev => !prev);
+    showToast(`Minimap ${minimapVisible ? 'hidden' : 'shown'}`, 'info');
+  }, [minimapVisible, showToast]);
+  
+  const handleToggleInspector = useCallback(() => {
+    setInspectorVisible(prev => !prev);
+    showToast(`Inspector ${inspectorVisible ? 'hidden' : 'shown'}`, 'info');
+  }, [inspectorVisible, showToast]);
+  
+  const handleToggleTheme = useCallback((theme: 'light' | 'dark' | 'cinema') => {
+    setCurrentTheme(theme);
+    // Apply theme to document root
+    document.documentElement.setAttribute('data-theme', theme);
+    showToast(`Switched to ${theme} theme`, 'info');
+  }, [showToast]);
+  
   // Handle node changes with frame edge enforcement
   const handleNodesChange = useCallback((nodes: Node[]) => {
     const fixedNodes = enforceFrameEdgePositions(nodes, demoNodes);
     
-    if (JSON.stringify(fixedNodes) !== JSON.stringify(currentNodes)) {
-      setCurrentNodes(fixedNodes);
-      if (nodes.length !== currentNodes.length) {
-        setTimeout(() => addToHistory(fixedNodes, currentEdges), 300);
-      }
+    // Always update nodes immediately for smooth interaction
+    setCurrentNodes(fixedNodes);
+    
+    // Only add to history if nodes were added/removed
+    if (nodes.length !== currentNodes.length) {
+      setTimeout(() => addToHistory(fixedNodes, currentEdges), 300);
     }
   }, [currentNodes, currentEdges, demoNodes, addToHistory]);
   
   // Handle edge changes
   const handleEdgesChange = useCallback((edges: Edge[]) => {
-    if (JSON.stringify(edges) !== JSON.stringify(currentEdges)) {
-      setCurrentEdges(edges);
-      if (edges.length !== currentEdges.length) {
-        setTimeout(() => addToHistory(currentNodes, edges), 300);
-      }
+    // Always update edges immediately for smooth interaction
+    setCurrentEdges(edges);
+    
+    // Only add to history if edges were added/removed
+    if (edges.length !== currentEdges.length) {
+      setTimeout(() => addToHistory(currentNodes, edges), 300);
     }
   }, [currentNodes, currentEdges, addToHistory]);
   
@@ -206,23 +402,53 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       {showMenuBar && MenuBarComponent && (
         <MenuBarComponent
+          // File operations
           onNew={() => handleNew(demoNodes, demoEdges)}
           onOpen={handleOpen}
           onSave={() => handleSave(currentNodes, currentEdges)}
           onSaveAs={() => handleSaveAs(currentNodes, currentEdges)}
+          onImport={handleImport}
+          onExport={handleExport}
           onQuit={() => handleQuit(currentNodes, currentEdges)}
+          // Edit operations
           onUndo={handleUndo}
           onRedo={handleRedo}
+          onCut={handleCut}
           onCopy={handleCopy}
           onPaste={handlePaste}
-          onAbout={handleAbout}
+          onSelectAll={handleSelectAll}
+          onFind={handleFind}
+          onPreferences={handlePreferences}
+          // View operations
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
+          onFitView={handleFitView}
+          onToggleGrid={handleToggleGrid}
+          onToggleMinimap={handleToggleMinimap}
+          onToggleInspector={handleToggleInspector}
+          onToggleFullscreen={handleToggleFullscreen}
+          onToggleTheme={handleToggleTheme}
+          // Debug operations
+          onDevTools={handleDevTools}
           onValidateGraph={handleValidateGraph}
+          onPerformanceMonitor={handlePerformanceMonitor}
           onConsoleToggle={handleConsoleToggle}
+          // Help operations
+          onDocumentation={handleDocumentation}
+          onKeyboardShortcuts={handleKeyboardShortcuts}
+          onAbout={handleAbout}
+          onSupport={handleSupport}
+          onReportBug={handleReportBug}
+          // State
           canUndo={canUndo}
           canRedo={canRedo}
           hasSelection={hasSelection}
           nodes={currentNodes}
           edges={currentEdges}
+          gridVisible={gridVisible}
+          minimapVisible={minimapVisible}
+          inspectorVisible={inspectorVisible}
+          theme={currentTheme}
         />
       )}
       
