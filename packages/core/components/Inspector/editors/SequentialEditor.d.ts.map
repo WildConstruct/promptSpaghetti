@@ -1,1 +1,0 @@
-{"version":3,"file":"SequentialEditor.d.ts","sourceRoot":"","sources":["SequentialEditor.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAC1B,OAAO,EAAE,mBAAmB,EAAE,MAAM,mBAAmB,CAAC;AAexD,MAAM,WAAW,qBAAsB,SAAQ,IAAI,CAAC,mBAAmB,EAAE,UAAU,CAAC;CAEnF;AAED;;;;;;;GAOG;AAEH,eAAO,MAAM,gBAAgB,EAAE,KAAK,CAAC,EAAE,CAAC,qBAAqB,CA0jB5D,CAAC;AAEF,eAAe,gBAAgB,CAAC"}

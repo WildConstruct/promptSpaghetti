@@ -5,7 +5,14 @@
 
 import { ExecutionContext } from '../../types';
 import { BaseInlineEditableNode, InlineEditableConfig } from './BaseInlineEditableNode';
-import { SecurityValidation } from '../../../validation/security';
+
+// Simple security validation for variable names
+const SecurityValidation = {
+  validateVariableName(name: string): boolean {
+    // Allow alphanumeric, underscores, max 64 chars
+    return /^[a-zA-Z_][a-zA-Z0-9_]{0,63}$/.test(name);
+  }
+};
 
 /**
  * Variable node modes
