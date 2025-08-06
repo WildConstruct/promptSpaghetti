@@ -1,39 +1,52 @@
 import React from 'react';
-import { Edge, EdgeProps, getBezierPath } from 'reactflow';
+import { Edge, EdgeProps, getBezierPath, getSmoothStepPath } from 'reactflow';
 
 // Default edge component that forces rendering
 export const DefaultEdge: React.FC<EdgeProps> = (props) => {
-  const [edgePath] = getBezierPath({
+  // Log edge state for debugging
+  if (props.selected) {
+    console.log('[DefaultEdge] Selected edge:', props.id, 'className:', props.className);
+  }
+  
+  // Use smoothstep path since that's what the edges are configured to use
+  const [edgePath] = getSmoothStepPath({
     sourceX: props.sourceX,
     sourceY: props.sourceY,
     sourcePosition: props.sourcePosition,
     targetX: props.targetX,
     targetY: props.targetY,
     targetPosition: props.targetPosition,
+    borderRadius: 10,
   });
 
   return (
-    <g className="react-flow__edge" style={{ pointerEvents: 'all', cursor: 'pointer' }}>
+    <g className={`react-flow__edge ${props.selected ? 'selected' : ''} ${props.className || ''}`}>
+      {/* Invisible wider path for better click detection - MUST BE FIRST */}
+      <path
+        className="react-flow__edge-interaction"
+        d={edgePath}
+        fill="none"
+        stroke="transparent"
+        strokeWidth={30}
+        style={{ 
+          pointerEvents: 'stroke', 
+          cursor: 'pointer',
+          opacity: 0
+        }}
+      />
+      {/* Visible edge path */}
       <path
         id={props.id}
         style={{
           ...props.style,
-          pointerEvents: 'stroke',
+          pointerEvents: 'none', // Let the interaction path handle clicks
           cursor: 'pointer'
         }}
         className="react-flow__edge-path"
         d={edgePath}
         markerEnd={props.markerEnd}
         fill="none"
-        strokeWidth={props.style?.strokeWidth || 2}
-      />
-      {/* Invisible wider path for better click detection */}
-      <path
-        d={edgePath}
-        fill="none"
-        stroke="transparent"
-        strokeWidth={40}
-        style={{ pointerEvents: 'stroke', cursor: 'pointer' }}
+        strokeWidth={props.style?.strokeWidth || 3}
       />
     </g>
   );

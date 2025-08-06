@@ -217,10 +217,10 @@
   color: #4a9eff;
 }
 
-/* Smooth pan/zoom transitions */
-.react-flow__viewport {
+/* Removed smooth pan/zoom transitions to fix panning easing issue */
+/* .react-flow__viewport {
   transition: transform 0.2s ease !important;
-}
+} */
 
 /* Dark theme support */
 .epic1-keyboard-help-content.dark {

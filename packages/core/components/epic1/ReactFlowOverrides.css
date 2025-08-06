@@ -78,7 +78,7 @@
 .react-flow__connectionline + .react-flow__nodes .epic1-handle.hidden-handle,
 .react-flow__container.connecting .epic1-handle.hidden-handle {
   opacity: 0.5 !important;
-  transition: opacity 0.2s ease;
+  /* Removed transition to eliminate animation */
 }
 
 /* Ensure edge selection works */

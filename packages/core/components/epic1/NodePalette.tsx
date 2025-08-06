@@ -5,6 +5,7 @@
 
 import React from 'react';
 import './NodePalette.css';
+import { debugLogEpic1 } from '../../utils/debug';
 
 export interface NodeTypeInfo {
   type: string;
@@ -36,12 +37,12 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
   const [collapsed, setCollapsed] = React.useState(defaultCollapsed);
   
   React.useEffect(() => {
-    console.log('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
+    debugLogEpic1('[NodePalette] Mounted, position:', position, 'collapsed:', collapsed);
     onCollapsedChange?.(collapsed);
   }, [position, collapsed, onCollapsedChange]);
 
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
-    console.log('[NodePalette] Drag started for node type:', nodeType);
+    debugLogEpic1('[NodePalette] Drag started for node type:', nodeType);
     // Use text/plain as primary for better compatibility
     event.dataTransfer.setData('text/plain', nodeType);
     event.dataTransfer.setData('application/node-type', nodeType);
@@ -70,7 +71,7 @@ export const NodePalette: React.FC<NodePaletteProps> = ({
               className="node-item"
               draggable="true"
               onDragStart={(e) => onDragStart(e, node.type)}
-              onDragEnd={() => console.log('[NodePalette] Drag ended for', node.type)}
+              onDragEnd={() => debugLogEpic1('[NodePalette] Drag ended for', node.type)}
               title={node.label}
             >
               <span className="node-icon">{node.icon}</span>

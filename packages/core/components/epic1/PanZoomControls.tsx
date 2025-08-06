@@ -60,11 +60,11 @@ export const PanZoomControls: React.FC<PanZoomControlsProps> = ({
   }, [reactFlowInstance]);
 
   const handleFitView = useCallback(() => {
-    reactFlowInstance.fitView({ padding: 0.2, duration: 300 });
+    reactFlowInstance.fitView({ padding: 0.2 });
   }, [reactFlowInstance]);
 
   const handleResetView = useCallback(() => {
-    reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 1 }, { duration: 300 });
+    reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 1 });
   }, [reactFlowInstance]);
 
   // Space key handler for pan mode

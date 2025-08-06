@@ -6,7 +6,6 @@ import ReactFlow, {
   addEdge,
   Background,
   Controls,
-  MiniMap,
   Connection,
   useNodesState,
   useEdgesState,
@@ -21,6 +20,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
+import { CustomMinimap } from './CustomMinimap';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
@@ -81,27 +81,45 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 }) => {
   // Use droppable node types if asset library is shown
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
-  console.log('[Epic1GraphEditor] Using nodeTypes:', showAssetLibrary ? 'droppable' : 'regular', 'showAssetLibrary:', showAssetLibrary);
-  console.log('[Epic1GraphEditor] Initial nodes:', initialNodes.length, 'nodes');
-  const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [activatedEdges, setActivatedEdges] = useState<Set<string>>(new Set());
   
-  // Use onNodesChangeBase directly
-  const onNodesChange = onNodesChangeBase;
+  const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(initialNodes);
+  const [edges, setEdges, onEdgesChangeBase] = useEdgesState(initialEdges);
+  const [activatedEdges, setActivatedEdges] = useState<Set<string>>(new Set());
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  
+  // Custom node change handler to optimize performance during dragging
+  const onNodesChange = useCallback((changes: any[]) => {
+    // Check if we're dragging
+    const hasDraggingChange = changes.some(change => 
+      change.type === 'position' && change.dragging === true
+    );
+    const hasStoppedDragging = changes.some(change => 
+      change.type === 'position' && change.dragging === false
+    );
+    
+    if (hasDraggingChange) {
+      setIsDragging(true);
+    }
+    if (hasStoppedDragging) {
+      setIsDragging(false);
+    }
+    
+    // Always apply changes for smooth interaction
+    onNodesChangeBase(changes);
+  }, [onNodesChangeBase]);
+  
+  // Custom edges change handler to ensure proper selection behavior
+  const onEdgesChange = useCallback((changes: any[]) => {
+    // Apply the changes using the base handler
+    onEdgesChangeBase(changes);
+  }, [onEdgesChangeBase]);
   
   // Debug: Log nodes and edges whenever they change
   useEffect(() => {
-    console.log('[Epic1GraphEditor] Nodes state changed:', nodes.length, 'nodes');
-    console.log('[Epic1GraphEditor] Current edges:', edges.length, 'edges', edges);
-    console.log('[Epic1GraphEditor] Node details:', nodes.map(n => ({ 
-      id: n.id, 
-      type: n.type,
-      position: n.position,
-      width: n.width,
-      height: n.height,
-      data: n.data
-    })));
+    // Removed console.log statements that fire on every state change
+    // These were causing performance issues during mouse movement/dragging
+    
     // Check for duplicate IDs
     const ids = nodes.map(n => n.id);
     const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
@@ -201,7 +219,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Handle new connections with replacement for single input nodes
   const onConnect = useCallback(
     (params: Connection) => {
-      console.log('[Epic1GraphEditor] Connection attempt:', params);
       setEdges((eds) => {
         // Check if target already has an incoming connection (single input constraint)
         const existingIncomingEdge = eds.find(e => e.target === params.target && e.targetHandle === params.targetHandle);
@@ -209,7 +226,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         let newEdges = eds;
         if (existingIncomingEdge) {
           // Replace the existing incoming connection
-          console.log('[Epic1GraphEditor] Replacing existing connection to target:', params.target);
           newEdges = eds.filter(e => e.id !== existingIncomingEdge.id);
         }
         
@@ -222,8 +238,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           style: { stroke: '#9ca3af', strokeWidth: 3 }
         };
         newEdges = addEdge(edgeParams, newEdges);
-        console.log('[Epic1GraphEditor] Edges after connection:', newEdges.length, 'edges');
-        console.log('[Epic1GraphEditor] New edge details:', newEdges);
         return newEdges;
       });
       
@@ -245,9 +259,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const convertToRuntimeGraph = useCallback((flowNodes: Node<EditableNodeData>[], flowEdges: Edge[]): Epic1Graph | null => {
     try {
       const runtimeNodes = new Map();
-      
-      console.log('[convertToRuntimeGraph] Input nodes:', flowNodes.length, 'nodes');
-      console.log('[convertToRuntimeGraph] Node IDs:', flowNodes.map(n => n.id));
       
       for (const node of flowNodes) {
         // Skip nodes without proper type or position
@@ -277,24 +288,16 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     }
   }, []);
 
-  // Update preview when graph changes
+  // Update preview when graph changes (but not during dragging)
   useEffect(() => {
-    if (!isPreviewVisible || !previewEngineRef.current) return;
+    if (!isPreviewVisible || !previewEngineRef.current || isDragging) return;
 
     const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
     if (runtimeGraph) {
-      console.log('[Epic1GraphEditor] Updating preview with graph:', {
-        nodeCount: runtimeGraph.nodes.size,
-        edgeCount: runtimeGraph.edges.length,
-        nodes: Array.from(runtimeGraph.nodes.entries()).map(([id, node]) => ({
-          id,
-          type: node.getNodeType()
-        })),
-        edges: runtimeGraph.edges
-      });
+      // Removed console.log that was causing performance issues
       previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
     }
-  }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph]);
+  }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph, isDragging]);
 
   // Notify parent of changes
   React.useEffect(() => {
@@ -349,11 +352,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     const targetNodes = nodesToDelete || nodes.filter(n => n.selected);
     
     if (targetNodes.length === 0) {
-      console.log('[Epic1GraphEditor] No nodes selected to delete');
       return;
     }
     
-    console.log('[Epic1GraphEditor] Deleting nodes:', targetNodes.map(n => n.id));
     const nodeIds = targetNodes.map(n => n.id);
     setNodes((nds) => nds.filter(n => !nodeIds.includes(n.id)));
     setEdges((eds) => eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
@@ -379,16 +380,19 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   }, [setNodes]);
 
   // Handle canvas click to deselect all nodes and edges
-  const handlePaneClick = useCallback(() => {
-    setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
-    setEdges((eds) => eds.map(e => ({ ...e, selected: false })));
-    setSelectedNodeId(null);
-    setActivatedEdges(new Set()); // Clear activated edges when clicking on canvas
-  }, [setNodes, setEdges]);
+  const handlePaneClick = useCallback((event: React.MouseEvent) => {
+    // Only deselect if we're not in the middle of a selection drag
+    if (!isSelecting) {
+      // Removed console.log that was causing performance issues
+      setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
+      setEdges((eds) => eds.map(e => ({ ...e, selected: false })));
+      setSelectedNodeId(null);
+      setActivatedEdges(new Set());
+    }
+  }, [setNodes, setEdges, isSelecting]);
   
   // Handle node click to select it
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
-    console.log('[Epic1GraphEditor] Node clicked:', node.id, 'Shift:', event.shiftKey);
     
     if (event.shiftKey) {
       // Multi-select with shift key
@@ -410,13 +414,25 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   
   // Handle edge click to select and activate/deactivate
   const handleEdgeClick = useCallback((event: React.MouseEvent, edge: Edge) => {
-    console.log('[Epic1GraphEditor] Edge clicked:', edge.id);
+    event.stopPropagation(); // Prevent the pane click handler
     
-    // Select the edge
-    setEdges((eds) => eds.map(e => ({
-      ...e,
-      selected: e.id === edge.id
-    })));
+    if (!event.shiftKey) {
+      // Single selection - clear other selections first
+      setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
+    }
+    
+    // Toggle edge selection
+    setEdges((eds) => {
+      const updatedEdges = eds.map(e => {
+        if (e.id === edge.id) {
+          const newSelected = !e.selected;
+          return { ...e, selected: newSelected };
+        }
+        // Keep other selections if shift is held
+        return event.shiftKey ? e : { ...e, selected: false };
+      });
+      return updatedEdges;
+    });
     
     // Toggle activation
     setActivatedEdges((prev) => {
@@ -430,7 +446,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       }
       return newSet;
     });
-  }, [setEdges, showToast]);
+  }, [setEdges, setNodes, showToast]);
 
   // Toggle preview panel
   const handleTogglePreview = useCallback(() => {
@@ -472,7 +488,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         event.preventDefault();
         const selectedNodes = nodes.filter(n => n.selected);
         if (selectedNodes.length > 0) {
-          console.log('[Epic1GraphEditor] Delete key pressed, deleting selected nodes');
           handleDelete(selectedNodes);
         }
       }
@@ -540,8 +555,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             newEdges.push({
               id: `edge-${lastNodeId}-${nodeId}`,
               source: lastNodeId,
-              target: nodeId,
-              animated: true
+              target: nodeId
             });
           }
           
@@ -570,8 +584,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           newEdges.push({
             id: `edge-${lastNodeId}-${outputId}`,
             source: lastNodeId,
-            target: outputId,
-            animated: true
+            target: outputId
           });
         }
         
@@ -614,7 +627,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Handle ReactFlow initialization
   const onInit = useCallback((instance: ReactFlowInstance) => {
-    console.log('ReactFlow initialized:', instance);
     setReactFlowInstance(instance);
     // Fit view to show all nodes properly positioned at frame edges
     setTimeout(() => {
@@ -635,8 +647,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       x: typeof position?.x === 'number' ? position.x : 250,
       y: typeof position?.y === 'number' ? position.y : 250
     };
-    
-    console.log('[Epic1GraphEditor] Creating node at position:', validPosition);
     
     const newNode: Node<EditableNodeData> = {
       id: createNodeId(),
@@ -741,15 +751,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         nodeType = event.dataTransfer.getData('text');
       }
       
-      console.log('[Epic1GraphEditor] Drop event detected!');
-      console.log('  - Node type:', nodeType);
-      console.log('  - ReactFlow instance ready:', !!reactFlowInstance);
-      console.log('  - Drop position:', event.clientX, event.clientY);
-      console.log('  - Available data types:', Array.from(event.dataTransfer.types));
-      
       if (!nodeType) {
         console.error('Drop failed: no nodeType found in any data transfer format');
-        console.log('Available types were:', Array.from(event.dataTransfer.types));
         return;
       }
 
@@ -785,12 +788,17 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             edges={edges.map(edge => ({
               ...edge,
               animated: activatedEdges.has(edge.id),
-              className: activatedEdges.has(edge.id) ? 'activated' : ''
+              className: `${activatedEdges.has(edge.id) ? 'activated' : ''} ${edge.selected ? 'selected' : ''}`.trim()
             }))}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onPaneClick={handlePaneClick}
+            onSelectionStart={() => setIsSelecting(true)}
+            onSelectionEnd={() => {
+              setIsSelecting(false);
+              // The selection has already updated the nodes/edges
+            }}
             onNodeClick={handleNodeClick}
             onEdgeClick={handleEdgeClick}
             onInit={onInit}
@@ -818,6 +826,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             zoomOnPinch={true}
             panOnDrag={[1, 2]}
             selectionOnDrag={true}
+            panActivationKeyCode="Space"
             selectionMode="partial"
             nodesDraggable={true}
             nodesConnectable={true}
@@ -829,32 +838,21 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           >
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
-          <MiniMap 
-            position="top-left"
-            style={{ 
-              left: nodePaletteCollapsed ? 50 : 210,
-              top: 70,
-              transition: 'left 0.3s ease-in-out',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '4px',
-              backgroundColor: 'rgba(26, 26, 26, 0.95)',
-              width: '150px',
-              height: '100px'
-            }}
-            zoomable
-            pannable
-            nodeColor={(node) => {
-              switch (node.type) {
-                case 'textBlock': return '#7c7ff2';
-                case 'weightedChoice': return '#f6a723';
-                case 'concat': return '#22c493';
-                case 'variable': return '#9d70f7';
-                case 'output': return '#f15656';
-                default: return '#666';
-              }
-            }}
-            maskColor="rgba(0, 0, 0, 0.1)"
-          />
+          {nodes.length > 0 && (
+            <CustomMinimap 
+              nodes={nodes}
+              edges={edges}
+              style={{ 
+                left: nodePaletteCollapsed ? 50 : 210,
+                top: 70,
+                width: '200px',
+                height: '120px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                zIndex: 1000,
+                transition: 'left 0.3s ease-in-out'
+              }}
+            />
+          )}
           
           {/* Epic 1 specific controls */}
           <Panel position="top-right">
@@ -968,7 +966,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
 // Export the main component
 export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
-  console.log('[Epic1GraphEditor] Wrapper mounting with props:', { showAssetLibrary: props.showAssetLibrary });
   return (
     <ReactFlowProvider>
       <Epic1GraphEditorInner {...props} />

@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect, useCallback } from 'react';
-import { NodeProps, Handle, Position } from 'reactflow';
+import { NodeProps, Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
 import './WeightedChoiceNode.css';
 import './BranchingWeightedChoice.css';
@@ -41,6 +41,8 @@ const WEIGHT_PRESETS = {
  * Branching WeightedChoice node with conditional outputs per option
  */
 export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeightedChoiceNodeData>) => {
+  const updateNodeInternals = useUpdateNodeInternals();
+  
   // Initialize options with stable IDs
   const initializeOptions = (opts: WeightedOption[]) => {
     return opts.map((opt, index) => ({
@@ -84,6 +86,16 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
   
   // Check if any option has branching enabled
   const hasBranching = options.some(opt => opt.hasBranch);
+  
+  // Update React Flow's internal handle positions when branch handles change
+  useEffect(() => {
+    // Give React Flow time to render the new handles before updating internals
+    const timeoutId = setTimeout(() => {
+      updateNodeInternals(props.id);
+    }, 50);
+    
+    return () => clearTimeout(timeoutId);
+  }, [options, props.id, updateNodeInternals]);
 
   // Calculate percentages for display
   const calculatePercentages = useCallback((opts: WeightedOption[]) => {
@@ -136,6 +148,12 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
       hasBranch: !newOptions[index].hasBranch 
     };
     setOptions(newOptions);
+    
+    // Immediately update node internals to ensure handle positions are recalculated
+    // Use a small delay to ensure React has rendered the DOM changes
+    setTimeout(() => {
+      updateNodeInternals(props.id);
+    }, 10);
   };
 
   // Update option text
@@ -369,7 +387,7 @@ export const BranchingWeightedChoiceNode = memo((props: NodeProps<BranchingWeigh
                           style={{ 
                             position: 'absolute',
                             top: '50%', 
-                            right: -28, // Position on the node's outer frame edge (accounting for padding)
+                            right: -32, // Consistent position on the node's outer frame edge
                             transform: 'translateY(-50%)',
                             background: '#f59e0b',
                             width: '14px',

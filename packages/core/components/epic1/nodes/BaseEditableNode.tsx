@@ -188,7 +188,7 @@ export const BaseEditableNode = memo(({
       </div>
 
       {/* Only show the default source handle if not an enhanced branching node */}
-      {data.nodeType !== 'enhancedBranching' && data.nodeType !== 'output' && (
+      {data.nodeType !== 'enhancedBranching' && data.nodeType !== 'weightedChoice' && data.nodeType !== 'output' && (
         <Handle
           type="source"
           position={Position.Right}
@@ -196,8 +196,8 @@ export const BaseEditableNode = memo(({
           className="epic1-handle source"
         />
       )}
-      {/* For enhanced branching nodes without branching, show the standard output on the right */}
-      {data.nodeType === 'enhancedBranching' && !data.options?.some((opt: any) => opt.hasBranch) && (
+      {/* For enhanced branching nodes (including weightedChoice) without branching, show the standard output on the right */}
+      {(data.nodeType === 'enhancedBranching' || data.nodeType === 'weightedChoice') && !data.options?.some((opt: any) => opt.hasBranch) && (
         <Handle
           type="source"
           position={Position.Right}

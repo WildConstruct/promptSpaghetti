@@ -5,28 +5,92 @@
   width: 100% !important;
   height: 100% !important;
   position: relative !important;
+  /* Optimize scrolling and panning performance */
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-/* Style edges with proper appearance */
+/* Optimize viewport for smooth panning */
+.react-flow__viewport {
+  will-change: transform;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Explicitly remove ALL transitions to prevent easing during panning */
+  transition: none !important;
+  transition-duration: 0ms !important;
+  transition-timing-function: unset !important;
+}
+
+/* Disable transitions while panning */
+.react-flow__renderer.dragging * {
+  transition: none !important;
+  transition-duration: 0ms !important;
+}
+
+/* Ensure renderer has no transitions */
+.react-flow__renderer {
+  transition: none !important;
+}
+
+/* Only remove transitions from elements that shouldn't animate */
+.react-flow__selectionpane {
+  transition: none !important;
+}
+
+/* Ensure edges don't have unwanted transitions */
+.react-flow__edges {
+  transition: none !important;
+}
+
+/* Fix dragging deadspots - CRITICAL */
+/* Removed pointer-events: none from .react-flow__nodes to fix middle mouse panning */
+
+.react-flow__node {
+  pointer-events: all !important; /* Individual nodes remain interactive */
+}
+
+/* Style edges with proper appearance - gray for normal state */
 .react-flow__edges path,
 .react-flow__edge path,
 .react-flow__edge-path,
 .react-flow path.react-flow__edge-path {
-  stroke: #9ca3af !important;
-  stroke-width: 2px !important;
+  stroke: #9ca3af !important; /* Gray for normal/deselected state */
+  stroke-width: 3px !important;
   opacity: 1 !important;
   fill: none !important;
   visibility: visible !important;
   stroke-linecap: round !important;
   stroke-linejoin: round !important;
-  pointer-events: stroke !important;
   cursor: pointer !important;
 }
 
+/* Visible edge path doesn't handle clicks */
+.react-flow__edge-path {
+  pointer-events: none !important;
+}
+
+/* Invisible wider hit area for easier edge selection */
+.react-flow__edge {
+  pointer-events: all !important;
+}
+
+.react-flow__edge-interaction {
+  stroke-width: 30px !important;
+  stroke: transparent !important;
+  fill: none !important;
+  pointer-events: stroke !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+}
+
 /* Hover effect for edges */
-.react-flow__edge:hover path {
-  stroke-width: 3px !important;
-  stroke: #6b7280 !important;
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 4px !important;
+  stroke: #6b7280 !important; /* Darker gray for hover */
+  filter: drop-shadow(0 0 2px rgba(107, 114, 128, 0.5));
 }
 
 /* Ensure edges container is visible */
@@ -36,6 +100,11 @@
   visibility: visible !important;
   display: block !important;
   pointer-events: none !important;
+}
+
+/* Individual edges must accept pointer events */
+.react-flow__edges .react-flow__edge {
+  pointer-events: all !important;
 }
 
 /* Ensure SVG element exists and is visible */
@@ -65,7 +134,7 @@
   transform: translateY(-50%) !important;
 }
 
-.react-flow__handle-right {
+.react-flow__handle-right:not(.branch-output) {
   right: -6px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
@@ -83,12 +152,14 @@
   transition: none !important;
 }
 
-/* Activated edges - show animation */
-.react-flow__edge.activated path {
-  stroke: #3b82f6 !important;
-  stroke-width: 3px !important;
+/* Activated edges - animated cyan with dashes */
+.react-flow__edge.activated .react-flow__edge-path {
+  stroke: #22d3ee !important; /* Cyan */
+  stroke-width: 4px !important;
   stroke-dasharray: 5;
   animation: dashdraw 0.5s linear infinite;
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.6)) !important;
+  opacity: 1 !important;
 }
 
 @keyframes dashdraw {
@@ -106,23 +177,89 @@
   border: 1px solid rgba(59, 130, 246, 0.5) !important;
 }
 
-/* Selected edge styling */
-.react-flow__edge.selected path {
-  stroke: #3b82f6 !important;
-  stroke-width: 3px !important;
+/* Selected edge styling - cyan */
+.react-flow .react-flow__edges .react-flow__edge.selected .react-flow__edge-path,
+.react-flow .react-flow__edge.selected path.react-flow__edge-path,
+.react-flow__edge[class*="selected"] .react-flow__edge-path {
+  stroke: #22d3ee !important; /* Cyan for selected state */
+  stroke-width: 4px !important;
+  filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.6)) !important;
+  opacity: 1 !important;
 }
 
-/* Fix edge click detection */
-.react-flow__edges {
-  pointer-events: all !important;
+/* Ensure selected state overrides all other states */
+.react-flow__edge.selected {
+  z-index: 10 !important;
 }
 
-.react-flow__edge {
-  pointer-events: all !important;
-}
+/* Fix edge click detection - removed duplicate rules */
 
 /* Ensure selection box is visible */
 .react-flow__selection {
   background: rgba(59, 130, 246, 0.1) !important;
   border: 1px solid #3b82f6 !important;
+}
+
+/* Force minimap to be visible in Epic1 editor */
+.epic1-graph-editor .react-flow__minimap {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  pointer-events: auto !important;
+}
+
+/* Ensure minimap mask shows viewport */
+.epic1-graph-editor .react-flow__minimap-mask {
+  fill: rgba(255, 255, 255, 0.1) !important;
+  stroke: #5b9eff !important;
+  stroke-width: 2px !important;
+}
+
+/* Make minimap nodes visible */
+.epic1-graph-editor .react-flow__minimap-node {
+  opacity: 1 !important;
+  visibility: visible !important;
+  fill-opacity: 1 !important;
+}
+
+/* Force minimap SVG to be visible */
+.epic1-graph-editor .react-flow__minimap svg {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Force ANY rect elements in minimap to be visible */
+.epic1-graph-editor .react-flow__minimap rect {
+  opacity: 1 !important;
+  fill-opacity: 1 !important;
+}
+
+/* Ensure minimap viewport rect is visible */
+.epic1-graph-editor .react-flow__minimap-mask {
+  fill: rgba(255, 255, 255, 0.1) !important;
+  fill-opacity: 0.1 !important;
+  stroke: #5b9eff !important;
+  stroke-width: 2px !important;
+  stroke-opacity: 1 !important;
+}
+
+/* Force global minimap node visibility */
+.react-flow__minimap .react-flow__minimap-node {
+  fill: #ff0000 !important; /* Red for debugging */
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Epic1 minimap nodes need explicit dimensions */
+.epic1-minimap-node {
+  width: 280px !important;
+  height: 140px !important;
+}
+
+/* Force React Flow nodes to have measurable dimensions */
+.react-flow__node {
+  width: 280px !important;
+  height: auto !important;
+  min-height: 140px !important;
 }

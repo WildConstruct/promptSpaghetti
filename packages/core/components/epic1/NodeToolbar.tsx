@@ -5,6 +5,7 @@
 
 import React from 'react';
 import './NodeToolbar.css';
+import { debugLogEpic1 } from '../../utils/debug';
 
 interface NodeTypeInfo {
   type: string;
@@ -26,7 +27,7 @@ const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
   const [isDragging, setIsDragging] = React.useState(false);
 
   const handleDragStart = (e: React.DragEvent) => {
-    console.log('[NodeToolbar] Drag started for:', nodeInfo.type);
+    debugLogEpic1('[NodeToolbar] Drag started for:', nodeInfo.type);
     setIsDragging(true);
     
     // Clear any existing data
@@ -59,14 +60,14 @@ const NodeButton: React.FC<{ nodeInfo: NodeTypeInfo }> = ({ nodeInfo }) => {
     }, 0);
     
     // Debug logging
-    console.log('[NodeToolbar] Data set for drag:', {
+    debugLogEpic1('[NodeToolbar] Data set for drag:', {
       type: nodeInfo.type,
       dataTypes: Array.from(e.dataTransfer.types || [])
     });
   };
 
   const handleDragEnd = () => {
-    console.log('[NodeToolbar] Drag ended for:', nodeInfo.type);
+    debugLogEpic1('[NodeToolbar] Drag ended for:', nodeInfo.type);
     setIsDragging(false);
   };
 

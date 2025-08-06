@@ -887,12 +887,12 @@ const GraphEditorInner: React.FC<GraphEditorProps> = ({ initialNodes, initialEdg
               />
               {nodes.length < 200 && (
                 <MiniMap
-                  nodeColor={() => (isPerformanceGood ? '#ff7c00' : '#363a45')}
-                  maskColor="#181b21BB"
-                  style={ {
-  backgroundColor: 'rgba(31, 41, 55, 0.8)'
-  border: '1px solid rgba(55, 65, 81, 0.6)' }
-
+                  nodeColor={() => '#ff7c00'}
+                  maskColor="rgba(255, 255, 255, 0.1)"
+                  style={{
+                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
+                    border: '1px solid rgba(55, 65, 81, 0.6)'
+                  }}
                 />
               )}
               <Controls

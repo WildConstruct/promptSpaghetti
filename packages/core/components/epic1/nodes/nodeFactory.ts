@@ -10,6 +10,7 @@ import { WeightedChoiceNode, WeightedOption } from '../../../runtime/nodes/epic1
 import { ConcatNode } from '../../../runtime/nodes/epic1/ConcatNode';
 import { VariableNode, VariableMode } from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
+import { debugLogEpic1 } from '../../../utils/debug';
 
 /**
  * Convert a React Flow node to an Epic 1 runtime node
@@ -17,7 +18,7 @@ import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
 export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInlineEditableNode | null {
   const { id, type, data } = flowNode;
   
-  console.log('[nodeFactory] Converting node:', { id, type, data });
+  debugLogEpic1('[nodeFactory] Converting node:', { id, type, data });
 
   try {
     switch (type) {
@@ -77,7 +78,7 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
       case 'output': {
         // OutputNode constructor takes (id, initialValue, config)
         const node = new OutputNode(id, data.label || data.value || 'Output');
-        console.log('[nodeFactory] Created output node:', id, 'with label:', data.label || data.value || 'Output');
+        debugLogEpic1('[nodeFactory] Created output node:', id, 'with label:', data.label || data.value || 'Output');
         return node;
       }
 

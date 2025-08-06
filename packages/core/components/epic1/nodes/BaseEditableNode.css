@@ -21,10 +21,10 @@
   /* Prevent text selection during drag */
   user-select: none;
   -webkit-user-select: none;
-  /* Use auto width to prevent layout shifts */
-  width: auto !important;
+  /* Fixed width for minimap to properly render nodes */
+  width: 280px;
   /* Ensure minimum width for content */
-  min-width: fit-content;
+  min-width: 280px;
 }
 
 /* Remove ALL ReactFlow selection outlines and borders */
@@ -94,6 +94,7 @@
   outline: none !important;
 }
 
+
 /* Override ALL ReactFlow selection styles */
 .react-flow__node.selected::before,
 .react-flow__node.selected::after,
@@ -146,6 +147,35 @@
 
 .epic1-handle.source {
   right: -6px !important; /* Position centered on the border edge (half of 12px width) */
+}
+
+/* React Flow handle position classes */
+.react-flow__handle-bottom.epic1-handle {
+  bottom: -6px !important;
+  left: 50% !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+.react-flow__handle-top.epic1-handle {
+  top: -6px !important;
+  left: 50% !important;
+  bottom: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+.react-flow__handle-left.epic1-handle {
+  left: -6px !important;
+  top: 50% !important;
+  right: auto !important;
+  transform: translateY(-50%) !important;
+}
+
+.react-flow__handle-right.epic1-handle:not(.branch-output) {
+  right: -6px !important;
+  left: auto !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
 }
 
 /* No position adjustment needed on hover since we're using scale transform */
@@ -243,17 +273,19 @@
 }
 
 .epic1-editable-node.weighted-choice {
-  border-color: #f6a723;
+  border-color: #475569; /* Dark blue-gray for normal/deselected state */
   border-radius: 12px; /* Maintain rounded corners */
 }
 
 .epic1-editable-node.weighted-choice.editing {
+  border-color: #22d3ee !important; /* Bright cyan when editing */
   box-shadow: 
-    0 0 0 1px rgba(246, 167, 35, 0.6),
-    0 0 12px rgba(246, 167, 35, 0.8),
-    0 0 24px rgba(246, 167, 35, 0.4);
+    0 0 0 1px rgba(34, 211, 238, 0.6),
+    0 0 12px rgba(34, 211, 238, 0.8),
+    0 0 24px rgba(34, 211, 238, 0.4);
   border-radius: 12px; /* Maintain rounded corners */
 }
+
 
 .epic1-editable-node.concat {
   border-color: #22c493;
@@ -303,4 +335,13 @@
     0 0 0 1px rgba(241, 86, 86, 0.6),
     0 0 12px rgba(241, 86, 86, 0.8),
     0 0 24px rgba(241, 86, 86, 0.4);
+}
+
+/* IMPORTANT: Weighted choice selected state override - MUST BE LAST */
+.react-flow__node.selected .epic1-editable-node.weighted-choice:not(.editing),
+.epic1-editable-node.weighted-choice.selected:not(.editing) {
+  border-color: #22d3ee !important; /* Bright cyan for selected state */
+  border-width: 2px !important;
+  box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.3) !important;
+  background: #1e1e1e !important; /* Keep the lighter background */
 }

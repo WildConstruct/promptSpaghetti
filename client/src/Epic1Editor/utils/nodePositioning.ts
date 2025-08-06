@@ -83,6 +83,8 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     id: 'prompt-1',
     type: 'textBlock',
     position: positions.topCenter,
+    width: 280,
+    height: 140,
     draggable: true,
     selectable: true,
     data: {
@@ -96,6 +98,8 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     id: 'setting-1',
     type: 'weightedChoice',
     position: positions.rightMiddle,
+    width: 280,
+    height: 140,
     draggable: true,
     selectable: true,
     data: {
@@ -111,6 +115,8 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     id: 'prompt-2',
     type: 'textBlock',
     position: positions.bottomRight,
+    width: 280,
+    height: 140,
     draggable: true,
     selectable: true,
     data: {
@@ -123,6 +129,8 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     id: 'character-1',
     type: 'weightedChoice',
     position: positions.bottomCenter,
+    width: 280,
+    height: 140,
     draggable: true,
     selectable: true,
     data: {
@@ -139,6 +147,8 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     id: 'output-1',
     type: 'output',
     position: positions.leftMiddle,
+    width: 280,
+    height: 140,
     draggable: true,
     selectable: true,
     data: {

@@ -66,6 +66,14 @@
   --demo-contrast-boost: 1;
 }
 
+/* Global smooth scrolling for better UX */
+html {
+  /* Enable smooth scrolling throughout the application */
+  scroll-behavior: smooth;
+  /* Optimize scrolling performance on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -82,6 +90,49 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+/* Global smooth transitions for better UX - excluding React Flow */
+/* Apply transitions only to specific UI elements that need them */
+button, 
+input, 
+select, 
+textarea,
+.modal,
+.dropdown,
+.menu-item,
+.sidebar,
+.panel {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure smooth scrolling on all scrollable elements */
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Optimize performance for scrollable containers */
+.scrollable,
+[data-scrollable="true"] {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
 }
 
 /* Professional Layout Grid System */
@@ -220,6 +271,19 @@ body {
 .react-flow__minimap {
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-node-border);
+}
+
+/* Ensure minimap nodes are visible */
+.react-flow__minimap-node {
+  fill: var(--color-accent-orange) !important;
+  stroke: var(--color-ui-border) !important;
+  stroke-width: 1px !important;
+  opacity: 0.9 !important;
+}
+
+/* Minimap viewport indicator */
+.react-flow__minimap-mask {
+  fill: rgba(255, 255, 255, 0.1) !important;
 }
 
 .react-flow__selection {
@@ -487,11 +551,7 @@ select:focus {
     pointer-events: none;
   }
 
-  /* Hide minimap for cleaner view */
-  .react-flow__minimap {
-    opacity: 0;
-    pointer-events: none;
-  }
+  /* Note: Minimap hiding removed to fix visibility issue */
 
   /* Clean up status messages */
   .status-message:not(.demo-safe) {

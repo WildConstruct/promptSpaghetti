@@ -158,32 +158,24 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   
   // Edit menu handlers
   const handleUndo = useCallback(() => {
-    console.log('[Epic1EditorContainer] Undo requested. History:', history.length, 'items, index:', historyIndex);
     if (historyIndex > 0) {
       const newIndex = historyIndex - 1;
       const state = history[newIndex];
-      console.log('[Epic1EditorContainer] Restoring:', state.nodes.length, 'nodes,', state.edges.length, 'edges');
       setCurrentNodes([...state.nodes]);
       setCurrentEdges([...state.edges]);
       setHistoryIndex(newIndex);
       setEditorKey(prev => prev + 1); // Force editor re-render
-    } else {
-      console.log('[Epic1EditorContainer] Nothing to undo');
     }
   }, [history, historyIndex]);
   
   const handleRedo = useCallback(() => {
-    console.log('[Epic1EditorContainer] Redo requested. History:', history.length, 'items, index:', historyIndex);
     if (historyIndex < history.length - 1) {
       const newIndex = historyIndex + 1;
       const state = history[newIndex];
-      console.log('[Epic1EditorContainer] Restoring:', state.nodes.length, 'nodes,', state.edges.length, 'edges');
       setCurrentNodes([...state.nodes]);
       setCurrentEdges([...state.edges]);
       setHistoryIndex(newIndex);
       setEditorKey(prev => prev + 1); // Force editor re-render
-    } else {
-      console.log('[Epic1EditorContainer] Nothing to redo');
     }
   }, [history, historyIndex]);
   
@@ -210,7 +202,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       }, 100);
       showToast(`Cut ${selectedNodes.length} node${selectedNodes.length !== 1 ? 's' : ''}`, 'success');
     } else {
-      console.log('[Epic1EditorContainer] No nodes selected to cut');
       showToast('No nodes selected to cut', 'warning');
     }
   }, [currentNodes, currentEdges, addToHistory, showToast]);
@@ -293,7 +284,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   }, [clipboard, currentNodes, currentEdges, addToHistory, showToast]);
   
   const handleSelectAll = useCallback(() => {
-    console.log('[Epic1EditorContainer] Selecting all nodes:', currentNodes.length);
     const allSelected = currentNodes.map(n => ({ ...n, selected: true }));
     setCurrentNodes(allSelected);
     setEditorKey(prev => prev + 1); // Force re-render with selection
@@ -301,12 +291,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   }, [currentNodes, showToast]);
   
   const handleFind = useCallback(() => {
-    console.log('[Epic1EditorContainer] Find not yet implemented');
     // TODO: Implement find functionality
   }, []);
   
   const handlePreferences = useCallback(() => {
-    console.log('[Epic1EditorContainer] Preferences not yet implemented');
     // TODO: Implement preferences dialog
   }, []);
 
@@ -381,13 +369,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           showMenuBar ? import('@promptscape/core/components/MenuBar/ProfessionalMenuBar') : Promise.resolve(null),
           showOnboarding ? import('@promptscape/core/components/epic1/onboarding') : Promise.resolve(null)
         ]);
-
-        console.log('Modules loaded:', {
-          nodes: !!nodesModule,
-          epic1: !!epic1Module,
-          menuBar: !!menuBarModule,
-          onboarding: !!onboardingModule
-        });
 
         if (!mounted) return;
 
@@ -548,10 +529,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   ];
 
   const initialEdges = [
-    { id: 'e1', source: 'prompt-1', target: 'setting-1', animated: true },
-    { id: 'e2', source: 'setting-1', target: 'prompt-2', animated: true },
-    { id: 'e3', source: 'prompt-2', target: 'character-1', animated: true },
-    { id: 'e4', source: 'character-1', target: 'output-1', animated: true }
+    { id: 'e1', source: 'prompt-1', target: 'setting-1' },
+    { id: 'e2', source: 'setting-1', target: 'prompt-2' },
+    { id: 'e3', source: 'prompt-2', target: 'character-1' },
+    { id: 'e4', source: 'character-1', target: 'output-1' }
   ];
 
   // Render the complete application
@@ -579,7 +560,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           hasSelection={currentNodes.some(n => n.selected)}
           // Help menu
           onDocumentation={() => window.open('/docs', '_blank')}
-          onKeyboardShortcuts={() => console.log('Show keyboard shortcuts')}
+          onKeyboardShortcuts={() => setShowKeyboardShortcuts(true)}
           // Graph data
           nodes={currentNodes.length > 0 ? currentNodes : initialNodes}
           edges={currentEdges.length > 0 ? currentEdges : initialEdges}
@@ -607,7 +588,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             
             // Add to history when nodes are added or deleted (not just moved)
             if (nodes.length !== prevLength) {
-              console.log('[Epic1EditorContainer] Node count changed from', prevLength, 'to', nodes.length);
               // Small delay to batch changes
               clearTimeout(window.historyTimeout);
               window.historyTimeout = setTimeout(() => {
@@ -625,7 +605,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
             
             // Add to history when edges are added or deleted
             if (edges.length !== currentEdges.length) {
-              console.log('[Epic1EditorContainer] Edge count changed from', currentEdges.length, 'to', edges.length);
               clearTimeout(window.historyTimeout);
               window.historyTimeout = setTimeout(() => {
                 addToHistory(currentNodes, edges);

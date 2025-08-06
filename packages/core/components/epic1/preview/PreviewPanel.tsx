@@ -13,6 +13,7 @@ import { DiffViewer, DiffIndicator, ChangeHighlight } from './DiffViewer';
 import { CacheIndicator } from './CacheIndicator';
 import { WorkerIndicator } from './WorkerIndicator';
 import './PreviewPanel.css';
+import { debugLogEpic1 } from '../../../utils/debug';
 
 export interface PreviewPanelProps {
   previewEngine: PreviewEngine;
@@ -59,7 +60,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   // Subscribe to preview engine updates
   useEffect(() => {
     const unsubscribe = previewEngine.subscribe((update) => {
-      console.log('[PreviewPanel] Received update:', {
+      debugLogEpic1('[PreviewPanel] Received update:', {
         state: update.state,
         hasResults: !!update.results,
         resultCount: update.results?.length,
@@ -74,7 +75,7 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
       // Log the actual output values for debugging
       if (update.results && update.state === PreviewState.IDLE) {
         update.results.forEach((result, idx) => {
-          console.log(`[PreviewPanel] Result ${idx}: "${result.output || '(empty)'}"`, {
+          debugLogEpic1(`[PreviewPanel] Result ${idx}: "${result.output || '(empty)'}"`, {
             success: result.success,
             hasStats: !!result.stats,
             errors: result.stats?.errors?.length || 0
@@ -236,6 +237,25 @@ export const PreviewPanel: React.FC<PreviewPanelProps> = ({
   // Render results
   const renderResults = () => {
     if (!previewUpdate?.results || previewUpdate.results.length === 0) {
+      return (
+        <div className="preview-empty">
+          <div className="preview-empty-icon">🔗</div>
+          <div className="preview-empty-text">
+            Connect an Output node to see results
+          </div>
+          <div className="preview-empty-hint">
+            Drag an Output node from the palette and connect it to your graph
+          </div>
+        </div>
+      );
+    }
+
+    // Check if all results have the "no output node" warning
+    const allResultsHaveNoOutput = previewUpdate.results.every(result => 
+      result.stats.warnings.some(w => w.message === 'Connect an Output node to see results')
+    );
+
+    if (allResultsHaveNoOutput) {
       return (
         <div className="preview-empty">
           <div className="preview-empty-icon">🔗</div>

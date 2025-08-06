@@ -92,8 +92,8 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   // Fit view shortcut
   const handleFitView = useCallback(() => {
     reactFlowInstance.fitView({ 
-      padding: 0.2, 
-      duration: 300 
+      padding: 0.2
+      // Removed duration to eliminate animation
     });
   }, [reactFlowInstance]);
 

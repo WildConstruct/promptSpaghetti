@@ -410,11 +410,11 @@ export async function validateGraph(
   );
   
   if (outputNodes.length === 0) {
-    allErrors.push({
+    allWarnings.push({
       nodeId: 'graph',
       nodeType: 'graph',
       message: 'Graph has no output node',
-      severity: 'error'
+      severity: 'warning'
     });
   } else if (outputNodes.length > 1) {
     allWarnings.push({
