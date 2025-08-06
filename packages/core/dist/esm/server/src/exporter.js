@@ -274,100 +274,100 @@ function extractControlNetParameters(graph) {
                             if (key.includes('camera') || key.includes('position')) {
                                 if (key.includes('x') && typeof value === 'number') {
                                     sceneData.camera.position.x = value;
-                                    if (key.includes('y') && typeof value === 'number') {
-                                        sceneData.camera.position.y = value;
-                                        if (key.includes('z') && typeof value === 'number') {
-                                            sceneData.camera.position.z = value;
-                                            // Camera angles
-                                            if (key.includes('angle') || key.includes('rotation')) {
-                                                if (key.includes('pitch') && typeof value === 'number') {
-                                                    sceneData.camera.angle.pitch = Math.max(-90, Math.min(90, value));
-                                                    if (key.includes('yaw') && typeof value === 'number') {
-                                                        sceneData.camera.angle.yaw = Math.max(-180, Math.min(180, value));
-                                                        if (key.includes('roll') && typeof value === 'number') {
-                                                            sceneData.camera.angle.roll = Math.max(-180, Math.min(180, value));
-                                                            // Distance
-                                                            if (key.includes('distance') && typeof value === 'number') {
-                                                                sceneData.camera.distance = Math.max(0.1, Math.min(1000, value));
-                                                                // Lighting conditions
-                                                                if (key.includes('time') || key.includes('lighting')) {
-                                                                    const timeKeywords = ['dawn', 'morning', 'noon', 'afternoon', 'dusk', 'night', 'golden', 'blue'];
+                                }
+                                if (key.includes('y') && typeof value === 'number') {
+                                    sceneData.camera.position.y = value;
+                                }
+                                if (key.includes('z') && typeof value === 'number') {
+                                    sceneData.camera.position.z = value;
+                                }
+                            }
+                            // Camera angles
+                            if (key.includes('angle') || key.includes('rotation')) {
+                                if (key.includes('pitch') && typeof value === 'number') {
+                                    sceneData.camera.angle.pitch = Math.max(-90, Math.min(90, value));
+                                }
+                                if (key.includes('yaw') && typeof value === 'number') {
+                                    sceneData.camera.angle.yaw = Math.max(-180, Math.min(180, value));
+                                }
+                                if (key.includes('roll') && typeof value === 'number') {
+                                    sceneData.camera.angle.roll = Math.max(-180, Math.min(180, value));
+                                }
+                            }
+                            // Distance
+                            if (key.includes('distance') && typeof value === 'number') {
+                                sceneData.camera.distance = Math.max(0.1, Math.min(1000, value));
+                            }
+                            // Lighting conditions
+                            if (key.includes('time') || key.includes('lighting')) {
+                                const timeKeywords = ['dawn', 'morning', 'noon', 'afternoon', 'dusk', 'night', 'golden', 'blue'];
+                                const stringValue = String(value).toLowerCase();
+                                for (const keyword of timeKeywords) {
+                                    if (stringValue.includes(keyword)) {
+                                        if (keyword === 'golden')
+                                            sceneData.lighting.timeOfDay = 'golden-hour';
+                                        else if (keyword === 'blue')
+                                            sceneData.lighting.timeOfDay = 'blue-hour';
+                                        else
+                                            sceneData.lighting.timeOfDay = keyword;
+                                        break;
+                                        // Weather
+                                        if (key.includes('weather')) {
+                                            const weatherKeywords = ['clear', 'cloudy', 'overcast', 'foggy', 'rainy', 'stormy', 'snowy'];
+                                            const stringValue = String(value).toLowerCase();
+                                            for (const keyword of weatherKeywords) {
+                                                if (stringValue.includes(keyword)) {
+                                                    sceneData.lighting.weather = keyword;
+                                                    break;
+                                                    // Mood/atmosphere
+                                                    if (key.includes('mood') || key.includes('atmosphere')) {
+                                                        const moodKeywords = ['bright', 'dramatic', 'soft', 'harsh', 'moody', 'ethereal', 'cinematic'];
+                                                        const stringValue = String(value).toLowerCase();
+                                                        for (const keyword of moodKeywords) {
+                                                            if (stringValue.includes(keyword)) {
+                                                                sceneData.lighting.mood = keyword;
+                                                                break;
+                                                                // Environment setting
+                                                                if (key.includes('setting') || key.includes('location')) {
+                                                                    const settingKeywords = [
+                                                                        'interior-home', 'interior-office', 'interior-studio', 'interior-warehouse',
+                                                                        'exterior-urban', 'exterior-nature', 'exterior-beach', 'exterior-mountain',
+                                                                        'exterior-forest', 'exterior-desert', 'exterior-space', 'abstract'
+                                                                    ];
                                                                     const stringValue = String(value).toLowerCase();
-                                                                    for (const keyword of timeKeywords) {
-                                                                        if (stringValue.includes(keyword)) {
-                                                                            if (keyword === 'golden')
-                                                                                sceneData.lighting.timeOfDay = 'golden-hour';
-                                                                            else if (keyword === 'blue')
-                                                                                sceneData.lighting.timeOfDay = 'blue-hour';
-                                                                            else
-                                                                                sceneData.lighting.timeOfDay = keyword;
+                                                                    for (const keyword of settingKeywords) {
+                                                                        if (stringValue.includes(keyword.replace('-', '')) || stringValue.includes(keyword)) {
+                                                                            sceneData.environment.setting = keyword;
                                                                             break;
-                                                                            // Weather
-                                                                            if (key.includes('weather')) {
-                                                                                const weatherKeywords = ['clear', 'cloudy', 'overcast', 'foggy', 'rainy', 'stormy', 'snowy'];
-                                                                                const stringValue = String(value).toLowerCase();
-                                                                                for (const keyword of weatherKeywords) {
-                                                                                    if (stringValue.includes(keyword)) {
-                                                                                        sceneData.lighting.weather = keyword;
-                                                                                        break;
-                                                                                        // Mood/atmosphere
-                                                                                        if (key.includes('mood') || key.includes('atmosphere')) {
-                                                                                            const moodKeywords = ['bright', 'dramatic', 'soft', 'harsh', 'moody', 'ethereal', 'cinematic'];
-                                                                                            const stringValue = String(value).toLowerCase();
-                                                                                            for (const keyword of moodKeywords) {
-                                                                                                if (stringValue.includes(keyword)) {
-                                                                                                    sceneData.lighting.mood = keyword;
-                                                                                                    break;
-                                                                                                    // Environment setting
-                                                                                                    if (key.includes('setting') || key.includes('location')) {
-                                                                                                        const settingKeywords = [
-                                                                                                            'interior-home', 'interior-office', 'interior-studio', 'interior-warehouse',
-                                                                                                            'exterior-urban', 'exterior-nature', 'exterior-beach', 'exterior-mountain',
-                                                                                                            'exterior-forest', 'exterior-desert', 'exterior-space', 'abstract'
-                                                                                                        ];
-                                                                                                        const stringValue = String(value).toLowerCase();
-                                                                                                        for (const keyword of settingKeywords) {
-                                                                                                            if (stringValue.includes(keyword.replace('-', '')) || stringValue.includes(keyword)) {
-                                                                                                                sceneData.environment.setting = keyword;
-                                                                                                                break;
-                                                                                                                // Props
-                                                                                                                if (key.includes('prop') && typeof value === 'string') {
-                                                                                                                    if (!sceneData.environment.props)
-                                                                                                                        sceneData.environment.props = [];
-                                                                                                                    sceneData.environment.props.push(value);
-                                                                                                                    // Extract scene hints from node names and content
-                                                                                                                    const nodeId = node.id.toLowerCase();
-                                                                                                                    const nodeContent = JSON.stringify(node).toLowerCase();
-                                                                                                                    // Camera movement hints
-                                                                                                                    if (nodeId.includes('pan') || nodeContent.includes('pan')) {
-                                                                                                                        if (!sceneData.camera.movement)
-                                                                                                                            sceneData.camera.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
-                                                                                                                        sceneData.camera.movement.type = 'pan';
-                                                                                                                        if (nodeId.includes('dolly') || nodeContent.includes('dolly')) {
-                                                                                                                            if (!sceneData.camera.movement)
-                                                                                                                                sceneData.camera.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
-                                                                                                                            sceneData.camera.movement.type = 'dolly';
-                                                                                                                            // Lighting hints from node content
-                                                                                                                            if (nodeContent.includes('dramatic') || nodeContent.includes('cinematic')) {
-                                                                                                                                sceneData.lighting.mood = 'dramatic';
-                                                                                                                                if (nodeContent.includes('soft') || nodeContent.includes('gentle')) {
-                                                                                                                                    sceneData.lighting.mood = 'soft';
-                                                                                                                                    // Scale hints
-                                                                                                                                    if (nodeContent.includes('close') || nodeContent.includes('intimate')) {
-                                                                                                                                        sceneData.environment.scale = 'intimate';
-                                                                                                                                        if (nodeContent.includes('wide') || nodeContent.includes('vast')) {
-                                                                                                                                            sceneData.environment.scale = 'wide';
-                                                                                                                                            if (nodeContent.includes('epic') || nodeContent.includes('grand')) {
-                                                                                                                                                sceneData.environment.scale = 'epic';
-                                                                                                                                            }
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                            }
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                }
-                                                                                                            }
+                                                                            // Props
+                                                                            if (key.includes('prop') && typeof value === 'string') {
+                                                                                if (!sceneData.environment.props)
+                                                                                    sceneData.environment.props = [];
+                                                                                sceneData.environment.props.push(value);
+                                                                                // Extract scene hints from node names and content
+                                                                                const nodeId = node.id.toLowerCase();
+                                                                                const nodeContent = JSON.stringify(node).toLowerCase();
+                                                                                // Camera movement hints
+                                                                                if (nodeId.includes('pan') || nodeContent.includes('pan')) {
+                                                                                    if (!sceneData.camera.movement)
+                                                                                        sceneData.camera.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
+                                                                                    sceneData.camera.movement.type = 'pan';
+                                                                                    if (nodeId.includes('dolly') || nodeContent.includes('dolly')) {
+                                                                                        if (!sceneData.camera.movement)
+                                                                                            sceneData.camera.movement = { type: 'static', speed: 'medium', smoothness: 0.8 };
+                                                                                        sceneData.camera.movement.type = 'dolly';
+                                                                                        // Lighting hints from node content
+                                                                                        if (nodeContent.includes('dramatic') || nodeContent.includes('cinematic')) {
+                                                                                            sceneData.lighting.mood = 'dramatic';
+                                                                                            if (nodeContent.includes('soft') || nodeContent.includes('gentle')) {
+                                                                                                sceneData.lighting.mood = 'soft';
+                                                                                                // Scale hints
+                                                                                                if (nodeContent.includes('close') || nodeContent.includes('intimate')) {
+                                                                                                    sceneData.environment.scale = 'intimate';
+                                                                                                    if (nodeContent.includes('wide') || nodeContent.includes('vast')) {
+                                                                                                        sceneData.environment.scale = 'wide';
+                                                                                                        if (nodeContent.includes('epic') || nodeContent.includes('grand')) {
+                                                                                                            sceneData.environment.scale = 'epic';
                                                                                                         }
                                                                                                     }
                                                                                                 }

@@ -1,6 +1,6 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { memo, useState, useCallback } from 'react';
-import { Handle, Position } from 'reactflow';
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { memo, useState, useEffect, useCallback } from 'react';
+import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import { BaseEditableNode } from './BaseEditableNode';
 import './WeightedChoiceNode.css';
 import './BranchingWeightedChoice.css';
@@ -19,10 +19,49 @@ const WEIGHT_PRESETS = {
  * Branching WeightedChoice node with conditional outputs per option
  */
 export const BranchingWeightedChoiceNode = memo((props) => {
-    const [options, setOptions] = useState(props.data.options || []);
+    const updateNodeInternals = useUpdateNodeInternals();
+    // Initialize options with stable IDs
+    const initializeOptions = (opts) => {
+        return opts.map((opt, index) => ({
+            ...opt,
+            // Use a more stable ID based on node ID and index
+            id: opt.id || `${props.id}-option-${index}`
+        }));
+    };
+    const [options, setOptions] = useState(() => initializeOptions(props.data.options || []));
     const [draggedIndex, setDraggedIndex] = useState(null);
+    // Update options when props change, but preserve stable IDs
+    useEffect(() => {
+        if (props.data.options) {
+            setOptions(currentOptions => {
+                // Map new options preserving existing IDs where possible
+                // More robust ID preservation based on index and content
+                return props.data.options.map((newOpt, index) => {
+                    // First try to find by matching index and similar content
+                    let existingOpt = currentOptions[index];
+                    // If not found by index, try to find by exact content match
+                    if (!existingOpt || existingOpt.text !== newOpt.text || existingOpt.weight !== newOpt.weight) {
+                        existingOpt = currentOptions.find(opt => opt.text === newOpt.text && opt.weight === newOpt.weight);
+                    }
+                    // Preserve the ID if we found a match, otherwise use the new option's ID or generate one
+                    return {
+                        ...newOpt,
+                        id: existingOpt?.id || newOpt.id || `option-${index}-${Date.now().toString(36)}`
+                    };
+                });
+            });
+        }
+    }, [props.data.options]);
     // Check if any option has branching enabled
     const hasBranching = options.some(opt => opt.hasBranch);
+    // Update React Flow's internal handle positions when branch handles change
+    useEffect(() => {
+        // Give React Flow time to render the new handles before updating internals
+        const timeoutId = setTimeout(() => {
+            updateNodeInternals(props.id);
+        }, 50);
+        return () => clearTimeout(timeoutId);
+    }, [options, props.id, updateNodeInternals]);
     // Calculate percentages for display
     const calculatePercentages = useCallback((opts) => {
         const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
@@ -71,6 +110,11 @@ export const BranchingWeightedChoiceNode = memo((props) => {
             hasBranch: !newOptions[index].hasBranch
         };
         setOptions(newOptions);
+        // Immediately update node internals to ensure handle positions are recalculated
+        // Use a small delay to ensure React has rendered the DOM changes
+        setTimeout(() => {
+            updateNodeInternals(props.id);
+        }, 10);
     };
     // Update option text
     const updateOptionText = (index, text) => {
@@ -86,7 +130,13 @@ export const BranchingWeightedChoiceNode = memo((props) => {
     };
     // Add new option
     const addOption = () => {
-        const newOptions = [...options, { text: '', weight: 50, hasBranch: false }];
+        const newOption = {
+            text: '',
+            weight: 50,
+            hasBranch: false,
+            id: `${props.id}-option-${options.length}`
+        };
+        const newOptions = [...options, newOption];
         setOptions(newOptions);
     };
     // Remove option
@@ -120,11 +170,21 @@ export const BranchingWeightedChoiceNode = memo((props) => {
             ...props.data,
             options,
             onEdit: (value) => {
+                // Save options with their stable IDs
                 props.data.onEdit?.(JSON.stringify(options));
             }
         }, children: ({ isEditing, confirmEdit, cancelEdit }) => {
             if (isEditing) {
-                return (_jsxs("div", { className: "epic1-weighted-choice-editor branching", children: [hasBranching && (_jsx(Handle, { type: "source", position: Position.Top, id: "main-output", className: "epic1-handle epic1-handle-top main-output", style: { top: -8, left: '50%', transform: 'translateX(-50%)' } })), _jsx("div", { className: "epic1-node-type-label", children: "Weighted Choice (Branching)" }), _jsxs("div", { className: "epic1-weight-presets", children: [Object.entries(WEIGHT_PRESETS).map(([key, preset]) => (_jsx("button", { className: "epic1-preset-btn nodrag", onClick: (e) => {
+                return (_jsxs("div", { className: "epic1-weighted-choice-editor branching", children: [_jsx(Handle, { type: "source", position: Position.Top, id: "main-output", className: "epic1-handle epic1-handle-top main-output", style: {
+                                top: -8,
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                width: '16px',
+                                height: '16px',
+                                background: '#ff6b35',
+                                border: '3px solid #1a1a2e',
+                                zIndex: 10
+                            } }), _jsx("div", { className: "epic1-node-type-label", children: "Weighted Choice (Branching)" }), _jsxs("div", { className: "epic1-weight-presets", children: [Object.entries(WEIGHT_PRESETS).map(([key, preset]) => (_jsx("button", { className: "epic1-preset-btn nodrag", onClick: (e) => {
                                         e.stopPropagation();
                                         applyPreset(key);
                                     }, title: preset.title, children: preset.icon }, key))), _jsxs("div", { className: "epic1-total-weight", children: ["Total: ", totalWeight] })] }), _jsx("div", { className: "epic1-options-list branching nodrag nopan nowheel", onWheel: (e) => e.stopPropagation(), onPointerDown: (e) => e.stopPropagation(), onMouseDown: (e) => e.stopPropagation(), children: options.map((option, index) => (_jsxs("div", { className: `epic1-option-row branching ${draggedIndex === index ? 'dragging' : ''}`, draggable: true, onDragStart: () => handleDragStart(index), onDragOver: (e) => handleDragOver(e, index), onDragEnd: handleDragEnd, children: [_jsx("div", { className: "epic1-drag-handle", children: _jsx(DragHandleIcon, {}) }), _jsx("input", { type: "text", className: "epic1-option-text nodrag", value: option.text, onChange: (e) => updateOptionText(index, e.target.value), placeholder: "Option text...", onClick: (e) => e.stopPropagation(), style: { flex: '1', minWidth: '100px' } }), _jsx("input", { type: "range", className: "epic1-weight-slider nodrag", min: "0", max: "100", value: option.weight, onChange: (e) => updateOptionWeight(index, parseInt(e.target.value)), onMouseDown: (e) => e.stopPropagation(), style: {
@@ -143,12 +203,28 @@ export const BranchingWeightedChoiceNode = memo((props) => {
                                         }, title: "Toggle branch output", style: { flexShrink: 0 }, children: "\u26A1" }), options.length > 1 && (_jsx("button", { className: "epic1-remove-option nodrag", onClick: (e) => {
                                             e.stopPropagation();
                                             removeOption(index);
-                                        }, title: "Remove option", style: { flexShrink: 0 }, children: "\u00D7" })), option.hasBranch && (_jsx(Handle, { type: "source", position: Position.Right, id: `branch-${index}`, className: "epic1-handle epic1-handle-right branch-output", style: {
-                                            top: '50%',
-                                            right: -8,
-                                            transform: 'translateY(-50%)',
-                                            background: '#f59e0b'
-                                        } }))] }, index))) }), _jsx("div", { className: "epic1-weight-hints", children: "Drag to reorder \u2022 \u26A1 = branch output \u2022 Raw weights (orange) \u2022 Actual % (blue)" }), _jsxs("div", { className: "epic1-option-controls", children: [_jsx("button", { className: "epic1-add-option nodrag", onClick: (e) => {
+                                        }, title: "Remove option", style: { flexShrink: 0 }, children: "\u00D7" })), option.hasBranch && (_jsxs(_Fragment, { children: [_jsx("div", { className: "branch-edge-indicator", style: {
+                                                    position: 'absolute',
+                                                    top: '50%',
+                                                    right: 0,
+                                                    width: '50px',
+                                                    height: '2px',
+                                                    background: 'linear-gradient(90deg, #f59e0b 0%, transparent 100%)',
+                                                    pointerEvents: 'none',
+                                                    transform: 'translateY(-50%)',
+                                                    opacity: 0.6
+                                                } }), _jsx(Handle, { type: "source", position: Position.Right, id: `branch-${option.id}`, className: "epic1-handle epic1-handle-right branch-output", style: {
+                                                    position: 'absolute',
+                                                    top: '50%',
+                                                    right: -32, // Consistent position on the node's outer frame edge
+                                                    transform: 'translateY(-50%)',
+                                                    background: '#f59e0b',
+                                                    width: '14px',
+                                                    height: '14px',
+                                                    border: '2px solid #1a1a2e',
+                                                    borderRadius: '50%',
+                                                    zIndex: 10
+                                                } })] }))] }, option.id))) }), _jsx("div", { className: "epic1-weight-hints", children: "Drag to reorder \u2022 \u26A1 = branch output \u2022 Raw weights (orange) \u2022 Actual % (blue)" }), _jsxs("div", { className: "epic1-option-controls", children: [_jsx("button", { className: "epic1-add-option nodrag", onClick: (e) => {
                                         e.stopPropagation();
                                         addOption();
                                     }, type: "button", children: "+ Add Option" }), _jsxs("div", { className: "epic1-edit-actions", children: [_jsx("button", { className: "epic1-confirm nodrag", onClick: (e) => {
@@ -157,14 +233,40 @@ export const BranchingWeightedChoiceNode = memo((props) => {
                                             }, type: "button", children: "\u2713" }), _jsx("button", { className: "epic1-cancel nodrag", onClick: (e) => {
                                                 e.stopPropagation();
                                                 cancelEdit();
-                                            }, type: "button", children: "\u00D7" })] })] }), !hasBranching && (_jsx(Handle, { type: "source", position: Position.Right, id: "main-output", className: "epic1-handle epic1-handle-right main-output" }))] }));
+                                            }, type: "button", children: "\u00D7" })] })] })] }));
             }
             // Display mode
-            return (_jsxs("div", { className: "epic1-weighted-choice-display branching", children: [hasBranching && (_jsx(Handle, { type: "source", position: Position.Top, id: "main-output", className: "epic1-handle epic1-handle-top main-output", style: { top: -8, left: '50%', transform: 'translateX(-50%)' } })), _jsxs("div", { className: "epic1-node-type-label", children: ["Weighted Choice ", hasBranching && '(Branching)'] }), _jsx("div", { className: "epic1-options-preview", children: options.map((option, index) => (_jsxs("div", { className: "epic1-option-preview branching", children: [_jsxs("div", { className: "epic1-option-text-preview", children: [option.text || _jsx("span", { className: "epic1-placeholder", children: "Empty option" }), option.hasBranch && _jsx("span", { className: "branch-indicator", children: "\u26A1" })] }), _jsxs("div", { className: "epic1-weight-bar-container", children: [_jsx("div", { className: "epic1-weight-bar", style: { width: `${percentages[index]}%` } }), _jsxs("div", { className: "epic1-weight-label", children: [percentages[index], "%"] })] }), option.hasBranch && (_jsx(Handle, { type: "source", position: Position.Right, id: `branch-${index}`, className: "epic1-handle epic1-handle-right branch-output", style: {
-                                        top: `${20 + index * 50}px`,
-                                        right: -8,
-                                        background: '#f59e0b'
-                                    } }))] }, index))) }), !hasBranching && (_jsx(Handle, { type: "source", position: Position.Right, id: "main-output", className: "epic1-handle epic1-handle-right main-output" }))] }));
+            return (_jsxs("div", { className: "epic1-weighted-choice-display branching", children: [_jsx(Handle, { type: "source", position: Position.Top, id: "main-output", className: "epic1-handle epic1-handle-top main-output", style: {
+                            top: -8,
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: '16px',
+                            height: '16px',
+                            background: '#ff6b35',
+                            border: '3px solid #1a1a2e',
+                            zIndex: 10
+                        } }), _jsxs("div", { className: "epic1-node-type-label", children: ["Weighted Choice ", hasBranching && '(Branching)'] }), _jsx("div", { className: "epic1-options-preview", style: { position: 'relative' }, children: options.map((option, index) => (_jsxs("div", { className: "epic1-option-preview branching", style: { position: 'relative' }, children: [_jsxs("div", { className: "epic1-option-text-preview", children: [option.text || _jsx("span", { className: "epic1-placeholder", children: "Empty option" }), option.hasBranch && _jsx("span", { className: "branch-indicator", children: "\u26A1" })] }), _jsxs("div", { className: "epic1-weight-bar-container", children: [_jsx("div", { className: "epic1-weight-bar", style: { width: `${percentages[index]}%` } }), _jsxs("div", { className: "epic1-weight-label", children: [percentages[index], "%"] })] }), option.hasBranch && (_jsxs(_Fragment, { children: [_jsx("div", { className: "branch-edge-indicator", style: {
+                                                position: 'absolute',
+                                                top: '50%',
+                                                right: 0,
+                                                width: '45px',
+                                                height: '2px',
+                                                background: 'linear-gradient(90deg, #f59e0b 0%, transparent 100%)',
+                                                pointerEvents: 'none',
+                                                transform: 'translateY(-50%)',
+                                                opacity: 0.6
+                                            } }), _jsx(Handle, { type: "source", position: Position.Right, id: `branch-${option.id}`, className: "epic1-handle epic1-handle-right branch-output", style: {
+                                                position: 'absolute',
+                                                top: '50%',
+                                                right: -32, // Position on the node's outer frame edge
+                                                transform: 'translateY(-50%)',
+                                                background: '#f59e0b',
+                                                width: '14px',
+                                                height: '14px',
+                                                border: '2px solid #1a1a2e',
+                                                borderRadius: '50%',
+                                                zIndex: 10
+                                            } })] }))] }, option.id))) })] }));
         } }));
 });
 BranchingWeightedChoiceNode.displayName = 'BranchingWeightedChoiceNode';

@@ -12,6 +12,7 @@ import { DiffViewer, DiffIndicator, ChangeHighlight } from './DiffViewer';
 import { CacheIndicator } from './CacheIndicator';
 import { WorkerIndicator } from './WorkerIndicator';
 import './PreviewPanel.css';
+import { debugLogEpic1 } from '../../../utils/debug';
 /**
  * PreviewPanel Component
  */
@@ -31,7 +32,7 @@ export const PreviewPanel = ({ previewEngine, className = '', onSeedChange, onCl
     // Subscribe to preview engine updates
     useEffect(() => {
         const unsubscribe = previewEngine.subscribe((update) => {
-            console.log('[PreviewPanel] Received update:', {
+            debugLogEpic1('[PreviewPanel] Received update:', {
                 state: update.state,
                 hasResults: !!update.results,
                 resultCount: update.results?.length,
@@ -45,7 +46,7 @@ export const PreviewPanel = ({ previewEngine, className = '', onSeedChange, onCl
             // Log the actual output values for debugging
             if (update.results && update.state === PreviewState.IDLE) {
                 update.results.forEach((result, idx) => {
-                    console.log(`[PreviewPanel] Result ${idx}: "${result.output || '(empty)'}"`, {
+                    debugLogEpic1(`[PreviewPanel] Result ${idx}: "${result.output || '(empty)'}"`, {
                         success: result.success,
                         hasStats: !!result.stats,
                         errors: result.stats?.errors?.length || 0

@@ -1,11 +1,12 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import React, { useCallback, useState, useMemo, useEffect, useRef } from 'react';
-import ReactFlow, { ReactFlowProvider, addEdge, Background, Controls, MiniMap, useNodesState, useEdgesState, ConnectionMode, Panel, } from 'reactflow';
+import ReactFlow, { ReactFlowProvider, addEdge, Background, Controls, useNodesState, useEdgesState, ConnectionMode, Panel, } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { epic1NodeTypes } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
+import { CustomMinimap } from './CustomMinimap';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
@@ -20,6 +21,7 @@ import { NodeContextMenu } from './nodes/NodeContextMenu';
 import { useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
+import { edgeTypes } from './EdgeRenderingFix';
 import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
@@ -31,25 +33,28 @@ import './PanZoomControls.css';
 const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesChange: onNodesChangeProp, onEdgesChange: onEdgesChangeProp, onExecute, showPreview = true, previewPosition = 'right', previewWidth = '400px', previewDebounceDelay = 300, previewSeeds, showAssetLibrary = true, assetLibraryPosition = 'left', }) => {
     // Use droppable node types if asset library is shown
     const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
-    console.log('[Epic1GraphEditor] Using nodeTypes:', showAssetLibrary ? 'droppable' : 'regular', 'showAssetLibrary:', showAssetLibrary);
-    console.log('[Epic1GraphEditor] Initial nodes:', initialNodes.length, 'nodes');
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-    // Debug: Log nodes whenever they change
+    const [nodes, setNodes, onNodesChangeBase] = useNodesState(initialNodes);
+    const [edges, setEdges, onEdgesChangeBase] = useEdgesState(initialEdges);
+    const [activatedEdges, setActivatedEdges] = useState(new Set());
+    const [isSelecting, setIsSelecting] = useState(false);
+    // Use onNodesChangeBase directly
+    const onNodesChange = onNodesChangeBase;
+    // Custom edges change handler to ensure proper selection behavior
+    const onEdgesChange = useCallback((changes) => {
+        // Apply the changes using the base handler
+        onEdgesChangeBase(changes);
+    }, [onEdgesChangeBase]);
+    // Debug: Log nodes and edges whenever they change
     useEffect(() => {
-        console.log('[Epic1GraphEditor] Nodes state changed:', nodes.length, 'nodes');
-        console.log('[Epic1GraphEditor] Node details:', nodes.map(n => ({
-            id: n.id,
-            type: n.type,
-            position: n.position
-        })));
+        // Removed console.log statements that fire on every state change
+        // These were causing performance issues during mouse movement/dragging
         // Check for duplicate IDs
         const ids = nodes.map(n => n.id);
         const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
         if (duplicates.length > 0) {
             console.warn('[Epic1GraphEditor] DUPLICATE NODE IDS FOUND:', duplicates);
         }
-    }, [nodes]);
+    }, [nodes, edges]);
     const [selectedNodeId, setSelectedNodeId] = useState(null);
     const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -122,15 +127,31 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                 data: nodeData,
                 // Preserve the original selected state from nodes, don't override
                 selected: node.selected || node.id === selectedNodeId,
+                // Ensure dimensions are set
+                width: node.width || undefined,
+                height: node.height || undefined,
             };
         });
     }, [nodes, selectedNodeId, createNodeData]);
-    // Handle new connections
+    // Handle new connections with replacement for single input nodes
     const onConnect = useCallback((params) => {
-        console.log('[Epic1GraphEditor] Connection attempt:', params);
         setEdges((eds) => {
-            const newEdges = addEdge(params, eds);
-            console.log('[Epic1GraphEditor] Edges after connection:', newEdges.length, 'edges');
+            // Check if target already has an incoming connection (single input constraint)
+            const existingIncomingEdge = eds.find(e => e.target === params.target && e.targetHandle === params.targetHandle);
+            let newEdges = eds;
+            if (existingIncomingEdge) {
+                // Replace the existing incoming connection
+                newEdges = eds.filter(e => e.id !== existingIncomingEdge.id);
+            }
+            // Add the new edge
+            const edgeParams = {
+                ...params,
+                id: `${params.source || 'unknown'}-${params.target || 'unknown'}-${Date.now()}`,
+                type: 'smoothstep',
+                animated: false,
+                style: { stroke: '#9ca3af', strokeWidth: 3 }
+            };
+            newEdges = addEdge(edgeParams, newEdges);
             return newEdges;
         });
         // Highlight the new connection
@@ -147,8 +168,6 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
     const convertToRuntimeGraph = useCallback((flowNodes, flowEdges) => {
         try {
             const runtimeNodes = new Map();
-            console.log('[convertToRuntimeGraph] Input nodes:', flowNodes.length, 'nodes');
-            console.log('[convertToRuntimeGraph] Node IDs:', flowNodes.map(n => n.id));
             for (const node of flowNodes) {
                 // Skip nodes without proper type or position
                 if (!node.type || !node.position) {
@@ -182,15 +201,7 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
             return;
         const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
         if (runtimeGraph) {
-            console.log('[Epic1GraphEditor] Updating preview with graph:', {
-                nodeCount: runtimeGraph.nodes.size,
-                edgeCount: runtimeGraph.edges.length,
-                nodes: Array.from(runtimeGraph.nodes.entries()).map(([id, node]) => ({
-                    id,
-                    type: node.getNodeType()
-                })),
-                edges: runtimeGraph.edges
-            });
+            // Removed console.log that was causing performance issues
             previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
         }
     }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph]);
@@ -241,10 +252,8 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
         // If no nodes provided, get selected nodes
         const targetNodes = nodesToDelete || nodes.filter(n => n.selected);
         if (targetNodes.length === 0) {
-            console.log('[Epic1GraphEditor] No nodes selected to delete');
             return;
         }
-        console.log('[Epic1GraphEditor] Deleting nodes:', targetNodes.map(n => n.id));
         const nodeIds = targetNodes.map(n => n.id);
         setNodes((nds) => nds.filter(n => !nodeIds.includes(n.id)));
         setEdges((eds) => eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
@@ -266,14 +275,19 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
     const handleSelectAll = useCallback(() => {
         setNodes((nds) => nds.map(n => ({ ...n, selected: true })));
     }, [setNodes]);
-    // Handle canvas click to deselect all nodes
-    const handlePaneClick = useCallback(() => {
-        setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
-        setSelectedNodeId(null);
-    }, [setNodes]);
+    // Handle canvas click to deselect all nodes and edges
+    const handlePaneClick = useCallback((event) => {
+        // Only deselect if we're not in the middle of a selection drag
+        if (!isSelecting) {
+            // Removed console.log that was causing performance issues
+            setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
+            setEdges((eds) => eds.map(e => ({ ...e, selected: false })));
+            setSelectedNodeId(null);
+            setActivatedEdges(new Set());
+        }
+    }, [setNodes, setEdges, isSelecting]);
     // Handle node click to select it
     const handleNodeClick = useCallback((event, node) => {
-        console.log('[Epic1GraphEditor] Node clicked:', node.id, 'Shift:', event.shiftKey);
         if (event.shiftKey) {
             // Multi-select with shift key
             setNodes((nds) => nds.map(n => {
@@ -292,6 +306,39 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
             setSelectedNodeId(node.id);
         }
     }, [setNodes]);
+    // Handle edge click to select and activate/deactivate
+    const handleEdgeClick = useCallback((event, edge) => {
+        event.stopPropagation(); // Prevent the pane click handler
+        if (!event.shiftKey) {
+            // Single selection - clear other selections first
+            setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
+        }
+        // Toggle edge selection
+        setEdges((eds) => {
+            const updatedEdges = eds.map(e => {
+                if (e.id === edge.id) {
+                    const newSelected = !e.selected;
+                    return { ...e, selected: newSelected };
+                }
+                // Keep other selections if shift is held
+                return event.shiftKey ? e : { ...e, selected: false };
+            });
+            return updatedEdges;
+        });
+        // Toggle activation
+        setActivatedEdges((prev) => {
+            const newSet = new Set(prev);
+            if (newSet.has(edge.id)) {
+                newSet.delete(edge.id);
+                showToast('info', 'Edge deactivated');
+            }
+            else {
+                newSet.add(edge.id);
+                showToast('success', 'Edge activated!');
+            }
+            return newSet;
+        });
+    }, [setEdges, setNodes, showToast]);
     // Toggle preview panel
     const handleTogglePreview = useCallback(() => {
         setIsPreviewVisible(prev => !prev);
@@ -327,7 +374,6 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                 event.preventDefault();
                 const selectedNodes = nodes.filter(n => n.selected);
                 if (selectedNodes.length > 0) {
-                    console.log('[Epic1GraphEditor] Delete key pressed, deleting selected nodes');
                     handleDelete(selectedNodes);
                 }
             }
@@ -389,8 +435,7 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                         newEdges.push({
                             id: `edge-${lastNodeId}-${nodeId}`,
                             source: lastNodeId,
-                            target: nodeId,
-                            animated: true
+                            target: nodeId
                         });
                     }
                     lastNodeId = nodeId;
@@ -416,8 +461,7 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                     newEdges.push({
                         id: `edge-${lastNodeId}-${outputId}`,
                         source: lastNodeId,
-                        target: outputId,
-                        animated: true
+                        target: outputId
                     });
                 }
                 // Set the new nodes and edges
@@ -454,11 +498,15 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
     }, []);
     // Handle ReactFlow initialization
     const onInit = useCallback((instance) => {
-        console.log('ReactFlow initialized:', instance);
         setReactFlowInstance(instance);
-        // Don't auto-fit view on init to prevent zoom changes
-        // Force a re-render to ensure drag-drop knows about the instance
+        // Fit view to show all nodes properly positioned at frame edges
         setTimeout(() => {
+            instance.fitView({
+                padding: 0.1,
+                includeHiddenNodes: false,
+                minZoom: 0.5,
+                maxZoom: 1.5
+            });
             setReactFlowInstance(instance);
         }, 100);
     }, []);
@@ -469,7 +517,6 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
             x: typeof position?.x === 'number' ? position.x : 250,
             y: typeof position?.y === 'number' ? position.y : 250
         };
-        console.log('[Epic1GraphEditor] Creating node at position:', validPosition);
         const newNode = {
             id: createNodeId(),
             type: nodeType || 'textBlock', // Ensure type is never undefined
@@ -562,14 +609,8 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
         if (!nodeType) {
             nodeType = event.dataTransfer.getData('text');
         }
-        console.log('[Epic1GraphEditor] Drop event detected!');
-        console.log('  - Node type:', nodeType);
-        console.log('  - ReactFlow instance ready:', !!reactFlowInstance);
-        console.log('  - Drop position:', event.clientX, event.clientY);
-        console.log('  - Available data types:', Array.from(event.dataTransfer.types));
         if (!nodeType) {
             console.error('Drop failed: no nodeType found in any data transfer format');
-            console.log('Available types were:', Array.from(event.dataTransfer.types));
             return;
         }
         // Calculate position using the new screenToFlowPosition API
@@ -592,25 +633,31 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
         handleNodeDrop(nodeType, position);
     }, [reactFlowInstance, handleNodeDrop]);
     // Wrap with DndProvider if using droppable nodes
-    const content = (_jsxs("div", { className: "epic1-graph-editor", style: editorStyle, onDrop: onDrop, onDragOver: onDragOver, children: [_jsxs(ReactFlow, { nodes: enhancedNodes, edges: edges, onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onPaneClick: handlePaneClick, onNodeClick: handleNodeClick, onInit: onInit, nodeTypes: nodeTypes, isValidConnection: isValidConnection, connectionMode: ConnectionMode.Loose, fitView: false, attributionPosition: "bottom-left", panOnScroll: false, zoomOnScroll: true, zoomOnPinch: true, panOnDrag: true, selectionOnDrag: false, nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, deleteKeyCode: null, multiSelectionKeyCode: "Shift", nodeDragThreshold: 5, children: [_jsx(Background, { variant: "dots", gap: 16, size: 1, color: "#333333" }), _jsx(Controls, {}), _jsx(MiniMap, { position: "top-left", style: {
+    const content = (_jsxs("div", { className: "epic1-graph-editor", style: editorStyle, onDrop: onDrop, onDragOver: onDragOver, children: [_jsxs(ReactFlow, { nodes: enhancedNodes, edges: edges.map(edge => ({
+                    ...edge,
+                    animated: activatedEdges.has(edge.id),
+                    className: `${activatedEdges.has(edge.id) ? 'activated' : ''} ${edge.selected ? 'selected' : ''}`.trim()
+                })), onNodesChange: onNodesChange, onEdgesChange: onEdgesChange, onConnect: onConnect, onPaneClick: handlePaneClick, onSelectionStart: () => setIsSelecting(true), onSelectionEnd: () => {
+                    setIsSelecting(false);
+                    // The selection has already updated the nodes/edges
+                }, onNodeClick: handleNodeClick, onEdgeClick: handleEdgeClick, onInit: onInit, nodeTypes: nodeTypes, edgeTypes: edgeTypes, isValidConnection: isValidConnection, connectionMode: ConnectionMode.Loose, connectionLineType: "smoothstep", defaultEdgeOptions: {
+                    type: 'smoothstep',
+                    animated: false,
+                    style: { stroke: '#9ca3af', strokeWidth: 3 }
+                }, fitView: true, fitViewOptions: {
+                    padding: 0.2,
+                    includeHiddenNodes: false,
+                    minZoom: 0.3,
+                    maxZoom: 2
+                }, defaultViewport: { x: 0, y: 0, zoom: 0.8 }, attributionPosition: "bottom-left", panOnScroll: false, zoomOnScroll: true, zoomOnPinch: true, panOnDrag: [1, 2], selectionOnDrag: true, selectionMode: "partial", nodesDraggable: true, nodesConnectable: true, elementsSelectable: true, selectNodesOnDrag: true, deleteKeyCode: ['Delete', 'Backspace'], multiSelectionKeyCode: "Shift", nodeDragThreshold: 5, children: [_jsx(Background, { variant: "dots", gap: 16, size: 1, color: "#333333" }), _jsx(Controls, {}), nodes.length > 0 && (_jsx(CustomMinimap, { nodes: nodes, edges: edges, style: {
                             left: nodePaletteCollapsed ? 50 : 210,
                             top: 70,
-                            transition: 'left 0.3s ease-in-out',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            borderRadius: '4px',
-                            backgroundColor: 'rgba(26, 26, 26, 0.95)',
-                            width: '150px',
-                            height: '100px'
-                        }, zoomable: true, pannable: true, nodeColor: (node) => {
-                            switch (node.type) {
-                                case 'textBlock': return '#7c7ff2';
-                                case 'weightedChoice': return '#f6a723';
-                                case 'concat': return '#22c493';
-                                case 'variable': return '#9d70f7';
-                                case 'output': return '#f15656';
-                                default: return '#666';
-                            }
-                        }, maskColor: "rgba(0, 0, 0, 0.1)" }), _jsx(Panel, { position: "top-right", children: _jsxs("div", { className: "epic1-controls", children: [_jsx("button", { className: "epic1-preview-toggle", onClick: handleTogglePreview, title: "Toggle preview (P)", children: isPreviewVisible ? '👁️' : '👁️‍🗨️' }), onExecute && (_jsx("button", { className: "epic1-execute-button", onClick: handleExecute, children: "Execute Graph" }))] }) }), _jsx(Panel, { position: "bottom-center", children: _jsx("div", { className: "epic1-instructions", children: "Click any node to edit \u2022 Tab/Shift+Tab to navigate \u2022 Enter to confirm \u2022 Escape to cancel \u2022 Press P for preview \u2022 Press ? for help" }) }), _jsx(ConnectionFeedback, { nodes: nodes, edges: edges }), _jsx(SafeReactFlowWrapper, { children: _jsx(PanZoomControls, { position: "bottom-right" }) })] }), _jsx(SafeReactFlowWrapper, { children: _jsx(KeyboardShortcuts, { onSave: handleSave, onLoad: handleLoad, onExport: handleExport, onDelete: handleDelete, onDuplicate: handleDuplicate, onSelectAll: handleSelectAll, additionalHandlers: {
+                            width: '200px',
+                            height: '120px',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
+                            zIndex: 1000,
+                            transition: 'left 0.3s ease-in-out'
+                        } })), _jsx(Panel, { position: "top-right", children: _jsxs("div", { className: "epic1-controls", children: [_jsx("button", { className: "epic1-preview-toggle", onClick: handleTogglePreview, title: "Toggle preview (P)", children: isPreviewVisible ? '👁️' : '👁️‍🗨️' }), onExecute && (_jsx("button", { className: "epic1-execute-button", onClick: handleExecute, children: "Execute Graph" }))] }) }), _jsx(Panel, { position: "bottom-center", children: _jsx("div", { className: "epic1-instructions", children: "Click any node to edit \u2022 Tab/Shift+Tab to navigate \u2022 Enter to confirm \u2022 Escape to cancel \u2022 Press P for preview \u2022 Press ? for help" }) }), _jsx(ConnectionFeedback, { nodes: nodes, edges: edges }), _jsx(SafeReactFlowWrapper, { children: _jsx(PanZoomControls, { position: "bottom-right" }) })] }), _jsx(SafeReactFlowWrapper, { children: _jsx(KeyboardShortcuts, { onSave: handleSave, onLoad: handleLoad, onExport: handleExport, onDelete: handleDelete, onDuplicate: handleDuplicate, onSelectAll: handleSelectAll, additionalHandlers: {
                         'p': handleTogglePreview,
                         'P': handleTogglePreview
                     } }) }), toasts.map((toast) => (_jsx(ConnectionToast, { message: toast, onDismiss: () => dismissToast(toast.id) }, toast.id))), _jsx(NodePalette, { position: "left", defaultCollapsed: false, onCollapsedChange: setNodePaletteCollapsed }), _jsx(NodeToolbar, { position: "top" }), _jsx(TabbedSidePanel, { previewEngine: previewEngineRef.current, onPresetDrag: (preset) => {
@@ -624,7 +671,6 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
 };
 // Export the main component
 export const Epic1GraphEditor = (props) => {
-    console.log('[Epic1GraphEditor] Wrapper mounting with props:', { showAssetLibrary: props.showAssetLibrary });
     return (_jsx(ReactFlowProvider, { children: _jsx(Epic1GraphEditorInner, { ...props }) }));
 };
 // Also export with provider for compatibility

@@ -107,7 +107,7 @@ export const BaseEditableNode = memo(({ data, selected, children, className = ''
             minWidth: `${minWidth}px`,
             minHeight: `${minHeight}px`,
             ...style,
-        }, children: [_jsx(Handle, { type: "target", position: Position.Left, className: "epic1-handle target" }), _jsx("div", { className: "epic1-node-content", children: children({
+        }, children: [_jsx(Handle, { type: "target", position: Position.Left, id: "target", className: "epic1-handle target" }), _jsx("div", { className: "epic1-node-content", children: children({
                     isEditing,
                     value: data.value,
                     editBuffer,
@@ -115,6 +115,6 @@ export const BaseEditableNode = memo(({ data, selected, children, className = ''
                     updateBuffer,
                     confirmEdit,
                     cancelEdit,
-                }) }), _jsx(Handle, { type: "source", position: Position.Right, className: "epic1-handle source" }), isEditing && _jsx("div", { className: "epic1-edit-indicator" }), selected && !isEditing && _jsx("div", { className: "epic1-selected-indicator" }), _jsx(SaveIndicator, { trigger: saveTrigger })] }));
+                }) }), data.nodeType !== 'enhancedBranching' && data.nodeType !== 'weightedChoice' && data.nodeType !== 'output' && (_jsx(Handle, { type: "source", position: Position.Right, id: "source", className: "epic1-handle source" })), (data.nodeType === 'enhancedBranching' || data.nodeType === 'weightedChoice') && !data.options?.some((opt) => opt.hasBranch) && (_jsx(Handle, { type: "source", position: Position.Right, className: "epic1-handle source main-output", id: "main-output" })), isEditing && _jsx("div", { className: "epic1-edit-indicator" }), selected && !isEditing && _jsx("div", { className: "epic1-selected-indicator" }), _jsx(SaveIndicator, { trigger: saveTrigger })] }));
 });
 BaseEditableNode.displayName = 'BaseEditableNode';

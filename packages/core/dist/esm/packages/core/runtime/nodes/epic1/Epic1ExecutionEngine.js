@@ -5,6 +5,7 @@
 import { Epic1ExecutionContext } from './Epic1ExecutionContext';
 import { Epic1NodeType } from './nodeTypes';
 import { validateGraph } from './validation';
+import { debugLogExecution } from '../../../utils/debug';
 /**
  * Epic 1 Execution Engine
  * Handles graph traversal and node execution with deterministic behavior
@@ -27,7 +28,7 @@ export class Epic1ExecutionEngine {
     async execute() {
         const startTime = Date.now();
         try {
-            console.log('[ExecutionEngine] Starting execution with', this.graph.nodes.size, 'nodes');
+            debugLogExecution('[ExecutionEngine] Starting execution with', this.graph.nodes.size, 'nodes');
             // Validate the graph first
             const validation = await validateGraph(this.graph.nodes, this.graph.edges);
             if (!validation.valid) {
@@ -40,8 +41,8 @@ export class Epic1ExecutionEngine {
             // Find output node(s)
             const outputNodes = Array.from(this.graph.nodes.entries())
                 .filter(([_, node]) => node.getNodeType() === Epic1NodeType.Output);
-            console.log('[ExecutionEngine] Found output nodes:', outputNodes.map(([id]) => id));
-            console.log('[ExecutionEngine] Graph edges:', this.graph.edges.length, 'edges:', this.graph.edges);
+            debugLogExecution('[ExecutionEngine] Found output nodes:', outputNodes.map(([id]) => id));
+            debugLogExecution('[ExecutionEngine] Graph edges:', this.graph.edges.length, 'edges:', this.graph.edges);
             if (outputNodes.length === 0) {
                 console.warn('[ExecutionEngine] No output node found in graph - skipping execution');
                 throw new Error('No output node found in graph');
@@ -50,7 +51,7 @@ export class Epic1ExecutionEngine {
             this.outputNodeId = outputNodes[0][0];
             // Build execution order (topological sort)
             this.buildExecutionOrder();
-            console.log('[ExecutionEngine] Execution order:', this.executionOrder);
+            debugLogExecution('[ExecutionEngine] Execution order:', this.executionOrder);
             // Execute nodes in order
             for (const nodeId of this.executionOrder) {
                 await this.executeNode(nodeId);
@@ -58,7 +59,7 @@ export class Epic1ExecutionEngine {
             // Get final output
             const outputResult = this.results.get(this.outputNodeId);
             const finalOutput = outputResult?.output || null;
-            console.log('[ExecutionEngine] Final output from node', this.outputNodeId, ':', finalOutput);
+            debugLogExecution('[ExecutionEngine] Final output from node', this.outputNodeId, ':', finalOutput);
             // Finalize stats
             const stats = this.context.finalize();
             return {
@@ -104,7 +105,7 @@ export class Epic1ExecutionEngine {
             this.context.recordNodeExecution(nodeId);
             // Get inputs for this node
             const inputs = this.getNodeInputs(nodeId);
-            console.log(`[ExecutionEngine] Executing node ${nodeId} of type ${node.getNodeType()} with ${inputs.length} inputs:`, inputs);
+            debugLogExecution(`[ExecutionEngine] Executing node ${nodeId} of type ${node.getNodeType()} with ${inputs.length} inputs:`, inputs);
             // Execute based on node type
             let output = null;
             switch (node.getNodeType()) {
@@ -132,7 +133,7 @@ export class Epic1ExecutionEngine {
                 output,
                 duration: Date.now() - startTime
             });
-            console.log(`[ExecutionEngine] Node ${nodeId} produced output:`, output);
+            debugLogExecution(`[ExecutionEngine] Node ${nodeId} produced output:`, output);
             this.context.decrementDepth();
         }
         catch (error) {
@@ -240,7 +241,7 @@ export class Epic1ExecutionEngine {
      */
     async executeOutput(node, inputs) {
         const input = inputs.length > 0 ? inputs[0] : '';
-        console.log('[ExecutionEngine] Output node receiving input:', input, 'from', inputs.length, 'sources');
+        debugLogExecution('[ExecutionEngine] Output node receiving input:', input, 'from', inputs.length, 'sources');
         // Set the input on the node for display
         node.setInput(input);
         return input;

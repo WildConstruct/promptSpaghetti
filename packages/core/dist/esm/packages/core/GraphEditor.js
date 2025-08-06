@@ -869,12 +869,10 @@ return (_jsx(DemoModeManager, { initialConfig: {
                                 [-2000, -2000]
                             ], "[4000, 4000]]} nodeExtent=", [
                                 [-1500, -1500]
-                            ], "[3000, 3000]]} // Performance-aware rendering", ...optimizer.getOptimizedRenderSettings(nodes.length, viewport.zoom), ">", _jsx(Background, { color: "#2d3748", gap: viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32, size: viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2 }), nodes.length < 200 && (_jsx(MiniMap, { nodeColor: () => (isPerformanceGood ? '#ff7c00' : '#363a45'), maskColor: "#181b21BB", style: {
-                                    backgroundColor: 'rgba(31, 41, 55, 0.8)',
+                            ], "[3000, 3000]]} // Performance-aware rendering", ...optimizer.getOptimizedRenderSettings(nodes.length, viewport.zoom), ">", _jsx(Background, { color: "#2d3748", gap: viewport.zoom > 0.8 ? 16 : viewport.zoom > 0.4 ? 24 : 32, size: viewport.zoom > 0.8 ? 1 : viewport.zoom > 0.4 ? 1.5 : 2 }), nodes.length < 200 && (_jsx(MiniMap, { nodeColor: () => '#ff7c00', maskColor: "rgba(255, 255, 255, 0.1)", style: {
+                                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
                                     border: '1px solid rgba(55, 65, 81, 0.6)'
-                                }
-                                    /  >
-                             })), _jsx(Controls, { style: {
+                                } })), _jsx(Controls, { style: {
                                     button: {
                                         backgroundColor: 'rgba(31, 41, 55, 0.9)',
                                         border: '1px solid rgba(55, 65, 81, 0.6)',

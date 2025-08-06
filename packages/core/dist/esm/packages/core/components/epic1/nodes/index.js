@@ -24,7 +24,7 @@ export { NodeContextMenu };
 // Now we can safely create the node type mapping
 export const epic1NodeTypes = {
     textBlock: TextBlockNode,
-    weightedChoice: EnhancedBranchingNode, // Use enhanced version with radio dials and all fixes
+    weightedChoice: EnhancedBranchingNode, // Use enhanced version - we'll fix the handle position
     concat: ConcatNode,
     variable: VariableNode,
     setVariable: VariableNode,

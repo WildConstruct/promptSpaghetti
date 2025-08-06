@@ -1,1 +1,0 @@
-{"version":3,"file":"ApprovalDashboard.d.ts","sourceRoot":"","sources":["ApprovalDashboard.tsx"],"names":[],"mappings":"AAGA,OAAO,KAA8B,MAAM,OAAO,CAAC;AAuDnD,UAAU,sBAAsB;IAC9B,WAAW,EAAE,MAAM,CAAC;IACpB,aAAa,EAAE,MAAM,CAAC;IACtB,IAAI,CAAC,EAAE,UAAU,GAAG,WAAW,GAAG,OAAO,CAAC;CAC3C;AAED,eAAO,MAAM,iBAAiB,EAAE,KAAK,CAAC,EAAE,CAAC,sBAAsB,CA4e9D,CAAC"}

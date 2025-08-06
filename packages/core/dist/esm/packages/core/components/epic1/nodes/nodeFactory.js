@@ -6,12 +6,13 @@ import { WeightedChoiceNode } from '../../../runtime/nodes/epic1/WeightedChoiceN
 import { ConcatNode } from '../../../runtime/nodes/epic1/ConcatNode';
 import { VariableNode } from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
+import { debugLogEpic1 } from '../../../utils/debug';
 /**
  * Convert a React Flow node to an Epic 1 runtime node
  */
 export function nodeDataToRuntimeNode(flowNode) {
     const { id, type, data } = flowNode;
-    console.log('[nodeFactory] Converting node:', { id, type, data });
+    debugLogEpic1('[nodeFactory] Converting node:', { id, type, data });
     try {
         switch (type) {
             case 'textBlock': {
@@ -60,7 +61,7 @@ export function nodeDataToRuntimeNode(flowNode) {
             case 'output': {
                 // OutputNode constructor takes (id, initialValue, config)
                 const node = new OutputNode(id, data.label || data.value || 'Output');
-                console.log('[nodeFactory] Created output node:', id, 'with label:', data.label || data.value || 'Output');
+                debugLogEpic1('[nodeFactory] Created output node:', id, 'with label:', data.label || data.value || 'Output');
                 return node;
             }
             default:
