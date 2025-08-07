@@ -26,4 +26,4 @@ jobs:
       - name: Prettier check (repo, warn only)
         run: |
           set +e
-          npx prettier --check "**/*.{ts,tsx,js,jsx,json,md}" || true
+          npx prettier --check "**/*.{ts,tsx,js,jsx,json}" || true

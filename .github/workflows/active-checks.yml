@@ -23,4 +23,4 @@ jobs:
           ACTIVE_GLOBS="packages/asset-browser/**/*.ts packages/asset-browser/**/*.tsx packages/core/components/**/*.ts packages/core/components/**/*.tsx packages/core/types/**/*.ts packages/core/utils/**/*.ts packages/core/index.ts"
           npx eslint --max-warnings 100 $ACTIVE_GLOBS || true
       - name: Prettier check (repo)
-        run: npx prettier --check "**/*.{ts,tsx,js,jsx,json,md}" || true
+        run: npx prettier --check "**/*.{ts,tsx,js,jsx,json}" || true
