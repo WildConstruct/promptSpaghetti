@@ -2,6 +2,9 @@
 dist/
 build/
 coverage/
+.cache/
+temp-build/
+.vercel/
 .next/
 .turbo/
 
@@ -15,6 +18,15 @@ node_modules/
 *.map
 auto-*.js
 monitor-*.js
+
+# Reports and logs
+coverage-reports/
+performance-test-results/
+reports/
+logs/
+
+# Sandboxes and local scratch
+sandboxes/**
 
 # Complex JSX files that don't format well
 **/epic1/**/*.tsx
@@ -37,6 +49,8 @@ monitor-*.js
 # Configuration files managed manually
 .husky/
 scripts/*.js
+scripts/maintenance/*.js
+scripts/build/*.sh
 
 # Temporary and backup files
 *.tmp
