@@ -1,0 +1,34 @@
+name: Legacy code quarantine and directory cleanup
+description: Track moving deprecated code to legacy/ and wiring excludes
+labels: ['tech-debt', 'cleanup', 'qa']
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue tracks physically moving deprecated code to `legacy/`, updating tsconfig/eslint excludes, and cleaning imports.
+  - type: input
+    id: scope
+    attributes:
+      label: Scope
+      description: High-level scope (dirs to move, components impacted)
+      placeholder: e.g., client/**, deprecated services, legacy runtime
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Checklist of actions
+      value: |
+        - [ ] Inventory deprecated directories and confirm no live imports
+        - [ ] Move to legacy/** with git mv (preserve history)
+        - [ ] Update tsconfig.json excludes
+        - [ ] Update ESLint ignore config
+        - [ ] Fix any broken imports (if any) or add alias to block accidental usage
+        - [ ] Update docs (README/CONTRIBUTING) to reflect quarantine
+        - [ ] Optional: add CI job to ensure legacy/ is not part of active builds
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Additional context or risks
+      placeholder: Risks, roll-back plan
