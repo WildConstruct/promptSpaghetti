@@ -286,6 +286,10 @@ Active checks
 - TypeScript and ESLint are scoped to active code via `tsconfig.active.json` and the Husky pre-commit hook.
 - CI uses `.github/workflows/active-checks.yml` for push/PR and `.github/workflows/legacy-scan.yml` for scheduled warn-only scans.
 
+Local backlog
+
+- Non-GitHub tasks tracked in `docs/qa/local-backlog.md` (e.g., Proposal C: Legacy Quarantine).
+
 ## 📝 Documentation
 
 ### Core Documentation
