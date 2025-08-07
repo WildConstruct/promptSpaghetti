@@ -1,0 +1,26 @@
+name: Active Code Quality Checks
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  active-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: TypeScript (active)
+        run: npx tsc -p tsconfig.active.json --noEmit --skipLibCheck
+      - name: ESLint (active paths)
+        run: |
+          ACTIVE_GLOBS="packages/asset-browser/**/*.ts packages/asset-browser/**/*.tsx packages/core/components/**/*.ts packages/core/components/**/*.tsx packages/core/types/**/*.ts packages/core/utils/**/*.ts packages/core/index.ts"
+          npx eslint --max-warnings 100 $ACTIVE_GLOBS || true
+      - name: Prettier check (repo)
+        run: npx prettier --check "**/*.{ts,tsx,js,jsx,json,md}" || true

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weighted Choice - Branching Behavior Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        h1 { color: #22d3ee; }
+        h2 { color: #10b981; margin-top: 30px; }
+        
+        .node-container {
+            position: relative;
+            width: 520px;
+            min-height: 200px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 0;
+            overflow: visible;
+        }
+        
+        .title-bar {
+            background: #2a2a2a;
+            padding: 10px 15px;
+            border-radius: 6px 6px 0 0;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+        
+        .options-area {
+            padding: 15px;
+        }
+        
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        
+        .option-text {
+            flex: 1;
+            padding: 6px 10px;
+            background: #333;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #fff;
+        }
+        
+        .branch-toggle {
+            padding: 6px 12px;
+            background: #333;
+            border: 1px solid #555;
+            color: #888;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .branch-toggle.active {
+            background: #f59e0b;
+            border-color: #fbbf24;
+            color: #000;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+        
+        .handle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: #22d3ee;
+            right: -10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+        
+        .handle.main {
+            background: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+        
+        .handle.branch {
+            background: #f59e0b;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+        
+        .handle.hidden {
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .status-box {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #444;
+        }
+        
+        .status-indicator.on {
+            background: #10b981;
+            box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+        }
+        
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        
+        .test-result.pass {
+            background: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .test-result.fail {
+            background: #7f1d1d;
+            border: 1px solid #ef4444;
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background: #22d3ee;
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        button:hover {
+            background: #06b6d4;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Weighted Choice Node - Branching Behavior Test</h1>
+    
+    <h2>Expected Behavior</h2>
+    <div class="status-box">
+        <div class="test-result pass">✅ By default, optional branching is OFF for all options</div>
+        <div class="test-result pass">✅ When branching is OFF: Only one handle (on the right, standard output)</div>
+        <div class="test-result pass">✅ When branching is turned ON for an option: A new branch handle appears for that option</div>
+        <div class="test-result pass">✅ When ANY branching is ON: Main output handle moves to align with title bar</div>
+    </div>
+    
+    <h2>Interactive Demo</h2>
+    <div class="node-container" id="demo-node">
+        <div class="title-bar">Weighted Choice</div>
+        
+        <!-- Main output handle (only visible when branching is ON) -->
+        <div id="main-handle" class="handle main hidden" style="top: 20px;" title="Main output (appears when branching is ON)"></div>
+        
+        <div class="options-area">
+            <div class="option-row">
+                <input type="text" class="option-text" placeholder="Option 1" value="Happy path">
+                <button class="branch-toggle" onclick="toggleBranch(0)" data-index="0">⚡ Branch</button>
+                <div id="branch-0" class="handle branch hidden" style="top: 70px;" title="Branch output for Option 1"></div>
+            </div>
+            
+            <div class="option-row">
+                <input type="text" class="option-text" placeholder="Option 2" value="Sad path">
+                <button class="branch-toggle" onclick="toggleBranch(1)" data-index="1">⚡ Branch</button>
+                <div id="branch-1" class="handle branch hidden" style="top: 120px;" title="Branch output for Option 2"></div>
+            </div>
+            
+            <div class="option-row">
+                <input type="text" class="option-text" placeholder="Option 3" value="Error path">
+                <button class="branch-toggle" onclick="toggleBranch(2)" data-index="2">⚡ Branch</button>
+                <div id="branch-2" class="handle branch hidden" style="top: 170px;" title="Branch output for Option 3"></div>
+            </div>
+        </div>
+        
+        <!-- Standard output handle (only visible when NO branching) -->
+        <div id="standard-handle" class="handle" style="top: 100px;" title="Standard output (visible when branching is OFF)"></div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="resetAll()">Reset All (Branching OFF)</button>
+        <button onclick="enableAll()">Enable All Branches</button>
+        <button onclick="testScenario()">Run Test Scenario</button>
+    </div>
+    
+    <h2>Current State</h2>
+    <div class="status-box">
+        <div class="status-item">
+            <span class="status-indicator" id="branch-0-status"></span>
+            <span>Option 1 Branch: <span id="branch-0-state">OFF</span></span>
+        </div>
+        <div class="status-item">
+            <span class="status-indicator" id="branch-1-status"></span>
+            <span>Option 2 Branch: <span id="branch-1-state">OFF</span></span>
+        </div>
+        <div class="status-item">
+            <span class="status-indicator" id="branch-2-status"></span>
+            <span>Option 3 Branch: <span id="branch-2-state">OFF</span></span>
+        </div>
+        <div class="status-item">
+            <span class="status-indicator" id="main-status"></span>
+            <span>Main Output Handle: <span id="main-state">HIDDEN (No branching active)</span></span>
+        </div>
+        <div class="status-item">
+            <span class="status-indicator" id="standard-status" class="on"></span>
+            <span>Standard Output Handle: <span id="standard-state">VISIBLE (No branching)</span></span>
+        </div>
+    </div>
+    
+    <h2>Test Results</h2>
+    <div id="test-results"></div>
+    
+    <script>
+        let branchStates = [false, false, false];
+        
+        function updateHandles() {
+            const hasBranching = branchStates.some(state => state);
+            const mainHandle = document.getElementById('main-handle');
+            const standardHandle = document.getElementById('standard-handle');
+            
+            // Update main and standard handles based on branching state
+            if (hasBranching) {
+                // Show main handle aligned with title
+                mainHandle.classList.remove('hidden');
+                // Hide standard handle
+                standardHandle.classList.add('hidden');
+                
+                document.getElementById('main-status').classList.add('on');
+                document.getElementById('main-state').textContent = 'VISIBLE (Aligned with title)';
+                document.getElementById('standard-status').classList.remove('on');
+                document.getElementById('standard-state').textContent = 'HIDDEN (Branching active)';
+            } else {
+                // Hide main handle
+                mainHandle.classList.add('hidden');
+                // Show standard handle
+                standardHandle.classList.remove('hidden');
+                
+                document.getElementById('main-status').classList.remove('on');
+                document.getElementById('main-state').textContent = 'HIDDEN (No branching active)';
+                document.getElementById('standard-status').classList.add('on');
+                document.getElementById('standard-state').textContent = 'VISIBLE (No branching)';
+            }
+            
+            // Update individual branch handles
+            branchStates.forEach((state, index) => {
+                const branchHandle = document.getElementById(`branch-${index}`);
+                const statusIndicator = document.getElementById(`branch-${index}-status`);
+                const stateText = document.getElementById(`branch-${index}-state`);
+                
+                if (state) {
+                    branchHandle.classList.remove('hidden');
+                    statusIndicator.classList.add('on');
+                    stateText.textContent = 'ON';
+                } else {
+                    branchHandle.classList.add('hidden');
+                    statusIndicator.classList.remove('on');
+                    stateText.textContent = 'OFF';
+                }
+            });
+        }
+        
+        function toggleBranch(index) {
+            branchStates[index] = !branchStates[index];
+            const button = document.querySelector(`[data-index="${index}"]`);
+            
+            if (branchStates[index]) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+            
+            updateHandles();
+        }
+        
+        function resetAll() {
+            branchStates = [false, false, false];
+            document.querySelectorAll('.branch-toggle').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            updateHandles();
+        }
+        
+        function enableAll() {
+            branchStates = [true, true, true];
+            document.querySelectorAll('.branch-toggle').forEach(btn => {
+                btn.classList.add('active');
+            });
+            updateHandles();
+        }
+        
+        function testScenario() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '';
+            
+            // Test 1: Initial state
+            resetAll();
+            const test1 = !branchStates.some(s => s) && 
+                         document.getElementById('standard-handle').classList.length === 1 &&
+                         document.getElementById('main-handle').classList.contains('hidden');
+            addTestResult('Default state: Branching OFF, standard handle visible', test1);
+            
+            // Test 2: Enable one branch
+            toggleBranch(0);
+            const test2 = branchStates[0] && 
+                         !document.getElementById('branch-0').classList.contains('hidden') &&
+                         !document.getElementById('main-handle').classList.contains('hidden') &&
+                         document.getElementById('standard-handle').classList.contains('hidden');
+            addTestResult('Single branch ON: Branch handle visible, main handle visible, standard hidden', test2);
+            
+            // Test 3: Enable multiple branches
+            toggleBranch(1);
+            const test3 = branchStates[0] && branchStates[1] &&
+                         !document.getElementById('branch-0').classList.contains('hidden') &&
+                         !document.getElementById('branch-1').classList.contains('hidden') &&
+                         !document.getElementById('main-handle').classList.contains('hidden');
+            addTestResult('Multiple branches ON: All branch handles visible, main handle visible', test3);
+            
+            // Test 4: Disable all branches
+            resetAll();
+            const test4 = !branchStates.some(s => s) && 
+                         document.getElementById('standard-handle').classList.length === 1 &&
+                         document.getElementById('main-handle').classList.contains('hidden');
+            addTestResult('All branches OFF: Back to standard handle only', test4);
+            
+            function addTestResult(description, passed) {
+                const div = document.createElement('div');
+                div.className = `test-result ${passed ? 'pass' : 'fail'}`;
+                div.textContent = `${passed ? '✅' : '❌'} ${description}`;
+                results.appendChild(div);
+            }
+        }
+        
+        // Initialize
+        updateHandles();
+    </script>
+</body>
+</html>

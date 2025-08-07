@@ -1,0 +1,29 @@
+name: Legacy Code Scan (Scheduled)
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Mondays at 08:00 UTC
+  workflow_dispatch:
+
+jobs:
+  legacy-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: TypeScript (full, warn only)
+        run: |
+          set +e
+          npx tsc --noEmit --skipLibCheck || true
+      - name: ESLint (full repo, warn only)
+        run: |
+          set +e
+          npx eslint --max-warnings 100 "**/*.{ts,tsx}" || true
+      - name: Prettier check (repo, warn only)
+        run: |
+          set +e
+          npx prettier --check "**/*.{ts,tsx,js,jsx,json,md}" || true

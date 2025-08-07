@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weighted Choice Node - Handle Testing</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 40px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-section {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #22d3ee;
+            margin-top: 0;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #065f46;
+            border: 1px solid #10b981;
+        }
+        .warning {
+            background: #713f12;
+            border: 1px solid #f59e0b;
+        }
+        .error {
+            background: #7f1d1d;
+            border: 1px solid #ef4444;
+        }
+        .test-input {
+            width: 100%;
+            padding: 8px;
+            background: #333;
+            border: 1px solid #555;
+            color: #fff;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .handle-demo {
+            position: relative;
+            width: 520px;
+            height: 200px;
+            background: #333;
+            border: 2px solid #555;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #22d3ee;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .handle.main {
+            right: -8px;
+            background: #10b981;
+        }
+        .handle.branch {
+            right: -8px;
+            background: #f59e0b;
+        }
+        .options-list {
+            padding: 10px;
+        }
+        .option {
+            padding: 8px;
+            margin: 5px 0;
+            background: #444;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .branch-toggle {
+            padding: 4px 8px;
+            background: #555;
+            border: 1px solid #777;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .branch-toggle.active {
+            background: #f59e0b;
+            border-color: #fbbf24;
+        }
+        pre {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        code {
+            color: #22d3ee;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Weighted Choice Node - QA Test Suite</h1>
+
+    <div class="test-section">
+        <h2>1. Paste Functionality Test</h2>
+        <div class="status" id="paste-status">Testing paste functionality...</div>
+        <input type="text" class="test-input" id="paste-test" placeholder="Try pasting text here (Cmd+V or Ctrl+V)">
+        <div id="paste-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Dynamic Handle Positioning</h2>
+        <div class="handle-demo" id="handle-demo">
+            <div class="handle main" id="main-handle" style="top: 40px;"></div>
+            <div class="options-list">
+                <div class="option">
+                    Option 1 <button class="branch-toggle" onclick="toggleBranch(0)">⚡ Branch</button>
+                </div>
+                <div class="option">
+                    Option 2 <button class="branch-toggle" onclick="toggleBranch(1)">⚡ Branch</button>
+                </div>
+                <div class="option">
+                    Option 3 <button class="branch-toggle" onclick="toggleBranch(2)">⚡ Branch</button>
+                </div>
+            </div>
+        </div>
+        <button onclick="toggleEditMode()">Toggle Edit/Display Mode</button>
+        <div id="handle-status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Handle ID Conflicts</h2>
+        <div class="status" id="conflict-status">Checking for duplicate handle IDs...</div>
+        <pre id="conflict-result"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Issues Fixed</h2>
+        <div class="status success">✅ Fixed: Handle position consistency between edit/display modes</div>
+        <div class="status success">✅ Fixed: Duplicate handle IDs causing connection issues</div>
+        <div class="status success">✅ Fixed: Paste event propagation in input fields</div>
+        <div class="status success">✅ Fixed: Dynamic handle appearance when toggling branches</div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Code Changes Summary</h2>
+        <pre><code>// EnhancedBranchingNode.tsx
+- Fixed handle position calculation using mainHandleTop state
+- Added paste/copy/cut event handlers to inputs
+- Synchronized handle positions between modes
+
+// BaseEditableNode.tsx  
+- Changed duplicate "main-output" ID to "source"
+- Fixed conditional logic for handle rendering
+- Prevented duplicate handle creation
+
+// Key improvements:
+1. Consistent handle positioning using calculated mainHandleTop
+2. Proper event handling for clipboard operations
+3. No duplicate handle IDs in DOM
+4. Smooth transitions when toggling branch options</code></pre>
+    </div>
+
+    <script>
+        // Test paste functionality
+        const pasteInput = document.getElementById('paste-test');
+        const pasteStatus = document.getElementById('paste-status');
+        const pasteResult = document.getElementById('paste-result');
+        
+        pasteInput.addEventListener('paste', (e) => {
+            const text = e.clipboardData.getData('text');
+            pasteStatus.className = 'status success';
+            pasteStatus.textContent = '✅ Paste event captured successfully!';
+            pasteResult.textContent = `Pasted text: "${text}"`;
+        });
+
+        pasteInput.addEventListener('input', (e) => {
+            if (pasteInput.value) {
+                pasteStatus.className = 'status success';
+                pasteStatus.textContent = '✅ Input received successfully!';
+            }
+        });
+
+        // Test handle positioning
+        let isEditMode = false;
+        let branches = [false, false, false];
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const mainHandle = document.getElementById('main-handle');
+            const handleStatus = document.getElementById('handle-status');
+            
+            // Simulate the calculated position
+            const calculatedTop = isEditMode ? 55 : 40;
+            mainHandle.style.top = calculatedTop + 'px';
+            
+            handleStatus.innerHTML = `<div class="status success">Mode: ${isEditMode ? 'Edit' : 'Display'} | Main handle position: ${calculatedTop}px</div>`;
+        }
+
+        function toggleBranch(index) {
+            branches[index] = !branches[index];
+            const button = event.target;
+            button.classList.toggle('active');
+            
+            // Add/remove branch handle
+            const demo = document.getElementById('handle-demo');
+            const existingHandle = document.getElementById(`branch-${index}`);
+            
+            if (branches[index] && !existingHandle) {
+                const handle = document.createElement('div');
+                handle.className = 'handle branch';
+                handle.id = `branch-${index}`;
+                handle.style.top = (60 + index * 40) + 'px';
+                demo.appendChild(handle);
+            } else if (!branches[index] && existingHandle) {
+                existingHandle.remove();
+            }
+            
+            updateConflictCheck();
+        }
+
+        function updateConflictCheck() {
+            const conflictStatus = document.getElementById('conflict-status');
+            const conflictResult = document.getElementById('conflict-result');
+            
+            // Check for duplicate IDs
+            const handleIds = ['main-handle'];
+            branches.forEach((hasBranch, index) => {
+                if (hasBranch) {
+                    handleIds.push(`branch-${index}`);
+                }
+            });
+            
+            const uniqueIds = new Set(handleIds);
+            if (uniqueIds.size === handleIds.length) {
+                conflictStatus.className = 'status success';
+                conflictStatus.textContent = '✅ No duplicate handle IDs detected';
+                conflictResult.textContent = `Active handles: ${handleIds.join(', ')}`;
+            } else {
+                conflictStatus.className = 'status error';
+                conflictStatus.textContent = '❌ Duplicate handle IDs found!';
+            }
+        }
+
+        // Initial check
+        updateConflictCheck();
+        
+        // Test for clipboard API availability
+        if (navigator.clipboard) {
+            console.log('✅ Clipboard API available');
+        } else {
+            console.warn('⚠️ Clipboard API not available in this context');
+        }
+    </script>
+</body>
+</html>

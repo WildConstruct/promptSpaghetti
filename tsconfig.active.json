@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM"],
+    "jsx": "react-jsx",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "."
+  },
+  "include": [
+    "packages/asset-browser/**/*",
+    "packages/core/components/**/*",
+    "packages/core/types/**/*",
+    "packages/core/utils/**/*",
+    "packages/core/index.ts"
+  ],
+  "exclude": [
+    "client/**",
+    "legacy/**",
+    "packages/core/runtime/**",
+    "packages/prompt-targeting/**",
+    "**/dist/**",
+    "**/node_modules/**"
+  ]
+}

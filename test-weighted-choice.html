@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weighted Choice Node Handle Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a2e;
+            color: white;
+        }
+        h1 { color: #3b82f6; }
+        .status { 
+            padding: 10px; 
+            background: #2a2a3e; 
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #3b82f6; }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #3b82f6;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weighted Choice Node Handle Test</h1>
+    
+    <div class="status">
+        <h2>Handle Configuration:</h2>
+        <ul>
+            <li class="info">Input Handle (Blue): Left side at 50% height</li>
+            <li class="success">Main Output (Green): Right side at 20% (with branches) or 50% (without)</li>
+            <li style="color: #f59e0b;">Branch Outputs (Orange): Right side, dynamically positioned</li>
+        </ul>
+    </div>
+
+    <div class="status">
+        <h2>CSS Applied:</h2>
+        <ul>
+            <li>✅ WeightedChoiceHandles.css imported</li>
+            <li>✅ Handles positioned absolutely on node border</li>
+            <li>✅ BaseEditableNode no longer adds conflicting handles</li>
+            <li>✅ Branch handles positioned based on option index</li>
+        </ul>
+    </div>
+
+    <div class="status">
+        <h2>Expected Behavior:</h2>
+        <ul>
+            <li>All handles should appear on the outer border of the node</li>
+            <li>Handles should not float in space or attach to internal elements</li>
+            <li>Branch handles should align with their corresponding options</li>
+            <li>Handle positions should update when options are added/removed</li>
+        </ul>
+    </div>
+
+    <div class="status">
+        <h2>Development Server:</h2>
+        <p>View the app at: <a href="http://localhost:3000" target="_blank" style="color: #3b82f6;">http://localhost:3000</a></p>
+        <iframe src="http://localhost:3000"></iframe>
+    </div>
+
+    <script>
+        console.log('Weighted Choice Node Handle Test Page Loaded');
+        console.log('Changes made:');
+        console.log('1. Added handles inside EnhancedBranchingNode render function');
+        console.log('2. Removed conflicting handle generation from BaseEditableNode');
+        console.log('3. Created WeightedChoiceHandles.css for precise positioning');
+        console.log('4. Dynamic branch handle positioning based on option count');
+    </script>
+</body>
+</html>
