@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback } from 'react';
+import React, { memo, useState, useCallback, useRef, useLayoutEffect } from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
 import './WeightedChoiceNode.css';
@@ -200,18 +200,140 @@ const WEIGHT_PRESETS = {
 };
 
 const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeData>) => {
-  const [options, setOptions] = useState<WeightedOption[]>(props.data.options || []);
-  const [title, setTitle] = useState(props.data.title || 'Weighted Choice');
+  // Ensure all options have hasBranch set to false by default
+  const initializeOptions = () => {
+    // Check if options are in props.data.options
+    if (Array.isArray(props.data?.options) && props.data.options.length > 0) {
+      // Ensure hasBranch is false if not explicitly set
+      return props.data.options.map(opt => ({
+        ...opt,
+        hasBranch: opt.hasBranch === true // Only true if explicitly true
+      }));
+    }
+    
+    // Try to parse from value if it's a JSON string
+    if (typeof props.data?.value === 'string') {
+      try {
+        const parsed = JSON.parse(props.data.value);
+        if (Array.isArray(parsed.options)) {
+          return parsed.options.map((opt: any) => ({
+            ...opt,
+            hasBranch: opt.hasBranch === true
+          }));
+        }
+      } catch (e) {
+        // Ignore parse errors
+      }
+    }
+    
+    // Default options with branching OFF
+    return [
+      { text: '', weight: 50, hasBranch: false },
+      { text: '', weight: 50, hasBranch: false }
+    ];
+  };
+  
+  const [options, setOptions] = useState<WeightedOption[]>(initializeOptions());
+  const [title, setTitle] = useState(props.data?.title || 'Weighted Choice');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [mainHandleTop, setMainHandleTop] = useState(35);
+  const [branchHandleTops, setBranchHandleTops] = useState<number[]>([]);
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   
   const hasBranching = options.some(opt => opt.hasBranch);
+  
+  // Calculate the position of the main handle and each branch handle relative to the node box
+  useLayoutEffect(() => {
+    if (!nodeRef.current || !hasBranching) return;
+
+    // The handles are absolutely positioned relative to the outer node container
+    const editorElInit = nodeRef.current!;
+    const rootEl = editorElInit.closest('.epic1-editable-node') as HTMLElement | null;
+
+    const calcPositions = () => {
+      const editorEl = nodeRef.current!;
+      const nodeRect = (rootEl ?? editorEl).getBoundingClientRect();
+      // Determine mode accurately: the nodeRef points directly at the editor/display container
+      const isEditingMode = editorEl.classList.contains('enhanced-branching-editor');
+      // Mode-specific vertical nudge for main handle baseline
+      // Edit: bring all handles down ~10px; Display unchanged
+      const vNudge = isEditingMode ? -36 : -30;
+
+      // Title center for main handle
+      const titleElement = editorEl.querySelector('.enhanced-title-section, .display-title') as HTMLElement | null;
+      if (titleElement) {
+        const titleRect = titleElement.getBoundingClientRect();
+        const relativeTop = titleRect.top - nodeRect.top + (titleRect.height / 2) + vNudge;
+        setMainHandleTop(relativeTop);
+      }
+
+      // Option row centers for branch handles
+      const tops = options.map((_, i) => {
+        const rowEl = optionRefs.current[i];
+        if (!rowEl) return 0;
+        // Use the entire row's visual box to match the dark rounded background
+        const r = rowEl.getBoundingClientRect();
+        // Branch-only fine tune: push orange lower in edit more than green
+        const branchFineTune = isEditingMode ? -2 : 1;
+        return r.top - nodeRect.top + r.height / 2 + vNudge + branchFineTune;
+      });
+      // Apply mode-specific spacing and lift for branches
+      // Spacing unchanged
+      const compress = isEditingMode ? 0.77 : 0.77;
+      // Extra lift: move branches up relative to main
+      // Drop edit branches further overall than green
+      const extraLift = isEditingMode ? -40 : -21;
+      const adjustedTops = tops.length
+        ? tops.map((t, idx) => {
+            const base = tops[0];
+            return base + (t - base) * compress + extraLift;
+          })
+        : tops;
+      setBranchHandleTops(adjustedTops);
+      // Keep optionRefs array in sync with options length
+      optionRefs.current.length = options.length;
+    };
+
+    // Run once after layout, and schedule follow-ups to catch async ref assignments
+    calcPositions();
+    requestAnimationFrame(() => calcPositions());
+    setTimeout(() => calcPositions(), 0);
+
+    // Recalculate on resize of node
+    const ro = new ResizeObserver(() => {
+      calcPositions();
+    });
+    ro.observe(nodeRef.current);
+
+    // Recalculate on DOM mutations (edit/display mode toggle, content changes)
+    let mo: MutationObserver | null = null;
+    if (rootEl) {
+      mo = new MutationObserver(() => {
+        // Recalc immediately and again on next frames to handle mode swaps and ref updates
+        calcPositions();
+        requestAnimationFrame(() => calcPositions());
+        setTimeout(() => calcPositions(), 0);
+      });
+      mo.observe(rootEl, { childList: true, subtree: true, attributes: true });
+    }
+
+    // Also listen to window resize (zoom/layout changes)
+    window.addEventListener('resize', calcPositions);
+
+    return () => {
+      try { ro.disconnect(); } catch {}
+      try { mo?.disconnect(); } catch {}
+      window.removeEventListener('resize', calcPositions);
+    };
+  }, [hasBranching, title, options.length]);
 
   const calculatePercentages = useCallback((opts: WeightedOption[]) => {
     const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
     if (totalWeight === 0) return opts.map(() => 0);
-    // Show actual weight values, not percentages
-    return opts.map(opt => opt.weight);
+    // Calculate actual percentages
+    return opts.map(opt => Math.round((opt.weight / totalWeight) * 100));
   }, []);
 
   const applyPreset = useCallback((preset: string) => {
@@ -337,8 +459,8 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       minHeight={180}
       data={{
         ...props.data,
-        nodeType: 'enhancedBranching',
-        options,
+        nodeType: 'weightedChoice', // Use weightedChoice for compatibility
+        options, // Pass current options state so BaseEditableNode can check hasBranch
         title,
         onEdit: (value: string) => {
           props.data.onEdit?.(JSON.stringify({ options, title }));
@@ -348,7 +470,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       {({ isEditing, confirmEdit, cancelEdit }) => {
         if (isEditing) {
           return (
-            <div className="enhanced-branching-editor" onMouseDown={(e) => e.stopPropagation()}>
+            <div ref={nodeRef} className="enhanced-branching-editor" onMouseDown={(e) => e.stopPropagation()}>
               {/* Main output is handled by BaseEditableNode when no branching */}
 
               {/* Title section with edit capability */}
@@ -362,7 +484,11 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     onBlur={() => setIsEditingTitle(false)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') setIsEditingTitle(false);
+                      e.stopPropagation(); // Prevent node keyboard shortcuts
                     }}
+                    onPaste={(e) => e.stopPropagation()}
+                    onCopy={(e) => e.stopPropagation()}
+                    onCut={(e) => e.stopPropagation()}
                     autoFocus
                   />
                 ) : (
@@ -408,6 +534,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                   <div 
                     key={index} 
                     className={`enhanced-option-row ${draggedIndex === index ? 'dragging' : ''}`}
+                    ref={(el) => { optionRefs.current[index] = el; }}
                     onDragOver={(e) => handleDragOver(e, index)}
                     onDrop={(e) => {
                       e.preventDefault();
@@ -447,6 +574,18 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                         e.currentTarget.focus();
                       }}
                       onClick={(e) => e.stopPropagation()}
+                      onPaste={(e) => {
+                        // Allow paste events to work properly
+                        e.stopPropagation();
+                      }}
+                      onCopy={(e) => {
+                        // Allow copy events to work properly
+                        e.stopPropagation();
+                      }}
+                      onCut={(e) => {
+                        // Allow cut events to work properly
+                        e.stopPropagation();
+                      }}
                       style={{ pointerEvents: 'all' }}
                     />
                     
@@ -485,21 +624,14 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                       </button>
                     )}
 
-                    {/* Branch output handle - positioned at edge */}
+                    {/* Branch handle indicator - actual handle rendered at node level */}
                     {option.hasBranch && (
-                      <Handle
-                        type="source"
-                        position={Position.Right}
-                        id={`branch-${index}`}
-                        className="enhanced-handle branch-output"
-                        style={{ 
-                          position: 'absolute',
-                          right: -8,
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          zIndex: 1000
-                        }}
-                      />
+                      <span style={{ 
+                        position: 'absolute',
+                        right: '10px',
+                        color: '#f59e0b',
+                        fontSize: '10px'
+                      }}>●</span>
                     )}
                   </div>
                 ))}
@@ -521,19 +653,48 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 </div>
               </div>
 
-              {/* Main output on top edge when branching enabled */}
+              {/* Render all branch handles at node level */}
+              {options.map((option, index) => 
+                option.hasBranch && (
+                  <Handle
+                    key={`branch-${index}`}
+                    type="source"
+                    position={Position.Right}
+                    id={`branch-${index}`}
+                    className="epic1-handle enhanced-handle branch-output"
+                    style={{ 
+                      position: 'absolute',
+                      // vertical via CSS var wins over generic !important
+                      ['--handle-top' as any]: `${branchHandleTops[index] ?? 0}px`,
+                      transform: 'translateY(-50%)',
+                      zIndex: 1000,
+                      background: '#f59e0b',
+                      border: '2px solid #fff',
+                      width: '12px',
+                      height: '12px',
+                      borderRadius: '50%'
+                    }}
+                  />
+                )
+              )}
+
+              {/* Main output on right edge when branching enabled */}
               {hasBranching && (
                 <Handle
                   type="source"
-                  position={Position.Top}
-                  id="main-output"
-                  className="enhanced-handle main-output"
+                  position={Position.Right}
+                  id="main"
+                  className="epic1-handle enhanced-handle main-output"
                   style={{ 
                     position: 'absolute',
-                    top: -8,
-                    right: 30,
-                    left: 'auto',
-                    transform: 'translateX(50%)'
+                    ['--handle-top' as any]: `${mainHandleTop}px`,
+                    transform: 'translateY(-50%)',
+                    zIndex: 1000,
+                    background: '#10b981',
+                    border: '2px solid #fff',
+                    width: '14px',
+                    height: '14px',
+                    borderRadius: '50%'
                   }}
                 />
               )}
@@ -544,51 +705,69 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
 
         // Display mode
         return (
-          <div className="enhanced-branching-display">
+          <div ref={nodeRef} className="enhanced-branching-display" style={{ position: 'relative' }}>
             {/* Main output is handled by BaseEditableNode in display mode */}
 
             <div className="display-title">{title}</div>
             
             <div className="display-options">
               {options.map((option, index) => (
-                <div key={index} className="display-option">
+                <div
+                  key={index}
+                  className="display-option"
+                  style={{ position: 'relative' }}
+                  ref={(el) => { optionRefs.current[index] = el; }}
+                >
                   <span className="option-text">
                     {option.text || 'Empty option'}
                     {option.hasBranch && ' ⚡'}
                   </span>
                   <span className="option-percentage">{percentages[index]}%</span>
-                  
-                  {option.hasBranch && (
-                    <Handle
-                      type="source"
-                      position={Position.Right}
-                      id={`branch-${index}`}
-                      className="enhanced-handle branch-output"
-                      style={{ 
-                        position: 'absolute',
-                        right: -10, // Position on frame edge in display mode
-                        top: '50%',
-                        transform: 'translateY(-50%)'
-                      }}
-                    />
-                  )}
                 </div>
               ))}
             </div>
 
-            {/* Main output on top edge when branching is enabled */}
+            {/* Render all handles at node level, not inside option divs */}
+            {options.map((option, index) => 
+              option.hasBranch && (
+                <Handle
+                  key={`branch-${index}`}
+                  type="source"
+                  position={Position.Right}
+                  id={`branch-${index}`}
+                  className="epic1-handle enhanced-handle branch-output"
+                  style={{ 
+                    position: 'absolute',
+                    ['--handle-top' as any]: `${branchHandleTops[index] ?? 0}px`,
+                    transform: 'translateY(-50%)',
+                    zIndex: 1000,
+                    background: '#f59e0b',
+                    border: '2px solid #fff',
+                    width: '12px',
+                    height: '12px',
+                    borderRadius: '50%'
+                  }}
+                />
+              )
+            )}
+
+            {/* Main output on right edge when branching is enabled */}
             {hasBranching && (
               <Handle
                 type="source"
-                position={Position.Top}
-                id="main-output"
-                className="enhanced-handle main-output"
+                position={Position.Right}
+                id="main"
+                className="epic1-handle enhanced-handle main-output"
                 style={{ 
                   position: 'absolute',
-                  top: -8,
-                  right: 30,
-                  left: 'auto',
-                  transform: 'translateX(50%)'
+                  ['--handle-top' as any]: `${mainHandleTop}px`,
+                  transform: 'translateY(-50%)',
+                  zIndex: 1000,
+                  background: '#10b981',
+                  border: '2px solid #fff',
+                  width: '14px',
+                  height: '14px',
+                  borderRadius: '50%'
                 }}
               />
             )}

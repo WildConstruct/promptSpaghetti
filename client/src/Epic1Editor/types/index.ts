@@ -76,8 +76,10 @@ export interface TextBlockNodeData extends BaseNodeData {
 }
 
 export interface WeightedChoiceOption {
+  id?: string;
   text: string;
   weight: number;
+  hasBranch?: boolean;
 }
 
 export interface WeightedChoiceNodeData extends BaseNodeData {

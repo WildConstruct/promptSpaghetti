@@ -105,11 +105,12 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     data: {
       nodeType: 'weightedChoice',
       options: [
-        { text: 'medieval fantasy', weight: 40 },
-        { text: 'dark medieval', weight: 30 },
-        { text: 'high fantasy', weight: 30 }
+        { id: 'opt-1', text: 'medieval fantasy', weight: 40, hasBranch: true },
+        { id: 'opt-2', text: 'dark medieval', weight: 30, hasBranch: true },
+        { id: 'opt-3', text: 'high fantasy', weight: 30, hasBranch: true }
       ],
-      label: 'Setting'    } as WeightedChoiceNodeData
+      label: 'Setting'
+    } as WeightedChoiceNodeData
   },
   {
     id: 'prompt-2',
@@ -136,12 +137,13 @@ export const createDemoNodes = (positions: NodePositions): TypedNode[] => [
     data: {
       nodeType: 'weightedChoice',
       options: [
-        { text: 'brave knight', weight: 25 },
-        { text: 'cunning rogue', weight: 25 },
-        { text: 'wise wizard', weight: 25 },
-        { text: 'mysterious ranger', weight: 25 }
+        { id: 'char-1', text: 'brave knight', weight: 25, hasBranch: true },
+        { id: 'char-2', text: 'cunning rogue', weight: 25, hasBranch: true },
+        { id: 'char-3', text: 'wise wizard', weight: 25, hasBranch: true },
+        { id: 'char-4', text: 'mysterious ranger', weight: 25, hasBranch: true }
       ],
-      label: 'Character Type'    } as WeightedChoiceNodeData
+      label: 'Character Type'
+    } as WeightedChoiceNodeData
   },
   {
     id: 'output-1',

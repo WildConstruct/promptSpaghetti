@@ -93,3 +93,50 @@
   stroke-width: 3 !important;
   cursor: pointer;
 }
+
+/* CRITICAL: Force overflow visible for handle positioning */
+.react-flow,
+.react-flow__renderer,
+.react-flow__pane,
+.react-flow__zoompane,
+.react-flow__nodes,
+.react-flow__node,
+.react-flow__node-default {
+  overflow: visible !important;
+}
+
+/* Ensure branching nodes specifically allow overflow */
+.react-flow__node .epic1-editable-node.weighted-choice.enhanced-branching,
+.react-flow__node .epic1-editable-node.weighted-choice.branching,
+.react-flow__node-branchingWeightedChoice,
+.react-flow__node-branchingWeightedChoiceNode {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* Force handle visibility and positioning */
+.react-flow__node .enhanced-handle {
+  position: absolute !important;
+  z-index: 10 !important;
+  pointer-events: all !important;
+}
+
+/* Override any parent container clipping */
+.react-flow__node > div {
+  overflow: visible !important;
+}
+
+/* Create proper stacking context for handles */
+.epic1-editable-node.weighted-choice.enhanced-branching {
+  transform: translateZ(0);
+  overflow: visible !important;
+}
+
+/* Ensure edges don't block handle interactions */
+.react-flow__edges {
+  pointer-events: none !important;
+}
+
+.react-flow__edge {
+  pointer-events: stroke !important;
+}

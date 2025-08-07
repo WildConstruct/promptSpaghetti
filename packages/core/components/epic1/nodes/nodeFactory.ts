@@ -32,21 +32,71 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
         let options: WeightedOption[] = [];
         
         if (data.options) {
-          // Already parsed
-          options = data.options;
+          // Check if options is already an array
+          if (Array.isArray(data.options)) {
+            // Already parsed - ensure all options have ids
+            options = data.options.map((opt: any, idx: number) => ({
+              id: opt.id || `option-${idx + 1}`,
+              text: opt.text || '',
+              weight: opt.weight || 1
+            }));
+          } else if (typeof data.options === 'string') {
+            // Try to parse string
+            try {
+              const parsed = JSON.parse(data.options);
+              if (Array.isArray(parsed)) {
+                options = parsed.map((opt: any, idx: number) => ({
+                  id: opt.id || `option-${idx + 1}`,
+                  text: opt.text || '',
+                  weight: opt.weight || 1
+                }));
+              }
+            } catch (e) {
+              console.warn('Failed to parse options string:', e);
+              options = [{ id: 'option-1', text: 'Option 1', weight: 1 }, { id: 'option-2', text: 'Option 2', weight: 1 }];
+            }
+          } else if (typeof data.options === 'object' && data.options.options) {
+            // Handle case where data.options is an object with an options property
+            const innerOptions = data.options.options;
+            if (Array.isArray(innerOptions)) {
+              options = innerOptions.map((opt: any, idx: number) => ({
+                id: opt.id || `option-${idx + 1}`,
+                text: opt.text || '',
+                weight: opt.weight || 1,
+                hasBranch: opt.hasBranch !== undefined ? opt.hasBranch : true
+              }));
+            }
+          } else {
+            console.warn('Unknown options format:', typeof data.options, data.options);
+            options = [{ id: 'option-1', text: 'Option 1', weight: 50 }, { id: 'option-2', text: 'Option 2', weight: 50 }];
+          }
         } else if (data.value) {
-          // Try to parse from string
+          // Try to parse from value field
           try {
             const parsed = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
             if (Array.isArray(parsed)) {
-              options = parsed;
+              options = parsed.map((opt: any, idx: number) => ({
+                id: opt.id || `option-${idx + 1}`,
+                text: opt.text || '',
+                weight: opt.weight || 1
+              }));
+            } else if (parsed && parsed.options && Array.isArray(parsed.options)) {
+              options = parsed.options.map((opt: any, idx: number) => ({
+                id: opt.id || `option-${idx + 1}`,
+                text: opt.text || '',
+                weight: opt.weight || 1
+              }));
             }
           } catch (e) {
-            console.warn('Failed to parse weighted choice options:', e);
-            options = [{ text: data.value || '', weight: 1 }];
+            console.warn('Failed to parse weighted choice value:', e);
+            options = [{ id: 'option-1', text: data.value || 'Option 1', weight: 1 }];
           }
+        } else {
+          // Default options
+          options = [{ id: 'option-1', text: 'Option 1', weight: 1 }, { id: 'option-2', text: 'Option 2', weight: 1 }];
         }
 
+        debugLogEpic1('[nodeFactory] Parsed options for WeightedChoice:', options);
         // WeightedChoiceNode constructor takes (id, options)
         return new WeightedChoiceNode(id, options);
       }

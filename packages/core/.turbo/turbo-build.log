@@ -6,14 +6,3 @@
 > @promptscape/core@0.1.0-alpha build:esm
 > tsc --project tsconfig.esm.json
 
-components/activity/ActivityFilters.tsx(13,16): error TS1005: ';' expected.
-components/activity/ActivityFilters.tsx(13,68): error TS1136: Property assignment expected.
-components/activity/ActivityFilters.tsx(14,10): error TS1005: ',' expected.
-components/activity/ActivityFilters.tsx(15,13): error TS1005: ',' expected.
-components/activity/ActivityFilters.tsx(17,3): error TS1005: ')' expected.
-components/activity/ActivityFilters.tsx(20,1): error TS1128: Declaration or statement expected.
-components/activity/ActivityFilters.tsx(20,2): error TS1128: Declaration or statement expected.
-components/activity/ActivityFilters.tsx(20,4): error TS1128: Declaration or statement expected.
-components/activity/ActivityFilters.tsx(21,47): error TS1136: Property assignment expected.
-components/activity/ActivityFilters.tsx(23,5): error TS1005: ';' expected.
-components/activity/ActivityFilters.tsx(24,1): error TS1128: Declaration or statement expected.

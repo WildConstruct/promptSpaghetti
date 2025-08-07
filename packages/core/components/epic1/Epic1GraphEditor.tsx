@@ -533,7 +533,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               }
             });
           } else if (segment.type === 'choice') {
-            const options = segment.options.map(opt => ({
+            const options = segment.options.map((opt, idx) => ({
+              id: `option-${idx + 1}`,
               text: opt,
               weight: Math.floor(100 / segment.options.length)
             }));
@@ -661,12 +662,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         }),
         ...(nodeType === 'weightedChoice' && { 
           value: JSON.stringify([
-            { text: 'Option 1', weight: 1 },
-            { text: 'Option 2', weight: 1 }
+            { id: 'option-1', text: 'Option 1', weight: 50, hasBranch: true },
+            { id: 'option-2', text: 'Option 2', weight: 50, hasBranch: true }
           ], null, 2),
           options: [
-            { text: 'Option 1', weight: 1 },
-            { text: 'Option 2', weight: 1 }
+            { id: 'option-1', text: 'Option 1', weight: 50, hasBranch: true },
+            { id: 'option-2', text: 'Option 2', weight: 50, hasBranch: true }
           ]
         }),
         ...(nodeType === 'concat' && { 

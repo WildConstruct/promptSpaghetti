@@ -187,24 +187,42 @@ export const BaseEditableNode = memo(({
         })}
       </div>
 
-      {/* Only show the default source handle if not an enhanced branching node */}
-      {data.nodeType !== 'enhancedBranching' && data.nodeType !== 'weightedChoice' && data.nodeType !== 'output' && (
-        <Handle
-          type="source"
-          position={Position.Right}
-          id="source"
-          className="epic1-handle source"
-        />
-      )}
-      {/* For enhanced branching nodes (including weightedChoice) without branching, show the standard output on the right */}
-      {(data.nodeType === 'enhancedBranching' || data.nodeType === 'weightedChoice') && !data.options?.some((opt: any) => opt.hasBranch) && (
-        <Handle
-          type="source"
-          position={Position.Right}
-          className="epic1-handle source main-output"
-          id="main-output"
-        />
-      )}
+      {/* Handle rendering logic based on node type */}
+      {(() => {
+        // For weighted choice nodes
+        if (data.nodeType === 'weightedChoice') {
+          // Only show handle if NO branches are active
+          // When branches are active, EnhancedBranchingNode handles all outputs
+          const hasBranching = data.options && data.options.some((opt: any) => opt.hasBranch === true);
+          if (!hasBranching) {
+            return (
+              <Handle
+                type="source"
+                position={Position.Right}
+                className="epic1-handle source"
+                id="source"
+              />
+            );
+          }
+          // If hasBranching is true, return null - EnhancedBranchingNode will handle all outputs
+          return null;
+        }
+        
+        // For output nodes - no source handle
+        if (data.nodeType === 'output') {
+          return null;
+        }
+        
+        // For all other node types - show standard source handle
+        return (
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="source"
+            className="epic1-handle source"
+          />
+        );
+      })()}
 
       {/* Visual feedback indicators */}
       {isEditing && <div className="epic1-edit-indicator" />}

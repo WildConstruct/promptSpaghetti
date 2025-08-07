@@ -21,7 +21,7 @@ export declare const OpenAIConfigSchema: z.ZodObject<{
 }, "strip", z.ZodTypeAny, {
     maxTokens: number;
     temperature: number;
-    model: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k";
+    model: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k";
     topP: number;
     frequencyPenalty: number;
     presencePenalty: number;
@@ -32,8 +32,8 @@ export declare const OpenAIConfigSchema: z.ZodObject<{
 }, {
     maxTokens?: number | undefined;
     temperature?: number | undefined;
-    model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
     apiKey?: string | undefined;
+    model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k" | undefined;
     organization?: string | undefined;
     baseURL?: string | undefined;
     topP?: number | undefined;
@@ -73,16 +73,16 @@ export declare const DALLEConfigSchema: z.ZodObject<{
     style: z.ZodDefault<z.ZodEnum<["vivid", "natural"]>>;
     n: z.ZodDefault<z.ZodNumber>;
 }, "strip", z.ZodTypeAny, {
-    size: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792";
+    quality: "standard" | "hd";
     style: "vivid" | "natural";
     model: "dall-e-2" | "dall-e-3";
-    quality: "standard" | "hd";
+    size: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792";
     n: number;
 }, {
-    size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
+    quality?: "standard" | "hd" | undefined;
     style?: "vivid" | "natural" | undefined;
     model?: "dall-e-2" | "dall-e-3" | undefined;
-    quality?: "standard" | "hd" | undefined;
+    size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
     n?: number | undefined;
 }>;
 /**
@@ -107,8 +107,8 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         }, "strip", z.ZodTypeAny, {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k" | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
             topP?: number | undefined;
@@ -118,8 +118,8 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         }, {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k" | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
             topP?: number | undefined;
@@ -159,24 +159,24 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             style: z.ZodOptional<z.ZodDefault<z.ZodEnum<["vivid", "natural"]>>>;
             n: z.ZodOptional<z.ZodDefault<z.ZodNumber>>;
         }, "strip", z.ZodTypeAny, {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
+            quality?: "standard" | "hd" | undefined;
             style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
-            quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         }, {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
+            quality?: "standard" | "hd" | undefined;
             style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
-            quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         }>>;
     }, "strip", z.ZodTypeAny, {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k" | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
             topP?: number | undefined;
@@ -194,18 +194,18 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
+            quality?: "standard" | "hd" | undefined;
             style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
-            quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     }, {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k" | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
             topP?: number | undefined;
@@ -223,10 +223,10 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
+            quality?: "standard" | "hd" | undefined;
             style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
-            quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     }>>;
@@ -272,27 +272,27 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         enableEvents: z.ZodDefault<z.ZodBoolean>;
         enableLogging: z.ZodDefault<z.ZodBoolean>;
     }, "strip", z.ZodTypeAny, {
-        enableLogging: boolean;
         enableTiming: boolean;
         enableMemoryTracking: boolean;
         enableEvents: boolean;
+        enableLogging: boolean;
     }, {
-        enableLogging?: boolean | undefined;
         enableTiming?: boolean | undefined;
         enableMemoryTracking?: boolean | undefined;
         enableEvents?: boolean | undefined;
+        enableLogging?: boolean | undefined;
     }>>;
     customMappings: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
 }, "strip", z.ZodTypeAny, {
-    enableOptimizations: boolean;
     qualityPreference: number;
+    enableOptimizations: boolean;
     stylePreference: "default" | "artistic" | "photorealistic" | "minimal";
     platformOverrides: {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k" | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
             topP?: number | undefined;
@@ -310,10 +310,10 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
+            quality?: "standard" | "hd" | undefined;
             style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
-            quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     };
@@ -328,22 +328,22 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         };
     };
     monitoring: {
-        enableLogging: boolean;
         enableTiming: boolean;
         enableMemoryTracking: boolean;
         enableEvents: boolean;
+        enableLogging: boolean;
     };
     customMappings: Record<string, unknown>;
 }, {
-    enableOptimizations?: boolean | undefined;
     qualityPreference?: number | undefined;
+    enableOptimizations?: boolean | undefined;
     stylePreference?: "default" | "artistic" | "photorealistic" | "minimal" | undefined;
     platformOverrides?: {
         openai?: {
             maxTokens?: number | undefined;
             temperature?: number | undefined;
-            model?: "gpt-4" | "gpt-4-32k" | "gpt-4-turbo" | "gpt-3.5-turbo" | "gpt-3.5-turbo-16k" | undefined;
             apiKey?: string | undefined;
+            model?: "gpt-3.5-turbo" | "gpt-4" | "gpt-4-turbo" | "gpt-3.5-turbo-16k" | "gpt-4-32k" | undefined;
             organization?: string | undefined;
             baseURL?: string | undefined;
             topP?: number | undefined;
@@ -361,10 +361,10 @@ export declare const GlobalConfigSchema: z.ZodObject<{
             enableVariations?: boolean | undefined;
         } | undefined;
         dalle?: {
-            size?: "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | undefined;
+            quality?: "standard" | "hd" | undefined;
             style?: "vivid" | "natural" | undefined;
             model?: "dall-e-2" | "dall-e-3" | undefined;
-            quality?: "standard" | "hd" | undefined;
+            size?: "256x256" | "512x512" | "1024x1024" | "1792x1024" | "1024x1792" | undefined;
             n?: number | undefined;
         } | undefined;
     } | undefined;
@@ -379,10 +379,10 @@ export declare const GlobalConfigSchema: z.ZodObject<{
         } | undefined;
     } | undefined;
     monitoring?: {
-        enableLogging?: boolean | undefined;
         enableTiming?: boolean | undefined;
         enableMemoryTracking?: boolean | undefined;
         enableEvents?: boolean | undefined;
+        enableLogging?: boolean | undefined;
     } | undefined;
     customMappings?: Record<string, unknown> | undefined;
 }>;

@@ -180,6 +180,24 @@
 
 /* No position adjustment needed on hover since we're using scale transform */
 
+/* Enhanced Branching: allow dynamic vertical and precise horizontal alignment */
+.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.branch-output,
+.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.main-output {
+  /* Use CSS var set inline from TSX for vertical positioning */
+  top: var(--handle-top, 50%) !important;
+  /* Preserve centering transform; TSX can still set translateY(-50%) */
+  transform: translateY(-50%) !important;
+}
+
+
+.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.branch-output {
+  right: -26px !important; /* shift ~20px further right from border */
+}
+
+.epic1-editable-node.weighted-choice.enhanced-branching .epic1-handle.main-output {
+  right: -27px !important; /* shift ~20px further right from border */
+}
+
 /* Visual indicators */
 .epic1-edit-indicator {
   position: absolute;

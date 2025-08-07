@@ -4,14 +4,14 @@
 
 import { withDroppableNode } from '../asset-library/DroppableNode';
 import { TextBlockNode } from './TextBlockNode';
-import { WeightedChoiceNode } from './WeightedChoiceNode';
+import { EnhancedBranchingNode } from './EnhancedBranchingNode';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
 
 // Create droppable versions of all node types
 export const DroppableTextBlockNode = withDroppableNode(TextBlockNode);
-export const DroppableWeightedChoiceNode = withDroppableNode(WeightedChoiceNode);
+export const DroppableWeightedChoiceNode = withDroppableNode(EnhancedBranchingNode);
 export const DroppableConcatNode = withDroppableNode(ConcatNode);
 export const DroppableVariableNode = withDroppableNode(VariableNode);
 export const DroppableOutputNode = withDroppableNode(OutputNode);
