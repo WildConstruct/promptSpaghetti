@@ -14,6 +14,21 @@
     "declarationMap": true,
     "outDir": "./dist"
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "__tests__", "**/__tests__", "**/*.test.ts", "**/*.test.tsx", "dist"]
+  "include": [
+    "public.ts",
+    "utils/index.ts",
+    "utils/psgCodec.ts",
+    "utils/psgStorage.ts",
+    "utils/supabaseClient.ts",
+    "utils/supabaseFeature.ts",
+    "types/graph.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "__tests__",
+    "**/__tests__",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "dist"
+  ]
 }

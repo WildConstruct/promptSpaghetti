@@ -11,13 +11,18 @@
     "noEmit": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": ["node"]
   },
   "include": [
-    "packages/asset-browser/**/*",
-    "packages/core/components/**/*",
-    "packages/core/types/**/*",
-    "packages/core/utils/**/*",
+    "packages/asset-browser/src/**/*",
+    "packages/core/public.ts",
+    "packages/core/utils/index.ts",
+    "packages/core/utils/psgCodec.ts",
+    "packages/core/utils/psgStorage.ts",
+    "packages/core/utils/supabaseClient.ts",
+    "packages/core/utils/supabaseFeature.ts",
+    "packages/core/types/graph.ts",
     "packages/core/index.ts"
   ],
   "exclude": [
@@ -25,6 +30,13 @@
     "legacy/**",
     "packages/core/runtime/**",
     "packages/prompt-targeting/**",
+    "packages/asset-browser/tests/**",
+    "packages/asset-browser/types/**",
+    "packages/asset-browser/jest.config.*",
+    "packages/asset-browser/jest.setup.*",
+    "**/__tests__/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "**/dist/**",
     "**/node_modules/**"
   ]

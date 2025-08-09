@@ -2,6 +2,49 @@
 
 A React component for editing and validating node graphs, built with [ReactFlow](https://reactflow.dev/). Implements edge drag, validation, and error UI as described in Story 2.2 of Epic 2 in the PRD.
 
+## Importing @promptscape/core
+
+The core package exposes a minimal, stable public surface:
+
+- `@promptscape/core` → public entry (types + utils)
+- `@promptscape/core/utils` → utilities index
+- `@promptscape/core/utils/*` → individual utilities
+
+### ESM examples
+
+```ts
+// Public entry
+import * as Core from '@promptscape/core';
+
+// Utils index
+import { deriveEnableSupabaseProp } from '@promptscape/core/utils';
+
+// Specific util subpaths
+import { listUserGraphs } from '@promptscape/core/utils/psgStorage';
+import { supabase } from '@promptscape/core/utils/supabaseClient';
+```
+
+### CommonJS examples
+
+```js
+// Public entry
+const Core = require('@promptscape/core');
+
+// Utils index
+const { deriveEnableSupabaseProp } = require('@promptscape/core/utils');
+
+// Specific util subpaths
+const { listUserGraphs } = require('@promptscape/core/utils/psgStorage');
+const { supabase } = require('@promptscape/core/utils/supabaseClient');
+```
+
+Types are published under `dist/types` and resolve automatically from the paths above.
+
+### Breaking changes (Story 1.30)
+
+- Do not import internal modules via deep paths (e.g., `@promptscape/core/anything-else`).
+- Use only the public entry and `utils` subpaths shown above.
+
 ## Features
 
 - **Edge Drag:** Connect nodes by dragging from output to input handles.
@@ -62,3 +105,22 @@ export default function App() {
 ## License
 
 MIT
+
+---
+
+## Supabase Configuration (for storage helpers)
+
+The core package exposes a typed Supabase client and helpers for listing, reading, and writing user `.psg` files.
+
+- Supported env vars (one of):
+  - `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+
+Behavior:
+- If env vars are present, `supabase` is initialized and storage helpers operate normally.
+- If missing, `supabase` is `null` and helpers return discriminated error results (no throws). In development, a once-per-session warning logs to the console.
+
+Storage conventions:
+- Bucket: `graphs`
+- Object path: `users/{userId}/graphs/{name}`
+- Uploads use `contentType: application/json` and `upsert: true`.

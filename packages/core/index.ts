@@ -1,3 +1,12 @@
+// Story 1.30: Trimmed public surface
+// This index re-exports ONLY the stable public API. All legacy/unstable
+// exports are commented out below to avoid unresolved/missing references.
+// For consumers, prefer importing from `@promptscape/core` (which maps to
+// `public.*`) or `@promptscape/core/utils` and subpaths.
+
+export * from './public';
+
+/*
 // Shared types and engine placeholder
 
 export interface Node { id: string;
@@ -257,3 +266,4 @@ export { ExecutionContext
   AdvancedExecutionContext
   AdvancedNodeConfig }
  from './runtime';
+*/
