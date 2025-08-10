@@ -2,7 +2,6 @@
 // Shared Zod schema for a graph JSON used by both UI and executor.
 // Nodes are stored in an object keyed by node id for O(1) lookup.
 import { z } from 'zod';
-import { SecureValidation } from './validation/security';
 
 export const NodeTypeEnum = z.enum([
   'WeightedChoice',

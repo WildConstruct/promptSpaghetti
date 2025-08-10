@@ -1,0 +1,356 @@
+epic:
+  id: EPIC-WIZARD-001
+  title: Prompt Wizard Integration
+  description: Enable users to paste prompts and automatically convert them into randomizable node graphs
+  priority: P1
+  estimated_sprints: 3
+  success_metrics:
+    - Time to first randomized preset < 2 minutes
+    - Span detection accuracy > 75%
+    - User acceptance rate of auto-detected spans > 60%
+    - Asset binding success rate > 80%
+
+stories:
+  - id: STORY-WIZ-001
+    title: Basic Parsing Infrastructure
+    priority: P0
+    points: 8
+    description: |
+      Implement the core text parsing engine that splits prompts into meaningful spans
+      for randomization. This is the foundation for all wizard functionality.
+    
+    technical_notes:
+      - Use Web Worker for non-blocking parsing
+      - Implement in packages/core/utils/promptParser.ts
+      - Create span detection state machine
+      - Support 300-400 token prompts
+    
+    acceptance_criteria:
+      - Given a prompt with commas, When parsed, Then segments split at comma boundaries
+      - Given a prompt with conjunctions (and, or, but), When parsed, Then segments split appropriately
+      - Given a 400-token prompt, When parsed, Then completion time < 150ms
+      - Given overlapping spans, When detected, Then merge into single span
+      - Given empty segments, When detected, Then filter from output
+      - Given quoted text, When parsed, Then preserve as single span
+    
+    test_data:
+      simple: "A happy dog, playing in the park, during sunset"
+      complex: "Cinematic black and white portrait of an elderly man with glasses and a warm smile, shot on vintage film"
+      edge_cases:
+        - "Text with \"quoted phrases\" should stay together"
+        - "Multiple,,,commas,,,in a row"
+        - "Mixed conjunctions: cats and dogs or birds but not fish"
+
+  - id: STORY-WIZ-002
+    title: Wizard UI Panel Component
+    priority: P0
+    points: 13
+    description: |
+      Create the right-side panel UI that displays the parsed prompt with
+      interactive span highlighting and controls.
+    
+    technical_notes:
+      - Component: packages/core/components/PromptWizard/WizardPanel.tsx
+      - Use existing panel patterns from InspectorPanel.tsx
+      - Implement collapsible/resizable behavior
+      - Support both light and dark themes
+    
+    acceptance_criteria:
+      - Given wizard closed, When "+ Paste prompt" clicked, Then panel slides in from right
+      - Given text pasted, When processing, Then show loading indicator
+      - Given spans detected, When displayed, Then each has distinct visual treatment
+      - Given span focused, When displayed, Then show blue ring outline
+      - Given locked span, When displayed, Then show lock icon + neutral background
+      - Given randomized span, When displayed, Then show dice icon + green background
+      - Given panel open, When Esc pressed, Then panel closes
+      - Given panel open, When clicking outside, Then panel remains open (no accidental closes)
+    
+    ui_specifications:
+      panel_width: "480px"
+      animation: "slide-in 200ms ease-out"
+      span_styles:
+        locked: "bg-zinc-800/30 border-zinc-700"
+        randomized: "bg-emerald-900/25 border-emerald-700"
+        focused: "ring-2 ring-sky-500"
+      icons:
+        lock: "Lock from lucide-react, 12px"
+        randomize: "Dice1 from lucide-react, 12px"
+
+  - id: STORY-WIZ-003
+    title: Span Interaction & Editing
+    priority: P1
+    points: 8
+    description: |
+      Implement the span boundary adjustment and type assignment features
+      for fine-tuning the auto-detected segments.
+    
+    technical_notes:
+      - Use contentEditable with custom selection handling
+      - Implement token-aware boundary snapping
+      - Track span positions relative to original text
+      - Debounce updates by 100ms
+    
+    acceptance_criteria:
+      - Given span selected, When arrow key pressed, Then boundary moves by one token
+      - Given span selected, When Shift+arrow pressed, Then boundary moves by phrase
+      - Given two spans adjacent, When Cmd+M pressed, Then merge into single span
+      - Given span selected, When Cmd+Shift+M at cursor, Then split at cursor position
+      - Given span selected, When Backspace pressed, Then delete span (with confirmation)
+      - Given span boundary dragged, When released, Then snap to nearest token boundary
+      - Given span type dropdown, When changed, Then update span category
+      - Given overlapping spans after edit, When detected, Then show error state
+    
+    span_types:
+      - Subject
+      - Style
+      - Lighting  
+      - Optics
+      - Color/Tonality
+      - Composition
+      - Mood
+      - Background/Location
+      - Era/Reference
+      - Process/Medium
+
+  - id: STORY-WIZ-004
+    title: Node Generation Pipeline
+    priority: P1
+    points: 13
+    description: |
+      Convert the edited spans into a valid PSG node graph with proper
+      TextBlock, WeightedChoice, and Concat nodes.
+    
+    technical_notes:
+      - Generate deterministic node IDs
+      - Calculate node positions using force-directed layout
+      - Preserve spacing and punctuation in TextBlocks
+      - Use empty separator in Concat nodes
+      - Store original span info in node metadata
+    
+    acceptance_criteria:
+      - Given locked span, When converted, Then create TextBlock node with exact text
+      - Given randomized span, When converted, Then create WeightedChoice with original as first option
+      - Given span sequence, When assembled, Then connect all to single Concat node
+      - Given Concat output, When connected, Then link to Output node
+      - Given generated graph, When imported, Then pass validation in graphSchema.ts
+      - Given node positions, When calculated, Then no overlapping nodes
+      - Given PSG export, When formatted, Then match formatVersion: "2.0.0"
+      - Given metadata, When included, Then contain wizard version and timestamp
+    
+    validation_rules:
+      - All nodes must have unique IDs
+      - All edges must connect valid source/target
+      - Graph must have exactly one Output node
+      - No circular dependencies allowed
+
+  - id: STORY-WIZ-005
+    title: Basic Asset Matching & Search
+    priority: P1
+    points: 8
+    description: |
+      Implement local asset index and exact-match search functionality
+      for binding spans to existing assets.
+    
+    technical_notes:
+      - Store index in IndexedDB for persistence
+      - Use Fuse.js for fuzzy matching (threshold: 0.8)
+      - Implement Web Worker for search operations
+      - Cache last 20 search results
+    
+    acceptance_criteria:
+      - Given span focused, When asset matches exist, Then show count badge within 120ms
+      - Given search initiated, When typing, Then filter results in real-time
+      - Given exact match found, When displayed, Then show at top of results
+      - Given no matches, When displayed, Then show "No matches" message
+      - Given 1000 assets indexed, When searching, Then return results < 50ms
+      - Given asset selected, When Enter pressed, Then bind to span
+      - Given multiple assets selected, When confirmed, Then add all as alternatives
+    
+    search_scoring:
+      exact_match: 1.0
+      tag_match: 0.8
+      alias_match: 0.7
+      partial_match: 0.5
+      category_boost: "+0.2 if type matches span type"
+
+  - id: STORY-WIZ-006
+    title: Asset Binding UI & Popover
+    priority: P2
+    points: 8
+    description: |
+      Create the inline popover interface for browsing and binding
+      assets to detected spans.
+    
+    technical_notes:
+      - Use Floating UI for positioning
+      - Virtualize list for performance (react-window)
+      - Preload thumbnails on hover
+      - Implement keyboard navigation
+    
+    acceptance_criteria:
+      - Given span clicked, When popover opens, Then position below span without obscuring
+      - Given popover open, When scrolling page, Then popover follows span position
+      - Given search active, When typing, Then debounce by 150ms
+      - Given results shown, When arrow keys used, Then navigate through options
+      - Given result selected, When Enter pressed, Then bind and close popover
+      - Given Cmd+Enter pressed, When results exist, Then quick-bind first result
+      - Given Esc pressed, When popover open, Then close without changes
+      - Given thumbnail URLs, When loaded, Then display 64x48px images
+    
+    popover_specs:
+      max_height: "320px"
+      width: "420px"
+      thumbnail_size: "64x48px"
+      max_results: 50
+      virtualization_threshold: 20
+
+  - id: STORY-WIZ-007
+    title: Keyboard Shortcuts System
+    priority: P2
+    points: 5
+    description: |
+      Implement comprehensive keyboard navigation for power users
+      to quickly edit and manipulate spans without mouse.
+    
+    technical_notes:
+      - Use packages/core/hooks/useKeyboardShortcuts.ts
+      - Prevent conflicts with existing graph editor shortcuts
+      - Show shortcut hints in UI tooltips
+      - Support both Mac and Windows key combinations
+    
+    acceptance_criteria:
+      - Given Space pressed on span, When toggled, Then switch lock/random state
+      - Given Tab pressed, When navigating, Then cycle through spans forward
+      - Given Shift+Tab pressed, When navigating, Then cycle through spans backward
+      - Given number key (1-9) pressed, When in type menu, Then quick-select type
+      - Given Cmd+A pressed in wizard, Then select all spans (not graph nodes)
+      - Given Cmd+Z in wizard, When action undoable, Then undo last span edit
+      - Given ? pressed, When in wizard, Then show keyboard shortcut overlay
+    
+    shortcut_map:
+      Space: "Toggle lock/randomize"
+      Enter: "Accept/Edit span"
+      Escape: "Cancel/Close"
+      Delete/Backspace: "Delete span"
+      Tab/Shift+Tab: "Navigate spans"
+      Arrows: "Adjust boundaries"
+      Cmd+M: "Merge spans"
+      Cmd+Shift+M: "Split span"
+      Cmd+Enter: "Quick-bind asset"
+      "1-9": "Quick-select type"
+
+  - id: STORY-WIZ-008
+    title: Preview & Confirmation Flow
+    priority: P2
+    points: 5
+    description: |
+      Implement the live preview dock and final confirmation step
+      before generating the node graph.
+    
+    technical_notes:
+      - Update preview on every span change
+      - Show {alt1|alt2} syntax for randomized spans
+      - Generate example variations on demand
+      - Implement preset naming dialog
+    
+    acceptance_criteria:
+      - Given spans configured, When preview shown, Then display assembled prompt
+      - Given randomized spans, When in preview, Then show {option1|option2} format
+      - Given "Randomize Preview" clicked, When executed, Then show new variation
+      - Given "Apply Now" clicked, When confirmed, Then generate nodes immediately
+      - Given "Save as Preset" clicked, When named, Then store in preset library
+      - Given preset saved, When listed, Then show name, date, and span count
+      - Given changes made, When navigating away, Then show unsaved changes warning
+    
+    preview_features:
+      dock_height: "120px"
+      position: "bottom of panel"
+      randomize_limit: 10
+      variation_seed: "sequential for reproducibility"
+
+  - id: STORY-WIZ-009
+    title: Alternative Grouping & Conflicts
+    priority: P3
+    points: 5
+    description: |
+      Detect conflicting options (like B&W vs Color) and offer
+      smart grouping as mutually exclusive alternatives.
+    
+    technical_notes:
+      - Define conflict rules in configuration
+      - Use heuristics for auto-detection
+      - Store relationships in graph metadata
+      - Visual indication of grouped alternatives
+    
+    acceptance_criteria:
+      - Given B&W and Warm LUTs selected, When detected, Then show conflict warning
+      - Given conflict detected, When "Group" clicked, Then create alternative set
+      - Given alternatives grouped, When displayed, Then show link indicator
+      - Given alternative selected, When randomizing, Then exclude others in group
+      - Given ungrouping requested, When confirmed, Then restore independent spans
+      - Given multiple conflicts, When detected, Then handle each separately
+    
+    conflict_rules:
+      color_tonality:
+        - ["black and white", "b&w", "monochrome"] vs ["color", "warm", "cool", "vibrant"]
+      lighting:
+        - ["bright", "high key"] vs ["dark", "low key", "moody"]
+      mood:
+        - ["happy", "joyful", "cheerful"] vs ["sad", "melancholic", "somber"]
+
+  - id: STORY-WIZ-010
+    title: Testing & Polish
+    priority: P3
+    points: 8
+    description: |
+      Comprehensive testing, performance optimization, and polish pass
+      for the complete wizard feature.
+    
+    technical_notes:
+      - Add E2E tests with Playwright
+      - Profile with Chrome DevTools
+      - Optimize React re-renders
+      - Add loading skeletons
+      - Implement error boundaries
+    
+    acceptance_criteria:
+      - Given 50 test prompts, When parsed, Then 90% have acceptable span detection
+      - Given 1000 assets, When searching, Then no UI lag or jank
+      - Given network failure, When binding asset, Then show retry option
+      - Given malformed prompt, When pasted, Then show helpful error message
+      - Given wizard used 10 times, When measured, Then memory usage stable
+      - Given feature complete, When documented, Then include video tutorial
+      - Given accessibility audit, When tested, Then WCAG 2.1 AA compliant
+    
+    performance_targets:
+      parse_time: "< 150ms for 400 tokens"
+      search_time: "< 50ms for 1000 assets"
+      ui_response: "< 100ms for all interactions"
+      memory_limit: "< 50MB additional usage"
+      bundle_size: "< 200KB gzipped"
+
+rollout_plan:
+  phase1:
+    stories: [STORY-WIZ-001, STORY-WIZ-002, STORY-WIZ-003]
+    duration: "1 sprint"
+    gate: "Internal team testing"
+  
+  phase2:
+    stories: [STORY-WIZ-004, STORY-WIZ-005, STORY-WIZ-006]
+    duration: "1 sprint"
+    gate: "Beta user feedback"
+  
+  phase3:
+    stories: [STORY-WIZ-007, STORY-WIZ-008, STORY-WIZ-009, STORY-WIZ-010]
+    duration: "1 sprint"
+    gate: "Performance benchmarks met"
+
+dependencies:
+  external:
+    - Asset Browser infrastructure (Epic 1)
+    - PSG 2.0.0 format support
+  
+  internal:
+    - packages/core/runtime/nodes
+    - packages/core/components/Inspector
+    - packages/core/graphSchema.ts

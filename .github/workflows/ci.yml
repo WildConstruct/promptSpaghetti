@@ -58,6 +58,37 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
         if: success() || failure()
 
+      - name: Generate graph manifest
+        env:
+          MANIFEST_OPTIONAL: ${{ vars.MANIFEST_OPTIONAL || 'false' }}
+        run: |
+          set -e
+          echo "📋 Generating graph manifest for demo assets..."
+          if pnpm run generate:manifest; then
+            echo "✅ Manifest generated successfully"
+          else
+            if [ "$MANIFEST_OPTIONAL" = "true" ]; then
+              echo "::warning::Graph manifest generation failed but marked optional; continuing"
+              exit 0
+            else
+              echo "::error::Graph manifest generation failed and is required. Set MANIFEST_OPTIONAL=true to continue in preview."
+              exit 1
+            fi
+          fi
+          if [ -f packages/asset-browser/public/graphs/manifest.json ]; then
+            head -20 packages/asset-browser/public/graphs/manifest.json
+          else
+            echo "⚠️ No manifest generated (may be expected if no .psg files)"
+          fi
+
+      - name: Upload graph manifest artifact
+        if: ${{ hashFiles('packages/asset-browser/public/graphs/manifest.json') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-manifest
+          path: packages/asset-browser/public/graphs/manifest.json
+          if-no-files-found: ignore
+
       - name: Build client
         run: pnpm --filter client build
 
@@ -67,6 +98,9 @@ jobs:
       - name: Docker build (server)
         run: docker build -t promptscape-server ./server
         # (Optional: push to GHCR)
+
+      - name: Install Playwright browsers (Chromium)
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Performance tests
         run: |

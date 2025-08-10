@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useRef, useLayoutEffect } from 'react';
 import { Handle, Position } from 'reactflow';
 import { BaseEditableNode } from './BaseEditableNode';
 import './WeightedChoiceNode.css';
@@ -101,17 +101,135 @@ const WEIGHT_PRESETS = {
     rampDown: { icon: '📉', title: 'Ramp down' }
 };
 const EnhancedBranchingNodeComponent = (props) => {
-    const [options, setOptions] = useState(props.data.options || []);
-    const [title, setTitle] = useState(props.data.title || 'Weighted Choice');
+    // Ensure all options have hasBranch set to false by default
+    const initializeOptions = () => {
+        // Check if options are in props.data.options
+        if (Array.isArray(props.data?.options) && props.data.options.length > 0) {
+            // Ensure hasBranch is false if not explicitly set
+            return props.data.options.map(opt => ({
+                ...opt,
+                hasBranch: opt.hasBranch === true // Only true if explicitly true
+            }));
+        }
+        // Try to parse from value if it's a JSON string
+        if (typeof props.data?.value === 'string') {
+            try {
+                const parsed = JSON.parse(props.data.value);
+                if (Array.isArray(parsed.options)) {
+                    return parsed.options.map((opt) => ({
+                        ...opt,
+                        hasBranch: opt.hasBranch === true
+                    }));
+                }
+            }
+            catch (e) {
+                // Ignore parse errors
+            }
+        }
+        // Default options with branching OFF
+        return [
+            { text: '', weight: 50, hasBranch: false },
+            { text: '', weight: 50, hasBranch: false }
+        ];
+    };
+    const [options, setOptions] = useState(initializeOptions());
+    const [title, setTitle] = useState(props.data?.title || 'Weighted Choice');
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [draggedIndex, setDraggedIndex] = useState(null);
+    const [mainHandleTop, setMainHandleTop] = useState(35);
+    const [branchHandleTops, setBranchHandleTops] = useState([]);
+    const nodeRef = useRef(null);
+    const optionRefs = useRef([]);
     const hasBranching = options.some(opt => opt.hasBranch);
+    // Calculate the position of the main handle and each branch handle relative to the node box
+    useLayoutEffect(() => {
+        if (!nodeRef.current || !hasBranching)
+            return;
+        // The handles are absolutely positioned relative to the outer node container
+        const editorElInit = nodeRef.current;
+        const rootEl = editorElInit.closest('.epic1-editable-node');
+        const calcPositions = () => {
+            const editorEl = nodeRef.current;
+            const nodeRect = (rootEl ?? editorEl).getBoundingClientRect();
+            // Determine mode accurately: the nodeRef points directly at the editor/display container
+            const isEditingMode = editorEl.classList.contains('enhanced-branching-editor');
+            // Mode-specific vertical nudge for main handle baseline
+            // Edit: bring all handles down ~10px; Display unchanged
+            const vNudge = isEditingMode ? -36 : -30;
+            // Title center for main handle
+            const titleElement = editorEl.querySelector('.enhanced-title-section, .display-title');
+            if (titleElement) {
+                const titleRect = titleElement.getBoundingClientRect();
+                const relativeTop = titleRect.top - nodeRect.top + (titleRect.height / 2) + vNudge;
+                setMainHandleTop(relativeTop);
+            }
+            // Option row centers for branch handles
+            const tops = options.map((_, i) => {
+                const rowEl = optionRefs.current[i];
+                if (!rowEl)
+                    return 0;
+                // Use the entire row's visual box to match the dark rounded background
+                const r = rowEl.getBoundingClientRect();
+                // Branch-only fine tune: push orange lower in edit more than green
+                const branchFineTune = isEditingMode ? -2 : 1;
+                return r.top - nodeRect.top + r.height / 2 + vNudge + branchFineTune;
+            });
+            // Apply mode-specific spacing and lift for branches
+            // Spacing unchanged
+            const compress = isEditingMode ? 0.77 : 0.77;
+            // Extra lift: move branches up relative to main
+            // Drop edit branches further overall than green
+            const extraLift = isEditingMode ? -40 : -21;
+            const adjustedTops = tops.length
+                ? tops.map((t, idx) => {
+                    const base = tops[0];
+                    return base + (t - base) * compress + extraLift;
+                })
+                : tops;
+            setBranchHandleTops(adjustedTops);
+            // Keep optionRefs array in sync with options length
+            optionRefs.current.length = options.length;
+        };
+        // Run once after layout, and schedule follow-ups to catch async ref assignments
+        calcPositions();
+        requestAnimationFrame(() => calcPositions());
+        setTimeout(() => calcPositions(), 0);
+        // Recalculate on resize of node
+        const ro = new ResizeObserver(() => {
+            calcPositions();
+        });
+        ro.observe(nodeRef.current);
+        // Recalculate on DOM mutations (edit/display mode toggle, content changes)
+        let mo = null;
+        if (rootEl) {
+            mo = new MutationObserver(() => {
+                // Recalc immediately and again on next frames to handle mode swaps and ref updates
+                calcPositions();
+                requestAnimationFrame(() => calcPositions());
+                setTimeout(() => calcPositions(), 0);
+            });
+            mo.observe(rootEl, { childList: true, subtree: true, attributes: true });
+        }
+        // Also listen to window resize (zoom/layout changes)
+        window.addEventListener('resize', calcPositions);
+        return () => {
+            try {
+                ro.disconnect();
+            }
+            catch { }
+            try {
+                mo?.disconnect();
+            }
+            catch { }
+            window.removeEventListener('resize', calcPositions);
+        };
+    }, [hasBranching, title, options.length]);
     const calculatePercentages = useCallback((opts) => {
         const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
         if (totalWeight === 0)
             return opts.map(() => 0);
-        // Show actual weight values, not percentages
-        return opts.map(opt => opt.weight);
+        // Calculate actual percentages
+        return opts.map(opt => Math.round((opt.weight / totalWeight) * 100));
     }, []);
     const applyPreset = useCallback((preset) => {
         const count = options.length;
@@ -214,21 +332,22 @@ const EnhancedBranchingNodeComponent = (props) => {
     const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
     return (_jsx(BaseEditableNode, { ...props, className: "weighted-choice enhanced-branching", style: { width: '520px' }, minWidth: 520, minHeight: 180, data: {
             ...props.data,
-            nodeType: 'enhancedBranching',
-            options,
+            nodeType: 'weightedChoice', // Use weightedChoice for compatibility
+            options, // Pass current options state so BaseEditableNode can check hasBranch
             title,
             onEdit: (value) => {
                 props.data.onEdit?.(JSON.stringify({ options, title }));
             }
         }, children: ({ isEditing, confirmEdit, cancelEdit }) => {
             if (isEditing) {
-                return (_jsxs("div", { className: "enhanced-branching-editor", onMouseDown: (e) => e.stopPropagation(), children: [_jsx("div", { className: "enhanced-title-section", children: isEditingTitle ? (_jsx("input", { type: "text", className: "title-edit-input", value: title, onChange: (e) => setTitle(e.target.value), onBlur: () => setIsEditingTitle(false), onKeyDown: (e) => {
+                return (_jsxs("div", { ref: nodeRef, className: "enhanced-branching-editor", onMouseDown: (e) => e.stopPropagation(), children: [_jsx("div", { className: "enhanced-title-section", children: isEditingTitle ? (_jsx("input", { type: "text", className: "title-edit-input", value: title, onChange: (e) => setTitle(e.target.value), onBlur: () => setIsEditingTitle(false), onKeyDown: (e) => {
                                     if (e.key === 'Enter')
                                         setIsEditingTitle(false);
-                                }, autoFocus: true })) : (_jsxs("div", { className: "title-display", children: [_jsx("span", { className: "title-text", children: title.toUpperCase() }), _jsx("button", { className: "title-edit-btn", onClick: () => setIsEditingTitle(true), title: "Edit title", children: "\u270F\uFE0F" })] })) }), _jsxs("div", { className: "enhanced-presets", children: [Object.entries(WEIGHT_PRESETS).map(([key, preset]) => (_jsx("button", { className: "preset-btn", onClick: () => applyPreset(key), title: preset.title, children: preset.icon }, key))), _jsxs("div", { className: "total-weight", children: ["Total: ", totalWeight] })] }), _jsx("div", { className: "enhanced-options-list", onWheel: (e) => {
+                                    e.stopPropagation(); // Prevent node keyboard shortcuts
+                                }, onPaste: (e) => e.stopPropagation(), onCopy: (e) => e.stopPropagation(), onCut: (e) => e.stopPropagation(), autoFocus: true })) : (_jsxs("div", { className: "title-display", children: [_jsx("span", { className: "title-text", children: title.toUpperCase() }), _jsx("button", { className: "title-edit-btn", onClick: () => setIsEditingTitle(true), title: "Edit title", children: "\u270F\uFE0F" })] })) }), _jsxs("div", { className: "enhanced-presets", children: [Object.entries(WEIGHT_PRESETS).map(([key, preset]) => (_jsx("button", { className: "preset-btn", onClick: () => applyPreset(key), title: preset.title, children: preset.icon }, key))), _jsxs("div", { className: "total-weight", children: ["Total: ", totalWeight] })] }), _jsx("div", { className: "enhanced-options-list", onWheel: (e) => {
                                 e.stopPropagation();
                                 // Allow scrolling within the list
-                            }, children: options.map((option, index) => (_jsxs("div", { className: `enhanced-option-row ${draggedIndex === index ? 'dragging' : ''}`, onDragOver: (e) => handleDragOver(e, index), onDrop: (e) => {
+                            }, children: options.map((option, index) => (_jsxs("div", { className: `enhanced-option-row ${draggedIndex === index ? 'dragging' : ''}`, ref: (el) => { optionRefs.current[index] = el; }, onDragOver: (e) => handleDragOver(e, index), onDrop: (e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                 }, onMouseDown: (e) => {
@@ -241,38 +360,70 @@ const EnhancedBranchingNodeComponent = (props) => {
                                         }, style: { cursor: 'grab' }, title: "Drag to reorder", children: _jsx(DragHandleIcon, {}) }), _jsx("input", { type: "text", className: "enhanced-option-text nodrag", value: option.text, onChange: (e) => updateOptionText(index, e.target.value), placeholder: "Option text...", onMouseDown: (e) => {
                                             e.stopPropagation();
                                             e.currentTarget.focus();
-                                        }, onClick: (e) => e.stopPropagation(), style: { pointerEvents: 'all' } }), _jsx(RadioDial, { value: option.weight, onChange: (val) => updateOptionWeight(index, val), percentage: percentages[index] }), _jsx("button", { className: `branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`, onClick: (e) => {
+                                        }, onClick: (e) => e.stopPropagation(), onPaste: (e) => {
+                                            // Allow paste events to work properly
+                                            e.stopPropagation();
+                                        }, onCopy: (e) => {
+                                            // Allow copy events to work properly
+                                            e.stopPropagation();
+                                        }, onCut: (e) => {
+                                            // Allow cut events to work properly
+                                            e.stopPropagation();
+                                        }, style: { pointerEvents: 'all' } }), _jsx(RadioDial, { value: option.weight, onChange: (val) => updateOptionWeight(index, val), percentage: percentages[index] }), _jsx("button", { className: `branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`, onClick: (e) => {
                                             e.stopPropagation();
                                             toggleBranch(index);
                                         }, onMouseDown: (e) => e.stopPropagation(), title: "Toggle branch output", children: "\u26A1" }), options.length > 1 && (_jsx("button", { className: "remove-btn nodrag", onClick: (e) => {
                                             e.stopPropagation();
                                             removeOption(index);
-                                        }, onMouseDown: (e) => e.stopPropagation(), title: "Remove option", children: "\u00D7" })), option.hasBranch && (_jsx(Handle, { type: "source", position: Position.Right, id: `branch-${index}`, className: "enhanced-handle branch-output", style: {
+                                        }, onMouseDown: (e) => e.stopPropagation(), title: "Remove option", children: "\u00D7" })), option.hasBranch && (_jsx("span", { style: {
                                             position: 'absolute',
-                                            right: -8,
-                                            top: '50%',
-                                            transform: 'translateY(-50%)',
-                                            zIndex: 1000
-                                        } }))] }, index))) }), _jsxs("div", { className: "enhanced-footer", children: [_jsx("div", { className: "hints", children: "Drag to reorder \u2022 \u26A1 = branch output \u2022 Click and drag dials to adjust weights" }), _jsxs("div", { className: "footer-controls", children: [_jsx("button", { className: "add-option-btn", onClick: addOption, children: "+ Add Option" }), _jsxs("div", { className: "edit-actions", children: [_jsx("button", { className: "confirm-btn", onClick: confirmEdit, children: "\u2713" }), _jsx("button", { className: "cancel-btn", onClick: cancelEdit, children: "\u00D7" })] })] })] }), hasBranching && (_jsx(Handle, { type: "source", position: Position.Top, id: "main-output", className: "enhanced-handle main-output", style: {
+                                            right: '10px',
+                                            color: '#f59e0b',
+                                            fontSize: '10px'
+                                        }, children: "\u25CF" }))] }, index))) }), _jsxs("div", { className: "enhanced-footer", children: [_jsx("div", { className: "hints", children: "Drag to reorder \u2022 \u26A1 = branch output \u2022 Click and drag dials to adjust weights" }), _jsxs("div", { className: "footer-controls", children: [_jsx("button", { className: "add-option-btn", onClick: addOption, children: "+ Add Option" }), _jsxs("div", { className: "edit-actions", children: [_jsx("button", { className: "confirm-btn", onClick: confirmEdit, children: "\u2713" }), _jsx("button", { className: "cancel-btn", onClick: cancelEdit, children: "\u00D7" })] })] })] }), options.map((option, index) => option.hasBranch && (_jsx(Handle, { type: "source", position: Position.Right, id: `branch-${index}`, className: "epic1-handle enhanced-handle branch-output", style: {
                                 position: 'absolute',
-                                top: -8,
-                                right: 30,
-                                left: 'auto',
-                                transform: 'translateX(50%)'
+                                // vertical via CSS var wins over generic !important
+                                ['--handle-top']: `${branchHandleTops[index] ?? 0}px`,
+                                transform: 'translateY(-50%)',
+                                zIndex: 1000,
+                                background: '#f59e0b',
+                                border: '2px solid #fff',
+                                width: '12px',
+                                height: '12px',
+                                borderRadius: '50%'
+                            } }, `branch-${index}`))), hasBranching && (_jsx(Handle, { type: "source", position: Position.Right, id: "main", className: "epic1-handle enhanced-handle main-output", style: {
+                                position: 'absolute',
+                                ['--handle-top']: `${mainHandleTop}px`,
+                                transform: 'translateY(-50%)',
+                                zIndex: 1000,
+                                background: '#10b981',
+                                border: '2px solid #fff',
+                                width: '14px',
+                                height: '14px',
+                                borderRadius: '50%'
                             } }))] }));
             }
             // Display mode
-            return (_jsxs("div", { className: "enhanced-branching-display", children: [_jsx("div", { className: "display-title", children: title }), _jsx("div", { className: "display-options", children: options.map((option, index) => (_jsxs("div", { className: "display-option", children: [_jsxs("span", { className: "option-text", children: [option.text || 'Empty option', option.hasBranch && ' ⚡'] }), _jsxs("span", { className: "option-percentage", children: [percentages[index], "%"] }), option.hasBranch && (_jsx(Handle, { type: "source", position: Position.Right, id: `branch-${index}`, className: "enhanced-handle branch-output", style: {
-                                        position: 'absolute',
-                                        right: -10, // Position on frame edge in display mode
-                                        top: '50%',
-                                        transform: 'translateY(-50%)'
-                                    } }))] }, index))) }), hasBranching && (_jsx(Handle, { type: "source", position: Position.Top, id: "main-output", className: "enhanced-handle main-output", style: {
+            return (_jsxs("div", { ref: nodeRef, className: "enhanced-branching-display", style: { position: 'relative' }, children: [_jsx("div", { className: "display-title", children: title }), _jsx("div", { className: "display-options", children: options.map((option, index) => (_jsxs("div", { className: "display-option", style: { position: 'relative' }, ref: (el) => { optionRefs.current[index] = el; }, children: [_jsxs("span", { className: "option-text", children: [option.text || 'Empty option', option.hasBranch && ' ⚡'] }), _jsxs("span", { className: "option-percentage", children: [percentages[index], "%"] })] }, index))) }), options.map((option, index) => option.hasBranch && (_jsx(Handle, { type: "source", position: Position.Right, id: `branch-${index}`, className: "epic1-handle enhanced-handle branch-output", style: {
                             position: 'absolute',
-                            top: -8,
-                            right: 30,
-                            left: 'auto',
-                            transform: 'translateX(50%)'
+                            ['--handle-top']: `${branchHandleTops[index] ?? 0}px`,
+                            transform: 'translateY(-50%)',
+                            zIndex: 1000,
+                            background: '#f59e0b',
+                            border: '2px solid #fff',
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%'
+                        } }, `branch-${index}`))), hasBranching && (_jsx(Handle, { type: "source", position: Position.Right, id: "main", className: "epic1-handle enhanced-handle main-output", style: {
+                            position: 'absolute',
+                            ['--handle-top']: `${mainHandleTop}px`,
+                            transform: 'translateY(-50%)',
+                            zIndex: 1000,
+                            background: '#10b981',
+                            border: '2px solid #fff',
+                            width: '14px',
+                            height: '14px',
+                            borderRadius: '50%'
                         } }))] }));
         } }));
 };

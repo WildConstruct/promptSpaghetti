@@ -1,0 +1,127 @@
+{
+  "fileType": "psglib",
+  "formatVersion": "1.0.0",
+  "metadata": {
+    "id": "preset-weather-condition-1736537004000",
+    "name": "Weather Condition Generator",
+    "description": "Creates atmospheric weather conditions for scene setting",
+    "author": "PromptScape Team",
+    "version": "1.0.0",
+    "tags": ["weather", "environment", "atmosphere", "setting"],
+    "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+    "lastModified": "2025-01-10T20:10:04.000Z",
+    "license": "MIT",
+    "usageStats": {
+      "timesUsed": 0,
+      "lastUsed": null,
+      "popularity": 0
+    }
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "time-1736537004000",
+        "type": "WeightedChoice",
+        "position": { "x": 100, "y": 50 },
+        "data": {
+          "choices": [
+            { "text": "Dawn brought", "weight": 1 },
+            { "text": "The morning sky showed", "weight": 2 },
+            { "text": "By midday,", "weight": 2 },
+            { "text": "As evening fell,", "weight": 2 },
+            { "text": "The night was filled with", "weight": 1 },
+            { "text": "Without warning,", "weight": 1 }
+          ]
+        },
+        "label": "Time Frame"
+      },
+      {
+        "id": "weather-1736537004001",
+        "type": "WeightedChoice",
+        "position": { "x": 100, "y": 150 },
+        "data": {
+          "choices": [
+            { "text": "a gentle mist", "weight": 2 },
+            { "text": "torrential rain", "weight": 1 },
+            { "text": "swirling snow", "weight": 1 },
+            { "text": "oppressive heat", "weight": 2 },
+            { "text": "violent thunderstorms", "weight": 1 },
+            { "text": "an eerie fog", "weight": 1 },
+            { "text": "bitter cold winds", "weight": 1 },
+            { "text": "unusual warmth", "weight": 1 },
+            { "text": "crystalline frost", "weight": 1 }
+          ]
+        },
+        "label": "Weather Type"
+      },
+      {
+        "id": "effect-1736537004002",
+        "type": "WeightedChoice",
+        "position": { "x": 100, "y": 250 },
+        "data": {
+          "choices": [
+            { "text": "that obscured vision beyond a few feet", "weight": 1 },
+            { "text": "making travel nearly impossible", "weight": 1 },
+            { "text": "that seemed almost supernatural", "weight": 1 },
+            { "text": "bringing an unexpected chill", "weight": 2 },
+            { "text": "that lifted spirits despite the circumstances", "weight": 1 },
+            { "text": "casting strange shadows", "weight": 1 },
+            { "text": "that pressed down like a physical weight", "weight": 1 },
+            { "text": "carrying whispers of distant places", "weight": 1 }
+          ]
+        },
+        "label": "Effect"
+      },
+      {
+        "id": "concat-1736537004000",
+        "type": "Concat",
+        "position": { "x": 350, "y": 150 },
+        "data": {
+          "separator": " ",
+          "suffix": "."
+        },
+        "label": "Full Weather"
+      },
+      {
+        "id": "output-1736537004000",
+        "type": "Output",
+        "position": { "x": 550, "y": 150 },
+        "data": {
+          "template": "{weather}"
+        },
+        "label": "Weather Condition"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge-1736537004000-1",
+        "source": "time-1736537004000",
+        "target": "concat-1736537004000",
+        "sourceHandle": "output",
+        "targetHandle": "input0"
+      },
+      {
+        "id": "edge-1736537004000-2",
+        "source": "weather-1736537004001",
+        "target": "concat-1736537004000",
+        "sourceHandle": "output",
+        "targetHandle": "input1"
+      },
+      {
+        "id": "edge-1736537004000-3",
+        "source": "effect-1736537004002",
+        "target": "concat-1736537004000",
+        "sourceHandle": "output",
+        "targetHandle": "input2"
+      },
+      {
+        "id": "edge-1736537004000-4",
+        "source": "concat-1736537004000",
+        "target": "output-1736537004000",
+        "sourceHandle": "output",
+        "targetHandle": "weather"
+      }
+    ],
+    "settings": {}
+  }
+}

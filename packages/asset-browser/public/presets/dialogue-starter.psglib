@@ -1,0 +1,90 @@
+{
+  "fileType": "psglib",
+  "formatVersion": "1.0.0",
+  "metadata": {
+    "id": "preset-dialogue-starter-1736537000000",
+    "name": "Dialogue Starter",
+    "description": "Generates natural conversation openers for various situations",
+    "author": "PromptScape Team",
+    "version": "1.0.0",
+    "tags": ["dialogue", "conversation", "writing", "social"],
+    "nodeTypes": ["WeightedChoice", "Output"],
+    "lastModified": "2025-01-10T20:10:00.000Z",
+    "license": "MIT",
+    "usageStats": {
+      "timesUsed": 0,
+      "lastUsed": null,
+      "popularity": 0
+    }
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "context-1736537000000",
+        "type": "WeightedChoice",
+        "position": { "x": 100, "y": 100 },
+        "data": {
+          "choices": [
+            { "text": "meeting someone new", "weight": 2 },
+            { "text": "reuniting after years", "weight": 1 },
+            { "text": "confronting a rival", "weight": 1 },
+            { "text": "asking for help", "weight": 2 },
+            { "text": "delivering bad news", "weight": 1 },
+            { "text": "confessing feelings", "weight": 1 },
+            { "text": "negotiating a deal", "weight": 1 },
+            { "text": "apologizing", "weight": 1 }
+          ]
+        },
+        "label": "Context"
+      },
+      {
+        "id": "opener-1736537000001",
+        "type": "WeightedChoice",
+        "position": { "x": 350, "y": 100 },
+        "data": {
+          "choices": [
+            { "text": "\"I wasn't expecting to see you here.\"", "weight": 2 },
+            { "text": "\"We need to talk about what happened.\"", "weight": 1 },
+            { "text": "\"I've been thinking about what you said.\"", "weight": 2 },
+            { "text": "\"There's something I should have told you.\"", "weight": 1 },
+            { "text": "\"I know this is awkward, but...\"", "weight": 2 },
+            { "text": "\"You're probably wondering why I called.\"", "weight": 1 },
+            { "text": "\"I owe you an explanation.\"", "weight": 1 },
+            { "text": "\"Before you say anything, hear me out.\"", "weight": 1 },
+            { "text": "\"I didn't think I'd get another chance to say this.\"", "weight": 1 },
+            { "text": "\"You look different. Good different.\"", "weight": 1 },
+            { "text": "\"I need your help, and you're the only one I trust.\"", "weight": 1 },
+            { "text": "\"This isn't easy for me to say.\"", "weight": 2 }
+          ]
+        },
+        "label": "Opening Line"
+      },
+      {
+        "id": "output-1736537000000",
+        "type": "Output",
+        "position": { "x": 600, "y": 100 },
+        "data": {
+          "template": "Context: {context}\n\n\"{opener}\""
+        },
+        "label": "Dialogue Starter"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge-context-1736537000000",
+        "source": "context-1736537000000",
+        "target": "output-1736537000000",
+        "sourceHandle": "output",
+        "targetHandle": "context"
+      },
+      {
+        "id": "edge-opener-1736537000000",
+        "source": "opener-1736537000001",
+        "target": "output-1736537000000",
+        "sourceHandle": "output",
+        "targetHandle": "opener"
+      }
+    ],
+    "settings": {}
+  }
+}

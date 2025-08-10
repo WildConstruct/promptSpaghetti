@@ -115,6 +115,24 @@ export const BaseEditableNode = memo(({ data, selected, children, className = ''
                     updateBuffer,
                     confirmEdit,
                     cancelEdit,
-                }) }), data.nodeType !== 'enhancedBranching' && data.nodeType !== 'weightedChoice' && data.nodeType !== 'output' && (_jsx(Handle, { type: "source", position: Position.Right, id: "source", className: "epic1-handle source" })), (data.nodeType === 'enhancedBranching' || data.nodeType === 'weightedChoice') && !data.options?.some((opt) => opt.hasBranch) && (_jsx(Handle, { type: "source", position: Position.Right, className: "epic1-handle source main-output", id: "main-output" })), isEditing && _jsx("div", { className: "epic1-edit-indicator" }), selected && !isEditing && _jsx("div", { className: "epic1-selected-indicator" }), _jsx(SaveIndicator, { trigger: saveTrigger })] }));
+                }) }), (() => {
+                // For weighted choice nodes
+                if (data.nodeType === 'weightedChoice') {
+                    // Only show handle if NO branches are active
+                    // When branches are active, EnhancedBranchingNode handles all outputs
+                    const hasBranching = data.options && data.options.some((opt) => opt.hasBranch === true);
+                    if (!hasBranching) {
+                        return (_jsx(Handle, { type: "source", position: Position.Right, className: "epic1-handle source", id: "source" }));
+                    }
+                    // If hasBranching is true, return null - EnhancedBranchingNode will handle all outputs
+                    return null;
+                }
+                // For output nodes - no source handle
+                if (data.nodeType === 'output') {
+                    return null;
+                }
+                // For all other node types - show standard source handle
+                return (_jsx(Handle, { type: "source", position: Position.Right, id: "source", className: "epic1-handle source" }));
+            })(), isEditing && _jsx("div", { className: "epic1-edit-indicator" }), selected && !isEditing && _jsx("div", { className: "epic1-selected-indicator" }), _jsx(SaveIndicator, { trigger: saveTrigger })] }));
 });
 BaseEditableNode.displayName = 'BaseEditableNode';

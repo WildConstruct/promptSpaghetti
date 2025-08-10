@@ -5,3 +5,9 @@ export type { GraphNode, GraphEdge, Graph, PSGFile } from './types/graph';
 
 // Public Utils surface
 export * from './utils/index.js';
+
+// File Formats
+export * from './fileFormats/index.js';
+
+// Runtime modules
+export * from './runtime/presetInsertion.js';

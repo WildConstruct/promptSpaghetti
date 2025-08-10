@@ -5,12 +5,10 @@
  * This includes compression services, performance monitoring,
  * and other shared utilities.
  */
-// Export compression utilities
-export * from './CompressionService';
-export { compressionService as defaultCompressionService } from './CompressionService';
-// Re-export for convenience
-export { CompressionService, compressionService } from './CompressionService';
-// Export performance monitoring if available
-export * from './PerformanceMonitor';
-// Export any other utilities that may exist
-// This will be the central point for all core utilities
+// Note: CompressionService and PerformanceMonitor are intentionally not re-exported
+// here due to incomplete implementations that can break consumers during type-checking.
+// If/when stabilized, they can be re-added.
+export * from './supabaseClient.js';
+export * from './psgStorage.js';
+export * from './supabaseFeature.js';
+export * from './psgCodec.js';

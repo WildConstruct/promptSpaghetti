@@ -1,0 +1,322 @@
+/**
+ * Work preservation utilities for auth transitions
+ */
+
+import type { Node, Edge } from 'reactflow';
+
+/**
+ * Graph state snapshot for preservation
+ */
+export interface GraphSnapshot {
+  nodes: Node[];
+  edges: Edge[];
+  viewport?: {
+    x: number;
+    y: number;
+    zoom: number;
+  };
+  metadata?: {
+    timestamp: number;
+    nodeCount: number;
+    edgeCount: number;
+    version?: string;
+  };
+}
+
+/**
+ * Storage keys for work preservation
+ */
+const STORAGE_KEYS = {
+  PRE_AUTH_WORK: 'psg_pre_auth_work',
+  WORK_BACKUP: 'psg_work_backup',
+  RECOVERY_AVAILABLE: 'psg_recovery_available'
+};
+
+/**
+ * Export current graph state for preservation
+ */
+export async function exportGraphState(
+  nodes: Node[],
+  edges: Edge[],
+  viewport?: { x: number; y: number; zoom: number }
+): Promise<GraphSnapshot> {
+  const snapshot: GraphSnapshot = {
+    nodes: JSON.parse(JSON.stringify(nodes)), // Deep clone
+    edges: JSON.parse(JSON.stringify(edges)), // Deep clone
+    viewport,
+    metadata: {
+      timestamp: Date.now(),
+      nodeCount: nodes.length,
+      edgeCount: edges.length,
+      version: '1.0'
+    }
+  };
+  
+  return snapshot;
+}
+
+/**
+ * Import preserved graph state
+ */
+export async function importGraphState(
+  snapshot: GraphSnapshot
+): Promise<{
+  nodes: Node[];
+  edges: Edge[];
+  viewport?: { x: number; y: number; zoom: number };
+}> {
+  // Validate snapshot
+  if (!snapshot || !Array.isArray(snapshot.nodes) || !Array.isArray(snapshot.edges)) {
+    throw new Error('Invalid graph snapshot');
+  }
+  
+  return {
+    nodes: snapshot.nodes,
+    edges: snapshot.edges,
+    viewport: snapshot.viewport
+  };
+}
+
+/**
+ * Preserve work before authentication
+ */
+export async function preserveWorkBeforeAuth(
+  nodes: Node[],
+  edges: Edge[],
+  viewport?: { x: number; y: number; zoom: number }
+): Promise<void> {
+  try {
+    const snapshot = await exportGraphState(nodes, edges, viewport);
+    
+    // Store in sessionStorage (persists for session)
+    sessionStorage.setItem(
+      STORAGE_KEYS.PRE_AUTH_WORK,
+      JSON.stringify(snapshot)
+    );
+    
+    // Also backup to localStorage (persists longer)
+    localStorage.setItem(
+      STORAGE_KEYS.WORK_BACKUP,
+      JSON.stringify(snapshot)
+    );
+    
+    // Mark recovery as available
+    localStorage.setItem(STORAGE_KEYS.RECOVERY_AVAILABLE, 'true');
+    
+    console.log('Work preserved successfully', {
+      nodeCount: nodes.length,
+      edgeCount: edges.length
+    });
+  } catch (error) {
+    console.error('Failed to preserve work:', error);
+    throw new Error('Failed to save your work before authentication');
+  }
+}
+
+/**
+ * Restore work after authentication
+ */
+export async function restoreWorkAfterAuth(): Promise<GraphSnapshot | null> {
+  try {
+    // Try sessionStorage first (most recent)
+    let preserved = sessionStorage.getItem(STORAGE_KEYS.PRE_AUTH_WORK);
+    
+    // Fall back to localStorage if needed
+    if (!preserved) {
+      preserved = localStorage.getItem(STORAGE_KEYS.WORK_BACKUP);
+    }
+    
+    if (!preserved) {
+      return null;
+    }
+    
+    const snapshot = JSON.parse(preserved) as GraphSnapshot;
+    
+    // Clean up storage
+    sessionStorage.removeItem(STORAGE_KEYS.PRE_AUTH_WORK);
+    localStorage.removeItem(STORAGE_KEYS.RECOVERY_AVAILABLE);
+    
+    console.log('Work restored successfully', {
+      nodeCount: snapshot.metadata?.nodeCount,
+      edgeCount: snapshot.metadata?.edgeCount,
+      age: snapshot.metadata?.timestamp 
+        ? Math.floor((Date.now() - snapshot.metadata.timestamp) / 1000) + 's'
+        : 'unknown'
+    });
+    
+    return snapshot;
+  } catch (error) {
+    console.error('Failed to restore work:', error);
+    return null;
+  }
+}
+
+/**
+ * Check if there's work available for recovery
+ */
+export function hasRecoverableWork(): boolean {
+  return localStorage.getItem(STORAGE_KEYS.RECOVERY_AVAILABLE) === 'true';
+}
+
+/**
+ * Clear all preserved work
+ */
+export function clearPreservedWork(): void {
+  sessionStorage.removeItem(STORAGE_KEYS.PRE_AUTH_WORK);
+  localStorage.removeItem(STORAGE_KEYS.WORK_BACKUP);
+  localStorage.removeItem(STORAGE_KEYS.RECOVERY_AVAILABLE);
+}
+
+/**
+ * Hook for work preservation during auth
+ */
+export function useWorkPreservation() {
+  const preserveAndAuthenticate = async (
+    nodes: Node[],
+    edges: Edge[],
+    viewport: { x: number; y: number; zoom: number } | undefined,
+    authCallback: () => Promise<void>,
+    options?: {
+      autoSaveToCloud?: boolean;
+      onSuccess?: (snapshot: GraphSnapshot) => void;
+      onError?: (error: Error) => void;
+    }
+  ) => {
+    try {
+      // 1. Preserve current work
+      await preserveWorkBeforeAuth(nodes, edges, viewport);
+      
+      // 2. Trigger authentication
+      await authCallback();
+      
+      // 3. After successful auth, restore work
+      const restored = await restoreWorkAfterAuth();
+      
+      if (restored) {
+        options?.onSuccess?.(restored);
+        
+        // 4. Optionally auto-save to cloud
+        if (options?.autoSaveToCloud) {
+          // This would call the cloud save function
+          console.log('Auto-saving to cloud after authentication...');
+        }
+      }
+    } catch (error) {
+      console.error('Authentication flow error:', error);
+      options?.onError?.(error as Error);
+    }
+  };
+  
+  const checkForRecovery = async (): Promise<GraphSnapshot | null> => {
+    if (!hasRecoverableWork()) {
+      return null;
+    }
+    
+    return await restoreWorkAfterAuth();
+  };
+  
+  return {
+    preserveAndAuthenticate,
+    checkForRecovery,
+    hasRecoverableWork: hasRecoverableWork(),
+    clearPreservedWork
+  };
+}
+
+/**
+ * Recovery prompt component props
+ */
+interface RecoveryPromptProps {
+  onRecover: (snapshot: GraphSnapshot) => void;
+  onDiscard: () => void;
+}
+
+/**
+ * Component to show when recoverable work is detected
+ */
+export function RecoveryPrompt({ onRecover, onDiscard }: RecoveryPromptProps) {
+  const handleRecover = async () => {
+    const snapshot = await restoreWorkAfterAuth();
+    if (snapshot) {
+      onRecover(snapshot);
+    }
+  };
+  
+  const handleDiscard = () => {
+    clearPreservedWork();
+    onDiscard();
+  };
+  
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        top: '20px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#fef3c7',
+        border: '1px solid #f59e0b',
+        borderRadius: '8px',
+        padding: '16px 20px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        zIndex: 1000,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px',
+        maxWidth: '600px',
+        width: '90%'
+      }}
+    >
+      <span style={{ fontSize: '24px' }}>⚠️</span>
+      
+      <div style={{ flex: 1 }}>
+        <strong style={{ color: '#92400e' }}>
+          Unsaved work detected
+        </strong>
+        <p
+          style={{
+            margin: '4px 0 0 0',
+            fontSize: '14px',
+            color: '#78350f'
+          }}
+        >
+          We found work from your previous session. Would you like to restore it?
+        </p>
+      </div>
+      
+      <div style={{ display: 'flex', gap: '8px' }}>
+        <button
+          onClick={handleRecover}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: '#f59e0b',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer'
+          }}
+        >
+          Restore
+        </button>
+        
+        <button
+          onClick={handleDiscard}
+          style={{
+            padding: '8px 16px',
+            backgroundColor: 'white',
+            color: '#92400e',
+            border: '1px solid #fbbf24',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer'
+          }}
+        >
+          Discard
+        </button>
+      </div>
+    </div>
+  );
+}

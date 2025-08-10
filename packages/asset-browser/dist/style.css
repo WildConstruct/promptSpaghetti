@@ -1,0 +1,1 @@
+:where(button,[role=button],[role=gridcell]) :focus-visible,:where(button,[role=button],[role=gridcell]) :focus{outline:none}:where(button,[role=button]) :focus-visible,:where(button,[role=button]) :focus{box-shadow:0 0 0 2px #2563eb inset}[role=gridcell][aria-selected=true]{outline:2px solid #2563eb;outline-offset:-2px}

@@ -1,0 +1,13 @@
+{
+  "nodes": [
+    {
+      "id": "legacy-1",
+      "type": "Output",
+      "label": "Legacy Node"
+    }
+  ],
+  "edges": [],
+  "settings": {
+    "oldFormat": true
+  }
+}

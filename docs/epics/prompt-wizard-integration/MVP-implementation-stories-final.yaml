@@ -1,0 +1,569 @@
+# Prompt Wizard MVP Implementation Stories - FINAL
+# Scrum Master: Bob
+# Reviewed and adjusted for development readiness
+# Sprint 1: 20 points total (split keyboard story)
+# Date: 2025-01-09
+
+epic:
+  id: EPIC-WIZARD-MVP
+  title: Prompt Wizard MVP - Development Ready
+  description: |
+    Minimal viable wizard with core features validated by 50 user interviews
+    and 150 survey responses. Stories adjusted for clear developer handoff
+    with all edge cases and error states defined.
+  success_criteria:
+    - Parse time <200ms (p95)
+    - 60% of parsed segments accepted unchanged
+    - Time to first preset <2 minutes
+    - 30% of users return within first week
+  
+  definitions:
+    token: "A word boundary OR punctuation mark. Examples: 'hello world' = 2 tokens, 'hello, world' = 3 tokens (hello + , + world)"
+    segment: "A continuous span of text that will become a single node"
+    boundary: "The start or end position of a segment in the original text"
+
+stories:
+
+  - id: STORY-MVP-001
+    title: Simple Prompt Parser with Error Handling
+    points: 5
+    priority: P0
+    week: 1
+    description: |
+      Implement a simple, fast parser that splits prompts into segments
+      using basic heuristics. Must handle errors gracefully and meet
+      performance expectations from user research.
+    
+    research_backing:
+      - "If parsing takes more than 3 seconds, I might as well do it manually" - P09
+      - 82% of users rate auto-detect as P0 feature
+      - Users tolerate 30% error rate if easily correctable
+    
+    technical_requirements:
+      - Use Web Worker to avoid blocking UI
+      - Simple comma and conjunction splitting
+      - Merge short segments (<3 words)
+      - Handle quoted strings as single segment
+      - Return structured span data with positions
+      - Generate unique IDs using timestamp + counter
+    
+    acceptance_criteria:
+      - Given a 100-word prompt, When parsed, Then complete in <100ms
+      - Given a 400-word prompt, When parsed, Then complete in <200ms
+      - Given text with commas, When parsed, Then split at commas
+      - Given text with "and/or/but", When parsed, Then split at conjunctions
+      - Given "quoted text", When parsed, Then keep as single segment
+      - Given segments <3 words, When detected, Then merge with adjacent
+      - Given parsing error, When occurs, Then return error object with user-friendly message
+      - Given successful parse, When complete, Then return 4-8 segments average
+      - Given empty input, When parsed, Then return empty array with no error
+      - Given input >1000 words, When parsed, Then truncate and show warning
+      - Given Web Worker fails, When detected, Then fallback to main thread parsing
+      - Given parser timeout (>3s), When occurs, Then cancel and show timeout error
+    
+    error_states:
+      empty_input:
+        message: "Please paste a prompt to get started"
+        type: "info"
+      
+      too_long:
+        message: "Prompt too long. Limited to 1000 words."
+        type: "warning"
+        action: "Truncate and continue"
+      
+      parse_failed:
+        message: "Could not parse prompt. Try simplifying the text."
+        type: "error"
+        action: "Allow manual segment creation"
+      
+      timeout:
+        message: "Parsing is taking too long. Switching to simple mode."
+        type: "warning"
+        action: "Use basic comma split only"
+    
+    test_prompts:
+      simple: "A red car, a blue sky, and green grass"
+      complex: "Cinematic portrait of a young woman in vintage dress, soft natural light, shot on 35mm film"
+      quoted: 'Use "exact phrase" in the prompt, then add variations'
+      edge_empty: ""
+      edge_huge: "[generate 1500 word prompt]"
+      edge_special: "Multiple,,,commas,,,and...dots...everywhere!!!"
+    
+    definition_of_done:
+      - [ ] Parser function implemented with error handling
+      - [ ] Web Worker integration with fallback
+      - [ ] Unique ID generation working
+      - [ ] Performance <200ms for 400 words
+      - [ ] All error states handled gracefully
+      - [ ] Unit tests pass with 90% coverage
+      - [ ] Returns structured span objects
+      - [ ] Timeout handling implemented
+
+  - id: STORY-MVP-002
+    title: Wizard Panel UI with Loading and Error States
+    points: 5
+    priority: P0
+    week: 1
+    description: |
+      Create the slide-in panel with visual span highlighting.
+      Include loading states during parsing and error state displays.
+      Focus on clarity and immediate visual feedback.
+    
+    research_backing:
+      - 74% positive reaction to auto-highlight concept
+      - "Don't overthink it. Parse, highlight, let me fix. Ship it." - P08
+      - Visual feedback critical for building trust
+    
+    ui_requirements:
+      - Fixed-width panel (480px) sliding from right
+      - Clear paste area with placeholder text
+      - Loading spinner during parse (with "Analyzing..." text)
+      - Error message display area
+      - Highlighted spans with distinct visual treatment
+      - Lock icon for locked spans (gray background)
+      - Dice icon for randomized spans (green background)
+      - Focus ring (blue) for selected span
+    
+    acceptance_criteria:
+      - Given Randomizer open, When click "+ Paste prompt", Then panel slides in from right
+      - Given panel open, When paste text, Then show loading spinner with "Analyzing..." text
+      - Given parse in progress, When >500ms, Then show "Still working..." message
+      - Given parse complete, When displayed, Then hide loading and show highlighted spans
+      - Given parse error, When occurs, Then show error message with retry button
+      - Given locked span, When rendered, Then show lock icon + gray bg (#zinc-800/30)
+      - Given randomized span, When rendered, Then show dice icon + green bg (#emerald-900/25)
+      - Given span clicked, When selected, Then show blue focus ring
+      - Given panel open, When press Escape, Then panel closes
+      - Given long prompt, When displayed, Then text wraps with maintained highlights
+      - Given no spans found, When parsed, Then show "No variations detected. Try adding commas." message
+    
+    visual_specifications:
+      panel:
+        width: "480px"
+        animation: "slide-in 200ms ease-out"
+        background: "bg-zinc-900"
+        padding: "24px"
+      
+      loading_state:
+        spinner: "animate-spin 24px"
+        text: "Analyzing your prompt..."
+        delayed_text: "Still working..." (after 500ms)
+      
+      error_state:
+        background: "bg-red-900/20"
+        border: "border-red-700"
+        icon: "AlertCircle from lucide-react"
+        message_color: "text-red-200"
+      
+      spans:
+        locked:
+          background: "bg-zinc-800/30"
+          border: "border-zinc-700"
+          icon: "Lock from lucide-react"
+        randomized:
+          background: "bg-emerald-900/25"
+          border: "border-emerald-700"
+          icon: "Dice1 from lucide-react"
+        focused:
+          ring: "ring-2 ring-sky-500"
+      
+      icons:
+        size: "12px"
+        margin: "2px"
+    
+    definition_of_done:
+      - [ ] Panel component created with loading state
+      - [ ] Slide animation working smoothly
+      - [ ] Loading spinner with text displays
+      - [ ] Error state UI implemented
+      - [ ] Span highlighting working
+      - [ ] Icons displaying correctly
+      - [ ] Focus states working
+      - [ ] Responsive text wrapping
+      - [ ] Escape key closes panel
+      - [ ] All states visually distinct
+
+  - id: STORY-MVP-003
+    title: Live Preview Panel with Error Recovery
+    points: 3
+    priority: P0
+    week: 2
+    description: |
+      Implement live preview showing the assembled prompt with
+      randomization notation. This is the #1 requested feature
+      from user research. Must handle preview generation errors.
+    
+    research_backing:
+      - Live preview ranked 4.53/5 (highest priority)
+      - 66% rate as P0 (Must Have)
+      - "Preview is non-negotiable. I need to see what chaos I'm about to unleash." - P35
+      - "I can't tell if it's working until I run it. That's like cooking blindfolded." - P31
+    
+    ui_requirements:
+      - Dock at bottom of wizard panel
+      - Fixed height (120px)
+      - Monospace font for clarity
+      - Show {option1|option2} for randomized spans
+      - Update in real-time as spans change
+      - Visual separator from main panel
+      - Fallback display if preview generation fails
+    
+    acceptance_criteria:
+      - Given wizard open, When spans detected, Then preview shows assembled prompt
+      - Given locked span, When in preview, Then show as plain text
+      - Given randomized span, When in preview, Then show as {original} notation
+      - Given span toggled, When changed, Then preview updates immediately (<50ms)
+      - Given boundary adjusted, When moved, Then preview reflects new text
+      - Given multiple randomized spans, When shown, Then each has {} notation
+      - Given preview text, When displayed, Then use monospace font (font-mono)
+      - Given long preview, When displayed, Then wrap text appropriately
+      - Given preview generation fails, When error, Then show "Preview unavailable" message
+      - Given no spans exist, When viewing, Then show "Start by pasting a prompt above"
+      - Given performance issue, When update >100ms, Then debounce updates
+    
+    error_handling:
+      preview_failed:
+        message: "Preview temporarily unavailable"
+        fallback: "Show span count and types instead"
+      
+      update_lag:
+        threshold: "100ms"
+        action: "Debounce to 200ms intervals"
+    
+    preview_examples:
+      input: "A happy dog in a sunny park"
+      locked_all: "A happy dog in a sunny park"
+      one_random: "A happy dog in a {sunny|bright|shaded} park"
+      multi_random: "A {happy|playful|sleepy} dog in a {sunny|rainy|cloudy} park"
+      empty_state: "Start by pasting a prompt above"
+      error_state: "Preview temporarily unavailable (3 segments detected)"
+    
+    definition_of_done:
+      - [ ] Preview panel component created
+      - [ ] Real-time updates working <50ms
+      - [ ] {option} notation implemented
+      - [ ] Monospace font applied
+      - [ ] Text wrapping handled
+      - [ ] Error state display working
+      - [ ] Empty state message shown
+      - [ ] Visual design matches spec
+      - [ ] Debouncing implemented if needed
+      - [ ] Performance monitoring added
+
+  - id: STORY-MVP-004A
+    title: Basic Keyboard Navigation
+    points: 2
+    priority: P0
+    week: 2
+    description: |
+      Implement core keyboard navigation for accessibility and
+      basic interactions. This covers the essential shortcuts
+      without the complex boundary adjustment logic.
+    
+    research_backing:
+      - 48% rate keyboard shortcuts as P0
+      - "Keyboard shortcuts or death" - P07 (Power User)
+      - Accessibility requirement for keyboard-only users
+    
+    keyboard_map:
+      navigation:
+        Tab: "Move focus to next span"
+        Shift+Tab: "Move focus to previous span"
+      
+      actions:
+        Space: "Toggle lock/randomize on focused span"
+        Enter: "Edit current span (future feature)"
+        Escape: "Close wizard panel"
+        "?": "Show keyboard shortcuts help overlay"
+    
+    acceptance_criteria:
+      - Given span focused, When Space pressed, Then toggle lock/randomize state
+      - Given wizard open, When Tab pressed, Then focus next span (wrap to first)
+      - Given wizard open, When Shift+Tab pressed, Then focus previous span (wrap to last)
+      - Given any span focused, When state changes, Then preview updates immediately
+      - Given wizard open, When Escape pressed, Then panel closes
+      - Given wizard open, When "?" pressed, Then show shortcuts overlay
+      - Given shortcuts overlay open, When Escape pressed, Then close overlay only
+      - Given no spans exist, When Tab pressed, Then focus paste area
+      - Given keyboard navigation, When used, Then no focus traps exist
+      - Given screen reader active, When navigating, Then announce span text and state
+    
+    visual_feedback:
+      focused_span: "ring-2 ring-sky-500"
+      state_change: "Brief scale animation (scale-105 for 200ms)"
+      shortcuts_overlay: "Modal with dark background, white text"
+    
+    accessibility_requirements:
+      - aria-label on all interactive elements
+      - role="button" on spans
+      - aria-pressed for toggle state
+      - Focus visible at all times
+      - Announce state changes to screen readers
+    
+    definition_of_done:
+      - [ ] Tab navigation working with wrap
+      - [ ] Space toggle working with animation
+      - [ ] Escape closes panel
+      - [ ] Help overlay implemented
+      - [ ] No keyboard traps
+      - [ ] Screen reader announcements working
+      - [ ] Visual feedback for all actions
+      - [ ] Focus management correct
+      - [ ] Accessibility audit passed
+
+  - id: STORY-MVP-004B
+    title: Arrow Key Boundary Adjustment
+    points: 2
+    priority: P0
+    week: 2
+    description: |
+      Implement arrow key controls for adjusting segment boundaries.
+      This addresses the #2 pain point of identifying correct
+      variable boundaries in prompts.
+    
+    research_backing:
+      - "Identifying variable boundaries" - 31 mentions as pain point
+      - "Like surgery with boxing gloves" - P28 on boundary adjustment
+      - Power users need precise control over segments
+    
+    boundary_controls:
+      token_movement:
+        ArrowLeft: "Move left boundary left by 1 token"
+        ArrowRight: "Move right boundary right by 1 token"
+        Alt+ArrowLeft: "Move right boundary left by 1 token"
+        Alt+ArrowRight: "Move left boundary right by 1 token"
+      
+      word_movement:
+        Shift+ArrowLeft: "Move active boundary left by 1 word"
+        Shift+ArrowRight: "Move active boundary right by 1 word"
+    
+    acceptance_criteria:
+      - Given span focused, When ArrowLeft pressed, Then left boundary moves left 1 token
+      - Given span focused, When ArrowRight pressed, Then right boundary moves right 1 token
+      - Given span focused, When Alt+Arrow pressed, Then opposite boundary moves
+      - Given span focused, When Shift+Arrow pressed, Then boundary moves by word
+      - Given boundary at text start/end, When arrow pressed, Then prevent movement and flash red
+      - Given boundaries would overlap, When adjusted, Then prevent and show error flash
+      - Given boundary adjusted, When moved, Then preview updates immediately
+      - Given token is punctuation, When adjusting, Then treat as separate token
+      - Given "hello, world", When parsing tokens, Then recognize 3 tokens (hello + , + world)
+      - Given boundary being adjusted, When moving, Then show dotted line indicator
+      - Given adjustment would create empty span, When attempted, Then prevent with error
+    
+    collision_detection:
+      overlap_check: "Before each move, check adjacent span boundaries"
+      minimum_span: "At least 1 token required"
+      error_feedback: "Red flash on boundary + shake animation"
+    
+    visual_indicators:
+      adjusting: "Dotted line at boundary being moved"
+      valid_move: "Green flash on boundary"
+      invalid_move: "Red flash + shake animation"
+      token_highlight: "Subtle highlight of token under consideration"
+    
+    token_definition:
+      - Word: continuous letters/numbers
+      - Punctuation: , . ! ? ; : ( ) [ ] { } " '
+      - Space: treated as separator, not token
+      - Examples:
+        - "hello world" = 2 tokens
+        - "hello, world" = 3 tokens
+        - "it's" = 1 token
+        - "test-case" = 1 token
+    
+    definition_of_done:
+      - [ ] Arrow key handlers implemented
+      - [ ] Token detection working correctly
+      - [ ] Word detection for Shift+Arrow
+      - [ ] Collision detection preventing overlaps
+      - [ ] Visual feedback for adjustments
+      - [ ] Error states handled gracefully
+      - [ ] Preview updates on boundary change
+      - [ ] Performance <50ms for adjustment
+      - [ ] Edge case handling complete
+
+  - id: STORY-MVP-005
+    title: PSG Node Generation with Validation
+    points: 3
+    priority: P0
+    week: 2
+    description: |
+      Convert the configured spans into valid PSG nodes that
+      can be imported into the main graph. Must handle validation
+      errors and ensure unique node IDs.
+    
+    research_backing:
+      - Users want to go from "prompt to preset" quickly
+      - Current manual process takes 32 minutes average
+      - Must feel like "magic, even if it's not perfect" - P48
+    
+    technical_requirements:
+      - Generate TextBlock for locked spans
+      - Generate WeightedChoice for randomized spans
+      - Create single Concat node joining all
+      - Connect Concat to Output node
+      - Calculate reasonable node positions
+      - Include metadata for provenance
+      - Generate unique IDs using timestamp + random suffix
+    
+    node_generation_rules:
+      locked_span:
+        type: "TextBlock"
+        data: "{ value: span.text }"
+        meta: "{ source: 'wizard', confidence: span.confidence }"
+        id_format: "text_[timestamp]_[random(4)]"
+      
+      randomized_span:
+        type: "WeightedChoice"
+        data: "{ choices: [{ text: span.text, weight: 1 }] }"
+        meta: "{ source: 'wizard', editable: true }"
+        id_format: "choice_[timestamp]_[random(4)]"
+      
+      concat:
+        type: "Concat"
+        data: "{ separator: '' }"
+        connections: "all spans in order"
+        id_format: "concat_[timestamp]_[random(4)]"
+      
+      output:
+        type: "Output"
+        data: "{ template: '{input}' }"
+        connection: "from concat"
+        id_format: "output_[timestamp]_[random(4)]"
+    
+    acceptance_criteria:
+      - Given locked span, When converted, Then create TextBlock with exact text
+      - Given randomized span, When converted, Then create WeightedChoice with original text
+      - Given multiple spans, When converted, Then connect all to single Concat
+      - Given Concat created, When connected, Then link to Output node
+      - Given nodes generated, When positioned, Then no overlapping (50px min spacing)
+      - Given PSG generated, When validated, Then pass graphSchema validation
+      - Given validation fails, When error, Then show specific error message and keep wizard open
+      - Given duplicate ID generated, When detected, Then regenerate with new random suffix
+      - Given metadata included, When generated, Then track wizard source and timestamp
+      - Given "Generate" clicked, When complete, Then close wizard panel
+      - Given nodes added to graph, When displayed, Then appear centered in viewport
+      - Given generation fails, When error, Then show "Could not create nodes. Please try again."
+    
+    error_handling:
+      validation_failed:
+        message: "Generated nodes invalid: {specific_error}"
+        action: "Keep wizard open, highlight problem span"
+      
+      id_collision:
+        detection: "Check against existing graph nodes"
+        resolution: "Regenerate with new random suffix"
+      
+      graph_integration_failed:
+        message: "Could not add nodes to graph. Please try again."
+        action: "Keep wizard open, allow retry"
+    
+    id_generation:
+      format: "[type]_[timestamp]_[random]"
+      timestamp: "Date.now()"
+      random: "Math.random().toString(36).substr(2, 4)"
+      collision_check: "Verify unique before adding to graph"
+    
+    validation_requirements:
+      - All nodes have unique IDs
+      - All edges properly connected
+      - Graph has exactly one Output
+      - No circular dependencies
+      - PSG format version 2.0.0
+      - Node positions are numbers
+      - All required fields present
+    
+    definition_of_done:
+      - [ ] Node generation logic implemented
+      - [ ] Unique ID generation working
+      - [ ] TextBlock creation working
+      - [ ] WeightedChoice creation working
+      - [ ] Concat assembly working
+      - [ ] Output connection working
+      - [ ] Position calculation implemented
+      - [ ] PSG validation passing
+      - [ ] Error handling for all failure modes
+      - [ ] Integration with main graph working
+      - [ ] Wizard closes after success
+      - [ ] Retry mechanism for failures
+
+sprint_summary:
+  week_1:
+    focus: "Parser and UI Foundation"
+    stories: [STORY-MVP-001, STORY-MVP-002]
+    points: 10
+    deliverable: "Working panel with parsed highlights and error handling"
+  
+  week_2:
+    focus: "Preview, Keyboard, and Generation"
+    stories: [STORY-MVP-003, STORY-MVP-004A, STORY-MVP-004B, STORY-MVP-005]
+    points: 10
+    deliverable: "Complete wizard flow with all interactions"
+  
+  total_points: 20
+  
+  success_metrics:
+    - 50+ users try in first week
+    - <2 minute time to first preset
+    - 60% parse acceptance rate
+    - 30% return usage in week 1
+    - <5% error rate in production
+
+risks_and_mitigations:
+  - risk: "Arrow key complexity"
+    mitigation: "Start with token movement only, add word movement if time permits"
+  
+  - risk: "Parse accuracy below 60%"
+    mitigation: "Allow manual segment creation as fallback"
+  
+  - risk: "Performance issues with preview"
+    mitigation: "Implement debouncing from the start"
+  
+  - risk: "20 points too ambitious"
+    mitigation: "Arrow keys (4B) can be deferred if needed"
+
+dependencies:
+  external_packages:
+    - name: "lucide-react"
+      version: "latest"
+      purpose: "Icons for UI"
+      
+    - name: "Worker setup"
+      config: "Webpack/Vite worker configuration"
+      purpose: "Web Worker for parsing"
+  
+  existing_code:
+    - "packages/core/graphSchema.ts" # For validation
+    - "packages/core/runtime/nodes/*" # Node type definitions
+    - "React Flow integration" # For adding nodes to graph
+
+team_notes:
+  - Daily standups at 9:30 AM
+  - Pair programming for arrow key implementation
+  - User feedback collection from day 1
+  - Performance monitoring critical
+  - Accessibility review before launch
+  - Integration testing between stories
+  - Consider feature flag for rollout
+
+testing_requirements:
+  unit_tests:
+    - Parser with all edge cases
+    - Keyboard event handlers
+    - Node generation logic
+    - Boundary collision detection
+  
+  integration_tests:
+    - Parser → UI → Preview flow
+    - Keyboard → Preview updates
+    - Generation → Graph integration
+  
+  e2e_tests:
+    - Complete user journey
+    - Error recovery flows
+    - Keyboard-only navigation
+  
+  performance_tests:
+    - Parse time for various prompt sizes
+    - Preview update latency
+    - Memory usage over time

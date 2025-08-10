@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
+    "isolatedModules": true,
     "baseUrl": "."
   },
   "include": ["src", "tests", "scripts/**/*.d.ts", "scripts/**/*.d.cts"]

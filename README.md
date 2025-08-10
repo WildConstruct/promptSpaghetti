@@ -111,6 +111,9 @@ For the best development experience:
 4. Run `pnpm dev` in the integrated terminal
 
 ## 📖 Usage
+Related documentation:
+- Supabase storage setup: `docs/setup/supabase-storage.md`
+- In-app file browser epic stories: `docs/stories/`
 
 ### Creating Your First Graph
 
@@ -199,7 +202,45 @@ cp .env.example .env
 # Edit with your values
 ENABLE_CORRECTIONS=true
 VITE_API_BASE_URL=http://localhost:8000
+
+# Supabase (Storage for .psg)
+# Choose the pair matching your build tool (Next.js-style or Vite-style)
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+
+# Feature flags
+NEXT_PUBLIC_FEATURE_SUPABASE=1   # set 0 to disable Supabase features globally
+NEXT_PUBLIC_FEATURE_DEV_USER=0   # set 1 to enable local dev userId stub
 ```
+
+## 📦 Graph Manifest & Demo Graphs
+
+- __Public graphs folder__: `packages/asset-browser/public/graphs/`
+- __Add demo graphs__: drop `*.psg` files into that folder.
+- __Generate manifest__: creates `public/graphs/manifest.json` used by the Asset Browser.
+
+```bash
+# From repo root
+pnpm run generate:manifest
+
+# Or build the package (runs prebuild -> generator)
+pnpm --filter @prompt/asset-browser build
+```
+
+- __Runtime__: `packages/asset-browser/src/services/GraphManifestLoader.ts` loads `/graphs/manifest.json`.
+- __Validation__: the generator validates `.psg` via `packages/core/utils/psgCodec.ts` when available; invalid files are skipped with warnings.
+- __Sample demos included__: `city-plaza.psg`, `forest-path.psg`, `medieval-market.psg` in `packages/asset-browser/public/graphs/`.
+- __CI__: see workflow step "Generate graph manifest" in `.github/workflows/ci.yml`.
+
+### Tips: Demos, Local Files, Supabase
+
+- __Open demos__: uses `/graphs/manifest.json` from the public folder.
+- __Open local files__: load `.psg` directly via the file dialog (no manifest needed).
+- __Save locally__: exports `.psg` to your machine.
+- __Save to Supabase__: requires `NEXT_PUBLIC_SUPABASE_URL/ANON_KEY` or `VITE_SUPABASE_URL/ANON_KEY` set; bucket path convention `users/{userId}/graphs/*`.
+- For bucket/policy setup, see `docs/setup/supabase-storage.md`.
 
 ## 📊 Performance
 

@@ -1,0 +1,43 @@
+{
+  "name": "@prompt/asset-browser",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "prebuild": "node scripts/build/generate-graph-manifest.mjs",
+    "dev": "vite",
+    "build": "tsc -p tsconfig.build.json && vite build",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "jest -c jest.config.cjs --passWithNoTests"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@promptscape/core": "workspace:*",
+    "comlink": "^4.4.1",
+    "fuse.js": "^7.0.0",
+    "react-window": "^1.8.10",
+    "zod": "^3.25.76",
+    "zustand": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/react-window": "^1.8.8",
+    "@vitejs/plugin-react": "^4.3.1",
+    "typescript": "^5.0.2",
+    "vite": "^5.3.0"
+  }
+}
