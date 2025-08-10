@@ -3,20 +3,12 @@
  * Combines Preview and Asset Browser in a collapsible tabbed interface
  */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { PreviewPanel } from './preview/PreviewPanel';
-import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
-import { AssetLibraryErrorBoundary } from './asset-library/AssetLibraryErrorBoundary';
+import { AssetBrowserLoader } from './AssetBrowserLoader';
 import { PreviewEngine } from './preview/PreviewEngine';
 import { Preset } from './asset-library/types';
 import './TabbedSidePanel.css';
-
-// Dynamic import for the asset browser
-let TabbedAssetBrowser: any = null;
-let UserProvider: any = null;
-
-// Fallback component alias
-const AssetLibraryV2Fallback = AssetLibraryV2;
 
 export interface TabbedSidePanelProps {
   previewEngine: PreviewEngine | null;
@@ -41,45 +33,6 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
-  const [componentsLoaded, setComponentsLoaded] = useState(false);
-  const [loadError, setLoadError] = useState<string>('');
-
-  // Load the asset browser components dynamically
-  useEffect(() => {
-    // Only attempt to load in browser environment
-    if (typeof window !== 'undefined') {
-      // Skip trying to load asset browser in production for now
-      // The package needs to be properly bundled first
-      const isProduction = window.location.hostname.includes('netlify.app') || 
-                          window.location.hostname.includes('netlify.live') ||
-                          window.location.hostname !== 'localhost';
-      
-      if (isProduction) {
-        console.log('[TabbedSidePanel] Production environment detected, using fallback asset library');
-        setComponentsLoaded(false);
-        setLoadError('Using local asset library');
-      } else {
-        // Try to load the asset browser package in development
-        const loadAssetBrowser = async () => {
-          try {
-            const moduleName = '@prompt' + '/asset-browser';
-            console.log('[TabbedSidePanel] Attempting to load asset browser from:', moduleName);
-            const module = await import(/* @vite-ignore */ moduleName);
-            console.log('[TabbedSidePanel] Asset browser module loaded:', module);
-            TabbedAssetBrowser = module.TabbedAssetBrowser;
-            UserProvider = module.UserProvider;
-            setComponentsLoaded(true);
-            console.log('[TabbedSidePanel] Asset browser components loaded successfully');
-          } catch (error) {
-            console.error('[TabbedSidePanel] Failed to load asset browser:', error);
-            setLoadError('Using local asset library');
-            setComponentsLoaded(false);
-          }
-        };
-        loadAssetBrowser();
-      }
-    }
-  }, []);
 
   const handleTabClick = useCallback((tab: TabType) => {
     setActiveTab(activeTab === tab ? null : tab);
@@ -132,43 +85,10 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         
         {activeTab === 'assets' && (
           <div className="assets-container">
-            <AssetLibraryErrorBoundary>
-              {(() => {
-                console.log('[TabbedSidePanel] Rendering assets tab:', {
-                  componentsLoaded,
-                  hasTabbedAssetBrowser: !!TabbedAssetBrowser,
-                  hasUserProvider: !!UserProvider,
-                  loadError
-                });
-                
-                if (componentsLoaded && TabbedAssetBrowser && UserProvider) {
-                  console.log('[TabbedSidePanel] Rendering new asset browser');
-                  return (
-                    <UserProvider>
-                      <TabbedAssetBrowser 
-                        onInsert={(preset: any) => {
-                          // Convert the preset format if needed
-                          if (preset?.data) {
-                            onPresetSelect?.(preset);
-                            onPresetDrag?.(preset);
-                          }
-                        }}
-                      />
-                    </UserProvider>
-                  );
-                } else {
-                  console.log('[TabbedSidePanel] Falling back to AssetLibraryV2');
-                  return (
-                    <AssetLibraryV2Fallback 
-                      position="right"
-                      onPresetDrag={onPresetDrag}
-                      onPresetSelect={onPresetSelect}
-                      defaultExpanded={true}
-                    />
-                  );
-                }
-              })()}
-            </AssetLibraryErrorBoundary>
+            <AssetBrowserLoader
+              onPresetDrag={onPresetDrag}
+              onPresetSelect={onPresetSelect}
+            />
           </div>
         )}
         
