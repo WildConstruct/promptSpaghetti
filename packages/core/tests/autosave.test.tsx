@@ -31,7 +31,9 @@ const mockGraphStore = {
 };
 
 // Mock persistence functions
-const mockPersistenceStorage = persistenceStorage as jest.Mocked<typeof persistenceStorage>;
+const mockPersistenceStorage = persistenceStorage as jest.Mocked<
+  typeof persistenceStorage
+>;
 const mockUsePersistenceEnabled = jest.fn(() => true);
 
 // Set up mocks
@@ -59,7 +61,7 @@ describe('useAutosave Hook', () => {
   describe('Basic Functionality', () => {
     it('should initialize with saved status', () => {
       const { result } = renderHook(() => useAutosave());
-      
+
       expect(result.current.status).toBe('saved');
       expect(result.current.lastSaved).toBeNull();
       expect(result.current.error).toBeNull();
@@ -68,16 +70,16 @@ describe('useAutosave Hook', () => {
 
     it('should respect enabled option', () => {
       const { result } = renderHook(() => useAutosave({ enabled: false }));
-      
+
       expect(result.current.isEnabled).toBe(false);
       expect(mockGraphStore.subscribe).not.toHaveBeenCalled();
     });
 
     it('should respect persistence feature flag', () => {
       mockUsePersistenceEnabled.mockReturnValue(false);
-      
+
       const { result } = renderHook(() => useAutosave());
-      
+
       expect(result.current.isEnabled).toBe(false);
       expect(mockGraphStore.subscribe).not.toHaveBeenCalled();
     });
@@ -86,7 +88,7 @@ describe('useAutosave Hook', () => {
   describe('Debounced Saving', () => {
     it('should debounce save calls', async () => {
       const { result } = renderHook(() => useAutosave({ debounceMs: 1000 }));
-      
+
       // Trigger multiple saves
       act(() => {
         // Simulate store changes
@@ -95,21 +97,21 @@ describe('useAutosave Hook', () => {
         subscribeCallback();
         subscribeCallback();
       });
-      
+
       expect(result.current.status).toBe('unsaved');
-      
+
       // Advance time but not enough to trigger save
       act(() => {
         jest.advanceTimersByTime(500);
       });
-      
+
       expect(mockPersistenceStorage.setItem).not.toHaveBeenCalled();
-      
+
       // Advance time to trigger save
       act(() => {
         jest.advanceTimersByTime(500);
       });
-      
+
       await waitFor(() => {
         expect(mockPersistenceStorage.setItem).toHaveBeenCalledTimes(1);
       });
@@ -117,28 +119,28 @@ describe('useAutosave Hook', () => {
 
     it('should cancel pending saves when saveNow is called', async () => {
       const { result } = renderHook(() => useAutosave({ debounceMs: 5000 }));
-      
+
       // Trigger debounced save
       act(() => {
         const subscribeCallback = mockGraphStore.subscribe.mock.calls[0][1];
         subscribeCallback();
       });
-      
+
       expect(result.current.status).toBe('unsaved');
-      
+
       // Call saveNow before debounce completes
       await act(async () => {
         await result.current.saveNow();
       });
-      
+
       expect(mockPersistenceStorage.setItem).toHaveBeenCalledTimes(1);
       expect(result.current.status).toBe('saved');
-      
+
       // Advance timers to when debounced save would trigger
       act(() => {
         jest.advanceTimersByTime(5000);
       });
-      
+
       // Should still only have one save call
       expect(mockPersistenceStorage.setItem).toHaveBeenCalledTimes(1);
     });
@@ -147,14 +149,14 @@ describe('useAutosave Hook', () => {
   describe('Save Status Tracking', () => {
     it('should update status during save lifecycle', async () => {
       const { result } = renderHook(() => useAutosave());
-      
+
       expect(result.current.status).toBe('saved');
-      
+
       // Trigger save
       await act(async () => {
         await result.current.saveNow();
       });
-      
+
       expect(result.current.status).toBe('saved');
       expect(result.current.lastSaved).toBeInstanceOf(Date);
     });
@@ -163,14 +165,14 @@ describe('useAutosave Hook', () => {
       mockPersistenceStorage.setItem.mockImplementation(() => {
         throw new Error('Save failed');
       });
-      
+
       const onError = jest.fn();
       const { result } = renderHook(() => useAutosave({ onError }));
-      
+
       await act(async () => {
         await result.current.saveNow();
       });
-      
+
       expect(result.current.status).toBe('error');
       expect(result.current.error).toBe('Save failed');
       expect(onError).toHaveBeenCalledWith(expect.any(Error));
@@ -182,14 +184,14 @@ describe('useAutosave Hook', () => {
         error.name = 'QuotaExceededError';
         throw error;
       });
-      
+
       const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
       const { result } = renderHook(() => useAutosave());
-      
+
       await act(async () => {
         await result.current.saveNow();
       });
-      
+
       expect(result.current.status).toBe('error');
       expect(result.current.error).toContain('Storage quota exceeded');
       expect(dispatchEventSpy).toHaveBeenCalledWith(
@@ -197,7 +199,7 @@ describe('useAutosave Hook', () => {
           type: 'storage-quota-exceeded'
         })
       );
-      
+
       dispatchEventSpy.mockRestore();
     });
   });
@@ -206,7 +208,7 @@ describe('useAutosave Hook', () => {
     it('should detect conflicts from storage events', () => {
       const onConflict = jest.fn();
       const { result } = renderHook(() => useAutosave({ onConflict }));
-      
+
       // Simulate storage event from another tab
       const storageEvent = new StorageEvent('storage', {
         key: 'promptgraph:state:v1',
@@ -216,11 +218,11 @@ describe('useAutosave Hook', () => {
           version: 5
         })
       });
-      
+
       act(() => {
         window.dispatchEvent(storageEvent);
       });
-      
+
       expect(result.current.conflictDetected).toBe(true);
       expect(result.current.remoteVersion).toBe(5);
       expect(onConflict).toHaveBeenCalledWith(0, 5);
@@ -232,19 +234,19 @@ describe('useAutosave Hook', () => {
         value: { reload: reloadSpy },
         writable: true
       });
-      
+
       const { result } = renderHook(() => useAutosave());
-      
+
       act(() => {
         result.current.acceptRemoteChanges();
       });
-      
+
       expect(reloadSpy).toHaveBeenCalled();
     });
 
     it('should resolve conflicts by keeping local changes', async () => {
       const { result } = renderHook(() => useAutosave());
-      
+
       // Set up conflict state
       const storageEvent = new StorageEvent('storage', {
         key: 'promptgraph:state:v1',
@@ -254,18 +256,18 @@ describe('useAutosave Hook', () => {
           version: 5
         })
       });
-      
+
       act(() => {
         window.dispatchEvent(storageEvent);
       });
-      
+
       expect(result.current.conflictDetected).toBe(true);
-      
+
       // Keep local changes
       await act(async () => {
         await result.current.keepLocalChanges();
       });
-      
+
       expect(result.current.conflictDetected).toBe(false);
       expect(mockPersistenceStorage.setItem).toHaveBeenCalled();
     });
@@ -273,58 +275,60 @@ describe('useAutosave Hook', () => {
 
   describe('Performance Optimization', () => {
     it('should use requestIdleCallback for large graphs', async () => {
-      const requestIdleCallbackSpy = jest.fn((callback) => {
+      const requestIdleCallbackSpy = jest.fn(callback => {
         callback({ timeRemaining: () => 50 });
         return 1;
       });
-      
+
       window.requestIdleCallback = requestIdleCallbackSpy;
-      
+
       mockGraphStore.getState.mockReturnValue({
         nodes: new Array(1001).fill({ id: 'node', type: 'test' }),
         edges: []
       });
-      
-      const { result } = renderHook(() => useAutosave({ useIdleCallback: true }));
-      
+
+      const { result } = renderHook(() =>
+        useAutosave({ useIdleCallback: true })
+      );
+
       await act(async () => {
         await result.current.saveNow();
       });
-      
+
       expect(requestIdleCallbackSpy).toHaveBeenCalled();
     });
 
     it('should measure save performance', async () => {
       const dispatchEventSpy = jest.spyOn(window, 'dispatchEvent');
       const { result } = renderHook(() => useAutosave());
-      
+
       await act(async () => {
         await result.current.saveNow();
       });
-      
+
       expect(dispatchEventSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           type: 'autosave-performance'
         })
       );
-      
+
       dispatchEventSpy.mockRestore();
     });
 
     it('should prevent concurrent saves', async () => {
       const { result } = renderHook(() => useAutosave());
-      
+
       // Start multiple saves concurrently
       const saves = Promise.all([
         result.current.saveNow(),
         result.current.saveNow(),
         result.current.saveNow()
       ]);
-      
+
       await act(async () => {
         await saves;
       });
-      
+
       // Should only save once despite multiple calls
       expect(mockPersistenceStorage.setItem).toHaveBeenCalledTimes(1);
     });
@@ -339,18 +343,18 @@ describe('AutosaveIndicator Component', () => {
 
   it('should render save status', () => {
     render(<AutosaveIndicator />);
-    
+
     expect(screen.getByRole('status')).toBeInTheDocument();
     expect(screen.getByText('Saved')).toBeInTheDocument();
   });
 
   it('should show relative timestamp', () => {
     jest.useRealTimers(); // Use real timers for this test
-    
+
     // Mock hook to return a specific lastSaved date
     const mockDate = new Date();
     mockDate.setMinutes(mockDate.getMinutes() - 5);
-    
+
     jest.spyOn(require('../hooks/useAutosave'), 'useAutosave').mockReturnValue({
       status: 'saved',
       lastSaved: mockDate,
@@ -362,9 +366,9 @@ describe('AutosaveIndicator Component', () => {
       acceptRemoteChanges: jest.fn(),
       keepLocalChanges: jest.fn()
     });
-    
+
     render(<AutosaveIndicator showTimestamp={true} />);
-    
+
     expect(screen.getByText(/5 minutes ago/)).toBeInTheDocument();
   });
 
@@ -380,11 +384,13 @@ describe('AutosaveIndicator Component', () => {
       acceptRemoteChanges: jest.fn(),
       keepLocalChanges: jest.fn()
     });
-    
+
     render(<AutosaveIndicator />);
-    
+
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText(/Changes Detected in Another Tab/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Changes Detected in Another Tab/)
+    ).toBeInTheDocument();
     expect(screen.getByText('Use Their Changes')).toBeInTheDocument();
     expect(screen.getByText('Keep My Changes')).toBeInTheDocument();
   });
@@ -401,15 +407,15 @@ describe('AutosaveIndicator Component', () => {
       acceptRemoteChanges: jest.fn(),
       keepLocalChanges: jest.fn()
     });
-    
+
     const { container } = render(<AutosaveIndicator />);
-    
+
     expect(container.firstChild).toBeNull();
   });
 
   it('should apply correct position styles', () => {
     render(<AutosaveIndicator position="bottom-left" />);
-    
+
     const indicator = screen.getByRole('status');
     expect(indicator).toHaveStyle({
       bottom: '20px',

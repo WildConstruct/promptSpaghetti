@@ -39,7 +39,7 @@ export class LRUCache<T = any> {
    */
   get(key: string): T | undefined {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       this.stats.misses++;
       return undefined;
@@ -55,7 +55,7 @@ export class LRUCache<T = any> {
     // Move to end (most recently used)
     this.cache.delete(key);
     this.cache.set(key, entry);
-    
+
     this.stats.hits++;
     return entry.value;
   }
@@ -73,11 +73,11 @@ export class LRUCache<T = any> {
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
       const evictedEntry = this.cache.get(firstKey);
-      
+
       if (evictedEntry && this.onEvict) {
         this.onEvict(firstKey, evictedEntry.value);
       }
-      
+
       this.cache.delete(firstKey);
       this.stats.evictions++;
     }
@@ -98,15 +98,15 @@ export class LRUCache<T = any> {
    */
   has(key: string): boolean {
     const entry = this.cache.get(key);
-    
+
     if (!entry) return false;
-    
+
     // Check expiration
     if (entry.ttl && Date.now() - entry.timestamp > entry.ttl) {
       this.cache.delete(key);
       return false;
     }
-    
+
     return true;
   }
 
@@ -135,8 +135,9 @@ export class LRUCache<T = any> {
    * Get cache statistics
    */
   getStats() {
-    const hitRate = this.stats.hits / (this.stats.hits + this.stats.misses) || 0;
-    
+    const hitRate =
+      this.stats.hits / (this.stats.hits + this.stats.misses) || 0;
+
     return {
       ...this.stats,
       hitRate: (hitRate * 100).toFixed(2) + '%',
@@ -170,14 +171,14 @@ export class LRUCache<T = any> {
   invalidatePattern(pattern: string): number {
     const regex = new RegExp(pattern.replace(/\*/g, '.*'));
     let invalidated = 0;
-    
+
     for (const key of this.cache.keys()) {
       if (regex.test(key)) {
         this.cache.delete(key);
         invalidated++;
       }
     }
-    
+
     return invalidated;
   }
 }

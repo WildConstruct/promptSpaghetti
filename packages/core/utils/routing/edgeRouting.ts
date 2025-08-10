@@ -28,7 +28,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
   private autoRoutingConfig?: AutoRoutingConfig;
   private routingQueue: Set<string> = new Set();
   private cacheVersion = 0;
-  
+
   // Performance metrics
   private metrics = {
     totalCalculations: 0,
@@ -36,7 +36,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
     totalCalculationTime: 0,
     workerCalculations: 0
   };
-  
+
   constructor() {
     // Initialize with performance infrastructure
     const { cache } = getPerformanceInfrastructure();
@@ -45,7 +45,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       this.loadCachedPaths();
     }
   }
-  
+
   /**
    * Set routing configuration for an edge
    */
@@ -54,24 +54,27 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
     // Invalidate cache for this edge
     this.invalidateEdgeCache(edgeId);
   }
-  
+
   /**
    * Get routing configuration for an edge
    */
   getRoutingConfig(edgeId: string): EdgeRoutingConfig | null {
     return this.routingConfigs.get(edgeId) || null;
   }
-  
+
   /**
    * Calculate path for a single edge with caching
    */
-  async calculatePath(edge: Edge, nodes: Node[]): Promise<PathCalculationResult> {
+  async calculatePath(
+    edge: Edge,
+    nodes: Node[]
+  ): Promise<PathCalculationResult> {
     const startTime = performance.now();
     const { cache, workerPool, perfMonitor } = getPerformanceInfrastructure();
-    
+
     // Generate cache key
     const cacheKey = this.generateCacheKey(edge, nodes);
-    
+
     // Check cache first
     if (cache) {
       const cached = await cache.get<PathCalculationResult>(cacheKey);
@@ -87,21 +90,22 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
         };
       }
     }
-    
+
     // Get routing configuration
     const config = this.routingConfigs.get(edge.id) || {
       algorithm: 'straight' as EdgeRoutingAlgorithm,
       controlPoints: [],
       style: {}
     };
-    
+
     // Determine if we should use worker
-    const shouldUseWorker = config.performance?.useWorkers !== false && 
-                           workerPool && 
-                           (nodes.length > 50 || config.algorithm === 'orthogonal');
-    
+    const shouldUseWorker =
+      config.performance?.useWorkers !== false &&
+      workerPool &&
+      (nodes.length > 50 || config.algorithm === 'orthogonal');
+
     let result: PathCalculationResult;
-    
+
     if (shouldUseWorker) {
       // Calculate in worker for complex paths
       result = await this.calculateInWorker(edge, nodes, config);
@@ -110,59 +114,62 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       // Calculate inline for simple paths
       result = await this.calculateInline(edge, nodes, config);
     }
-    
+
     // Update metrics
     const calculationTime = performance.now() - startTime;
     this.metrics.totalCalculations++;
     this.metrics.totalCalculationTime += calculationTime;
-    
+
     result.performance.calculationTime = calculationTime;
-    
+
     // Cache the result
     if (cache && config.performance?.useCaching !== false) {
       await cache.set(cacheKey, result, { ttl: 60000 }); // 1 minute TTL
     }
-    
+
     // Store in local cache
     this.pathCache.set(edge.id, result);
-    
+
     // Track performance
     perfMonitor?.record('edge:path:calculation', calculationTime);
-    
+
     return result;
   }
-  
+
   /**
    * Calculate paths for multiple edges in parallel
    */
-  async calculateAllPaths(edges: Edge[], nodes: Node[]): Promise<Map<string, PathCalculationResult>> {
+  async calculateAllPaths(
+    edges: Edge[],
+    nodes: Node[]
+  ): Promise<Map<string, PathCalculationResult>> {
     const { perfMonitor } = getPerformanceInfrastructure();
     const startTime = performance.now();
-    
+
     perfMonitor?.mark('edge:batch:start');
-    
+
     // Process edges in parallel batches
     const batchSize = 10;
     const results = new Map<string, PathCalculationResult>();
-    
+
     for (let i = 0; i < edges.length; i += batchSize) {
       const batch = edges.slice(i, i + batchSize);
       const batchResults = await Promise.all(
         batch.map(edge => this.calculatePath(edge, nodes))
       );
-      
+
       batch.forEach((edge, index) => {
         results.set(edge.id, batchResults[index]);
       });
     }
-    
+
     perfMonitor?.measureMarks('edge:batch:start', 'edge:batch:end');
     perfMonitor?.record('edge:batch:size', edges.length);
     perfMonitor?.record('edge:batch:time', performance.now() - startTime);
-    
+
     return results;
   }
-  
+
   /**
    * Add control point to edge
    */
@@ -173,11 +180,15 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       this.invalidateEdgeCache(edgeId);
     }
   }
-  
+
   /**
    * Update control point position
    */
-  updateControlPoint(edgeId: string, pointId: string, position: XYPosition): void {
+  updateControlPoint(
+    edgeId: string,
+    pointId: string,
+    position: XYPosition
+  ): void {
     const config = this.routingConfigs.get(edgeId);
     if (config) {
       const point = config.controlPoints.find(cp => cp.id === pointId);
@@ -187,18 +198,20 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       }
     }
   }
-  
+
   /**
    * Remove control point
    */
   removeControlPoint(edgeId: string, pointId: string): void {
     const config = this.routingConfigs.get(edgeId);
     if (config) {
-      config.controlPoints = config.controlPoints.filter(cp => cp.id !== pointId);
+      config.controlPoints = config.controlPoints.filter(
+        cp => cp.id !== pointId
+      );
       this.invalidateEdgeCache(edgeId);
     }
   }
-  
+
   /**
    * Enable auto-routing
    */
@@ -208,7 +221,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       this.startAutoRouting();
     }
   }
-  
+
   /**
    * Disable auto-routing
    */
@@ -217,7 +230,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       this.autoRoutingConfig.enabled = false;
     }
   }
-  
+
   /**
    * Recalculate routes for specified edges
    */
@@ -229,30 +242,32 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       this.pathCache.clear();
       this.cacheVersion++;
     }
-    
+
     // Process routing queue
     await this.processRoutingQueue();
   }
-  
+
   /**
    * Get cache statistics
    */
   getCacheStats() {
-    const hitRate = this.metrics.totalCalculations > 0
-      ? (this.metrics.cacheHits / this.metrics.totalCalculations) * 100
-      : 0;
-    
-    const avgCalculationTime = this.metrics.totalCalculations > 0
-      ? this.metrics.totalCalculationTime / this.metrics.totalCalculations
-      : 0;
-    
+    const hitRate =
+      this.metrics.totalCalculations > 0
+        ? (this.metrics.cacheHits / this.metrics.totalCalculations) * 100
+        : 0;
+
+    const avgCalculationTime =
+      this.metrics.totalCalculations > 0
+        ? this.metrics.totalCalculationTime / this.metrics.totalCalculations
+        : 0;
+
     return {
       size: this.pathCache.size,
       hitRate,
       avgCalculationTime
     };
   }
-  
+
   /**
    * Clear all caches
    */
@@ -264,7 +279,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       cache.invalidatePattern('edge:path:*');
     }
   }
-  
+
   /**
    * Calculate path inline (non-worker)
    */
@@ -274,18 +289,18 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
     config: EdgeRoutingConfig
   ): Promise<PathCalculationResult> {
     const algorithm = RoutingAlgorithmFactory.getAlgorithm(config.algorithm);
-    
+
     // Get source and target positions
     const sourceNode = nodes.find(n => n.id === edge.source);
     const targetNode = nodes.find(n => n.id === edge.target);
-    
+
     if (!sourceNode || !targetNode) {
       throw new Error(`Cannot find source or target node for edge ${edge.id}`);
     }
-    
+
     const sourcePos = this.getEdgePosition(sourceNode, edge.sourceHandle);
     const targetPos = this.getEdgePosition(targetNode, edge.targetHandle);
-    
+
     // Calculate path
     const path = await algorithm.calculatePath(
       sourcePos,
@@ -293,17 +308,19 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       config.controlPoints,
       config.constraints
     );
-    
+
     // Calculate control points if not provided
-    const controlPoints = config.controlPoints.length > 0
-      ? config.controlPoints
-      : algorithm.calculateControlPoints(sourcePos, targetPos, config);
-    
+    const controlPoints =
+      config.controlPoints.length > 0
+        ? config.controlPoints
+        : algorithm.calculateControlPoints(sourcePos, targetPos, config);
+
     // Validate path for collisions if needed
-    const collision = config.constraints?.avoidNodes || config.constraints?.avoidEdges
-      ? algorithm.validatePath(path, nodes)
-      : undefined;
-    
+    const collision =
+      config.constraints?.avoidNodes || config.constraints?.avoidEdges
+        ? algorithm.validatePath(path, nodes)
+        : undefined;
+
     return {
       path,
       controlPoints,
@@ -317,7 +334,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       }
     };
   }
-  
+
   /**
    * Calculate path in worker
    */
@@ -327,12 +344,12 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
     config: EdgeRoutingConfig
   ): Promise<PathCalculationResult> {
     const { workerPool } = getPerformanceInfrastructure();
-    
+
     if (!workerPool) {
       // Fallback to inline calculation
       return this.calculateInline(edge, nodes, config);
     }
-    
+
     const task: EdgeRoutingWorkerTask = {
       type: 'CALCULATE_EDGE_PATH',
       data: {
@@ -347,14 +364,15 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
         config
       }
     };
-    
+
     const result = await workerPool.execute<EdgeRoutingWorkerResult>(task);
-    
+
     return {
       path: result.path,
       controlPoints: result.controlPoints,
       length: this.calculatePathLength(result.path),
-      bends: result.controlPoints.filter(cp => cp.type === 'intermediate').length,
+      bends: result.controlPoints.filter(cp => cp.type === 'intermediate')
+        .length,
       collision: result.collision,
       performance: {
         calculationTime: result.calculationTime,
@@ -363,7 +381,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       }
     };
   }
-  
+
   /**
    * Get edge connection position on node
    */
@@ -375,7 +393,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       y: node.position.y + (node.height || 50) / 2
     };
   }
-  
+
   /**
    * Calculate SVG path length
    */
@@ -384,7 +402,7 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
     const segments = pathString.match(/[ML]\s*[\d.]+,[\d.]+/g) || [];
     let length = 0;
     let lastPoint: XYPosition | null = null;
-    
+
     segments.forEach(segment => {
       const coords = segment.match(/[\d.]+/g);
       if (coords && coords.length === 2) {
@@ -392,21 +410,21 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
           x: parseFloat(coords[0]),
           y: parseFloat(coords[1])
         };
-        
+
         if (lastPoint) {
           length += Math.sqrt(
             Math.pow(point.x - lastPoint.x, 2) +
-            Math.pow(point.y - lastPoint.y, 2)
+              Math.pow(point.y - lastPoint.y, 2)
           );
         }
-        
+
         lastPoint = point;
       }
     });
-    
+
     return length;
   }
-  
+
   /**
    * Generate cache key for edge path
    */
@@ -414,10 +432,10 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
     const sourceNode = nodes.find(n => n.id === edge.source);
     const targetNode = nodes.find(n => n.id === edge.target);
     const config = this.routingConfigs.get(edge.id);
-    
+
     return `edge:path:${edge.id}:${sourceNode?.position.x},${sourceNode?.position.y}:${targetNode?.position.x},${targetNode?.position.y}:${config?.algorithm || 'straight'}:v${this.cacheVersion}`;
   }
-  
+
   /**
    * Invalidate cache for specific edge
    */
@@ -428,37 +446,37 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       cache.invalidatePattern(`edge:path:${edgeId}:*`);
     }
   }
-  
+
   /**
    * Start auto-routing process
    */
   private startAutoRouting(): void {
     if (!this.autoRoutingConfig?.enabled) return;
-    
+
     const interval = this.autoRoutingConfig.updateInterval || 1000;
-    
+
     const autoRoute = async () => {
       if (this.autoRoutingConfig?.enabled && this.routingQueue.size > 0) {
         await this.processRoutingQueue();
       }
-      
+
       if (this.autoRoutingConfig?.enabled) {
         setTimeout(autoRoute, interval);
       }
     };
-    
+
     setTimeout(autoRoute, interval);
   }
-  
+
   /**
    * Process routing queue
    */
   private async processRoutingQueue(): Promise<void> {
     if (this.routingQueue.size === 0) return;
-    
+
     const edgeIds = Array.from(this.routingQueue);
     this.routingQueue.clear();
-    
+
     // Process in batches
     const batchSize = 5;
     for (let i = 0; i < edgeIds.length; i += batchSize) {
@@ -467,14 +485,14 @@ export class EdgeRoutingManager implements IEdgeRoutingManager {
       // In practice, this would be called with proper context
     }
   }
-  
+
   /**
    * Load cached paths from persistent storage
    */
   private async loadCachedPaths(): Promise<void> {
     const { cache } = getPerformanceInfrastructure();
     if (!cache) return;
-    
+
     // Load previously cached paths
     // This would iterate through known edge IDs and load their cached paths
   }
@@ -504,17 +522,17 @@ export async function applyRoutingToEdges(
   routingConfigs?: Map<string, EdgeRoutingConfig>
 ): Promise<RoutedEdge[]> {
   const manager = getEdgeRoutingManager();
-  
+
   // Set routing configurations
   if (routingConfigs) {
     routingConfigs.forEach((config, edgeId) => {
       manager.setRoutingConfig(edgeId, config);
     });
   }
-  
+
   // Calculate paths for all edges
   const paths = await manager.calculateAllPaths(edges, nodes);
-  
+
   // Apply calculated paths to edges
   return edges.map(edge => ({
     ...edge,
@@ -526,9 +544,11 @@ export async function applyRoutingToEdges(
 /**
  * Invalidate edge routing caches
  */
-export async function invalidateEdgeRoutingCaches(pattern?: string): Promise<number> {
+export async function invalidateEdgeRoutingCaches(
+  pattern?: string
+): Promise<number> {
   const manager = getEdgeRoutingManager();
-  
+
   if (pattern) {
     // Invalidate specific pattern
     const { cache } = getPerformanceInfrastructure();
@@ -539,6 +559,6 @@ export async function invalidateEdgeRoutingCaches(pattern?: string): Promise<num
     // Clear all caches
     manager.clearCache();
   }
-  
+
   return 0;
 }

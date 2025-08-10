@@ -3,8 +3,15 @@
  */
 
 import React from 'react';
-import { useFeatureGate, useFeatureAvailability } from '../../hooks/useFeatureGate';
-import { InlineUpgradePrompt, FeatureTooltip, PremiumBadge } from '../upgrade/UpgradePrompt';
+import {
+  useFeatureGate,
+  useFeatureAvailability
+} from '../../hooks/useFeatureGate';
+import {
+  InlineUpgradePrompt,
+  FeatureTooltip,
+  PremiumBadge
+} from '../upgrade/UpgradePrompt';
 
 /**
  * Props for gated save/load buttons
@@ -19,12 +26,16 @@ interface GatedButtonProps {
 /**
  * Cloud save button with auth gate
  */
-export function CloudSaveButton({ onClick, disabled, children }: GatedButtonProps) {
+export function CloudSaveButton({
+  onClick,
+  disabled,
+  children
+}: GatedButtonProps) {
   const { isEnabled, Gate, isAuthenticated } = useFeatureGate({
     requireAuth: true,
     requireSupabase: true
   });
-  
+
   return (
     <Gate
       fallback={
@@ -68,12 +79,12 @@ export function CloudSaveButton({ onClick, disabled, children }: GatedButtonProp
           alignItems: 'center',
           gap: '8px'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = '#0369a1';
           }
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = '#0284c7';
           }
@@ -88,12 +99,16 @@ export function CloudSaveButton({ onClick, disabled, children }: GatedButtonProp
 /**
  * Cloud load button with auth gate
  */
-export function CloudLoadButton({ onClick, disabled, children }: GatedButtonProps) {
+export function CloudLoadButton({
+  onClick,
+  disabled,
+  children
+}: GatedButtonProps) {
   const { isEnabled, Gate } = useFeatureGate({
     requireAuth: true,
     requireSupabase: true
   });
-  
+
   return (
     <Gate
       fallback={
@@ -137,12 +152,12 @@ export function CloudLoadButton({ onClick, disabled, children }: GatedButtonProp
           alignItems: 'center',
           gap: '8px'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = '#f0f9ff';
           }
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = 'white';
           }
@@ -157,7 +172,11 @@ export function CloudLoadButton({ onClick, disabled, children }: GatedButtonProp
 /**
  * Local save button (always available)
  */
-export function LocalSaveButton({ onClick, disabled, children }: GatedButtonProps) {
+export function LocalSaveButton({
+  onClick,
+  disabled,
+  children
+}: GatedButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -176,12 +195,12 @@ export function LocalSaveButton({ onClick, disabled, children }: GatedButtonProp
         alignItems: 'center',
         gap: '8px'
       }}
-      onMouseEnter={(e) => {
+      onMouseEnter={e => {
         if (!disabled) {
           e.currentTarget.style.backgroundColor = '#f9fafb';
         }
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={e => {
         if (!disabled) {
           e.currentTarget.style.backgroundColor = 'white';
         }
@@ -199,22 +218,30 @@ interface FeatureIndicatorProps {
   showPremium?: boolean;
 }
 
-export function FeatureAvailabilityIndicator({ showPremium = true }: FeatureIndicatorProps) {
+export function FeatureAvailabilityIndicator({
+  showPremium = true
+}: FeatureIndicatorProps) {
   const cloudSaveAvailable = useFeatureAvailability('premium.cloudSaveLoad');
-  const crossDeviceAvailable = useFeatureAvailability('premium.crossDeviceSync');
-  
+  const crossDeviceAvailable = useFeatureAvailability(
+    'premium.crossDeviceSync'
+  );
+
   const features = [
     { name: 'Create & Edit Graphs', available: true },
     { name: 'Local Save/Load', available: true },
     { name: 'Export/Import', available: true },
     { name: 'Cloud Storage', available: cloudSaveAvailable, premium: true },
-    { name: 'Cross-Device Sync', available: crossDeviceAvailable, premium: true }
+    {
+      name: 'Cross-Device Sync',
+      available: crossDeviceAvailable,
+      premium: true
+    }
   ];
-  
+
   if (!showPremium) {
     return null;
   }
-  
+
   return (
     <div
       style={{
@@ -234,7 +261,7 @@ export function FeatureAvailabilityIndicator({ showPremium = true }: FeatureIndi
       >
         Feature Availability
       </h4>
-      
+
       <ul
         style={{
           margin: 0,
@@ -250,13 +277,16 @@ export function FeatureAvailabilityIndicator({ showPremium = true }: FeatureIndi
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '6px 0',
-              borderBottom: index < features.length - 1 ? '1px solid #e5e7eb' : 'none'
+              borderBottom:
+                index < features.length - 1 ? '1px solid #e5e7eb' : 'none'
             }}
           >
             <span style={{ color: feature.available ? '#374151' : '#9ca3af' }}>
               {feature.available ? '✅' : '🔒'} {feature.name}
             </span>
-            {feature.premium && !feature.available && <PremiumBadge size="small" />}
+            {feature.premium && !feature.available && (
+              <PremiumBadge size="small" />
+            )}
           </li>
         ))}
       </ul>
@@ -274,17 +304,17 @@ interface GatedSectionProps {
   children: React.ReactNode;
 }
 
-export function GatedSection({ 
-  feature, 
-  benefits, 
-  onUpgrade, 
-  children 
+export function GatedSection({
+  feature,
+  benefits,
+  onUpgrade,
+  children
 }: GatedSectionProps) {
   const { isEnabled, Gate } = useFeatureGate({
     requireAuth: true,
     requireSupabase: true
   });
-  
+
   return (
     <Gate
       fallback={

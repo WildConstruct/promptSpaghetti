@@ -8,51 +8,35 @@ export type { TutorialStep, OnboardingState } from './TutorialContext';
 
 export { TutorialOverlay } from './TutorialOverlay';
 
-export { 
-  SuccessCelebration, 
-  useSuccessCelebration 
+export {
+  SuccessCelebration,
+  useSuccessCelebration
 } from './SuccessCelebration';
 
-export { 
-  ProgressTracker, 
-  ProgressWidget 
-} from './ProgressTracker';
+export { ProgressTracker, ProgressWidget } from './ProgressTracker';
 
-export { 
-  OnboardingIntegration,
-  useOnboarding 
-} from './OnboardingIntegration';
+export { OnboardingIntegration, useOnboarding } from './OnboardingIntegration';
 
 // Tooltip exports
-export { 
-  ContextualTooltips,
-  useContextualTooltip 
-} from './ContextualTooltips';
+export { ContextualTooltips, useContextualTooltip } from './ContextualTooltips';
 export type { TooltipConfig } from './ContextualTooltips';
 
-export { 
-  SmartTooltip,
-  TooltipWrapper 
-} from './SmartTooltip';
+export { SmartTooltip, TooltipWrapper } from './SmartTooltip';
 
-export {
-  TooltipContent,
-  QuickTooltip,
-  tooltipContent,
-} from './TooltipContent';
+export { TooltipContent, QuickTooltip, tooltipContent } from './TooltipContent';
 
 export {
   TooltipManagerProvider,
   useTooltipManager,
   useTooltipSequence,
   AutoTooltips,
-  tooltipPresets,
+  tooltipPresets
 } from './TooltipManager';
 
 // Keyboard shortcut exports
 export {
   KeyboardShortcutReference,
-  useKeyboardShortcuts,
+  useKeyboardShortcuts
 } from './KeyboardShortcutReference';
 
 export {
@@ -60,13 +44,10 @@ export {
   KeyboardShortcutIntegration,
   useKeyboardShortcutManager,
   useCommonShortcuts,
-  ShortcutHint,
+  ShortcutHint
 } from './KeyboardShortcutManager';
 
-export {
-  VisualKeyboardMap,
-  CompactKeyboardView,
-} from './VisualKeyboardMap';
+export { VisualKeyboardMap, CompactKeyboardView } from './VisualKeyboardMap';
 
 // Tutorial step IDs for external reference
 export const TUTORIAL_STEPS = {
@@ -76,7 +57,7 @@ export const TUTORIAL_STEPS = {
   NODES_CREATED: 'nodes-created',
   INLINE_EDIT: 'inline-edit',
   PREVIEW_UPDATE: 'preview-update',
-  COMPLETION: 'completion',
+  COMPLETION: 'completion'
 } as const;
 
 // Achievement IDs
@@ -86,5 +67,5 @@ export const ACHIEVEMENTS = {
   GRAPH_MASTER: 'graph_master',
   SPEED_DEMON: 'speed_demon',
   EXPLORER: 'explorer',
-  POWER_USER: 'power_user',
+  POWER_USER: 'power_user'
 } as const;

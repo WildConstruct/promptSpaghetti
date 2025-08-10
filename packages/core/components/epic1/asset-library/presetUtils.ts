@@ -47,14 +47,17 @@ export function applyPresetToNode(
         updatedData.value = preset.value.variableName;
         updatedData.variableName = preset.value.variableName;
         updatedData.editBuffer = preset.value.variableName;
-        
+
         // Set operation type if specified
         if (preset.value.operation) {
           updatedData.operation = preset.value.operation;
         }
-        
+
         // For set variables, include the value
-        if (preset.value.value !== undefined && preset.value.operation === 'set') {
+        if (
+          preset.value.value !== undefined &&
+          preset.value.operation === 'set'
+        ) {
           updatedData.variableValue = preset.value.value;
         }
       }
@@ -87,25 +90,30 @@ export function isNodeModifiedFromPreset(nodeData: EditableNodeData): boolean {
 /**
  * Get the current value from node data based on node type
  */
-export function getNodeValue(nodeData: EditableNodeData, nodeType: string): any {
+export function getNodeValue(
+  nodeData: EditableNodeData,
+  nodeType: string
+): any {
   switch (nodeType) {
     case 'textBlock':
       return nodeData.text || nodeData.value;
-    
+
     case 'weightedChoice':
-      return nodeData.options || (nodeData.value ? JSON.parse(nodeData.value) : []);
-    
+      return (
+        nodeData.options || (nodeData.value ? JSON.parse(nodeData.value) : [])
+      );
+
     case 'concat':
       return nodeData.separator || nodeData.value;
-    
+
     case 'variable':
     case 'setVariable':
     case 'getVariable':
       return nodeData.variableName || nodeData.value;
-    
+
     case 'output':
       return nodeData.label || nodeData.value;
-    
+
     default:
       return nodeData.value;
   }
@@ -122,37 +130,38 @@ export function createPresetFromNode(
   tags: string[] = []
 ): Preset {
   const value = getNodeValue(nodeData, nodeType);
-  
+
   let presetValue: any;
   switch (nodeType) {
     case 'textBlock':
       presetValue = { text: value };
       break;
-    
+
     case 'weightedChoice':
       presetValue = { options: value };
       break;
-    
+
     case 'concat':
       presetValue = { separator: value };
       break;
-    
+
     case 'variable':
     case 'setVariable':
     case 'getVariable':
-      presetValue = { 
+      presetValue = {
         variableName: value,
-        operation: nodeData.operation || (nodeType === 'setVariable' ? 'set' : 'get')
+        operation:
+          nodeData.operation || (nodeType === 'setVariable' ? 'set' : 'get')
       };
       if (nodeData.variableValue !== undefined) {
         presetValue.value = nodeData.variableValue;
       }
       break;
-    
+
     case 'output':
       presetValue = { label: value };
       break;
-    
+
     default:
       presetValue = value;
   }

@@ -152,7 +152,7 @@ const clothingAppearance: Preset[] = [
         { text: 'tattered robes', weight: 30 },
         { text: 'simple woolen tunic', weight: 40 },
         { text: 'leather jerkin', weight: 20 },
-        { text: 'traveler\'s cloak', weight: 10 }
+        { text: "traveler's cloak", weight: 10 }
       ]
     },
     ['clothing', 'varied', 'common'],
@@ -236,7 +236,7 @@ const itemsProps: Preset[] = [
       options: [
         { text: 'ancient scroll', weight: 20 },
         { text: 'sealed letter', weight: 25 },
-        { text: 'merchant\'s ledger', weight: 20 },
+        { text: "merchant's ledger", weight: 20 },
         { text: 'royal decree', weight: 15 },
         { text: 'treasure map', weight: 20 }
       ]
@@ -269,7 +269,7 @@ const itemsProps: Preset[] = [
     {
       options: [
         { text: 'leather coin purse', weight: 25 },
-        { text: 'traveler\'s pack', weight: 20 },
+        { text: "traveler's pack", weight: 20 },
         { text: 'wineskin', weight: 20 },
         { text: 'iron lantern', weight: 20 },
         { text: 'worn boots', weight: 15 }
@@ -293,7 +293,7 @@ const settingsLocations: Preset[] = [
         { text: 'narrow cobblestone alley', weight: 20 },
         { text: 'grand cathedral square', weight: 15 },
         { text: 'harbor district', weight: 20 },
-        { text: 'craftsman\'s quarter', weight: 20 }
+        { text: "craftsman's quarter", weight: 20 }
       ]
     },
     ['setting', 'urban', 'town'],
@@ -437,4 +437,6 @@ export const medievalPresetCategories: PresetCategory[] = [
 ];
 
 // Get all presets as a flat array
-export const allMedievalPresets: Preset[] = medievalPresetCategories.flatMap(cat => cat.presets);
+export const allMedievalPresets: Preset[] = medievalPresetCategories.flatMap(
+  cat => cat.presets
+);

@@ -47,9 +47,12 @@ export class WorkerPool {
   };
 
   private constructor(maxWorkers?: number) {
-    this.maxWorkers = maxWorkers || 
-      (typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || 4 : 4);
-    
+    this.maxWorkers =
+      maxWorkers ||
+      (typeof navigator !== 'undefined'
+        ? navigator.hardwareConcurrency || 4
+        : 4);
+
     // Check if Workers are available
     if (typeof Worker === 'undefined') {
       console.warn('Web Workers not available, using fallback mode');
@@ -75,7 +78,7 @@ export class WorkerPool {
 
     // Use provided URL or create inline worker
     this.workerScript = workerScriptUrl || this.createInlineWorkerScript();
-    
+
     // Create initial workers (start with half capacity)
     const initialWorkers = Math.ceil(this.maxWorkers / 2);
     for (let i = 0; i < initialWorkers; i++) {
@@ -109,7 +112,7 @@ export class WorkerPool {
       // Add to queue
       this.enqueue(queueItem);
       this.stats.tasksQueued++;
-      
+
       // Try to process immediately
       this.processQueue();
     });
@@ -128,7 +131,7 @@ export class WorkerPool {
         break;
       }
     }
-    
+
     if (!inserted) {
       this.queue.push(item);
     }
@@ -142,12 +145,12 @@ export class WorkerPool {
 
     // Find available worker
     let availableWorker = this.workers.find(w => !w.busy);
-    
+
     // Create new worker if needed and under limit
     if (!availableWorker && this.workers.length < this.maxWorkers) {
       availableWorker = this.createWorker();
     }
-    
+
     if (!availableWorker) return;
 
     // Get next task from queue
@@ -474,15 +477,15 @@ export class WorkerPool {
   private async executeFallback<T>(task: WorkerTask): Promise<T> {
     // Simulate async execution
     await new Promise(resolve => setTimeout(resolve, 0));
-    
+
     // Simple fallback implementations
     switch (task.type) {
       case 'CALCULATE_PATH':
         return this.calculatePathFallback(task.data) as T;
-        
+
       case 'CALCULATE_GROUP_BOUNDS':
         return this.calculateGroupBoundsFallback(task.data) as T;
-        
+
       default:
         throw new Error(`Fallback not implemented for task type: ${task.type}`);
     }
@@ -493,8 +496,8 @@ export class WorkerPool {
     return {
       path: `M ${edge.sourceX},${edge.sourceY} L ${edge.targetX},${edge.targetY}`,
       length: Math.sqrt(
-        Math.pow(edge.targetX - edge.sourceX, 2) + 
-        Math.pow(edge.targetY - edge.sourceY, 2)
+        Math.pow(edge.targetX - edge.sourceX, 2) +
+          Math.pow(edge.targetY - edge.sourceY, 2)
       )
     };
   }
@@ -502,14 +505,14 @@ export class WorkerPool {
   private calculateGroupBoundsFallback(data: any): any {
     const { group, nodes } = data;
     const groupNodes = nodes.filter((n: any) => group.nodeIds.includes(n.id));
-    
+
     if (groupNodes.length === 0) {
       return { x: 0, y: 0, width: 0, height: 0 };
     }
-    
+
     const xs = groupNodes.map((n: any) => n.position.x);
     const ys = groupNodes.map((n: any) => n.position.y);
-    
+
     return {
       x: Math.min(...xs) - 20,
       y: Math.min(...ys) - 40,
@@ -555,13 +558,13 @@ export class WorkerPool {
       item.reject(new Error('Worker pool terminated'));
     });
     this.queue = [];
-    
+
     // Terminate workers
     this.workers.forEach(workerInfo => {
       workerInfo.worker.terminate();
     });
     this.workers = [];
-    
+
     // Clean up blob URL if created
     if (this.workerScript && this.workerScript.startsWith('blob:')) {
       URL.revokeObjectURL(this.workerScript);

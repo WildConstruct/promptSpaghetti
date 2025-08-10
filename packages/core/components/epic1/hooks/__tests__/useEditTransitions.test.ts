@@ -3,7 +3,10 @@
  */
 
 import { renderHook, act } from '@testing-library/react-hooks';
-import { useEditTransitions, useWeightedOptionTransitions } from '../useEditTransitions';
+import {
+  useEditTransitions,
+  useWeightedOptionTransitions
+} from '../useEditTransitions';
 
 // Mock timers
 jest.useFakeTimers();
@@ -88,7 +91,7 @@ describe('useEditTransitions', () => {
 
   describe('value confirmation animations', () => {
     it('triggers value confirmed animation', () => {
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useEditTransitions({ isEditing: false })
       );
 
@@ -97,7 +100,9 @@ describe('useEditTransitions', () => {
       });
 
       expect(result.current.transitionState.isValueConfirmed).toBe(true);
-      expect(result.current.animationClasses).toContain('epic1-value-confirmed');
+      expect(result.current.animationClasses).toContain(
+        'epic1-value-confirmed'
+      );
 
       // Animation should clear after timeout
       act(() => {
@@ -108,7 +113,7 @@ describe('useEditTransitions', () => {
     });
 
     it('triggers value cancelled animation', () => {
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useEditTransitions({ isEditing: false })
       );
 
@@ -117,7 +122,9 @@ describe('useEditTransitions', () => {
       });
 
       expect(result.current.transitionState.isValueCancelled).toBe(true);
-      expect(result.current.animationClasses).toContain('epic1-value-cancelled');
+      expect(result.current.animationClasses).toContain(
+        'epic1-value-cancelled'
+      );
 
       // Animation should clear after timeout
       act(() => {
@@ -130,7 +137,7 @@ describe('useEditTransitions', () => {
 
   describe('error state', () => {
     it('adds error class when hasError is true', () => {
-      const { result } = renderHook(() => 
+      const { result } = renderHook(() =>
         useEditTransitions({ isEditing: false, hasError: true })
       );
 
@@ -141,7 +148,7 @@ describe('useEditTransitions', () => {
 
   describe('animation cleanup', () => {
     it('clears timeouts on unmount', () => {
-      const { result, unmount } = renderHook(() => 
+      const { result, unmount } = renderHook(() =>
         useEditTransitions({ isEditing: false })
       );
 
@@ -167,7 +174,9 @@ describe('useWeightedOptionTransitions', () => {
       result.current.animateOptionAdd(0);
     });
 
-    expect(result.current.getOptionClass(0, false)).toBe('epic1-weighted-option-entering');
+    expect(result.current.getOptionClass(0, false)).toBe(
+      'epic1-weighted-option-entering'
+    );
 
     // Animation should clear after timeout
     act(() => {
@@ -185,7 +194,9 @@ describe('useWeightedOptionTransitions', () => {
       result.current.animateOptionRemove(1, onComplete);
     });
 
-    expect(result.current.getOptionClass(1, true)).toBe('epic1-weighted-option-exiting');
+    expect(result.current.getOptionClass(1, true)).toBe(
+      'epic1-weighted-option-exiting'
+    );
     expect(onComplete).not.toHaveBeenCalled();
 
     // Callback should fire after animation
@@ -206,9 +217,15 @@ describe('useWeightedOptionTransitions', () => {
       result.current.animateOptionAdd(2);
     });
 
-    expect(result.current.getOptionClass(0, false)).toBe('epic1-weighted-option-entering');
-    expect(result.current.getOptionClass(1, false)).toBe('epic1-weighted-option-entering');
-    expect(result.current.getOptionClass(2, false)).toBe('epic1-weighted-option-entering');
+    expect(result.current.getOptionClass(0, false)).toBe(
+      'epic1-weighted-option-entering'
+    );
+    expect(result.current.getOptionClass(1, false)).toBe(
+      'epic1-weighted-option-entering'
+    );
+    expect(result.current.getOptionClass(2, false)).toBe(
+      'epic1-weighted-option-entering'
+    );
 
     // Clear first animation
     act(() => {
@@ -220,7 +237,9 @@ describe('useWeightedOptionTransitions', () => {
       result.current.animateOptionAdd(3);
     });
 
-    expect(result.current.getOptionClass(3, false)).toBe('epic1-weighted-option-entering');
+    expect(result.current.getOptionClass(3, false)).toBe(
+      'epic1-weighted-option-entering'
+    );
 
     // Clear all animations
     act(() => {

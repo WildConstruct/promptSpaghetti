@@ -8,8 +8,8 @@ interface RestorationLoaderProps {
   message?: string;
 }
 
-export function RestorationLoader({ 
-  message = 'Restoring your work...' 
+export function RestorationLoader({
+  message = 'Restoring your work...'
 }: RestorationLoaderProps) {
   return (
     <div
@@ -71,7 +71,7 @@ export function RestorationLoader({
             }}
           />
         </div>
-        
+
         {/* Loading Message */}
         <div
           style={{
@@ -83,7 +83,7 @@ export function RestorationLoader({
         >
           {message}
         </div>
-        
+
         {/* Progress Dots */}
         <div
           style={{
@@ -91,7 +91,7 @@ export function RestorationLoader({
             gap: '8px'
           }}
         >
-          {[0, 1, 2].map((index) => (
+          {[0, 1, 2].map(index => (
             <div
               key={index}
               style={{
@@ -106,7 +106,7 @@ export function RestorationLoader({
           ))}
         </div>
       </div>
-      
+
       {/* CSS Animations */}
       <style>{`
         @keyframes spin {
@@ -141,15 +141,15 @@ export function RestorationToast({
       return () => clearTimeout(timer);
     }
   }, [onClose]);
-  
+
   const colors = {
     success: { bg: '#d4edda', border: '#c3e6cb', text: '#155724', icon: '✓' },
     error: { bg: '#f8d7da', border: '#f5c6cb', text: '#721c24', icon: '✗' },
     warning: { bg: '#fff3cd', border: '#ffeeba', text: '#856404', icon: '⚠' }
   };
-  
+
   const style = colors[type];
-  
+
   return (
     <div
       style={{
@@ -187,10 +187,10 @@ export function RestorationToast({
             opacity: 0.7,
             transition: 'opacity 0.2s'
           }}
-          onMouseEnter={(e) => {
+          onMouseEnter={e => {
             e.currentTarget.style.opacity = '1';
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={e => {
             e.currentTarget.style.opacity = '0.7';
           }}
           aria-label="Close"
@@ -198,7 +198,7 @@ export function RestorationToast({
           ×
         </button>
       )}
-      
+
       <style>{`
         @keyframes slideIn {
           from {

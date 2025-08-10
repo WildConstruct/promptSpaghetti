@@ -20,38 +20,38 @@ export function SessionTimeoutWarning({
   const [showWarning, setShowWarning] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [lastActivity, setLastActivity] = useState(Date.now());
-  
+
   // Track user activity
   useEffect(() => {
     if (!isAuthenticated) return;
-    
+
     const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
-    
+
     const updateActivity = () => {
       setLastActivity(Date.now());
       setShowWarning(false);
     };
-    
+
     events.forEach(event => {
       window.addEventListener(event, updateActivity);
     });
-    
+
     return () => {
       events.forEach(event => {
         window.removeEventListener(event, updateActivity);
       });
     };
   }, [isAuthenticated]);
-  
+
   // Check for timeout
   useEffect(() => {
     if (!isAuthenticated) return;
-    
+
     const interval = setInterval(() => {
       const now = Date.now();
       const timeSinceActivity = now - lastActivity;
       const timeUntilTimeout = sessionDuration - timeSinceActivity;
-      
+
       if (timeUntilTimeout <= 0) {
         // Session expired
         setShowWarning(false);
@@ -65,31 +65,31 @@ export function SessionTimeoutWarning({
         setShowWarning(false);
       }
     }, 1000);
-    
+
     return () => clearInterval(interval);
   }, [isAuthenticated, lastActivity, sessionDuration, warningTime]);
-  
+
   const handleExtend = useCallback(async () => {
     setLastActivity(Date.now());
     setShowWarning(false);
-    
+
     // Refresh the session
     await refreshSession();
     onExtend?.();
   }, [refreshSession, onExtend]);
-  
+
   const handleLogout = useCallback(() => {
     setShowWarning(false);
     // Trigger logout through auth provider
   }, []);
-  
+
   if (!showWarning || !isAuthenticated) {
     return null;
   }
-  
+
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
-  
+
   return (
     <div
       style={{
@@ -121,7 +121,7 @@ export function SessionTimeoutWarning({
         >
           ⏱️
         </span>
-        
+
         <div style={{ flex: 1 }}>
           <h3
             style={{
@@ -133,7 +133,7 @@ export function SessionTimeoutWarning({
           >
             Session Expiring Soon
           </h3>
-          
+
           <p
             style={{
               margin: '0 0 16px 0',
@@ -148,7 +148,7 @@ export function SessionTimeoutWarning({
             </strong>
             . Would you like to continue working?
           </p>
-          
+
           <div
             style={{
               display: 'flex',
@@ -169,16 +169,16 @@ export function SessionTimeoutWarning({
                 cursor: 'pointer',
                 transition: 'background-color 0.2s'
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 e.currentTarget.style.backgroundColor = '#d97706';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.backgroundColor = '#f59e0b';
               }}
             >
               Stay Signed In
             </button>
-            
+
             <button
               onClick={handleLogout}
               style={{
@@ -193,10 +193,10 @@ export function SessionTimeoutWarning({
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 e.currentTarget.style.backgroundColor = '#fef3c7';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.backgroundColor = 'white';
               }}
             >
@@ -205,7 +205,7 @@ export function SessionTimeoutWarning({
           </div>
         </div>
       </div>
-      
+
       {/* Progress bar */}
       <div
         style={{
@@ -228,7 +228,7 @@ export function SessionTimeoutWarning({
           }}
         />
       </div>
-      
+
       <style>{`
         @keyframes slideIn {
           from {

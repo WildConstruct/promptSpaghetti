@@ -3,7 +3,10 @@
  */
 
 import { PreviewEngine, PreviewState, PreviewUpdate } from '../PreviewEngine';
-import { Epic1Graph, ExecutionResult } from '../../../../runtime/nodes/epic1/Epic1ExecutionEngine';
+import {
+  Epic1Graph,
+  ExecutionResult
+} from '../../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { TextBlockNode } from '../../../../runtime/nodes/epic1/TextBlockNode';
 import { OutputNode } from '../../../../runtime/nodes/epic1/OutputNode';
 
@@ -39,15 +42,13 @@ describe('PreviewEngine', () => {
     // Create test graph
     const textNode = new TextBlockNode({ id: 'node1', text: 'Hello' });
     const outputNode = new OutputNode({ id: 'node2', label: 'Output' });
-    
+
     mockGraph = {
       nodes: new Map([
         ['node1', textNode],
         ['node2', outputNode]
       ]),
-      edges: [
-        { id: 'edge1', source: 'node1', target: 'node2' }
-      ]
+      edges: [{ id: 'edge1', source: 'node1', target: 'node2' }]
     };
 
     // Create engine with short debounce for testing
@@ -125,7 +126,7 @@ describe('PreviewEngine', () => {
 
       // First update
       engine.updatePreview(mockGraph);
-      
+
       // Advance halfway through debounce
       jest.advanceTimersByTime(50);
 
@@ -271,34 +272,34 @@ describe('PreviewEngine', () => {
   describe('Debounce delay management', () => {
     it('should update debounce delay', () => {
       engine.setDebounceDelay(500);
-      
+
       const callback = jest.fn();
       engine.subscribe(callback);
 
       engine.updatePreview(mockGraph);
-      
+
       // Advance less than new delay
       jest.advanceTimersByTime(400);
-      
+
       // Should still be pending
       expect(engine.getState()).toBe(PreviewState.PENDING);
 
       // Advance past new delay
       jest.advanceTimersByTime(150);
-      
+
       // Now should be executing
       expect(engine.getState()).toBe(PreviewState.EXECUTING);
     });
 
     it('should handle negative delay values', () => {
       engine.setDebounceDelay(-100);
-      
+
       // Should be set to 0
       const callback = jest.fn();
       engine.subscribe(callback);
 
       engine.updatePreview(mockGraph);
-      
+
       // Should execute immediately with 0 delay
       jest.advanceTimersByTime(0);
       expect(engine.getState()).toBe(PreviewState.EXECUTING);
@@ -308,7 +309,9 @@ describe('PreviewEngine', () => {
   describe('Error handling', () => {
     it('should handle execution errors', async () => {
       // Mock execution to fail
-      const { Epic1ExecutionEngine } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
+      const {
+        Epic1ExecutionEngine
+      } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
       Epic1ExecutionEngine.mockImplementationOnce(() => ({
         execute: jest.fn().mockRejectedValue(new Error('Execution failed'))
       }));
@@ -337,11 +340,16 @@ describe('PreviewEngine', () => {
       });
 
       // Mock slow execution
-      const { Epic1ExecutionEngine } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
+      const {
+        Epic1ExecutionEngine
+      } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
       Epic1ExecutionEngine.mockImplementationOnce(() => ({
-        execute: jest.fn(() => new Promise(resolve => {
-          setTimeout(resolve, 1000);
-        }))
+        execute: jest.fn(
+          () =>
+            new Promise(resolve => {
+              setTimeout(resolve, 1000);
+            })
+        )
       }));
 
       const callback = jest.fn();
@@ -381,12 +389,17 @@ describe('PreviewEngine', () => {
 
     it('should not update state after cancellation', async () => {
       // Mock slow execution
-      const { Epic1ExecutionEngine } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
+      const {
+        Epic1ExecutionEngine
+      } = require('../../../../runtime/nodes/epic1/Epic1ExecutionEngine');
       let resolveExecution: any;
       Epic1ExecutionEngine.mockImplementationOnce(() => ({
-        execute: jest.fn(() => new Promise(resolve => {
-          resolveExecution = resolve;
-        }))
+        execute: jest.fn(
+          () =>
+            new Promise(resolve => {
+              resolveExecution = resolve;
+            })
+        )
       }));
 
       const callback = jest.fn();
@@ -439,7 +452,7 @@ describe('PreviewEngine', () => {
   describe('State getters', () => {
     it('should return current state', () => {
       expect(engine.getState()).toBe(PreviewState.IDLE);
-      
+
       engine.updatePreview(mockGraph);
       expect(engine.getState()).toBe(PreviewState.PENDING);
     });

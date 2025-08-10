@@ -49,31 +49,38 @@ export function useKeyboardNavigation({
   }, [nodes]);
 
   // Find next/previous node in tab order
-  const getNextNode = useCallback((currentNodeId: string, reverse: boolean = false) => {
-    if (getEditableNodes.length === 0) return null;
+  const getNextNode = useCallback(
+    (currentNodeId: string, reverse: boolean = false) => {
+      if (getEditableNodes.length === 0) return null;
 
-    const currentIndex = getEditableNodes.findIndex(node => node.id === currentNodeId);
-    
-    if (currentIndex === -1) {
-      // If current node not found, return first/last based on direction
-      return reverse ? getEditableNodes[getEditableNodes.length - 1] : getEditableNodes[0];
-    }
+      const currentIndex = getEditableNodes.findIndex(
+        node => node.id === currentNodeId
+      );
 
-    let nextIndex: number;
-    if (reverse) {
-      nextIndex = currentIndex - 1;
-      if (nextIndex < 0) {
-        nextIndex = getEditableNodes.length - 1; // Wrap to last
+      if (currentIndex === -1) {
+        // If current node not found, return first/last based on direction
+        return reverse
+          ? getEditableNodes[getEditableNodes.length - 1]
+          : getEditableNodes[0];
       }
-    } else {
-      nextIndex = currentIndex + 1;
-      if (nextIndex >= getEditableNodes.length) {
-        nextIndex = 0; // Wrap to first
-      }
-    }
 
-    return getEditableNodes[nextIndex];
-  }, [getEditableNodes]);
+      let nextIndex: number;
+      if (reverse) {
+        nextIndex = currentIndex - 1;
+        if (nextIndex < 0) {
+          nextIndex = getEditableNodes.length - 1; // Wrap to last
+        }
+      } else {
+        nextIndex = currentIndex + 1;
+        if (nextIndex >= getEditableNodes.length) {
+          nextIndex = 0; // Wrap to first
+        }
+      }
+
+      return getEditableNodes[nextIndex];
+    },
+    [getEditableNodes]
+  );
 
   // Safe focus function that manages timeouts properly
   const focusNodeInput = useCallback((nodeId: string, delay: number = 50) => {
@@ -93,13 +100,13 @@ export function useKeyboardNavigation({
         const inputElement = document.querySelector(
           `[data-node-id="${nodeId}"] input, [data-node-id="${nodeId}"] textarea`
         ) as HTMLElement;
-        
+
         if (inputElement && document.contains(inputElement)) {
           inputElement.focus();
-          
+
           // Ensure element is visible in viewport
-          inputElement.scrollIntoView({ 
-            behavior: 'smooth', 
+          inputElement.scrollIntoView({
+            behavior: 'smooth',
             block: 'nearest',
             inline: 'nearest'
           });
@@ -107,7 +114,7 @@ export function useKeyboardNavigation({
       } catch (error) {
         console.warn('Failed to focus element:', error);
       }
-      
+
       // Remove this timeout from tracking
       const index = timeoutsRef.current.indexOf(timeoutId);
       if (index > -1) {
@@ -129,69 +136,75 @@ export function useKeyboardNavigation({
   }, [getEditableNodes, selectedNodeId, onNodeSelect, focusNodeInput]);
 
   // Handle keyboard events with improved performance
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (!enabled) return;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (!enabled) return;
 
-    // Ignore if user is typing in a non-node input
-    const target = event.target as HTMLElement;
-    const isNodeInput = target.closest('[data-node-id]');
-    
-    // Tab navigation
-    if (event.key === 'Tab' && (isNodeInput || !target.matches('input, textarea'))) {
-      event.preventDefault();
-      
-      if (!selectedNodeId) {
-        autoFocusFirstNode();
-        return;
-      }
+      // Ignore if user is typing in a non-node input
+      const target = event.target as HTMLElement;
+      const isNodeInput = target.closest('[data-node-id]');
 
-      const nextNode = getNextNode(selectedNodeId, event.shiftKey);
-      if (nextNode) {
-        onNodeSelect(nextNode.id);
-        focusNodeInput(nextNode.id);
-      }
-    }
+      // Tab navigation
+      if (
+        event.key === 'Tab' &&
+        (isNodeInput || !target.matches('input, textarea'))
+      ) {
+        event.preventDefault();
 
-    // Escape key handling
-    if (event.key === 'Escape' && isNodeInput) {
-      event.preventDefault();
-      event.stopPropagation();
-      
-      if (selectedNodeId && onEditCancel) {
-        onEditCancel(selectedNodeId);
-      }
-      if (onEscapePress) {
-        onEscapePress();
-      }
-    }
+        if (!selectedNodeId) {
+          autoFocusFirstNode();
+          return;
+        }
 
-    // Enter key to confirm current edit and move to next
-    if (event.key === 'Enter' && !event.shiftKey && isNodeInput) {
-      // Don't interfere with textarea line breaks
-      if (target.tagName === 'TEXTAREA') {
-        return;
-      }
-
-      event.preventDefault();
-      
-      if (selectedNodeId) {
-        const nextNode = getNextNode(selectedNodeId, false);
+        const nextNode = getNextNode(selectedNodeId, event.shiftKey);
         if (nextNode) {
           onNodeSelect(nextNode.id);
           focusNodeInput(nextNode.id);
         }
       }
-    }
-  }, [
-    enabled, 
-    selectedNodeId, 
-    autoFocusFirstNode, 
-    getNextNode, 
-    onNodeSelect, 
-    onEditCancel, 
-    onEscapePress,
-    focusNodeInput
-  ]);
+
+      // Escape key handling
+      if (event.key === 'Escape' && isNodeInput) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (selectedNodeId && onEditCancel) {
+          onEditCancel(selectedNodeId);
+        }
+        if (onEscapePress) {
+          onEscapePress();
+        }
+      }
+
+      // Enter key to confirm current edit and move to next
+      if (event.key === 'Enter' && !event.shiftKey && isNodeInput) {
+        // Don't interfere with textarea line breaks
+        if (target.tagName === 'TEXTAREA') {
+          return;
+        }
+
+        event.preventDefault();
+
+        if (selectedNodeId) {
+          const nextNode = getNextNode(selectedNodeId, false);
+          if (nextNode) {
+            onNodeSelect(nextNode.id);
+            focusNodeInput(nextNode.id);
+          }
+        }
+      }
+    },
+    [
+      enabled,
+      selectedNodeId,
+      autoFocusFirstNode,
+      getNextNode,
+      onNodeSelect,
+      onEditCancel,
+      onEscapePress,
+      focusNodeInput
+    ]
+  );
 
   // Set up event listeners with proper cleanup
   useEffect(() => {
@@ -199,7 +212,7 @@ export function useKeyboardNavigation({
 
     // Use capture phase for better control
     document.addEventListener('keydown', handleKeyDown, true);
-    
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown, true);
     };
@@ -221,7 +234,7 @@ export function useKeyboardNavigation({
   useEffect(() => {
     if (selectedNodeId && !focusHistoryRef.current.includes(selectedNodeId)) {
       focusHistoryRef.current.push(selectedNodeId);
-      
+
       // Keep history limited to prevent memory growth
       if (focusHistoryRef.current.length > 10) {
         focusHistoryRef.current = focusHistoryRef.current.slice(-10);

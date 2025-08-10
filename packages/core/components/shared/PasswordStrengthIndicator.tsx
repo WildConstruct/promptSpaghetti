@@ -16,9 +16,9 @@ interface PasswordStrengthIndicatorProps {
   };
 }
 
-export function PasswordStrengthIndicator({ 
-  strength, 
-  requirements 
+export function PasswordStrengthIndicator({
+  strength,
+  requirements
 }: PasswordStrengthIndicatorProps) {
   const strengthConfig = {
     weak: {
@@ -37,9 +37,9 @@ export function PasswordStrengthIndicator({
       label: 'Strong'
     }
   };
-  
+
   const config = strengthConfig[strength];
-  
+
   return (
     <div style={{ marginBottom: '20px', marginTop: '-10px' }}>
       {/* Strength Bar */}
@@ -71,7 +71,7 @@ export function PasswordStrengthIndicator({
             {config.label}
           </span>
         </div>
-        
+
         <div
           style={{
             height: '4px',
@@ -90,7 +90,7 @@ export function PasswordStrengthIndicator({
           />
         </div>
       </div>
-      
+
       {/* Requirements Checklist */}
       <div
         style={{
@@ -100,10 +100,12 @@ export function PasswordStrengthIndicator({
           fontSize: '12px'
         }}
       >
-        <div style={{ marginBottom: '4px', fontWeight: '500', color: '#495057' }}>
+        <div
+          style={{ marginBottom: '4px', fontWeight: '500', color: '#495057' }}
+        >
           Password requirements:
         </div>
-        
+
         <ul
           style={{
             margin: 0,
@@ -119,10 +121,7 @@ export function PasswordStrengthIndicator({
             met={requirements.hasUppercase}
             text="One uppercase letter"
           />
-          <RequirementItem
-            met={requirements.hasNumber}
-            text="One number"
-          />
+          <RequirementItem met={requirements.hasNumber} text="One number" />
           <RequirementItem
             met={requirements.hasLowercase}
             text="One lowercase letter"
@@ -139,13 +138,13 @@ export function PasswordStrengthIndicator({
   );
 }
 
-function RequirementItem({ 
-  met, 
-  text, 
-  optional = false 
-}: { 
-  met: boolean; 
-  text: string; 
+function RequirementItem({
+  met,
+  text,
+  optional = false
+}: {
+  met: boolean;
+  text: string;
   optional?: boolean;
 }) {
   return (

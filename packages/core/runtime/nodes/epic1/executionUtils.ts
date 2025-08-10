@@ -4,7 +4,12 @@
  */
 
 import { BaseInlineEditableNode } from './BaseInlineEditableNode';
-import { Epic1ExecutionEngine, Epic1Edge, Epic1Graph, ExecutionResult } from './Epic1ExecutionEngine';
+import {
+  Epic1ExecutionEngine,
+  Epic1Edge,
+  Epic1Graph,
+  ExecutionResult
+} from './Epic1ExecutionEngine';
 import { createNodeFromData } from './index';
 
 /**
@@ -26,7 +31,12 @@ export class GraphBuilder {
   /**
    * Connect two nodes
    */
-  connect(sourceId: string, targetId: string, sourceHandle?: string, targetHandle?: string): GraphBuilder {
+  connect(
+    sourceId: string,
+    targetId: string,
+    sourceHandle?: string,
+    targetHandle?: string
+  ): GraphBuilder {
     this.edges.push({
       id: `edge-${this.edgeIdCounter++}`,
       source: sourceId,
@@ -80,20 +90,24 @@ export function compareExecutionResults(
 
   // Compare final outputs
   if (result1.output !== result2.output) {
-    differences.push(`Output differs: "${result1.output}" vs "${result2.output}"`);
+    differences.push(
+      `Output differs: "${result1.output}" vs "${result2.output}"`
+    );
   }
 
   // Compare node results
   result1.results.forEach((nodeResult1, nodeId) => {
     const nodeResult2 = result2.results.get(nodeId);
-    
+
     if (!nodeResult2) {
       differences.push(`Node ${nodeId} missing in second result`);
       return;
     }
 
     if (nodeResult1.output !== nodeResult2.output) {
-      differences.push(`Node ${nodeId} output differs: "${nodeResult1.output}" vs "${nodeResult2.output}"`);
+      differences.push(
+        `Node ${nodeId} output differs: "${nodeResult1.output}" vs "${nodeResult2.output}"`
+      );
     }
   });
 
@@ -176,7 +190,7 @@ export async function generatePreview(
   for (const seed of seeds) {
     const engine = new Epic1ExecutionEngine(graph, seed);
     const result = await engine.execute();
-    
+
     outputs.push(result.output || '');
     durations.push(result.stats.totalDuration);
     allSuccess = allSuccess && result.success;
@@ -215,7 +229,7 @@ export async function validateDeterminism(
   for (let i = 0; i < iterations; i++) {
     const engine = new Epic1ExecutionEngine(graph, seed);
     const result = await engine.execute();
-    
+
     if (result.success) {
       outputs.add(result.output || '');
     }
@@ -264,16 +278,25 @@ export function createExampleGraph(): Epic1Graph {
   const builder = new GraphBuilder();
 
   // Import node classes
-  const { TextBlockNode, WeightedChoiceNode, ConcatNode, VariableNode, OutputNode } = require('./index');
+  const {
+    TextBlockNode,
+    WeightedChoiceNode,
+    ConcatNode,
+    VariableNode,
+    OutputNode
+  } = require('./index');
 
   // Create nodes
   const greeting = new TextBlockNode('greeting', 'Hello {{name}}!');
   const mood = new WeightedChoiceNode('mood', [
-    { id: 'happy', text: 'I hope you\'re having a great day', weight: 70 },
+    { id: 'happy', text: "I hope you're having a great day", weight: 70 },
     { id: 'neutral', text: 'How are you doing', weight: 20 },
-    { id: 'excited', text: 'I\'m so excited to see you', weight: 10 }
+    { id: 'excited', text: "I'm so excited to see you", weight: 10 }
   ]);
-  const nameVar = new VariableNode('nameVar', { name: 'name', defaultValue: 'friend' });
+  const nameVar = new VariableNode('nameVar', {
+    name: 'name',
+    defaultValue: 'friend'
+  });
   const concat = new ConcatNode('concat', { separator: ' ' });
   const output = new OutputNode('output');
 

@@ -1,4 +1,9 @@
-import { getSupabaseConfig, isSupabaseEnabled, isSupabaseFeatureFlagEnabled, hasSupabaseEnv } from '../utils/supabaseFeature';
+import {
+  getSupabaseConfig,
+  isSupabaseEnabled,
+  isSupabaseFeatureFlagEnabled,
+  hasSupabaseEnv
+} from '../utils/supabaseFeature';
 
 describe('supabaseFeature', () => {
   const envBackup = { ...process.env };

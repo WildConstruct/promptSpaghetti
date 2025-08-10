@@ -16,27 +16,33 @@ export const PSGLibMetadataSchema = z.object({
   nodeTypes: z.array(z.string()),
   thumbnail: z.string().optional(),
   lastModified: z.string(),
-  
+
   // PM Requirement: Future-proofing for marketplace
-  license: z.enum(['MIT', 'CC-BY', 'CC-BY-SA', 'CC0', 'proprietary', 'custom']).default('MIT'),
-  
+  license: z
+    .enum(['MIT', 'CC-BY', 'CC-BY-SA', 'CC0', 'proprietary', 'custom'])
+    .default('MIT'),
+
   // PM Requirement: Analytics tracking
-  usageStats: z.object({
-    timesUsed: z.number().default(0),
-    lastUsed: z.string().nullable().default(null),
-    popularity: z.number().default(0)
-  }).default({
-    timesUsed: 0,
-    lastUsed: null,
-    popularity: 0
-  }),
-  
+  usageStats: z
+    .object({
+      timesUsed: z.number().default(0),
+      lastUsed: z.string().nullable().default(null),
+      popularity: z.number().default(0)
+    })
+    .default({
+      timesUsed: 0,
+      lastUsed: null,
+      popularity: 0
+    }),
+
   // PM Requirement: Reserved for future marketplace
-  marketplace: z.object({
-    price: z.number().nullable().default(null),
-    rating: z.number().nullable().default(null),
-    downloads: z.number().default(0)
-  }).optional()
+  marketplace: z
+    .object({
+      price: z.number().nullable().default(null),
+      rating: z.number().nullable().default(null),
+      downloads: z.number().default(0)
+    })
+    .optional()
 });
 
 // Node schema (matching PSG format)
@@ -48,10 +54,12 @@ export const PSGLibNodeSchema = z.object({
     y: z.number()
   }),
   data: z.record(z.any()),
-  size: z.object({
-    width: z.number(),
-    height: z.number()
-  }).optional(),
+  size: z
+    .object({
+      width: z.number(),
+      height: z.number()
+    })
+    .optional(),
   style: z.record(z.any()).optional(),
   label: z.string().optional(),
   description: z.string().optional(),
@@ -200,10 +208,12 @@ export function createPSGLib(
   metadata: Partial<PSGLibMetadata>
 ): PSGLibFile {
   const now = new Date().toISOString();
-  
+
   // Generate unique ID if not provided
-  const id = metadata.id || `preset-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  
+  const id =
+    metadata.id ||
+    `preset-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
   // Extract node types from nodes
   const nodeTypes = [...new Set(nodes.map(n => n.type))];
 
@@ -300,11 +310,14 @@ function validateNoCycles(nodes: PSGLibNode[], edges: PSGLibEdge[]): void {
 /**
  * Track preset usage for analytics (PM requirement)
  */
-export function trackPresetUsage(preset: PSGLibFile, action: 'import' | 'export' | 'use'): void {
+export function trackPresetUsage(
+  preset: PSGLibFile,
+  action: 'import' | 'export' | 'use'
+): void {
   // Update usage stats
   preset.metadata.usageStats.timesUsed++;
   preset.metadata.usageStats.lastUsed = new Date().toISOString();
-  
+
   // Send analytics event (integrate with analytics service)
   if (typeof window !== 'undefined' && (window as any).analytics) {
     (window as any).analytics.track('preset_usage', {
@@ -324,7 +337,7 @@ export function trackPresetUsage(preset: PSGLibFile, action: 'import' | 'export'
 export function regenerateNodeIds(
   nodes: PSGLibNode[],
   edges: PSGLibEdge[]
-): { nodes: PSGLibNode[], edges: PSGLibEdge[] } {
+): { nodes: PSGLibNode[]; edges: PSGLibEdge[] } {
   const idMap = new Map<string, string>();
   const timestamp = Date.now();
 

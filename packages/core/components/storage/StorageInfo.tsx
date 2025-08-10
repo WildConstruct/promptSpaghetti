@@ -3,7 +3,11 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { getStorageInfo, exportBackup, clearPersistedState } from '../../utils/stateRestoration';
+import {
+  getStorageInfo,
+  exportBackup,
+  clearPersistedState
+} from '../../utils/stateRestoration';
 import { getPersistedStateInfo } from '../../utils/persistenceUtils';
 
 interface StorageInfoProps {
@@ -19,11 +23,14 @@ export function StorageInfo({
   onReset,
   className = ''
 }: StorageInfoProps) {
-  const [storageInfo, setStorageInfo] = useState<Awaited<ReturnType<typeof getStorageInfo>> | null>(null);
-  const [stateInfo, setStateInfo] = useState<ReturnType<typeof getPersistedStateInfo>>(null);
+  const [storageInfo, setStorageInfo] = useState<Awaited<
+    ReturnType<typeof getStorageInfo>
+  > | null>(null);
+  const [stateInfo, setStateInfo] =
+    useState<ReturnType<typeof getPersistedStateInfo>>(null);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  
+
   // Update storage information
   useEffect(() => {
     const updateInfo = async () => {
@@ -31,24 +38,24 @@ export function StorageInfo({
       setStorageInfo(storage);
       setStateInfo(getPersistedStateInfo());
     };
-    
+
     updateInfo();
-    
+
     // Update periodically
     const interval = setInterval(updateInfo, 30000); // Every 30 seconds
-    
+
     // Listen for storage events
     const handleStorageChange = () => updateInfo();
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('state-cleared', handleStorageChange);
-    
+
     return () => {
       clearInterval(interval);
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('state-cleared', handleStorageChange);
     };
   }, []);
-  
+
   const handleExportBackup = async () => {
     setIsExporting(true);
     try {
@@ -60,11 +67,11 @@ export function StorageInfo({
       setIsExporting(false);
     }
   };
-  
+
   const handleReset = () => {
     setShowResetConfirm(true);
   };
-  
+
   const confirmReset = async () => {
     // Export backup first
     try {
@@ -72,63 +79,68 @@ export function StorageInfo({
     } catch (error) {
       console.error('Backup export failed:', error);
     }
-    
+
     // Clear state
     clearPersistedState();
     setShowResetConfirm(false);
-    
+
     // Notify parent
     onReset?.();
-    
+
     // Reload to get fresh state
     setTimeout(() => {
       window.location.reload();
     }, 100);
   };
-  
+
   const cancelReset = () => {
     setShowResetConfirm(false);
   };
-  
+
   // Format last modified time
   const formatLastModified = () => {
     if (!stateInfo?.timestamp) return 'Never';
-    
+
     const date = new Date(stateInfo.timestamp);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
-    
+
     if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-    
+    if (diffMins < 60)
+      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-    
+    if (diffHours < 24)
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+
     return date.toLocaleDateString();
   };
-  
+
   if (!storageInfo) {
     return null;
   }
-  
-  const containerStyles: React.CSSProperties = position === 'fixed' ? {
-    position: 'fixed',
-    bottom: '20px',
-    left: '20px',
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-    padding: '12px 16px',
-    zIndex: 1000,
-    maxWidth: '300px'
-  } : {
-    backgroundColor: '#f8f9fa',
-    borderRadius: '8px',
-    border: '1px solid #dee2e6',
-    padding: '16px'
-  };
-  
+
+  const containerStyles: React.CSSProperties =
+    position === 'fixed'
+      ? {
+          position: 'fixed',
+          bottom: '20px',
+          left: '20px',
+          backgroundColor: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+          padding: '12px 16px',
+          zIndex: 1000,
+          maxWidth: '300px'
+        }
+      : {
+          backgroundColor: '#f8f9fa',
+          borderRadius: '8px',
+          border: '1px solid #dee2e6',
+          padding: '16px'
+        };
+
   return (
     <>
       <div className={className} style={containerStyles}>
@@ -146,7 +158,7 @@ export function StorageInfo({
           <span>💾</span>
           Storage Information
         </h4>
-        
+
         <div style={{ fontSize: '13px', color: '#6c757d' }}>
           {/* Last Modified */}
           <div
@@ -161,7 +173,7 @@ export function StorageInfo({
               {formatLastModified()}
             </span>
           </div>
-          
+
           {/* Storage Usage */}
           <div
             style={{
@@ -175,7 +187,7 @@ export function StorageInfo({
               {storageInfo.formattedUsed}
             </span>
           </div>
-          
+
           {/* Available Space */}
           {storageInfo.quota && (
             <div
@@ -191,7 +203,7 @@ export function StorageInfo({
               </span>
             </div>
           )}
-          
+
           {/* Storage Bar */}
           {storageInfo.quota && (
             <div style={{ marginTop: '12px' }}>
@@ -221,16 +233,19 @@ export function StorageInfo({
                   style={{
                     height: '100%',
                     width: `${Math.min(100, storageInfo.percentage)}%`,
-                    backgroundColor: 
-                      storageInfo.percentage > 90 ? '#dc3545' :
-                      storageInfo.percentage > 75 ? '#ffc107' : '#28a745',
+                    backgroundColor:
+                      storageInfo.percentage > 90
+                        ? '#dc3545'
+                        : storageInfo.percentage > 75
+                          ? '#ffc107'
+                          : '#28a745',
                     transition: 'width 0.3s ease'
                   }}
                 />
               </div>
             </div>
           )}
-          
+
           {/* Compression Status */}
           {stateInfo?.compressed && (
             <div
@@ -244,12 +259,15 @@ export function StorageInfo({
                 display: 'inline-block'
               }}
             >
-              🗜️ Data compressed ({stateInfo.size ? 
-                `${Math.round(stateInfo.size / 1024)} KB` : 'size unknown'})
+              🗜️ Data compressed (
+              {stateInfo.size
+                ? `${Math.round(stateInfo.size / 1024)} KB`
+                : 'size unknown'}
+              )
             </div>
           )}
         </div>
-        
+
         {/* Action Buttons */}
         {showActions && (
           <div
@@ -273,24 +291,25 @@ export function StorageInfo({
                 color: '#007bff',
                 fontSize: '12px',
                 fontWeight: '500',
-                cursor: isExporting || !stateInfo?.exists ? 'not-allowed' : 'pointer',
+                cursor:
+                  isExporting || !stateInfo?.exists ? 'not-allowed' : 'pointer',
                 opacity: isExporting || !stateInfo?.exists ? 0.5 : 1,
                 transition: 'all 0.2s'
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 if (!isExporting && stateInfo?.exists) {
                   e.currentTarget.style.backgroundColor = '#007bff';
                   e.currentTarget.style.color = 'white';
                 }
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.backgroundColor = 'white';
                 e.currentTarget.style.color = '#007bff';
               }}
             >
               {isExporting ? 'Exporting...' : 'Export Backup'}
             </button>
-            
+
             <button
               onClick={handleReset}
               style={{
@@ -305,11 +324,11 @@ export function StorageInfo({
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 e.currentTarget.style.backgroundColor = '#dc3545';
                 e.currentTarget.style.color = 'white';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.backgroundColor = 'white';
                 e.currentTarget.style.color = '#dc3545';
               }}
@@ -319,13 +338,10 @@ export function StorageInfo({
           </div>
         )}
       </div>
-      
+
       {/* Reset Confirmation Dialog */}
       {showResetConfirm && (
-        <ResetConfirmDialog
-          onConfirm={confirmReset}
-          onCancel={cancelReset}
-        />
+        <ResetConfirmDialog onConfirm={confirmReset} onCancel={cancelReset} />
       )}
     </>
   );
@@ -384,7 +400,7 @@ function ResetConfirmDialog({
           <span>⚠️</span>
           Reset Storage?
         </h3>
-        
+
         <p
           id="reset-description"
           style={{
@@ -394,10 +410,11 @@ function ResetConfirmDialog({
             lineHeight: '1.5'
           }}
         >
-          This will <strong>permanently delete</strong> all your saved work and cannot be undone.
-          A backup will be automatically exported before resetting.
+          This will <strong>permanently delete</strong> all your saved work and
+          cannot be undone. A backup will be automatically exported before
+          resetting.
         </p>
-        
+
         <div
           style={{
             backgroundColor: '#fff3cd',
@@ -409,11 +426,13 @@ function ResetConfirmDialog({
             color: '#856404'
           }}
         >
-          <strong>Note:</strong> Your current work will be exported as a backup file before 
-          resetting. You can re-import it later if needed.
+          <strong>Note:</strong> Your current work will be exported as a backup
+          file before resetting. You can re-import it later if needed.
         </div>
-        
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+
+        <div
+          style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}
+        >
           <button
             onClick={onCancel}
             style={{
@@ -427,16 +446,16 @@ function ResetConfirmDialog({
               cursor: 'pointer',
               transition: 'background-color 0.2s'
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = '#e9ecef';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = '#f8f9fa';
             }}
           >
             Cancel
           </button>
-          
+
           <button
             onClick={onConfirm}
             style={{
@@ -450,10 +469,10 @@ function ResetConfirmDialog({
               cursor: 'pointer',
               transition: 'background-color 0.2s'
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = '#c82333';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = '#dc3545';
             }}
           >

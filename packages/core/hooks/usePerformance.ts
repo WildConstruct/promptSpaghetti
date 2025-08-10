@@ -4,8 +4,8 @@
  */
 
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { 
-  getPerformanceInfrastructure, 
+import {
+  getPerformanceInfrastructure,
   initializePerformance,
   PerformanceReport,
   WorkerTask
@@ -82,7 +82,7 @@ export function useCachedData<T>(
       // Fetch fresh data
       const fresh = await fetcher();
       setData(fresh);
-      
+
       // Cache the result
       await cache.set(key, fresh, { ttl: options?.ttl });
     } catch (err) {
@@ -160,9 +160,7 @@ export function useWorkerTask<T>(
 /**
  * Hook for performance monitoring
  */
-export function usePerformanceMonitor(
-  updateInterval: number = 1000
-): {
+export function usePerformanceMonitor(updateInterval: number = 1000): {
   report: PerformanceReport | null;
   fps: number;
   memory: { used: number; percentage: number };
@@ -181,7 +179,9 @@ export function usePerformanceMonitor(
     const interval = setInterval(async () => {
       // Get cache stats
       const cacheStats = cache ? await cache.getStats() : null;
-      const cacheHitRate = cacheStats?.l1.hitRate ? parseFloat(cacheStats.l1.hitRate) : 0;
+      const cacheHitRate = cacheStats?.l1.hitRate
+        ? parseFloat(cacheStats.l1.hitRate)
+        : 0;
 
       // Get worker stats
       const workerStats = workerPool?.getStats();
@@ -203,23 +203,29 @@ export function usePerformanceMonitor(
     return () => clearInterval(interval);
   }, [perfMonitor, cache, workerPool, updateInterval]);
 
-  const startMeasure = useCallback((name: string) => {
-    marksRef.current.set(name, performance.now());
-    perfMonitor?.mark(name);
-  }, [perfMonitor]);
+  const startMeasure = useCallback(
+    (name: string) => {
+      marksRef.current.set(name, performance.now());
+      perfMonitor?.mark(name);
+    },
+    [perfMonitor]
+  );
 
-  const endMeasure = useCallback((startName: string, endName?: string) => {
-    const startTime = marksRef.current.get(startName);
-    if (!startTime) return 0;
+  const endMeasure = useCallback(
+    (startName: string, endName?: string) => {
+      const startTime = marksRef.current.get(startName);
+      if (!startTime) return 0;
 
-    const duration = performance.now() - startTime;
-    const metricName = endName || startName;
-    
-    perfMonitor?.record(metricName, duration);
-    marksRef.current.delete(startName);
-    
-    return duration;
-  }, [perfMonitor]);
+      const duration = performance.now() - startTime;
+      const metricName = endName || startName;
+
+      perfMonitor?.record(metricName, duration);
+      marksRef.current.delete(startName);
+
+      return duration;
+    },
+    [perfMonitor]
+  );
 
   return { report, fps, memory, startMeasure, endMeasure };
 }
@@ -234,7 +240,7 @@ export function useRenderPerformance(componentName: string) {
 
   useEffect(() => {
     renderStartRef.current = performance.now();
-    
+
     return () => {
       if (perfMonitor && renderStartRef.current) {
         const duration = performance.now() - renderStartRef.current;
@@ -246,11 +252,14 @@ export function useRenderPerformance(componentName: string) {
 
   return {
     renderCount: renderCount.current,
-    measure: useCallback((operation: string, fn: () => void) => {
-      if (perfMonitor) {
-        return perfMonitor.measure(`${componentName}:${operation}`, fn);
-      }
-      fn();
-    }, [perfMonitor, componentName])
+    measure: useCallback(
+      (operation: string, fn: () => void) => {
+        if (perfMonitor) {
+          return perfMonitor.measure(`${componentName}:${operation}`, fn);
+        }
+        fn();
+      },
+      [perfMonitor, componentName]
+    )
   };
 }

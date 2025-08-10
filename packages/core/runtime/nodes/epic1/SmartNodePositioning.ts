@@ -1,6 +1,6 @@
 /**
  * Smart Node Positioning System for Epic 1
- * 
+ *
  * Implements intelligent node placement that minimizes overlaps,
  * creates natural flow, and groups related content together.
  */
@@ -63,7 +63,7 @@ export class SmartNodePositioner {
     groupSpacing: 50,
     flowDirection: 'diagonal'
   };
-  
+
   private readonly nodeDimensions: Record<Epic1NodeType, NodeDimensions> = {
     [Epic1NodeType.TextBlock]: { width: 200, height: 80 },
     [Epic1NodeType.WeightedChoice]: { width: 240, height: 120 },
@@ -71,7 +71,7 @@ export class SmartNodePositioner {
     [Epic1NodeType.Variable]: { width: 180, height: 70 },
     [Epic1NodeType.Output]: { width: 120, height: 60 }
   };
-  
+
   /**
    * Calculate smart positions for all nodes
    */
@@ -80,10 +80,10 @@ export class SmartNodePositioner {
     config?: Partial<LayoutConfig>
   ): NodePosition[] {
     const finalConfig = { ...this.defaultConfig, ...config };
-    
+
     // Identify node groups based on relationships
     const groups = this.identifyNodeGroups(nodes);
-    
+
     // Calculate positions based on flow direction
     switch (finalConfig.flowDirection) {
       case 'horizontal':
@@ -95,44 +95,47 @@ export class SmartNodePositioner {
         return this.layoutDiagonal(nodes, groups, finalConfig);
     }
   }
-  
+
   /**
    * Identify groups of related nodes
    */
   private identifyNodeGroups(nodes: GeneratedNode[]): NodeGroup[] {
     const groups: NodeGroup[] = [];
     const visited = new Set<number>();
-    
+
     for (let i = 0; i < nodes.length; i++) {
       if (visited.has(i)) continue;
-      
+
       const group: NodeGroup = {
         nodes: [i],
         bounds: { minX: 0, maxX: 0, minY: 0, maxY: 0 }
       };
-      
+
       // Check if this node is related to others
       const node = nodes[i];
-      
+
       // Group nodes that share source segments
       for (let j = i + 1; j < nodes.length; j++) {
         if (visited.has(j)) continue;
-        
+
         const otherNode = nodes[j];
         if (this.areNodesRelated(node, otherNode)) {
           group.nodes.push(j);
           visited.add(j);
         }
       }
-      
+
       // Group consecutive text blocks
       if (node.node.getType() === Epic1NodeType.TextBlock) {
         for (let j = i + 1; j < nodes.length; j++) {
           if (visited.has(j)) continue;
-          
+
           const otherNode = nodes[j];
-          if (otherNode.node.getType() === Epic1NodeType.TextBlock &&
-              j === i + 1) { // Only consecutive blocks
+          if (
+            otherNode.node.getType() === Epic1NodeType.TextBlock &&
+            j === i + 1
+          ) {
+            // Only consecutive blocks
             group.nodes.push(j);
             visited.add(j);
           } else {
@@ -140,14 +143,14 @@ export class SmartNodePositioner {
           }
         }
       }
-      
+
       visited.add(i);
       groups.push(group);
     }
-    
+
     return groups;
   }
-  
+
   /**
    * Check if two nodes are related
    */
@@ -155,20 +158,22 @@ export class SmartNodePositioner {
     // Check if they share source segments
     const segments1 = new Set(node1.sourceSegments);
     const segments2 = new Set(node2.sourceSegments);
-    
+
     for (const seg of segments1) {
       if (segments2.has(seg)) return true;
     }
-    
+
     // Check if one is a concat node between others
-    if (node1.node.getType() === Epic1NodeType.Concat ||
-        node2.node.getType() === Epic1NodeType.Concat) {
+    if (
+      node1.node.getType() === Epic1NodeType.Concat ||
+      node2.node.getType() === Epic1NodeType.Concat
+    ) {
       return true;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Layout nodes horizontally (left to right flow)
    */
@@ -181,7 +186,7 @@ export class SmartNodePositioner {
     let currentX = config.baseX;
     let currentY = config.baseY;
     let rowHeight = 0;
-    
+
     for (const group of groups) {
       const groupPositions = this.layoutGroup(
         group,
@@ -191,20 +196,20 @@ export class SmartNodePositioner {
         config,
         'horizontal'
       );
-      
+
       // Update positions array
       for (let i = 0; i < group.nodes.length; i++) {
         positions[group.nodes[i]] = groupPositions[i];
       }
-      
+
       // Calculate group bounds
       const groupWidth = this.calculateGroupWidth(group, nodes);
       const groupHeight = this.calculateGroupHeight(group, nodes);
-      
+
       // Update position for next group
       currentX += groupWidth + config.groupSpacing;
       rowHeight = Math.max(rowHeight, groupHeight);
-      
+
       // Wrap to next row if needed
       if (currentX > config.maxWidth) {
         currentX = config.baseX;
@@ -212,10 +217,10 @@ export class SmartNodePositioner {
         rowHeight = 0;
       }
     }
-    
+
     return positions;
   }
-  
+
   /**
    * Layout nodes vertically (top to bottom flow)
    */
@@ -227,7 +232,7 @@ export class SmartNodePositioner {
     const positions: NodePosition[] = [];
     let currentX = config.baseX;
     let currentY = config.baseY;
-    
+
     for (const group of groups) {
       const groupPositions = this.layoutGroup(
         group,
@@ -237,22 +242,22 @@ export class SmartNodePositioner {
         config,
         'vertical'
       );
-      
+
       // Update positions array
       for (let i = 0; i < group.nodes.length; i++) {
         positions[group.nodes[i]] = groupPositions[i];
       }
-      
+
       // Calculate group height
       const groupHeight = this.calculateGroupHeight(group, nodes);
-      
+
       // Update position for next group
       currentY += groupHeight + config.groupSpacing;
     }
-    
+
     return positions;
   }
-  
+
   /**
    * Layout nodes diagonally (natural reading flow)
    */
@@ -265,7 +270,7 @@ export class SmartNodePositioner {
     let currentX = config.baseX;
     let currentY = config.baseY;
     let diagonalOffset = 0;
-    
+
     for (let g = 0; g < groups.length; g++) {
       const group = groups[g];
       const groupPositions = this.layoutGroup(
@@ -276,16 +281,16 @@ export class SmartNodePositioner {
         config,
         'diagonal'
       );
-      
+
       // Update positions array
       for (let i = 0; i < group.nodes.length; i++) {
         positions[group.nodes[i]] = groupPositions[i];
       }
-      
+
       // Calculate next position with diagonal offset
       const groupWidth = this.calculateGroupWidth(group, nodes);
       const groupHeight = this.calculateGroupHeight(group, nodes);
-      
+
       // Create a flowing diagonal pattern
       if (g % 2 === 0) {
         // Even groups: move right and slightly down
@@ -296,15 +301,15 @@ export class SmartNodePositioner {
         currentX += 50; // Slight horizontal offset
         currentY += groupHeight + config.verticalSpacing;
       }
-      
+
       // Wrap if we go too far right
       if (currentX > config.maxWidth) {
-        currentX = config.baseX + (diagonalOffset * 100);
+        currentX = config.baseX + diagonalOffset * 100;
         currentY += config.verticalSpacing * 2;
         diagonalOffset = (diagonalOffset + 1) % 3;
       }
     }
-    
+
     // Special handling for output node (last node)
     if (nodes.length > 0) {
       const lastNode = nodes[nodes.length - 1];
@@ -312,17 +317,17 @@ export class SmartNodePositioner {
         // Position output node at the bottom right
         const maxX = Math.max(...positions.map(p => p.x));
         const maxY = Math.max(...positions.map(p => p.y));
-        
+
         positions[nodes.length - 1] = {
           x: maxX + config.horizontalSpacing,
           y: maxY + config.verticalSpacing
         };
       }
     }
-    
+
     return positions;
   }
-  
+
   /**
    * Layout nodes within a group
    */
@@ -337,16 +342,16 @@ export class SmartNodePositioner {
     const positions: NodePosition[] = [];
     let currentX = startX;
     let currentY = startY;
-    
+
     for (let i = 0; i < group.nodes.length; i++) {
       const nodeIndex = group.nodes[i];
       const node = nodes[nodeIndex];
       const nodeType = node.node.getType();
       const dimensions = this.nodeDimensions[nodeType];
-      
+
       // Position this node
       positions.push({ x: currentX, y: currentY });
-      
+
       // Update position for next node in group
       switch (direction) {
         case 'horizontal':
@@ -365,40 +370,46 @@ export class SmartNodePositioner {
           break;
       }
     }
-    
+
     return positions;
   }
-  
+
   /**
    * Calculate total width of a group
    */
-  private calculateGroupWidth(group: NodeGroup, nodes: GeneratedNode[]): number {
+  private calculateGroupWidth(
+    group: NodeGroup,
+    nodes: GeneratedNode[]
+  ): number {
     let totalWidth = 0;
-    
+
     for (const nodeIndex of group.nodes) {
       const node = nodes[nodeIndex];
       const dimensions = this.nodeDimensions[node.node.getType()];
       totalWidth = Math.max(totalWidth, dimensions.width);
     }
-    
+
     return totalWidth;
   }
-  
+
   /**
    * Calculate total height of a group
    */
-  private calculateGroupHeight(group: NodeGroup, nodes: GeneratedNode[]): number {
+  private calculateGroupHeight(
+    group: NodeGroup,
+    nodes: GeneratedNode[]
+  ): number {
     let totalHeight = 0;
-    
+
     for (const nodeIndex of group.nodes) {
       const node = nodes[nodeIndex];
       const dimensions = this.nodeDimensions[node.node.getType()];
       totalHeight = Math.max(totalHeight, dimensions.height);
     }
-    
+
     return totalHeight;
   }
-  
+
   /**
    * Optimize positions to minimize overlaps
    */
@@ -408,10 +419,10 @@ export class SmartNodePositioner {
     iterations: number = 10
   ): NodePosition[] {
     const optimized = [...positions];
-    
+
     for (let iter = 0; iter < iterations; iter++) {
       let hasOverlap = false;
-      
+
       // Check all pairs for overlaps
       for (let i = 0; i < optimized.length; i++) {
         for (let j = i + 1; j < optimized.length; j++) {
@@ -421,14 +432,14 @@ export class SmartNodePositioner {
           const pos2 = optimized[j];
           const dim1 = this.nodeDimensions[node1.node.getType()];
           const dim2 = this.nodeDimensions[node2.node.getType()];
-          
+
           // Check for overlap
           if (this.doNodesOverlap(pos1, dim1, pos2, dim2)) {
             hasOverlap = true;
-            
+
             // Resolve overlap by moving the second node
             const overlap = this.calculateOverlap(pos1, dim1, pos2, dim2);
-            
+
             // Move in the direction of least overlap
             if (overlap.horizontal < overlap.vertical) {
               // Move horizontally
@@ -440,14 +451,14 @@ export class SmartNodePositioner {
           }
         }
       }
-      
+
       // If no overlaps found, we're done
       if (!hasOverlap) break;
     }
-    
+
     return optimized;
   }
-  
+
   /**
    * Check if two nodes overlap
    */
@@ -458,7 +469,7 @@ export class SmartNodePositioner {
     dim2: NodeDimensions
   ): boolean {
     const buffer = 20; // Small buffer between nodes
-    
+
     return !(
       pos1.x + dim1.width + buffer < pos2.x ||
       pos2.x + dim2.width + buffer < pos1.x ||
@@ -466,7 +477,7 @@ export class SmartNodePositioner {
       pos2.y + dim2.height + buffer < pos1.y
     );
   }
-  
+
   /**
    * Calculate overlap amount
    */
@@ -480,12 +491,12 @@ export class SmartNodePositioner {
       pos1.x + dim1.width - pos2.x,
       pos2.x + dim2.width - pos1.x
     );
-    
+
     const verticalOverlap = Math.min(
       pos1.y + dim1.height - pos2.y,
       pos2.y + dim2.height - pos1.y
     );
-    
+
     return {
       horizontal: horizontalOverlap,
       vertical: verticalOverlap

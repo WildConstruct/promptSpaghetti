@@ -117,7 +117,7 @@ describe('Node Grouping', () => {
       };
 
       const bounds = await getGroupBounds(emptyGroup, nodes);
-      
+
       expect(bounds).toEqual({ x: 0, y: 0, width: 0, height: 0 });
     });
   });
@@ -146,7 +146,7 @@ describe('Node Grouping', () => {
       groups.set('group-2', group2);
 
       const validation = await validateGroupHierarchy(groups);
-      
+
       expect(validation.valid).toBe(true);
       expect(validation.errors).toHaveLength(0);
     });
@@ -175,9 +175,11 @@ describe('Node Grouping', () => {
       groups.set('group-2', group2);
 
       const validation = await validateGroupHierarchy(groups);
-      
+
       expect(validation.valid).toBe(false);
-      expect(validation.errors).toContain('Circular dependency detected: group-1');
+      expect(validation.errors).toContain(
+        'Circular dependency detected: group-1'
+      );
     });
 
     test('should detect max depth exceeded', async () => {
@@ -223,9 +225,11 @@ describe('Node Grouping', () => {
       groups.set('group-4', group4);
 
       const validation = await validateGroupHierarchy(groups, 3);
-      
+
       expect(validation.valid).toBe(false);
-      expect(validation.errors).toContain('Group group-4 exceeds max depth of 3');
+      expect(validation.errors).toContain(
+        'Group group-4 exceeds max depth of 3'
+      );
     });
 
     test('should warn about orphaned groups', async () => {
@@ -241,7 +245,7 @@ describe('Node Grouping', () => {
       groups.set('orphan', orphanedGroup);
 
       const validation = await validateGroupHierarchy(groups);
-      
+
       expect(validation.valid).toBe(true); // Warnings don't invalidate
       expect(validation.warnings).toContain(
         'Orphaned group: orphan references non-existent parent non-existent'
@@ -315,10 +319,10 @@ describe('Node Grouping', () => {
       }));
 
       const startTime = performance.now();
-      
+
       const largeGroup = await createGroup(largeNodeIds, groups, 'Large Group');
       const bounds = await getGroupBounds(largeGroup, largeNodes);
-      
+
       const duration = performance.now() - startTime;
 
       // Should complete in reasonable time (< 100ms without workers)
@@ -330,7 +334,7 @@ describe('Node Grouping', () => {
     test('should handle deep nesting efficiently', async () => {
       // Create nested groups
       let parentId: string | undefined;
-      
+
       for (let i = 0; i < 3; i++) {
         const group: NodeGroup = {
           id: `level-${i}`,
@@ -340,7 +344,7 @@ describe('Node Grouping', () => {
           collapsed: false,
           metadata: { createdAt: Date.now(), updatedAt: Date.now() }
         };
-        
+
         groups.set(group.id, group);
         parentId = group.id;
       }

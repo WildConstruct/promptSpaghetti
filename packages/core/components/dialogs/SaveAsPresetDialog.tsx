@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { createPSGLib, serializePSGLib, trackPresetUsage, type PSGLibMetadata } from '../../fileFormats/psglib';
+import {
+  createPSGLib,
+  serializePSGLib,
+  trackPresetUsage,
+  type PSGLibMetadata
+} from '../../fileFormats/psglib';
 
 interface SaveAsPresetDialogProps {
   isOpen: boolean;
@@ -25,7 +30,8 @@ export function SaveAsPresetDialog({
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [license, setLicense] = useState<PSGLibMetadata['license']>('MIT');
-  const [saveToLibraryChecked, setSaveToLibraryChecked] = useState(saveToLibrary);
+  const [saveToLibraryChecked, setSaveToLibraryChecked] =
+    useState(saveToLibrary);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -59,24 +65,23 @@ export function SaveAsPresetDialog({
 
     try {
       // Create PSGLib file
-      const psglib = createPSGLib(
-        selectedNodes,
-        selectedEdges,
-        {
-          name: name.trim(),
-          description: description.trim(),
-          author: currentUser,
-          tags,
-          license
-        }
-      );
+      const psglib = createPSGLib(selectedNodes, selectedEdges, {
+        name: name.trim(),
+        description: description.trim(),
+        author: currentUser,
+        tags,
+        license
+      });
 
       // Track creation for analytics
       trackPresetUsage(psglib, 'export');
 
       // Serialize to JSON
       const jsonString = serializePSGLib(psglib);
-      const filename = `${name.trim().replace(/[^a-z0-9-_]/gi, '-').toLowerCase()}.psglib`;
+      const filename = `${name
+        .trim()
+        .replace(/[^a-z0-9-_]/gi, '-')
+        .toLowerCase()}.psglib`;
 
       if (saveToLibraryChecked) {
         // Save to library directory
@@ -114,9 +119,9 @@ export function SaveAsPresetDialog({
   };
 
   return (
-    <div 
-      role="dialog" 
-      aria-modal="true" 
+    <div
+      role="dialog"
+      aria-modal="true"
       aria-label="Save as Preset"
       style={{
         position: 'fixed',
@@ -128,24 +133,28 @@ export function SaveAsPresetDialog({
         zIndex: 1000
       }}
     >
-      <div style={{
-        background: '#fff',
-        borderRadius: 8,
-        width: 520,
-        maxWidth: '95vw',
-        maxHeight: '80vh',
-        overflow: 'auto',
-        boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
-      }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '16px 20px',
-          borderBottom: '1px solid #e1e4e8'
-        }}>
+      <div
+        style={{
+          background: '#fff',
+          borderRadius: 8,
+          width: 520,
+          maxWidth: '95vw',
+          maxHeight: '80vh',
+          overflow: 'auto',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.2)'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '16px 20px',
+            borderBottom: '1px solid #e1e4e8'
+          }}
+        >
           <h2 style={{ margin: 0, fontSize: 18 }}>Save as Preset</h2>
-          <button 
+          <button
             onClick={onClose}
             aria-label="Close"
             style={{
@@ -167,13 +176,15 @@ export function SaveAsPresetDialog({
 
         <div style={{ padding: 20 }}>
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>
+            <label
+              style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}
+            >
               Name *
             </label>
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={e => setName(e.target.value)}
               placeholder="My Awesome Preset"
               style={{
                 width: '100%',
@@ -186,12 +197,14 @@ export function SaveAsPresetDialog({
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>
+            <label
+              style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}
+            >
               Description
             </label>
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={e => setDescription(e.target.value)}
               placeholder="What does this preset do?"
               rows={3}
               style={{
@@ -206,10 +219,19 @@ export function SaveAsPresetDialog({
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>
+            <label
+              style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}
+            >
               Tags
             </label>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: 8,
+                marginBottom: 8,
+                flexWrap: 'wrap'
+              }}
+            >
               {tags.map(tag => (
                 <span
                   key={tag}
@@ -244,8 +266,10 @@ export function SaveAsPresetDialog({
               <input
                 type="text"
                 value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                onChange={e => setTagInput(e.target.value)}
+                onKeyDown={e =>
+                  e.key === 'Enter' && (e.preventDefault(), handleAddTag())
+                }
                 placeholder="Add a tag"
                 style={{
                   flex: 1,
@@ -272,12 +296,16 @@ export function SaveAsPresetDialog({
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>
+            <label
+              style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}
+            >
               License
             </label>
             <select
               value={license}
-              onChange={(e) => setLicense(e.target.value as PSGLibMetadata['license'])}
+              onChange={e =>
+                setLicense(e.target.value as PSGLibMetadata['license'])
+              }
               style={{
                 width: '100%',
                 padding: '8px 12px',
@@ -297,7 +325,9 @@ export function SaveAsPresetDialog({
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>
+            <label
+              style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}
+            >
               Author
             </label>
             <input
@@ -321,7 +351,7 @@ export function SaveAsPresetDialog({
               <input
                 type="checkbox"
                 checked={saveToLibraryChecked}
-                onChange={(e) => setSaveToLibraryChecked(e.target.checked)}
+                onChange={e => setSaveToLibraryChecked(e.target.checked)}
               />
               <span>Save to library for immediate use</span>
             </label>
@@ -345,13 +375,15 @@ export function SaveAsPresetDialog({
           )}
         </div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          gap: 8,
-          padding: '16px 20px',
-          borderTop: '1px solid #e1e4e8'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            gap: 8,
+            padding: '16px 20px',
+            borderTop: '1px solid #e1e4e8'
+          }}
+        >
           <button
             onClick={onClose}
             style={{

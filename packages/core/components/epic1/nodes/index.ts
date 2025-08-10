@@ -11,13 +11,19 @@ import { NodeContextMenu } from './NodeContextMenu';
 
 // Export components and types
 export { BaseEditableNode };
-export type { BaseEditableNodeProps, EditableNodeData } from './BaseEditableNode';
+export type {
+  BaseEditableNodeProps,
+  EditableNodeData
+} from './BaseEditableNode';
 
 export { TextBlockNode };
 export type { TextBlockNodeData } from './TextBlockNode';
 
 export { EnhancedBranchingNode as WeightedChoiceNode };
-export type { EnhancedBranchingNodeData as WeightedChoiceNodeData, WeightedOption } from './EnhancedBranchingNode';
+export type {
+  EnhancedBranchingNodeData as WeightedChoiceNodeData,
+  WeightedOption
+} from './EnhancedBranchingNode';
 
 export { ConcatNode };
 export type { ConcatNodeData } from './ConcatNode';
@@ -39,7 +45,7 @@ export const epic1NodeTypes = {
   variable: VariableNode,
   setVariable: VariableNode,
   getVariable: VariableNode,
-  output: OutputNode,
+  output: OutputNode
 };
 
 // Note: CSS imports removed to avoid bundling issues

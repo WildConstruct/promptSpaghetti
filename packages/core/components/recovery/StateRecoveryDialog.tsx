@@ -21,10 +21,12 @@ export function StateRecoveryDialog({
   onClose
 }: StateRecoveryDialogProps) {
   const totalRecoverable = report.recoverable.nodes + report.recoverable.edges;
-  const totalCorrupted = report.corrupted.nodes.length + report.corrupted.edges.length;
+  const totalCorrupted =
+    report.corrupted.nodes.length + report.corrupted.edges.length;
   const total = totalRecoverable + totalCorrupted;
-  const recoveryPercentage = total > 0 ? Math.round((totalRecoverable / total) * 100) : 0;
-  
+  const recoveryPercentage =
+    total > 0 ? Math.round((totalRecoverable / total) * 100) : 0;
+
   return (
     <div
       style={{
@@ -70,7 +72,7 @@ export function StateRecoveryDialog({
           <span style={{ fontSize: '28px' }}>⚠️</span>
           State Recovery Needed
         </h2>
-        
+
         <p
           id="recovery-description"
           style={{
@@ -80,9 +82,10 @@ export function StateRecoveryDialog({
             lineHeight: '1.6'
           }}
         >
-          {report.details || 'We detected issues with your saved work. Choose how to proceed:'}
+          {report.details ||
+            'We detected issues with your saved work. Choose how to proceed:'}
         </p>
-        
+
         {/* Recovery Statistics */}
         <div
           style={{
@@ -103,7 +106,7 @@ export function StateRecoveryDialog({
           >
             Recovery Analysis
           </h3>
-          
+
           <div style={{ display: 'grid', gap: '8px', fontSize: '13px' }}>
             <RecoveryStatRow
               label="Nodes"
@@ -126,7 +129,7 @@ export function StateRecoveryDialog({
               </div>
             )}
           </div>
-          
+
           {recoveryPercentage > 0 && (
             <div
               style={{
@@ -146,7 +149,13 @@ export function StateRecoveryDialog({
                 <span style={{ fontSize: '12px', color: '#6c757d' }}>
                   Recovery Rate
                 </span>
-                <span style={{ fontSize: '14px', fontWeight: '600', color: '#495057' }}>
+                <span
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    color: '#495057'
+                  }}
+                >
                   {recoveryPercentage}%
                 </span>
               </div>
@@ -162,8 +171,12 @@ export function StateRecoveryDialog({
                   style={{
                     height: '100%',
                     width: `${recoveryPercentage}%`,
-                    backgroundColor: recoveryPercentage > 80 ? '#28a745' : 
-                                     recoveryPercentage > 50 ? '#ffc107' : '#dc3545',
+                    backgroundColor:
+                      recoveryPercentage > 80
+                        ? '#28a745'
+                        : recoveryPercentage > 50
+                          ? '#ffc107'
+                          : '#dc3545',
                     transition: 'width 0.3s ease'
                   }}
                 />
@@ -171,7 +184,7 @@ export function StateRecoveryDialog({
             </div>
           )}
         </div>
-        
+
         {/* Error Messages */}
         {report.errors.length > 0 && (
           <div
@@ -210,7 +223,7 @@ export function StateRecoveryDialog({
             </ul>
           </div>
         )}
-        
+
         {/* Action Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {report.recommendation !== 'reset' && (
@@ -231,10 +244,10 @@ export function StateRecoveryDialog({
                 justifyContent: 'center',
                 gap: '8px'
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 e.currentTarget.style.backgroundColor = '#0056b3';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.backgroundColor = '#007bff';
               }}
             >
@@ -247,14 +260,15 @@ export function StateRecoveryDialog({
               )}
             </button>
           )}
-          
+
           <button
             onClick={onStartFresh}
             style={{
               padding: '12px 20px',
               borderRadius: '6px',
               border: '1px solid #dee2e6',
-              backgroundColor: report.recommendation === 'reset' ? '#28a745' : '#f8f9fa',
+              backgroundColor:
+                report.recommendation === 'reset' ? '#28a745' : '#f8f9fa',
               color: report.recommendation === 'reset' ? 'white' : '#495057',
               fontSize: '15px',
               fontWeight: '500',
@@ -265,14 +279,14 @@ export function StateRecoveryDialog({
               justifyContent: 'center',
               gap: '8px'
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               if (report.recommendation === 'reset') {
                 e.currentTarget.style.backgroundColor = '#218838';
               } else {
                 e.currentTarget.style.backgroundColor = '#e9ecef';
               }
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               if (report.recommendation === 'reset') {
                 e.currentTarget.style.backgroundColor = '#28a745';
               } else {
@@ -288,7 +302,7 @@ export function StateRecoveryDialog({
               </span>
             )}
           </button>
-          
+
           <button
             onClick={onLoadFromFile}
             style={{
@@ -306,17 +320,17 @@ export function StateRecoveryDialog({
               justifyContent: 'center',
               gap: '8px'
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = '#e9ecef';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = '#f8f9fa';
             }}
           >
             <span>📁</span>
             Load from File
           </button>
-          
+
           {onClose && (
             <button
               onClick={onClose}
@@ -329,10 +343,10 @@ export function StateRecoveryDialog({
                 cursor: 'pointer',
                 transition: 'color 0.2s'
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 e.currentTarget.style.color = '#495057';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.color = '#6c757d';
               }}
             >
@@ -358,15 +372,11 @@ function RecoveryStatRow({
   corrupted: number;
 }) {
   const total = recoverable + corrupted;
-  
+
   if (total === 0) {
-    return (
-      <div style={{ color: '#6c757d' }}>
-        {label}: None found
-      </div>
-    );
+    return <div style={{ color: '#6c757d' }}>{label}: None found</div>;
   }
-  
+
   return (
     <div
       style={{

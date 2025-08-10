@@ -1,6 +1,6 @@
 /**
  * Epic 1 - Preview Caching System
- * 
+ *
  * Stores and retrieves preview results to avoid redundant executions.
  * Uses graph hash and seed values as cache keys.
  */
@@ -44,7 +44,11 @@ export class PreviewCache {
   /**
    * Generate a cache key from nodes, edges, and seeds
    */
-  private generateKey(nodes: ReactFlowNode[], edges: ReactFlowEdge[], seeds: number[]): string {
+  private generateKey(
+    nodes: ReactFlowNode[],
+    edges: ReactFlowEdge[],
+    seeds: number[]
+  ): string {
     const graphHash = this.hashGraph(nodes, edges);
     const seedsKey = seeds.join(',');
     return `${graphHash}-${seedsKey}`;
@@ -59,28 +63,30 @@ export class PreviewCache {
     const sortedEdges = [...edges].sort((a, b) => a.id.localeCompare(b.id));
 
     // Create a string representation of the graph
-    const nodeStr = sortedNodes.map(n => 
-      `${n.id}:${n.type}:${JSON.stringify(n.data)}`
-    ).join('|');
-    
-    const edgeStr = sortedEdges.map(e => 
-      `${e.source}->${e.target}`
-    ).join('|');
+    const nodeStr = sortedNodes
+      .map(n => `${n.id}:${n.type}:${JSON.stringify(n.data)}`)
+      .join('|');
+
+    const edgeStr = sortedEdges.map(e => `${e.source}->${e.target}`).join('|');
 
     // Simple hash function (djb2)
     let hash = 5381;
     const str = `${nodeStr}::${edgeStr}`;
     for (let i = 0; i < str.length; i++) {
-      hash = ((hash << 5) + hash) + str.charCodeAt(i);
+      hash = (hash << 5) + hash + str.charCodeAt(i);
     }
-    
+
     return hash.toString(36);
   }
 
   /**
    * Get cached results if available and fresh
    */
-  get(nodes: ReactFlowNode[], edges: ReactFlowEdge[], seeds: number[]): ExecutionResult[] | null {
+  get(
+    nodes: ReactFlowNode[],
+    edges: ReactFlowEdge[],
+    seeds: number[]
+  ): ExecutionResult[] | null {
     const key = this.generateKey(nodes, edges, seeds);
     const entry = this.cache.get(key);
 
@@ -104,20 +110,25 @@ export class PreviewCache {
     entry.hits++;
     this.stats.hits++;
     this.updateHitRate();
-    
+
     // Move to end (LRU behavior)
     this.cache.delete(key);
     this.cache.set(key, entry);
-    
+
     return entry.results;
   }
 
   /**
    * Store results in cache
    */
-  set(nodes: ReactFlowNode[], edges: ReactFlowEdge[], seeds: number[], results: ExecutionResult[]): void {
+  set(
+    nodes: ReactFlowNode[],
+    edges: ReactFlowEdge[],
+    seeds: number[],
+    results: ExecutionResult[]
+  ): void {
     const key = this.generateKey(nodes, edges, seeds);
-    
+
     // Check if we need to evict old entries
     if (this.cache.size >= this.maxSize && !this.cache.has(key)) {
       this.evictOldest();
@@ -194,12 +205,16 @@ export class PreviewCache {
   /**
    * Check if a specific graph configuration is cached
    */
-  has(nodes: ReactFlowNode[], edges: ReactFlowEdge[], seeds: number[]): boolean {
+  has(
+    nodes: ReactFlowNode[],
+    edges: ReactFlowEdge[],
+    seeds: number[]
+  ): boolean {
     const key = this.generateKey(nodes, edges, seeds);
     const entry = this.cache.get(key);
-    
+
     if (!entry) return false;
-    
+
     // Check if expired
     const age = Date.now() - entry.timestamp;
     return age <= this.maxAge;
@@ -208,12 +223,16 @@ export class PreviewCache {
   /**
    * Get the age of a cache entry in milliseconds
    */
-  getAge(nodes: ReactFlowNode[], edges: ReactFlowEdge[], seeds: number[]): number | null {
+  getAge(
+    nodes: ReactFlowNode[],
+    edges: ReactFlowEdge[],
+    seeds: number[]
+  ): number | null {
     const key = this.generateKey(nodes, edges, seeds);
     const entry = this.cache.get(key);
-    
+
     if (!entry) return null;
-    
+
     return Date.now() - entry.timestamp;
   }
 
@@ -248,14 +267,16 @@ export class PreviewCache {
     try {
       const parsed = JSON.parse(data);
       this.cache.clear();
-      
+
       // Reconstruct cache with proper key generation
       parsed.entries.forEach((entry: CacheEntry) => {
         // We can't reconstruct the original key without nodes/edges
         // This is primarily for debugging/inspection
-        console.warn('Cache import requires nodes/edges for proper key generation');
+        console.warn(
+          'Cache import requires nodes/edges for proper key generation'
+        );
       });
-      
+
       this.stats = parsed.stats;
       this.maxSize = parsed.maxSize;
       this.maxAge = parsed.maxAge;

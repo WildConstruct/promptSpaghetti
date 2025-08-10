@@ -188,11 +188,13 @@ export function useEditTransitions({
 
 // Hook for managing weighted choice option animations
 export function useWeightedOptionTransitions() {
-  const [animatingOptions, setAnimatingOptions] = useState<Set<number>>(new Set());
+  const [animatingOptions, setAnimatingOptions] = useState<Set<number>>(
+    new Set()
+  );
 
   const animateOptionAdd = useCallback((index: number) => {
     setAnimatingOptions(prev => new Set(prev).add(index));
-    
+
     setTimeout(() => {
       setAnimatingOptions(prev => {
         const next = new Set(prev);
@@ -202,23 +204,31 @@ export function useWeightedOptionTransitions() {
     }, 300);
   }, []);
 
-  const animateOptionRemove = useCallback((index: number, onComplete: () => void) => {
-    setAnimatingOptions(prev => new Set(prev).add(index));
-    
-    setTimeout(() => {
-      onComplete();
-      setAnimatingOptions(prev => {
-        const next = new Set(prev);
-        next.delete(index);
-        return next;
-      });
-    }, 200);
-  }, []);
+  const animateOptionRemove = useCallback(
+    (index: number, onComplete: () => void) => {
+      setAnimatingOptions(prev => new Set(prev).add(index));
 
-  const getOptionClass = useCallback((index: number, isRemoving: boolean) => {
-    if (!animatingOptions.has(index)) return '';
-    return isRemoving ? 'epic1-weighted-option-exiting' : 'epic1-weighted-option-entering';
-  }, [animatingOptions]);
+      setTimeout(() => {
+        onComplete();
+        setAnimatingOptions(prev => {
+          const next = new Set(prev);
+          next.delete(index);
+          return next;
+        });
+      }, 200);
+    },
+    []
+  );
+
+  const getOptionClass = useCallback(
+    (index: number, isRemoving: boolean) => {
+      if (!animatingOptions.has(index)) return '';
+      return isRemoving
+        ? 'epic1-weighted-option-exiting'
+        : 'epic1-weighted-option-entering';
+    },
+    [animatingOptions]
+  );
 
   return {
     animateOptionAdd,

@@ -28,45 +28,54 @@ export function useKeyboardNavigation({
 
   // Get only editable nodes that are currently in edit mode
   const getEditableNodes = useCallback(() => {
-    return nodes.filter(node => {
-      const nodeData = node.data as any;
-      return nodeData?.isEditing === true;
-    }).sort((a, b) => {
-      // Sort by position (top to bottom, left to right)
-      if (Math.abs(a.position.y - b.position.y) > 20) {
-        return a.position.y - b.position.y;
-      }
-      return a.position.x - b.position.x;
-    });
+    return nodes
+      .filter(node => {
+        const nodeData = node.data as any;
+        return nodeData?.isEditing === true;
+      })
+      .sort((a, b) => {
+        // Sort by position (top to bottom, left to right)
+        if (Math.abs(a.position.y - b.position.y) > 20) {
+          return a.position.y - b.position.y;
+        }
+        return a.position.x - b.position.x;
+      });
   }, [nodes]);
 
   // Find next/previous node in tab order
-  const getNextNode = useCallback((currentNodeId: string, reverse: boolean = false) => {
-    const editableNodes = getEditableNodes();
-    if (editableNodes.length === 0) return null;
+  const getNextNode = useCallback(
+    (currentNodeId: string, reverse: boolean = false) => {
+      const editableNodes = getEditableNodes();
+      if (editableNodes.length === 0) return null;
 
-    const currentIndex = editableNodes.findIndex(node => node.id === currentNodeId);
-    
-    if (currentIndex === -1) {
-      // If current node not found, return first/last based on direction
-      return reverse ? editableNodes[editableNodes.length - 1] : editableNodes[0];
-    }
+      const currentIndex = editableNodes.findIndex(
+        node => node.id === currentNodeId
+      );
 
-    let nextIndex: number;
-    if (reverse) {
-      nextIndex = currentIndex - 1;
-      if (nextIndex < 0) {
-        nextIndex = editableNodes.length - 1; // Wrap to last
+      if (currentIndex === -1) {
+        // If current node not found, return first/last based on direction
+        return reverse
+          ? editableNodes[editableNodes.length - 1]
+          : editableNodes[0];
       }
-    } else {
-      nextIndex = currentIndex + 1;
-      if (nextIndex >= editableNodes.length) {
-        nextIndex = 0; // Wrap to first
-      }
-    }
 
-    return editableNodes[nextIndex];
-  }, [getEditableNodes]);
+      let nextIndex: number;
+      if (reverse) {
+        nextIndex = currentIndex - 1;
+        if (nextIndex < 0) {
+          nextIndex = editableNodes.length - 1; // Wrap to last
+        }
+      } else {
+        nextIndex = currentIndex + 1;
+        if (nextIndex >= editableNodes.length) {
+          nextIndex = 0; // Wrap to first
+        }
+      }
+
+      return editableNodes[nextIndex];
+    },
+    [getEditableNodes]
+  );
 
   // Auto-focus first generated node
   const autoFocusFirstNode = useCallback(() => {
@@ -74,7 +83,7 @@ export function useKeyboardNavigation({
     if (editableNodes.length > 0 && !selectedNodeId) {
       const firstNode = editableNodes[0];
       onNodeSelect(firstNode.id);
-      
+
       // Focus the actual input element after a short delay
       setTimeout(() => {
         const inputElement = document.querySelector(
@@ -86,58 +95,24 @@ export function useKeyboardNavigation({
   }, [getEditableNodes, selectedNodeId, onNodeSelect]);
 
   // Handle keyboard events
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (!enabled) return;
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (!enabled) return;
 
-    // Tab navigation
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      
-      if (!selectedNodeId) {
-        autoFocusFirstNode();
-        return;
-      }
+      // Tab navigation
+      if (event.key === 'Tab') {
+        event.preventDefault();
 
-      const nextNode = getNextNode(selectedNodeId, event.shiftKey);
-      if (nextNode) {
-        onNodeSelect(nextNode.id);
-        
-        // Focus the input element in the next node
-        setTimeout(() => {
-          const inputElement = document.querySelector(
-            `[data-node-id="${nextNode.id}"] input, [data-node-id="${nextNode.id}"] textarea`
-          ) as HTMLElement;
-          inputElement?.focus();
-        }, 50);
-      }
-    }
+        if (!selectedNodeId) {
+          autoFocusFirstNode();
+          return;
+        }
 
-    // Escape key handling
-    if (event.key === 'Escape') {
-      if (selectedNodeId && onEditCancel) {
-        onEditCancel(selectedNodeId);
-      }
-      if (onEscapePress) {
-        onEscapePress();
-      }
-    }
-
-    // Enter key to confirm current edit and move to next
-    if (event.key === 'Enter' && !event.shiftKey) {
-      const target = event.target as HTMLElement;
-      
-      // Don't interfere with textarea line breaks
-      if (target.tagName === 'TEXTAREA') {
-        return;
-      }
-
-      event.preventDefault();
-      
-      if (selectedNodeId) {
-        const nextNode = getNextNode(selectedNodeId, false);
+        const nextNode = getNextNode(selectedNodeId, event.shiftKey);
         if (nextNode) {
           onNodeSelect(nextNode.id);
-          
+
+          // Focus the input element in the next node
           setTimeout(() => {
             const inputElement = document.querySelector(
               `[data-node-id="${nextNode.id}"] input, [data-node-id="${nextNode.id}"] textarea`
@@ -146,8 +121,53 @@ export function useKeyboardNavigation({
           }, 50);
         }
       }
-    }
-  }, [enabled, selectedNodeId, autoFocusFirstNode, getNextNode, onNodeSelect, onEditCancel, onEscapePress]);
+
+      // Escape key handling
+      if (event.key === 'Escape') {
+        if (selectedNodeId && onEditCancel) {
+          onEditCancel(selectedNodeId);
+        }
+        if (onEscapePress) {
+          onEscapePress();
+        }
+      }
+
+      // Enter key to confirm current edit and move to next
+      if (event.key === 'Enter' && !event.shiftKey) {
+        const target = event.target as HTMLElement;
+
+        // Don't interfere with textarea line breaks
+        if (target.tagName === 'TEXTAREA') {
+          return;
+        }
+
+        event.preventDefault();
+
+        if (selectedNodeId) {
+          const nextNode = getNextNode(selectedNodeId, false);
+          if (nextNode) {
+            onNodeSelect(nextNode.id);
+
+            setTimeout(() => {
+              const inputElement = document.querySelector(
+                `[data-node-id="${nextNode.id}"] input, [data-node-id="${nextNode.id}"] textarea`
+              ) as HTMLElement;
+              inputElement?.focus();
+            }, 50);
+          }
+        }
+      }
+    },
+    [
+      enabled,
+      selectedNodeId,
+      autoFocusFirstNode,
+      getNextNode,
+      onNodeSelect,
+      onEditCancel,
+      onEscapePress
+    ]
+  );
 
   // Set up event listeners
   useEffect(() => {
@@ -170,7 +190,7 @@ export function useKeyboardNavigation({
   useEffect(() => {
     if (selectedNodeId && !focusHistoryRef.current.includes(selectedNodeId)) {
       focusHistoryRef.current.push(selectedNodeId);
-      
+
       // Keep history limited
       if (focusHistoryRef.current.length > 10) {
         focusHistoryRef.current.shift();

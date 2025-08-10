@@ -23,7 +23,7 @@ export function sanitizeText(input: string): string {
   if (typeof input !== 'string') {
     return '';
   }
-  
+
   return input
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -41,15 +41,15 @@ export function sanitizeText(input: string): string {
 export function sanitizeVariableName(name: string): string {
   // Remove any non-alphanumeric characters except underscore
   const cleaned = name.replace(/[^a-zA-Z0-9_]/g, '');
-  
+
   // Ensure it doesn't start with a number
   const valid = cleaned.replace(/^[0-9]+/, '');
-  
+
   // Check against dangerous property names
   if (isDangerousPropertyName(valid)) {
     throw new Error(`Invalid variable name: ${name}`);
   }
-  
+
   return valid;
 }
 
@@ -68,10 +68,12 @@ export function isDangerousPropertyName(name: string): boolean {
     'toString',
     'valueOf'
   ];
-  
-  return dangerous.includes(name.toLowerCase()) || 
-         name.includes('__proto__') ||
-         name.includes('constructor');
+
+  return (
+    dangerous.includes(name.toLowerCase()) ||
+    name.includes('__proto__') ||
+    name.includes('constructor')
+  );
 }
 
 /**
@@ -92,17 +94,17 @@ export function sanitizeFilePath(path: string): string {
 export function sanitizeURL(url: string): string | null {
   try {
     const parsed = new URL(url);
-    
+
     // Only allow http(s) protocols
     if (!['http:', 'https:'].includes(parsed.protocol)) {
       return null;
     }
-    
+
     // Prevent javascript: and data: URLs
     if (url.match(/^(javascript|data|vbscript|file):/i)) {
       return null;
     }
-    
+
     return parsed.href;
   } catch {
     return null;
@@ -129,15 +131,18 @@ export function generateCSPHeader(): string {
 /**
  * Validate node data before execution
  */
-export function validateNodeData<T>(data: T, schema: {
-  type: string;
-  required?: string[];
-  properties?: Record<string, any>;
-}): boolean {
+export function validateNodeData<T>(
+  data: T,
+  schema: {
+    type: string;
+    required?: string[];
+    properties?: Record<string, any>;
+  }
+): boolean {
   if (!data || typeof data !== 'object') {
     return false;
   }
-  
+
   // Check required fields
   if (schema.required) {
     for (const field of schema.required) {
@@ -146,7 +151,7 @@ export function validateNodeData<T>(data: T, schema: {
       }
     }
   }
-  
+
   // Additional validation can be added here
   return true;
 }
@@ -156,29 +161,29 @@ export function validateNodeData<T>(data: T, schema: {
  */
 export class RateLimiter {
   private attempts: Map<string, number[]> = new Map();
-  
+
   constructor(
     private maxAttempts: number = 10,
     private windowMs: number = 60000 // 1 minute
   ) {}
-  
+
   isAllowed(key: string): boolean {
     const now = Date.now();
     const attempts = this.attempts.get(key) || [];
-    
+
     // Remove old attempts outside the window
     const validAttempts = attempts.filter(time => now - time < this.windowMs);
-    
+
     if (validAttempts.length >= this.maxAttempts) {
       return false;
     }
-    
+
     validAttempts.push(now);
     this.attempts.set(key, validAttempts);
-    
+
     return true;
   }
-  
+
   reset(key: string): void {
     this.attempts.delete(key);
   }
@@ -194,28 +199,31 @@ export const ValidationRules = {
   maxLength: (max: number) => (value: string) => {
     return value.length <= max || `Maximum length is ${max} characters`;
   },
-  
+
   /**
    * Validate minimum length
    */
   minLength: (min: number) => (value: string) => {
     return value.length >= min || `Minimum length is ${min} characters`;
   },
-  
+
   /**
    * Validate against regex pattern
    */
   pattern: (regex: RegExp, message: string) => (value: string) => {
     return regex.test(value) || message;
   },
-  
+
   /**
    * Validate numeric range
    */
   range: (min: number, max: number) => (value: number) => {
-    return (value >= min && value <= max) || `Value must be between ${min} and ${max}`;
+    return (
+      (value >= min && value <= max) ||
+      `Value must be between ${min} and ${max}`
+    );
   },
-  
+
   /**
    * Validate email format
    */
@@ -238,9 +246,10 @@ export function secureRandom(): number {
  * Generate secure random string
  */
 export function generateSecureId(length: number = 16): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const array = new Uint8Array(length);
   crypto.getRandomValues(array);
-  
+
   return Array.from(array, byte => chars[byte % chars.length]).join('');
 }

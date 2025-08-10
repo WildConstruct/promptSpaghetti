@@ -24,40 +24,40 @@ export class ConnectionValidator {
     {
       sourceType: 'output',
       targetType: [],
-      errorMessage: 'Output nodes cannot have outgoing connections',
+      errorMessage: 'Output nodes cannot have outgoing connections'
     },
-    
+
     // Variables can only connect to appropriate nodes
     {
       sourceType: 'getVariable',
       targetType: ['concat', 'output', 'setVariable', 'weightedChoice'],
-      errorMessage: 'Variable getters can only connect to processing nodes',
+      errorMessage: 'Variable getters can only connect to processing nodes'
     },
-    
+
     // Set variables need input
     {
       sourceType: ['textBlock', 'weightedChoice', 'concat', 'getVariable'],
-      targetType: 'setVariable',
+      targetType: 'setVariable'
     },
-    
+
     // Concat accepts multiple inputs
     {
       sourceType: ['textBlock', 'weightedChoice', 'getVariable', 'concat'],
-      targetType: 'concat',
+      targetType: 'concat'
     },
-    
+
     // WeightedChoice can receive context
     {
       sourceType: ['textBlock', 'getVariable'],
       targetType: 'weightedChoice',
-      errorMessage: 'WeightedChoice can only receive text or variable inputs',
+      errorMessage: 'WeightedChoice can only receive text or variable inputs'
     },
-    
+
     // Output accepts processed results
     {
       sourceType: ['textBlock', 'weightedChoice', 'concat', 'getVariable'],
-      targetType: 'output',
-    },
+      targetType: 'output'
+    }
   ];
 
   /**
@@ -92,9 +92,10 @@ export class ConnectionValidator {
     // Check if target already has an incoming connection (except for concat nodes)
     const targetType = targetNode.type || 'default';
     if (targetType !== 'concat' && targetType !== 'enhancedBranching') {
-      const hasIncomingConnection = edges.some(e => 
-        e.target === connection.target && 
-        e.targetHandle === connection.targetHandle
+      const hasIncomingConnection = edges.some(
+        e =>
+          e.target === connection.target &&
+          e.targetHandle === connection.targetHandle
       );
       if (hasIncomingConnection) {
         // Note: The connection will be replaced automatically in onConnect handler
@@ -102,10 +103,10 @@ export class ConnectionValidator {
         return { isValid: true };
       }
     }
-    
+
     // Check against rules
     const validationResult = this.checkRules(sourceNode, targetNode, edges);
-    
+
     return validationResult;
   }
 
@@ -122,16 +123,22 @@ export class ConnectionValidator {
 
     // Find applicable rules
     for (const rule of this.rules) {
-      const sourceTypes = Array.isArray(rule.sourceType) ? rule.sourceType : [rule.sourceType];
-      const targetTypes = Array.isArray(rule.targetType) ? rule.targetType : [rule.targetType];
+      const sourceTypes = Array.isArray(rule.sourceType)
+        ? rule.sourceType
+        : [rule.sourceType];
+      const targetTypes = Array.isArray(rule.targetType)
+        ? rule.targetType
+        : [rule.targetType];
 
       // Check if rule applies to source
       if (sourceTypes.includes(sourceType)) {
         // If target types is empty array, no connections allowed
         if (targetTypes.length === 0) {
-          return { 
-            isValid: false, 
-            error: rule.errorMessage || `${sourceType} cannot have outgoing connections` 
+          return {
+            isValid: false,
+            error:
+              rule.errorMessage ||
+              `${sourceType} cannot have outgoing connections`
           };
         }
 
@@ -146,7 +153,9 @@ export class ConnectionValidator {
           if (!isValid) {
             return {
               isValid: false,
-              error: rule.errorMessage || `Invalid connection from ${sourceType} to ${targetType}`,
+              error:
+                rule.errorMessage ||
+                `Invalid connection from ${sourceType} to ${targetType}`
             };
           }
         }
@@ -163,10 +172,16 @@ export class ConnectionValidator {
   /**
    * General compatibility check when no specific rules apply
    */
-  private checkGeneralCompatibility(sourceType: string, targetType: string): ValidationResult {
+  private checkGeneralCompatibility(
+    sourceType: string,
+    targetType: string
+  ): ValidationResult {
     // Output nodes cannot be sources
     if (sourceType === 'output') {
-      return { isValid: false, error: 'Output nodes cannot have outgoing connections' };
+      return {
+        isValid: false,
+        error: 'Output nodes cannot have outgoing connections'
+      };
     }
 
     // Default: allow connection
@@ -187,8 +202,8 @@ export class ConnectionValidator {
       {
         id: 'temp',
         source: connection.source!,
-        target: connection.target!,
-      },
+        target: connection.target!
+      }
     ];
 
     // Use DFS to detect cycles
@@ -234,10 +249,14 @@ export class ConnectionValidator {
     const validTargets = new Set<string>();
 
     for (const rule of this.rules) {
-      const sourceTypes = Array.isArray(rule.sourceType) ? rule.sourceType : [rule.sourceType];
-      
+      const sourceTypes = Array.isArray(rule.sourceType)
+        ? rule.sourceType
+        : [rule.sourceType];
+
       if (sourceTypes.includes(sourceType)) {
-        const targetTypes = Array.isArray(rule.targetType) ? rule.targetType : [rule.targetType];
+        const targetTypes = Array.isArray(rule.targetType)
+          ? rule.targetType
+          : [rule.targetType];
         targetTypes.forEach(t => validTargets.add(t));
       }
     }

@@ -67,22 +67,36 @@ export interface OutputPresetValue {
 }
 
 // Type guards
-export function isTextBlockPreset(preset: Preset): preset is Preset & { value: TextBlockPresetValue } {
+export function isTextBlockPreset(
+  preset: Preset
+): preset is Preset & { value: TextBlockPresetValue } {
   return preset.nodeType === 'textBlock';
 }
 
-export function isWeightedChoicePreset(preset: Preset): preset is Preset & { value: WeightedChoicePresetValue } {
+export function isWeightedChoicePreset(
+  preset: Preset
+): preset is Preset & { value: WeightedChoicePresetValue } {
   return preset.nodeType === 'weightedChoice';
 }
 
-export function isConcatPreset(preset: Preset): preset is Preset & { value: ConcatPresetValue } {
+export function isConcatPreset(
+  preset: Preset
+): preset is Preset & { value: ConcatPresetValue } {
   return preset.nodeType === 'concat';
 }
 
-export function isVariablePreset(preset: Preset): preset is Preset & { value: VariablePresetValue } {
-  return preset.nodeType === 'variable' || preset.nodeType === 'setVariable' || preset.nodeType === 'getVariable';
+export function isVariablePreset(
+  preset: Preset
+): preset is Preset & { value: VariablePresetValue } {
+  return (
+    preset.nodeType === 'variable' ||
+    preset.nodeType === 'setVariable' ||
+    preset.nodeType === 'getVariable'
+  );
 }
 
-export function isOutputPreset(preset: Preset): preset is Preset & { value: OutputPresetValue } {
+export function isOutputPreset(
+  preset: Preset
+): preset is Preset & { value: OutputPresetValue } {
   return preset.nodeType === 'output';
 }

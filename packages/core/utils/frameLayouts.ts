@@ -44,7 +44,7 @@ export function rectangularFrameLayout(
       y: padding
     };
   }
-  
+
   // Right edge
   const rightStart = viewportWidth - 2 * padding;
   if (distance < rightStart + viewportHeight - 2 * padding) {
@@ -53,7 +53,7 @@ export function rectangularFrameLayout(
       y: padding + (distance - rightStart)
     };
   }
-  
+
   // Bottom edge
   const bottomStart = rightStart + viewportHeight - 2 * padding;
   if (distance < bottomStart + viewportWidth - 2 * padding) {
@@ -62,11 +62,14 @@ export function rectangularFrameLayout(
       y: viewportHeight - nodeHeight - padding
     };
   }
-  
+
   // Left edge
   return {
     x: padding,
-    y: viewportHeight - padding - (distance - bottomStart - viewportWidth + 2 * padding)
+    y:
+      viewportHeight -
+      padding -
+      (distance - bottomStart - viewportWidth + 2 * padding)
   };
 }
 
@@ -84,24 +87,24 @@ export function ellipticalFrameLayout(
     viewportHeight,
     nodeWidth = 200,
     nodeHeight = 100,
-    padding = 10  // Minimal padding from absolute edge
+    padding = 10 // Minimal padding from absolute edge
   } = options;
 
   // Calculate angle for this node position
   const angle = (index / total) * 2 * Math.PI - Math.PI / 2; // Start from top
-  
+
   // Get normalized direction
   const cos = Math.cos(angle);
   const sin = Math.sin(angle);
-  
+
   // Determine which edge this node should be pinned to
   // by checking which direction component is larger
   const absX = Math.abs(cos);
   const absY = Math.abs(sin);
-  
+
   let x: number;
   let y: number;
-  
+
   if (absX > absY) {
     // Node belongs on left or right edge
     if (cos > 0) {
@@ -120,14 +123,14 @@ export function ellipticalFrameLayout(
       // Bottom edge - pin to bottom boundary
       y = viewportHeight - nodeHeight - padding;
     } else {
-      // Top edge - pin to top boundary  
+      // Top edge - pin to top boundary
       y = padding;
     }
     // Position along the horizontal axis based on angle
     const normalizedX = (cos + 1) / 2; // Convert from -1,1 to 0,1
     x = padding + normalizedX * (viewportWidth - nodeWidth - padding * 2);
   }
-  
+
   return { x, y };
 }
 
@@ -149,15 +152,15 @@ export function diamondFrameLayout(
 
   const centerX = viewportWidth / 2;
   const centerY = viewportHeight / 2;
-  
+
   // Divide nodes into 4 sides
   const nodesPerSide = Math.ceil(total / 4);
   const side = Math.floor(index / nodesPerSide);
   const sideIndex = index % nodesPerSide;
   const sideProgress = sideIndex / (nodesPerSide - 1 || 1);
-  
+
   let x, y;
-  
+
   switch (side) {
     case 0: // Top to right
       x = centerX + (centerX - padding) * sideProgress;
@@ -177,7 +180,7 @@ export function diamondFrameLayout(
       y = centerY - (centerY - padding) * sideProgress;
       break;
   }
-  
+
   return {
     x: x - nodeWidth / 2,
     y: y - nodeHeight / 2
@@ -202,20 +205,26 @@ export function spiralFrameLayout(
 
   const centerX = viewportWidth / 2;
   const centerY = viewportHeight / 2;
-  
+
   // Spiral parameters
   const maxRadius = Math.min(viewportWidth, viewportHeight) / 2 - padding;
   const minRadius = maxRadius * 0.3;
   const progress = index / (total - 1 || 1);
   const radius = maxRadius - (maxRadius - minRadius) * progress;
   const angle = progress * 4 * Math.PI; // 2 full rotations
-  
+
   const x = centerX + radius * Math.cos(angle) - nodeWidth / 2;
   const y = centerY + radius * Math.sin(angle) - nodeHeight / 2;
-  
+
   return {
-    x: Math.max(padding / 2, Math.min(viewportWidth - nodeWidth - padding / 2, x)),
-    y: Math.max(padding / 2, Math.min(viewportHeight - nodeHeight - padding / 2, y))
+    x: Math.max(
+      padding / 2,
+      Math.min(viewportWidth - nodeWidth - padding / 2, x)
+    ),
+    y: Math.max(
+      padding / 2,
+      Math.min(viewportHeight - nodeHeight - padding / 2, y)
+    )
   };
 }
 
@@ -239,29 +248,42 @@ export function starFrameLayout(
   const centerY = viewportHeight / 2;
   const outerRadius = Math.min(viewportWidth, viewportHeight) / 2 - padding;
   const innerRadius = outerRadius * 0.4;
-  
+
   // Alternate between outer and inner points
   const isOuter = index % 2 === 0;
   const radius = isOuter ? outerRadius : innerRadius;
   const pointIndex = Math.floor(index / 2);
   const totalPoints = Math.ceil(total / 2);
-  
+
   // Start from top
   const angle = (pointIndex / totalPoints) * 2 * Math.PI - Math.PI / 2;
-  
+
   const x = centerX + radius * Math.cos(angle) - nodeWidth / 2;
   const y = centerY + radius * Math.sin(angle) - nodeHeight / 2;
-  
+
   return {
-    x: Math.max(padding / 2, Math.min(viewportWidth - nodeWidth - padding / 2, x)),
-    y: Math.max(padding / 2, Math.min(viewportHeight - nodeHeight - padding / 2, y))
+    x: Math.max(
+      padding / 2,
+      Math.min(viewportWidth - nodeWidth - padding / 2, x)
+    ),
+    y: Math.max(
+      padding / 2,
+      Math.min(viewportHeight - nodeHeight - padding / 2, y)
+    )
   };
 }
 
 /**
  * Gets a frame layout function by name
  */
-export function getFrameLayout(layoutType: 'rectangular' | 'elliptical' | 'diamond' | 'spiral' | 'star' = 'elliptical') {
+export function getFrameLayout(
+  layoutType:
+    | 'rectangular'
+    | 'elliptical'
+    | 'diamond'
+    | 'spiral'
+    | 'star' = 'elliptical'
+) {
   switch (layoutType) {
     case 'rectangular':
       return rectangularFrameLayout;
@@ -284,7 +306,12 @@ export function autoFrameLayout(
   nodes: any[],
   viewportWidth: number,
   viewportHeight: number,
-  layoutType: 'rectangular' | 'elliptical' | 'diamond' | 'spiral' | 'star' = 'elliptical'
+  layoutType:
+    | 'rectangular'
+    | 'elliptical'
+    | 'diamond'
+    | 'spiral'
+    | 'star' = 'elliptical'
 ): any[] {
   const layoutFn = getFrameLayout(layoutType);
   const layoutOptions: LayoutOptions = {

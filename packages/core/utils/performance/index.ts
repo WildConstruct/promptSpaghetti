@@ -11,7 +11,11 @@ export { PerformanceMonitor } from './PerformanceMonitor';
 export type { CacheOptions } from './LRUCache';
 export type { MultiLevelCacheOptions } from './MultiLevelCache';
 export type { WorkerTask, WorkerResult } from './WorkerPool';
-export type { PerformanceMetric, PerformanceThreshold, PerformanceReport } from './PerformanceMonitor';
+export type {
+  PerformanceMetric,
+  PerformanceThreshold,
+  PerformanceReport
+} from './PerformanceMonitor';
 
 // Singleton instances for easy access
 let cache: MultiLevelCache | null = null;
@@ -66,7 +70,9 @@ export async function initializePerformance(options?: {
  */
 export function getPerformanceInfrastructure() {
   if (!cache || !workerPool || !perfMonitor) {
-    throw new Error('Performance infrastructure not initialized. Call initializePerformance() first.');
+    throw new Error(
+      'Performance infrastructure not initialized. Call initializePerformance() first.'
+    );
   }
 
   return {

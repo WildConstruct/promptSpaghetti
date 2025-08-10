@@ -11,7 +11,9 @@ import { OutputNode } from './OutputNode';
 
 // Create droppable versions of all node types
 export const DroppableTextBlockNode = withDroppableNode(TextBlockNode);
-export const DroppableWeightedChoiceNode = withDroppableNode(EnhancedBranchingNode);
+export const DroppableWeightedChoiceNode = withDroppableNode(
+  EnhancedBranchingNode
+);
 export const DroppableConcatNode = withDroppableNode(ConcatNode);
 export const DroppableVariableNode = withDroppableNode(VariableNode);
 export const DroppableOutputNode = withDroppableNode(OutputNode);
@@ -24,5 +26,5 @@ export const droppableEpic1NodeTypes = {
   variable: DroppableVariableNode,
   setVariable: DroppableVariableNode,
   getVariable: DroppableVariableNode,
-  output: DroppableOutputNode,
+  output: DroppableOutputNode
 };

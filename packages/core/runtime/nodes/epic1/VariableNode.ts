@@ -4,7 +4,10 @@
  */
 
 import { ExecutionContext } from '../../types';
-import { BaseInlineEditableNode, InlineEditableConfig } from './BaseInlineEditableNode';
+import {
+  BaseInlineEditableNode,
+  InlineEditableConfig
+} from './BaseInlineEditableNode';
 
 // Simple security validation for variable names
 const SecurityValidation = {
@@ -22,7 +25,13 @@ export type VariableMode = 'set' | 'get' | 'both';
 /**
  * Variable value types
  */
-export type VariableType = 'string' | 'number' | 'boolean' | 'array' | 'object' | 'any';
+export type VariableType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'array'
+  | 'object'
+  | 'any';
 
 /**
  * Configuration value for Variable nodes
@@ -90,12 +99,18 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
 
     if (mode === 'set' || mode === 'both') {
       // Set variable mode
-      const valueToSet = this.input !== undefined ? this.input : config.currentValue;
-      
+      const valueToSet =
+        this.input !== undefined ? this.input : config.currentValue;
+
       if (valueToSet !== undefined) {
         // Validate type if configured
-        if (this.nodeConfig.variableType !== 'any' && !this.validateType(valueToSet)) {
-          throw new Error(`Type mismatch: expected ${this.nodeConfig.variableType}, got ${typeof valueToSet}`);
+        if (
+          this.nodeConfig.variableType !== 'any' &&
+          !this.validateType(valueToSet)
+        ) {
+          throw new Error(
+            `Type mismatch: expected ${this.nodeConfig.variableType}, got ${typeof valueToSet}`
+          );
         }
 
         // Store the value
@@ -174,9 +189,9 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
    */
   private validateType(value: any): boolean {
     const type = this.nodeConfig.variableType;
-    
+
     if (type === 'any') return true;
-    
+
     switch (type) {
       case 'string':
         return typeof value === 'string';
@@ -187,7 +202,9 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
       case 'array':
         return Array.isArray(value);
       case 'object':
-        return value !== null && typeof value === 'object' && !Array.isArray(value);
+        return (
+          value !== null && typeof value === 'object' && !Array.isArray(value)
+        );
       default:
         return false;
     }
@@ -196,7 +213,9 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
   /**
    * Validate the configuration
    */
-  protected async validateValue(value: VariableConfig): Promise<{ valid: boolean; errors: string[] }> {
+  protected async validateValue(
+    value: VariableConfig
+  ): Promise<{ valid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
     // Check if value is an object
@@ -209,20 +228,32 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
     if (typeof value.name !== 'string') {
       errors.push('Variable name must be a string');
     } else if (!SecurityValidation.validateVariableName(value.name)) {
-      errors.push('Invalid variable name: must be alphanumeric with underscores, max 64 chars');
+      errors.push(
+        'Invalid variable name: must be alphanumeric with underscores, max 64 chars'
+      );
     }
 
     // Validate currentValue type if specified
-    if (value.currentValue !== undefined && this.nodeConfig.variableType !== 'any') {
+    if (
+      value.currentValue !== undefined &&
+      this.nodeConfig.variableType !== 'any'
+    ) {
       if (!this.validateType(value.currentValue)) {
-        errors.push(`Current value type mismatch: expected ${this.nodeConfig.variableType}`);
+        errors.push(
+          `Current value type mismatch: expected ${this.nodeConfig.variableType}`
+        );
       }
     }
 
     // Validate defaultValue type if specified
-    if (value.defaultValue !== undefined && this.nodeConfig.variableType !== 'any') {
+    if (
+      value.defaultValue !== undefined &&
+      this.nodeConfig.variableType !== 'any'
+    ) {
       if (!this.validateType(value.defaultValue)) {
-        errors.push(`Default value type mismatch: expected ${this.nodeConfig.variableType}`);
+        errors.push(
+          `Default value type mismatch: expected ${this.nodeConfig.variableType}`
+        );
       }
     }
 
@@ -264,8 +295,13 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
    * Update default value
    */
   setDefaultValue(defaultValue: any): void {
-    if (this.nodeConfig.variableType !== 'any' && !this.validateType(defaultValue)) {
-      throw new Error(`Type mismatch: expected ${this.nodeConfig.variableType}`);
+    if (
+      this.nodeConfig.variableType !== 'any' &&
+      !this.validateType(defaultValue)
+    ) {
+      throw new Error(
+        `Type mismatch: expected ${this.nodeConfig.variableType}`
+      );
     }
 
     const config = this.getCurrentValue();
@@ -289,8 +325,13 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
    * Update current value
    */
   setCurrentValue(currentValue: any): void {
-    if (this.nodeConfig.variableType !== 'any' && !this.validateType(currentValue)) {
-      throw new Error(`Type mismatch: expected ${this.nodeConfig.variableType}`);
+    if (
+      this.nodeConfig.variableType !== 'any' &&
+      !this.validateType(currentValue)
+    ) {
+      throw new Error(
+        `Type mismatch: expected ${this.nodeConfig.variableType}`
+      );
     }
 
     const config = this.getCurrentValue();
@@ -315,16 +356,22 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
    */
   setVariableType(type: VariableType): void {
     this.nodeConfig.variableType = type;
-    
+
     // Revalidate current values
     const config = this.getCurrentValue();
     const errors: string[] = [];
 
-    if (config.currentValue !== undefined && !this.validateType(config.currentValue)) {
+    if (
+      config.currentValue !== undefined &&
+      !this.validateType(config.currentValue)
+    ) {
       errors.push('Current value does not match new type');
     }
 
-    if (config.defaultValue !== undefined && !this.validateType(config.defaultValue)) {
+    if (
+      config.defaultValue !== undefined &&
+      !this.validateType(config.defaultValue)
+    ) {
       errors.push('Default value does not match new type');
     }
 

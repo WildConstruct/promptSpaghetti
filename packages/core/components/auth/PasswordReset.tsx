@@ -3,7 +3,10 @@
  */
 
 import React, { useState, FormEvent } from 'react';
-import { useEmailValidation, getAuthErrorMessage } from '../../hooks/useAuthValidation';
+import {
+  useEmailValidation,
+  getAuthErrorMessage
+} from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
 
 interface PasswordResetProps {
@@ -15,38 +18,37 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
-  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!email.isValid) {
       email.onBlur();
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       // TODO: Replace with actual Supabase auth call
       // const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
       //   redirectTo: `${window.location.origin}/reset-password`
       // });
-      
+
       // Simulated auth call for now
-      await new Promise((resolve) => {
+      await new Promise(resolve => {
         setTimeout(resolve, 1000);
       });
-      
+
       setIsSuccess(true);
-      
     } catch (err) {
       setError(getAuthErrorMessage(err));
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   if (isSuccess) {
     return (
       <div style={{ textAlign: 'center', padding: '20px 0' }}>
@@ -58,7 +60,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
         >
           📧
         </div>
-        
+
         <h3
           style={{
             margin: '0 0 12px 0',
@@ -69,7 +71,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
         >
           Check Your Email
         </h3>
-        
+
         <p
           style={{
             margin: '0 0 24px 0',
@@ -78,10 +80,11 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
             lineHeight: '1.5'
           }}
         >
-          We've sent a password reset link to<br />
+          We've sent a password reset link to
+          <br />
           <strong>{email.value}</strong>
         </p>
-        
+
         <div
           style={{
             padding: '12px',
@@ -106,7 +109,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
             <li>Wait a few minutes and try again</li>
           </ul>
         </div>
-        
+
         <button
           onClick={onBack}
           style={{
@@ -120,11 +123,11 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
             cursor: 'pointer',
             transition: 'all 0.2s'
           }}
-          onMouseEnter={(e) => {
+          onMouseEnter={e => {
             e.currentTarget.style.backgroundColor = '#007bff';
             e.currentTarget.style.color = 'white';
           }}
-          onMouseLeave={(e) => {
+          onMouseLeave={e => {
             e.currentTarget.style.backgroundColor = 'white';
             e.currentTarget.style.color = '#007bff';
           }}
@@ -134,7 +137,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
       </div>
     );
   }
-  
+
   return (
     <form onSubmit={handleSubmit} noValidate>
       <p
@@ -145,9 +148,10 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           lineHeight: '1.5'
         }}
       >
-        Enter your email address and we'll send you a link to reset your password.
+        Enter your email address and we'll send you a link to reset your
+        password.
       </p>
-      
+
       {/* Error Message */}
       {error && (
         <div
@@ -165,7 +169,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           {error}
         </div>
       )}
-      
+
       {/* Email Field */}
       <FormField
         label="Email"
@@ -179,7 +183,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
         required
         placeholder="you@example.com"
       />
-      
+
       {/* Submit Button */}
       <button
         type="submit"
@@ -201,12 +205,12 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           gap: '8px',
           marginBottom: '16px'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           if (email.isValid && !isLoading) {
             e.currentTarget.style.backgroundColor = '#0056b3';
           }
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           if (email.isValid && !isLoading) {
             e.currentTarget.style.backgroundColor = '#007bff';
           }

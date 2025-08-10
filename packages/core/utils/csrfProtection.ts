@@ -40,30 +40,30 @@ export class CSRFTokenManager {
   private token: string | null = null;
   private tokenExpiry: number = 0;
   private readonly tokenLifetime = 30 * 60 * 1000; // 30 minutes
-  
+
   /**
    * Get or generate a CSRF token
    */
   getToken(): string {
     const now = Date.now();
-    
+
     // Generate new token if expired or doesn't exist
     if (!this.token || now >= this.tokenExpiry) {
       this.token = generateCSRFToken();
       this.tokenExpiry = now + this.tokenLifetime;
       storeCSRFToken(this.token);
     }
-    
+
     return this.token;
   }
-  
+
   /**
    * Validate a token
    */
   validateToken(token: string): boolean {
     return this.token !== null && this.token === token;
   }
-  
+
   /**
    * Refresh the token
    */
@@ -73,7 +73,7 @@ export class CSRFTokenManager {
     storeCSRFToken(this.token);
     return this.token;
   }
-  
+
   /**
    * Clear the token
    */
@@ -94,24 +94,27 @@ export const csrfManager = new CSRFTokenManager();
  */
 export function useCSRFProtection() {
   const [token, setToken] = useState<string>('');
-  
+
   useEffect(() => {
     const newToken = csrfManager.getToken();
     setToken(newToken);
-    
+
     // Refresh token periodically
-    const interval = setInterval(() => {
-      const refreshedToken = csrfManager.refreshToken();
-      setToken(refreshedToken);
-    }, 25 * 60 * 1000); // Refresh 5 minutes before expiry
-    
+    const interval = setInterval(
+      () => {
+        const refreshedToken = csrfManager.refreshToken();
+        setToken(refreshedToken);
+      },
+      25 * 60 * 1000
+    ); // Refresh 5 minutes before expiry
+
     return () => clearInterval(interval);
   }, []);
-  
+
   const validateToken = useCallback((tokenToValidate: string) => {
     return csrfManager.validateToken(tokenToValidate);
   }, []);
-  
+
   return {
     token,
     validateToken,

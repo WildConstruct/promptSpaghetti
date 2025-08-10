@@ -3,7 +3,11 @@
  */
 
 import React, { useState, FormEvent } from 'react';
-import { useEmailValidation, usePasswordValidation, getAuthErrorMessage } from '../../hooks/useAuthValidation';
+import {
+  useEmailValidation,
+  usePasswordValidation,
+  getAuthErrorMessage
+} from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
 
 interface LoginFormProps {
@@ -18,50 +22,52 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const isFormValid = email.isValid && password.isValid;
-  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!isFormValid) {
       email.onBlur();
       password.onBlur();
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       // TODO: Replace with actual Supabase auth call
       // const { data, error } = await supabase.auth.signInWithPassword({
       //   email: email.value,
       //   password: password.value
       // });
-      
+
       // Simulated auth call for now
       await new Promise((resolve, reject) => {
         setTimeout(() => {
-          if (email.value === 'test@example.com' && password.value === 'Test1234') {
+          if (
+            email.value === 'test@example.com' &&
+            password.value === 'Test1234'
+          ) {
             resolve({ user: { email: email.value, id: '123' } });
           } else {
             reject(new Error('Invalid login credentials'));
           }
         }, 1000);
       });
-      
+
       setShowSuccessMessage(true);
       setTimeout(() => {
         onSuccess({ email: email.value });
       }, 500);
-      
     } catch (err) {
       setError(getAuthErrorMessage(err));
       setIsLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} noValidate>
       {/* Error Message */}
@@ -81,7 +87,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           {error}
         </div>
       )}
-      
+
       {/* Success Message */}
       {showSuccessMessage && (
         <div
@@ -99,7 +105,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           ✓ Login successful! Redirecting...
         </div>
       )}
-      
+
       {/* Email Field */}
       <FormField
         label="Email"
@@ -113,7 +119,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
         required
         placeholder="you@example.com"
       />
-      
+
       {/* Password Field */}
       <FormField
         label="Password"
@@ -129,7 +135,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
         showPasswordToggle
         onTogglePassword={() => setShowPassword(!showPassword)}
       />
-      
+
       {/* Forgot Password Link */}
       <div
         style={{
@@ -154,7 +160,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           Forgot password?
         </button>
       </div>
-      
+
       {/* Submit Button */}
       <button
         type="submit"
@@ -175,12 +181,12 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           justifyContent: 'center',
           gap: '8px'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           if (isFormValid && !isLoading) {
             e.currentTarget.style.backgroundColor = '#0056b3';
           }
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           if (isFormValid && !isLoading) {
             e.currentTarget.style.backgroundColor = '#007bff';
           }
@@ -205,7 +211,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           'Log In'
         )}
       </button>
-      
+
       {/* CSS for spinner */}
       <style>{`
         @keyframes spin {

@@ -9,7 +9,11 @@ import { ExecutionContext, RuntimeNode } from './types.js';
 
 // Re-export types
 export { ExecutionContext, RuntimeNode } from './types.js';
-export { AdvancedRuntimeNode, AdvancedExecutionContext, AdvancedNodeConfig } from './advanced.js';
+export {
+  AdvancedRuntimeNode,
+  AdvancedExecutionContext,
+  AdvancedNodeConfig
+} from './advanced.js';
 
 /* ------------------------- Core node runtimes ------------------------- */
 
@@ -31,8 +35,6 @@ export class WeightedChoiceNode extends RuntimeNode<string> {
     return this.choices[this.choices.length - 1].value;
   }
 }
-
-
 
 export class ConcatNode extends RuntimeNode<string> {
   constructor(
@@ -58,7 +60,6 @@ export class OutputNode extends RuntimeNode<string> {
     return this.input;
   }
 }
-
 
 export class IncludeNode extends RuntimeNode<string> {
   constructor(
@@ -92,8 +93,6 @@ export class IncludeNode extends RuntimeNode<string> {
   }
 }
 
-
-
 export class SetVariableNode extends RuntimeNode<void> {
   constructor(
     id: string,
@@ -108,7 +107,6 @@ export class SetVariableNode extends RuntimeNode<void> {
       return; // Silently ignore invalid variable names
     }
 
-
     // Security: Validate value is safe
     if (this.value === null || this.value === undefined) {
       ctx.variables[this.key] = this.value;
@@ -117,7 +115,11 @@ export class SetVariableNode extends RuntimeNode<void> {
 
     // Only allow safe primitive types and simple objects/arrays
     const valueType = typeof this.value;
-    if (valueType === 'string' || valueType === 'number' || valueType === 'boolean') {
+    if (
+      valueType === 'string' ||
+      valueType === 'number' ||
+      valueType === 'boolean'
+    ) {
       ctx.variables[this.key] = this.value;
     } else if (Array.isArray(this.value)) {
       // Deep clone to prevent reference pollution
@@ -131,8 +133,6 @@ export class SetVariableNode extends RuntimeNode<void> {
     }
   }
 }
-
-
 
 export class GetVariableNode extends RuntimeNode<unknown> {
   constructor(
@@ -148,7 +148,6 @@ export class GetVariableNode extends RuntimeNode<unknown> {
       return undefined; // Return undefined for invalid variable names
     }
 
-
     // Security: Only return value if it exists as own property
     if (!Object.prototype.hasOwnProperty.call(ctx.variables, this.key)) {
       return undefined;
@@ -158,13 +157,13 @@ export class GetVariableNode extends RuntimeNode<unknown> {
   }
 }
 
-
-
 /* ----------------------------- Utilities ------------------------------ */
 
 import seedrandom from 'seedrandom';
 
-function seededRandom(seed: string | number): number { return seedrandom(String(seed))() }
+function seededRandom(seed: string | number): number {
+  return seedrandom(String(seed))();
+}
 
 /* ----------------------------- Advanced Nodes (Epic 7) ------------------------------ */
 

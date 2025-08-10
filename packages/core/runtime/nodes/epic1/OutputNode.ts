@@ -4,7 +4,10 @@
  */
 
 import { ExecutionContext } from '../../types';
-import { BaseInlineEditableNode, InlineEditableConfig } from './BaseInlineEditableNode';
+import {
+  BaseInlineEditableNode,
+  InlineEditableConfig
+} from './BaseInlineEditableNode';
 
 /**
  * Output node implementation with inline editing support
@@ -54,7 +57,9 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
   /**
    * Validate the value (output nodes accept any string)
    */
-  protected async validateValue(value: string): Promise<{ valid: boolean; errors: string[] }> {
+  protected async validateValue(
+    value: string
+  ): Promise<{ valid: boolean; errors: string[] }> {
     // Output nodes accept any string value
     return {
       valid: true,
@@ -105,7 +110,7 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
   } {
     const value = this.data.value;
     const isEmpty = value.trim().length === 0;
-    
+
     return {
       isEmpty,
       length: value.length,
@@ -134,10 +139,10 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
     format?: 'plain' | 'json' | 'markdown' | 'code';
   } {
     const value = this.data.value;
-    
+
     // Try to detect format
     let format: 'plain' | 'json' | 'markdown' | 'code' = 'plain';
-    
+
     // Check for JSON
     if (value.trim().startsWith('{') || value.trim().startsWith('[')) {
       try {
@@ -147,14 +152,22 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
         // Not valid JSON
       }
     }
-    
+
     // Check for markdown indicators
-    else if (value.includes('```') || value.includes('##') || value.includes('**')) {
+    else if (
+      value.includes('```') ||
+      value.includes('##') ||
+      value.includes('**')
+    ) {
       format = 'markdown';
     }
-    
+
     // Check for code indicators
-    else if (value.includes('function') || value.includes('const') || value.includes('class')) {
+    else if (
+      value.includes('function') ||
+      value.includes('const') ||
+      value.includes('class')
+    ) {
       format = 'code';
     }
 
@@ -170,7 +183,7 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
   serialize(): any {
     const base = super.serialize();
     const stats = this.getStats();
-    
+
     return {
       ...base,
       metadata: {

@@ -3,7 +3,7 @@
  * @jest-environment jsdom
  */
 
-import { 
+import {
   isStorageAvailable,
   maybeCompress,
   maybeDecompress,
@@ -28,9 +28,9 @@ describe('Persistence Utils', () => {
         },
         writable: true
       });
-      
+
       expect(isStorageAvailable()).toBe(false);
-      
+
       Object.defineProperty(window, 'localStorage', {
         value: original,
         writable: true
@@ -42,7 +42,7 @@ describe('Persistence Utils', () => {
     it('should not compress small data', () => {
       const smallData = JSON.stringify({ test: 'data' });
       const result = maybeCompress(smallData);
-      
+
       expect(result.compressed).toBe(false);
       expect(result.data).toBe(smallData);
     });
@@ -51,7 +51,7 @@ describe('Persistence Utils', () => {
       // Create data larger than threshold
       const largeData = 'x'.repeat(COMPRESSION_THRESHOLD + 1000);
       const result = maybeCompress(largeData);
-      
+
       expect(result.compressed).toBe(true);
       expect(result.data).not.toBe(largeData);
       expect(result.data.length).toBeLessThan(largeData.length);
@@ -60,15 +60,18 @@ describe('Persistence Utils', () => {
     it('should decompress compressed data correctly', () => {
       const originalData = 'x'.repeat(COMPRESSION_THRESHOLD + 1000);
       const compressed = maybeCompress(originalData);
-      const decompressed = maybeDecompress(compressed.data, compressed.compressed);
-      
+      const decompressed = maybeDecompress(
+        compressed.data,
+        compressed.compressed
+      );
+
       expect(decompressed).toBe(originalData);
     });
 
     it('should handle decompression of non-compressed data', () => {
       const data = 'test data';
       const result = maybeDecompress(data, false);
-      
+
       expect(result).toBe(data);
     });
   });
@@ -81,7 +84,7 @@ describe('Persistence Utils', () => {
         viewport: { x: 0, y: 0, zoom: 1 },
         lastModified: new Date().toISOString()
       };
-      
+
       const result = validatePersistedState(validState);
       expect(result).toEqual(validState);
     });
@@ -91,7 +94,7 @@ describe('Persistence Utils', () => {
         nodes: 'not an array',
         edges: []
       };
-      
+
       const result = validatePersistedState(invalidState);
       expect(result).toBeNull();
     });
@@ -101,7 +104,7 @@ describe('Persistence Utils', () => {
         nodes: [],
         edges: []
       };
-      
+
       const result = validatePersistedState(minimalState);
       expect(result).toEqual(minimalState);
     });

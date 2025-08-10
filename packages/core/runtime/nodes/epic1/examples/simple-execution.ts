@@ -23,9 +23,10 @@ async function runExample() {
 
   // Create nodes
   console.log('Creating nodes...');
-  
+
   // Variable to store the user's name
-  const nameVar = new VariableNode('nameVar', 
+  const nameVar = new VariableNode(
+    'nameVar',
     { name: 'userName', defaultValue: 'Friend' },
     { mode: 'set', variableType: 'string' }
   );
@@ -42,14 +43,20 @@ async function runExample() {
 
   // Mood message
   const mood = new WeightedChoiceNode('mood', [
-    { id: 'happy', text: 'Hope you\'re having a wonderful day!', weight: 60 },
+    { id: 'happy', text: "Hope you're having a wonderful day!", weight: 60 },
     { id: 'neutral', text: 'How are things going?', weight: 30 },
     { id: 'excited', text: 'Great to see you!', weight: 10 }
   ]);
 
   // Concatenate parts
-  const concat1 = new ConcatNode('concat1', { separator: ' ', trimInputs: true });
-  const concat2 = new ConcatNode('concat2', { separator: ' ', trimInputs: true });
+  const concat1 = new ConcatNode('concat1', {
+    separator: ' ',
+    trimInputs: true
+  });
+  const concat2 = new ConcatNode('concat2', {
+    separator: ' ',
+    trimInputs: true
+  });
 
   // Output
   const output = new OutputNode('output');
@@ -75,7 +82,9 @@ async function runExample() {
     .connect('concat2', 'output')
     .build();
 
-  console.log(`Graph contains ${graph.nodes.size} nodes and ${graph.edges.length} edges\n`);
+  console.log(
+    `Graph contains ${graph.nodes.size} nodes and ${graph.edges.length} edges\n`
+  );
 
   // Execute with a specific seed
   console.log('Executing with seed "example-123"...');
@@ -101,19 +110,22 @@ async function runExample() {
 
   // Demonstrate variable usage
   console.log('\n--- Variable Example ---\n');
-  
+
   // Change the name variable
-  const customNameVar = new VariableNode('customNameVar',
+  const customNameVar = new VariableNode(
+    'customNameVar',
     { name: 'userName', defaultValue: 'Alice' },
     { mode: 'set' }
   );
 
   const customBuilder = new GraphBuilder();
-  const customGreeting = new TextBlockNode('customGreeting', 
+  const customGreeting = new TextBlockNode(
+    'customGreeting',
     'Welcome back, {{userName}}! Your last visit was {{lastVisit}}.'
   );
-  
-  const lastVisitVar = new VariableNode('lastVisitVar',
+
+  const lastVisitVar = new VariableNode(
+    'lastVisitVar',
     { name: 'lastVisit', defaultValue: 'yesterday' },
     { mode: 'set' }
   );

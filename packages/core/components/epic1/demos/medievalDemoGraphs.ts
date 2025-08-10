@@ -29,8 +29,8 @@ export const simpleCharacterGraph: DemoGraph = {
       data: {
         value: 'A',
         text: 'A',
-        nodeType: 'textBlock',
-      },
+        nodeType: 'textBlock'
+      }
     },
     {
       id: 'adjective',
@@ -42,17 +42,17 @@ export const simpleCharacterGraph: DemoGraph = {
           { text: 'weary', weight: 25 },
           { text: 'cunning', weight: 20 },
           { text: 'noble', weight: 15 },
-          { text: 'mysterious', weight: 10 },
+          { text: 'mysterious', weight: 10 }
         ]),
         options: [
           { text: 'brave', weight: 30 },
           { text: 'weary', weight: 25 },
           { text: 'cunning', weight: 20 },
           { text: 'noble', weight: 15 },
-          { text: 'mysterious', weight: 10 },
+          { text: 'mysterious', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'occupation',
@@ -63,16 +63,16 @@ export const simpleCharacterGraph: DemoGraph = {
           { text: 'knight', weight: 35 },
           { text: 'merchant', weight: 30 },
           { text: 'wizard', weight: 20 },
-          { text: 'thief', weight: 15 },
+          { text: 'thief', weight: 15 }
         ]),
         options: [
           { text: 'knight', weight: 35 },
           { text: 'merchant', weight: 30 },
           { text: 'wizard', weight: 20 },
-          { text: 'thief', weight: 15 },
+          { text: 'thief', weight: 15 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'output',
@@ -81,17 +81,17 @@ export const simpleCharacterGraph: DemoGraph = {
       data: {
         value: 'Character',
         label: 'Character',
-        nodeType: 'output',
-      },
-    },
+        nodeType: 'output'
+      }
+    }
   ],
   edges: [
     { id: 'e1', source: 'article', target: 'adjective', animated: true },
     { id: 'e2', source: 'adjective', target: 'occupation', animated: true },
-    { id: 'e3', source: 'occupation', target: 'output' },
+    { id: 'e3', source: 'occupation', target: 'output' }
   ],
   previewSeeds: ['hero1', 'hero2', 'hero3'],
-  tags: ['simple', 'character', 'quick'],
+  tags: ['simple', 'character', 'quick']
 };
 
 // Quest hook generator
@@ -107,8 +107,8 @@ export const questHookGraph: DemoGraph = {
       data: {
         value: 'You must',
         text: 'You must',
-        nodeType: 'textBlock',
-      },
+        nodeType: 'textBlock'
+      }
     },
     {
       id: 'action',
@@ -120,17 +120,17 @@ export const questHookGraph: DemoGraph = {
           { text: 'destroy', weight: 20 },
           { text: 'protect', weight: 20 },
           { text: 'discover', weight: 20 },
-          { text: 'escape from', weight: 15 },
+          { text: 'escape from', weight: 15 }
         ]),
         options: [
           { text: 'retrieve', weight: 25 },
           { text: 'destroy', weight: 20 },
           { text: 'protect', weight: 20 },
           { text: 'discover', weight: 20 },
-          { text: 'escape from', weight: 15 },
+          { text: 'escape from', weight: 15 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'target',
@@ -139,20 +139,20 @@ export const questHookGraph: DemoGraph = {
       data: {
         value: JSON.stringify([
           { text: 'the ancient artifact', weight: 30 },
-          { text: 'the dragon\'s hoard', weight: 25 },
+          { text: "the dragon's hoard", weight: 25 },
           { text: 'the lost princess', weight: 20 },
           { text: 'the cursed amulet', weight: 15 },
-          { text: 'the forbidden tome', weight: 10 },
+          { text: 'the forbidden tome', weight: 10 }
         ]),
         options: [
           { text: 'the ancient artifact', weight: 30 },
-          { text: 'the dragon\'s hoard', weight: 25 },
+          { text: "the dragon's hoard", weight: 25 },
           { text: 'the lost princess', weight: 20 },
           { text: 'the cursed amulet', weight: 15 },
-          { text: 'the forbidden tome', weight: 10 },
+          { text: 'the forbidden tome', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'location-prep',
@@ -161,8 +161,8 @@ export const questHookGraph: DemoGraph = {
       data: {
         value: 'hidden in',
         text: 'hidden in',
-        nodeType: 'textBlock',
-      },
+        nodeType: 'textBlock'
+      }
     },
     {
       id: 'location',
@@ -174,17 +174,17 @@ export const questHookGraph: DemoGraph = {
           { text: 'the abandoned castle', weight: 25 },
           { text: 'the sunken temple', weight: 20 },
           { text: 'the mountain fortress', weight: 15 },
-          { text: 'the wizard\'s tower', weight: 10 },
+          { text: "the wizard's tower", weight: 10 }
         ]),
         options: [
           { text: 'the haunted forest', weight: 30 },
           { text: 'the abandoned castle', weight: 25 },
           { text: 'the sunken temple', weight: 20 },
           { text: 'the mountain fortress', weight: 15 },
-          { text: 'the wizard\'s tower', weight: 10 },
+          { text: "the wizard's tower", weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'output',
@@ -193,19 +193,19 @@ export const questHookGraph: DemoGraph = {
       data: {
         value: 'Quest',
         label: 'Quest',
-        nodeType: 'output',
-      },
-    },
+        nodeType: 'output'
+      }
+    }
   ],
   edges: [
     { id: 'e1', source: 'intro', target: 'action', animated: true },
     { id: 'e2', source: 'action', target: 'target', animated: true },
     { id: 'e3', source: 'target', target: 'location-prep' },
     { id: 'e4', source: 'location-prep', target: 'location', animated: true },
-    { id: 'e5', source: 'location', target: 'output' },
+    { id: 'e5', source: 'location', target: 'output' }
   ],
   previewSeeds: ['quest1', 'quest2', 'quest3', 'quest4', 'quest5'],
-  tags: ['quest', 'adventure', 'hook'],
+  tags: ['quest', 'adventure', 'hook']
 };
 
 // Tavern scene generator
@@ -223,16 +223,16 @@ export const tavernSceneGraph: DemoGraph = {
           { text: 'In the dimly lit', weight: 40 },
           { text: 'In the crowded', weight: 30 },
           { text: 'In the smoky', weight: 20 },
-          { text: 'In the quiet', weight: 10 },
+          { text: 'In the quiet', weight: 10 }
         ]),
         options: [
           { text: 'In the dimly lit', weight: 40 },
           { text: 'In the crowded', weight: 30 },
           { text: 'In the smoky', weight: 20 },
-          { text: 'In the quiet', weight: 10 },
+          { text: 'In the quiet', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'tavern-name',
@@ -241,20 +241,20 @@ export const tavernSceneGraph: DemoGraph = {
       data: {
         value: JSON.stringify([
           { text: 'Prancing Pony', weight: 25 },
-          { text: 'Dragon\'s Rest', weight: 25 },
+          { text: "Dragon's Rest", weight: 25 },
           { text: 'Broken Shield', weight: 20 },
-          { text: 'Wizard\'s Brew', weight: 20 },
-          { text: 'Silent Knight', weight: 10 },
+          { text: "Wizard's Brew", weight: 20 },
+          { text: 'Silent Knight', weight: 10 }
         ]),
         options: [
           { text: 'Prancing Pony', weight: 25 },
-          { text: 'Dragon\'s Rest', weight: 25 },
+          { text: "Dragon's Rest", weight: 25 },
           { text: 'Broken Shield', weight: 20 },
-          { text: 'Wizard\'s Brew', weight: 20 },
-          { text: 'Silent Knight', weight: 10 },
+          { text: "Wizard's Brew", weight: 20 },
+          { text: 'Silent Knight', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'comma',
@@ -263,8 +263,8 @@ export const tavernSceneGraph: DemoGraph = {
       data: {
         value: ',',
         text: ',',
-        nodeType: 'textBlock',
-      },
+        nodeType: 'textBlock'
+      }
     },
     {
       id: 'patron',
@@ -276,17 +276,17 @@ export const tavernSceneGraph: DemoGraph = {
           { text: 'a grizzled mercenary', weight: 25 },
           { text: 'a nervous merchant', weight: 20 },
           { text: 'a mysterious bard', weight: 15 },
-          { text: 'an old wizard', weight: 10 },
+          { text: 'an old wizard', weight: 10 }
         ]),
         options: [
           { text: 'a hooded stranger', weight: 30 },
           { text: 'a grizzled mercenary', weight: 25 },
           { text: 'a nervous merchant', weight: 20 },
           { text: 'a mysterious bard', weight: 15 },
-          { text: 'an old wizard', weight: 10 },
+          { text: 'an old wizard', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'action',
@@ -298,17 +298,17 @@ export const tavernSceneGraph: DemoGraph = {
           { text: 'slides a map across the table', weight: 25 },
           { text: 'whispers of ancient treasure', weight: 20 },
           { text: 'offers you a dangerous job', weight: 15 },
-          { text: 'warns of impending doom', weight: 10 },
+          { text: 'warns of impending doom', weight: 10 }
         ]),
         options: [
           { text: 'beckons you over', weight: 30 },
           { text: 'slides a map across the table', weight: 25 },
           { text: 'whispers of ancient treasure', weight: 20 },
           { text: 'offers you a dangerous job', weight: 15 },
-          { text: 'warns of impending doom', weight: 10 },
+          { text: 'warns of impending doom', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'output',
@@ -317,19 +317,19 @@ export const tavernSceneGraph: DemoGraph = {
       data: {
         value: 'Scene',
         label: 'Scene',
-        nodeType: 'output',
-      },
-    },
+        nodeType: 'output'
+      }
+    }
   ],
   edges: [
     { id: 'e1', source: 'time', target: 'tavern-name', animated: true },
     { id: 'e2', source: 'tavern-name', target: 'comma' },
     { id: 'e3', source: 'comma', target: 'patron' },
     { id: 'e4', source: 'patron', target: 'action', animated: true },
-    { id: 'e5', source: 'action', target: 'output' },
+    { id: 'e5', source: 'action', target: 'output' }
   ],
   previewSeeds: ['tavern1', 'tavern2', 'tavern3', 'scene1', 'scene2'],
-  tags: ['tavern', 'scene', 'atmosphere'],
+  tags: ['tavern', 'scene', 'atmosphere']
 };
 
 // Combat encounter generator
@@ -345,8 +345,8 @@ export const combatEncounterGraph: DemoGraph = {
       data: {
         value: 'Suddenly,',
         text: 'Suddenly,',
-        nodeType: 'textBlock',
-      },
+        nodeType: 'textBlock'
+      }
     },
     {
       id: 'enemy-count',
@@ -357,16 +357,16 @@ export const combatEncounterGraph: DemoGraph = {
           { text: 'three', weight: 40 },
           { text: 'five', weight: 30 },
           { text: 'a dozen', weight: 20 },
-          { text: 'a horde of', weight: 10 },
+          { text: 'a horde of', weight: 10 }
         ]),
         options: [
           { text: 'three', weight: 40 },
           { text: 'five', weight: 30 },
           { text: 'a dozen', weight: 20 },
-          { text: 'a horde of', weight: 10 },
+          { text: 'a horde of', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'enemy-type',
@@ -378,17 +378,17 @@ export const combatEncounterGraph: DemoGraph = {
           { text: 'bandits', weight: 25 },
           { text: 'orcs', weight: 20 },
           { text: 'undead', weight: 15 },
-          { text: 'cultists', weight: 10 },
+          { text: 'cultists', weight: 10 }
         ]),
         options: [
           { text: 'goblins', weight: 30 },
           { text: 'bandits', weight: 25 },
           { text: 'orcs', weight: 20 },
           { text: 'undead', weight: 15 },
-          { text: 'cultists', weight: 10 },
+          { text: 'cultists', weight: 10 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'attack-verb',
@@ -399,16 +399,16 @@ export const combatEncounterGraph: DemoGraph = {
           { text: 'burst from the shadows', weight: 35 },
           { text: 'charge from the treeline', weight: 30 },
           { text: 'emerge from hiding', weight: 20 },
-          { text: 'surround your party', weight: 15 },
+          { text: 'surround your party', weight: 15 }
         ]),
         options: [
           { text: 'burst from the shadows', weight: 35 },
           { text: 'charge from the treeline', weight: 30 },
           { text: 'emerge from hiding', weight: 20 },
-          { text: 'surround your party', weight: 15 },
+          { text: 'surround your party', weight: 15 }
         ],
-        nodeType: 'weightedChoice',
-      },
+        nodeType: 'weightedChoice'
+      }
     },
     {
       id: 'output',
@@ -417,18 +417,18 @@ export const combatEncounterGraph: DemoGraph = {
       data: {
         value: 'Encounter',
         label: 'Encounter',
-        nodeType: 'output',
-      },
-    },
+        nodeType: 'output'
+      }
+    }
   ],
   edges: [
     { id: 'e1', source: 'suddenly', target: 'enemy-count', animated: true },
     { id: 'e2', source: 'enemy-count', target: 'enemy-type', animated: true },
     { id: 'e3', source: 'enemy-type', target: 'attack-verb' },
-    { id: 'e4', source: 'attack-verb', target: 'output' },
+    { id: 'e4', source: 'attack-verb', target: 'output' }
   ],
   previewSeeds: ['combat1', 'combat2', 'battle1', 'fight1', 'encounter1'],
-  tags: ['combat', 'encounter', 'action'],
+  tags: ['combat', 'encounter', 'action']
 };
 
 // Collect all demo graphs
@@ -436,7 +436,7 @@ export const medievalDemoGraphs: DemoGraph[] = [
   simpleCharacterGraph,
   questHookGraph,
   tavernSceneGraph,
-  combatEncounterGraph,
+  combatEncounterGraph
 ];
 
 // Helper to get graph by ID

@@ -35,7 +35,7 @@ export function FormField({
 }: FormFieldProps) {
   const inputId = `field-${label.toLowerCase().replace(/\s+/g, '-')}`;
   const errorId = `${inputId}-error`;
-  
+
   return (
     <div style={{ marginBottom: '20px' }}>
       <label
@@ -61,13 +61,13 @@ export function FormField({
           </span>
         )}
       </label>
-      
+
       <div style={{ position: 'relative' }}>
         <input
           id={inputId}
           type={type}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={e => onChange(e.target.value)}
           onBlur={onBlur}
           disabled={disabled}
           autoComplete={autoComplete}
@@ -83,22 +83,24 @@ export function FormField({
             borderRadius: '6px',
             backgroundColor: disabled ? '#e9ecef' : 'white',
             color: '#495057',
-            transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
+            transition:
+              'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
             outline: 'none',
             boxSizing: 'border-box'
           }}
-          onFocus={(e) => {
+          onFocus={e => {
             if (!error) {
               e.currentTarget.style.borderColor = '#80bdff';
-              e.currentTarget.style.boxShadow = '0 0 0 0.2rem rgba(0, 123, 255, 0.25)';
+              e.currentTarget.style.boxShadow =
+                '0 0 0 0.2rem rgba(0, 123, 255, 0.25)';
             }
           }}
-          onBlurCapture={(e) => {
+          onBlurCapture={e => {
             e.currentTarget.style.borderColor = error ? '#dc3545' : '#ced4da';
             e.currentTarget.style.boxShadow = 'none';
           }}
         />
-        
+
         {/* Password Toggle Button */}
         {showPasswordToggle && onTogglePassword && (
           <button
@@ -126,7 +128,7 @@ export function FormField({
           </button>
         )}
       </div>
-      
+
       {/* Error Message */}
       {error && (
         <div

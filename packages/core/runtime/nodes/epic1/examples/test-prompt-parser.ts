@@ -22,7 +22,8 @@ const tests = [
   },
   {
     name: 'Complex example',
-    prompt: 'A weary merchant in tattered robes, carrying scrolls or books or potions',
+    prompt:
+      'A weary merchant in tattered robes, carrying scrolls or books or potions',
     minSegments: 2,
     hasWeightedChoice: true
   },
@@ -44,50 +45,74 @@ for (const test of tests) {
     const result = promptParser.parse(test.prompt);
     let success = true;
     const errors: string[] = [];
-    
+
     // Check segment count
-    if (test.expectedSegments !== undefined && result.segments.length !== test.expectedSegments) {
-      errors.push(`Expected ${test.expectedSegments} segments, got ${result.segments.length}`);
+    if (
+      test.expectedSegments !== undefined &&
+      result.segments.length !== test.expectedSegments
+    ) {
+      errors.push(
+        `Expected ${test.expectedSegments} segments, got ${result.segments.length}`
+      );
       success = false;
     }
-    
-    if (test.minSegments !== undefined && result.segments.length < test.minSegments) {
-      errors.push(`Expected at least ${test.minSegments} segments, got ${result.segments.length}`);
+
+    if (
+      test.minSegments !== undefined &&
+      result.segments.length < test.minSegments
+    ) {
+      errors.push(
+        `Expected at least ${test.minSegments} segments, got ${result.segments.length}`
+      );
       success = false;
     }
-    
+
     // Check node type
     if (test.expectedNodeType !== undefined && result.segments.length > 0) {
       if (result.segments[0].suggestedNodeType !== test.expectedNodeType) {
-        errors.push(`Expected node type ${test.expectedNodeType}, got ${result.segments[0].suggestedNodeType}`);
+        errors.push(
+          `Expected node type ${test.expectedNodeType}, got ${result.segments[0].suggestedNodeType}`
+        );
         success = false;
       }
     }
-    
+
     // Check alternatives
     if (test.expectedAlternatives !== undefined && result.segments.length > 0) {
-      const alternatives = result.segments[0].metadata?.alternatives?.length || 0;
+      const alternatives =
+        result.segments[0].metadata?.alternatives?.length || 0;
       if (alternatives !== test.expectedAlternatives) {
-        errors.push(`Expected ${test.expectedAlternatives} alternatives, got ${alternatives}`);
+        errors.push(
+          `Expected ${test.expectedAlternatives} alternatives, got ${alternatives}`
+        );
         success = false;
       }
     }
-    
+
     // Check for weighted choice
     if (test.hasWeightedChoice !== undefined) {
-      const hasWeighted = result.segments.some(s => s.suggestedNodeType === Epic1NodeType.WeightedChoice);
+      const hasWeighted = result.segments.some(
+        s => s.suggestedNodeType === Epic1NodeType.WeightedChoice
+      );
       if (hasWeighted !== test.hasWeightedChoice) {
-        errors.push(`Expected hasWeightedChoice=${test.hasWeightedChoice}, got ${hasWeighted}`);
+        errors.push(
+          `Expected hasWeightedChoice=${test.hasWeightedChoice}, got ${hasWeighted}`
+        );
         success = false;
       }
     }
-    
+
     // Check node count
-    if (test.expectedNodes !== undefined && result.nodes.length !== test.expectedNodes) {
-      errors.push(`Expected ${test.expectedNodes} nodes, got ${result.nodes.length}`);
+    if (
+      test.expectedNodes !== undefined &&
+      result.nodes.length !== test.expectedNodes
+    ) {
+      errors.push(
+        `Expected ${test.expectedNodes} nodes, got ${result.nodes.length}`
+      );
       success = false;
     }
-    
+
     if (success) {
       console.log(`✅ ${test.name}`);
       passed++;
@@ -107,7 +132,9 @@ console.log(`\n📊 Results: ${passed} passed, ${failed} failed`);
 
 // Run a demo
 console.log('\n🎯 Demo Parse:');
-const demoResult = promptParser.parse('A knight with sword or spear, wearing plate armor or chainmail');
+const demoResult = promptParser.parse(
+  'A knight with sword or spear, wearing plate armor or chainmail'
+);
 console.log(`Segments: ${demoResult.segments.length}`);
 demoResult.segments.forEach((seg, i) => {
   console.log(`  [${i}] "${seg.text}" -> ${seg.suggestedNodeType}`);

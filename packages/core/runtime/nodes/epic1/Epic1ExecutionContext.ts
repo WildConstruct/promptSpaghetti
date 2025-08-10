@@ -8,7 +8,12 @@ import seedrandom from 'seedrandom';
 /**
  * Variable value types supported by the execution context
  */
-export type VariableValue = string | number | boolean | any[] | Record<string, any>;
+export type VariableValue =
+  | string
+  | number
+  | boolean
+  | any[]
+  | Record<string, any>;
 
 /**
  * Execution statistics
@@ -139,7 +144,7 @@ export class Epic1ExecutionContext {
         this.addWarning('unknown', `Unknown variable: ${varName}`);
         return match; // Keep original if variable not found
       }
-      
+
       // Convert value to string representation
       if (typeof value === 'object') {
         try {
@@ -148,7 +153,7 @@ export class Epic1ExecutionContext {
           return '[Object]';
         }
       }
-      
+
       return String(value);
     });
   }
@@ -220,17 +225,17 @@ export class Epic1ExecutionContext {
    */
   clone(): Epic1ExecutionContext {
     const cloned = new Epic1ExecutionContext(this.seed);
-    
+
     // Copy variables
     this.variables.forEach((value, key) => {
       cloned.variables.set(key, this.cloneValue(value));
     });
-    
+
     // Copy node seeds
     this.nodeSeeds.forEach((seed, nodeId) => {
       cloned.nodeSeeds.set(nodeId, seed);
     });
-    
+
     return cloned;
   }
 
@@ -253,7 +258,7 @@ export class Epic1ExecutionContext {
     }
 
     const type = typeof value;
-    
+
     // Primitives are immutable
     if (type === 'string' || type === 'number' || type === 'boolean') {
       return value;

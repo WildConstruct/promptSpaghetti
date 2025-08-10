@@ -2,7 +2,12 @@
  * Tests for preset utility functions
  */
 
-import { applyPresetToNode, getNodeValue, createPresetFromNode, isNodeModifiedFromPreset } from '../presetUtils';
+import {
+  applyPresetToNode,
+  getNodeValue,
+  createPresetFromNode,
+  isNodeModifiedFromPreset
+} from '../presetUtils';
 import { EditableNodeData } from '../../nodes';
 import { Preset } from '../types';
 
@@ -66,7 +71,9 @@ describe('presetUtils', () => {
 
       expect(result.value).toBe(JSON.stringify(preset.value.options));
       expect(result.options).toEqual(preset.value.options);
-      expect(result.editBuffer).toBe(JSON.stringify(preset.value.options, null, 2));
+      expect(result.editBuffer).toBe(
+        JSON.stringify(preset.value.options, null, 2)
+      );
     });
 
     it('applies concat preset to node', () => {
@@ -180,8 +187,12 @@ describe('presetUtils', () => {
       const afterTime = new Date();
 
       expect(result.lastModified).toBeDefined();
-      expect(result.lastModified!.getTime()).toBeGreaterThanOrEqual(beforeTime.getTime());
-      expect(result.lastModified!.getTime()).toBeLessThanOrEqual(afterTime.getTime());
+      expect(result.lastModified!.getTime()).toBeGreaterThanOrEqual(
+        beforeTime.getTime()
+      );
+      expect(result.lastModified!.getTime()).toBeLessThanOrEqual(
+        afterTime.getTime()
+      );
     });
   });
 
@@ -367,8 +378,18 @@ describe('presetUtils', () => {
         isEditing: false
       };
 
-      const preset1 = createPresetFromNode(nodeData, 'textBlock', 'Preset 1', 'custom');
-      const preset2 = createPresetFromNode(nodeData, 'textBlock', 'Preset 2', 'custom');
+      const preset1 = createPresetFromNode(
+        nodeData,
+        'textBlock',
+        'Preset 1',
+        'custom'
+      );
+      const preset2 = createPresetFromNode(
+        nodeData,
+        'textBlock',
+        'Preset 2',
+        'custom'
+      );
 
       expect(preset1.id).not.toBe(preset2.id);
     });
@@ -380,7 +401,12 @@ describe('presetUtils', () => {
         isEditing: false
       };
 
-      const preset = createPresetFromNode(nodeData, 'textBlock', 'Test', 'custom');
+      const preset = createPresetFromNode(
+        nodeData,
+        'textBlock',
+        'Test',
+        'custom'
+      );
       expect(preset.metadata.usage).toBe(0);
     });
   });

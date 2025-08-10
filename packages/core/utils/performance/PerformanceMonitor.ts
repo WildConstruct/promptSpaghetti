@@ -18,16 +18,19 @@ export interface PerformanceThreshold {
 }
 
 export interface PerformanceReport {
-  metrics: Record<string, {
-    count: number;
-    total: number;
-    average: number;
-    min: number;
-    max: number;
-    p50: number;
-    p95: number;
-    p99: number;
-  }>;
+  metrics: Record<
+    string,
+    {
+      count: number;
+      total: number;
+      average: number;
+      min: number;
+      max: number;
+      p50: number;
+      p95: number;
+      p99: number;
+    }
+  >;
   memory: {
     used: number;
     limit: number;
@@ -93,10 +96,10 @@ export class PerformanceMonitor {
     if (!this.metrics.has(name)) {
       this.metrics.set(name, []);
     }
-    
+
     const metricArray = this.metrics.get(name)!;
     metricArray.push(metric);
-    
+
     // Keep only last 1000 measurements per metric
     if (metricArray.length > 1000) {
       metricArray.shift();
@@ -163,30 +166,34 @@ export class PerformanceMonitor {
   /**
    * Measure between two marks
    */
-  measureMarks(startMark: string, endMark: string, metricName?: string): number {
+  measureMarks(
+    startMark: string,
+    endMark: string,
+    metricName?: string
+  ): number {
     if (typeof performance === 'undefined' || !performance.measure) {
       return 0;
     }
 
     const measureName = metricName || `${startMark}-${endMark}`;
-    
+
     try {
       performance.measure(measureName, startMark, endMark);
       const entries = performance.getEntriesByName(measureName);
-      
+
       if (entries.length > 0) {
         const duration = entries[entries.length - 1].duration;
         this.record(measureName, duration);
-        
+
         // Clean up
         performance.clearMeasures(measureName);
-        
+
         return duration;
       }
     } catch (error) {
       console.error('Failed to measure marks:', error);
     }
-    
+
     return 0;
   }
 
@@ -202,20 +209,24 @@ export class PerformanceMonitor {
    */
   private checkThresholds(metric: PerformanceMetric): void {
     const threshold = this.thresholds.get(metric.name);
-    
+
     if (threshold && metric.value > threshold.maxValue) {
       switch (threshold.action) {
         case 'warn':
-          console.warn(`Performance warning: ${metric.name} = ${metric.value}ms (threshold: ${threshold.maxValue}ms)`);
+          console.warn(
+            `Performance warning: ${metric.name} = ${metric.value}ms (threshold: ${threshold.maxValue}ms)`
+          );
           break;
         case 'error':
-          console.error(`Performance error: ${metric.name} = ${metric.value}ms (threshold: ${threshold.maxValue}ms)`);
+          console.error(
+            `Performance error: ${metric.name} = ${metric.value}ms (threshold: ${threshold.maxValue}ms)`
+          );
           break;
         case 'alert':
           this.notifyObservers();
           break;
       }
-      
+
       if (threshold.callback) {
         threshold.callback(metric);
       }
@@ -227,34 +238,34 @@ export class PerformanceMonitor {
    */
   private startFPSMonitoring(): void {
     if (this.isMonitoring) return;
-    
+
     this.isMonitoring = true;
     this.lastFrameTime = performance.now();
-    
+
     const measureFPS = (currentTime: number) => {
       if (!this.isMonitoring) return;
-      
+
       const delta = currentTime - this.lastFrameTime;
       const fps = 1000 / delta;
-      
+
       // Detect frame drops (less than 30 FPS)
       if (fps < 30 && this.frameCount > 10) {
         this.frameDrops++;
       }
-      
+
       this.fpsHistory.push(fps);
-      
+
       // Keep only last 60 measurements (1 second at 60fps)
       if (this.fpsHistory.length > 60) {
         this.fpsHistory.shift();
       }
-      
+
       this.lastFrameTime = currentTime;
       this.frameCount++;
-      
+
       this.rafId = requestAnimationFrame(measureFPS);
     };
-    
+
     this.rafId = requestAnimationFrame(measureFPS);
   }
 
@@ -263,7 +274,7 @@ export class PerformanceMonitor {
    */
   stopFPSMonitoring(): void {
     this.isMonitoring = false;
-    
+
     if (this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
       this.rafId = null;
@@ -283,7 +294,7 @@ export class PerformanceMonitor {
    */
   getAverageFPS(): number {
     if (this.fpsHistory.length === 0) return 60;
-    
+
     const sum = this.fpsHistory.reduce((a, b) => a + b, 0);
     return sum / this.fpsHistory.length;
   }
@@ -295,12 +306,12 @@ export class PerformanceMonitor {
     if (typeof performance === 'undefined' || !(performance as any).memory) {
       return { used: 0, limit: 0, percentage: 0 };
     }
-    
+
     const memory = (performance as any).memory;
     const used = memory.usedJSHeapSize / (1024 * 1024); // Convert to MB
     const limit = memory.jsHeapSizeLimit / (1024 * 1024); // Convert to MB
     const percentage = (used / limit) * 100;
-    
+
     return { used, limit, percentage };
   }
 
@@ -317,16 +328,20 @@ export class PerformanceMonitor {
         drops: this.frameDrops
       },
       cacheStats: cacheStats || { hitRate: 0, size: 0 },
-      workerStats: workerStats || { queueLength: 0, busyWorkers: 0, averageTime: 0 }
+      workerStats: workerStats || {
+        queueLength: 0,
+        busyWorkers: 0,
+        averageTime: 0
+      }
     };
 
     // Calculate statistics for each metric
     for (const [name, values] of this.metrics.entries()) {
       if (values.length === 0) continue;
-      
+
       const sorted = values.map(v => v.value).sort((a, b) => a - b);
       const sum = sorted.reduce((a, b) => a + b, 0);
-      
+
       report.metrics[name] = {
         count: values.length,
         total: sum,
@@ -347,7 +362,7 @@ export class PerformanceMonitor {
    */
   private percentile(sorted: number[], p: number): number {
     if (sorted.length === 0) return 0;
-    
+
     const index = Math.ceil(sorted.length * p) - 1;
     return sorted[Math.max(0, Math.min(index, sorted.length - 1))];
   }
@@ -357,7 +372,7 @@ export class PerformanceMonitor {
    */
   subscribe(callback: (report: PerformanceReport) => void): () => void {
     this.observers.push(callback);
-    
+
     // Return unsubscribe function
     return () => {
       const index = this.observers.indexOf(callback);
@@ -397,11 +412,11 @@ export class PerformanceMonitor {
    */
   exportMetrics(): Record<string, PerformanceMetric[]> {
     const exported: Record<string, PerformanceMetric[]> = {};
-    
+
     for (const [name, values] of this.metrics.entries()) {
       exported[name] = [...values];
     }
-    
+
     return exported;
   }
 

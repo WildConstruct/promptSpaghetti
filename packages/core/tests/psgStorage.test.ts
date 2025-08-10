@@ -8,9 +8,11 @@ describe('psgStorage helpers', () => {
 
   test('short-circuits when supabase client is null', async () => {
     jest.doMock(path.resolve(__dirname, '../utils/supabaseClient.ts'), () => ({
-      supabase: null,
+      supabase: null
     }));
-    const { listUserGraphs, getUserGraph, putUserGraph } = await import('../utils/psgStorage');
+    const { listUserGraphs, getUserGraph, putUserGraph } = await import(
+      '../utils/psgStorage'
+    );
 
     const list = await listUserGraphs('user1');
     expect(list.ok).toBe(false);
@@ -28,35 +30,42 @@ describe('psgStorage helpers', () => {
       data: [
         { name: 'a.psg' },
         { name: 'b.txt' },
-        { name: 'c.PSG' }, // should be excluded (case-sensitive)
+        { name: 'c.PSG' } // should be excluded (case-sensitive)
       ],
-      error: null,
+      error: null
     });
     const fromMock = jest.fn(() => ({ list: listMock }));
 
     jest.doMock(path.resolve(__dirname, '../utils/supabaseClient.ts'), () => ({
-      supabase: { storage: { from: fromMock } },
+      supabase: { storage: { from: fromMock } }
     }));
 
     const { listUserGraphs } = await import('../utils/psgStorage');
     const res = await listUserGraphs('user42');
 
     expect(fromMock).toHaveBeenCalledWith('graphs');
-    expect(listMock).toHaveBeenCalledWith('users/user42/graphs/', expect.objectContaining({ limit: 100 }));
+    expect(listMock).toHaveBeenCalledWith(
+      'users/user42/graphs/',
+      expect.objectContaining({ limit: 100 })
+    );
 
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.data.map((x) => x.name)).toEqual(['a.psg']);
+      expect(res.data.map(x => x.name)).toEqual(['a.psg']);
     }
   });
 
   test('getUserGraph downloads correct path and returns text', async () => {
-    const blob = new Blob([JSON.stringify({ x: 1 })], { type: 'application/json' });
-    const downloadMock = jest.fn().mockResolvedValue({ data: blob, error: null });
+    const blob = new Blob([JSON.stringify({ x: 1 })], {
+      type: 'application/json'
+    });
+    const downloadMock = jest
+      .fn()
+      .mockResolvedValue({ data: blob, error: null });
     const fromMock = jest.fn(() => ({ download: downloadMock }));
 
     jest.doMock(path.resolve(__dirname, '../utils/supabaseClient.ts'), () => ({
-      supabase: { storage: { from: fromMock } },
+      supabase: { storage: { from: fromMock } }
     }));
 
     const { getUserGraph } = await import('../utils/psgStorage');
@@ -73,7 +82,7 @@ describe('psgStorage helpers', () => {
     const fromMock = jest.fn(() => ({ upload: uploadMock }));
 
     jest.doMock(path.resolve(__dirname, '../utils/supabaseClient.ts'), () => ({
-      supabase: { storage: { from: fromMock } },
+      supabase: { storage: { from: fromMock } }
     }));
 
     const { putUserGraph } = await import('../utils/psgStorage');
@@ -88,7 +97,9 @@ describe('psgStorage helpers', () => {
     const sentBlob: Blob = args[1];
     const opts = args[2];
 
-    expect(opts).toEqual(expect.objectContaining({ upsert: true, contentType: 'application/json' }));
+    expect(opts).toEqual(
+      expect.objectContaining({ upsert: true, contentType: 'application/json' })
+    );
     const text = await sentBlob.text();
     expect(text).toBe(payload);
 

@@ -34,23 +34,26 @@ export function validateEmail(email: string): ValidationResult {
   if (!email) {
     return { isValid: false, error: 'Email is required' };
   }
-  
+
   if (!EMAIL_REGEX.test(email)) {
     return { isValid: false, error: 'Please enter a valid email address' };
   }
-  
+
   // Additional checks
   if (email.length > 254) {
     return { isValid: false, error: 'Email address is too long' };
   }
-  
+
   return { isValid: true, error: null };
 }
 
 /**
  * Validate password and calculate strength
  */
-export function validatePassword(password: string, isSignup: boolean = false): PasswordValidationResult {
+export function validatePassword(
+  password: string,
+  isSignup: boolean = false
+): PasswordValidationResult {
   const requirements = {
     minLength: password.length >= 8,
     hasUppercase: /[A-Z]/.test(password),
@@ -58,7 +61,7 @@ export function validatePassword(password: string, isSignup: boolean = false): P
     hasNumber: /\d/.test(password),
     hasSpecial: /[^a-zA-Z\d\s]/.test(password)
   };
-  
+
   // Calculate strength
   let strengthScore = 0;
   if (password.length >= 8) strengthScore++;
@@ -66,11 +69,10 @@ export function validatePassword(password: string, isSignup: boolean = false): P
   if (requirements.hasUppercase && requirements.hasLowercase) strengthScore++;
   if (requirements.hasNumber) strengthScore++;
   if (requirements.hasSpecial) strengthScore++;
-  
-  const strength: PasswordStrength = 
-    strengthScore <= 2 ? 'weak' :
-    strengthScore <= 4 ? 'medium' : 'strong';
-  
+
+  const strength: PasswordStrength =
+    strengthScore <= 2 ? 'weak' : strengthScore <= 4 ? 'medium' : 'strong';
+
   // Validation for signup (stricter)
   if (isSignup) {
     if (!password) {
@@ -81,7 +83,7 @@ export function validatePassword(password: string, isSignup: boolean = false): P
         requirements
       };
     }
-    
+
     if (!requirements.minLength) {
       return {
         isValid: false,
@@ -90,7 +92,7 @@ export function validatePassword(password: string, isSignup: boolean = false): P
         requirements
       };
     }
-    
+
     if (!requirements.hasUppercase) {
       return {
         isValid: false,
@@ -99,7 +101,7 @@ export function validatePassword(password: string, isSignup: boolean = false): P
         requirements
       };
     }
-    
+
     if (!requirements.hasNumber) {
       return {
         isValid: false,
@@ -108,7 +110,7 @@ export function validatePassword(password: string, isSignup: boolean = false): P
         requirements
       };
     }
-    
+
     return {
       isValid: true,
       error: null,
@@ -116,7 +118,7 @@ export function validatePassword(password: string, isSignup: boolean = false): P
       requirements
     };
   }
-  
+
   // Validation for login (less strict)
   if (!password) {
     return {
@@ -126,7 +128,7 @@ export function validatePassword(password: string, isSignup: boolean = false): P
       requirements
     };
   }
-  
+
   return {
     isValid: true,
     error: null,
@@ -140,25 +142,31 @@ export function validatePassword(password: string, isSignup: boolean = false): P
  */
 export function useEmailValidation(initialValue: string = '') {
   const [email, setEmail] = useState(initialValue);
-  const [validation, setValidation] = useState<ValidationResult>({ isValid: false, error: null });
+  const [validation, setValidation] = useState<ValidationResult>({
+    isValid: false,
+    error: null
+  });
   const [touched, setTouched] = useState(false);
-  
+
   useEffect(() => {
     if (touched || email) {
       const result = validateEmail(email);
       setValidation(result);
     }
   }, [email, touched]);
-  
-  const handleChange = useCallback((value: string) => {
-    setEmail(value);
-    if (!touched) setTouched(true);
-  }, [touched]);
-  
+
+  const handleChange = useCallback(
+    (value: string) => {
+      setEmail(value);
+      if (!touched) setTouched(true);
+    },
+    [touched]
+  );
+
   const handleBlur = useCallback(() => {
     setTouched(true);
   }, []);
-  
+
   return {
     value: email,
     validation,
@@ -189,25 +197,28 @@ export function usePasswordValidation(isSignup: boolean = false) {
   });
   const [touched, setTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   useEffect(() => {
     const result = validatePassword(password, isSignup);
     setValidation(result);
   }, [password, isSignup]);
-  
-  const handleChange = useCallback((value: string) => {
-    setPassword(value);
-    if (!touched) setTouched(true);
-  }, [touched]);
-  
+
+  const handleChange = useCallback(
+    (value: string) => {
+      setPassword(value);
+      if (!touched) setTouched(true);
+    },
+    [touched]
+  );
+
   const handleBlur = useCallback(() => {
     setTouched(true);
   }, []);
-  
+
   const toggleShowPassword = useCallback(() => {
     setShowPassword(prev => !prev);
   }, []);
-  
+
   return {
     value: password,
     validation,
@@ -229,22 +240,28 @@ export function usePasswordValidation(isSignup: boolean = false) {
 export function useConfirmPasswordValidation(password: string) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [touched, setTouched] = useState(false);
-  
+
   const validation: ValidationResult = {
     isValid: confirmPassword === password && confirmPassword.length > 0,
-    error: !confirmPassword ? 'Please confirm your password' :
-           confirmPassword !== password ? 'Passwords do not match' : null
+    error: !confirmPassword
+      ? 'Please confirm your password'
+      : confirmPassword !== password
+        ? 'Passwords do not match'
+        : null
   };
-  
-  const handleChange = useCallback((value: string) => {
-    setConfirmPassword(value);
-    if (!touched) setTouched(true);
-  }, [touched]);
-  
+
+  const handleChange = useCallback(
+    (value: string) => {
+      setConfirmPassword(value);
+      if (!touched) setTouched(true);
+    },
+    [touched]
+  );
+
   const handleBlur = useCallback(() => {
     setTouched(true);
   }, []);
-  
+
   return {
     value: confirmPassword,
     validation,
@@ -261,29 +278,31 @@ export function useConfirmPasswordValidation(password: string) {
  */
 export function getAuthErrorMessage(error: any): string {
   if (!error) return 'An unexpected error occurred';
-  
-  const errorMessage = error.message || error.error_description || error.toString();
-  
+
+  const errorMessage =
+    error.message || error.error_description || error.toString();
+
   const errorMap: Record<string, string> = {
     'Invalid login credentials': 'Email or password is incorrect',
     'Email not confirmed': 'Please check your email to confirm your account',
     'User already registered': 'An account with this email already exists',
     'Password should be at least 6 characters': 'Password is too short',
     'Rate limit exceeded': 'Too many attempts. Please try again later',
-    'Network request failed': 'Connection error. Please check your internet connection',
-    'invalid_grant': 'Invalid email or password',
-    'user_not_found': 'No account found with this email',
-    'email_not_confirmed': 'Please verify your email before signing in',
-    'weak_password': 'Password is too weak. Please choose a stronger password'
+    'Network request failed':
+      'Connection error. Please check your internet connection',
+    invalid_grant: 'Invalid email or password',
+    user_not_found: 'No account found with this email',
+    email_not_confirmed: 'Please verify your email before signing in',
+    weak_password: 'Password is too weak. Please choose a stronger password'
   };
-  
+
   // Check for partial matches
   for (const [key, message] of Object.entries(errorMap)) {
     if (errorMessage.toLowerCase().includes(key.toLowerCase())) {
       return message;
     }
   }
-  
+
   // Default message
   return 'An error occurred. Please try again';
 }

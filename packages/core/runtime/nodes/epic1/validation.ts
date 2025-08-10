@@ -102,7 +102,6 @@ export async function validateNode(
         await validateOutput(node, errors, warnings, context);
         break;
     }
-
   } catch (error) {
     errors.push({
       nodeId,
@@ -144,7 +143,7 @@ async function validateTextBlock(
   // Check for unmatched variable syntax
   const variablePattern = /\{\{(\w+)\}\}/g;
   const incompletePattern = /\{\{[^}]*$|\{[^{]|[^}]\}\}/;
-  
+
   if (incompletePattern.test(value)) {
     errors.push({
       nodeId: node.serialize().id,
@@ -165,7 +164,11 @@ async function validateWeightedChoice(
   warnings: ValidationError[]
 ): Promise<void> {
   const data = node.getData();
-  const options = data.value as Array<{ id: string; text: string; weight: number }>;
+  const options = data.value as Array<{
+    id: string;
+    text: string;
+    weight: number;
+  }>;
 
   // Check for empty options
   if (options.length === 0) {
@@ -210,7 +213,7 @@ async function validateWeightedChoice(
     const text = option.text.trim();
     textCounts.set(text, (textCounts.get(text) || 0) + 1);
   });
-  
+
   textCounts.forEach((count, text) => {
     if (count > 1) {
       warnings.push({
@@ -238,7 +241,7 @@ async function validateConcat(
   // Check for incoming connections
   if (context.edges) {
     const incomingEdges = context.edges.filter(edge => edge.target === nodeId);
-    
+
     if (incomingEdges.length === 0) {
       warnings.push({
         nodeId,
@@ -267,15 +270,22 @@ async function validateVariable(
   context: ValidationContext
 ): Promise<void> {
   const data = node.getData();
-  const config = data.value as { name: string; defaultValue?: any; currentValue?: any };
+  const config = data.value as {
+    name: string;
+    defaultValue?: any;
+    currentValue?: any;
+  };
   const nodeId = node.serialize().id;
 
   // Check for duplicate variable names
   if (context.nodes) {
     const duplicates: string[] = [];
-    
+
     context.nodes.forEach((otherNode, otherId) => {
-      if (otherId !== nodeId && otherNode.getNodeType() === Epic1NodeType.Variable) {
+      if (
+        otherId !== nodeId &&
+        otherNode.getNodeType() === Epic1NodeType.Variable
+      ) {
         const otherConfig = otherNode.getData().value as { name: string };
         if (otherConfig.name === config.name) {
           duplicates.push(otherId);
@@ -321,7 +331,7 @@ async function validateOutput(
   // Check for incoming connections
   if (context.edges) {
     const incomingEdges = context.edges.filter(edge => edge.target === nodeId);
-    
+
     if (incomingEdges.length === 0) {
       errors.push({
         nodeId,
@@ -375,7 +385,7 @@ export async function validateGraph(
   }
 
   // Graph-level validation
-  
+
   // Check for orphaned nodes (no connections)
   const connectedNodes = new Set<string>();
   edges.forEach(edge => {
@@ -384,7 +394,10 @@ export async function validateGraph(
   });
 
   nodes.forEach((node, nodeId) => {
-    if (!connectedNodes.has(nodeId) && node.getNodeType() !== Epic1NodeType.Output) {
+    if (
+      !connectedNodes.has(nodeId) &&
+      node.getNodeType() !== Epic1NodeType.Output
+    ) {
       allWarnings.push({
         nodeId,
         nodeType: node.getNodeType(),
@@ -408,7 +421,7 @@ export async function validateGraph(
   const outputNodes = Array.from(nodes.values()).filter(
     node => node.getNodeType() === Epic1NodeType.Output
   );
-  
+
   if (outputNodes.length === 0) {
     allWarnings.push({
       nodeId: 'graph',
@@ -440,12 +453,12 @@ function hasCycles(
   edges: Array<{ source: string; target: string }>
 ): boolean {
   const adjacency = new Map<string, string[]>();
-  
+
   // Build adjacency list
   nodes.forEach((node, nodeId) => {
     adjacency.set(nodeId, []);
   });
-  
+
   edges.forEach(edge => {
     const neighbors = adjacency.get(edge.source) || [];
     neighbors.push(edge.target);
@@ -495,7 +508,7 @@ export function sanitizeValue(value: any): any {
   }
 
   const type = typeof value;
-  
+
   // Primitives are safe
   if (type === 'string' || type === 'number' || type === 'boolean') {
     return value;

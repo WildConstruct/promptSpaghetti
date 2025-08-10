@@ -1,6 +1,6 @@
 /**
  * Demo: Smart Node Positioning for Epic 1
- * 
+ *
  * Run with: npx ts-node packages/core/runtime/nodes/epic1/examples/smart-positioning-demo.ts
  */
 
@@ -11,16 +11,18 @@ import chalk from 'chalk';
 // Test prompts
 const testPrompts = [
   {
-    name: "Simple narrative",
-    prompt: "A weary merchant walks through the marketplace."
+    name: 'Simple narrative',
+    prompt: 'A weary merchant walks through the marketplace.'
   },
   {
-    name: "List with choices",
-    prompt: "The knight carries a sword, shield, or lance, wearing shining armor."
+    name: 'List with choices',
+    prompt:
+      'The knight carries a sword, shield, or lance, wearing shining armor.'
   },
   {
-    name: "Complex scene",
-    prompt: "In the ancient castle courtyard, guards patrol with torches or lanterns, while merchants sell bread, cheese, or wine."
+    name: 'Complex scene',
+    prompt:
+      'In the ancient castle courtyard, guards patrol with torches or lanterns, while merchants sell bread, cheese, or wine.'
   }
 ];
 
@@ -31,21 +33,23 @@ const parser = new PromptParser();
 testPrompts.forEach((test, index) => {
   console.log(chalk.yellow(`\n${index + 1}. ${test.name}:`));
   console.log(chalk.gray(`   "${test.prompt}"\n`));
-  
+
   try {
     const analysis = parser.parse(test.prompt);
-    
+
     console.log(chalk.green(`   ✓ Generated ${analysis.nodes.length} nodes`));
-    
+
     // Show node positions
     console.log(chalk.blue('\n   Node Positions:'));
     analysis.nodes.forEach((genNode, idx) => {
       const node = genNode.node;
       const pos = genNode.position;
       const type = node.getType();
-      
-      console.log(chalk.white(`     ${idx + 1}. ${type} at (${pos.x}, ${pos.y})`));
-      
+
+      console.log(
+        chalk.white(`     ${idx + 1}. ${type} at (${pos.x}, ${pos.y})`)
+      );
+
       // Show node content
       const data = node.serialize();
       let content = '';
@@ -62,18 +66,21 @@ testPrompts.forEach((test, index) => {
       }
       console.log(chalk.gray(`        "${content}"`));
     });
-    
+
     // Calculate layout metrics
     const positions = analysis.nodes.map(n => n.position);
     const minX = Math.min(...positions.map(p => p.x));
     const maxX = Math.max(...positions.map(p => p.x));
     const minY = Math.min(...positions.map(p => p.y));
     const maxY = Math.max(...positions.map(p => p.y));
-    
+
     console.log(chalk.magenta('\n   Layout Metrics:'));
-    console.log(chalk.white(`     Canvas bounds: X(${minX}-${maxX}), Y(${minY}-${maxY})`));
-    console.log(chalk.white(`     Width: ${maxX - minX}, Height: ${maxY - minY}`));
-    
+    console.log(
+      chalk.white(`     Canvas bounds: X(${minX}-${maxX}), Y(${minY}-${maxY})`)
+    );
+    console.log(
+      chalk.white(`     Width: ${maxX - minX}, Height: ${maxY - minY}`)
+    );
   } catch (error: any) {
     console.log(chalk.red(`   ✗ Error: ${error.message}`));
   }
@@ -114,18 +121,22 @@ optimized.forEach((pos, i) => {
 });
 
 const distBefore = Math.sqrt(
-  Math.pow(overlappingPositions[1].x - overlappingPositions[0].x, 2) + 
-  Math.pow(overlappingPositions[1].y - overlappingPositions[0].y, 2)
+  Math.pow(overlappingPositions[1].x - overlappingPositions[0].x, 2) +
+    Math.pow(overlappingPositions[1].y - overlappingPositions[0].y, 2)
 );
 
 const distAfter = Math.sqrt(
-  Math.pow(optimized[1].x - optimized[0].x, 2) + 
-  Math.pow(optimized[1].y - optimized[0].y, 2)
+  Math.pow(optimized[1].x - optimized[0].x, 2) +
+    Math.pow(optimized[1].y - optimized[0].y, 2)
 );
 
 console.log(chalk.magenta(`\nDistance before: ${distBefore.toFixed(2)}`));
 console.log(chalk.magenta(`Distance after: ${distAfter.toFixed(2)}`));
-console.log(chalk.green(`✓ Separation improved by ${(distAfter - distBefore).toFixed(2)} units`));
+console.log(
+  chalk.green(
+    `✓ Separation improved by ${(distAfter - distBefore).toFixed(2)} units`
+  )
+);
 
 console.log(chalk.cyan.bold('\n✨ Smart Positioning Features:\n'));
 console.log(chalk.white('  • Diagonal flow for natural reading'));

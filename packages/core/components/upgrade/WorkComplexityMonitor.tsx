@@ -53,11 +53,11 @@ export function WorkComplexityMonitor({
     lastPromptShown: 0,
     actionsPerformed: 0
   });
-  
+
   const sessionStartRef = useRef<number>(Date.now());
   const actionCountRef = useRef<number>(0);
   const promptShownRef = useRef<boolean>(false);
-  
+
   // Update metrics when props change
   useEffect(() => {
     setMetrics(prev => ({
@@ -66,7 +66,7 @@ export function WorkComplexityMonitor({
       edgeCount
     }));
   }, [nodeCount, edgeCount]);
-  
+
   // Track session duration
   useEffect(() => {
     const interval = setInterval(() => {
@@ -76,10 +76,10 @@ export function WorkComplexityMonitor({
         sessionDuration: Math.floor(duration)
       }));
     }, 60000); // Update every minute
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   // Track user actions
   useEffect(() => {
     const handleUserAction = () => {
@@ -89,20 +89,20 @@ export function WorkComplexityMonitor({
         actionsPerformed: actionCountRef.current
       }));
     };
-    
+
     // Track various user actions
     const events = ['click', 'keydown'];
     events.forEach(event => {
       window.addEventListener(event, handleUserAction);
     });
-    
+
     return () => {
       events.forEach(event => {
         window.removeEventListener(event, handleUserAction);
       });
     };
   }, []);
-  
+
   // Check if prompt should be shown
   useEffect(() => {
     // Don't show if authenticated
@@ -110,62 +110,58 @@ export function WorkComplexityMonitor({
       setShowPrompt(false);
       return;
     }
-    
+
     // Don't show if already shown in this session
     if (promptShownRef.current) {
       return;
     }
-    
+
     // Check if dismissed recently
     const dismissedUntil = localStorage.getItem('upgrade_prompt_dismissed');
     if (dismissedUntil && Date.now() < parseInt(dismissedUntil)) {
       return;
     }
-    
+
     // Check complexity threshold
-    const complexityScore = metrics.nodeCount + (metrics.edgeCount * 0.5);
+    const complexityScore = metrics.nodeCount + metrics.edgeCount * 0.5;
     const meetsComplexity = complexityScore >= threshold;
-    
+
     // Check session duration
     const meetsSessionDuration = metrics.sessionDuration >= minSessionDuration;
-    
+
     // Check cooldown period
-    const lastPromptTime = parseInt(localStorage.getItem('last_upgrade_prompt') || '0');
+    const lastPromptTime = parseInt(
+      localStorage.getItem('last_upgrade_prompt') || '0'
+    );
     const cooldownMs = promptCooldown * 60 * 60 * 1000;
     const meetsCooldown = Date.now() - lastPromptTime > cooldownMs;
-    
+
     // Show prompt if all conditions are met
     if (meetsComplexity && meetsSessionDuration && meetsCooldown) {
       setShowPrompt(true);
       promptShownRef.current = true;
       localStorage.setItem('last_upgrade_prompt', Date.now().toString());
     }
-  }, [
-    metrics,
-    isAuthenticated,
-    threshold,
-    minSessionDuration,
-    promptCooldown
-  ]);
-  
+  }, [metrics, isAuthenticated, threshold, minSessionDuration, promptCooldown]);
+
   const handleSignUp = () => {
     setShowPrompt(false);
     onSignUp?.();
   };
-  
+
   const handleSignIn = () => {
     setShowPrompt(false);
     onSignIn?.();
   };
-  
+
   const handleDismiss = () => {
     setShowPrompt(false);
   };
-  
+
   return (
     <>
       {children}
-      
+
       {showPrompt && (
         <UpgradeModal
           title="Save your work to the cloud"
@@ -194,16 +190,16 @@ export function useWorkComplexity() {
     edgeCount: 0,
     score: 0
   });
-  
+
   const updateComplexity = (nodes: number, edges: number) => {
-    const score = nodes + (edges * 0.5);
+    const score = nodes + edges * 0.5;
     setComplexity({
       nodeCount: nodes,
       edgeCount: edges,
       score
     });
   };
-  
+
   return {
     complexity,
     updateComplexity,
@@ -225,9 +221,9 @@ export const ComplexityIndicator = memo(function ComplexityIndicator({
   edgeCount,
   threshold = 10
 }: ComplexityIndicatorProps) {
-  const score = nodeCount + (edgeCount * 0.5);
+  const score = nodeCount + edgeCount * 0.5;
   const progress = Math.min((score / threshold) * 100, 100);
-  
+
   return (
     <div
       style={{
@@ -251,7 +247,7 @@ export const ComplexityIndicator = memo(function ComplexityIndicator({
           {Math.floor(progress)}%
         </span>
       </div>
-      
+
       <div
         style={{
           height: '4px',
@@ -269,7 +265,7 @@ export const ComplexityIndicator = memo(function ComplexityIndicator({
           }}
         />
       </div>
-      
+
       <div
         style={{
           marginTop: '4px',

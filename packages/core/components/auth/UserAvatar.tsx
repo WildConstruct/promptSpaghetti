@@ -19,7 +19,7 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -32,13 +32,14 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
         setShowDropdown(false);
       }
     };
-    
+
     if (showDropdown) {
       document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      return () =>
+        document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [showDropdown]);
-  
+
   // Close dropdown on escape key
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -47,13 +48,13 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
         buttonRef.current?.focus();
       }
     };
-    
+
     if (showDropdown) {
       document.addEventListener('keydown', handleEscape);
       return () => document.removeEventListener('keydown', handleEscape);
     }
   }, [showDropdown]);
-  
+
   if (!user) {
     return (
       <button
@@ -72,11 +73,11 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
           alignItems: 'center',
           gap: '6px'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           e.currentTarget.style.backgroundColor = '#007bff';
           e.currentTarget.style.color = 'white';
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           e.currentTarget.style.backgroundColor = 'white';
           e.currentTarget.style.color = '#007bff';
         }}
@@ -86,7 +87,7 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
       </button>
     );
   }
-  
+
   // Get user initials
   const getInitials = () => {
     if (user.name) {
@@ -99,7 +100,7 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
     }
     return user.email[0].toUpperCase();
   };
-  
+
   return (
     <div style={{ position: 'relative' }}>
       <button
@@ -124,10 +125,10 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
           outline: showDropdown ? '2px solid #007bff' : 'none',
           outlineOffset: '2px'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           e.currentTarget.style.borderColor = '#007bff';
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           if (!showDropdown) {
             e.currentTarget.style.borderColor = 'transparent';
           }
@@ -150,7 +151,7 @@ export function UserAvatar({ user, onSignOut, onSignIn }: UserAvatarProps) {
           getInitials()
         )}
       </button>
-      
+
       {showDropdown && (
         <UserDropdown
           ref={dropdownRef}

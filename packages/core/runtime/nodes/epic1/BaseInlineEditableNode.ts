@@ -48,7 +48,10 @@ export interface InlineEditableData<T = any> {
 /**
  * Abstract base class for all Epic 1 nodes with inline editing support
  */
-export abstract class BaseInlineEditableNode<TValue = any, TOutput = unknown> extends RuntimeNode<TOutput> {
+export abstract class BaseInlineEditableNode<
+  TValue = any,
+  TOutput = unknown
+> extends RuntimeNode<TOutput> {
   protected data: InlineEditableData<TValue>;
   protected editBuffer: TValue | null = null;
 
@@ -65,7 +68,7 @@ export abstract class BaseInlineEditableNode<TValue = any, TOutput = unknown> ex
       lockReason: config.lockReason,
       previewMode: config.previewMode || 'auto',
       isValid: config.isValid !== false,
-      validationMessage: config.validationMessage,
+      validationMessage: config.validationMessage
     };
   }
 
@@ -78,7 +81,7 @@ export abstract class BaseInlineEditableNode<TValue = any, TOutput = unknown> ex
       editBuffer: undefined,
       lastEditTimestamp: undefined,
       validationErrors: [],
-      isDirty: false,
+      isDirty: false
     };
   }
 
@@ -87,7 +90,9 @@ export abstract class BaseInlineEditableNode<TValue = any, TOutput = unknown> ex
    */
   startEdit(): void {
     if (this.data.isLocked) {
-      throw new Error(`Node is locked: ${this.data.lockReason || 'No reason provided'}`);
+      throw new Error(
+        `Node is locked: ${this.data.lockReason || 'No reason provided'}`
+      );
     }
 
     this.data.editState.isEditing = true;
@@ -149,7 +154,9 @@ export abstract class BaseInlineEditableNode<TValue = any, TOutput = unknown> ex
     // Perform immediate validation if in auto preview mode
     if (this.data.previewMode === 'auto') {
       this.validateValue(newValue).then(result => {
-        this.data.editState.validationErrors = result.valid ? [] : result.errors;
+        this.data.editState.validationErrors = result.valid
+          ? []
+          : result.errors;
       });
     }
   }
@@ -234,16 +241,20 @@ export abstract class BaseInlineEditableNode<TValue = any, TOutput = unknown> ex
   /**
    * Validate a value (must be implemented by subclasses)
    */
-  protected abstract validateValue(value: TValue): Promise<{ valid: boolean; errors: string[] }>;
+  protected abstract validateValue(
+    value: TValue
+  ): Promise<{ valid: boolean; errors: string[] }>;
 
   /**
    * Clone the complete data structure
    */
-  protected cloneData(data: InlineEditableData<TValue>): InlineEditableData<TValue> {
+  protected cloneData(
+    data: InlineEditableData<TValue>
+  ): InlineEditableData<TValue> {
     return {
       ...data,
       value: this.cloneValue(data.value),
-      editState: { ...data.editState },
+      editState: { ...data.editState }
     };
   }
 
@@ -254,7 +265,7 @@ export abstract class BaseInlineEditableNode<TValue = any, TOutput = unknown> ex
     return {
       id: this.id,
       type: this.getNodeType(),
-      data: this.getData(),
+      data: this.getData()
     };
   }
 

@@ -6,18 +6,26 @@ import { Node } from 'reactflow';
 import { EditableNodeData } from './index';
 import { BaseInlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
 import { TextBlockNode } from '../../../runtime/nodes/epic1/TextBlockNode';
-import { WeightedChoiceNode, WeightedOption } from '../../../runtime/nodes/epic1/WeightedChoiceNode';
+import {
+  WeightedChoiceNode,
+  WeightedOption
+} from '../../../runtime/nodes/epic1/WeightedChoiceNode';
 import { ConcatNode } from '../../../runtime/nodes/epic1/ConcatNode';
-import { VariableNode, VariableMode } from '../../../runtime/nodes/epic1/VariableNode';
+import {
+  VariableNode,
+  VariableMode
+} from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
 import { debugLogEpic1 } from '../../../utils/debug';
 
 /**
  * Convert a React Flow node to an Epic 1 runtime node
  */
-export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInlineEditableNode | null {
+export function nodeDataToRuntimeNode(
+  flowNode: Node<EditableNodeData>
+): BaseInlineEditableNode | null {
   const { id, type, data } = flowNode;
-  
+
   debugLogEpic1('[nodeFactory] Converting node:', { id, type, data });
 
   try {
@@ -30,7 +38,7 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
       case 'weightedChoice': {
         // Parse options from data
         let options: WeightedOption[] = [];
-        
+
         if (data.options) {
           // Check if options is already an array
           if (Array.isArray(data.options)) {
@@ -53,7 +61,10 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
               }
             } catch (e) {
               console.warn('Failed to parse options string:', e);
-              options = [{ id: 'option-1', text: 'Option 1', weight: 1 }, { id: 'option-2', text: 'Option 2', weight: 1 }];
+              options = [
+                { id: 'option-1', text: 'Option 1', weight: 1 },
+                { id: 'option-2', text: 'Option 2', weight: 1 }
+              ];
             }
           } else if (typeof data.options === 'object' && data.options.options) {
             // Handle case where data.options is an object with an options property
@@ -67,20 +78,34 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
               }));
             }
           } else {
-            console.warn('Unknown options format:', typeof data.options, data.options);
-            options = [{ id: 'option-1', text: 'Option 1', weight: 50 }, { id: 'option-2', text: 'Option 2', weight: 50 }];
+            console.warn(
+              'Unknown options format:',
+              typeof data.options,
+              data.options
+            );
+            options = [
+              { id: 'option-1', text: 'Option 1', weight: 50 },
+              { id: 'option-2', text: 'Option 2', weight: 50 }
+            ];
           }
         } else if (data.value) {
           // Try to parse from value field
           try {
-            const parsed = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+            const parsed =
+              typeof data.value === 'string'
+                ? JSON.parse(data.value)
+                : data.value;
             if (Array.isArray(parsed)) {
               options = parsed.map((opt: any, idx: number) => ({
                 id: opt.id || `option-${idx + 1}`,
                 text: opt.text || '',
                 weight: opt.weight || 1
               }));
-            } else if (parsed && parsed.options && Array.isArray(parsed.options)) {
+            } else if (
+              parsed &&
+              parsed.options &&
+              Array.isArray(parsed.options)
+            ) {
               options = parsed.options.map((opt: any, idx: number) => ({
                 id: opt.id || `option-${idx + 1}`,
                 text: opt.text || '',
@@ -89,14 +114,22 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
             }
           } catch (e) {
             console.warn('Failed to parse weighted choice value:', e);
-            options = [{ id: 'option-1', text: data.value || 'Option 1', weight: 1 }];
+            options = [
+              { id: 'option-1', text: data.value || 'Option 1', weight: 1 }
+            ];
           }
         } else {
           // Default options
-          options = [{ id: 'option-1', text: 'Option 1', weight: 1 }, { id: 'option-2', text: 'Option 2', weight: 1 }];
+          options = [
+            { id: 'option-1', text: 'Option 1', weight: 1 },
+            { id: 'option-2', text: 'Option 2', weight: 1 }
+          ];
         }
 
-        debugLogEpic1('[nodeFactory] Parsed options for WeightedChoice:', options);
+        debugLogEpic1(
+          '[nodeFactory] Parsed options for WeightedChoice:',
+          options
+        );
         // WeightedChoiceNode constructor takes (id, options)
         return new WeightedChoiceNode(id, options);
       }
@@ -128,7 +161,12 @@ export function nodeDataToRuntimeNode(flowNode: Node<EditableNodeData>): BaseInl
       case 'output': {
         // OutputNode constructor takes (id, initialValue, config)
         const node = new OutputNode(id, data.label || data.value || 'Output');
-        debugLogEpic1('[nodeFactory] Created output node:', id, 'with label:', data.label || data.value || 'Output');
+        debugLogEpic1(
+          '[nodeFactory] Created output node:',
+          id,
+          'with label:',
+          data.label || data.value || 'Output'
+        );
         return node;
       }
 
@@ -150,7 +188,7 @@ export function validateNodesForExecution(nodes: BaseInlineEditableNode[]): {
   errors: string[];
 } {
   const errors: string[] = [];
-  
+
   // Check for at least one output node
   const hasOutput = nodes.some(node => node.getNodeType() === 'output');
   if (!hasOutput) {

@@ -14,10 +14,10 @@ interface InlineUpgradePromptProps {
   onUpgrade: () => void;
 }
 
-export function InlineUpgradePrompt({ 
-  feature, 
-  benefits, 
-  onUpgrade 
+export function InlineUpgradePrompt({
+  feature,
+  benefits,
+  onUpgrade
 }: InlineUpgradePromptProps) {
   return (
     <div
@@ -49,7 +49,7 @@ export function InlineUpgradePrompt({
           Sign in to enable {feature}
         </h4>
       </div>
-      
+
       <ul
         style={{
           margin: '0 0 16px 0',
@@ -63,7 +63,7 @@ export function InlineUpgradePrompt({
           </li>
         ))}
       </ul>
-      
+
       <button
         onClick={onUpgrade}
         style={{
@@ -77,10 +77,10 @@ export function InlineUpgradePrompt({
           cursor: 'pointer',
           transition: 'background-color 0.2s'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           e.currentTarget.style.backgroundColor = '#0369a1';
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           e.currentTarget.style.backgroundColor = '#0284c7';
         }}
       >
@@ -112,11 +112,11 @@ export function UpgradeModal({
 }: UpgradeModalProps) {
   const handleDismiss = () => {
     // Store dismiss timestamp
-    const dismissUntil = Date.now() + (dismissDuration * 24 * 60 * 60 * 1000);
+    const dismissUntil = Date.now() + dismissDuration * 24 * 60 * 60 * 1000;
     localStorage.setItem('upgrade_prompt_dismissed', dismissUntil.toString());
     onDismiss();
   };
-  
+
   return (
     <>
       {/* Backdrop */}
@@ -133,7 +133,7 @@ export function UpgradeModal({
         }}
         onClick={handleDismiss}
       />
-      
+
       {/* Modal */}
       <div
         style={{
@@ -170,7 +170,7 @@ export function UpgradeModal({
         >
           ×
         </button>
-        
+
         {/* Icon */}
         <div
           style={{
@@ -181,7 +181,7 @@ export function UpgradeModal({
         >
           ☁️
         </div>
-        
+
         {/* Title */}
         <h2
           style={{
@@ -194,7 +194,7 @@ export function UpgradeModal({
         >
           {title}
         </h2>
-        
+
         {/* Benefits */}
         <div
           style={{
@@ -230,7 +230,7 @@ export function UpgradeModal({
             ))}
           </ul>
         </div>
-        
+
         {/* Actions */}
         <div
           style={{
@@ -253,16 +253,16 @@ export function UpgradeModal({
               cursor: 'pointer',
               transition: 'background-color 0.2s'
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = '#0369a1';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = '#0284c7';
             }}
           >
             Sign Up Free
           </button>
-          
+
           <button
             onClick={onSignIn}
             style={{
@@ -277,17 +277,17 @@ export function UpgradeModal({
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = '#f0f9ff';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = 'white';
             }}
           >
             Sign In
           </button>
         </div>
-        
+
         {/* Dismiss link */}
         <div style={{ textAlign: 'center' }}>
           <button
@@ -305,7 +305,7 @@ export function UpgradeModal({
           </button>
         </div>
       </div>
-      
+
       {/* Animations */}
       <style>{`
         @keyframes fadeIn {
@@ -338,7 +338,7 @@ interface FeatureTooltipProps {
 
 export function FeatureTooltip({ content, children }: FeatureTooltipProps) {
   const [showTooltip, setShowTooltip] = useState(false);
-  
+
   return (
     <div
       style={{ position: 'relative', display: 'inline-block' }}
@@ -346,7 +346,7 @@ export function FeatureTooltip({ content, children }: FeatureTooltipProps) {
       onMouseLeave={() => setShowTooltip(false)}
     >
       {children}
-      
+
       {showTooltip && (
         <div
           style={{
@@ -366,7 +366,7 @@ export function FeatureTooltip({ content, children }: FeatureTooltipProps) {
           }}
         >
           {content}
-          
+
           {/* Arrow */}
           <div
             style={{
@@ -383,7 +383,7 @@ export function FeatureTooltip({ content, children }: FeatureTooltipProps) {
           />
         </div>
       )}
-      
+
       <style>{`
         @keyframes tooltipFade {
           from { opacity: 0; transform: translateX(-50%) translateY(4px); }
@@ -407,7 +407,7 @@ export function PremiumBadge({ size = 'small' }: PremiumBadgeProps) {
     medium: { fontSize: '12px', padding: '3px 8px' },
     large: { fontSize: '14px', padding: '4px 10px' }
   };
-  
+
   return (
     <span
       style={{

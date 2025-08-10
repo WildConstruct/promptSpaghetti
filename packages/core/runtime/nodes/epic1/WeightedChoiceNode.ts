@@ -4,7 +4,10 @@
  */
 
 import { ExecutionContext } from '../../types';
-import { BaseInlineEditableNode, InlineEditableConfig } from './BaseInlineEditableNode';
+import {
+  BaseInlineEditableNode,
+  InlineEditableConfig
+} from './BaseInlineEditableNode';
 import seedrandom from 'seedrandom';
 
 /**
@@ -45,7 +48,10 @@ export interface WeightedChoiceConfig extends InlineEditableConfig {
 /**
  * WeightedChoice node implementation with inline editing support
  */
-export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceValue, string> {
+export class WeightedChoiceNode extends BaseInlineEditableNode<
+  WeightedChoiceValue,
+  string
+> {
   private config: WeightedChoiceConfig;
 
   constructor(
@@ -54,11 +60,14 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
     config: WeightedChoiceConfig = {}
   ) {
     // Ensure at least 2 options by default
-    const defaultValue = initialValue.length >= 2 ? initialValue : [
-      { id: 'option-1', text: 'Option 1', weight: 50 },
-      { id: 'option-2', text: 'Option 2', weight: 50 }
-    ];
-    
+    const defaultValue =
+      initialValue.length >= 2
+        ? initialValue
+        : [
+            { id: 'option-1', text: 'Option 1', weight: 50 },
+            { id: 'option-2', text: 'Option 2', weight: 50 }
+          ];
+
     super(id, defaultValue, config);
     this.config = {
       normalizeWeights: true,
@@ -74,14 +83,14 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
    */
   async run(ctx: ExecutionContext): Promise<string> {
     const options = this.getCurrentValue();
-    
+
     if (options.length === 0) {
       return '';
     }
 
     // Calculate total weight
     const totalWeight = options.reduce((sum, option) => sum + option.weight, 0);
-    
+
     if (totalWeight === 0) {
       // If all weights are 0, return empty or first option
       return options[0]?.text || '';
@@ -115,7 +124,9 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
   /**
    * Validate the weighted options
    */
-  protected async validateValue(value: WeightedChoiceValue): Promise<{ valid: boolean; errors: string[] }> {
+  protected async validateValue(
+    value: WeightedChoiceValue
+  ): Promise<{ valid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
     // Check if value is an array
@@ -138,7 +149,7 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
     const ids = new Set<string>();
     for (let i = 0; i < value.length; i++) {
       const option = value[i];
-      
+
       // Check structure
       if (!option || typeof option !== 'object') {
         errors.push(`Option ${i + 1} is invalid`);
@@ -238,7 +249,7 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
    */
   updateOptionText(id: string, text: string): void {
     const options = this.getCurrentValue();
-    const updated = options.map(option => 
+    const updated = options.map(option =>
       option.id === id ? { ...option, text } : option
     );
 
@@ -258,7 +269,7 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
     }
 
     const options = this.getCurrentValue();
-    const updated = options.map(option => 
+    const updated = options.map(option =>
       option.id === id ? { ...option, weight } : option
     );
 
@@ -274,7 +285,7 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
    */
   updateOptionColor(id: string, color: string | undefined): void {
     const options = this.getCurrentValue();
-    const updated = options.map(option => 
+    const updated = options.map(option =>
       option.id === id ? { ...option, color } : option
     );
 
@@ -311,12 +322,15 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
   normalizeWeights(): void {
     const options = this.getCurrentValue();
     const totalWeight = options.reduce((sum, option) => sum + option.weight, 0);
-    
+
     if (totalWeight === 0) {
       // Distribute evenly
       const evenWeight = 100 / options.length;
-      const normalized = options.map(option => ({ ...option, weight: evenWeight }));
-      
+      const normalized = options.map(option => ({
+        ...option,
+        weight: evenWeight
+      }));
+
       if (this.isEditing()) {
         this.updateEditBuffer(normalized);
       } else {
@@ -328,7 +342,7 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<WeightedChoiceVal
         ...option,
         weight: (option.weight / totalWeight) * 100
       }));
-      
+
       if (this.isEditing()) {
         this.updateEditBuffer(normalized);
       } else {

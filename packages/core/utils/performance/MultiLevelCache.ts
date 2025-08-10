@@ -37,7 +37,7 @@ export class MultiLevelCache {
     // L3: IndexedDB configuration
     this.dbName = options.dbName || 'PerformanceCache';
     this.storeName = options.storeName || 'cache';
-    
+
     // Initialize IndexedDB
     this.initPromise = this.initDB();
   }
@@ -74,11 +74,13 @@ export class MultiLevelCache {
         resolve();
       };
 
-      request.onupgradeneeded = (event) => {
+      request.onupgradeneeded = event => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         if (!db.objectStoreNames.contains(this.storeName)) {
-          const store = db.createObjectStore(this.storeName, { keyPath: 'key' });
+          const store = db.createObjectStore(this.storeName, {
+            keyPath: 'key'
+          });
           store.createIndex('timestamp', 'timestamp', { unique: false });
         }
       };
@@ -118,10 +120,14 @@ export class MultiLevelCache {
   /**
    * Set value in cache
    */
-  async set<T = any>(key: string, value: T, options?: { ttl?: number }): Promise<void> {
+  async set<T = any>(
+    key: string,
+    value: T,
+    options?: { ttl?: number }
+  ): Promise<void> {
     // Always set in L1
     this.l1Cache.set(key, value, options);
-    
+
     // Also set in L3 for persistence
     await this.setL3(key, value);
   }
@@ -149,16 +155,16 @@ export class MultiLevelCache {
    */
   async invalidatePattern(pattern: string): Promise<number> {
     let invalidated = 0;
-    
+
     // Invalidate L1
     invalidated += this.l1Cache.invalidatePattern(pattern);
-    
+
     // Invalidate L2
     invalidated += this.invalidateL2Pattern(pattern);
-    
+
     // Invalidate L3
     invalidated += await this.invalidateL3Pattern(pattern);
-    
+
     return invalidated;
   }
 
@@ -169,7 +175,7 @@ export class MultiLevelCache {
     const l1Stats = this.l1Cache.getStats();
     const l2Size = this.getL2Size();
     const l3Size = await this.getL3Size();
-    
+
     return {
       l1: l1Stats,
       l2: { size: l2Size },
@@ -187,15 +193,15 @@ export class MultiLevelCache {
     try {
       const item = sessionStorage.getItem(`cache:${key}`);
       if (!item) return undefined;
-      
+
       const parsed = JSON.parse(item);
-      
+
       // Check expiration
       if (parsed.ttl && Date.now() - parsed.timestamp > parsed.ttl) {
         sessionStorage.removeItem(`cache:${key}`);
         return undefined;
       }
-      
+
       return parsed.value;
     } catch (e) {
       console.error('L2 cache get error:', e);
@@ -220,7 +226,10 @@ export class MultiLevelCache {
       if (e instanceof DOMException && e.code === 22) {
         this.clearOldL2Entries();
         try {
-          sessionStorage.setItem(`cache:${key}`, JSON.stringify({ value, timestamp: Date.now() }));
+          sessionStorage.setItem(
+            `cache:${key}`,
+            JSON.stringify({ value, timestamp: Date.now() })
+          );
         } catch (e2) {
           console.error('L2 cache set error after clearing:', e2);
         }
@@ -252,7 +261,8 @@ export class MultiLevelCache {
       return 0;
     }
 
-    return Object.keys(sessionStorage).filter(key => key.startsWith('cache:')).length;
+    return Object.keys(sessionStorage).filter(key => key.startsWith('cache:'))
+      .length;
   }
 
   private invalidateL2Pattern(pattern: string): number {
@@ -262,7 +272,7 @@ export class MultiLevelCache {
 
     const regex = new RegExp(pattern.replace(/\*/g, '.*'));
     let invalidated = 0;
-    
+
     Object.keys(sessionStorage).forEach(key => {
       if (key.startsWith('cache:')) {
         const cacheKey = key.substring(6);
@@ -272,7 +282,7 @@ export class MultiLevelCache {
         }
       }
     });
-    
+
     return invalidated;
   }
 
@@ -282,7 +292,7 @@ export class MultiLevelCache {
     }
 
     const entries: Array<{ key: string; timestamp: number }> = [];
-    
+
     Object.keys(sessionStorage).forEach(key => {
       if (key.startsWith('cache:')) {
         try {
@@ -294,11 +304,11 @@ export class MultiLevelCache {
         }
       }
     });
-    
+
     // Sort by timestamp and remove oldest 25%
     entries.sort((a, b) => a.timestamp - b.timestamp);
     const toRemove = Math.floor(entries.length * 0.25);
-    
+
     for (let i = 0; i < toRemove; i++) {
       sessionStorage.removeItem(entries[i].key);
     }
@@ -311,18 +321,18 @@ export class MultiLevelCache {
       if (!this.db) return undefined;
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const transaction = this.db!.transaction([this.storeName], 'readonly');
       const store = transaction.objectStore(this.storeName);
       const request = store.get(key);
-      
+
       request.onsuccess = () => {
         const result = request.result;
         if (!result) {
           resolve(undefined);
           return;
         }
-        
+
         // Check expiration
         if (result.ttl && Date.now() - result.timestamp > result.ttl) {
           // Delete expired entry
@@ -330,10 +340,10 @@ export class MultiLevelCache {
           resolve(undefined);
           return;
         }
-        
+
         resolve(result.value);
       };
-      
+
       request.onerror = () => {
         console.error('L3 cache get error:', request.error);
         resolve(undefined);
@@ -350,16 +360,16 @@ export class MultiLevelCache {
     return new Promise((resolve, reject) => {
       const transaction = this.db!.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
-      
+
       const data = {
         key,
         value,
         timestamp: Date.now(),
         ttl: 3600000 // 1 hour in L3
       };
-      
+
       const request = store.put(data);
-      
+
       request.onsuccess = () => resolve();
       request.onerror = () => {
         console.error('L3 cache set error:', request.error);
@@ -374,11 +384,11 @@ export class MultiLevelCache {
       if (!this.db) return;
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const transaction = this.db!.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
       const request = store.delete(key);
-      
+
       request.onsuccess = () => resolve();
       request.onerror = () => {
         console.error('L3 cache delete error:', request.error);
@@ -393,11 +403,11 @@ export class MultiLevelCache {
       if (!this.db) return;
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const transaction = this.db!.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
       const request = store.clear();
-      
+
       request.onsuccess = () => resolve();
       request.onerror = () => {
         console.error('L3 cache clear error:', request.error);
@@ -412,11 +422,11 @@ export class MultiLevelCache {
       if (!this.db) return 0;
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const transaction = this.db!.transaction([this.storeName], 'readonly');
       const store = transaction.objectStore(this.storeName);
       const request = store.count();
-      
+
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => {
         console.error('L3 cache count error:', request.error);
@@ -431,14 +441,14 @@ export class MultiLevelCache {
       if (!this.db) return 0;
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const regex = new RegExp(pattern.replace(/\*/g, '.*'));
       let invalidated = 0;
-      
+
       const transaction = this.db!.transaction([this.storeName], 'readwrite');
       const store = transaction.objectStore(this.storeName);
       const request = store.openCursor();
-      
+
       request.onsuccess = () => {
         const cursor = request.result;
         if (cursor) {
@@ -451,7 +461,7 @@ export class MultiLevelCache {
           resolve(invalidated);
         }
       };
-      
+
       request.onerror = () => {
         console.error('L3 pattern invalidation error:', request.error);
         resolve(invalidated);

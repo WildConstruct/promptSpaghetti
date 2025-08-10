@@ -3,11 +3,11 @@
  */
 
 import React, { useState, FormEvent } from 'react';
-import { 
-  useEmailValidation, 
-  usePasswordValidation, 
+import {
+  useEmailValidation,
+  usePasswordValidation,
   useConfirmPasswordValidation,
-  getAuthErrorMessage 
+  getAuthErrorMessage
 } from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
 import { PasswordStrengthIndicator } from '../shared/PasswordStrengthIndicator';
@@ -24,33 +24,33 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  
-  const isFormValid = 
-    email.isValid && 
-    password.isValid && 
+
+  const isFormValid =
+    email.isValid &&
+    password.isValid &&
     confirmPassword.isValid &&
     agreedToTerms;
-  
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!isFormValid) {
       email.onBlur();
       password.onBlur();
       confirmPassword.onBlur();
       return;
     }
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       // TODO: Replace with actual Supabase auth call
       // const { data, error } = await supabase.auth.signUp({
       //   email: email.value,
       //   password: password.value
       // });
-      
+
       // Simulated auth call for now
       await new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -61,18 +61,17 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           }
         }, 1000);
       });
-      
+
       setShowSuccessMessage(true);
       setTimeout(() => {
         onSuccess({ email: email.value });
       }, 1500);
-      
     } catch (err) {
       setError(getAuthErrorMessage(err));
       setIsLoading(false);
     }
   };
-  
+
   return (
     <form onSubmit={handleSubmit} noValidate>
       {/* Error Message */}
@@ -92,7 +91,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           {error}
         </div>
       )}
-      
+
       {/* Success Message */}
       {showSuccessMessage && (
         <div
@@ -110,7 +109,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           ✓ Account created! Check your email to verify your account.
         </div>
       )}
-      
+
       {/* Email Field */}
       <FormField
         label="Email"
@@ -124,7 +123,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         required
         placeholder="you@example.com"
       />
-      
+
       {/* Password Field */}
       <FormField
         label="Password"
@@ -140,7 +139,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         showPasswordToggle
         onTogglePassword={password.toggleShowPassword}
       />
-      
+
       {/* Password Strength Indicator */}
       {password.value && (
         <PasswordStrengthIndicator
@@ -148,7 +147,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           requirements={password.requirements}
         />
       )}
-      
+
       {/* Confirm Password Field */}
       <FormField
         label="Confirm Password"
@@ -162,7 +161,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         required
         placeholder="••••••••"
       />
-      
+
       {/* Terms Agreement */}
       <div
         style={{
@@ -176,7 +175,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           type="checkbox"
           id="terms"
           checked={agreedToTerms}
-          onChange={(e) => setAgreedToTerms(e.target.checked)}
+          onChange={e => setAgreedToTerms(e.target.checked)}
           disabled={isLoading}
           style={{
             marginTop: '4px',
@@ -195,18 +194,18 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           I agree to the{' '}
           <a
             href="#"
-            onClick={(e) => e.preventDefault()}
+            onClick={e => e.preventDefault()}
             style={{
               color: '#007bff',
               textDecoration: 'underline'
             }}
           >
             Terms of Service
-          </a>
-          {' '}and{' '}
+          </a>{' '}
+          and{' '}
           <a
             href="#"
-            onClick={(e) => e.preventDefault()}
+            onClick={e => e.preventDefault()}
             style={{
               color: '#007bff',
               textDecoration: 'underline'
@@ -216,7 +215,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           </a>
         </label>
       </div>
-      
+
       {/* Submit Button */}
       <button
         type="submit"
@@ -237,12 +236,12 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           justifyContent: 'center',
           gap: '8px'
         }}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           if (isFormValid && !isLoading) {
             e.currentTarget.style.backgroundColor = '#218838';
           }
         }}
-        onMouseLeave={(e) => {
+        onMouseLeave={e => {
           if (isFormValid && !isLoading) {
             e.currentTarget.style.backgroundColor = '#28a745';
           }
@@ -267,7 +266,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           'Create Account'
         )}
       </button>
-      
+
       {/* Info Text */}
       <p
         style={{
@@ -278,8 +277,8 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           lineHeight: '1.5'
         }}
       >
-        By signing up, you'll get access to save your graphs, 
-        collaborate with others, and use advanced features.
+        By signing up, you'll get access to save your graphs, collaborate with
+        others, and use advanced features.
       </p>
     </form>
   );

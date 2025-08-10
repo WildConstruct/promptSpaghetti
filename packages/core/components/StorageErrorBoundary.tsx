@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { clearPersistedState, getPersistedStateInfo, checkStorageQuota } from '../utils/persistenceUtils';
+import {
+  clearPersistedState,
+  getPersistedStateInfo,
+  checkStorageQuota
+} from '../utils/persistenceUtils';
 
 interface StorageErrorBoundaryProps {
   children: React.ReactNode;
@@ -45,12 +49,24 @@ export function StorageErrorBoundary({ children }: StorageErrorBoundaryProps) {
       });
     };
 
-    window.addEventListener('storage-quota-exceeded', handleQuotaExceeded as EventListener);
-    window.addEventListener('storage-corruption', handleCorruption as EventListener);
+    window.addEventListener(
+      'storage-quota-exceeded',
+      handleQuotaExceeded as EventListener
+    );
+    window.addEventListener(
+      'storage-corruption',
+      handleCorruption as EventListener
+    );
 
     return () => {
-      window.removeEventListener('storage-quota-exceeded', handleQuotaExceeded as EventListener);
-      window.removeEventListener('storage-corruption', handleCorruption as EventListener);
+      window.removeEventListener(
+        'storage-quota-exceeded',
+        handleQuotaExceeded as EventListener
+      );
+      window.removeEventListener(
+        'storage-corruption',
+        handleCorruption as EventListener
+      );
     };
   }, []);
 
@@ -96,24 +112,27 @@ export function StorageErrorBoundary({ children }: StorageErrorBoundaryProps) {
       >
         <div style={{ marginBottom: 12 }}>
           <strong style={{ color: '#d73a49' }}>
-            {errorState.errorType === 'quota' ? '⚠️ Storage Full' : '⚠️ Storage Error'}
+            {errorState.errorType === 'quota'
+              ? '⚠️ Storage Full'
+              : '⚠️ Storage Error'}
           </strong>
         </div>
-        
+
         <div style={{ marginBottom: 12, fontSize: 14, color: '#586069' }}>
           {errorState.errorMessage}
         </div>
 
         {errorState.errorType === 'quota' && errorState.quotaInfo && (
           <div style={{ marginBottom: 12, fontSize: 12, color: '#6a737d' }}>
-            Storage used: {Math.round(errorState.quotaInfo.percentage)}%
-            ({(errorState.quotaInfo.used / 1024).toFixed(1)} KB)
+            Storage used: {Math.round(errorState.quotaInfo.percentage)}% (
+            {(errorState.quotaInfo.used / 1024).toFixed(1)} KB)
           </div>
         )}
 
         {errorState.storageInfo?.exists && (
           <div style={{ marginBottom: 12, fontSize: 12, color: '#6a737d' }}>
-            Last saved: {errorState.storageInfo.timestamp 
+            Last saved:{' '}
+            {errorState.storageInfo.timestamp
               ? new Date(errorState.storageInfo.timestamp).toLocaleString()
               : 'Unknown'}
             {errorState.storageInfo.compressed && ' (compressed)'}
@@ -165,11 +184,14 @@ export function StorageErrorBoundary({ children }: StorageErrorBoundaryProps) {
  * Storage status indicator component
  */
 export function StorageStatusIndicator() {
-  const [storageInfo, setStorageInfo] = useState<ReturnType<typeof getPersistedStateInfo>>(null);
-  const [quotaInfo, setQuotaInfo] = useState<ReturnType<typeof checkStorageQuota>>({ 
-    used: 0, 
-    available: true, 
-    percentage: 0 
+  const [storageInfo, setStorageInfo] =
+    useState<ReturnType<typeof getPersistedStateInfo>>(null);
+  const [quotaInfo, setQuotaInfo] = useState<
+    ReturnType<typeof checkStorageQuota>
+  >({
+    used: 0,
+    available: true,
+    percentage: 0
   });
 
   useEffect(() => {
@@ -179,11 +201,11 @@ export function StorageStatusIndicator() {
     };
 
     updateInfo();
-    
+
     // Update on storage events
     const handleStorage = () => updateInfo();
     window.addEventListener('storage', handleStorage);
-    
+
     // Update periodically
     const interval = setInterval(updateInfo, 30000); // Every 30 seconds
 

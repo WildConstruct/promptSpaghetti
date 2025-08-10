@@ -1,11 +1,14 @@
 /**
  * WorkerPool - Manages a pool of WebWorkers for parallel graph execution
- * 
+ *
  * Provides efficient worker reuse, automatic scaling, and request queuing
  * to maximize performance while preventing resource exhaustion.
  */
 
-import { Epic1Graph, ExecutionResult } from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
+import {
+  Epic1Graph,
+  ExecutionResult
+} from '../../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { WorkerRequest, WorkerResponse } from './execution.worker';
 
 export interface WorkerTask {
@@ -39,7 +42,7 @@ export class WorkerPool {
     this.workerConstructor = workerConstructor;
     this.minWorkers = Math.max(1, minWorkers);
     this.maxWorkers = Math.max(this.minWorkers, maxWorkers);
-    
+
     // Initialize minimum workers
     this.initializeWorkers();
   }
@@ -64,12 +67,15 @@ export class WorkerPool {
     };
 
     // Handle worker messages
-    worker.addEventListener('message', (event: MessageEvent<WorkerResponse>) => {
-      this.handleWorkerMessage(pooledWorker, event.data);
-    });
+    worker.addEventListener(
+      'message',
+      (event: MessageEvent<WorkerResponse>) => {
+        this.handleWorkerMessage(pooledWorker, event.data);
+      }
+    );
 
     // Handle worker errors
-    worker.addEventListener('error', (error) => {
+    worker.addEventListener('error', error => {
       this.handleWorkerError(pooledWorker, error);
     });
 
@@ -80,7 +86,10 @@ export class WorkerPool {
   /**
    * Handle messages from workers
    */
-  private handleWorkerMessage(pooledWorker: PooledWorker, response: WorkerResponse): void {
+  private handleWorkerMessage(
+    pooledWorker: PooledWorker,
+    response: WorkerResponse
+  ): void {
     const task = pooledWorker.currentTask;
     if (!task) return;
 
@@ -108,7 +117,10 @@ export class WorkerPool {
   /**
    * Handle worker errors
    */
-  private handleWorkerError(pooledWorker: PooledWorker, error: ErrorEvent): void {
+  private handleWorkerError(
+    pooledWorker: PooledWorker,
+    error: ErrorEvent
+  ): void {
     const task = pooledWorker.currentTask;
     if (task) {
       task.reject(new Error(`Worker error: ${error.message}`));
@@ -164,7 +176,7 @@ export class WorkerPool {
    * Execute graph using worker pool
    */
   execute(
-    graph: Epic1Graph, 
+    graph: Epic1Graph,
     seed: string | number,
     onProgress?: (progress: number) => void
   ): Promise<ExecutionResult> {
@@ -185,7 +197,7 @@ export class WorkerPool {
 
       // Find idle worker
       const idleWorker = this.workers.find(w => !w.busy);
-      
+
       if (idleWorker) {
         // Assign immediately
         this.assignTask(idleWorker, task);
@@ -208,11 +220,11 @@ export class WorkerPool {
     seeds: (string | number)[],
     onProgress?: (index: number, progress: number) => void
   ): Promise<ExecutionResult[]> {
-    const promises = seeds.map((seed, index) => 
+    const promises = seeds.map((seed, index) =>
       this.execute(
-        graph, 
+        graph,
         seed,
-        onProgress ? (progress) => onProgress(index, progress) : undefined
+        onProgress ? progress => onProgress(index, progress) : undefined
       )
     );
 
@@ -229,7 +241,7 @@ export class WorkerPool {
     queuedTasks: number;
   } {
     const busyWorkers = this.workers.filter(w => w.busy).length;
-    
+
     return {
       totalWorkers: this.workers.length,
       busyWorkers,
@@ -243,7 +255,7 @@ export class WorkerPool {
    */
   terminate(): void {
     this.terminated = true;
-    
+
     // Reject all queued tasks
     this.taskQueue.forEach(task => {
       task.reject(new Error('WorkerPool terminated'));

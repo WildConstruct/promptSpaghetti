@@ -4,6 +4,7 @@ import 'reactflow/dist/style.css';
 import { ToastContainer, useToast } from '../Toast';
 import { useFileOperations } from './hooks/useFileOperations';
 import { useEditOperations } from './hooks/useEditOperations';
+import { AssetLibraryPanel } from './components/AssetLibraryPanel';
 import { 
   calculateViewportDimensions, 
   calculateNodePositions, 
@@ -39,6 +40,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [MenuBarComponent, setMenuBarComponent] = useState<React.ComponentType<ProfessionalMenuBarProps> | null>(null);
   const [loadError, setLoadError] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
+  const [assetLibraryVisible, setAssetLibraryVisible] = useState(showAssetLibrary);
   
   // Calculate viewport and node positions
   const viewport = calculateViewportDimensions();
@@ -321,6 +323,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     showToast(`Inspector ${inspectorVisible ? 'hidden' : 'shown'}`, 'info');
   }, [inspectorVisible, showToast]);
   
+  const handleToggleAssetLibrary = useCallback(() => {
+    setAssetLibraryVisible(prev => !prev);
+    showToast(`Asset Library ${assetLibraryVisible ? 'hidden' : 'shown'}`, 'info');
+  }, [assetLibraryVisible, showToast]);
+  
   const handleToggleTheme = useCallback((theme: 'light' | 'dark' | 'cinema') => {
     setCurrentTheme(theme);
     // Apply theme to document root
@@ -426,6 +433,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           onToggleGrid={handleToggleGrid}
           onToggleMinimap={handleToggleMinimap}
           onToggleInspector={handleToggleInspector}
+          onToggleAssetLibrary={handleToggleAssetLibrary}
           onToggleFullscreen={handleToggleFullscreen}
           onToggleTheme={handleToggleTheme}
           // Debug operations
@@ -448,11 +456,12 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           gridVisible={gridVisible}
           minimapVisible={minimapVisible}
           inspectorVisible={inspectorVisible}
+          assetLibraryVisible={assetLibraryVisible}
           theme={currentTheme}
         />
       )}
       
-      <div style={{ flex: 1, position: 'relative' }}>
+      <div style={{ flex: 1, position: 'relative', display: 'flex' }}>
         <EditorComponent
           key={editorKey}
           initialNodes={currentNodes}
@@ -463,6 +472,13 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           onNodesChange={handleNodesChange}
           onEdgesChange={handleEdgesChange}
         />
+        
+        {assetLibraryVisible && (
+          <AssetLibraryPanel
+            position={assetLibraryPosition}
+            onClose={() => setAssetLibraryVisible(false)}
+          />
+        )}
       </div>
       
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />

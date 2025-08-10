@@ -4,7 +4,10 @@
  */
 
 import { ExecutionContext } from '../../types';
-import { BaseInlineEditableNode, InlineEditableConfig } from './BaseInlineEditableNode';
+import {
+  BaseInlineEditableNode,
+  InlineEditableConfig
+} from './BaseInlineEditableNode';
 
 /**
  * Configuration specific to TextBlock nodes
@@ -40,7 +43,7 @@ export class TextBlockNode extends BaseInlineEditableNode<string, string> {
     // For text blocks, we simply return the current value
     // If in edit mode with auto preview, return the edit buffer
     const value = this.getCurrentValue();
-    
+
     // Process any variable substitutions if needed
     // This allows for {{variable}} syntax in text blocks
     return this.processVariables(value, ctx);
@@ -67,7 +70,9 @@ export class TextBlockNode extends BaseInlineEditableNode<string, string> {
   /**
    * Validate the text value
    */
-  protected async validateValue(value: string): Promise<{ valid: boolean; errors: string[] }> {
+  protected async validateValue(
+    value: string
+  ): Promise<{ valid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
     // Check if value is a string
@@ -78,7 +83,9 @@ export class TextBlockNode extends BaseInlineEditableNode<string, string> {
 
     // Check max length if configured
     if (this.config.maxLength && value.length > this.config.maxLength) {
-      errors.push(`Text exceeds maximum length of ${this.config.maxLength} characters`);
+      errors.push(
+        `Text exceeds maximum length of ${this.config.maxLength} characters`
+      );
     }
 
     // Check multiline constraint
@@ -109,7 +116,7 @@ export class TextBlockNode extends BaseInlineEditableNode<string, string> {
       /on\w+\s*=/i, // Event handlers like onclick=
       /<iframe/i,
       /<object/i,
-      /<embed/i,
+      /<embed/i
     ];
 
     return dangerousPatterns.some(pattern => pattern.test(text));
@@ -151,7 +158,8 @@ export class TextBlockNode extends BaseInlineEditableNode<string, string> {
     // If disabling multiline, validate current content
     if (!multiline && this.data.value.includes('\n')) {
       this.data.isValid = false;
-      this.data.validationMessage = 'Content contains newlines but multiline is disabled';
+      this.data.validationMessage =
+        'Content contains newlines but multiline is disabled';
     }
   }
 
@@ -183,7 +191,10 @@ export class TextBlockNode extends BaseInlineEditableNode<string, string> {
    */
   getWordCount(): number {
     const value = this.getCurrentValue();
-    return value.trim().split(/\s+/).filter(word => word.length > 0).length;
+    return value
+      .trim()
+      .split(/\s+/)
+      .filter(word => word.length > 0).length;
   }
 
   /**
@@ -203,7 +214,7 @@ export class TextBlockNode extends BaseInlineEditableNode<string, string> {
       config: this.config,
       metadata: {
         wordCount: this.getWordCount(),
-        characterCount: this.getCharacterCount(),
+        characterCount: this.getCharacterCount()
       }
     };
   }

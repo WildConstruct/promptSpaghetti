@@ -6,34 +6,34 @@
 export { EasterEggManager } from './EasterEggManager';
 export type { EasterEgg } from './EasterEggManager';
 
-export { 
-  PlayfulLoadingStates, 
-  InlineLoadingSpinner, 
-  PlayfulProgressBar 
+export {
+  PlayfulLoadingStates,
+  InlineLoadingSpinner,
+  PlayfulProgressBar
 } from './PlayfulLoadingStates';
 
-export { 
-  UnexpectedAnimations, 
-  celebrateNodeClick 
+export {
+  UnexpectedAnimations,
+  celebrateNodeClick
 } from './UnexpectedAnimations';
 
-export { 
+export {
   DelightfulIntegration,
-  useDelightfulLoading 
+  useDelightfulLoading
 } from './DelightfulIntegration';
 
 // Re-export for convenience
 export const EASTER_EGGS = {
   KONAMI: 'konami',
-  LONGPRESS: 'longpress', 
+  LONGPRESS: 'longpress',
   TRIPLECLICK: 'tripleclick',
   SHAKE: 'shake',
-  SHIFT: 'shift',
+  SHIFT: 'shift'
 } as const;
 
 export const LOADING_TYPES = {
   GRAPH: 'graph',
   PREVIEW: 'preview',
   SAVE: 'save',
-  GENERAL: 'general',
+  GENERAL: 'general'
 } as const;

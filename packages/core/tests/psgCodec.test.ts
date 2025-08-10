@@ -1,4 +1,11 @@
-import { readPsg, writePsg, fromLegacyGraph, roundTripTest, PSGErrorType, PSGValidationError } from '../utils/psgCodec';
+import {
+  readPsg,
+  writePsg,
+  fromLegacyGraph,
+  roundTripTest,
+  PSGErrorType,
+  PSGValidationError
+} from '../utils/psgCodec';
 import type { PSGFile, Graph } from '../types/graph';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -70,7 +77,7 @@ describe('psgCodec', () => {
 
     test('readPsg throws INVALID_JSON for malformed JSON', () => {
       const malformedJson = '{ broken json }';
-      
+
       expect(() => readPsg(malformedJson)).toThrow(PSGValidationError);
       try {
         readPsg(malformedJson);
@@ -83,9 +90,13 @@ describe('psgCodec', () => {
     });
 
     test('readPsg validates fixture: invalid-psg-missing-required.json', () => {
-      const fixturePath = path.join(__dirname, 'fixtures', 'invalid-psg-missing-required.json');
+      const fixturePath = path.join(
+        __dirname,
+        'fixtures',
+        'invalid-psg-missing-required.json'
+      );
       const text = fs.readFileSync(fixturePath, 'utf-8');
-      
+
       expect(() => readPsg(text)).toThrow(PSGValidationError);
       try {
         readPsg(text);
@@ -97,9 +108,13 @@ describe('psgCodec', () => {
     });
 
     test('readPsg validates fixture: invalid-psg-wrong-type.json', () => {
-      const fixturePath = path.join(__dirname, 'fixtures', 'invalid-psg-wrong-type.json');
+      const fixturePath = path.join(
+        __dirname,
+        'fixtures',
+        'invalid-psg-wrong-type.json'
+      );
       const text = fs.readFileSync(fixturePath, 'utf-8');
-      
+
       expect(() => readPsg(text)).toThrow(PSGValidationError);
     });
   });
@@ -115,15 +130,17 @@ describe('psgCodec', () => {
           createdAt: '2024-01-01T00:00:00.000Z',
           updatedAt: '2024-01-01T00:00:00.000Z'
         },
-        graph: { 
-          nodes: [{
-            id: 'n1',
-            type: 'Node',
-            data: {
-              constructor: { name: 'malicious' }
+        graph: {
+          nodes: [
+            {
+              id: 'n1',
+              type: 'Node',
+              data: {
+                constructor: { name: 'malicious' }
+              }
             }
-          }],
-          edges: [] 
+          ],
+          edges: []
         }
       };
       const maliciousJson = JSON.stringify(maliciousObj);
@@ -177,7 +194,9 @@ describe('psgCodec', () => {
         graph: { nodes: [], edges: [] }
       });
 
-      expect(() => readPsg(json, { maxFileSize: 50 })).toThrow(PSGValidationError);
+      expect(() => readPsg(json, { maxFileSize: 50 })).toThrow(
+        PSGValidationError
+      );
       try {
         readPsg(json, { maxFileSize: 50 });
       } catch (e) {
@@ -252,11 +271,12 @@ describe('psgCodec', () => {
             { id: 'n1', type: 'Start' },
             { id: 'n2', type: 'End' }
           ],
-          edges: [
-            { id: 'e1', source: 'n1', target: 'n2' }
-          ]
+          edges: [{ id: 'e1', source: 'n1', target: 'n2' }]
         },
-        extras: { previewUrl: 'https://example.com/prev.png', thumbSeed: 'seed' }
+        extras: {
+          previewUrl: 'https://example.com/prev.png',
+          thumbSeed: 'seed'
+        }
       };
 
       const serialized = writePsg(psg);
@@ -275,14 +295,12 @@ describe('psgCodec', () => {
       jest.useFakeTimers();
       const now = new Date('2024-01-02T03:04:05.000Z');
       jest.setSystemTime(now);
-      
+
       try {
         (globalThis as any).crypto = { randomUUID: () => 'uuid-fixed-1234' };
 
         const legacyGraph: Graph = {
-          nodes: [
-            { id: 'legacy-1', type: 'Output', label: 'Legacy Node' }
-          ],
+          nodes: [{ id: 'legacy-1', type: 'Output', label: 'Legacy Node' }],
           edges: [],
           settings: { oldFormat: true }
         };
@@ -314,12 +332,12 @@ describe('psgCodec', () => {
       const legacyGraph = JSON.parse(text) as Graph;
 
       const migrated = fromLegacyGraph('Legacy Migration', legacyGraph);
-      
+
       expect(migrated.graph.nodes).toHaveLength(1);
       expect(migrated.graph.nodes[0].id).toBe('legacy-1');
       expect(migrated.graph.nodes[0].type).toBe('Output');
       expect(migrated.graph.settings).toEqual({ oldFormat: true });
-      
+
       const validated = readPsg(writePsg(migrated));
       expect(validated.graph.nodes).toEqual(migrated.graph.nodes);
     });
@@ -343,7 +361,7 @@ describe('psgCodec', () => {
 
     test('[AC-A2] readPsg provides structured error with paths', () => {
       const invalid = JSON.stringify({ version: '1.0' });
-      
+
       try {
         readPsg(invalid);
         fail('Should have thrown');
@@ -394,9 +412,7 @@ describe('psgCodec', () => {
             { id: 'n1', type: 'Start', label: 'Start', data: { x: 0 } },
             { id: 'n2', type: 'End', label: 'End', data: { x: 100 } }
           ],
-          edges: [
-            { id: 'e1', source: 'n1', target: 'n2', label: 'Edge 1' }
-          ],
+          edges: [{ id: 'e1', source: 'n1', target: 'n2', label: 'Edge 1' }],
           layout: { type: 'horizontal' },
           settings: { grid: true }
         },
@@ -417,7 +433,7 @@ describe('psgCodec', () => {
       };
 
       const result = fromLegacyGraph('Legacy', legacy);
-      
+
       expect(() => writePsg(result)).not.toThrow();
       expect(() => readPsg(writePsg(result))).not.toThrow();
     });
@@ -428,15 +444,13 @@ describe('psgCodec', () => {
           { id: 'a', type: 'TypeA', label: 'Node A' },
           { id: 'b', type: 'TypeB', label: 'Node B' }
         ],
-        edges: [
-          { id: 'e1', source: 'a', target: 'b', label: 'Connection' }
-        ],
+        edges: [{ id: 'e1', source: 'a', target: 'b', label: 'Connection' }],
         layout: { orientation: 'vertical' },
         settings: { snapToGrid: true }
       };
 
       const migrated = fromLegacyGraph('Preserved', legacy);
-      
+
       expect(migrated.graph.nodes).toEqual(legacy.nodes);
       expect(migrated.graph.edges).toEqual(legacy.edges);
       expect(migrated.graph.layout).toEqual(legacy.layout);

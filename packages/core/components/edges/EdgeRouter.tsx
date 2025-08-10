@@ -12,7 +12,11 @@ import {
   BaseEdge,
   useReactFlow
 } from 'reactflow';
-import { RoutedEdge, ControlPoint, EdgeRoutingAlgorithm } from '../../types/edgeRouting';
+import {
+  RoutedEdge,
+  ControlPoint,
+  EdgeRoutingAlgorithm
+} from '../../types/edgeRouting';
 import { usePerformance } from '../../hooks/usePerformance';
 
 interface EdgeRouterProps extends EdgeProps {
@@ -23,7 +27,11 @@ interface EdgeRouterProps extends EdgeProps {
       animated?: boolean;
       label?: string;
     };
-    onControlPointMove?: (edgeId: string, pointId: string, position: { x: number; y: number }) => void;
+    onControlPointMove?: (
+      edgeId: string,
+      pointId: string,
+      position: { x: number; y: number }
+    ) => void;
     performanceMetrics?: {
       calculationTime?: number;
       cacheHit?: boolean;
@@ -49,21 +57,25 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
 }) => {
   const { perfMonitor } = usePerformance();
   const { getEdge, setEdges } = useReactFlow();
-  
+
   const [isDraggingControl, setIsDraggingControl] = useState(false);
-  const [activeControlPoint, setActiveControlPoint] = useState<string | null>(null);
-  const [localControlPoints, setLocalControlPoints] = useState<ControlPoint[]>([]);
-  
+  const [activeControlPoint, setActiveControlPoint] = useState<string | null>(
+    null
+  );
+  const [localControlPoints, setLocalControlPoints] = useState<ControlPoint[]>(
+    []
+  );
+
   // Get the edge's calculated path
   const edge = getEdge(id) as RoutedEdge | undefined;
   const calculatedPath = edge?.calculatedPath;
-  
+
   // Use calculated path or fall back to default bezier
   const edgePath = useMemo(() => {
     if (calculatedPath?.path) {
       return calculatedPath.path;
     }
-    
+
     // Default bezier path
     const [path] = getBezierPath({
       sourceX,
@@ -73,88 +85,107 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
       targetY,
       targetPosition
     });
-    
+
     return path;
-  }, [calculatedPath, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition]);
-  
+  }, [
+    calculatedPath,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition
+  ]);
+
   // Initialize control points
   useEffect(() => {
     if (calculatedPath?.controlPoints) {
       setLocalControlPoints(calculatedPath.controlPoints);
     }
   }, [calculatedPath]);
-  
+
   // Handle control point drag start
-  const handleControlPointMouseDown = useCallback((
-    event: React.MouseEvent,
-    pointId: string
-  ) => {
-    event.stopPropagation();
-    setIsDraggingControl(true);
-    setActiveControlPoint(pointId);
-    
-    perfMonitor?.mark('edge:control:drag:start');
-  }, [perfMonitor]);
-  
+  const handleControlPointMouseDown = useCallback(
+    (event: React.MouseEvent, pointId: string) => {
+      event.stopPropagation();
+      setIsDraggingControl(true);
+      setActiveControlPoint(pointId);
+
+      perfMonitor?.mark('edge:control:drag:start');
+    },
+    [perfMonitor]
+  );
+
   // Handle control point drag
-  const handleMouseMove = useCallback((event: MouseEvent) => {
-    if (!isDraggingControl || !activeControlPoint) return;
-    
-    const point = localControlPoints.find(cp => cp.id === activeControlPoint);
-    if (!point || point.locked) return;
-    
-    // Get SVG coordinates
-    const svg = (event.target as Element).closest('svg');
-    if (!svg) return;
-    
-    const pt = svg.createSVGPoint();
-    pt.x = event.clientX;
-    pt.y = event.clientY;
-    
-    const svgP = pt.matrixTransform(svg.getScreenCTM()?.inverse());
-    
-    // Update local control point
-    setLocalControlPoints(prev => prev.map(cp => 
-      cp.id === activeControlPoint
-        ? { ...cp, position: { x: svgP.x, y: svgP.y } }
-        : cp
-    ));
-    
-    // Notify parent if callback provided
-    if (data?.onControlPointMove) {
-      data.onControlPointMove(id, activeControlPoint, { x: svgP.x, y: svgP.y });
-    }
-  }, [isDraggingControl, activeControlPoint, localControlPoints, id, data]);
-  
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (!isDraggingControl || !activeControlPoint) return;
+
+      const point = localControlPoints.find(cp => cp.id === activeControlPoint);
+      if (!point || point.locked) return;
+
+      // Get SVG coordinates
+      const svg = (event.target as Element).closest('svg');
+      if (!svg) return;
+
+      const pt = svg.createSVGPoint();
+      pt.x = event.clientX;
+      pt.y = event.clientY;
+
+      const svgP = pt.matrixTransform(svg.getScreenCTM()?.inverse());
+
+      // Update local control point
+      setLocalControlPoints(prev =>
+        prev.map(cp =>
+          cp.id === activeControlPoint
+            ? { ...cp, position: { x: svgP.x, y: svgP.y } }
+            : cp
+        )
+      );
+
+      // Notify parent if callback provided
+      if (data?.onControlPointMove) {
+        data.onControlPointMove(id, activeControlPoint, {
+          x: svgP.x,
+          y: svgP.y
+        });
+      }
+    },
+    [isDraggingControl, activeControlPoint, localControlPoints, id, data]
+  );
+
   // Handle control point drag end
   const handleMouseUp = useCallback(() => {
     if (isDraggingControl) {
       setIsDraggingControl(false);
       setActiveControlPoint(null);
-      
-      perfMonitor?.measureMarks('edge:control:drag:start', 'edge:control:drag:end');
+
+      perfMonitor?.measureMarks(
+        'edge:control:drag:start',
+        'edge:control:drag:end'
+      );
     }
   }, [isDraggingControl, perfMonitor]);
-  
+
   // Setup global mouse listeners for dragging
   useEffect(() => {
     if (isDraggingControl) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-      
+
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
   }, [isDraggingControl, handleMouseMove, handleMouseUp]);
-  
+
   // Render control points
   const controlPointElements = useMemo(() => {
     if (!data?.routing?.showControlPoints || !selected) {
       return null;
     }
-    
+
     return localControlPoints
       .filter(cp => cp.type === 'intermediate')
       .map(point => (
@@ -180,7 +211,7 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
             strokeDasharray="2,2"
             opacity={0.5}
           />
-          
+
           {/* Control point handle */}
           <circle
             cx={point.position.x}
@@ -190,12 +221,17 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
             stroke="#fff"
             strokeWidth={2}
             cursor={point.locked ? 'not-allowed' : 'move'}
-            onMouseDown={(e) => !point.locked && handleControlPointMouseDown(e, point.id)}
+            onMouseDown={e =>
+              !point.locked && handleControlPointMouseDown(e, point.id)
+            }
             style={{
-              filter: activeControlPoint === point.id ? 'drop-shadow(0 0 4px rgba(26, 115, 232, 0.5))' : undefined
+              filter:
+                activeControlPoint === point.id
+                  ? 'drop-shadow(0 0 4px rgba(26, 115, 232, 0.5))'
+                  : undefined
             }}
           />
-          
+
           {/* Control point label */}
           {point.metadata?.weight && (
             <text
@@ -221,13 +257,13 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
     activeControlPoint,
     handleControlPointMouseDown
   ]);
-  
+
   // Performance indicator
   const performanceIndicator = useMemo(() => {
     if (!data?.performanceMetrics || !selected) return null;
-    
+
     const { calculationTime, cacheHit } = data.performanceMetrics;
-    
+
     return (
       <EdgeLabelRenderer>
         <div
@@ -247,18 +283,21 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
       </EdgeLabelRenderer>
     );
   }, [data?.performanceMetrics, selected, sourceX, sourceY, targetX, targetY]);
-  
+
   // Edge style with animation
-  const edgeStyle = useMemo(() => ({
-    ...style,
-    stroke: selected ? '#1a73e8' : (style.stroke || '#b1b1b7'),
-    strokeWidth: selected ? 2 : (style.strokeWidth || 1),
-    ...(data?.routing?.animated && {
-      strokeDasharray: '5 5',
-      animation: 'dash 1s linear infinite'
-    })
-  }), [style, selected, data?.routing?.animated]);
-  
+  const edgeStyle = useMemo(
+    () => ({
+      ...style,
+      stroke: selected ? '#1a73e8' : style.stroke || '#b1b1b7',
+      strokeWidth: selected ? 2 : style.strokeWidth || 1,
+      ...(data?.routing?.animated && {
+        strokeDasharray: '5 5',
+        animation: 'dash 1s linear infinite'
+      })
+    }),
+    [style, selected, data?.routing?.animated]
+  );
+
   return (
     <>
       <style>
@@ -270,14 +309,10 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
           }
         `}
       </style>
-      
+
       {/* Main edge path */}
-      <BaseEdge
-        path={edgePath}
-        markerEnd={markerEnd}
-        style={edgeStyle}
-      />
-      
+      <BaseEdge path={edgePath} markerEnd={markerEnd} style={edgeStyle} />
+
       {/* Invisible wider path for easier selection */}
       <path
         d={edgePath}
@@ -286,10 +321,10 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
         stroke="transparent"
         style={{ cursor: 'pointer' }}
       />
-      
+
       {/* Control points */}
       {controlPointElements}
-      
+
       {/* Edge label */}
       {data?.routing?.label && (
         <EdgeLabelRenderer>
@@ -309,10 +344,10 @@ const EdgeRouter: React.FC<EdgeRouterProps> = ({
           </div>
         </EdgeLabelRenderer>
       )}
-      
+
       {/* Performance indicator */}
       {performanceIndicator}
-      
+
       {/* Algorithm indicator */}
       {selected && data?.routing?.algorithm && (
         <EdgeLabelRenderer>

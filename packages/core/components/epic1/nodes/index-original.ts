@@ -1,12 +1,18 @@
 // Epic 1 Custom React Flow Nodes
 export { BaseEditableNode } from './BaseEditableNode';
-export type { BaseEditableNodeProps, EditableNodeData } from './BaseEditableNode';
+export type {
+  BaseEditableNodeProps,
+  EditableNodeData
+} from './BaseEditableNode';
 
 export { TextBlockNode } from './TextBlockNode';
 export type { TextBlockNodeData } from './TextBlockNode';
 
 export { WeightedChoiceNode } from './WeightedChoiceNode';
-export type { WeightedChoiceNodeData, WeightedOption } from './WeightedChoiceNode';
+export type {
+  WeightedChoiceNodeData,
+  WeightedOption
+} from './WeightedChoiceNode';
 
 export { ConcatNode } from './ConcatNode';
 export type { ConcatNodeData } from './ConcatNode';
@@ -28,7 +34,7 @@ export const epic1NodeTypes = {
   variable: VariableNode,
   setVariable: VariableNode,
   getVariable: VariableNode,
-  output: OutputNode,
+  output: OutputNode
 };
 
 // CSS imports

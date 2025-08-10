@@ -35,11 +35,11 @@ export class DiffEngine {
 
     // Compare each output
     const maxLength = Math.max(previousOutputs.length, newOutputs.length);
-    
+
     for (let i = 0; i < maxLength; i++) {
       const prev = previousOutputs[i] || '';
       const next = newOutputs[i] || '';
-      
+
       if (prev !== next) {
         changedIndices.push(i);
         const diff = this.computeDiff(prev, next);
@@ -61,7 +61,12 @@ export class DiffEngine {
 
     // Handle edge cases
     if (!oldText && !newText) {
-      return { segments: [], hasChanges: false, addedCount: 0, removedCount: 0 };
+      return {
+        segments: [],
+        hasChanges: false,
+        addedCount: 0,
+        removedCount: 0
+      };
     }
 
     if (!oldText) {
@@ -72,7 +77,12 @@ export class DiffEngine {
         startIndex: 0,
         endIndex: newText.length
       });
-      return { segments, hasChanges: true, addedCount: newText.length, removedCount: 0 };
+      return {
+        segments,
+        hasChanges: true,
+        addedCount: newText.length,
+        removedCount: 0
+      };
     }
 
     if (!newText) {
@@ -83,14 +93,19 @@ export class DiffEngine {
         startIndex: 0,
         endIndex: oldText.length
       });
-      return { segments, hasChanges: true, addedCount: 0, removedCount: oldText.length };
+      return {
+        segments,
+        hasChanges: true,
+        addedCount: 0,
+        removedCount: oldText.length
+      };
     }
 
     // Simple word-based diff for MVP
     const oldWords = this.tokenize(oldText);
     const newWords = this.tokenize(newText);
     const lcs = this.findLCS(oldWords, newWords);
-    
+
     let oldIndex = 0;
     let newIndex = 0;
     let currentPosition = 0;
@@ -178,12 +193,13 @@ export class DiffEngine {
     // Split on word boundaries but keep the delimiters
     const tokens: string[] = [];
     let current = '';
-    
+
     for (let i = 0; i < text.length; i++) {
       const char = text[i];
       const isWordChar = /\w/.test(char);
-      const wasWordChar = current.length > 0 && /\w/.test(current[current.length - 1]);
-      
+      const wasWordChar =
+        current.length > 0 && /\w/.test(current[current.length - 1]);
+
       if (current.length > 0 && isWordChar !== wasWordChar) {
         tokens.push(current);
         current = char;
@@ -191,21 +207,26 @@ export class DiffEngine {
         current += char;
       }
     }
-    
+
     if (current) {
       tokens.push(current);
     }
-    
+
     return tokens;
   }
 
   /**
    * Find Longest Common Subsequence using dynamic programming
    */
-  private findLCS(oldWords: string[], newWords: string[]): Array<{ oldIdx: number; newIdx: number; word: string }> {
+  private findLCS(
+    oldWords: string[],
+    newWords: string[]
+  ): Array<{ oldIdx: number; newIdx: number; word: string }> {
     const m = oldWords.length;
     const n = newWords.length;
-    const dp: number[][] = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+    const dp: number[][] = Array(m + 1)
+      .fill(null)
+      .map(() => Array(n + 1).fill(0));
 
     // Build the LCS table
     for (let i = 1; i <= m; i++) {
@@ -274,8 +295,14 @@ export class DiffEngine {
     const totalChanged = changeSet.changedIndices.length;
     if (totalChanged === 0) return 'No changes';
 
-    const additions = changeSet.diffs.reduce((sum, { diff }) => sum + diff.addedCount, 0);
-    const deletions = changeSet.diffs.reduce((sum, { diff }) => sum + diff.removedCount, 0);
+    const additions = changeSet.diffs.reduce(
+      (sum, { diff }) => sum + diff.addedCount,
+      0
+    );
+    const deletions = changeSet.diffs.reduce(
+      (sum, { diff }) => sum + diff.removedCount,
+      0
+    );
 
     const parts: string[] = [];
     if (totalChanged === 1) {

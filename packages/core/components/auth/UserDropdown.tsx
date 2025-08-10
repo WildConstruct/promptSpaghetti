@@ -17,7 +17,7 @@ interface UserDropdownProps {
 export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
   ({ user, onSignOut, onClose }, ref) => {
     const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
-    
+
     const handleSignOut = () => {
       if (showSignOutConfirm) {
         onSignOut();
@@ -25,11 +25,11 @@ export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
         setShowSignOutConfirm(true);
       }
     };
-    
+
     const handleCancel = () => {
       setShowSignOutConfirm(false);
     };
-    
+
     return (
       <div
         ref={ref}
@@ -74,7 +74,7 @@ export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
             {user.email}
           </div>
         </div>
-        
+
         {/* Menu Items */}
         <div style={{ padding: '8px 0' }}>
           <MenuItem
@@ -101,7 +101,7 @@ export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
               onClose();
             }}
           />
-          
+
           <div
             style={{
               height: '1px',
@@ -109,7 +109,7 @@ export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
               margin: '8px 0'
             }}
           />
-          
+
           {!showSignOutConfirm ? (
             <MenuItem
               icon="🚪"
@@ -142,10 +142,10 @@ export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
                     cursor: 'pointer',
                     transition: 'background-color 0.2s'
                   }}
-                  onMouseEnter={(e) => {
+                  onMouseEnter={e => {
                     e.currentTarget.style.backgroundColor = '#f8f9fa';
                   }}
-                  onMouseLeave={(e) => {
+                  onMouseLeave={e => {
                     e.currentTarget.style.backgroundColor = 'white';
                   }}
                 >
@@ -165,10 +165,10 @@ export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
                     cursor: 'pointer',
                     transition: 'background-color 0.2s'
                   }}
-                  onMouseEnter={(e) => {
+                  onMouseEnter={e => {
                     e.currentTarget.style.backgroundColor = '#c82333';
                   }}
-                  onMouseLeave={(e) => {
+                  onMouseLeave={e => {
                     e.currentTarget.style.backgroundColor = '#dc3545';
                   }}
                 >
@@ -178,7 +178,7 @@ export const UserDropdown = forwardRef<HTMLDivElement, UserDropdownProps>(
             </div>
           )}
         </div>
-        
+
         {/* CSS Animation */}
         <style>{`
           @keyframes dropdownSlide {
@@ -230,10 +230,10 @@ function MenuItem({
         alignItems: 'center',
         gap: '10px'
       }}
-      onMouseEnter={(e) => {
+      onMouseEnter={e => {
         e.currentTarget.style.backgroundColor = danger ? '#fff5f5' : '#f8f9fa';
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={e => {
         e.currentTarget.style.backgroundColor = 'transparent';
       }}
       role="menuitem"

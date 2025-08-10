@@ -2,7 +2,15 @@
  * Enhanced User Provider with complete Supabase authentication integration
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef
+} from 'react';
 import type { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabaseClient';
 import {
@@ -75,13 +83,13 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
     error: null,
     isAuthenticated: false
   });
-  
+
   // Utilities
   const tokenScheduler = useRef<TokenRefreshScheduler | null>(null);
   const broadcaster = useRef<AuthStateBroadcaster | null>(null);
   const offlineQueue = useRef<OfflineAuthQueue | null>(null);
   const logger = useRef<AuthDebugLogger | null>(null);
-  
+
   // Initialize utilities
   useEffect(() => {
     if (!tokenScheduler.current) {
@@ -89,26 +97,26 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
         await refreshSession();
       });
     }
-    
+
     if (!broadcaster.current) {
       broadcaster.current = new AuthStateBroadcaster();
     }
-    
+
     if (!offlineQueue.current) {
       offlineQueue.current = new OfflineAuthQueue();
     }
-    
+
     if (!logger.current) {
       logger.current = new AuthDebugLogger();
     }
-    
+
     return () => {
       tokenScheduler.current?.cancel();
       broadcaster.current?.close();
       offlineQueue.current?.clear();
     };
   }, []);
-  
+
   // Session restoration on mount
   useEffect(() => {
     const restoreSession = async () => {
@@ -116,11 +124,14 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
         setAuthState(prev => ({ ...prev, loading: false }));
         return;
       }
-      
+
       try {
         logger.current?.log('Restoring session');
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+          error
+        } = await supabase.auth.getSession();
+
         if (error) {
           logger.current?.error('Session restoration failed', error);
           setAuthState({
@@ -132,7 +143,7 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           });
           return;
         }
-        
+
         if (session) {
           logger.current?.log('Session restored', { userId: session.user.id });
           setAuthState({
@@ -163,81 +174,88 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
         });
       }
     };
-    
+
     restoreSession();
   }, []);
-  
+
   // Auth state subscription
   useEffect(() => {
     if (!supabase) return;
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        logger.current?.log('Auth state change', { event, userId: session?.user.id });
-        
-        switch (event) {
-          case 'SIGNED_IN':
-            setAuthState({
-              user: session!.user,
-              session,
-              loading: false,
-              error: null,
-              isAuthenticated: true
+
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      logger.current?.log('Auth state change', {
+        event,
+        userId: session?.user.id
+      });
+
+      switch (event) {
+        case 'SIGNED_IN':
+          setAuthState({
+            user: session!.user,
+            session,
+            loading: false,
+            error: null,
+            isAuthenticated: true
+          });
+          tokenScheduler.current?.schedule(session!);
+          broadcaster.current?.broadcast('signin', {
+            userId: session!.user.id
+          });
+          break;
+
+        case 'SIGNED_OUT':
+          setAuthState({
+            user: null,
+            session: null,
+            loading: false,
+            error: null,
+            isAuthenticated: false
+          });
+          tokenScheduler.current?.cancel();
+          broadcaster.current?.broadcast('signout');
+          break;
+
+        case 'TOKEN_REFRESHED':
+          setAuthState(prev => ({
+            ...prev,
+            session,
+            user: session?.user ?? null
+          }));
+          if (session) {
+            tokenScheduler.current?.schedule(session);
+            broadcaster.current?.broadcast('session_refresh', {
+              userId: session.user.id
             });
-            tokenScheduler.current?.schedule(session!);
-            broadcaster.current?.broadcast('signin', { userId: session!.user.id });
-            break;
-            
-          case 'SIGNED_OUT':
-            setAuthState({
-              user: null,
-              session: null,
-              loading: false,
-              error: null,
-              isAuthenticated: false
-            });
-            tokenScheduler.current?.cancel();
-            broadcaster.current?.broadcast('signout');
-            break;
-            
-          case 'TOKEN_REFRESHED':
-            setAuthState(prev => ({
-              ...prev,
-              session,
-              user: session?.user ?? null
-            }));
-            if (session) {
-              tokenScheduler.current?.schedule(session);
-              broadcaster.current?.broadcast('session_refresh', { userId: session.user.id });
-            }
-            break;
-            
-          case 'USER_UPDATED':
-            setAuthState(prev => ({
-              ...prev,
-              user: session?.user ?? null
-            }));
-            break;
-        }
+          }
+          break;
+
+        case 'USER_UPDATED':
+          setAuthState(prev => ({
+            ...prev,
+            user: session?.user ?? null
+          }));
+          break;
       }
-    );
-    
+    });
+
     return () => subscription.unsubscribe();
   }, []);
-  
+
   // Cross-tab synchronization
   useEffect(() => {
     if (!broadcaster.current) return;
-    
+
     const unsubscribe = broadcaster.current.subscribe((event, data) => {
       logger.current?.log('Cross-tab auth event', { event, data });
-      
+
       switch (event) {
         case 'signin':
           // Another tab signed in, refresh our session
           refreshSession();
           break;
-          
+
         case 'signout':
           // Another tab signed out, clear our session
           setAuthState({
@@ -249,70 +267,71 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
           });
           tokenScheduler.current?.cancel();
           break;
-          
+
         case 'session_refresh':
           // Another tab refreshed, we should too
           refreshSession();
           break;
       }
     });
-    
+
     return () => {
       if (typeof unsubscribe === 'function') {
         unsubscribe();
       }
     };
   }, []);
-  
+
   // Sign in method
   const signIn = useCallback(async (email: string, password: string) => {
     if (!supabase) {
       throw new Error('Authentication is not available');
     }
-    
+
     // Check rate limiting
     const rateLimitKey = `signin_${email}`;
     const { limited, retryAfter } = authRateLimiter.isRateLimited(rateLimitKey);
-    
+
     if (limited) {
       const errorMessage = `Too many attempts. Please try again in ${retryAfter} seconds`;
       setAuthState(prev => ({ ...prev, loading: false, error: errorMessage }));
       throw new Error(errorMessage);
     }
-    
+
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Sign in attempt', { email });
-    
+
     try {
       authRateLimiter.recordAttempt(rateLimitKey);
-      
+
       const operation = async () => {
         const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
         });
-        
+
         if (error) throw error;
         return data;
       };
-      
+
       const data = await retryWithBackoff(operation);
       logger.current?.log('Sign in successful', { userId: data.user.id });
-      
+
       // Reset rate limiting on success
       authRateLimiter.reset(rateLimitKey);
-      
+
       // State update handled by onAuthStateChange
     } catch (error) {
       logger.current?.error('Sign in failed', error);
       const errorMessage = transformAuthError(error);
-      
+
       // Show remaining attempts if not at limit yet
       const remaining = authRateLimiter.getRemainingAttempts(rateLimitKey);
-      const finalMessage = remaining > 0 && remaining < 3 
-        ? `${errorMessage} (${remaining} attempts remaining)`
-        : errorMessage;
-      
+      const finalMessage =
+        remaining > 0 && remaining < 3
+          ? `${errorMessage} (${remaining} attempts remaining)`
+          : errorMessage;
+
       setAuthState(prev => ({
         ...prev,
         loading: false,
@@ -321,16 +340,16 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       throw new Error(finalMessage);
     }
   }, []);
-  
+
   // Sign up method
   const signUp = useCallback(async (email: string, password: string) => {
     if (!supabase) {
       throw new Error('Authentication is not available');
     }
-    
+
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Sign up attempt', { email });
-    
+
     try {
       const operation = async () => {
         const { data, error } = await supabase.auth.signUp({
@@ -340,14 +359,14 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
             emailRedirectTo: `${window.location.origin}/auth/callback`
           }
         });
-        
+
         if (error) throw error;
         return data;
       };
-      
+
       const data = await retryWithBackoff(operation);
       logger.current?.log('Sign up successful', { userId: data.user?.id });
-      
+
       // Check if email confirmation is required
       if (data.user && !data.session) {
         setAuthState(prev => ({
@@ -368,18 +387,18 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       throw new Error(errorMessage);
     }
   }, []);
-  
+
   // Sign out method
   const signOut = useCallback(async () => {
     if (!supabase) return;
-    
+
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Sign out attempt');
-    
+
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      
+
       logger.current?.log('Sign out successful');
       // State update handled by onAuthStateChange
     } catch (error) {
@@ -393,28 +412,28 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       throw new Error(errorMessage);
     }
   }, []);
-  
+
   // Reset password method
   const resetPassword = useCallback(async (email: string) => {
     if (!supabase) {
       throw new Error('Authentication is not available');
     }
-    
+
     setAuthState(prev => ({ ...prev, loading: true, error: null }));
     logger.current?.log('Password reset attempt', { email });
-    
+
     try {
       const operation = async () => {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/auth/reset-password`
         });
-        
+
         if (error) throw error;
       };
-      
+
       await retryWithBackoff(operation);
       logger.current?.log('Password reset email sent', { email });
-      
+
       setAuthState(prev => ({ ...prev, loading: false }));
     } catch (error) {
       logger.current?.error('Password reset failed', error);
@@ -427,52 +446,58 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       throw new Error(errorMessage);
     }
   }, []);
-  
+
   // Update profile method
-  const updateProfile = useCallback(async (updates: ProfileUpdate) => {
-    if (!supabase || !authState.user) {
-      throw new Error('Must be signed in to update profile');
-    }
-    
-    setAuthState(prev => ({ ...prev, loading: true, error: null }));
-    logger.current?.log('Profile update attempt', updates);
-    
-    try {
-      const { data, error } = await supabase.auth.updateUser({
-        data: updates
-      });
-      
-      if (error) throw error;
-      
-      logger.current?.log('Profile updated', { userId: data.user.id });
-      setAuthState(prev => ({
-        ...prev,
-        user: data.user,
-        loading: false
-      }));
-    } catch (error) {
-      logger.current?.error('Profile update failed', error);
-      const errorMessage = transformAuthError(error);
-      setAuthState(prev => ({
-        ...prev,
-        loading: false,
-        error: errorMessage
-      }));
-      throw new Error(errorMessage);
-    }
-  }, [authState.user]);
-  
+  const updateProfile = useCallback(
+    async (updates: ProfileUpdate) => {
+      if (!supabase || !authState.user) {
+        throw new Error('Must be signed in to update profile');
+      }
+
+      setAuthState(prev => ({ ...prev, loading: true, error: null }));
+      logger.current?.log('Profile update attempt', updates);
+
+      try {
+        const { data, error } = await supabase.auth.updateUser({
+          data: updates
+        });
+
+        if (error) throw error;
+
+        logger.current?.log('Profile updated', { userId: data.user.id });
+        setAuthState(prev => ({
+          ...prev,
+          user: data.user,
+          loading: false
+        }));
+      } catch (error) {
+        logger.current?.error('Profile update failed', error);
+        const errorMessage = transformAuthError(error);
+        setAuthState(prev => ({
+          ...prev,
+          loading: false,
+          error: errorMessage
+        }));
+        throw new Error(errorMessage);
+      }
+    },
+    [authState.user]
+  );
+
   // Refresh session method
   const refreshSession = useCallback(async () => {
     if (!supabase) return;
-    
+
     logger.current?.log('Refreshing session');
-    
+
     try {
-      const { data: { session }, error } = await supabase.auth.refreshSession();
-      
+      const {
+        data: { session },
+        error
+      } = await supabase.auth.refreshSession();
+
       if (error) throw error;
-      
+
       if (session) {
         logger.current?.log('Session refreshed', { userId: session.user.id });
         setAuthState(prev => ({
@@ -488,38 +513,37 @@ export function AuthUserProvider({ children }: AuthUserProviderProps) {
       // as they might be transient
     }
   }, []);
-  
+
   // Clear error method
   const clearError = useCallback(() => {
     setAuthState(prev => ({ ...prev, error: null }));
   }, []);
-  
+
   // Memoized context value
-  const value = useMemo(() => ({
-    ...authState,
-    signIn,
-    signUp,
-    signOut,
-    resetPassword,
-    updateProfile,
-    refreshSession,
-    clearError
-  }), [
-    authState,
-    signIn,
-    signUp,
-    signOut,
-    resetPassword,
-    updateProfile,
-    refreshSession,
-    clearError
-  ]);
-  
-  return (
-    <UserContext.Provider value={value}>
-      {children}
-    </UserContext.Provider>
+  const value = useMemo(
+    () => ({
+      ...authState,
+      signIn,
+      signUp,
+      signOut,
+      resetPassword,
+      updateProfile,
+      refreshSession,
+      clearError
+    }),
+    [
+      authState,
+      signIn,
+      signUp,
+      signOut,
+      resetPassword,
+      updateProfile,
+      refreshSession,
+      clearError
+    ]
   );
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }
 
 /**

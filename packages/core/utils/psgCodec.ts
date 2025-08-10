@@ -149,9 +149,11 @@ export function roundTripTest(psg: PSGFile): boolean {
   try {
     const serialized = writePsg(psg);
     const deserialized = readPsg(serialized);
-    
+
     const normalize = (obj: any): any => JSON.parse(JSON.stringify(obj));
-    return JSON.stringify(normalize(psg)) === JSON.stringify(normalize(deserialized));
+    return (
+      JSON.stringify(normalize(psg)) === JSON.stringify(normalize(deserialized))
+    );
   } catch {
     return false;
   }
@@ -173,7 +175,7 @@ function checkSecurityViolations(obj: any, path: string = ''): PSGError | null {
 
   for (const key of Object.keys(obj)) {
     const currentPath = path ? `${path}.${key}` : key;
-    
+
     if (dangerousKeys.includes(key)) {
       return {
         type: PSGErrorType.SECURITY_VIOLATION,
@@ -208,9 +210,9 @@ function checkSecurityViolations(obj: any, path: string = ''): PSGError | null {
 
 function checkDataConsistency(psg: PSGFile): PSGError | null {
   const nodeIds = new Set(psg.graph.nodes.map(n => n.id));
-  
-  const duplicateNodes = psg.graph.nodes.filter((node, index, arr) => 
-    arr.findIndex(n => n.id === node.id) !== index
+
+  const duplicateNodes = psg.graph.nodes.filter(
+    (node, index, arr) => arr.findIndex(n => n.id === node.id) !== index
   );
   if (duplicateNodes.length > 0) {
     return {
@@ -251,13 +253,13 @@ function mapZodErrorToPSGError(error: ZodError): PSGError {
     'meta.updatedAt': 'Update timestamp is required',
     'graph.nodes': 'Graph must contain a nodes array',
     'graph.edges': 'Graph must contain an edges array',
-    'version': 'Version field is required',
-    'kind': 'Kind must be "graph"'
+    version: 'Version field is required',
+    kind: 'Kind must be "graph"'
   };
 
   const issues = error.issues;
   const paths = issues.map(i => i.path.join('.'));
-  
+
   for (const [path, message] of Object.entries(pathErrorMap)) {
     if (paths.includes(path)) {
       return {

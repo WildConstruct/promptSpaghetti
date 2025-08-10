@@ -156,14 +156,22 @@ describe('DiffEngine', () => {
         ['The cat sat'],
         ['The dog sat']
       );
-      
+
       const segments = changeSet.diffs[0].diff.segments;
-      
+
       // Should have unchanged "The ", removed "cat", added "dog", unchanged " sat"
-      expect(segments.some(s => s.type === 'unchanged' && s.text.includes('The'))).toBe(true);
-      expect(segments.some(s => s.type === 'removed' && s.text.includes('cat'))).toBe(true);
-      expect(segments.some(s => s.type === 'added' && s.text.includes('dog'))).toBe(true);
-      expect(segments.some(s => s.type === 'unchanged' && s.text.includes('sat'))).toBe(true);
+      expect(
+        segments.some(s => s.type === 'unchanged' && s.text.includes('The'))
+      ).toBe(true);
+      expect(
+        segments.some(s => s.type === 'removed' && s.text.includes('cat'))
+      ).toBe(true);
+      expect(
+        segments.some(s => s.type === 'added' && s.text.includes('dog'))
+      ).toBe(true);
+      expect(
+        segments.some(s => s.type === 'unchanged' && s.text.includes('sat'))
+      ).toBe(true);
     });
 
     it('should merge adjacent segments of same type', () => {
@@ -171,13 +179,13 @@ describe('DiffEngine', () => {
         ['Hello world'],
         ['Goodbye universe']
       );
-      
+
       const segments = changeSet.diffs[0].diff.segments;
-      
+
       // Adjacent removed or added segments should be merged
       const removedSegments = segments.filter(s => s.type === 'removed');
       const addedSegments = segments.filter(s => s.type === 'added');
-      
+
       // Should have minimal segments after merging
       expect(removedSegments.length).toBeLessThanOrEqual(1);
       expect(addedSegments.length).toBeLessThanOrEqual(1);

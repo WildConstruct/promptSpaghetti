@@ -1,17 +1,17 @@
 /**
  * Example integration of Performance Infrastructure
  * Story 0.1: Performance Infrastructure
- * 
+ *
  * This file demonstrates how to integrate the performance infrastructure
  * into the existing graph editor components.
  */
 
 import React, { useCallback, useEffect } from 'react';
-import { 
-  useCachedData, 
-  useWorkerTask, 
+import {
+  useCachedData,
+  useWorkerTask,
   useRenderPerformance,
-  usePerformance 
+  usePerformance
 } from '../../hooks/usePerformance';
 import { Node, Edge } from 'reactflow';
 
@@ -28,12 +28,14 @@ export const OptimizedEdgeRouting: React.FC<{
 
   // Use worker for complex edge calculations
   const { result, execute } = useWorkerTask<Edge[]>(
-    edges.length > 50 ? {
-      type: 'OPTIMIZE_EDGE_ROUTING',
-      data: { edges, nodes }
-    } : null,
+    edges.length > 50
+      ? {
+          type: 'OPTIMIZE_EDGE_ROUTING',
+          data: { edges, nodes }
+        }
+      : null,
     {
-      onSuccess: (optimizedEdges) => {
+      onSuccess: optimizedEdges => {
         perfMonitor?.record('edge:optimization', edges.length);
         onEdgesCalculated(optimizedEdges);
       }
@@ -64,23 +66,23 @@ export const CachedGroupBounds: React.FC<{
   onBoundsCalculated: (bounds: any) => void;
 }> = ({ groupId, nodeIds, nodes, onBoundsCalculated }) => {
   const cacheKey = `group:bounds:${groupId}:${nodeIds.join(',')}`;
-  
+
   // Use cached data with automatic invalidation
   const { data: bounds, isLoading } = useCachedData(
     cacheKey,
     async () => {
       // This will be cached automatically
       const groupNodes = nodes.filter(n => nodeIds.includes(n.id));
-      
+
       if (groupNodes.length === 0) {
         return { x: 0, y: 0, width: 0, height: 0 };
       }
-      
+
       const xs = groupNodes.map(n => n.position.x);
       const ys = groupNodes.map(n => n.position.y);
       const rights = groupNodes.map(n => n.position.x + (n.width || 150));
       const bottoms = groupNodes.map(n => n.position.y + (n.height || 50));
-      
+
       return {
         x: Math.min(...xs) - 20,
         y: Math.min(...ys) - 40,
@@ -111,37 +113,45 @@ export const PerformanceOptimizedGraphEditor: React.FC = () => {
   const { startMeasure, endMeasure } = useRenderPerformance('GraphEditor');
 
   // Example: Optimized node update with caching
-  const updateNodePosition = useCallback(async (nodeId: string, position: { x: number; y: number }) => {
-    startMeasure('node-update');
-    
-    // Cache the position for quick retrieval
-    await cache?.set(`node:position:${nodeId}`, position, { ttl: 30000 });
-    
-    // Record performance metric
-    const duration = endMeasure('node-update');
-    
-    if (duration > 50) {
-      console.warn(`Slow node update: ${duration}ms`);
-    }
-  }, [cache, startMeasure, endMeasure]);
+  const updateNodePosition = useCallback(
+    async (nodeId: string, position: { x: number; y: number }) => {
+      startMeasure('node-update');
+
+      // Cache the position for quick retrieval
+      await cache?.set(`node:position:${nodeId}`, position, { ttl: 30000 });
+
+      // Record performance metric
+      const duration = endMeasure('node-update');
+
+      if (duration > 50) {
+        console.warn(`Slow node update: ${duration}ms`);
+      }
+    },
+    [cache, startMeasure, endMeasure]
+  );
 
   // Example: Batch operations with worker pool
-  const batchUpdateNodes = useCallback(async (updates: Array<{ id: string; position: { x: number; y: number } }>) => {
-    if (updates.length > 20 && workerPool) {
-      // Use worker for large batches
-      const result = await workerPool.execute({
-        type: 'BATCH_UPDATE_NODES',
-        data: updates,
-        priority: 1 // High priority
-      });
-      
-      perfMonitor?.record('batch:update', updates.length);
-      return result;
-    } else {
-      // Direct update for small batches
-      return updates;
-    }
-  }, [workerPool, perfMonitor]);
+  const batchUpdateNodes = useCallback(
+    async (
+      updates: Array<{ id: string; position: { x: number; y: number } }>
+    ) => {
+      if (updates.length > 20 && workerPool) {
+        // Use worker for large batches
+        const result = await workerPool.execute({
+          type: 'BATCH_UPDATE_NODES',
+          data: updates,
+          priority: 1 // High priority
+        });
+
+        perfMonitor?.record('batch:update', updates.length);
+        return result;
+      } else {
+        // Direct update for small batches
+        return updates;
+      }
+    },
+    [workerPool, perfMonitor]
+  );
 
   return (
     <div>
@@ -153,28 +163,28 @@ export const PerformanceOptimizedGraphEditor: React.FC = () => {
 
 /**
  * Example: How to integrate into existing GraphEditor component
- * 
+ *
  * In packages/core/GraphEditor.tsx, add:
- * 
+ *
  * ```typescript
  * import { usePerformance, useRenderPerformance } from './hooks/usePerformance';
- * 
+ *
  * export const GraphEditor: React.FC = () => {
  *   const { cache, workerPool, perfMonitor } = usePerformance();
  *   const { measure } = useRenderPerformance('GraphEditor');
- * 
+ *
  *   // Wrap expensive operations
  *   const onNodesChange = useCallback((changes) => {
  *     measure('nodes-change', () => {
  *       // Existing logic
  *     });
  *   }, [measure]);
- * 
+ *
  *   // Cache frequently accessed data
  *   useEffect(() => {
  *     cache?.set('graph:nodes', nodes, { ttl: 60000 });
  *   }, [nodes, cache]);
- * 
+ *
  *   // Use workers for heavy computations
  *   const calculateLayout = async () => {
  *     if (nodes.length > 100) {
@@ -198,7 +208,7 @@ export const setupPerformanceThresholds = (perfMonitor: any) => {
     metric: 'render',
     maxValue: 200,
     action: 'warn',
-    callback: (metric) => {
+    callback: metric => {
       console.warn(`Slow render detected: ${metric.value}ms`);
     }
   });
@@ -207,7 +217,7 @@ export const setupPerformanceThresholds = (perfMonitor: any) => {
     metric: 'edge:calculation',
     maxValue: 50,
     action: 'error',
-    callback: (metric) => {
+    callback: metric => {
       console.error(`Edge calculation too slow: ${metric.value}ms`);
     }
   });
@@ -216,7 +226,7 @@ export const setupPerformanceThresholds = (perfMonitor: any) => {
     metric: 'group:operation',
     maxValue: 100,
     action: 'alert',
-    callback: (metric) => {
+    callback: metric => {
       // Could show user notification
       console.log(`Group operation taking long: ${metric.value}ms`);
     }

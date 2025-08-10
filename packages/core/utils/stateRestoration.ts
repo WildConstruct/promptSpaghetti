@@ -3,7 +3,12 @@
  */
 
 import { z } from 'zod';
-import { getPersistedStateInfo, validatePersistedState, persistenceStorage, STORAGE_KEY } from './persistenceUtils';
+import {
+  getPersistedStateInfo,
+  validatePersistedState,
+  persistenceStorage,
+  STORAGE_KEY
+} from './persistenceUtils';
 import { GraphSchema } from '../graphSchema';
 
 export interface RecoveryReport {
@@ -35,30 +40,30 @@ export interface RestorationResult {
  */
 export function attemptRecovery(corrupted: unknown): RecoveryReport {
   const report: RecoveryReport = {
-    recoverable: { 
-      nodes: 0, 
-      edges: 0, 
+    recoverable: {
+      nodes: 0,
+      edges: 0,
       viewport: false,
-      selection: false 
+      selection: false
     },
-    corrupted: { 
-      nodes: [], 
-      edges: [], 
-      errors: [] 
+    corrupted: {
+      nodes: [],
+      edges: [],
+      errors: []
     },
     recommendation: 'reset',
     details: ''
   };
-  
+
   try {
     if (typeof corrupted !== 'object' || corrupted === null) {
       report.corrupted.errors.push('State is not an object');
       report.details = 'The saved state appears to be completely corrupted.';
       return report;
     }
-    
+
     const state = corrupted as any;
-    
+
     // Try to recover nodes
     if (Array.isArray(state.nodes)) {
       for (const node of state.nodes) {
@@ -74,13 +79,19 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
         }
       }
     }
-    
+
     // Try to recover edges
     if (Array.isArray(state.edges)) {
       for (const edge of state.edges) {
         try {
           // Validate individual edge
-          if (edge && typeof edge === 'object' && edge.id && edge.source && edge.target) {
+          if (
+            edge &&
+            typeof edge === 'object' &&
+            edge.id &&
+            edge.source &&
+            edge.target
+          ) {
             report.recoverable.edges++;
           } else {
             report.corrupted.edges.push(edge?.id || 'unknown');
@@ -90,34 +101,44 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
         }
       }
     }
-    
+
     // Check viewport
     if (state.viewport && typeof state.viewport === 'object') {
-      if (typeof state.viewport.x === 'number' && 
-          typeof state.viewport.y === 'number' && 
-          typeof state.viewport.zoom === 'number') {
+      if (
+        typeof state.viewport.x === 'number' &&
+        typeof state.viewport.y === 'number' &&
+        typeof state.viewport.zoom === 'number'
+      ) {
         report.recoverable.viewport = true;
       }
     }
-    
+
     // Check selection state
-    if (Array.isArray(state.selectedNodes) || Array.isArray(state.selectedEdges)) {
+    if (
+      Array.isArray(state.selectedNodes) ||
+      Array.isArray(state.selectedEdges)
+    ) {
       report.recoverable.selection = true;
     }
-    
+
     // Determine recommendation
     const totalNodes = report.recoverable.nodes + report.corrupted.nodes.length;
     const totalEdges = report.recoverable.edges + report.corrupted.edges.length;
-    
+
     if (report.recoverable.nodes === 0 && report.recoverable.edges === 0) {
       report.recommendation = 'reset';
-      report.details = 'No recoverable data found. Starting fresh is recommended.';
-    } else if (report.corrupted.nodes.length === 0 && report.corrupted.edges.length === 0) {
+      report.details =
+        'No recoverable data found. Starting fresh is recommended.';
+    } else if (
+      report.corrupted.nodes.length === 0 &&
+      report.corrupted.edges.length === 0
+    ) {
       report.recommendation = 'full';
       report.details = 'All data can be recovered successfully.';
     } else {
-      const recoveryRate = (report.recoverable.nodes + report.recoverable.edges) / 
-                          (totalNodes + totalEdges);
+      const recoveryRate =
+        (report.recoverable.nodes + report.recoverable.edges) /
+        (totalNodes + totalEdges);
       if (recoveryRate > 0.8) {
         report.recommendation = 'partial';
         report.details = `${Math.round(recoveryRate * 100)}% of your data can be recovered.`;
@@ -126,71 +147,85 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
         report.details = `Only ${Math.round(recoveryRate * 100)}% of data is recoverable. Consider starting fresh.`;
       }
     }
-    
   } catch (error) {
-    report.corrupted.errors.push(error instanceof Error ? error.message : 'Unknown error');
+    report.corrupted.errors.push(
+      error instanceof Error ? error.message : 'Unknown error'
+    );
     report.details = 'An unexpected error occurred during recovery analysis.';
   }
-  
+
   return report;
 }
 
 /**
  * Build recovered state from corrupted data
  */
-export function buildRecoveredState(corrupted: any, report: RecoveryReport): any {
+export function buildRecoveredState(
+  corrupted: any,
+  report: RecoveryReport
+): any {
   const recovered: any = {
     nodes: [],
     edges: [],
     viewport: { x: 0, y: 0, zoom: 1 }
   };
-  
+
   // Recover nodes
   if (Array.isArray(corrupted.nodes)) {
     for (const node of corrupted.nodes) {
-      if (node && typeof node === 'object' && 
-          node.id && node.type && 
-          !report.corrupted.nodes.includes(node.id)) {
+      if (
+        node &&
+        typeof node === 'object' &&
+        node.id &&
+        node.type &&
+        !report.corrupted.nodes.includes(node.id)
+      ) {
         recovered.nodes.push(node);
       }
     }
   }
-  
+
   // Recover edges (only if both source and target nodes exist)
   const nodeIds = new Set(recovered.nodes.map((n: any) => n.id));
   if (Array.isArray(corrupted.edges)) {
     for (const edge of corrupted.edges) {
-      if (edge && typeof edge === 'object' && 
-          edge.id && edge.source && edge.target &&
-          nodeIds.has(edge.source) && nodeIds.has(edge.target) &&
-          !report.corrupted.edges.includes(edge.id)) {
+      if (
+        edge &&
+        typeof edge === 'object' &&
+        edge.id &&
+        edge.source &&
+        edge.target &&
+        nodeIds.has(edge.source) &&
+        nodeIds.has(edge.target) &&
+        !report.corrupted.edges.includes(edge.id)
+      ) {
         recovered.edges.push(edge);
       }
     }
   }
-  
+
   // Recover viewport if valid
   if (report.recoverable.viewport && corrupted.viewport) {
     recovered.viewport = corrupted.viewport;
   }
-  
+
   // Recover selection if valid
   if (report.recoverable.selection) {
     if (Array.isArray(corrupted.selectedNodes)) {
-      recovered.selectedNodes = corrupted.selectedNodes.filter((id: string) => 
+      recovered.selectedNodes = corrupted.selectedNodes.filter((id: string) =>
         nodeIds.has(id)
       );
     }
     if (Array.isArray(corrupted.selectedEdges)) {
       const edgeIds = new Set(recovered.edges.map((e: any) => e.id));
-      recovered.selectedEdges = corrupted.selectedEdges.filter((id: string) => 
+      recovered.selectedEdges = corrupted.selectedEdges.filter((id: string) =>
         edgeIds.has(id)
       );
     }
   }
-  
+
   recovered.lastModified = new Date().toISOString();
-  
+
   return recovered;
 }
 
@@ -208,7 +243,7 @@ export async function restoreState(): Promise<RestorationResult> {
         error: 'No saved state found'
       };
     }
-    
+
     // Get persisted state
     const persistedString = persistenceStorage.getItem(STORAGE_KEY);
     if (!persistedString) {
@@ -218,7 +253,7 @@ export async function restoreState(): Promise<RestorationResult> {
         error: 'Unable to read saved state'
       };
     }
-    
+
     // Parse state
     let parsedState: any;
     try {
@@ -233,7 +268,7 @@ export async function restoreState(): Promise<RestorationResult> {
         error: 'State is corrupted'
       };
     }
-    
+
     // Validate state
     const validatedState = validatePersistedState(parsedState);
     if (validatedState) {
@@ -243,7 +278,7 @@ export async function restoreState(): Promise<RestorationResult> {
         state: validatedState
       };
     }
-    
+
     // Validation failed, attempt recovery
     const report = attemptRecovery(parsedState);
     if (report.recommendation !== 'reset') {
@@ -255,19 +290,19 @@ export async function restoreState(): Promise<RestorationResult> {
         state: recoveredState
       };
     }
-    
+
     return {
       success: false,
       recovered: true,
       report,
       error: 'State validation failed'
     };
-    
   } catch (error) {
     return {
       success: false,
       recovered: false,
-      error: error instanceof Error ? error.message : 'Unknown restoration error'
+      error:
+        error instanceof Error ? error.message : 'Unknown restoration error'
     };
   }
 }
@@ -291,7 +326,7 @@ export async function getStorageInfo(): Promise<{
     formattedAvailable: 'Unknown',
     quota: undefined as number | undefined
   };
-  
+
   try {
     // Calculate current usage
     let totalSize = 0;
@@ -305,14 +340,15 @@ export async function getStorageInfo(): Promise<{
       }
     }
     info.used = totalSize * 2; // UTF-16 uses 2 bytes per character
-    
+
     // Get storage quota if available
     if ('storage' in navigator && 'estimate' in navigator.storage) {
       const estimate = await navigator.storage.estimate();
       if (estimate.quota) {
         info.quota = estimate.quota;
         info.available = estimate.quota - (estimate.usage || info.used);
-        info.percentage = ((estimate.usage || info.used) / estimate.quota) * 100;
+        info.percentage =
+          ((estimate.usage || info.used) / estimate.quota) * 100;
       }
     } else {
       // Fallback: assume 5MB localStorage limit
@@ -321,15 +357,14 @@ export async function getStorageInfo(): Promise<{
       info.available = Math.max(0, assumedQuota - info.used);
       info.percentage = (info.used / assumedQuota) * 100;
     }
-    
+
     // Format sizes
     info.formattedUsed = formatBytes(info.used);
     info.formattedAvailable = formatBytes(info.available);
-    
   } catch (error) {
     console.error('Error calculating storage info:', error);
   }
-  
+
   return info;
 }
 
@@ -338,11 +373,11 @@ export async function getStorageInfo(): Promise<{
  */
 function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
-  
+
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  
+
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
@@ -355,12 +390,12 @@ export function exportBackup(): void {
     if (!state) {
       throw new Error('No state to export');
     }
-    
+
     const blob = new Blob([state], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const filename = `promptgraph-backup-${timestamp}.json`;
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
@@ -381,7 +416,7 @@ export function clearPersistedState(): void {
   try {
     // Remove main state
     persistenceStorage.removeItem(STORAGE_KEY);
-    
+
     // Clear any other app-related keys
     const keysToRemove: string[] = [];
     for (let i = 0; i < localStorage.length; i++) {
@@ -390,9 +425,9 @@ export function clearPersistedState(): void {
         keysToRemove.push(key);
       }
     }
-    
+
     keysToRemove.forEach(key => localStorage.removeItem(key));
-    
+
     // Dispatch event for UI updates
     window.dispatchEvent(new CustomEvent('state-cleared'));
   } catch (error) {

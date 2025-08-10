@@ -4,7 +4,10 @@
  */
 
 import { ExecutionContext } from '../../types';
-import { BaseInlineEditableNode, InlineEditableConfig } from './BaseInlineEditableNode';
+import {
+  BaseInlineEditableNode,
+  InlineEditableConfig
+} from './BaseInlineEditableNode';
 
 /**
  * Configuration value for Concat nodes
@@ -21,7 +24,7 @@ export interface ConcatConfig {
  */
 export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
   private inputs: string[] = [];
-  
+
   constructor(
     id: string,
     initialConfig: ConcatConfig = { separator: ' ', trimInputs: true },
@@ -43,17 +46,19 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
    */
   async run(ctx: ExecutionContext): Promise<string> {
     const config = this.getCurrentValue();
-    
+
     // Process inputs based on configuration
-    const processedInputs = this.inputs.map(input => {
-      // Convert to string if needed
-      const str = String(input || '');
-      // Trim if configured
-      return config.trimInputs ? str.trim() : str;
-    }).filter(input => {
-      // Filter out empty strings if trimming is enabled
-      return !config.trimInputs || input.length > 0;
-    });
+    const processedInputs = this.inputs
+      .map(input => {
+        // Convert to string if needed
+        const str = String(input || '');
+        // Trim if configured
+        return config.trimInputs ? str.trim() : str;
+      })
+      .filter(input => {
+        // Filter out empty strings if trimming is enabled
+        return !config.trimInputs || input.length > 0;
+      });
 
     // Join with separator
     return processedInputs.join(config.separator);
@@ -69,7 +74,9 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
   /**
    * Validate the configuration
    */
-  protected async validateValue(value: ConcatConfig): Promise<{ valid: boolean; errors: string[] }> {
+  protected async validateValue(
+    value: ConcatConfig
+  ): Promise<{ valid: boolean; errors: string[] }> {
     const errors: string[] = [];
 
     // Check if value is an object
@@ -154,7 +161,7 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
       { label: 'Tab', value: '\t' },
       { label: 'Pipe', value: ' | ' },
       { label: 'Dash', value: ' - ' },
-      { label: 'None', value: '' },
+      { label: 'None', value: '' }
     ];
   }
 
@@ -163,13 +170,15 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
    */
   preview(sampleInputs: string[]): string {
     const config = this.getCurrentValue();
-    
-    const processed = sampleInputs.map(input => {
-      const str = String(input || '');
-      return config.trimInputs ? str.trim() : str;
-    }).filter(input => {
-      return !config.trimInputs || input.length > 0;
-    });
+
+    const processed = sampleInputs
+      .map(input => {
+        const str = String(input || '');
+        return config.trimInputs ? str.trim() : str;
+      })
+      .filter(input => {
+        return !config.trimInputs || input.length > 0;
+      });
 
     return processed.join(config.separator);
   }
@@ -208,7 +217,7 @@ export class ConcatNode extends BaseInlineEditableNode<ConcatConfig, string> {
    */
   private getSeparatorDisplay(): string {
     const sep = this.data.value.separator;
-    
+
     // Handle special characters
     switch (sep) {
       case ' ':

@@ -13,28 +13,32 @@ export async function retryWithBackoff<T>(
   baseDelay = 1000
 ): Promise<T> {
   let lastError: Error;
-  
+
   for (let i = 0; i < maxRetries; i++) {
     try {
       return await fn();
     } catch (error) {
       lastError = error as Error;
-      
+
       // Don't retry on auth errors (wrong password, etc)
       if (error && typeof error === 'object' && 'status' in error) {
         const authError = error as AuthError;
-        if (authError.status && authError.status >= 400 && authError.status < 500) {
+        if (
+          authError.status &&
+          authError.status >= 400 &&
+          authError.status < 500
+        ) {
           throw error;
         }
       }
-      
+
       if (i < maxRetries - 1) {
         const delay = baseDelay * Math.pow(2, i);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
   }
-  
+
   throw lastError!;
 }
 
@@ -44,20 +48,20 @@ export async function retryWithBackoff<T>(
 export class TokenRefreshScheduler {
   private refreshTimer: NodeJS.Timeout | null = null;
   private refreshCallback: () => Promise<void>;
-  
+
   constructor(refreshCallback: () => Promise<void>) {
     this.refreshCallback = refreshCallback;
   }
-  
+
   schedule(session: Session) {
     this.cancel();
-    
+
     if (!session.expires_at) return;
-    
+
     const expiresAt = session.expires_at * 1000; // Convert to milliseconds
     const expiresIn = expiresAt - Date.now();
     const refreshIn = Math.max(0, expiresIn - 60000); // Refresh 1 min before expiry
-    
+
     if (refreshIn > 0) {
       this.refreshTimer = setTimeout(async () => {
         try {
@@ -68,7 +72,7 @@ export class TokenRefreshScheduler {
       }, refreshIn);
     }
   }
-  
+
   cancel() {
     if (this.refreshTimer) {
       clearTimeout(this.refreshTimer);
@@ -83,7 +87,7 @@ export class TokenRefreshScheduler {
 export class AuthStateBroadcaster {
   private channel: BroadcastChannel | null = null;
   private storageKey = 'psg_auth_sync';
-  
+
   constructor() {
     // Use BroadcastChannel if available, otherwise fall back to storage events
     if (typeof BroadcastChannel !== 'undefined') {
@@ -94,10 +98,10 @@ export class AuthStateBroadcaster {
       }
     }
   }
-  
+
   broadcast(event: 'signin' | 'signout' | 'session_refresh', data?: any) {
     const message = { event, data, timestamp: Date.now() };
-    
+
     if (this.channel) {
       this.channel.postMessage(message);
     } else {
@@ -111,10 +115,10 @@ export class AuthStateBroadcaster {
       }
     }
   }
-  
+
   subscribe(callback: (event: string, data?: any) => void) {
     if (this.channel) {
-      this.channel.onmessage = (e) => {
+      this.channel.onmessage = e => {
         callback(e.data.event, e.data.data);
       };
     } else {
@@ -133,7 +137,7 @@ export class AuthStateBroadcaster {
       return () => window.removeEventListener('storage', handleStorage);
     }
   }
-  
+
   close() {
     if (this.channel) {
       this.channel.close();
@@ -151,23 +155,23 @@ export class OfflineAuthQueue {
     reject: (error: Error) => void;
   }> = [];
   private onlineHandler: (() => void) | null = null;
-  
+
   constructor() {
     // Process queue when coming back online
     this.onlineHandler = () => this.processQueue();
     window.addEventListener('online', this.onlineHandler);
   }
-  
+
   async enqueue(operation: () => Promise<void>): Promise<void> {
     if (!navigator.onLine) {
       return new Promise((resolve, reject) => {
         this.queue.push({ operation, resolve, reject });
       });
     }
-    
+
     return operation();
   }
-  
+
   private async processQueue() {
     while (this.queue.length > 0) {
       const item = this.queue.shift()!;
@@ -179,14 +183,14 @@ export class OfflineAuthQueue {
       }
     }
   }
-  
+
   clear() {
     // Reject all pending operations
     this.queue.forEach(item => {
       item.reject(new Error('Queue cleared'));
     });
     this.queue = [];
-    
+
     // Remove event listener
     if (this.onlineHandler) {
       window.removeEventListener('online', this.onlineHandler);
@@ -200,12 +204,12 @@ export class OfflineAuthQueue {
  */
 export function transformAuthError(error: unknown): string {
   if (!error) return 'An unknown error occurred';
-  
+
   if (typeof error === 'string') return error;
-  
+
   if (error && typeof error === 'object' && 'message' in error) {
     const message = (error as { message: string }).message;
-    
+
     // Map common Supabase errors to friendly messages
     const errorMap: Record<string, string> = {
       'Invalid login credentials': 'Email or password is incorrect',
@@ -214,18 +218,18 @@ export function transformAuthError(error: unknown): string {
       'Password should be at least 6 characters': 'Password is too short',
       'Rate limit exceeded': 'Too many attempts. Please try again later',
       'Network request failed': 'Connection error. Please check your internet',
-      'Failed to fetch': 'Connection error. Please try again',
+      'Failed to fetch': 'Connection error. Please try again'
     };
-    
+
     for (const [key, value] of Object.entries(errorMap)) {
       if (message.includes(key)) {
         return value;
       }
     }
-    
+
     return message;
   }
-  
+
   return 'An error occurred. Please try again';
 }
 
@@ -234,17 +238,18 @@ export function transformAuthError(error: unknown): string {
  */
 export class AuthDebugLogger {
   private enabled: boolean;
-  
+
   constructor() {
     // More strict check to prevent logging in production
-    this.enabled = process.env.NODE_ENV === 'development' && 
-                   !process.env.NEXT_PUBLIC_PRODUCTION &&
-                   !process.env.VITE_PRODUCTION;
+    this.enabled =
+      process.env.NODE_ENV === 'development' &&
+      !process.env.NEXT_PUBLIC_PRODUCTION &&
+      !process.env.VITE_PRODUCTION;
   }
-  
+
   log(event: string, data?: any) {
     if (!this.enabled) return;
-    
+
     const timestamp = new Date().toISOString();
     console.group(`[Auth] ${event} - ${timestamp}`);
     if (data) {
@@ -252,10 +257,10 @@ export class AuthDebugLogger {
     }
     console.groupEnd();
   }
-  
+
   error(event: string, error: unknown) {
     if (!this.enabled) return;
-    
+
     const timestamp = new Date().toISOString();
     console.group(`[Auth Error] ${event} - ${timestamp}`);
     console.error('Error:', error);

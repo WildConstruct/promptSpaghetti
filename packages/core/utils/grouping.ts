@@ -5,16 +5,13 @@
  */
 
 import { Node } from 'reactflow';
-import { 
-  NodeGroup, 
-  GroupBounds, 
+import {
+  NodeGroup,
+  GroupBounds,
   GroupValidationResult,
-  NormalizedGroupState 
+  NormalizedGroupState
 } from '../types/groups';
-import { 
-  getPerformanceInfrastructure,
-  WorkerTask 
-} from './performance';
+import { getPerformanceInfrastructure, WorkerTask } from './performance';
 
 // Get performance infrastructure instances
 let cache: any;
@@ -29,7 +26,9 @@ export function initializeGroupingPerformance() {
     workerPool = infrastructure.workerPool;
     perfMonitor = infrastructure.perfMonitor;
   } catch (error) {
-    console.warn('Performance infrastructure not initialized for grouping utilities');
+    console.warn(
+      'Performance infrastructure not initialized for grouping utilities'
+    );
   }
 }
 
@@ -44,14 +43,17 @@ export async function createGroup(
   perfMonitor?.mark('createGroup:start');
 
   // Validate group creation
-  const validation = await validateGroupCreation(selectedNodeIds, existingGroups);
+  const validation = await validateGroupCreation(
+    selectedNodeIds,
+    existingGroups
+  );
   if (!validation.valid) {
     throw new Error(validation.errors[0]);
   }
 
   // Check for existing group membership
   const parentGroups = getParentGroups(selectedNodeIds, existingGroups);
-  
+
   if (parentGroups.size > 1) {
     throw new Error('Cannot group nodes from different groups');
   }
@@ -68,7 +70,11 @@ export async function createGroup(
     }
   };
 
-  perfMonitor?.measureMarks('createGroup:start', 'createGroup:end', 'group:creation');
+  perfMonitor?.measureMarks(
+    'createGroup:start',
+    'createGroup:end',
+    'group:creation'
+  );
   perfMonitor?.record('group:nodeCount', selectedNodeIds.length);
 
   return group;
@@ -83,7 +89,7 @@ export async function getGroupBounds(
   nodes: Node[]
 ): Promise<GroupBounds> {
   const cacheKey = `group:bounds:${group.id}:${Array.from(group.nodeIds).join(',')}`;
-  
+
   // Check cache first (L1 → L2 → L3)
   if (cache) {
     const cached = await cache.get(cacheKey);
@@ -96,71 +102,78 @@ export async function getGroupBounds(
 
   // For large groups, offload to worker (>50 nodes)
   if (group.nodeIds.size > 50 && workerPool) {
-    const bounds = await perfMonitor?.measureAsync('groupBounds:worker', async () => {
-      return workerPool.execute({
-        type: 'CALCULATE_GROUP_BOUNDS',
-        data: { 
-          group: {
-            ...group,
-            nodeIds: Array.from(group.nodeIds) // Convert Set to Array for serialization
-          }, 
-          nodes 
-        }
-      });
-    });
-    
+    const bounds = await perfMonitor?.measureAsync(
+      'groupBounds:worker',
+      async () => {
+        return workerPool.execute({
+          type: 'CALCULATE_GROUP_BOUNDS',
+          data: {
+            group: {
+              ...group,
+              nodeIds: Array.from(group.nodeIds) // Convert Set to Array for serialization
+            },
+            nodes
+          }
+        });
+      }
+    );
+
     // Cache the result
     if (cache) {
       await cache.set(cacheKey, bounds, { ttl: 60000 }); // 1 minute TTL
     }
-    
+
     return bounds;
   }
 
   // Small groups: calculate inline
-  const bounds = perfMonitor?.measure('groupBounds:inline', () => {
-    const groupNodes = nodes.filter(n => group.nodeIds.has(n.id));
-    
-    if (groupNodes.length === 0) {
-      return { x: 0, y: 0, width: 0, height: 0 };
-    }
-    
-    const xs = groupNodes.map(n => n.position.x);
-    const ys = groupNodes.map(n => n.position.y);
-    const rights = groupNodes.map(n => n.position.x + (n.width || 150));
-    const bottoms = groupNodes.map(n => n.position.y + (n.height || 50));
-    
-    return {
-      x: Math.min(...xs) - 20,
-      y: Math.min(...ys) - 40, // Extra space for header
-      width: Math.max(...rights) - Math.min(...xs) + 40,
-      height: Math.max(...bottoms) - Math.min(...ys) + 60
-    };
-  }) || calculateGroupBoundsFallback(group, nodes);
-  
+  const bounds =
+    perfMonitor?.measure('groupBounds:inline', () => {
+      const groupNodes = nodes.filter(n => group.nodeIds.has(n.id));
+
+      if (groupNodes.length === 0) {
+        return { x: 0, y: 0, width: 0, height: 0 };
+      }
+
+      const xs = groupNodes.map(n => n.position.x);
+      const ys = groupNodes.map(n => n.position.y);
+      const rights = groupNodes.map(n => n.position.x + (n.width || 150));
+      const bottoms = groupNodes.map(n => n.position.y + (n.height || 50));
+
+      return {
+        x: Math.min(...xs) - 20,
+        y: Math.min(...ys) - 40, // Extra space for header
+        width: Math.max(...rights) - Math.min(...xs) + 40,
+        height: Math.max(...bottoms) - Math.min(...ys) + 60
+      };
+    }) || calculateGroupBoundsFallback(group, nodes);
+
   // Cache the result
   if (cache) {
     await cache.set(cacheKey, bounds, { ttl: 60000 });
   }
-  
+
   return bounds;
 }
 
 /**
  * Fallback calculation when performance infrastructure is not available
  */
-function calculateGroupBoundsFallback(group: NodeGroup, nodes: Node[]): GroupBounds {
+function calculateGroupBoundsFallback(
+  group: NodeGroup,
+  nodes: Node[]
+): GroupBounds {
   const groupNodes = nodes.filter(n => group.nodeIds.has(n.id));
-  
+
   if (groupNodes.length === 0) {
     return { x: 0, y: 0, width: 0, height: 0 };
   }
-  
+
   const xs = groupNodes.map(n => n.position.x);
   const ys = groupNodes.map(n => n.position.y);
   const rights = groupNodes.map(n => n.position.x + (n.width || 150));
   const bottoms = groupNodes.map(n => n.position.y + (n.height || 50));
-  
+
   return {
     x: Math.min(...xs) - 20,
     y: Math.min(...ys) - 40,
@@ -177,7 +190,7 @@ export async function validateGroupHierarchy(
   maxDepth: number = 3
 ): Promise<GroupValidationResult> {
   const cacheKey = `hierarchy:validation:${Array.from(groups.keys()).join(',')}`;
-  
+
   // Try cache first
   if (cache) {
     const cached = await cache.get(cacheKey);
@@ -197,22 +210,22 @@ export async function validateGroupHierarchy(
         maxDepth
       }
     });
-    
+
     // Cache validation results
     if (cache) {
       await cache.set(cacheKey, result, { ttl: 30000 }); // 30 seconds
     }
-    
+
     return result;
   }
 
   // Inline validation for small hierarchies
   const result = validateHierarchyInline(groups, maxDepth);
-  
+
   if (cache) {
     await cache.set(cacheKey, result, { ttl: 30000 });
   }
-  
+
   return result;
 }
 
@@ -239,9 +252,11 @@ function validateHierarchyInline(
 
       visited.add(current.parentId);
       const parent = groups.get(current.parentId);
-      
+
       if (!parent) {
-        warnings.push(`Orphaned group: ${id} references non-existent parent ${current.parentId}`);
+        warnings.push(
+          `Orphaned group: ${id} references non-existent parent ${current.parentId}`
+        );
         break;
       }
 
@@ -261,13 +276,10 @@ function validateHierarchyInline(
 /**
  * Collapse group to single node representation
  */
-export function collapseGroup(
-  group: NodeGroup,
-  nodes: Node[]
-): Node {
+export function collapseGroup(group: NodeGroup, nodes: Node[]): Node {
   const groupNodes = nodes.filter(n => group.nodeIds.has(n.id));
   const bounds = calculateGroupBoundsFallback(group, nodes);
-  
+
   return {
     id: `group-${group.id}`,
     type: 'groupNode',
@@ -292,7 +304,7 @@ function getParentGroups(
   groups: Map<string, NodeGroup>
 ): Set<string> {
   const parentGroups = new Set<string>();
-  
+
   for (const [groupId, group] of groups) {
     for (const nodeId of nodeIds) {
       if (group.nodeIds.has(nodeId)) {
@@ -300,7 +312,7 @@ function getParentGroups(
       }
     }
   }
-  
+
   return parentGroups;
 }
 
@@ -356,25 +368,27 @@ async function getGroupDepth(
 ): Promise<number> {
   let depth = 0;
   let current = groups.get(groupId);
-  
+
   while (current?.parentId) {
     depth++;
     current = groups.get(current.parentId);
-    
+
     if (depth > 10) {
       // Prevent infinite loops
       console.error('Possible circular dependency in group hierarchy');
       break;
     }
   }
-  
+
   return depth;
 }
 
 /**
  * Normalize group state for efficient operations
  */
-export function normalizeGroupState(groups: Map<string, NodeGroup>): NormalizedGroupState {
+export function normalizeGroupState(
+  groups: Map<string, NodeGroup>
+): NormalizedGroupState {
   const byId: Record<string, NodeGroup> = {};
   const allIds: string[] = [];
   const nodeToGroup: Record<string, string> = {};
@@ -383,11 +397,11 @@ export function normalizeGroupState(groups: Map<string, NodeGroup>): NormalizedG
   for (const [id, group] of groups) {
     byId[id] = group;
     allIds.push(id);
-    
+
     if (!group.parentId) {
       rootGroups.push(id);
     }
-    
+
     for (const nodeId of group.nodeIds) {
       nodeToGroup[nodeId] = id;
     }
@@ -401,10 +415,10 @@ export function normalizeGroupState(groups: Map<string, NodeGroup>): NormalizedG
  */
 export async function invalidateGroupCaches(pattern?: string): Promise<void> {
   if (!cache) return;
-  
+
   const invalidatePattern = pattern || 'group:*';
   const invalidated = await cache.invalidatePattern(invalidatePattern);
-  
+
   perfMonitor?.record('cache:invalidated', invalidated);
 }
 

@@ -22,14 +22,17 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 import GroupNode from './nodes/GroupNode';
-import { useGroupedNodes, useGroupKeyboardShortcuts } from '../hooks/useGroupedNodes';
+import {
+  useGroupedNodes,
+  useGroupKeyboardShortcuts
+} from '../hooks/useGroupedNodes';
 import { usePerformance } from '../hooks/usePerformance';
 import { GroupingSlice } from '../stores/groupingSlice';
 import { NodeGroup } from '../types/groups';
 
 // Define node types including our custom GroupNode
 const nodeTypes: NodeTypes = {
-  groupNode: GroupNode,
+  groupNode: GroupNode
   // Add other custom node types here
 };
 
@@ -74,46 +77,61 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
   }, []);
 
   // Handle edge connection
-  const onConnect = useCallback((params: Connection) => {
-    perfMonitor?.measure('edge:connect', () => {
-      setEdges((eds) => addEdge(params, eds));
-    });
-  }, [setEdges, perfMonitor]);
+  const onConnect = useCallback(
+    (params: Connection) => {
+      perfMonitor?.measure('edge:connect', () => {
+        setEdges(eds => addEdge(params, eds));
+      });
+    },
+    [setEdges, perfMonitor]
+  );
 
   // Group operations
-  const handleCreateGroup = useCallback(async (nodeIds: string[]) => {
-    perfMonitor?.mark('group:create:start');
-    
-    try {
-      await groupingStore.createGroup(nodeIds);
-      
-      // Clear selection after grouping
-      setSelectedNodes([]);
-      
-      perfMonitor?.measureMarks('group:create:start', 'group:create:end');
-    } catch (error) {
-      console.error('Failed to create group:', error);
-      // Show error to user
-    }
-  }, [groupingStore, perfMonitor]);
+  const handleCreateGroup = useCallback(
+    async (nodeIds: string[]) => {
+      perfMonitor?.mark('group:create:start');
 
-  const handleToggleGroup = useCallback(async (groupId: string) => {
-    await groupingStore.toggleGroup(groupId);
-  }, [groupingStore]);
+      try {
+        await groupingStore.createGroup(nodeIds);
 
-  const handleEditGroup = useCallback(async (groupId: string, updates: Partial<NodeGroup>) => {
-    await groupingStore.updateGroup(groupId, updates);
-  }, [groupingStore]);
+        // Clear selection after grouping
+        setSelectedNodes([]);
 
-  const handleDeleteGroup = useCallback(async (groupId: string, deleteContents: boolean) => {
-    await groupingStore.deleteGroup(groupId, deleteContents);
-  }, [groupingStore]);
+        perfMonitor?.measureMarks('group:create:start', 'group:create:end');
+      } catch (error) {
+        console.error('Failed to create group:', error);
+        // Show error to user
+      }
+    },
+    [groupingStore, perfMonitor]
+  );
+
+  const handleToggleGroup = useCallback(
+    async (groupId: string) => {
+      await groupingStore.toggleGroup(groupId);
+    },
+    [groupingStore]
+  );
+
+  const handleEditGroup = useCallback(
+    async (groupId: string, updates: Partial<NodeGroup>) => {
+      await groupingStore.updateGroup(groupId, updates);
+    },
+    [groupingStore]
+  );
+
+  const handleDeleteGroup = useCallback(
+    async (groupId: string, deleteContents: boolean) => {
+      await groupingStore.deleteGroup(groupId, deleteContents);
+    },
+    [groupingStore]
+  );
 
   // Setup keyboard shortcuts
   useGroupKeyboardShortcuts(
     selectedNodes,
     handleCreateGroup,
-    (groupId) => handleDeleteGroup(groupId, false),
+    groupId => handleDeleteGroup(groupId, false),
     handleToggleGroup
   );
 
@@ -135,25 +153,28 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
       return node;
     });
   }, [
-    groupedNodes, 
-    handleToggleGroup, 
-    handleEditGroup, 
+    groupedNodes,
+    handleToggleGroup,
+    handleEditGroup,
     handleDeleteGroup,
     groupingStore.performanceMetrics
   ]);
 
   // Context menu for grouping
-  const onNodeContextMenu = useCallback((event: React.MouseEvent, node: Node) => {
-    event.preventDefault();
-    
-    // Show context menu with group options
-    // This is a simplified example - implement proper context menu
-    if (selectedNodes.length > 1 && selectedNodes.includes(node.id)) {
-      if (window.confirm('Create group from selected nodes?')) {
-        handleCreateGroup(selectedNodes);
+  const onNodeContextMenu = useCallback(
+    (event: React.MouseEvent, node: Node) => {
+      event.preventDefault();
+
+      // Show context menu with group options
+      // This is a simplified example - implement proper context menu
+      if (selectedNodes.length > 1 && selectedNodes.includes(node.id)) {
+        if (window.confirm('Create group from selected nodes?')) {
+          handleCreateGroup(selectedNodes);
+        }
       }
-    }
-  }, [selectedNodes, handleCreateGroup]);
+    },
+    [selectedNodes, handleCreateGroup]
+  );
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
@@ -171,32 +192,38 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
         <Background />
         <Controls />
         <MiniMap />
-        
+
         {/* Group Statistics Panel */}
         <Panel position="top-left">
-          <div style={{
-            padding: '10px',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderRadius: '4px',
-            fontSize: '12px',
-            fontFamily: 'monospace'
-          }}>
+          <div
+            style={{
+              padding: '10px',
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              borderRadius: '4px',
+              fontSize: '12px',
+              fontFamily: 'monospace'
+            }}
+          >
             <div>Total Nodes: {stats.totalNodes}</div>
             <div>Visible Nodes: {stats.visibleNodes}</div>
             <div>Groups: {stats.totalGroups}</div>
             <div>Collapsed: {stats.collapsedGroups}</div>
             <div>Hidden: {stats.hiddenNodes}</div>
-            {isCalculating && <div style={{ color: '#ff6b6b' }}>Calculating...</div>}
+            {isCalculating && (
+              <div style={{ color: '#ff6b6b' }}>Calculating...</div>
+            )}
           </div>
         </Panel>
-        
+
         {/* Group Actions Panel */}
         <Panel position="top-right">
-          <div style={{
-            padding: '10px',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderRadius: '4px'
-          }}>
+          <div
+            style={{
+              padding: '10px',
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              borderRadius: '4px'
+            }}
+          >
             <button
               onClick={() => {
                 if (selectedNodes.length > 1) {
@@ -218,13 +245,15 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
             >
               Group Selected ({selectedNodes.length})
             </button>
-            
+
             <button
               onClick={async () => {
                 // Validate hierarchy
                 const validation = await groupingStore.validateHierarchy();
                 if (!validation.valid) {
-                  alert(`Hierarchy validation failed:\n${validation.errors.join('\n')}`);
+                  alert(
+                    `Hierarchy validation failed:\n${validation.errors.join('\n')}`
+                  );
                 } else {
                   alert('Hierarchy is valid!');
                 }
@@ -243,7 +272,7 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
             >
               Validate Hierarchy
             </button>
-            
+
             <button
               onClick={() => groupingStore.invalidateCaches()}
               style={{
@@ -261,19 +290,22 @@ const GraphEditorWithGroups: React.FC<GraphEditorWithGroupsProps> = ({
             </button>
           </div>
         </Panel>
-        
+
         {/* Performance Metrics (if available) */}
         {groupingStore.performanceMetrics.lastOperationTime > 0 && (
           <Panel position="bottom-right">
-            <div style={{
-              padding: '8px',
-              backgroundColor: 'rgba(0, 0, 0, 0.8)',
-              color: '#00ff00',
-              borderRadius: '4px',
-              fontSize: '10px',
-              fontFamily: 'monospace'
-            }}>
-              Last Op: {groupingStore.performanceMetrics.lastOperationTime.toFixed(0)}ms
+            <div
+              style={{
+                padding: '8px',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                color: '#00ff00',
+                borderRadius: '4px',
+                fontSize: '10px',
+                fontFamily: 'monospace'
+              }}
+            >
+              Last Op:{' '}
+              {groupingStore.performanceMetrics.lastOperationTime.toFixed(0)}ms
             </div>
           </Panel>
         )}
@@ -286,16 +318,16 @@ export default GraphEditorWithGroups;
 
 /**
  * Example usage with Zustand store
- * 
+ *
  * ```typescript
  * import { create } from 'zustand';
  * import { createGroupingSlice } from '@/packages/core/stores/groupingSlice';
- * 
+ *
  * const useStore = create(createGroupingSlice);
- * 
+ *
  * function App() {
  *   const groupingStore = useStore();
- *   
+ *
  *   return (
  *     <GraphEditorWithGroups
  *       initialNodes={nodes}

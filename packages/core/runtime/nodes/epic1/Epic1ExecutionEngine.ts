@@ -84,12 +84,21 @@ export class Epic1ExecutionEngine {
     const startTime = Date.now();
 
     try {
-      debugLogExecution('[ExecutionEngine] Starting execution with', this.graph.nodes.size, 'nodes');
-      
+      debugLogExecution(
+        '[ExecutionEngine] Starting execution with',
+        this.graph.nodes.size,
+        'nodes'
+      );
+
       // Validate the graph first
-      const validation = await validateGraph(this.graph.nodes, this.graph.edges);
+      const validation = await validateGraph(
+        this.graph.nodes,
+        this.graph.edges
+      );
       if (!validation.valid) {
-        throw new Error(`Graph validation failed: ${validation.errors.map(e => e.message).join(', ')}`);
+        throw new Error(
+          `Graph validation failed: ${validation.errors.map(e => e.message).join(', ')}`
+        );
       }
 
       // Add warnings from validation
@@ -98,27 +107,40 @@ export class Epic1ExecutionEngine {
       });
 
       // Find output node(s)
-      const outputNodes = Array.from(this.graph.nodes.entries())
-        .filter(([_, node]) => node.getNodeType() === Epic1NodeType.Output);
+      const outputNodes = Array.from(this.graph.nodes.entries()).filter(
+        ([_, node]) => node.getNodeType() === Epic1NodeType.Output
+      );
 
-      debugLogExecution('[ExecutionEngine] Found output nodes:', outputNodes.map(([id]) => id));
-      debugLogExecution('[ExecutionEngine] Graph edges:', this.graph.edges.length, 'edges:', this.graph.edges);
+      debugLogExecution(
+        '[ExecutionEngine] Found output nodes:',
+        outputNodes.map(([id]) => id)
+      );
+      debugLogExecution(
+        '[ExecutionEngine] Graph edges:',
+        this.graph.edges.length,
+        'edges:',
+        this.graph.edges
+      );
 
       if (outputNodes.length === 0) {
-        debugLogExecution('[ExecutionEngine] No output node found in graph - returning empty result');
+        debugLogExecution(
+          '[ExecutionEngine] No output node found in graph - returning empty result'
+        );
         // Return a special empty result instead of throwing an error
         return {
-          success: true,  // Mark as success to avoid red error styling
+          success: true, // Mark as success to avoid red error styling
           output: '',
           results: new Map(),
           stats: {
             totalDuration: 0,
             nodesExecuted: 0,
             errors: [],
-            warnings: [{
-              nodeId: '',
-              message: 'Connect an Output node to see results'
-            }]
+            warnings: [
+              {
+                nodeId: '',
+                message: 'Connect an Output node to see results'
+              }
+            ]
           },
           context: this.context
         };
@@ -129,7 +151,10 @@ export class Epic1ExecutionEngine {
 
       // Build execution order (topological sort)
       this.buildExecutionOrder();
-      debugLogExecution('[ExecutionEngine] Execution order:', this.executionOrder);
+      debugLogExecution(
+        '[ExecutionEngine] Execution order:',
+        this.executionOrder
+      );
 
       // Execute nodes in order
       for (const nodeId of this.executionOrder) {
@@ -139,7 +164,12 @@ export class Epic1ExecutionEngine {
       // Get final output
       const outputResult = this.results.get(this.outputNodeId);
       const finalOutput = outputResult?.output || null;
-      debugLogExecution('[ExecutionEngine] Final output from node', this.outputNodeId, ':', finalOutput);
+      debugLogExecution(
+        '[ExecutionEngine] Final output from node',
+        this.outputNodeId,
+        ':',
+        finalOutput
+      );
 
       // Finalize stats
       const stats = this.context.finalize();
@@ -156,10 +186,9 @@ export class Epic1ExecutionEngine {
         },
         context: this.context
       };
-
     } catch (error) {
       const stats = this.context.finalize();
-      
+
       return {
         success: false,
         output: null,
@@ -167,7 +196,10 @@ export class Epic1ExecutionEngine {
         stats: {
           totalDuration: Date.now() - startTime,
           nodesExecuted: stats.nodesExecuted,
-          errors: [...stats.errors, { nodeId: 'engine', error: error as Error }],
+          errors: [
+            ...stats.errors,
+            { nodeId: 'engine', error: error as Error }
+          ],
           warnings: stats.warnings
         },
         context: this.context
@@ -192,7 +224,10 @@ export class Epic1ExecutionEngine {
 
       // Get inputs for this node
       const inputs = this.getNodeInputs(nodeId);
-      debugLogExecution(`[ExecutionEngine] Executing node ${nodeId} of type ${node.getNodeType()} with ${inputs.length} inputs:`, inputs);
+      debugLogExecution(
+        `[ExecutionEngine] Executing node ${nodeId} of type ${node.getNodeType()} with ${inputs.length} inputs:`,
+        inputs
+      );
 
       // Execute based on node type
       let output: any = null;
@@ -201,23 +236,26 @@ export class Epic1ExecutionEngine {
         case Epic1NodeType.TextBlock:
           output = await this.executeTextBlock(node as TextBlockNode, inputs);
           break;
-        
+
         case Epic1NodeType.WeightedChoice:
-          output = await this.executeWeightedChoice(node as WeightedChoiceNode, inputs);
+          output = await this.executeWeightedChoice(
+            node as WeightedChoiceNode,
+            inputs
+          );
           break;
-        
+
         case Epic1NodeType.Concat:
           output = await this.executeConcat(node as ConcatNode, inputs);
           break;
-        
+
         case Epic1NodeType.Variable:
           output = await this.executeVariable(node as VariableNode, inputs);
           break;
-        
+
         case Epic1NodeType.Output:
           output = await this.executeOutput(node as OutputNode, inputs);
           break;
-        
+
         default:
           throw new Error(`Unknown node type: ${node.getNodeType()}`);
       }
@@ -228,16 +266,18 @@ export class Epic1ExecutionEngine {
         output,
         duration: Date.now() - startTime
       });
-      debugLogExecution(`[ExecutionEngine] Node ${nodeId} produced output:`, output);
+      debugLogExecution(
+        `[ExecutionEngine] Node ${nodeId} produced output:`,
+        output
+      );
 
       this.context.decrementDepth();
-
     } catch (error) {
       this.context.decrementDepth();
-      
+
       const err = error as Error;
       this.context.addError(nodeId, err);
-      
+
       this.results.set(nodeId, {
         nodeId,
         output: null,
@@ -253,28 +293,34 @@ export class Epic1ExecutionEngine {
   /**
    * Execute a TextBlock node
    */
-  private async executeTextBlock(node: TextBlockNode, inputs: any[]): Promise<string> {
+  private async executeTextBlock(
+    node: TextBlockNode,
+    inputs: any[]
+  ): Promise<string> {
     const value = node.getCurrentValue();
-    
+
     // Substitute variables
     const substituted = this.context.substituteVariables(value);
-    
+
     return substituted;
   }
 
   /**
    * Execute a WeightedChoice node
    */
-  private async executeWeightedChoice(node: WeightedChoiceNode, inputs: any[]): Promise<string> {
+  private async executeWeightedChoice(
+    node: WeightedChoiceNode,
+    inputs: any[]
+  ): Promise<string> {
     const options = node.getData().value;
-    
+
     if (options.length === 0) {
       return '';
     }
 
     // Calculate total weight
     const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
-    
+
     if (totalWeight === 0) {
       return options[0].text; // Fallback to first option
     }
@@ -300,7 +346,10 @@ export class Epic1ExecutionEngine {
   /**
    * Execute a Concat node
    */
-  private async executeConcat(node: ConcatNode, inputs: any[]): Promise<string> {
+  private async executeConcat(
+    node: ConcatNode,
+    inputs: any[]
+  ): Promise<string> {
     const config = node.getData().configuration || {};
     const separator = config.separator || ' ';
     const trimInputs = config.trimInputs !== false;
@@ -320,7 +369,10 @@ export class Epic1ExecutionEngine {
   /**
    * Execute a Variable node
    */
-  private async executeVariable(node: VariableNode, inputs: any[]): Promise<any> {
+  private async executeVariable(
+    node: VariableNode,
+    inputs: any[]
+  ): Promise<any> {
     const config = node.getData().value;
     const nodeConfig = node.getData().configuration || {};
     const mode = nodeConfig.mode || 'both';
@@ -330,8 +382,9 @@ export class Epic1ExecutionEngine {
 
     if (mode === 'set' || mode === 'both') {
       // Set the variable
-      const valueToSet = inputValue !== undefined ? inputValue : config.defaultValue;
-      
+      const valueToSet =
+        inputValue !== undefined ? inputValue : config.defaultValue;
+
       if (valueToSet !== undefined) {
         this.context.setVariable(config.name, valueToSet);
       }
@@ -340,7 +393,7 @@ export class Epic1ExecutionEngine {
     if (mode === 'get' || mode === 'both') {
       // Get the variable
       const value = this.context.getVariable(config.name);
-      
+
       if (value !== undefined) {
         return value;
       } else if (config.defaultValue !== undefined) {
@@ -361,11 +414,17 @@ export class Epic1ExecutionEngine {
    */
   private async executeOutput(node: OutputNode, inputs: any[]): Promise<any> {
     const input = inputs.length > 0 ? inputs[0] : '';
-    debugLogExecution('[ExecutionEngine] Output node receiving input:', input, 'from', inputs.length, 'sources');
-    
+    debugLogExecution(
+      '[ExecutionEngine] Output node receiving input:',
+      input,
+      'from',
+      inputs.length,
+      'sources'
+    );
+
     // Set the input on the node for display
     node.setInput(input);
-    
+
     return input;
   }
 
@@ -374,10 +433,12 @@ export class Epic1ExecutionEngine {
    */
   private getNodeInputs(nodeId: string): any[] {
     const inputs: any[] = [];
-    
+
     // Find edges targeting this node
-    const incomingEdges = this.graph.edges.filter(edge => edge.target === nodeId);
-    
+    const incomingEdges = this.graph.edges.filter(
+      edge => edge.target === nodeId
+    );
+
     // Sort by targetHandle to maintain order (if handles are like 'input0', 'input1', etc.)
     incomingEdges.sort((a, b) => {
       const handleA = a.targetHandle || '0';
@@ -388,7 +449,7 @@ export class Epic1ExecutionEngine {
     // Collect outputs from source nodes
     for (const edge of incomingEdges) {
       const sourceResult = this.results.get(edge.source);
-      
+
       if (sourceResult && !sourceResult.error) {
         inputs.push(sourceResult.output);
       }
@@ -420,7 +481,7 @@ export class Epic1ExecutionEngine {
     // DFS for topological sort
     const visit = (nodeId: string) => {
       if (visited.has(nodeId)) return;
-      
+
       if (visiting.has(nodeId)) {
         throw new Error('Cycle detected in graph');
       }

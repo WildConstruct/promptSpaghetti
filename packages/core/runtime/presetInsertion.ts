@@ -3,13 +3,13 @@
  * Handles importing PSGLib presets into the graph editor
  */
 
-import { 
-  parsePSGLib, 
-  regenerateNodeIds, 
+import {
+  parsePSGLib,
+  regenerateNodeIds,
   trackPresetUsage,
   type PSGLibFile,
   type PSGLibNode,
-  type PSGLibEdge 
+  type PSGLibEdge
 } from '../fileFormats/psglib';
 
 export interface InsertionOptions {
@@ -49,19 +49,19 @@ export async function insertPreset(
   try {
     // Parse PSGLib file
     const psglib = parsePSGLib(psglibContent);
-    
+
     // Track usage for analytics
     trackPresetUsage(psglib, 'import');
-    
+
     // Regenerate IDs to avoid conflicts
     const { nodes, edges } = regenerateNodeIds(
       psglib.graph.nodes,
       psglib.graph.edges
     );
-    
+
     // Calculate bounds of the preset
     const bounds = calculateBounds(nodes);
-    
+
     // Position nodes
     const positionedNodes = positionNodes(
       nodes,
@@ -71,14 +71,14 @@ export async function insertPreset(
       snapToGrid,
       gridSize
     );
-    
+
     // Mark nodes as selected if requested
     if (selectAfterInsert) {
       positionedNodes.forEach(node => {
         (node as any).selected = true;
       });
     }
-    
+
     return {
       nodes: positionedNodes,
       edges,
@@ -130,7 +130,7 @@ export async function loadPresetFromPath(
     if (!response.ok) {
       throw new Error(`Failed to load preset: ${response.statusText}`);
     }
-    
+
     const content = await response.text();
     return insertPreset(content, options);
   } catch (error) {
@@ -150,7 +150,7 @@ export function validatePreset(psglibContent: string): {
 } {
   try {
     const psglib = parsePSGLib(psglibContent);
-    
+
     // Check for empty preset
     if (psglib.graph.nodes.length === 0) {
       return {
@@ -158,7 +158,7 @@ export function validatePreset(psglibContent: string): {
         error: 'Preset contains no nodes'
       };
     }
-    
+
     // Check for orphaned edges
     const nodeIds = new Set(psglib.graph.nodes.map(n => n.id));
     for (const edge of psglib.graph.edges) {
@@ -169,7 +169,7 @@ export function validatePreset(psglibContent: string): {
         };
       }
     }
-    
+
     return {
       valid: true,
       nodeCount: psglib.graph.nodes.length,
@@ -260,14 +260,7 @@ export function createGhostNodes(
   position: { x: number; y: number }
 ): PSGLibNode[] {
   const bounds = calculateBounds(nodes);
-  const positioned = positionNodes(
-    nodes,
-    bounds,
-    position,
-    false,
-    true,
-    20
-  );
+  const positioned = positionNodes(nodes, bounds, position, false, true, 20);
 
   // Add ghost styling
   return positioned.map(node => ({
@@ -291,7 +284,7 @@ export function checkDuplicatePresetId(
   conflictingPreset?: { id: string; name: string };
 } {
   const conflict = existingPresets.find(p => p.id === presetId);
-  
+
   return {
     isDuplicate: !!conflict,
     conflictingPreset: conflict
@@ -306,12 +299,15 @@ export function createImportAnimation(
   duration = 500
 ): void {
   // Flash animation
-  nodeElement.animate([
-    { boxShadow: '0 0 0 0 rgba(46, 164, 79, 0.8)' },
-    { boxShadow: '0 0 20px 10px rgba(46, 164, 79, 0.4)' },
-    { boxShadow: '0 0 0 0 rgba(46, 164, 79, 0)' }
-  ], {
-    duration,
-    easing: 'ease-out'
-  });
+  nodeElement.animate(
+    [
+      { boxShadow: '0 0 0 0 rgba(46, 164, 79, 0.8)' },
+      { boxShadow: '0 0 20px 10px rgba(46, 164, 79, 0.4)' },
+      { boxShadow: '0 0 0 0 rgba(46, 164, 79, 0)' }
+    ],
+    {
+      duration,
+      easing: 'ease-out'
+    }
+  );
 }

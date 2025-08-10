@@ -25,13 +25,13 @@ export function AuthModal({
   const [activeTab, setActiveTab] = useState<AuthTab>(initialTab);
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
-  
+
   // Focus management
   useEffect(() => {
     if (isOpen) {
       // Store current focus
       previousFocusRef.current = document.activeElement as HTMLElement;
-      
+
       // Focus modal
       setTimeout(() => {
         modalRef.current?.focus();
@@ -41,24 +41,26 @@ export function AuthModal({
       previousFocusRef.current?.focus();
     }
   }, [isOpen]);
-  
+
   // Trap focus within modal
   useEffect(() => {
     if (!isOpen) return;
-    
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
         return;
       }
-      
+
       if (e.key === 'Tab' && modalRef.current) {
         const focusableElements = modalRef.current.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
         const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-        
+        const lastElement = focusableElements[
+          focusableElements.length - 1
+        ] as HTMLElement;
+
         if (e.shiftKey && document.activeElement === firstElement) {
           e.preventDefault();
           lastElement?.focus();
@@ -68,36 +70,36 @@ export function AuthModal({
         }
       }
     };
-    
+
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
-  
+
   if (!isOpen) return null;
-  
+
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
-  
+
   const handleTabChange = (tab: AuthTab) => {
     setActiveTab(tab);
   };
-  
+
   const handleAuthSuccess = (user: any) => {
     onSuccess?.(user);
     onClose();
   };
-  
+
   const handleForgotPassword = () => {
     setActiveTab('reset');
   };
-  
+
   const handleBackToLogin = () => {
     setActiveTab('login');
   };
-  
+
   return (
     <div
       style={{
@@ -131,7 +133,7 @@ export function AuthModal({
           boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',
           animation: 'slideUp 0.3s ease'
         }}
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div
@@ -176,10 +178,10 @@ export function AuthModal({
                 borderRadius: '4px',
                 transition: 'background-color 0.2s'
               }}
-              onMouseEnter={(e) => {
+              onMouseEnter={e => {
                 e.currentTarget.style.backgroundColor = '#f8f9fa';
               }}
-              onMouseLeave={(e) => {
+              onMouseLeave={e => {
                 e.currentTarget.style.backgroundColor = 'transparent';
               }}
               aria-label="Close modal"
@@ -187,7 +189,7 @@ export function AuthModal({
               ×
             </button>
           </div>
-          
+
           {/* Tab Navigation */}
           {activeTab !== 'reset' && (
             <div
@@ -241,7 +243,7 @@ export function AuthModal({
             </div>
           )}
         </div>
-        
+
         {/* Content */}
         <div style={{ padding: '24px' }}>
           {activeTab === 'login' && (
@@ -252,22 +254,18 @@ export function AuthModal({
               />
             </div>
           )}
-          
+
           {activeTab === 'signup' && (
             <div id="signup-panel" role="tabpanel">
-              <SignupForm
-                onSuccess={handleAuthSuccess}
-              />
+              <SignupForm onSuccess={handleAuthSuccess} />
             </div>
           )}
-          
+
           {activeTab === 'reset' && (
-            <PasswordReset
-              onBack={handleBackToLogin}
-            />
+            <PasswordReset onBack={handleBackToLogin} />
           )}
         </div>
-        
+
         {/* Footer */}
         <div
           style={{
@@ -337,7 +335,7 @@ export function AuthModal({
           )}
         </div>
       </div>
-      
+
       {/* CSS Animations */}
       <style>{`
         @keyframes fadeIn {
