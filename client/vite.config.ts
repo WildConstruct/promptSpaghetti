@@ -52,7 +52,11 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@promptscape/core': path.resolve(__dirname, '../packages/core')
+      '@promptscape/core': path.resolve(__dirname, '../packages/core'),
+      '@prompt/asset-browser': path.resolve(
+        __dirname,
+        '../packages/asset-browser'
+      )
     },
     dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow']
   },

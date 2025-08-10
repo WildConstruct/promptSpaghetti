@@ -53,12 +53,15 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         try {
           // Use dynamic string to prevent static analysis
           const moduleName = '@prompt' + '/asset-browser';
+          console.log('[TabbedSidePanel] Attempting to load asset browser from:', moduleName);
           const module = await import(/* @vite-ignore */ moduleName);
+          console.log('[TabbedSidePanel] Asset browser module loaded:', module);
           TabbedAssetBrowser = module.TabbedAssetBrowser;
           UserProvider = module.UserProvider;
           setComponentsLoaded(true);
+          console.log('[TabbedSidePanel] Asset browser components loaded successfully');
         } catch (error) {
-          console.warn('Asset browser not available, using fallback');
+          console.error('[TabbedSidePanel] Failed to load asset browser:', error);
           setLoadError('Using local asset library');
           setComponentsLoaded(false);
         }
@@ -119,27 +122,41 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         {activeTab === 'assets' && (
           <div className="assets-container">
             <AssetLibraryErrorBoundary>
-              {componentsLoaded && TabbedAssetBrowser && UserProvider ? (
-                <UserProvider>
-                  <TabbedAssetBrowser 
-                    onInsert={(preset: any) => {
-                      // Convert the preset format if needed
-                      if (preset?.data) {
-                        onPresetSelect?.(preset);
-                        onPresetDrag?.(preset);
-                      }
-                    }}
-                  />
-                </UserProvider>
-              ) : (
-                // Always show the fallback AssetLibraryV2 if asset-browser is not available
-                <AssetLibraryV2Fallback 
-                  position="right"
-                  onPresetDrag={onPresetDrag}
-                  onPresetSelect={onPresetSelect}
-                  defaultExpanded={true}
-                />
-              )}
+              {(() => {
+                console.log('[TabbedSidePanel] Rendering assets tab:', {
+                  componentsLoaded,
+                  hasTabbedAssetBrowser: !!TabbedAssetBrowser,
+                  hasUserProvider: !!UserProvider,
+                  loadError
+                });
+                
+                if (componentsLoaded && TabbedAssetBrowser && UserProvider) {
+                  console.log('[TabbedSidePanel] Rendering new asset browser');
+                  return (
+                    <UserProvider>
+                      <TabbedAssetBrowser 
+                        onInsert={(preset: any) => {
+                          // Convert the preset format if needed
+                          if (preset?.data) {
+                            onPresetSelect?.(preset);
+                            onPresetDrag?.(preset);
+                          }
+                        }}
+                      />
+                    </UserProvider>
+                  );
+                } else {
+                  console.log('[TabbedSidePanel] Falling back to AssetLibraryV2');
+                  return (
+                    <AssetLibraryV2Fallback 
+                      position="right"
+                      onPresetDrag={onPresetDrag}
+                      onPresetSelect={onPresetSelect}
+                      defaultExpanded={true}
+                    />
+                  );
+                }
+              })()}
             </AssetLibraryErrorBoundary>
           </div>
         )}
