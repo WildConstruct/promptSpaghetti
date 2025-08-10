@@ -48,25 +48,36 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   useEffect(() => {
     // Only attempt to load in browser environment
     if (typeof window !== 'undefined') {
-      // Try to load the asset browser package
-      const loadAssetBrowser = async () => {
-        try {
-          // Use dynamic string to prevent static analysis
-          const moduleName = '@prompt' + '/asset-browser';
-          console.log('[TabbedSidePanel] Attempting to load asset browser from:', moduleName);
-          const module = await import(/* @vite-ignore */ moduleName);
-          console.log('[TabbedSidePanel] Asset browser module loaded:', module);
-          TabbedAssetBrowser = module.TabbedAssetBrowser;
-          UserProvider = module.UserProvider;
-          setComponentsLoaded(true);
-          console.log('[TabbedSidePanel] Asset browser components loaded successfully');
-        } catch (error) {
-          console.error('[TabbedSidePanel] Failed to load asset browser:', error);
-          setLoadError('Using local asset library');
-          setComponentsLoaded(false);
-        }
-      };
-      loadAssetBrowser();
+      // Skip trying to load asset browser in production for now
+      // The package needs to be properly bundled first
+      const isProduction = window.location.hostname.includes('netlify.app') || 
+                          window.location.hostname.includes('netlify.live') ||
+                          window.location.hostname !== 'localhost';
+      
+      if (isProduction) {
+        console.log('[TabbedSidePanel] Production environment detected, using fallback asset library');
+        setComponentsLoaded(false);
+        setLoadError('Using local asset library');
+      } else {
+        // Try to load the asset browser package in development
+        const loadAssetBrowser = async () => {
+          try {
+            const moduleName = '@prompt' + '/asset-browser';
+            console.log('[TabbedSidePanel] Attempting to load asset browser from:', moduleName);
+            const module = await import(/* @vite-ignore */ moduleName);
+            console.log('[TabbedSidePanel] Asset browser module loaded:', module);
+            TabbedAssetBrowser = module.TabbedAssetBrowser;
+            UserProvider = module.UserProvider;
+            setComponentsLoaded(true);
+            console.log('[TabbedSidePanel] Asset browser components loaded successfully');
+          } catch (error) {
+            console.error('[TabbedSidePanel] Failed to load asset browser:', error);
+            setLoadError('Using local asset library');
+            setComponentsLoaded(false);
+          }
+        };
+        loadAssetBrowser();
+      }
     }
   }, []);
 
