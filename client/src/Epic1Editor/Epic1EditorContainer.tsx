@@ -48,7 +48,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   const [MenuBarComponent, setMenuBarComponent] =
     useState<React.ComponentType<ProfessionalMenuBarProps> | null>(null);
   const [loadError, setLoadError] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isComponentsLoading, setIsComponentsLoading] = useState(true);
   const [assetLibraryVisible, setAssetLibraryVisible] =
     useState(showAssetLibrary);
 
@@ -474,7 +474,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         }
       } finally {
         if (mounted) {
-          setIsLoading(false);
+          setIsComponentsLoading(false);
         }
       }
     };
@@ -490,7 +490,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     return <div className="error-message">Error: {loadError}</div>;
   }
 
-  if (isLoading || !EditorComponent) {
+  if (isComponentsLoading || !EditorComponent) {
     return <div className="loading-message">Loading...</div>;
   }
 
