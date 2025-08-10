@@ -24,6 +24,8 @@ export interface TabbedSidePanelProps {
   onPresetSelect?: (preset: Preset) => void;
   position?: 'left' | 'right';
   defaultTab?: 'preview' | 'assets' | null;
+  showAssets?: boolean;
+  showPreview?: boolean;
 }
 
 type TabType = 'preview' | 'assets' | null;
@@ -33,7 +35,9 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   onPresetDrag,
   onPresetSelect,
   position = 'right',
-  defaultTab = null
+  defaultTab = null,
+  showAssets = true,
+  showPreview = true
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>(defaultTab);
   const [hoveredTab, setHoveredTab] = useState<TabType>(null);
@@ -75,26 +79,30 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
     >
       {/* Tab buttons */}
       <div className="tab-buttons">
-        <button
-          className={`tab-button ${activeTab === 'preview' ? 'active' : ''} ${hoveredTab === 'preview' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('preview')}
-          onMouseEnter={() => setHoveredTab('preview')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Preview"
-        >
-          <span className="tab-icon">👁️</span>
-          <span className="tab-label">Preview</span>
-        </button>
-        <button
-          className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
-          onClick={() => handleTabClick('assets')}
-          onMouseEnter={() => setHoveredTab('assets')}
-          onMouseLeave={() => setHoveredTab(null)}
-          title="Asset Browser"
-        >
-          <span className="tab-icon">📚</span>
-          <span className="tab-label">Assets</span>
-        </button>
+        {showPreview && (
+          <button
+            className={`tab-button ${activeTab === 'preview' ? 'active' : ''} ${hoveredTab === 'preview' ? 'hovered' : ''}`}
+            onClick={() => handleTabClick('preview')}
+            onMouseEnter={() => setHoveredTab('preview')}
+            onMouseLeave={() => setHoveredTab(null)}
+            title="Preview"
+          >
+            <span className="tab-icon">👁️</span>
+            <span className="tab-label">Preview</span>
+          </button>
+        )}
+        {showAssets && (
+          <button
+            className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
+            onClick={() => handleTabClick('assets')}
+            onMouseEnter={() => setHoveredTab('assets')}
+            onMouseLeave={() => setHoveredTab(null)}
+            title="Asset Browser"
+          >
+            <span className="tab-icon">📚</span>
+            <span className="tab-label">Assets</span>
+          </button>
+        )}
       </div>
 
       {/* Panel content */}

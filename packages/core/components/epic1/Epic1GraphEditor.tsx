@@ -928,7 +928,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       <NodeToolbar position="top" />
       
       {/* Tabbed Side Panel - combines Preview and Asset Browser */}
-      <TabbedSidePanel
+      {(showPreview || showAssetLibrary) && (
+        <TabbedSidePanel
           previewEngine={previewEngineRef.current}
           onPresetDrag={(preset) => {
             // TODO: Implement preset application to nodes
@@ -937,8 +938,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             // TODO: Implement preset selection
           }}
           position="right"
-          defaultTab={isPreviewVisible ? 'preview' : null}
+          defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}
+          showAssets={showAssetLibrary}
+          showPreview={showPreview}
         />
+      )}
       
       {/* Context Menu */}
       <NodeContextMenu

@@ -6,7 +6,6 @@ import { useSupabaseFileOperations } from './hooks/useSupabaseFileOperations';
 import { useEditOperations } from './hooks/useEditOperations';
 import { SupabaseOpenDialog } from './components/SupabaseOpenDialog';
 import { SupabaseSaveDialog } from './components/SupabaseSaveDialog';
-import { AssetLibraryPanel } from './components/AssetLibraryPanel';
 import { testSupabaseConnection } from './hooks/testSupabase';
 import {
   calculateViewportDimensions,
@@ -563,22 +562,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           initialNodes={currentNodes}
           initialEdges={currentEdges}
           showPreview={showPreview}
-          showAssetLibrary={false}
+          showAssetLibrary={assetLibraryVisible}
           assetLibraryPosition={assetLibraryPosition}
           onNodesChange={handleNodesChange}
           onEdgesChange={handleEdgesChange}
         />
-
-        {assetLibraryVisible && (
-          <AssetLibraryPanel
-            position={assetLibraryPosition}
-            onClose={() => setAssetLibraryVisible(false)}
-            onNodesChange={handleNodesChange}
-            onEdgesChange={handleEdgesChange}
-            currentNodes={currentNodes}
-            currentEdges={currentEdges}
-          />
-        )}
       </div>
 
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
