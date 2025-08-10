@@ -477,6 +477,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           <AssetLibraryPanel
             position={assetLibraryPosition}
             onClose={() => setAssetLibraryVisible(false)}
+            onNodesChange={handleNodesChange}
+            onEdgesChange={handleEdgesChange}
+            currentNodes={currentNodes}
+            currentEdges={currentEdges}
           />
         )}
       </div>

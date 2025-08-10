@@ -1,0 +1,129 @@
+{
+  "fileType": "psglib",
+  "formatVersion": "1.0.0",
+  "metadata": {
+    "id": "preset-story-hook-1736536801000",
+    "name": "Story Hook Generator",
+    "description": "Creates compelling opening lines and story hooks with variety",
+    "author": "PromptScape Team",
+    "version": "1.0.0",
+    "tags": ["story", "writing", "hooks", "narrative"],
+    "nodeTypes": ["WeightedChoice", "Output"],
+    "lastModified": "2025-01-10T20:00:01.000Z",
+    "license": "MIT",
+    "usageStats": {
+      "timesUsed": 0,
+      "lastUsed": null,
+      "popularity": 0
+    }
+  },
+  "graph": {
+    "nodes": [
+      {
+        "id": "hook-type-1736536801000",
+        "type": "WeightedChoice",
+        "position": { "x": 100, "y": 150 },
+        "data": {
+          "choices": [
+            { "text": "The day the {subject} disappeared, nobody noticed except {observer}.", "weight": 2 },
+            { "text": "They say {place} was cursed, but I didn't believe it until {event}.", "weight": 2 },
+            { "text": "I never thought I'd {action}, but when {trigger}, everything changed.", "weight": 2 },
+            { "text": "The {object} had been in my family for generations, until the night it {reaction}.", "weight": 1 },
+            { "text": "Everyone knew the rules: never {forbidden}. So naturally, that's exactly what {character} did.", "weight": 2 },
+            { "text": "The letter arrived {timeframe}, addressed to someone who'd been dead for {duration}.", "weight": 1 },
+            { "text": "If you had told me {timeago} that I'd be {situation}, I would have laughed.", "weight": 2 },
+            { "text": "The {discovery} changed everything we thought we knew about {topic}.", "weight": 1 },
+            { "text": "It started with a {sign}, so small that most people ignored it.", "weight": 2 },
+            { "text": "The last {person} in {location} knew a secret that could {consequence}.", "weight": 1 }
+          ]
+        },
+        "label": "Hook Template"
+      },
+      {
+        "id": "subject-1736536801001",
+        "type": "WeightedChoice",
+        "position": { "x": 350, "y": 50 },
+        "data": {
+          "choices": [
+            { "text": "stars", "weight": 1 },
+            { "text": "children", "weight": 1 },
+            { "text": "king", "weight": 1 },
+            { "text": "prophecy", "weight": 1 },
+            { "text": "library", "weight": 1 }
+          ]
+        },
+        "label": "Subject"
+      },
+      {
+        "id": "observer-1736536801002",
+        "type": "WeightedChoice",
+        "position": { "x": 350, "y": 150 },
+        "data": {
+          "choices": [
+            { "text": "the old lighthouse keeper", "weight": 1 },
+            { "text": "a stray cat", "weight": 1 },
+            { "text": "the town drunk", "weight": 1 },
+            { "text": "my grandmother", "weight": 1 },
+            { "text": "the youngest apprentice", "weight": 1 }
+          ]
+        },
+        "label": "Observer"
+      },
+      {
+        "id": "place-1736536801003",
+        "type": "WeightedChoice",
+        "position": { "x": 350, "y": 250 },
+        "data": {
+          "choices": [
+            { "text": "the old mill", "weight": 1 },
+            { "text": "Blackwater Manor", "weight": 1 },
+            { "text": "the crossroads", "weight": 1 },
+            { "text": "the forgotten temple", "weight": 1 },
+            { "text": "room 13", "weight": 1 }
+          ]
+        },
+        "label": "Place"
+      },
+      {
+        "id": "output-1736536801000",
+        "type": "Output",
+        "position": { "x": 600, "y": 150 },
+        "data": {
+          "template": "{hook}"
+        },
+        "label": "Story Hook"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge-hook-1736536801000",
+        "source": "hook-type-1736536801000",
+        "target": "output-1736536801000",
+        "sourceHandle": "output",
+        "targetHandle": "hook"
+      },
+      {
+        "id": "edge-subject-1736536801000",
+        "source": "subject-1736536801001",
+        "target": "hook-type-1736536801000",
+        "sourceHandle": "output",
+        "targetHandle": "subject"
+      },
+      {
+        "id": "edge-observer-1736536801000",
+        "source": "observer-1736536801002",
+        "target": "hook-type-1736536801000",
+        "sourceHandle": "output",
+        "targetHandle": "observer"
+      },
+      {
+        "id": "edge-place-1736536801000",
+        "source": "place-1736536801003",
+        "target": "hook-type-1736536801000",
+        "sourceHandle": "output",
+        "targetHandle": "place"
+      }
+    ],
+    "settings": {}
+  }
+}
