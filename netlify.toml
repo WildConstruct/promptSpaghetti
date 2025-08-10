@@ -24,7 +24,9 @@
   # Cache bust to force fresh build
   NETLIFY_CACHE_BUST = "v5-template-editor-fix"
   # Disable secrets scanning for .env.example and other false positives
-  SECRETS_SCAN_OMIT_PATHS = ".env.example,docs/**,packages/*/dist/**"
+  SECRETS_SCAN_OMIT_PATHS = ".env.example,docs/**,packages/*/dist/**,client/dist/**"
+  # Omit Supabase URL from secrets scanning (it's a public URL, not a secret)
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_URL"
 
 [build.processing]
   skip_processing = false

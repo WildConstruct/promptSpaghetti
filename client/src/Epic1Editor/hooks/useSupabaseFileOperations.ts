@@ -4,6 +4,9 @@ import { useToast } from '../../Toast';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
+// Note: supabaseUrl and supabaseAnonKey are intentionally public.
+// Security is handled through Row Level Security (RLS) policies in Supabase.
+// See: https://supabase.com/docs/guides/auth/row-level-security
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase =
