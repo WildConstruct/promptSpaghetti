@@ -14,7 +14,7 @@ interface AssetLibraryPanelProps {
   currentEdges?: Edge[];
 }
 
-export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({ 
+export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
   onClose,
   position = 'right',
   onNodesChange,
@@ -26,57 +26,68 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
   const [loadError, setLoadError] = useState<string>('');
 
   useEffect(() => {
-    // Dynamically import the asset browser components
-    import('@prompt/asset-browser')
-      .then((module) => {
-        TabbedAssetBrowser = module.TabbedAssetBrowser;
-        UserProvider = module.UserProvider;
-        setComponentsLoaded(true);
-      })
-      .catch((error) => {
-        console.warn('Failed to load asset browser:', error);
-        setLoadError('Asset browser module not available');
-      });
+    // Only attempt to load in browser environment
+    if (typeof window !== 'undefined') {
+      // Try to load the asset browser package
+      const loadAssetBrowser = async () => {
+        try {
+          // Use dynamic string to prevent static analysis
+          const moduleName = '@prompt' + '/asset-browser';
+          const module = await import(/* @vite-ignore */ moduleName);
+          TabbedAssetBrowser = module.TabbedAssetBrowser;
+          UserProvider = module.UserProvider;
+          setComponentsLoaded(true);
+        } catch (error) {
+          console.warn('Asset browser not available, using placeholder');
+          setLoadError('Asset browser module not available');
+        }
+      };
+      loadAssetBrowser();
+    }
   }, []);
 
-  const handleInsertPreset = useCallback((preset: any) => {
-    if (!onNodesChange || !onEdgesChange) return;
-    
-    // Convert preset to nodes and insert into graph
-    if (preset?.data && preset.data.nodes) {
-      // Generate unique IDs for the new nodes
-      const timestamp = Date.now();
-      const idMap = new Map<string, string>();
-      
-      const newNodes = preset.data.nodes.map((node: any, index: number) => {
-        const newId = `${node.id}_${timestamp}_${index}`;
-        idMap.set(node.id, newId);
-        
-        return {
-          ...node,
-          id: newId,
-          position: {
-            x: 300 + (index * 150),
-            y: 200 + (index * 80)
-          }
-        };
-      });
+  const handleInsertPreset = useCallback(
+    (preset: any) => {
+      if (!onNodesChange || !onEdgesChange) return;
 
-      const newEdges = preset.data.edges?.map((edge: any, idx: number) => ({
-        ...edge,
-        id: `${edge.id}_${timestamp}_${idx}`,
-        source: idMap.get(edge.source) || edge.source,
-        target: idMap.get(edge.target) || edge.target
-      })) || [];
+      // Convert preset to nodes and insert into graph
+      if (preset?.data && preset.data.nodes) {
+        // Generate unique IDs for the new nodes
+        const timestamp = Date.now();
+        const idMap = new Map<string, string>();
 
-      // Add to existing graph
-      onNodesChange([...currentNodes, ...newNodes]);
-      onEdgesChange([...currentEdges, ...newEdges]);
-    }
-  }, [currentNodes, currentEdges, onNodesChange, onEdgesChange]);
+        const newNodes = preset.data.nodes.map((node: any, index: number) => {
+          const newId = `${node.id}_${timestamp}_${index}`;
+          idMap.set(node.id, newId);
+
+          return {
+            ...node,
+            id: newId,
+            position: {
+              x: 300 + index * 150,
+              y: 200 + index * 80
+            }
+          };
+        });
+
+        const newEdges =
+          preset.data.edges?.map((edge: any, idx: number) => ({
+            ...edge,
+            id: `${edge.id}_${timestamp}_${idx}`,
+            source: idMap.get(edge.source) || edge.source,
+            target: idMap.get(edge.target) || edge.target
+          })) || [];
+
+        // Add to existing graph
+        onNodesChange([...currentNodes, ...newNodes]);
+        onEdgesChange([...currentEdges, ...newEdges]);
+      }
+    },
+    [currentNodes, currentEdges, onNodesChange, onEdgesChange]
+  );
 
   return (
-    <div 
+    <div
       className={`asset-library-panel ${position}`}
       style={{
         position: 'absolute',
@@ -85,15 +96,21 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
         bottom: 0,
         width: '320px',
         background: 'var(--bg-primary, #1a1a1a)',
-        borderLeft: position === 'right' ? '1px solid var(--border-color, #333)' : undefined,
-        borderRight: position === 'left' ? '1px solid var(--border-color, #333)' : undefined,
+        borderLeft:
+          position === 'right'
+            ? '1px solid var(--border-color, #333)'
+            : undefined,
+        borderRight:
+          position === 'left'
+            ? '1px solid var(--border-color, #333)'
+            : undefined,
         display: 'flex',
         flexDirection: 'column',
         zIndex: 10
       }}
     >
       {/* Header */}
-      <div 
+      <div
         style={{
           padding: '12px 16px',
           borderBottom: '1px solid var(--border-color, #333)',
@@ -130,43 +147,57 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
             <TabbedAssetBrowser onInsert={handleInsertPreset} />
           </UserProvider>
         ) : loadError ? (
-          <div style={{ 
-            padding: '16px', 
-            color: 'var(--text-secondary, #999)',
-            textAlign: 'center'
-          }}>
+          <div
+            style={{
+              padding: '16px',
+              color: 'var(--text-secondary, #999)',
+              textAlign: 'center'
+            }}
+          >
             <p style={{ fontSize: '12px' }}>{loadError}</p>
           </div>
         ) : (
           // Placeholder while loading
-          <div style={{ 
-            flex: 1, 
-            overflow: 'auto',
-            padding: '16px',
-            color: 'var(--text-secondary, #999)'
-          }}>
-            <div style={{
-              textAlign: 'center',
-              marginTop: '32px'
-            }}>
-              <p style={{ marginBottom: '16px' }}>🎨 Loading Asset Library...</p>
+          <div
+            style={{
+              flex: 1,
+              overflow: 'auto',
+              padding: '16px',
+              color: 'var(--text-secondary, #999)'
+            }}
+          >
+            <div
+              style={{
+                textAlign: 'center',
+                marginTop: '32px'
+              }}
+            >
+              <p style={{ marginBottom: '16px' }}>
+                🎨 Loading Asset Library...
+              </p>
               <p style={{ fontSize: '12px', opacity: 0.7 }}>
                 Browse and insert presets, templates, and saved graphs.
               </p>
-              <div style={{
-                marginTop: '32px',
-                padding: '12px',
-                background: 'var(--bg-secondary, #2a2a2a)',
-                borderRadius: '4px'
-              }}>
-                <p style={{ fontSize: '11px', marginBottom: '8px' }}>Available Features:</p>
-                <ul style={{ 
-                  listStyle: 'none', 
-                  padding: 0, 
-                  margin: 0,
-                  fontSize: '11px',
-                  textAlign: 'left'
-                }}>
+              <div
+                style={{
+                  marginTop: '32px',
+                  padding: '12px',
+                  background: 'var(--bg-secondary, #2a2a2a)',
+                  borderRadius: '4px'
+                }}
+              >
+                <p style={{ fontSize: '11px', marginBottom: '8px' }}>
+                  Available Features:
+                </p>
+                <ul
+                  style={{
+                    listStyle: 'none',
+                    padding: 0,
+                    margin: 0,
+                    fontSize: '11px',
+                    textAlign: 'left'
+                  }}
+                >
                   <li>• Character name generators</li>
                   <li>• Story templates</li>
                   <li>• Dialogue patterns</li>

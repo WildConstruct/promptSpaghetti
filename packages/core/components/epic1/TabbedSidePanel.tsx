@@ -42,17 +42,25 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
 
   // Load the asset browser components dynamically
   useEffect(() => {
-    import('@prompt/asset-browser')
-      .then((module) => {
-        TabbedAssetBrowser = module.TabbedAssetBrowser;
-        UserProvider = module.UserProvider;
-        setComponentsLoaded(true);
-      })
-      .catch((error) => {
-        console.warn('Failed to load asset browser:', error);
-        setLoadError('Asset browser module not available');
-        // Fall back to AssetLibraryV2 if needed
-      });
+    // Only attempt to load in browser environment
+    if (typeof window !== 'undefined') {
+      // Try to load the asset browser package
+      const loadAssetBrowser = async () => {
+        try {
+          // Use dynamic string to prevent static analysis
+          const moduleName = '@prompt' + '/asset-browser';
+          const module = await import(/* @vite-ignore */ moduleName);
+          TabbedAssetBrowser = module.TabbedAssetBrowser;
+          UserProvider = module.UserProvider;
+          setComponentsLoaded(true);
+        } catch (error) {
+          console.warn('Asset browser not available, using fallback');
+          setLoadError('Using local asset library');
+          setComponentsLoaded(false);
+        }
+      };
+      loadAssetBrowser();
+    }
   }, []);
 
   const handleTabClick = useCallback((tab: TabType) => {
@@ -115,19 +123,14 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
                     }}
                   />
                 </UserProvider>
-              ) : loadError ? (
-                <div style={{ padding: '16px', color: '#999' }}>
-                  {loadError}
-                  {/* Fall back to local AssetLibraryV2 */}
-                  <AssetLibraryV2Fallback 
-                    onPresetDrag={onPresetDrag}
-                    onPresetSelect={onPresetSelect}
-                  />
-                </div>
               ) : (
-                <div style={{ padding: '16px', textAlign: 'center' }}>
-                  Loading asset browser...
-                </div>
+                // Always show the fallback AssetLibraryV2 if asset-browser is not available
+                <AssetLibraryV2Fallback 
+                  position="right"
+                  onPresetDrag={onPresetDrag}
+                  onPresetSelect={onPresetSelect}
+                  defaultExpanded={true}
+                />
               )}
             </AssetLibraryErrorBoundary>
           </div>

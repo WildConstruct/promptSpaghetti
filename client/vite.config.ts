@@ -17,33 +17,50 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     commonjsOptions: {
-      include: [/zod/, /node_modules/],
+      include: [/zod/, /node_modules/]
     },
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           flow: ['reactflow'],
-          utils: ['zod', 'zustand'],
-        },
+          utils: ['zod', 'zustand']
+        }
       },
-    },
+      external: id => {
+        // Mark @prompt/asset-browser as external for dynamic imports
+        if (id === '@prompt/asset-browser') {
+          return false; // Actually, we want to bundle it if available
+        }
+        return false;
+      },
+      onwarn(warning, warn) {
+        // Suppress warnings about unresolved dynamic imports for asset-browser
+        if (
+          warning.code === 'UNRESOLVED_IMPORT' &&
+          warning.source === '@prompt/asset-browser'
+        ) {
+          return;
+        }
+        warn(warning);
+      }
+    }
   },
   server: {
     port: 3001,
-    strictPort: false,
+    strictPort: false
   },
   resolve: {
     alias: {
-      '@promptscape/core': path.resolve(__dirname, '../packages/core'),
+      '@promptscape/core': path.resolve(__dirname, '../packages/core')
     },
-    dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow'],
+    dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow']
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand', 'seedrandom'],
+    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand', 'seedrandom']
   },
   define: {
     // Ensure process.env is available for any Node.js checks
-    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
-  },
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+  }
 });
