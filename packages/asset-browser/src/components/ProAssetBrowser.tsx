@@ -320,9 +320,9 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
               >
                 <div className="preset-icon">📄</div>
                 <div className="preset-name">{preset.name}</div>
-                <div className="preset-category">{preset.category}</div>
-                <div className="preset-meta">{preset.complexity}</div>
-                <div className="preset-meta">{preset.nodes}</div>
+                <div className="preset-category">{preset.category || ''}</div>
+                <div className="preset-meta">{preset.complexity || ''}</div>
+                <div className="preset-meta">{preset.nodes || 0}</div>
                 <div className="preset-meta">
                   <button
                     className="toolbar-button"
@@ -361,8 +361,12 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                   <div className="preset-card-title">{preset.name}</div>
                 </div>
                 <div className="preset-card-meta">
-                  <span className="preset-card-tag">{preset.category}</span>
-                  <span className="preset-card-tag">{preset.nodes} nodes</span>
+                  <span className="preset-card-tag">
+                    {preset.category || 'Uncategorized'}
+                  </span>
+                  <span className="preset-card-tag">
+                    {preset.nodes || 0} nodes
+                  </span>
                 </div>
               </div>
             ))}
@@ -375,24 +379,27 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
         <div className="details-panel">
           <div className="details-header">
             <div className="details-title">
-              {filteredPresets.find(p => p.id === selectedPreset)?.name}
+              {filteredPresets.find(p => p.id === selectedPreset)?.name || ''}
             </div>
             <div className="details-subtitle">
-              {filteredPresets.find(p => p.id === selectedPreset)?.category}
+              {filteredPresets.find(p => p.id === selectedPreset)?.category ||
+                ''}
             </div>
           </div>
 
           <div className="details-section">
             <div className="details-label">Complexity</div>
             <div className="details-value">
-              {filteredPresets.find(p => p.id === selectedPreset)?.complexity}
+              {filteredPresets.find(p => p.id === selectedPreset)?.complexity ||
+                ''}
             </div>
           </div>
 
           <div className="details-section">
             <div className="details-label">Node Count</div>
             <div className="details-value">
-              {filteredPresets.find(p => p.id === selectedPreset)?.nodes} nodes
+              {filteredPresets.find(p => p.id === selectedPreset)?.nodes || 0}{' '}
+              nodes
             </div>
           </div>
 
@@ -401,7 +408,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
             <div className="details-value">
               {filteredPresets
                 .find(p => p.id === selectedPreset)
-                ?.tags.join(', ')}
+                ?.tags.join(', ') || ''}
             </div>
           </div>
 

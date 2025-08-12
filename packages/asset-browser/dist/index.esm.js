@@ -3587,15 +3587,103 @@ function Do({ libraryView: r }) {
   ] });
 }
 const Bt = [
-  { id: "1", name: "Medieval Castle", category: "Location", tags: ["demo", "medieval"], complexity: "medium", nodes: 12, type: "graph" },
-  { id: "2", name: "Forest Path", category: "Nature", tags: ["nature"], complexity: "simple", nodes: 8, type: "graph" },
-  { id: "3", name: "Character Dialogue", category: "Character", tags: ["dialogue"], complexity: "complex", nodes: 15, type: "graph" },
-  { id: "4", name: "Action Scene", category: "Action", tags: ["action", "combat"], complexity: "complex", nodes: 20, type: "graph" },
-  { id: "5", name: "Emotional Moment", category: "Emotion", tags: ["emotion", "character"], complexity: "medium", nodes: 10, type: "graph" },
-  { id: "6", name: "Mystery Setup", category: "Plot", tags: ["mystery", "plot"], complexity: "medium", nodes: 14, type: "graph" },
-  { id: "7", name: "Urban Setting", category: "Location", tags: ["urban", "modern"], complexity: "simple", nodes: 7, type: "graph" },
-  { id: "8", name: "Magic System", category: "Fantasy", tags: ["magic", "fantasy"], complexity: "complex", nodes: 18, type: "graph" }
-], Hn = ["All", "Location", "Character", "Nature", "Action", "Emotion", "Plot", "Fantasy"], Jn = ["demo", "medieval", "nature", "dialogue", "action", "combat", "emotion", "character", "mystery", "plot", "urban", "modern", "magic", "fantasy"];
+  {
+    id: "1",
+    name: "Medieval Castle",
+    category: "Location",
+    tags: ["demo", "medieval"],
+    complexity: "medium",
+    nodes: 12,
+    type: "graph"
+  },
+  {
+    id: "2",
+    name: "Forest Path",
+    category: "Nature",
+    tags: ["nature"],
+    complexity: "simple",
+    nodes: 8,
+    type: "graph"
+  },
+  {
+    id: "3",
+    name: "Character Dialogue",
+    category: "Character",
+    tags: ["dialogue"],
+    complexity: "complex",
+    nodes: 15,
+    type: "graph"
+  },
+  {
+    id: "4",
+    name: "Action Scene",
+    category: "Action",
+    tags: ["action", "combat"],
+    complexity: "complex",
+    nodes: 20,
+    type: "graph"
+  },
+  {
+    id: "5",
+    name: "Emotional Moment",
+    category: "Emotion",
+    tags: ["emotion", "character"],
+    complexity: "medium",
+    nodes: 10,
+    type: "graph"
+  },
+  {
+    id: "6",
+    name: "Mystery Setup",
+    category: "Plot",
+    tags: ["mystery", "plot"],
+    complexity: "medium",
+    nodes: 14,
+    type: "graph"
+  },
+  {
+    id: "7",
+    name: "Urban Setting",
+    category: "Location",
+    tags: ["urban", "modern"],
+    complexity: "simple",
+    nodes: 7,
+    type: "graph"
+  },
+  {
+    id: "8",
+    name: "Magic System",
+    category: "Fantasy",
+    tags: ["magic", "fantasy"],
+    complexity: "complex",
+    nodes: 18,
+    type: "graph"
+  }
+], Hn = [
+  "All",
+  "Location",
+  "Character",
+  "Nature",
+  "Action",
+  "Emotion",
+  "Plot",
+  "Fantasy"
+], Jn = [
+  "demo",
+  "medieval",
+  "nature",
+  "dialogue",
+  "action",
+  "combat",
+  "emotion",
+  "character",
+  "mystery",
+  "plot",
+  "urban",
+  "modern",
+  "magic",
+  "fantasy"
+];
 function Yn({ onInsert: r }) {
   var v, E, F, M, T;
   const [e, t] = Q("list"), [s, n] = Q("All"), [i, a] = Q([]), [o, l] = Q(""), [c, d] = Q(null), [h, f] = Q("name"), [g, p] = Q("asc"), b = ms(() => {
@@ -3757,9 +3845,9 @@ function Yn({ onInsert: r }) {
             children: [
               /* @__PURE__ */ u.jsx("div", { className: "preset-icon", children: "📄" }),
               /* @__PURE__ */ u.jsx("div", { className: "preset-name", children: _.name }),
-              /* @__PURE__ */ u.jsx("div", { className: "preset-category", children: _.category }),
-              /* @__PURE__ */ u.jsx("div", { className: "preset-meta", children: _.complexity }),
-              /* @__PURE__ */ u.jsx("div", { className: "preset-meta", children: _.nodes }),
+              /* @__PURE__ */ u.jsx("div", { className: "preset-category", children: _.category || "" }),
+              /* @__PURE__ */ u.jsx("div", { className: "preset-meta", children: _.complexity || "" }),
+              /* @__PURE__ */ u.jsx("div", { className: "preset-meta", children: _.nodes || 0 }),
               /* @__PURE__ */ u.jsx("div", { className: "preset-meta", children: /* @__PURE__ */ u.jsx(
                 "button",
                 {
@@ -3797,9 +3885,9 @@ function Yn({ onInsert: r }) {
               /* @__PURE__ */ u.jsx("div", { className: "preset-card-title", children: _.name })
             ] }),
             /* @__PURE__ */ u.jsxs("div", { className: "preset-card-meta", children: [
-              /* @__PURE__ */ u.jsx("span", { className: "preset-card-tag", children: _.category }),
+              /* @__PURE__ */ u.jsx("span", { className: "preset-card-tag", children: _.category || "Uncategorized" }),
               /* @__PURE__ */ u.jsxs("span", { className: "preset-card-tag", children: [
-                _.nodes,
+                _.nodes || 0,
                 " nodes"
               ] })
             ] })
@@ -3810,23 +3898,23 @@ function Yn({ onInsert: r }) {
     ] }),
     c && /* @__PURE__ */ u.jsxs("div", { className: "details-panel", children: [
       /* @__PURE__ */ u.jsxs("div", { className: "details-header", children: [
-        /* @__PURE__ */ u.jsx("div", { className: "details-title", children: (v = b.find((_) => _.id === c)) == null ? void 0 : v.name }),
-        /* @__PURE__ */ u.jsx("div", { className: "details-subtitle", children: (E = b.find((_) => _.id === c)) == null ? void 0 : E.category })
+        /* @__PURE__ */ u.jsx("div", { className: "details-title", children: ((v = b.find((_) => _.id === c)) == null ? void 0 : v.name) || "" }),
+        /* @__PURE__ */ u.jsx("div", { className: "details-subtitle", children: ((E = b.find((_) => _.id === c)) == null ? void 0 : E.category) || "" })
       ] }),
       /* @__PURE__ */ u.jsxs("div", { className: "details-section", children: [
         /* @__PURE__ */ u.jsx("div", { className: "details-label", children: "Complexity" }),
-        /* @__PURE__ */ u.jsx("div", { className: "details-value", children: (F = b.find((_) => _.id === c)) == null ? void 0 : F.complexity })
+        /* @__PURE__ */ u.jsx("div", { className: "details-value", children: ((F = b.find((_) => _.id === c)) == null ? void 0 : F.complexity) || "" })
       ] }),
       /* @__PURE__ */ u.jsxs("div", { className: "details-section", children: [
         /* @__PURE__ */ u.jsx("div", { className: "details-label", children: "Node Count" }),
         /* @__PURE__ */ u.jsxs("div", { className: "details-value", children: [
-          (M = b.find((_) => _.id === c)) == null ? void 0 : M.nodes,
+          ((M = b.find((_) => _.id === c)) == null ? void 0 : M.nodes) || 0,
           " nodes"
         ] })
       ] }),
       /* @__PURE__ */ u.jsxs("div", { className: "details-section", children: [
         /* @__PURE__ */ u.jsx("div", { className: "details-label", children: "Tags" }),
-        /* @__PURE__ */ u.jsx("div", { className: "details-value", children: (T = b.find((_) => _.id === c)) == null ? void 0 : T.tags.join(", ") })
+        /* @__PURE__ */ u.jsx("div", { className: "details-value", children: ((T = b.find((_) => _.id === c)) == null ? void 0 : T.tags.join(", ")) || "" })
       ] }),
       /* @__PURE__ */ u.jsxs("div", { className: "details-actions", children: [
         /* @__PURE__ */ u.jsx(
@@ -3834,7 +3922,9 @@ function Yn({ onInsert: r }) {
           {
             className: "action-btn primary",
             onClick: () => {
-              const _ = b.find((I) => I.id === c);
+              const _ = b.find(
+                (I) => I.id === c
+              );
               _ && A(_);
             },
             children: "Insert"
