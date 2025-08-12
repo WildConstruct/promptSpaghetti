@@ -110,9 +110,6 @@ const allTags = [
 ];
 
 export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
-  // Add debug logging
-  console.log('[ProAssetBrowser] Rendering with props:', { onInsert });
-
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
