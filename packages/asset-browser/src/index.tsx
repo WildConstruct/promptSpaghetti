@@ -1,4 +1,4 @@
-// Remove React import from index since we're just re-exporting components
+// Re-export components
 import { AssetBrowser } from './components/AssetBrowser';
 import { AssetBrowserTabs } from './components/AssetBrowserTabs';
 import { ServerTab } from './components/ServerTab';
@@ -24,5 +24,6 @@ export {
   useUserId
 };
 
-// Export the component directly instead of wrapping it
-export { TabbedAssetBrowser as default } from './components/TabbedAssetBrowser';
+// Export TabbedAssetBrowser as the default
+const DefaultExport = TabbedAssetBrowser;
+export default DefaultExport;

@@ -1,15 +1,18 @@
-import React from 'react';
+// import React from 'react';
 import type { Preset } from '../types';
 
 interface ProAssetBrowserSimpleProps {
   onInsert?: (preset: Preset) => void;
 }
 
-export function ProAssetBrowserSimple({
-  onInsert
-}: ProAssetBrowserSimpleProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function ProAssetBrowserSimple(_props: ProAssetBrowserSimpleProps) {
   console.log('[ProAssetBrowserSimple] Rendering');
 
+  // Temporarily return null to isolate the issue
+  return null;
+
+  /*
   return (
     <div
       style={{
@@ -43,4 +46,5 @@ export function ProAssetBrowserSimple({
       </button>
     </div>
   );
+  */
 }
