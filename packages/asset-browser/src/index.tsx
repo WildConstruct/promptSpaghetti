@@ -1,4 +1,4 @@
-import React from 'react';
+// Remove React import from index since we're just re-exporting components
 import { AssetBrowser } from './components/AssetBrowser';
 import { AssetBrowserTabs } from './components/AssetBrowserTabs';
 import { ServerTab } from './components/ServerTab';
@@ -13,8 +13,16 @@ export type AssetBrowserProps = {
   onInsert?: (preset: Preset) => void;
 };
 
-export { AssetBrowser, AssetBrowserTabs, ServerTab, TabbedAssetBrowser, OpenGraphDialog, SaveGraphDialog, UserProvider, useUserId };
+export {
+  AssetBrowser,
+  AssetBrowserTabs,
+  ServerTab,
+  TabbedAssetBrowser,
+  OpenGraphDialog,
+  SaveGraphDialog,
+  UserProvider,
+  useUserId
+};
 
-export default function EmbeddedAssetBrowser(props: AssetBrowserProps) {
-  return <TabbedAssetBrowser {...props} />;
-}
+// Export the component directly instead of wrapping it
+export { TabbedAssetBrowser as default } from './components/TabbedAssetBrowser';

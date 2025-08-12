@@ -3452,7 +3452,7 @@ function Vn({ children: r }) {
     return window.addEventListener("keydown", o), () => window.removeEventListener("keydown", o);
   }, [n, s]), /* @__PURE__ */ h.jsx("div", { ref: e, children: /* @__PURE__ */ h.jsx(zn.Provider, { value: { toggleOpen: i, isWithinBounds: a }, children: r }) });
 }
-function Io({ onInsert: r }) {
+function $o({ onInsert: r }) {
   const e = B((s) => s.selectedPresetId), t = B((s) => s.detailsOpen);
   return /* @__PURE__ */ h.jsx(Vn, { children: /* @__PURE__ */ h.jsxs("div", { className: "asset-browser", style: { display: "grid", gridTemplateColumns: "280px 1fr" }, children: [
     /* @__PURE__ */ h.jsx(Nn, {}),
@@ -3557,7 +3557,7 @@ function Gn() {
     ] }, u.filename)) })
   ] });
 }
-function No({ libraryView: r }) {
+function Io({ libraryView: r }) {
   const [e, t] = N.useState("library");
   return /* @__PURE__ */ h.jsxs("section", { "aria-label": "Asset Browser Tabs", children: [
     /* @__PURE__ */ h.jsxs("nav", { "aria-label": "Asset Views", style: { display: "flex", gap: 8, borderBottom: "1px solid #ddd", padding: 8 }, children: [
@@ -3586,37 +3586,47 @@ function No({ libraryView: r }) {
     ] })
   ] });
 }
-function Kn({ onInsert: r }) {
-  return console.log("[ProAssetBrowserSimple] Rendering"), /* @__PURE__ */ h.jsxs("div", { style: { padding: "20px", background: "#1a1a1a", color: "white", height: "100%" }, children: [
-    /* @__PURE__ */ h.jsx("h3", { children: "Asset Browser (Simple Test)" }),
-    /* @__PURE__ */ h.jsx("p", { children: "This is a minimal test component to debug the React error." }),
-    /* @__PURE__ */ h.jsx(
-      "button",
-      {
-        onClick: () => {
-          console.log("[ProAssetBrowserSimple] Insert clicked"), r == null || r({
-            id: "test",
-            name: "Test Preset",
-            tags: ["test"]
-          });
-        },
-        style: {
-          padding: "8px 16px",
-          background: "#4a4a4a",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer"
-        },
-        children: "Test Insert"
-      }
-    )
-  ] });
+function Kn({
+  onInsert: r
+}) {
+  return console.log("[ProAssetBrowserSimple] Rendering"), /* @__PURE__ */ h.jsxs(
+    "div",
+    {
+      style: {
+        padding: "20px",
+        background: "#1a1a1a",
+        color: "white",
+        height: "100%"
+      },
+      children: [
+        /* @__PURE__ */ h.jsx("h3", { children: "Asset Browser (Simple Test)" }),
+        /* @__PURE__ */ h.jsx("p", { children: "This is a minimal test component to debug the React error." }),
+        /* @__PURE__ */ h.jsx(
+          "button",
+          {
+            onClick: () => {
+              console.log("[ProAssetBrowserSimple] Insert clicked"), r == null || r({
+                id: "test",
+                name: "Test Preset",
+                tags: ["test"]
+              });
+            },
+            style: {
+              padding: "8px 16px",
+              background: "#4a4a4a",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer"
+            },
+            children: "Test Insert"
+          }
+        )
+      ]
+    }
+  );
 }
-function Hn(r) {
-  return console.log("[TabbedAssetBrowser] Rendering with simple version"), /* @__PURE__ */ h.jsx(Kn, { ...r });
-}
-const Jn = (r) => {
+const No = (r) => (console.log("[TabbedAssetBrowser] Rendering with simple version"), /* @__PURE__ */ h.jsx(Kn, { ...r })), Hn = (r) => {
   let e;
   return r ? e = r : typeof fetch > "u" ? e = (...t) => Promise.resolve().then(() => Ke).then(({ default: s }) => s(...t)) : e = fetch, (...t) => e(...t);
 };
@@ -3625,7 +3635,7 @@ class ys extends Error {
     super(e), this.name = t, this.context = s;
   }
 }
-class Yn extends ys {
+class Jn extends ys {
   constructor(e) {
     super("Failed to send a request to the Edge Function", "FunctionsFetchError", e);
   }
@@ -3644,7 +3654,7 @@ var rs;
 (function(r) {
   r.Any = "any", r.ApNortheast1 = "ap-northeast-1", r.ApNortheast2 = "ap-northeast-2", r.ApSouth1 = "ap-south-1", r.ApSoutheast1 = "ap-southeast-1", r.ApSoutheast2 = "ap-southeast-2", r.CaCentral1 = "ca-central-1", r.EuCentral1 = "eu-central-1", r.EuWest1 = "eu-west-1", r.EuWest2 = "eu-west-2", r.EuWest3 = "eu-west-3", r.SaEast1 = "sa-east-1", r.UsEast1 = "us-east-1", r.UsWest1 = "us-west-1", r.UsWest2 = "us-west-2";
 })(rs || (rs = {}));
-var Qn = function(r, e, t, s) {
+var Yn = function(r, e, t, s) {
   function n(i) {
     return i instanceof t ? i : new t(function(a) {
       a(i);
@@ -3671,9 +3681,9 @@ var Qn = function(r, e, t, s) {
     c((s = s.apply(r, e || [])).next());
   });
 };
-class Xn {
+class Qn {
   constructor(e, { headers: t = {}, customFetch: s, region: n = rs.Any } = {}) {
-    this.url = e, this.headers = t, this.region = n, this.fetch = Jn(s);
+    this.url = e, this.headers = t, this.region = n, this.fetch = Hn(s);
   }
   /**
    * Updates the authorization header
@@ -3689,7 +3699,7 @@ class Xn {
    */
   invoke(e, t = {}) {
     var s;
-    return Qn(this, void 0, void 0, function* () {
+    return Yn(this, void 0, void 0, function* () {
       try {
         const { headers: n, method: i, body: a } = t;
         let o = {}, { region: l } = t;
@@ -3707,7 +3717,7 @@ class Xn {
           headers: Object.assign(Object.assign(Object.assign({}, o), this.headers), n),
           body: u
         }).catch((b) => {
-          throw new Yn(b);
+          throw new Jn(b);
         }), f = d.headers.get("x-relay-error");
         if (f && f === "true")
           throw new Vs(d);
@@ -3725,7 +3735,7 @@ class Xn {
     });
   }
 }
-var Y = {}, vs = {}, At = {}, lt = {}, Ot = {}, Ct = {}, ei = function() {
+var Y = {}, vs = {}, At = {}, lt = {}, Ot = {}, Ct = {}, Xn = function() {
   if (typeof self < "u")
     return self;
   if (typeof window < "u")
@@ -3733,31 +3743,31 @@ var Y = {}, vs = {}, At = {}, lt = {}, Ot = {}, Ct = {}, ei = function() {
   if (typeof global < "u")
     return global;
   throw new Error("unable to locate global object");
-}, Ge = ei();
-const ti = Ge.fetch, mr = Ge.fetch.bind(Ge), yr = Ge.Headers, si = Ge.Request, ri = Ge.Response, Ke = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, Ge = Xn();
+const ei = Ge.fetch, mr = Ge.fetch.bind(Ge), yr = Ge.Headers, ti = Ge.Request, si = Ge.Response, Ke = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   Headers: yr,
-  Request: si,
-  Response: ri,
+  Request: ti,
+  Response: si,
   default: mr,
-  fetch: ti
-}, Symbol.toStringTag, { value: "Module" })), ni = /* @__PURE__ */ Jr(Ke);
+  fetch: ei
+}, Symbol.toStringTag, { value: "Module" })), ri = /* @__PURE__ */ Jr(Ke);
 var Rt = {};
 Object.defineProperty(Rt, "__esModule", { value: !0 });
-let ii = class extends Error {
+let ni = class extends Error {
   constructor(e) {
     super(e.message), this.name = "PostgrestError", this.details = e.details, this.hint = e.hint, this.code = e.code;
   }
 };
-Rt.default = ii;
+Rt.default = ni;
 var vr = te && te.__importDefault || function(r) {
   return r && r.__esModule ? r : { default: r };
 };
 Object.defineProperty(Ct, "__esModule", { value: !0 });
-const ai = vr(ni), oi = vr(Rt);
-let li = class {
+const ii = vr(ri), ai = vr(Rt);
+let oi = class {
   constructor(e) {
-    this.shouldThrowOnError = !1, this.method = e.method, this.url = e.url, this.headers = e.headers, this.schema = e.schema, this.body = e.body, this.shouldThrowOnError = e.shouldThrowOnError, this.signal = e.signal, this.isMaybeSingle = e.isMaybeSingle, e.fetch ? this.fetch = e.fetch : typeof fetch > "u" ? this.fetch = ai.default : this.fetch = fetch;
+    this.shouldThrowOnError = !1, this.method = e.method, this.url = e.url, this.headers = e.headers, this.schema = e.schema, this.body = e.body, this.shouldThrowOnError = e.shouldThrowOnError, this.signal = e.signal, this.isMaybeSingle = e.isMaybeSingle, e.fetch ? this.fetch = e.fetch : typeof fetch > "u" ? this.fetch = ii.default : this.fetch = fetch;
   }
   /**
    * If there's an error with the query, throwOnError will reject the promise by
@@ -3808,7 +3818,7 @@ let li = class {
           };
         }
         if (c && this.isMaybeSingle && (!((l = c == null ? void 0 : c.details) === null || l === void 0) && l.includes("0 rows")) && (c = null, f = 200, y = "OK"), c && this.shouldThrowOnError)
-          throw new oi.default(c);
+          throw new ai.default(c);
       }
       return {
         error: c,
@@ -3869,13 +3879,13 @@ let li = class {
     return this;
   }
 };
-Ct.default = li;
-var ci = te && te.__importDefault || function(r) {
+Ct.default = oi;
+var li = te && te.__importDefault || function(r) {
   return r && r.__esModule ? r : { default: r };
 };
 Object.defineProperty(Ot, "__esModule", { value: !0 });
-const ui = ci(Ct);
-let di = class extends ui.default {
+const ci = li(Ct);
+let ui = class extends ci.default {
   /**
    * Perform a SELECT on the query result.
    *
@@ -4038,13 +4048,13 @@ let di = class extends ui.default {
     return this;
   }
 };
-Ot.default = di;
-var hi = te && te.__importDefault || function(r) {
+Ot.default = ui;
+var di = te && te.__importDefault || function(r) {
   return r && r.__esModule ? r : { default: r };
 };
 Object.defineProperty(lt, "__esModule", { value: !0 });
-const fi = hi(Ot);
-let pi = class extends fi.default {
+const hi = di(Ot);
+let fi = class extends hi.default {
   /**
    * Match only rows where `column` is equal to `value`.
    *
@@ -4343,13 +4353,13 @@ let pi = class extends fi.default {
     return this.url.searchParams.append(e, `${t}.${s}`), this;
   }
 };
-lt.default = pi;
-var gi = te && te.__importDefault || function(r) {
+lt.default = fi;
+var pi = te && te.__importDefault || function(r) {
   return r && r.__esModule ? r : { default: r };
 };
 Object.defineProperty(At, "__esModule", { value: !0 });
-const Qe = gi(lt);
-let mi = class {
+const Qe = pi(lt);
+let gi = class {
   constructor(e, { headers: t = {}, schema: s, fetch: n }) {
     this.url = e, this.headers = t, this.schema = s, this.fetch = n;
   }
@@ -4553,21 +4563,21 @@ let mi = class {
     });
   }
 };
-At.default = mi;
+At.default = gi;
 var Pt = {}, $t = {};
 Object.defineProperty($t, "__esModule", { value: !0 });
 $t.version = void 0;
 $t.version = "0.0.0-automated";
 Object.defineProperty(Pt, "__esModule", { value: !0 });
 Pt.DEFAULT_HEADERS = void 0;
-const yi = $t;
-Pt.DEFAULT_HEADERS = { "X-Client-Info": `postgrest-js/${yi.version}` };
+const mi = $t;
+Pt.DEFAULT_HEADERS = { "X-Client-Info": `postgrest-js/${mi.version}` };
 var _r = te && te.__importDefault || function(r) {
   return r && r.__esModule ? r : { default: r };
 };
 Object.defineProperty(vs, "__esModule", { value: !0 });
-const vi = _r(At), _i = _r(lt), bi = Pt;
-let wi = class br {
+const yi = _r(At), vi = _r(lt), _i = Pt;
+let bi = class br {
   // TODO: Add back shouldThrowOnError once we figure out the typings
   /**
    * Creates a PostgREST client.
@@ -4579,7 +4589,7 @@ let wi = class br {
    * @param options.fetch - Custom fetch
    */
   constructor(e, { headers: t = {}, schema: s, fetch: n } = {}) {
-    this.url = e, this.headers = Object.assign(Object.assign({}, bi.DEFAULT_HEADERS), t), this.schemaName = s, this.fetch = n;
+    this.url = e, this.headers = Object.assign(Object.assign({}, _i.DEFAULT_HEADERS), t), this.schemaName = s, this.fetch = n;
   }
   /**
    * Perform a query on a table or a view.
@@ -4588,7 +4598,7 @@ let wi = class br {
    */
   from(e) {
     const t = new URL(`${this.url}/${e}`);
-    return new vi.default(t, {
+    return new yi.default(t, {
       headers: Object.assign({}, this.headers),
       schema: this.schemaName,
       fetch: this.fetch
@@ -4639,7 +4649,7 @@ let wi = class br {
       o.searchParams.append(u, d);
     })) : (a = "POST", l = t);
     const c = Object.assign({}, this.headers);
-    return i && (c.Prefer = `count=${i}`), new _i.default({
+    return i && (c.Prefer = `count=${i}`), new vi.default({
       method: a,
       url: o,
       headers: c,
@@ -4650,7 +4660,7 @@ let wi = class br {
     });
   }
 };
-vs.default = wi;
+vs.default = bi;
 var He = te && te.__importDefault || function(r) {
   return r && r.__esModule ? r : { default: r };
 };
@@ -4668,7 +4678,7 @@ const Tr = He(Ct);
 Y.PostgrestBuilder = Tr.default;
 const jr = He(Rt);
 Y.PostgrestError = jr.default;
-var ki = Y.default = {
+var wi = Y.default = {
   PostgrestClient: wr.default,
   PostgrestQueryBuilder: kr.default,
   PostgrestFilterBuilder: xr.default,
@@ -4677,14 +4687,14 @@ var ki = Y.default = {
   PostgrestError: jr.default
 };
 const {
-  PostgrestClient: xi,
+  PostgrestClient: ki,
   PostgrestQueryBuilder: Fo,
   PostgrestFilterBuilder: qo,
   PostgrestTransformBuilder: Wo,
   PostgrestBuilder: zo,
   PostgrestError: Vo
-} = ki;
-class Si {
+} = wi;
+class xi {
   /**
    * Dynamic require that works in both CJS and ESM environments
    * Bulletproof against strict ESM environments where require might not be in scope
@@ -4775,7 +4785,7 @@ Suggested solution: ${e.workaround}`), new Error(t);
     }
   }
 }
-const Ti = "2.15.0", ji = `realtime-js/${Ti}`, Ei = "1.0.0", ns = 1e4, Ai = 1e3, Oi = 100;
+const Si = "2.15.0", Ti = `realtime-js/${Si}`, ji = "1.0.0", ns = 1e4, Ei = 1e3, Ai = 100;
 var tt;
 (function(r) {
   r[r.connecting = 0] = "connecting", r[r.open = 1] = "open", r[r.closing = 2] = "closing", r[r.closed = 3] = "closed";
@@ -4796,7 +4806,7 @@ var Ae;
 (function(r) {
   r.Connecting = "connecting", r.Open = "open", r.Closing = "closing", r.Closed = "closed";
 })(Ae || (Ae = {}));
-class Ci {
+class Oi {
   constructor() {
     this.HEADER_LENGTH = 1;
   }
@@ -4839,18 +4849,18 @@ var M;
 const Gs = (r, e, t = {}) => {
   var s;
   const n = (s = t.skipTypes) !== null && s !== void 0 ? s : [];
-  return Object.keys(e).reduce((i, a) => (i[a] = Ri(a, r, e, n), i), {});
-}, Ri = (r, e, t, s) => {
+  return Object.keys(e).reduce((i, a) => (i[a] = Ci(a, r, e, n), i), {});
+}, Ci = (r, e, t, s) => {
   const n = e.find((o) => o.name === r), i = n == null ? void 0 : n.type, a = t[r];
   return i && !s.includes(i) ? Ar(i, a) : as(a);
 }, Ar = (r, e) => {
   if (r.charAt(0) === "_") {
     const t = r.slice(1, r.length);
-    return Ni(e, t);
+    return Ii(e, t);
   }
   switch (r) {
     case M.bool:
-      return Pi(e);
+      return Ri(e);
     case M.float4:
     case M.float8:
     case M.int2:
@@ -4858,12 +4868,12 @@ const Gs = (r, e, t = {}) => {
     case M.int8:
     case M.numeric:
     case M.oid:
-      return $i(e);
+      return Pi(e);
     case M.json:
     case M.jsonb:
-      return Ii(e);
+      return $i(e);
     case M.timestamp:
-      return Li(e);
+      return Ni(e);
     // Format to be consistent with PostgREST
     case M.abstime:
     // To allow users to cast it based on Timezone
@@ -4888,7 +4898,7 @@ const Gs = (r, e, t = {}) => {
     default:
       return as(e);
   }
-}, as = (r) => r, Pi = (r) => {
+}, as = (r) => r, Ri = (r) => {
   switch (r) {
     case "t":
       return !0;
@@ -4897,14 +4907,14 @@ const Gs = (r, e, t = {}) => {
     default:
       return r;
   }
-}, $i = (r) => {
+}, Pi = (r) => {
   if (typeof r == "string") {
     const e = parseFloat(r);
     if (!Number.isNaN(e))
       return e;
   }
   return r;
-}, Ii = (r) => {
+}, $i = (r) => {
   if (typeof r == "string")
     try {
       return JSON.parse(r);
@@ -4912,7 +4922,7 @@ const Gs = (r, e, t = {}) => {
       return console.log(`JSON parse error: ${e}`), r;
     }
   return r;
-}, Ni = (r, e) => {
+}, Ii = (r, e) => {
   if (typeof r != "string")
     return r;
   const t = r.length - 1, s = r[t];
@@ -4927,7 +4937,7 @@ const Gs = (r, e, t = {}) => {
     return i.map((o) => Ar(e, o));
   }
   return r;
-}, Li = (r) => typeof r == "string" ? r.replace(" ", "T") : r, Or = (r) => {
+}, Ni = (r) => typeof r == "string" ? r.replace(" ", "T") : r, Or = (r) => {
   let e = r;
   return e = e.replace(/^ws/i, "http"), e = e.replace(/(\/socket\/websocket|\/socket|\/websocket)\/?$/i, ""), e.replace(/\/+$/, "") + "/api/broadcast";
 };
@@ -5337,7 +5347,7 @@ class _s {
   }
   /** @internal */
   _addToPushBuffer(e) {
-    if (e.startTimeout(), this.pushBuffer.push(e), this.pushBuffer.length > Oi) {
+    if (e.startTimeout(), this.pushBuffer.push(e), this.pushBuffer.length > Ai) {
       const t = this.pushBuffer.shift();
       t && (t.destroy(), this.socket.log("channel", `discarded push due to buffer overflow: ${t.event}`, t.payload));
     }
@@ -5493,13 +5503,13 @@ const Js = () => {
   HEARTBEAT_INTERVAL: 25e3,
   RECONNECT_DELAY: 10,
   HEARTBEAT_TIMEOUT_FALLBACK: 100
-}, Ui = [1e3, 2e3, 5e3, 1e4], Di = 1e4, Mi = `
+}, Li = [1e3, 2e3, 5e3, 1e4], Ui = 1e4, Di = `
   addEventListener("message", (e) => {
     if (e.data.event === "start") {
       setInterval(() => postMessage({ event: "keepAlive" }), e.data.interval);
     }
   });`;
-class Bi {
+class Mi {
   /**
    * Initializes the Socket.
    *
@@ -5520,7 +5530,7 @@ class Bi {
    */
   constructor(e, t) {
     var s;
-    if (this.accessTokenValue = null, this.apiKey = null, this.channels = new Array(), this.endPoint = "", this.httpEndpoint = "", this.headers = {}, this.params = {}, this.timeout = ns, this.transport = null, this.heartbeatIntervalMs = dt.HEARTBEAT_INTERVAL, this.heartbeatTimer = void 0, this.pendingHeartbeatRef = null, this.heartbeatCallback = Js, this.ref = 0, this.reconnectTimer = null, this.logger = Js, this.conn = null, this.sendBuffer = [], this.serializer = new Ci(), this.stateChangeCallbacks = {
+    if (this.accessTokenValue = null, this.apiKey = null, this.channels = new Array(), this.endPoint = "", this.httpEndpoint = "", this.headers = {}, this.params = {}, this.timeout = ns, this.transport = null, this.heartbeatIntervalMs = dt.HEARTBEAT_INTERVAL, this.heartbeatTimer = void 0, this.pendingHeartbeatRef = null, this.heartbeatCallback = Js, this.ref = 0, this.reconnectTimer = null, this.logger = Js, this.conn = null, this.sendBuffer = [], this.serializer = new Oi(), this.stateChangeCallbacks = {
       open: [],
       close: [],
       error: [],
@@ -5543,7 +5553,7 @@ class Bi {
         this.conn = new this.transport(this.endpointURL());
       else
         try {
-          this.conn = Si.createWebSocket(this.endpointURL());
+          this.conn = xi.createWebSocket(this.endpointURL());
         } catch (e) {
           throw this._setConnectionState("disconnected"), new Error(`WebSocket not available: ${e.message}`);
         }
@@ -5555,7 +5565,7 @@ class Bi {
    * @returns string The URL of the websocket.
    */
   endpointURL() {
-    return this._appendParams(this.endPoint, Object.assign({}, this.params, { vsn: Ei }));
+    return this._appendParams(this.endPoint, Object.assign({}, this.params, { vsn: ji }));
   }
   /**
    * Disconnects the socket.
@@ -5687,7 +5697,7 @@ class Bi {
       return;
     }
     if (this.pendingHeartbeatRef) {
-      this.pendingHeartbeatRef = null, this.log("transport", "heartbeat timeout. Attempting to re-establish connection"), this.heartbeatCallback("timeout"), this._wasManualDisconnect = !1, (e = this.conn) === null || e === void 0 || e.close(Ai, "heartbeat timeout"), setTimeout(() => {
+      this.pendingHeartbeatRef = null, this.log("transport", "heartbeat timeout. Attempting to re-establish connection"), this.heartbeatCallback("timeout"), this._wasManualDisconnect = !1, (e = this.conn) === null || e === void 0 || e.close(Ei, "heartbeat timeout"), setTimeout(() => {
         var t;
         this.isConnected() || (t = this.reconnectTimer) === null || t === void 0 || t.scheduleTimeout();
       }, dt.HEARTBEAT_TIMEOUT_FALLBACK);
@@ -5820,7 +5830,7 @@ class Bi {
     if (e)
       t = e;
     else {
-      const s = new Blob([Mi], { type: "application/javascript" });
+      const s = new Blob([Di], { type: "application/javascript" });
       t = URL.createObjectURL(s);
     }
     return t;
@@ -5841,7 +5851,7 @@ class Bi {
     e ? t = e : this.accessToken ? t = await this.accessToken() : t = this.accessTokenValue, this.accessTokenValue != t && (this.accessTokenValue = t, this.channels.forEach((s) => {
       const n = {
         access_token: t,
-        version: ji
+        version: Ti
       };
       t && s.updateJoinPayload(n), s.joinedOnce && s._isJoined() && s._push(ie.access_token, {
         access_token: t
@@ -5898,7 +5908,7 @@ class Bi {
    */
   _initializeOptions(e) {
     var t, s, n, i, a, o, l, c;
-    if (this.transport = (t = e == null ? void 0 : e.transport) !== null && t !== void 0 ? t : null, this.timeout = (s = e == null ? void 0 : e.timeout) !== null && s !== void 0 ? s : ns, this.heartbeatIntervalMs = (n = e == null ? void 0 : e.heartbeatIntervalMs) !== null && n !== void 0 ? n : dt.HEARTBEAT_INTERVAL, this.worker = (i = e == null ? void 0 : e.worker) !== null && i !== void 0 ? i : !1, this.accessToken = (a = e == null ? void 0 : e.accessToken) !== null && a !== void 0 ? a : null, e != null && e.params && (this.params = e.params), e != null && e.logger && (this.logger = e.logger), (e != null && e.logLevel || e != null && e.log_level) && (this.logLevel = e.logLevel || e.log_level, this.params = Object.assign(Object.assign({}, this.params), { log_level: this.logLevel })), this.reconnectAfterMs = (o = e == null ? void 0 : e.reconnectAfterMs) !== null && o !== void 0 ? o : (u) => Ui[u - 1] || Di, this.encode = (l = e == null ? void 0 : e.encode) !== null && l !== void 0 ? l : (u, d) => d(JSON.stringify(u)), this.decode = (c = e == null ? void 0 : e.decode) !== null && c !== void 0 ? c : this.serializer.decode.bind(this.serializer), this.worker) {
+    if (this.transport = (t = e == null ? void 0 : e.transport) !== null && t !== void 0 ? t : null, this.timeout = (s = e == null ? void 0 : e.timeout) !== null && s !== void 0 ? s : ns, this.heartbeatIntervalMs = (n = e == null ? void 0 : e.heartbeatIntervalMs) !== null && n !== void 0 ? n : dt.HEARTBEAT_INTERVAL, this.worker = (i = e == null ? void 0 : e.worker) !== null && i !== void 0 ? i : !1, this.accessToken = (a = e == null ? void 0 : e.accessToken) !== null && a !== void 0 ? a : null, e != null && e.params && (this.params = e.params), e != null && e.logger && (this.logger = e.logger), (e != null && e.logLevel || e != null && e.log_level) && (this.logLevel = e.logLevel || e.log_level, this.params = Object.assign(Object.assign({}, this.params), { log_level: this.logLevel })), this.reconnectAfterMs = (o = e == null ? void 0 : e.reconnectAfterMs) !== null && o !== void 0 ? o : (u) => Li[u - 1] || Ui, this.encode = (l = e == null ? void 0 : e.encode) !== null && l !== void 0 ? l : (u, d) => d(JSON.stringify(u)), this.decode = (c = e == null ? void 0 : e.decode) !== null && c !== void 0 ? c : this.serializer.decode.bind(this.serializer), this.worker) {
       if (typeof window < "u" && !window.Worker)
         throw new Error("Web Worker is not supported");
       this.workerUrl = e == null ? void 0 : e.workerUrl;
@@ -5913,7 +5923,7 @@ class bs extends Error {
 function Z(r) {
   return typeof r == "object" && r !== null && "__isStorageError" in r;
 }
-class Fi extends bs {
+class Bi extends bs {
   constructor(e, t, s) {
     super(e), this.name = "StorageApiError", this.status = t, this.statusCode = s;
   }
@@ -5931,7 +5941,7 @@ class os extends bs {
     super(e), this.name = "StorageUnknownError", this.originalError = t;
   }
 }
-var qi = function(r, e, t, s) {
+var Fi = function(r, e, t, s) {
   function n(i) {
     return i instanceof t ? i : new t(function(a) {
       a(i);
@@ -5961,7 +5971,7 @@ var qi = function(r, e, t, s) {
 const Cr = (r) => {
   let e;
   return r ? e = r : typeof fetch > "u" ? e = (...t) => Promise.resolve().then(() => Ke).then(({ default: s }) => s(...t)) : e = fetch, (...t) => e(...t);
-}, Wi = () => qi(void 0, void 0, void 0, function* () {
+}, qi = () => Fi(void 0, void 0, void 0, function* () {
   return typeof Response > "u" ? (yield Promise.resolve().then(() => Ke)).Response : Response;
 }), ls = (r) => {
   if (Array.isArray(r))
@@ -5973,7 +5983,7 @@ const Cr = (r) => {
     const n = t.replace(/([-_][a-z])/gi, (i) => i.toUpperCase().replace(/[-_]/g, ""));
     e[n] = ls(s);
   }), e;
-}, zi = (r) => {
+}, Wi = (r) => {
   if (typeof r != "object" || r === null)
     return !1;
   const e = Object.getPrototypeOf(r);
@@ -6006,26 +6016,26 @@ var Ce = function(r, e, t, s) {
     c((s = s.apply(r, e || [])).next());
   });
 };
-const Ft = (r) => r.msg || r.message || r.error_description || r.error || JSON.stringify(r), Vi = (r, e, t) => Ce(void 0, void 0, void 0, function* () {
-  const s = yield Wi();
+const Ft = (r) => r.msg || r.message || r.error_description || r.error || JSON.stringify(r), zi = (r, e, t) => Ce(void 0, void 0, void 0, function* () {
+  const s = yield qi();
   r instanceof s && !(t != null && t.noResolveJson) ? r.json().then((n) => {
     const i = r.status || 500, a = (n == null ? void 0 : n.statusCode) || i + "";
-    e(new Fi(Ft(n), i, a));
+    e(new Bi(Ft(n), i, a));
   }).catch((n) => {
     e(new os(Ft(n), n));
   }) : e(new os(Ft(r), r));
-}), Zi = (r, e, t, s) => {
+}), Vi = (r, e, t, s) => {
   const n = { method: r, headers: (e == null ? void 0 : e.headers) || {} };
-  return r === "GET" || !s ? n : (zi(s) ? (n.headers = Object.assign({ "Content-Type": "application/json" }, e == null ? void 0 : e.headers), n.body = JSON.stringify(s)) : n.body = s, Object.assign(Object.assign({}, n), t));
+  return r === "GET" || !s ? n : (Wi(s) ? (n.headers = Object.assign({ "Content-Type": "application/json" }, e == null ? void 0 : e.headers), n.body = JSON.stringify(s)) : n.body = s, Object.assign(Object.assign({}, n), t));
 };
 function ct(r, e, t, s, n, i) {
   return Ce(this, void 0, void 0, function* () {
     return new Promise((a, o) => {
-      r(t, Zi(e, s, n, i)).then((l) => {
+      r(t, Vi(e, s, n, i)).then((l) => {
         if (!l.ok)
           throw l;
         return s != null && s.noResolveJson ? l : l.json();
-      }).then((l) => a(l)).catch((l) => Vi(l, o, s));
+      }).then((l) => a(l)).catch((l) => zi(l, o, s));
     });
   });
 }
@@ -6044,7 +6054,7 @@ function cs(r, e, t, s, n) {
     return ct(r, "PUT", e, s, n, t);
   });
 }
-function Gi(r, e, t, s) {
+function Zi(r, e, t, s) {
   return Ce(this, void 0, void 0, function* () {
     return ct(r, "HEAD", e, Object.assign(Object.assign({}, t), { noResolveJson: !0 }), s);
   });
@@ -6081,7 +6091,7 @@ var J = function(r, e, t, s) {
     c((s = s.apply(r, e || [])).next());
   });
 };
-const Ki = {
+const Gi = {
   limit: 100,
   offset: 0,
   sortBy: {
@@ -6093,7 +6103,7 @@ const Ki = {
   contentType: "text/plain;charset=UTF-8",
   upsert: !1
 };
-class Hi {
+class Ki {
   constructor(e, t = {}, s, n) {
     this.url = e, this.headers = t, this.bucketId = s, this.fetch = Cr(n);
   }
@@ -6334,7 +6344,7 @@ class Hi {
     return J(this, void 0, void 0, function* () {
       const t = this._getFinalPath(e);
       try {
-        return yield Gi(this.fetch, `${this.url}/object/${t}`, {
+        return yield Zi(this.fetch, `${this.url}/object/${t}`, {
           headers: this.headers
         }), { data: !0, error: null };
       } catch (s) {
@@ -6448,7 +6458,7 @@ class Hi {
   list(e, t, s) {
     return J(this, void 0, void 0, function* () {
       try {
-        const n = Object.assign(Object.assign(Object.assign({}, Ki), t), { prefix: e || "" });
+        const n = Object.assign(Object.assign(Object.assign({}, Gi), t), { prefix: e || "" });
         return { data: yield fe(this.fetch, `${this.url}/object/list/${this.bucketId}`, n, { headers: this.headers }, s), error: null };
       } catch (n) {
         if (Z(n))
@@ -6474,7 +6484,7 @@ class Hi {
     return e.width && t.push(`width=${e.width}`), e.height && t.push(`height=${e.height}`), e.resize && t.push(`resize=${e.resize}`), e.format && t.push(`format=${e.format}`), e.quality && t.push(`quality=${e.quality}`), t.join("&");
   }
 }
-const Ji = "2.10.4", Yi = { "X-Client-Info": `storage-js/${Ji}` };
+const Hi = "2.10.4", Ji = { "X-Client-Info": `storage-js/${Hi}` };
 var $e = function(r, e, t, s) {
   function n(i) {
     return i instanceof t ? i : new t(function(a) {
@@ -6502,10 +6512,10 @@ var $e = function(r, e, t, s) {
     c((s = s.apply(r, e || [])).next());
   });
 };
-class Qi {
+class Yi {
   constructor(e, t = {}, s, n) {
     const i = new URL(e);
-    n != null && n.useNewHostname && /supabase\.(co|in|red)$/.test(i.hostname) && !i.hostname.includes("storage.supabase.") && (i.hostname = i.hostname.replace("supabase.", "storage.supabase.")), this.url = i.href, this.headers = Object.assign(Object.assign({}, Yi), t), this.fetch = Cr(s);
+    n != null && n.useNewHostname && /supabase\.(co|in|red)$/.test(i.hostname) && !i.hostname.includes("storage.supabase.") && (i.hostname = i.hostname.replace("supabase.", "storage.supabase.")), this.url = i.href, this.headers = Object.assign(Object.assign({}, Ji), t), this.fetch = Cr(s);
   }
   /**
    * Retrieves the details of all Storage buckets within an existing project.
@@ -6635,7 +6645,7 @@ class Qi {
     });
   }
 }
-class Xi extends Qi {
+class Qi extends Yi {
   constructor(e, t = {}, s, n) {
     super(e, t, s, n);
   }
@@ -6645,23 +6655,23 @@ class Xi extends Qi {
    * @param id The bucket id to operate on.
    */
   from(e) {
-    return new Hi(this.url, this.headers, e, this.fetch);
+    return new Ki(this.url, this.headers, e, this.fetch);
   }
 }
-const ea = "2.54.0";
+const Xi = "2.54.0";
 let et = "";
 typeof Deno < "u" ? et = "deno" : typeof document < "u" ? et = "web" : typeof navigator < "u" && navigator.product === "ReactNative" ? et = "react-native" : et = "node";
-const ta = { "X-Client-Info": `supabase-js-${et}/${ea}` }, sa = {
-  headers: ta
-}, ra = {
+const ea = { "X-Client-Info": `supabase-js-${et}/${Xi}` }, ta = {
+  headers: ea
+}, sa = {
   schema: "public"
-}, na = {
+}, ra = {
   autoRefreshToken: !0,
   persistSession: !0,
   detectSessionInUrl: !0,
   flowType: "implicit"
-}, ia = {};
-var aa = function(r, e, t, s) {
+}, na = {};
+var ia = function(r, e, t, s) {
   function n(i) {
     return i instanceof t ? i : new t(function(a) {
       a(i);
@@ -6688,19 +6698,19 @@ var aa = function(r, e, t, s) {
     c((s = s.apply(r, e || [])).next());
   });
 };
-const oa = (r) => {
+const aa = (r) => {
   let e;
   return r ? e = r : typeof fetch > "u" ? e = mr : e = fetch, (...t) => e(...t);
-}, la = () => typeof Headers > "u" ? yr : Headers, ca = (r, e, t) => {
-  const s = oa(t), n = la();
-  return (i, a) => aa(void 0, void 0, void 0, function* () {
+}, oa = () => typeof Headers > "u" ? yr : Headers, la = (r, e, t) => {
+  const s = aa(t), n = oa();
+  return (i, a) => ia(void 0, void 0, void 0, function* () {
     var o;
     const l = (o = yield e()) !== null && o !== void 0 ? o : r;
     let c = new n(a == null ? void 0 : a.headers);
     return c.has("apikey") || c.set("apikey", r), c.has("Authorization") || c.set("Authorization", `Bearer ${l}`), s(i, Object.assign(Object.assign({}, a), { headers: c }));
   });
 };
-var ua = function(r, e, t, s) {
+var ca = function(r, e, t, s) {
   function n(i) {
     return i instanceof t ? i : new t(function(a) {
       a(i);
@@ -6727,10 +6737,10 @@ var ua = function(r, e, t, s) {
     c((s = s.apply(r, e || [])).next());
   });
 };
-function da(r) {
+function ua(r) {
   return r.endsWith("/") ? r : r + "/";
 }
-function ha(r, e) {
+function da(r, e) {
   var t, s;
   const { db: n, auth: i, realtime: a, global: o } = r, { db: l, auth: c, realtime: u, global: d } = e, f = {
     db: Object.assign(Object.assign({}, l), n),
@@ -6738,18 +6748,18 @@ function ha(r, e) {
     realtime: Object.assign(Object.assign({}, u), a),
     storage: {},
     global: Object.assign(Object.assign(Object.assign({}, d), o), { headers: Object.assign(Object.assign({}, (t = d == null ? void 0 : d.headers) !== null && t !== void 0 ? t : {}), (s = o == null ? void 0 : o.headers) !== null && s !== void 0 ? s : {}) }),
-    accessToken: () => ua(this, void 0, void 0, function* () {
+    accessToken: () => ca(this, void 0, void 0, function* () {
       return "";
     })
   };
   return r.accessToken ? f.accessToken = r.accessToken : delete f.accessToken, f;
 }
-const Pr = "2.71.1", Be = 30 * 1e3, us = 3, qt = us * Be, fa = "http://localhost:9999", pa = "supabase.auth.token", ga = { "X-Client-Info": `gotrue-js/${Pr}` }, ds = "X-Supabase-Api-Version", $r = {
+const Pr = "2.71.1", Be = 30 * 1e3, us = 3, qt = us * Be, ha = "http://localhost:9999", fa = "supabase.auth.token", pa = { "X-Client-Info": `gotrue-js/${Pr}` }, ds = "X-Supabase-Api-Version", $r = {
   "2024-01-01": {
     timestamp: Date.parse("2024-01-01T00:00:00.0Z"),
     name: "2024-01-01"
   }
-}, ma = /^([a-z0-9_-]{4})*($|[a-z0-9_-]{3}$|[a-z0-9_-]{2}$)$/i, ya = 600 * 1e3;
+}, ga = /^([a-z0-9_-]{4})*($|[a-z0-9_-]{3}$|[a-z0-9_-]{2}$)$/i, ma = 600 * 1e3;
 class ws extends Error {
   constructor(e, t, s) {
     super(e), this.__isAuthError = !0, this.name = "AuthError", this.status = t, this.code = s;
@@ -6758,12 +6768,12 @@ class ws extends Error {
 function O(r) {
   return typeof r == "object" && r !== null && "__isAuthError" in r;
 }
-class va extends ws {
+class ya extends ws {
   constructor(e, t, s) {
     super(e, t, s), this.name = "AuthApiError", this.status = t, this.code = s;
   }
 }
-function _a(r) {
+function va(r) {
   return O(r) && r.name === "AuthApiError";
 }
 class Ir extends ws {
@@ -6781,7 +6791,7 @@ class _e extends Se {
     super("Auth session missing!", "AuthSessionMissingError", 400, void 0);
   }
 }
-function ba(r) {
+function _a(r) {
   return O(r) && r.name === "AuthSessionMissingError";
 }
 class ht extends Se {
@@ -6807,7 +6817,7 @@ class pt extends Se {
     };
   }
 }
-function wa(r) {
+function ba(r) {
   return O(r) && r.name === "AuthImplicitGrantRedirectError";
 }
 class Qs extends Se {
@@ -6842,7 +6852,7 @@ class fs extends Se {
   }
 }
 const jt = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_".split(""), er = ` 	
-\r=`.split(""), ka = (() => {
+\r=`.split(""), wa = (() => {
   const r = new Array(128);
   for (let e = 0; e < r.length; e += 1)
     r[e] = -1;
@@ -6865,7 +6875,7 @@ function tr(r, e, t) {
     }
 }
 function Nr(r, e, t) {
-  const s = ka[r];
+  const s = wa[r];
   if (s > -1)
     for (e.queue = e.queue << 6 | s, e.queuedBits += 6; e.queuedBits >= 8; )
       t(e.queue >> e.queuedBits - 8 & 255), e.queuedBits -= 8;
@@ -6882,13 +6892,13 @@ function sr(r) {
     utf8seq: 0,
     codepoint: 0
   }, n = { queue: 0, queuedBits: 0 }, i = (a) => {
-    Ta(a, s, t);
+    Sa(a, s, t);
   };
   for (let a = 0; a < r.length; a += 1)
     Nr(r.charCodeAt(a), n, i);
   return e.join("");
 }
-function xa(r, e) {
+function ka(r, e) {
   if (r <= 127) {
     e(r);
     return;
@@ -6904,17 +6914,17 @@ function xa(r, e) {
   }
   throw new Error(`Unrecognized Unicode codepoint: ${r.toString(16)}`);
 }
-function Sa(r, e) {
+function xa(r, e) {
   for (let t = 0; t < r.length; t += 1) {
     let s = r.charCodeAt(t);
     if (s > 55295 && s <= 56319) {
       const n = (s - 55296) * 1024 & 65535;
       s = (r.charCodeAt(t + 1) - 56320 & 65535 | n) + 65536, t += 1;
     }
-    xa(s, e);
+    ka(s, e);
   }
 }
-function Ta(r, e, t) {
+function Sa(r, e, t) {
   if (e.utf8seq === 0) {
     if (r <= 127) {
       t(r);
@@ -6940,7 +6950,7 @@ function Ta(r, e, t) {
     e.codepoint = e.codepoint << 6 | r & 63, e.utf8seq -= 1, e.utf8seq === 0 && t(e.codepoint);
   }
 }
-function ja(r) {
+function Ta(r) {
   const e = [], t = { queue: 0, queuedBits: 0 }, s = (n) => {
     e.push(n);
   };
@@ -6948,20 +6958,20 @@ function ja(r) {
     Nr(r.charCodeAt(n), t, s);
   return new Uint8Array(e);
 }
-function Ea(r) {
+function ja(r) {
   const e = [];
-  return Sa(r, (t) => e.push(t)), new Uint8Array(e);
+  return xa(r, (t) => e.push(t)), new Uint8Array(e);
 }
-function Aa(r) {
+function Ea(r) {
   const e = [], t = { queue: 0, queuedBits: 0 }, s = (n) => {
     e.push(n);
   };
   return r.forEach((n) => tr(n, t, s)), tr(null, t, s), e.join("");
 }
-function Oa(r) {
+function Aa(r) {
   return Math.round(Date.now() / 1e3) + r;
 }
-function Ca() {
+function Oa() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(r) {
     const e = Math.random() * 16 | 0;
     return (r == "x" ? e : e & 3 | 8).toString(16);
@@ -6989,7 +6999,7 @@ const ne = () => typeof window < "u" && typeof document < "u", Te = {
   }
   return Te.writable;
 };
-function Ra(r) {
+function Ca(r) {
   const e = {}, t = new URL(r);
   if (t.hash && t.hash[0] === "#")
     try {
@@ -7005,7 +7015,7 @@ function Ra(r) {
 const Ur = (r) => {
   let e;
   return r ? e = r : typeof fetch > "u" ? e = (...t) => Promise.resolve().then(() => Ke).then(({ default: s }) => s(...t)) : e = fetch, (...t) => e(...t);
-}, Pa = (r) => typeof r == "object" && r !== null && "status" in r && "ok" in r && "json" in r && typeof r.json == "function", Fe = async (r, e, t) => {
+}, Ra = (r) => typeof r == "object" && r !== null && "status" in r && "ok" in r && "json" in r && typeof r.json == "function", Fe = async (r, e, t) => {
   await r.setItem(e, JSON.stringify(t));
 }, je = async (r, e) => {
   const t = await r.getItem(e);
@@ -7032,25 +7042,25 @@ function zt(r) {
   if (e.length !== 3)
     throw new fs("Invalid JWT structure");
   for (let s = 0; s < e.length; s++)
-    if (!ma.test(e[s]))
+    if (!ga.test(e[s]))
       throw new fs("JWT not in base64url format");
   return {
     // using base64url lib
     header: JSON.parse(sr(e[0])),
     payload: JSON.parse(sr(e[1])),
-    signature: ja(e[2]),
+    signature: Ta(e[2]),
     raw: {
       header: e[0],
       payload: e[1]
     }
   };
 }
-async function $a(r) {
+async function Pa(r) {
   return await new Promise((e) => {
     setTimeout(() => e(null), r);
   });
 }
-function Ia(r, e) {
+function $a(r, e) {
   return new Promise((s, n) => {
     (async () => {
       for (let i = 0; i < 1 / 0; i++)
@@ -7069,10 +7079,10 @@ function Ia(r, e) {
     })();
   });
 }
-function Na(r) {
+function Ia(r) {
   return ("0" + r.toString(16)).substr(-2);
 }
-function La() {
+function Na() {
   const e = new Uint32Array(56);
   if (typeof crypto > "u") {
     const t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~", s = t.length;
@@ -7081,29 +7091,29 @@ function La() {
       n += t.charAt(Math.floor(Math.random() * s));
     return n;
   }
-  return crypto.getRandomValues(e), Array.from(e, Na).join("");
+  return crypto.getRandomValues(e), Array.from(e, Ia).join("");
 }
-async function Ua(r) {
+async function La(r) {
   const t = new TextEncoder().encode(r), s = await crypto.subtle.digest("SHA-256", t), n = new Uint8Array(s);
   return Array.from(n).map((i) => String.fromCharCode(i)).join("");
 }
-async function Da(r) {
+async function Ua(r) {
   if (!(typeof crypto < "u" && typeof crypto.subtle < "u" && typeof TextEncoder < "u"))
     return console.warn("WebCrypto API is not supported. Code challenge method will default to use plain instead of sha256."), r;
-  const t = await Ua(r);
+  const t = await La(r);
   return btoa(t).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 async function Ie(r, e, t = !1) {
-  const s = La();
+  const s = Na();
   let n = s;
   t && (n += "/PASSWORD_RECOVERY"), await Fe(r, `${e}-code-verifier`, n);
-  const i = await Da(s);
+  const i = await Ua(s);
   return [i, s === i ? "plain" : "s256"];
 }
-const Ma = /^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])$/i;
-function Ba(r) {
+const Da = /^2[0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-9]|3[0-1])$/i;
+function Ma(r) {
   const e = r.headers.get(ds);
-  if (!e || !e.match(Ma))
+  if (!e || !e.match(Da))
     return null;
   try {
     return /* @__PURE__ */ new Date(`${e}T00:00:00.0Z`);
@@ -7111,14 +7121,14 @@ function Ba(r) {
     return null;
   }
 }
-function Fa(r) {
+function Ba(r) {
   if (!r)
     throw new Error("Missing exp claim");
   const e = Math.floor(Date.now() / 1e3);
   if (r <= e)
     throw new Error("JWT has expired");
 }
-function qa(r) {
+function Fa(r) {
   switch (r) {
     case "RS256":
       return {
@@ -7135,9 +7145,9 @@ function qa(r) {
       throw new Error("Invalid alg claim");
   }
 }
-const Wa = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const qa = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 function Ne(r) {
-  if (!Wa.test(r))
+  if (!qa.test(r))
     throw new Error("@supabase/auth-js: Expected parameter to be UUID but is not");
 }
 function Vt() {
@@ -7164,7 +7174,7 @@ function Vt() {
 function rr(r) {
   return JSON.parse(JSON.stringify(r));
 }
-var za = function(r, e) {
+var Wa = function(r, e) {
   var t = {};
   for (var s in r) Object.prototype.hasOwnProperty.call(r, s) && e.indexOf(s) < 0 && (t[s] = r[s]);
   if (r != null && typeof Object.getOwnPropertySymbols == "function")
@@ -7172,12 +7182,12 @@ var za = function(r, e) {
       e.indexOf(s[n]) < 0 && Object.prototype.propertyIsEnumerable.call(r, s[n]) && (t[s[n]] = r[s[n]]);
   return t;
 };
-const Ee = (r) => r.msg || r.message || r.error_description || r.error || JSON.stringify(r), Va = [502, 503, 504];
+const Ee = (r) => r.msg || r.message || r.error_description || r.error || JSON.stringify(r), za = [502, 503, 504];
 async function nr(r) {
   var e;
-  if (!Pa(r))
+  if (!Ra(r))
     throw new hs(Ee(r), 0);
-  if (Va.includes(r.status))
+  if (za.includes(r.status))
     throw new hs(Ee(r), r.status);
   let t;
   try {
@@ -7186,7 +7196,7 @@ async function nr(r) {
     throw new Ir(Ee(i), i);
   }
   let s;
-  const n = Ba(r);
+  const n = Ma(r);
   if (n && n.getTime() >= $r["2024-01-01"].timestamp && typeof t == "object" && t && typeof t.code == "string" ? s = t.code : typeof t == "object" && t && typeof t.error_code == "string" && (s = t.error_code), s) {
     if (s === "weak_password")
       throw new Xs(Ee(t), r.status, ((e = t.weak_password) === null || e === void 0 ? void 0 : e.reasons) || []);
@@ -7194,9 +7204,9 @@ async function nr(r) {
       throw new _e();
   } else if (typeof t == "object" && t && typeof t.weak_password == "object" && t.weak_password && Array.isArray(t.weak_password.reasons) && t.weak_password.reasons.length && t.weak_password.reasons.reduce((i, a) => i && typeof a == "string", !0))
     throw new Xs(Ee(t), r.status, t.weak_password.reasons);
-  throw new va(Ee(t), r.status || 500, s);
+  throw new ya(Ee(t), r.status || 500, s);
 }
-const Za = (r, e, t, s) => {
+const Va = (r, e, t, s) => {
   const n = { method: r, headers: (e == null ? void 0 : e.headers) || {} };
   return r === "GET" ? n : (n.headers = Object.assign({ "Content-Type": "application/json;charset=UTF-8" }, e == null ? void 0 : e.headers), n.body = JSON.stringify(s), Object.assign(Object.assign({}, n), t));
 };
@@ -7206,14 +7216,14 @@ async function I(r, e, t, s) {
   i[ds] || (i[ds] = $r["2024-01-01"].name), s != null && s.jwt && (i.Authorization = `Bearer ${s.jwt}`);
   const a = (n = s == null ? void 0 : s.query) !== null && n !== void 0 ? n : {};
   s != null && s.redirectTo && (a.redirect_to = s.redirectTo);
-  const o = Object.keys(a).length ? "?" + new URLSearchParams(a).toString() : "", l = await Ga(r, e, t + o, {
+  const o = Object.keys(a).length ? "?" + new URLSearchParams(a).toString() : "", l = await Za(r, e, t + o, {
     headers: i,
     noResolveJson: s == null ? void 0 : s.noResolveJson
   }, {}, s == null ? void 0 : s.body);
   return s != null && s.xform ? s == null ? void 0 : s.xform(l) : { data: Object.assign({}, l), error: null };
 }
-async function Ga(r, e, t, s, n, i) {
-  const a = Za(e, s, n, i);
+async function Za(r, e, t, s, n, i) {
+  const a = Va(e, s, n, i);
   let o;
   try {
     o = await r(t, Object.assign({}, a));
@@ -7231,7 +7241,7 @@ async function Ga(r, e, t, s, n, i) {
 function de(r) {
   var e;
   let t = null;
-  Ya(r) && (t = Object.assign({}, r), r.expires_at || (t.expires_at = Oa(r.expires_in)));
+  Ja(r) && (t = Object.assign({}, r), r.expires_at || (t.expires_at = Aa(r.expires_in)));
   const s = (e = r.user) !== null && e !== void 0 ? e : r;
   return { data: { session: t, user: s }, error: null };
 }
@@ -7243,11 +7253,11 @@ function we(r) {
   var e;
   return { data: { user: (e = r.user) !== null && e !== void 0 ? e : r }, error: null };
 }
-function Ka(r) {
+function Ga(r) {
   return { data: r, error: null };
 }
-function Ha(r) {
-  const { action_link: e, email_otp: t, hashed_token: s, redirect_to: n, verification_type: i } = r, a = za(r, ["action_link", "email_otp", "hashed_token", "redirect_to", "verification_type"]), o = {
+function Ka(r) {
+  const { action_link: e, email_otp: t, hashed_token: s, redirect_to: n, verification_type: i } = r, a = Wa(r, ["action_link", "email_otp", "hashed_token", "redirect_to", "verification_type"]), o = {
     action_link: e,
     email_otp: t,
     hashed_token: s,
@@ -7262,14 +7272,14 @@ function Ha(r) {
     error: null
   };
 }
-function Ja(r) {
+function Ha(r) {
   return r;
 }
-function Ya(r) {
+function Ja(r) {
   return r.access_token && r.refresh_token && r.expires_in;
 }
 const Zt = ["global", "local", "others"];
-var Qa = function(r, e) {
+var Ya = function(r, e) {
   var t = {};
   for (var s in r) Object.prototype.hasOwnProperty.call(r, s) && e.indexOf(s) < 0 && (t[s] = r[s]);
   if (r != null && typeof Object.getOwnPropertySymbols == "function")
@@ -7277,7 +7287,7 @@ var Qa = function(r, e) {
       e.indexOf(s[n]) < 0 && Object.prototype.propertyIsEnumerable.call(r, s[n]) && (t[s[n]] = r[s[n]]);
   return t;
 };
-class Xa {
+class Qa {
   constructor({ url: e = "", headers: t = {}, fetch: s }) {
     this.url = e, this.headers = t, this.fetch = Ur(s), this.mfa = {
       listFactors: this._listFactors.bind(this),
@@ -7332,11 +7342,11 @@ class Xa {
    */
   async generateLink(e) {
     try {
-      const { options: t } = e, s = Qa(e, ["options"]), n = Object.assign(Object.assign({}, s), t);
+      const { options: t } = e, s = Ya(e, ["options"]), n = Object.assign(Object.assign({}, s), t);
       return "newEmail" in s && (n.new_email = s == null ? void 0 : s.newEmail, delete n.newEmail), await I(this.fetch, "POST", `${this.url}/admin/generate_link`, {
         body: n,
         headers: this.headers,
-        xform: Ha,
+        xform: Ka,
         redirectTo: t == null ? void 0 : t.redirectTo
       });
     } catch (t) {
@@ -7385,7 +7395,7 @@ class Xa {
           page: (s = (t = e == null ? void 0 : e.page) === null || t === void 0 ? void 0 : t.toString()) !== null && s !== void 0 ? s : "",
           per_page: (i = (n = e == null ? void 0 : e.perPage) === null || n === void 0 ? void 0 : n.toString()) !== null && i !== void 0 ? i : ""
         },
-        xform: Ja
+        xform: Ha
       });
       if (u.error)
         throw u.error;
@@ -7504,7 +7514,7 @@ function ar(r = {}) {
     }
   };
 }
-function eo() {
+function Xa() {
   if (typeof globalThis != "object")
     try {
       Object.defineProperty(Object.prototype, "__magic__", {
@@ -7528,9 +7538,9 @@ class Dr extends Error {
     super(e), this.isAcquireTimeout = !0;
   }
 }
-class to extends Dr {
+class eo extends Dr {
 }
-async function so(r, e, t) {
+async function to(r, e, t) {
   Le.debug && console.log("@supabase/gotrue-js: navigatorLock: acquire lock", r, e);
   const s = new globalThis.AbortController();
   return e > 0 && setTimeout(() => {
@@ -7551,7 +7561,7 @@ async function so(r, e, t) {
       }
     } else {
       if (e === 0)
-        throw Le.debug && console.log("@supabase/gotrue-js: navigatorLock: not immediately available", r), new to(`Acquiring an exclusive Navigator LockManager lock "${r}" immediately failed`);
+        throw Le.debug && console.log("@supabase/gotrue-js: navigatorLock: not immediately available", r), new eo(`Acquiring an exclusive Navigator LockManager lock "${r}" immediately failed`);
       if (Le.debug)
         try {
           const i = await globalThis.navigator.locks.query();
@@ -7563,14 +7573,14 @@ async function so(r, e, t) {
     }
   }));
 }
-eo();
-const ro = {
-  url: fa,
-  storageKey: pa,
+Xa();
+const so = {
+  url: ha,
+  storageKey: fa,
   autoRefreshToken: !0,
   persistSession: !0,
   detectSessionInUrl: !0,
-  headers: ga,
+  headers: pa,
   flowType: "implicit",
   debug: !1,
   hasCustomAuthorizationHeader: !1
@@ -7586,12 +7596,12 @@ class ot {
   constructor(e) {
     var t, s;
     this.userStorage = null, this.memoryStorage = null, this.stateChangeEmitters = /* @__PURE__ */ new Map(), this.autoRefreshTicker = null, this.visibilityChangedCallback = null, this.refreshingDeferred = null, this.initializePromise = null, this.detectSessionInUrl = !0, this.hasCustomAuthorizationHeader = !1, this.suppressGetSessionWarning = !1, this.lockAcquired = !1, this.pendingInLock = [], this.broadcastChannel = null, this.logger = console.log, this.instanceID = ot.nextInstanceID, ot.nextInstanceID += 1, this.instanceID > 0 && ne() && console.warn("Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.");
-    const n = Object.assign(Object.assign({}, ro), e);
-    if (this.logDebugMessages = !!n.debug, typeof n.debug == "function" && (this.logger = n.debug), this.persistSession = n.persistSession, this.storageKey = n.storageKey, this.autoRefreshToken = n.autoRefreshToken, this.admin = new Xa({
+    const n = Object.assign(Object.assign({}, so), e);
+    if (this.logDebugMessages = !!n.debug, typeof n.debug == "function" && (this.logger = n.debug), this.persistSession = n.persistSession, this.storageKey = n.storageKey, this.autoRefreshToken = n.autoRefreshToken, this.admin = new Qa({
       url: n.url,
       headers: n.headers,
       fetch: n.fetch
-    }), this.url = n.url, this.headers = n.headers, this.fetch = Ur(n.fetch), this.lock = n.lock || or, this.detectSessionInUrl = n.detectSessionInUrl, this.flowType = n.flowType, this.hasCustomAuthorizationHeader = n.hasCustomAuthorizationHeader, n.lock ? this.lock = n.lock : ne() && (!((t = globalThis == null ? void 0 : globalThis.navigator) === null || t === void 0) && t.locks) ? this.lock = so : this.lock = or, this.jwks || (this.jwks = { keys: [] }, this.jwks_cached_at = Number.MIN_SAFE_INTEGER), this.mfa = {
+    }), this.url = n.url, this.headers = n.headers, this.fetch = Ur(n.fetch), this.lock = n.lock || or, this.detectSessionInUrl = n.detectSessionInUrl, this.flowType = n.flowType, this.hasCustomAuthorizationHeader = n.hasCustomAuthorizationHeader, n.lock ? this.lock = n.lock : ne() && (!((t = globalThis == null ? void 0 : globalThis.navigator) === null || t === void 0) && t.locks) ? this.lock = to : this.lock = or, this.jwks || (this.jwks = { keys: [] }, this.jwks_cached_at = Number.MIN_SAFE_INTEGER), this.mfa = {
       verify: this._verify.bind(this),
       enroll: this._enroll.bind(this),
       unenroll: this._unenroll.bind(this),
@@ -7648,12 +7658,12 @@ class ot {
   async _initialize() {
     var e;
     try {
-      const t = Ra(window.location.href);
+      const t = Ca(window.location.href);
       let s = "none";
       if (this._isImplicitGrantCallback(t) ? s = "implicit" : await this._isPKCECallback(t) && (s = "pkce"), ne() && this.detectSessionInUrl && s !== "none") {
         const { data: n, error: i } = await this._getSessionFromURL(t, s);
         if (i) {
-          if (this._debug("#_initialize()", "error detecting session from URL", i), wa(i)) {
+          if (this._debug("#_initialize()", "error detecting session from URL", i), ba(i)) {
             const l = (e = i.details) === null || e === void 0 ? void 0 : e.code;
             if (l === "identity_already_exists" || l === "identity_not_found" || l === "single_identity_not_deletable")
               return { error: i };
@@ -7903,7 +7913,7 @@ class ot {
     try {
       const { data: x, error: S } = await I(this.fetch, "POST", `${this.url}/token?grant_type=web3`, {
         headers: this.headers,
-        body: Object.assign({ chain: "solana", message: p, signature: Aa(b) }, !((f = e.options) === null || f === void 0) && f.captchaToken ? { gotrue_meta_security: { captcha_token: (y = e.options) === null || y === void 0 ? void 0 : y.captchaToken } } : null),
+        body: Object.assign({ chain: "solana", message: p, signature: Ea(b) }, !((f = e.options) === null || f === void 0) && f.captchaToken ? { gotrue_meta_security: { captcha_token: (y = e.options) === null || y === void 0 ? void 0 : y.captchaToken } } : null),
         xform: de
       });
       if (S)
@@ -8073,7 +8083,7 @@ class ot {
       return this.flowType === "pkce" && ([i, a] = await Ie(this.storage, this.storageKey)), await I(this.fetch, "POST", `${this.url}/sso`, {
         body: Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, "providerId" in e ? { provider_id: e.providerId } : null), "domain" in e ? { domain: e.domain } : null), { redirect_to: (s = (t = e.options) === null || t === void 0 ? void 0 : t.redirectTo) !== null && s !== void 0 ? s : void 0 }), !((n = e == null ? void 0 : e.options) === null || n === void 0) && n.captchaToken ? { gotrue_meta_security: { captcha_token: e.options.captchaToken } } : null), { skip_http_redirect: !0, code_challenge: i, code_challenge_method: a }),
         headers: this.headers,
-        xform: Ka
+        xform: Ga
       });
     } catch (i) {
       if (O(i))
@@ -8271,7 +8281,7 @@ class ot {
       });
     } catch (t) {
       if (O(t))
-        return ba(t) && (await this._removeSession(), await ye(this.storage, `${this.storageKey}-code-verifier`)), { data: { user: null }, error: t };
+        return _a(t) && (await this._removeSession(), await ye(this.storage, `${this.storageKey}-code-verifier`)), { data: { user: null }, error: t };
       throw t;
     }
   }
@@ -8476,7 +8486,7 @@ class ot {
       const a = (s = n.session) === null || s === void 0 ? void 0 : s.access_token;
       if (a) {
         const { error: o } = await this.admin.signOut(a, e);
-        if (o && !(_a(o) && (o.status === 404 || o.status === 401 || o.status === 403)))
+        if (o && !(va(o) && (o.status === 404 || o.status === 401 || o.status === 403)))
           return { error: o };
       }
       return e !== "others" && (await this._removeSession(), await ye(this.storage, `${this.storageKey}-code-verifier`)), { error: null };
@@ -8487,7 +8497,7 @@ class ot {
    * @param callback A callback function to be invoked when an auth event happens.
    */
   onAuthStateChange(e) {
-    const t = Ca(), s = {
+    const t = Oa(), s = {
       id: t,
       callback: e,
       unsubscribe: () => {
@@ -8621,7 +8631,7 @@ class ot {
     this._debug(t, "begin");
     try {
       const s = Date.now();
-      return await Ia(async (n) => (n > 0 && await $a(200 * Math.pow(2, n - 1)), this._debug(t, "refreshing attempt", n), await I(this.fetch, "POST", `${this.url}/token?grant_type=refresh_token`, {
+      return await $a(async (n) => (n > 0 && await Pa(200 * Math.pow(2, n - 1)), this._debug(t, "refreshing attempt", n), await I(this.fetch, "POST", `${this.url}/token?grant_type=refresh_token`, {
         body: { refresh_token: e },
         headers: this.headers,
         xform: de
@@ -9058,7 +9068,7 @@ class ot {
     if (s)
       return s;
     const n = Date.now();
-    if (s = this.jwks.keys.find((o) => o.kid === e), s && this.jwks_cached_at + ya > n)
+    if (s = this.jwks.keys.find((o) => o.kid === e), s && this.jwks_cached_at + ma > n)
       return s;
     const { data: i, error: a } = await I(this.fetch, "GET", `${this.url}/.well-known/jwks.json`, {
       headers: this.headers
@@ -9093,7 +9103,7 @@ class ot {
         s = y.session.access_token;
       }
       const { header: n, payload: i, signature: a, raw: { header: o, payload: l } } = zt(s);
-      t != null && t.allowExpired || Fa(i.exp);
+      t != null && t.allowExpired || Ba(i.exp);
       const c = !n.alg || n.alg.startsWith("HS") || !n.kid || !("crypto" in globalThis && "subtle" in globalThis.crypto) ? null : await this.fetchJwk(n.kid, t != null && t.keys ? { keys: t.keys } : t == null ? void 0 : t.jwks);
       if (!c) {
         const { error: y } = await this.getUser(s);
@@ -9108,10 +9118,10 @@ class ot {
           error: null
         };
       }
-      const u = qa(n.alg), d = await crypto.subtle.importKey("jwk", c, u, !0, [
+      const u = Fa(n.alg), d = await crypto.subtle.importKey("jwk", c, u, !0, [
         "verify"
       ]);
-      if (!await crypto.subtle.verify(u, d, a, Ea(`${o}.${l}`)))
+      if (!await crypto.subtle.verify(u, d, a, ja(`${o}.${l}`)))
         throw new fs("Invalid JWT signature");
       return {
         data: {
@@ -9129,13 +9139,13 @@ class ot {
   }
 }
 ot.nextInstanceID = 0;
-const no = ot;
-class io extends no {
+const ro = ot;
+class no extends ro {
   constructor(e) {
     super(e);
   }
 }
-var ao = function(r, e, t, s) {
+var io = function(r, e, t, s) {
   function n(i) {
     return i instanceof t ? i : new t(function(a) {
       a(i);
@@ -9162,7 +9172,7 @@ var ao = function(r, e, t, s) {
     c((s = s.apply(r, e || [])).next());
   });
 };
-class oo {
+class ao {
   /**
    * Create a new client for use in the browser.
    * @param supabaseUrl The unique Supabase URL which is supplied when you create a new project in your project dashboard.
@@ -9182,29 +9192,29 @@ class oo {
       throw new Error("supabaseUrl is required.");
     if (!t)
       throw new Error("supabaseKey is required.");
-    const o = da(e), l = new URL(o);
+    const o = ua(e), l = new URL(o);
     this.realtimeUrl = new URL("realtime/v1", l), this.realtimeUrl.protocol = this.realtimeUrl.protocol.replace("http", "ws"), this.authUrl = new URL("auth/v1", l), this.storageUrl = new URL("storage/v1", l), this.functionsUrl = new URL("functions/v1", l);
     const c = `sb-${l.hostname.split(".")[0]}-auth-token`, u = {
-      db: ra,
-      realtime: ia,
-      auth: Object.assign(Object.assign({}, na), { storageKey: c }),
-      global: sa
-    }, d = ha(s ?? {}, u);
+      db: sa,
+      realtime: na,
+      auth: Object.assign(Object.assign({}, ra), { storageKey: c }),
+      global: ta
+    }, d = da(s ?? {}, u);
     this.storageKey = (n = d.auth.storageKey) !== null && n !== void 0 ? n : "", this.headers = (i = d.global.headers) !== null && i !== void 0 ? i : {}, d.accessToken ? (this.accessToken = d.accessToken, this.auth = new Proxy({}, {
       get: (f, y) => {
         throw new Error(`@supabase/supabase-js: Supabase Client is configured with the accessToken option, accessing supabase.auth.${String(y)} is not possible`);
       }
-    })) : this.auth = this._initSupabaseAuthClient((a = d.auth) !== null && a !== void 0 ? a : {}, this.headers, d.global.fetch), this.fetch = ca(t, this._getAccessToken.bind(this), d.global.fetch), this.realtime = this._initRealtimeClient(Object.assign({ headers: this.headers, accessToken: this._getAccessToken.bind(this) }, d.realtime)), this.rest = new xi(new URL("rest/v1", l).href, {
+    })) : this.auth = this._initSupabaseAuthClient((a = d.auth) !== null && a !== void 0 ? a : {}, this.headers, d.global.fetch), this.fetch = la(t, this._getAccessToken.bind(this), d.global.fetch), this.realtime = this._initRealtimeClient(Object.assign({ headers: this.headers, accessToken: this._getAccessToken.bind(this) }, d.realtime)), this.rest = new ki(new URL("rest/v1", l).href, {
       headers: this.headers,
       schema: d.db.schema,
       fetch: this.fetch
-    }), this.storage = new Xi(this.storageUrl.href, this.headers, this.fetch, s == null ? void 0 : s.storage), d.accessToken || this._listenForAuthEvents();
+    }), this.storage = new Qi(this.storageUrl.href, this.headers, this.fetch, s == null ? void 0 : s.storage), d.accessToken || this._listenForAuthEvents();
   }
   /**
    * Supabase Functions allows you to deploy and invoke edge functions.
    */
   get functions() {
-    return new Xn(this.functionsUrl.href, {
+    return new Qn(this.functionsUrl.href, {
       headers: this.headers,
       customFetch: this.fetch
     });
@@ -9288,7 +9298,7 @@ class oo {
   }
   _getAccessToken() {
     var e, t;
-    return ao(this, void 0, void 0, function* () {
+    return io(this, void 0, void 0, function* () {
       if (this.accessToken)
         return yield this.accessToken();
       const { data: s } = yield this.auth.getSession();
@@ -9300,7 +9310,7 @@ class oo {
       Authorization: `Bearer ${this.supabaseKey}`,
       apikey: `${this.supabaseKey}`
     };
-    return new io({
+    return new no({
       url: this.authUrl.href,
       headers: Object.assign(Object.assign({}, d), c),
       storageKey: i,
@@ -9318,7 +9328,7 @@ class oo {
     });
   }
   _initRealtimeClient(e) {
-    return new Bi(this.realtimeUrl.href, Object.assign(Object.assign({}, e), { params: Object.assign({ apikey: this.supabaseKey }, e == null ? void 0 : e.params) }));
+    return new Mi(this.realtimeUrl.href, Object.assign(Object.assign({}, e), { params: Object.assign({ apikey: this.supabaseKey }, e == null ? void 0 : e.params) }));
   }
   _listenForAuthEvents() {
     return this.auth.onAuthStateChange((t, s) => {
@@ -9329,8 +9339,8 @@ class oo {
     (e === "TOKEN_REFRESHED" || e === "SIGNED_IN") && this.changedAccessToken !== s ? this.changedAccessToken = s : e === "SIGNED_OUT" && (this.realtime.setAuth(), t == "STORAGE" && this.auth.signOut(), this.changedAccessToken = void 0);
   }
 }
-const lo = (r, e, t) => new oo(r, e, t);
-function co() {
+const oo = (r, e, t) => new ao(r, e, t);
+function lo() {
   if (typeof window < "u" || typeof process > "u")
     return !1;
   const r = process.version;
@@ -9339,7 +9349,7 @@ function co() {
   const e = r.match(/^v(\d+)\./);
   return e ? parseInt(e[1], 10) <= 18 : !1;
 }
-co() && console.warn("⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217");
+lo() && console.warn("⚠️  Node.js 18 and below are deprecated and will no longer be supported in future versions of @supabase/supabase-js. Please upgrade to Node.js 20 or later. For more information, visit: https://github.com/orgs/supabase/discussions/37217");
 function De(r) {
   var s;
   if (typeof process < "u" && typeof process.env < "u" && Object.prototype.hasOwnProperty.call(process.env, r))
@@ -9350,7 +9360,7 @@ function De(r) {
     return typeof n == "string" ? n : n != null ? String(n) : void 0;
   }
 }
-function uo(r, e = !0) {
+function co(r, e = !0) {
   if (r == null || r === "")
     return e;
   if (typeof r == "boolean")
@@ -9359,34 +9369,34 @@ function uo(r, e = !0) {
   return ["1", "true", "yes", "on", "enabled"].includes(t) ? !0 : ["0", "false", "no", "off", "disabled"].includes(t) ? !1 : e;
 }
 function Mr() {
-  const r = De("NEXT_PUBLIC_SUPABASE_URL") || De("VITE_SUPABASE_URL") || "", e = De("NEXT_PUBLIC_SUPABASE_ANON_KEY") || De("VITE_SUPABASE_ANON_KEY") || "", t = De("NEXT_PUBLIC_FEATURE_SUPABASE") ?? De("VITE_FEATURE_SUPABASE"), s = uo(t, !0), n = !!(r && e);
+  const r = De("NEXT_PUBLIC_SUPABASE_URL") || De("VITE_SUPABASE_URL") || "", e = De("NEXT_PUBLIC_SUPABASE_ANON_KEY") || De("VITE_SUPABASE_ANON_KEY") || "", t = De("NEXT_PUBLIC_FEATURE_SUPABASE") ?? De("VITE_FEATURE_SUPABASE"), s = co(t, !0), n = !!(r && e);
   return { url: r, anonKey: e, flagRaw: t, enabledByFlag: s, hasEnv: n, enabled: s && n };
 }
-function ho() {
+function uo() {
   return Mr().enabled;
 }
 function Br() {
-  return ho();
+  return uo();
 }
-const { url: fo, anonKey: po, enabledByFlag: go, hasEnv: mo, enabled: Fr } = Mr();
+const { url: ho, anonKey: fo, enabledByFlag: po, hasEnv: go, enabled: Fr } = Mr();
 let lr = !1;
-const yo = process.env.NODE_ENV === "test", vo = process.env.NODE_ENV === "production", _o = process.env.CI === "true";
-!Fr && go && !mo && !vo && !yo && !_o && !lr && (console.warn("[supabase] URL/key missing; storage features are disabled."), lr = !0);
-Fr && lo(fo, po);
-const bo = X({
+const mo = process.env.NODE_ENV === "test", yo = process.env.NODE_ENV === "production", vo = process.env.CI === "true";
+!Fr && po && !go && !yo && !mo && !vo && !lr && (console.warn("[supabase] URL/key missing; storage features are disabled."), lr = !0);
+Fr && oo(ho, fo);
+const _o = X({
   id: P(),
   type: P(),
   label: P().optional(),
   data: St(at()).optional()
-}), wo = X({
+}), bo = X({
   id: P(),
   source: P(),
   target: P(),
   label: P().optional(),
   data: St(at()).optional()
-}), ko = X({
-  nodes: ae(bo),
-  edges: ae(wo),
+}), wo = X({
+  nodes: ae(_o),
+  edges: ae(bo),
   layout: St(at()).optional(),
   settings: St(at()).optional()
 });
@@ -9402,14 +9412,14 @@ X({
     updatedAt: P(),
     author: X({ id: P().optional(), name: P().optional() }).optional()
   }),
-  graph: ko,
+  graph: wo,
   extras: X({
     previewUrl: P().url().optional(),
     thumbSeed: P().optional()
   }).catchall(at()).optional()
 });
 const cr = "psg.devUserId";
-function xo() {
+function ko() {
   const r = (process.env.NEXT_PUBLIC_FEATURE_DEV_USER || process.env.VITE_FEATURE_DEV_USER || "").toLowerCase();
   return r === "1" || r === "true";
 }
@@ -9420,7 +9430,7 @@ function Zo({ children: r, supabase: e }) {
     let i;
     async function a() {
       var o, l;
-      if (xo() && typeof window < "u")
+      if (ko() && typeof window < "u")
         try {
           let c = window.localStorage.getItem(cr);
           c || (c = `dev-${Math.random().toString(36).slice(2, 10)}`, window.localStorage.setItem(cr, c)), s(c);
@@ -9454,7 +9464,7 @@ function Zo({ children: r, supabase: e }) {
 function Wr() {
   return N.useContext(qr);
 }
-async function So(r) {
+async function xo(r) {
   const e = await fetch(r);
   if (!e.ok) throw new Error(`Failed to download graph (${e.status})`);
   return e.json();
@@ -9474,10 +9484,10 @@ function Go({ isOpen: r, onClose: e, onOpenGraph: t, userId: s, enableSupabase: 
       f && /* @__PURE__ */ h.jsx("button", { type: "button", "aria-selected": o === "supabase", onClick: () => l("supabase"), children: "Supabase" }),
       /* @__PURE__ */ h.jsx("button", { type: "button", "aria-selected": o === "local", onClick: () => l("local"), children: "Local" })
     ] }),
-    /* @__PURE__ */ h.jsx("section", { style: { padding: 12 }, children: o === "server" ? /* @__PURE__ */ h.jsx(jo, { onOpenGraph: t }) : o === "local" ? /* @__PURE__ */ h.jsx(Eo, { onOpenGraph: t }) : (
+    /* @__PURE__ */ h.jsx("section", { style: { padding: 12 }, children: o === "server" ? /* @__PURE__ */ h.jsx(To, { onOpenGraph: t }) : o === "local" ? /* @__PURE__ */ h.jsx(jo, { onOpenGraph: t }) : (
       // tab === 'supabase'
       f ? /* @__PURE__ */ h.jsx(
-        To,
+        So,
         {
           userId: u,
           onOpenGraph: t,
@@ -9488,7 +9498,7 @@ function Go({ isOpen: r, onClose: e, onOpenGraph: t, userId: s, enableSupabase: 
     ) })
   ] }) }) : null;
 }
-function To({ userId: r, onOpenGraph: e, listFn: t, getFn: s }) {
+function So({ userId: r, onOpenGraph: e, listFn: t, getFn: s }) {
   const [n, i] = N.useState("idle"), [a, o] = N.useState(null), [l, c] = N.useState([]), [u, d] = N.useState(null), [f, y] = N.useState(0), p = N.useCallback(async () => {
     i("loading"), o(null);
     const S = await t(r);
@@ -9563,7 +9573,7 @@ function To({ userId: r, onOpenGraph: e, listFn: t, getFn: s }) {
     )
   ] });
 }
-function jo({ onOpenGraph: r }) {
+function To({ onOpenGraph: r }) {
   const [e, t] = N.useState("idle"), [s, n] = N.useState(null), [i, a] = N.useState([]), [o, l] = N.useState(null), [c, u] = N.useState(0), d = N.useCallback(async () => {
     t("loading"), n(null);
     try {
@@ -9580,7 +9590,7 @@ function jo({ onOpenGraph: r }) {
   async function f(p) {
     l(p);
     try {
-      const b = await So(`/graphs/${p}`);
+      const b = await xo(`/graphs/${p}`);
       r(b);
     } catch (b) {
       const x = b instanceof Error ? b.message : "Failed to open graph";
@@ -9642,7 +9652,7 @@ function jo({ onOpenGraph: r }) {
     )
   ] });
 }
-function Eo({ onOpenGraph: r }) {
+function jo({ onOpenGraph: r }) {
   const [e, t] = N.useState(null);
   function s(n) {
     var l;
@@ -9677,10 +9687,10 @@ function ur() {
   return /* @__PURE__ */ h.jsx("span", { "aria-label": "saving", role: "status", children: "Saving…" });
 }
 const Gt = "graph";
-function Ao(r) {
+function Eo(r) {
   return r.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9._-]/g, "");
 }
-function Oo(r) {
+function Ao(r) {
   return r.toLowerCase().endsWith(".psg") ? r : `${r}.psg`;
 }
 function Ko({ isOpen: r, onClose: e, graph: t, onSaveBlob: s, enableSupabase: n, userId: i, supabasePut: a, onSupabaseSaved: o }) {
@@ -9688,7 +9698,7 @@ function Ko({ isOpen: r, onClose: e, graph: t, onSaveBlob: s, enableSupabase: n,
   if (N.useEffect(() => {
     r && (u(Gt), f(null), p(!1), x(!1));
   }, [r]), !r) return null;
-  const C = Ao(c).slice(0, 64), v = Oo(C || Gt), E = !!C && !C.startsWith(".") && !C.endsWith("."), F = i ?? l ?? null, T = !!((n ?? Br()) && F && a);
+  const C = Eo(c).slice(0, 64), v = Ao(C || Gt), E = !!C && !C.startsWith(".") && !C.endsWith("."), F = i ?? l ?? null, T = !!((n ?? Br()) && F && a);
   async function z() {
     if (!E || !T) {
       f("Please enter a valid name");
@@ -9772,18 +9782,15 @@ const mt = {
   header: { display: "flex", justifyContent: "space-between", padding: 12, borderBottom: "1px solid #eee" },
   footer: { display: "flex", gap: 8, justifyContent: "flex-end", padding: 12, borderTop: "1px solid #eee" }
 };
-function Ho(r) {
-  return /* @__PURE__ */ h.jsx(Hn, { ...r });
-}
 export {
-  Io as AssetBrowser,
-  No as AssetBrowserTabs,
+  $o as AssetBrowser,
+  Io as AssetBrowserTabs,
   Go as OpenGraphDialog,
   Ko as SaveGraphDialog,
   Gn as ServerTab,
-  Hn as TabbedAssetBrowser,
+  No as TabbedAssetBrowser,
   Zo as UserProvider,
-  Ho as default,
+  No as default,
   Wr as useUserId
 };
 //# sourceMappingURL=index.esm.js.map

@@ -7,11 +7,9 @@ export type TabbedAssetBrowserProps = {
   onInsert?: (preset: Preset) => void;
 };
 
-export function TabbedAssetBrowser(
-  props: TabbedAssetBrowserProps
-): JSX.Element {
+export const TabbedAssetBrowser: React.FC<TabbedAssetBrowserProps> = props => {
   // Temporarily use simple version to debug
   console.log('[TabbedAssetBrowser] Rendering with simple version');
   return <ProAssetBrowserSimple {...props} />;
   // return <ProAssetBrowser {...props} />;
-}
+};
