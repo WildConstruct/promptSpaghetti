@@ -119,6 +119,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
     'name' | 'category' | 'complexity' | 'nodes'
   >('name');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [showDetails, setShowDetails] = useState(false);
 
   // Filter and sort presets
   const filteredPresets = useMemo(() => {
@@ -190,244 +191,244 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
   };
 
   return (
-    <div className="asset-browser-pro">
-      {/* Sidebar */}
-      <div className="browser-sidebar-pro">
-        {/* Search */}
-        <div className="sidebar-section">
-          <div className="sidebar-section-header">Search</div>
-          <div style={{ padding: '8px' }}>
-            <div className="browser-search-field">
-              <span className="browser-search-icon">🔍</span>
-              <input
-                type="text"
-                className="browser-search-input"
-                placeholder="Search presets..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-              />
-            </div>
+    <div className="asset-browser-pro-horizontal">
+      {/* Top Section with Controls */}
+      <div className="browser-top-controls">
+        {/* Search Bar */}
+        <div className="search-section">
+          <div className="browser-search-field">
+            <span className="browser-search-icon">🔍</span>
+            <input
+              type="text"
+              className="browser-search-input"
+              placeholder="Search presets..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+            />
           </div>
         </div>
 
-        {/* Categories */}
-        <div className="sidebar-section">
-          <div className="sidebar-section-header">Categories</div>
-          <div className="sidebar-filters">
-            {categories.map(cat => {
-              const count =
-                cat === 'All'
-                  ? mockPresets.length
-                  : mockPresets.filter(p => p.category === cat).length;
-              return (
-                <div
-                  key={cat}
-                  className={`filter-item ${selectedCategory === cat ? 'active' : ''}`}
-                  onClick={() => setSelectedCategory(cat)}
-                >
-                  <span>{cat}</span>
-                  <span className="filter-count">{count}</span>
-                </div>
-              );
-            })}
+        {/* Keyword Buttons - Logic Pro Style */}
+        <div className="keyword-buttons-section">
+          <div className="keyword-row">
+            <button
+              className={`keyword-btn ${selectedCategory === 'All' ? 'active' : ''}`}
+              onClick={() => setSelectedCategory('All')}
+            >
+              All
+            </button>
+            {categories.slice(1).map(cat => (
+              <button
+                key={cat}
+                className={`keyword-btn ${selectedCategory === cat ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
-        </div>
-
-        {/* Tags */}
-        <div className="sidebar-section">
-          <div className="sidebar-section-header">Tags</div>
-          <div className="sidebar-tags">
+          <div className="keyword-row">
             {allTags.map(tag => (
-              <span
+              <button
                 key={tag}
-                className={`tag-pill ${selectedTags.includes(tag) ? 'active' : ''}`}
+                className={`keyword-btn tag ${selectedTags.includes(tag) ? 'active' : ''}`}
                 onClick={() => toggleTag(tag)}
               >
                 {tag}
-              </span>
+              </button>
             ))}
           </div>
         </div>
+
+        {/* View Controls */}
+        <div className="view-controls-section">
+          <button className="toolbar-button active">Library</button>
+          <button className="toolbar-button">Server</button>
+          <span className="divider">|</span>
+          <button
+            className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+            onClick={() => setViewMode('list')}
+            title="List View"
+          >
+            ☰
+          </button>
+          <button
+            className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+            onClick={() => setViewMode('grid')}
+            title="Grid View"
+          >
+            ⊞
+          </button>
+          <button
+            className={`view-toggle-btn ${showDetails ? 'active' : ''}`}
+            onClick={() => setShowDetails(!showDetails)}
+            title="Show Details"
+          >
+            ℹ
+          </button>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="browser-content-pro">
-        {/* Toolbar */}
-        <div className="browser-toolbar">
-          <div className="toolbar-button-group">
-            <button className="toolbar-button active">Library</button>
-            <button className="toolbar-button">Server</button>
-          </div>
+      {/* Main Content Area */}
+      <div className="browser-main-content">
+        <div className="content-wrapper">
+          {/* List/Grid View */}
+          {viewMode === 'list' ? (
+            <div className="preset-list-container">
+              {/* Column Headers */}
+              <div className="preset-list-header">
+                <div className="column-header icon-col"></div>
+                <div
+                  className={`column-header sortable ${sortColumn === 'name' ? `sorted-${sortDirection}` : ''}`}
+                  onClick={() => handleSort('name')}
+                >
+                  Name
+                </div>
+                <div
+                  className={`column-header sortable ${sortColumn === 'category' ? `sorted-${sortDirection}` : ''}`}
+                  onClick={() => handleSort('category')}
+                >
+                  Category
+                </div>
+                <div
+                  className={`column-header sortable ${sortColumn === 'complexity' ? `sorted-${sortDirection}` : ''}`}
+                  onClick={() => handleSort('complexity')}
+                >
+                  Level
+                </div>
+                <div
+                  className={`column-header sortable ${sortColumn === 'nodes' ? `sorted-${sortDirection}` : ''}`}
+                  onClick={() => handleSort('nodes')}
+                >
+                  Nodes
+                </div>
+                <div className="column-header action-col">Action</div>
+              </div>
 
-          <div className="view-controls">
-            <button
-              className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
-              onClick={() => setViewMode('list')}
-              title="List View"
-            >
-              ☰
-            </button>
-            <button
-              className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
-              onClick={() => setViewMode('grid')}
-              title="Grid View"
-            >
-              ⊞
-            </button>
-          </div>
-        </div>
-
-        {/* List/Grid View */}
-        {viewMode === 'list' ? (
-          <div className="preset-list-container">
-            {/* Column Headers */}
-            <div className="preset-list-header">
-              <div className="column-header"></div>
-              <div
-                className={`column-header sortable ${sortColumn === 'name' ? `sorted-${sortDirection}` : ''}`}
-                onClick={() => handleSort('name')}
-              >
-                Name
+              {/* Preset Rows */}
+              <div className="preset-list-body">
+                {filteredPresets.map(preset => (
+                  <div
+                    key={preset.id}
+                    className={`preset-list-item ${selectedPreset === preset.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedPreset(preset.id)}
+                    onDoubleClick={() => handleInsert(preset)}
+                  >
+                    <div className="preset-icon">📄</div>
+                    <div className="preset-name">{preset.name}</div>
+                    <div className="preset-category">
+                      {preset.category || ''}
+                    </div>
+                    <div className="preset-meta">{preset.complexity || ''}</div>
+                    <div className="preset-meta">{preset.nodes || 0}</div>
+                    <div className="preset-action">
+                      <button
+                        className="insert-btn"
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleInsert(preset);
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div
-                className={`column-header sortable ${sortColumn === 'category' ? `sorted-${sortDirection}` : ''}`}
-                onClick={() => handleSort('category')}
-              >
-                Category
-              </div>
-              <div
-                className={`column-header sortable ${sortColumn === 'complexity' ? `sorted-${sortDirection}` : ''}`}
-                onClick={() => handleSort('complexity')}
-              >
-                Level
-              </div>
-              <div
-                className={`column-header sortable ${sortColumn === 'nodes' ? `sorted-${sortDirection}` : ''}`}
-                onClick={() => handleSort('nodes')}
-              >
-                Nodes
-              </div>
-              <div className="column-header">Insert</div>
             </div>
-
-            {/* Preset Rows */}
-            {filteredPresets.map(preset => (
-              <div
-                key={preset.id}
-                className={`preset-list-item ${selectedPreset === preset.id ? 'selected' : ''}`}
-                onClick={() => setSelectedPreset(preset.id)}
-                onDoubleClick={() => handleInsert(preset)}
-              >
-                <div className="preset-icon">📄</div>
-                <div className="preset-name">{preset.name}</div>
-                <div className="preset-category">{preset.category || ''}</div>
-                <div className="preset-meta">{preset.complexity || ''}</div>
-                <div className="preset-meta">{preset.nodes || 0}</div>
-                <div className="preset-meta">
+          ) : (
+            <div className="preset-grid-container">
+              {filteredPresets.map(preset => (
+                <div
+                  key={preset.id}
+                  className={`preset-card-compact ${selectedPreset === preset.id ? 'selected' : ''}`}
+                  onClick={() => setSelectedPreset(preset.id)}
+                  onDoubleClick={() => handleInsert(preset)}
+                >
                   <button
-                    className="toolbar-button"
-                    style={{ padding: '2px 6px', fontSize: '10px' }}
+                    className="preset-insert-btn"
                     onClick={e => {
                       e.stopPropagation();
                       handleInsert(preset);
                     }}
                   >
-                    Insert
+                    +
                   </button>
+                  <div className="preset-card-header">
+                    <div className="preset-card-icon">📄</div>
+                    <div className="preset-card-title">{preset.name}</div>
+                  </div>
+                  <div className="preset-card-meta">
+                    <span className="preset-card-tag">
+                      {preset.category || 'Uncategorized'}
+                    </span>
+                    <span className="preset-card-tag">
+                      {preset.nodes || 0} nodes
+                    </span>
+                  </div>
                 </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Details Panel (shown when showDetails is true) */}
+        {showDetails && selectedPreset && (
+          <div className="details-panel-horizontal">
+            <div className="details-header">
+              <div className="details-title">
+                {filteredPresets.find(p => p.id === selectedPreset)?.name || ''}
               </div>
-            ))}
-          </div>
-        ) : (
-          <div className="preset-grid-container">
-            {filteredPresets.map(preset => (
-              <div
-                key={preset.id}
-                className={`preset-card-compact ${selectedPreset === preset.id ? 'selected' : ''}`}
-                onClick={() => setSelectedPreset(preset.id)}
-                onDoubleClick={() => handleInsert(preset)}
+              <div className="details-subtitle">
+                {filteredPresets.find(p => p.id === selectedPreset)?.category ||
+                  ''}
+              </div>
+            </div>
+
+            <div className="details-content">
+              <div className="details-row">
+                <span className="details-label">Complexity:</span>
+                <span className="details-value">
+                  {filteredPresets.find(p => p.id === selectedPreset)
+                    ?.complexity || 'N/A'}
+                </span>
+              </div>
+
+              <div className="details-row">
+                <span className="details-label">Nodes:</span>
+                <span className="details-value">
+                  {filteredPresets.find(p => p.id === selectedPreset)?.nodes ||
+                    0}
+                </span>
+              </div>
+
+              <div className="details-row">
+                <span className="details-label">Tags:</span>
+                <span className="details-value">
+                  {filteredPresets
+                    .find(p => p.id === selectedPreset)
+                    ?.tags.join(', ') || 'None'}
+                </span>
+              </div>
+            </div>
+
+            <div className="details-actions">
+              <button
+                className="action-btn primary"
+                onClick={() => {
+                  const preset = filteredPresets.find(
+                    p => p.id === selectedPreset
+                  );
+                  if (preset) handleInsert(preset);
+                }}
               >
-                <button
-                  className="preset-insert-btn"
-                  onClick={e => {
-                    e.stopPropagation();
-                    handleInsert(preset);
-                  }}
-                >
-                  +
-                </button>
-                <div className="preset-card-header">
-                  <div className="preset-card-icon">📄</div>
-                  <div className="preset-card-title">{preset.name}</div>
-                </div>
-                <div className="preset-card-meta">
-                  <span className="preset-card-tag">
-                    {preset.category || 'Uncategorized'}
-                  </span>
-                  <span className="preset-card-tag">
-                    {preset.nodes || 0} nodes
-                  </span>
-                </div>
-              </div>
-            ))}
+                Insert
+              </button>
+              <button className="action-btn">Preview</button>
+            </div>
           </div>
         )}
       </div>
-
-      {/* Details Panel (optional) */}
-      {selectedPreset && (
-        <div className="details-panel">
-          <div className="details-header">
-            <div className="details-title">
-              {filteredPresets.find(p => p.id === selectedPreset)?.name || ''}
-            </div>
-            <div className="details-subtitle">
-              {filteredPresets.find(p => p.id === selectedPreset)?.category ||
-                ''}
-            </div>
-          </div>
-
-          <div className="details-section">
-            <div className="details-label">Complexity</div>
-            <div className="details-value">
-              {filteredPresets.find(p => p.id === selectedPreset)?.complexity ||
-                ''}
-            </div>
-          </div>
-
-          <div className="details-section">
-            <div className="details-label">Node Count</div>
-            <div className="details-value">
-              {filteredPresets.find(p => p.id === selectedPreset)?.nodes || 0}{' '}
-              nodes
-            </div>
-          </div>
-
-          <div className="details-section">
-            <div className="details-label">Tags</div>
-            <div className="details-value">
-              {filteredPresets
-                .find(p => p.id === selectedPreset)
-                ?.tags.join(', ') || ''}
-            </div>
-          </div>
-
-          <div className="details-actions">
-            <button
-              className="action-btn primary"
-              onClick={() => {
-                const preset = filteredPresets.find(
-                  p => p.id === selectedPreset
-                );
-                if (preset) handleInsert(preset);
-              }}
-            >
-              Insert
-            </button>
-            <button className="action-btn">Preview</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
