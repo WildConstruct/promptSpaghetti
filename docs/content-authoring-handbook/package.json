@@ -33,14 +33,14 @@
   "author": "Prompt Spaghetti Team",
   "license": "MIT",
   "dependencies": {
-    "archiver": "^6.0.1",
+    "archiver": "^6.0.2",
     "marked": "^9.1.6"
   },
   "devDependencies": {
     "http-server": "^14.1.1",
-    "nodemon": "^3.0.2",
-    "puppeteer-core": "^24.14.0",
-    "ts-jest": "^29.4.0"
+    "nodemon": "^3.1.10",
+    "puppeteer-core": "^24.16.1",
+    "ts-jest": "^29.4.1"
   },
   "engines": {
     "node": ">=16.0.0"
