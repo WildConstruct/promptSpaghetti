@@ -1,5 +1,6 @@
 import React from 'react';
-import { ProAssetBrowser } from './ProAssetBrowser';
+// import { ProAssetBrowser } from './ProAssetBrowser';
+import { ProAssetBrowserSimple } from './ProAssetBrowserSimple';
 import type { Preset } from '../types';
 
 export type TabbedAssetBrowserProps = {
@@ -9,6 +10,8 @@ export type TabbedAssetBrowserProps = {
 export function TabbedAssetBrowser(
   props: TabbedAssetBrowserProps
 ): JSX.Element {
-  // Use the new Pro Asset Browser with Logic-inspired UI
-  return <ProAssetBrowser {...props} />;
+  // Temporarily use simple version to debug
+  console.log('[TabbedAssetBrowser] Rendering with simple version');
+  return <ProAssetBrowserSimple {...props} />;
+  // return <ProAssetBrowser {...props} />;
 }
