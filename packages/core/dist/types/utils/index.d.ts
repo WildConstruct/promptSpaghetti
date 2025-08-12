@@ -9,4 +9,5 @@ export * from './supabaseClient.js';
 export * from './psgStorage.js';
 export * from './supabaseFeature.js';
 export * from './psgCodec.js';
+export * from './persistenceUtils.js';
 //# sourceMappingURL=index.d.ts.map

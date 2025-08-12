@@ -17,7 +17,7 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     commonjsOptions: {
-      include: [/zod/, /node_modules/]
+      include: [/zod/, /node_modules/, /@prompt\/asset-browser/]
     },
     rollupOptions: {
       output: {
@@ -58,10 +58,27 @@ export default defineConfig({
         '../packages/asset-browser'
       )
     },
-    dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow']
+    dedupe: [
+      'react',
+      'react-dom',
+      'react/jsx-runtime',
+      'react/jsx-dev-runtime',
+      'zod',
+      'zustand',
+      'reactflow'
+    ]
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand', 'seedrandom']
+    include: [
+      'react',
+      'react-dom',
+      'reactflow',
+      'zod',
+      'zustand',
+      'seedrandom',
+      '@prompt/asset-browser > react',
+      '@prompt/asset-browser > react-dom'
+    ]
   },
   define: {
     // Ensure process.env is available for any Node.js checks

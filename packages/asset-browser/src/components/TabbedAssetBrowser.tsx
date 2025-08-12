@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 // import { ProAssetBrowser } from './ProAssetBrowser';
 // import { ProAssetBrowserSimple } from './ProAssetBrowserSimple';
 import type { Preset } from '../types';

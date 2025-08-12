@@ -1,30 +1,41 @@
+"use strict";
 /**
  * Persistence utilities for localStorage with compression and validation
  */
-import { compress, decompress } from 'lz-string';
-import { z } from 'zod';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.persistenceStorage = exports.PersistedStateSchema = exports.MAX_STORAGE_SIZE = exports.COMPRESSION_THRESHOLD = exports.STORAGE_VERSION = exports.STORAGE_KEY = void 0;
+exports.isStorageAvailable = isStorageAvailable;
+exports.getStorageSize = getStorageSize;
+exports.checkStorageQuota = checkStorageQuota;
+exports.maybeCompress = maybeCompress;
+exports.maybeDecompress = maybeDecompress;
+exports.validatePersistedState = validatePersistedState;
+exports.clearPersistedState = clearPersistedState;
+exports.getPersistedStateInfo = getPersistedStateInfo;
+const lz_string_1 = require("lz-string");
+const zod_1 = require("zod");
 // Storage configuration
-export const STORAGE_KEY = 'promptgraph:state:v1';
-export const STORAGE_VERSION = 1;
-export const COMPRESSION_THRESHOLD = 100 * 1024; // 100KB
-export const MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
+exports.STORAGE_KEY = 'promptgraph:state:v1';
+exports.STORAGE_VERSION = 1;
+exports.COMPRESSION_THRESHOLD = 100 * 1024; // 100KB
+exports.MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
 // Persisted state schema for validation
-export const PersistedStateSchema = z.object({
-    nodes: z.array(z.any()), // Using any for now, could be more specific
-    edges: z.array(z.any()),
-    viewport: z
+exports.PersistedStateSchema = zod_1.z.object({
+    nodes: zod_1.z.array(zod_1.z.any()), // Using any for now, could be more specific
+    edges: zod_1.z.array(zod_1.z.any()),
+    viewport: zod_1.z
         .object({
-        x: z.number(),
-        y: z.number(),
-        zoom: z.number()
+        x: zod_1.z.number(),
+        y: zod_1.z.number(),
+        zoom: zod_1.z.number()
     })
         .optional(),
-    lastModified: z.string().optional()
+    lastModified: zod_1.z.string().optional()
 });
 /**
  * Check if localStorage is available and has space
  */
-export function isStorageAvailable() {
+function isStorageAvailable() {
     try {
         const test = '__storage_test__';
         localStorage.setItem(test, test);
@@ -38,7 +49,7 @@ export function isStorageAvailable() {
 /**
  * Get storage size for a key
  */
-export function getStorageSize(key) {
+function getStorageSize(key) {
     const item = localStorage.getItem(key);
     if (!item)
         return 0;
@@ -47,7 +58,7 @@ export function getStorageSize(key) {
 /**
  * Check if we're approaching storage quota
  */
-export function checkStorageQuota() {
+function checkStorageQuota() {
     let totalSize = 0;
     try {
         for (const key in localStorage) {
@@ -55,10 +66,10 @@ export function checkStorageQuota() {
                 totalSize += localStorage[key].length + key.length;
             }
         }
-        const percentage = (totalSize / MAX_STORAGE_SIZE) * 100;
+        const percentage = (totalSize / exports.MAX_STORAGE_SIZE) * 100;
         return {
             used: totalSize,
-            available: totalSize < MAX_STORAGE_SIZE * 0.9, // 90% threshold
+            available: totalSize < exports.MAX_STORAGE_SIZE * 0.9, // 90% threshold
             percentage
         };
     }
@@ -69,10 +80,10 @@ export function checkStorageQuota() {
 /**
  * Compress data if it's above threshold
  */
-export function maybeCompress(data) {
+function maybeCompress(data) {
     const size = new Blob([data]).size;
-    if (size > COMPRESSION_THRESHOLD) {
-        const compressed = compress(data);
+    if (size > exports.COMPRESSION_THRESHOLD) {
+        const compressed = (0, lz_string_1.compress)(data);
         // Only use compression if it actually reduces size
         const compressedSize = new Blob([compressed]).size;
         if (compressedSize < size * 0.9) {
@@ -84,10 +95,10 @@ export function maybeCompress(data) {
 /**
  * Decompress data if needed
  */
-export function maybeDecompress(data, compressed) {
+function maybeDecompress(data, compressed) {
     if (compressed) {
         try {
-            return decompress(data) || data;
+            return (0, lz_string_1.decompress)(data) || data;
         }
         catch {
             console.error('Failed to decompress data');
@@ -99,9 +110,9 @@ export function maybeDecompress(data, compressed) {
 /**
  * Validate persisted state
  */
-export function validatePersistedState(data) {
+function validatePersistedState(data) {
     try {
-        return PersistedStateSchema.parse(data);
+        return exports.PersistedStateSchema.parse(data);
     }
     catch (error) {
         if (process.env.NODE_ENV === 'development') {
@@ -113,7 +124,7 @@ export function validatePersistedState(data) {
 /**
  * Storage adapter for Zustand persist
  */
-export const persistenceStorage = {
+exports.persistenceStorage = {
     getItem: (name) => {
         if (!isStorageAvailable())
             return null;
@@ -123,8 +134,8 @@ export const persistenceStorage = {
                 return null;
             const wrapper = JSON.parse(item);
             // Check version compatibility
-            if (wrapper.version !== STORAGE_VERSION) {
-                console.warn(`Storage version mismatch. Expected ${STORAGE_VERSION}, got ${wrapper.version}`);
+            if (wrapper.version !== exports.STORAGE_VERSION) {
+                console.warn(`Storage version mismatch. Expected ${exports.STORAGE_VERSION}, got ${wrapper.version}`);
                 // In the future, we could add migration logic here
                 return null;
             }
@@ -165,7 +176,7 @@ export const persistenceStorage = {
             // Create wrapper
             const wrapper = {
                 state: data,
-                version: STORAGE_VERSION,
+                version: exports.STORAGE_VERSION,
                 timestamp: Date.now(),
                 compressed,
                 size: new Blob([data]).size
@@ -194,19 +205,19 @@ export const persistenceStorage = {
 /**
  * Clear persisted state
  */
-export function clearPersistedState() {
+function clearPersistedState() {
     if (isStorageAvailable()) {
-        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(exports.STORAGE_KEY);
     }
 }
 /**
  * Get persisted state info (for debugging)
  */
-export function getPersistedStateInfo() {
+function getPersistedStateInfo() {
     if (!isStorageAvailable())
         return null;
     try {
-        const item = localStorage.getItem(STORAGE_KEY);
+        const item = localStorage.getItem(exports.STORAGE_KEY);
         if (!item)
             return { exists: false, size: 0, compressed: false, timestamp: null };
         const wrapper = JSON.parse(item);

@@ -12,3 +12,6 @@ export * from './supabaseClient.js';
 export * from './psgStorage.js';
 export * from './supabaseFeature.js';
 export * from './psgCodec.js';
+export * from './persistenceUtils.js';
+// Temporarily exclude stateRestoration due to duplicate export conflict
+// export * from './stateRestoration.js';

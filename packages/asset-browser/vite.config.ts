@@ -3,16 +3,21 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react({
+      // Use classic runtime to avoid JSX transform issues
+      jsxRuntime: 'classic'
+    })
+  ],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.tsx'),
       name: 'AssetBrowser',
-      formats: ['es', 'cjs'],
-      fileName: format => (format === 'es' ? 'index.esm.js' : 'index.cjs')
+      formats: ['es'],
+      fileName: () => 'index.esm.js'
     },
     rollupOptions: {
-      // Also externalize the JSX runtime to prevent bundling
+      // Externalize all React-related packages
       external: [
         'react',
         'react-dom',
@@ -23,11 +28,13 @@ export default defineConfig({
         'react-window'
       ],
       output: {
+        // Use interop for better compatibility
+        interop: 'auto',
+        // Ensure imports are preserved
+        preserveModules: false,
         globals: {
           react: 'React',
-          'react-dom': 'ReactDOM',
-          'react/jsx-runtime': 'React',
-          'react/jsx-dev-runtime': 'React'
+          'react-dom': 'ReactDOM'
         }
       }
     },
