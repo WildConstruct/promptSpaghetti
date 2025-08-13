@@ -1,0 +1,288 @@
+/* Bounding Box Styles */
+.bounding-box {
+  position: relative;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  pointer-events: all;
+  cursor: move;
+  user-select: none;
+}
+
+.bounding-box.selected {
+  box-shadow: 0 0 0 2px #0084ff;
+}
+
+/* Header */
+.bounding-box-header {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px 8px 0 0;
+  backdrop-filter: blur(4px);
+}
+
+.bounding-box-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  cursor: text;
+}
+
+.bounding-box-title:hover {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 4px;
+  margin: -2px -4px;
+  border-radius: 4px;
+}
+
+.bounding-box-title-input {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  background: white;
+  border: 2px solid #0084ff;
+  border-radius: 4px;
+  padding: 2px 4px;
+  outline: none;
+}
+
+.bounding-box-description {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #666;
+  cursor: text;
+  min-height: 20px;
+}
+
+.bounding-box-description:hover {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 4px;
+  margin: 6px -4px 0 -4px;
+  border-radius: 4px;
+}
+
+.bounding-box-description .placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+.bounding-box-description-input {
+  width: 100%;
+  min-height: 40px;
+  font-size: 14px;
+  color: #666;
+  background: white;
+  border: 2px solid #0084ff;
+  border-radius: 4px;
+  padding: 4px;
+  outline: none;
+  resize: vertical;
+  margin-top: 8px;
+}
+
+/* Status */
+.bounding-box-status {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.contained-count {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.lock-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.lock-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.lock-button.locked {
+  color: #ff6b6b;
+}
+
+/* Controls */
+.bounding-box-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
+}
+
+/* Color Picker */
+.color-picker-container {
+  position: relative;
+}
+
+.color-picker-button {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-picker-button:hover {
+  transform: scale(1.1);
+  border-color: #0084ff;
+}
+
+.color-picker-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 32px);
+  gap: 4px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.color-option {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+  border-color: #0084ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Opacity Control */
+.opacity-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opacity-control label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.opacity-slider {
+  width: 80px;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #ddd;
+  border-radius: 2px;
+  outline: none;
+}
+
+.opacity-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #0084ff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.opacity-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #0084ff;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Resize Handles */
+.resize-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #0084ff;
+  border: 2px solid white;
+  border-radius: 50%;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.bounding-box.selected .resize-handle {
+  opacity: 1;
+}
+
+.resize-handle:hover {
+  transform: scale(1.2);
+}
+
+.resize-handle-se {
+  bottom: -6px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.resize-handle-sw {
+  bottom: -6px;
+  left: -6px;
+  cursor: nesw-resize;
+}
+
+.resize-handle-ne {
+  top: -6px;
+  right: -6px;
+  cursor: nesw-resize;
+}
+
+.resize-handle-nw {
+  top: -6px;
+  left: -6px;
+  cursor: nwse-resize;
+}
+
+/* React Flow overrides for bounding boxes */
+.react-flow__node-boundingBox {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.react-flow__node-boundingBox.selected {
+  outline: none !important;
+}
+
+/* Z-index to ensure boxes are behind nodes */
+.react-flow__node-boundingBox {
+  z-index: -1 !important;
+}

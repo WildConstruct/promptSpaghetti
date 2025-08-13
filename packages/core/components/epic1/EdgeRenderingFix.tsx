@@ -1,5 +1,7 @@
 import React from 'react';
 import { Edge, EdgeProps, getBezierPath, getSmoothStepPath } from 'reactflow';
+import { AttachmentEdge } from './edges/AttachmentEdge';
+import EdgeRouter from './edges/EdgeRouter';
 
 // Default edge component that forces rendering
 export const DefaultEdge: React.FC<EdgeProps> = (props) => {
@@ -58,6 +60,9 @@ export const edgeTypes = {
   smoothstep: DefaultEdge,
   straight: DefaultEdge,
   step: DefaultEdge,
+  attachment: AttachmentEdge,
+  bezier: EdgeRouter,
+  advanced: EdgeRouter,
 };
 
 // Helper to check if edges are rendering

@@ -270,16 +270,19 @@ function trackPresetUsage(preset, action) {
 function regenerateNodeIds(nodes, edges) {
     const idMap = new Map();
     const timestamp = Date.now();
-    // Generate new IDs for nodes
+    const random = Math.random().toString(36).substr(2, 9);
+    const counter = Math.floor(Math.random() * 100000); // Add extra randomness
+    // Generate new IDs for nodes with better uniqueness
     const newNodes = nodes.map((node, index) => {
-        const newId = `${node.type}-${timestamp}-${index}`;
+        // Create a truly unique ID that won't conflict
+        const newId = `node-${timestamp}-${random}-${counter}-${index}`;
         idMap.set(node.id, newId);
         return { ...node, id: newId };
     });
-    // Update edge references
-    const newEdges = edges.map(edge => ({
+    // Update edge references with unique IDs
+    const newEdges = edges.map((edge, index) => ({
         ...edge,
-        id: `edge-${timestamp}-${Math.random().toString(36).substr(2, 9)}`,
+        id: `edge-${timestamp}-${random}-${counter}-${index}`,
         source: idMap.get(edge.source) || edge.source,
         target: idMap.get(edge.target) || edge.target
     }));

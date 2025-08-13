@@ -1,0 +1,184 @@
+/* Edge Routing Controls */
+.edge-routing-controls {
+  position: absolute;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  min-width: 200px;
+  transition: all 0.3s ease;
+}
+
+.edge-routing-controls-top.left {
+  top: 20px;
+  left: 20px;
+}
+
+.edge-routing-controls-top.right {
+  top: 20px;
+  right: 20px;
+}
+
+.edge-routing-controls-bottom.left {
+  bottom: 20px;
+  left: 20px;
+}
+
+.edge-routing-controls-bottom.right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.edge-routing-header {
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.edge-routing-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.edge-routing-toggle {
+  font-size: 10px;
+  color: #666;
+  transition: transform 0.2s;
+}
+
+.edge-routing-controls.expanded .edge-routing-toggle {
+  transform: rotate(0deg);
+}
+
+.edge-routing-body {
+  padding: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.edge-routing-section {
+  margin-bottom: 16px;
+}
+
+.edge-routing-section:last-child {
+  margin-bottom: 0;
+}
+
+.edge-routing-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.edge-routing-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.routing-btn {
+  padding: 6px 10px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.routing-btn:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.routing-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #2563eb;
+}
+
+.edge-routing-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edge-routing-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+}
+
+.edge-routing-checkbox input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.routing-action-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 4px;
+}
+
+.routing-action-btn:hover {
+  background: #059669;
+}
+
+.routing-action-btn:last-child {
+  background: #6b7280;
+  margin-bottom: 0;
+}
+
+.routing-action-btn:last-child:hover {
+  background: #4b5563;
+}
+
+.edge-routing-help {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 11px;
+  color: #666;
+}
+
+.edge-routing-help p {
+  margin: 0 0 4px 0;
+  font-weight: 500;
+}
+
+.edge-routing-help ul {
+  margin: 0;
+  padding-left: 16px;
+  list-style: none;
+}
+
+.edge-routing-help li {
+  margin: 2px 0;
+  position: relative;
+}
+
+.edge-routing-help li::before {
+  content: '•';
+  position: absolute;
+  left: -12px;
+  color: #9ca3af;
+}

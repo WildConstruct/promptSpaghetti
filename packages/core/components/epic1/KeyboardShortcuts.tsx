@@ -10,6 +10,8 @@ interface KeyboardShortcutsProps {
   onDelete?: (nodes: Node[]) => void;
   onDuplicate?: (nodes: Node[]) => void;
   onSelectAll?: () => void;
+  onGroup?: (nodes: Node[]) => void;
+  onUngroup?: (nodes: Node[]) => void;
   additionalHandlers?: Record<string, () => void>;
 }
 
@@ -24,6 +26,8 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
   onDelete,
   onDuplicate,
   onSelectAll,
+  onGroup,
+  onUngroup,
   additionalHandlers = {},
 }) => {
   const reactFlowInstance = useReactFlow();
@@ -217,6 +221,22 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
             event.preventDefault();
             handleDuplicate();
             break;
+          case 'g':
+            event.preventDefault();
+            if (selectedNodes.length > 1 && onGroup) {
+              onGroup(selectedNodes);
+            }
+            break;
+        }
+      }
+      
+      // Ungroup shortcut (Cmd/Ctrl+Shift+G)
+      if (hasCmd && hasShift && !hasAlt) {
+        if (key === 'g') {
+          event.preventDefault();
+          if (selectedNodes.length > 0 && onUngroup) {
+            onUngroup(selectedNodes);
+          }
         }
       }
 

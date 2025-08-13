@@ -8,6 +8,9 @@ import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
 import { NodeContextMenu } from './NodeContextMenu';
+import { PostItNote } from './PostItNote';
+import { BoundingBox } from './BoundingBox';
+import GroupNode from './GroupNode';
 
 // Export components and types
 export { BaseEditableNode };
@@ -37,6 +40,14 @@ export type { OutputNodeData } from './OutputNode';
 export { NodeContextMenu };
 export type { ContextMenuPosition } from './NodeContextMenu';
 
+export { PostItNote };
+export type { PostItNoteData } from './PostItNote';
+
+export { BoundingBox };
+export type { BoundingBoxData } from './BoundingBox';
+
+export { GroupNode };
+
 // Now we can safely create the node type mapping
 export const epic1NodeTypes = {
   textBlock: TextBlockNode,
@@ -45,7 +56,10 @@ export const epic1NodeTypes = {
   variable: VariableNode,
   setVariable: VariableNode,
   getVariable: VariableNode,
-  output: OutputNode
+  output: OutputNode,
+  postItNote: PostItNote,
+  boundingBox: BoundingBox,
+  group: GroupNode
 };
 
 // Note: CSS imports removed to avoid bundling issues

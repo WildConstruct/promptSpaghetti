@@ -4,6 +4,60 @@
  */
 import { parsePSGLib, regenerateNodeIds, trackPresetUsage } from '../fileFormats/psglib';
 /**
+ * Map edge handles based on node types and enable branch outputs
+ */
+function mapEdgeHandles(edges, nodeTypeMap, nodes) {
+    // Track which weighted choice nodes have branch connections
+    const branchConnections = new Map();
+    edges.forEach(edge => {
+        const sourceType = nodeTypeMap.get(edge.source);
+        if (sourceType === 'weightedChoice' && edge.sourceHandle) {
+            // Check if this is a branch output (e.g., branch-0, branch-1, etc.)
+            const branchMatch = edge.sourceHandle.match(/branch-(\d+)/);
+            if (branchMatch) {
+                const branchIndex = parseInt(branchMatch[1]);
+                if (!branchConnections.has(edge.source)) {
+                    branchConnections.set(edge.source, new Set());
+                }
+                branchConnections.get(edge.source).add(branchIndex);
+            }
+        }
+    });
+    // Enable hasBranch for connected options
+    nodes.forEach(node => {
+        if (node.type === 'WeightedChoice' || node.type === 'weightedChoice') {
+            const connections = branchConnections.get(node.id);
+            if (connections && node.data.options) {
+                node.data.options.forEach((option, index) => {
+                    option.hasBranch = connections.has(index);
+                });
+            }
+        }
+    });
+    return edges.map(edge => {
+        const sourceType = nodeTypeMap.get(edge.source);
+        const targetType = nodeTypeMap.get(edge.target);
+        // Map source handle based on source node type
+        let sourceHandle = edge.sourceHandle;
+        if (sourceType === 'weightedChoice' && sourceHandle === 'output') {
+            sourceHandle = 'main'; // WeightedChoice uses 'main' not 'output'
+        }
+        // Map target handle if needed
+        let targetHandle = edge.targetHandle;
+        // Concat nodes use 'target' not 'input0', 'input1', etc.
+        if (targetType === 'concat' &&
+            targetHandle &&
+            targetHandle.startsWith('input')) {
+            targetHandle = 'target'; // Concat nodes only have a single 'target' handle
+        }
+        return {
+            ...edge,
+            sourceHandle,
+            targetHandle
+        };
+    });
+}
+/**
  * Insert a preset from PSGLib file content
  */
 export async function insertPreset(psglibContent, options = {}) {
@@ -17,8 +71,15 @@ export async function insertPreset(psglibContent, options = {}) {
         const { nodes, edges } = regenerateNodeIds(psglib.graph.nodes, psglib.graph.edges);
         // Calculate bounds of the preset
         const bounds = calculateBounds(nodes);
-        // Position nodes
+        // Position nodes and get type map
         const positionedNodes = positionNodes(nodes, bounds, position, preservePositions, snapToGrid, gridSize);
+        // Create node type map for edge handle mapping
+        const nodeTypeMap = new Map();
+        positionedNodes.forEach(node => {
+            nodeTypeMap.set(node.id, node.type);
+        });
+        // Map edge handles based on node types and enable branch outputs
+        const mappedEdges = mapEdgeHandles(edges, nodeTypeMap, positionedNodes);
         // Mark nodes as selected if requested
         if (selectAfterInsert) {
             positionedNodes.forEach(node => {
@@ -27,7 +88,7 @@ export async function insertPreset(psglibContent, options = {}) {
         }
         return {
             nodes: positionedNodes,
-            edges,
+            edges: mappedEdges,
             bounds: {
                 minX: position.x,
                 minY: position.y,
@@ -135,26 +196,121 @@ function calculateBounds(nodes) {
     return { minX, minY, maxX, maxY };
 }
 /**
+ * Map PSGLib node types to ReactFlow node types
+ */
+function mapNodeType(type) {
+    const typeMap = {
+        WeightedChoice: 'weightedChoice',
+        Concat: 'concat',
+        Output: 'output',
+        TextBlock: 'textBlock',
+        Variable: 'variable',
+        SetVariable: 'setVariable',
+        GetVariable: 'getVariable',
+        Include: 'include'
+    };
+    // Return mapped type or lowercase version as fallback
+    return typeMap[type] || type.toLowerCase();
+}
+/**
+ * Convert PSGLib node data to ReactFlow node data
+ */
+function convertNodeData(type, data) {
+    const nodeType = mapNodeType(type);
+    // Convert data based on node type
+    switch (nodeType) {
+        case 'weightedChoice':
+            // Convert choices array to options format expected by WeightedChoiceNode
+            if (data.choices && Array.isArray(data.choices)) {
+                return {
+                    ...data,
+                    nodeType: 'weightedChoice',
+                    options: data.choices.map((choice, idx) => ({
+                        id: `option-${idx + 1}`,
+                        text: choice.text || '',
+                        weight: choice.weight || 1,
+                        hasBranch: false // Default to false - only enable when actually connected
+                    })),
+                    value: JSON.stringify(data.choices, null, 2)
+                };
+            }
+            break;
+        case 'concat':
+            return {
+                ...data,
+                nodeType: 'concat',
+                value: data.separator || ' '
+            };
+        case 'output':
+            return {
+                ...data,
+                nodeType: 'output',
+                value: data.template || data.label || 'output',
+                label: data.label || 'output'
+            };
+        case 'textBlock':
+            return {
+                ...data,
+                nodeType: 'textBlock',
+                value: data.text || data.value || 'New text block',
+                text: data.text || data.value || 'New text block'
+            };
+        case 'variable':
+        case 'setVariable':
+        case 'getVariable':
+            return {
+                ...data,
+                nodeType: nodeType,
+                value: data.variableName || 'myVariable',
+                variableName: data.variableName || 'myVariable',
+                mode: nodeType === 'setVariable'
+                    ? 'set'
+                    : nodeType === 'getVariable'
+                        ? 'get'
+                        : 'both'
+            };
+    }
+    // Default: just add nodeType field
+    return {
+        ...data,
+        nodeType
+    };
+}
+/**
  * Position nodes relative to insertion point
  */
 function positionNodes(nodes, bounds, position, preservePositions, snapToGrid, gridSize) {
     if (preservePositions) {
         return nodes;
     }
-    // Calculate offset from bounds to target position
-    const offsetX = position.x - bounds.minX;
-    const offsetY = position.y - bounds.minY;
+    // Calculate center of the preset
+    const presetWidth = bounds.maxX - bounds.minX;
+    const presetHeight = bounds.maxY - bounds.minY;
+    const centerX = bounds.minX + presetWidth / 2;
+    const centerY = bounds.minY + presetHeight / 2;
+    // Calculate offset to center the preset at the drop position
+    const offsetX = position.x - centerX;
+    const offsetY = position.y - centerY;
+    // Apply a better spread to avoid overlapping if multiple presets are dropped
+    const spreadOffset = 80; // Increased spread to prevent stacking
+    const randomSpread = {
+        x: (Math.random() - 0.5) * spreadOffset * 2, // Wider horizontal spread
+        y: (Math.random() - 0.5) * spreadOffset
+    };
     return nodes.map(node => {
-        let x = node.position.x + offsetX;
-        let y = node.position.y + offsetY;
+        let x = node.position.x + offsetX + randomSpread.x;
+        let y = node.position.y + offsetY + randomSpread.y;
         // Snap to grid if enabled
         if (snapToGrid) {
             x = Math.round(x / gridSize) * gridSize;
             y = Math.round(y / gridSize) * gridSize;
         }
+        // Convert node to ReactFlow format
         return {
             ...node,
-            position: { x, y }
+            type: mapNodeType(node.type), // Map the type to ReactFlow format
+            position: { x, y },
+            data: convertNodeData(node.type, node.data) // Convert data to expected format
         };
     });
 }
@@ -164,9 +320,13 @@ function positionNodes(nodes, bounds, position, preservePositions, snapToGrid, g
 export function createGhostNodes(nodes, position) {
     const bounds = calculateBounds(nodes);
     const positioned = positionNodes(nodes, bounds, position, false, true, 20);
-    // Add ghost styling
-    return positioned.map(node => ({
+    // Add ghost styling and ensure unique IDs for preview
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substr(2, 9);
+    const counter = Math.floor(Math.random() * 100000); // Add extra randomness
+    return positioned.map((node, index) => ({
         ...node,
+        id: `ghost-${timestamp}-${random}-${counter}-${index}`, // Unique ghost ID
         style: {
             ...node.style,
             opacity: 0.5,

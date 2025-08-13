@@ -3,3 +3,32 @@
 > node assets/tools/build-handbook.js
 
 📚 Building Content Authoring Handbook (all)...
+📖 Loading chapters...
+📚 Loaded 7 chapters
+📋 Generating table of contents...
+
+🔄 Building WEB format...
+🌐 Building web version...
+🔍 Building search index...
+✓ Indexed: Content Authoring Handbook - Build Guide
+✓ Indexed: Changelog
+✓ Indexed: Contributors
+✓ Indexed: Maintenance and Update Cycle
+✓ Indexed: Content Authoring Handbook - Detailed Outline
+✓ Indexed: Content Authoring Handbook
+✓ Indexed: Version Control and Updates
+✓ Indexed: Chapter 1: Introduction & Overview
+✓ Indexed: Chapter 2: Architecture & Core Concepts
+✓ Indexed: Chapter 3: Generator JSON Schema Reference
+✓ Indexed: Chapter 4: Basic Generator Creation
+✓ Indexed: Chapter 15: Expansion Recipes for LLMs
+✓ Indexed: Chapter 14: Interactive Tutorial - Your First Generator
+✓ Indexed: Chapter 22: Quick Reference Tables
+✅ Search index built successfully!
+📊 Indexed 14 pages
+📝 Output: /Users/brianbehm/CascadeProjects/prompt-spaghetti/docs/content-authoring-handbook/_build/web/assets/data/search-index.json
+✅ Web version complete
+
+🔄 Building PDF format...
+📄 Building PDF version...
+ ELIFECYCLE  Command failed with exit code 130.

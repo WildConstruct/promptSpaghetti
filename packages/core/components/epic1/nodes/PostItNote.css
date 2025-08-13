@@ -1,0 +1,223 @@
+/* Post-it Note Styles */
+.post-it-note {
+  position: relative;
+  padding: 12px;
+  border-radius: 2px;
+  font-family: 'Kalam', cursive, -apple-system, sans-serif;
+  transition: all 0.2s ease;
+  min-width: 150px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  /* Paper-like texture */
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(0, 0, 0, 0.03) 28px,
+      rgba(0, 0, 0, 0.03) 29px
+    );
+  
+  /* Slight tilt for natural look */
+  transform: rotate(-1deg);
+}
+
+.post-it-note:hover {
+  transform: rotate(-1deg) scale(1.02);
+  z-index: 1000;
+}
+
+.post-it-note.selected {
+  transform: rotate(-1deg) scale(1.05);
+  z-index: 1001;
+}
+
+.post-it-note.collapsed {
+  min-height: 40px;
+  max-height: 40px;
+}
+
+/* Controls */
+.post-it-delete,
+.post-it-collapse {
+  position: absolute;
+  top: 4px;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.post-it-note:hover .post-it-delete,
+.post-it-note:hover .post-it-collapse {
+  opacity: 1;
+}
+
+.post-it-delete {
+  right: 4px;
+}
+
+.post-it-collapse {
+  right: 28px;
+}
+
+.post-it-delete:hover,
+.post-it-collapse:hover {
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* Content area */
+.post-it-content {
+  flex: 1;
+  overflow: auto;
+  margin-top: 8px;
+}
+
+/* Editor */
+.post-it-editor {
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.8);
+  padding: 4px;
+}
+
+/* Markdown rendering */
+.post-it-markdown {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.8);
+  word-wrap: break-word;
+}
+
+.post-it-markdown h1,
+.post-it-markdown h2,
+.post-it-markdown h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.post-it-markdown h1 { font-size: 18px; }
+.post-it-markdown h2 { font-size: 16px; }
+.post-it-markdown h3 { font-size: 14px; }
+
+.post-it-markdown p {
+  margin: 0 0 8px 0;
+}
+
+.post-it-markdown ul,
+.post-it-markdown ol {
+  margin: 0 0 8px 0;
+  padding-left: 20px;
+}
+
+.post-it-markdown li {
+  margin: 2px 0;
+}
+
+.post-it-markdown code {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+.post-it-markdown blockquote {
+  border-left: 3px solid rgba(0, 0, 0, 0.2);
+  margin: 8px 0;
+  padding-left: 8px;
+  font-style: italic;
+}
+
+/* Placeholder */
+.post-it-placeholder {
+  color: rgba(0, 0, 0, 0.4);
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Resize handle */
+.post-it-resize {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  z-index: 10;
+}
+
+.post-it-resize::before {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 10px 10px;
+  border-color: transparent transparent rgba(0, 0, 0, 0.2) transparent;
+}
+
+/* Connection handle */
+.post-it-handle {
+  visibility: hidden;
+}
+
+/* Attachment line visual */
+.post-it-note[data-attached="true"]::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 20px;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.2);
+  transform: translateY(-50%);
+}
+
+/* Color-specific adjustments */
+.post-it-note[data-color="blue"] .post-it-markdown,
+.post-it-note[data-color="purple"] .post-it-markdown {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.post-it-note[data-color="blue"] .post-it-placeholder,
+.post-it-note[data-color="purple"] .post-it-placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.post-it-note[data-color="blue"] .post-it-editor,
+.post-it-note[data-color="purple"] .post-it-editor {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* React Flow overrides for post-it notes */
+.react-flow__node-postItNote {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.react-flow__node-postItNote.selected {
+  outline: none !important;
+}

@@ -19,6 +19,7 @@ interface NodeContextMenuProps {
   onSaveAsPreset: () => void;
   onDuplicate?: () => void;
   onDelete?: () => void;
+  onAttachNote?: () => void;
 }
 
 export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
@@ -28,7 +29,8 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
   onClose,
   onSaveAsPreset,
   onDuplicate,
-  onDelete
+  onDelete,
+  onAttachNote
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -90,6 +92,16 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
           <span className="icon">💾</span>
           Save as Preset
         </button>
+        
+        {onAttachNote && (
+          <button 
+            className="context-menu-item"
+            onClick={() => handleAction(onAttachNote)}
+          >
+            <span className="icon">📝</span>
+            Attach Note
+          </button>
+        )}
         
         {onDuplicate && (
           <button 

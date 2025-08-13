@@ -25,6 +25,7 @@ import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedbac
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
 import { PanZoomControls } from './PanZoomControls';
+import { EdgeRoutingControls } from './EdgeRoutingControls';
 import { PreviewEngine } from './preview/PreviewEngine';
 import { PreviewPanel } from './preview/PreviewPanel';
 import { Epic1Graph } from '../../runtime/nodes/epic1/Epic1ExecutionEngine';
@@ -35,6 +36,7 @@ import { TabbedSidePanel } from './TabbedSidePanel';
 import { NodeToolbar } from './NodeToolbar';
 import { NodePalette } from './NodePalette';
 import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
+import { CanvasContextMenu } from './nodes/CanvasContextMenu';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
 import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInteractionEnhancer';
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
@@ -136,13 +138,13 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [isSelecting, setIsSelecting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   
-  // Autosave to local storage
+  // Autosave to local storage (includes post-it notes)
   const saveToLocalStorage = useCallback((currentNodes: Node[], currentEdges: Edge[]) => {
     if (!isStorageAvailable()) return;
     
     try {
       const state = {
-        nodes: currentNodes,
+        nodes: currentNodes, // This includes post-it notes since they're just another node type
         edges: currentEdges,
         lastModified: new Date().toISOString()
       };
@@ -157,7 +159,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       };
       
       localStorage.setItem(STORAGE_KEY, JSON.stringify(wrapper));
-      console.log('Graph saved to local storage');
+      console.log('Graph saved to local storage (including post-it notes)');
     } catch (error) {
       console.error('Failed to save to local storage:', error);
     }
@@ -197,14 +199,76 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     
     if (hasDraggingChange) {
       setIsDragging(true);
+      
+      // Handle locked bounding boxes - move contained nodes with the box
+      const boxDragChanges = changes.filter(change => 
+        change.type === 'position' && 
+        change.dragging && 
+        nodes.find(n => n.id === change.id && n.type === 'boundingBox' && n.data.locked)
+      );
+      
+      if (boxDragChanges.length > 0) {
+        // For each locked box being dragged, move its contained nodes
+        const additionalChanges: any[] = [];
+        
+        boxDragChanges.forEach(boxChange => {
+          const box = nodes.find(n => n.id === boxChange.id);
+          if (!box || !box.data.locked) return;
+          
+          // Find nodes contained in this box
+          const containedNodeIds = nodes.filter(node => {
+            if (node.id === box.id || node.type === 'boundingBox' || node.type === 'postItNote') return false;
+            
+            const nodeX = node.position.x;
+            const nodeY = node.position.y;
+            const nodeWidth = node.width || 150;
+            const nodeHeight = node.height || 50;
+            
+            const boxX = box.position.x;
+            const boxY = box.position.y;
+            const boxWidth = box.data.width || 400;
+            const boxHeight = box.data.height || 300;
+            
+            return (
+              nodeX >= boxX &&
+              nodeY >= boxY &&
+              nodeX + nodeWidth <= boxX + boxWidth &&
+              nodeY + nodeHeight <= boxY + boxHeight
+            );
+          }).map(n => n.id);
+          
+          // Calculate delta
+          const deltaX = boxChange.position.x - box.position.x;
+          const deltaY = boxChange.position.y - box.position.y;
+          
+          // Add position changes for contained nodes
+          containedNodeIds.forEach(nodeId => {
+            const node = nodes.find(n => n.id === nodeId);
+            if (node) {
+              additionalChanges.push({
+                id: nodeId,
+                type: 'position',
+                position: {
+                  x: node.position.x + deltaX,
+                  y: node.position.y + deltaY
+                }
+              });
+            }
+          });
+        });
+        
+        // Combine original changes with additional changes for contained nodes
+        changes = [...changes, ...additionalChanges];
+      }
     }
+    
     if (hasStoppedDragging) {
       setIsDragging(false);
     }
     
     // Always apply changes for smooth interaction
     onNodesChangeBase(changes);
-  }, [onNodesChangeBase]);
+  }, [onNodesChangeBase, nodes]);
   
   // Custom edges change handler to ensure proper selection behavior
   const onEdgesChange = useCallback((changes: any[]) => {
@@ -312,6 +376,40 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       };
     });
   }, [nodes, selectedNodeId, createNodeData]);
+  
+  // Manage attachment edges for post-it notes
+  useEffect(() => {
+    const attachmentEdges: Edge[] = [];
+    
+    // Find all post-it notes with attachments
+    nodes.forEach((node) => {
+      if (node.type === 'postItNote' && node.data.attachedTo) {
+        const attachedToNode = nodes.find(n => n.id === node.data.attachedTo);
+        if (attachedToNode) {
+          // Create an attachment edge
+          attachmentEdges.push({
+            id: `attachment-${node.id}`,
+            source: node.data.attachedTo,
+            target: node.id,
+            type: 'attachment',
+            animated: false,
+            style: {
+              stroke: '#999',
+              strokeWidth: 2,
+            }
+          });
+        }
+      }
+    });
+    
+    // Update edges to include attachment edges
+    setEdges((eds) => {
+      // Remove old attachment edges
+      const nonAttachmentEdges = eds.filter(e => !e.id.startsWith('attachment-'));
+      // Add new attachment edges
+      return [...nonAttachmentEdges, ...attachmentEdges];
+    });
+  }, [nodes, setEdges]);
 
   // Handle new connections with replacement for single input nodes
   const onConnect = useCallback(
@@ -494,6 +592,22 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Handle canvas click to deselect all nodes and edges
   const handlePaneClick = useCallback((event: React.MouseEvent) => {
+    // Check for right-click
+    if (event.button === 2) {
+      event.preventDefault();
+      // Store position for creating post-it note
+      const reactFlowBounds = (event.target as HTMLElement).getBoundingClientRect();
+      const position = reactFlowInstance?.project({
+        x: event.clientX - reactFlowBounds.left,
+        y: event.clientY - reactFlowBounds.top,
+      }) || { x: event.clientX, y: event.clientY };
+      
+      // Show context menu for canvas (will add post-it note option)
+      setContextMenuPosition({ x: event.clientX, y: event.clientY });
+      setContextMenuNodeId(null); // null indicates canvas context menu
+      return;
+    }
+    
     // Only deselect if we're not in the middle of a selection drag
     if (!isSelecting) {
       // Removed console.log that was causing performance issues
@@ -502,7 +616,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       setSelectedNodeId(null);
       setActivatedEdges(new Set());
     }
-  }, [setNodes, setEdges, isSelecting]);
+  }, [setNodes, setEdges, isSelecting, reactFlowInstance]);
   
   // Handle node click to select it
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
@@ -953,6 +1067,138 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     showToast('success', `Added ${nodeType} node`);
   }, [createNodeId, setNodes, addNodeWithBounce, showToast]);
 
+  // Create post-it note handler
+  const handleCreatePostIt = useCallback((position: { x: number; y: number }) => {
+    const newNode: Node = {
+      id: `postit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      type: 'postItNote',
+      position,
+      data: {
+        text: '',
+        color: 'yellow',
+        collapsed: false,
+        width: 200,
+        height: 150
+      }
+    };
+    
+    setNodes((nds) => [...nds, newNode]);
+    showToast('success', 'Post-it note created - double-click to edit');
+    setContextMenuPosition(null);
+  }, [setNodes, showToast]);
+  
+  // Group selected nodes
+  const handleGroupNodes = useCallback((nodesToGroup: Node[]) => {
+    if (nodesToGroup.length < 2) {
+      showToast('warning', 'Select at least 2 nodes to group');
+      return;
+    }
+    
+    // Calculate group bounds
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    nodesToGroup.forEach(node => {
+      minX = Math.min(minX, node.position.x);
+      minY = Math.min(minY, node.position.y);
+      maxX = Math.max(maxX, node.position.x + (node.width || 150));
+      maxY = Math.max(maxY, node.position.y + (node.height || 50));
+    });
+    
+    // Create group node
+    const groupNode: Node = {
+      id: `group-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      type: 'group',
+      position: { x: minX - 20, y: minY - 40 },
+      data: {
+        group: {
+          id: `group-${Date.now()}`,
+          name: `Group ${nodes.filter(n => n.type === 'group').length + 1}`,
+          nodeIds: new Set(nodesToGroup.map(n => n.id)),
+          collapsed: false,
+          metadata: {
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+          }
+        },
+        nodeCount: nodesToGroup.length,
+        onToggle: (groupId: string) => {
+          // Toggle group collapse state
+          setNodes((nds) => 
+            nds.map(n => {
+              if (n.id === groupNode.id) {
+                return {
+                  ...n,
+                  data: {
+                    ...n.data,
+                    group: {
+                      ...n.data.group,
+                      collapsed: !n.data.group.collapsed
+                    }
+                  }
+                };
+              }
+              return n;
+            })
+          );
+        }
+      },
+      style: {
+        width: maxX - minX + 40,
+        height: maxY - minY + 60,
+        backgroundColor: 'rgba(200, 200, 255, 0.1)',
+        border: '2px dashed #999',
+        borderRadius: '8px',
+        zIndex: -1
+      }
+    };
+    
+    setNodes((nds) => [groupNode, ...nds]);
+    showToast('success', `Created group with ${nodesToGroup.length} nodes`);
+  }, [nodes, setNodes, showToast]);
+  
+  // Ungroup nodes
+  const handleUngroupNodes = useCallback((nodesToUngroup: Node[]) => {
+    const groupNodes = nodesToUngroup.filter(n => n.type === 'group');
+    
+    if (groupNodes.length === 0) {
+      showToast('warning', 'Select a group node to ungroup');
+      return;
+    }
+    
+    // Remove group nodes
+    const groupIds = groupNodes.map(n => n.id);
+    setNodes((nds) => nds.filter(n => !groupIds.includes(n.id)));
+    showToast('success', `Ungrouped ${groupNodes.length} group(s)`);
+  }, [setNodes, showToast]);
+  
+  // Create bounding box handler
+  const handleCreateBoundingBox = useCallback((position: { x: number; y: number }) => {
+    const newNode: Node = {
+      id: `box-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      type: 'boundingBox',
+      position,
+      data: {
+        title: 'New Region',
+        description: '',
+        backgroundColor: '#FFE5B4',
+        opacity: 0.3,
+        borderColor: '#666',
+        borderStyle: 'dashed',
+        borderWidth: 2,
+        locked: false,
+        width: 400,
+        height: 300
+      }
+    };
+    
+    // Add box with lower z-index to appear behind nodes
+    setNodes((nds) => {
+      // Put bounding boxes at the beginning of the array (lower z-index)
+      return [newNode, ...nds];
+    });
+    showToast('success', 'Region box created - double-click title to edit');
+    setContextMenuPosition(null);
+  }, [setNodes, showToast]);
+  
   // Context menu handlers
   const handleSaveAsPreset = useCallback(() => {
     if (contextMenuNodeId) {
@@ -1059,7 +1305,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const content = (
     <div className="epic1-graph-editor" style={editorStyle}
          onDrop={onDrop}
-         onDragOver={onDragOver}>
+         onDragOver={onDragOver}
+         onContextMenu={(e) => e.preventDefault()}>
         <ReactFlow
             nodes={enhancedNodes}
             edges={edges.map(edge => ({
@@ -1165,6 +1412,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           {/* Pan/Zoom controls */}
           <SafeReactFlowWrapper>
             <PanZoomControls position="bottom-right" />
+            <EdgeRoutingControls position="top-right" />
           </SafeReactFlowWrapper>
           
           {/* Keyboard shortcuts handler - must be inside ReactFlow for useReactFlow to work */}
@@ -1175,6 +1423,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             onDelete={handleDelete}
             onDuplicate={handleDuplicate}
             onSelectAll={handleSelectAll}
+            onGroup={handleGroupNodes}
+            onUngroup={handleUngroupNodes}
             additionalHandlers={{
               'p': handleTogglePreview,
               'P': handleTogglePreview
@@ -1225,13 +1475,65 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       )}
       
       {/* Context Menu */}
-      <NodeContextMenu
-        nodeId={contextMenuNodeId || ''}
-        nodeType={nodes.find(n => n.id === contextMenuNodeId)?.type || 'textBlock'}
-        position={contextMenuPosition}
-        onClose={() => setContextMenuPosition(null)}
-        onSaveAsPreset={handleSaveAsPreset}
-      />
+      {contextMenuPosition && contextMenuNodeId && (
+        <NodeContextMenu
+          nodeId={contextMenuNodeId}
+          nodeType={nodes.find(n => n.id === contextMenuNodeId)?.type || 'textBlock'}
+          position={contextMenuPosition}
+          onClose={() => setContextMenuPosition(null)}
+          onSaveAsPreset={handleSaveAsPreset}
+          onAttachNote={() => {
+            // Create a note attached to this node
+            const targetNode = nodes.find(n => n.id === contextMenuNodeId);
+            if (targetNode) {
+              const newNote: Node = {
+                id: `postit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                type: 'postItNote',
+                position: {
+                  x: targetNode.position.x + (targetNode.width || 200) + 50,
+                  y: targetNode.position.y
+                },
+                data: {
+                  text: '',
+                  color: 'yellow',
+                  collapsed: false,
+                  width: 200,
+                  height: 150,
+                  attachedTo: contextMenuNodeId,
+                  attachmentOffset: { x: 50, y: 0 }
+                }
+              };
+              setNodes((nds) => [...nds, newNote]);
+              showToast('success', 'Note attached to node - double-click to edit');
+            }
+            setContextMenuPosition(null);
+          }}
+        />
+      )}
+      
+      {/* Canvas Context Menu (for post-it notes and bounding boxes) */}
+      {contextMenuPosition && !contextMenuNodeId && (
+        <CanvasContextMenu
+          position={contextMenuPosition}
+          onAddNote={(pos) => {
+            // Convert screen position to flow position
+            const flowPos = reactFlowInstance?.project({
+              x: pos.x,
+              y: pos.y
+            }) || pos;
+            handleCreatePostIt(flowPos);
+          }}
+          onAddBoundingBox={(pos) => {
+            // Convert screen position to flow position
+            const flowPos = reactFlowInstance?.project({
+              x: pos.x,
+              y: pos.y
+            }) || pos;
+            handleCreateBoundingBox(flowPos);
+          }}
+          onClose={() => setContextMenuPosition(null)}
+        />
+      )}
       
       {/* Save As Preset Dialog */}
       <SaveAsPresetDialog

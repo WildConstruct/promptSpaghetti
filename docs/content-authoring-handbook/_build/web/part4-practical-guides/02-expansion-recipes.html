@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chapter 15: Expansion Recipes for LLMs - Content Authoring Handbook</title>
+    <meta name="description" content="Chapter 15: Expansion Recipes for LLMs - Content Authoring Handbook" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="./assets/css/handbook-base.css" />
+    <link rel="stylesheet" href="./assets/css/search-navigation.css" />
+    <link rel="stylesheet" href="./assets/css/interactive-examples.css" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/favicon.ico" />
+
+    <!-- Search Engine -->
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Chapter 15: Expansion Recipes for LLMs - Content Authoring Handbook" />
+    <meta property="og:description" content="Chapter 15: Expansion Recipes for LLMs - Content Authoring Handbook" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{PAGE_URL}}" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Chapter 15: Expansion Recipes for LLMs - Content Authoring Handbook" />
+    <meta name="twitter:description" content="Chapter 15: Expansion Recipes for LLMs - Content Authoring Handbook" />
+
+    <!-- Monaco Editor (for interactive examples) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs/loader.min.js"></script>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="handbook-header">
+      <div class="header-container">
+        <div class="header-left">
+          <a href="" class="logo">
+            <img src="./assets/images/logo.svg" alt="Prompt Spaghetti" class="logo-img" />
+            <span class="logo-text">Content Authoring Handbook</span>
+          </a>
+        </div>
+
+        <div class="header-center">
+          <div class="handbook-search-container">
+            <div class="search-header">
+              <input type="text" id="handbook-search" placeholder="Search handbook... (Ctrl+K)" class="search-input" />
+              <button class="search-clear" title="Clear search">×</button>
+            </div>
+            <div class="search-filters">
+              <select class="filter-select" data-filter="type">
+                <option value="all">All Types</option>
+                <option value="chapter">Chapters</option>
+                <option value="example">Examples</option>
+                <option value="reference">Reference</option>
+              </select>
+              <select class="filter-select" data-filter="difficulty">
+                <option value="all">All Levels</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <select class="filter-select" data-filter="part">
+                <option value="all">All Parts</option>
+                <option value="part1">Part 1: Foundation</option>
+                <option value="part2">Part 2: Content Development</option>
+                <option value="part3">Part 3: Engine Reference</option>
+                <option value="part4">Part 4: Practical Guides</option>
+                <option value="part5">Part 5: Advanced Topics</option>
+                <option value="part6">Part 6: Reference Materials</option>
+              </select>
+            </div>
+            <div id="search-results" class="search-results"></div>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <nav class="header-nav">
+            <a href="" class="nav-link">Home</a>
+            <a href="/part4-practical-guides/14-interactive-tutorial.html" class="nav-link">Tutorial</a>
+            <a href="/part6-reference-materials/22-quick-reference.html" class="nav-link">Reference</a>
+            <a href="https://github.com/your-org/prompt-spaghetti" class="nav-link" target="_blank">GitHub</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="handbook-main">
+      <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+          <div class="sidebar-content">
+            <!-- Breadcrumb Navigation -->
+            <nav class="breadcrumb-nav">
+      <div class="breadcrumb-item">
+        <a href="../index.html" class="breadcrumb-link">Home</a>
+      </div>
+      <div class="breadcrumb-item">
+        <a href="#" class="breadcrumb-link">Part 4: Practical Guides</a>
+      </div>
+      <div class="breadcrumb-item">
+        <span class="breadcrumb-current">Chapter 15: Expansion Recipes for LLMs</span>
+      </div>
+    </nav>
+
+            <!-- Table of Contents -->
+            <div class="table-of-contents">
+              <h3 class="toc-title">On This Page</h3>
+              <ul class="toc-list" id="toc-list">
+                <!-- Generated by JavaScript -->
+              </ul>
+            </div>
+
+            <!-- Main Navigation -->
+            <nav class="handbook-navigation" id="handbook-nav">
+              <div class="nav-section">
+                <h3 class="nav-section-title">Part 1: Foundation</h3>
+                <ul class="nav-section-items">
+                  <li class="nav-item">
+                    <a href="/part1-foundation/01-introduction.html" class="nav-link"
+                      >Introduction & Overview</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part1-foundation/02-architecture.html" class="nav-link"
+                      >Architecture & Core Concepts</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part1-foundation/03-schema-reference.html" class="nav-link"
+                      >Generator JSON Schema Reference</a
+                    >
+                  </li>
+                </ul>
+              </div>
+
+              <div class="nav-section">
+                <h3 class="nav-section-title">Part 2: Content Development</h3>
+                <ul class="nav-section-items">
+                  <li class="nav-item">
+                    <a href="/part2-content-development/04-basic-generator.html" class="nav-link"
+                      >Basic Generator Creation</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part2-content-development/05-advanced-rules.html" class="nav-link"
+                      >Advanced Rule Syntax</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part2-content-development/06-modularization.html" class="nav-link"
+                      >Modularization & Organization</a
+                    >
+                  </li>
+                </ul>
+              </div>
+
+              <div class="nav-section">
+                <h3 class="nav-section-title">Part 3: Engine Reference</h3>
+                <ul class="nav-section-items">
+                  <li class="nav-item">
+                    <a href="/part3-engine-reference/09-api-documentation.html" class="nav-link"
+                      >Engine API Documentation</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part3-engine-reference/10-modifier-system.html" class="nav-link"
+                      >Modifier System</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part3-engine-reference/11-variable-system.html" class="nav-link"
+                      >Variable System</a
+                    >
+                  </li>
+                </ul>
+              </div>
+
+              <div class="nav-section">
+                <h3 class="nav-section-title">Part 4: Practical Guides</h3>
+                <ul class="nav-section-items">
+                  <li class="nav-item">
+                    <a href="/part4-practical-guides/14-interactive-tutorial.html" class="nav-link"
+                      >Interactive Tutorial</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part4-practical-guides/15-expansion-recipes.html" class="nav-link"
+                      >Expansion Recipes for LLMs</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part4-practical-guides/16-testing-qa.html" class="nav-link"
+                      >Testing & Quality Assurance</a
+                    >
+                  </li>
+                </ul>
+              </div>
+
+              <div class="nav-section">
+                <h3 class="nav-section-title">Part 5: Advanced Topics</h3>
+                <ul class="nav-section-items">
+                  <li class="nav-item">
+                    <a href="/part5-advanced-topics/18-custom-extensions.html" class="nav-link"
+                      >Custom Extensions</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part5-advanced-topics/19-security.html" class="nav-link"
+                      >Security Best Practices</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part5-advanced-topics/20-integration.html" class="nav-link"
+                      >Integration Patterns</a
+                    >
+                  </li>
+                </ul>
+              </div>
+
+              <div class="nav-section">
+                <h3 class="nav-section-title">Part 6: Reference Materials</h3>
+                <ul class="nav-section-items">
+                  <li class="nav-item">
+                    <a href="/part6-reference-materials/22-quick-reference.html" class="nav-link"
+                      >Quick Reference Tables</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part6-reference-materials/23-templates.html" class="nav-link"
+                      >Templates & Boilerplates</a
+                    >
+                  </li>
+                  <li class="nav-item">
+                    <a href="/part6-reference-materials/24-pitfalls.html" class="nav-link"
+                      >Common Pitfalls & Solutions</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </aside>
+
+        <!-- Content Area -->
+        <article class="content">
+          <div class="content-header">
+            <h1 class="page-title">Chapter 15: Expansion Recipes for LLMs</h1>
+            <div class="page-meta">
+              <span class="page-type">reference</span>
+              <span class="page-difficulty">beginner</span>
+              <span class="page-part">part4</span>
+            </div>
+          </div>
+
+          <div class="content-body"><h1>Chapter 15: Expansion Recipes for LLMs</h1><p>This chapter provides comprehensive patterns and recipes for Large Language Models (LLMs) to effectively expand and enhance generator content. These patterns are derived from real-world usage and optimized for AI-assisted content development.</p><h2>Understanding LLM Content Expansion</h2><p>When working with LLMs to expand generators, the key is providing clear, structured instructions that leverage the AI's strengths while maintaining consistency with existing content.</p><h3>Core Principles</h3><p>1. <strong>Context Preservation</strong>: Always provide sufficient context about the generator's theme and style</p>
+<p>2. <strong>Pattern Recognition</strong>: LLMs excel at recognizing and replicating patterns from examples</p>
+<p>3. <strong>Structured Output</strong>: Request specific formats to ensure compatibility</p>
+<p>4. <strong>Iterative Refinement</strong>: Build content incrementally for best results</p><h2>Basic Expansion Patterns</h2><h3>Adding Entries to Existing Categories</h3><h4>Recipe: Simple Array Expansion</h4><p>``<code>markdown</p>
+<p>Task: Add 10 new entries to the "occupations" array in fantasy-generator.json</p><p>Current entries for reference:</p>
+<p>["Knight", "Wizard", "Merchant", "Blacksmith", "Innkeeper"]</p><p>Requirements:</p>
+<ul><li>Match the fantasy medieval theme</li>
+<li>Keep entries 1-2 words</li>
+<li>Avoid modern occupations</li>
+<li>Ensure variety in social classes</li>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>[</p>
+<p>  "Alchemist",</p>
+<p>  "Scribe",</p>
+<p>  "Fletcher",</p>
+<p>  "Herbalist",</p>
+<p>  "Minstrel",</p>
+<p>  "Falconer",</p>
+<p>  "Cartographer",</p>
+<p>  "Armorer",</p>
+<p>  "Apothecary",</p>
+<p>  "Bailiff"</p>
+<p>]</p>
+</code>`<code></p><h4>Recipe: Weighted Entry Expansion</h4></code>`<code>markdown</p>
+<p>Task: Add 5 new weighted entries to the "treasure" category</p><p>Current format:</p>
+<p>[</p>
+<p>{"w": 60, "v": "copper coins"},</p>
+<p>{"w": 30, "v": "silver coins"},</p>
+<p>{"w": 10, "v": "gold coins"}</p>
+<p>]</p><p>Requirements:</p>
+<li>Maintain rarity distribution (common: 50-70, uncommon: 20-40, rare: 5-15)</li>
+<li>Include both currency and items</li>
+<li>Keep value descriptions concise</li>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>[</p>
+<p>  { "w": 65, "v": "worn leather pouch" },</p>
+<p>  { "w": 55, "v": "iron trinkets" },</p>
+<p>  { "w": 35, "v": "small gemstone" },</p>
+<p>  { "w": 25, "v": "ancient map" },</p>
+<p>  { "w": 8, "v": "enchanted ring" }</p>
+<p>]</p>
+</code>`<code></p><h3>Creating New Categories</h3><h4>Recipe: Structured Category Creation</h4></code>`<code>markdown</p>
+<p>Task: Create a new "personality_traits" category for the character generator</p><p>Requirements:</p>
+<li>Create 20 diverse personality traits</li>
+<li>Mix positive, negative, and neutral traits</li>
+<li>Keep traits to 1-3 words</li>
+<li>Ensure traits work for any character type</li>
+<li>Format as a simple array</li><p>Context: This will be used in templates like "[name] is a [trait] [class]"</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>{</p>
+<p>  "personality_traits": [</p>
+<p>    "ambitious",</p>
+<p>    "cautious",</p>
+<p>    "cheerful",</p>
+<p>    "cynical",</p>
+<p>    "determined",</p>
+<p>    "eccentric",</p>
+<p>    "gentle",</p>
+<p>    "grumpy",</p>
+<p>    "honest",</p>
+<p>    "impulsive",</p>
+<p>    "loyal",</p>
+<p>    "mysterious",</p>
+<p>    "naive",</p>
+<p>    "patient",</p>
+<p>    "proud",</p>
+<p>    "rebellious",</p>
+<p>    "stoic",</p>
+<p>    "thoughtful",</p>
+<p>    "witty",</p>
+<p>    "zealous"</p>
+<p>  ]</p>
+<p>}</p>
+</code>`<code></p><h2>Advanced Expansion Patterns</h2><h3>Complex Object Arrays</h3><h4>Recipe: Detailed Item Generation</h4></code>`<code>markdown</p>
+<p>Task: Create 5 new entries for "magical_items" with structured data</p><p>Required format:</p>
+<p>{</p>
+<p>"name": "Item Name",</p>
+<p>"description": "Brief description",</p>
+<p>"rarity": "common|uncommon|rare|legendary",</p>
+<p>"effects": ["effect1", "effect2"],</p>
+<p>"cost": number</p>
+<p>}</p><p>Theme: Low-magic fantasy setting</p>
+<p>Power level: Modest, practical effects</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>[</p>
+<p>  {</p>
+<p>    "name": "Everburning Torch",</p>
+<p>    "description": "A torch that never extinguishes",</p>
+<p>    "rarity": "uncommon",</p>
+<p>    "effects": ["provides light", "never needs fuel"],</p>
+<p>    "cost": 50</p>
+<p>  },</p>
+<p>  {</p>
+<p>    "name": "Merchant's Coin Purse",</p>
+<p>    "description": "Always contains one copper piece at dawn",</p>
+<p>    "rarity": "uncommon",</p>
+<p>    "effects": ["generates 1 copper daily", "cannot be stolen"],</p>
+<p>    "cost": 100</p>
+<p>  }</p>
+<p>  // ... more items</p>
+<p>]</p>
+</code>`<code></p><h3>Conditional Content</h3><h4>Recipe: Context-Aware Expansions</h4></code>`<code>markdown</p>
+<p>Task: Add 10 weather descriptions that change based on season variable</p><p>Format:</p>
+<p>{</p>
+<p>"condition": "{season} == 'value'",</p>
+<p>"options": ["weather1", "weather2", "weather3"]</p>
+<p>}</p><p>Create entries for all four seasons</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>{</p>
+<p>  "seasonal_weather": [</p>
+<p>    {</p>
+<p>      "condition": "{season} == 'spring'",</p>
+<p>      "options": [</p>
+<p>        "gentle rain falls on blooming flowers",</p>
+<p>        "warm breeze carries pollen through the air",</p>
+<p>        "morning mist clings to new growth"</p>
+<p>      ]</p>
+<p>    },</p>
+<p>    {</p>
+<p>      "condition": "{season} == 'summer'",</p>
+<p>      "options": [</p>
+<p>        "scorching sun beats down mercilessly",</p>
+<p>        "thunderstorms roll across the horizon",</p>
+<p>        "humid air hangs heavy and still"</p>
+<p>      ]</p>
+<p>    }</p>
+<p>    // ... more seasons</p>
+<p>  ]</p>
+<p>}</p>
+</code>`<code></p><h2>Modularization Patterns</h2><h3>Creating Subfiles</h3><h4>Recipe: Extracting Large Categories</h4></code>`<code>markdown</p>
+<p>Task: Modularize the "locations" category into its own file</p><p>Current structure has 200+ entries. Create:</p><p>1. A new locations.json file with all entries</p>
+<p>2. Update the main file to reference it</p>
+<p>3. Add metadata for UI integration</p><p>Organize locations by type in the new file</p>
+</code>`<code></p><strong>Expected Output:</strong></code>locations.json<code>:</p></code>`<code>json</p>
+<p>{</p>
+<p>  "_meta": {</p>
+<p>    "version": "1.0.0",</p>
+<p>    "description": "Location data for the world generator",</p>
+<p>    "categories": ["urban", "rural", "wilderness", "mystical"]</p>
+<p>  },</p>
+<p>  "urban": ["bustling marketplace", "quiet library", "royal palace"],</p>
+<p>  "rural": ["farming village", "mill by the river", "crossroads inn"]</p>
+<p>  // ... more categories</p>
+<p>}</p>
+</code>`<code></p><p>Main file reference:</p></code>`<code>json</p>
+<p>{</p>
+<p>  "locations": [{ "_meta": { "uiLabel": "Locations" } }, { "$include": "./data/locations.json" }]</p>
+<p>}</p>
+</code>`<code></p><h2>Slot-Based Content Assembly</h2><h3>Understanding Slot Taxonomy</h3><p>The slot system determines how content pieces are assembled into natural language:</p></code>`<code></p>
+<p>subject → style → condition → size → age → purpose → materials →</p>
+<p>colour → texture → controls → displays → lighting → sound →</p>
+<p>motion → background → markings → density → provenance → setting → view</p>
+</code>`<code></p><h4>Recipe: Slot-Aware Content Creation</h4></code>`<code>markdown</p>
+<p>Task: Create descriptors for a "futuristic device" generator using proper slots</p><p>Required slots:</p>
+<li>subject: The device type</li>
+<li>style: Aesthetic descriptor</li>
+<li>materials: Construction materials</li>
+<li>displays: Visual indicators</li>
+<li>controls: Input mechanisms</li><p>5 entries per slot, maintaining thematic consistency</p>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>{</p>
+<p>  "device_subject": {</p>
+<p>    "_meta": { "slot": "subject" },</p>
+<p>    "values": ["scanner", "transmitter", "analyzer", "projector", "synthesizer"]</p>
+<p>  },</p>
+<p>  "device_style": {</p>
+<p>    "_meta": { "slot": "style", "connector": "with a" },</p>
+<p>    "values": ["sleek", "industrial", "military-grade", "prototype", "consumer"]</p>
+<p>  },</p>
+<p>  "device_materials": {</p>
+<p>    "_meta": { "slot": "materials", "connector": "made of" },</p>
+<p>    "values": ["carbon fiber", "transparent aluminum", "bio-plastic", "quantum glass", "neo-steel"]</p>
+<p>  },</p>
+<p>  "device_displays": {</p>
+<p>    "_meta": { "slot": "displays", "connector": "featuring" },</p>
+<p>    "values": ["holographic readouts", "neural interfaces", "quantum displays", "bio-feedback monitors", "AR overlays"]</p>
+<p>  },</p>
+<p>  "device_controls": {</p>
+<p>    "_meta": { "slot": "controls", "connector": "controlled by" },</p>
+<p>    "values": ["gesture recognition", "voice commands", "neural link", "haptic panels", "eye tracking"]</p>
+<p>  }</p>
+<p>}</p>
+</code>`<code></p><h2>Style and Tone Matching</h2><h3>Analyzing Existing Style</h3><h4>Recipe: Style Replication</h4></code>`<code>markdown</p>
+<p>Task: Analyze these examples and create 10 more in the same style</p><p>Examples from "villain_epithets":</p>
+<li>"the Dread Pirate Roberts"</li>
+<li>"Baroness von Bloodbath"</li>
+<li>"Professor Catastrophe"</li>
+<li>"The Crimson Crescendo"</li><p>Identify the pattern and create similar entries</p>
+</code>`<code></p><strong>Pattern Analysis:</strong>
+<li>Mix of titles and descriptive names</li>
+<li>Alliteration used frequently</li>
+<li>Combination of formal titles with dramatic descriptors</li>
+<li>Color and sound motifs</li><strong>Expected Output:</strong></code>`<code>json</p>
+<p>[</p>
+<p>  "Doctor Doomsday",</p>
+<p>  "The Violet Vendetta",</p>
+<p>  "Countess Calamity",</p>
+<p>  "The Shadow Symphony",</p>
+<p>  "Admiral Apocalypse",</p>
+<p>  "The Scarlet Scourge",</p>
+<p>  "Maestro Mayhem",</p>
+<p>  "The Obsidian Oracle",</p>
+<p>  "Captain Chaos",</p>
+<p>  "The Emerald Eclipse"</p>
+<p>]</p>
+</code>`<code></p><h2>Common LLM Expansion Tasks</h2><h3>Batch Processing Instructions</h3><h4>Recipe: Multi-Category Expansion</h4></code>`<code>markdown</p>
+<p>Task: Expand multiple related categories for a "space station" generator</p><p>Categories to expand (add 15 items each):</p><p>1. station_modules: Different sections of the station</p>
+<p>2. station_problems: Technical issues that arise</p>
+<p>3. station_personnel: Job titles and roles</p>
+<p>4. station_events: Random occurrences</p><p>Maintain sci-fi theme consistency across all categories</p>
+<p>Ensure items can interconnect logically</p>
+</code>`<code></p><h3>Variation Generation</h3><h4>Recipe: Creating Variations</h4></code>`<code>markdown</p>
+<p>Task: Generate 5 variations of this announcement template</p><p>Base: "Attention citizens of [location], the [authority] declares [event]"</p><p>Create variations that:</p>
+<li>Maintain the same information structure</li>
+<li>Vary tone (urgent, routine, celebratory)</li>
+<li>Use different vocabulary</li>
+<li>Keep placeholder references intact</li>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>[</p>
+<p>  "Citizens of [location], this is an urgent broadcast from the [authority] regarding [event]",</p>
+<p>  "Hear ye, people of [location]! The [authority] hereby proclaims [event]",</p>
+<p>  "Public notice: The [authority] of [location] announces [event]",</p>
+<p>  "[location] residents, please be advised that the [authority] has declared [event]",</p>
+<p>  "Breaking: [authority] officials in [location] confirm [event]"</p>
+<p>]</p>
+</code>`<code></p><h2>Quality Assurance Patterns</h2><h3>Validation Checks</h3><h4>Recipe: Content Validation</h4></code>`<code>markdown</p>
+<p>Task: Review and validate this generated content</p><p>Check for:</p><p>1. Duplicate entries</p>
+<p>2. Inconsistent formatting</p>
+<p>3. Theme violations</p>
+<p>4. Grammar/spelling errors</p>
+<p>5. Appropriate content</p><p>Flag issues and provide corrections</p>
+</code>`<code></p><h3>Testing Integration</h3><h4>Recipe: Test Case Generation</h4></code>`<code>markdown</p>
+<p>Task: Create test cases for the "character backstory" generator</p><p>Generate 5 test scenarios that verify:</p>
+<li>All paths produce valid output</li>
+<li>Variables are properly substituted</li>
+<li>Conditional logic works correctly</li>
+<li>No infinite loops occur</li>
+<li>Output length is reasonable</li>
+</code>`<code></p><h2>Optimization Strategies</h2><h3>Performance-Aware Content</h3><h4>Recipe: Efficient Rule Design</h4></code>`<code>markdown</p>
+<p>Task: Optimize this rule structure for better performance</p><p>Current:</p>
+<p>{</p>
+<p>"description": "[color] [material] [item] with [detail1] and [detail2] and [detail3]"</p>
+<p>}</p><p>Requirements:</p>
+<li>Reduce redundant lookups</li>
+<li>Minimize deep nesting</li>
+<li>Use variables for repeated values</li>
+</code>`<code></p><strong>Expected Output:</strong></code>`<code>json</p>
+<p>{</p>
+<p>  "description": "[setBasic][getBasic] with [details]",</p>
+<p>  "setBasic": {</p>
+<p>    "type": "setVariable",</p>
+<p>    "key": "basic_desc",</p>
+<p>    "value": "[color] [material] [item]"</p>
+<p>  },</p>
+<p>  "getBasic": {</p>
+<p>    "type": "getVariable",</p>
+<p>    "key": "basic_desc"</p>
+<p>  },</p>
+<p>  "details": ["[detail1]", "[detail1] and [detail2]", "[detail1], [detail2], and [detail3]"]</p>
+<p>}</p>
+</code>`<code></p><h2>Best Practices for LLM Expansion</h2><h3>Do's</h3><p>1. <strong>Provide Clear Context</strong>: Always include theme, style, and purpose</p>
+<p>2. <strong>Show Examples</strong>: Include 3-5 existing entries for pattern matching</p>
+<p>3. <strong>Specify Format</strong>: Be explicit about JSON structure required</p>
+<p>4. <strong>Request Validation</strong>: Ask LLM to check its own output</p>
+<p>5. <strong>Iterate</strong>: Build complex content in stages</p><h3>Don'ts</h3><p>1. <strong>Don't Assume Knowledge</strong>: Always explain generator-specific concepts</p>
+<p>2. <strong>Don't Request Too Much</strong>: Limit to 20-30 items per request</p>
+<p>3. <strong>Don't Skip Validation</strong>: Always review generated content</p>
+<p>4. <strong>Don't Ignore Context</strong>: Ensure all content fits the generator theme</p>
+<p>5. <strong>Don't Rush</strong>: Take time to refine prompts for better results</p><h2>Integration Workflows</h2><h3>Continuous Expansion</h3></code>`<code>markdown</p>
+<p>Workflow for ongoing content development:</p><p>1. Initial Analysis</p>
+<li>Review current generator structure</li>
+<li>Identify expansion opportunities</li>
+<li>Prioritize based on impact</li><p>2. Staged Expansion</p>
+<li>Week 1: Core content (main categories)</li>
+<li>Week 2: Variations and edge cases</li>
+<li>Week 3: Polish and interconnections</li>
+<li>Week 4: Testing and refinement</li><p>3. Documentation</p>
+<li>Update change logs</li>
+<li>Document new patterns</li>
+<li>Create usage examples</li><p>4. Validation</p>
+<li>Test all new content paths</li>
+<li>Verify theme consistency</li>
+<li>Check performance impact</li></ul>
+</code>``</p><h2>Conclusion</h2><p>Effective LLM expansion requires clear communication, structured thinking, and iterative refinement. By following these recipes and patterns, you can efficiently scale your generators while maintaining quality and consistency.</p><p>Remember: LLMs are tools to augment creativity, not replace it. Always review and refine generated content to ensure it meets your standards and enhances the user experience.</p><p>---</p><strong>Next Chapter</strong>: <a href="16-testing-qa.md">Testing & Quality Assurance</a> →</p>
+</div>
+
+          <div class="content-footer">
+            <div class="page-navigation">
+              {{#PREV_PAGE}}
+              <a href="{{PREV_PAGE.url}}" class="page-nav-link prev">
+                <span class="nav-direction">← Previous</span>
+                <span class="nav-title">{{PREV_PAGE.title}}</span>
+              </a>
+              {{/PREV_PAGE}} {{#NEXT_PAGE}}
+              <a href="{{NEXT_PAGE.url}}" class="page-nav-link next">
+                <span class="nav-direction">Next →</span>
+                <span class="nav-title">{{NEXT_PAGE.title}}</span>
+              </a>
+              {{/NEXT_PAGE}}
+            </div>
+
+            <div class="content-actions">
+              <button class="action-button" onclick="window.print()">Print</button>
+              <button class="action-button" onclick="copyPageUrl()">Share</button>
+              <a href="https://github.com/your-org/prompt-spaghetti/edit/main/docs/content-authoring-handbook" class="action-button" target="_blank">Edit on GitHub</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="handbook-footer">
+      <div class="footer-container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>Content Authoring Handbook</h4>
+            <p>Comprehensive guide to creating content with Prompt Spaghetti</p>
+          </div>
+
+          <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="/part1-foundation/01-introduction.html">Getting Started</a></li>
+              <li>
+                <a href="/part4-practical-guides/14-interactive-tutorial.html">Interactive Tutorial</a>
+              </li>
+              <li><a href="/part6-reference-materials/22-quick-reference.html">Quick Reference</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Community</h4>
+            <ul>
+              <li><a href="https://github.com/your-org/prompt-spaghetti" target="_blank">GitHub</a></li>
+              <li><a href="https://discord.gg/your-server" target="_blank">Discord</a></li>
+              <li><a href="https://twitter.com/your-account" target="_blank">Twitter</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-section">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="/assets/examples/" target="_blank">Example Generators</a></li>
+              <li><a href="/assets/templates/" target="_blank">Templates</a></li>
+              <li><a href="/assets/tools/" target="_blank">Tools</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2025 Prompt Spaghetti. All rights reserved.</p>
+          <p>Built with ❤️ for the content creation community</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="./assets/js/search-system.js"></script>
+    <script src="./assets/js/interactive-examples.js"></script>
+    <script src="./assets/js/handbook-utils.js"></script>
+
+    <script>
+      // Initialize Monaco Editor for interactive examples
+      require.config({
+        paths: {
+          vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.1/min/vs',
+        },
+      });
+
+      // Initialize handbook features
+      document.addEventListener('DOMContentLoaded', function () {
+        // Generate table of contents
+        generateTableOfContents();
+
+        // Initialize search with custom configuration
+        window.handbookSearch = new HandbookSearchSystem({
+          searchInputId: 'handbook-search',
+          resultsContainerId: 'search-results',
+          navigationId: 'handbook-nav',
+          indexPath: './assets/data/search-index.json',
+        });
+
+        // Initialize interactive examples
+        initializeInteractiveExamples();
+
+        // Track page views
+        trackPageView();
+      });
+
+      // Generate table of contents from headings
+      function generateTableOfContents() {
+        const toc = document.getElementById('toc-list');
+        const headings = document.querySelectorAll('.content h2, .content h3, .content h4');
+
+        if (headings.length === 0) {
+          toc.parentElement.style.display = 'none';
+          return;
+        }
+
+        headings.forEach((heading, index) => {
+          const id = heading.id || `heading-${index}`;
+          if (!heading.id) {
+            heading.id = id;
+          }
+
+          const li = document.createElement('li');
+          li.className = 'toc-item';
+
+          const a = document.createElement('a');
+          a.href = `#${id}`;
+          a.className = 'toc-link';
+          a.textContent = heading.textContent;
+
+          li.appendChild(a);
+          toc.appendChild(li);
+        });
+
+        // Highlight current section on scroll
+        window.addEventListener('scroll', updateTocHighlight);
+      }
+
+      // Update TOC highlighting based on scroll position
+      function updateTocHighlight() {
+        const headings = document.querySelectorAll('.content h2, .content h3, .content h4');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        let current = 0;
+        headings.forEach((heading, index) => {
+          if (heading.offsetTop <= window.scrollY + 100) {
+            current = index;
+          }
+        });
+
+        tocLinks.forEach((link, index) => {
+          link.classList.toggle('active', index === current);
+        });
+      }
+
+      // Initialize interactive examples
+      function initializeInteractiveExamples() {
+        // This is handled by the interactive-examples.js file
+        // but we can add any page-specific initialization here
+      }
+
+      // Copy page URL to clipboard
+      function copyPageUrl() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('Page URL copied to clipboard!');
+        });
+      }
+
+      // Track page views for analytics
+      function trackPageView() {
+        if (typeof gtag !== 'undefined') {
+          gtag('config', 'GA_MEASUREMENT_ID', {
+            page_title: 'Chapter 15: Expansion Recipes for LLMs',
+            page_location: window.location.href,
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

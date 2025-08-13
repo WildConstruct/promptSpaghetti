@@ -2,3 +2,24 @@
 > @promptscape/core@0.1.0-alpha build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core
 > npm run build:esm && npm run build:cjs && npm run build:types
 
+npm warn Unknown env config "recursive". This will stop working in the next major version of npm.
+npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+
+> @promptscape/core@0.1.0-alpha build:esm
+> tsc --project tsconfig.esm.json
+
+npm warn Unknown env config "recursive". This will stop working in the next major version of npm.
+npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+
+> @promptscape/core@0.1.0-alpha build:cjs
+> tsc --project tsconfig.cjs.json
+
+npm warn Unknown env config "recursive". This will stop working in the next major version of npm.
+npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+
+> @promptscape/core@0.1.0-alpha build:types
+> tsc --project tsconfig.types.json
+

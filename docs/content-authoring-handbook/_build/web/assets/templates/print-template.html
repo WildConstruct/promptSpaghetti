@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{TITLE}} - Print Version</title>
+    <style>
+      /* Print-optimized styles */
+      @media print {
+        @page {
+          size: A4;
+          margin: 2cm;
+
+          @top-left {
+            content: '{{TITLE}}';
+            font-size: 9pt;
+            color: #666;
+          }
+
+          @top-right {
+            content: 'Page ' counter(page);
+            font-size: 9pt;
+            color: #666;
+          }
+
+          @bottom-center {
+            content: 'Printed on ' date();
+            font-size: 8pt;
+            color: #999;
+          }
+        }
+
+        @page :first {
+          @top-left {
+            content: none;
+          }
+          @top-right {
+            content: none;
+          }
+        }
+
+        /* Ensure good page breaks */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          page-break-after: avoid;
+        }
+
+        p,
+        li {
+          orphans: 2;
+          widows: 2;
+        }
+
+        pre,
+        blockquote,
+        table {
+          page-break-inside: avoid;
+        }
+
+        /* Hide non-print elements */
+        .no-print,
+        .interactive-example .example-controls,
+        .search-container,
+        .search-results,
+        .nav-link:hover,
+        .toast-message {
+          display: none !important;
+        }
+
+        /* Show URLs for links */
+        a[href]:after {
+          content: ' (' attr(href) ')';
+          font-size: 9pt;
+          color: #666;
+          word-break: break-all;
+        }
+
+        a[href^='#']:after,
+        a[href^='javascript:']:after {
+          content: '';
+        }
+      }
+
+      /* Base styles */
+      body {
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 11pt;
+        line-height: 1.6;
+        color: #333;
+        max-width: 210mm;
+        margin: 0 auto;
+        padding: 20pt;
+        background: white;
+      }
+
+      /* Print cover */
+      .print-cover {
+        text-align: center;
+        margin-bottom: 40pt;
+        page-break-after: always;
+      }
+
+      .print-cover .print-title h1 {
+        font-size: 32pt;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 20pt;
+        line-height: 1.2;
+      }
+
+      .print-cover .print-subtitle {
+        font-size: 16pt;
+        color: #666;
+        margin-bottom: 40pt;
+        font-style: italic;
+      }
+
+      .print-cover .print-author {
+        font-size: 14pt;
+        color: #333;
+      }
+
+      .print-cover .print-author p {
+        margin-bottom: 10pt;
+      }
+
+      /* Table of contents */
+      .print-toc {
+        page-break-after: always;
+        margin-bottom: 40pt;
+      }
+
+      .print-toc h2 {
+        font-size: 20pt;
+        color: #000;
+        margin-bottom: 20pt;
+        border-bottom: 2pt solid #000;
+        padding-bottom: 10pt;
+      }
+
+      .toc-part {
+        margin-bottom: 16pt;
+      }
+
+      .toc-part h3 {
+        font-size: 14pt;
+        color: #333;
+        margin-bottom: 8pt;
+        font-weight: bold;
+      }
+
+      .toc-part ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 0;
+      }
+
+      .toc-part li {
+        margin-bottom: 4pt;
+        padding-left: 16pt;
+        position: relative;
+      }
+
+      .toc-part li::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #333;
+      }
+
+      .toc-part a {
+        color: #000;
+        text-decoration: none;
+      }
+
+      /* Chapter styling */
+      .print-chapter {
+        page-break-before: always;
+        margin-bottom: 30pt;
+      }
+
+      .print-chapter-title {
+        font-size: 22pt;
+        color: #000;
+        margin-bottom: 16pt;
+        padding-bottom: 8pt;
+        border-bottom: 2pt solid #000;
+        font-weight: bold;
+      }
+
+      .print-chapter-content h1 {
+        font-size: 18pt;
+        color: #000;
+        margin-top: 16pt;
+        margin-bottom: 8pt;
+        font-weight: bold;
+      }
+
+      .print-chapter-content h2 {
+        font-size: 16pt;
+        color: #000;
+        margin-top: 14pt;
+        margin-bottom: 7pt;
+        font-weight: bold;
+      }
+
+      .print-chapter-content h3 {
+        font-size: 14pt;
+        color: #000;
+        margin-top: 12pt;
+        margin-bottom: 6pt;
+        font-weight: bold;
+      }
+
+      .print-chapter-content h4 {
+        font-size: 12pt;
+        color: #000;
+        margin-top: 10pt;
+        margin-bottom: 5pt;
+        font-weight: bold;
+      }
+
+      .print-chapter-content p {
+        margin-bottom: 8pt;
+        text-align: justify;
+        text-justify: inter-word;
+      }
+
+      .print-chapter-content ul,
+      .print-chapter-content ol {
+        margin-bottom: 8pt;
+        padding-left: 16pt;
+      }
+
+      .print-chapter-content li {
+        margin-bottom: 4pt;
+      }
+
+      .print-chapter-content code {
+        font-family: 'Courier New', monospace;
+        font-size: 9pt;
+        background: #f5f5f5;
+        padding: 2pt 3pt;
+        border-radius: 2pt;
+        border: 1pt solid #ddd;
+      }
+
+      .print-chapter-content pre {
+        background: #f5f5f5;
+        padding: 8pt;
+        border-radius: 3pt;
+        border: 1pt solid #ddd;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 9pt;
+        line-height: 1.3;
+        margin: 8pt 0;
+      }
+
+      .print-chapter-content blockquote {
+        margin: 8pt 0;
+        padding: 8pt 12pt;
+        border-left: 3pt solid #000;
+        background: #f9f9f9;
+        font-style: italic;
+      }
+
+      .print-chapter-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 8pt 0;
+        font-size: 10pt;
+      }
+
+      .print-chapter-content th,
+      .print-chapter-content td {
+        border: 1pt solid #333;
+        padding: 6pt;
+        text-align: left;
+      }
+
+      .print-chapter-content th {
+        background: #f0f0f0;
+        font-weight: bold;
+      }
+
+      .print-chapter-content a {
+        color: #000;
+        text-decoration: underline;
+      }
+
+      .print-chapter-content strong {
+        font-weight: bold;
+      }
+
+      .print-chapter-content em {
+        font-style: italic;
+      }
+
+      /* Interactive examples - simplified for print */
+      .interactive-example {
+        border: 1pt solid #333;
+        border-radius: 3pt;
+        padding: 8pt;
+        margin: 8pt 0;
+        background: #f9f9f9;
+        page-break-inside: avoid;
+      }
+
+      .interactive-example::before {
+        content: '💻 Interactive Example';
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8pt;
+        color: #000;
+      }
+
+      .interactive-example pre {
+        background: #fff;
+        border: 1pt solid #ccc;
+        margin-top: 8pt;
+      }
+
+      .interactive-example .example-note {
+        font-size: 9pt;
+        color: #666;
+        font-style: italic;
+        margin-top: 8pt;
+      }
+
+      .interactive-example .example-note::before {
+        content: 'Note: ';
+        font-weight: bold;
+      }
+
+      /* Special print elements */
+      .print-break {
+        page-break-before: always;
+      }
+
+      .print-avoid-break {
+        page-break-inside: avoid;
+      }
+
+      .print-note {
+        border: 1pt solid #ccc;
+        background: #f9f9f9;
+        padding: 8pt;
+        margin: 8pt 0;
+        border-radius: 3pt;
+      }
+
+      .print-note::before {
+        content: '📝 Note: ';
+        font-weight: bold;
+        color: #000;
+      }
+
+      .print-warning {
+        border: 1pt solid #d1a700;
+        background: #fff3cd;
+        padding: 8pt;
+        margin: 8pt 0;
+        border-radius: 3pt;
+      }
+
+      .print-warning::before {
+        content: '⚠️ Warning: ';
+        font-weight: bold;
+        color: #856404;
+      }
+
+      .print-tip {
+        border: 1pt solid #28a745;
+        background: #d4edda;
+        padding: 8pt;
+        margin: 8pt 0;
+        border-radius: 3pt;
+      }
+
+      .print-tip::before {
+        content: '💡 Tip: ';
+        font-weight: bold;
+        color: #155724;
+      }
+
+      /* Footer for each page */
+      .print-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 9pt;
+        color: #666;
+        border-top: 1pt solid #ddd;
+        padding-top: 4pt;
+        background: white;
+      }
+
+      /* Screen styles for preview */
+      @media screen {
+        body {
+          background: #f5f5f5;
+          padding: 40pt;
+        }
+
+        .print-chapter,
+        .print-cover,
+        .print-toc {
+          background: white;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          margin-bottom: 20pt;
+          padding: 20pt;
+        }
+
+        .print-preview-note {
+          background: #e3f2fd;
+          border: 1pt solid #1976d2;
+          border-radius: 3pt;
+          padding: 12pt;
+          margin: 20pt 0;
+          color: #1976d2;
+        }
+
+        .print-preview-note::before {
+          content: '👀 Print Preview: ';
+          font-weight: bold;
+        }
+      }
+
+      /* High contrast mode */
+      @media print and (prefers-contrast: high) {
+        body {
+          color: #000;
+        }
+
+        .print-chapter-title,
+        .print-chapter-content h1,
+        .print-chapter-content h2,
+        .print-chapter-content h3,
+        .print-chapter-content h4 {
+          color: #000;
+        }
+
+        code,
+        pre {
+          background: #fff;
+          border: 2pt solid #000;
+        }
+
+        .interactive-example {
+          background: #fff;
+          border: 2pt solid #000;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="print-preview-note">
+      This is the print-optimized version of the Content Authoring Handbook. Use your browser's print function (Ctrl+P)
+      to print or save as PDF.
+    </div>
+
+    {{CONTENT}}
+
+    <div class="print-footer no-print">
+      <p>Content Authoring Handbook - Print Version</p>
+    </div>
+  </body>
+</html>

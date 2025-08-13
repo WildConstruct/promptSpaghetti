@@ -2,3 +2,153 @@
 > @prompt-graph/targeting@1.0.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/prompt-targeting
 > tsc
 
+src/documentation/LocalizationStrategy.ts(25,1): error TS1131: Property or signature expected.
+src/documentation/LocalizationStrategy.ts(51,1): error TS1131: Property or signature expected.
+src/documentation/LocalizationStrategy.ts(83,1): error TS1131: Property or signature expected.
+src/documentation/LocalizationStrategy.ts(114,1): error TS1131: Property or signature expected.
+src/documentation/LocalizationStrategy.ts(128,3): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(149,3): error TS1434: Unexpected keyword or identifier.
+src/documentation/LocalizationStrategy.ts(149,33): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(149,42): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(150,13): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(150,40): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(150,42): error TS1136: Property assignment expected.
+src/documentation/LocalizationStrategy.ts(159,2): error TS1005: 'try' expected.
+src/documentation/LocalizationStrategy.ts(168,3): error TS1434: Unexpected keyword or identifier.
+src/documentation/LocalizationStrategy.ts(169,8): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(170,13): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(171,12): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(171,20): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(172,20): error TS1109: Expression expected.
+src/documentation/LocalizationStrategy.ts(173,4): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(174,9): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(175,13): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(175,63): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(176,11): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(176,62): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(178,11): error TS1003: Identifier expected.
+src/documentation/LocalizationStrategy.ts(178,28): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(178,72): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(178,74): error TS1136: Property assignment expected.
+src/documentation/LocalizationStrategy.ts(197,2): error TS1005: 'try' expected.
+src/documentation/LocalizationStrategy.ts(206,3): error TS1434: Unexpected keyword or identifier.
+src/documentation/LocalizationStrategy.ts(206,38): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(206,47): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(207,13): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(207,45): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(207,47): error TS1136: Property assignment expected.
+src/documentation/LocalizationStrategy.ts(219,3): error TS1434: Unexpected keyword or identifier.
+src/documentation/LocalizationStrategy.ts(219,37): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(219,55): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(219,64): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(219,81): error TS1011: An element access expression should take an argument.
+src/documentation/LocalizationStrategy.ts(220,11): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(220,65): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(221,12): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(221,73): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(231,1): error TS1131: Property or signature expected.
+src/documentation/LocalizationStrategy.ts(247,2): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(261,3): error TS1434: Unexpected keyword or identifier.
+src/documentation/LocalizationStrategy.ts(261,48): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(261,57): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(262,21): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(264,27): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(265,25): error TS1011: An element access expression should take an argument.
+src/documentation/LocalizationStrategy.ts(265,26): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(266,72): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(267,31): error TS1011: An element access expression should take an argument.
+src/documentation/LocalizationStrategy.ts(267,32): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(268,6): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(270,26): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(271,22): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(272,35): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(273,6): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(274,1): error TS1136: Property assignment expected.
+src/documentation/LocalizationStrategy.ts(275,11): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(275,61): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(276,11): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(276,67): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(278,12): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(291,6): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(303,2): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(326,31): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(330,28): error TS1011: An element access expression should take an argument.
+src/documentation/LocalizationStrategy.ts(335,29): error TS1011: An element access expression should take an argument.
+src/documentation/LocalizationStrategy.ts(381,3): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(397,6): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(417,6): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(454,6): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(456,11): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(456,15): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(475,6): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(477,12): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(477,76): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(495,3): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(500,3): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(505,3): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(516,5): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(519,3): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(528,1): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(532,12): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(533,5): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(533,12): error TS1005: ':' expected.
+src/documentation/LocalizationStrategy.ts(533,16): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(544,4): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(549,27): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(549,36): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(549,38): error TS1434: Unexpected keyword or identifier.
+src/documentation/LocalizationStrategy.ts(552,4): error TS1128: Declaration or statement expected.
+src/documentation/LocalizationStrategy.ts(557,30): error TS1005: ',' expected.
+src/documentation/LocalizationStrategy.ts(557,39): error TS1005: ';' expected.
+src/documentation/LocalizationStrategy.ts(557,41): error TS1434: Unexpected keyword or identifier.
+src/documentation/LocalizationStrategy.ts(574,50): error TS1005: '}' expected.
+src/validation/index.ts(14,2): error TS1005: ',' expected.
+src/validation/index.ts(21,2): error TS1005: ',' expected.
+src/validation/index.ts(29,2): error TS1005: ',' expected.
+src/validation/index.ts(39,2): error TS1005: ',' expected.
+src/validation/index.ts(140,4): error TS1005: ',' expected.
+src/validation/index.ts(142,10): error TS1005: ':' expected.
+src/validation/index.ts(142,34): error TS1005: ',' expected.
+src/validation/index.ts(148,23): error TS1005: ':' expected.
+src/validation/index.ts(149,8): error TS1005: ',' expected.
+src/validation/index.ts(150,18): error TS1109: Expression expected.
+src/validation/index.ts(151,16): error TS1109: Expression expected.
+src/validation/index.ts(152,2): error TS1005: ',' expected.
+src/validation/index.ts(152,12): error TS1005: '>' expected.
+src/validation/index.ts(156,1): error TS1109: Expression expected.
+src/validation/index.ts(157,9): error TS1005: ':' expected.
+src/validation/index.ts(157,53): error TS1005: ',' expected.
+src/validation/index.ts(159,9): error TS1005: ':' expected.
+src/validation/index.ts(159,89): error TS1005: ',' expected.
+src/validation/index.ts(160,9): error TS1005: ':' expected.
+src/validation/index.ts(160,91): error TS1005: ',' expected.
+src/validation/index.ts(162,9): error TS1005: ':' expected.
+src/validation/index.ts(162,16): error TS1005: ',' expected.
+src/validation/index.ts(172,4): error TS1005: ',' expected.
+src/validation/index.ts(174,9): error TS1005: ':' expected.
+src/validation/index.ts(174,65): error TS1005: ',' expected.
+src/validation/index.ts(176,10): error TS1005: ':' expected.
+src/validation/index.ts(180,4): error TS1005: ',' expected.
+src/validation/index.ts(186,10): error TS1005: ':' expected.
+src/validation/index.ts(186,39): error TS1005: ',' expected.
+src/validation/index.ts(186,45): error TS1005: ',' expected.
+src/validation/index.ts(186,54): error TS1005: ',' expected.
+src/validation/index.ts(186,61): error TS1005: ',' expected.
+src/validation/index.ts(254,4): error TS1005: ',' expected.
+src/validation/index.ts(256,10): error TS1005: ':' expected.
+src/validation/index.ts(256,56): error TS1005: ',' expected.
+src/validation/index.ts(262,10): error TS1005: ':' expected.
+src/validation/index.ts(262,40): error TS1005: ',' expected.
+src/validation/index.ts(262,46): error TS1005: ',' expected.
+src/validation/index.ts(262,55): error TS1005: ',' expected.
+src/validation/index.ts(263,9): error TS1005: ':' expected.
+src/validation/index.ts(263,45): error TS1005: ',' expected.
+src/validation/index.ts(296,1): error TS1128: Declaration or statement expected.
+src/validation/index.ts(296,10): error TS1005: ':' expected.
+src/validation/index.ts(301,20): error TS1005: ',' expected.
+src/validation/index.ts(301,57): error TS1005: '=>' expected.
+src/validation/index.ts(310,25): error TS1005: ',' expected.
+src/validation/index.ts(310,44): error TS1005: ';' expected.
+src/validation/index.ts(310,46): error TS1434: Unexpected keyword or identifier.
+src/validation/index.ts(326,3): error TS1005: '}' expected.
+ ELIFECYCLE  Command failed with exit code 2.
