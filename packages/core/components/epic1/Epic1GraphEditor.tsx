@@ -1518,11 +1518,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         <CanvasContextMenu
           position={contextMenuPosition}
           onAddNote={(pos) => {
-            // Convert screen position to flow position
+            // pos is already the click position, convert to flow position
             const flowPos = reactFlowInstance?.screenToFlowPosition({
               x: pos.x,
               y: pos.y
-            }) || pos;
+            }) || { x: 250, y: 250 };
+            console.log('[onAddNote] Creating post-it at:', flowPos);
             handleCreatePostIt(flowPos);
           }}
           onAddBoundingBox={(pos) => {

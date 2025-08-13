@@ -50,16 +50,23 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
       }}
       onMouseLeave={onClose}
     >
-      <button onClick={handleAddNote}>
-        📝 Add Post-it Note
-      </button>
-      {onAddBoundingBox && (
-        <button onClick={handleAddBoundingBox}>
-          📦 Add Region Box
+      <div className="context-menu-items">
+        <button className="context-menu-item" onClick={handleAddNote}>
+          <span className="icon">📝</span>
+          Add Post-it Note
         </button>
-      )}
-      <div className="node-context-menu-divider" />
-      <button onClick={onClose}>Cancel</button>
+        {onAddBoundingBox && (
+          <button className="context-menu-item" onClick={handleAddBoundingBox}>
+            <span className="icon">📦</span>
+            Add Region Box
+          </button>
+        )}
+        <div className="context-menu-separator" />
+        <button className="context-menu-item" onClick={onClose}>
+          <span className="icon">✕</span>
+          Cancel
+        </button>
+      </div>
     </div>
   );
 };
