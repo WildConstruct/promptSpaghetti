@@ -594,15 +594,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Handle canvas click to deselect all nodes and edges
   const handlePaneClick = useCallback((event: React.MouseEvent) => {
-    // Check for right-click
-    if (event.button === 2) {
+    // Check for right-click or context menu event
+    if (event.button === 2 || event.type === 'contextmenu') {
       event.preventDefault();
-      // Store position for creating post-it note
-      const reactFlowBounds = (event.target as HTMLElement).getBoundingClientRect();
-      const position = reactFlowInstance?.screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      }) || { x: event.clientX, y: event.clientY };
+      event.stopPropagation();
       
       // Show context menu for canvas (will add post-it note option)
       setContextMenuPosition({ x: event.clientX, y: event.clientY });
@@ -610,15 +605,15 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       return;
     }
     
-    // Only deselect if we're not in the middle of a selection drag
-    if (!isSelecting) {
+    // Only deselect if we're not in the middle of a selection drag (left-click only)
+    if (!isSelecting && event.button === 0) {
       // Removed console.log that was causing performance issues
       setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
       setEdges((eds) => eds.map(e => ({ ...e, selected: false })));
       setSelectedNodeId(null);
       setActivatedEdges(new Set());
     }
-  }, [setNodes, setEdges, isSelecting, reactFlowInstance]);
+  }, [setNodes, setEdges, isSelecting]);
   
   // Handle node click to select it
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
@@ -1307,8 +1302,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const content = (
     <div className="epic1-graph-editor" style={editorStyle}
          onDrop={onDrop}
-         onDragOver={onDragOver}
-         onContextMenu={(e) => e.preventDefault()}>
+         onDragOver={onDragOver}>
         <ReactFlow
             nodes={enhancedNodes}
             edges={edges.map(edge => ({
@@ -1320,6 +1314,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onPaneClick={handlePaneClick}
+            onContextMenu={handlePaneClick}
             onSelectionStart={() => setIsSelecting(true)}
             onSelectionEnd={() => {
               setIsSelecting(false);

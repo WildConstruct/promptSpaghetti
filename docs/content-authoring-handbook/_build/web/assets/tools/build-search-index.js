@@ -21,7 +21,7 @@ class SearchIndexBuilder {
       excludePatterns: ['**/node_modules/**', '**/assets/**', '**/_build/**'],
       minContentLength: 50,
       maxContentLength: 1000,
-      ...options
+      ...options,
     };
 
     this.index = [];
@@ -32,7 +32,7 @@ class SearchIndexBuilder {
       'part4-practical-guides': 'part4',
       'part5-advanced-topics': 'part5',
       'part6-reference-materials': 'part6',
-      'assets/examples': 'examples'
+      'assets/examples': 'examples',
     };
 
     this.difficultyMap = {
@@ -45,7 +45,7 @@ class SearchIndexBuilder {
       api: 'advanced',
       extension: 'advanced',
       security: 'advanced',
-      performance: 'advanced'
+      performance: 'advanced',
     };
 
     this.typeMap = {
@@ -54,7 +54,7 @@ class SearchIndexBuilder {
       tutorial: 'example',
       example: 'example',
       api: 'reference',
-      guide: 'chapter'
+      guide: 'chapter',
     };
   }
 
@@ -116,9 +116,7 @@ class SearchIndexBuilder {
     const relativePath = path.relative(this.options.docsPath, file);
 
     return this.options.excludePatterns.some(pattern => {
-      return relativePath.includes(
-        pattern.replace('**/', '').replace('/**', '')
-      );
+      return relativePath.includes(pattern.replace('**/', '').replace('/**', ''));
     });
   }
 
@@ -156,7 +154,7 @@ class SearchIndexBuilder {
       type,
       difficulty,
       part,
-      keywords
+      keywords,
     };
   }
 
@@ -323,14 +321,11 @@ class SearchIndexBuilder {
       'security',
       'integration',
       'testing',
-      'debugging'
+      'debugging',
     ];
 
     technicalTerms.forEach(term => {
-      if (
-        title.toLowerCase().includes(term) ||
-        content.toLowerCase().includes(term)
-      ) {
+      if (title.toLowerCase().includes(term) || content.toLowerCase().includes(term)) {
         keywords.add(term);
       }
     });
@@ -390,7 +385,7 @@ class SearchIndexBuilder {
       generated: new Date().toISOString(),
       version: '1.0.0',
       totalPages: this.index.length,
-      pages: this.index
+      pages: this.index,
     };
 
     const jsonContent = JSON.stringify(indexData.pages, null, 2);
@@ -412,7 +407,7 @@ class SearchIndexBuilder {
           generated: indexData.generated,
           version: indexData.version,
           totalPages: indexData.totalPages,
-          stats: this.generateStats()
+          stats: this.generateStats(),
         },
         null,
         2
@@ -425,13 +420,12 @@ class SearchIndexBuilder {
     const stats = {
       byType: {},
       byDifficulty: {},
-      byPart: {}
+      byPart: {},
     };
 
     this.index.forEach(item => {
       stats.byType[item.type] = (stats.byType[item.type] || 0) + 1;
-      stats.byDifficulty[item.difficulty] =
-        (stats.byDifficulty[item.difficulty] || 0) + 1;
+      stats.byDifficulty[item.difficulty] = (stats.byDifficulty[item.difficulty] || 0) + 1;
       stats.byPart[item.part] = (stats.byPart[item.part] || 0) + 1;
     });
 

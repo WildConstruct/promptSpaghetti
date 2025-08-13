@@ -50,13 +50,7 @@
 
     "common_epithet": ["Bold", "Brave", "Swift", "Strong", "Wise"],
 
-    "uncommon_epithet": [
-      "Cunning",
-      "Mysterious",
-      "Ancient",
-      "Forgotten",
-      "Wandering"
-    ],
+    "uncommon_epithet": ["Cunning", "Mysterious", "Ancient", "Forgotten", "Wandering"],
 
     "rare_epithet": ["Legendary", "Immortal", "Prophesied", "Cursed", "Divine"]
   },

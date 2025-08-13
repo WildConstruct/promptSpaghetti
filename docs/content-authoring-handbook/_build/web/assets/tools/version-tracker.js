@@ -17,10 +17,7 @@ class VersionTracker {
     this.rootDir = path.join(__dirname, '../..');
     this.versionFile = path.join(this.rootDir, 'VERSION');
     this.changelogFile = path.join(this.rootDir, 'CHANGELOG.md');
-    this.metadataFile = path.join(
-      this.rootDir,
-      'assets/data/version-metadata.json'
-    );
+    this.metadataFile = path.join(this.rootDir, 'assets/data/version-metadata.json');
 
     this.initializeMetadata();
   }
@@ -36,7 +33,7 @@ class VersionTracker {
         contentHash: this.generateContentHash(),
         buildNumber: 1,
         contributors: [],
-        recentChanges: []
+        recentChanges: [],
       };
 
       this.ensureDirectoryExists(path.dirname(this.metadataFile));
@@ -93,7 +90,7 @@ class VersionTracker {
       'part3-engine-reference',
       'part4-practical-guides',
       'part5-advanced-topics',
-      'part6-reference-materials'
+      'part6-reference-materials',
     ];
 
     let combinedContent = '';
@@ -146,7 +143,7 @@ class VersionTracker {
         description: changeDescription,
         timestamp: new Date().toISOString(),
         author: this.getGitAuthor(),
-        hash: newHash.substring(0, 8)
+        hash: newHash.substring(0, 8),
       };
 
       metadata.recentChanges.unshift(change);
@@ -168,12 +165,8 @@ class VersionTracker {
    */
   getGitAuthor() {
     try {
-      const name = execSync('git config user.name', {
-        encoding: 'utf8'
-      }).trim();
-      const email = execSync('git config user.email', {
-        encoding: 'utf8'
-      }).trim();
+      const name = execSync('git config user.name', { encoding: 'utf8' }).trim();
+      const email = execSync('git config user.email', { encoding: 'utf8' }).trim();
       return `${name} <${email}>`;
     } catch (error) {
       return 'Unknown Author';
@@ -199,10 +192,7 @@ class VersionTracker {
     const metadata = this.getMetadata();
     const updatedMetadata = { ...metadata, ...updates };
 
-    fs.writeFileSync(
-      this.metadataFile,
-      JSON.stringify(updatedMetadata, null, 2)
-    );
+    fs.writeFileSync(this.metadataFile, JSON.stringify(updatedMetadata, null, 2));
   }
 
   /**
@@ -230,7 +220,7 @@ class VersionTracker {
       Added: [],
       Changed: [],
       Fixed: [],
-      Removed: []
+      Removed: [],
     };
 
     changes.forEach(change => {
@@ -257,17 +247,9 @@ class VersionTracker {
   categorizeChange(description) {
     const desc = description.toLowerCase();
 
-    if (
-      desc.includes('add') ||
-      desc.includes('new') ||
-      desc.includes('create')
-    ) {
+    if (desc.includes('add') || desc.includes('new') || desc.includes('create')) {
       return 'Added';
-    } else if (
-      desc.includes('fix') ||
-      desc.includes('bug') ||
-      desc.includes('error')
-    ) {
+    } else if (desc.includes('fix') || desc.includes('bug') || desc.includes('error')) {
       return 'Fixed';
     } else if (desc.includes('remove') || desc.includes('delete')) {
       return 'Removed';
@@ -302,11 +284,7 @@ class VersionTracker {
     if (unreleasedIndex !== -1) {
       const afterUnreleased = changelog.indexOf('\n## [', unreleasedIndex + 1);
       if (afterUnreleased !== -1) {
-        changelog =
-          changelog.slice(0, afterUnreleased) +
-          '\n' +
-          newEntry +
-          changelog.slice(afterUnreleased);
+        changelog = changelog.slice(0, afterUnreleased) + '\n' + newEntry + changelog.slice(afterUnreleased);
       } else {
         changelog += '\n' + newEntry;
       }
@@ -330,7 +308,7 @@ class VersionTracker {
       buildDate: new Date().toISOString(),
       contentHash: metadata.contentHash,
       lastUpdated: metadata.lastUpdated,
-      contributors: metadata.contributors.length
+      contributors: metadata.contributors.length,
     };
   }
 
@@ -395,9 +373,7 @@ if (require.main === module) {
       if (filePath && description) {
         tracker.trackChanges(filePath, description);
       } else {
-        console.log(
-          'Usage: node version-tracker.js track <file> <description>'
-        );
+        console.log('Usage: node version-tracker.js track <file> <description>');
       }
       break;
 
@@ -421,14 +397,10 @@ if (require.main === module) {
       console.log('Usage: node version-tracker.js <command>');
       console.log('Commands:');
       console.log('  version              - Show current version');
-      console.log(
-        '  update [type]        - Update version (patch/minor/major)'
-      );
+      console.log('  update [type]        - Update version (patch/minor/major)');
       console.log('  track <file> <desc>  - Track content change');
       console.log('  changelog            - Update changelog');
-      console.log(
-        '  build                - Increment build number and show version info'
-      );
+      console.log('  build                - Increment build number and show version info');
       console.log('  check                - Check if content has changed');
       break;
   }

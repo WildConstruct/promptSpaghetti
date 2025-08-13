@@ -1,0 +1,24 @@
+{
+  "title": "Content Authoring Handbook",
+  "author": "Prompt Spaghetti Team",
+  "version": "1.0.0",
+  "generated": "2025-08-13T15:13:38.378Z",
+  "formats": {
+    "web": {
+      "path": "web/",
+      "size": 437773
+    },
+    "pdf": {
+      "path": "pdf/",
+      "size": 0
+    },
+    "epub": {
+      "path": "epub/",
+      "size": 0
+    },
+    "print": {
+      "path": "print/",
+      "size": 0
+    }
+  }
+}

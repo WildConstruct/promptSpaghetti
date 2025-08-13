@@ -48,14 +48,14 @@ class UpdateNotifier {
             enabled: true,
             frequency: 'normal', // 'off', 'minimal', 'normal', 'all'
             autoUpdate: false,
-            showChangelog: true
+            showChangelog: true,
           };
     } catch (error) {
       return {
         enabled: true,
         frequency: 'normal',
         autoUpdate: false,
-        showChangelog: true
+        showChangelog: true,
       };
     }
   }
@@ -65,10 +65,7 @@ class UpdateNotifier {
    */
   saveSettings(settings) {
     this.settings = { ...this.settings, ...settings };
-    localStorage.setItem(
-      'handbook-notification-settings',
-      JSON.stringify(this.settings)
-    );
+    localStorage.setItem('handbook-notification-settings', JSON.stringify(this.settings));
   }
 
   /**
@@ -249,10 +246,7 @@ class UpdateNotifier {
   setupEventListeners() {
     // Listen for visibility changes to pause checks when not visible
     document.addEventListener('visibilitychange', () => {
-      if (
-        !document.hidden &&
-        Date.now() - this.lastCheck > this.checkInterval
-      ) {
+      if (!document.hidden && Date.now() - this.lastCheck > this.checkInterval) {
         this.checkForUpdates();
       }
     });
@@ -288,11 +282,7 @@ class UpdateNotifier {
 
     try {
       // Check multiple sources for update information
-      const sources = [
-        this.checkVersionAPI(),
-        this.checkGitHubReleases(),
-        this.checkMetadata()
-      ];
+      const sources = [this.checkVersionAPI(), this.checkGitHubReleases(), this.checkMetadata()];
 
       const results = await Promise.allSettled(sources);
       const updates = results
@@ -314,7 +304,7 @@ class UpdateNotifier {
     try {
       const response = await fetch('/api/version-check', {
         method: 'GET',
-        headers: { 'Cache-Control': 'no-cache' }
+        headers: { 'Cache-Control': 'no-cache' },
       });
 
       if (!response.ok) throw new Error('API request failed');
@@ -327,7 +317,7 @@ class UpdateNotifier {
           version: data.version,
           changes: data.changes,
           releaseDate: data.releaseDate,
-          source: 'api'
+          source: 'api',
         };
       }
     } catch (error) {
@@ -341,9 +331,7 @@ class UpdateNotifier {
    */
   async checkGitHubReleases() {
     try {
-      const response = await fetch(
-        'https://api.github.com/repos/your-org/prompt-spaghetti/releases/latest'
-      );
+      const response = await fetch('https://api.github.com/repos/your-org/prompt-spaghetti/releases/latest');
       if (!response.ok) throw new Error('GitHub API request failed');
 
       const release = await response.json();
@@ -356,7 +344,7 @@ class UpdateNotifier {
           changes: release.body,
           releaseDate: release.published_at,
           downloadUrl: release.html_url,
-          source: 'github'
+          source: 'github',
         };
       }
     } catch (error) {
@@ -369,18 +357,14 @@ class UpdateNotifier {
    */
   async checkMetadata() {
     try {
-      const response = await fetch(
-        '/assets/data/version-metadata.json?t=' + Date.now()
-      );
+      const response = await fetch('/assets/data/version-metadata.json?t=' + Date.now());
       if (!response.ok) throw new Error('Metadata request failed');
 
       const metadata = await response.json();
 
       // Check if content has been updated recently
       const lastUpdated = new Date(metadata.lastUpdated);
-      const lastNotified = new Date(
-        localStorage.getItem('handbook-last-notified') || '2000-01-01'
-      );
+      const lastNotified = new Date(localStorage.getItem('handbook-last-notified') || '2000-01-01');
 
       if (lastUpdated > lastNotified && metadata.recentChanges.length > 0) {
         return {
@@ -388,7 +372,7 @@ class UpdateNotifier {
           version: metadata.version,
           changes: metadata.recentChanges,
           lastUpdated: metadata.lastUpdated,
-          source: 'metadata'
+          source: 'metadata',
         };
       }
     } catch (error) {
@@ -402,15 +386,12 @@ class UpdateNotifier {
   isNewerVersion(newVersion, currentVersion) {
     const parseVersion = v => v.split('.').map(Number);
     const [newMajor, newMinor, newPatch] = parseVersion(newVersion);
-    const [currentMajor, currentMinor, currentPatch] =
-      parseVersion(currentVersion);
+    const [currentMajor, currentMinor, currentPatch] = parseVersion(currentVersion);
 
     return (
       newMajor > currentMajor ||
       (newMajor === currentMajor && newMinor > currentMinor) ||
-      (newMajor === currentMajor &&
-        newMinor === currentMinor &&
-        newPatch > currentPatch)
+      (newMajor === currentMajor && newMinor === currentMinor && newPatch > currentPatch)
     );
   }
 
@@ -433,12 +414,7 @@ class UpdateNotifier {
 
     if (frequency === 'off') return false;
     if (frequency === 'minimal' && update.type === 'content') return false;
-    if (
-      frequency === 'normal' &&
-      update.type === 'content' &&
-      update.changes.length < 3
-    )
-      return false;
+    if (frequency === 'normal' && update.type === 'content' && update.changes.length < 3) return false;
 
     return true;
   }
@@ -538,9 +514,7 @@ class UpdateNotifier {
     switch (update.type) {
       case 'version':
       case 'release':
-        actions.push(
-          '<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>'
-        );
+        actions.push('<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>');
         if (update.downloadUrl) {
           actions.push(
             `<a href="${update.downloadUrl}" class="update-notification-button secondary" target="_blank">View Release</a>`
@@ -548,9 +522,7 @@ class UpdateNotifier {
         }
         break;
       case 'content':
-        actions.push(
-          '<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>'
-        );
+        actions.push('<button class="update-notification-button" onclick="location.reload()">Refresh Page</button>');
         if (this.settings.showChangelog) {
           actions.push(
             '<a href="/CHANGELOG.md" class="update-notification-button secondary" target="_blank">View Changes</a>'
@@ -613,7 +585,7 @@ class UpdateNotifier {
       type: 'info',
       version: this.currentVersion,
       changes: [],
-      message: 'Checking for updates...'
+      message: 'Checking for updates...',
     });
 
     this.checkForUpdates();

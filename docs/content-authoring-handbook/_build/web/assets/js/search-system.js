@@ -15,7 +15,7 @@ class HandbookSearchSystem {
       searchDelay: 300,
       enableSuggestions: true,
       enableFiltering: true,
-      ...options
+      ...options,
     };
 
     this.searchIndex = null;
@@ -27,7 +27,7 @@ class HandbookSearchSystem {
     this.filters = {
       type: 'all',
       difficulty: 'all',
-      part: 'all'
+      part: 'all',
     };
 
     this.init();
@@ -44,12 +44,8 @@ class HandbookSearchSystem {
 
   setupElements() {
     this.searchInput = document.getElementById(this.options.searchInputId);
-    this.resultsContainer = document.getElementById(
-      this.options.resultsContainerId
-    );
-    this.navigationContainer = document.getElementById(
-      this.options.navigationId
-    );
+    this.resultsContainer = document.getElementById(this.options.resultsContainerId);
+    this.navigationContainer = document.getElementById(this.options.navigationId);
 
     if (!this.searchInput || !this.resultsContainer) {
       console.warn('Search elements not found, creating fallback');
@@ -96,9 +92,7 @@ class HandbookSearchSystem {
 
     document.body.insertAdjacentHTML('afterbegin', searchHtml);
     this.searchInput = document.getElementById(this.options.searchInputId);
-    this.resultsContainer = document.getElementById(
-      this.options.resultsContainerId
-    );
+    this.resultsContainer = document.getElementById(this.options.resultsContainerId);
   }
 
   setupEventListeners() {
@@ -145,9 +139,7 @@ class HandbookSearchSystem {
         throw new Error(`Failed to load search index: ${response.status}`);
       }
       this.searchIndex = await response.json();
-      console.log(
-        `Loaded search index with ${this.searchIndex.length} entries`
-      );
+      console.log(`Loaded search index with ${this.searchIndex.length} entries`);
     } catch (error) {
       console.error('Error loading search index:', error);
       this.searchIndex = this.generateFallbackIndex();
@@ -164,7 +156,7 @@ class HandbookSearchSystem {
         type: 'chapter',
         difficulty: 'beginner',
         part: 'part1',
-        keywords: ['introduction', 'overview', 'getting started']
+        keywords: ['introduction', 'overview', 'getting started'],
       },
       {
         title: 'Architecture & Core Concepts',
@@ -173,7 +165,7 @@ class HandbookSearchSystem {
         type: 'chapter',
         difficulty: 'intermediate',
         part: 'part1',
-        keywords: ['architecture', 'concepts', 'engine']
+        keywords: ['architecture', 'concepts', 'engine'],
       },
       {
         title: 'Generator JSON Schema Reference',
@@ -182,7 +174,7 @@ class HandbookSearchSystem {
         type: 'reference',
         difficulty: 'intermediate',
         part: 'part1',
-        keywords: ['schema', 'json', 'reference', 'format']
+        keywords: ['schema', 'json', 'reference', 'format'],
       },
       {
         title: 'Basic Generator Creation',
@@ -191,7 +183,7 @@ class HandbookSearchSystem {
         type: 'chapter',
         difficulty: 'beginner',
         part: 'part2',
-        keywords: ['basic', 'generator', 'creation', 'tutorial']
+        keywords: ['basic', 'generator', 'creation', 'tutorial'],
       },
       {
         title: 'Interactive Tutorial',
@@ -200,7 +192,7 @@ class HandbookSearchSystem {
         type: 'example',
         difficulty: 'beginner',
         part: 'part4',
-        keywords: ['tutorial', 'interactive', 'examples', 'hands-on']
+        keywords: ['tutorial', 'interactive', 'examples', 'hands-on'],
       },
       {
         title: 'Expansion Recipes for LLMs',
@@ -209,7 +201,7 @@ class HandbookSearchSystem {
         type: 'chapter',
         difficulty: 'advanced',
         part: 'part4',
-        keywords: ['llm', 'expansion', 'recipes', 'patterns']
+        keywords: ['llm', 'expansion', 'recipes', 'patterns'],
       },
       {
         title: 'Quick Reference Tables',
@@ -218,8 +210,8 @@ class HandbookSearchSystem {
         type: 'reference',
         difficulty: 'all',
         part: 'part6',
-        keywords: ['reference', 'tables', 'quick', 'lookup']
-      }
+        keywords: ['reference', 'tables', 'quick', 'lookup'],
+      },
     ];
 
     return pages;
@@ -265,11 +257,7 @@ class HandbookSearchSystem {
       matches.push(...contentScore.matches);
 
       // Keywords matches
-      const keywordScore = this.calculateKeywordScore(
-        item.keywords || [],
-        queryTerms,
-        8
-      );
+      const keywordScore = this.calculateKeywordScore(item.keywords || [], queryTerms, 8);
       score += keywordScore.score;
       matches.push(...keywordScore.matches);
 
@@ -285,21 +273,15 @@ class HandbookSearchSystem {
         ...item,
         score,
         matches: [...new Set(matches)],
-        snippet: this.generateSnippet(item.content, queryTerms)
+        snippet: this.generateSnippet(item.content, queryTerms),
       };
     });
 
     // Filter by current filters
     results = results.filter(item => {
-      if (this.filters.type !== 'all' && item.type !== this.filters.type)
-        return false;
-      if (
-        this.filters.difficulty !== 'all' &&
-        item.difficulty !== this.filters.difficulty
-      )
-        return false;
-      if (this.filters.part !== 'all' && item.part !== this.filters.part)
-        return false;
+      if (this.filters.type !== 'all' && item.type !== this.filters.type) return false;
+      if (this.filters.difficulty !== 'all' && item.difficulty !== this.filters.difficulty) return false;
+      if (this.filters.part !== 'all' && item.part !== this.filters.part) return false;
       return true;
     });
 
@@ -456,89 +438,35 @@ class HandbookSearchSystem {
   buildNavigation() {
     const navigationStructure = {
       'Part 1: Foundation': [
-        {
-          title: 'Introduction & Overview',
-          url: 'part1-foundation/01-introduction.html'
-        },
-        {
-          title: 'Architecture & Core Concepts',
-          url: 'part1-foundation/02-architecture.html'
-        },
-        {
-          title: 'Generator JSON Schema Reference',
-          url: 'part1-foundation/03-schema-reference.html'
-        }
+        { title: 'Introduction & Overview', url: 'part1-foundation/01-introduction.html' },
+        { title: 'Architecture & Core Concepts', url: 'part1-foundation/02-architecture.html' },
+        { title: 'Generator JSON Schema Reference', url: 'part1-foundation/03-schema-reference.html' },
       ],
       'Part 2: Content Development': [
-        {
-          title: 'Basic Generator Creation',
-          url: 'part2-content-development/04-basic-generator.html'
-        },
-        {
-          title: 'Advanced Rule Syntax',
-          url: 'part2-content-development/05-advanced-rules.html'
-        },
-        {
-          title: 'Modularization & Organization',
-          url: 'part2-content-development/06-modularization.html'
-        }
+        { title: 'Basic Generator Creation', url: 'part2-content-development/04-basic-generator.html' },
+        { title: 'Advanced Rule Syntax', url: 'part2-content-development/05-advanced-rules.html' },
+        { title: 'Modularization & Organization', url: 'part2-content-development/06-modularization.html' },
       ],
       'Part 3: Engine Reference': [
-        {
-          title: 'Engine API Documentation',
-          url: 'part3-engine-reference/09-api-documentation.html'
-        },
-        {
-          title: 'Modifier System',
-          url: 'part3-engine-reference/10-modifier-system.html'
-        },
-        {
-          title: 'Variable System',
-          url: 'part3-engine-reference/11-variable-system.html'
-        }
+        { title: 'Engine API Documentation', url: 'part3-engine-reference/09-api-documentation.html' },
+        { title: 'Modifier System', url: 'part3-engine-reference/10-modifier-system.html' },
+        { title: 'Variable System', url: 'part3-engine-reference/11-variable-system.html' },
       ],
       'Part 4: Practical Guides': [
-        {
-          title: 'Interactive Tutorial',
-          url: 'part4-practical-guides/14-interactive-tutorial.html'
-        },
-        {
-          title: 'Expansion Recipes for LLMs',
-          url: 'part4-practical-guides/15-expansion-recipes.html'
-        },
-        {
-          title: 'Testing & Quality Assurance',
-          url: 'part4-practical-guides/16-testing-qa.html'
-        }
+        { title: 'Interactive Tutorial', url: 'part4-practical-guides/14-interactive-tutorial.html' },
+        { title: 'Expansion Recipes for LLMs', url: 'part4-practical-guides/15-expansion-recipes.html' },
+        { title: 'Testing & Quality Assurance', url: 'part4-practical-guides/16-testing-qa.html' },
       ],
       'Part 5: Advanced Topics': [
-        {
-          title: 'Custom Extensions',
-          url: 'part5-advanced-topics/18-custom-extensions.html'
-        },
-        {
-          title: 'Security Best Practices',
-          url: 'part5-advanced-topics/19-security.html'
-        },
-        {
-          title: 'Integration Patterns',
-          url: 'part5-advanced-topics/20-integration.html'
-        }
+        { title: 'Custom Extensions', url: 'part5-advanced-topics/18-custom-extensions.html' },
+        { title: 'Security Best Practices', url: 'part5-advanced-topics/19-security.html' },
+        { title: 'Integration Patterns', url: 'part5-advanced-topics/20-integration.html' },
       ],
       'Part 6: Reference Materials': [
-        {
-          title: 'Quick Reference Tables',
-          url: 'part6-reference-materials/22-quick-reference.html'
-        },
-        {
-          title: 'Templates & Boilerplates',
-          url: 'part6-reference-materials/23-templates.html'
-        },
-        {
-          title: 'Common Pitfalls & Solutions',
-          url: 'part6-reference-materials/24-pitfalls.html'
-        }
-      ]
+        { title: 'Quick Reference Tables', url: 'part6-reference-materials/22-quick-reference.html' },
+        { title: 'Templates & Boilerplates', url: 'part6-reference-materials/23-templates.html' },
+        { title: 'Common Pitfalls & Solutions', url: 'part6-reference-materials/24-pitfalls.html' },
+      ],
     };
 
     if (this.navigationContainer) {
@@ -602,9 +530,7 @@ class HandbookSearchSystem {
       query: this.currentQuery,
       url: link.href,
       title: link.querySelector('.search-result-title').textContent,
-      position: Array.from(link.parentNode.parentNode.children).indexOf(
-        link.parentNode
-      )
+      position: Array.from(link.parentNode.parentNode.children).indexOf(link.parentNode),
     };
 
     // Send to analytics if available
