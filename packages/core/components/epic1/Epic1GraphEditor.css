@@ -5,6 +5,11 @@
   height: 100%;
   position: relative;
   background: #0f0f0f;
+  /* Prevent text selection to avoid Cmd+A selecting text */
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 /* Ensure drag and drop works properly */

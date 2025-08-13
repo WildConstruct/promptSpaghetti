@@ -218,10 +218,11 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   }, [showToast]);
 
   const handleSelectAll = useCallback(() => {
-    const allNodeIds = currentNodes.map(n => n.id);
-    const allEdgeIds = currentEdges.map(e => e.id);
+    // Actually select all nodes and edges
+    setCurrentNodes(nodes => nodes.map(n => ({ ...n, selected: true })));
+    setCurrentEdges(edges => edges.map(e => ({ ...e, selected: true })));
     showToast(
-      `Selected ${allNodeIds.length} nodes and ${allEdgeIds.length} edges`,
+      `Selected ${currentNodes.length} nodes and ${currentEdges.length} edges`,
       'info'
     );
   }, [currentNodes, currentEdges, showToast]);

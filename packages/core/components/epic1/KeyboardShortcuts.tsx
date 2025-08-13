@@ -146,11 +146,15 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
 
   // Select all nodes
   const handleSelectAll = useCallback(() => {
+    // Always use reactFlow instance directly for immediate selection
+    const nodes = reactFlowInstance.getNodes();
+    const edges = reactFlowInstance.getEdges();
+    reactFlowInstance.setNodes(nodes.map(n => ({ ...n, selected: true })));
+    reactFlowInstance.setEdges(edges.map(e => ({ ...e, selected: true })));
+    
+    // Also call the callback if provided (for toast notification)
     if (onSelectAll) {
       onSelectAll();
-    } else {
-      const nodes = reactFlowInstance.getNodes();
-      reactFlowInstance.setNodes(nodes.map(n => ({ ...n, selected: true })));
     }
   }, [reactFlowInstance, onSelectAll]);
 
@@ -161,7 +165,22 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
       const target = event.target as HTMLElement;
       const isInputField = ['INPUT', 'TEXTAREA'].includes(target.tagName);
       
-      // Don't handle shortcuts when typing in input fields
+      // For Cmd+A, ALWAYS handle it regardless of input field focus
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'a') {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        
+        // Clear any text selection
+        if (window.getSelection) {
+          window.getSelection()?.removeAllRanges();
+        }
+        
+        handleSelectAll();
+        return; // Exit early after handling Cmd+A
+      }
+      
+      // Don't handle other shortcuts when typing in input fields
       if (isInputField && !event.metaKey && !event.ctrlKey) {
         return;
       }
@@ -193,10 +212,7 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
             event.preventDefault();
             onExport?.();
             break;
-          case 'a':
-            event.preventDefault();
-            handleSelectAll();
-            break;
+          // case 'a' handled above before this switch
           case 'd':
             event.preventDefault();
             handleDuplicate();
@@ -271,8 +287,9 @@ export const KeyboardShortcuts: React.FC<KeyboardShortcutsProps> = ({
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    // Add listener in capture phase to intercept before other handlers
+    window.addEventListener('keydown', handleKeyDown, true);
+    return () => window.removeEventListener('keydown', handleKeyDown, true);
   }, [
     onSave,
     onLoad,

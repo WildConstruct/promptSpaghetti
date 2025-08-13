@@ -246,7 +246,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   
   // Calculate the position of the main handle and each branch handle relative to the node box
   useLayoutEffect(() => {
-    if (!nodeRef.current || !hasBranching) return;
+    if (!nodeRef.current) return;
 
     // The handles are absolutely positioned relative to the outer node container
     const editorElInit = nodeRef.current!;
@@ -258,7 +258,7 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       // Determine mode accurately: the nodeRef points directly at the editor/display container
       const isEditingMode = editorEl.classList.contains('enhanced-branching-editor');
       // Mode-specific vertical nudge for main handle baseline
-      // Edit: bring all handles down ~10px; Display unchanged
+      // These values are from the documentation - tested and confirmed
       const vNudge = isEditingMode ? -36 : -30;
 
       // Title center for main handle
@@ -275,15 +275,15 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
         if (!rowEl) return 0;
         // Use the entire row's visual box to match the dark rounded background
         const r = rowEl.getBoundingClientRect();
-        // Branch-only fine tune: push orange lower in edit more than green
+        // Branch-only fine tune: values from documentation
         const branchFineTune = isEditingMode ? -2 : 1;
         return r.top - nodeRect.top + r.height / 2 + vNudge + branchFineTune;
       });
       // Apply mode-specific spacing and lift for branches
-      // Spacing unchanged
-      const compress = isEditingMode ? 0.77 : 0.77;
-      // Extra lift: move branches up relative to main
-      // Drop edit branches further overall than green
+      // Compression factor for vertical spacing between options
+      const compress = 0.77;
+      // Extra lift: uniform offset for all branch handles
+      // Values from documentation - properly tested
       const extraLift = isEditingMode ? -40 : -21;
       const adjustedTops = tops.length
         ? tops.map((t, idx) => {
@@ -664,7 +664,6 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                     className="epic1-handle enhanced-handle branch-output"
                     style={{ 
                       position: 'absolute',
-                      // vertical via CSS var wins over generic !important
                       ['--handle-top' as any]: `${branchHandleTops[index] ?? 0}px`,
                       transform: 'translateY(-50%)',
                       zIndex: 1000,

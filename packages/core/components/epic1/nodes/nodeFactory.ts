@@ -74,7 +74,7 @@ export function nodeDataToRuntimeNode(
                 id: opt.id || `option-${idx + 1}`,
                 text: opt.text || '',
                 weight: opt.weight || 1,
-                hasBranch: opt.hasBranch !== undefined ? opt.hasBranch : true
+                hasBranch: opt.hasBranch !== undefined ? opt.hasBranch : false
               }));
             }
           } else {

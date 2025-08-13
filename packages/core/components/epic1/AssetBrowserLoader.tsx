@@ -4,7 +4,6 @@
  */
 
 import React, { lazy, Suspense } from 'react';
-import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
 import { AssetLibraryErrorBoundary } from './asset-library/AssetLibraryErrorBoundary';
 import { Preset } from './asset-library/types';
 
@@ -27,13 +26,21 @@ const AssetBrowserIntegrated = lazy(() =>
 interface AssetBrowserLoaderProps {
   onPresetDrag?: (preset: Preset) => void;
   onPresetSelect?: (preset: Preset) => void;
+  onInsert?: (preset: any) => void;
 }
 
 export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = ({
   onPresetDrag,
-  onPresetSelect
+  onPresetSelect,
+  onInsert
 }) => {
   const [loadFailed, setLoadFailed] = React.useState(false);
+
+  const LoadingPlaceholder = () => (
+    <div style={{ padding: 12, color: '#9ca3af' }}>
+      Loading Asset Browser…
+    </div>
+  );
 
   React.useEffect(() => {
     // Check if the component actually loaded
@@ -50,31 +57,27 @@ export const AssetBrowserLoader: React.FC<AssetBrowserLoaderProps> = ({
   // If load failed, use fallback directly
   if (loadFailed) {
     return (
-      <AssetLibraryV2
-        position="right"
-        onPresetDrag={onPresetDrag}
-        onPresetSelect={onPresetSelect}
-        defaultExpanded={true}
-      />
+      <div style={{ padding: 12 }}>
+        <div style={{ marginBottom: 6, fontWeight: 600 }}>Asset Browser failed to load</div>
+        <div style={{ color: '#6b7280', marginBottom: 8 }}>Please reload the page or try again.</div>
+        <button onClick={() => {
+          setLoadFailed(false);
+          // Re-trigger dynamic import check
+          import('./AssetBrowserIntegrated').catch(() => setLoadFailed(true));
+        }}>Retry</button>
+      </div>
     );
   }
 
   return (
     <AssetLibraryErrorBoundary>
-      <Suspense fallback={
-        <AssetLibraryV2
-          position="right"
-          onPresetDrag={onPresetDrag}
-          onPresetSelect={onPresetSelect}
-          defaultExpanded={true}
-        />
-      }>
+      <Suspense fallback={<LoadingPlaceholder />}>
         <AssetBrowserIntegrated
           onInsert={(preset: any) => {
-            if (preset?.data) {
-              onPresetSelect?.(preset);
-              onPresetDrag?.(preset);
-            }
+            // Forward insert event directly to upstream without guards (AC7)
+            // Just call onInsert(preset) directly as per story requirements
+            console.log('[AssetBrowserLoader] Forwarding preset insert:', preset);
+            onInsert?.(preset);
           }}
         />
       </Suspense>

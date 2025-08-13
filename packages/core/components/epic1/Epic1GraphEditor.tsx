@@ -30,7 +30,6 @@ import { PreviewPanel } from './preview/PreviewPanel';
 import { Epic1Graph } from '../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
-import { AssetLibraryV2 } from './asset-library/AssetLibraryV2';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
 import { TabbedSidePanel } from './TabbedSidePanel';
 import { NodeToolbar } from './NodeToolbar';
@@ -45,6 +44,7 @@ import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
+import { insertPreset, validatePreset } from '../../runtime/presetInsertion';
 
 export interface Epic1GraphEditorProps {
   initialNodes?: Node<EditableNodeData>[];
@@ -348,17 +348,27 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   }, [enhancedNodes, edges, showToast]);
 
   const handleDelete = useCallback((nodesToDelete?: Node[]) => {
-    // If no nodes provided, get selected nodes
-    const targetNodes = nodesToDelete || nodes.filter(n => n.selected);
-    
-    if (targetNodes.length === 0) {
-      return;
+    // Use the nodes passed or get them from current state
+    if (nodesToDelete && nodesToDelete.length > 0) {
+      const nodeIds = nodesToDelete.map(n => n.id);
+      setNodes((nds) => nds.filter(n => !nodeIds.includes(n.id)));
+      setEdges((eds) => eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
+      showToast('info', `Deleted ${nodeIds.length} node(s)`);
+    } else {
+      // Delete selected nodes from current state
+      setNodes((nds) => {
+        const selectedNodes = nds.filter(n => n.selected);
+        if (selectedNodes.length === 0) return nds;
+        const nodeIds = selectedNodes.map(n => n.id);
+        showToast('info', `Deleted ${nodeIds.length} node(s)`);
+        return nds.filter(n => !nodeIds.includes(n.id));
+      });
+      setEdges((eds) => {
+        const selectedNodes = nodes.filter(n => n.selected);
+        const nodeIds = selectedNodes.map(n => n.id);
+        return eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target));
+      });
     }
-    
-    const nodeIds = targetNodes.map(n => n.id);
-    setNodes((nds) => nds.filter(n => !nodeIds.includes(n.id)));
-    setEdges((eds) => eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
-    showToast('info', `Deleted ${nodeIds.length} node(s)`);
   }, [nodes, setNodes, setEdges, showToast]);
 
   const handleDuplicate = useCallback((nodesToDuplicate: Node[]) => {
@@ -376,8 +386,16 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   }, [setNodes, showToast]);
 
   const handleSelectAll = useCallback(() => {
-    setNodes((nds) => nds.map(n => ({ ...n, selected: true })));
-  }, [setNodes]);
+    // Select all nodes and edges using state updater functions
+    setNodes((currentNodes) => {
+      const selectedNodes = currentNodes.map(n => ({ ...n, selected: true }));
+      showToast('info', `Selected ${selectedNodes.length} nodes`);
+      return selectedNodes;
+    });
+    setEdges((currentEdges) => {
+      return currentEdges.map(e => ({ ...e, selected: true }));
+    });
+  }, [setNodes, setEdges, showToast]);
 
   // Handle canvas click to deselect all nodes and edges
   const handlePaneClick = useCallback((event: React.MouseEvent) => {
@@ -626,6 +644,145 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     return `node-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }, []);
 
+  // Manifest cache and base resolution for preset assets
+  const manifestCacheRef = useRef<unknown | null>(null);
+  const manifestBaseRef = useRef<string>('/presets');
+  const manifestLoadPromiseRef = useRef<Promise<unknown> | null>(null);
+
+  // Resolve preset path by ID using the published manifest
+  const resolvePresetPathById = useCallback(async (presetId: string): Promise<string | null> => {
+    // Load manifest once with multiple candidate URLs and HTML guard
+    type Manifest = { presets?: Array<{ id?: string; path?: string }> };
+    const getManifest = async (): Promise<unknown | null> => {
+      if (manifestCacheRef.current) return manifestCacheRef.current;
+      if (manifestLoadPromiseRef.current) return manifestLoadPromiseRef.current;
+      const loader = (async () => {
+        try {
+          const baseUrl = ((import.meta as unknown) as { env?: { BASE_URL?: string } })?.env?.BASE_URL || '/';
+          const base = String(baseUrl).replace(/\/$/, '');
+          const candidates = [
+            `${base}/presets/manifest.json`,
+            '/presets/manifest.json',
+            '/asset-browser/presets/manifest.json',
+          ];
+          for (const url of candidates) {
+            try {
+              const res = await fetch(url, { cache: 'no-cache' });
+              if (!res.ok) continue;
+              const text = await res.text();
+              const trimmed = text.trim().toLowerCase();
+              if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html')) {
+                // HTML, not JSON - try next candidate
+                continue;
+              }
+              const json = JSON.parse(text);
+              manifestCacheRef.current = json;
+              manifestBaseRef.current = url.includes('/asset-browser/')
+                ? '/asset-browser/presets'
+                : '/presets';
+              return json;
+            } catch {
+              // try next
+            }
+          }
+        } finally {
+          manifestLoadPromiseRef.current = null;
+        }
+        return null;
+      })();
+      manifestLoadPromiseRef.current = loader;
+      return loader;
+    };
+
+    try {
+      const manifest = (await getManifest()) as Manifest | null;
+      if (!manifest) return null;
+      const entry = Array.isArray(manifest.presets)
+        ? manifest.presets.find((p) => p.id === presetId)
+        : null;
+      return entry?.path || null;
+    } catch (err) {
+      console.warn('[Epic1GraphEditor] Error reading presets manifest', err);
+      return null;
+    }
+  }, []);
+
+  const normalizePresetPath = useCallback((path: string): string => {
+    if (!path) return path;
+    // Absolute URL or already absolute path
+    if (/^https?:\/\//i.test(path) || path.startsWith('/')) return path;
+    const base = manifestBaseRef.current || '/presets';
+    if (path.startsWith('./')) return `${base}/${path.slice(2)}`;
+    if (path.startsWith('presets/')) return `/${path}`;
+    if (path.startsWith('asset-browser/presets/') || path.startsWith('/asset-browser/presets/')) {
+      return path.startsWith('/') ? path : `/${path}`;
+    }
+    return `${base}/${path}`;
+  }, []);
+
+  // Shared insertion routine for both drop and explicit insert actions
+  const insertPresetByMeta = useCallback(async (
+    meta: any,
+    position: { x: number; y: number }
+  ) => {
+    try {
+      let content: string | null = null;
+
+      // Prefer inline PSG content if provided
+      if (meta?.psglib || meta?.content) {
+        content = String(meta.psglib ?? meta.content);
+      } else {
+        // Resolve path from payload or manifest by ID
+        let presetPath: string | null = meta?.path || null;
+        if (!presetPath && meta?.id) {
+          presetPath = await resolvePresetPathById(meta.id);
+        }
+        if (!presetPath) {
+          throw new Error('Unable to resolve preset path.');
+        }
+        const normalized = normalizePresetPath(presetPath);
+        const resp = await fetch(normalized, { cache: 'no-cache' });
+        if (!resp.ok) {
+          throw new Error(`Failed to load preset: ${resp.status} ${resp.statusText}`);
+        }
+        content = await resp.text();
+      }
+
+      if (!content) throw new Error('Preset content is empty.');
+
+      // Validate before inserting
+      const validation = validatePreset(content);
+      if (!validation.valid) {
+        throw new Error(validation.error || 'Preset failed validation');
+      }
+
+      const result = await insertPreset(content, {
+        position,
+        snapToGrid: true,
+        selectAfterInsert: true
+      });
+
+      setNodes(nds => nds.concat(result.nodes as any));
+      setEdges(eds => eds.concat(result.edges as any));
+
+      // Optional: bounce first node for feedback
+      try {
+        if (addNodeWithBounce && result.nodes?.[0]) {
+          addNodeWithBounce(result.nodes[0] as any);
+        }
+      } catch (e) {
+        // non-fatal
+      }
+
+      const name = meta?.name ? ` "${meta.name}"` : '';
+      const count = (validation.nodeCount ?? 0) > 0 ? ` (${validation.nodeCount} nodes)` : '';
+      showToast('success', `Inserted preset${name}${count}`);
+    } catch (error) {
+      console.error('[Epic1GraphEditor] Preset insertion failed:', error);
+      showToast('error', error instanceof Error ? error.message : 'Failed to insert preset');
+    }
+  }, [addNodeWithBounce, setNodes, setEdges, showToast, normalizePresetPath, resolvePresetPathById]);
+
   // Handle ReactFlow initialization
   const onInit = useCallback((instance: ReactFlowInstance) => {
     setReactFlowInstance(instance);
@@ -740,6 +897,30 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       event.preventDefault();
       event.stopPropagation();
 
+      // First: check for Asset Browser preset payload
+      let presetPayload = '';
+      try {
+        presetPayload = event.dataTransfer.getData('application/x-preset');
+      } catch {
+        // ignore
+      }
+
+      if (presetPayload) {
+        try {
+          const meta = JSON.parse(presetPayload);
+          // Calculate graph position
+          const pos = reactFlowInstance
+            ? reactFlowInstance.screenToFlowPosition({ x: event.clientX, y: event.clientY })
+            : { x: 250, y: 250 };
+          void insertPresetByMeta(meta, pos);
+          return;
+        } catch (e) {
+          console.error('[Epic1GraphEditor] Invalid preset drop payload:', e);
+          showToast('error', 'Invalid preset drop payload');
+          return;
+        }
+      }
+
       // Try multiple data types for compatibility
       let nodeType = event.dataTransfer.getData('application/reactflow');
       if (!nodeType) {
@@ -776,7 +957,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
       handleNodeDrop(nodeType, position);
     },
-    [reactFlowInstance, handleNodeDrop]
+    [reactFlowInstance, handleNodeDrop, insertPresetByMeta, showToast]
   );
 
   // Wrap with DndProvider if using droppable nodes
@@ -890,10 +1071,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           <SafeReactFlowWrapper>
             <PanZoomControls position="bottom-right" />
           </SafeReactFlowWrapper>
-        </ReactFlow>
-
-        {/* Keyboard shortcuts handler */}
-        <SafeReactFlowWrapper>
+          
+          {/* Keyboard shortcuts handler - must be inside ReactFlow for useReactFlow to work */}
           <KeyboardShortcuts
             onSave={handleSave}
             onLoad={handleLoad}
@@ -906,7 +1085,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               'P': handleTogglePreview
             }}
           />
-        </SafeReactFlowWrapper>
+        </ReactFlow>
 
         {/* Toast notifications */}
         {toasts.map((toast) => (
@@ -936,6 +1115,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           }}
           onPresetSelect={(preset) => {
             // TODO: Implement preset selection
+          }}
+          onInsert={(preset) => {
+            const pos = reactFlowInstance
+              ? reactFlowInstance.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
+              : { x: 250, y: 250 };
+            void insertPresetByMeta(preset, pos);
           }}
           position="right"
           defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}

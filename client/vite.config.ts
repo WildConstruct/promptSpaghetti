@@ -55,7 +55,7 @@ export default defineConfig({
       '@promptscape/core': path.resolve(__dirname, '../packages/core'),
       '@prompt/asset-browser': path.resolve(
         __dirname,
-        '../packages/asset-browser'
+        '../packages/asset-browser/src'
       )
     },
     dedupe: [

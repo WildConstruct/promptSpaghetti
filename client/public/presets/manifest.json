@@ -1,0 +1,105 @@
+{
+  "version": "1.0.0",
+  "generated": "2025-01-10T20:15:00.000Z",
+  "presets": [
+    {
+      "id": "preset-character-name-basic-1736536800000",
+      "path": "./character-name-basic.psglib",
+      "name": "Character Name Generator",
+      "description": "Generates diverse character names with first and last name combinations",
+      "tags": ["character", "names", "basic", "rpg"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "character"
+    },
+    {
+      "id": "preset-story-hook-1736536801000",
+      "path": "./story-hook.psglib",
+      "name": "Story Hook Generator",
+      "description": "Creates compelling opening lines and story hooks with variety",
+      "tags": ["story", "writing", "hooks", "narrative"],
+      "nodeTypes": ["WeightedChoice", "Output"],
+      "category": "narrative"
+    },
+    {
+      "id": "preset-setting-description-1736536802000",
+      "path": "./setting-description.psglib",
+      "name": "Setting Description Generator",
+      "description": "Creates vivid, atmospheric location and scene descriptions",
+      "tags": ["setting", "description", "atmosphere", "worldbuilding"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "worldbuilding"
+    },
+    {
+      "id": "preset-character-trait-1736536803000",
+      "path": "./character-trait.psglib",
+      "name": "Character Trait Generator",
+      "description": "Generates diverse and interesting personality traits for characters",
+      "tags": ["character", "personality", "traits", "rpg"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "character"
+    },
+    {
+      "id": "preset-plot-twist-1736536804000",
+      "path": "./plot-twist.psglib",
+      "name": "Plot Twist Generator",
+      "description": "Creates surprising yet logical plot twists for stories",
+      "tags": ["story", "plot", "twist", "narrative"],
+      "nodeTypes": ["WeightedChoice", "Output"],
+      "category": "narrative"
+    },
+    {
+      "id": "preset-dialogue-starter-1736537000000",
+      "path": "./dialogue-starter.psglib",
+      "name": "Dialogue Starter",
+      "description": "Generates natural conversation openers for various situations",
+      "tags": ["dialogue", "conversation", "writing", "social"],
+      "nodeTypes": ["WeightedChoice", "Output"],
+      "category": "dialogue"
+    },
+    {
+      "id": "preset-item-generator-1736537001000",
+      "path": "./item-generator.psglib",
+      "name": "Fantasy Item Generator",
+      "description": "Creates unique magical items and artifacts with properties",
+      "tags": ["items", "fantasy", "rpg", "equipment", "magic"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "items"
+    },
+    {
+      "id": "preset-quest-objective-1736537002000",
+      "path": "./quest-objective.psglib",
+      "name": "Quest Objective Generator",
+      "description": "Creates varied mission goals and quest objectives",
+      "tags": ["quest", "mission", "rpg", "objectives", "adventure"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "gameplay"
+    },
+    {
+      "id": "preset-emotion-state-1736537003000",
+      "path": "./emotion-state.psglib",
+      "name": "Emotion State Selector",
+      "description": "Generates nuanced emotional states and moods for characters",
+      "tags": ["emotion", "mood", "character", "psychology"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "character"
+    },
+    {
+      "id": "preset-weather-condition-1736537004000",
+      "path": "./weather-condition.psglib",
+      "name": "Weather Condition Generator",
+      "description": "Creates atmospheric weather conditions for scene setting",
+      "tags": ["weather", "environment", "atmosphere", "setting"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "environment"
+    },
+    {
+      "id": "preset-relationship-dynamic-1736537005000",
+      "path": "./relationship-dynamic.psglib",
+      "name": "Relationship Dynamic Generator",
+      "description": "Creates complex character relationships with history and tension",
+      "tags": ["relationship", "character", "dynamics", "advanced"],
+      "nodeTypes": ["WeightedChoice", "Concat", "Output"],
+      "category": "character"
+    }
+  ]
+}

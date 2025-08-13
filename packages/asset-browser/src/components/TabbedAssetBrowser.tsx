@@ -1,5 +1,5 @@
 import React from 'react';
-import { AssetBrowser } from './AssetBrowser';
+import { ProAssetBrowser } from './ProAssetBrowser';
 import { AssetBrowserTabs } from './AssetBrowserTabs';
 import type { Preset } from '../types';
 
@@ -12,6 +12,6 @@ export const TabbedAssetBrowser: React.FC<TabbedAssetBrowserProps> = ({
 }) => {
   // Compose the current Asset Browser inside tabs (Library + Server)
   return (
-    <AssetBrowserTabs libraryView={<AssetBrowser onInsert={onInsert} />} />
+    <AssetBrowserTabs libraryView={<ProAssetBrowser onInsert={onInsert} />} />
   );
 };

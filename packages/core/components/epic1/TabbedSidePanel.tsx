@@ -14,6 +14,7 @@ export interface TabbedSidePanelProps {
   previewEngine: PreviewEngine | null;
   onPresetDrag?: (preset: Preset) => void;
   onPresetSelect?: (preset: Preset) => void;
+  onInsert?: (preset: any) => void;
   position?: 'left' | 'right';
   defaultTab?: 'preview' | 'assets' | null;
   showAssets?: boolean;
@@ -26,6 +27,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
   previewEngine,
   onPresetDrag,
   onPresetSelect,
+  onInsert,
   position = 'right',
   defaultTab = null,
   showAssets = true,
@@ -88,6 +90,7 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
             <AssetBrowserLoader
               onPresetDrag={onPresetDrag}
               onPresetSelect={onPresetSelect}
+              onInsert={onInsert}
             />
           </div>
         )}
