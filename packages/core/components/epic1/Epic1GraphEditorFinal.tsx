@@ -24,7 +24,8 @@ import { TabbedSidePanel } from './TabbedSidePanel';
 import { useKeyboardHandlers, useDragDropHandlers, useContextMenu } from './hooks';
 
 // Import node types
-import { droppableEpic1NodeTypes, epic1NodeTypes } from './nodes';
+import { epic1NodeTypes } from './nodes';
+import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
 import { edgeTypes } from './EdgeRenderingFix';
 
 // Import styles
@@ -220,7 +221,7 @@ const Epic1GraphEditorContent: React.FC<{
       <GraphOverlays
         toasts={notifications.map(n => ({
           id: n.id,
-          type: n.type,
+          type: n.type === 'warning' ? 'info' : n.type as 'success' | 'error' | 'info',
           message: n.message,
         }))}
         onDismissToast={dismissNotification}
@@ -286,5 +287,6 @@ export const Epic1GraphEditorFinal: React.FC<Epic1GraphEditorProps> = ({
   );
 };
 
-// Export with compatibility alias
+// Export with compatibility alias (THIS IS THE DEFAULT EXPORT)
 export const Epic1GraphEditor = Epic1GraphEditorFinal;
+export default Epic1GraphEditorFinal;

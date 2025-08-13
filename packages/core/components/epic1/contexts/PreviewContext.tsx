@@ -1,24 +1,30 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
-import type { EditableNodeData } from '../nodes';
-import { usePreviewEngine } from '../hooks/usePreviewEngine';
 import { PreviewEngine } from '../preview/PreviewEngine';
+import type { EditableNodeData } from '../nodes';
 
-interface PreviewContextType {
+export interface PreviewResult {
+  seed: string | number;
+  result: string;
+  error?: string;
+}
+
+export interface PreviewContextValue {
   previewEngine: PreviewEngine | null;
   isPreviewVisible: boolean;
   setPreviewVisible: (visible: boolean) => void;
-  previewResults: any[];
+  executePreview: (nodes: Node<EditableNodeData>[], edges: Edge[]) => Promise<void>;
+  previewResults: PreviewResult[];
   isExecuting: boolean;
-  error: Error | null;
-  updatePreview: () => void;
-  handleSeedChange: (seeds: (string | number)[]) => void;
+  previewSeeds: (string | number)[];
+  setPreviewSeeds: (seeds: (string | number)[]) => void;
+  clearResults: () => void;
 }
 
-const PreviewContext = createContext<PreviewContextType | undefined>(undefined);
+const PreviewContext = createContext<PreviewContextValue | undefined>(undefined);
 
-interface PreviewProviderProps {
-  children: ReactNode;
+export interface PreviewProviderProps {
+  children: React.ReactNode;
   nodes: Node<EditableNodeData>[];
   edges: Edge[];
   isDragging: boolean;
@@ -26,82 +32,136 @@ interface PreviewProviderProps {
   previewSeeds?: (string | number)[];
 }
 
-/**
- * PreviewProvider - Manages preview engine state and execution
- * Provides preview functionality to all child components
- */
 export const PreviewProvider: React.FC<PreviewProviderProps> = ({
   children,
   nodes,
   edges,
   isDragging,
   previewDebounceDelay = 300,
-  previewSeeds,
+  previewSeeds: initialSeeds = ['seed1', 'seed2', 'seed3'],
 }) => {
-  const [isPreviewVisible, setPreviewVisible] = React.useState(true);
-  const [previewResults, setPreviewResults] = React.useState<any[]>([]);
-  const [isExecuting, setIsExecuting] = React.useState(false);
-  const [error, setError] = React.useState<Error | null>(null);
+  const [previewEngine] = useState(() => new PreviewEngine());
+  const [isPreviewVisible, setPreviewVisible] = useState(false);
+  const [previewResults, setPreviewResults] = useState<PreviewResult[]>([]);
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [previewSeeds, setPreviewSeeds] = useState<(string | number)[]>(initialSeeds);
+  
+  const executionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const { previewEngine, handlePreviewSeedChange } = usePreviewEngine({
-    previewDebounceDelay,
-    previewSeeds,
-    nodes,
-    edges,
-    isPreviewVisible,
-    isDragging,
-  });
+  // Auto-execute preview when nodes/edges change and preview is visible
+  useEffect(() => {
+    if (!isPreviewVisible || isDragging) {
+      return;
+    }
 
-  // Subscribe to preview engine events
-  React.useEffect(() => {
-    if (!previewEngine) return;
+    // Clear existing timeout
+    if (executionTimeoutRef.current) {
+      clearTimeout(executionTimeoutRef.current);
+    }
 
-    const handleResults = (results: any[]) => {
-      setPreviewResults(results);
-      setIsExecuting(false);
-      setError(null);
-    };
-
-    const handleError = (err: Error) => {
-      setError(err);
-      setIsExecuting(false);
-    };
-
-    const handleStart = () => {
-      setIsExecuting(true);
-      setError(null);
-    };
-
-    // Add event listeners (assuming PreviewEngine has these methods)
-    // You might need to implement these in PreviewEngine
-    const unsubscribeResults = previewEngine.onResults?.(handleResults);
-    const unsubscribeError = previewEngine.onError?.(handleError);
-    const unsubscribeStart = previewEngine.onStart?.(handleStart);
+    // Debounce execution
+    executionTimeoutRef.current = setTimeout(() => {
+      executePreview(nodes, edges);
+    }, previewDebounceDelay);
 
     return () => {
-      unsubscribeResults?.();
-      unsubscribeError?.();
-      unsubscribeStart?.();
+      if (executionTimeoutRef.current) {
+        clearTimeout(executionTimeoutRef.current);
+      }
     };
-  }, [previewEngine]);
+  }, [nodes, edges, isPreviewVisible, isDragging, previewDebounceDelay]);
 
-  const updatePreview = React.useCallback(() => {
-    if (previewEngine && !isDragging) {
-      // Trigger preview update
-      setIsExecuting(true);
-      // The actual update happens through the usePreviewEngine hook
+  const executePreview = useCallback(async (
+    previewNodes: Node<EditableNodeData>[],
+    previewEdges: Edge[]
+  ) => {
+    // Cancel any existing execution
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
     }
-  }, [previewEngine, isDragging]);
 
-  const value: PreviewContextType = {
+    // Create new abort controller
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+
+    setIsExecuting(true);
+    setPreviewResults([]);
+
+    try {
+      const results: PreviewResult[] = [];
+
+      for (const seed of previewSeeds) {
+        // Check if aborted
+        if (abortController.signal.aborted) {
+          break;
+        }
+
+        try {
+          const result = await previewEngine.execute(
+            previewNodes,
+            previewEdges,
+            seed
+          );
+
+          // Check if aborted after execution
+          if (!abortController.signal.aborted) {
+            results.push({
+              seed,
+              result: result || 'No output',
+            });
+          }
+        } catch (error) {
+          if (!abortController.signal.aborted) {
+            results.push({
+              seed,
+              result: '',
+              error: error instanceof Error ? error.message : 'Unknown error',
+            });
+          }
+        }
+      }
+
+      // Only update results if not aborted
+      if (!abortController.signal.aborted) {
+        setPreviewResults(results);
+      }
+    } catch (error) {
+      console.error('Preview execution error:', error);
+    } finally {
+      if (abortControllerRef.current === abortController) {
+        setIsExecuting(false);
+        abortControllerRef.current = null;
+      }
+    }
+  }, [previewEngine, previewSeeds]);
+
+  const clearResults = useCallback(() => {
+    setPreviewResults([]);
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (executionTimeoutRef.current) {
+        clearTimeout(executionTimeoutRef.current);
+      }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  const value: PreviewContextValue = {
     previewEngine,
     isPreviewVisible,
     setPreviewVisible,
+    executePreview,
     previewResults,
     isExecuting,
-    error,
-    updatePreview,
-    handleSeedChange: handlePreviewSeedChange,
+    previewSeeds,
+    setPreviewSeeds,
+    clearResults,
   };
 
   return (
@@ -111,13 +171,10 @@ export const PreviewProvider: React.FC<PreviewProviderProps> = ({
   );
 };
 
-/**
- * usePreview - Hook to access preview context
- */
-export const usePreview = (): PreviewContextType => {
+export const usePreview = () => {
   const context = useContext(PreviewContext);
   if (!context) {
-    throw new Error('usePreview must be used within PreviewProvider');
+    throw new Error('usePreview must be used within a PreviewProvider');
   }
   return context;
 };

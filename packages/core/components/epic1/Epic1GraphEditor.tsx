@@ -1562,7 +1562,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 };
 
 // Export the main component
-export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
+// Original monolithic implementation (now legacy)
+const Epic1GraphEditorMonolithic: React.FC<Epic1GraphEditorProps> = (props) => {
   return (
     <ReactFlowProvider>
       <Epic1GraphEditorInner {...props} />
@@ -1570,5 +1571,16 @@ export const Epic1GraphEditor: React.FC<Epic1GraphEditorProps> = (props) => {
   );
 };
 
-// Also export with provider for compatibility
-export const Epic1GraphEditorWithProvider = Epic1GraphEditor;
+// Import the refactored version
+import { Epic1GraphEditorFinal } from './Epic1GraphEditorFinal';
+
+// DEFAULT EXPORT: Now uses the refactored version!
+export const Epic1GraphEditor = Epic1GraphEditorFinal;
+
+// Legacy exports for backward compatibility if needed
+export const Epic1GraphEditorLegacy = Epic1GraphEditorMonolithic;
+export const Epic1GraphEditorWithProvider = Epic1GraphEditorFinal; // Also use new version
+
+// Conditional export based on feature flag (can force legacy if needed)
+export const Epic1GraphEditorConditional = 
+  process.env.FORCE_LEGACY_EDITOR === 'true' ? Epic1GraphEditorMonolithic : Epic1GraphEditorFinal;
