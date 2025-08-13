@@ -1,36 +1,31 @@
 // Story 1.30: Trimmed public surface
-// This index re-exports ONLY the stable public API. All legacy/unstable
-// exports are commented out below to avoid unresolved/missing references.
-// For consumers, prefer importing from `@promptscape/core` (which maps to
-// `public.*`) or `@promptscape/core/utils` and subpaths.
-
+// Re-enabling exports to fix Epic1GraphEditor
 export * from './public';
 
-/*
 // Shared types and engine placeholder
 
-export interface Node { id: string;
+export interface Node { 
+  id: string;
   type: string;
-  data: Record<string, unknown> }
+  data: Record<string, unknown>;
   position: { x: number; y: number };
+}
 
-
-export interface Edge { id: string;
+export interface Edge { 
+  id: string;
   source: string;
   target: string;
-  type?: string }
+  type?: string;
+}
 
-
-export interface Graph { nodes: Node;
-  edges: Edge;
-  meta: { }
+export interface Graph { 
+  nodes: Node[];
+  edges: Edge[];
+  meta: {};
   version: string;
-
-  };
-
+}
 
 // Export new components and types
-
 export * from './components/Inspector';
 export * from './types/NodeTypes';
 export * from './utils/nodeDataUtils';
@@ -260,10 +255,16 @@ export type { UTDGNode
 export { HISTORICAL_ERAS } from './types/UTDG';
 
 // Runtime system exports
-export { ExecutionContext
-  RuntimeNode
-  AdvancedRuntimeNode
-  AdvancedExecutionContext
-  AdvancedNodeConfig }
- from './runtime';
-*/
+export { 
+  ExecutionContext,
+  RuntimeNode,
+  AdvancedRuntimeNode,
+  AdvancedExecutionContext,
+  AdvancedNodeConfig 
+} from './runtime';
+
+// Epic1 exports
+export { Epic1GraphEditor, Epic1GraphEditorWithProvider } from './components/epic1/Epic1GraphEditor';
+export { AssetBrowserLoader } from './components/epic1/AssetBrowserLoader';
+export { TabbedSidePanel } from './components/epic1/TabbedSidePanel';
+export { EdgeRenderingFix, edgeTypes as epic1EdgeTypes } from './components/epic1/EdgeRenderingFix';

@@ -180,12 +180,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     }
   }, [nodes, edges, debouncedSave]);
   
-  // Show toast when state is restored
-  useEffect(() => {
-    if (hasRestoredState) {
-      showToast('success', 'Graph restored from local storage');
-    }
-  }, [hasRestoredState, showToast]);
+  // This useEffect is moved after useToast hook definition
   
   // Custom node change handler to optimize performance during dragging
   const onNodesChange = useCallback((changes: any[]) => {
@@ -299,8 +294,15 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [saveAsPresetNodeId, setSaveAsPresetNodeId] = useState<string | null>(null);
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
   
-  // Toast system for error messages
+  // Toast system for error messages (moved before useEffects that use it)
   const { toasts, showToast, dismissToast } = useToast();
+  
+  // Show toast when state is restored
+  useEffect(() => {
+    if (hasRestoredState) {
+      showToast('success', 'Graph restored from local storage');
+    }
+  }, [hasRestoredState, showToast]);
   
   // Micro-interactions and node interactions
   const { addNodeWithBounce, highlightConnection } = useNodeInteractions();

@@ -22,7 +22,12 @@
     "utils/psgStorage.ts",
     "utils/supabaseClient.ts",
     "utils/supabaseFeature.ts",
-    "types/graph.ts"
+    "types/graph.ts",
+    "fileFormats/index.ts",
+    "runtime/presetInsertion.ts",
+    "runtime/nodes/epic1/Epic1ExecutionEngine.ts",
+    "components/epic1/**/*.ts",
+    "components/epic1/**/*.tsx"
   ],
   "exclude": [
     "node_modules",
