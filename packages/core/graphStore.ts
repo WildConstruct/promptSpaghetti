@@ -72,7 +72,7 @@ export interface GraphState { nodes: Node;
   setConnectionAnnotations: (annotations: ConnectionAnnotation) => void
   addConnectionAnnotation: (annotation: ConnectionAnnotation) => void
   updateConnectionAnnotation: (annotationId: string, updates: Partial<ConnectionAnnotation>) => void
-  removeConnectionAnnotation: (annotationId: string) => void }
+  removeConnectionAnnotation: (annotationId: string) => void;
   setConnectionAnnotationPreferences: (preferences: Partial<ConnectionAnnotationPreferences>) => void;
   connectionAnnotationPreferences?: ConnectionAnnotationPreferences;
   // Project operations (file-based)
@@ -80,12 +80,12 @@ export interface GraphState { nodes: Node;
   saveProject: (options: SaveProjectOptions) => Promise<{ success: boolean; error?: string }>;
   loadProject: () => Promise<{ success: boolean; error?: string }>;
   // Project operations (server-based)
-  saveProjectToServer: (;
-  options: SaveProjectOptions & { userId?: number }
+  saveProjectToServer: (
+    options: SaveProjectOptions & { userId?: number }
   ) => Promise<{ success: boolean; error?: string; projectId?: string }>;
   loadProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;
-  updateProjectOnServer: (;
-  projectId: string,
+  updateProjectOnServer: (
+    projectId: string,
     options: SaveProjectOptions & { userId?: number }
   ) => Promise<{ success: boolean; error?: string }>;
   deleteProjectFromServer: (projectId: string, userId?: number) => Promise<{ success: boolean; error?: string }>;

@@ -173,15 +173,22 @@ export function deserializeProject(
     let migrated = false;
     // Check version compatibility
     const compatibility = isVersionCompatible(psgFile.formatVersion);
-    if (!compatibility.compatible) { return {
-  success: false
-  error: compatibility.message || 'Incompatible file version' }
-};
+    if (!compatibility.compatible) { 
+      return {
+        success: false,
+        error: compatibility.message || 'Incompatible file version' 
+      };
+    }
 
-    if (compatibility.requiresMigration) { if (autoMigrate) {
+    if (compatibility.requiresMigration) { 
+      if (autoMigrate) {
         // Perform migration (placeholder for future versions)
         migrated = true;
-        warnings.push(compatibility.message || 'File format was automatically updated') } else { warnings.push(compatibility.message || 'File format migration available') }
+        warnings.push(compatibility.message || 'File format was automatically updated');
+      } else { 
+        warnings.push(compatibility.message || 'File format migration available');
+      }
+    }
     // Convert graph nodes back to ReactFlow format
     const reactFlowNodes = psgFile.graph.nodes.map(node =>
       convertGraphNodeToReactFlowNode(node, { preserveIds })
@@ -190,119 +197,136 @@ export function deserializeProject(
     const reactFlowEdges = generateEdgesFromNodes(reactFlowNodes);
     // Build graph state
     const graphState: GraphState = { 
-  nodes: reactFlowNodes
-  edges: reactFlowEdges }
-};
+      nodes: reactFlowNodes,
+      edges: reactFlowEdges 
+    };
     // Add collaboration data if present
-    if (psgFile.collaboration) { graphState.annotations = {
-  stickyNotes: psgFile.collaboration.stickyNotes
-  nodeLabels: psgFile.collaboration.annotations.nodeLabels
-  regionGroups: psgFile.collaboration.annotations.regionGroups
-  connectionLabels: psgFile.collaboration.annotations.connectionLabels }
-};
+    if (psgFile.collaboration) { 
+      graphState.annotations = {
+        stickyNotes: psgFile.collaboration.stickyNotes,
+        nodeLabels: psgFile.collaboration.annotations.nodeLabels,
+        regionGroups: psgFile.collaboration.annotations.regionGroups,
+        connectionLabels: psgFile.collaboration.annotations.connectionLabels 
+      };
+    }
 
-    return { success: true
-  data: {
-  graph: graphState
-  metadata: psgFile.metadata
-  settings: psgFile.settings
-  collaboration: psgFile.collaboration }
-
-      warnings
+    return { 
+      success: true,
+      data: {
+        graph: graphState,
+        metadata: psgFile.metadata,
+        settings: psgFile.settings,
+        collaboration: psgFile.collaboration 
+      },
+      warnings,
       migrated
     };
- catch (error) { return {
-  success: false
-  error: error instanceof Error ? error.message : 'Unknown deserialization error' }
-};
+  } catch (error) { 
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown deserialization error' 
+    };
+  }
 
 /**
  * Converts ReactFlow node to graph schema node format
  */
-function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, unknown> { // Map nodeType to proper schema type
+function convertReactFlowNodeToGraphNode(reactFlowNode: Node): Record<string, unknown> { 
+  // Map nodeType to proper schema type
   const getSchemaNodeType = (nodeType: string): string => {
-  const typeMap: Record<string, string> = {
-  'weighted-choice': 'WeightedChoice'
-  'concat': 'Concat'
-  'output': 'Output'
-  'include': 'Include'
-  'set-variable': 'SetVariable'
-  'get-variable': 'GetVariable'
-  'weighted-advanced': 'WeightedAdvanced'
-  'conditional': 'Conditional'
-  'sequential': 'Sequential'
-  'markov': 'Markov'
-  'python-transform': 'PythonTransform' }
-};
-    return typeMap[nodeType] || 'Output'
+    const typeMap: Record<string, string> = {
+      'weighted-choice': 'WeightedChoice',
+      'concat': 'Concat',
+      'output': 'Output',
+      'include': 'Include',
+      'set-variable': 'SetVariable',
+      'get-variable': 'GetVariable',
+      'weighted-advanced': 'WeightedAdvanced',
+      'conditional': 'Conditional',
+      'sequential': 'Sequential',
+      'markov': 'Markov',
+      'python-transform': 'PythonTransform' 
+    };
+    return typeMap[nodeType] || 'Output';
   };
   const nodeType = reactFlowNode.data?.nodeType || 'output';
   const schemaType = getSchemaNodeType(nodeType);
-  const baseNode = { id: reactFlowNode.id
-  type: schemaType
-  inputs: [] // Will be calculated from edge connections }
-};
+  const baseNode: any = { 
+    id: reactFlowNode.id,
+    type: schemaType,
+    inputs: [] // Will be calculated from edge connections 
+  };
   // Copy node-specific data, excluding ReactFlow-specific fields
   if (reactFlowNode.data) {
     const { nodeType: _, ...nodeData } = reactFlowNode.data;
     // Handle specific node type conversions
-    if (schemaType === 'WeightedChoice' && nodeData.variations) { // Convert variations array to choices format for WeightedChoice nodes
-  baseNode.choices = (nodeData.variations as string).map((value: string) => ({
-  value
-  weight: 1.0 // Default equal weight }
-}));
+    if (schemaType === 'WeightedChoice' && nodeData.variations) { 
+      // Convert variations array to choices format for WeightedChoice nodes
+      baseNode.choices = (nodeData.variations as string[]).map((value: string) => ({
+        value,
+        weight: 1.0 // Default equal weight 
+      }));
       // Don't include the original variations field
       const { variations: _variations, ...restData } = nodeData;
       Object.assign(baseNode, restData);
- else {
+    } else {
       Object.assign(baseNode, nodeData);
+    }
+  }
   return baseNode;
+}
+
 /**
  * Converts graph schema node to ReactFlow node format
  */
-function convertGraphNodeToReactFlowNode(graphNode: Record<string, unknown>)
+function convertGraphNodeToReactFlowNode(
+  graphNode: Record<string, unknown>,
   options: { preserveIds?: boolean } = {}
 ): Node {
   const { preserveIds = true } = options;
   // Map schema type back to UI nodeType
-  const getUINodeType = (schemaType: string): string => { const typeMap: Record<string, string> = {
-  'WeightedChoice': 'weighted-choice'
-  'Concat': 'concat'
-  'Output': 'output'
-  'Include': 'include'
-  'SetVariable': 'set-variable'
-  'GetVariable': 'get-variable'
-  'WeightedAdvanced': 'weighted-advanced'
-  'Conditional': 'conditional'
-  'Sequential': 'sequential'
-  'Markov': 'markov'
-  'PythonTransform': 'python-transform' }
-};
-    return typeMap[schemaType] || 'output'
+  const getUINodeType = (schemaType: string): string => { 
+    const typeMap: Record<string, string> = {
+      'WeightedChoice': 'weighted-choice',
+      'Concat': 'concat',
+      'Output': 'output',
+      'Include': 'include',
+      'SetVariable': 'set-variable',
+      'GetVariable': 'get-variable',
+      'WeightedAdvanced': 'weighted-advanced',
+      'Conditional': 'conditional',
+      'Sequential': 'sequential',
+      'Markov': 'markov',
+      'PythonTransform': 'python-transform' 
+    };
+    return typeMap[schemaType] || 'output';
   };
   const uiNodeType = getUINodeType(graphNode.type);
   const reactFlowNode: Node = {
-  id: preserveIds ? graphNode.id : `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
-
-  type: 'default', // ReactFlow visual type
+    id: preserveIds ? (graphNode.id as string) : `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    type: 'default', // ReactFlow visual type
     position: { x: 0, y: 0 }, // Will be set by auto-layout or user
     data: { 
-  nodeType: uiNodeType
-  label: graphNode.label || graphNode.id }
-  ...graphNode
-};
+      nodeType: uiNodeType,
+      label: (graphNode.label || graphNode.id) as string,
+      ...graphNode
+    }
+  };
   // Handle specific node type conversions back to UI format
   if (graphNode.type === 'WeightedChoice' && graphNode.choices) {
     // Convert choices back to variations for UI
     reactFlowNode.data.variations = (graphNode.choices as Array<{ value: unknown }>).map((choice) => choice.value);
     // Remove the schema-specific choices field from data
     const { choices: _choices, type: _type, ...restData } = reactFlowNode.data;
-    reactFlowNode.data = { nodeType: uiNodeType, label: graphNode.label || graphNode.id, ...restData };
- else {
+    reactFlowNode.data = { nodeType: uiNodeType, label: (graphNode.label || graphNode.id) as string, ...restData };
+  } else {
     // Remove schema-specific type field
     const { type: _type, ...restData } = reactFlowNode.data;
-    reactFlowNode.data = { nodeType: uiNodeType, label: graphNode.label || graphNode.id, ...restData };
+    reactFlowNode.data = { nodeType: uiNodeType, label: (graphNode.label || graphNode.id) as string, ...restData };
+  }
   return reactFlowNode;
+}
+
 /**
  * Generates ReactFlow edges from node input connections
  */
@@ -324,6 +348,8 @@ function generateEdgesFromNodes(nodes: Node): Edge {
       });
   });
   return edges;
+}
+
 /**
  * Generates a simple checksum for file integrity
  */
@@ -331,7 +357,10 @@ function generateChecksum(content: string): string {
   let checksum = 0;
   for (let i = 0; i < content.length; i++) {
     checksum = ((checksum << 5) - checksum + content.charCodeAt(i)) & 0xffffffff;
+  }
   return Math.abs(checksum).toString(16);
+}
+
 /**
  * Validates file integrity using checksum
  */

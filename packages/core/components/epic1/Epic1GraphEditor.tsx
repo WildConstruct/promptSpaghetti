@@ -297,12 +297,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Toast system for error messages (moved before useEffects that use it)
   const { toasts, showToast, dismissToast } = useToast();
   
-  // Show toast when state is restored
+  // Show toast when state is restored (only once on mount)
   useEffect(() => {
     if (hasRestoredState) {
       showToast('success', 'Graph restored from local storage');
     }
-  }, [hasRestoredState, showToast]);
+  }, []); // Empty deps - only run once on mount
   
   // Micro-interactions and node interactions
   const { addNodeWithBounce, highlightConnection } = useNodeInteractions();
@@ -1083,10 +1083,17 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       }
     };
     
-    setNodes((nds) => [...nds, newNode]);
+    console.log('[handleCreatePostIt] Creating node:', newNode);
+    console.log('[handleCreatePostIt] Available nodeTypes:', Object.keys(nodeTypes));
+    
+    setNodes((nds) => {
+      const updated = [...nds, newNode];
+      console.log('[handleCreatePostIt] Updated nodes:', updated);
+      return updated;
+    });
     showToast('success', 'Post-it note created - double-click to edit');
     setContextMenuPosition(null);
-  }, [setNodes, showToast]);
+  }, [setNodes, showToast, nodeTypes]);
   
   // Group selected nodes
   const handleGroupNodes = useCallback((nodesToGroup: Node[]) => {

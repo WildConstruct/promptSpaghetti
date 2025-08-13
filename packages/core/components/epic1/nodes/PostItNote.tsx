@@ -295,14 +295,18 @@ export const PostItNote: React.FC<NodeProps<PostItNoteData>> = ({
         />
       )}
 
-      {/* Connection handle for attaching to nodes */}
+      {/* Connection handle only shown when attached to nodes */}
       {data.attachedTo && (
         <Handle
           type="target"
           position={Position.Left}
           id="attach"
           className="post-it-handle"
-          style={{ background: 'transparent', border: 'none' }}
+          style={{ 
+            background: 'transparent', 
+            border: 'none',
+            visibility: 'hidden'  // Hide the handle visually
+          }}
         />
       )}
     </div>
