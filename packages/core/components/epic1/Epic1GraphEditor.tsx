@@ -594,10 +594,14 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Handle canvas click to deselect all nodes and edges
   const handlePaneClick = useCallback((event: React.MouseEvent) => {
+    console.log('[handlePaneClick] Event type:', event.type, 'Button:', event.button);
+    
     // Check for right-click or context menu event
     if (event.button === 2 || event.type === 'contextmenu') {
       event.preventDefault();
       event.stopPropagation();
+      
+      console.log('[handlePaneClick] Right-click detected, showing context menu');
       
       // Show context menu for canvas (will add post-it note option)
       setContextMenuPosition({ x: event.clientX, y: event.clientY });
@@ -1314,7 +1318,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onPaneClick={handlePaneClick}
-            onContextMenu={handlePaneClick}
+            onPaneContextMenu={handlePaneClick}
             onSelectionStart={() => setIsSelecting(true)}
             onSelectionEnd={() => {
               setIsSelecting(false);
@@ -1509,6 +1513,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       )}
       
       {/* Canvas Context Menu (for post-it notes and bounding boxes) */}
+      {console.log('[Render] Context menu state:', { contextMenuPosition, contextMenuNodeId })}
       {contextMenuPosition && !contextMenuNodeId && (
         <CanvasContextMenu
           position={contextMenuPosition}
