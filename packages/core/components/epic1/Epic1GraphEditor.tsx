@@ -599,9 +599,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       event.preventDefault();
       // Store position for creating post-it note
       const reactFlowBounds = (event.target as HTMLElement).getBoundingClientRect();
-      const position = reactFlowInstance?.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
+      const position = reactFlowInstance?.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
       }) || { x: event.clientX, y: event.clientY };
       
       // Show context menu for canvas (will add post-it note option)
@@ -1519,7 +1519,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           position={contextMenuPosition}
           onAddNote={(pos) => {
             // Convert screen position to flow position
-            const flowPos = reactFlowInstance?.project({
+            const flowPos = reactFlowInstance?.screenToFlowPosition({
               x: pos.x,
               y: pos.y
             }) || pos;
@@ -1527,7 +1527,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           }}
           onAddBoundingBox={(pos) => {
             // Convert screen position to flow position
-            const flowPos = reactFlowInstance?.project({
+            const flowPos = reactFlowInstance?.screenToFlowPosition({
               x: pos.x,
               y: pos.y
             }) || pos;
