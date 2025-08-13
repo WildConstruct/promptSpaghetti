@@ -45,6 +45,24 @@ import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
 import './PanZoomControls.css';
 import { insertPreset, validatePreset } from '../../runtime/presetInsertion';
+import { 
+  isStorageAvailable, 
+  persistenceStorage, 
+  STORAGE_KEY,
+  clearPersistedState 
+} from '../../utils/persistenceUtils';
+
+// Simple debounce utility
+function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  wait: number
+): T {
+  let timeout: NodeJS.Timeout;
+  return ((...args: Parameters<T>) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  }) as T;
+}
 
 export interface Epic1GraphEditorProps {
   initialNodes?: Node<EditableNodeData>[];
@@ -82,11 +100,90 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   // Use droppable node types if asset library is shown
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
   
-  const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(initialNodes);
-  const [edges, setEdges, onEdgesChangeBase] = useEdgesState(initialEdges);
+  // Load persisted state on mount
+  const loadPersistedState = useCallback(() => {
+    if (!isStorageAvailable()) return null;
+    
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const wrapper = JSON.parse(stored);
+        const decompressed = wrapper.compressed 
+          ? JSON.parse(wrapper.state) // Would need lz-string decompress in real impl
+          : JSON.parse(wrapper.state);
+        
+        if (decompressed.nodes && decompressed.edges) {
+          console.log('Restored graph from local storage');
+          return decompressed;
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load persisted state:', error);
+    }
+    return null;
+  }, []);
+
+  // Initialize with persisted state or initial props
+  const persistedState = useMemo(() => loadPersistedState(), []);
+  const [hasRestoredState] = useState(() => !!persistedState);
+  const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(
+    persistedState?.nodes || initialNodes
+  );
+  const [edges, setEdges, onEdgesChangeBase] = useEdgesState(
+    persistedState?.edges || initialEdges
+  );
   const [activatedEdges, setActivatedEdges] = useState<Set<string>>(new Set());
   const [isSelecting, setIsSelecting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  
+  // Autosave to local storage
+  const saveToLocalStorage = useCallback((currentNodes: Node[], currentEdges: Edge[]) => {
+    if (!isStorageAvailable()) return;
+    
+    try {
+      const state = {
+        nodes: currentNodes,
+        edges: currentEdges,
+        lastModified: new Date().toISOString()
+      };
+      
+      const stateString = JSON.stringify(state);
+      const wrapper = {
+        state: stateString,
+        version: 1,
+        timestamp: Date.now(),
+        compressed: false,
+        size: new Blob([stateString]).size
+      };
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(wrapper));
+      console.log('Graph saved to local storage');
+    } catch (error) {
+      console.error('Failed to save to local storage:', error);
+    }
+  }, []);
+  
+  // Debounced autosave
+  const debouncedSave = useMemo(
+    () => debounce((nodes: Node[], edges: Edge[]) => {
+      saveToLocalStorage(nodes, edges);
+    }, 2000), // Save after 2 seconds of inactivity
+    [saveToLocalStorage]
+  );
+  
+  // Trigger autosave on changes
+  useEffect(() => {
+    if (nodes.length > 0 || edges.length > 0) {
+      debouncedSave(nodes, edges);
+    }
+  }, [nodes, edges, debouncedSave]);
+  
+  // Show toast when state is restored
+  useEffect(() => {
+    if (hasRestoredState) {
+      showToast('success', 'Graph restored from local storage');
+    }
+  }, [hasRestoredState, showToast]);
   
   // Custom node change handler to optimize performance during dragging
   const onNodesChange = useCallback((changes: any[]) => {
@@ -315,24 +412,22 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Keyboard shortcut handlers
   const handleSave = useCallback(() => {
-    // Save current graph state
-    const graphData = { nodes: enhancedNodes, edges };
-    localStorage.setItem('epic1-graph', JSON.stringify(graphData));
-    showToast('success', 'Graph saved!');
-  }, [enhancedNodes, edges, showToast]);
+    // Save current graph state using persistence utilities
+    saveToLocalStorage(nodes, edges);
+    showToast('success', 'Graph saved to browser storage!');
+  }, [nodes, edges, saveToLocalStorage, showToast]);
 
   const handleLoad = useCallback(() => {
-    // Load graph from localStorage
-    const saved = localStorage.getItem('epic1-graph');
-    if (saved) {
-      const { nodes: loadedNodes, edges: loadedEdges } = JSON.parse(saved);
-      setNodes(loadedNodes);
-      setEdges(loadedEdges);
-      showToast('success', 'Graph loaded!');
+    // Load graph from localStorage using persistence utilities
+    const state = loadPersistedState();
+    if (state) {
+      setNodes(state.nodes || []);
+      setEdges(state.edges || []);
+      showToast('success', 'Graph loaded from browser storage!');
     } else {
       showToast('info', 'No saved graph found');
     }
-  }, [setNodes, setEdges, showToast]);
+  }, [setNodes, setEdges, showToast, loadPersistedState]);
 
   const handleExport = useCallback(() => {
     // Export graph as JSON
