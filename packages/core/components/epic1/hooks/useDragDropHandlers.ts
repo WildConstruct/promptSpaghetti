@@ -2,6 +2,7 @@ import { useCallback, useRef } from 'react';
 import { Node, ReactFlowInstance } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
 import { validatePreset, insertPreset } from '../../../runtime/presetInsertion';
+import { layoutNewNodes } from '../../../utils/layoutAlgorithms';
 
 interface UseDragDropHandlersProps {
   setNodes: (
@@ -154,12 +155,40 @@ export function useDragDropHandlers({
 
         const result = await insertPreset(content, {
           position,
+          preservePositions: false, // Let auto-layout handle positioning
           snapToGrid: true,
           selectAfterInsert: true
         });
 
-        setNodes(nds => nds.concat(result.nodes as any));
-        setEdges(eds => eds.concat(result.edges as any));
+        // Check if result has nodes
+        if (!result || !result.nodes) {
+          throw new Error('Preset insertion returned no nodes');
+        }
+
+        // Apply auto-layout if multiple nodes
+        let nodesToAdd = result.nodes as Node[];
+        if (nodesToAdd && nodesToAdd.length > 1) {
+          console.log('[DragDrop] Applying auto-layout to', nodesToAdd.length, 'nodes');
+          // Get existing nodes for layout context
+          const existingNodes = [] as Node[]; // We don't need existing nodes for new layout
+          const layoutedNodes = layoutNewNodes(
+            existingNodes,
+            nodesToAdd,
+            position,
+            result.edges || []
+          );
+          
+          // Only use layouted nodes if the layout succeeded
+          if (layoutedNodes && layoutedNodes.length > 0) {
+            nodesToAdd = layoutedNodes;
+            console.log('[DragDrop] Layout applied successfully');
+          } else {
+            console.warn('[DragDrop] Layout failed, using original positions');
+          }
+        }
+
+        setNodes(nds => nds.concat(nodesToAdd as any));
+        setEdges(eds => eds.concat((result.edges || []) as any));
 
         // Optional: bounce first node for feedback
         try {

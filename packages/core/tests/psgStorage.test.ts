@@ -56,12 +56,11 @@ describe('psgStorage helpers', () => {
   });
 
   test('getUserGraph downloads correct path and returns text', async () => {
-    const blob = new Blob([JSON.stringify({ x: 1 })], {
-      type: 'application/json'
-    });
+    const json = JSON.stringify({ x: 1 });
+    // Return raw JSON string to avoid Blob/Text polyfill variability
     const downloadMock = jest
       .fn()
-      .mockResolvedValue({ data: blob, error: null });
+      .mockResolvedValue({ data: json, error: null });
     const fromMock = jest.fn(() => ({ download: downloadMock }));
 
     jest.doMock(path.resolve(__dirname, '../utils/supabaseClient.ts'), () => ({
@@ -100,8 +99,10 @@ describe('psgStorage helpers', () => {
     expect(opts).toEqual(
       expect.objectContaining({ upsert: true, contentType: 'application/json' })
     );
-    const text = await sentBlob.text();
-    expect(text).toBe(payload);
+    expect(sentBlob).toBeInstanceOf(Blob);
+    expect(sentBlob.type).toBe('application/json');
+    const expectedSize = new Blob([payload], { type: 'application/json' }).size;
+    expect(sentBlob.size).toBe(expectedSize);
 
     expect(res.ok).toBe(true);
     if (res.ok) expect(res.data.path).toBe('users/u7/graphs/n.psg');

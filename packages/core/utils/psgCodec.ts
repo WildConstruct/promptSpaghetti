@@ -133,12 +133,17 @@ export function writePsg(psg: PSGFile): string {
   return JSON.stringify(psg, null, 2);
 }
 
-export function fromLegacyGraph(name: string, graph: Graph): PSGFile {
-  const now = new Date().toISOString();
+export function fromLegacyGraph(
+  name: string,
+  graph: Graph,
+  options?: { idFactory?: () => string; now?: () => string }
+): PSGFile {
+  const nowIso = options?.now ? options.now() : new Date().toISOString();
+  const id = options?.idFactory ? options.idFactory() : cryptoRandomId();
   const psg: PSGFile = {
     version: '1.0',
     kind: 'graph',
-    meta: { id: cryptoRandomId(), name, createdAt: now, updatedAt: now },
+    meta: { id, name, createdAt: nowIso, updatedAt: nowIso },
     graph
   };
   PSGFileSchema.parse(psg as unknown as z.infer<typeof PSGFileSchema>);

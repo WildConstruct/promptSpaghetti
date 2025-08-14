@@ -2,24 +2,611 @@
 > @promptscape/core@0.1.0-alpha build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/core
 > npm run build:esm && npm run build:cjs && npm run build:types
 
-npm warn Unknown env config "recursive". This will stop working in the next major version of npm.
-npm warn Unknown env config "dir". This will stop working in the next major version of npm.
-npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
 
 > @promptscape/core@0.1.0-alpha build:esm
 > tsc --project tsconfig.esm.json
 
-npm warn Unknown env config "recursive". This will stop working in the next major version of npm.
-npm warn Unknown env config "dir". This will stop working in the next major version of npm.
-npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+[1G[0K[96mcomponents/epic1/animations/MicroInteractions.tsx[0m:[93m98[0m:[93m43[0m - [91merror[0m[90m TS2304: [0mCannot find name 'targetX'.
 
-> @promptscape/core@0.1.0-alpha build:cjs
-> tsc --project tsconfig.cjs.json
+[7m98[0m                 d={`M ${x} ${y} Q ${(x + (targetX || x)) / 2} ${y - 20} ${targetX || x} ${targetY || y}`}
+[7m  [0m [91m                                          ~~~~~~~[0m
 
-npm warn Unknown env config "recursive". This will stop working in the next major version of npm.
-npm warn Unknown env config "dir". This will stop working in the next major version of npm.
-npm warn Unknown env config "workspace-root". This will stop working in the next major version of npm.
+[96mcomponents/epic1/animations/MicroInteractions.tsx[0m:[93m98[0m:[93m75[0m - [91merror[0m[90m TS2304: [0mCannot find name 'targetX'.
 
-> @promptscape/core@0.1.0-alpha build:types
-> tsc --project tsconfig.types.json
+[7m98[0m                 d={`M ${x} ${y} Q ${(x + (targetX || x)) / 2} ${y - 20} ${targetX || x} ${targetY || y}`}
+[7m  [0m [91m                                                                          ~~~~~~~[0m
 
+[96mcomponents/epic1/animations/MicroInteractions.tsx[0m:[93m98[0m:[93m91[0m - [91merror[0m[90m TS2304: [0mCannot find name 'targetY'.
+
+[7m98[0m                 d={`M ${x} ${y} Q ${(x + (targetX || x)) / 2} ${y - 20} ${targetX || x} ${targetY || y}`}
+[7m  [0m [91m                                                                                          ~~~~~~~[0m
+
+[96mcomponents/epic1/asset-library/DroppableNode.tsx[0m:[93m24[0m:[93m3[0m - [91merror[0m[90m TS2322: [0mType 'MemoExoticComponent<(props: T) => Element>' is not assignable to type 'ComponentType<T>'.
+  Type 'MemoExoticComponent<(props: T) => Element>' is not assignable to type 'FunctionComponent<T>'.
+    Types of parameters 'props' and 'props' are incompatible.
+      Type 'T' is not assignable to type 'PropsWithRef<T>'.
+        Type 'NodeProps' is not assignable to type 'PropsWithRef<T>'.
+
+[7m24[0m   return React.memo((props: T) => {
+[7m  [0m [91m  ~~~~~~[0m
+
+[96mcomponents/epic1/AssetBrowserIntegrated.tsx[0m:[93m7[0m:[93m50[0m - [91merror[0m[90m TS2307: [0mCannot find module '@prompt/asset-browser' or its corresponding type declarations.
+
+[7m7[0m import { TabbedAssetBrowser, UserProvider } from '@prompt/asset-browser';
+[7m [0m [91m                                                 ~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/components/GraphCanvas.tsx[0m:[93m84[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '"smoothstep"' is not assignable to type 'ConnectionLineType'.
+
+[7m84[0m       connectionLineType="smoothstep"
+[7m  [0m [91m      ~~~~~~~~~~~~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/container/ReactFlow/index.d.ts[0m:[93m59[0m:[93m5[0m
+    [7m59[0m     connectionLineType?: ConnectionLineType | undefined;
+    [7m  [0m [96m    ~~~~~~~~~~~~~~~~~~[0m
+    The expected type comes from property 'connectionLineType' which is declared here on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, "onError"> & { nodes?: Node<any, string>[]; edges?: Edge<...>[]; ... 108 more ...; nodeDragThreshold?: number; } & RefAttributes<...>'
+
+[96mcomponents/epic1/components/GraphCanvas.tsx[0m:[93m105[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType '"partial"' is not assignable to type 'SelectionMode'.
+
+[7m105[0m       selectionMode="partial"
+[7m   [0m [91m      ~~~~~~~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/container/ReactFlow/index.d.ts[0m:[93m67[0m:[93m5[0m
+    [7m67[0m     selectionMode?: SelectionMode | undefined;
+    [7m  [0m [96m    ~~~~~~~~~~~~~[0m
+    The expected type comes from property 'selectionMode' which is declared here on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, "onError"> & { nodes?: Node<any, string>[]; edges?: Edge<...>[]; ... 108 more ...; nodeDragThreshold?: number; } & RefAttributes<...>'
+
+[96mcomponents/epic1/components/GraphCanvas.tsx[0m:[93m114[0m:[93m19[0m - [91merror[0m[90m TS2322: [0mType '"dots"' is not assignable to type 'BackgroundVariant'.
+
+[7m114[0m       <Background variant="dots" gap={16} size={1} color="#333333" />
+[7m   [0m [91m                  ~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+background@11.3.14_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/background/dist/esm/types.d.ts[0m:[93m15[0m:[93m5[0m
+    [7m15[0m     variant?: BackgroundVariant;
+    [7m  [0m [96m    ~~~~~~~[0m
+    The expected type comes from property 'variant' which is declared here on type 'IntrinsicAttributes & BackgroundProps'
+
+[96mcomponents/epic1/components/GraphOverlays.tsx[0m:[93m69[0m:[93m11[0m - [91merror[0m[90m TS2322: [0mType 'Toast' is not assignable to type 'ToastMessage'.
+  Types of property 'type' are incompatible.
+    Type '"error" | "success" | "info"' is not assignable to type '"error" | "warning" | "success"'.
+      Type '"info"' is not assignable to type '"error" | "warning" | "success"'.
+
+[7m69[0m           message={toast}
+[7m  [0m [91m          ~~~~~~~[0m
+
+  [96mcomponents/epic1/ConnectionToast.tsx[0m:[93m12[0m:[93m3[0m
+    [7m12[0m   message: ToastMessage | null;
+    [7m  [0m [96m  ~~~~~~~[0m
+    The expected type comes from property 'message' which is declared here on type 'IntrinsicAttributes & ConnectionToastProps'
+
+[96mcomponents/epic1/ConnectionFeedback.tsx[0m:[93m42[0m:[93m15[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ source: string; target: string; }' is not assignable to parameter of type 'Connection'.
+  Type '{ source: string; target: string; }' is missing the following properties from type 'Connection': sourceHandle, targetHandle
+
+[7m42[0m               { source: connectionNodeId, target: node.id },
+[7m  [0m [91m              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/contexts/PreviewContext.tsx[0m:[93m77[0m:[93m46[0m - [91merror[0m[90m TS2339: [0mProperty 'onResults' does not exist on type 'PreviewEngine'.
+
+[7m77[0m     const unsubscribeResults = previewEngine.onResults?.(handleResults);
+[7m  [0m [91m                                             ~~~~~~~~~[0m
+
+[96mcomponents/epic1/contexts/PreviewContext.tsx[0m:[93m78[0m:[93m44[0m - [91merror[0m[90m TS2339: [0mProperty 'onError' does not exist on type 'PreviewEngine'.
+
+[7m78[0m     const unsubscribeError = previewEngine.onError?.(handleError);
+[7m  [0m [91m                                           ~~~~~~~[0m
+
+[96mcomponents/epic1/contexts/PreviewContext.tsx[0m:[93m79[0m:[93m44[0m - [91merror[0m[90m TS2339: [0mProperty 'onStart' does not exist on type 'PreviewEngine'.
+
+[7m79[0m     const unsubscribeStart = previewEngine.onStart?.(handleStart);
+[7m  [0m [91m                                           ~~~~~~~[0m
+
+[96mcomponents/epic1/delightful/DelightfulIntegration.tsx[0m:[93m11[0m:[93m26[0m - [91merror[0m[90m TS2307: [0mCannot find module '@/stores/graphStore' or its corresponding type declarations.
+
+[7m11[0m import { useStore } from '@/stores/graphStore';
+[7m  [0m [91m                         ~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/delightful/EasterEggManager.tsx[0m:[93m7[0m:[93m26[0m - [91merror[0m[90m TS2307: [0mCannot find module '@/stores/graphStore' or its corresponding type declarations.
+
+[7m7[0m import { useStore } from '@/stores/graphStore';
+[7m [0m [91m                         ~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/EdgeRenderingFix.tsx[0m:[93m10[0m:[93m79[0m - [91merror[0m[90m TS2339: [0mProperty 'className' does not exist on type 'EdgeProps'.
+
+[7m10[0m     console.log('[DefaultEdge] Selected edge:', props.id, 'className:', props.className);
+[7m  [0m [91m                                                                              ~~~~~~~~~[0m
+
+[96mcomponents/epic1/EdgeRenderingFix.tsx[0m:[93m25[0m:[93m81[0m - [91merror[0m[90m TS2339: [0mProperty 'className' does not exist on type 'EdgeProps'.
+
+[7m25[0m     <g className={`react-flow__edge ${props.selected ? 'selected' : ''} ${props.className || ''}`}>
+[7m  [0m [91m                                                                                ~~~~~~~~~[0m
+
+[96mcomponents/epic1/edges/EdgeRouter.tsx[0m:[93m299[0m:[93m14[0m - [91merror[0m[90m TS2322: [0mType '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+
+[7m299[0m       <style jsx>{`
+[7m   [0m [91m             ~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m528[0m:[93m17[0m - [91merror[0m[90m TS2345: [0mArgument of type '"info"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m528[0m       showToast('info', 'No saved graph found');
+[7m   [0m [91m                ~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m551[0m:[93m17[0m - [91merror[0m[90m TS2345: [0mArgument of type '"info"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m551[0m       showToast('info', `Deleted ${nodeIds.length} node(s)`);
+[7m   [0m [91m                ~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m558[0m:[93m19[0m - [91merror[0m[90m TS2345: [0mArgument of type '"info"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m558[0m         showToast('info', `Deleted ${nodeIds.length} node(s)`);
+[7m   [0m [91m                  ~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m587[0m:[93m17[0m - [91merror[0m[90m TS2345: [0mArgument of type '"info"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m587[0m       showToast('info', `Selected ${selectedNodes.length} nodes`);
+[7m   [0m [91m                ~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m670[0m:[93m19[0m - [91merror[0m[90m TS2345: [0mArgument of type '"info"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m670[0m         showToast('info', 'Edge deactivated');
+[7m   [0m [91m                  ~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m682[0m:[93m15[0m - [91merror[0m[90m TS2345: [0mArgument of type '"info"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m682[0m     showToast('info', `Preview ${!isPreviewVisible ? 'shown' : 'hidden'}`);
+[7m   [0m [91m              ~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m752[0m:[93m23[0m - [91merror[0m[90m TS2339: [0mProperty 'type' does not exist on type 'PromptSegment'.
+
+[7m752[0m           if (segment.type === 'text') {
+[7m   [0m [91m                      ~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m759[0m:[93m31[0m - [91merror[0m[90m TS2339: [0mProperty 'content' does not exist on type 'PromptSegment'.
+
+[7m759[0m                 text: segment.content,
+[7m   [0m [91m                              ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m760[0m:[93m32[0m - [91merror[0m[90m TS2339: [0mProperty 'content' does not exist on type 'PromptSegment'.
+
+[7m760[0m                 value: segment.content
+[7m   [0m [91m                               ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m763[0m:[93m30[0m - [91merror[0m[90m TS2339: [0mProperty 'type' does not exist on type 'PromptSegment'.
+
+[7m763[0m           } else if (segment.type === 'choice') {
+[7m   [0m [91m                             ~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m764[0m:[93m37[0m - [91merror[0m[90m TS2339: [0mProperty 'options' does not exist on type 'PromptSegment'.
+
+[7m764[0m             const options = segment.options.map((opt, idx) => ({
+[7m   [0m [91m                                    ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m767[0m:[93m48[0m - [91merror[0m[90m TS2339: [0mProperty 'options' does not exist on type 'PromptSegment'.
+
+[7m767[0m               weight: Math.floor(100 / segment.options.length)
+[7m   [0m [91m                                               ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m1223[0m:[93m15[0m - [91merror[0m[90m TS2345: [0mArgument of type '"Preset saved successfully!"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m1223[0m     showToast('Preset saved successfully!', 'success');
+[7m    [0m [91m              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m1341[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '"smoothstep"' is not assignable to type 'ConnectionLineType'.
+
+[7m1341[0m             connectionLineType="smoothstep"
+[7m    [0m [91m            ~~~~~~~~~~~~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/container/ReactFlow/index.d.ts[0m:[93m59[0m:[93m5[0m
+    [7m59[0m     connectionLineType?: ConnectionLineType | undefined;
+    [7m  [0m [96m    ~~~~~~~~~~~~~~~~~~[0m
+    The expected type comes from property 'connectionLineType' which is declared here on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, "onError"> & { nodes?: Node<any, string>[]; edges?: Edge<...>[]; ... 108 more ...; nodeDragThreshold?: number; } & RefAttributes<...>'
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m1362[0m:[93m13[0m - [91merror[0m[90m TS2322: [0mType '"partial"' is not assignable to type 'SelectionMode'.
+
+[7m1362[0m             selectionMode="partial"
+[7m    [0m [91m            ~~~~~~~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/container/ReactFlow/index.d.ts[0m:[93m67[0m:[93m5[0m
+    [7m67[0m     selectionMode?: SelectionMode | undefined;
+    [7m  [0m [96m    ~~~~~~~~~~~~~[0m
+    The expected type comes from property 'selectionMode' which is declared here on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, "onError"> & { nodes?: Node<any, string>[]; edges?: Edge<...>[]; ... 108 more ...; nodeDragThreshold?: number; } & RefAttributes<...>'
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m1371[0m:[93m23[0m - [91merror[0m[90m TS2322: [0mType '"dots"' is not assignable to type 'BackgroundVariant'.
+
+[7m1371[0m           <Background variant="dots" gap={16} size={1} color="#333333" />
+[7m    [0m [91m                      ~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+background@11.3.14_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/background/dist/esm/types.d.ts[0m:[93m15[0m:[93m5[0m
+    [7m15[0m     variant?: BackgroundVariant;
+    [7m  [0m [96m    ~~~~~~~[0m
+    The expected type comes from property 'variant' which is declared here on type 'IntrinsicAttributes & BackgroundProps'
+
+[96mcomponents/epic1/Epic1GraphEditor.tsx[0m:[93m1460[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'void' is not assignable to type 'ReactNode'.
+
+[7m1460[0m       <NodeToolbar position="top" />
+[7m    [0m [91m      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorFinal.tsx[0m:[93m27[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"./nodes"' has no exported member 'droppableEpic1NodeTypes'.
+
+[7m27[0m import { droppableEpic1NodeTypes, epic1NodeTypes } from './nodes';
+[7m  [0m [91m         ~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorFinal.tsx[0m:[93m221[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType '{ id: string; type: "error" | "warning" | "success" | "info"; message: string; }[]' is not assignable to type 'Toast[]'.
+  Type '{ id: string; type: "error" | "warning" | "success" | "info"; message: string; }' is not assignable to type 'Toast'.
+    Types of property 'type' are incompatible.
+      Type '"error" | "warning" | "success" | "info"' is not assignable to type '"error" | "success" | "info"'.
+        Type '"warning"' is not assignable to type '"error" | "success" | "info"'.
+
+[7m221[0m         toasts={notifications.map(n => ({
+[7m   [0m [91m        ~~~~~~[0m
+
+  [96mcomponents/epic1/components/GraphOverlays.tsx[0m:[93m19[0m:[93m3[0m
+    [7m19[0m   toasts: Toast[];
+    [7m  [0m [96m  ~~~~~~[0m
+    The expected type comes from property 'toasts' which is declared here on type 'IntrinsicAttributes & GraphOverlaysProps'
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m150[0m:[93m15[0m - [91merror[0m[90m TS2345: [0mArgument of type '"info"' is not assignable to parameter of type '"error" | "warning" | "success"'.
+
+[7m150[0m     showToast('info', `Preview ${!isPreviewVisible ? 'shown' : 'hidden'}`);
+[7m   [0m [91m              ~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m158[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType '(type: ToastMessage["type"], message: string, duration?: number) => void' is not assignable to type '(type: "error" | "success" | "info", message: string) => void'.
+  Types of parameters 'type' and 'type' are incompatible.
+    Type '"error" | "success" | "info"' is not assignable to type '"error" | "warning" | "success"'.
+      Type '"info"' is not assignable to type '"error" | "warning" | "success"'.
+
+[7m158[0m     showToast,
+[7m   [0m [91m    ~~~~~~~~~[0m
+
+  [96mcomponents/epic1/hooks/useKeyboardHandlers.ts[0m:[93m14[0m:[93m3[0m
+    [7m14[0m   showToast: (type: 'success' | 'error' | 'info', message: string) => void;
+    [7m  [0m [96m  ~~~~~~~~~[0m
+    The expected type comes from property 'showToast' which is declared here on type 'UseKeyboardHandlersProps'
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m167[0m:[93m5[0m - [91merror[0m[90m TS2322: [0mType '(type: ToastMessage["type"], message: string, duration?: number) => void' is not assignable to type '(type: "error" | "success" | "info", message: string) => void'.
+  Types of parameters 'type' and 'type' are incompatible.
+    Type '"error" | "success" | "info"' is not assignable to type '"error" | "warning" | "success"'.
+      Type '"info"' is not assignable to type '"error" | "warning" | "success"'.
+
+[7m167[0m     showToast,
+[7m   [0m [91m    ~~~~~~~~~[0m
+
+  [96mcomponents/epic1/hooks/useDragDropHandlers.ts[0m:[93m14[0m:[93m3[0m
+    [7m14[0m   showToast: (type: 'success' | 'error' | 'info', message: string) => void;
+    [7m  [0m [96m  ~~~~~~~~~[0m
+    The expected type comes from property 'showToast' which is declared here on type 'UseDragDropHandlersProps'
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m274[0m:[93m23[0m - [91merror[0m[90m TS2339: [0mProperty 'type' does not exist on type 'PromptSegment'.
+
+[7m274[0m           if (segment.type === 'text') {
+[7m   [0m [91m                      ~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m276[0m:[93m29[0m - [91merror[0m[90m TS2339: [0mProperty 'content' does not exist on type 'PromptSegment'.
+
+[7m276[0m               text: segment.content,
+[7m   [0m [91m                            ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m277[0m:[93m30[0m - [91merror[0m[90m TS2339: [0mProperty 'content' does not exist on type 'PromptSegment'.
+
+[7m277[0m               value: segment.content
+[7m   [0m [91m                             ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m279[0m:[93m30[0m - [91merror[0m[90m TS2339: [0mProperty 'type' does not exist on type 'PromptSegment'.
+
+[7m279[0m           } else if (segment.type === 'choice') {
+[7m   [0m [91m                             ~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m280[0m:[93m37[0m - [91merror[0m[90m TS2339: [0mProperty 'options' does not exist on type 'PromptSegment'.
+
+[7m280[0m             const options = segment.options.map((opt, idx) => ({
+[7m   [0m [91m                                    ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m283[0m:[93m48[0m - [91merror[0m[90m TS2339: [0mProperty 'options' does not exist on type 'PromptSegment'.
+
+[7m283[0m               weight: Math.floor(100 / segment.options.length)
+[7m   [0m [91m                                               ~~~~~~~[0m
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m381[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType '"smoothstep"' is not assignable to type 'ConnectionLineType'.
+
+[7m381[0m         connectionLineType="smoothstep"
+[7m   [0m [91m        ~~~~~~~~~~~~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/container/ReactFlow/index.d.ts[0m:[93m59[0m:[93m5[0m
+    [7m59[0m     connectionLineType?: ConnectionLineType | undefined;
+    [7m  [0m [96m    ~~~~~~~~~~~~~~~~~~[0m
+    The expected type comes from property 'connectionLineType' which is declared here on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, "onError"> & { nodes?: Node<any, string>[]; edges?: Edge<...>[]; ... 108 more ...; nodeDragThreshold?: number; } & RefAttributes<...>'
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m402[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType '"partial"' is not assignable to type 'SelectionMode'.
+
+[7m402[0m         selectionMode="partial"
+[7m   [0m [91m        ~~~~~~~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+core@11.11.4_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/core/dist/esm/container/ReactFlow/index.d.ts[0m:[93m67[0m:[93m5[0m
+    [7m67[0m     selectionMode?: SelectionMode | undefined;
+    [7m  [0m [96m    ~~~~~~~~~~~~~[0m
+    The expected type comes from property 'selectionMode' which is declared here on type 'IntrinsicAttributes & Omit<HTMLAttributes<HTMLDivElement>, "onError"> & { nodes?: Node<any, string>[]; edges?: Edge<...>[]; ... 108 more ...; nodeDragThreshold?: number; } & RefAttributes<...>'
+
+[96mcomponents/epic1/Epic1GraphEditorRefactored.tsx[0m:[93m411[0m:[93m21[0m - [91merror[0m[90m TS2322: [0mType '"dots"' is not assignable to type 'BackgroundVariant'.
+
+[7m411[0m         <Background variant="dots" gap={16} size={1} color="#333333" />
+[7m   [0m [91m                    ~~~~~~~[0m
+
+  [96m../../node_modules/.pnpm/@reactflow+background@11.3.14_@types+react@18.3.23_react-dom@18.3.1_react@18.3.1/node_modules/@reactflow/background/dist/esm/types.d.ts[0m:[93m15[0m:[93m5[0m
+    [7m15[0m     variant?: BackgroundVariant;
+    [7m  [0m [96m    ~~~~~~~[0m
+    The expected type comes from property 'variant' which is declared here on type 'IntrinsicAttributes & BackgroundProps'
+
+[96mcomponents/epic1/examples/AnimationsDemo.tsx[0m:[93m88[0m:[93m25[0m - [91merror[0m[90m TS2559: [0mType '"Example error"' has no properties in common with type '{ message?: string; targetX?: number; targetY?: number; nodeId?: string; haptic?: "error" | "medium" | "light" | "heavy"; }'.
+
+[7m88[0m     trigger(type, x, y, type === 'error' ? 'Example error' : undefined);
+[7m  [0m [91m                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/examples/OnboardingExample.tsx[0m:[93m21[0m:[93m6[0m - [91merror[0m[90m TS2322: [0mType '{ children: Element; showProgress: boolean; }' is not assignable to type 'IntrinsicAttributes & { onComplete?: () => void; onSkip?: () => void; }'.
+  Property 'children' does not exist on type 'IntrinsicAttributes & { onComplete?: () => void; onSkip?: () => void; }'.
+
+[7m21[0m     <OnboardingIntegration showProgress={true}>
+[7m  [0m [91m     ~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/hooks/useKeyboardNavigation.ts[0m:[93m8[0m:[93m10[0m - [91merror[0m[90m TS2724: [0m'"../../../runtime/nodes/epic1/BaseInlineEditableNode"' has no exported member named 'InlineEditableNode'. Did you mean 'BaseInlineEditableNode'?
+
+[7m8[0m import { InlineEditableNode } from '../../../runtime/nodes/epic1/BaseInlineEditableNode';
+[7m [0m [91m         ~~~~~~~~~~~~~~~~~~[0m
+
+  [96mruntime/nodes/epic1/BaseInlineEditableNode.ts[0m:[93m51[0m:[93m23[0m
+    [7m51[0m export abstract class BaseInlineEditableNode<
+    [7m  [0m [96m                      ~~~~~~~~~~~~~~~~~~~~~~[0m
+    'BaseInlineEditableNode' is declared here.
+
+[96mcomponents/epic1/interactions/MagneticSnapHandler.tsx[0m:[93m65[0m:[93m7[0m - [91merror[0m[90m TS2554: [0mExpected 1 arguments, but got 2.
+
+[7m 65[0m       connectionNodeId => {
+[7m   [0m [91m      ~~~~~~~~~~~~~~~~~~~~~[0m
+[7m 66[0m         setIsConnecting(!!connectionNodeId);
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m 69[0m         }
+[7m   [0m [91m~~~~~~~~~[0m
+[7m 70[0m       }
+[7m   [0m [91m~~~~~~~[0m
+
+[96mcomponents/epic1/KeyboardShortcuts.tsx[0m:[93m38[0m:[93m12[0m - [91merror[0m[90m TS2339: [0mProperty 'nodes' does not exist on type 'ReactFlowState'.
+
+[7m38[0m     state?.nodes?.filter(node => node.selected) || []
+[7m  [0m [91m           ~~~~~[0m
+
+[96mcomponents/epic1/nodes/GroupNode.tsx[0m:[93m92[0m:[93m19[0m - [91merror[0m[90m TS2339: [0mProperty 'boxShadow' does not exist on type '{ padding: string; borderRadius: string; backgroundColor: string; border: string; minWidth: string; minHeight: string; cursor: string; transition: string; }'.
+
+[7m92[0m         baseStyle.boxShadow = '0 4px 12px rgba(26, 115, 232, 0.3)';
+[7m  [0m [91m                  ~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/GroupNode.tsx[0m:[93m244[0m:[93m18[0m - [91merror[0m[90m TS2339: [0mProperty 'parentId' does not exist on type 'NodeGroup'.
+
+[7m244[0m           {group.parentId && (
+[7m   [0m [91m                 ~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/GroupNode.tsx[0m:[93m381[0m:[93m16[0m - [91merror[0m[90m TS2322: [0mType '{ children: string; jsx: true; }' is not assignable to type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+  Property 'jsx' does not exist on type 'DetailedHTMLProps<StyleHTMLAttributes<HTMLStyleElement>, HTMLStyleElement>'.
+
+[7m381[0m         <style jsx>{`
+[7m   [0m [91m               ~~~[0m
+
+[96mcomponents/epic1/nodes/index-original.ts[0m:[93m31[0m:[93m14[0m - [91merror[0m[90m TS2304: [0mCannot find name 'TextBlockNode'.
+
+[7m31[0m   textBlock: TextBlockNode,
+[7m  [0m [91m             ~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/index-original.ts[0m:[93m32[0m:[93m19[0m - [91merror[0m[90m TS2304: [0mCannot find name 'WeightedChoiceNode'.
+
+[7m32[0m   weightedChoice: WeightedChoiceNode,
+[7m  [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/index-original.ts[0m:[93m33[0m:[93m11[0m - [91merror[0m[90m TS2304: [0mCannot find name 'ConcatNode'.
+
+[7m33[0m   concat: ConcatNode,
+[7m  [0m [91m          ~~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/index-original.ts[0m:[93m34[0m:[93m13[0m - [91merror[0m[90m TS2304: [0mCannot find name 'VariableNode'.
+
+[7m34[0m   variable: VariableNode,
+[7m  [0m [91m            ~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/index-original.ts[0m:[93m35[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'VariableNode'.
+
+[7m35[0m   setVariable: VariableNode,
+[7m  [0m [91m               ~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/index-original.ts[0m:[93m36[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'VariableNode'.
+
+[7m36[0m   getVariable: VariableNode,
+[7m  [0m [91m               ~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/index-original.ts[0m:[93m37[0m:[93m11[0m - [91merror[0m[90m TS2304: [0mCannot find name 'OutputNode'.
+
+[7m37[0m   output: OutputNode
+[7m  [0m [91m          ~~~~~~~~~~[0m
+
+[96mcomponents/epic1/nodes/nodeFactory.ts[0m:[93m157[0m:[93m11[0m - [91merror[0m[90m TS2554: [0mExpected 1-3 arguments, but got 4.
+
+[7m157[0m           { mode }
+[7m   [0m [91m          ~~~~~~~~[0m
+
+[96mcomponents/epic1/onboarding/KeyboardShortcutReference.tsx[0m:[93m266[0m:[93m11[0m - [91merror[0m[90m TS2339: [0mProperty 'state' does not exist on type 'TutorialContextType'.
+
+[7m266[0m   const { state, updatePreferences } = useTutorial();
+[7m   [0m [91m          ~~~~~[0m
+
+[96mcomponents/epic1/PanZoomControls.tsx[0m:[93m24[0m:[93m47[0m - [91merror[0m[90m TS2339: [0mProperty 'viewport' does not exist on type 'ReactFlowState'.
+
+[7m24[0m   const viewport = useStore((state) => state?.viewport);
+[7m  [0m [91m                                              ~~~~~~~~[0m
+
+[96mcomponents/epic1/preview/execution.worker.ts[0m:[93m31[0m:[93m21[0m - [91merror[0m[90m TS2304: [0mCannot find name 'DedicatedWorkerGlobalScope'.
+
+[7m31[0m declare const self: DedicatedWorkerGlobalScope;
+[7m  [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mcomponents/epic1/preview/execution.worker.ts[0m:[93m46[0m:[93m41[0m - [91merror[0m[90m TS2554: [0mExpected 0 arguments, but got 1.
+
+[7m 46[0m     const result = await engine.execute(progress => {
+[7m   [0m [91m                                        ~~~~~~~~~~~~~[0m
+[7m 47[0m       // Report progress in 10% increments to avoid message flooding
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m...[0m 
+[7m 55[0m       }
+[7m   [0m [91m~~~~~~~[0m
+[7m 56[0m     });
+[7m   [0m [91m~~~~~[0m
+
+[96mcomponents/epic1/SafeReactFlowWrapper.tsx[0m:[93m19[0m:[93m54[0m - [91merror[0m[90m TS2339: [0mProperty 'viewport' does not exist on type 'ReactFlowState'.
+
+[7m19[0m     const isInitialized = useStore((state) => state?.viewport !== undefined);
+[7m  [0m [91m                                                     ~~~~~~~~[0m
+
+[96mcomponents/epic1/services/GraphConverter.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2307: [0mCannot find module '../../../../runtime/nodes/epic1/Epic1ExecutionEngine' or its corresponding type declarations.
+
+[7m2[0m import { Epic1Graph } from '../../../../runtime/nodes/epic1/Epic1ExecutionEngine';
+[7m [0m [91m                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mpublic.ts[0m:[93m19[0m:[93m10[0m - [91merror[0m[90m TS2305: [0mModule '"./components/epic1/EdgeRenderingFix.js"' has no exported member 'EdgeRenderingFix'.
+
+[7m19[0m export { EdgeRenderingFix, edgeTypes as epic1EdgeTypes } from './components/epic1/EdgeRenderingFix.js';
+[7m  [0m [91m         ~~~~~~~~~~~~~~~~[0m
+
+[96mruntime/nodes/epic1/BaseInlineEditableNode.ts[0m:[93m8[0m:[93m44[0m - [91merror[0m[90m TS2307: [0mCannot find module '../../../schemas/psgSchemaV2' or its corresponding type declarations.
+
+[7m8[0m import { EditStateSchema, EditState } from '../../../schemas/psgSchemaV2';
+[7m [0m [91m                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mruntime/nodes/epic1/Epic1ExecutionContext.ts[0m:[93m35[0m:[93m37[0m - [91merror[0m[90m TS2724: [0m'seedrandom' has no exported member named 'PRNG'. Did you mean 'prng'?
+
+[7m35[0m   private readonly prng: seedrandom.PRNG;
+[7m  [0m [91m                                    ~~~~[0m
+
+[96mruntime/nodes/epic1/Epic1ExecutionContext.ts[0m:[93m78[0m:[93m43[0m - [91merror[0m[90m TS2724: [0m'seedrandom' has no exported member named 'PRNG'. Did you mean 'prng'?
+
+[7m78[0m   getNodePRNG(nodeId: string): seedrandom.PRNG {
+[7m  [0m [91m                                          ~~~~[0m
+
+[96mruntime/nodes/epic1/Epic1ExecutionEngine.ts[0m:[93m353[0m:[93m35[0m - [91merror[0m[90m TS2339: [0mProperty 'configuration' does not exist on type 'InlineEditableData<ConcatConfig>'.
+
+[7m353[0m     const config = node.getData().configuration || {};
+[7m   [0m [91m                                  ~~~~~~~~~~~~~[0m
+
+[96mruntime/nodes/epic1/Epic1ExecutionEngine.ts[0m:[93m377[0m:[93m39[0m - [91merror[0m[90m TS2339: [0mProperty 'configuration' does not exist on type 'InlineEditableData<VariableConfig>'.
+
+[7m377[0m     const nodeConfig = node.getData().configuration || {};
+[7m   [0m [91m                                      ~~~~~~~~~~~~~[0m
+
+[96mruntime/nodes/epic1/Epic1ExecutionEngine.ts[0m:[93m517[0m:[93m10[0m - [91merror[0m[90m TS2540: [0mCannot assign to 'executionOrder' because it is a read-only property.
+
+[7m517[0m     this.executionOrder = order;
+[7m   [0m [91m         ~~~~~~~~~~~~~~[0m
+
+[96mruntime/nodes/epic1/index.ts[0m:[93m27[0m:[93m32[0m - [91merror[0m[90m TS2307: [0mCannot find module '../../schemas/psgSchemaV2' or its corresponding type declarations.
+
+[7m27[0m export type { EditState } from '../../schemas/psgSchemaV2';
+[7m  [0m [91m                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96mruntime/nodes/epic1/PromptParser.ts[0m:[93m539[0m:[93m66[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ separator: string; }' is not assignable to parameter of type 'ConcatConfig'.
+  Property 'trimInputs' is missing in type '{ separator: string; }' but required in type 'ConcatConfig'.
+
+[7m539[0m         const concatNode = new ConcatNode(this.generateNodeId(), {
+[7m   [0m [91m                                                                 ~[0m
+[7m540[0m           separator: opportunity.separator
+[7m   [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m541[0m         });
+[7m   [0m [91m~~~~~~~~~[0m
+
+  [96mruntime/nodes/epic1/ConcatNode.ts[0m:[93m19[0m:[93m3[0m
+    [7m19[0m   trimInputs: boolean;
+    [7m  [0m [96m  ~~~~~~~~~~[0m
+    'trimInputs' is declared here.
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m129[0m:[93m21[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m129[0m       if (node.node.getType() === Epic1NodeType.TextBlock) {
+[7m   [0m [91m                    ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m135[0m:[93m28[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m135[0m             otherNode.node.getType() === Epic1NodeType.TextBlock &&
+[7m   [0m [91m                           ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m168[0m:[93m18[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m168[0m       node1.node.getType() === Epic1NodeType.Concat ||
+[7m   [0m [91m                 ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m169[0m:[93m18[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m169[0m       node2.node.getType() === Epic1NodeType.Concat
+[7m   [0m [91m                 ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m316[0m:[93m25[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m316[0m       if (lastNode.node.getType() === Epic1NodeType.Output) {
+[7m   [0m [91m                        ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m349[0m:[93m34[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m349[0m       const nodeType = node.node.getType();
+[7m   [0m [91m                                 ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m388[0m:[93m56[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m388[0m       const dimensions = this.nodeDimensions[node.node.getType()];
+[7m   [0m [91m                                                       ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m406[0m:[93m56[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m406[0m       const dimensions = this.nodeDimensions[node.node.getType()];
+[7m   [0m [91m                                                       ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m433[0m:[93m55[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m433[0m           const dim1 = this.nodeDimensions[node1.node.getType()];
+[7m   [0m [91m                                                      ~~~~~~~[0m
+
+[96mruntime/nodes/epic1/SmartNodePositioning.ts[0m:[93m434[0m:[93m55[0m - [91merror[0m[90m TS2339: [0mProperty 'getType' does not exist on type 'BaseInlineEditableNode<any, unknown>'.
+
+[7m434[0m           const dim2 = this.nodeDimensions[node2.node.getType()];
+[7m   [0m [91m                                                      ~~~~~~~[0m
+
+
+Found 90 errors in 34 files.
+
+Errors  Files
+     3  components/epic1/animations/MicroInteractions.tsx[90m:98[0m
+     1  components/epic1/asset-library/DroppableNode.tsx[90m:24[0m
+     1  components/epic1/AssetBrowserIntegrated.tsx[90m:7[0m
+     3  components/epic1/components/GraphCanvas.tsx[90m:84[0m
+     1  components/epic1/components/GraphOverlays.tsx[90m:69[0m
+     1  components/epic1/ConnectionFeedback.tsx[90m:42[0m
+     3  components/epic1/contexts/PreviewContext.tsx[90m:77[0m
+     1  components/epic1/delightful/DelightfulIntegration.tsx[90m:11[0m
+     1  components/epic1/delightful/EasterEggManager.tsx[90m:7[0m
+     2  components/epic1/EdgeRenderingFix.tsx[90m:10[0m
+     1  components/epic1/edges/EdgeRouter.tsx[90m:299[0m
+    17  components/epic1/Epic1GraphEditor.tsx[90m:528[0m
+     2  components/epic1/Epic1GraphEditorFinal.tsx[90m:27[0m
+    12  components/epic1/Epic1GraphEditorRefactored.tsx[90m:150[0m
+     1  components/epic1/examples/AnimationsDemo.tsx[90m:88[0m
+     1  components/epic1/examples/OnboardingExample.tsx[90m:21[0m
+     1  components/epic1/hooks/useKeyboardNavigation.ts[90m:8[0m
+     1  components/epic1/interactions/MagneticSnapHandler.tsx[90m:65[0m
+     1  components/epic1/KeyboardShortcuts.tsx[90m:38[0m
+     3  components/epic1/nodes/GroupNode.tsx[90m:92[0m
+     7  components/epic1/nodes/index-original.ts[90m:31[0m
+     1  components/epic1/nodes/nodeFactory.ts[90m:157[0m
+     1  components/epic1/onboarding/KeyboardShortcutReference.tsx[90m:266[0m
+     1  components/epic1/PanZoomControls.tsx[90m:24[0m
+     2  components/epic1/preview/execution.worker.ts[90m:31[0m
+     1  components/epic1/SafeReactFlowWrapper.tsx[90m:19[0m
+     1  components/epic1/services/GraphConverter.ts[90m:2[0m
+     1  public.ts[90m:19[0m
+     1  runtime/nodes/epic1/BaseInlineEditableNode.ts[90m:8[0m
+     2  runtime/nodes/epic1/Epic1ExecutionContext.ts[90m:35[0m
+     3  runtime/nodes/epic1/Epic1ExecutionEngine.ts[90m:353[0m
+     1  runtime/nodes/epic1/index.ts[90m:27[0m
+     1  runtime/nodes/epic1/PromptParser.ts[90m:539[0m
+    10  runtime/nodes/epic1/SmartNodePositioning.ts[90m:129[0m
+[1G[0K⠙[1G[0K[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 2.[39m

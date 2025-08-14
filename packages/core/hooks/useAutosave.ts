@@ -21,6 +21,9 @@ export interface AutosaveState {
   remoteVersion: number | null;
 }
 
+// Module-level coalescing guards to prevent concurrent saves across re-renders
+let sharedPendingSave: Promise<void> | null = null;
+
 interface AutosaveOptions {
   enabled?: boolean;
   debounceMs?: number;
@@ -33,11 +36,11 @@ interface AutosaveOptions {
 /**
  * Custom debounce implementation
  */
-function useDebouncedCallback<T extends (...args: any[]) => any>(
+function useDebouncedCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number
 ): [T, () => void] {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<number | null>(null);
   const callbackRef = useRef(callback);
 
   // Update callback ref when it changes
@@ -46,8 +49,9 @@ function useDebouncedCallback<T extends (...args: any[]) => any>(
   }, [callback]);
 
   const cancel = useCallback(() => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+    if (timeoutRef.current !== null) {
+      // Use window timers for consistent DOM typings in jsdom
+      window.clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
   }, []);
@@ -55,7 +59,7 @@ function useDebouncedCallback<T extends (...args: any[]) => any>(
   const debouncedCallback = useCallback(
     (...args: Parameters<T>) => {
       cancel();
-      timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = window.setTimeout(() => {
         callbackRef.current(...args);
       }, delay);
     },
@@ -84,7 +88,14 @@ export function useAutosave(options: AutosaveOptions = {}) {
   } = options;
 
   const persistenceEnabled = usePersistenceEnabled();
-  const graphStore = useGraphStore();
+  type GraphStoreApi = {
+    getState: () => { nodes: unknown[]; edges: unknown[] };
+    subscribe: (
+      selector: (state: unknown) => unknown,
+      callback: () => void
+    ) => () => void;
+  };
+  const graphStore = useGraphStore() as unknown as GraphStoreApi;
 
   const [state, setState] = useState<AutosaveState>({
     status: 'saved',
@@ -96,6 +107,7 @@ export function useAutosave(options: AutosaveOptions = {}) {
 
   const versionRef = useRef(0);
   const saveInProgressRef = useRef(false);
+  const pendingSaveRef = useRef<Promise<void> | null>(null);
 
   // Performance monitoring for large graphs
   const measureSavePerformance = useCallback(
@@ -123,11 +135,19 @@ export function useAutosave(options: AutosaveOptions = {}) {
 
   // Save function with performance tracking
   const performSave = useCallback(async () => {
-    if (saveInProgressRef.current) {
-      return; // Prevent concurrent saves
-    }
+    // Coalesce concurrent saves by returning or creating a shared promise
+    if (sharedPendingSave) return sharedPendingSave;
+    if (pendingSaveRef.current) return pendingSaveRef.current;
 
+    let resolveRun: (() => void) | undefined;
+    const runPromise = new Promise<void>(resolve => {
+      resolveRun = resolve;
+    });
+    pendingSaveRef.current = runPromise;
+    sharedPendingSave = runPromise;
     saveInProgressRef.current = true;
+    // Yield microtask so subsequent same-tick callers see the shared promise
+    await Promise.resolve();
     const startTime = performance.now();
 
     setState(prev => ({ ...prev, status: 'saving', error: null }));
@@ -174,11 +194,20 @@ export function useAutosave(options: AutosaveOptions = {}) {
 
           // Check if it's a quota error
           if (errorMessage.includes('QuotaExceeded')) {
-            const quota = checkStorageQuota();
+            interface StorageQuotaInfo { percentage?: number }
+            const quota: StorageQuotaInfo | undefined =
+              typeof checkStorageQuota === 'function' ? (checkStorageQuota() as StorageQuotaInfo) : undefined;
+            const percentage =
+              quota && typeof quota.percentage === 'number'
+                ? Math.round(quota.percentage)
+                : undefined;
             setState(prev => ({
               ...prev,
               status: 'error',
-              error: `Storage quota exceeded (${Math.round(quota.percentage)}% used)`
+              error:
+                percentage !== undefined
+                  ? `Storage quota exceeded (${percentage}% used)`
+                  : 'Storage quota exceeded'
             }));
 
             // Dispatch quota exceeded event
@@ -198,6 +227,9 @@ export function useAutosave(options: AutosaveOptions = {}) {
           onError?.(error as Error);
         } finally {
           saveInProgressRef.current = false;
+          pendingSaveRef.current = null;
+          sharedPendingSave = null;
+          resolveRun?.();
         }
       };
 
@@ -208,6 +240,8 @@ export function useAutosave(options: AutosaveOptions = {}) {
       }
     } catch (error) {
       saveInProgressRef.current = false;
+      pendingSaveRef.current = null;
+      sharedPendingSave = null;
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
       setState(prev => ({
@@ -216,7 +250,10 @@ export function useAutosave(options: AutosaveOptions = {}) {
         error: errorMessage
       }));
       onError?.(error as Error);
+      resolveRun?.();
     }
+
+    return runPromise;
   }, [graphStore, useIdleCallback, onSave, onError, measureSavePerformance]);
 
   // Debounced save function

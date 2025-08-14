@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { Node, Edge } from 'reactflow';
 import type { EditableNodeData } from '../nodes';
+import { useAutoLayout } from './useAutoLayout';
 
 interface UseKeyboardHandlersProps {
   nodes: Node<EditableNodeData>[];
@@ -96,20 +97,43 @@ export function useKeyboardHandlers({
     setNodes(nds => nds.map(n => ({ ...n, selected: true })));
   }, [setNodes]);
 
-  // Direct keyboard handler for delete
+  // Initialize auto-layout hook
+  const { cleanupNodes, cleanupSelection, cleanupAll } = useAutoLayout();
+
+  // Handle layout cleanup
+  const handleLayoutCleanup = useCallback(() => {
+    const selectedNodes = nodes.filter(n => n.selected);
+    if (selectedNodes.length > 0) {
+      cleanupSelection();
+      showToast('info', `Cleaned up ${selectedNodes.length} selected nodes`);
+    } else {
+      cleanupAll();
+      showToast('info', 'Cleaned up all nodes');
+    }
+  }, [nodes, cleanupSelection, cleanupAll, showToast]);
+
+  // Direct keyboard handler for delete and layout
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Delete' || event.key === 'Backspace') {
-        const target = event.target as HTMLElement;
-        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-          return;
-        }
+      // Ignore if typing in input
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+        return;
+      }
 
+      // Delete key
+      if (event.key === 'Delete' || event.key === 'Backspace') {
         event.preventDefault();
         const selectedNodes = nodes.filter(n => n.selected);
         if (selectedNodes.length > 0) {
           handleDelete(selectedNodes);
         }
+      }
+      
+      // Cmd+Shift+L for layout cleanup
+      if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'l') {
+        event.preventDefault();
+        handleLayoutCleanup();
       }
     };
 
@@ -117,7 +141,7 @@ export function useKeyboardHandlers({
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [nodes, handleDelete]);
+  }, [nodes, handleDelete, handleLayoutCleanup]);
 
   return {
     handleSave,
@@ -126,6 +150,7 @@ export function useKeyboardHandlers({
     handleDelete,
     handleDuplicate,
     handleSelectAll,
+    handleLayoutCleanup,
     keyboardHandlers: {
       onSave: handleSave,
       onLoad: handleLoad,

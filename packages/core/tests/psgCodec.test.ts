@@ -291,39 +291,30 @@ describe('psgCodec', () => {
 
   describe('AC C1, C2: Legacy migration tests', () => {
     test('fromLegacyGraph migrates preserving nodes/edges', () => {
-      const originalCrypto: any = (globalThis as any).crypto;
-      jest.useFakeTimers();
-      const now = new Date('2024-01-02T03:04:05.000Z');
-      jest.setSystemTime(now);
+      const legacyGraph: Graph = {
+        nodes: [{ id: 'legacy-1', type: 'Output', label: 'Legacy Node' }],
+        edges: [],
+        settings: { oldFormat: true }
+      };
 
-      try {
-        (globalThis as any).crypto = { randomUUID: () => 'uuid-fixed-1234' };
+      const migrated = fromLegacyGraph('Migrated Graph', legacyGraph, {
+        idFactory: () => 'uuid-fixed-1234',
+        now: () => '2024-01-02T03:04:05.000Z'
+      });
 
-        const legacyGraph: Graph = {
-          nodes: [{ id: 'legacy-1', type: 'Output', label: 'Legacy Node' }],
-          edges: [],
-          settings: { oldFormat: true }
-        };
+      expect(migrated.version).toBe('1.0');
+      expect(migrated.kind).toBe('graph');
+      expect(migrated.meta.name).toBe('Migrated Graph');
+      expect(migrated.meta.id).toBe('uuid-fixed-1234');
+      expect(migrated.meta.createdAt).toBe('2024-01-02T03:04:05.000Z');
+      expect(migrated.meta.updatedAt).toBe('2024-01-02T03:04:05.000Z');
+      expect(migrated.graph.nodes).toEqual(legacyGraph.nodes);
+      expect(migrated.graph.edges).toEqual(legacyGraph.edges);
+      expect(migrated.graph.settings).toEqual(legacyGraph.settings);
 
-        const migrated = fromLegacyGraph('Migrated Graph', legacyGraph);
-
-        expect(migrated.version).toBe('1.0');
-        expect(migrated.kind).toBe('graph');
-        expect(migrated.meta.name).toBe('Migrated Graph');
-        expect(migrated.meta.id).toBe('uuid-fixed-1234');
-        expect(migrated.meta.createdAt).toBe('2024-01-02T03:04:05.000Z');
-        expect(migrated.meta.updatedAt).toBe('2024-01-02T03:04:05.000Z');
-        expect(migrated.graph.nodes).toEqual(legacyGraph.nodes);
-        expect(migrated.graph.edges).toEqual(legacyGraph.edges);
-        expect(migrated.graph.settings).toEqual(legacyGraph.settings);
-
-        const serialized = writePsg(migrated);
-        const parsed = readPsg(serialized);
-        expect(parsed).toEqual(migrated);
-      } finally {
-        (globalThis as any).crypto = originalCrypto;
-        jest.useRealTimers();
-      }
+      const serialized = writePsg(migrated);
+      const parsed = readPsg(serialized);
+      expect(parsed).toEqual(migrated);
     });
 
     test('fromLegacyGraph processes fixture: legacy-graph.json', () => {

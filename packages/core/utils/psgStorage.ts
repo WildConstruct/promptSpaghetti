@@ -36,7 +36,44 @@ export async function getUserGraph(
   const path = objectPath(userId, name);
   const { data, error } = await supabase.storage.from(BUCKET).download(path);
   if (error) return { ok: false, error: { message: error.message } };
-  const text = await data.text();
+  const value: unknown = data;
+  // Decode blob-like, buffers, or strings without relying on global Response
+  let text: string;
+  const hasMethod = <T extends string>(
+    obj: unknown,
+    name: T
+  ): obj is { [K in T]: (...args: unknown[]) => unknown } =>
+    typeof obj === 'object' &&
+    obj !== null &&
+    name in obj &&
+    typeof (obj as Record<string, unknown>)[name] === 'function';
+  if (hasMethod(value, 'text')) {
+    text = (await value.text()) as unknown as string;
+  } else if (hasMethod(value, 'arrayBuffer')) {
+    const buf = (await value.arrayBuffer()) as unknown as ArrayBuffer;
+    text = new TextDecoder().decode(buf);
+  } else if (typeof (globalThis as any).Response !== 'undefined') {
+    text = await new (globalThis as any).Response(value).text();
+  } else if (typeof (globalThis as any).FileReader !== 'undefined') {
+    text = await new Promise<string>((resolve, reject) => {
+      try {
+        const fr = new (globalThis as any).FileReader();
+        fr.onload = () => resolve(String(fr.result ?? ''));
+        fr.onerror = (e: any) => reject(e);
+        fr.readAsText(value as Blob);
+      } catch (e) {
+        resolve(String(value));
+      }
+    });
+  } else if (typeof value === 'string') {
+    text = value;
+  } else if (value instanceof Uint8Array) {
+    text = new TextDecoder().decode(value);
+  } else if (value instanceof ArrayBuffer) {
+    text = new TextDecoder().decode(new Uint8Array(value));
+  } else {
+    text = String(value);
+  }
   return { ok: true, data: text };
 }
 

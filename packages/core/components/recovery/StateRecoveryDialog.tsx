@@ -186,7 +186,7 @@ export function StateRecoveryDialog({
         </div>
 
         {/* Error Messages */}
-        {report.errors.length > 0 && (
+        {report.corrupted.errors.length > 0 && (
           <div
             style={{
               backgroundColor: '#f8d7da',
@@ -214,11 +214,11 @@ export function StateRecoveryDialog({
                 color: '#721c24'
               }}
             >
-              {report.errors.slice(0, 3).map((error, index) => (
+              {report.corrupted.errors.slice(0, 3).map((error, index) => (
                 <li key={index}>{error}</li>
               ))}
-              {report.errors.length > 3 && (
-                <li>...and {report.errors.length - 3} more</li>
+              {report.corrupted.errors.length > 3 && (
+                <li>...and {report.corrupted.errors.length - 3} more</li>
               )}
             </ul>
           </div>

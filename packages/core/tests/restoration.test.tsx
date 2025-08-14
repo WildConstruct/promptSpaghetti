@@ -13,13 +13,14 @@ import {
   exportBackup,
   clearPersistedState
 } from '../utils/stateRestoration';
+import * as stateRestorationModule from '../utils/stateRestoration';
 import { StateRecoveryDialog } from '../components/recovery/StateRecoveryDialog';
 import { StorageInfo } from '../components/storage/StorageInfo';
 import {
   RestorationLoader,
   RestorationToast
 } from '../components/indicators/RestorationLoader';
-import { persistenceStorage } from '../utils/persistenceUtils';
+import { persistenceStorage, getPersistedStateInfo } from '../utils/persistenceUtils';
 
 // Mock modules
 jest.mock('../utils/persistenceUtils');
@@ -80,7 +81,7 @@ describe('State Recovery', () => {
       expect(report.recommendation).toBe('reset');
       expect(report.recoverable.nodes).toBe(0);
       expect(report.recoverable.edges).toBe(0);
-      expect(report.errors).toHaveLength(1);
+      expect(report.corrupted.errors).toHaveLength(1);
     });
 
     it('should recover valid nodes and edges', () => {
@@ -184,6 +185,18 @@ describe('State Recovery', () => {
   });
 
   describe('restoreState', () => {
+    beforeEach(() => {
+      (getPersistedStateInfo as unknown as jest.Mock).mockReturnValue({
+        exists: true,
+        size: 1024,
+        compressed: false,
+        timestamp: Date.now()
+      });
+      // validatePersistedState comes from mocked persistenceUtils
+      const { validatePersistedState } = jest.requireMock('../utils/persistenceUtils');
+      (validatePersistedState as jest.Mock).mockImplementation((x: unknown) => x);
+    });
+
     it('should return success for valid persisted state', async () => {
       const validState = {
         nodes: [],
@@ -392,17 +405,24 @@ describe('StorageInfo Component', () => {
       fireEvent.click(resetButton);
     });
 
-    expect(
-      screen.getByText(/This will permanently delete/)
-    ).toBeInTheDocument();
+    const matches = screen.getAllByText((_, node) =>
+      node?.textContent?.includes('This will permanently delete') ?? false
+    );
+    expect(matches.length).toBeGreaterThan(0);
     expect(screen.getByText('Cancel')).toBeInTheDocument();
   });
 
   it('should export backup on export button click', async () => {
     const exportBackupMock = jest.fn();
-    jest
-      .spyOn(require('../utils/stateRestoration'), 'exportBackup')
-      .mockImplementation(exportBackupMock);
+    jest.spyOn(stateRestorationModule, 'exportBackup').mockImplementation(exportBackupMock);
+
+    // Ensure Export button is enabled by reporting that persisted state exists
+    (getPersistedStateInfo as unknown as jest.Mock).mockReturnValue({
+      exists: true,
+      size: 123,
+      compressed: false,
+      timestamp: Date.now(),
+    });
 
     render(<StorageInfo />);
 

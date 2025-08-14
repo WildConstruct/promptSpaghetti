@@ -5,6 +5,7 @@ interface CanvasContextMenuProps {
   position: { x: number; y: number };
   onAddNote: (position: { x: number; y: number }) => void;
   onAddBoundingBox?: (position: { x: number; y: number }) => void;
+  onLayoutCleanup?: () => void;
   onClose: () => void;
 }
 
@@ -15,6 +16,7 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
   position,
   onAddNote,
   onAddBoundingBox,
+  onLayoutCleanup,
   onClose
 }) => {
   const handleAddNote = () => {
@@ -60,6 +62,16 @@ export const CanvasContextMenu: React.FC<CanvasContextMenuProps> = ({
             <span className="icon">📦</span>
             Add Region Box
           </button>
+        )}
+        {onLayoutCleanup && (
+          <>
+            <div className="context-menu-separator" />
+            <button className="context-menu-item" onClick={() => { onLayoutCleanup(); onClose(); }}>
+              <span className="icon">🧹</span>
+              Clean Up Layout
+              <span className="context-menu-shortcut">⌘⇧L</span>
+            </button>
+          </>
         )}
         <div className="context-menu-separator" />
         <button className="context-menu-item" onClick={onClose}>

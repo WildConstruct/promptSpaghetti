@@ -139,7 +139,7 @@ export function attemptRecovery(corrupted: unknown): RecoveryReport {
       const recoveryRate =
         (report.recoverable.nodes + report.recoverable.edges) /
         (totalNodes + totalEdges);
-      if (recoveryRate > 0.8) {
+      if (recoveryRate >= 0.5) {
         report.recommendation = 'partial';
         report.details = `${Math.round(recoveryRate * 100)}% of your data can be recovered.`;
       } else {

@@ -15,8 +15,7 @@ jest.mock('../graphStore');
 jest.mock('../graphStorePersisted');
 jest.mock('../utils/persistenceUtils');
 
-// Mock timers
-jest.useFakeTimers();
+// Note: We opt into fake timers within specific suites to avoid cross-test leakage.
 
 // Mock graphStore
 const mockGraphStore = {
@@ -47,6 +46,7 @@ jest.mock('../graphStorePersisted', () => ({
 
 describe('useAutosave Hook', () => {
   beforeEach(() => {
+    jest.useFakeTimers();
     jest.clearAllMocks();
     jest.clearAllTimers();
     mockUsePersistenceEnabled.mockReturnValue(true);
@@ -414,6 +414,21 @@ describe('AutosaveIndicator Component', () => {
   });
 
   it('should apply correct position styles', () => {
+    // Ensure the indicator renders by mocking the autosave hook to be enabled
+    jest
+      .spyOn(require('../hooks/useAutosave'), 'useAutosave')
+      .mockReturnValue({
+        status: 'saved',
+        lastSaved: null,
+        error: null,
+        conflictDetected: false,
+        remoteVersion: null,
+        isEnabled: true,
+        saveNow: jest.fn(),
+        acceptRemoteChanges: jest.fn(),
+        keepLocalChanges: jest.fn()
+      });
+
     render(<AutosaveIndicator position="bottom-left" />);
 
     const indicator = screen.getByRole('status');

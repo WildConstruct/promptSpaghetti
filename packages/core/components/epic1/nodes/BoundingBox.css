@@ -2,10 +2,11 @@
 .bounding-box {
   position: relative;
   border-radius: 8px;
-  transition: all 0.2s ease;
-  pointer-events: all;
+  transition: opacity 0.2s ease, box-shadow 0.2s ease;
+  pointer-events: auto;
   cursor: move;
   user-select: none;
+  box-sizing: border-box;
 }
 
 .bounding-box.selected {
@@ -15,21 +16,21 @@
 /* Header */
 .bounding-box-header {
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(38, 38, 38, 0.95);
   border-radius: 8px 8px 0 0;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 
 .bounding-box-title {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #333;
+  color: #e1e1e1;
   cursor: text;
 }
 
 .bounding-box-title:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   padding: 2px 4px;
   margin: -2px -4px;
   border-radius: 4px;
@@ -39,8 +40,8 @@
   width: 100%;
   font-size: 16px;
   font-weight: 600;
-  color: #333;
-  background: white;
+  color: #e1e1e1;
+  background: rgba(0, 0, 0, 0.8);
   border: 2px solid #0084ff;
   border-radius: 4px;
   padding: 2px 4px;
@@ -50,20 +51,20 @@
 .bounding-box-description {
   margin-top: 8px;
   font-size: 14px;
-  color: #666;
+  color: #999;
   cursor: text;
   min-height: 20px;
 }
 
 .bounding-box-description:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.1);
   padding: 2px 4px;
   margin: 6px -4px 0 -4px;
   border-radius: 4px;
 }
 
 .bounding-box-description .placeholder {
-  color: #999;
+  color: #666;
   font-style: italic;
 }
 
@@ -71,8 +72,8 @@
   width: 100%;
   min-height: 40px;
   font-size: 14px;
-  color: #666;
-  background: white;
+  color: #e1e1e1;
+  background: rgba(0, 0, 0, 0.8);
   border: 2px solid #0084ff;
   border-radius: 4px;
   padding: 4px;
@@ -91,14 +92,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 4px 8px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(38, 38, 38, 0.95);
   border-radius: 4px;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 
 .contained-count {
   font-size: 12px;
-  color: #666;
+  color: #999;
   font-weight: 500;
 }
 
@@ -113,7 +114,7 @@
 }
 
 .lock-button:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .lock-button.locked {
@@ -129,10 +130,12 @@
   gap: 12px;
   align-items: center;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(38, 38, 38, 0.95);
   border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  pointer-events: auto !important;
+  z-index: 1000;
 }
 
 /* Color Picker */
@@ -162,11 +165,12 @@
   grid-template-columns: repeat(4, 32px);
   gap: 4px;
   padding: 8px;
-  background: white;
-  border: 1px solid #ddd;
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid #333;
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  pointer-events: auto !important;
 }
 
 .color-option {
@@ -193,7 +197,7 @@
 
 .opacity-control label {
   font-size: 12px;
-  color: #666;
+  color: #999;
   font-weight: 500;
 }
 
@@ -202,9 +206,12 @@
   height: 4px;
   -webkit-appearance: none;
   appearance: none;
-  background: #ddd;
+  background: #444;
   border-radius: 2px;
   outline: none;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1000;
 }
 
 .opacity-slider::-webkit-slider-thumb {
@@ -215,6 +222,9 @@
   background: #0084ff;
   border-radius: 50%;
   cursor: pointer;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1001;
 }
 
 .opacity-slider::-moz-range-thumb {
@@ -229,14 +239,17 @@
 /* Resize Handles */
 .resize-handle {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
   background: #0084ff;
   border: 2px solid white;
   border-radius: 50%;
   z-index: 10;
   opacity: 0;
   transition: opacity 0.2s;
+  pointer-events: auto !important;
+  touch-action: none;
+  user-select: none;
 }
 
 .bounding-box.selected .resize-handle {
@@ -248,26 +261,26 @@
 }
 
 .resize-handle-se {
-  bottom: -6px;
-  right: -6px;
+  bottom: -8px;
+  right: -8px;
   cursor: nwse-resize;
 }
 
 .resize-handle-sw {
-  bottom: -6px;
-  left: -6px;
+  bottom: -8px;
+  left: -8px;
   cursor: nesw-resize;
 }
 
 .resize-handle-ne {
-  top: -6px;
-  right: -6px;
+  top: -8px;
+  right: -8px;
   cursor: nesw-resize;
 }
 
 .resize-handle-nw {
-  top: -6px;
-  left: -6px;
+  top: -8px;
+  left: -8px;
   cursor: nwse-resize;
 }
 
@@ -276,13 +289,19 @@
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+  overflow: visible !important;
 }
 
 .react-flow__node-boundingBox.selected {
   outline: none !important;
 }
 
-/* Z-index to ensure boxes are behind nodes */
+/* Z-index to ensure boxes are behind nodes but still selectable */
 .react-flow__node-boundingBox {
-  z-index: -1 !important;
+  z-index: 0 !important;
+}
+
+/* Disable transitions during resize */
+.bounding-box.resizing {
+  transition: none !important;
 }

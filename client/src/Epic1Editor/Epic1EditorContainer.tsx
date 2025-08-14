@@ -32,6 +32,7 @@ interface Epic1EditorContainerProps {
   assetLibraryPosition?: 'left' | 'right';
   showMenuBar?: boolean;
   showOnboarding?: boolean;
+  initialAnalysis?: any; // PromptAnalysis type from the parser
 }
 
 export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
@@ -39,7 +40,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   showAssetLibrary = true,
   assetLibraryPosition = 'right',
   showMenuBar = true,
-  showOnboarding = false
+  showOnboarding = false,
+  initialAnalysis
 }) => {
   // Component loading state
   const [EditorComponent, setEditorComponent] =

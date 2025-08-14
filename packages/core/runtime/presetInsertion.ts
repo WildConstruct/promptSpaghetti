@@ -130,6 +130,7 @@ export async function insertPreset(
     const bounds = calculateBounds(nodes);
 
     // Position nodes and get type map
+    // Note: We'll let the auto-layout in useDragDropHandlers handle multi-node positioning
     const positionedNodes = positionNodes(
       nodes,
       bounds,
@@ -394,43 +395,77 @@ function positionNodes(
   snapToGrid: boolean,
   gridSize: number
 ): PSGLibNode[] {
-  if (preservePositions) {
-    return nodes;
+  // Check if nodes are stacked (all at same position)
+  const firstPos = nodes[0]?.position;
+  const areStacked = nodes.length > 1 && nodes.every(node => 
+    node.position.x === firstPos.x && node.position.y === firstPos.y
+  );
+
+  // If nodes are stacked or bounds indicate no layout, don't preserve positions
+  const shouldPreserve = preservePositions && !areStacked && 
+    (bounds.maxX - bounds.minX > 0 || bounds.maxY - bounds.minY > 0);
+
+  if (shouldPreserve) {
+    // Nodes have a good layout, just offset them to the drop position
+    const centerX = bounds.minX + (bounds.maxX - bounds.minX) / 2;
+    const centerY = bounds.minY + (bounds.maxY - bounds.minY) / 2;
+    const offsetX = position.x - centerX;
+    const offsetY = position.y - centerY;
+
+    return nodes.map(node => {
+      let x = node.position.x + offsetX;
+      let y = node.position.y + offsetY;
+
+      if (snapToGrid) {
+        x = Math.round(x / gridSize) * gridSize;
+        y = Math.round(y / gridSize) * gridSize;
+      }
+
+      return {
+        ...node,
+        type: mapNodeType(node.type),
+        position: { x, y },
+        data: convertNodeData(node.type, node.data)
+      };
+    });
   }
 
-  // Calculate center of the preset
-  const presetWidth = bounds.maxX - bounds.minX;
-  const presetHeight = bounds.maxY - bounds.minY;
-  const centerX = bounds.minX + presetWidth / 2;
-  const centerY = bounds.minY + presetHeight / 2;
+  // Nodes are stacked or need repositioning
+  // For single node, just place at drop position
+  if (nodes.length === 1) {
+    return [{
+      ...nodes[0],
+      type: mapNodeType(nodes[0].type),
+      position: snapToGrid ? {
+        x: Math.round(position.x / gridSize) * gridSize,
+        y: Math.round(position.y / gridSize) * gridSize
+      } : position,
+      data: convertNodeData(nodes[0].type, nodes[0].data)
+    }];
+  }
 
-  // Calculate offset to center the preset at the drop position
-  const offsetX = position.x - centerX;
-  const offsetY = position.y - centerY;
+  // For multiple stacked nodes, give them initial positions for the layout algorithm
+  // Place them in a temporary grid so the layout algorithm has something to work with
+  const tempSpacing = 300;  // Increased spacing for better initial layout
+  const cols = Math.ceil(Math.sqrt(nodes.length));
+  
+  return nodes.map((node, index) => {
+    const row = Math.floor(index / cols);
+    const col = index % cols;
+    
+    let x = position.x + (col * tempSpacing) - ((cols - 1) * tempSpacing / 2);
+    let y = position.y + (row * tempSpacing) - ((Math.ceil(nodes.length / cols) - 1) * tempSpacing / 2);
 
-  // Apply a better spread to avoid overlapping if multiple presets are dropped
-  const spreadOffset = 80; // Increased spread to prevent stacking
-  const randomSpread = {
-    x: (Math.random() - 0.5) * spreadOffset * 2, // Wider horizontal spread
-    y: (Math.random() - 0.5) * spreadOffset
-  };
-
-  return nodes.map(node => {
-    let x = node.position.x + offsetX + randomSpread.x;
-    let y = node.position.y + offsetY + randomSpread.y;
-
-    // Snap to grid if enabled
     if (snapToGrid) {
       x = Math.round(x / gridSize) * gridSize;
       y = Math.round(y / gridSize) * gridSize;
     }
 
-    // Convert node to ReactFlow format
     return {
       ...node,
-      type: mapNodeType(node.type), // Map the type to ReactFlow format
+      type: mapNodeType(node.type),
       position: { x, y },
-      data: convertNodeData(node.type, node.data) // Convert data to expected format
+      data: convertNodeData(node.type, node.data)
     };
   });
 }
