@@ -45,14 +45,14 @@ export function FormField({
           marginBottom: '6px',
           fontSize: '14px',
           fontWeight: '500',
-          color: '#212529'
+          color: '#e0e0e0'
         }}
       >
         {label}
         {required && (
           <span
             style={{
-              color: '#dc3545',
+              color: '#f87171',
               marginLeft: '4px'
             }}
             aria-label="required"
@@ -79,10 +79,10 @@ export function FormField({
             width: '100%',
             padding: showPasswordToggle ? '10px 40px 10px 12px' : '10px 12px',
             fontSize: '15px',
-            border: `1px solid ${error ? '#dc3545' : '#ced4da'}`,
+            border: `1px solid ${error ? '#f87171' : '#444'}`,
             borderRadius: '6px',
-            backgroundColor: disabled ? '#e9ecef' : 'white',
-            color: '#495057',
+            backgroundColor: disabled ? '#2a2a2a' : '#1a1a1a',
+            color: '#e0e0e0',
             transition:
               'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
             outline: 'none',
@@ -90,13 +90,13 @@ export function FormField({
           }}
           onFocus={e => {
             if (!error) {
-              e.currentTarget.style.borderColor = '#80bdff';
+              e.currentTarget.style.borderColor = '#2563eb';
               e.currentTarget.style.boxShadow =
-                '0 0 0 0.2rem rgba(0, 123, 255, 0.25)';
+                '0 0 0 0.2rem rgba(37, 99, 235, 0.25)';
             }
           }}
           onBlurCapture={e => {
-            e.currentTarget.style.borderColor = error ? '#dc3545' : '#ced4da';
+            e.currentTarget.style.borderColor = error ? '#f87171' : '#444';
             e.currentTarget.style.boxShadow = 'none';
           }}
         />
@@ -114,7 +114,7 @@ export function FormField({
               transform: 'translateY(-50%)',
               background: 'none',
               border: 'none',
-              color: '#6c757d',
+              color: '#999',
               cursor: disabled ? 'not-allowed' : 'pointer',
               padding: '4px',
               fontSize: '18px',
@@ -136,7 +136,7 @@ export function FormField({
           style={{
             marginTop: '4px',
             fontSize: '13px',
-            color: '#dc3545'
+            color: '#f87171'
           }}
           role="alert"
         >

@@ -9,6 +9,7 @@ import {
   getAuthErrorMessage
 } from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
+import { supabase } from '../../utils/supabaseClient';
 
 interface LoginFormProps {
   onSuccess: (user: any) => void;
@@ -38,29 +39,26 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
     setError(null);
 
     try {
-      // TODO: Replace with actual Supabase auth call
-      // const { data, error } = await supabase.auth.signInWithPassword({
-      //   email: email.value,
-      //   password: password.value
-      // });
+      if (!supabase) {
+        throw new Error('Authentication service is not available');
+      }
 
-      // Simulated auth call for now
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (
-            email.value === 'test@example.com' &&
-            password.value === 'Test1234'
-          ) {
-            resolve({ user: { email: email.value, id: '123' } });
-          } else {
-            reject(new Error('Invalid login credentials'));
-          }
-        }, 1000);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.value,
+        password: password.value
       });
+
+      if (error) {
+        throw error;
+      }
+
+      if (!data.user) {
+        throw new Error('Login failed - no user returned');
+      }
 
       setShowSuccessMessage(true);
       setTimeout(() => {
-        onSuccess({ email: email.value });
+        onSuccess(data.user);
       }, 500);
     } catch (err) {
       setError(getAuthErrorMessage(err));
@@ -76,10 +74,10 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           style={{
             padding: '12px',
             marginBottom: '20px',
-            backgroundColor: '#f8d7da',
-            border: '1px solid #f5c6cb',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
             borderRadius: '6px',
-            color: '#721c24',
+            color: '#f87171',
             fontSize: '14px'
           }}
           role="alert"
@@ -94,10 +92,10 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           style={{
             padding: '12px',
             marginBottom: '20px',
-            backgroundColor: '#d4edda',
-            border: '1px solid #c3e6cb',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
             borderRadius: '6px',
-            color: '#155724',
+            color: '#4ade80',
             fontSize: '14px'
           }}
           role="status"
@@ -149,7 +147,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           style={{
             background: 'none',
             border: 'none',
-            color: '#007bff',
+            color: '#60a5fa',
             fontSize: '14px',
             cursor: 'pointer',
             textDecoration: 'underline',
@@ -170,8 +168,8 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
           padding: '12px 20px',
           borderRadius: '6px',
           border: 'none',
-          backgroundColor: isFormValid && !isLoading ? '#007bff' : '#e9ecef',
-          color: isFormValid && !isLoading ? 'white' : '#6c757d',
+          backgroundColor: isFormValid && !isLoading ? '#2563eb' : '#333',
+          color: isFormValid && !isLoading ? 'white' : '#666',
           fontSize: '16px',
           fontWeight: '500',
           cursor: isFormValid && !isLoading ? 'pointer' : 'not-allowed',
@@ -183,12 +181,12 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
         }}
         onMouseEnter={e => {
           if (isFormValid && !isLoading) {
-            e.currentTarget.style.backgroundColor = '#0056b3';
+            e.currentTarget.style.backgroundColor = '#1d4ed8';
           }
         }}
         onMouseLeave={e => {
           if (isFormValid && !isLoading) {
-            e.currentTarget.style.backgroundColor = '#007bff';
+            e.currentTarget.style.backgroundColor = '#2563eb';
           }
         }}
       >
@@ -199,7 +197,7 @@ export function LoginForm({ onSuccess, onForgotPassword }: LoginFormProps) {
                 display: 'inline-block',
                 width: '16px',
                 height: '16px',
-                border: '2px solid #6c757d',
+                border: '2px solid #999',
                 borderTopColor: 'transparent',
                 borderRadius: '50%',
                 animation: 'spin 0.8s linear infinite'

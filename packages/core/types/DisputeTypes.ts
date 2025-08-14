@@ -66,7 +66,9 @@ export enum DisputeType { CHARGEBACK = 'chargeback',
   QUALITY_DISPUTE = 'quality_dispute',
   FRAUD_DISPUTE = 'fraud_dispute',
   AUTHORIZATION_DISPUTE = 'authorization_dispute'
-  export enum DisputeCategory {
+}
+
+export enum DisputeCategory {
   FRAUD = 'fraud',
   AUTHORIZATION = 'authorization',
   PROCESSING_ERROR = 'processing_error',
@@ -77,7 +79,9 @@ export enum DisputeType { CHARGEBACK = 'chargeback',
   CREDIT_NOT_PROCESSED = 'credit_not_processed',
   CANCELLED_RECURRING = 'cancelled_recurring',
   PRODUCT_NOT_RECEIVED = 'product_not_received'
-  export enum DisputeReason {
+}
+
+export enum DisputeReason {
   // Fraud-related
   UNAUTHORIZED_TRANSACTION = 'unauthorized_transaction',
   FRAUDULENT_TRANSACTION = 'fraudulent_transaction',
@@ -103,7 +107,9 @@ export enum DisputeType { CHARGEBACK = 'chargeback',
   // General
   GENERAL_DISPUTE = 'general_dispute',
   OTHER = 'other'
-  export enum DisputeStatus {
+}
+
+export enum DisputeStatus {
   RECEIVED = 'received',
   INVESTIGATING = 'investigating',
   AWAITING_RESPONSE = 'awaiting_response',
@@ -115,7 +121,9 @@ export enum DisputeType { CHARGEBACK = 'chargeback',
   WITHDRAWN = 'withdrawn',
   ESCALATED = 'escalated',
   CLOSED = 'closed'
-  export enum DisputeStage {
+}
+
+export enum DisputeStage {
   INITIAL_DISPUTE = 'initial_dispute',
   EVIDENCE_COLLECTION = 'evidence_collection',
   INVESTIGATION = 'investigation',
@@ -126,13 +134,17 @@ export enum DisputeType { CHARGEBACK = 'chargeback',
   APPEAL_PERIOD = 'appeal_period',
   APPEAL_PROCESS = 'appeal_process',
   FINAL_RESOLUTION = 'final_resolution'
-  export enum DisputeSource {
+}
+
+export enum DisputeSource {
   PAYMENT_PROVIDER = 'payment_provider',
   CUSTOMER_REPORT = 'customer_report',
   MERCHANT_REPORT = 'merchant_report',
   SYSTEM_DETECTION = 'system_detection',
   ADMIN_INITIATED = 'admin_initiated'
-  export interface DisputeEvidence {
+}
+
+export interface DisputeEvidence {
   evidenceId: string;
   type: DisputeEvidenceType;
   title: string;

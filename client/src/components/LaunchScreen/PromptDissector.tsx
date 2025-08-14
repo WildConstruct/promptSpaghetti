@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { PromptParser, PromptAnalysis } from '../../../../packages/core/runtime/nodes/epic1/PromptParser';
+import { simplePromptParser, PromptAnalysis } from '../../lib/simplePromptParser';
 import './PromptDissector.css';
 
 interface PromptDissectorProps {
@@ -8,6 +8,7 @@ interface PromptDissectorProps {
   onAnalysisComplete: (analysis: PromptAnalysis) => void;
   selectedNodeId?: string | null;
   placeholder?: string;
+  focusOnValueChange?: boolean;
 }
 
 interface HighlightSegment {
@@ -35,15 +36,30 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   onChange,
   onAnalysisComplete,
   selectedNodeId,
-  placeholder = 'Enter your prompt...'
+  placeholder = 'Enter your prompt...',
+  focusOnValueChange = false,
 }) => {
   const [analysis, setAnalysis] = useState<PromptAnalysis | null>(null);
   const [highlightSegments, setHighlightSegments] = useState<HighlightSegment[]>([]);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const parserRef = useRef<PromptParser>(new PromptParser());
+  const parserRef = useRef<typeof simplePromptParser>(simplePromptParser);
   const debounceTimerRef = useRef<NodeJS.Timeout>();
+
+  // Focus textarea when value changes (e.g., template selected)
+  useEffect(() => {
+    if (focusOnValueChange && textareaRef.current) {
+      const el = textareaRef.current;
+      el.focus();
+      const len = el.value.length;
+      try {
+        el.setSelectionRange(len, len);
+      } catch {
+        // ignore if not supported
+      }
+    }
+  }, [value, focusOnValueChange]);
 
   // Parse the prompt with debouncing
   useEffect(() => {
@@ -150,8 +166,9 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                   segment.isSelected ? 'selected' : ''
                 } ${hoveredNodeId === segment.nodeId ? 'hovered' : ''}`}
                 style={{
-                  backgroundColor: segment.color ? `${segment.color}33` : 'transparent',
-                  borderBottom: segment.color ? `2px solid ${segment.color}` : 'none',
+                  backgroundColor: segment.color ? `${segment.color}55` : 'transparent',  // Increased opacity from 33 to 55
+                  borderBottom: segment.color ? `3px solid ${segment.color}` : 'none',  // Thicker border
+                  color: segment.color ? '#ffffff' : 'inherit',  // Make text white on highlighted segments
                 }}
                 onMouseEnter={() => segment.nodeId && handleSegmentHover(segment.nodeId)}
                 onMouseLeave={() => handleSegmentHover(null)}
@@ -171,6 +188,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           onChange={handleChange}
           onScroll={handleScroll}
           placeholder={placeholder}
+          aria-label="Prompt editor"
           spellCheck={false}
         />
       </div>
@@ -197,7 +215,16 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       {analysis && analysis.nodes.length > 0 && (
         <div className="dissector-legend">
           <span className="legend-title">Node Types:</span>
-          {Array.from(new Set(analysis.nodes.map(n => n.node.nodeType))).map((type, index) => (
+          {Array.from(
+            new Set(
+              analysis.nodes.map(n => {
+                const nodeAny = n.node as any;
+                return typeof nodeAny.getNodeType === 'function'
+                  ? nodeAny.getNodeType()
+                  : 'Node';
+              })
+            )
+          ).map((type, index) => (
             <span key={type} className="legend-item">
               <span 
                 className="legend-color" 

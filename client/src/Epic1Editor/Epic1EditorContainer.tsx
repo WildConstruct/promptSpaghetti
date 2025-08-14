@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { ToastContainer, useToast } from '../Toast';
@@ -17,7 +17,8 @@ import {
   validateGraph,
   formatValidationMessage
 } from './utils/graphValidation';
-import { Epic1GraphEditorProps, ProfessionalMenuBarProps } from './types';
+import { Epic1GraphEditorProps, NodeData } from './types';
+import type { PromptAnalysis, GeneratedNode } from '../lib/simplePromptParser';
 import { stylePresets, getConsoleStyle } from './utils/styleUtils';
 import '@promptscape/core/components/epic1/Epic1GraphEditor.css';
 import '@promptscape/core/components/epic1/nodes/BaseEditableNode.css';
@@ -25,6 +26,8 @@ import '@promptscape/core/components/epic1/nodes/NodeStyles.css';
 import '../Epic1ReactFlowFix.css';
 import './styles/about-modal.css';
 import './styles/theme-variables.css';
+import { fromLegacyGraph, writePsg } from '@promptscape/core';
+import type { GraphNode, GraphEdge, Graph } from '@promptscape/core';
 
 interface Epic1EditorContainerProps {
   showPreview?: boolean;
@@ -32,7 +35,8 @@ interface Epic1EditorContainerProps {
   assetLibraryPosition?: 'left' | 'right';
   showMenuBar?: boolean;
   showOnboarding?: boolean;
-  initialAnalysis?: any; // PromptAnalysis type from the parser
+  initialAnalysis?: PromptAnalysis; // PromptAnalysis from simplePromptParser
+  initialGraph?: { nodes: Node[]; edges: Edge[] };
 }
 
 export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
@@ -41,17 +45,24 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   assetLibraryPosition = 'right',
   showMenuBar = true,
   showOnboarding = false,
-  initialAnalysis
+  initialAnalysis,
+  initialGraph
 }) => {
   // Component loading state
   const [EditorComponent, setEditorComponent] =
     useState<React.ComponentType<Epic1GraphEditorProps> | null>(null);
   const [MenuBarComponent, setMenuBarComponent] =
-    useState<React.ComponentType<ProfessionalMenuBarProps> | null>(null);
+    useState<React.ComponentType<Record<string, unknown>> | null>(null);
   const [loadError, setLoadError] = useState<string>('');
   const [isComponentsLoading, setIsComponentsLoading] = useState(true);
   const [assetLibraryVisible, setAssetLibraryVisible] =
     useState(showAssetLibrary);
+  const hasInitialInput = Boolean(
+    (initialGraph && initialGraph.nodes && initialGraph.edges) ||
+      (initialAnalysis && initialAnalysis.nodes)
+  );
+  // Gate rendering the core editor until we've cleared its persistence when launching with initial input
+  const [editorReady, setEditorReady] = useState<boolean>(!hasInitialInput);
 
   // Calculate viewport and node positions
   const viewport = calculateViewportDimensions();
@@ -91,16 +102,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
   // Graph state - start with empty graph
   const [currentNodes, setCurrentNodes] = useState<Node[]>([]);
   const [currentEdges, setCurrentEdges] = useState<Edge[]>([]);
+  const initializedRef = useRef(false);
   const [editorKey, setEditorKey] = useState(0);
-
-  // View state
-  const [gridVisible, setGridVisible] = useState(true);
-  const [minimapVisible, setMinimapVisible] = useState(false);
-  const [inspectorVisible, setInspectorVisible] = useState(true);
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'cinema'>(
-    'cinema'
-  );
-
   // Toast notifications
   const { toasts, showToast, dismissToast } = useToast();
 
@@ -113,7 +116,6 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     showSaveDialog,
     setShowOpenDialog,
     setShowSaveDialog,
-    handleSupabaseOpen,
     handleSupabaseSave,
     handleLocalOpen,
     loadGraph,
@@ -122,13 +124,277 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     handleOpen,
     handleSave,
     handleSaveAs,
-    handleQuit
+    handleQuit,
+    loadFromPsgContent
   } = useSupabaseFileOperations({
     onNodesChange: setCurrentNodes,
     onEdgesChange: setCurrentEdges,
     onEditorKeyChange: setEditorKey,
     showToast
   });
+
+  // Initialize from props once
+  useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
+
+    // Clear core editor's persisted state so it won't auto-restore an old graph
+    // over the freshly provided LaunchScreen analysis/graph.
+    if ((initialGraph && initialGraph.nodes && initialGraph.edges) || (initialAnalysis && initialAnalysis.nodes)) {
+      try {
+        // Clear core editor's persistence key used by Epic1GraphEditor
+        localStorage.removeItem('promptgraph:state:v1');
+      } catch (e) {
+        console.warn('[Epic1Editor] Failed to clear core persisted state', e);
+      }
+    }
+
+    if (initialGraph && initialGraph.nodes && initialGraph.edges) {
+      try {
+        // Convert initial React Flow graph to PSG and load programmatically
+        const positions = Object.fromEntries(
+          (initialGraph.nodes || []).map(n => [n.id, n.position || { x: 0, y: 0 }])
+        );
+        const psgNodes: GraphNode[] = (initialGraph.nodes || []).map((n) => {
+          const type = n.type ?? 'textBlock';
+          const dataRaw = (n.data ?? {}) as Record<string, unknown>;
+          const labelFromData = typeof dataRaw['label'] === 'string' ? (dataRaw['label'] as string) : undefined;
+          const label = labelFromData;
+          let data: Record<string, unknown> = {};
+          switch (type) {
+            case 'textBlock': {
+              const contentVal = dataRaw['content'];
+              const textVal = dataRaw['text'];
+              const content = typeof contentVal === 'string' ? contentVal : typeof textVal === 'string' ? textVal : (label ?? '');
+              // Ensure content is preserved in all necessary fields
+              data = { 
+                content: content,
+                text: content,  // Store in both fields for compatibility
+                value: content,  // BaseEditableNode expects 'value'
+                nodeType: 'textBlock'
+              };
+              break;
+            }
+            case 'weightedChoice': {
+              const optionsVal = dataRaw['options'];
+              const options = Array.isArray(optionsVal) ? optionsVal : [];
+              data = { 
+                options: options,
+                nodeType: 'weightedChoice'
+              };
+              break;
+            }
+            case 'output': {
+              const outVal = dataRaw['outputName'];
+              const outputName = typeof outVal === 'string' ? outVal : 'output';
+              data = { 
+                outputName: outputName,
+                nodeType: 'output'
+              };
+              break;
+            }
+            default: {
+              data = dataRaw;
+            }
+          }
+          return { id: n.id, type: String(type), label, data };
+        });
+        const psgEdges: GraphEdge[] = (initialGraph.edges || []).map((e, i) => ({ id: e.id || `e-${i}`, source: e.source, target: e.target }));
+        const graph: Graph = { nodes: psgNodes, edges: psgEdges, layout: { positions } };
+        const psg = fromLegacyGraph('Unsaved Graph', graph);
+        const psgText = writePsg(psg);
+        loadFromPsgContent(psgText);
+      } catch (e) {
+        console.warn('[Epic1Editor] Failed to convert initialGraph to PSG; falling back to direct load', e);
+        setCurrentNodes(initialGraph.nodes);
+        setCurrentEdges(initialGraph.edges);
+        try {
+          localStorage.setItem('epic1-graph', JSON.stringify({ nodes: initialGraph.nodes, edges: initialGraph.edges }));
+        } catch (err) {
+          console.warn('[Epic1Editor] Failed to persist initialGraph to localStorage', err);
+        }
+        setEditorKey(prev => prev + 1);
+      }
+      setEditorReady(true);
+      return;
+    }
+
+    if (initialAnalysis && initialAnalysis.nodes) {
+      const nodes: Node[] = [];
+      const edges: Edge[] = [];
+      const horizontalSpacing = 350; // Increased spacing to prevent overlap
+      const verticalSpacing = 200;   // Increased vertical spacing
+
+      initialAnalysis.nodes.forEach((genNode: GeneratedNode, index: number) => {
+        const row = Math.floor(index / 3);
+        const col = index % 3;
+        const n = genNode.node;
+        const content = n.getPreviewText ? n.getPreviewText() : 'Node';
+
+        // Map LaunchScreen node types to Editor node types/data
+        let editorType: Node['type'] = 'default';
+        let data: Partial<NodeData> & { label?: string } = { label: content };
+
+        switch (n.nodeType) {
+          case 'Text': {
+            editorType = 'textBlock';
+            data = {
+              nodeType: 'textBlock',
+              content: content,  // Use the actual content
+              text: content,      // Store in both fields for compatibility
+              value: content,     // BaseEditableNode expects 'value'
+              label: content.length > 30 ? content.substring(0, 27) + '...' : content
+            };
+            break;
+          }
+          case 'Choice': {
+            editorType = 'weightedChoice';
+            // For choices, split the content by "or" to create options
+            const options = content.includes(' or ') 
+              ? content.split(' or ').map((opt, i) => ({
+                  id: `opt-${index}-${i}`,
+                  text: opt.trim(),
+                  weight: 100,
+                  hasBranch: false
+                }))
+              : [{ id: `opt-${index}`, text: content, weight: 100, hasBranch: false }];
+            
+            data = {
+              nodeType: 'weightedChoice',
+              options: options,
+              label: 'Choice'
+            };
+            break;
+          }
+          case 'Variable': {
+            editorType = 'textBlock';
+            const varName = n.variableName || 'var';
+            const varDisplay = `{{${varName}}}`;
+            data = {
+              nodeType: 'textBlock',
+              content: varDisplay,
+              text: varDisplay,
+              label: `Variable: ${varName}`
+            };
+            break;
+          }
+          case 'Output': {
+            editorType = 'output';
+            data = {
+              nodeType: 'output',
+              outputName: 'output',
+              label: 'Output'
+            };
+            break;
+          }
+          case 'Concat': {
+            editorType = 'concat';
+            data = {
+              nodeType: 'concat',
+              separator: ', ',  // Default separator
+              value: ', ',       // BaseEditableNode expects 'value'
+              label: 'Concat'
+            };
+            break;
+          }
+          default: {
+            editorType = 'default';
+            data = { label: content };
+          }
+        }
+
+        nodes.push({
+          id: n.id,
+          position: { x: col * horizontalSpacing + 200, y: row * verticalSpacing + 120 },
+          data,
+          type: editorType
+        });
+      });
+
+      if (nodes.length > 1) {
+        for (let i = 0; i < nodes.length - 1; i++) {
+          edges.push({
+            id: `init-e-${i}`,
+            source: nodes[i].id,
+            target: nodes[i + 1].id,
+            type: 'smoothstep',
+            sourceHandle: 'source',
+            targetHandle: 'target'
+          });
+        }
+      }
+
+      try {
+        // Convert the LaunchScreen-derived React Flow graph to PSG and load
+        const positions = Object.fromEntries(
+          nodes.map(n => [n.id, n.position || { x: 0, y: 0 }])
+        );
+        const psgNodes: GraphNode[] = nodes.map((n) => {
+          const type = n.type ?? 'textBlock';
+          const dataRaw = (n.data ?? {}) as Record<string, unknown>;
+          const labelFromData = typeof dataRaw['label'] === 'string' ? (dataRaw['label'] as string) : undefined;
+          const label = labelFromData;
+          let data: Record<string, unknown> = {};
+          switch (type) {
+            case 'textBlock': {
+              const contentVal = dataRaw['content'];
+              const textVal = dataRaw['text'];
+              const content = typeof contentVal === 'string' ? contentVal : typeof textVal === 'string' ? textVal : (label ?? '');
+              data = { content };
+              break;
+            }
+            case 'weightedChoice': {
+              const optionsVal = dataRaw['options'];
+              const options = Array.isArray(optionsVal) ? optionsVal : [];
+              data = { options };
+              break;
+            }
+            case 'output': {
+              const outVal = dataRaw['outputName'];
+              const outputName = typeof outVal === 'string' ? outVal : 'output';
+              data = { outputName };
+              break;
+            }
+            default: {
+              data = dataRaw;
+            }
+          }
+          return { id: n.id, type: String(type), label, data };
+        });
+        const psgEdges: GraphEdge[] = edges.map((e, i) => ({ id: e.id || `init-e-${i}`, source: e.source, target: e.target }));
+        const graph: Graph = { nodes: psgNodes, edges: psgEdges, layout: { positions } };
+        const psg = fromLegacyGraph('Unsaved Graph', graph);
+        const psgText = writePsg(psg);
+        loadFromPsgContent(psgText);
+      } catch (e) {
+        console.warn('[Epic1Editor] Failed to convert analysis graph to PSG; falling back to direct load', e);
+        setCurrentNodes(nodes);
+        setCurrentEdges(edges);
+        try {
+          localStorage.setItem('epic1-graph', JSON.stringify({ nodes, edges }));
+        } catch (err) {
+          console.warn('[Epic1Editor] Failed to persist graph to localStorage', err);
+        }
+        setEditorKey(prev => prev + 1);
+      }
+      setEditorReady(true);
+    }
+    // If no initial input, allow editor to render immediately
+    if (!hasInitialInput) {
+      setEditorReady(true);
+    }
+  }, [initialGraph, initialAnalysis, hasInitialInput, loadFromPsgContent]);
+  
+
+  // View state
+  const [gridVisible, setGridVisible] = useState(true);
+  const [minimapVisible, setMinimapVisible] = useState(false);
+  const [inspectorVisible, setInspectorVisible] = useState(true);
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | 'cinema'>(
+    'cinema'
+  );
+
+  
 
   // Edit operations hook
   const {
@@ -455,7 +721,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     const loadComponents = async () => {
       try {
         const [epic1Module, menuBarModule] = await Promise.all([
-          import('@promptscape/core/components/epic1'),
+          import('@promptscape/core/components/epic1/Epic1GraphEditor'),
           showMenuBar
             ? import('@promptscape/core/components/MenuBar/ProfessionalMenuBar')
             : Promise.resolve(null)
@@ -468,7 +734,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         }
 
         if (menuBarModule?.ProfessionalMenuBar) {
-          setMenuBarComponent(() => menuBarModule.ProfessionalMenuBar);
+          setMenuBarComponent(
+            () => menuBarModule.ProfessionalMenuBar as unknown as React.ComponentType<Record<string, unknown>>
+          );
         }
       } catch (err) {
         if (mounted) {
@@ -494,6 +762,12 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
   if (isComponentsLoading || !EditorComponent) {
     return <div className="loading-message">Loading...</div>;
+  }
+
+  // When launching with an initial analysis/graph, wait until we've cleared core persistence
+  // and prepared the initial nodes/edges before rendering the core editor to avoid auto-restore.
+  if (!editorReady) {
+    return <div className="loading-message">Preparing editor…</div>;
   }
 
   return (
@@ -560,16 +834,18 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
       )}
 
       <div style={{ flex: 1, position: 'relative', display: 'flex' }}>
-        <EditorComponent
-          key={editorKey}
-          initialNodes={currentNodes}
-          initialEdges={currentEdges}
-          showPreview={showPreview}
-          showAssetLibrary={assetLibraryVisible}
-          assetLibraryPosition={assetLibraryPosition}
-          onNodesChange={handleNodesChange}
-          onEdgesChange={handleEdgesChange}
-        />
+        {editorReady && (
+          <EditorComponent
+            key={editorKey}
+            initialNodes={currentNodes}
+            initialEdges={currentEdges}
+            showPreview={showPreview}
+            showAssetLibrary={assetLibraryVisible}
+            assetLibraryPosition={assetLibraryPosition}
+            onNodesChange={handleNodesChange}
+            onEdgesChange={handleEdgesChange}
+          />
+        )}
       </div>
 
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />

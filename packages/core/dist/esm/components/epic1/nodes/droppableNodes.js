@@ -7,6 +7,8 @@ import { EnhancedBranchingNode } from './EnhancedBranchingNode';
 import { ConcatNode } from './ConcatNode';
 import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
+import { PostItNote } from './PostItNote';
+import { BoundingBox } from './BoundingBox';
 import { epic1NodeTypes } from './index';
 // Create droppable versions of all node types
 export const DroppableTextBlockNode = withDroppableNode(TextBlockNode);
@@ -14,6 +16,10 @@ export const DroppableWeightedChoiceNode = withDroppableNode(EnhancedBranchingNo
 export const DroppableConcatNode = withDroppableNode(ConcatNode);
 export const DroppableVariableNode = withDroppableNode(VariableNode);
 export const DroppableOutputNode = withDroppableNode(OutputNode);
+// PostItNote and BoundingBox don't need droppable behavior but should be included
+// so they work properly in the editor
+export const DroppablePostItNote = PostItNote;
+export const DroppableBoundingBox = BoundingBox;
 // Export enhanced node types mapping
 // Include ALL base node types, overriding only the ones that support droppable behavior
 export const droppableEpic1NodeTypes = {
@@ -25,4 +31,6 @@ export const droppableEpic1NodeTypes = {
     setVariable: DroppableVariableNode,
     getVariable: DroppableVariableNode,
     output: DroppableOutputNode,
+    postItNote: DroppablePostItNote,
+    boundingBox: DroppableBoundingBox,
 };

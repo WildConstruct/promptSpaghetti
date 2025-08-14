@@ -4,7 +4,7 @@ import { Handle, Position, useReactFlow } from 'reactflow';
 import ReactMarkdown from 'react-markdown';
 import './PostItNote.css';
 const colorMap = {
-    yellow: '#fff740',
+    yellow: '#d4c896', // Desaturated yellow, easier on eyes in dark mode
     blue: '#40d9ff',
     green: '#40ff90',
     pink: '#ff40a0',
@@ -15,7 +15,7 @@ const colorMap = {
  * Post-it Note component for annotations
  * Story 1.25: Post-it Notes/Comments
  */
-export const PostItNote = ({ data, selected, id }) => {
+export const PostItNote = ({ data, selected, id, xPos, yPos, draggable = true, measured }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [text, setText] = useState(data.text || '');
     const [isResizing, setIsResizing] = useState(false);
@@ -28,9 +28,32 @@ export const PostItNote = ({ data, selected, id }) => {
     const nodeRef = useRef(null);
     const textareaRef = useRef(null);
     const { setNodes, getNode, getNodes } = useReactFlow();
+    // Ensure the node has its dimensions set in ReactFlow on mount
+    useEffect(() => {
+        setNodes((nodes) => nodes.map((node) => node.id === id
+            ? {
+                ...node,
+                width: data.width || 200,
+                height: data.height || 150,
+                measured: {
+                    width: data.width || 200,
+                    height: data.height || 150
+                }
+            }
+            : node));
+    }, []);
     useEffect(() => {
         sizeRef.current = size;
     }, [size]);
+    // Update size when data changes (e.g., from undo/redo or external updates)
+    useEffect(() => {
+        if (data.width !== undefined && data.height !== undefined) {
+            setSize({
+                width: data.width,
+                height: data.height
+            });
+        }
+    }, [data.width, data.height]);
     // Get attached node position for visual connection
     const attachedNode = data.attachedTo ? getNode(data.attachedTo) : null;
     // Handle drag end to check for nearby nodes to attach to
@@ -135,41 +158,93 @@ export const PostItNote = ({ data, selected, id }) => {
     const handleDelete = useCallback(() => {
         setNodes((nodes) => nodes.filter((node) => node.id !== id));
     }, [id, setNodes]);
-    // Handle resize
+    // Handle resize - optimized for performance
     const handleResizeStart = useCallback((e) => {
         e.stopPropagation();
         e.preventDefault();
+        // Stop the event from bubbling to ReactFlow
+        e.nativeEvent.stopImmediatePropagation();
         setIsResizing(true);
-        const startX = e.clientX;
-        const startY = e.clientY;
-        const startWidth = size.width;
-        const startHeight = size.height;
+        // Set node as non-draggable during resize
+        setNodes((nodes) => nodes.map((node) => node.id === id
+            ? { ...node, draggable: false }
+            : node));
+        const startX = ('clientX' in e) ? e.clientX : e.clientX;
+        const startY = ('clientY' in e) ? e.clientY : e.clientY;
+        const startWidth = sizeRef.current.width; // Use ref to get current size
+        const startHeight = sizeRef.current.height;
+        // Track the new size without updating state on every move
+        let currentWidth = startWidth;
+        let currentHeight = startHeight;
+        let hasStartedResizing = false;
+        const THRESHOLD = 5; // Pixels of movement required before resize starts
         const handleMouseMove = (ev) => {
             ev.preventDefault();
-            const newWidth = Math.max(150, startWidth + ev.clientX - startX);
-            const newHeight = Math.max(100, startHeight + ev.clientY - startY);
-            setSize({ width: newWidth, height: newHeight });
+            ev.stopPropagation();
+            const clientX = ('clientX' in ev) ? ev.clientX : ev.clientX;
+            const clientY = ('clientY' in ev) ? ev.clientY : ev.clientY;
+            const deltaX = clientX - startX;
+            const deltaY = clientY - startY;
+            // Check if we've moved enough to start resizing
+            if (!hasStartedResizing) {
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                if (distance < THRESHOLD) {
+                    return; // Don't resize yet
+                }
+                hasStartedResizing = true;
+            }
+            currentWidth = Math.max(150, startWidth + deltaX);
+            currentHeight = Math.max(100, startHeight + deltaY);
+            // Update the DOM directly for smooth visual feedback
+            if (nodeRef.current) {
+                nodeRef.current.style.width = `${currentWidth}px`;
+                nodeRef.current.style.height = `${currentHeight}px`;
+                nodeRef.current.style.minWidth = `${currentWidth}px`;
+                nodeRef.current.style.minHeight = `${currentHeight}px`;
+                nodeRef.current.style.maxWidth = `${currentWidth}px`;
+                nodeRef.current.style.maxHeight = `${currentHeight}px`;
+            }
         };
         const handleMouseUp = () => {
             setIsResizing(false);
-            document.removeEventListener('mousemove', handleMouseMove);
-            document.removeEventListener('mouseup', handleMouseUp);
-            // Persist final size to node data
-            const finalSize = sizeRef.current;
+            // Now commit the final size to state and ReactFlow
+            const finalWidth = currentWidth;
+            const finalHeight = currentHeight;
+            setSize({ width: finalWidth, height: finalHeight });
+            // Update ReactFlow node with final dimensions
             setNodes((nodes) => nodes.map((node) => node.id === id
                 ? {
                     ...node,
+                    draggable: true, // Restore draggable
+                    width: finalWidth,
+                    height: finalHeight,
+                    measured: {
+                        width: finalWidth,
+                        height: finalHeight
+                    },
+                    style: {
+                        ...node.style,
+                        width: `${finalWidth}px`,
+                        height: `${finalHeight}px`,
+                    },
                     data: {
                         ...node.data,
-                        width: finalSize.width,
-                        height: finalSize.height,
+                        width: finalWidth,
+                        height: finalHeight,
                     },
                 }
                 : node));
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+            document.removeEventListener('pointermove', handleMouseMove);
+            document.removeEventListener('pointerup', handleMouseUp);
         };
+        // Add both mouse and pointer event listeners for better compatibility
         document.addEventListener('mousemove', handleMouseMove, { passive: false });
         document.addEventListener('mouseup', handleMouseUp);
-    }, [id, setNodes, size]);
+        document.addEventListener('pointermove', handleMouseMove, { passive: false });
+        document.addEventListener('pointerup', handleMouseUp);
+    }, [id, setNodes]);
     // Focus textarea when entering edit mode
     useEffect(() => {
         if (isEditing && textareaRef.current) {
@@ -187,17 +262,25 @@ export const PostItNote = ({ data, selected, id }) => {
         }
     }, [handleSave, handleCancel]);
     const backgroundColor = colorMap[data.color || 'yellow'];
-    return (_jsxs("div", { ref: nodeRef, className: `post-it-note ${selected ? 'selected' : ''} ${isCollapsed ? 'collapsed' : ''}`, style: {
-            backgroundColor,
-            width: isCollapsed ? 200 : size.width,
-            height: isCollapsed ? 40 : size.height,
-            boxShadow: selected ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
-            cursor: isEditing ? 'text' : 'move'
-        }, onDoubleClick: handleDoubleClick, onMouseUp: () => {
+    // Apply size directly via style - this ensures the visual update happens
+    const nodeStyle = {
+        backgroundColor,
+        width: `${isCollapsed ? 200 : size.width}px`,
+        height: `${isCollapsed ? 40 : size.height}px`,
+        minWidth: `${isCollapsed ? 200 : size.width}px`,
+        minHeight: `${isCollapsed ? 40 : size.height}px`,
+        maxWidth: `${isCollapsed ? 200 : size.width}px`,
+        maxHeight: `${isCollapsed ? 40 : size.height}px`,
+        boxShadow: selected ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.15)',
+        cursor: isEditing ? 'text' : (isResizing ? 'nwse-resize' : 'move'),
+        position: 'relative',
+        overflow: 'hidden'
+    };
+    return (_jsxs("div", { ref: nodeRef, className: `post-it-note ${selected ? 'selected' : ''} ${isCollapsed ? 'collapsed' : ''} ${isResizing ? 'resizing' : ''}`, style: nodeStyle, onDoubleClick: handleDoubleClick, onMouseUp: () => {
             if (!isResizing) {
                 handleDragEnd();
             }
-        }, "data-attached": !!data.attachedTo, "data-color": data.color || 'yellow', children: [_jsx("button", { className: "post-it-delete", onClick: (e) => {
+        }, "data-attached": !!data.attachedTo, "data-color": data.color || 'yellow', "data-resizing": isResizing, children: [_jsx("button", { className: "post-it-delete", onClick: (e) => {
                     e.stopPropagation();
                     handleDelete();
                 }, title: "Delete note", children: "\u00D7" }), _jsx("button", { className: "post-it-collapse", onClick: (e) => {
@@ -207,9 +290,17 @@ export const PostItNote = ({ data, selected, id }) => {
                         width: '100%',
                         height: '100%',
                         backgroundColor: 'transparent'
-                    } })) : (_jsx("div", { className: "post-it-markdown", children: text ? (_jsx(ReactMarkdown, { children: text })) : (_jsx("div", { className: "post-it-placeholder", children: "Double-click to add note..." })) })) })), !isCollapsed && !isEditing && (_jsx("div", { className: "post-it-resize nodrag nopan nowheel", onMouseDown: handleResizeStart, onPointerDown: handleResizeStart, onClick: (e) => e.stopPropagation(), onDoubleClick: (e) => e.stopPropagation(), style: {
-                    cursor: isResizing ? 'nwse-resize' : 'nwse-resize'
-                } })), data.attachedTo && (_jsx(Handle, { type: "target", position: Position.Left, id: "attach", className: "post-it-handle", style: {
+                    } })) : (_jsx("div", { className: "post-it-markdown", children: text ? (_jsx(ReactMarkdown, { children: text })) : (_jsx("div", { className: "post-it-placeholder", children: "Double-click to add note..." })) })) })), !isCollapsed && !isEditing && (_jsx("div", { className: "post-it-resize nodrag nopan", onMouseDown: handleResizeStart, onPointerDown: handleResizeStart, onClick: (e) => e.stopPropagation(), onDoubleClick: (e) => e.stopPropagation(), style: {
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: '20px',
+                    height: '20px',
+                    cursor: 'nwse-resize',
+                    zIndex: 1000,
+                    pointerEvents: 'auto',
+                    opacity: isResizing ? 1 : (selected ? 0.7 : 0.3)
+                }, title: "Drag to resize" })), data.attachedTo && (_jsx(Handle, { type: "target", position: Position.Left, id: "attach", className: "post-it-handle", style: {
                     background: 'transparent',
                     border: 'none',
                     visibility: 'hidden' // Hide the handle visually

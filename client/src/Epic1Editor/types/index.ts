@@ -38,6 +38,62 @@ export interface ProfessionalMenuBarProps {
 }
 
 /**
+ * Superset of props actually passed by Epic1EditorContainer to the Menu Bar.
+ * This avoids type mismatch with the external component while keeping type safety here.
+ */
+export interface Epic1MenuBarProps {
+  // File
+  onNew: () => void;
+  onOpen: () => void;
+  onSave: () => void;
+  onSaveAs: () => void;
+  onImport: () => void;
+  onExport: (format: 'json' | 'png' | 'svg' | 'pdf') => void;
+  onQuit: () => void;
+  // Edit
+  onUndo: () => void;
+  onRedo: () => void;
+  onCut: () => void;
+  onCopy: () => void;
+  onPaste: () => void;
+  onSelectAll: () => void;
+  onFind: () => void;
+  onPreferences: () => void;
+  // View
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onFitView: () => void;
+  onToggleGrid: () => void;
+  onToggleMinimap: () => void;
+  onToggleInspector: () => void;
+  onToggleAssetLibrary: () => void;
+  onToggleFullscreen: () => void;
+  onToggleTheme: () => void;
+  // Debug
+  onDevTools: () => void;
+  onValidateGraph: () => void;
+  onPerformanceMonitor: () => void;
+  onConsoleToggle: () => void;
+  // Help
+  onDocumentation: () => void;
+  onKeyboardShortcuts: () => void;
+  onAbout: () => void;
+  onSupport: () => void;
+  onReportBug: () => void;
+  // State
+  canUndo: boolean;
+  canRedo: boolean;
+  hasSelection: boolean;
+  nodes: Node[];
+  edges: Edge[];
+  gridVisible: boolean;
+  minimapVisible: boolean;
+  inspectorVisible: boolean;
+  assetLibraryVisible: boolean;
+  theme: 'light' | 'dark' | 'cinema';
+}
+
+/**
  * Toast notification types
  */
 export type ToastType = 'success' | 'error' | 'warning' | 'info';

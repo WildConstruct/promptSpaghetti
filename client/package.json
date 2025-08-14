@@ -13,6 +13,7 @@
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --passWithNoTests"
   },
   "dependencies": {
+    "@promptscape/core": "workspace:^",
     "@heroicons/react": "^2.2.0",
     "@prompt/asset-browser": "workspace:^",
     "@supabase/supabase-js": "^2.54.0",

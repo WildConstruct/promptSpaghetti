@@ -13,6 +13,7 @@ import ReactFlow, {
   Panel,
   useReactFlow,
   ReactFlowInstance,
+  MiniMap,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { DndProvider } from 'react-dnd';
@@ -20,7 +21,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { epic1NodeTypes } from './nodes';
 import type { EditableNodeData } from './nodes';
 import { droppableEpic1NodeTypes } from './nodes/droppableNodes';
-import { CustomMinimap } from './CustomMinimap';
 import { ConnectionFeedback, useConnectionValidation } from './ConnectionFeedback';
 import { ConnectionToast, useToast } from './ConnectionToast';
 import { KeyboardShortcuts } from './KeyboardShortcuts';
@@ -42,6 +42,8 @@ import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInter
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
 import { edgeTypes } from './EdgeRenderingFix';
+import { AuthModal } from '../auth/AuthModal';
+import { supabase } from '../../utils/supabaseClient';
 import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
@@ -293,9 +295,34 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [contextMenuNodeId, setContextMenuNodeId] = useState<string | null>(null);
   const [saveAsPresetNodeId, setSaveAsPresetNodeId] = useState<string | null>(null);
   const [customPresets, setCustomPresets] = useState<Preset[]>([]);
+  const [isPromptWizardOpen, setIsPromptWizardOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [pendingWizardNodes, setPendingWizardNodes] = useState<{nodes: Node<EditableNodeData>[], edges: Edge[]} | null>(null);
   
   // Toast system for error messages (moved before useEffects that use it)
   const { toasts, showToast, dismissToast } = useToast();
+  
+  // Check for current user on mount
+  useEffect(() => {
+    const checkUser = async () => {
+      if (supabase) {
+        const { data: { user } } = await supabase.auth.getUser();
+        setCurrentUser(user);
+      }
+    };
+    
+    checkUser();
+    
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event, session) => {
+      setCurrentUser(session?.user || null);
+    }) || { data: { subscription: null } };
+    
+    return () => {
+      subscription?.unsubscribe();
+    };
+  }, []);
   
   // Show toast when state is restored (only once on mount)
   useEffect(() => {
@@ -551,18 +578,20 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       showToast('info', `Deleted ${nodeIds.length} node(s)`);
     } else {
       // Delete selected nodes from current state
+      const selectedNodeIds: string[] = [];
       setNodes((nds) => {
         const selectedNodes = nds.filter(n => n.selected);
         if (selectedNodes.length === 0) return nds;
-        const nodeIds = selectedNodes.map(n => n.id);
-        showToast('info', `Deleted ${nodeIds.length} node(s)`);
-        return nds.filter(n => !nodeIds.includes(n.id));
+        selectedNodes.forEach(n => selectedNodeIds.push(n.id));
+        showToast('info', `Deleted ${selectedNodes.length} node(s)`);
+        return nds.filter(n => !n.selected);
       });
-      setEdges((eds) => {
-        const selectedNodes = nodes.filter(n => n.selected);
-        const nodeIds = selectedNodes.map(n => n.id);
-        return eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target));
-      });
+      // Clean up edges connected to deleted nodes
+      if (selectedNodeIds.length > 0) {
+        setEdges((eds) => eds.filter(e => 
+          !selectedNodeIds.includes(e.source) && !selectedNodeIds.includes(e.target)
+        ));
+      }
     }
   }, [nodes, setNodes, setEdges, showToast]);
 
@@ -1362,14 +1391,34 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           <Background variant="dots" gap={16} size={1} color="#333333" />
           <Controls />
           {nodes.length > 0 && (
-            <CustomMinimap 
-              nodes={nodes}
-              edges={edges}
+            <MiniMap 
+              nodeColor={(node) => {
+                // Use muted colors that match the dark theme
+                switch (node.type) {
+                  case 'textBlock': return '#4a4a4a';
+                  case 'weightedChoice': return '#5a5a4a';
+                  case 'enhancedBranching': return '#5a5a4a';
+                  case 'concat': return '#3a5a4a';
+                  case 'setVariable': return '#4a3a5a';
+                  case 'getVariable': return '#4a3a5a';
+                  case 'variable': return '#4a3a5a';
+                  case 'output': return '#5a3a3a';
+                  case 'postItNote': return '#5a5a3a';
+                  case 'group': return '#2a2a2a';
+                  default: return '#4a4a4a';
+                }
+              }}
+              nodeStrokeWidth={2}
+              nodeStrokeColor="#333"
+              pannable
+              zoomable
               style={{ 
+                position: 'absolute',
                 left: nodePaletteCollapsed ? 50 : 210,
                 top: 70,
-                width: '200px',
-                height: '120px',
+                width: 200,
+                height: 120,
+                background: 'rgba(40, 40, 40, 0.9)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
                 zIndex: 1000,
                 transition: 'left 0.3s ease-in-out'
@@ -1380,13 +1429,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           {/* Epic 1 specific controls */}
           <Panel position="top-right">
             <div className="epic1-controls">
-              <button 
-                className="epic1-preview-toggle"
-                onClick={handleTogglePreview}
-                title="Toggle preview (P)"
-              >
-                {isPreviewVisible ? '👁️' : '👁️‍🗨️'}
-              </button>
               {onExecute && (
                 <button 
                   className="epic1-execute-button"
@@ -1397,6 +1439,110 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               )}
             </div>
           </Panel>
+          
+          {/* Auth and Wizard buttons positioned above NodePalette */}
+          <div style={{
+            position: 'absolute',
+            bottom: '20px',
+            left: nodePaletteCollapsed ? '68px' : '220px',
+            zIndex: 15,
+            transition: 'left 0.3s ease'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              padding: '12px',
+              background: 'rgba(26, 26, 26, 0.95)',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+            }}>
+              {/* Auth button */}
+              {currentUser ? (
+                <button 
+                  className="epic1-auth-button"
+                  onClick={async () => {
+                    await supabase?.auth.signOut();
+                    showToast('success', 'Logged out successfully');
+                  }}
+                  title="Sign out"
+                  style={{
+                    padding: '10px 16px',
+                    background: '#333',
+                    border: '1px solid #444',
+                    borderRadius: '6px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    width: '160px',
+                    justifyContent: 'center',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#444'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = '#333'}
+                >
+                  <span style={{ fontSize: '12px', opacity: 0.8 }}>
+                    {currentUser.email?.split('@')[0]}
+                  </span>
+                  🚪
+                </button>
+              ) : (
+                <button 
+                  className="epic1-auth-button"
+                  onClick={() => setIsAuthModalOpen(true)}
+                  title="Sign in"
+                  style={{
+                    padding: '10px 16px',
+                    background: '#2563eb',
+                    border: 'none',
+                    borderRadius: '6px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    width: '160px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    transition: 'background 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = '#1d4ed8'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = '#2563eb'}
+                >
+                  🔐 Sign In
+                </button>
+              )}
+              
+              <button 
+                className="epic1-wizard-button"
+                onClick={() => setIsPromptWizardOpen(true)}
+                title="Open Prompt Wizard (W)"
+                style={{
+                  padding: '10px 16px',
+                  background: '#9d70f7',
+                  border: 'none',
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  width: '160px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  transition: 'background 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#8a5fe6'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#9d70f7'}
+              >
+                🪄 Wizard
+              </button>
+            </div>
+          </div>
 
           {/* Instructions panel */}
           <Panel position="bottom-center">
@@ -1543,6 +1689,361 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         nodeType={saveAsPresetNode?.type || 'textBlock'}
         onClose={() => setSaveAsPresetNodeId(null)}
         onSave={handleSavePreset}
+      />
+      
+      {/* Prompt Wizard Dialog */}
+      {isPromptWizardOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000
+          }}
+          onClick={() => setIsPromptWizardOpen(false)}
+        >
+          <div 
+            style={{
+              background: '#1a1a1a',
+              border: '1px solid #333',
+              borderRadius: '8px',
+              padding: '20px',
+              width: '600px',
+              maxWidth: '90%',
+              maxHeight: '80%',
+              overflow: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{ margin: '0 0 16px 0', color: '#9d70f7' }}>🪄 Prompt Wizard</h2>
+            <p style={{ color: '#999', marginBottom: '16px' }}>
+              Paste your prompt and I'll help you create variations automatically.
+            </p>
+            <div style={{ 
+              background: '#2a2a2a', 
+              border: '1px solid #444', 
+              borderRadius: '4px', 
+              padding: '12px', 
+              marginBottom: '16px',
+              fontSize: '13px',
+              color: '#aaa'
+            }}>
+              <strong style={{ color: '#9d70f7' }}>Tips for better results:</strong>
+              <ul style={{ margin: '8px 0 0 0', paddingLeft: '20px' }}>
+                <li>Use commas to separate variations: "A brave, courageous, fearless knight"</li>
+                <li>Use "or" for alternatives: "knight or warrior or soldier"</li>
+                <li>Use parentheses for optional parts: "A (brave) knight ventures into the (dark) forest"</li>
+                <li>Combine techniques: "A brave knight, fearless warrior ventures into the dark, mysterious forest"</li>
+              </ul>
+            </div>
+            <textarea
+              id="prompt-wizard-input"
+              placeholder="Paste your prompt here... (e.g., A brave knight ventures into the dark forest)"
+              style={{
+                width: '100%',
+                height: '120px',
+                background: '#2a2a2a',
+                border: '1px solid #444',
+                borderRadius: '4px',
+                padding: '8px',
+                color: '#fff',
+                fontSize: '14px',
+                resize: 'vertical'
+              }}
+              autoFocus
+            />
+            <div style={{ marginTop: '16px', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setIsPromptWizardOpen(false)}
+                style={{
+                  padding: '8px 16px',
+                  background: '#333',
+                  border: '1px solid #444',
+                  borderRadius: '4px',
+                  color: '#fff',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  const input = (document.getElementById('prompt-wizard-input') as HTMLTextAreaElement)?.value;
+                  if (!input || !input.trim()) {
+                    showToast('warning', 'Please enter a prompt to analyze');
+                    return;
+                  }
+                  
+                  try {
+                    const { promptParser } = await import('../../runtime/nodes/epic1/PromptParser');
+                    const analysis = promptParser.parse(input);
+                    
+                    if (!analysis.nodes || analysis.nodes.length === 0) {
+                      showToast('warning', 'Could not parse any variations from your prompt');
+                      return;
+                    }
+                    
+                    // Generate nodes from the analysis
+                    const newNodes: Node<EditableNodeData>[] = [];
+                    const newEdges: Edge[] = [];
+                    
+                    // Calculate positions for new nodes
+                    const startX = 100;
+                    const startY = 100;
+                    const nodeSpacing = 250;
+                    const rowHeight = 150;
+                    const nodesPerRow = 3;
+                    
+                    analysis.nodes.forEach((genNode, index) => {
+                      const row = Math.floor(index / nodesPerRow);
+                      const col = index % nodesPerRow;
+                      const nodeId = `wizard-${Date.now()}-${index}`;
+                      const position = { 
+                        x: startX + (col * nodeSpacing), 
+                        y: startY + (row * rowHeight) 
+                      };
+                      
+                      // Get the actual node from the generated node wrapper
+                      const runtimeNode = genNode.node;
+                      const nodeType = runtimeNode.getNodeType();
+                      let flowNode: Node<EditableNodeData> | null = null;
+                      
+                      // Create the appropriate React Flow node based on the runtime node type
+                      if (nodeType === 'TextBlock' || nodeType === 'Text') {
+                        const value = runtimeNode.getCurrentValue();
+                        flowNode = {
+                          id: nodeId,
+                          type: 'textBlock',
+                          position,
+                          data: {
+                            nodeType: 'textBlock',
+                            value: value,
+                            content: value,
+                            text: value
+                          }
+                        };
+                      } else if (nodeType === 'WeightedChoice' || nodeType === 'Choice') {
+                        const value = runtimeNode.getCurrentValue();
+                        const options = value.options ? value.options.map((opt: any, idx: number) => ({
+                          id: `opt-${idx}`,
+                          text: opt.text || '',
+                          weight: opt.weight || 1,
+                          hasBranch: false
+                        })) : [];
+                        
+                        flowNode = {
+                          id: nodeId,
+                          type: 'weightedChoice',
+                          position,
+                          data: {
+                            nodeType: 'weightedChoice',
+                            value: JSON.stringify(options),
+                            options: options
+                          }
+                        };
+                      } else if (nodeType === 'Concat') {
+                        const value = runtimeNode.getCurrentValue();
+                        flowNode = {
+                          id: nodeId,
+                          type: 'concat',
+                          position,
+                          data: {
+                            nodeType: 'concat',
+                            value: value,
+                            separator: value.separator || ' '
+                          }
+                        };
+                      } else if (nodeType === 'Variable') {
+                        const value = runtimeNode.getCurrentValue();
+                        flowNode = {
+                          id: nodeId,
+                          type: 'setVariable',
+                          position,
+                          data: {
+                            nodeType: 'setVariable',
+                            value: value,
+                            variableName: value.name || 'variable',
+                            variableValue: value.value || ''
+                          }
+                        };
+                      } else if (nodeType === 'Output') {
+                        flowNode = {
+                          id: nodeId,
+                          type: 'output',
+                          position,
+                          data: {
+                            nodeType: 'output',
+                            value: '',
+                            outputName: 'output'
+                          }
+                        };
+                      }
+                      
+                      if (flowNode) {
+                        newNodes.push(flowNode);
+                      }
+                    });
+                    
+                    // Connect nodes in sequence
+                    for (let i = 0; i < newNodes.length - 1; i++) {
+                      newEdges.push({
+                        id: `wizard-edge-${i}`,
+                        source: newNodes[i].id,
+                        target: newNodes[i + 1].id,
+                        type: 'smoothstep'
+                      });
+                    }
+                    
+                    // Check if we have existing nodes
+                    const hasExistingNodes = nodes.length > 0;
+                    if (hasExistingNodes) {
+                      // Store the pending nodes and show dialog
+                      setPendingWizardNodes({ nodes: newNodes, edges: newEdges });
+                      setIsPromptWizardOpen(false);
+                    } else {
+                      // No existing nodes, just add
+                      setNodes(newNodes);
+                      setEdges(newEdges);
+                      showToast('success', `Created ${newNodes.length} nodes from your prompt!`);
+                      setIsPromptWizardOpen(false);
+                    }
+                  } catch (error) {
+                    console.error('Error parsing prompt:', error);
+                    const errorMsg = error instanceof Error ? error.message : String(error);
+                    showToast('error', `Failed to parse prompt: ${errorMsg}`);
+                  }
+                }}
+                style={{
+                  padding: '8px 16px',
+                  background: '#9d70f7',
+                  border: 'none',
+                  borderRadius: '4px',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+              >
+                Generate Nodes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Replace/Append Dialog */}
+      {pendingWizardNodes && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10001
+          }}
+        >
+          <div 
+            style={{
+              background: '#1a1a1a',
+              border: '1px solid #333',
+              borderRadius: '8px',
+              padding: '24px',
+              width: '400px',
+              maxWidth: '90%'
+            }}
+          >
+            <h3 style={{ margin: '0 0 16px 0', color: '#fff' }}>How would you like to add the nodes?</h3>
+            <p style={{ color: '#999', marginBottom: '20px' }}>
+              You have an existing graph. Would you like to replace it or add the new nodes alongside?
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => {
+                  // Cancel - do nothing
+                  setPendingWizardNodes(null);
+                }}
+                style={{
+                  padding: '8px 16px',
+                  background: '#333',
+                  border: 'none',
+                  borderRadius: '4px',
+                  color: '#fff',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  // Append to existing nodes with offset
+                  const maxX = Math.max(...nodes.map(n => n.position.x), 0);
+                  const offsetNodes = pendingWizardNodes.nodes.map(node => ({
+                    ...node,
+                    position: {
+                      x: node.position.x + maxX + 300,
+                      y: node.position.y
+                    }
+                  }));
+                  setNodes((nds) => [...nds, ...offsetNodes]);
+                  setEdges((eds) => [...eds, ...pendingWizardNodes.edges]);
+                  showToast('success', `Added ${pendingWizardNodes.nodes.length} nodes to your graph!`);
+                  setPendingWizardNodes(null);
+                }}
+                style={{
+                  padding: '8px 16px',
+                  background: '#2563eb',
+                  border: 'none',
+                  borderRadius: '4px',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+              >
+                Add to Graph
+              </button>
+              <button
+                onClick={() => {
+                  // Replace existing nodes
+                  setNodes(pendingWizardNodes.nodes);
+                  setEdges(pendingWizardNodes.edges);
+                  showToast('success', `Replaced graph with ${pendingWizardNodes.nodes.length} new nodes!`);
+                  setPendingWizardNodes(null);
+                }}
+                style={{
+                  padding: '8px 16px',
+                  background: '#dc2626',
+                  border: 'none',
+                  borderRadius: '4px',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+              >
+                Replace Graph
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={(user) => {
+          setCurrentUser(user);
+          showToast('success', `Welcome ${user.email}!`);
+        }}
       />
     </div>
   );

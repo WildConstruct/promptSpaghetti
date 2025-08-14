@@ -126,13 +126,13 @@ export class SmartNodePositioner {
       }
 
       // Group consecutive text blocks
-      if (node.node.getType() === Epic1NodeType.TextBlock) {
+      if (node.node.getNodeType() === Epic1NodeType.TextBlock) {
         for (let j = i + 1; j < nodes.length; j++) {
           if (visited.has(j)) continue;
 
           const otherNode = nodes[j];
           if (
-            otherNode.node.getType() === Epic1NodeType.TextBlock &&
+            otherNode.node.getNodeType() === Epic1NodeType.TextBlock &&
             j === i + 1
           ) {
             // Only consecutive blocks
@@ -165,8 +165,8 @@ export class SmartNodePositioner {
 
     // Check if one is a concat node between others
     if (
-      node1.node.getType() === Epic1NodeType.Concat ||
-      node2.node.getType() === Epic1NodeType.Concat
+      node1.node.getNodeType() === Epic1NodeType.Concat ||
+      node2.node.getNodeType() === Epic1NodeType.Concat
     ) {
       return true;
     }
@@ -313,7 +313,7 @@ export class SmartNodePositioner {
     // Special handling for output node (last node)
     if (nodes.length > 0) {
       const lastNode = nodes[nodes.length - 1];
-      if (lastNode.node.getType() === Epic1NodeType.Output) {
+      if (lastNode.node.getNodeType() === Epic1NodeType.Output) {
         // Position output node at the bottom right
         const maxX = Math.max(...positions.map(p => p.x));
         const maxY = Math.max(...positions.map(p => p.y));
@@ -346,7 +346,7 @@ export class SmartNodePositioner {
     for (let i = 0; i < group.nodes.length; i++) {
       const nodeIndex = group.nodes[i];
       const node = nodes[nodeIndex];
-      const nodeType = node.node.getType();
+      const nodeType = node.node.getNodeType();
       const dimensions = this.nodeDimensions[nodeType];
 
       // Position this node
@@ -385,7 +385,7 @@ export class SmartNodePositioner {
 
     for (const nodeIndex of group.nodes) {
       const node = nodes[nodeIndex];
-      const dimensions = this.nodeDimensions[node.node.getType()];
+      const dimensions = this.nodeDimensions[node.node.getNodeType()];
       totalWidth = Math.max(totalWidth, dimensions.width);
     }
 
@@ -403,7 +403,7 @@ export class SmartNodePositioner {
 
     for (const nodeIndex of group.nodes) {
       const node = nodes[nodeIndex];
-      const dimensions = this.nodeDimensions[node.node.getType()];
+      const dimensions = this.nodeDimensions[node.node.getNodeType()];
       totalHeight = Math.max(totalHeight, dimensions.height);
     }
 
@@ -430,8 +430,8 @@ export class SmartNodePositioner {
           const node2 = nodes[j];
           const pos1 = optimized[i];
           const pos2 = optimized[j];
-          const dim1 = this.nodeDimensions[node1.node.getType()];
-          const dim2 = this.nodeDimensions[node2.node.getType()];
+          const dim1 = this.nodeDimensions[node1.node.getNodeType()];
+          const dim2 = this.nodeDimensions[node2.node.getNodeType()];
 
           // Check for overlap
           if (this.doNodesOverlap(pos1, dim1, pos2, dim2)) {

@@ -12,7 +12,7 @@ import ReactFlow, {
   Position,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import type { PromptAnalysis } from '../../../../packages/core/runtime/nodes/epic1/PromptParser';
+import type { PromptAnalysis, GeneratedNodeInternal } from '../../lib/simplePromptParser';
 import './NodePreview.css';
 
 interface NodePreviewProps {
@@ -60,8 +60,8 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
     const edges: Edge[] = [];
     const nodeWidth = 180;
     const nodeHeight = 80;
-    const horizontalSpacing = 250;
-    const verticalSpacing = 120;
+    const horizontalSpacing = 320;  // Increased from 250 to prevent overlap
+    const verticalSpacing = 150;    // Increased from 120 for better spacing
 
     // Create nodes from analysis
     analysis.nodes.forEach((genNode, index) => {
@@ -71,6 +71,10 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
       // Find the mapping for this node to get its color
       const mapping = analysis.mappings.find(m => m.nodeId === genNode.node.id);
       const color = mapping?.highlightColor || '#666';
+      const internal: GeneratedNodeInternal = genNode.node;
+      const label = internal.nodeType === 'Variable'
+        ? (internal.variableName ? `$${internal.variableName}` : 'Variable')
+        : (internal.getPreviewText ? internal.getPreviewText() : 'Text');
 
       nodes.push({
         id: genNode.node.id,
@@ -80,8 +84,8 @@ export const NodePreview: React.FC<NodePreviewProps> = ({
           y: row * verticalSpacing + 50,
         },
         data: {
-          label: genNode.node.getPreviewText ? genNode.node.getPreviewText() : 'Node',
-          nodeType: genNode.node.nodeType,
+          label,
+          nodeType: internal.nodeType,
           color: color,
         },
         selected: genNode.node.id === selectedNodeId,

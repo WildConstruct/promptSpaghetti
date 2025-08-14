@@ -32,6 +32,7 @@ export default defineConfig({
         '../packages/asset-browser/src'
       )
     },
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
     dedupe: ['react', 'react-dom', 'zod', 'zustand', 'reactflow']
   },
   optimizeDeps: {

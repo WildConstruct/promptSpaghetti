@@ -168,12 +168,15 @@ export const BaseEditableNode = memo(({
         ...style,
       }}
     >
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="target"
-        className="epic1-handle target"
-      />
+      {/* Render input handle for non-concat nodes (concat manages its own) */}
+      {data.nodeType !== 'concat' && (
+        <Handle
+          type="target"
+          position={Position.Left}
+          id="target"
+          className="epic1-handle target"
+        />
+      )}
       
       <div className="epic1-node-content">
         {children({
@@ -189,6 +192,11 @@ export const BaseEditableNode = memo(({
 
       {/* Handle rendering logic based on node type */}
       {(() => {
+        // For concat nodes - handles are managed by the ConcatNode component
+        if (data.nodeType === 'concat') {
+          return null;
+        }
+        
         // For weighted choice nodes
         if (data.nodeType === 'weightedChoice') {
           // Only show handle if NO branches are active

@@ -8,6 +8,7 @@ import {
   getAuthErrorMessage
 } from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
+import { supabase } from '../../utils/supabaseClient';
 
 interface PasswordResetProps {
   onBack: () => void;
@@ -31,15 +32,17 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
     setError(null);
 
     try {
-      // TODO: Replace with actual Supabase auth call
-      // const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
-      //   redirectTo: `${window.location.origin}/reset-password`
-      // });
+      if (!supabase) {
+        throw new Error('Authentication service is not available');
+      }
 
-      // Simulated auth call for now
-      await new Promise(resolve => {
-        setTimeout(resolve, 1000);
+      const { error } = await supabase.auth.resetPasswordForEmail(email.value, {
+        redirectTo: `${window.location.origin}/reset-password`
       });
+
+      if (error) {
+        throw error;
+      }
 
       setIsSuccess(true);
     } catch (err) {
@@ -66,7 +69,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
             margin: '0 0 12px 0',
             fontSize: '20px',
             fontWeight: '600',
-            color: '#212529'
+            color: '#e0e0e0'
           }}
         >
           Check Your Email
@@ -76,7 +79,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           style={{
             margin: '0 0 24px 0',
             fontSize: '14px',
-            color: '#6c757d',
+            color: '#999',
             lineHeight: '1.5'
           }}
         >
@@ -88,10 +91,10 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
         <div
           style={{
             padding: '12px',
-            backgroundColor: '#d1ecf1',
-            border: '1px solid #bee5eb',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            border: '1px solid rgba(59, 130, 246, 0.3)',
             borderRadius: '6px',
-            color: '#0c5460',
+            color: '#60a5fa',
             fontSize: '13px',
             textAlign: 'left',
             marginBottom: '24px'
@@ -115,21 +118,21 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           style={{
             padding: '10px 20px',
             borderRadius: '6px',
-            border: '1px solid #007bff',
-            backgroundColor: 'white',
-            color: '#007bff',
+            border: '1px solid #2563eb',
+            backgroundColor: 'transparent',
+            color: '#60a5fa',
             fontSize: '14px',
             fontWeight: '500',
             cursor: 'pointer',
             transition: 'all 0.2s'
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.backgroundColor = '#007bff';
+            e.currentTarget.style.backgroundColor = '#2563eb';
             e.currentTarget.style.color = 'white';
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.backgroundColor = 'white';
-            e.currentTarget.style.color = '#007bff';
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = '#60a5fa';
           }}
         >
           Back to Login
@@ -144,7 +147,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
         style={{
           margin: '0 0 20px 0',
           fontSize: '14px',
-          color: '#6c757d',
+          color: '#999',
           lineHeight: '1.5'
         }}
       >
@@ -158,10 +161,10 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           style={{
             padding: '12px',
             marginBottom: '20px',
-            backgroundColor: '#f8d7da',
-            border: '1px solid #f5c6cb',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
             borderRadius: '6px',
-            color: '#721c24',
+            color: '#f87171',
             fontSize: '14px'
           }}
           role="alert"
@@ -193,8 +196,8 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
           padding: '12px 20px',
           borderRadius: '6px',
           border: 'none',
-          backgroundColor: email.isValid && !isLoading ? '#007bff' : '#e9ecef',
-          color: email.isValid && !isLoading ? 'white' : '#6c757d',
+          backgroundColor: email.isValid && !isLoading ? '#2563eb' : '#333',
+          color: email.isValid && !isLoading ? 'white' : '#666',
           fontSize: '16px',
           fontWeight: '500',
           cursor: email.isValid && !isLoading ? 'pointer' : 'not-allowed',
@@ -207,12 +210,12 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
         }}
         onMouseEnter={e => {
           if (email.isValid && !isLoading) {
-            e.currentTarget.style.backgroundColor = '#0056b3';
+            e.currentTarget.style.backgroundColor = '#1d4ed8';
           }
         }}
         onMouseLeave={e => {
           if (email.isValid && !isLoading) {
-            e.currentTarget.style.backgroundColor = '#007bff';
+            e.currentTarget.style.backgroundColor = '#2563eb';
           }
         }}
       >
@@ -223,7 +226,7 @@ export function PasswordReset({ onBack }: PasswordResetProps) {
                 display: 'inline-block',
                 width: '16px',
                 height: '16px',
-                border: '2px solid #6c757d',
+                border: '2px solid #999',
                 borderTopColor: 'transparent',
                 borderRadius: '50%',
                 animation: 'spin 0.8s linear infinite'

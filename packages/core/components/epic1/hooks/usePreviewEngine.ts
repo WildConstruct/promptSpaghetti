@@ -96,6 +96,10 @@ export function usePreviewEngine({
   const handlePreviewSeedChange = useCallback(
     (seeds: (string | number)[]) => {
       if (previewEngineRef.current) {
+        // Update the seeds first
+        previewEngineRef.current.setSeeds(seeds);
+        
+        // Then trigger a new preview with the updated seeds
         const runtimeGraph = convertToRuntimeGraph(nodes, edges);
         if (runtimeGraph) {
           previewEngineRef.current.updatePreview(runtimeGraph, nodes, edges);

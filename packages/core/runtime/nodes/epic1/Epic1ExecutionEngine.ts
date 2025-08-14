@@ -301,6 +301,12 @@ export class Epic1ExecutionEngine {
 
     // Substitute variables
     const substituted = this.context.substituteVariables(value);
+    
+    // If there are inputs, prepend them to the output
+    if (inputs.length > 0) {
+      const inputStr = inputs.map(i => String(i || '')).join(' ');
+      return inputStr ? `${inputStr} ${substituted}` : substituted;
+    }
 
     return substituted;
   }
@@ -350,9 +356,17 @@ export class Epic1ExecutionEngine {
     node: ConcatNode,
     inputs: any[]
   ): Promise<string> {
-    const config = node.getData().configuration || {};
-    const separator = config.separator || ' ';
+    // ConcatNode stores its config in 'value' field
+    const config = node.getData().value || node.getData().configuration || {};
+    const separator = config.separator !== undefined ? config.separator : ' ';
     const trimInputs = config.trimInputs !== false;
+
+    debugLogExecution(
+      `[ExecutionEngine] Concat node ${node.serialize().id} config:`,
+      { separator, trimInputs },
+      'inputs:',
+      inputs
+    );
 
     // Process inputs
     const processedInputs = inputs
@@ -363,7 +377,13 @@ export class Epic1ExecutionEngine {
       })
       .filter(str => str.length > 0); // Remove empty after trimming
 
-    return processedInputs.join(separator);
+    const result = processedInputs.join(separator);
+    debugLogExecution(
+      `[ExecutionEngine] Concat node ${node.serialize().id} result:`,
+      result
+    );
+    
+    return result;
   }
 
   /**
@@ -413,13 +433,17 @@ export class Epic1ExecutionEngine {
    * Execute an Output node
    */
   private async executeOutput(node: OutputNode, inputs: any[]): Promise<any> {
-    const input = inputs.length > 0 ? inputs[0] : '';
+    // If multiple inputs, concatenate them with spaces
+    const input = inputs.length > 1 
+      ? inputs.map(i => String(i || '')).join(' ')
+      : (inputs.length > 0 ? inputs[0] : '');
     debugLogExecution(
-      '[ExecutionEngine] Output node receiving input:',
-      input,
-      'from',
+      '[ExecutionEngine] Output node receiving',
       inputs.length,
-      'sources'
+      'input(s):',
+      inputs,
+      '-> concatenated:',
+      input
     );
 
     // Set the input on the node for display
@@ -439,10 +463,20 @@ export class Epic1ExecutionEngine {
       edge => edge.target === nodeId
     );
 
-    // Sort by targetHandle to maintain order (if handles are like 'input0', 'input1', etc.)
+    // Sort by targetHandle to maintain order
+    // Handles like 'input1', 'input2' should be ordered, 'target' comes first
     incomingEdges.sort((a, b) => {
-      const handleA = a.targetHandle || '0';
-      const handleB = b.targetHandle || '0';
+      const handleA = a.targetHandle || 'target';
+      const handleB = b.targetHandle || 'target';
+      
+      // Special handling for concat node inputs
+      if (handleA.startsWith('input') && handleB.startsWith('input')) {
+        // Extract numbers from handles like 'input1', 'input2'
+        const numA = parseInt(handleA.replace('input', '')) || 0;
+        const numB = parseInt(handleB.replace('input', '')) || 0;
+        return numA - numB;
+      }
+      
       return handleA.localeCompare(handleB);
     });
 
@@ -454,6 +488,13 @@ export class Epic1ExecutionEngine {
         inputs.push(sourceResult.output);
       }
     }
+
+    debugLogExecution(
+      `[ExecutionEngine] Node ${nodeId} incoming edges:`,
+      incomingEdges.map(e => ({ source: e.source, targetHandle: e.targetHandle })),
+      'collected inputs:',
+      inputs
+    );
 
     return inputs;
   }
@@ -477,6 +518,9 @@ export class Epic1ExecutionEngine {
       neighbors.push(edge.target);
       adjacency.set(edge.source, neighbors);
     });
+    
+    debugLogExecution('[ExecutionEngine] Graph edges:', this.graph.edges);
+    debugLogExecution('[ExecutionEngine] Adjacency list:', Array.from(adjacency.entries()));
 
     // DFS for topological sort
     const visit = (nodeId: string) => {
@@ -515,6 +559,7 @@ export class Epic1ExecutionEngine {
     });
 
     this.executionOrder = order;
+    debugLogExecution('[ExecutionEngine] Final execution order:', this.executionOrder);
   }
 
   /**

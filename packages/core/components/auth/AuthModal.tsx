@@ -124,14 +124,15 @@ export function AuthModal({
         ref={modalRef}
         tabIndex={-1}
         style={{
-          backgroundColor: 'white',
+          backgroundColor: '#1a1a1a',
           borderRadius: '12px',
           width: '90%',
           maxWidth: '440px',
           maxHeight: '90vh',
           overflow: 'auto',
-          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.15)',
-          animation: 'slideUp 0.3s ease'
+          boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)',
+          animation: 'slideUp 0.3s ease',
+          border: '1px solid #333'
         }}
         onClick={e => e.stopPropagation()}
       >
@@ -139,7 +140,7 @@ export function AuthModal({
         <div
           style={{
             padding: '24px 24px 0',
-            borderBottom: activeTab !== 'reset' ? '1px solid #e9ecef' : 'none'
+            borderBottom: activeTab !== 'reset' ? '1px solid #333' : 'none'
           }}
         >
           <div
@@ -156,7 +157,7 @@ export function AuthModal({
                 margin: 0,
                 fontSize: '24px',
                 fontWeight: '600',
-                color: '#212529'
+                color: '#e0e0e0'
               }}
             >
               {activeTab === 'reset' ? 'Reset Password' : 'Welcome'}
@@ -167,7 +168,7 @@ export function AuthModal({
                 background: 'none',
                 border: 'none',
                 fontSize: '24px',
-                color: '#6c757d',
+                color: '#999',
                 cursor: 'pointer',
                 padding: '4px',
                 display: 'flex',
@@ -179,7 +180,7 @@ export function AuthModal({
                 transition: 'background-color 0.2s'
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = '#f8f9fa';
+                e.currentTarget.style.backgroundColor = '#333';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.backgroundColor = 'transparent';
@@ -207,8 +208,8 @@ export function AuthModal({
                   padding: '12px',
                   background: 'none',
                   border: 'none',
-                  borderBottom: `2px solid ${activeTab === 'login' ? '#007bff' : 'transparent'}`,
-                  color: activeTab === 'login' ? '#007bff' : '#6c757d',
+                  borderBottom: `2px solid ${activeTab === 'login' ? '#2563eb' : 'transparent'}`,
+                  color: activeTab === 'login' ? '#60a5fa' : '#666',
                   fontSize: '16px',
                   fontWeight: activeTab === 'login' ? '600' : '400',
                   cursor: 'pointer',
@@ -227,8 +228,8 @@ export function AuthModal({
                   padding: '12px',
                   background: 'none',
                   border: 'none',
-                  borderBottom: `2px solid ${activeTab === 'signup' ? '#007bff' : 'transparent'}`,
-                  color: activeTab === 'signup' ? '#007bff' : '#6c757d',
+                  borderBottom: `2px solid ${activeTab === 'signup' ? '#2563eb' : 'transparent'}`,
+                  color: activeTab === 'signup' ? '#60a5fa' : '#666',
                   fontSize: '16px',
                   fontWeight: activeTab === 'signup' ? '600' : '400',
                   cursor: 'pointer',
@@ -270,11 +271,11 @@ export function AuthModal({
         <div
           style={{
             padding: '16px 24px',
-            borderTop: '1px solid #e9ecef',
-            backgroundColor: '#f8f9fa',
+            borderTop: '1px solid #333',
+            backgroundColor: '#222',
             borderRadius: '0 0 12px 12px',
             fontSize: '13px',
-            color: '#6c757d',
+            color: '#999',
             textAlign: 'center'
           }}
         >
@@ -286,7 +287,7 @@ export function AuthModal({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#007bff',
+                  color: '#60a5fa',
                   cursor: 'pointer',
                   textDecoration: 'underline',
                   padding: 0,
@@ -304,7 +305,7 @@ export function AuthModal({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#007bff',
+                  color: '#60a5fa',
                   cursor: 'pointer',
                   textDecoration: 'underline',
                   padding: 0,
@@ -322,7 +323,7 @@ export function AuthModal({
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#007bff',
+                  color: '#60a5fa',
                   cursor: 'pointer',
                   textDecoration: 'underline',
                   padding: 0,

@@ -136,8 +136,10 @@ export function nodeDataToRuntimeNode(
 
       case 'concat': {
         // ConcatNode constructor takes (id, config)
+        // Get separator from value field if it exists (for templates)
+        const separator = data.value || data.separator || ' ';
         return new ConcatNode(id, {
-          separator: data.separator || ' ',
+          separator: separator,
           trimInputs: data.trimInputs !== false
         });
       }

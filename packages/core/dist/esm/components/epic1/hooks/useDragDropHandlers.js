@@ -125,18 +125,32 @@ export function useDragDropHandlers({ setNodes, setEdges, reactFlowInstance, sho
             }
             const result = await insertPreset(content, {
                 position,
+                preservePositions: false, // Let auto-layout handle positioning
                 snapToGrid: true,
                 selectAfterInsert: true
             });
+            // Check if result has nodes
+            if (!result || !result.nodes) {
+                throw new Error('Preset insertion returned no nodes');
+            }
             // Apply auto-layout if multiple nodes
             let nodesToAdd = result.nodes;
-            if (nodesToAdd.length > 1) {
+            if (nodesToAdd && nodesToAdd.length > 1) {
+                console.log('[DragDrop] Applying auto-layout to', nodesToAdd.length, 'nodes');
                 // Get existing nodes for layout context
                 const existingNodes = []; // We don't need existing nodes for new layout
-                nodesToAdd = layoutNewNodes(existingNodes, nodesToAdd, position, result.edges);
+                const layoutedNodes = layoutNewNodes(existingNodes, nodesToAdd, position, result.edges || []);
+                // Only use layouted nodes if the layout succeeded
+                if (layoutedNodes && layoutedNodes.length > 0) {
+                    nodesToAdd = layoutedNodes;
+                    console.log('[DragDrop] Layout applied successfully');
+                }
+                else {
+                    console.warn('[DragDrop] Layout failed, using original positions');
+                }
             }
             setNodes(nds => nds.concat(nodesToAdd));
-            setEdges(eds => eds.concat(result.edges));
+            setEdges(eds => eds.concat((result.edges || [])));
             // Optional: bounce first node for feedback
             try {
                 if (addNodeWithBounce && result.nodes?.[0]) {

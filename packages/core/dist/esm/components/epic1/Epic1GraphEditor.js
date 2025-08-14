@@ -470,12 +470,10 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
     }, [setNodes, setEdges, showToast]);
     // Handle canvas click to deselect all nodes and edges
     const handlePaneClick = useCallback((event) => {
-        console.log('[handlePaneClick] Event type:', event.type, 'Button:', event.button);
         // Check for right-click or context menu event
         if (event.button === 2 || event.type === 'contextmenu') {
             event.preventDefault();
             event.stopPropagation();
-            console.log('[handlePaneClick] Right-click detected, showing context menu');
             // Show context menu for canvas (will add post-it note option)
             setContextMenuPosition({ x: event.clientX, y: event.clientY });
             setContextMenuNodeId(null); // null indicates canvas context menu
@@ -483,7 +481,6 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
         }
         // Only deselect if we're not in the middle of a selection drag (left-click only)
         if (!isSelecting && event.button === 0) {
-            // Removed console.log that was causing performance issues
             setNodes((nds) => nds.map(n => ({ ...n, selected: false })));
             setEdges((eds) => eds.map(e => ({ ...e, selected: false })));
             setSelectedNodeId(null);
@@ -914,6 +911,8 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
             id: `postit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             type: 'postItNote',
             position,
+            width: 200, // Set initial width on node
+            height: 150, // Set initial height on node
             data: {
                 text: '',
                 color: 'yellow',
@@ -922,16 +921,10 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                 height: 150
             }
         };
-        console.log('[handleCreatePostIt] Creating node:', newNode);
-        console.log('[handleCreatePostIt] Available nodeTypes:', Object.keys(nodeTypes));
-        setNodes((nds) => {
-            const updated = [...nds, newNode];
-            console.log('[handleCreatePostIt] Updated nodes:', updated);
-            return updated;
-        });
+        setNodes((nds) => [...nds, newNode]);
         showToast('success', 'Post-it note created - double-click to edit');
         setContextMenuPosition(null);
-    }, [setNodes, showToast, nodeTypes]);
+    }, [setNodes, showToast]);
     // Group selected nodes
     const handleGroupNodes = useCallback((nodesToGroup) => {
         if (nodesToGroup.length < 2) {
@@ -1012,10 +1005,11 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
             id: `box-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             type: 'boundingBox',
             position,
+            selectable: true,
             data: {
                 title: 'New Region',
                 description: '',
-                backgroundColor: '#FFE5B4',
+                backgroundColor: '#CC567D',
                 opacity: 0.3,
                 borderColor: '#666',
                 borderStyle: 'dashed',
@@ -1171,6 +1165,8 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                                 x: targetNode.position.x + (targetNode.width || 200) + 50,
                                 y: targetNode.position.y
                             },
+                            width: 200, // Set initial width on node
+                            height: 150, // Set initial height on node
                             data: {
                                 text: '',
                                 color: 'yellow',
@@ -1185,13 +1181,12 @@ const Epic1GraphEditorInner = ({ initialNodes = [], initialEdges = [], onNodesCh
                         showToast('success', 'Note attached to node - double-click to edit');
                     }
                     setContextMenuPosition(null);
-                } })), console.log('[Render] Context menu state:', { contextMenuPosition, contextMenuNodeId }), contextMenuPosition && !contextMenuNodeId && (_jsx(CanvasContextMenu, { position: contextMenuPosition, onAddNote: (pos) => {
+                } })), contextMenuPosition && !contextMenuNodeId && (_jsx(CanvasContextMenu, { position: contextMenuPosition, onAddNote: (pos) => {
                     // pos is already the click position, convert to flow position
                     const flowPos = reactFlowInstance?.screenToFlowPosition({
                         x: pos.x,
                         y: pos.y
                     }) || { x: 250, y: 250 };
-                    console.log('[onAddNote] Creating post-it at:', flowPos);
                     handleCreatePostIt(flowPos);
                 }, onAddBoundingBox: (pos) => {
                     // Convert screen position to flow position
@@ -1212,10 +1207,11 @@ const Epic1GraphEditorMonolithic = (props) => {
 };
 // Import the refactored version
 import { Epic1GraphEditorFinal } from './Epic1GraphEditorFinal';
-// DEFAULT EXPORT: Now uses the refactored version!
-export const Epic1GraphEditor = Epic1GraphEditorFinal;
+// DEFAULT EXPORT: Using the legacy version until refactored version is fully complete
+// The refactored version is missing preview window, context menus, and select all functionality
+export const Epic1GraphEditor = Epic1GraphEditorMonolithic;
 // Legacy exports for backward compatibility if needed
 export const Epic1GraphEditorLegacy = Epic1GraphEditorMonolithic;
-export const Epic1GraphEditorWithProvider = Epic1GraphEditorFinal; // Also use new version
-// Conditional export based on feature flag (can force legacy if needed)
-export const Epic1GraphEditorConditional = process.env.FORCE_LEGACY_EDITOR === 'true' ? Epic1GraphEditorMonolithic : Epic1GraphEditorFinal;
+export const Epic1GraphEditorWithProvider = Epic1GraphEditorMonolithic; // Use legacy until refactor is complete
+// Conditional export based on feature flag (can force refactored if needed)
+export const Epic1GraphEditorConditional = process.env.USE_REFACTORED_EDITOR === 'true' ? Epic1GraphEditorFinal : Epic1GraphEditorMonolithic;

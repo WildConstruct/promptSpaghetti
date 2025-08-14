@@ -17,17 +17,13 @@
   },
   "include": [
     "public.ts",
+    "types/graph.ts",
     "utils/index.ts",
     "utils/psgCodec.ts",
     "utils/psgStorage.ts",
     "utils/supabaseClient.ts",
     "utils/supabaseFeature.ts",
-    "types/graph.ts",
-    "fileFormats/index.ts",
-    "runtime/presetInsertion.ts",
-    "runtime/nodes/epic1/Epic1ExecutionEngine.ts",
-    "components/epic1/**/*.ts",
-    "components/epic1/**/*.tsx"
+    "utils/persistenceUtils.ts"
   ],
   "exclude": [
     "node_modules",

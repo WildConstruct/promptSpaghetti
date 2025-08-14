@@ -11,6 +11,7 @@ import {
 } from '../../hooks/useAuthValidation';
 import { FormField } from '../shared/FormField';
 import { PasswordStrengthIndicator } from '../shared/PasswordStrengthIndicator';
+import { supabase } from '../../utils/supabaseClient';
 
 interface SignupFormProps {
   onSuccess: (user: any) => void;
@@ -45,26 +46,32 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
     setError(null);
 
     try {
-      // TODO: Replace with actual Supabase auth call
-      // const { data, error } = await supabase.auth.signUp({
-      //   email: email.value,
-      //   password: password.value
-      // });
+      if (!supabase) {
+        throw new Error('Authentication service is not available');
+      }
 
-      // Simulated auth call for now
-      await new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (email.value.includes('@')) {
-            resolve({ user: { email: email.value, id: '123' } });
-          } else {
-            reject(new Error('Invalid email format'));
-          }
-        }, 1000);
+      const { data, error } = await supabase.auth.signUp({
+        email: email.value,
+        password: password.value,
+        options: {
+          emailRedirectTo: window.location.origin
+        }
       });
 
+      if (error) {
+        throw error;
+      }
+
+      if (!data.user) {
+        throw new Error('Signup failed - no user returned');
+      }
+
       setShowSuccessMessage(true);
+      
+      // Note: Supabase may require email confirmation
+      // The user object will be returned but session might not be active until confirmed
       setTimeout(() => {
-        onSuccess({ email: email.value });
+        onSuccess(data.user);
       }, 1500);
     } catch (err) {
       setError(getAuthErrorMessage(err));
@@ -80,10 +87,10 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           style={{
             padding: '12px',
             marginBottom: '20px',
-            backgroundColor: '#f8d7da',
-            border: '1px solid #f5c6cb',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
             borderRadius: '6px',
-            color: '#721c24',
+            color: '#f87171',
             fontSize: '14px'
           }}
           role="alert"
@@ -98,10 +105,10 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           style={{
             padding: '12px',
             marginBottom: '20px',
-            backgroundColor: '#d4edda',
-            border: '1px solid #c3e6cb',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
             borderRadius: '6px',
-            color: '#155724',
+            color: '#4ade80',
             fontSize: '14px'
           }}
           role="status"
@@ -186,7 +193,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           htmlFor="terms"
           style={{
             fontSize: '14px',
-            color: '#495057',
+            color: '#e0e0e0',
             cursor: 'pointer',
             lineHeight: '1.5'
           }}
@@ -196,7 +203,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
             href="#"
             onClick={e => e.preventDefault()}
             style={{
-              color: '#007bff',
+              color: '#60a5fa',
               textDecoration: 'underline'
             }}
           >
@@ -207,7 +214,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
             href="#"
             onClick={e => e.preventDefault()}
             style={{
-              color: '#007bff',
+              color: '#60a5fa',
               textDecoration: 'underline'
             }}
           >
@@ -225,8 +232,8 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
           padding: '12px 20px',
           borderRadius: '6px',
           border: 'none',
-          backgroundColor: isFormValid && !isLoading ? '#28a745' : '#e9ecef',
-          color: isFormValid && !isLoading ? 'white' : '#6c757d',
+          backgroundColor: isFormValid && !isLoading ? '#10b981' : '#333',
+          color: isFormValid && !isLoading ? 'white' : '#666',
           fontSize: '16px',
           fontWeight: '500',
           cursor: isFormValid && !isLoading ? 'pointer' : 'not-allowed',
@@ -238,12 +245,12 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
         }}
         onMouseEnter={e => {
           if (isFormValid && !isLoading) {
-            e.currentTarget.style.backgroundColor = '#218838';
+            e.currentTarget.style.backgroundColor = '#059669';
           }
         }}
         onMouseLeave={e => {
           if (isFormValid && !isLoading) {
-            e.currentTarget.style.backgroundColor = '#28a745';
+            e.currentTarget.style.backgroundColor = '#10b981';
           }
         }}
       >
@@ -254,7 +261,7 @@ export function SignupForm({ onSuccess }: SignupFormProps) {
                 display: 'inline-block',
                 width: '16px',
                 height: '16px',
-                border: '2px solid #6c757d',
+                border: '2px solid #999',
                 borderTopColor: 'transparent',
                 borderRadius: '50%',
                 animation: 'spin 0.8s linear infinite'

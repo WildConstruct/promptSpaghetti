@@ -309,6 +309,19 @@
   border-color: #22c493;
 }
 
+/* Concat nodes should have same selection styling as other nodes */
+.epic1-editable-node.concat.selected:not(.editing) {
+  border-color: #22c493;
+  box-shadow: 
+    0 0 0 1px rgba(34, 196, 147, 0.4),
+    0 0 8px rgba(34, 196, 147, 0.3);
+}
+
+/* Concat nodes need relative positioning for absolute handles */
+.epic1-editable-node.concat {
+  position: relative;
+}
+
 .epic1-editable-node.concat.editing {
   box-shadow: 
     0 0 0 1px rgba(34, 196, 147, 0.6),

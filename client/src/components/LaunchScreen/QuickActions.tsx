@@ -2,7 +2,7 @@ import React from 'react';
 import './QuickActions.css';
 
 interface QuickActionsProps {
-  onSelectTemplate: (template: string) => void;
+  onSelectTemplate: (templateId: string) => void;
 }
 
 interface Template {
@@ -66,7 +66,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onSelectTemplate }) 
           <button
             key={template.id}
             className="template-card"
-            onClick={() => onSelectTemplate(template.prompt)}
+            onClick={() => onSelectTemplate(template.id)}
             title={template.prompt}
           >
             <span className="template-icon">{template.icon}</span>

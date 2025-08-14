@@ -1,6 +1,27 @@
 /* Additional node-specific styles - Dark Mode */
 
 /* Concat Node */
+/* Style the two input handles with labels for visual clarity */
+.concat-input-1::after,
+.concat-input-2::after {
+  position: absolute;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.concat-input-1::after {
+  content: '1';
+}
+
+.concat-input-2::after {
+  content: '2';
+}
+
 .epic1-concat-display,
 .epic1-concat-editor {
   text-align: center;

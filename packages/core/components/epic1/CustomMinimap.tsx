@@ -189,15 +189,15 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
         
         {/* Draw viewport indicator */}
         <rect
-          x={(-viewport.x - bounds.minX) * scale}
-          y={(-viewport.y - bounds.minY) * scale}
-          width={(window.innerWidth / viewport.zoom) * scale}
-          height={(window.innerHeight / viewport.zoom) * scale}
+          x={Math.max(0, Math.min(200 - (window.innerWidth / viewport.zoom) * scale, (-viewport.x - bounds.minX) * scale))}
+          y={Math.max(0, Math.min(120 - (window.innerHeight / viewport.zoom) * scale, (-viewport.y - bounds.minY) * scale))}
+          width={Math.min(200, (window.innerWidth / viewport.zoom) * scale)}
+          height={Math.min(120, (window.innerHeight / viewport.zoom) * scale)}
           fill="rgba(91, 158, 255, 0.1)"
           stroke="#5b9eff"
           strokeWidth={2}
           opacity={0.8}
-          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+          style={{ cursor: isDragging ? 'grabbing' : 'grab', pointerEvents: 'all' }}
           onMouseDown={handleViewportMouseDown}
         />
       </svg>
