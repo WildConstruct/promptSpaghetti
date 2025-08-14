@@ -318,3 +318,19 @@
 2025-08-14T23:17:04.202407Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
 2025-08-14T23:17:04.303186Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("server/package.json.838224065"), AnchoredSystemPathBuf("server/package.json")}
 2025-08-14T23:17:04.303196Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("server"), path: AnchoredSystemPathBuf("server") }}))
+2025-08-14T23:27:09.908390Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts"), AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts.tmp.21024.1755214029840")}
+2025-08-14T23:27:09.908403Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("client"), path: AnchoredSystemPathBuf("client") }}))
+2025-08-14T23:27:31.108467Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts.tmp.21024.1755214050992"), AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts")}
+2025-08-14T23:27:31.108477Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("client"), path: AnchoredSystemPathBuf("client") }}))
+2025-08-14T23:27:50.209249Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts"), AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts.tmp.21024.1755214070105")}
+2025-08-14T23:27:50.209259Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("client"), path: AnchoredSystemPathBuf("client") }}))
+2025-08-14T23:28:01.208676Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts"), AnchoredSystemPathBuf("client/src/lib/simplePromptParser.ts.tmp.21024.1755214081133")}
+2025-08-14T23:28:01.208687Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("client"), path: AnchoredSystemPathBuf("client") }}))
+2025-08-14T23:28:37.709735Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("test-parser.js"), AnchoredSystemPathBuf("test-parser.js.tmp.21024.1755214117603")}
+2025-08-14T23:28:37.709745Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2025-08-14T23:28:53.009282Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("test-parser.ts.tmp.21024.1755214132938"), AnchoredSystemPathBuf("test-parser.ts")}
+2025-08-14T23:28:53.009292Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2025-08-14T23:29:15.310258Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("test-parser.ts"), AnchoredSystemPathBuf("test-parser.ts.tmp.21024.1755214155224")}
+2025-08-14T23:29:15.310267Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2025-08-14T23:30:41.324572Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("test-parser.js"), AnchoredSystemPathBuf("test-parser.ts")}
+2025-08-14T23:30:41.324582Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))

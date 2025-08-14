@@ -11,7 +11,7 @@ export interface PromptSegment {
 export interface GeneratedNodeInternal {
   id: string;
   // explicit node kinds for UI swapping on splash screen
-  nodeType: 'Text' | 'Choice' | 'Variable' | 'Output' | 'Concat';
+  nodeType: 'Text' | 'Choice' | 'Variable' | 'Output';
   // optional variable metadata used when nodeType === 'Variable'
   variableName?: string;
   getPreviewText?: () => string;
@@ -48,21 +48,33 @@ const HIGHLIGHT_COLORS = [
 
 function tokenize(input: string): Array<{ text: string; start: number; end: number }> {
   const tokens: Array<{ text: string; start: number; end: number }> = [];
-  let i = 0;
-  while (i < input.length) {
-    // Split on commas first to form coarse segments
-    const nextComma = input.indexOf(',', i);
-    const end = nextComma === -1 ? input.length : nextComma;
-    const raw = input.slice(i, end);
-    const trimmed = raw.trim();
-    if (trimmed.length > 0) {
-      const startIndex = i + (raw.length - raw.trimStart().length);
-      const endIndex = startIndex + trimmed.length;
-      tokens.push({ text: trimmed, start: startIndex, end: endIndex });
+  
+  // Parse as semantic phrases rather than comma-separated segments
+  // This better matches the wizard's grammar-based approach
+  
+  // Split on commas but treat them as phrase boundaries
+  const parts = input.split(',').map((p, idx, arr) => ({
+    text: p.trim(),
+    hasCommaAfter: idx < arr.length - 1
+  }));
+  
+  let currentPos = 0;
+  parts.forEach((part) => {
+    if (part.text.length > 0) {
+      // Find the actual position in the original string
+      const startIndex = input.indexOf(part.text, currentPos);
+      const endIndex = startIndex + part.text.length;
+      
+      tokens.push({ 
+        text: part.text,
+        start: startIndex, 
+        end: endIndex 
+      });
+      
+      currentPos = endIndex;
     }
-    if (nextComma === -1) break;
-    i = nextComma + 1;
-  }
+  });
+  
   return tokens;
 }
 
@@ -126,28 +138,11 @@ export const simplePromptParser = {
       segmentNodeGroups.push(segmentNodes);
     });
 
-    // If there are multiple segments (separated by commas), create concat nodes
-    if (segmentNodeGroups.length > 1) {
-      // Add concat nodes between segments
-      segmentNodeGroups.forEach((group, groupIdx) => {
-        nodes.push(...group);
-        
-        // Add concat node after each segment except the last
-        if (groupIdx < segmentNodeGroups.length - 1) {
-          const concatId = `concat-${groupIdx}`;
-          nodes.push({
-            node: {
-              id: concatId,
-              nodeType: 'Concat',
-              getPreviewText: () => ', ',
-            },
-          });
-        }
-      });
-    } else if (segmentNodeGroups.length === 1) {
-      // Single segment, just add the nodes
-      nodes.push(...segmentNodeGroups[0]);
-    }
+    // Add all segment nodes without concat nodes
+    // The commas will be preserved in the text content itself
+    segmentNodeGroups.forEach((group) => {
+      nodes.push(...group);
+    });
 
     // Always add a final Output node to mirror the expected shape in preview
     const outputId = 'output';
