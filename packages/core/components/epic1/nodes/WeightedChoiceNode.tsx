@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect } from 'react';
-import { NodeProps } from 'reactflow';
+import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
 import './WeightedChoiceNode.css';
 import './VisualFeedbackEnhancements.css';
@@ -7,6 +7,7 @@ import './VisualFeedbackEnhancements.css';
 export interface WeightedOption {
   text: string;
   weight: number;
+  hasBranch?: boolean;
 }
 
 export interface WeightedChoiceNodeData extends EditableNodeData {
@@ -44,9 +45,19 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
     setOptions(normalizeWeights(newOptions));
   };
 
+  // Toggle branching for an option
+  const toggleBranch = (index: number) => {
+    const newOptions = [...options];
+    newOptions[index] = { 
+      ...newOptions[index], 
+      hasBranch: !newOptions[index].hasBranch 
+    };
+    setOptions(newOptions);
+  };
+
   // Add new option
   const addOption = () => {
-    const newOptions = [...options, { text: '', weight: 50 }];
+    const newOptions = [...options, { text: '', weight: 50, hasBranch: false }];
     setOptions(normalizeWeights(newOptions));
   };
 
@@ -58,21 +69,25 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
     }
   };
 
+  // Check if any options have branching enabled
+  const hasBranching = options.some(opt => opt.hasBranch);
+
   return (
-    <BaseEditableNode
-      {...props}
-      className="weighted-choice"
-      minWidth={280}
-      minHeight={120}
-      data={{
-        ...props.data,
-        options,
-        onEdit: (value: string) => {
-          // In edit mode, we save the options array
-          props.data.onEdit?.(JSON.stringify(options));
-        }
-      }}
-    >
+    <>
+      <BaseEditableNode
+        {...props}
+        className="weighted-choice"
+        minWidth={280}
+        minHeight={120}
+        data={{
+          ...props.data,
+          options,
+          onEdit: (value: string) => {
+            // In edit mode, we save the options array
+            props.data.onEdit?.(JSON.stringify(options));
+          }
+        }}
+      >
       {({ isEditing, confirmEdit, cancelEdit }) => {
         if (isEditing) {
           return (
@@ -122,6 +137,18 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
                         style={{ '--value': `${option.weight}%` } as React.CSSProperties}
                       />
                       <span className="epic1-weight-value">{option.weight}%</span>
+                      <button
+                        className={`epic1-branch-toggle nodrag ${option.hasBranch ? 'active' : ''}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          toggleBranch(index);
+                        }}
+                        type="button"
+                        title="Toggle branching for this option"
+                      >
+                        ⚡
+                      </button>
                       {options.length > 1 && (
                         <button
                           className="epic1-remove-option nodrag"
@@ -188,7 +215,10 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
               ) : (
                 options.map((option, index) => (
                   <div key={index} className="epic1-option-preview">
-                    <span className="epic1-option-text-preview">{option.text || '(empty)'}</span>
+                    <span className="epic1-option-text-preview">
+                      {option.text || '(empty)'}
+                      {option.hasBranch && ' ⚡'}
+                    </span>
                     <div className="epic1-weight-bar-container">
                       <div 
                         className="epic1-weight-bar"
@@ -204,6 +234,30 @@ export const WeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>
         );
       }}
     </BaseEditableNode>
+      
+      {/* Add branch output handles when branching is enabled */}
+      {hasBranching && options.map((option, index) => {
+        if (!option.hasBranch) return null;
+        return (
+          <Handle
+            key={`branch-${index}`}
+            type="source"
+            position={Position.Right}
+            id={`branch-${index}`}
+            className="epic1-branch-handle"
+            style={{
+              top: `${30 + (index * 35)}px`,
+              background: '#fbbf24',
+              width: '8px',
+              height: '8px',
+              border: '2px solid #1e1e1e',
+              right: '-6px'
+            }}
+            title={`Branch: ${option.text || `Option ${index + 1}`}`}
+          />
+        );
+      })}
+    </>
   );
 });
 

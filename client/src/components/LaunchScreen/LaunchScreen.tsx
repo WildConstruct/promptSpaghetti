@@ -23,9 +23,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   // node overrides
-  const [stagedOverrides, setStagedOverrides] = useState<Record<string, { nodeType: 'Text' | 'Choice' }>>({});
-  const [appliedOverrides, setAppliedOverrides] = useState<Record<string, { nodeType: 'Text' | 'Choice' }>>({});
-  const isDirty = useMemo(() => JSON.stringify(stagedOverrides) !== JSON.stringify(appliedOverrides), [stagedOverrides, appliedOverrides]);
+  const [nodeOverrides, setNodeOverrides] = useState<Record<string, { nodeType: 'Text' | 'Choice' }>>({}); 
 
   // Handle prompt text changes
   const handlePromptChange = useCallback((text: string) => {
@@ -37,8 +35,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       setAnalysis(null);
       setIsAnalyzing(false);
       setSelectedNodeId(null);
-      setStagedOverrides({});
-      setAppliedOverrides({});
+      setNodeOverrides({});
     } else {
       setIsAnalyzing(true);
     }
@@ -54,7 +51,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const mergedAnalysis = useMemo(() => {
     if (!analysis) return null;
     const newNodes = analysis.nodes.map((gen) => {
-      const ov = appliedOverrides[gen.node.id];
+      const ov = nodeOverrides[gen.node.id];
       if (!ov) return gen;
       return {
         node: {
@@ -64,7 +61,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       };
     });
     return { ...analysis, nodes: newNodes } as PromptAnalysis;
-  }, [analysis, appliedOverrides]);
+  }, [analysis, nodeOverrides]);
 
   // Handle launching the editor
   const handleLaunchEditor = useCallback(() => {
@@ -116,7 +113,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const applyNodeType = useCallback((type: 'Text' | 'Choice') => {
     if (!selectedNodeId) return;
     if (selectedNodeId === 'output') return; // don't edit Output node
-    setStagedOverrides((prev) => ({
+    setNodeOverrides((prev) => ({
       ...prev,
       [selectedNodeId]: {
         nodeType: type,
@@ -129,17 +126,13 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
   const resetNodeOverride = useCallback(() => {
     if (!selectedNodeId) return;
     if (selectedNodeId === 'output') return; // don't edit Output node
-    setStagedOverrides((prev) => {
+    setNodeOverrides((prev) => {
       const next = { ...prev };
       delete next[selectedNodeId!];
       return next;
     });
   }, [selectedNodeId]);
 
-  // apply staged overrides -> preview
-  const handleApplyOverrides = useCallback(() => {
-    setAppliedOverrides(stagedOverrides);
-  }, [stagedOverrides]);
 
   return (
     <div className={`launch-screen ${isTransitioning ? 'transitioning' : ''}`}>
@@ -165,15 +158,6 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
               focusOnValueChange
               placeholder="Type or paste your prompt here... For example: 'A warrior with a sword and shield, wearing armor or leather clothing'"
             />
-            {isDirty && (
-              <div className="update-banner">
-                <span className="update-indicator" aria-hidden>●</span>
-                <span>Changes to node types or variables are pending.</span>
-                <button className="launch-button-secondary" onClick={handleApplyOverrides}>
-                  Update Prompt
-                </button>
-              </div>
-            )}
           </div>
           
           {/* Analysis Status */}
@@ -187,7 +171,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
 
         {/* Center Column - Node Preview */}
         <div className="launch-column launch-column-center">
-          <div className={`launch-section preview-section ${isDirty ? 'needs-update' : ''}`}>
+          <div className="launch-section preview-section">
             <h2>Node Graph Preview</h2>
             <NodePreview
               analysis={mergedAnalysis}
