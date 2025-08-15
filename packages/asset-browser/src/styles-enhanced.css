@@ -1,0 +1,198 @@
+/* Enhanced Asset Browser Styles with Em Units and Improved Typography */
+
+/* Base Typography - Using em units for better accessibility */
+.asset-browser {
+  font-size: 1.15em; /* 15% increase from base */
+  line-height: 1.5;
+}
+
+/* Preset Card Typography */
+.preset-card {
+  padding: 0.5em;
+  margin: 0.5em;
+}
+
+.preset-card-title {
+  font-size: 1.2em; /* ~18-19px at default browser settings */
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+.preset-card-tags {
+  font-size: 0.9em; /* ~14px */
+  color: var(--text-secondary, #666);
+  margin-bottom: 0.5em;
+}
+
+.preset-card-preview {
+  font-size: 0.95em;
+  color: var(--text-primary, #333);
+  padding: 0.75em;
+  background: var(--bg-preview, #f8f9fa);
+  border-radius: 0.25em;
+  margin: 0.5em 0;
+  min-height: 3em;
+  font-style: italic;
+  border-left: 3px solid var(--accent-color, #2563eb);
+}
+
+/* Sidebar Typography */
+.asset-sidebar {
+  font-size: 1em;
+}
+
+.asset-sidebar-section {
+  padding: 0.75em;
+}
+
+.asset-sidebar-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+}
+
+.asset-tag-button {
+  font-size: 0.95em;
+  padding: 0.4em 0.8em;
+  margin: 0.25em;
+}
+
+/* Search Input */
+.asset-search-input {
+  font-size: 1em;
+  padding: 0.6em;
+  width: 100%;
+}
+
+/* Details Drawer */
+.asset-details {
+  font-size: 1em;
+  padding: 1em;
+}
+
+.asset-details-title {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 0.75em;
+}
+
+.asset-details-metadata {
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.asset-details-metadata-label {
+  font-weight: 600;
+  margin-right: 0.5em;
+}
+
+/* Drag and Drop Visual Feedback */
+.asset-drop-target {
+  outline: 2px dashed var(--accent-color, #2563eb);
+  outline-offset: -2px;
+  background: rgba(37, 99, 235, 0.05);
+  transition: all 0.2s ease;
+}
+
+.asset-drop-target-active {
+  outline-width: 3px;
+  background: rgba(37, 99, 235, 0.1);
+  transform: scale(1.02);
+}
+
+.asset-dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+/* Node Replacement Indicators */
+.node-replaceable {
+  position: relative;
+}
+
+.node-replaceable::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.node-replaceable.drop-hover::after {
+  border-color: var(--success-color, #10b981);
+  background: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Preview Loading State */
+.preview-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3em;
+  color: var(--text-secondary, #666);
+  font-size: 0.9em;
+}
+
+.preview-loading-spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid #e5e7eb;
+  border-top-color: var(--accent-color, #2563eb);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 0.5em;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Accessibility - Focus Indicators */
+.asset-browser :focus-visible {
+  outline: 2px solid var(--accent-color, #2563eb);
+  outline-offset: 2px;
+}
+
+.asset-browser button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  .asset-browser {
+    font-size: 1.1em; /* Slightly smaller on mobile but still increased */
+  }
+  
+  .preset-card {
+    padding: 0.4em;
+    margin: 0.4em;
+  }
+}
+
+/* High DPI Support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .asset-browser {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Virtual Scrolling Container */
+.asset-grid-virtual {
+  will-change: transform;
+}
+
+.asset-grid-virtual-item {
+  contain: layout style paint;
+}
+
+/* Smooth Transitions */
+.asset-browser * {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}

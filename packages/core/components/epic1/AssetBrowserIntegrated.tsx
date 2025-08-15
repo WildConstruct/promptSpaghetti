@@ -1,19 +1,29 @@
 /**
  * Asset Browser Integrated Component
- * Directly imports and uses the asset browser components
+ * Uses enhanced asset browser with fragment manifest support
  */
 
 import React from 'react';
-import { TabbedAssetBrowser, UserProvider } from '@prompt/asset-browser';
+import { EnhancedAssetBrowser, UserProvider } from '@prompt/asset-browser';
 
 interface AssetBrowserIntegratedProps {
   onInsert?: (preset: any) => void;
+  onNodeReplace?: (nodeId: string, preset: any) => void;
+  enableFragmentManifest?: boolean;
 }
 
-export const AssetBrowserIntegrated: React.FC<AssetBrowserIntegratedProps> = ({ onInsert }) => {
+export const AssetBrowserIntegrated: React.FC<AssetBrowserIntegratedProps> = ({ 
+  onInsert,
+  onNodeReplace,
+  enableFragmentManifest = true
+}) => {
   return (
     <UserProvider>
-      <TabbedAssetBrowser onInsert={onInsert} />
+      <EnhancedAssetBrowser 
+        onInsert={onInsert}
+        onNodeReplace={onNodeReplace}
+        enableFragmentManifest={enableFragmentManifest}
+      />
     </UserProvider>
   );
 };
