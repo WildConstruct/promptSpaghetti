@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect, useRef } from 'react';
 import { Node, Edge } from 'reactflow';
 import { useToast } from '../../Toast';
 
@@ -24,9 +24,16 @@ export const useEditOperations = ({
   onEditorKeyChange,
   showToast
 }: EditOperationsConfig) => {
-  const [history, setHistory] = useState<HistoryState[]>([{ nodes: [], edges: [] }]);
+  // Initialize history with current state
+  const [history, setHistory] = useState<HistoryState[]>([
+    { 
+      nodes: JSON.parse(JSON.stringify(currentNodes || [])), 
+      edges: JSON.parse(JSON.stringify(currentEdges || [])) 
+    }
+  ]);
   const [historyIndex, setHistoryIndex] = useState(0);
   const [clipboard, setClipboard] = useState<HistoryState | null>(null);
+  const [lastChangeTime, setLastChangeTime] = useState(Date.now());
 
   const addToHistory = useCallback((nodes: Node[], edges: Edge[]) => {
     const newHistory = history.slice(0, historyIndex + 1);
@@ -49,8 +56,11 @@ export const useEditOperations = ({
       onEdgesChange([...state.edges]);
       setHistoryIndex(newIndex);
       onEditorKeyChange(prev => prev + 1);
+      showToast('Undo successful', 'success');
+    } else {
+      showToast('Nothing to undo', 'info');
     }
-  }, [history, historyIndex, onNodesChange, onEdgesChange, onEditorKeyChange]);
+  }, [history, historyIndex, onNodesChange, onEdgesChange, onEditorKeyChange, showToast]);
 
   const handleRedo = useCallback(() => {
     if (historyIndex < history.length - 1) {
@@ -60,8 +70,11 @@ export const useEditOperations = ({
       onEdgesChange([...state.edges]);
       setHistoryIndex(newIndex);
       onEditorKeyChange(prev => prev + 1);
+      showToast('Redo successful', 'success');
+    } else {
+      showToast('Nothing to redo', 'info');
     }
-  }, [history, historyIndex, onNodesChange, onEdgesChange, onEditorKeyChange]);
+  }, [history, historyIndex, onNodesChange, onEdgesChange, onEditorKeyChange, showToast]);
 
   const handleCopy = useCallback(() => {
     const selectedNodes = currentNodes.filter(n => n.selected);
@@ -138,6 +151,48 @@ export const useEditOperations = ({
     
     showToast(`Pasted ${pastedNodes.length} node${pastedNodes.length !== 1 ? 's' : ''}`, 'success');
   }, [clipboard, currentNodes, currentEdges, onNodesChange, onEdgesChange, onEditorKeyChange, addToHistory, showToast]);
+
+  // Track changes to nodes and edges for undo/redo history
+  const prevNodesRef = useRef<Node[]>(currentNodes);
+  const prevEdgesRef = useRef<Edge[]>(currentEdges);
+  const changeTimeoutRef = useRef<NodeJS.Timeout>();
+  
+  useEffect(() => {
+    // Skip if no actual changes
+    const nodesChanged = JSON.stringify(prevNodesRef.current) !== JSON.stringify(currentNodes);
+    const edgesChanged = JSON.stringify(prevEdgesRef.current) !== JSON.stringify(currentEdges);
+    
+    if (!nodesChanged && !edgesChanged) {
+      return;
+    }
+    
+    // Clear existing timeout
+    if (changeTimeoutRef.current) {
+      clearTimeout(changeTimeoutRef.current);
+    }
+    
+    // Debounce history updates to avoid too many entries
+    changeTimeoutRef.current = setTimeout(() => {
+      // Don't add to history if we're in the middle of undo/redo
+      const currentState = history[historyIndex];
+      const isUndoRedo = currentState && 
+        JSON.stringify(currentState.nodes) === JSON.stringify(currentNodes) &&
+        JSON.stringify(currentState.edges) === JSON.stringify(currentEdges);
+      
+      if (!isUndoRedo && (currentNodes.length > 0 || currentEdges.length > 0)) {
+        addToHistory(currentNodes, currentEdges);
+      }
+      
+      prevNodesRef.current = currentNodes;
+      prevEdgesRef.current = currentEdges;
+    }, 500); // 500ms debounce
+    
+    return () => {
+      if (changeTimeoutRef.current) {
+        clearTimeout(changeTimeoutRef.current);
+      }
+    };
+  }, [currentNodes, currentEdges, addToHistory, history, historyIndex]);
 
   return {
     history,
