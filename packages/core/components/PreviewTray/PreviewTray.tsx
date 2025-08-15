@@ -59,17 +59,6 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   // Enable keyboard shortcuts
   usePreviewTrayKeyboardShortcuts();
 
-  // Cleanup drag listeners on unmount
-  useEffect(() => {
-    return () => {
-      if (isDragging.current) {
-        document.removeEventListener('mousemove', handleDragMove);
-        document.removeEventListener('mouseup', handleDragEnd);
-        document.body.style.cursor = '';
-      }
-    };
-  }, [handleDragMove, handleDragEnd]);
-
   const maxHeightValue = maxHeight || window.innerHeight * TRAY_MAX_HEIGHT_PERCENT;
 
   const handleToggle = useCallback(() => {
@@ -121,6 +110,17 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
     document.removeEventListener('mouseup', handleDragEnd);
     document.body.style.cursor = '';
   }, [handleDragMove]);
+
+  // Cleanup drag listeners on unmount - moved after handler definitions
+  useEffect(() => {
+    return () => {
+      if (isDragging.current) {
+        document.removeEventListener('mousemove', handleDragMove);
+        document.removeEventListener('mouseup', handleDragEnd);
+        document.body.style.cursor = '';
+      }
+    };
+  }, [handleDragMove, handleDragEnd]);
 
   const getTrayHeight = () => {
     if (!isOpen) return 0;
