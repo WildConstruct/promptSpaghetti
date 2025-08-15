@@ -5,13 +5,34 @@ import { ServerTab } from './components/ServerTab';
 import { TabbedAssetBrowser } from './components/TabbedAssetBrowser';
 import { OpenGraphDialog } from './components/OpenGraphDialog';
 import { SaveGraphDialog } from './components/SaveGraphDialog';
-import { UserProvider, useUserId } from './user/UserProvider';
+import { UserProvider as OriginalUserProvider, useUserId } from './user/UserProvider';
+
+// Enhanced components
+import { EnhancedAssetBrowser } from './components/EnhancedAssetBrowser';
+import { EnhancedPresetGrid } from './components/EnhancedPresetGrid';
+import { EnhancedPresetCard } from './components/EnhancedPresetCard';
+
+// Services
+import { FragmentManifestLoader } from './services/FragmentManifestLoader';
+export type { FragmentManifest, FragmentCategory, FragmentEntry } from './services/FragmentManifestLoader';
+
+// Our new UserProvider wrapper for compatibility
+import { UserProvider } from './providers/UserProvider';
+
+// Store
+import { useAssetBrowserStore } from './stores/assetBrowserStore';
+
 import type { Preset } from './types';
 export type { Preset } from './types';
 
 export type AssetBrowserProps = {
   onInsert?: (preset: Preset) => void;
 };
+
+export interface EnhancedAssetBrowserProps extends AssetBrowserProps {
+  onNodeReplace?: (nodeId: string, preset: any) => void;
+  enableFragmentManifest?: boolean;
+}
 
 export {
   AssetBrowser,
@@ -21,7 +42,13 @@ export {
   OpenGraphDialog,
   SaveGraphDialog,
   UserProvider,
-  useUserId
+  OriginalUserProvider,
+  useUserId,
+  EnhancedAssetBrowser,
+  EnhancedPresetGrid,
+  EnhancedPresetCard,
+  FragmentManifestLoader,
+  useAssetBrowserStore
 };
 
 // Export TabbedAssetBrowser as the default
