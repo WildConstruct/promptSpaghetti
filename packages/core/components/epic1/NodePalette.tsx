@@ -21,6 +21,7 @@ const nodeTypes: NodeTypeInfo[] = [
   { type: 'setVariable', label: 'Set Variable', icon: '💾', category: 'Variables' },
   { type: 'getVariable', label: 'Get Variable', icon: '📥', category: 'Variables' },
   { type: 'output', label: 'Output', icon: '📤', category: 'Output' },
+  { type: 'enhancedBoundingBox', label: 'Region Box', icon: '🗂️', category: 'Organization' },
 ];
 
 export interface NodePaletteProps {

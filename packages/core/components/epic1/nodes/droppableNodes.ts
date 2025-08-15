@@ -10,6 +10,7 @@ import { VariableNode } from './VariableNode';
 import { OutputNode } from './OutputNode';
 import { PostItNote } from './PostItNote';
 import { BoundingBox } from './BoundingBox';
+import { EnhancedBoundingBox } from './EnhancedBoundingBox';
 import { epic1NodeTypes } from './index';
 import type { NodeTypes } from 'reactflow';
 
@@ -26,6 +27,7 @@ export const DroppableOutputNode = withDroppableNode(OutputNode);
 // so they work properly in the editor
 export const DroppablePostItNote = PostItNote;
 export const DroppableBoundingBox = BoundingBox;
+export const DroppableEnhancedBoundingBox = EnhancedBoundingBox;
 
 // Export enhanced node types mapping
 // Include ALL base node types, overriding only the ones that support droppable behavior
@@ -40,4 +42,5 @@ export const droppableEpic1NodeTypes: NodeTypes = {
   output: DroppableOutputNode,
   postItNote: DroppablePostItNote,
   boundingBox: DroppableBoundingBox,
+  enhancedBoundingBox: DroppableEnhancedBoundingBox,
 };

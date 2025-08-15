@@ -10,6 +10,7 @@ import { OutputNode } from './OutputNode';
 import { NodeContextMenu } from './NodeContextMenu';
 import { PostItNote } from './PostItNote';
 import { BoundingBox } from './BoundingBox';
+import { EnhancedBoundingBox } from './EnhancedBoundingBox';
 import GroupNode from './GroupNode';
 
 // Export components and types
@@ -46,6 +47,9 @@ export type { PostItNoteData } from './PostItNote';
 export { BoundingBox };
 export type { BoundingBoxData } from './BoundingBox';
 
+export { EnhancedBoundingBox };
+export type { EnhancedBoundingBoxData } from './EnhancedBoundingBox';
+
 export { GroupNode };
 
 // Now we can safely create the node type mapping
@@ -59,6 +63,7 @@ export const epic1NodeTypes = {
   output: OutputNode,
   postItNote: PostItNote,
   boundingBox: BoundingBox,
+  enhancedBoundingBox: EnhancedBoundingBox, // Enhanced version with collapse/expand
   group: GroupNode
 };
 

@@ -48,6 +48,7 @@ import { useAutoLayout } from './hooks/useAutoLayout';
 import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
+import './nodes/EnhancedBoundingBox.css';
 import './PanZoomControls.css';
 import { insertPreset, validatePreset } from '../../runtime/presetInsertion';
 import { 
@@ -215,7 +216,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           
           // Find nodes contained in this box
           const containedNodeIds = nodes.filter(node => {
-            if (node.id === box.id || node.type === 'boundingBox' || node.type === 'postItNote') return false;
+            if (node.id === box.id || node.type === 'boundingBox' || node.type === 'enhancedBoundingBox' || node.type === 'postItNote') return false;
             
             const nodeX = node.position.x;
             const nodeY = node.position.y;
@@ -1217,7 +1218,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const handleCreateBoundingBox = useCallback((position: { x: number; y: number }) => {
     const newNode: Node = {
       id: `box-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      type: 'boundingBox',
+      type: 'enhancedBoundingBox',
       position,
       selectable: true,
       data: {
