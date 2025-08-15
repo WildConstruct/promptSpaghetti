@@ -1,0 +1,138 @@
+{
+  "name": "Micro-Expressions Region Bundle",
+  "description": "Subtle facial expressions with intensity and context modifiers",
+  "version": "1.0.0",
+  "generated": "2025-01-16",
+  "generator": "asset-generator-agent",
+  
+  "region": {
+    "id": "region_micro_expressions_2025_01_16",
+    "name": "Micro-Expressions",
+    "color": "#FF5252",
+    "category": "character",
+    "subcategory": "emotion",
+    "description": "Fleeting facial movements that reveal hidden emotions"
+  },
+  
+  "nodes": [
+    {
+      "id": "micro_expression",
+      "type": "WeightedChoice",
+      "position": { "x": 100, "y": 150 },
+      "data": {
+        "label": "Micro-Expression",
+        "choices": [
+          { "id": "me_1", "text": "fleeting eyebrow flash", "weight": 2, "muted": false, "solo": false },
+          { "id": "me_2", "text": "subtle lip purse", "weight": 1.8, "muted": false, "solo": false },
+          { "id": "me_3", "text": "quick eye dart", "weight": 1.8, "muted": false, "solo": false },
+          { "id": "me_4", "text": "brief nostril flare", "weight": 1.2, "muted": false, "solo": false },
+          { "id": "me_5", "text": "micro brow furrow", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "me_6", "text": "slight eye narrowing", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "me_7", "text": "corner mouth twitch", "weight": 1.3, "muted": false, "solo": false },
+          { "id": "me_8", "text": "momentary jaw clench", "weight": 1.2, "muted": false, "solo": false },
+          { "id": "me_9", "text": "suppressed eye roll", "weight": 1, "muted": false, "solo": false },
+          { "id": "me_10", "text": "fighting back a smile", "weight": 1.4, "muted": false, "solo": false },
+          { "id": "me_11", "text": "quick inner lip bite", "weight": 1.3, "muted": false, "solo": false },
+          { "id": "me_12", "text": "subtle chin raise", "weight": 1, "muted": false, "solo": false }
+        ]
+      }
+    },
+    {
+      "id": "intensity",
+      "type": "WeightedChoice",
+      "position": { "x": 350, "y": 150 },
+      "data": {
+        "label": "Intensity",
+        "choices": [
+          { "id": "int_1", "text": "barely perceptible", "weight": 2, "muted": false, "solo": false },
+          { "id": "int_2", "text": "fleeting", "weight": 3, "muted": false, "solo": false },
+          { "id": "int_3", "text": "subtle but noticeable", "weight": 2, "muted": false, "solo": false },
+          { "id": "int_4", "text": "quickly suppressed", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "int_5", "text": "involuntary", "weight": 1.5, "muted": false, "solo": false }
+        ]
+      }
+    },
+    {
+      "id": "context",
+      "type": "WeightedChoice",
+      "position": { "x": 600, "y": 150 },
+      "data": {
+        "label": "Context",
+        "choices": [
+          { "id": "ctx_1", "text": "betraying", "weight": 2.5, "muted": false, "solo": false },
+          { "id": "ctx_2", "text": "revealing", "weight": 2, "muted": false, "solo": false },
+          { "id": "ctx_3", "text": "trying to hide", "weight": 2, "muted": false, "solo": false },
+          { "id": "ctx_4", "text": "suggesting", "weight": 1.5, "muted": false, "solo": false }
+        ]
+      }
+    },
+    {
+      "id": "micro_expression_output",
+      "type": "Output",
+      "position": { "x": 350, "y": 300 },
+      "data": {
+        "label": "Complete Expression",
+        "template": "A {{intensity}} {{micro_expression}}, {{context}} their true feelings"
+      }
+    }
+  ],
+  
+  "edges": [
+    {
+      "id": "edge_1",
+      "source": "micro_expression",
+      "target": "micro_expression_output",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge_2",
+      "source": "intensity",
+      "target": "micro_expression_output",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "id": "edge_3",
+      "source": "context",
+      "target": "micro_expression_output",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    }
+  ],
+  
+  "keywords": {
+    "primary": "character",
+    "secondary": "emotion",
+    "tags": [
+      "micro-expression",
+      "facial",
+      "fleeting",
+      "subtle",
+      "nonverbal",
+      "psychology",
+      "emotion",
+      "hidden",
+      "involuntary",
+      "eyebrow",
+      "lip",
+      "eye"
+    ],
+    "usage": ["dialogue", "character-reveal", "tension", "subtext"]
+  },
+  
+  "metadata": {
+    "nodeCount": 4,
+    "possibleCombinations": 240,
+    "averageLength": "8-12 words",
+    "complexity": "simple",
+    "recommendedUse": "Perfect for adding subtle character moments during dialogue or tense scenes"
+  },
+  
+  "examples": [
+    "A barely perceptible fleeting eyebrow flash, betraying their true feelings",
+    "A fleeting subtle lip purse, revealing their true feelings",
+    "A quickly suppressed quick eye dart, trying to hide their true feelings",
+    "An involuntary micro brow furrow, suggesting their true feelings"
+  ]
+}

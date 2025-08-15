@@ -1,0 +1,149 @@
+{
+  "name": "PSG Region Color Taxonomy",
+  "version": "1.0.0",
+  "description": "Standardized color coding for region annotations to ensure visual consistency and quick recognition",
+  
+  "primaryCategories": {
+    "character": {
+      "color": "#FF6B6B",
+      "hex": "#FF6B6B",
+      "name": "Coral Red",
+      "description": "All character-related assets (physical, emotional, personality)",
+      "subcategories": {
+        "physical": "#FF8787",
+        "emotion": "#FF5252",
+        "personality": "#FF6B6B",
+        "action": "#FF7979"
+      }
+    },
+    "environment": {
+      "color": "#4ECDC4",
+      "hex": "#4ECDC4",
+      "name": "Teal",
+      "description": "Settings, locations, weather, atmosphere",
+      "subcategories": {
+        "location": "#45B7B8",
+        "weather": "#5ED4CC",
+        "time": "#4ECDC4",
+        "atmosphere": "#56D6CD"
+      }
+    },
+    "narrative": {
+      "color": "#95E77E",
+      "hex": "#95E77E",
+      "name": "Spring Green",
+      "description": "Story elements, plot, hooks, twists",
+      "subcategories": {
+        "plot": "#8FE070",
+        "hooks": "#A0ED8C",
+        "conflict": "#95E77E",
+        "resolution": "#9BEB86"
+      }
+    },
+    "dialogue": {
+      "color": "#FFE66D",
+      "hex": "#FFE66D",
+      "name": "Sunshine Yellow",
+      "description": "Conversation, speech patterns, communication",
+      "subcategories": {
+        "conversation": "#FFE15D",
+        "tone": "#FFEB7D",
+        "style": "#FFE66D",
+        "subtext": "#FFE875"
+      }
+    },
+    "worldbuilding": {
+      "color": "#A8E6CF",
+      "hex": "#A8E6CF",
+      "name": "Mint Green",
+      "description": "Lore, culture, society, systems",
+      "subcategories": {
+        "culture": "#9FE2C8",
+        "society": "#B1EAD6",
+        "history": "#A8E6CF",
+        "systems": "#ACE8D2"
+      }
+    },
+    "items": {
+      "color": "#C7CEEA",
+      "hex": "#C7CEEA",
+      "name": "Periwinkle",
+      "description": "Objects, equipment, artifacts, props",
+      "subcategories": {
+        "equipment": "#BFC7E6",
+        "artifacts": "#CFD5EE",
+        "consumables": "#C7CEEA",
+        "props": "#CBD2EC"
+      }
+    },
+    "gameplay": {
+      "color": "#FFDAB9",
+      "hex": "#FFDAB9",
+      "name": "Peach",
+      "description": "Quests, objectives, mechanics, challenges",
+      "subcategories": {
+        "quest": "#FFD4A3",
+        "objective": "#FFE0CF",
+        "mechanic": "#FFDAB9",
+        "challenge": "#FFDDC1"
+      }
+    }
+  },
+  
+  "specialPurpose": {
+    "experimental": {
+      "color": "#E0E0E0",
+      "name": "Gray",
+      "description": "Work in progress or experimental assets"
+    },
+    "premium": {
+      "color": "#FFD700",
+      "name": "Gold",
+      "description": "High-quality curated asset bundles"
+    },
+    "template": {
+      "color": "#9B59B6",
+      "name": "Purple",
+      "description": "Reusable template structures"
+    },
+    "tutorial": {
+      "color": "#3498DB",
+      "name": "Blue",
+      "description": "Educational or example assets"
+    }
+  },
+  
+  "usageGuidelines": {
+    "consistency": "Always use the exact hex codes provided for each category",
+    "hierarchy": "Use lighter shades for subcategories within the same color family",
+    "contrast": "Ensure text remains readable against colored backgrounds",
+    "accessibility": "Consider colorblind users - add patterns or icons as secondary indicators"
+  },
+  
+  "implementationExample": {
+    "cssVariables": {
+      "--region-character": "#FF6B6B",
+      "--region-environment": "#4ECDC4",
+      "--region-narrative": "#95E77E",
+      "--region-dialogue": "#FFE66D",
+      "--region-worldbuilding": "#A8E6CF",
+      "--region-items": "#C7CEEA",
+      "--region-gameplay": "#FFDAB9"
+    },
+    "regionAnnotation": {
+      "id": "region_example",
+      "name": "Character Emotions",
+      "color": "#FF5252",
+      "category": "character",
+      "subcategory": "emotion"
+    }
+  },
+  
+  "bestPractices": [
+    "Use primary category colors for main region borders",
+    "Apply subcategory colors for inner node highlights",
+    "Maintain 60% opacity for region backgrounds to keep nodes readable",
+    "Add a 2px border with full opacity for clear boundaries",
+    "Include color legend in asset browser UI"
+  ]
+}

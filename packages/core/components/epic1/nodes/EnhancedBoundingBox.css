@@ -1,0 +1,181 @@
+/* Enhanced Bounding Box Styles */
+
+.enhanced-bounding-box {
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.enhanced-bounding-box.collapsed {
+  overflow: hidden;
+}
+
+/* Collapse/Expand Toggle */
+.collapse-toggle {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  transition: transform 0.2s ease;
+  z-index: 10;
+}
+
+.collapse-toggle:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+/* Port System */
+.port-label {
+  position: absolute;
+  font-size: 10px;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.port-label-input {
+  right: 100%;
+  margin-right: 8px;
+  transform: translateY(-50%);
+}
+
+.port-label-output {
+  left: 100%;
+  margin-left: 8px;
+  transform: translateY(-50%);
+}
+
+.enhanced-bounding-box.collapsed:hover .port-label {
+  opacity: 1;
+}
+
+/* Auto-layout Button */
+.auto-layout-button {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.auto-layout-button:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.05);
+}
+
+/* Collapsed State Specific */
+.enhanced-bounding-box.collapsed .bounding-box-header {
+  border-bottom: none;
+  padding-bottom: 8px;
+}
+
+.enhanced-bounding-box.collapsed .bounding-box-title {
+  margin-left: 28px; /* Space for collapse toggle */
+}
+
+/* Animation Classes */
+.node-hidden-animation {
+  animation: fadeOut 0.3s ease-in-out;
+}
+
+.node-visible-animation {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Handle Styles for Ports */
+.react-flow__handle {
+  transition: all 0.2s ease;
+}
+
+.enhanced-bounding-box.collapsed .react-flow__handle {
+  opacity: 0.7;
+}
+
+.enhanced-bounding-box.collapsed:hover .react-flow__handle {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Type-based Port Colors */
+.port-type-string {
+  background: #52c41a !important;
+}
+
+.port-type-number {
+  background: #1890ff !important;
+}
+
+.port-type-choice {
+  background: #faad14 !important;
+}
+
+.port-type-any {
+  background: #722ed1 !important;
+}
+
+/* Collapsed Region Content */
+.collapsed-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+}
+
+.collapsed-summary {
+  text-align: center;
+}
+
+.collapsed-node-count {
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* Professional Border Styles */
+.enhanced-bounding-box.selected {
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.6);
+}
+
+.enhanced-bounding-box.collapsed.selected {
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.8);
+}

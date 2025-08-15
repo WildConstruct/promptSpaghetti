@@ -32,10 +32,12 @@ export const nodeSchemas: Record<string, z.ZodSchema<any>> = {
       .array(
         z.object({
           text: z.string(),
-          weight: z.number().min(0).default(1)
+          weight: z.number().min(0).default(1),
+          muted: z.boolean().default(false),
+          solo: z.boolean().default(false)
         })
       )
-      .default([{ text: 'choice', weight: 1 }])
+      .default([{ text: 'choice', weight: 1, muted: false, solo: false }])
   }),
   
   Concat: baseNodeSchema.extend({

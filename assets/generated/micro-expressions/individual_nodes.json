@@ -1,0 +1,74 @@
+{
+  "nodes": [
+    {
+      "id": "micro_expression_eyebrow_flash",
+      "type": "Output",
+      "data": {
+        "label": "Eyebrow Flash",
+        "template": "fleeting eyebrow flash",
+        "metadata": {
+          "category": "micro_expressions",
+          "subcategory": "facial_movements",
+          "tags": ["micro-expression", "eyebrow", "flash", "fleeting", "face", "expression"],
+          "generated": "2025-01-16",
+          "source": "batch-generator",
+          "description": "A quick, subtle raising of the eyebrows"
+        }
+      },
+      "position": {
+        "x": 100,
+        "y": 100
+      }
+    },
+    {
+      "id": "micro_expression_lip_purse",
+      "type": "Output",
+      "data": {
+        "label": "Lip Purse",
+        "template": "subtle lip purse",
+        "metadata": {
+          "category": "micro_expressions",
+          "subcategory": "facial_movements",
+          "tags": ["micro-expression", "lip", "purse", "fleeting", "face", "mouth"],
+          "generated": "2025-01-16",
+          "source": "batch-generator",
+          "description": "A brief tightening or pursing of the lips"
+        }
+      },
+      "position": {
+        "x": 300,
+        "y": 100
+      }
+    },
+    {
+      "id": "micro_expression_eye_dart",
+      "type": "Output",
+      "data": {
+        "label": "Eye Dart",
+        "template": "quick eye dart",
+        "metadata": {
+          "category": "micro_expressions",
+          "subcategory": "facial_movements",
+          "tags": ["micro-expression", "eye", "dart", "fleeting", "face", "glance"],
+          "generated": "2025-01-16",
+          "source": "batch-generator",
+          "description": "A rapid, darting eye movement"
+        }
+      },
+      "position": {
+        "x": 500,
+        "y": 100
+      }
+    }
+  ],
+  "edges": [],
+  "metadata": {
+    "version": "1.0.0",
+    "name": "Micro-Expressions Collection",
+    "description": "Fleeting facial expressions for subtle character details",
+    "generated": "2025-01-16",
+    "generator": "asset-generator",
+    "nodeCount": 3,
+    "edgeCount": 0
+  }
+}

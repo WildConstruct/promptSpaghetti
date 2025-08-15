@@ -9,15 +9,18 @@ import { IOSpecBuilder, TypedInputs } from '../io-system';
 import { AIModelFactory, DALLEAdapter, MidjourneyAdapter, StableDiffusionAdapter } from '../../ai';
 
 
-export interface ImageGenerationConfig { provider: 'dalle' | 'midjourney' | 'stable-diffusion';
+export interface ImageGenerationConfig {
+  provider: 'dalle' | 'midjourney' | 'stable-diffusion';
   model?: string;
   apiKey?: string;
   endpoint?: string;
-  defaultParameters?: Record<string, any> }
+  defaultParameters?: Record<string, any>;
+}
 
 
 
-export interface ImageMetadata { width: number;
+export interface ImageMetadata {
+  width: number;
   height: number;
   format: string;
   model: string;
@@ -26,19 +29,22 @@ export interface ImageMetadata { width: number;
   cost: number;
   seed?: number;
   prompt: string;
-  negativePrompt?: string }
+  negativePrompt?: string;
+}
 
 
 
-export interface GeneratedImage { url?: string;
+export interface GeneratedImage {
+  url?: string;
   base64?: string;
-  metadata: ImageMetadata }
+  metadata: ImageMetadata;
+}
 
 export class ImageGenerationNode extends AdvancedRuntimeNode {
   private modelFactory: AIModelFactory;
   private adapters: Map<string, any> = new Map();
   constructor(nodeId: string, config: ImageGenerationConfig) {
-    const ioSpec = new IOSpecBuilder();
+    const ioSpec = new IOSpecBuilder()
       .input('prompt', 'string', 'Image description prompt')
       .input('negative_prompt', 'string', 'Negative prompt (optional)', { required: false })
       .input('width', 'number', 'Image width', { required: false, default: 1024 })
@@ -66,18 +72,20 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       // Validate inputs
       if (!prompt) {
         throw new Error('Prompt is required for image generation');
+      }
       const provider = this._getConfiguredProvider();
       const adapter = this.adapters.get(provider);
       if (!adapter) {
-        throw new Error(`No adapter configured for provider: ${provider}`);}
+        throw new Error(`No adapter configured for provider: ${provider}`);
+      }
       // Prepare generation options based on provider
-      const options = this._buildGenerationOptions(provider, { )
-  prompt
-        negativePrompt
-        width
-        height
-        style
-        quality }
+      const options = this._buildGenerationOptions(provider, {
+        prompt,
+        negativePrompt,
+        width,
+        height,
+        style,
+        quality,
         seed
       });
       // Generate images
@@ -85,19 +93,19 @@ export class ImageGenerationNode extends AdvancedRuntimeNode {
       const result = await adapter.process(prompt, options);
       const generationTime = Date.now() - startTime;
       // Process results
-      const images: GeneratedImage = result.images.map((img: unknown) => ({ );
-  url: img.url
-  base64: img.base64
-  metadata: {
-  width: img.metadata?.size?.split('x')[0] || width
-  height: img.metadata?.size?.split('x')[1] || height
-  format: 'png'
-  model: img.metadata?.model || adapter.metadata.name
-  provider
-  generationTime
-  cost: result.usage?.totalCost || result.usage?.estimatedCost || 0
-  seed: img.seed || seed
-  prompt
+      const images: GeneratedImage[] = result.images.map((img: any) => ({
+        url: img.url,
+        base64: img.base64,
+        metadata: {
+          width: img.metadata?.size?.split('x')[0] || width,
+          height: img.metadata?.size?.split('x')[1] || height,
+          format: 'png',
+          model: img.metadata?.model || adapter.metadata.name,
+          provider,
+          generationTime,
+          cost: result.usage?.totalCost || result.usage?.estimatedCost || 0,
+          seed: img.seed || seed,
+          prompt,
   negativePrompt: negativePrompt || undefined }
 }));
       const totalCost = images.reduce((sum, img) => sum + img.metadata.cost, 0);

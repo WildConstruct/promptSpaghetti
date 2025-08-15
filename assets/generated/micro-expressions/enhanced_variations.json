@@ -1,0 +1,111 @@
+{
+  "nodes": [
+    {
+      "id": "micro_expression_template",
+      "type": "Output",
+      "data": {
+        "label": "Micro-Expression Template",
+        "template": "{{character}} with a {{micro_expression}}, {{intensity}}",
+        "metadata": {
+          "category": "micro_expressions",
+          "type": "template",
+          "variables": ["character", "micro_expression", "intensity"],
+          "tags": ["template", "micro-expression", "variable"]
+        }
+      },
+      "position": {
+        "x": 100,
+        "y": 500
+      }
+    },
+    {
+      "id": "intensity_selector",
+      "type": "WeightedChoice",
+      "data": {
+        "label": "Expression Intensity",
+        "choices": [
+          {
+            "id": "barely_visible",
+            "weight": 2,
+            "text": "barely visible"
+          },
+          {
+            "id": "subtle",
+            "weight": 3,
+            "text": "subtle"
+          },
+          {
+            "id": "noticeable",
+            "weight": 2,
+            "text": "noticeable"
+          },
+          {
+            "id": "fleeting",
+            "weight": 3,
+            "text": "fleeting"
+          }
+        ]
+      },
+      "position": {
+        "x": 300,
+        "y": 500
+      }
+    },
+    {
+      "id": "context_selector",
+      "type": "WeightedChoice",
+      "data": {
+        "label": "Expression Context",
+        "choices": [
+          {
+            "id": "during_conversation",
+            "weight": 1,
+            "text": "during conversation"
+          },
+          {
+            "id": "in_thought",
+            "weight": 1,
+            "text": "lost in thought"
+          },
+          {
+            "id": "reacting",
+            "weight": 1,
+            "text": "reacting to news"
+          },
+          {
+            "id": "hiding_emotion",
+            "weight": 1,
+            "text": "trying to hide emotion"
+          }
+        ]
+      },
+      "position": {
+        "x": 500,
+        "y": 500
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_1",
+      "source": "weighted_micro_expressions",
+      "target": "micro_expression_template",
+      "label": "feeds into"
+    },
+    {
+      "id": "edge_2",
+      "source": "intensity_selector",
+      "target": "micro_expression_template",
+      "label": "modifies"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "name": "Enhanced Micro-Expression System",
+    "description": "Advanced template with intensity and context variations",
+    "generated": "2025-01-16",
+    "generator": "asset-generator",
+    "nodeCount": 3,
+    "edgeCount": 2
+  }
+}

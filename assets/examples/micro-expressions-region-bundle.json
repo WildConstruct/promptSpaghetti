@@ -1,0 +1,109 @@
+{
+  "name": "Micro-Expression Detection Bundle",
+  "description": "Subtle facial expressions with context and intensity modifiers",
+  "region": {
+    "id": "region_micro_expressions_001",
+    "name": "Micro-Expressions",
+    "color": "#FF6B6B",
+    "category": "character",
+    "subcategory": "emotion"
+  },
+  "nodes": [
+    {
+      "id": "micro_expression_selector",
+      "type": "WeightedChoice",
+      "position": { "x": 100, "y": 100 },
+      "data": {
+        "label": "Micro-Expression",
+        "choices": [
+          { "id": "eyebrow_flash", "text": "fleeting eyebrow flash", "weight": 2, "muted": false, "solo": false },
+          { "id": "lip_purse", "text": "subtle lip purse", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "eye_dart", "text": "quick eye dart", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "nostril_flare", "text": "brief nostril flare", "weight": 1, "muted": false, "solo": false },
+          { "id": "jaw_clench", "text": "momentary jaw clench", "weight": 1, "muted": false, "solo": false },
+          { "id": "eye_narrow", "text": "slight eye narrowing", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "mouth_twitch", "text": "corner mouth twitch", "weight": 1, "muted": false, "solo": false },
+          { "id": "brow_furrow", "text": "micro brow furrow", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "chin_raise", "text": "subtle chin raise", "weight": 0.8, "muted": false, "solo": false },
+          { "id": "lip_bite", "text": "quick inner lip bite", "weight": 1.2, "muted": false, "solo": false },
+          { "id": "eye_roll", "text": "suppressed eye roll", "weight": 0.8, "muted": false, "solo": false },
+          { "id": "smile_suppress", "text": "fighting back a smile", "weight": 1.5, "muted": false, "solo": false }
+        ]
+      }
+    },
+    {
+      "id": "intensity_modifier",
+      "type": "WeightedChoice",
+      "position": { "x": 300, "y": 100 },
+      "data": {
+        "label": "Intensity",
+        "choices": [
+          { "id": "barely", "text": "barely perceptible", "weight": 2, "muted": false, "solo": false },
+          { "id": "fleeting", "text": "fleeting", "weight": 3, "muted": false, "solo": false },
+          { "id": "subtle", "text": "subtle but noticeable", "weight": 2, "muted": false, "solo": false },
+          { "id": "suppressed", "text": "quickly suppressed", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "involuntary", "text": "involuntary", "weight": 1, "muted": false, "solo": false }
+        ]
+      }
+    },
+    {
+      "id": "context_modifier",
+      "type": "WeightedChoice",
+      "position": { "x": 500, "y": 100 },
+      "data": {
+        "label": "Context",
+        "choices": [
+          { "id": "hiding", "text": "trying to hide", "weight": 2, "muted": false, "solo": false },
+          { "id": "revealing", "text": "revealing", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "betraying", "text": "betraying their", "weight": 2, "muted": false, "solo": false },
+          { "id": "suggesting", "text": "suggesting", "weight": 1, "muted": false, "solo": false }
+        ]
+      }
+    },
+    {
+      "id": "emotion_target",
+      "type": "WeightedChoice",
+      "position": { "x": 700, "y": 100 },
+      "data": {
+        "label": "Emotion",
+        "choices": [
+          { "id": "discomfort", "text": "discomfort", "weight": 2, "muted": false, "solo": false },
+          { "id": "interest", "text": "interest", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "skepticism", "text": "skepticism", "weight": 2, "muted": false, "solo": false },
+          { "id": "amusement", "text": "amusement", "weight": 1.5, "muted": false, "solo": false },
+          { "id": "contempt", "text": "contempt", "weight": 1, "muted": false, "solo": false },
+          { "id": "anxiety", "text": "anxiety", "weight": 1.5, "muted": false, "solo": false }
+        ]
+      }
+    },
+    {
+      "id": "micro_expression_output",
+      "type": "Output",
+      "position": { "x": 400, "y": 250 },
+      "data": {
+        "label": "Complete Micro-Expression",
+        "template": "A {{intensity_modifier}} {{micro_expression_selector}}, {{context_modifier}} {{emotion_target}}"
+      }
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "micro_expression_selector", "target": "micro_expression_output" },
+    { "id": "e2", "source": "intensity_modifier", "target": "micro_expression_output" },
+    { "id": "e3", "source": "context_modifier", "target": "micro_expression_output" },
+    { "id": "e4", "source": "emotion_target", "target": "micro_expression_output" }
+  ],
+  "keywords": {
+    "primary": "character",
+    "secondary": "emotion",
+    "specific": ["micro-expression", "facial", "subtle", "nonverbal"],
+    "modifiers": ["fleeting", "involuntary", "suppressed", "revealing"],
+    "usage": ["dialogue", "character-development", "tension", "psychology"]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-16",
+    "nodeCount": 5,
+    "possibleCombinations": 2880,
+    "recommendedUse": "Character moments requiring subtle emotional reveals"
+  }
+}

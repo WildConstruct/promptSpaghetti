@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "weighted_micro_expressions",
+      "type": "WeightedChoice",
+      "data": {
+        "label": "Micro-Expression Selector",
+        "choices": [
+          {
+            "id": "choice_1",
+            "weight": 1,
+            "text": "fleeting eyebrow flash"
+          },
+          {
+            "id": "choice_2",
+            "weight": 1,
+            "text": "subtle lip purse"
+          },
+          {
+            "id": "choice_3",
+            "weight": 1,
+            "text": "quick eye dart"
+          }
+        ],
+        "metadata": {
+          "category": "micro_expressions",
+          "description": "Random selector for fleeting facial expressions",
+          "itemCount": 3,
+          "generated": "2025-01-16"
+        }
+      },
+      "position": {
+        "x": 300,
+        "y": 300
+      }
+    }
+  ],
+  "edges": [],
+  "metadata": {
+    "version": "1.0.0",
+    "name": "Micro-Expressions Weighted Choice",
+    "description": "Randomly select from fleeting facial expressions",
+    "generated": "2025-01-16",
+    "generator": "asset-generator",
+    "nodeCount": 1,
+    "edgeCount": 0
+  }
+}

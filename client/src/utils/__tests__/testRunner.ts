@@ -9,164 +9,185 @@ import { memoryUtils, WeakCache } from '../memoryOptimization';
 
 
 interface TestResult {
-  name: string;,
-  category: 'security' | 'performance' | 'memory' | 'integration';,
-  passed: boolean;,
+  name: string;
+  category: 'security' | 'performance' | 'memory' | 'integration';
+  passed: boolean;
   duration: number;
   error?: string;
   details?: Record<string, unknown>;
-
-
+}
 
 interface TestSuiteResult {
-  totalTests: number;,
-  passedTests: number;,
-  failedTests: number;,
+  totalTests: number;
+  passedTests: number;
+  failedTests: number;
   totalDuration: number;
-
-},
   categories: Record<string, { passed: number; failed: number; duration: number }>;
-  results: TestResult;
+  results: TestResult[];
   coverage?: {
-  security: number;,
-  performance: number;,
-  memory: number;,
-  integration: number;
-};
+    security: number;
+    performance: number;
+    memory: number;
+    integration: number;
+  };
+}
 class QualityTestRunner {
-  private results: TestResult = [];
+  private results: TestResult[] = [];
   /**
   * Run all quality improvement tests
   */
-  async runAllTests(): Promise<TestSuiteResult> {,
-  console.log('🧪 Starting comprehensive quality improvement tests...');
-  this.results = [];
-  // Run test categories in parallel for efficiency
-  const testPromises = [
-  this.runSecurityTests(),
-  this.runPerformanceTests(),
-  this.runMemoryTests(),
-  this.runIntegrationTests()
-  ];
-  await Promise.all(testPromises);
-  return this.generateReport();
+  async runAllTests(): Promise<TestSuiteResult> {
+    console.log('🧪 Starting comprehensive quality improvement tests...');
+    this.results = [];
+    // Run test categories in parallel for efficiency
+    const testPromises = [
+      this.runSecurityTests(),
+      this.runPerformanceTests(),
+      this.runMemoryTests(),
+      this.runIntegrationTests()
+    ];
+    await Promise.all(testPromises);
+    return this.generateReport();
+  }
   /**
   * Security utilities tests
   */
-  private async runSecurityTests(): Promise<void> {,
-  const tests = [
-  {
-  name: 'URL Validation - Safe URLs',
-  test: () => {,
-  const safeUrls = [
-  '/dashboard',
-  'https://example.com/api',
-  '/api/users?id=123'
-  ];
-  return safeUrls.every(url => validateUrl(url) !== null);
-
+  private async runSecurityTests(): Promise<void> {
+    const tests = [
       {
-  name: 'URL Validation - Dangerous URLs',
-  test: () => {,
-  const dangerousUrls = [
-  'javascript:alert(1)',
-  'data:text/html,<script>alert(1)</script>',
-  'vbscript:msgbox(1)'];
-  return dangerousUrls.every(url => validateUrl(url) === null);
-
+        name: 'URL Validation - Safe URLs',
+        test: () => {
+          const safeUrls = [
+            '/dashboard',
+            'https://example.com/api',
+            '/api/users?id=123'
+          ];
+          return safeUrls.every(url => validateUrl(url) !== null);
+        }
+      },
       {
-  name: 'Input Validation - XSS Prevention',
-  test: () => {,
-  const maliciousInputs = [
-  '<script>alert(1)</script>',
-  'javascript:alert(1)',
-  'onload=alert(1)',
-  'eval(maliciousCode)'
-  ];
-  return maliciousInputs.every(input => {)
-  const result = validateInput(input);
-  return !result.isValid && result.errors.some(e => e.includes('dangerous'));
-});
-
+        name: 'URL Validation - Dangerous URLs',
+        test: () => {
+          const dangerousUrls = [
+            'javascript:alert(1)',
+            'data:text/html,<script>alert(1)</script>',
+            'vbscript:msgbox(1)'
+          ];
+          return dangerousUrls.every(url => validateUrl(url) === null);
+        }
+      },
       {
-  name: 'CSRF Token Generation',
-  test: () => {,
-  const token1 = generateCSRFToken();
-  const token2 = generateCSRFToken();
-  return token1.length === 64 &&
-  token2.length === 64 &&
-  token1 !== token2 &&
-  /^[a-f0-9]+$/.test(token1);
+        name: 'Input Validation - XSS Prevention',
+        test: () => {
+          const maliciousInputs = [
+            '<script>alert(1)</script>',
+            'javascript:alert(1)',
+            'onload=alert(1)',
+            'eval(maliciousCode)'
+          ];
+          return maliciousInputs.every(input => {
+            const result = validateInput(input);
+            return !result.isValid && result.errors.some(e => e.includes('dangerous'));
+          });
+        }
+      },
+      {
+        name: 'CSRF Token Generation',
+        test: () => {
+          const token1 = generateCSRFToken();
+          const token2 = generateCSRFToken();
+          return token1.length === 64 &&
+                 token2.length === 64 &&
+                 token1 !== token2 &&
+                 /^[a-f0-9]+$/.test(token1);
+        }
+      },
 
       {
         name: 'Rate Limiting Functionality',
-        test: () => {,
+        test: () => {
           const limiter = new ClientRateLimiter(3, 1000);
           // Should allow 3 requests
           for (let i = 0; i < 3; i++) {
             if (!limiter.canMakeRequest('test-user')) return false;
+          }
           // 4th request should be blocked
           return !limiter.canMakeRequest('test-user');
+        }
+      }
     ];
+    
     for (const { name, test } of tests) {
-  await this.runTest(name, 'security', test);
+      await this.runTest(name, 'security', test);
+    }
+  }
   /**
   * Performance monitoring tests
   */
-  private async runPerformanceTests(): Promise<void> {,
-  const tests = [
-  {
-  name: 'Performance Measurement',
-  test: () => {,
-  let executed = false;
-  const result = performanceMonitor.measureExecution(;);
-  'test-function',
-  () => {
-  executed = true;
-  return 'success';
-  );
-  return executed && result === 'success';
-
+  private async runPerformanceTests(): Promise<void> {
+    const tests = [
       {
-  name: 'Async Performance Measurement',
-  test: async () => {,
-  let executed = false;
-  const result = await performanceMonitor.measureExecution(;);
-  'test-async-function',
-  async () => {
-  executed = true;
-  await new Promise(resolve => setTimeout(resolve, 10));
-  return 'async-success';
-  );
-  return executed && result === 'async-success';
-
+        name: 'Performance Measurement',
+        test: () => {
+          let executed = false;
+          const result = performanceMonitor.measureExecution(
+            'test-function',
+            () => {
+              executed = true;
+              return 'success';
+            }
+          );
+          return executed && result === 'success';
+        }
+      },
+      {
+        name: 'Async Performance Measurement',
+        test: async () => {
+          let executed = false;
+          const result = await performanceMonitor.measureExecution(
+            'test-async-function',
+            async () => {
+              executed = true;
+              await new Promise(resolve => setTimeout(resolve, 10));
+              return 'async-success';
+            }
+          );
+          return executed && result === 'async-success';
+        }
+      },
       {
         name: 'API Call Tracking',
-        test: async () => {,
+        test: async () => {
           const mockApiCall = () => Promise.resolve({ data: 'test' });
-          const result = await performanceMonitor.trackApiCall(;);
+          const result = await performanceMonitor.trackApiCall(
             '/api/test',
             'GET',
             mockApiCall
           );
           return result.data === 'test';
-
+        }
+      },
       {
-  name: 'Performance Statistics',
-  test: () => {,
-  // Add some test metrics
-  performanceMonitor.addMetric({)
-  name: 'test-metric',
-  duration: 100,
-  type: 'custom',
-});
+        name: 'Performance Statistics',
+        test: () => {
+          // Add some test metrics
+          performanceMonitor.addMetric({
+            name: 'test-metric',
+            duration: 100,
+            type: 'custom'
+          });
           const stats = performanceMonitor.getStats();
           return stats.total > 0 && 
                  typeof stats.averages === 'object' &&
                  Array.isArray(stats.slowest);
+        }
+      }
     ];
+    
     for (const { name, test } of tests) {
       await this.runTest(name, 'performance', test);
+    }
+  }
   /**
    * Memory optimization tests
    */
@@ -175,25 +196,27 @@ class QualityTestRunner {
     const tests = [
       {
         name: 'WeakCache Functionality',
-        test: () => {,
+        test: () => {
           const cache = new WeakCache<object, string>();
           const key = { id: 'test' };
           cache.set(key, 'test-value');
           return cache.get(key) === 'test-value' &&
                  cache.has(key) === true;
-
+        }
+      },
       {
         name: 'Deep Equality Check',
-        test: () => {,
+        test: () => {
           const obj1 = { a: 1, b: { c: 2 } };
           const obj2 = { a: 1, b: { c: 2 } };
           const obj3 = { a: 1, b: { c: 3 } };
           return memoryUtils.deepEqual(obj1, obj2) &&
                  !memoryUtils.deepEqual(obj1, obj3);
-
+        }
+      },
       {
         name: 'Shallow Equality Check',
-        test: () => {,
+        test: () => {
           const obj1 = { a: 1, b: 2 };
           const obj2 = { a: 1, b: 2 };
           const obj3 = { a: 1, b: 3 };
@@ -224,8 +247,9 @@ class QualityTestRunner {
           // Test that security validation doesn't impact performance significantly
           const startTime = performance.now();
           for (let i = 0; i < 100; i++) {
-            validateInput(`test-input-${i}`);}
-            validateUrl(`/test-url-${i}`);}
+            validateInput(`test-input-${i}`);
+            validateUrl(`/test-url-${i}`);
+          }
           const duration = performance.now() - startTime;
           return duration < 100; // Should complete in under 100ms
 

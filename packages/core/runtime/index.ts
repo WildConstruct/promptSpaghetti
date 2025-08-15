@@ -20,19 +20,33 @@ export {
 export class WeightedChoiceNode extends RuntimeNode<string> {
   constructor(
     id: string,
-    private choices: Array<{ value: string; weight: number }>
+    private choices: Array<{ value: string; weight: number; muted?: boolean; solo?: boolean }>
   ) {
     super(id);
   }
 
   run(ctx: ExecutionContext): string {
-    const total = this.choices.reduce((sum, c) => sum + c.weight, 0);
+    // Filter out muted choices
+    let activeChoices = this.choices.filter(c => !c.muted);
+    
+    // If any choice has solo, only use solo'd choices
+    const soloChoices = activeChoices.filter(c => c.solo);
+    if (soloChoices.length > 0) {
+      activeChoices = soloChoices;
+    }
+    
+    // Fallback if all choices are filtered out
+    if (activeChoices.length === 0) {
+      return this.choices[0]?.value || '';
+    }
+    
+    const total = activeChoices.reduce((sum, c) => sum + c.weight, 0);
     let r = seededRandom(ctx.seed) * total;
-    for (const c of this.choices) {
+    for (const c of activeChoices) {
       if (r < c.weight) return c.value;
       r -= c.weight;
     }
-    return this.choices[this.choices.length - 1].value;
+    return activeChoices[activeChoices.length - 1].value;
   }
 }
 
