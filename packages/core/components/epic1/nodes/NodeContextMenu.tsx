@@ -20,6 +20,7 @@ interface NodeContextMenuProps {
   onDuplicate?: () => void;
   onDelete?: () => void;
   onAttachNote?: () => void;
+  onConvertToWeightedChoice?: () => void;
 }
 
 export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
@@ -30,7 +31,8 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
   onSaveAsPreset,
   onDuplicate,
   onDelete,
-  onAttachNote
+  onAttachNote,
+  onConvertToWeightedChoice
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -92,6 +94,16 @@ export const NodeContextMenu: React.FC<NodeContextMenuProps> = ({
           <span className="icon">💾</span>
           Save as Preset
         </button>
+        
+        {onConvertToWeightedChoice && nodeType === 'textBlock' && (
+          <button 
+            className="context-menu-item"
+            onClick={() => handleAction(onConvertToWeightedChoice)}
+          >
+            <span className="icon">🎲</span>
+            Convert to Weighted Choice
+          </button>
+        )}
         
         {onAttachNote && (
           <button 

@@ -1,6 +1,7 @@
 // A minimal, local parser shim used only by the LaunchScreen UX.
 // It avoids deep imports from @promptscape/core runtime and provides the minimal
 // types/shape that the LaunchScreen components expect.
+// Now enhanced with unified parsing logic for consistency across the app.
 
 export interface PromptSegment {
   text: string;
@@ -97,6 +98,9 @@ function hashString(input: string): string {
 }
 
 export const simplePromptParser = {
+  /**
+   * Enhanced parser with better choice detection and grammar understanding
+   */
   parse(input: string): PromptAnalysis {
     const segments: PromptSegment[] = [];
     const nodes: GeneratedNode[] = [];
@@ -112,8 +116,12 @@ export const simplePromptParser = {
     coarse.forEach((seg, idx) => {
       segments.push({ text: seg.text, startIndex: seg.start, endIndex: seg.end });
 
+      // Enhanced alternative detection
       const alts = splitAlternatives(seg.text);
       const segmentNodes: GeneratedNode[] = [];
+      
+      // Smart detection: if we find patterns like "X or Y" or "X/Y" or "X|Y", treat as choice
+      const hasExplicitChoice = /\s+(or|and)\s+|[/|]/i.test(seg.text);
       
       alts.forEach((alt, altIdx) => {
         const nodeId = `node-${hashString(
@@ -122,8 +130,8 @@ export const simplePromptParser = {
         const color = HIGHLIGHT_COLORS[(idx + altIdx) % HIGHLIGHT_COLORS.length];
         const node: GeneratedNodeInternal = {
           id: nodeId,
-          // If there are multiple alternatives, it's a choice
-          nodeType: alts.length > 1 ? 'Choice' : 'Text',
+          // Enhanced logic: detect choice based on alternatives or explicit patterns
+          nodeType: (alts.length > 1 || hasExplicitChoice) ? 'Choice' : 'Text',
           getPreviewText: () => alt,
         };
         segmentNodes.push({ node });

@@ -44,6 +44,7 @@ import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
 import { edgeTypes } from './EdgeRenderingFix';
 import { AuthModal } from '../auth/AuthModal';
 import { supabase } from '../../utils/supabaseClient';
+import { useAutoLayout } from './hooks/useAutoLayout';
 import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
@@ -302,6 +303,21 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   
   // Toast system for error messages (moved before useEffects that use it)
   const { toasts, showToast, dismissToast } = useToast();
+  
+  // Auto-layout functionality
+  const { cleanupNodes, cleanupAll } = useAutoLayout();
+  
+  // Handle layout cleanup
+  const handleLayoutCleanup = useCallback(() => {
+    const selectedNodes = nodes.filter(node => node.selected);
+    if (selectedNodes.length > 0) {
+      cleanupNodes(selectedNodes);
+      showToast('success', `Cleaned up layout for ${selectedNodes.length} selected nodes`);
+    } else {
+      cleanupAll();
+      showToast('success', 'Cleaned up layout for all nodes');
+    }
+  }, [nodes, cleanupNodes, cleanupAll, showToast]);
   
   // Check for current user on mount
   useEffect(() => {
@@ -1393,23 +1409,23 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           {nodes.length > 0 && (
             <MiniMap 
               nodeColor={(node) => {
-                // Use muted colors that match the dark theme
+                // Use professional colors that match node types
                 switch (node.type) {
-                  case 'textBlock': return '#4a4a4a';
-                  case 'weightedChoice': return '#5a5a4a';
-                  case 'enhancedBranching': return '#5a5a4a';
-                  case 'concat': return '#3a5a4a';
-                  case 'setVariable': return '#4a3a5a';
-                  case 'getVariable': return '#4a3a5a';
-                  case 'variable': return '#4a3a5a';
-                  case 'output': return '#5a3a3a';
-                  case 'postItNote': return '#5a5a3a';
-                  case 'group': return '#2a2a2a';
-                  default: return '#4a4a4a';
+                  case 'textBlock': return '#606060';  // Medium gray
+                  case 'weightedChoice': return '#7a6a4a';  // Gold-ish
+                  case 'enhancedBranching': return '#7a6a4a';  // Gold-ish
+                  case 'concat': return '#4a6a5a';  // Teal-ish
+                  case 'setVariable': return '#6a4a7a';  // Purple-ish
+                  case 'getVariable': return '#6a4a7a';  // Purple-ish
+                  case 'variable': return '#6a4a7a';  // Purple-ish
+                  case 'output': return '#4a7a6a';  // Cyan-ish
+                  case 'postItNote': return '#8a8a4a';  // Yellow-ish
+                  case 'group': return '#3a3a3a';  // Dark gray
+                  default: return '#606060';  // Default gray
                 }
               }}
-              nodeStrokeWidth={2}
-              nodeStrokeColor="#333"
+              nodeStrokeWidth={1}
+              nodeStrokeColor="#505050"
               pannable
               zoomable
               style={{ 
@@ -1655,6 +1671,46 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             }
             setContextMenuPosition(null);
           }}
+          onConvertToWeightedChoice={() => {
+            // Convert text node to weighted choice
+            const targetNode = nodes.find(n => n.id === contextMenuNodeId);
+            if (targetNode && targetNode.type === 'textBlock') {
+              const text = targetNode.data.value || targetNode.data.text || '';
+              const options = text.includes(' or ') 
+                ? text.split(/\s+or\s+/i).map((opt, idx) => ({
+                    text: opt.trim(),
+                    weight: 50,
+                    hasBranch: false
+                  }))
+                : [{
+                    text: text,
+                    weight: 100,
+                    hasBranch: false
+                  }, {
+                    text: 'Alternative',
+                    weight: 50,
+                    hasBranch: false
+                  }];
+              
+              setNodes((nds) => nds.map(node => {
+                if (node.id === contextMenuNodeId) {
+                  return {
+                    ...node,
+                    type: 'weightedChoice',
+                    data: {
+                      ...node.data,
+                      nodeType: 'weightedChoice',
+                      options: options,
+                      value: JSON.stringify(options)
+                    }
+                  };
+                }
+                return node;
+              }));
+              showToast('success', 'Converted to Weighted Choice node');
+            }
+            setContextMenuPosition(null);
+          }}
         />
       )}
       
@@ -1678,6 +1734,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             }) || pos;
             handleCreateBoundingBox(flowPos);
           }}
+          onLayoutCleanup={handleLayoutCleanup}
           onClose={() => setContextMenuPosition(null)}
         />
       )}
