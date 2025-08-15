@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "name": "Victory Gestures Asset Fragment",
+  "description": "Victory gestures",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "gestures", "victory"],
+    "fragment_id": "weapons-victory-gestures",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "victory-gestures",
+      "type": "WeightedChoice",
+      "name": "Victory Gestures",
+      "description": "Victory gestures",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "blade salute", "weight": 10 },
+        { "text": "weapon spin holster", "weight": 9 },
+        { "text": "helmet tap", "weight": 8 }
+      ]
+    },
+    {
+      "id": "victory-gestures-output",
+      "type": "Output",
+      "name": "Victory Gesture",
+      "x": 520,
+      "y": 200,
+      "template": "{{victory-gestures}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "victory-gestures", "target": "victory-gestures-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-victory-gestures-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["victory-gestures", "victory-gestures-output"],
+      "description": "Victory gestures as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "name": "Movement Quality",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "Character movement styles and dynamics"
+  },
+  "nodes": [
+    {
+      "id": "movement-quality-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "data": {
+        "label": "Movement Quality",
+        "region": "steel-blue",
+        "collapsed": false,
+        "options": [
+          {
+            "id": "opt-1",
+            "text": "catlike silent grace",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-2",
+            "text": "lumbering heavy footfalls",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-3",
+            "text": "weightless floating drift",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-4",
+            "text": "staccato mechanical precision",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-5",
+            "text": "fluid water-like flow",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-6",
+            "text": "jittery nervous energy",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-7",
+            "text": "predatory stalking prowl",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-8",
+            "text": "bouncing springy steps",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-9",
+            "text": "shuffling tired drag",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-10",
+            "text": "gliding effortless stride",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-11",
+            "text": "erratic unpredictable shifts",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-12",
+            "text": "measured deliberate pacing",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [
+    {
+      "id": "region-movement-quality",
+      "label": "Movement Quality",
+      "nodeIds": ["movement-quality-main"],
+      "color": "steel-blue"
+    }
+  ]
+}

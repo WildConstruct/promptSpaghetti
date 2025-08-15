@@ -186,5 +186,6 @@ export * from './advanced';
 
 /* ----------------------------- Python Integration (Epic 8) ------------------------------ */
 
-// Re-export Python integration capabilities
-export * from './nodes/PythonTransform';
+// Python executor temporarily disabled - moved to backlog for future implementation
+// The Python executor service and TypeScript client need to be rebuilt
+// export * from './nodes/PythonTransform';

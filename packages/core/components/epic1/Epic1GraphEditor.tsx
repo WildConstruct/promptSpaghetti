@@ -28,6 +28,7 @@ import { PanZoomControls } from './PanZoomControls';
 import { EdgeRoutingControls } from './EdgeRoutingControls';
 import { PreviewEngine } from './preview/PreviewEngine';
 import { PreviewPanel } from './preview/PreviewPanel';
+import { PreviewTray } from '../PreviewTray/PreviewTray';
 import { Epic1Graph } from '../../runtime/nodes/epic1/Epic1ExecutionEngine';
 import { nodeDataToRuntimeNode } from './nodes/nodeFactory';
 import { AssetLibrary, Preset } from './asset-library';
@@ -302,6 +303,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [pendingWizardNodes, setPendingWizardNodes] = useState<{nodes: Node<EditableNodeData>[], edges: Edge[]} | null>(null);
   
+  // State for preview tray
+  const [previewResults, setPreviewResults] = useState<any[]>([]);
+  const [isPreviewExecuting, setIsPreviewExecuting] = useState(false);
+  const [previewError, setPreviewError] = useState<Error | undefined>();
+  
   // Toast system for error messages (moved before useEffects that use it)
   const { toasts, showToast, dismissToast } = useToast();
   
@@ -365,6 +371,28 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       workerPoolSize: 4
     });
   }
+  
+  // Subscribe to preview engine updates
+  useEffect(() => {
+    if (!previewEngineRef.current) return;
+    
+    const unsubscribe = previewEngineRef.current.subscribe((update) => {
+      setIsPreviewExecuting(update.state === 'executing' || update.state === 'pending');
+      if (update.results) {
+        setPreviewResults(update.results.map(r => ({
+          seed: r.seed,
+          result: r.output
+        })));
+      }
+      if (update.error) {
+        setPreviewError(update.error);
+      } else {
+        setPreviewError(undefined);
+      }
+    });
+    
+    return unsubscribe;
+  }, []);
 
   // Handle node data updates (from inline editing)
   const handleNodeEdit = useCallback((nodeId: string, newValue: string) => {
@@ -2103,6 +2131,44 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           showToast('success', `Welcome ${user.email}!`);
         }}
       />
+      
+      {/* Preview Tray - Bottom output panel */}
+      {showPreview && (
+        <PreviewTray
+          seeds={previewSeeds || [3141, 5926, 5358, 9793]}
+          results={previewResults}
+          isExecuting={isPreviewExecuting}
+          error={previewError}
+          onExecute={() => {
+            const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
+            if (runtimeGraph && previewEngineRef.current) {
+              previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
+            }
+          }}
+          onCancel={() => {
+            previewEngineRef.current?.cancelExecution();
+          }}
+          onCopy={(text) => {
+            navigator.clipboard.writeText(text).then(() => {
+              showToast('success', 'Results copied to clipboard');
+            });
+          }}
+          onExport={(format) => {
+            // Export functionality
+            const data = format === 'json' 
+              ? JSON.stringify(previewResults, null, 2)
+              : previewResults.map(r => `Seed ${r.seed}: ${r.result}`).join('\n');
+            const blob = new Blob([data], { type: format === 'json' ? 'application/json' : 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `preview-results.${format}`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('success', `Results exported as ${format.toUpperCase()}`);
+          }}
+        />
+      )}
     </div>
   );
   

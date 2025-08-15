@@ -1,12 +1,13 @@
 import React from 'react';
 import { ServerTab } from './ServerTab';
+import { AssetFragmentsTab } from './AssetFragmentsTab';
 
 export type AssetBrowserTabsProps = {
   libraryView?: React.ReactNode;
 };
 
 export function AssetBrowserTabs({ libraryView }: AssetBrowserTabsProps): JSX.Element {
-  const [tab, setTab] = React.useState<'library' | 'server'>('library');
+  const [tab, setTab] = React.useState<'library' | 'server' | 'fragments'>('library');
 
   return (
     <section aria-label="Asset Browser Tabs">
@@ -25,6 +26,13 @@ export function AssetBrowserTabs({ libraryView }: AssetBrowserTabsProps): JSX.El
         >
           Server
         </button>
+        <button
+          type="button"
+          aria-selected={tab === 'fragments'}
+          onClick={() => setTab('fragments')}
+        >
+          Fragments
+        </button>
       </nav>
       <div style={{ padding: 8 }}>
         {tab === 'library' && (
@@ -33,6 +41,7 @@ export function AssetBrowserTabs({ libraryView }: AssetBrowserTabsProps): JSX.El
           </div>
         )}
         {tab === 'server' && <ServerTab />}
+        {tab === 'fragments' && <AssetFragmentsTab />}
       </div>
     </section>
   );

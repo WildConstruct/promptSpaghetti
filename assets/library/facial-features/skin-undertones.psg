@@ -1,0 +1,156 @@
+{
+  "version": "1.0.0",
+  "name": "Skin Undertones Asset Fragment",
+  "description": "Diverse skin tone and undertone descriptors for character generation",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "appearance-base",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["skin", "undertones", "complexion", "diversity", "inclusive"],
+    "fragment_id": "skin-undertones",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "skin-undertone",
+      "type": "WeightedChoice",
+      "name": "Skin Undertones",
+      "description": "Inclusive range of skin tones and undertones",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "cool porcelain",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "undertone": "cool",
+            "depth": "very fair"
+          }
+        },
+        {
+          "text": "olive",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "undertone": "neutral-warm",
+            "depth": "medium"
+          }
+        },
+        {
+          "text": "warm mahogany",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "undertone": "warm",
+            "depth": "deep"
+          }
+        },
+        {
+          "text": "freckled peach",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "undertone": "warm",
+            "depth": "fair",
+            "texture": "freckled"
+          }
+        },
+        {
+          "text": "golden bronze",
+          "weight": 9,
+          "meta": {
+            "undertone": "warm",
+            "depth": "medium-deep"
+          }
+        },
+        {
+          "text": "rose beige",
+          "weight": 9,
+          "meta": {
+            "undertone": "cool",
+            "depth": "light"
+          }
+        },
+        {
+          "text": "deep ebony",
+          "weight": 9,
+          "meta": {
+            "undertone": "neutral",
+            "depth": "very deep"
+          }
+        },
+        {
+          "text": "honey caramel",
+          "weight": 9,
+          "meta": {
+            "undertone": "warm",
+            "depth": "medium"
+          }
+        },
+        {
+          "text": "alabaster",
+          "weight": 7,
+          "meta": {
+            "undertone": "neutral",
+            "depth": "very fair"
+          }
+        },
+        {
+          "text": "copper tan",
+          "weight": 8,
+          "meta": {
+            "undertone": "warm",
+            "depth": "medium"
+          }
+        },
+        {
+          "text": "cool umber",
+          "weight": 8,
+          "meta": {
+            "undertone": "cool",
+            "depth": "deep"
+          }
+        },
+        {
+          "text": "sun-kissed wheat",
+          "weight": 8,
+          "meta": {
+            "undertone": "warm",
+            "depth": "light-medium"
+          }
+        }
+      ]
+    },
+    {
+      "id": "skin-output",
+      "type": "Output",
+      "name": "Skin Undertone Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{skin-undertone}} skin"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "skin-undertone",
+      "target": "skin-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "skin-undertone-fragment",
+      "name": "Skin Undertone Fragment",
+      "color": "#DDA0DD",
+      "color_comment": "Plum - Base appearance feature",
+      "nodes": ["skin-undertone", "skin-output"],
+      "description": "Skin tone descriptor as single collapsible unit",
+      "metadata": {
+        "fragment_type": "appearance_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

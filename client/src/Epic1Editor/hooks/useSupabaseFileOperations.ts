@@ -488,15 +488,19 @@ export const useSupabaseFileOperations = ({
       setShowSaveDialog(true);
     },
     handleNew: (demoNodes: Node[], demoEdges: Edge[]) => {
-      if (
-        window.confirm('Create a new graph? Any unsaved changes will be lost.')
-      ) {
-        onNodesChange(demoNodes);
-        onEdgesChange(demoEdges);
-        onEditorKeyChange(prev => prev + 1);
-        localStorage.removeItem('epic1-graph');
-        showToast('New graph created', 'success');
-      }
+      // Use setTimeout to prevent immediate dismissal of dialog
+      setTimeout(() => {
+        if (
+          window.confirm('Create a new graph? Any unsaved changes will be lost.')
+        ) {
+          onNodesChange(demoNodes);
+          onEdgesChange(demoEdges);
+          onEditorKeyChange(prev => prev + 1);
+          localStorage.removeItem('epic1-graph');
+          localStorage.removeItem('promptgraph:state:v1'); // Clear persisted state
+          showToast('New graph created', 'success');
+        }
+      }, 0);
     },
     handleQuit: (currentNodes: Node[], currentEdges: Edge[]) => {
       const graphData = { nodes: currentNodes, edges: currentEdges };

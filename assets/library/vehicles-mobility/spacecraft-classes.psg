@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "name": "Spacecraft Classes Asset Fragment",
+  "description": "Spacecraft classes",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "vehicles-mobility",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["vehicles", "space", "mobility"],
+    "fragment_id": "vehicles-spacecraft-classes",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "spacecraft-classes",
+      "type": "WeightedChoice",
+      "name": "Spacecraft Classes",
+      "description": "Spacecraft archetypes",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "pocket courier", "weight": 10 },
+        { "text": "ring-hab cruiser", "weight": 9 },
+        { "text": "mining skiff", "weight": 8 }
+      ]
+    },
+    {
+      "id": "spacecraft-classes-output",
+      "type": "Output",
+      "name": "Spacecraft Class",
+      "x": 520,
+      "y": 200,
+      "template": "{{spacecraft-classes}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "spacecraft-classes", "target": "spacecraft-classes-output" }
+  ],
+  "regions": [
+    {
+      "id": "vehicles-spacecraft-classes-fragment",
+      "name": "Vehicles & Mobility Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Vehicles & Mobility",
+      "nodes": ["spacecraft-classes", "spacecraft-classes-output"],
+      "description": "Spacecraft classes as a single collapsible unit",
+      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+    }
+  ]
+}

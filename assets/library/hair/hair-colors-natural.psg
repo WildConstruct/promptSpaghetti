@@ -1,0 +1,156 @@
+{
+  "version": "1.0.0",
+  "name": "Natural Hair Colors Asset Fragment",
+  "description": "Natural hair color variations found in human populations",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "hair-appearance",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["hair", "color", "natural", "realistic"],
+    "fragment_id": "hair-colors-natural",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "hair-color-natural",
+      "type": "WeightedChoice",
+      "name": "Natural Hair Colors",
+      "description": "Realistic human hair colors",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "ash blonde",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "tone": "cool",
+            "rarity": "uncommon"
+          }
+        },
+        {
+          "text": "chestnut",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "tone": "warm brown",
+            "commonality": "very common"
+          }
+        },
+        {
+          "text": "raven",
+          "weight": 12,
+          "meta": {
+            "original": true,
+            "description": "blue-black",
+            "shine": "high"
+          }
+        },
+        {
+          "text": "strawberry red",
+          "weight": 6,
+          "meta": {
+            "original": true,
+            "rarity": "rare",
+            "tone": "warm red-blonde"
+          }
+        },
+        {
+          "text": "golden blonde",
+          "weight": 8,
+          "meta": {
+            "tone": "warm",
+            "shine": "lustrous"
+          }
+        },
+        {
+          "text": "auburn",
+          "weight": 7,
+          "meta": {
+            "description": "reddish-brown",
+            "warmth": "high"
+          }
+        },
+        {
+          "text": "salt and pepper",
+          "weight": 9,
+          "meta": {
+            "age": "mature",
+            "pattern": "mixed gray"
+          }
+        },
+        {
+          "text": "silver",
+          "weight": 7,
+          "meta": {
+            "age": "mature/premature",
+            "shine": "metallic"
+          }
+        },
+        {
+          "text": "dark brown",
+          "weight": 13,
+          "meta": {
+            "commonality": "most common",
+            "tone": "neutral"
+          }
+        },
+        {
+          "text": "honey blonde",
+          "weight": 8,
+          "meta": {
+            "tone": "warm golden",
+            "depth": "medium"
+          }
+        },
+        {
+          "text": "copper",
+          "weight": 6,
+          "meta": {
+            "rarity": "uncommon",
+            "shine": "metallic red"
+          }
+        },
+        {
+          "text": "platinum blonde",
+          "weight": 5,
+          "meta": {
+            "rarity": "very rare natural",
+            "tone": "cool white"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hair-color-natural-output",
+      "type": "Output",
+      "name": "Natural Hair Color Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{hair-color-natural}} hair"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "hair-color-natural",
+      "target": "hair-color-natural-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "hair-color-natural-fragment",
+      "name": "Natural Hair Color Fragment",
+      "color": "#8B4513",
+      "color_comment": "Saddle Brown - Natural hair colors",
+      "nodes": ["hair-color-natural", "hair-color-natural-output"],
+      "description": "Natural hair colors as single unit",
+      "metadata": {
+        "fragment_type": "hair_color",
+        "integration_priority": 3,
+        "realism": "high"
+      }
+    }
+  ]
+}

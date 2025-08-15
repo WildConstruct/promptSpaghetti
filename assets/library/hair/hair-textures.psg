@@ -1,0 +1,156 @@
+{
+  "version": "1.0.0",
+  "name": "Hair Textures Asset Fragment",
+  "description": "Hair texture patterns from straight to kinky coils",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "hair-appearance",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["hair", "texture", "curl-pattern", "appearance"],
+    "fragment_id": "hair-textures",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "hair-texture",
+      "type": "WeightedChoice",
+      "name": "Hair Textures",
+      "description": "Hair texture patterns using standard classification",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "pin-straight",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "type": "1A",
+            "description": "completely straight"
+          }
+        },
+        {
+          "text": "3C coils",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "type": "3C",
+            "description": "corkscrew curls"
+          }
+        },
+        {
+          "text": "beachy waves",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "type": "2A-2B",
+            "description": "tousled texture"
+          }
+        },
+        {
+          "text": "coarse curls",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "type": "3B-4A",
+            "description": "thick spirals"
+          }
+        },
+        {
+          "text": "soft waves",
+          "weight": 10,
+          "meta": {
+            "type": "2A",
+            "description": "gentle S-pattern"
+          }
+        },
+        {
+          "text": "ringlets",
+          "weight": 8,
+          "meta": {
+            "type": "3A",
+            "description": "defined spirals"
+          }
+        },
+        {
+          "text": "kinky coils",
+          "weight": 8,
+          "meta": {
+            "type": "4B-4C",
+            "description": "tight zigzag pattern"
+          }
+        },
+        {
+          "text": "loose curls",
+          "weight": 9,
+          "meta": {
+            "type": "2C-3A",
+            "description": "bouncy loops"
+          }
+        },
+        {
+          "text": "crimped",
+          "weight": 7,
+          "meta": {
+            "style": "zigzag waves",
+            "era": "80s-90s"
+          }
+        },
+        {
+          "text": "silky straight",
+          "weight": 9,
+          "meta": {
+            "type": "1B",
+            "description": "smooth with body"
+          }
+        },
+        {
+          "text": "fluffy afro",
+          "weight": 8,
+          "meta": {
+            "type": "4A-4C",
+            "style": "picked out"
+          }
+        },
+        {
+          "text": "tightly coiled",
+          "weight": 8,
+          "meta": {
+            "type": "4A",
+            "description": "S-pattern coils"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hair-texture-output",
+      "type": "Output",
+      "name": "Hair Texture Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{hair-texture}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "hair-texture",
+      "target": "hair-texture-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "hair-texture-fragment",
+      "name": "Hair Texture Fragment",
+      "color": "#D2691E",
+      "color_comment": "Chocolate - Hair texture attribute",
+      "nodes": ["hair-texture", "hair-texture-output"],
+      "description": "Hair texture patterns as single unit",
+      "metadata": {
+        "fragment_type": "hair_texture",
+        "integration_priority": 2,
+        "cultural_note": "Uses standard hair typing system"
+      }
+    }
+  ]
+}

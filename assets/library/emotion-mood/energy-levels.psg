@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "name": "Energy Levels",
+    "category": "emotion-mood",
+    "type": "SIMPLE",
+    "description": "Character energy and vitality states"
+  },
+  "nodes": [
+    {
+      "id": "energy-levels-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "data": {
+        "label": "Energy Levels",
+        "region": "yellow",
+        "collapsed": false,
+        "options": [
+          {
+            "id": "opt-1",
+            "text": "sluggish and drained",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-2",
+            "text": "jittery with caffeine buzz",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-3",
+            "text": "laser-focused intensity",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-4",
+            "text": "zen-still meditation calm",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-5",
+            "text": "vibrating with excitement",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-6",
+            "text": "bone-deep exhaustion",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-7",
+            "text": "manic hyperactivity",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-8",
+            "text": "steady sustainable rhythm",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-9",
+            "text": "restless pacing energy",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-10",
+            "text": "drowsy half-awake haze",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-11",
+            "text": "coiled spring readiness",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-12",
+            "text": "languid relaxation",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [
+    {
+      "id": "region-energy-levels",
+      "label": "Energy Levels",
+      "nodeIds": ["energy-levels-main"],
+      "color": "yellow"
+    }
+  ]
+}

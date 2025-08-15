@@ -1,0 +1,155 @@
+{
+  "version": "1.0.0",
+  "name": "Masculine-Coded Hair Styles Asset Fragment",
+  "description": "Traditionally masculine hair styling options",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "hair-styles",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["hair", "masculine", "traditional", "barbershop", "style"],
+    "fragment_id": "hair-styles-masculine",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "hair-style-masculine",
+      "type": "WeightedChoice",
+      "name": "Masculine-Coded Styles",
+      "description": "Traditional masculine hairstyles",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "pompadour",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "era": "1950s classic",
+            "volume": "high"
+          }
+        },
+        {
+          "text": "crew cut",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "military": true,
+            "maintenance": "low"
+          }
+        },
+        {
+          "text": "Viking braids",
+          "weight": 7,
+          "meta": {
+            "original": true,
+            "cultural": "Norse-inspired",
+            "length_required": "long"
+          }
+        },
+        {
+          "text": "high and tight",
+          "weight": 10,
+          "meta": {
+            "military": true,
+            "sides": "skin fade"
+          }
+        },
+        {
+          "text": "quiff",
+          "weight": 9,
+          "meta": {
+            "volume": "front lift",
+            "styling": "blow-dried"
+          }
+        },
+        {
+          "text": "man bun",
+          "weight": 8,
+          "meta": {
+            "placement": "crown/high",
+            "trend": "2010s"
+          }
+        },
+        {
+          "text": "ivy league",
+          "weight": 9,
+          "meta": {
+            "preppy": true,
+            "part": "side"
+          }
+        },
+        {
+          "text": "flat top",
+          "weight": 7,
+          "meta": {
+            "shape": "squared",
+            "era": "80s-90s"
+          }
+        },
+        {
+          "text": "French crop",
+          "weight": 10,
+          "meta": {
+            "fringe": "textured",
+            "modern": true
+          }
+        },
+        {
+          "text": "side swept",
+          "weight": 10,
+          "meta": {
+            "direction": "angular",
+            "length": "medium"
+          }
+        },
+        {
+          "text": "mohawk",
+          "weight": 6,
+          "meta": {
+            "punk": true,
+            "statement": "bold"
+          }
+        },
+        {
+          "text": "comb over",
+          "weight": 9,
+          "meta": {
+            "classic": true,
+            "business": "professional"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hair-style-masculine-output",
+      "type": "Output",
+      "name": "Masculine Style Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{hair-style-masculine}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "hair-style-masculine",
+      "target": "hair-style-masculine-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "hair-style-masculine-fragment",
+      "name": "Masculine Styles Fragment",
+      "color": "#4169E1",
+      "color_comment": "Royal Blue - Traditional masculine",
+      "nodes": ["hair-style-masculine", "hair-style-masculine-output"],
+      "description": "Masculine-coded styles as single unit",
+      "metadata": {
+        "fragment_type": "hair_style",
+        "integration_priority": 4,
+        "gender_coding": "masculine"
+      }
+    }
+  ]
+}

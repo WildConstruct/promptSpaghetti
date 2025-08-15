@@ -1,0 +1,155 @@
+{
+  "version": "1.0.0",
+  "name": "Gender-Neutral Hair Cuts Asset Fragment",
+  "description": "Hair cuts and styles that work across gender presentations",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "hair-styles",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["hair", "haircut", "gender-neutral", "inclusive", "style"],
+    "fragment_id": "hair-cuts-neutral",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "hair-cut-neutral",
+      "type": "WeightedChoice",
+      "name": "Gender-Neutral Cuts",
+      "description": "Inclusive hairstyle options",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "bowl cut",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "shape": "rounded",
+            "maintenance": "regular trims"
+          }
+        },
+        {
+          "text": "top knot",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "placement": "crown",
+            "versatility": "up or down"
+          }
+        },
+        {
+          "text": "undercut fade",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "sides": "graduated",
+            "top": "longer"
+          }
+        },
+        {
+          "text": "shag",
+          "weight": 10,
+          "meta": {
+            "layers": "choppy",
+            "texture": "messy-chic"
+          }
+        },
+        {
+          "text": "buzz cut",
+          "weight": 9,
+          "meta": {
+            "length": "uniform short",
+            "maintenance": "minimal"
+          }
+        },
+        {
+          "text": "wolf cut",
+          "weight": 9,
+          "meta": {
+            "style": "shag-mullet hybrid",
+            "trend": "modern"
+          }
+        },
+        {
+          "text": "textured crop",
+          "weight": 10,
+          "meta": {
+            "top": "textured",
+            "sides": "tapered"
+          }
+        },
+        {
+          "text": "side part",
+          "weight": 11,
+          "meta": {
+            "classic": true,
+            "adaptable": "any length"
+          }
+        },
+        {
+          "text": "slicked back",
+          "weight": 9,
+          "meta": {
+            "styling": "product-heavy",
+            "look": "polished"
+          }
+        },
+        {
+          "text": "messy bedhead",
+          "weight": 10,
+          "meta": {
+            "texture": "tousled",
+            "effort": "effortless look"
+          }
+        },
+        {
+          "text": "asymmetric cut",
+          "weight": 8,
+          "meta": {
+            "balance": "intentionally uneven",
+            "statement": "bold"
+          }
+        },
+        {
+          "text": "natural texture",
+          "weight": 11,
+          "meta": {
+            "styling": "minimal",
+            "embraces": "natural pattern"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hair-cut-neutral-output",
+      "type": "Output",
+      "name": "Gender-Neutral Cut Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{hair-cut-neutral}} style"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "hair-cut-neutral",
+      "target": "hair-cut-neutral-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "hair-cut-neutral-fragment",
+      "name": "Gender-Neutral Cuts Fragment",
+      "color": "#20B2AA",
+      "color_comment": "Light Sea Green - Inclusive/neutral",
+      "nodes": ["hair-cut-neutral", "hair-cut-neutral-output"],
+      "description": "Gender-neutral cuts as single unit",
+      "metadata": {
+        "fragment_type": "hair_style",
+        "integration_priority": 4,
+        "inclusivity": "high"
+      }
+    }
+  ]
+}

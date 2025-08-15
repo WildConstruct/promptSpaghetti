@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "name": "Paint-Job Styles Asset Fragment",
+  "description": "Vehicle paint-job styles",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "vehicles-mobility",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["vehicles", "paint", "style"],
+    "fragment_id": "vehicles-paint-job-styles",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "paint-job-styles",
+      "type": "WeightedChoice",
+      "name": "Paint-Job Styles",
+      "description": "Paint-job styles",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "rust-bucket patina", "weight": 10 },
+        { "text": "candy-apple gloss", "weight": 9 },
+        { "text": "dazzle camo", "weight": 8 }
+      ]
+    },
+    {
+      "id": "paint-job-styles-output",
+      "type": "Output",
+      "name": "Paint-Job Style",
+      "x": 520,
+      "y": 200,
+      "template": "{{paint-job-styles}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "paint-job-styles", "target": "paint-job-styles-output" }
+  ],
+  "regions": [
+    {
+      "id": "vehicles-paint-job-styles-fragment",
+      "name": "Vehicles & Mobility Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Vehicles & Mobility",
+      "nodes": ["paint-job-styles", "paint-job-styles-output"],
+      "description": "Paint-job styles as a single collapsible unit",
+      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+    }
+  ]
+}

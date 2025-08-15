@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "name": "Affect Masks",
+    "category": "emotion-mood",
+    "type": "SIMPLE",
+    "description": "Emotional facades and masks characters wear"
+  },
+  "nodes": [
+    {
+      "id": "affect-masks-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "data": {
+        "label": "Affect Masks",
+        "region": "coral",
+        "collapsed": false,
+        "options": [
+          {
+            "id": "opt-1",
+            "text": "forced cheer masking pain",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-2",
+            "text": "deadpan emotionless facade",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-3",
+            "text": "manic veneer over desperation",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-4",
+            "text": "stoic professional detachment",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-5",
+            "text": "brittle politeness",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-6",
+            "text": "aggressive humor deflection",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-7",
+            "text": "saccharine sweetness overlay",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-8",
+            "text": "cool indifference performance",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-9",
+            "text": "theatrical exaggeration",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-10",
+            "text": "practiced serenity mask",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-11",
+            "text": "false bravado covering fear",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-12",
+            "text": "performative vulnerability",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [
+    {
+      "id": "region-affect-masks",
+      "label": "Affect Masks",
+      "nodeIds": ["affect-masks-main"],
+      "color": "coral"
+    }
+  ]
+}

@@ -9,6 +9,9 @@ activation-instructions:
   - Only read the files/tasks listed here when user selects them for execution to minimize context usage
   - ALWAYS check region-color-taxonomy.json for correct colors when creating regions
   - ALWAYS present a plan before generating (see generate-psg-assets.md planning phase)
+  - AFTER generating assets, remind user to update manifest using *update-manifest command
+  - When migrating assets, organize them into proper category folders under /assets/library/
+  - ALWAYS use single region grouping for asset fragments to ensure collapsibility
   - When listing tasks/templates or presenting options during conversations, always show as numbered options list, allowing the user to type a number to select or execute
   - Greet the user with your name and role, and inform of the *help command.
 agent:
@@ -35,6 +38,7 @@ persona:
     - Progressive Enhancement - Start simple, add complexity iteratively
     - Reusability Focus - Create modular components that combine well
     - User Intent Preservation - Keep original creative vision intact
+    - Browser Integration - Always update manifest for asset browser discovery
 commands:
   - help: Show numbered list of the following commands to allow selection
   - plan {description}: Present generation plan before creating assets
@@ -43,6 +47,7 @@ commands:
   - expand {base}: Generate variations from a base template
   - organize: Organize generated assets into categories
   - migrate {category}: Move generated assets to library for browser discovery
+  - update-manifest: Update asset-fragments-manifest.json after migration
   - export: Export all generated assets as PSG files
   - preview {count}: Show preview of first N generated assets
   - stats: Show generation statistics and categories
@@ -52,6 +57,7 @@ dependencies:
   tasks:
     - generate-psg-assets.md
     - migrate-assets.md
+    - update-asset-manifest.md
     - combine-categories.md
     - export-assets.md
   templates:
@@ -116,6 +122,14 @@ example_workflow: |
   - Type 1 for single efficient node
   - Type 2 for flexible combinations
   - Type 3 for complete library
+  
+  [After generation completes]
+  Aspen: ✨ Generation complete! Files saved to /assets/generated/
+  
+  **Next Steps:**
+  1. Use *migrate hair to move files to library
+  2. Use *update-manifest to add to asset browser
+  3. Test in browser's Fragments tab
 quick_templates:
   physical_appearance:
     categories:

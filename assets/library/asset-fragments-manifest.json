@@ -1,0 +1,781 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragments",
+  "name": "Modular Asset Fragments Library",
+  "description": "Reusable asset fragments for character and scene generation - designed to be combined into larger graphs",
+  "created": "2025-01-15",
+  "lastUpdated": "2025-01-15T19:30:00Z",
+  "author": "Aspen (Asset Generator)",
+  "categories": {
+    "facial-features": {
+      "name": "Facial Features",
+      "description": "Face-related descriptors and modifications",
+      "icon": "👤",
+      "path": "./facial-features/",
+      "fragments": [
+        {
+          "file": "smile-variations-simple.psg",
+          "id": "fragment-smile-simple",
+          "name": "Simple Smile Variations",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "pale-green",
+          "collapsible": true
+        },
+        {
+          "file": "smile-variations-contextual.psg",
+          "id": "fragment-smile-contextual",
+          "name": "Contextual Smile System",
+          "type": "CONTEXTUAL",
+          "nodes": 4,
+          "combinations": 9,
+          "region": "gold",
+          "collapsible": true
+        },
+        {
+          "file": "eye-descriptors-multi-aspect.psg",
+          "id": "fragment-eyes-multi",
+          "name": "Multi-Aspect Eye System",
+          "type": "MULTI-ASPECT",
+          "nodes": 5,
+          "combinations": 40,
+          "region": "medium-purple",
+          "collapsible": true
+        },
+        {
+          "file": "skin-undertones.psg",
+          "id": "fragment-skin-undertones",
+          "name": "Skin Undertones",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "plum",
+          "collapsible": true
+        },
+        {
+          "file": "age-indicators.psg",
+          "id": "fragment-age-indicators",
+          "name": "Age Indicators",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "khaki",
+          "collapsible": true
+        },
+        {
+          "file": "facial-hair-styles.psg",
+          "id": "fragment-facial-hair",
+          "name": "Facial Hair Styles",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "saddle-brown",
+          "collapsible": true
+        },
+        {
+          "file": "facial-symmetry.psg",
+          "id": "fragment-facial-symmetry",
+          "name": "Facial Symmetry",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 11,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "makeup-accents.psg",
+          "id": "fragment-makeup",
+          "name": "Make-up Accents",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 13,
+          "region": "hot-pink",
+          "collapsible": true
+        },
+        {
+          "file": "piercings-mods.psg",
+          "id": "fragment-piercings",
+          "name": "Piercings & Mods",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 13,
+          "region": "silver",
+          "collapsible": true
+        },
+        {
+          "file": "iconic-features.psg",
+          "id": "fragment-iconic-features",
+          "name": "Iconic Features",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 14,
+          "region": "gold",
+          "collapsible": true
+        }
+      ]
+    },
+    "hair": {
+      "name": "Hair System",
+      "description": "Complete hair appearance and styling options",
+      "icon": "💇",
+      "path": "./hair/",
+      "fragments": [
+        {
+          "file": "hair-lengths.psg",
+          "id": "fragment-hair-lengths",
+          "name": "Hair Lengths",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 11,
+          "region": "peru",
+          "collapsible": true
+        },
+        {
+          "file": "hair-textures.psg",
+          "id": "fragment-hair-textures",
+          "name": "Hair Textures",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "chocolate",
+          "collapsible": true
+        },
+        {
+          "file": "hair-colors-natural.psg",
+          "id": "fragment-hair-colors-natural",
+          "name": "Natural Hair Colors",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "saddle-brown",
+          "collapsible": true
+        },
+        {
+          "file": "hair-colors-fantasy.psg",
+          "id": "fragment-hair-colors-fantasy",
+          "name": "Fantasy Hair Colors",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "violet",
+          "collapsible": true
+        },
+        {
+          "file": "hair-cuts-neutral.psg",
+          "id": "fragment-hair-cuts-neutral",
+          "name": "Gender-Neutral Cuts",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "light-sea-green",
+          "collapsible": true
+        },
+        {
+          "file": "hair-styles-masculine.psg",
+          "id": "fragment-hair-styles-masculine",
+          "name": "Masculine Styles",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "royal-blue",
+          "collapsible": true
+        },
+        {
+          "file": "hair-styles-feminine.psg",
+          "id": "fragment-hair-styles-feminine",
+          "name": "Feminine Styles",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "deep-pink",
+          "collapsible": true
+        },
+        {
+          "file": "hair-accessories.psg",
+          "id": "fragment-hair-accessories",
+          "name": "Hair Accessories",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 13,
+          "region": "light-pink",
+          "collapsible": true
+        },
+        {
+          "file": "hair-weathered-details.psg",
+          "id": "fragment-hair-weathered",
+          "name": "Weathered Details",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "goldenrod",
+          "collapsible": true
+        },
+        {
+          "file": "hair-motion-cues.psg",
+          "id": "fragment-hair-motion",
+          "name": "Motion Cues",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 12,
+          "region": "steel-blue",
+          "collapsible": true
+        }
+      ]
+    },
+    "body-silhouette": {
+      "name": "Body & Silhouette",
+      "description": "Body types, postures, movements, and physical markers",
+      "icon": "🚶",
+      "path": "./body-silhouette/",
+      "fragments": [
+        {
+          "file": "body-types.psg",
+          "id": "fragment-body-types",
+          "name": "Body Types",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "posture-keys.psg",
+          "id": "fragment-posture-keys",
+          "name": "Posture Keys",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "movement-quality.psg",
+          "id": "fragment-movement-quality",
+          "name": "Movement Quality",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "scars-tattoos.psg",
+          "id": "fragment-scars-tattoos",
+          "name": "Scars & Tattoos",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "clothing-fit.psg",
+          "id": "fragment-clothing-fit",
+          "name": "Clothing Fit",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "accessory-silhouettes.psg",
+          "id": "fragment-accessory-silhouettes",
+          "name": "Accessory Silhouettes",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "athletic-markers.psg",
+          "id": "fragment-athletic-markers",
+          "name": "Athletic Markers",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "assistive-gear.psg",
+          "id": "fragment-assistive-gear",
+          "name": "Assistive Gear",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "stage-presence.psg",
+          "id": "fragment-stage-presence",
+          "name": "Stage Presence Flags",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "gesture-starters.psg",
+          "id": "fragment-gesture-starters",
+          "name": "Gesture Starters",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "steel-blue",
+          "collapsible": true
+        }
+      ]
+    },
+    "emotion-mood": {
+      "name": "Emotion & Mood",
+      "description": "Emotional states, moods, and affective dynamics",
+      "icon": "😊",
+      "path": "./emotion-mood/",
+      "fragments": [
+        {
+          "file": "primary-emotions.psg",
+          "id": "fragment-primary-emotions",
+          "name": "Primary Emotion Tags",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "gold",
+          "collapsible": true
+        },
+        {
+          "file": "nuanced-feels.psg",
+          "id": "fragment-nuanced-feels",
+          "name": "Nuanced Feels",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "orange",
+          "collapsible": true
+        },
+        {
+          "file": "intensity-modifiers.psg",
+          "id": "fragment-intensity-modifiers",
+          "name": "Intensity Modifiers",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "affect-masks.psg",
+          "id": "fragment-affect-masks",
+          "name": "Affect Masks",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "coral",
+          "collapsible": true
+        },
+        {
+          "file": "temporal-mood-shifts.psg",
+          "id": "fragment-temporal-mood-shifts",
+          "name": "Temporal Mood Shifts",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "gold",
+          "collapsible": true
+        },
+        {
+          "file": "group-mood-fields.psg",
+          "id": "fragment-group-mood-fields",
+          "name": "Group Mood Fields",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "orange",
+          "collapsible": true
+        },
+        {
+          "file": "subtext-signals.psg",
+          "id": "fragment-subtext-signals",
+          "name": "Subtext Signals",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "salmon",
+          "collapsible": true
+        },
+        {
+          "file": "energy-levels.psg",
+          "id": "fragment-energy-levels",
+          "name": "Energy Levels",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "yellow",
+          "collapsible": true
+        },
+        {
+          "file": "empathetic-echoes.psg",
+          "id": "fragment-empathetic-echoes",
+          "name": "Empathetic Echoes",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 10,
+          "region": "light-coral",
+          "collapsible": true
+        },
+        {
+          "file": "conflict-escalation.psg",
+          "id": "fragment-conflict-escalation",
+          "name": "Conflict Escalation Stages",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "red",
+          "collapsible": true
+        }
+      ]
+    },
+    "vehicles-mobility": {
+      "name": "Vehicles & Mobility",
+      "description": "Ground, air, water, space mobility and styling",
+      "icon": "🚗",
+      "path": "./vehicles-mobility/",
+      "fragments": [
+        {
+          "file": "ground-rigs.psg",
+          "id": "fragment-vehicles-ground-rigs",
+          "name": "Ground Rigs",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "airframes.psg",
+          "id": "fragment-vehicles-airframes",
+          "name": "Airframes",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "watercraft.psg",
+          "id": "fragment-vehicles-watercraft",
+          "name": "Watercraft",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "spacecraft-classes.psg",
+          "id": "fragment-vehicles-spacecraft-classes",
+          "name": "Spacecraft Classes",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "locomotion-traits.psg",
+          "id": "fragment-vehicles-locomotion-traits",
+          "name": "Locomotion Traits",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 4,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "cockpit-vibes.psg",
+          "id": "fragment-vehicles-cockpit-vibes",
+          "name": "Cockpit Vibes",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "signature-exhaust.psg",
+          "id": "fragment-vehicles-signature-exhaust",
+          "name": "Signature Exhaust",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "damage-states.psg",
+          "id": "fragment-vehicles-damage-states",
+          "name": "Damage States",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "paint-job-styles.psg",
+          "id": "fragment-vehicles-paint-job-styles",
+          "name": "Paint-Job Styles",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        },
+        {
+          "file": "call-sign-decals.psg",
+          "id": "fragment-vehicles-call-sign-decals",
+          "name": "Call-Sign Decals",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "steel-blue",
+          "collapsible": true
+        }
+      ]
+    },
+    "action-dynamics": {
+      "name": "Action Verbs & Dynamics",
+      "description": "Movement actions, gestures, and dynamic behaviors",
+      "icon": "💥",
+      "path": "./action-dynamics/",
+      "fragments": [
+        {
+          "file": "high-impact-moves.psg",
+          "id": "fragment-high-impact-moves",
+          "name": "High-Impact Moves",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "dark-red",
+          "collapsible": true
+        },
+        {
+          "file": "subtle-micro-actions.psg",
+          "id": "fragment-subtle-micro-actions",
+          "name": "Subtle Micro-Actions",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "light-blue",
+          "collapsible": true
+        },
+        {
+          "file": "crowd-behaviors.psg",
+          "id": "fragment-crowd-behaviors",
+          "name": "Crowd Behaviors",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "purple",
+          "collapsible": true
+        },
+        {
+          "file": "facial-micro-gestures.psg",
+          "id": "fragment-facial-micro-gestures",
+          "name": "Facial Micro-Gestures",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "pink",
+          "collapsible": true
+        },
+        {
+          "file": "object-interactions.psg",
+          "id": "fragment-object-interactions",
+          "name": "Object Interactions",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "teal",
+          "collapsible": true
+        },
+        {
+          "file": "group-dynamics.psg",
+          "id": "fragment-group-dynamics",
+          "name": "Emergent Group Dynamics",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "indigo",
+          "collapsible": true
+        },
+        {
+          "file": "stealth-movements.psg",
+          "id": "fragment-stealth-movements",
+          "name": "Stealth Movements",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "dark-gray",
+          "collapsible": true
+        },
+        {
+          "file": "aerial-motions.psg",
+          "id": "fragment-aerial-motions",
+          "name": "Aerial Motions",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "sky-blue",
+          "collapsible": true
+        },
+        {
+          "file": "reaction-beats.psg",
+          "id": "fragment-reaction-beats",
+          "name": "Reaction Beats",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "amber",
+          "collapsible": true
+        },
+        {
+          "file": "transformative-actions.psg",
+          "id": "fragment-transformative-actions",
+          "name": "Transformative Actions",
+          "type": "SIMPLE",
+          "nodes": 1,
+          "options": 12,
+          "region": "violet",
+          "collapsible": true
+        }
+      ]
+    }
+  ,
+    "weapons-armor-combat": {
+      "name": "Weapons, Armor & Combat Flare",
+      "description": "Melee, ranged, explosives, defenses, stances, and techniques",
+      "icon": "⚔️",
+      "path": "./weapons-armor-combat/",
+      "fragments": [
+        {
+          "file": "blade-forms.psg",
+          "id": "fragment-weapons-blade-forms",
+          "name": "Blade Forms",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 4,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "ranged-tech.psg",
+          "id": "fragment-weapons-ranged-tech",
+          "name": "Ranged Tech",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "explosives.psg",
+          "id": "fragment-weapons-explosives",
+          "name": "Explosives",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "defensive-gear.psg",
+          "id": "fragment-weapons-defensive-gear",
+          "name": "Defensive Gear",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "improvised-weapons.psg",
+          "id": "fragment-weapons-improvised-weapons",
+          "name": "Improvised Weapons",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "holster-styles.psg",
+          "id": "fragment-weapons-holster-styles",
+          "name": "Holster Styles",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "combat-damage-fx.psg",
+          "id": "fragment-weapons-combat-damage-fx",
+          "name": "Combat Damage FX",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "victory-gestures.psg",
+          "id": "fragment-weapons-victory-gestures",
+          "name": "Victory Gestures",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "martial-stances.psg",
+          "id": "fragment-weapons-martial-stances",
+          "name": "Martial Stances",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        },
+        {
+          "file": "historical-techniques.psg",
+          "id": "fragment-weapons-historical-techniques",
+          "name": "Historical Techniques",
+          "type": "SIMPLE",
+          "nodes": 2,
+          "options": 3,
+          "region": "crimson",
+          "collapsible": true
+        }
+      ]
+    }
+  },
+  "statistics": {
+    "total_fragments": 70,
+    "total_nodes": 114,
+    "total_options": 642,
+    "categories": 7
+  },
+  "metadata": {
+    "format": "PSG",
+    "fileExtension": ".psg",
+    "manifestType": "asset-fragments",
+    "differentFrom": ["presets", "graphs"],
+    "purpose": "Modular building blocks for larger graphs"
+  }
+}

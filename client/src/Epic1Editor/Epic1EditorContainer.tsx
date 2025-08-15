@@ -507,8 +507,10 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     );
     setCurrentNodes(remainingNodes);
     setCurrentEdges(remainingEdges);
+    // Add to history after cut
+    addToHistory(remainingNodes, remainingEdges);
     showToast(`Cut ${selectedNodes.length} nodes`, 'info');
-  }, [currentNodes, currentEdges, handleCopy, showToast]);
+  }, [currentNodes, currentEdges, handleCopy, addToHistory, showToast]);
 
   const handleFind = useCallback(() => {
     const searchTerm = prompt('Search for node by label or ID:');

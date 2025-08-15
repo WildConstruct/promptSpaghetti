@@ -1,0 +1,104 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "name": "Stage Presence Flags",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "Body language and presence indicators"
+  },
+  "nodes": [
+    {
+      "id": "stage-presence-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "data": {
+        "label": "Stage Presence",
+        "region": "steel-blue",
+        "collapsed": false,
+        "options": [
+          {
+            "id": "opt-1",
+            "text": "shoulders back commanding attention",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-2",
+            "text": "hand on hip power pose",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-3",
+            "text": "arms crossed defensive barrier",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-4",
+            "text": "wide stance claiming space",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-5",
+            "text": "leaning back casual confidence",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-6",
+            "text": "hands behind back at ease",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-7",
+            "text": "chin up defiant pride",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-8",
+            "text": "weight shifted to one hip",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-9",
+            "text": "hands in pockets relaxed",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-10",
+            "text": "expansive gesture mid-speech",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [
+    {
+      "id": "region-stage-presence",
+      "label": "Stage Presence",
+      "nodeIds": ["stage-presence-main"],
+      "color": "steel-blue"
+    }
+  ]
+}

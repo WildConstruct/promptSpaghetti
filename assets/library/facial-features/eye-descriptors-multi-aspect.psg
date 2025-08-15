@@ -1,0 +1,304 @@
+{
+  "version": "1.0.0",
+  "name": "Multi-Aspect Eye Description System",
+  "description": "Comprehensive eye descriptor system with shape, color/features, and positioning aspects",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "facial-features",
+    "type": "MULTI-ASPECT",
+    "tags": ["eyes", "facial-features", "descriptors", "multi-aspect", "modular"],
+    "totalCombinations": "~40-50 variations",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "eye-shape",
+      "type": "WeightedChoice",
+      "name": "Eye Shape",
+      "description": "Primary eye shape descriptors",
+      "x": 100,
+      "y": 100,
+      "options": [
+        {
+          "text": "almond-shaped",
+          "weight": 12,
+          "meta": {
+            "original": true,
+            "commonality": "very common"
+          }
+        },
+        {
+          "text": "hooded",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "age_correlation": "mature"
+          }
+        },
+        {
+          "text": "doe-eyed",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "impression": "innocent, youthful"
+          }
+        },
+        {
+          "text": "round",
+          "weight": 11,
+          "meta": {
+            "impression": "youthful, surprised"
+          }
+        },
+        {
+          "text": "upturned",
+          "weight": 9,
+          "meta": {
+            "cultural_note": "cat-eye shape"
+          }
+        },
+        {
+          "text": "downturned",
+          "weight": 9,
+          "meta": {
+            "impression": "gentle, sad"
+          }
+        },
+        {
+          "text": "monolid",
+          "weight": 10,
+          "meta": {
+            "regional": "East Asian"
+          }
+        },
+        {
+          "text": "deep-set",
+          "weight": 9,
+          "meta": {
+            "shadow": "prominent brow"
+          }
+        },
+        {
+          "text": "protruding",
+          "weight": 7,
+          "meta": {
+            "impression": "prominent, bold"
+          }
+        },
+        {
+          "text": "narrow",
+          "weight": 8,
+          "meta": {
+            "impression": "focused, intense"
+          }
+        },
+        {
+          "text": "phoenix",
+          "weight": 5,
+          "meta": {
+            "cultural": "elongated, lifted"
+          }
+        }
+      ]
+    },
+    {
+      "id": "eye-color-feature",
+      "type": "WeightedChoice", 
+      "name": "Eye Color/Features",
+      "description": "Color and special characteristics",
+      "x": 100,
+      "y": 250,
+      "options": [
+        {
+          "text": "heterochromatic",
+          "weight": 5,
+          "meta": {
+            "original": true,
+            "rarity": "very rare",
+            "description": "different colored eyes"
+          }
+        },
+        {
+          "text": "bright",
+          "weight": 12,
+          "meta": {
+            "impression": "vivid, striking"
+          }
+        },
+        {
+          "text": "dark",
+          "weight": 13,
+          "meta": {
+            "commonality": "most common globally"
+          }
+        },
+        {
+          "text": "piercing",
+          "weight": 10,
+          "meta": {
+            "impression": "intense, penetrating"
+          }
+        },
+        {
+          "text": "pale",
+          "weight": 9,
+          "meta": {
+            "colors": "light blue, grey, green"
+          }
+        },
+        {
+          "text": "warm",
+          "weight": 11,
+          "meta": {
+            "colors": "brown, hazel, amber"
+          }
+        },
+        {
+          "text": "sparkling",
+          "weight": 10,
+          "meta": {
+            "impression": "lively, joyful"
+          }
+        },
+        {
+          "text": "clear",
+          "weight": 10,
+          "meta": {
+            "impression": "transparent, pure"
+          }
+        },
+        {
+          "text": "stormy",
+          "weight": 8,
+          "meta": {
+            "colors": "grey with variations"
+          }
+        },
+        {
+          "text": "golden",
+          "weight": 7,
+          "meta": {
+            "rarity": "rare",
+            "colors": "amber, honey"
+          }
+        },
+        {
+          "text": "multicolored",
+          "weight": 5,
+          "meta": {
+            "type": "sectoral heterochromia"
+          }
+        }
+      ]
+    },
+    {
+      "id": "eye-size-position",
+      "type": "WeightedChoice",
+      "name": "Eye Size/Position",
+      "description": "Size and spacing characteristics",
+      "x": 100,
+      "y": 400,
+      "options": [
+        {
+          "text": "wide-set",
+          "weight": 15,
+          "meta": {
+            "spacing": "further apart than average"
+          }
+        },
+        {
+          "text": "close-set",
+          "weight": 15,
+          "meta": {
+            "spacing": "closer together than average"
+          }
+        },
+        {
+          "text": "large",
+          "weight": 20,
+          "meta": {
+            "impression": "expressive, youthful"
+          }
+        },
+        {
+          "text": "small",
+          "weight": 15,
+          "meta": {
+            "impression": "mysterious, focused"
+          }
+        },
+        {
+          "text": "",
+          "weight": 35,
+          "weight_comment": "No size/position modifier - normal proportions",
+          "meta": {
+            "description": "average size and spacing"
+          }
+        }
+      ]
+    },
+    {
+      "id": "eye-description-output",
+      "type": "Output",
+      "name": "Complete Eye Description",
+      "description": "Combines all aspects into natural description",
+      "x": 450,
+      "y": 250,
+      "template": "{{eye-size-position}}{{#eye-size-position}} {{/eye-size-position}}{{eye-color-feature}} {{eye-shape}} eyes",
+      "template_comment": "Smart spacing - only adds space if size/position exists"
+    },
+    {
+      "id": "simple-eye-output",
+      "type": "Output",
+      "name": "Simple Eye Description",
+      "description": "Shape-only description for minimal approach",
+      "x": 450,
+      "y": 100,
+      "template": "{{eye-shape}} eyes"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "eye-shape",
+      "target": "eye-description-output"
+    },
+    {
+      "id": "e2",
+      "source": "eye-color-feature",
+      "target": "eye-description-output"
+    },
+    {
+      "id": "e3",
+      "source": "eye-size-position",
+      "target": "eye-description-output"
+    },
+    {
+      "id": "e4",
+      "source": "eye-shape",
+      "target": "simple-eye-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "eye-descriptor-system",
+      "name": "Eye Descriptor Asset Fragment",
+      "color": "#9370DB",
+      "color_comment": "Medium Purple - Feature descriptor region",
+      "nodes": [
+        "eye-shape",
+        "eye-color-feature",
+        "eye-size-position",
+        "eye-description-output",
+        "simple-eye-output"
+      ],
+      "description": "Complete eye description system as a single collapsible unit",
+      "metadata": {
+        "fragment_type": "facial_feature",
+        "integration_notes": "Drop into character generation graphs as a single unit",
+        "collapse_priority": "high"
+      }
+    }
+  ]
+}

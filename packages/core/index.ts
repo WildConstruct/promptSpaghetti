@@ -28,7 +28,8 @@ export interface Graph {
 // Export new components and types
 export * from './components/Inspector';
 export * from './types/NodeTypes';
-export * from './utils/nodeDataUtils';
+// Temporarily disabled - nodeDataUtils has syntax errors and is unused
+// export * from './utils/nodeDataUtils';
 export { GraphEditor } from './GraphEditor';
 // Legacy InspectorSidebar removed - use InspectorPanel from ./components/Inspector instead
 export { Palette } from './Palette';
