@@ -37,7 +37,7 @@ export const usePreviewTrayStore = create<PreviewTrayState>()(
   persist(
     (set) => ({
       // Initial state
-      isOpen: false,
+      isOpen: true,  // Start with tray open by default
       height: 250,
       mode: 'normal',
       isPinned: false,

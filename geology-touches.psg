@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "id": "fragment-geology-touches",
+    "name": "Geology Touches",
+    "description": "Geological formations and landscape features",
+    "author": "Aspen (Asset Generator)",
+    "created": "2025-01-15",
+    "category": "setting-environment",
+    "tags": ["geology", "landscape", "terrain", "formations"]
+  },
+  "nodes": [
+    {
+      "id": "geology-touches-main",
+      "type": "WeightedChoice",
+      "data": {
+        "label": "Geology Touches",
+        "region": "sienna",
+        "options": [
+          { "text": "basalt column hexagons", "weight": 2 },
+          { "text": "red-clay mesa layers", "weight": 2 },
+          { "text": "karst limestone spires", "weight": 2 },
+          { "text": "granite cliff faces", "weight": 2 },
+          { "text": "obsidian glass flows", "weight": 1 },
+          { "text": "sandstone arch formations", "weight": 2 },
+          { "text": "shale cliff striations", "weight": 2 },
+          { "text": "crystal cave clusters", "weight": 1 },
+          { "text": "volcanic pumice fields", "weight": 1 },
+          { "text": "glacier-carved valleys", "weight": 2 },
+          { "text": "salt flat expanses", "weight": 1 },
+          { "text": "metamorphic fold patterns", "weight": 1 }
+        ]
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "region-geology-touches",
+      "nodeIds": ["geology-touches-main"],
+      "color": "sienna"
+    }
+  ]
+}
