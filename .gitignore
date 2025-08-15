@@ -5,6 +5,8 @@ node_modules
 client/dist
 server/dist
 coverage
+**/dist/
+**/_build/
 
 # Logs
 npm-debug.log*
@@ -37,3 +39,7 @@ src/monitor-*.js
 # Load test results
 load-tests/results/
 load-tests/*.log
+
+# Generated assets
+assets/generated/
+asset-gen
