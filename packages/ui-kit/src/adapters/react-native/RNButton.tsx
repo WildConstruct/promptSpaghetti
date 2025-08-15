@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { Button, ButtonProps } from '../../components/Button';
+import { Button } from '../../components/Button';
+import { ButtonProps } from '../../types';
 import { usePlatformAdapter } from '../usePlatformAdapter';
 
 export interface RNButtonProps extends ButtonProps {

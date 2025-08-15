@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { Modal, ModalProps } from '../../components/Modal';
+import { Modal } from '../../components/Modal';
+import { ModalProps } from '../../types';
 import { usePlatformAdapter } from '../usePlatformAdapter';
 
 export interface RNModalProps extends ModalProps {

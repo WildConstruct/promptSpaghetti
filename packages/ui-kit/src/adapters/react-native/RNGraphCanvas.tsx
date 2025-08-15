@@ -3,7 +3,8 @@
  */
 
 import React, { useRef, useState, useCallback } from 'react';
-import { GraphCanvas, GraphCanvasProps } from '../../components/GraphCanvas';
+import { GraphCanvas } from '../../components/GraphCanvas';
+import { GraphCanvasProps } from '../../types';
 import { usePlatformAdapter } from '../usePlatformAdapter';
 
 export interface RNGraphCanvasProps extends GraphCanvasProps {

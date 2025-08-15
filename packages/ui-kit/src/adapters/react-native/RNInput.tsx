@@ -3,7 +3,11 @@
  */
 
 import React from 'react';
-import { Input, InputProps, TextArea, TextAreaProps } from '../../components/Input';
+import { Input, TextArea } from '../../components/Input';
+import { InputProps } from '../../types';
+
+// TextAreaProps doesn't exist, using InputProps for now
+type TextAreaProps = InputProps;
 import { usePlatformAdapter } from '../usePlatformAdapter';
 
 export interface RNInputProps extends InputProps {
