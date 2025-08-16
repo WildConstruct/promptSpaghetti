@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Suppressor Techniques Asset Fragment",
+  "description": "POI shift management, gas/backpressure tuning, and signature considerations",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "suppressor", "gas"],
+    "fragment_id": "weapons-suppressor-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "suppressor-techniques",
+      "type": "WeightedChoice",
+      "name": "Suppressor Techniques",
+      "description": "Suppressor-specific considerations",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "chart POI shift on/off", "weight": 12 },
+        { "text": "adjustable gas block tuning", "weight": 11 },
+        { "text": "buffer/spring tuning for ejection pattern", "weight": 10 },
+        { "text": "mitigate heat mirage", "weight": 9 },
+        { "text": "mount repeatability check", "weight": 8 },
+        { "text": "prevent carbon lock", "weight": 7 },
+        { "text": "subs vs. supers performance", "weight": 6 },
+        { "text": "flash and blowback on pistols", "weight": 5 },
+        { "text": "zero with suppressor attached", "weight": 4 },
+        { "text": "signature in low light and IR", "weight": 3 },
+        { "text": "ear pro and comms management", "weight": 2 },
+        { "text": "maintenance schedule logging", "weight": 1 }
+      ]
+    },
+    {
+      "id": "suppressor-techniques-output",
+      "type": "Output",
+      "name": "Suppressor Technique Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{suppressor-techniques}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "suppressor-techniques", "target": "suppressor-techniques-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-suppressor-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["suppressor-techniques", "suppressor-techniques-output"],
+      "description": "Suppressor techniques as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

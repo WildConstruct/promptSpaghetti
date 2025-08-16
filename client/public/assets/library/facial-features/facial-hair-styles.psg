@@ -1,0 +1,155 @@
+{
+  "version": "1.0.0",
+  "name": "Facial Hair Styles Asset Fragment",
+  "description": "Facial hair styles and grooming options for character generation",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "facial-features",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["facial-hair", "beard", "mustache", "grooming", "style"],
+    "fragment_id": "facial-hair",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "facial-hair-style",
+      "type": "WeightedChoice",
+      "name": "Facial Hair Styles",
+      "description": "Various facial hair configurations",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "five o'clock shadow",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "style": "stubble",
+            "maintenance": "low"
+          }
+        },
+        {
+          "text": "handlebar moustache",
+          "weight": 7,
+          "meta": {
+            "original": true,
+            "style": "vintage",
+            "maintenance": "high"
+          }
+        },
+        {
+          "text": "chin tuft",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "style": "soul patch",
+            "location": "chin only"
+          }
+        },
+        {
+          "text": "clean-shaven",
+          "weight": 14,
+          "meta": {
+            "style": "none",
+            "maintenance": "regular"
+          }
+        },
+        {
+          "text": "full beard",
+          "weight": 10,
+          "meta": {
+            "style": "classic",
+            "coverage": "full face"
+          }
+        },
+        {
+          "text": "goatee",
+          "weight": 9,
+          "meta": {
+            "style": "focused",
+            "location": "chin and mustache"
+          }
+        },
+        {
+          "text": "mutton chops",
+          "weight": 6,
+          "meta": {
+            "style": "vintage",
+            "location": "sideburns"
+          }
+        },
+        {
+          "text": "pencil mustache",
+          "weight": 7,
+          "meta": {
+            "style": "refined",
+            "width": "thin"
+          }
+        },
+        {
+          "text": "van dyke",
+          "weight": 7,
+          "meta": {
+            "style": "artistic",
+            "combination": "pointed beard + mustache"
+          }
+        },
+        {
+          "text": "scruff",
+          "weight": 10,
+          "meta": {
+            "style": "casual",
+            "length": "short"
+          }
+        },
+        {
+          "text": "braided beard",
+          "weight": 5,
+          "meta": {
+            "style": "viking",
+            "maintenance": "very high"
+          }
+        },
+        {
+          "text": "chinstrap",
+          "weight": 6,
+          "meta": {
+            "style": "defined",
+            "location": "jawline"
+          }
+        }
+      ]
+    },
+    {
+      "id": "facial-hair-output",
+      "type": "Output",
+      "name": "Facial Hair Description",
+      "x": 500,
+      "y": 200,
+      "template": "with {{facial-hair-style}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "facial-hair-style",
+      "target": "facial-hair-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "facial-hair-fragment",
+      "name": "Facial Hair Fragment",
+      "color": "#8B4513",
+      "color_comment": "Saddle Brown - Hair/grooming feature",
+      "nodes": ["facial-hair-style", "facial-hair-output"],
+      "description": "Facial hair options as single unit",
+      "metadata": {
+        "fragment_type": "facial_feature",
+        "integration_priority": 4,
+        "gender_note": "Typically masculine, adjust weights as needed"
+      }
+    }
+  ]
+}

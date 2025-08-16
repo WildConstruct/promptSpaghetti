@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Guard Breakers Asset Fragment",
+  "description": "Techniques to break or collapse an opponent's guard",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "pressure", "guard"],
+    "fragment_id": "weapons-guard-breakers",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "guard-breakers",
+      "type": "WeightedChoice",
+      "name": "Guard Breakers",
+      "description": "Guard collapsing and openings creation",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "beat to opening", "weight": 12 },
+        { "text": "bind and shove", "weight": 11 },
+        { "text": "blade wrench", "weight": 10 },
+        { "text": "press to line change", "weight": 9 },
+        { "text": "pommel pry", "weight": 8 },
+        { "text": "shield peel", "weight": 7 },
+        { "text": "hilt punch", "weight": 6 },
+        { "text": "low line drag", "weight": 5 },
+        { "text": "cross hand trap", "weight": 4 },
+        { "text": "feint to collapse", "weight": 3 },
+        { "text": "lever at wrist", "weight": 2 },
+        { "text": "hook and yank", "weight": 1 }
+      ]
+    },
+    {
+      "id": "guard-breakers-output",
+      "type": "Output",
+      "name": "Guard Breaker",
+      "x": 520,
+      "y": 200,
+      "template": "{{guard-breakers}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "guard-breakers", "target": "guard-breakers-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-guard-breakers-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["guard-breakers", "guard-breakers-output"],
+      "description": "Guard breaking actions as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

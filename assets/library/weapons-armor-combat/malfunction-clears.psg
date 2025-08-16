@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Malfunction Clears Asset Fragment",
+  "description": "Immediate and remedial actions for weapon malfunctions",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "reload", "malfunction"],
+    "fragment_id": "weapons-malfunction-clears",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "malfunction-clears",
+      "type": "WeightedChoice",
+      "name": "Malfunction Clears",
+      "description": "Clearing common malfunctions",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "tap rack bang", "weight": 12 },
+        { "text": "immediate action drill", "weight": 11 },
+        { "text": "remedial action (lock, rip, work)", "weight": 10 },
+        { "text": "double feed clear", "weight": 9 },
+        { "text": "stovepipe clear", "weight": 8 },
+        { "text": "failure to extract clear", "weight": 7 },
+        { "text": "failure to fire check", "weight": 6 },
+        { "text": "misfire wait and clear", "weight": 5 },
+        { "text": "out-of-battery fix", "weight": 4 },
+        { "text": "magazine reseat", "weight": 3 },
+        { "text": "chamber check", "weight": 2 },
+        { "text": "bolt override clear", "weight": 1 }
+      ]
+    },
+    {
+      "id": "malfunction-clears-output",
+      "type": "Output",
+      "name": "Malfunction Clear",
+      "x": 520,
+      "y": 200,
+      "template": "{{malfunction-clears}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "malfunction-clears", "target": "malfunction-clears-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-malfunction-clears-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["malfunction-clears", "malfunction-clears-output"],
+      "description": "Weapon malfunction clears as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

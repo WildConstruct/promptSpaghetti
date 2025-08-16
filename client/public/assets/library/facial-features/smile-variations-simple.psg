@@ -1,0 +1,150 @@
+{
+  "version": "1.0.0",
+  "name": "Simple Smile Variations (Expanded)",
+  "description": "SIMPLE SYSTEM - Direct smile expressions without modifiers, expanded from 3 to 12 variations",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "facial-expressions",
+    "type": "SIMPLE",
+    "tags": ["smile", "expression", "face", "emotion", "simple", "direct"],
+    "totalOptions": 12
+  },
+  "nodes": [
+    {
+      "id": "smile-variations-simple",
+      "type": "WeightedChoice",
+      "name": "Simple Smile Variations",
+      "description": "SIMPLE - Single node with 12 direct smile options",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "closed-lip grin",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "emotion": "friendly",
+            "intensity": "moderate"
+          }
+        },
+        {
+          "text": "half-smirk",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "emotion": "playful",
+            "intensity": "subtle"
+          }
+        },
+        {
+          "text": "toothy beam",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "emotion": "joyful",
+            "intensity": "high"
+          }
+        },
+        {
+          "text": "subtle smile",
+          "weight": 8,
+          "meta": {
+            "emotion": "gentle",
+            "intensity": "low"
+          }
+        },
+        {
+          "text": "wide grin",
+          "weight": 9,
+          "meta": {
+            "emotion": "enthusiastic",
+            "intensity": "high"
+          }
+        },
+        {
+          "text": "mysterious smirk",
+          "weight": 8,
+          "meta": {
+            "emotion": "enigmatic",
+            "intensity": "subtle"
+          }
+        },
+        {
+          "text": "gentle smile",
+          "weight": 8,
+          "meta": {
+            "emotion": "warm",
+            "intensity": "moderate"
+          }
+        },
+        {
+          "text": "radiant beam",
+          "weight": 9,
+          "meta": {
+            "emotion": "ecstatic",
+            "intensity": "very high"
+          }
+        },
+        {
+          "text": "shy smile",
+          "weight": 8,
+          "meta": {
+            "emotion": "bashful",
+            "intensity": "low"
+          }
+        },
+        {
+          "text": "crooked grin",
+          "weight": 8,
+          "meta": {
+            "emotion": "mischievous",
+            "intensity": "moderate"
+          }
+        },
+        {
+          "text": "warm smile",
+          "weight": 8,
+          "meta": {
+            "emotion": "welcoming",
+            "intensity": "moderate"
+          }
+        },
+        {
+          "text": "beaming smile",
+          "weight": 7,
+          "meta": {
+            "emotion": "proud",
+            "intensity": "high"
+          }
+        }
+      ]
+    },
+    {
+      "id": "smile-output-simple",
+      "type": "Output",
+      "name": "Simple Smile Output",
+      "description": "Direct output from simple selection",
+      "x": 500,
+      "y": 200,
+      "template": "{{smile-variations-simple}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "smile-variations-simple",
+      "target": "smile-output-simple"
+    }
+  ],
+  "regions": [
+    {
+      "id": "region-simple-system",
+      "name": "SIMPLE Smile System",
+      "color": "#98FB98",
+      "color_comment": "Pale Green - Simple/basic system",
+      "nodes": ["smile-variations-simple", "smile-output-simple"],
+      "description": "Simple, direct smile selection without modifiers"
+    }
+  ]
+}

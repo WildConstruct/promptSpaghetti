@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Safety Selector Manipulation Asset Fragment",
+  "description": "Selector control from safe to fire and back under various contexts",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "safety", "selector"],
+    "fragment_id": "weapons-safety-selector",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "safety-selector-manipulation",
+      "type": "WeightedChoice",
+      "name": "Safety Selector Manipulation",
+      "description": "Selector use and timing",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "selector to fire on presentation", "weight": 12 },
+        { "text": "selector to safe on reindex", "weight": 11 },
+        { "text": "ambidextrous swap on shoulder transition", "weight": 10 },
+        { "text": "support-hand thumb activation", "weight": 9 },
+        { "text": "trigger finger sweep vs. thumb (platform specific)", "weight": 8 },
+        { "text": "gloved operation assurance", "weight": 7 },
+        { "text": "movement with selector discipline", "weight": 6 },
+        { "text": "noise discipline minimize click", "weight": 5 },
+        { "text": "AK vs. AR lever ergonomics", "weight": 4 },
+        { "text": "high-ready safe vs. low-ready safe", "weight": 3 },
+        { "text": "verify tactile position before holster/sling", "weight": 2 },
+        { "text": "post-engagement selector habit loop", "weight": 1 }
+      ]
+    },
+    {
+      "id": "safety-selector-manipulation-output",
+      "type": "Output",
+      "name": "Safety Selector Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{safety-selector-manipulation}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "safety-selector-manipulation", "target": "safety-selector-manipulation-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-safety-selector-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["safety-selector-manipulation", "safety-selector-manipulation-output"],
+      "description": "Selector manipulation as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Grip Variations Asset Fragment",
+  "description": "Grip styles and variations for control across platforms",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "grip", "control"],
+    "fragment_id": "weapons-grip-variations",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "grip-variations",
+      "type": "WeightedChoice",
+      "name": "Grip Variations",
+      "description": "Grip options for recoil and retention",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "rifle C-clamp", "weight": 12 },
+        { "text": "thumb-over-bore", "weight": 11 },
+        { "text": "magwell grip", "weight": 10 },
+        { "text": "vertical foregrip wrap", "weight": 9 },
+        { "text": "angled foregrip pinch", "weight": 8 },
+        { "text": "pistol high tang", "weight": 7 },
+        { "text": "thumbs-forward pistol", "weight": 6 },
+        { "text": "revolver thumbs-down", "weight": 5 },
+        { "text": "support hand index on rail", "weight": 4 },
+        { "text": "sling tension support", "weight": 3 },
+        { "text": "choked-up on stock", "weight": 2 },
+        { "text": "light activation grip", "weight": 1 }
+      ]
+    },
+    {
+      "id": "grip-variations-output",
+      "type": "Output",
+      "name": "Grip Variation",
+      "x": 520,
+      "y": 200,
+      "template": "{{grip-variations}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "grip-variations", "target": "grip-variations-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-grip-variations-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["grip-variations", "grip-variations-output"],
+      "description": "Grip variations as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

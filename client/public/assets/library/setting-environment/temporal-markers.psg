@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "id": "fragment-temporal-markers",
+    "name": "Temporal Markers",
+    "description": "Time-of-day and temporal atmosphere indicators",
+    "author": "Aspen (Asset Generator)",
+    "created": "2025-01-15",
+    "category": "setting-environment",
+    "tags": ["time", "temporal", "daylight", "atmosphere"]
+  },
+  "nodes": [
+    {
+      "id": "temporal-markers-main",
+      "type": "WeightedChoice",
+      "data": {
+        "label": "Temporal Markers",
+        "region": "navy",
+        "options": [
+          { "text": "pre-dawn blue silence", "weight": 2 },
+          { "text": "witching-hour stillness", "weight": 2 },
+          { "text": "high-noon harsh glare", "weight": 2 },
+          { "text": "magic hour gold", "weight": 3 },
+          { "text": "dusk purple fade", "weight": 2 },
+          { "text": "midnight deep black", "weight": 2 },
+          { "text": "sunrise orange burst", "weight": 2 },
+          { "text": "afternoon lazy heat", "weight": 2 },
+          { "text": "twilight between-time", "weight": 2 },
+          { "text": "3am liminal void", "weight": 1 },
+          { "text": "morning fresh light", "weight": 2 },
+          { "text": "evening shadow stretch", "weight": 2 }
+        ]
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "region-temporal-markers",
+      "nodeIds": ["temporal-markers-main"],
+      "color": "navy"
+    }
+  ]
+}

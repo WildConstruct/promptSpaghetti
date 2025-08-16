@@ -1,0 +1,147 @@
+{
+  "version": "1.0.0",
+  "name": "Basic Hair Lengths Asset Fragment",
+  "description": "Hair length descriptors from buzzed to floor-length",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "hair-appearance",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["hair", "length", "hairstyle", "appearance"],
+    "fragment_id": "hair-lengths",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "hair-length",
+      "type": "WeightedChoice",
+      "name": "Hair Lengths",
+      "description": "Range of hair lengths from very short to very long",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "buzzed",
+          "weight": 9,
+          "meta": {
+            "original": true,
+            "length_cm": "0.5-1",
+            "maintenance": "weekly"
+          }
+        },
+        {
+          "text": "pixie",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "length_cm": "5-10",
+            "style": "short and chic"
+          }
+        },
+        {
+          "text": "lob",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "full_name": "long bob",
+            "length": "shoulder-grazing"
+          }
+        },
+        {
+          "text": "waist-length",
+          "weight": 7,
+          "meta": {
+            "original": true,
+            "length_cm": "60+",
+            "maintenance": "high"
+          }
+        },
+        {
+          "text": "chin-length",
+          "weight": 10,
+          "meta": {
+            "length": "jaw-level",
+            "versatility": "high"
+          }
+        },
+        {
+          "text": "shoulder-length",
+          "weight": 12,
+          "meta": {
+            "popularity": "most common",
+            "styling_options": "many"
+          }
+        },
+        {
+          "text": "mid-back",
+          "weight": 9,
+          "meta": {
+            "length": "bra-strap level",
+            "care_time": "moderate"
+          }
+        },
+        {
+          "text": "collar-length",
+          "weight": 9,
+          "meta": {
+            "length": "neck-grazing",
+            "grow_out": "awkward phase"
+          }
+        },
+        {
+          "text": "ear-length",
+          "weight": 8,
+          "meta": {
+            "style": "cropped",
+            "face_framing": "minimal"
+          }
+        },
+        {
+          "text": "hip-length",
+          "weight": 6,
+          "meta": {
+            "rarity": "uncommon",
+            "statement": "dramatic"
+          }
+        },
+        {
+          "text": "armpit-length",
+          "weight": 9,
+          "meta": {
+            "practical": "easy updo",
+            "length": "medium-long"
+          }
+        }
+      ]
+    },
+    {
+      "id": "hair-length-output",
+      "type": "Output",
+      "name": "Hair Length Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{hair-length}} hair"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "hair-length",
+      "target": "hair-length-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "hair-length-fragment",
+      "name": "Hair Length Fragment",
+      "color": "#CD853F",
+      "color_comment": "Peru - Hair base attribute",
+      "nodes": ["hair-length", "hair-length-output"],
+      "description": "Hair length options as single collapsible unit",
+      "metadata": {
+        "fragment_type": "hair_base",
+        "integration_priority": 1
+      }
+    }
+  ]
+}

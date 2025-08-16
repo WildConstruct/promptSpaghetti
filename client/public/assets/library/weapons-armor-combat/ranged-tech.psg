@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "name": "Ranged Tech Asset Fragment",
+  "description": "Ranged weapon technologies",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "ranged", "tech"],
+    "fragment_id": "weapons-ranged-tech",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "ranged-tech",
+      "type": "WeightedChoice",
+      "name": "Ranged Tech",
+      "description": "Ranged weapon technologies",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "coil rifle", "weight": 10 },
+        { "text": "smart blowgun", "weight": 9 },
+        { "text": "plasma sling", "weight": 8 }
+      ]
+    },
+    {
+      "id": "ranged-tech-output",
+      "type": "Output",
+      "name": "Ranged Tech",
+      "x": 520,
+      "y": 200,
+      "template": "{{ranged-tech}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "ranged-tech", "target": "ranged-tech-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-ranged-tech-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["ranged-tech", "ranged-tech-output"],
+      "description": "Ranged tech as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

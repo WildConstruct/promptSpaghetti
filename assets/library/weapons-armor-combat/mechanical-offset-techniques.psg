@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Mechanical Offset Techniques Asset Fragment",
+  "description": "Height-over-bore holds and offsets at near distances and around cover",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "offset", "holds"],
+    "fragment_id": "weapons-mechanical-offset",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "mechanical-offset-techniques",
+      "type": "WeightedChoice",
+      "name": "Mechanical Offset Techniques",
+      "description": "Offset holds and considerations",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "holdover at 5 yards", "weight": 12 },
+        { "text": "holdover at 7 yards (head box)", "weight": 11 },
+        { "text": "holdover at 10 yards", "weight": 10 },
+        { "text": "holdover at 15 yards", "weight": 9 },
+        { "text": "under-barrel over-cover aiming", "weight": 8 },
+        { "text": "height-over-bore awareness at barricades", "weight": 7 },
+        { "text": "offset with canted sights", "weight": 6 },
+        { "text": "offset with tall mount optics", "weight": 5 },
+        { "text": "offset on incline/decline", "weight": 4 },
+        { "text": "offset prone at low barricade", "weight": 3 },
+        { "text": "offset on uneven terrain", "weight": 2 },
+        { "text": "dry-fire offset indexing", "weight": 1 }
+      ]
+    },
+    {
+      "id": "mechanical-offset-techniques-output",
+      "type": "Output",
+      "name": "Mechanical Offset Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{mechanical-offset-techniques}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "mechanical-offset-techniques", "target": "mechanical-offset-techniques-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-mechanical-offset-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["mechanical-offset-techniques", "mechanical-offset-techniques-output"],
+      "description": "Mechanical offset as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

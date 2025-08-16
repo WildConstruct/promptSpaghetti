@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "One-Handed Weapon Use Asset Fragment",
+  "description": "Adaptations for operating weapons with one hand occupied or injured",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "one-hand", "adaptation"],
+    "fragment_id": "weapons-one-handed-weapon-use",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "one-handed-weapon-use",
+      "type": "WeightedChoice",
+      "name": "One-Handed Weapon Use",
+      "description": "One-handed adaptations",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "one-handed draw", "weight": 12 },
+        { "text": "one-handed reload (belt rack)", "weight": 11 },
+        { "text": "one-handed malfunction clear", "weight": 10 },
+        { "text": "retention firing tuck", "weight": 9 },
+        { "text": "barricade brace (one hand)", "weight": 8 },
+        { "text": "sling support (rifle, one hand)", "weight": 7 },
+        { "text": "flashlight/WML activation", "weight": 6 },
+        { "text": "cross-draw access", "weight": 5 },
+        { "text": "support injured carry & fire", "weight": 4 },
+        { "text": "recoil control one-hand", "weight": 3 },
+        { "text": "safe reholster/reindex", "weight": 2 },
+        { "text": "slide hook on boot/belt", "weight": 1 }
+      ]
+    },
+    {
+      "id": "one-handed-weapon-use-output",
+      "type": "Output",
+      "name": "One-Handed Technique",
+      "x": 520,
+      "y": 200,
+      "template": "{{one-handed-weapon-use}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "one-handed-weapon-use", "target": "one-handed-weapon-use-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-one-handed-weapon-use-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["one-handed-weapon-use", "one-handed-weapon-use-output"],
+      "description": "One-handed weapon use as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

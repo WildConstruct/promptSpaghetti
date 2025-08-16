@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Primary-to-Secondary Transitions Asset Fragment",
+  "description": "Efficient, safe transitions from long gun to handgun and back",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "transition", "pistol", "rifle"],
+    "fragment_id": "weapons-primary-secondary-transitions",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "primary-to-secondary-transitions",
+      "type": "WeightedChoice",
+      "name": "Primary-to-Secondary Transitions",
+      "description": "Timing, sling usage, and safe recovery",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "safe primary before draw", "weight": 12 },
+        { "text": "let rifle hang on sling control point", "weight": 11 },
+        { "text": "efficient pistol draw stroke under stress", "weight": 10 },
+        { "text": "index rifle outboard to avoid entanglement", "weight": 9 },
+        { "text": "manage sling tension during transition", "weight": 8 },
+        { "text": "confirm pistol sights before engagement", "weight": 7 },
+        { "text": "scan and decide when to recover primary", "weight": 6 },
+        { "text": "re-holster safely before re-shouldering rifle", "weight": 5 },
+        { "text": "transition due to malfunction vs empty", "weight": 4 },
+        { "text": "use cover to mask transition", "weight": 3 },
+        { "text": "maintain muzzle awareness on both weapons", "weight": 2 },
+        { "text": "post-transition gear check", "weight": 1 }
+      ]
+    },
+    {
+      "id": "primary-to-secondary-transitions-output",
+      "type": "Output",
+      "name": "Transition Technique Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{primary-to-secondary-transitions}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "primary-to-secondary-transitions", "target": "primary-to-secondary-transitions-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-primary-secondary-transitions-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["primary-to-secondary-transitions", "primary-to-secondary-transitions-output"],
+      "description": "Primary-to-secondary transitions as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

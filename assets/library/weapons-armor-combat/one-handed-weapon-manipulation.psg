@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "One-Handed Weapon Manipulation Asset Fragment",
+  "description": "Injured-limb protocols for reloads, malfunctions, and handling",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "one-handed", "injury"],
+    "fragment_id": "weapons-one-handed-manipulation",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "one-handed-weapon-manipulation",
+      "type": "WeightedChoice",
+      "name": "One-Handed Weapon Manipulation",
+      "description": "Strong-only/support-only solutions",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "strong-hand only pistol reload using belt/holster", "weight": 12 },
+        { "text": "support-hand only pistol reload with mag index", "weight": 11 },
+        { "text": "one-handed slide rack on belt/edge", "weight": 10 },
+        { "text": "clear stovepipe one-handed using surface", "weight": 9 },
+        { "text": "long gun one-handed sling-assisted control", "weight": 8 },
+        { "text": "one-handed lock-back and mag release techniques", "weight": 7 },
+        { "text": "use cover as tool while maintaining safety", "weight": 6 },
+        { "text": "safe reholster with limited dexterity", "weight": 5 },
+        { "text": "one-handed tourniquet access during lull", "weight": 4 },
+        { "text": "weapon retention during compromised grip", "weight": 3 },
+        { "text": "manage light/laser activation one-handed", "weight": 2 },
+        { "text": "post-action check and secure", "weight": 1 }
+      ]
+    },
+    {
+      "id": "one-handed-weapon-manipulation-output",
+      "type": "Output",
+      "name": "One-Handed Manipulation Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{one-handed-weapon-manipulation}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "one-handed-weapon-manipulation", "target": "one-handed-weapon-manipulation-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-one-handed-manipulation-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["one-handed-weapon-manipulation", "one-handed-weapon-manipulation-output"],
+      "description": "One-handed manipulation as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

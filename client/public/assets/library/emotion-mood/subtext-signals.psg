@@ -1,0 +1,104 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "name": "Subtext Signals",
+    "category": "emotion-mood",
+    "type": "SIMPLE",
+    "description": "Underlying emotional signals and hidden meanings"
+  },
+  "nodes": [
+    {
+      "id": "subtext-signals-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "data": {
+        "label": "Subtext Signals",
+        "region": "salmon",
+        "collapsed": false,
+        "options": [
+          {
+            "id": "opt-1",
+            "text": "subservient deference beneath smile",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-2",
+            "text": "ulterior motive twinkle",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-3",
+            "text": "suppressed rage tremor",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-4",
+            "text": "hidden attraction tension",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-5",
+            "text": "veiled threat undertone",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-6",
+            "text": "desperate plea beneath bravado",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-7",
+            "text": "jealousy masked as concern",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-8",
+            "text": "condescension disguised as help",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-9",
+            "text": "fear hiding behind aggression",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-10",
+            "text": "loneliness beneath independence",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [
+    {
+      "id": "region-subtext-signals",
+      "label": "Subtext Signals",
+      "nodeIds": ["subtext-signals-main"],
+      "color": "salmon"
+    }
+  ]
+}

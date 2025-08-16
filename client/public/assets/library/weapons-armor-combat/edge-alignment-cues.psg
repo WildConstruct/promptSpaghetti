@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Edge Alignment Cues Asset Fragment",
+  "description": "Cutting edge alignment and angles",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "blade", "alignment"],
+    "fragment_id": "weapons-edge-alignment-cues",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "edge-alignment-cues",
+      "type": "WeightedChoice",
+      "name": "Edge Alignment Cues",
+      "description": "Cutting edge alignment and angles",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "true edge", "weight": 12 },
+        { "text": "false edge", "weight": 11 },
+        { "text": "draw cut", "weight": 10 },
+        { "text": "push cut", "weight": 9 },
+        { "text": "45° slicing angle", "weight": 8 },
+        { "text": "horizontal cut", "weight": 7 },
+        { "text": "vertical cut", "weight": 6 },
+        { "text": "ascending cut", "weight": 5 },
+        { "text": "descending cut", "weight": 4 },
+        { "text": "edge alignment check", "weight": 3 },
+        { "text": "wrist alignment", "weight": 2 },
+        { "text": "tip-led cut", "weight": 1 }
+      ]
+    },
+    {
+      "id": "edge-alignment-cues-output",
+      "type": "Output",
+      "name": "Edge Alignment Cue",
+      "x": 520,
+      "y": 200,
+      "template": "{{edge-alignment-cues}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "edge-alignment-cues", "target": "edge-alignment-cues-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-edge-alignment-cues-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["edge-alignment-cues", "edge-alignment-cues-output"],
+      "description": "Edge alignment cues as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

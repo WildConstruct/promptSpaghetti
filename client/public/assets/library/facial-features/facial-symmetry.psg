@@ -1,0 +1,146 @@
+{
+  "version": "1.0.0",
+  "name": "Facial Symmetry Asset Fragment",
+  "description": "Facial balance and symmetry descriptors for character generation",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "facial-structure",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["symmetry", "balance", "facial-structure", "proportion", "aesthetic"],
+    "fragment_id": "facial-symmetry",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "facial-symmetry",
+      "type": "WeightedChoice",
+      "name": "Facial Symmetry",
+      "description": "Balance and proportion characteristics",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "perfectly balanced features",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "aesthetic": "classical beauty",
+            "rarity": "uncommon"
+          }
+        },
+        {
+          "text": "subtly asymmetrical charm",
+          "weight": 14,
+          "meta": {
+            "original": true,
+            "aesthetic": "natural",
+            "appeal": "relatable"
+          }
+        },
+        {
+          "text": "harmoniously proportioned face",
+          "weight": 10,
+          "meta": {
+            "aesthetic": "pleasing",
+            "balance": "well-distributed"
+          }
+        },
+        {
+          "text": "distinctively uneven features",
+          "weight": 9,
+          "meta": {
+            "aesthetic": "unique",
+            "character": "memorable"
+          }
+        },
+        {
+          "text": "golden ratio proportions",
+          "weight": 6,
+          "meta": {
+            "aesthetic": "mathematical beauty",
+            "rarity": "very rare"
+          }
+        },
+        {
+          "text": "charmingly lopsided smile",
+          "weight": 11,
+          "meta": {
+            "location": "mouth",
+            "appeal": "endearing"
+          }
+        },
+        {
+          "text": "naturally balanced face",
+          "weight": 12,
+          "meta": {
+            "aesthetic": "average",
+            "commonality": "most common"
+          }
+        },
+        {
+          "text": "artistically irregular features",
+          "weight": 8,
+          "meta": {
+            "aesthetic": "unconventional beauty",
+            "appeal": "striking"
+          }
+        },
+        {
+          "text": "classically symmetric face",
+          "weight": 7,
+          "meta": {
+            "aesthetic": "traditional beauty",
+            "style": "formal"
+          }
+        },
+        {
+          "text": "interestingly offset features",
+          "weight": 9,
+          "meta": {
+            "aesthetic": "unique",
+            "memorability": "high"
+          }
+        },
+        {
+          "text": "pleasingly imperfect proportions",
+          "weight": 10,
+          "meta": {
+            "aesthetic": "approachable",
+            "appeal": "warm"
+          }
+        }
+      ]
+    },
+    {
+      "id": "symmetry-output",
+      "type": "Output",
+      "name": "Facial Symmetry Description",
+      "x": 500,
+      "y": 200,
+      "template": "with {{facial-symmetry}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "facial-symmetry",
+      "target": "symmetry-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "facial-symmetry-fragment",
+      "name": "Facial Symmetry Fragment",
+      "color": "#4682B4",
+      "color_comment": "Steel Blue - Structural characteristic",
+      "nodes": ["facial-symmetry", "symmetry-output"],
+      "description": "Symmetry descriptors as single unit",
+      "metadata": {
+        "fragment_type": "facial_structure",
+        "integration_priority": 3,
+        "usage_note": "Adds character depth and uniqueness"
+      }
+    }
+  ]
+}

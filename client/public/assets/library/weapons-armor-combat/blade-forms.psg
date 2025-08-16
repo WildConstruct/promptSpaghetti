@@ -1,0 +1,52 @@
+{
+  "version": "1.0.0",
+  "name": "Blade Forms Asset Fragment",
+  "description": "Blade forms and profiles",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "melee", "blade"],
+    "fragment_id": "weapons-blade-forms",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "blade-forms",
+      "type": "WeightedChoice",
+      "name": "Blade Forms",
+      "description": "Blade archetypes",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "kris wave", "weight": 10 },
+        { "text": "tanto", "weight": 9 },
+        { "text": "gladius", "weight": 9 },
+        { "text": "nano-saber", "weight": 8 }
+      ]
+    },
+    {
+      "id": "blade-forms-output",
+      "type": "Output",
+      "name": "Blade Form",
+      "x": 520,
+      "y": 200,
+      "template": "{{blade-forms}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "blade-forms", "target": "blade-forms-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-blade-forms-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["blade-forms", "blade-forms-output"],
+      "description": "Blade forms as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "name": "Gesture Starters",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "Initial gesture and hand movement cues"
+  },
+  "nodes": [
+    {
+      "id": "gesture-starters-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "data": {
+        "label": "Gesture Starters",
+        "region": "steel-blue",
+        "collapsed": false,
+        "options": [
+          {
+            "id": "opt-1",
+            "text": "finger-gun point at target",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-2",
+            "text": "palm-up offering gesture",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-3",
+            "text": "two-finger salute farewell",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-4",
+            "text": "beckoning come-hither motion",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-5",
+            "text": "dismissive hand wave",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-6",
+            "text": "fist bump greeting",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-7",
+            "text": "thumbs up approval",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-8",
+            "text": "jazz hands excitement",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-9",
+            "text": "finger snap attention grab",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-10",
+            "text": "peace sign victory",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-11",
+            "text": "hand to heart sincerity",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-12",
+            "text": "temple tap thinking gesture",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [
+    {
+      "id": "region-gesture-starters",
+      "label": "Gesture Starters",
+      "nodeIds": ["gesture-starters-main"],
+      "color": "steel-blue"
+    }
+  ]
+}

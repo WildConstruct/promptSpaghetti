@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Finishing Moves Asset Fragment",
+  "description": "Fight-ending maneuvers",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "technique", "finish"],
+    "fragment_id": "weapons-finishing-moves",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "finishing-moves",
+      "type": "WeightedChoice",
+      "name": "Finishing Moves",
+      "description": "Fight-ending maneuvers",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "decisive cut", "weight": 12 },
+        { "text": "ground pin", "weight": 11 },
+        { "text": "choke finish", "weight": 10 },
+        { "text": "pommel strike", "weight": 9 },
+        { "text": "disarm finish", "weight": 8 },
+        { "text": "joint lock break", "weight": 7 },
+        { "text": "thrust to opening", "weight": 6 },
+        { "text": "trip and finish", "weight": 5 },
+        { "text": "spinning finisher", "weight": 4 },
+        { "text": "hammerfist end", "weight": 3 },
+        { "text": "axe kick ender", "weight": 2 },
+        { "text": "vault strike", "weight": 1 }
+      ]
+    },
+    {
+      "id": "finishing-moves-output",
+      "type": "Output",
+      "name": "Finishing Move",
+      "x": 520,
+      "y": 200,
+      "template": "{{finishing-moves}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "finishing-moves", "target": "finishing-moves-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-finishing-moves-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["finishing-moves", "finishing-moves-output"],
+      "description": "Finishing moves as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "version": "1.0.0",
+  "name": "Feminine-Coded Hair Styles Asset Fragment",
+  "description": "Traditionally feminine hair styling options",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "hair-styles",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["hair", "feminine", "traditional", "salon", "style"],
+    "fragment_id": "hair-styles-feminine",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "hair-style-feminine",
+      "type": "WeightedChoice",
+      "name": "Feminine-Coded Styles",
+      "description": "Traditional feminine hairstyles",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "French twist",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "elegance": "formal",
+            "technique": "updo"
+          }
+        },
+        {
+          "text": "curtain bangs",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "trend": "70s revival",
+            "face_framing": true
+          }
+        },
+        {
+          "text": "bubble pigtails",
+          "weight": 7,
+          "meta": {
+            "original": true,
+            "playful": true,
+            "sections": "tied segments"
+          }
+        },
+        {
+          "text": "beach waves",
+          "weight": 12,
+          "meta": {
+            "texture": "tousled",
+            "style": "effortless"
+          }
+        },
+        {
+          "text": "ballerina bun",
+          "weight": 9,
+          "meta": {
+            "placement": "high crown",
+            "polish": "sleek"
+          }
+        },
+        {
+          "text": "fishtail braid",
+          "weight": 8,
+          "meta": {
+            "complexity": "intricate",
+            "pattern": "herringbone"
+          }
+        },
+        {
+          "text": "Hollywood waves",
+          "weight": 9,
+          "meta": {
+            "era": "1940s glam",
+            "finish": "glossy"
+          }
+        },
+        {
+          "text": "space buns",
+          "weight": 8,
+          "meta": {
+            "placement": "dual high",
+            "style": "festival/rave"
+          }
+        },
+        {
+          "text": "waterfall braid",
+          "weight": 7,
+          "meta": {
+            "technique": "cascading",
+            "romantic": true
+          }
+        },
+        {
+          "text": "pin curls",
+          "weight": 7,
+          "meta": {
+            "vintage": "1920s-50s",
+            "set": "heat or overnight"
+          }
+        },
+        {
+          "text": "half-up crown",
+          "weight": 10,
+          "meta": {
+            "versatile": true,
+            "casual_elegant": true
+          }
+        },
+        {
+          "text": "side-swept curls",
+          "weight": 9,
+          "meta": {
+            "glamorous": true,
+            "asymmetric": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "hair-style-feminine-output",
+      "type": "Output",
+      "name": "Feminine Style Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{hair-style-feminine}}"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "hair-style-feminine",
+      "target": "hair-style-feminine-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "hair-style-feminine-fragment",
+      "name": "Feminine Styles Fragment",
+      "color": "#FF1493",
+      "color_comment": "Deep Pink - Traditional feminine",
+      "nodes": ["hair-style-feminine", "hair-style-feminine-output"],
+      "description": "Feminine-coded styles as single unit",
+      "metadata": {
+        "fragment_type": "hair_style",
+        "integration_priority": 4,
+        "gender_coding": "feminine"
+      }
+    }
+  ]
+}

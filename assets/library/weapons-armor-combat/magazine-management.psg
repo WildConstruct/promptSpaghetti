@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Magazine Management Asset Fragment",
+  "description": "Retention policies, indexing, handling, and lifecycle checks",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "magazine", "management"],
+    "fragment_id": "weapons-magazine-management",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "magazine-management",
+      "type": "WeightedChoice",
+      "name": "Magazine Management",
+      "description": "Policies and handling",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "tactical reload with retention", "weight": 12 },
+        { "text": "speed reload with drop", "weight": 11 },
+        { "text": "administrative load/unload", "weight": 10 },
+        { "text": "index mags consistently in pouches", "weight": 9 },
+        { "text": "mark and rotate magazines", "weight": 8 },
+        { "text": "mag swap to isolate malfunctions", "weight": 7 },
+        { "text": "download 1–2 rounds for reliability", "weight": 6 },
+        { "text": "inspect feed lips and springs", "weight": 5 },
+        { "text": "retain partials policy by context", "weight": 4 },
+        { "text": "mag couplers usage and pros/cons", "weight": 3 },
+        { "text": "position-specific retrieval", "weight": 2 },
+        { "text": "staging mags in kit for mission", "weight": 1 }
+      ]
+    },
+    {
+      "id": "magazine-management-output",
+      "type": "Output",
+      "name": "Magazine Management Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{magazine-management}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "magazine-management", "target": "magazine-management-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-magazine-management-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["magazine-management", "magazine-management-output"],
+      "description": "Magazine management as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

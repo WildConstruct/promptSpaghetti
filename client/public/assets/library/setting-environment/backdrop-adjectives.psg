@@ -1,0 +1,44 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "id": "fragment-backdrop-adjectives",
+    "name": "Backdrop Adjectives",
+    "description": "Scene-setting descriptive modifiers",
+    "author": "Aspen (Asset Generator)",
+    "created": "2025-01-15",
+    "category": "setting-environment",
+    "tags": ["backdrop", "adjectives", "descriptive", "scene"]
+  },
+  "nodes": [
+    {
+      "id": "backdrop-adjectives-main",
+      "type": "WeightedChoice",
+      "data": {
+        "label": "Backdrop Adjectives",
+        "region": "forest-green",
+        "options": [
+          { "text": "war-torn devastated", "weight": 1 },
+          { "text": "utopian pristine", "weight": 2 },
+          { "text": "liminal transitional", "weight": 2 },
+          { "text": "kaleidoscopic shifting", "weight": 1 },
+          { "text": "industrial grimy", "weight": 2 },
+          { "text": "pastoral serene", "weight": 2 },
+          { "text": "dystopian oppressive", "weight": 2 },
+          { "text": "ethereal dreamlike", "weight": 2 },
+          { "text": "abandoned derelict", "weight": 2 },
+          { "text": "bustling energetic", "weight": 2 },
+          { "text": "ancient weathered", "weight": 2 },
+          { "text": "futuristic sleek", "weight": 2 }
+        ]
+      }
+    }
+  ],
+  "groups": [
+    {
+      "id": "region-backdrop-adjectives",
+      "nodeIds": ["backdrop-adjectives-main"],
+      "color": "forest-green"
+    }
+  ]
+}

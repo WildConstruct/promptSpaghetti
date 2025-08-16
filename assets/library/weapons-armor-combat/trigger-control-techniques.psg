@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Trigger Control Techniques Asset Fragment",
+  "description": "Prep, break, reset, and cadence control",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "trigger", "control"],
+    "fragment_id": "weapons-trigger-control",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "trigger-control-techniques",
+      "type": "WeightedChoice",
+      "name": "Trigger Control Techniques",
+      "description": "Trigger management elements",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "take-up and prep to the wall", "weight": 12 },
+        { "text": "press straight to the rear", "weight": 11 },
+        { "text": "surprise break vs. controlled break", "weight": 10 },
+        { "text": "reset under recoil timing", "weight": 9 },
+        { "text": "cadence doubles and bill drill", "weight": 8 },
+        { "text": "avoid trigger freeze", "weight": 7 },
+        { "text": "slack management and consistency", "weight": 6 },
+        { "text": "finger isolation from grip", "weight": 5 },
+        { "text": "staging for precision hold", "weight": 4 },
+        { "text": "grit/stack awareness and mitigation", "weight": 3 },
+        { "text": "prep during presentation timing", "weight": 2 },
+        { "text": "cold start trigger validation", "weight": 1 }
+      ]
+    },
+    {
+      "id": "trigger-control-techniques-output",
+      "type": "Output",
+      "name": "Trigger Control Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{trigger-control-techniques}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "trigger-control-techniques", "target": "trigger-control-techniques-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-trigger-control-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["trigger-control-techniques", "trigger-control-techniques-output"],
+      "description": "Trigger control as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

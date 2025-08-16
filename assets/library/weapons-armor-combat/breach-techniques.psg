@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Breach Techniques Asset Fragment",
+  "description": "Door, barrier, and window breach methods for entry",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "breach", "entry"],
+    "fragment_id": "weapons-breach-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "breach-techniques",
+      "type": "WeightedChoice",
+      "name": "Breach Techniques",
+      "description": "Barrier and entry breach methods",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "door kick breach", "weight": 12 },
+        { "text": "ram breach", "weight": 11 },
+        { "text": "shotgun hinge breach", "weight": 10 },
+        { "text": "explosive strip breach", "weight": 9 },
+        { "text": "prybar breach", "weight": 8 },
+        { "text": "window breach entry", "weight": 7 },
+        { "text": "thermal torch breach", "weight": 6 },
+        { "text": "mechanical lock pick", "weight": 5 },
+        { "text": "ladder over-wall", "weight": 4 },
+        { "text": "sledge hammer breach", "weight": 3 },
+        { "text": "silent breach", "weight": 2 },
+        { "text": "diversionary breach", "weight": 1 }
+      ]
+    },
+    {
+      "id": "breach-techniques-output",
+      "type": "Output",
+      "name": "Breach Technique",
+      "x": 520,
+      "y": 200,
+      "template": "{{breach-techniques}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "breach-techniques", "target": "breach-techniques-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-breach-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["breach-techniques", "breach-techniques-output"],
+      "description": "Breach techniques as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

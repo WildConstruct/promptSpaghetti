@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Stance Transitions Asset Fragment",
+  "description": "Transitions between stances and guards under pressure and movement",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "stances", "transitions"],
+    "fragment_id": "weapons-stance-transitions",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "stance-transitions",
+      "type": "WeightedChoice",
+      "name": "Stance Transitions",
+      "description": "Guard and stance changes",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "open to closed guard", "weight": 12 },
+        { "text": "closed to open guard", "weight": 11 },
+        { "text": "left lead to right lead", "weight": 10 },
+        { "text": "right lead to left lead", "weight": 9 },
+        { "text": "high guard to low guard", "weight": 8 },
+        { "text": "low guard to high guard", "weight": 7 },
+        { "text": "passing step entry", "weight": 6 },
+        { "text": "switch step burst", "weight": 5 },
+        { "text": "drop step retreat", "weight": 4 },
+        { "text": "pivot turn", "weight": 3 },
+        { "text": "gather step advance", "weight": 2 },
+        { "text": "lunge recovery", "weight": 1 }
+      ]
+    },
+    {
+      "id": "stance-transitions-output",
+      "type": "Output",
+      "name": "Stance Transition",
+      "x": 520,
+      "y": 200,
+      "template": "{{stance-transitions}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "stance-transitions", "target": "stance-transitions-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-stance-transitions-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["stance-transitions", "stance-transitions-output"],
+      "description": "Stance transitions as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Sling Techniques Asset Fragment",
+  "description": "Sling setup, support, and transitions for control and retention",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "sling", "control"],
+    "fragment_id": "weapons-sling-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "sling-techniques",
+      "type": "WeightedChoice",
+      "name": "Sling Techniques",
+      "description": "Sling usage and transitions",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "two-point adjustable tension", "weight": 12 },
+        { "text": "single-point quick shoulder swap", "weight": 11 },
+        { "text": "three-point legacy wrap", "weight": 10 },
+        { "text": "sling for recoil control", "weight": 9 },
+        { "text": "sling for barricade support", "weight": 8 },
+        { "text": "admin carry vs. patrol carry", "weight": 7 },
+        { "text": "slung transition to pistol", "weight": 6 },
+        { "text": "cinch for one-handed fire", "weight": 5 },
+        { "text": "quick length adjust drill", "weight": 4 },
+        { "text": "sling as retention aid", "weight": 3 },
+        { "text": "hasty sling loop", "weight": 2 },
+        { "text": "support on looped arm", "weight": 1 }
+      ]
+    },
+    {
+      "id": "sling-techniques-output",
+      "type": "Output",
+      "name": "Sling Technique",
+      "x": 520,
+      "y": 200,
+      "template": "{{sling-techniques}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "sling-techniques", "target": "sling-techniques-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-sling-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["sling-techniques", "sling-techniques-output"],
+      "description": "Sling techniques as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

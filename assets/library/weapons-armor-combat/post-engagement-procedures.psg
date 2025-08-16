@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Post-Engagement Procedures Asset Fragment",
+  "description": "Immediate actions after engagement: checks, comms, and safe reindex",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "post-engagement", "procedures"],
+    "fragment_id": "weapons-post-engagement-procedures",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "post-engagement-procedures",
+      "type": "WeightedChoice",
+      "name": "Post-Engagement Procedures",
+      "description": "Actions after engagement",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "scan and breathe", "weight": 12 },
+        { "text": "top-off or tac reload as needed", "weight": 11 },
+        { "text": "malfunction quick check", "weight": 10 },
+        { "text": "selector to safe", "weight": 9 },
+        { "text": "sling or holster safely", "weight": 8 },
+        { "text": "light off and discipline", "weight": 7 },
+        { "text": "call status to team", "weight": 6 },
+        { "text": "check surroundings and hazards", "weight": 5 },
+        { "text": "re-index gear and pouches", "weight": 4 },
+        { "text": "quick function check", "weight": 3 },
+        { "text": "document or annotate as required", "weight": 2 },
+        { "text": "move to better cover/position", "weight": 1 }
+      ]
+    },
+    {
+      "id": "post-engagement-procedures-output",
+      "type": "Output",
+      "name": "Post-Engagement Procedure Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{post-engagement-procedures}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "post-engagement-procedures", "target": "post-engagement-procedures-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-post-engagement-procedures-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["post-engagement-procedures", "post-engagement-procedures-output"],
+      "description": "Post-engagement as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

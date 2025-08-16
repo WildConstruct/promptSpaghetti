@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Weapon Indexing Asset Fragment",
+  "description": "Consistent reference points for hands, stock, and sights",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "indexing", "consistency"],
+    "fragment_id": "weapons-weapon-indexing",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "weapon-indexing",
+      "type": "WeightedChoice",
+      "name": "Weapon Indexing",
+      "description": "Reference points and alignment",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "support hand index on rail", "weight": 12 },
+        { "text": "stock cheek weld repeatability", "weight": 11 },
+        { "text": "shoulder pocket consistency", "weight": 10 },
+        { "text": "grip pressure reference", "weight": 9 },
+        { "text": "optic height offset awareness", "weight": 8 },
+        { "text": "front sight focal index", "weight": 7 },
+        { "text": "trigger finger home position", "weight": 6 },
+        { "text": "mag index for reloads", "weight": 5 },
+        { "text": "light/laser activation index", "weight": 4 },
+        { "text": "holster/draw index points", "weight": 3 },
+        { "text": "duty gear interference check", "weight": 2 },
+        { "text": "re-index after movement", "weight": 1 }
+      ]
+    },
+    {
+      "id": "weapon-indexing-output",
+      "type": "Output",
+      "name": "Weapon Indexing Element",
+      "x": 520,
+      "y": 200,
+      "template": "{{weapon-indexing}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "weapon-indexing", "target": "weapon-indexing-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-weapon-indexing-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["weapon-indexing", "weapon-indexing-output"],
+      "description": "Weapon indexing as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

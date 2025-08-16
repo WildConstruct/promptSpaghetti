@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Bayonet Techniques Asset Fragment",
+  "description": "Techniques for thrusts, buttstrokes, parries, and entries with bayonet",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "bayonet", "close-quarters"],
+    "fragment_id": "weapons-bayonet-techniques",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "bayonet-techniques",
+      "type": "WeightedChoice",
+      "name": "Bayonet Techniques",
+      "description": "Bayonet-specific techniques",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "straight thrust", "weight": 12 },
+        { "text": "buttstroke to face", "weight": 11 },
+        { "text": "buttstroke to solar plexus", "weight": 10 },
+        { "text": "parry then thrust", "weight": 9 },
+        { "text": "feint then lunge", "weight": 8 },
+        { "text": "hook and drive", "weight": 7 },
+        { "text": "overhand stab", "weight": 6 },
+        { "text": "low-line thrust", "weight": 5 },
+        { "text": "bind and shove entry", "weight": 4 },
+        { "text": "stock bash follow-up", "weight": 3 },
+        { "text": "step-in jam", "weight": 2 },
+        { "text": "twist and withdraw", "weight": 1 }
+      ]
+    },
+    {
+      "id": "bayonet-techniques-output",
+      "type": "Output",
+      "name": "Bayonet Technique",
+      "x": 520,
+      "y": 200,
+      "template": "{{bayonet-techniques}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "bayonet-techniques", "target": "bayonet-techniques-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-bayonet-techniques-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["bayonet-techniques", "bayonet-techniques-output"],
+      "description": "Bayonet techniques as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

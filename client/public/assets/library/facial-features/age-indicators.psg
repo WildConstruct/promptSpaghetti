@@ -1,0 +1,154 @@
+{
+  "version": "1.0.0",
+  "name": "Age Indicators Asset Fragment",
+  "description": "Skin texture and age-related descriptors for character generation",
+  "metadata": {
+    "created": "2025-01-15",
+    "author": "Aspen",
+    "category": "appearance-modifier",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["age", "texture", "skin", "maturity", "experience"],
+    "fragment_id": "age-indicators",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "age-indicator",
+      "type": "WeightedChoice",
+      "name": "Age Indicators",
+      "description": "Texture and life experience markers",
+      "x": 200,
+      "y": 200,
+      "options": [
+        {
+          "text": "baby-smooth",
+          "weight": 10,
+          "meta": {
+            "original": true,
+            "age_range": "youth",
+            "texture": "flawless"
+          }
+        },
+        {
+          "text": "laugh-lined",
+          "weight": 11,
+          "meta": {
+            "original": true,
+            "age_range": "mature",
+            "character": "joyful history"
+          }
+        },
+        {
+          "text": "weather-beaten",
+          "weight": 8,
+          "meta": {
+            "original": true,
+            "age_range": "experienced",
+            "story": "outdoor life"
+          }
+        },
+        {
+          "text": "softly creased",
+          "weight": 10,
+          "meta": {
+            "age_range": "middle-aged",
+            "texture": "gentle aging"
+          }
+        },
+        {
+          "text": "crow's-footed",
+          "weight": 9,
+          "meta": {
+            "age_range": "mature",
+            "location": "eye corners"
+          }
+        },
+        {
+          "text": "poreless",
+          "weight": 8,
+          "meta": {
+            "age_range": "youth",
+            "texture": "refined"
+          }
+        },
+        {
+          "text": "sun-spotted",
+          "weight": 8,
+          "meta": {
+            "age_range": "mature",
+            "story": "sun exposure"
+          }
+        },
+        {
+          "text": "dewey fresh",
+          "weight": 9,
+          "meta": {
+            "age_range": "youth",
+            "texture": "hydrated"
+          }
+        },
+        {
+          "text": "character-etched",
+          "weight": 9,
+          "meta": {
+            "age_range": "experienced",
+            "story": "lived-in face"
+          }
+        },
+        {
+          "text": "timeless",
+          "weight": 9,
+          "meta": {
+            "age_range": "ageless",
+            "quality": "unchanging"
+          }
+        },
+        {
+          "text": "wizened",
+          "weight": 6,
+          "meta": {
+            "age_range": "elderly",
+            "wisdom": "aged gracefully"
+          }
+        },
+        {
+          "text": "velvet soft",
+          "weight": 8,
+          "meta": {
+            "age_range": "any",
+            "texture": "touchable"
+          }
+        }
+      ]
+    },
+    {
+      "id": "age-output",
+      "type": "Output",
+      "name": "Age Indicator Description",
+      "x": 500,
+      "y": 200,
+      "template": "{{age-indicator}} complexion"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "age-indicator",
+      "target": "age-output"
+    }
+  ],
+  "regions": [
+    {
+      "id": "age-indicator-fragment",
+      "name": "Age Indicator Fragment",
+      "color": "#F0E68C",
+      "color_comment": "Khaki - Time/experience modifier",
+      "nodes": ["age-indicator", "age-output"],
+      "description": "Age and texture descriptors as single unit",
+      "metadata": {
+        "fragment_type": "appearance_modifier",
+        "integration_priority": 2
+      }
+    }
+  ]
+}

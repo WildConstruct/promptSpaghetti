@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Suppressive Fire Patterns Asset Fragment",
+  "description": "Fire patterns for area control",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "ranged", "pattern"],
+    "fragment_id": "weapons-suppressive-fire-patterns",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "suppressive-fire-patterns",
+      "type": "WeightedChoice",
+      "name": "Suppressive Fire Patterns",
+      "description": "Fire patterns for area control",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "walking fire", "weight": 12 },
+        { "text": "area denial", "weight": 11 },
+        { "text": "bounding bursts", "weight": 10 },
+        { "text": "cyclic burst", "weight": 9 },
+        { "text": "controlled pairs", "weight": 8 },
+        { "text": "sweeping arc", "weight": 7 },
+        { "text": "high-low", "weight": 6 },
+        { "text": "box pattern", "weight": 5 },
+        { "text": "L-shape", "weight": 4 },
+        { "text": "enfilade", "weight": 3 },
+        { "text": "plunging fire", "weight": 2 },
+        { "text": "peppering shots", "weight": 1 }
+      ]
+    },
+    {
+      "id": "suppressive-fire-patterns-output",
+      "type": "Output",
+      "name": "Fire Pattern",
+      "x": 520,
+      "y": 200,
+      "template": "{{suppressive-fire-patterns}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "suppressive-fire-patterns", "target": "suppressive-fire-patterns-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-suppressive-fire-patterns-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["suppressive-fire-patterns", "suppressive-fire-patterns-output"],
+      "description": "Suppressive fire patterns as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

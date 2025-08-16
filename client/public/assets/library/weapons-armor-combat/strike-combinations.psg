@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "name": "Strike Combinations Asset Fragment",
+  "description": "Chained strikes to vary lines, tempo, and openings",
+  "metadata": {
+    "created": "2025-08-15",
+    "author": "Aspen",
+    "category": "weapons-armor-combat",
+    "type": "ASSET_FRAGMENT",
+    "tags": ["weapons", "striking", "combinations"],
+    "fragment_id": "weapons-strike-combinations",
+    "collapsible": true
+  },
+  "nodes": [
+    {
+      "id": "strike-combinations",
+      "type": "WeightedChoice",
+      "name": "Strike Combinations",
+      "description": "Combination strike patterns",
+      "x": 200,
+      "y": 200,
+      "options": [
+        { "text": "high-low-high", "weight": 12 },
+        { "text": "inside-outside-inside", "weight": 11 },
+        { "text": "feint-thrust-cut", "weight": 10 },
+        { "text": "beat-disengage-thrust", "weight": 9 },
+        { "text": "cut-cut-thrust", "weight": 8 },
+        { "text": "parry-riposte-follow", "weight": 7 },
+        { "text": "bash-cut-push", "weight": 6 },
+        { "text": "thrust-cut-press", "weight": 5 },
+        { "text": "double tap cut", "weight": 4 },
+        { "text": "bind to wind release", "weight": 3 },
+        { "text": "draw-cut-return", "weight": 2 },
+        { "text": "disengage-reengage", "weight": 1 }
+      ]
+    },
+    {
+      "id": "strike-combinations-output",
+      "type": "Output",
+      "name": "Strike Combination",
+      "x": 520,
+      "y": 200,
+      "template": "{{strike-combinations}}"
+    }
+  ],
+  "edges": [
+    { "id": "e1", "source": "strike-combinations", "target": "strike-combinations-output" }
+  ],
+  "regions": [
+    {
+      "id": "weapons-strike-combinations-fragment",
+      "name": "Weapons & Combat Fragment",
+      "color": "#DC143C",
+      "color_comment": "Crimson - Weapons/Combat",
+      "nodes": ["strike-combinations", "strike-combinations-output"],
+      "description": "Strike combinations as a single collapsible unit",
+      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+    }
+  ]
+}

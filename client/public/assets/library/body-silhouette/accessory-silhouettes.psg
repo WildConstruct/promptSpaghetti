@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "type": "asset-fragment",
+  "metadata": {
+    "name": "Accessory Silhouettes",
+    "category": "body-silhouette",
+    "type": "SIMPLE",
+    "description": "Distinctive accessory shapes and forms"
+  },
+  "nodes": [
+    {
+      "id": "accessory-silhouettes-main",
+      "type": "WeightedChoice",
+      "x": 100,
+      "y": 100,
+      "data": {
+        "label": "Accessory Silhouettes",
+        "region": "steel-blue",
+        "collapsed": false,
+        "options": [
+          {
+            "id": "opt-1",
+            "text": "hooded cloak billowing dramatically",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-2",
+            "text": "spiked pauldron armor shoulders",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-3",
+            "text": "worn messenger bag slung across",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-4",
+            "text": "tactical vest with pouches",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-5",
+            "text": "flowing scarf trailing behind",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-6",
+            "text": "utility belt with tools",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-7",
+            "text": "backpack loaded with gear",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-8",
+            "text": "holstered weapons at hip",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-9",
+            "text": "cape swept to one side",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-10",
+            "text": "bandolier across chest",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-11",
+            "text": "goggles pushed up on forehead",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          },
+          {
+            "id": "opt-12",
+            "text": "satchel hanging at side",
+            "weight": 10,
+            "mute": false,
+            "solo": false
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "groups": [
+    {
+      "id": "region-accessory-silhouettes",
+      "label": "Accessory Silhouettes",
+      "nodeIds": ["accessory-silhouettes-main"],
+      "color": "steel-blue"
+    }
+  ]
+}
