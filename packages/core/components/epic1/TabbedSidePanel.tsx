@@ -46,20 +46,8 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
     <div 
       className={`tabbed-side-panel ${position} ${isExpanded ? 'expanded' : 'collapsed'}`}
     >
-      {/* Tab buttons */}
+      {/* Tab buttons - Only show Assets since Preview is now in bottom tray */}
       <div className="tab-buttons">
-        {showPreview && (
-          <button
-            className={`tab-button ${activeTab === 'preview' ? 'active' : ''} ${hoveredTab === 'preview' ? 'hovered' : ''}`}
-            onClick={() => handleTabClick('preview')}
-            onMouseEnter={() => setHoveredTab('preview')}
-            onMouseLeave={() => setHoveredTab(null)}
-            title="Preview"
-          >
-            <span className="tab-icon">👁️</span>
-            <span className="tab-label">Preview</span>
-          </button>
-        )}
         {showAssets && (
           <button
             className={`tab-button ${activeTab === 'assets' ? 'active' : ''} ${hoveredTab === 'assets' ? 'hovered' : ''}`}
@@ -74,17 +62,8 @@ export const TabbedSidePanel: React.FC<TabbedSidePanelProps> = ({
         )}
       </div>
 
-      {/* Panel content */}
+      {/* Panel content - Only Assets now */}
       <div className="panel-content">
-        {activeTab === 'preview' && previewEngine && (
-          <div className="preview-container">
-            <PreviewPanel
-              previewEngine={previewEngine}
-              className="embedded-preview"
-            />
-          </div>
-        )}
-        
         {activeTab === 'assets' && (
           <div className="assets-container">
             <AssetBrowserLoader

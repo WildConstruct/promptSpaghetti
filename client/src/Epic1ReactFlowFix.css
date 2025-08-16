@@ -246,7 +246,7 @@
 
 /* Force global minimap node visibility */
 .react-flow__minimap .react-flow__minimap-node {
-  fill: #ff0000 !important; /* Red for debugging */
+  /* Removed red debugging fill - let nodeColor function handle colors */
   opacity: 1 !important;
   visibility: visible !important;
 }

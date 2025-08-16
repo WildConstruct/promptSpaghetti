@@ -307,6 +307,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [previewResults, setPreviewResults] = useState<any[]>([]);
   const [isPreviewExecuting, setIsPreviewExecuting] = useState(false);
   const [previewError, setPreviewError] = useState<Error | undefined>();
+  const [currentSeeds, setCurrentSeeds] = useState<number[]>(
+    previewSeeds as number[] || [3141, 5926, 5358, 9793]
+  );
   
   // Toast system for error messages (moved before useEffects that use it)
   const { toasts, showToast, dismissToast } = useToast();
@@ -363,7 +366,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   if (!previewEngineRef.current) {
     previewEngineRef.current = new PreviewEngine({
       debounceDelay: previewDebounceDelay,
-      seeds: previewSeeds,
+      seeds: currentSeeds,
       enableCache: true,
       cacheMaxSize: 100,
       cacheMaxAgeMinutes: 30,
@@ -371,6 +374,13 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       workerPoolSize: 4
     });
   }
+  
+  // Update seeds when they change
+  useEffect(() => {
+    if (previewEngineRef.current) {
+      previewEngineRef.current.updateSeeds(currentSeeds);
+    }
+  }, [currentSeeds]);
   
   // Subscribe to preview engine updates
   useEffect(() => {
@@ -1438,7 +1448,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           {nodes.length > 0 && (
             <MiniMap 
               nodeColor={(node) => {
-                // Use professional colors that match node types
                 switch (node.type) {
                   case 'textBlock': return '#606060';  // Medium gray
                   case 'weightedChoice': return '#7a6a4a';  // Gold-ish
@@ -1448,6 +1457,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
                   case 'getVariable': return '#6a4a7a';  // Purple-ish
                   case 'variable': return '#6a4a7a';  // Purple-ish
                   case 'output': return '#4a7a6a';  // Cyan-ish
+                  case 'enhancedBoundingBox': return '#4ECDC4';  // Teal for bounding boxes
+                  case 'boundingBox': return '#4ECDC4';  // Teal for bounding boxes
                   case 'postItNote': return '#8a8a4a';  // Yellow-ish
                   case 'group': return '#3a3a3a';  // Dark gray
                   default: return '#606060';  // Default gray
@@ -1455,6 +1466,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               }}
               nodeStrokeWidth={1}
               nodeStrokeColor="#505050"
+              nodeClassName="minimap-node"
               pannable
               zoomable
               style={{ 
@@ -2135,10 +2147,11 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       {/* Preview Tray - Bottom output panel */}
       {showPreview && (
         <PreviewTray
-          seeds={previewSeeds || [3141, 5926, 5358, 9793]}
+          seeds={currentSeeds}
           results={previewResults}
           isExecuting={isPreviewExecuting}
           error={previewError}
+          onSeedsChange={setCurrentSeeds}
           onExecute={() => {
             const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
             if (runtimeGraph && previewEngineRef.current) {

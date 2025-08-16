@@ -209,6 +209,17 @@
   fill-opacity: 1 !important;
   stroke: rgba(255, 255, 255, 0.2) !important;
   stroke-width: 1px !important;
+  /* Force the fill attribute to be respected */
+  fill: attr(fill) !important;
+}
+
+/* Override any red fill that might be applied */
+.epic1-graph-editor .react-flow__minimap rect {
+  fill: inherit !important;
+}
+
+.epic1-graph-editor .react-flow__minimap-node[fill="#4ECDC4"] {
+  fill: #4ECDC4 !important;
 }
 
 /* Controls styling */

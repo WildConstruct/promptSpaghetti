@@ -169,6 +169,9 @@ export const CustomMinimap: React.FC<CustomMinimapProps> = ({ nodes, edges, styl
             case 'concat': color = '#22c493'; break;
             case 'variable': color = '#9d70f7'; break;
             case 'output': color = '#f15656'; break;
+            case 'enhancedBoundingBox': color = '#4ECDC4'; break; // Teal for bounding boxes
+            case 'boundingBox': color = '#4ECDC4'; break; // Same for regular bounding boxes
+            default: color = '#666'; break;
           }
           
           return (
