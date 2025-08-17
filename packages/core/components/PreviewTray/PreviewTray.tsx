@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useRef } from 'react';
+import React, { useEffect, useCallback, useRef, useState } from 'react';
 import { PreviewResult } from '../epic1/contexts/PreviewContext';
 import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { usePreviewTrayKeyboardShortcuts } from './useKeyboardShortcuts';
@@ -71,6 +71,11 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   const isDragging = useRef(false);
   const dragStartY = useRef(0);
   const dragStartHeight = useRef(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  // State for inline seed editing
+  const [editingSeedIndex, setEditingSeedIndex] = useState<number | null>(null);
+  const [editingSeedValue, setEditingSeedValue] = useState<string>('');
 
   // Enable keyboard shortcuts
   usePreviewTrayKeyboardShortcuts();
@@ -87,6 +92,47 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
     const allResults = results.map(r => `Seed ${r.seed}: ${r.result}`).join('\n');
     onCopy?.(allResults);
   }, [results, onCopy]);
+
+  const handleSeedEdit = useCallback((index: number) => {
+    setEditingSeedIndex(index);
+    setEditingSeedValue(seeds[index].toString());
+  }, [seeds]);
+
+  const handleSeedSave = useCallback(() => {
+    if (editingSeedIndex !== null && onSeedsChange) {
+      const newSeeds = [...seeds];
+      newSeeds[editingSeedIndex] = parseInt(editingSeedValue) || 0;
+      onSeedsChange(newSeeds);
+      setEditingSeedIndex(null);
+    }
+  }, [editingSeedIndex, editingSeedValue, seeds, onSeedsChange]);
+
+  const handleRandomizeSeed = useCallback((index: number) => {
+    if (onSeedsChange) {
+      const newSeeds = [...seeds];
+      newSeeds[index] = Math.floor(Math.random() * 10000);
+      onSeedsChange(newSeeds);
+    }
+  }, [seeds, onSeedsChange]);
+
+  const handleDeleteSeed = useCallback((index: number) => {
+    if (onSeedsChange && seeds.length > 1) {
+      const newSeeds = seeds.filter((_, i) => i !== index);
+      onSeedsChange(newSeeds);
+    }
+  }, [seeds, onSeedsChange]);
+
+  const handleAddSeed = useCallback(() => {
+    if (onSeedsChange) {
+      onSeedsChange([...seeds, Math.floor(Math.random() * 10000)]);
+      // Scroll to the new seed
+      setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+        }
+      }, 100);
+    }
+  }, [seeds, onSeedsChange]);
 
   const handleDragMove = useCallback((e: MouseEvent) => {
     if (!isDragging.current) return;
@@ -198,8 +244,24 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
         {resizable && isOpen && (
           <div className="preview-tray-drag-handle" onMouseDown={handleDragStart} />
         )}
-        <div className="preview-tray-title">
-          Preview Output {results.length > 0 && `(${results.length} results)`}
+        <div className="preview-tray-title" style={{
+          fontWeight: 500,
+          fontSize: '14px',
+          color: '#e8e8e8',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
+          <span style={{ textTransform: 'uppercase' }}>Preview Output</span>
+          {seeds.length > 0 && (
+            <span style={{ 
+              fontSize: '12px', 
+              color: '#999',
+              fontWeight: 'normal'
+            }}>
+              {seeds.length} seed{seeds.length === 1 ? '' : 's'}
+            </span>
+          )}
         </div>
         <div className="preview-tray-controls">
           <button 
@@ -207,8 +269,24 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
             onClick={(e) => { e.stopPropagation(); toggleMinimized(); }}
             title={minimized ? 'Expand' : 'Minimize'}
             aria-label={minimized ? 'Expand preview tray' : 'Minimize preview tray'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
           >
-            <span className={`chevron ${!minimized ? 'open' : 'closed'}`}>⌄</span>
+            <svg 
+              width="8" 
+              height="8" 
+              viewBox="0 0 8 8" 
+              style={{
+                transform: minimized ? 'rotate(-90deg)' : 'rotate(0deg)',
+                transition: 'transform 150ms ease',
+                fill: 'currentColor'
+              }}
+            >
+              <path d="M0 0 L8 4 L0 8 Z" />
+            </svg>
           </button>
           <button 
             className="tray-control-btn close"
@@ -221,73 +299,6 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
         </div>
       </div>
 
-      {isOpen && !minimized && onSeedsChange && (
-        <div className="preview-seeds-editor" style={{
-          padding: '10px',
-          borderBottom: '1px solid #444',
-          background: '#222',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          flexWrap: 'wrap'
-        }}>
-          <span style={{ color: '#888', fontSize: '0.9em' }}>Seeds:</span>
-          {seeds.map((seed, index) => (
-            <input
-              key={index}
-              type="number"
-              value={seed}
-              onChange={(e) => {
-                const newSeeds = [...seeds];
-                newSeeds[index] = parseInt(e.target.value) || 0;
-                onSeedsChange(newSeeds);
-              }}
-              style={{
-                width: '80px',
-                padding: '4px 8px',
-                background: '#1a1a1a',
-                border: '1px solid #444',
-                borderRadius: '4px',
-                color: '#fff',
-                fontSize: '0.9em'
-              }}
-              title={`Seed ${index + 1}`}
-            />
-          ))}
-          <button
-            onClick={() => onSeedsChange([...seeds, Math.floor(Math.random() * 10000)])}
-            style={{
-              padding: '4px 8px',
-              background: '#2a2a2a',
-              border: '1px solid #444',
-              borderRadius: '4px',
-              color: '#888',
-              cursor: 'pointer',
-              fontSize: '0.9em'
-            }}
-            title="Add seed"
-          >
-            + Add
-          </button>
-          {seeds.length > 1 && (
-            <button
-              onClick={() => onSeedsChange(seeds.slice(0, -1))}
-              style={{
-                padding: '4px 8px',
-                background: '#2a2a2a',
-                border: '1px solid #444',
-                borderRadius: '4px',
-                color: '#888',
-                cursor: 'pointer',
-                fontSize: '0.9em'
-              }}
-              title="Remove last seed"
-            >
-              − Remove
-            </button>
-          )}
-        </div>
-      )}
 
       {isOpen && !minimized && (
         <div className="preview-tray-content">
@@ -308,105 +319,385 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
             </div>
           )}
 
-          {!isExecuting && !error && results.length > 0 && (
-            <div className="preview-results">
-              {results.length > virtualizeThreshold ? (
-                <VirtualResultsList 
-                  results={results}
-                  height={getTrayHeight() - 120} // Account for header and footer
-                />
-              ) : window.innerWidth > 1200 && results.length <= 6 ? (
-                // Split view for wide screens (up to 6 results)
-                <div className="seed-split-view" style={{
-                  display: 'grid',
-                  gridTemplateColumns: `repeat(${Math.min(results.length, 4)}, 1fr)`,
-                  gap: '10px',
-                  height: getTrayHeight() - 120,
-                  overflow: 'auto',
-                  padding: '10px'
-                }}>
-                  {results.map((result, index) => (
-                    <div key={index} className="seed-column" style={{
-                      border: '1px solid #444',
-                      borderRadius: '4px',
-                      padding: '10px',
-                      overflow: 'auto',
-                      background: '#1a1a1a',
-                      cursor: 'pointer'
-                    }} onClick={() => navigator.clipboard.writeText(result.result)}>
-                      <div className="seed-label" style={{
-                        fontWeight: 'bold',
-                        marginBottom: '10px',
-                        color: '#888',
-                        fontSize: '0.9em'
-                      }}>Seed {result.seed}</div>
-                      <div className="seed-result" style={{
-                        whiteSpace: 'pre-wrap',
-                        wordBreak: 'break-word',
-                        color: '#fff'
-                      }}>{result.result}</div>
-                    </div>
-                  ))}
-                </div>
-              ) : results.length > 3 ? (
-                // Tabs for narrow screens or many results
-                <>
-                  <div className="seed-tab-buttons">
-                    {results.map((result, index) => (
-                      <button
-                        key={index}
-                        className={`seed-tab-button ${activeTab === index ? 'active' : ''}`}
-                        onClick={() => setActiveTab(index)}
-                        aria-selected={activeTab === index}
-                        role="tab"
+          {!isExecuting && !error && (
+            <div className="preview-results-container" style={{
+              display: 'flex',
+              height: '100%',
+              position: 'relative'
+            }}>
+              <div 
+                ref={scrollContainerRef}
+                className="preview-results-scroll"
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  right: '180px', // Stop before the actions panel
+                  bottom: 0,
+                  display: 'flex',
+                  gap: '12px',
+                  padding: '12px',
+                  paddingRight: '20px', // Just a small buffer
+                  overflowX: 'auto',
+                  overflowY: 'hidden',
+                  scrollBehavior: 'smooth'
+                }}
+              >
+                {/* Show empty state if no results yet */}
+                {results.length === 0 ? (
+                  <div className="preview-empty" style={{
+                    flex: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#666',
+                    gap: '16px'
+                  }}>
+                    <p>No preview results yet</p>
+                    {onExecute && (
+                      <button 
+                        onClick={onExecute} 
+                        className="execute-btn"
+                        style={{
+                          padding: '8px 16px',
+                          background: '#2a2a2a',
+                          border: '1px solid #444',
+                          borderRadius: '6px',
+                          color: '#e8e8e8',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.background = '#333';
+                          e.currentTarget.style.borderColor = '#4a9eff';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.background = '#2a2a2a';
+                          e.currentTarget.style.borderColor = '#444';
+                        }}
                       >
-                        Seed {result.seed}
+                        Generate Preview
                       </button>
-                    ))}
+                    )}
                   </div>
-                  <div className="seed-tab-content" role="tabpanel">
-                    <div className="seed-result">
-                      {results[activeTab]?.result || ''}
+                ) : (
+                  <>
+                {/* All seeds */}
+                {seeds.map((seed, index) => {
+                  const result = results.find(r => r.seed === seed);
+                  return (
+                    <div
+                      key={`seed-${seed}-${index}`}
+                      className="preview-result-box"
+                      style={{
+                        flex: '0 0 320px', // Fixed width for consistent sizing
+                        minWidth: '320px',
+                        border: '1px solid #444',
+                        borderRadius: '6px',
+                        background: '#1a1a1a',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      {/* Delete button */}
+                      {seeds.length > 1 && (
+                        <button
+                          className="preview-delete-seed"
+                          onClick={() => handleDeleteSeed(index)}
+                          style={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            width: '20px',
+                            height: '20px',
+                            border: 'none',
+                            background: 'rgba(255, 255, 255, 0.1)',
+                            color: '#888',
+                            borderRadius: '3px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            lineHeight: '1',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 10,
+                            transition: 'background 0.2s, color 0.2s'
+                          }}
+                          onMouseEnter={e => {
+                            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)';
+                            e.currentTarget.style.color = '#ef4444';
+                          }}
+                          onMouseLeave={e => {
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                            e.currentTarget.style.color = '#888';
+                          }}
+                          title="Delete seed"
+                        >
+                          ×
+                        </button>
+                      )}
+                      
+                      {/* Seed label with inline edit */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        left: '12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px'
+                      }}>
+                        <span style={{ color: '#666', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Seed</span>
+                        {editingSeedIndex === index ? (
+                          <input
+                            type="number"
+                            value={editingSeedValue}
+                            onChange={e => setEditingSeedValue(e.target.value)}
+                            onBlur={handleSeedSave}
+                            onKeyDown={e => {
+                              if (e.key === 'Enter') handleSeedSave();
+                              if (e.key === 'Escape') setEditingSeedIndex(null);
+                            }}
+                            autoFocus
+                            style={{
+                              width: '60px',
+                              padding: '1px 4px',
+                              background: '#1a1a1a',
+                              border: '1px solid #4a9eff',
+                              borderRadius: '3px',
+                              color: '#fff',
+                              fontSize: '12px',
+                              outline: 'none'
+                            }}
+                          />
+                        ) : (
+                          <button
+                            onClick={() => handleSeedEdit(index)}
+                            style={{
+                              padding: '1px 4px',
+                              background: 'transparent',
+                              border: '1px solid transparent',
+                              borderRadius: '3px',
+                              color: '#e8e8e8',
+                              fontSize: '12px',
+                              cursor: 'pointer',
+                              transition: 'border-color 0.2s'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.borderColor = '#444'}
+                            onMouseLeave={e => e.currentTarget.style.borderColor = 'transparent'}
+                          >
+                            {seed}
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleRandomizeSeed(index)}
+                          style={{
+                            width: '20px',
+                            height: '20px',
+                            border: 'none',
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            borderRadius: '3px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(74, 158, 255, 0.2)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
+                          title="Randomize seed"
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <circle cx="15.5" cy="15.5" r="1.5" />
+                          </svg>
+                        </button>
+                      </div>
+                      
+                      {/* Result content */}
+                      <div style={{
+                        flex: 1,
+                        padding: '16px',
+                        paddingTop: '40px', // Make room for the seed label at the top
+                        overflow: 'auto',
+                        cursor: 'pointer'
+                      }} onClick={() => result && navigator.clipboard.writeText(result.result)}>
+                        {result ? (
+                          <div style={{
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                            color: '#e8e8e8',
+                            fontSize: '14px',
+                            lineHeight: '1.5'
+                          }}>
+                            {result.result}
+                          </div>
+                        ) : (
+                          <div style={{
+                            color: '#666',
+                            fontSize: '14px',
+                            fontStyle: 'italic'
+                          }}>
+                            No result yet
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </>
-              ) : (
-                // Simple list for 3 or fewer results
-                <div className="seed-tabs">
-                  {results.map((result, index) => (
-                    <div key={index} className="seed-tab">
-                      <div className="seed-label">Seed {result.seed}</div>
-                      <div className="seed-result">{result.result}</div>
-                    </div>
-                  ))}
+                  );
+                })}
+                
+                {/* Add new seed button */}
+                <div
+                  className="preview-add-seed-box"
+                  style={{
+                    flex: '0 0 80px',
+                    minWidth: '80px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  <button
+                    onClick={handleAddSeed}
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      border: '2px dashed #444',
+                      borderRadius: '6px',
+                      background: 'transparent',
+                      color: '#666',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = '#4a9eff';
+                      e.currentTarget.style.color = '#4a9eff';
+                      e.currentTarget.style.background = 'rgba(74, 158, 255, 0.1)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = '#444';
+                      e.currentTarget.style.color = '#666';
+                      e.currentTarget.style.background = 'transparent';
+                    }}
+                    title="Add new seed"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                  </button>
                 </div>
-              )}
-            </div>
-          )}
-
-          {!isExecuting && !error && results.length === 0 && (
-            <div className="preview-empty">
-              <p>No preview results yet</p>
-              {onExecute && (
-                <button onClick={onExecute} className="execute-btn">
-                  Generate Preview
+                  </>
+                )}
+              </div>
+              
+              {/* Actions panel on the right - like Asset Browser */}
+              <div
+                className="preview-actions-panel"
+                style={{
+                  position: 'absolute',
+                  right: '0',
+                  top: '0',
+                  bottom: '0',
+                  width: '180px', // Increased width to accommodate divider
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  padding: '12px',
+                  paddingLeft: '24px', // More padding for divider space
+                  background: '#2a2a2a',
+                  boxShadow: '-4px 0 8px rgba(0, 0, 0, 0.2)'
+                }}
+              >
+                {/* Vertical divider line */}
+                <div style={{
+                  position: 'absolute',
+                  left: '8px',
+                  top: '0',
+                  bottom: '0',
+                  width: '3px',
+                  background: '#3a3a3a'
+                }} />
+                <button
+                  onClick={handleCopyAll}
+                  style={{
+                    padding: '10px 12px',
+                    background: '#1a1a1a',
+                    border: '1px solid #444',
+                    borderRadius: '6px',
+                    color: '#e8e8e8',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = '#333';
+                    e.currentTarget.style.borderColor = '#4a9eff';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = '#1a1a1a';
+                    e.currentTarget.style.borderColor = '#444';
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                  </svg>
+                  Copy All
                 </button>
-              )}
+                
+                {onExport && (
+                  <button
+                    onClick={() => onExport('json')}
+                    style={{
+                      padding: '10px 12px',
+                      background: '#1a1a1a',
+                      border: '1px solid #444',
+                      borderRadius: '6px',
+                      color: '#e8e8e8',
+                      fontSize: '13px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.background = '#333';
+                      e.currentTarget.style.borderColor = '#4a9eff';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.background = '#1a1a1a';
+                      e.currentTarget.style.borderColor = '#444';
+                    }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Export JSON
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </div>
       )}
 
-      {isOpen && !minimized && results.length > 0 && (
-        <div className="preview-tray-footer">
-          <button onClick={handleCopyAll} className="action-btn">
-            Copy All
-          </button>
-          <button onClick={() => onExport?.('json')} className="action-btn">
-            Export JSON
-          </button>
-        </div>
-      )}
     </div>
   );
 };

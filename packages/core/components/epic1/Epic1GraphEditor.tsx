@@ -313,7 +313,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [isPreviewExecuting, setIsPreviewExecuting] = useState(false);
   const [previewError, setPreviewError] = useState<Error | undefined>();
   const [currentSeeds, setCurrentSeeds] = useState<number[]>(
-    previewSeeds as number[] || [3141, 5926, 5358, 9793]
+    previewSeeds as number[] || [3141, 5926, 5358]
   );
   
   // Toast system for error messages (moved before useEffects that use it)
