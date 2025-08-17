@@ -332,11 +332,11 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   position: 'absolute',
                   left: 0,
                   top: 0,
-                  right: '180px', // Stop before the actions panel
+                  right: '400px', // Updated to match much wider actions panel
                   bottom: 0,
                   display: 'flex',
                   gap: '12px',
-                  padding: '12px',
+                  padding: '0 12px', // Remove top padding entirely
                   paddingRight: '20px', // Just a small buffer
                   overflowX: 'auto',
                   overflowY: 'hidden',
@@ -391,8 +391,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                       key={`seed-${seed}-${index}`}
                       className="preview-result-box"
                       style={{
-                        flex: '0 0 320px', // Fixed width for consistent sizing
-                        minWidth: '320px',
+                        flex: '0 0 380px', // Wider boxes
+                        minWidth: '380px',
                         border: '1px solid #444',
                         borderRadius: '6px',
                         background: '#1a1a1a',
@@ -443,7 +443,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                       {/* Seed label with inline edit */}
                       <div style={{
                         position: 'absolute',
-                        top: '12px',
+                        top: '6px',
                         left: '12px',
                         display: 'flex',
                         alignItems: 'center',
@@ -520,8 +520,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                       {/* Result content */}
                       <div style={{
                         flex: 1,
-                        padding: '16px',
-                        paddingTop: '40px', // Make room for the seed label at the top
+                        padding: '8px 12px',
+                        paddingTop: '26px', // Just enough space for seed label
                         overflow: 'auto',
                         cursor: 'pointer'
                       }} onClick={() => result && navigator.clipboard.writeText(result.result)}>
@@ -605,12 +605,12 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   right: '0',
                   top: '0',
                   bottom: '0',
-                  width: '180px', // Increased width to accommodate divider
+                  width: '400px', // Doubled the width
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px',
-                  padding: '12px',
-                  paddingLeft: '24px', // More padding for divider space
+                  gap: '12px',
+                  padding: '16px',
+                  paddingLeft: '28px', // More padding for divider space
                   background: '#2a2a2a',
                   boxShadow: '-4px 0 8px rgba(0, 0, 0, 0.2)'
                 }}
