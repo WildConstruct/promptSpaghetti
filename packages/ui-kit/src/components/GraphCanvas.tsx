@@ -38,6 +38,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const theme = useTheme();
   const { isMobile } = useResponsive();
   const canvasRef = useRef<HTMLDivElement>(null);
+  const defaultPositionsRef = useRef<Record<string, { x: number; y: number }>>({});
   const [viewport, setViewport] = useState<ViewportState>({ zoom: 1, pan: { x: 0, y: 0 } });
   const [isDragging, setIsDragging] = useState(false);
   const [dragNode, setDragNode] = useState<string | null>(null);
@@ -45,14 +46,41 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
+  // Normalize graph structures (Map | Array | Record) to arrays (no any)
+  type Collection<T> = Map<string, T> | T[] | Record<string, T> | null | undefined;
+  const toArray = useCallback(<T,>(collection: Collection<T>): T[] => {
+    if (!collection) return [];
+    if (Array.isArray(collection)) return collection as T[];
+    if (collection instanceof Map) return Array.from(collection.values()) as T[];
+    if (typeof collection === 'object') return Object.values(collection) as T[];
+    return [];
+  }, []);
+
+  const nodesList = useMemo<GraphNode[]>(() => toArray<GraphNode>(graph?.nodes as unknown as Collection<GraphNode>), [toArray, graph]);
+  const edgesList = useMemo<GraphEdge[]>(() => toArray<GraphEdge>(graph?.edges as unknown as Collection<GraphEdge>), [toArray, graph]);
+
   // Convert graph nodes to canvas nodes with positioning
   const canvasNodes = useMemo<CanvasNode[]>(() => {
-    return graph.nodes.map(node => ({
-      ...node,
-      position: node.position || { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 },
-      size: { width: 150, height: 80 },
-    }));
-  }, [graph.nodes]);
+    return nodesList.map((node: GraphNode) => {
+      let position = node.position as { x: number; y: number } | undefined;
+      if (!position) {
+        const cached = defaultPositionsRef.current[node.id];
+        if (cached) {
+          position = cached;
+        } else {
+          const initial = { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 };
+          defaultPositionsRef.current[node.id] = initial;
+          position = initial;
+        }
+      }
+
+      return {
+        ...node,
+        position,
+        size: { width: 150, height: 80 },
+      };
+    });
+  }, [nodesList]);
 
   // Get node by ID
   const getNodeById = useCallback(
@@ -80,6 +108,9 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const handleMouseDown = useCallback(
     (e: React.MouseEvent, nodeId?: string) => {
       e.preventDefault();
+      if (nodeId) {
+        e.stopPropagation();
+      }
 
       if (nodeId && !readOnly) {
         // Start dragging node
@@ -113,6 +144,8 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
           x: canvasPos.x - dragOffset.x,
           y: canvasPos.y - dragOffset.y,
         };
+        // Optimistically update local cached position for smooth dragging
+        defaultPositionsRef.current[dragNode] = newPosition;
         onNodeMove?.(dragNode, newPosition);
       } else if (isDragging) {
         // Pan canvas
@@ -138,15 +171,29 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   const handleWheel = useCallback(
     (e: React.WheelEvent) => {
       e.preventDefault();
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
       const zoomFactor = 1 - e.deltaY * 0.001;
       const newZoom = Math.max(0.1, Math.min(3, viewport.zoom * zoomFactor));
+
+      // Keep the point under the cursor stable during zoom
+      const canvasPoint = screenToCanvas(e.clientX, e.clientY);
+      const screenX = e.clientX - rect.left;
+      const screenY = e.clientY - rect.top;
+
+      const newPan = {
+        x: screenX - canvasPoint.x * newZoom,
+        y: screenY - canvasPoint.y * newZoom,
+      };
 
       setViewport(prev => ({
         ...prev,
         zoom: newZoom,
+        pan: newPan,
       }));
     },
-    [viewport.zoom]
+    [viewport.zoom, screenToCanvas]
   );
 
   // Control functions
@@ -279,7 +326,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
   };
 
   const transformStyles = {
-    transform: `scale(${viewport.zoom}) translate(${viewport.pan.x / viewport.zoom}px, ${viewport.pan.y / viewport.zoom}px)`,
+    transform: `translate(${viewport.pan.x}px, ${viewport.pan.y}px) scale(${viewport.zoom})`,
     transformOrigin: '0 0',
     width: '100%',
     height: '100%',
@@ -319,7 +366,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
               zIndex: 1,
             }}
           >
-            {graph.edges.map(edge => {
+            {edgesList.map((edge: GraphEdge) => {
               const sourceNode = getNodeById(edge.source);
               const targetNode = getNodeById(edge.target);
 
@@ -370,7 +417,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
             {canvasNodes.map(node => (
               <div
                 key={node.id}
-                className={cn('ui-graph-node', { 'ui-graph-node--selected': selectedNodeId === node.id })}
+                className={cn('ui-graph-node', selectedNodeId === node.id ? 'ui-graph-node--selected' : undefined)}
                 style={{
                   position: 'absolute',
                   left: node.position.x,
@@ -527,7 +574,7 @@ export const GraphCanvas: React.FC<GraphCanvasProps> = ({
           zIndex: 10,
         }}
       >
-        Nodes: {canvasNodes.length} | Edges: {graph.edges.length} | Zoom: {Math.round(viewport.zoom * 100)}%
+        Nodes: {canvasNodes.length} | Edges: {edgesList.length} | Zoom: {Math.round(viewport.zoom * 100)}%
       </div>
     </div>
   );

@@ -106,7 +106,8 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
             : undefined,
         display: 'flex',
         flexDirection: 'column',
-        zIndex: 10
+        zIndex: 10,
+        overflow: 'hidden'
       }}
     >
       {/* Header */}
@@ -141,7 +142,7 @@ export const AssetLibraryPanel: React.FC<AssetLibraryPanelProps> = ({
       </div>
 
       {/* Asset Browser */}
-      <div style={{ flex: 1, overflow: 'hidden' }}>
+      <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
         {componentsLoaded && TabbedAssetBrowser && UserProvider ? (
           <UserProvider>
             <TabbedAssetBrowser onInsert={handleInsertPreset} />

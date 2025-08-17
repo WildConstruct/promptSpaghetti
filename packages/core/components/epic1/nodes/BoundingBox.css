@@ -7,6 +7,9 @@
   cursor: move;
   user-select: none;
   box-sizing: border-box;
+  /* Ensure the box is visible */
+  opacity: 1;
+  visibility: visible;
 }
 
 .bounding-box.selected {

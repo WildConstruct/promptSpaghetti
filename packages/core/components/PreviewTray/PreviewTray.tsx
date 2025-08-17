@@ -10,6 +10,7 @@ export interface PreviewTrayProps {
   results: PreviewResult[];
   isExecuting: boolean;
   error?: Error;
+  onSeedsChange?: (seeds: number[]) => void;
   onExecute?: () => void;
   onCancel?: () => void;
   onCopy?: (text: string) => void;
@@ -18,37 +19,52 @@ export interface PreviewTrayProps {
   maxHeight?: number;
   defaultHeight?: number;
   virtualizeThreshold?: number;
+  /** If false, disable drag resizing and use fixed open/minimized heights */
+  resizable?: boolean;
+  /**
+   * When true, render the tray as an absolute-positioned overlay at the bottom
+   * of its positioned container rather than as a flex sibling that consumes
+   * layout space.
+   *
+   * IMPORTANT: In Epic1 Graph Editor, this tray must NOT be an overlay.
+   * It must remain a flex sibling that pushes the editor content up.
+   * Do not pass overlay={true} in Epic1 contexts.
+   */
+  overlay?: boolean;
 }
 
 const TRAY_MIN_HEIGHT = 100;
 const TRAY_DEFAULT_HEIGHT = 250;
 const TRAY_MAX_HEIGHT_PERCENT = 0.6;
+const TRAY_HEADER_HEIGHT = 40; // keep in sync with CSS
 
 export const PreviewTray: React.FC<PreviewTrayProps> = ({
   seeds,
   results,
   isExecuting,
   error,
+  onSeedsChange,
   onExecute,
-  onCancel,
   onCopy,
   onExport,
   minHeight = TRAY_MIN_HEIGHT,
   maxHeight,
   defaultHeight = TRAY_DEFAULT_HEIGHT,
   virtualizeThreshold = 100,
+  resizable = true,
+  overlay = false,
 }) => {
   const {
     isOpen,
     height,
-    mode,
-    isPinned,
     activeTab,
     toggleTray,
     setHeight,
-    setMode,
-    togglePin,
     setActiveTab,
+    setOpen,
+    minimized,
+    toggleMinimized,
+    setMinimized,
   } = usePreviewTrayStore();
 
   const trayRef = useRef<HTMLDivElement>(null);
@@ -61,17 +77,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
 
   const maxHeightValue = maxHeight || window.innerHeight * TRAY_MAX_HEIGHT_PERCENT;
 
-  const handleToggle = useCallback(() => {
-    toggleTray();
-  }, [toggleTray]);
-
-  const handleMinimize = useCallback(() => {
-    setMode('minimized');
-  }, [setMode]);
-
-  const handleMaximize = useCallback(() => {
-    setMode(mode === 'maximized' ? 'normal' : 'maximized');
-  }, [mode, setMode]);
+  // Removed minimize/maximize - using simple open/close
 
   const handleClose = useCallback(() => {
     toggleTray();
@@ -82,90 +88,131 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
     onCopy?.(allResults);
   }, [results, onCopy]);
 
-  const handleDragStart = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    isDragging.current = true;
-    dragStartY.current = e.clientY;
-    dragStartHeight.current = height;
-    document.addEventListener('mousemove', handleDragMove);
-    document.addEventListener('mouseup', handleDragEnd);
-    document.body.style.cursor = 'ns-resize';
-  }, [height]);
-
   const handleDragMove = useCallback((e: MouseEvent) => {
     if (!isDragging.current) return;
     
-    const deltaY = dragStartY.current - e.clientY;
-    const newHeight = Math.min(
-      Math.max(dragStartHeight.current + deltaY, minHeight),
-      maxHeightValue
-    );
-    
-    setHeight(newHeight);
+    requestAnimationFrame(() => {
+      const deltaY = dragStartY.current - e.clientY;
+      const newHeight = Math.min(
+        Math.max(dragStartHeight.current + deltaY, minHeight),
+        maxHeightValue
+      );
+      
+      setHeight(newHeight);
+    });
   }, [minHeight, maxHeightValue, setHeight]);
 
   const handleDragEnd = useCallback(() => {
     isDragging.current = false;
-    document.removeEventListener('mousemove', handleDragMove);
-    document.removeEventListener('mouseup', handleDragEnd);
+    document.removeEventListener('mousemove', handleDragMove, true);
+    document.removeEventListener('mouseup', handleDragEnd, true);
     document.body.style.cursor = '';
   }, [handleDragMove]);
 
-  // Cleanup drag listeners on unmount - moved after handler definitions
+  const handleDragStart = useCallback((e: React.MouseEvent) => {
+    // Don't start drag if closed
+    if (!isOpen || !resizable) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    isDragging.current = true;
+    dragStartY.current = e.clientY;
+    dragStartHeight.current = height;
+    // Use capture so document receives events even if inner handlers stop propagation
+    document.addEventListener('mousemove', handleDragMove, { capture: true });
+    document.addEventListener('mouseup', handleDragEnd, { capture: true });
+    document.body.style.cursor = 'ns-resize';
+  }, [height, isOpen, resizable, handleDragMove, handleDragEnd]);
+
+  // Cleanup drag listeners on unmount
   useEffect(() => {
     return () => {
       if (isDragging.current) {
-        document.removeEventListener('mousemove', handleDragMove);
-        document.removeEventListener('mouseup', handleDragEnd);
+        document.removeEventListener('mousemove', handleDragMove, true);
+        document.removeEventListener('mouseup', handleDragEnd, true);
         document.body.style.cursor = '';
       }
     };
   }, [handleDragMove, handleDragEnd]);
 
+  // Auto-open when execution starts or when first results arrive
+  const prevExecRef = useRef(isExecuting);
+  const prevResultsCountRef = useRef(results.length);
+  useEffect(() => {
+    const prevExec = prevExecRef.current;
+    const prevCount = prevResultsCountRef.current;
+    const execStarted = !prevExec && isExecuting;
+    const gotFirstResults = prevCount === 0 && results.length > 0;
+    if (!isOpen && (execStarted || gotFirstResults)) {
+      setOpen(true);
+      setMinimized(false);
+    }
+    prevExecRef.current = isExecuting;
+    prevResultsCountRef.current = results.length;
+  }, [isExecuting, results.length, isOpen, setOpen, setMinimized]);
+
   const getTrayHeight = () => {
     if (!isOpen) return 0;
-    if (mode === 'minimized') return 40;
-    if (mode === 'maximized') return maxHeightValue;
-    return height;
+    if (minimized) return TRAY_HEADER_HEIGHT;
+    if (!resizable) {
+      // Use fixed height when not resizable
+      return Math.min(Math.max(defaultHeight, minHeight), maxHeightValue);
+    }
+    const clamped = Math.min(
+      Math.max((height || defaultHeight), minHeight),
+      maxHeightValue
+    );
+    return clamped;
   };
 
-  const trayClassName = `preview-tray ${isOpen ? 'open' : 'closed'} ${mode}`;
+  const trayClassName = `preview-tray ${isOpen ? 'open' : 'closed'} ${minimized ? 'minimized' : ''}`;
 
   return (
     <div 
       ref={trayRef}
-      className={trayClassName}
+      className={`${trayClassName} ${overlay ? 'overlay' : ''}`}
       style={{ height: getTrayHeight() }}
       data-testid="preview-tray"
+      // Prevent event propagation to canvas behind
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => {
+        // Only stop propagation if not clicking on the drag handle/header controls
+        if (!(e.target as HTMLElement).closest('.preview-tray-header')) {
+          e.stopPropagation();
+        }
+      }}
+      onMouseUp={(e) => { if (!isDragging.current) e.stopPropagation(); }}
+      onPointerDown={(e) => e.stopPropagation()}
+      onPointerUp={(e) => { if (!isDragging.current) e.stopPropagation(); }}
     >
       <div 
         className="preview-tray-header"
-        onMouseDown={handleDragStart}
+        style={{ cursor: 'pointer' }}
+        onClick={(e) => {
+          // Ignore clicks on handle or controls
+          const t = e.target as HTMLElement;
+          if (t.closest('.preview-tray-drag-handle') || t.closest('.preview-tray-controls')) return;
+          toggleMinimized();
+        }}
       >
-        <div className="preview-tray-drag-handle" />
+        {resizable && isOpen && (
+          <div className="preview-tray-drag-handle" onMouseDown={handleDragStart} />
+        )}
         <div className="preview-tray-title">
           Preview Output {results.length > 0 && `(${results.length} results)`}
         </div>
         <div className="preview-tray-controls">
           <button 
             className="tray-control-btn minimize"
-            onClick={handleMinimize}
-            title="Minimize"
-            aria-label="Minimize preview tray"
+            onClick={(e) => { e.stopPropagation(); toggleMinimized(); }}
+            title={minimized ? 'Expand' : 'Minimize'}
+            aria-label={minimized ? 'Expand preview tray' : 'Minimize preview tray'}
           >
-            −
-          </button>
-          <button 
-            className="tray-control-btn maximize"
-            onClick={handleMaximize}
-            title={mode === 'maximized' ? 'Restore' : 'Maximize'}
-            aria-label={mode === 'maximized' ? 'Restore preview tray' : 'Maximize preview tray'}
-          >
-            {mode === 'maximized' ? '↓' : '↑'}
+            <span className={`chevron ${!minimized ? 'open' : 'closed'}`}>⌄</span>
           </button>
           <button 
             className="tray-control-btn close"
-            onClick={handleClose}
+            onClick={(e) => { e.stopPropagation(); handleClose(); }}
             title="Close"
             aria-label="Close preview tray"
           >
@@ -174,7 +221,75 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
         </div>
       </div>
 
-      {mode !== 'minimized' && (
+      {isOpen && !minimized && onSeedsChange && (
+        <div className="preview-seeds-editor" style={{
+          padding: '10px',
+          borderBottom: '1px solid #444',
+          background: '#222',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          flexWrap: 'wrap'
+        }}>
+          <span style={{ color: '#888', fontSize: '0.9em' }}>Seeds:</span>
+          {seeds.map((seed, index) => (
+            <input
+              key={index}
+              type="number"
+              value={seed}
+              onChange={(e) => {
+                const newSeeds = [...seeds];
+                newSeeds[index] = parseInt(e.target.value) || 0;
+                onSeedsChange(newSeeds);
+              }}
+              style={{
+                width: '80px',
+                padding: '4px 8px',
+                background: '#1a1a1a',
+                border: '1px solid #444',
+                borderRadius: '4px',
+                color: '#fff',
+                fontSize: '0.9em'
+              }}
+              title={`Seed ${index + 1}`}
+            />
+          ))}
+          <button
+            onClick={() => onSeedsChange([...seeds, Math.floor(Math.random() * 10000)])}
+            style={{
+              padding: '4px 8px',
+              background: '#2a2a2a',
+              border: '1px solid #444',
+              borderRadius: '4px',
+              color: '#888',
+              cursor: 'pointer',
+              fontSize: '0.9em'
+            }}
+            title="Add seed"
+          >
+            + Add
+          </button>
+          {seeds.length > 1 && (
+            <button
+              onClick={() => onSeedsChange(seeds.slice(0, -1))}
+              style={{
+                padding: '4px 8px',
+                background: '#2a2a2a',
+                border: '1px solid #444',
+                borderRadius: '4px',
+                color: '#888',
+                cursor: 'pointer',
+                fontSize: '0.9em'
+              }}
+              title="Remove last seed"
+            >
+              − Remove
+            </button>
+          )}
+        </div>
+      )}
+
+      {isOpen && !minimized && (
         <div className="preview-tray-content">
           {isExecuting && (
             <div className="preview-loading">
@@ -200,7 +315,41 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   results={results}
                   height={getTrayHeight() - 120} // Account for header and footer
                 />
+              ) : window.innerWidth > 1200 && results.length <= 6 ? (
+                // Split view for wide screens (up to 6 results)
+                <div className="seed-split-view" style={{
+                  display: 'grid',
+                  gridTemplateColumns: `repeat(${Math.min(results.length, 4)}, 1fr)`,
+                  gap: '10px',
+                  height: getTrayHeight() - 120,
+                  overflow: 'auto',
+                  padding: '10px'
+                }}>
+                  {results.map((result, index) => (
+                    <div key={index} className="seed-column" style={{
+                      border: '1px solid #444',
+                      borderRadius: '4px',
+                      padding: '10px',
+                      overflow: 'auto',
+                      background: '#1a1a1a',
+                      cursor: 'pointer'
+                    }} onClick={() => navigator.clipboard.writeText(result.result)}>
+                      <div className="seed-label" style={{
+                        fontWeight: 'bold',
+                        marginBottom: '10px',
+                        color: '#888',
+                        fontSize: '0.9em'
+                      }}>Seed {result.seed}</div>
+                      <div className="seed-result" style={{
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
+                        color: '#fff'
+                      }}>{result.result}</div>
+                    </div>
+                  ))}
+                </div>
               ) : results.length > 3 ? (
+                // Tabs for narrow screens or many results
                 <>
                   <div className="seed-tab-buttons">
                     {results.map((result, index) => (
@@ -222,6 +371,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   </div>
                 </>
               ) : (
+                // Simple list for 3 or fewer results
                 <div className="seed-tabs">
                   {results.map((result, index) => (
                     <div key={index} className="seed-tab">
@@ -247,7 +397,7 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
         </div>
       )}
 
-      {mode !== 'minimized' && results.length > 0 && (
+      {isOpen && !minimized && results.length > 0 && (
         <div className="preview-tray-footer">
           <button onClick={handleCopyAll} className="action-btn">
             Copy All

@@ -1,10 +1,10 @@
 /**
  * Asset Browser Integrated Component
- * Uses enhanced asset browser with fragment manifest support
+ * Uses ProAssetBrowser for the nice Logic-like UI
  */
 
 import React from 'react';
-import { EnhancedAssetBrowser, UserProvider } from '@prompt/asset-browser';
+import { ProAssetBrowser, UserProvider } from '@prompt/asset-browser';
 
 interface AssetBrowserIntegratedProps {
   onInsert?: (preset: any) => void;
@@ -19,10 +19,8 @@ export const AssetBrowserIntegrated: React.FC<AssetBrowserIntegratedProps> = ({
 }) => {
   return (
     <UserProvider>
-      <EnhancedAssetBrowser 
+      <ProAssetBrowser 
         onInsert={onInsert}
-        onNodeReplace={onNodeReplace}
-        enableFragmentManifest={enableFragmentManifest}
       />
     </UserProvider>
   );

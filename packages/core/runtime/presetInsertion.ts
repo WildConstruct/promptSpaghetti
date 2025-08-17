@@ -11,6 +11,7 @@ import {
   type PSGLibNode,
   type PSGLibEdge
 } from '../fileFormats/psglib';
+import { parsePSG, convertPSGToPSGLib } from '../fileFormats/psg';
 
 export interface InsertionOptions {
   position?: { x: number; y: number };
@@ -99,10 +100,10 @@ function mapEdgeHandles(
 }
 
 /**
- * Insert a preset from PSGLib file content
+ * Insert a preset from PSGLib or PSG file content
  */
 export async function insertPreset(
-  psglibContent: string,
+  presetContent: string,
   options: InsertionOptions = {}
 ): Promise<InsertionResult> {
   const {
@@ -114,8 +115,22 @@ export async function insertPreset(
   } = options;
 
   try {
-    // Parse PSGLib file
-    const psglib = parsePSGLib(psglibContent);
+    // Parse the preset - detect format and convert if needed
+    let psglib: PSGLibFile;
+    
+    // Try to parse as JSON first to detect format
+    const data = JSON.parse(presetContent);
+    
+    if (data.fileType === 'psglib') {
+      // It's already a PSGLib file
+      psglib = parsePSGLib(presetContent);
+    } else if (data.version && data.nodes && !data.fileType) {
+      // It's a PSG fragment file - convert it
+      const psg = parsePSG(presetContent);
+      psglib = convertPSGToPSGLib(psg);
+    } else {
+      throw new Error('Unrecognized preset format');
+    }
 
     // Track usage for analytics
     trackPresetUsage(psglib, 'import');
@@ -176,7 +191,7 @@ export async function insertPreset(
  * Insert preset via drag and drop
  */
 export async function insertPresetFromDrop(
-  psglibContent: string,
+  presetContent: string,
   dropPosition: { x: number; y: number },
   viewportTransform?: { x: number; y: number; zoom: number }
 ): Promise<InsertionResult> {
@@ -188,7 +203,7 @@ export async function insertPresetFromDrop(
       }
     : dropPosition;
 
-  return insertPreset(psglibContent, {
+  return insertPreset(presetContent, {
     position: graphPosition,
     snapToGrid: true,
     selectAfterInsert: true
@@ -219,14 +234,47 @@ export async function loadPresetFromPath(
 /**
  * Validate preset before insertion
  */
-export function validatePreset(psglibContent: string): {
+export function validatePreset(presetContent: string): {
   valid: boolean;
   error?: string;
   nodeCount?: number;
   edgeCount?: number;
 } {
   try {
-    const psglib = parsePSGLib(psglibContent);
+    // Try to parse as JSON first to detect format
+    let data: any;
+    try {
+      data = JSON.parse(presetContent);
+    } catch (e) {
+      return {
+        valid: false,
+        error: 'Invalid JSON format'
+      };
+    }
+
+    let psglib: PSGLibFile;
+    
+    // Detect format based on structure
+    if (data.fileType === 'psglib') {
+      // It's already a PSGLib file
+      psglib = parsePSGLib(presetContent);
+    } else if (data.version && data.nodes && !data.fileType) {
+      // It's a PSG fragment file - convert it
+      try {
+        const psg = parsePSG(presetContent);
+        psglib = convertPSGToPSGLib(psg);
+      } catch (psgError) {
+        return {
+          valid: false,
+          error: `Invalid PSG fragment: ${psgError instanceof Error ? psgError.message : 'Unknown error'}`
+        };
+      }
+    } else {
+      return {
+        valid: false,
+        error: 'Unrecognized preset format'
+      };
+    }
 
     // Check for empty preset
     if (psglib.graph.nodes.length === 0) {
@@ -299,17 +347,23 @@ function calculateBounds(nodes: PSGLibNode[]): {
 function mapNodeType(type: string): string {
   const typeMap: Record<string, string> = {
     WeightedChoice: 'weightedChoice',
+    weightedChoice: 'weightedChoice', // Already mapped
     Concat: 'concat',
+    concat: 'concat', // Already mapped
     Output: 'output',
+    output: 'output', // Already mapped
     TextBlock: 'textBlock',
+    textBlock: 'textBlock', // Already mapped
     Variable: 'variable',
+    variable: 'variable', // Already mapped
     SetVariable: 'setVariable',
     GetVariable: 'getVariable',
-    Include: 'include'
+    Include: 'include',
+    boundingBox: 'boundingBox' // Don't lowercase this
   };
 
-  // Return mapped type or lowercase version as fallback
-  return typeMap[type] || type.toLowerCase();
+  // Return mapped type or keep as-is if already in correct format
+  return typeMap[type] || type;
 }
 
 /**

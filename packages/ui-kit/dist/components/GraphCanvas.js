@@ -10,20 +10,48 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
     const theme = useTheme();
     const { isMobile } = useResponsive();
     const canvasRef = useRef(null);
+    const defaultPositionsRef = useRef({});
     const [viewport, setViewport] = useState({ zoom: 1, pan: { x: 0, y: 0 } });
     const [isDragging, setIsDragging] = useState(false);
     const [dragNode, setDragNode] = useState(null);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const [connectionStart, setConnectionStart] = useState(null);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const toArray = useCallback((collection) => {
+        if (!collection)
+            return [];
+        if (Array.isArray(collection))
+            return collection;
+        if (collection instanceof Map)
+            return Array.from(collection.values());
+        if (typeof collection === 'object')
+            return Object.values(collection);
+        return [];
+    }, []);
+    const nodesList = useMemo(() => toArray(graph?.nodes), [toArray, graph]);
+    const edgesList = useMemo(() => toArray(graph?.edges), [toArray, graph]);
     // Convert graph nodes to canvas nodes with positioning
     const canvasNodes = useMemo(() => {
-        return graph.nodes.map(node => ({
-            ...node,
-            position: node.position || { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 },
-            size: { width: 150, height: 80 },
-        }));
-    }, [graph.nodes]);
+        return nodesList.map((node) => {
+            let position = node.position;
+            if (!position) {
+                const cached = defaultPositionsRef.current[node.id];
+                if (cached) {
+                    position = cached;
+                }
+                else {
+                    const initial = { x: Math.random() * 400 + 100, y: Math.random() * 300 + 100 };
+                    defaultPositionsRef.current[node.id] = initial;
+                    position = initial;
+                }
+            }
+            return {
+                ...node,
+                position,
+                size: { width: 150, height: 80 },
+            };
+        });
+    }, [nodesList]);
     // Get node by ID
     const getNodeById = useCallback((nodeId) => {
         return canvasNodes.find(node => node.id === nodeId);
@@ -41,6 +69,9 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
     // Handle mouse events
     const handleMouseDown = useCallback((e, nodeId) => {
         e.preventDefault();
+        if (nodeId) {
+            e.stopPropagation();
+        }
         if (nodeId && !readOnly) {
             // Start dragging node
             const node = getNodeById(nodeId);
@@ -69,6 +100,8 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
                 x: canvasPos.x - dragOffset.x,
                 y: canvasPos.y - dragOffset.y,
             };
+            // Optimistically update local cached position for smooth dragging
+            defaultPositionsRef.current[dragNode] = newPosition;
             onNodeMove?.(dragNode, newPosition);
         }
         else if (isDragging) {
@@ -90,13 +123,25 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
     // Handle zoom
     const handleWheel = useCallback((e) => {
         e.preventDefault();
+        const rect = canvasRef.current?.getBoundingClientRect();
+        if (!rect)
+            return;
         const zoomFactor = 1 - e.deltaY * 0.001;
         const newZoom = Math.max(0.1, Math.min(3, viewport.zoom * zoomFactor));
+        // Keep the point under the cursor stable during zoom
+        const canvasPoint = screenToCanvas(e.clientX, e.clientY);
+        const screenX = e.clientX - rect.left;
+        const screenY = e.clientY - rect.top;
+        const newPan = {
+            x: screenX - canvasPoint.x * newZoom,
+            y: screenY - canvasPoint.y * newZoom,
+        };
         setViewport(prev => ({
             ...prev,
             zoom: newZoom,
+            pan: newPan,
         }));
-    }, [viewport.zoom]);
+    }, [viewport.zoom, screenToCanvas]);
     // Control functions
     const zoomIn = useCallback(() => {
         setViewport(prev => ({ ...prev, zoom: Math.min(3, prev.zoom * 1.2) }));
@@ -202,7 +247,7 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
         ...style,
     };
     const transformStyles = {
-        transform: `scale(${viewport.zoom}) translate(${viewport.pan.x / viewport.zoom}px, ${viewport.pan.y / viewport.zoom}px)`,
+        transform: `translate(${viewport.pan.x}px, ${viewport.pan.y}px) scale(${viewport.zoom})`,
         transformOrigin: '0 0',
         width: '100%',
         height: '100%',
@@ -221,7 +266,7 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
                                 height: '100%',
                                 pointerEvents: 'none',
                                 zIndex: 1,
-                            }, children: [graph.edges.map(edge => {
+                            }, children: [edgesList.map((edge) => {
                                     const sourceNode = getNodeById(edge.source);
                                     const targetNode = getNodeById(edge.target);
                                     if (!sourceNode || !targetNode)
@@ -231,7 +276,7 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
                                     const targetX = targetNode.position.x + targetNode.size.width / 2;
                                     const targetY = targetNode.position.y + targetNode.size.height / 2;
                                     return (_jsx("line", { x1: sourceX, y1: sourceY, x2: targetX, y2: targetY, stroke: theme.colors.border, strokeWidth: "2", markerEnd: "url(#arrowhead)" }, edge.id));
-                                }), connectionStart && (_jsx("line", { x1: getNodeById(connectionStart)?.position.x + 75, y1: getNodeById(connectionStart)?.position.y + 40, x2: mousePosition.x, y2: mousePosition.y, stroke: theme.colors.primary, strokeWidth: "2", strokeDasharray: "5,5" })), _jsx("defs", { children: _jsx("marker", { id: "arrowhead", markerWidth: "10", markerHeight: "7", refX: "9", refY: "3.5", orient: "auto", children: _jsx("polygon", { points: "0 0, 10 3.5, 0 7", fill: theme.colors.border }) }) })] }), _jsx("div", { className: "ui-graph-nodes", style: { position: 'relative', zIndex: 2 }, children: canvasNodes.map(node => (_jsxs("div", { className: cn('ui-graph-node', { 'ui-graph-node--selected': selectedNodeId === node.id }), style: {
+                                }), connectionStart && (_jsx("line", { x1: getNodeById(connectionStart)?.position.x + 75, y1: getNodeById(connectionStart)?.position.y + 40, x2: mousePosition.x, y2: mousePosition.y, stroke: theme.colors.primary, strokeWidth: "2", strokeDasharray: "5,5" })), _jsx("defs", { children: _jsx("marker", { id: "arrowhead", markerWidth: "10", markerHeight: "7", refX: "9", refY: "3.5", orient: "auto", children: _jsx("polygon", { points: "0 0, 10 3.5, 0 7", fill: theme.colors.border }) }) })] }), _jsx("div", { className: "ui-graph-nodes", style: { position: 'relative', zIndex: 2 }, children: canvasNodes.map(node => (_jsxs("div", { className: cn('ui-graph-node', selectedNodeId === node.id ? 'ui-graph-node--selected' : undefined), style: {
                                     position: 'absolute',
                                     left: node.position.x,
                                     top: node.position.y,
@@ -305,7 +350,7 @@ export const GraphCanvas = ({ graph, onNodeSelect, onNodeMove, onEdgeCreate, onE
                     fontSize: `${theme.typography.fontSize.xs}px`,
                     color: theme.colors.textSecondary,
                     zIndex: 10,
-                }, children: ["Nodes: ", canvasNodes.length, " | Edges: ", graph.edges.length, " | Zoom: ", Math.round(viewport.zoom * 100), "%"] })] }));
+                }, children: ["Nodes: ", canvasNodes.length, " | Edges: ", edgesList.length, " | Zoom: ", Math.round(viewport.zoom * 100), "%"] })] }));
 };
 // Legacy default export for backward compatibility
 export default GraphCanvas;

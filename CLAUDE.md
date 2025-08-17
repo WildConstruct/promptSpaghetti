@@ -8,6 +8,57 @@ For multi-agent communication history and ticket instructions, see [CLAUDE-TICKE
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## FILE FORMAT STANDARDS (Critical - Story 1.28)
+
+### Node Type Naming Conventions
+
+**ALWAYS use these exact mappings to avoid "node type not found" errors:**
+
+| Display Name | PSG Type | React Flow Type | Class Name |
+|-------------|----------|-----------------|------------|
+| Weighted Choice | WeightedChoice | weightedChoice | WeightedChoiceNode |
+| Output | Output | output | OutputNode |
+| Concatenate | Concat | concat | ConcatNode |
+| Text Block | TextBlock | textBlock | TextBlockNode |
+| Variable | Variable | variable | VariableNode |
+
+**Use the Node Registry:** `packages/core/runtime/nodeRegistry.ts`
+- Convert types: `convertNodeType(type, 'psg' | 'reactflow')`
+- Get node info: `nodeRegistry.get(id)`
+
+### PSG vs PSGLib Formats
+
+**PSG Files (.psg) - Fragments:**
+- Use for reusable component groups
+- Should NOT contain Output nodes
+- Uses x/y coordinates: `{ x: 100, y: 200 }`
+- May contain regions for grouping
+
+**PSGLib Files (.psglib) - Complete Presets:**
+- Use for full graph templates
+- Uses position objects: `{ position: { x: 100, y: 200 } }`
+- Includes metadata and usage stats
+- Can contain Output nodes
+
+### Asset Validation
+
+**Before adding assets to library, validate with:**
+```typescript
+import { validateAsset } from '@/packages/core/validation/assetValidator';
+const result = await validateAsset(fileContent);
+if (!result.valid) {
+  console.error(result.errors);
+}
+```
+
+### Important Files
+
+- **Format Spec:** `docs/technical-specs/file-format-specification.md`
+- **Node Registry:** `packages/core/runtime/nodeRegistry.ts`
+- **Asset Validator:** `packages/core/validation/assetValidator.ts`
+- **PSG Parser:** `packages/core/fileFormats/psg.ts`
+- **PSGLib Parser:** `packages/core/fileFormats/psglib.ts`
+
 ## PROFESSIONAL FEATURES (Phase 2 Complete - July 25, 2025)
 
 ### NEW: Cinema 4D-Level Professional Interface ✅ COMPLETE

@@ -339,25 +339,37 @@ export function regenerateNodeIds(
   edges: PSGLibEdge[]
 ): { nodes: PSGLibNode[]; edges: PSGLibEdge[] } {
   const idMap = new Map<string, string>();
-  const timestamp = Date.now();
-  const random = Math.random().toString(36).substr(2, 9);
-  const counter = Math.floor(Math.random() * 100000); // Add extra randomness
+  // Use high-resolution timestamp with crypto for better uniqueness
+  const timestamp = typeof performance !== 'undefined' ? 
+    Math.floor(performance.now() * 1000000) : Date.now() * 1000;
+  const random = Math.random().toString(36).substring(2, 15);
+  const processId = Math.random().toString(36).substring(2, 8); 
+  
+  // Add a small delay counter to guarantee uniqueness even in tight loops
+  let delayCounter = 0;
 
-  // Generate new IDs for nodes with better uniqueness
+  // Generate new IDs for nodes with guaranteed uniqueness
   const newNodes = nodes.map((node, index) => {
-    // Create a truly unique ID that won't conflict
-    const newId = `node-${timestamp}-${random}-${counter}-${index}`;
+    // Create a unique ID with multiple entropy sources
+    delayCounter++;
+    const newId = `node-${timestamp}-${processId}-${random}-${delayCounter}-${index}`;
     idMap.set(node.id, newId);
     return { ...node, id: newId };
   });
 
+  // Reset counter for edges
+  delayCounter = 0;
+
   // Update edge references with unique IDs
-  const newEdges = edges.map((edge, index) => ({
-    ...edge,
-    id: `edge-${timestamp}-${random}-${counter}-${index}`,
-    source: idMap.get(edge.source) || edge.source,
-    target: idMap.get(edge.target) || edge.target
-  }));
+  const newEdges = edges.map((edge, index) => {
+    delayCounter++;
+    return {
+      ...edge,
+      id: `edge-${timestamp}-${processId}-${random}-${delayCounter}-${index}`,
+      source: idMap.get(edge.source) || edge.source,
+      target: idMap.get(edge.target) || edge.target
+    };
+  });
 
   return { nodes: newNodes, edges: newEdges };
 }

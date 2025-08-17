@@ -11,7 +11,22 @@ export interface FragmentManifest {
   created: string;
   lastUpdated: string;
   author: string;
-  categories: Record<string, FragmentCategory>;
+  categories?: Record<string, FragmentCategory>;
+  fragments?: Array<{
+    id: string;
+    name: string;
+    description: string;
+    path: string;
+    category: string;
+    tags: string[];
+    nodeCount: number;
+    metadata?: {
+      author?: string;
+      created?: string;
+      updated?: string;
+      version?: string;
+    };
+  }>;
 }
 
 export interface FragmentCategory {
@@ -69,7 +84,7 @@ export class FragmentManifestLoader {
     id: string;
     name: string;
     tags: string[];
-    type: string;
+    type: 'text' | 'image' | 'audio' | 'video' | 'graph' | 'unknown' | undefined;
     category: string;
     metadata?: {
       nodes?: number;
@@ -83,7 +98,7 @@ export class FragmentManifestLoader {
       id: string;
       name: string;
       tags: string[];
-      type: string;
+      type: 'text' | 'image' | 'audio' | 'video' | 'graph' | 'unknown' | undefined;
       category: string;
       metadata?: {
         nodes?: number;
@@ -94,28 +109,48 @@ export class FragmentManifestLoader {
       };
     }> = [];
 
-    Object.entries(manifest.categories).forEach(([categoryKey, category]) => {
-      category.fragments.forEach(fragment => {
+    // Handle new format with direct fragments array
+    if (manifest.fragments && Array.isArray(manifest.fragments)) {
+      manifest.fragments.forEach(fragment => {
         presets.push({
           id: fragment.id,
           name: fragment.name,
-          tags: [
-            categoryKey,
-            fragment.type.toLowerCase(),
-            ...(fragment.tags || [])
-          ],
-          type: fragment.type,
-          category: category.name,
+          tags: fragment.tags || [],
+          type: 'graph' as const,
+          category: fragment.category,
           metadata: {
-            nodes: fragment.nodes,
-            options: fragment.options,
-            combinations: fragment.combinations,
-            region: fragment.region,
-            file: `${category.path}${fragment.file}`
+            nodes: fragment.nodeCount,
+            file: fragment.path
           }
         });
       });
-    });
+    }
+    
+    // Handle old format with categories
+    if (manifest.categories) {
+      Object.entries(manifest.categories).forEach(([categoryKey, category]) => {
+        category.fragments.forEach(fragment => {
+          presets.push({
+            id: fragment.id,
+            name: fragment.name,
+            tags: [
+              categoryKey,
+              fragment.type.toLowerCase(),
+              ...(fragment.tags || [])
+            ],
+            type: 'graph' as const,  // Fragment manifests are always graph type
+            category: category.name,
+            metadata: {
+              nodes: fragment.nodes,
+              options: fragment.options,
+              combinations: fragment.combinations,
+              region: fragment.region,
+              file: `${category.path}${fragment.file}`
+            }
+          });
+        });
+      });
+    }
 
     return presets;
   }

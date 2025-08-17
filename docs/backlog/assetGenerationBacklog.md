@@ -53,17 +53,17 @@ Stealth Movements – sidle, slink, ghost step, hold breath ✅
 Aerial Motions – hover, dive, spiral, free-fall ✅
 Reaction Beats – recoil, double-take, slow nod, eye-roll ✅
 Transformative Actions – shapeshift, phase, glitch, bloom ✅
-51 – 60 · Setting & Environment Fragments
-Lighting Moods – golden hour, sodium vapor haze, noir chiaroscuro
-Weather Snapshots – sleet sting, dust-devil swirl, monsoon sheet-rain
-Geology Touches – basalt columns, red-clay mesas, karst spires
-Architectural Styles – brutalist slabs, neon izakaya alley, art-nouveau arcade
-Temporal Markers – pre-dawn blue, witching-hour stillness, high-noon glare
-Atmospherics – drifting spores, holographic signage buzz, cigar-smoke curls
-Sound Snippets – distant siren wail, crunching gravel, throat-sing drone
-Crowd Density Tags – deserted, trickling pedestrians, shoulder-to-shoulder throng
-Backdrop Adjectives – war-torn, utopian, liminal, kaleidoscopic
-Spatial Relations – tight corridor, yawning chasm, tiered balconies
+51 – 60 · Setting & Environment Fragments ✅ COMPLETED
+Lighting Moods – golden hour, sodium vapor haze, noir chiaroscuro ✅
+Weather Snapshots – sleet sting, dust-devil swirl, monsoon sheet-rain ✅
+Geology Touches – basalt columns, red-clay mesas, karst spires ✅
+Architectural Styles – brutalist slabs, neon izakaya alley, art-nouveau arcade ✅
+Temporal Markers – pre-dawn blue, witching-hour stillness, high-noon glare ✅
+Atmospherics – drifting spores, holographic signage buzz, cigar-smoke curls ✅
+Sound Snippets – distant siren wail, crunching gravel, throat-sing drone ✅
+Crowd Density Tags – deserted, trickling pedestrians, shoulder-to-shoulder throng ✅
+Backdrop Adjectives – war-torn, utopian, liminal, kaleidoscopic ✅
+Spatial Relations – tight corridor, yawning chasm, tiered balconies ✅
 61 – 70 · Camera & Cinematic Language
 Shot Sizes – ECU iris, cowboy, Dutch wide, aerial establishing
 Camera Movement – whip-pan, vertigo zoom, dolly-in, orbit

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ReactFlowProvider } from 'reactflow';
-import { EnhancedBoundingBox } from '../EnhancedBoundingBox';
+import { EnhancedBoundingBox } from '../../../../components/epic1/nodes/EnhancedBoundingBox';
 import { NodeProps } from 'reactflow';
 import '@testing-library/jest-dom';
 

@@ -207,7 +207,7 @@
 
 .preset-list-container {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: auto; /* Already has scrollbar */
   background: #1a1a1a;
 }
 
@@ -274,20 +274,26 @@
 }
 
 .preset-list-body .preset-list-item:nth-child(even) {
-  background: #1f1f1f;
+  background: #1f1f1f; /* Keep original zebra striping */
 }
 
-.preset-list-item:hover {
-  background: #252525;
+.preset-list-item:hover:not(.selected) {
+  background: rgba(255, 255, 255, 0.08); /* Subtle hover, but not on selected */
 }
 
 .preset-list-item.selected {
-  background: #0051d5;
-  box-shadow: inset 2px 0 0 #99c5ff;
+  background: rgba(0, 81, 213, 0.4) !important; /* More visible but still transparent, !important to override zebra */
+  box-shadow: inset 2px 0 0 rgba(0, 81, 213, 0.8);
 }
 
 .preset-list-item.selected * {
-  color: #fff !important;
+  /* Don't force white text - keep readable contrast */
+}
+
+/* Change category chip background in selected rows */
+.preset-list-item.selected .preset-category {
+  background: rgba(0, 81, 213, 0.6);
+  color: #fff;
 }
 
 /* Icon Column */
@@ -570,42 +576,41 @@
 
 .preset-list-container::-webkit-scrollbar,
 .preset-grid-container::-webkit-scrollbar,
-.details-panel::-webkit-scrollbar {
+.details-panel::-webkit-scrollbar,
+.keyword-buttons-section::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 .preset-list-container::-webkit-scrollbar-track,
 .preset-grid-container::-webkit-scrollbar-track,
-.details-panel::-webkit-scrollbar-track {
+.details-panel::-webkit-scrollbar-track,
+.keyword-buttons-section::-webkit-scrollbar-track {
   background: #1a1a1a;
 }
 
 .preset-list-container::-webkit-scrollbar-thumb,
 .preset-grid-container::-webkit-scrollbar-thumb,
-.details-panel::-webkit-scrollbar-thumb {
+.details-panel::-webkit-scrollbar-thumb,
+.keyword-buttons-section::-webkit-scrollbar-thumb {
   background: #333;
   border-radius: 4px;
 }
 
 .preset-list-container::-webkit-scrollbar-thumb:hover,
 .preset-grid-container::-webkit-scrollbar-thumb:hover,
-.details-panel::-webkit-scrollbar-thumb:hover {
+.details-panel::-webkit-scrollbar-thumb:hover,
+.keyword-buttons-section::-webkit-scrollbar-thumb:hover {
   background: #444;
 }
 
 /* Preview Panel - Added for Story 1.31 AC6 */
 .preset-preview-panel {
-  position: absolute;
-  bottom: 30px;
-  left: 0;
-  right: 0;
-  background: #1a1a1a;
-  border-top: 1px solid #333;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
-  animation: slideUp 0.2s ease-out;
+  /* Removed absolute positioning - now inline in details panel */
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* No animation - part of persistent info panel */
 }
 
 @keyframes slideUp {
@@ -740,12 +745,14 @@
 .asset-browser-pro-horizontal {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100% - 10px);
+  max-height: calc(100vh - 150px);
   background: #1a1a1a;
   color: #e0e0e0;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   font-size: 11px;
   overflow: hidden;
+  position: relative;
 }
 
 /* Search Bar - Full Width at Top */
@@ -753,9 +760,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 15px;
+  padding: 8px 12px;
   background: #1a1a1a;
   border-bottom: 1px solid #2a2a2a;
+  flex-shrink: 0;
 }
 
 .browser-search-bar .browser-search-field {
@@ -775,14 +783,12 @@
 
 /* Top Controls Section */
 .browser-top-controls {
-  background: linear-gradient(to bottom, #2a2a2a, #222);
+  background: #1a1a1a;
   border-bottom: 1px solid #333;
-  padding: 12px 8px;
+  padding: 0; /* Remove padding - sections handle their own */
   display: flex;
-  align-items: flex-start; /* allow multi-row chips to size naturally */
-  gap: 12px;
+  flex-direction: column;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), inset 0 -1px 0 rgba(0, 0, 0, 0.4);
   position: relative; /* create stacking context above sticky list header */
   z-index: 20;
 }
@@ -829,49 +835,87 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  overflow: visible; /* ensure chips are not clipped under the toolbar */
+  max-height: 150px; /* Constrain height to enable scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  padding-right: 4px; /* Space for scrollbar */
   margin-top: 10px; /* add breathing room above chips */
+  scroll-behavior: smooth; /* Smooth scrolling */
 }
 
 .keyword-row {
   display: flex;
-  gap: 4px;
+  gap: 6px; /* Increased gap between chips */
   flex-wrap: wrap;
+  padding: 4px; /* Add padding around the chip container */
 }
 
+/* Base keyword button styling */
 .keyword-btn {
-  padding: 5px 12px;
-  background: #2a2a2a;
-  border: 1px solid #333;
-  border-radius: 3px;
+  padding: 2px 8px; /* Compact chips */
+  background: rgba(255, 255, 255, 0.02); /* Almost invisible background */
+  border: 1px solid rgba(255, 255, 255, 0.06); /* Very subtle border */
+  border-radius: 2px;
   color: #999;
-  font-size: 12px;
+  font-size: 11px;
   cursor: pointer;
   transition: all 0.1s;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow: none;
   white-space: nowrap;
+  margin: 1px; /* Small margin around each chip */
+}
+
+/* Category chips - larger and darker */
+.keyword-btn.category {
+  padding: 4px 12px; /* Larger padding for categories */
+  background: rgba(255, 255, 255, 0.08); /* Darker background */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* More visible border */
+  font-size: 11px;
+  font-weight: 500; /* Slightly bolder */
+}
+
+/* Tag chips - smaller and darker */
+.keyword-btn.tag {
+  padding: 3px 9px; /* Smaller than categories */
+  background: rgba(255, 255, 255, 0.06); /* Darker than before */
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10px; /* Slightly smaller text */
 }
 
 .keyword-btn:hover {
-  background: #333;
-  color: #fff;
-  border-color: #444;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ddd;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.keyword-btn.category:hover {
+  background: rgba(255, 255, 255, 0.12); /* Brighter hover for categories */
+  color: #e0e0e0;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.keyword-btn.tag:hover {
+  background: rgba(255, 255, 255, 0.1); /* Subtler hover for tags */
+  color: #ccc;
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .keyword-btn.active {
-  background: linear-gradient(to bottom, #0664ff, #0051d5);
+  background: #0051d5;
   color: #fff;
   border-color: #0051d5;
 }
 
-.keyword-btn.tag {
-  background: #222;
-  font-size: 11px;
-  padding: 4px 10px;
+.keyword-btn.category.active {
+  background: #0051d5;
+  color: #fff;
+  border-color: #0051d5;
 }
 
 .keyword-btn.tag.active {
   background: #0066ff;
+  color: #fff;
+  border-color: #0066ff;
 }
 
 /* View Controls Section */
@@ -942,14 +986,18 @@
 .browser-main-content {
   flex: 1;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
+  border-top: 1px solid #333;
+  min-height: 0; /* Allow shrinking */
 }
 
 .content-wrapper {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* Updated List Container for Horizontal Layout */
@@ -961,8 +1009,9 @@
 }
 
 .preset-list-body {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
+  min-height: 0;
 }
 
 /* Updated Column Layout for Better Space Usage */
@@ -1041,6 +1090,22 @@
   flex-shrink: 0;
 }
 
+/* Bottom-anchored Details Panel */
+.details-panel-bottom {
+  background: #161616;
+  border-top: 1px solid #333;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  width: 100%;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: auto;
+  max-height: 200px;
+  /* No animation - instant show/hide */
+}
+
 .details-content {
   flex: 1;
   display: flex;
@@ -1090,3 +1155,255 @@
     display: none;
   }
 }
+/* ============================================
+   VERTICAL SECTION RESIZING
+   ============================================ */
+
+.resize-handle {
+  position: relative;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.resize-handle:hover {
+  background: #2a2a2a \!important;
+}
+
+.resize-handle:active {
+  background: #0051d5 \!important;
+}
+
+.section-header {
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.section-header:hover {
+  background: #222 \!important;
+}
+
+.section-container {
+  position: relative;
+  transition: none; /* Disable transition during resize for smoother dragging */
+}
+
+/* Collapsed section styles */
+.section-container.collapsed {
+  height: 30px \!important;
+  overflow: hidden;
+}
+
+.section-container.collapsed .keyword-buttons-section {
+  display: none;
+}
+EOF < /dev/null
+/* ============================================
+   AFTER EFFECTS STYLE SECTIONS
+   ============================================ */
+
+/* Section Container */
+.ae-section {
+  border-bottom: 1px solid #0a0a0a;
+  background: #1a1a1a;
+}
+
+/* Full Width Section Container */
+.ae-section-full-width {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Section Header - Like After Effects */
+.ae-section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px; /* Compact header */
+  background: linear-gradient(to bottom, #222, #1d1d1d);
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid #0a0a0a;
+  color: #999;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+
+/* Full Width Section Header */
+.ae-section-header-full {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: linear-gradient(to bottom, #252525, #1f1f1f);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid #111;
+  color: #999;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.ae-section-header:hover {
+  background: linear-gradient(to bottom, #333, #2a2a2a);
+  color: #ccc;
+}
+
+.ae-section-header-full:hover {
+  background: linear-gradient(to bottom, #2a2a2a, #242424);
+  color: #ddd;
+}
+
+.ae-section-arrow {
+  font-size: 9px;
+  transition: transform 0.15s ease;
+}
+
+/* Section Content */
+.ae-section-content {
+  padding: 3px 6px; /* Tight padding for chips close to header */
+  background: none; /* Transparent background to blend with parent */
+  transition: height 0.15s ease;
+  overflow: hidden;
+}
+
+/* Full Width Section Content */
+.ae-section-content-full {
+  background: #1a1a1a;
+  padding: 10px 12px;
+  width: 100%;
+  position: relative;
+  transition: height 0.15s ease; /* Smooth height transitions during resize */
+}
+
+/* Collapsed state - smooth height animation with proper spacing */
+.ae-section-full-width.collapsed .ae-section-content-full {
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  border: none;
+}
+
+/* Ensure proper spacing when collapsed */
+.ae-section-full-width.collapsed {
+  margin-bottom: 0;
+}
+
+/* Ensure arrow rotates when collapsed */
+.ae-section-full-width.collapsed .ae-section-arrow {
+  transform: rotate(-90deg);
+}
+
+/* Resize Handle - Thin line like After Effects */
+.ae-resize-handle {
+  height: 1px;
+  background: #0a0a0a;
+  cursor: ns-resize;
+  position: relative;
+  margin: 0;
+}
+
+.ae-resize-handle::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 7px;
+  cursor: ns-resize;
+  z-index: 10;
+}
+
+.ae-resize-handle:hover {
+  background: #333;
+  box-shadow: 0 0 2px rgba(0, 81, 213, 0.5);
+}
+
+/* Section resize handle - for each accordion section */
+.ae-resize-handle-section {
+  height: 1px;
+  background: #0a0a0a;
+  cursor: ns-resize;
+  position: relative;
+  width: 100%;
+  transition: all 0.15s ease;
+}
+
+.ae-resize-handle-section::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 9px;
+  cursor: ns-resize;
+  z-index: 30;
+}
+
+.ae-resize-handle-section:hover {
+  background: #0051d5;
+  box-shadow: 0 0 3px rgba(0, 81, 213, 0.6);
+  height: 2px;
+  margin-top: -0.5px;
+}
+
+/* Bottom resize handle - aligns with the main border */
+.ae-resize-handle-bottom {
+  height: 1px;
+  background: #333; /* Match the border color */
+  cursor: ns-resize;
+  position: relative;
+  width: 100%;
+}
+
+.ae-resize-handle-bottom::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 9px;
+  cursor: ns-resize;
+  z-index: 30;
+}
+
+.ae-resize-handle-bottom:hover {
+  background: #0051d5;
+  box-shadow: 0 0 3px rgba(0, 81, 213, 0.6);
+  height: 2px;
+  margin-top: -0.5px;
+}
+
+/* Override keyword section padding when in AE mode */
+.ae-section .keyword-buttons-section {
+  padding: 0;
+  margin: 0;
+  max-height: none;
+  overflow-y: visible;
+}
+
+.ae-section .keyword-row {
+  padding: 2px 0; /* Minimal row padding */
+  gap: 3px; /* Tighter chip spacing */
+}
+
+/* When collapsed, hide content completely */
+.ae-section-content[style*="height: 0"] {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Smooth transitions */
+.ae-section-content {
+  transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+EOF < /dev/null

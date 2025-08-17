@@ -37,16 +37,20 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
   xPos,
   yPos,
   draggable = true,
-  measured
+  measured,
+  width,
+  height
 }) => {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [title, setTitle] = useState(data.title || 'Region');
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [description, setDescription] = useState(data.description || '');
   const [isResizing, setIsResizing] = useState(false);
+  
+  // Use React Flow's width/height if available, otherwise fall back to data or defaults
   const [size, setSize] = useState({
-    width: data.width || 400,
-    height: data.height || 300
+    width: width || data.width || 400,
+    height: height || data.height || 300
   });
   const sizeRef = useRef(size);
   
@@ -54,24 +58,39 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
     sizeRef.current = size;
   }, [size]);
   
-  // Ensure the node has its dimensions set in ReactFlow on mount
+  // Sync with React Flow's width/height props if they change
   useEffect(() => {
-    setNodes((nodes) =>
-      nodes.map((node) =>
-        node.id === id
-          ? {
-              ...node,
-              width: data.width || 400,
-              height: data.height || 300,
-              measured: {
-                width: data.width || 400,
-                height: data.height || 300
+    if (width && height && (width !== size.width || height !== size.height)) {
+      setSize({ width, height });
+    }
+  }, [width, height]);
+  
+  // Initialize node dimensions if not set (for existing nodes)
+  // Only run once on mount to avoid infinite loops
+  const hasInitialized = useRef(false);
+  useEffect(() => {
+    if (!hasInitialized.current && (!width || !height)) {
+      hasInitialized.current = true;
+      const initialWidth = data.width || 400;
+      const initialHeight = data.height || 300;
+      setNodes((nodes) =>
+        nodes.map((node) =>
+          node.id === id
+            ? {
+                ...node,
+                width: initialWidth,
+                height: initialHeight,
+                measured: {
+                  width: initialWidth,
+                  height: initialHeight
+                }
               }
-            }
-          : node
-      )
-    );
-  }, []);
+            : node
+        )
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty deps - only run on mount
   const [showColorPicker, setShowColorPicker] = useState(false);
   
   const boxRef = useRef<HTMLDivElement>(null);
@@ -343,14 +362,37 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
     }
   }, [isEditingDescription]);
   
+  // Update React Flow node dimensions when size changes
+  useEffect(() => {
+    setNodes((nodes) =>
+      nodes.map((node) => {
+        if (node.id === id) {
+          return {
+            ...node,
+            width: size.width,
+            height: size.height,
+            measured: {
+              width: size.width,
+              height: size.height
+            },
+            style: {
+              ...node.style,
+              width: `${size.width}px`,
+              height: `${size.height}px`,
+            }
+          };
+        }
+        return node;
+      })
+    );
+  }, [id, size.width, size.height, setNodes]);
+  
   // Apply size directly via style - this ensures the visual update happens
   const boxStyle = {
     width: `${size.width}px`,
     height: `${size.height}px`,
     minWidth: `${size.width}px`,
     minHeight: `${size.height}px`,
-    maxWidth: `${size.width}px`,
-    maxHeight: `${size.height}px`,
     border: 'none',
     position: 'relative' as const,
     overflow: 'visible'
@@ -436,13 +478,13 @@ export const BoundingBox: React.FC<NodeProps<BoundingBoxData>> = ({
           bottom: 0,
           backgroundColor: getBackgroundWithOpacity(data.backgroundColor || defaultColors[0], data.opacity || 0.3),
           borderRadius: '8px',
-          zIndex: -1,
+          zIndex: 0,
           pointerEvents: 'none'
         }}
       />
       
       {/* Header */}
-      <div className="bounding-box-header">
+      <div className="bounding-box-header" style={{ position: 'relative', zIndex: 1 }}>
         {isEditingTitle ? (
           <input
             ref={titleInputRef}

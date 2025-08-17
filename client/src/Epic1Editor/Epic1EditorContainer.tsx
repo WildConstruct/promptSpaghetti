@@ -6,7 +6,9 @@ import { useSupabaseFileOperations } from './hooks/useSupabaseFileOperations';
 import { useEditOperations } from './hooks/useEditOperations';
 import { SupabaseOpenDialog } from './components/SupabaseOpenDialog';
 import { SupabaseSaveDialog } from './components/SupabaseSaveDialog';
+import { NewDocumentModal } from './components/NewDocumentModal';
 import { testSupabaseConnection } from './hooks/testSupabase';
+import { GraphEditorWithTray } from './GraphEditorWithTray';
 import {
   calculateViewportDimensions,
   calculateNodePositions,
@@ -116,6 +118,9 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
     showSaveDialog,
     setShowOpenDialog,
     setShowSaveDialog,
+    showNewDocumentModal,
+    confirmNewDocument,
+    cancelNewDocument,
     handleSupabaseSave,
     handleLocalOpen,
     loadGraph,
@@ -837,12 +842,13 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
       <div style={{ flex: 1, position: 'relative', display: 'flex' }}>
         {editorReady && (
-          <EditorComponent
-            key={editorKey}
-            initialNodes={currentNodes}
-            initialEdges={currentEdges}
+          <GraphEditorWithTray
+            EditorComponent={EditorComponent}
+            editorKey={editorKey}
+            currentNodes={currentNodes}
+            currentEdges={currentEdges}
             showPreview={showPreview}
-            showAssetLibrary={assetLibraryVisible}
+            assetLibraryVisible={assetLibraryVisible}
             assetLibraryPosition={assetLibraryPosition}
             onNodesChange={handleNodesChange}
             onEdgesChange={handleEdgesChange}
@@ -880,6 +886,12 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
         isAuthenticated={isAuthenticated}
         currentNodes={currentNodes}
         currentEdges={currentEdges}
+      />
+      
+      <NewDocumentModal
+        isOpen={showNewDocumentModal}
+        onConfirm={confirmNewDocument}
+        onCancel={cancelNewDocument}
       />
     </div>
   );

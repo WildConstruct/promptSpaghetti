@@ -43,8 +43,8 @@ export const BOUNDING_BOX_CONSTANTS = {
     PORT_OFFSET: 30,
   },
   zIndex: {
-    BOUNDING_BOX: -1,
-    BACKGROUND: -1,
+    BOUNDING_BOX: 0,
+    BACKGROUND: 0,
     CONTROLS: 10,
     RESIZE_HANDLES: 1000,
   },

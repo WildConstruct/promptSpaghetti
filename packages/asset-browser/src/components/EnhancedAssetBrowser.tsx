@@ -21,7 +21,7 @@ export interface EnhancedAssetBrowserProps extends AssetBrowserProps {
 export function EnhancedAssetBrowser({ 
   onInsert, 
   onNodeReplace,
-  enableFragmentManifest = true 
+  enableFragmentManifest = true  // Enabled to load fragment assets
 }: EnhancedAssetBrowserProps) {
   const selectedId = useAssetBrowserStore((s) => s.selectedPresetId);
   const open = useAssetBrowserStore((s) => s.detailsOpen);
@@ -43,17 +43,17 @@ export function EnhancedAssetBrowser({
         
         const presets = FragmentManifestLoader.convertToPresets(manifest);
         
-        // Create a manifest structure compatible with the store's scan method
-        const manifestData = {
-          version: manifest.version,
-          presets: presets.map(p => ({
-            id: p.id,
-            tags: p.tags,
-            metadata: p.metadata
-          }))
-        };
-
-        await scan([manifestData]);
+        // Directly set presets in store instead of using scan
+        // This avoids the manifest format incompatibility issue
+        const tags = Array.from(new Set(presets.flatMap((p) => p.tags))).sort();
+        
+        useAssetBrowserStore.setState({ 
+          presets: presets,
+          filteredPresets: presets,
+          availableTags: tags,
+          scanStatus: 'done',
+          error: null
+        });
         
         if (isMounted) {
           setManifestLoaded(true);
@@ -64,6 +64,10 @@ export function EnhancedAssetBrowser({
           const errorMsg = error instanceof Error ? error.message : 'Unknown error';
           console.error('Failed to load fragment manifest:', errorMsg);
           setLoadError(errorMsg);
+          useAssetBrowserStore.setState({ 
+            scanStatus: 'error',
+            error: errorMsg
+          });
         }
       }
     };
@@ -73,7 +77,7 @@ export function EnhancedAssetBrowser({
     return () => {
       isMounted = false;
     };
-  }, [enableFragmentManifest, scan]);
+  }, [enableFragmentManifest]);
 
   // Handle drag over for node replacement
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -122,29 +126,6 @@ export function EnhancedAssetBrowser({
       >
         <Sidebar />
         <div>
-          {loadError && (
-            <div className="asset-load-error" style={{ 
-              padding: '1em', 
-              background: '#fee', 
-              color: '#c00',
-              borderRadius: '0.25em',
-              margin: '0.5em'
-            }}>
-              Failed to load fragment manifest: {loadError}
-            </div>
-          )}
-          {manifestLoaded && (
-            <div style={{ 
-              padding: '0.5em', 
-              background: 'var(--bg-success, #d4edda)', 
-              color: 'var(--text-success, #155724)',
-              fontSize: '0.9em',
-              borderRadius: '0.25em',
-              margin: '0.5em'
-            }}>
-              ✓ Fragment manifest loaded successfully
-            </div>
-          )}
           <EnhancedPresetGrid onInsert={onInsert} onNodeReplace={onNodeReplace} />
         </div>
         <DetailsDrawer open={open} selectedId={selectedId} />

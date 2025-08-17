@@ -1,15 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type TrayMode = 'minimized' | 'normal' | 'maximized';
 export type ViewMode = 'tray' | 'modal';
 
 interface PreviewTrayState {
   // Tray state
   isOpen: boolean;
   height: number;
-  mode: TrayMode;
   isPinned: boolean;
+  minimized: boolean;
   
   // View preferences
   viewMode: ViewMode;
@@ -21,10 +20,12 @@ interface PreviewTrayState {
   selectedResults: Set<string>;
   
   // Actions
+  setOpen: (open: boolean) => void;
   toggleTray: () => void;
   setHeight: (height: number) => void;
-  setMode: (mode: TrayMode) => void;
   togglePin: () => void;
+  setMinimized: (minimized: boolean) => void;
+  toggleMinimized: () => void;
   switchView: (mode: ViewMode) => void;
   setDefaultView: (mode: ViewMode) => void;
   setActiveTab: (index: number) => void;
@@ -37,10 +38,10 @@ export const usePreviewTrayStore = create<PreviewTrayState>()(
   persist(
     (set) => ({
       // Initial state
-      isOpen: true,  // Start with tray open by default
+      isOpen: false,  // Start with tray closed
       height: 250,
-      mode: 'normal',
       isPinned: false,
+      minimized: false,
       viewMode: 'tray',
       defaultView: 'tray',
       activeTab: 0,
@@ -48,13 +49,15 @@ export const usePreviewTrayStore = create<PreviewTrayState>()(
       selectedResults: new Set(),
 
       // Actions
+      setOpen: (open) => set({ isOpen: open }),
       toggleTray: () => set((state) => ({ isOpen: !state.isOpen })),
       
-      setHeight: (height) => set({ height }),
-      
-      setMode: (mode) => set({ mode, isOpen: true }),
+      setHeight: (height) => set({ height: Math.min(Math.max(height, 100), window.innerHeight * 0.6) }),
       
       togglePin: () => set((state) => ({ isPinned: !state.isPinned })),
+      
+      setMinimized: (minimized) => set({ minimized }),
+      toggleMinimized: () => set((state) => ({ minimized: !state.minimized })),
       
       switchView: (mode) => set({ viewMode: mode }),
       
@@ -82,7 +85,6 @@ export const usePreviewTrayStore = create<PreviewTrayState>()(
         height: state.height,
         isPinned: state.isPinned,
         defaultView: state.defaultView,
-        mode: state.mode,
       }),
     }
   )

@@ -1,564 +1,922 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "asset-fragments",
   "name": "Modular Asset Fragments Library",
-  "description": "Reusable asset fragments for character and scene generation - designed to be combined into larger graphs",
+  "description": "Reusable asset fragments for character and scene generation",
   "created": "2025-01-15",
-  "lastUpdated": "2025-01-15T19:00:00Z",
+  "lastUpdated": "2025-01-15T20:00:00Z",
   "author": "Aspen (Asset Generator)",
-  "categories": {
-    "facial-features": {
-      "name": "Facial Features",
-      "description": "Face-related descriptors and modifications",
-      "icon": "👤",
-      "path": "./facial-features/",
-      "fragments": [
-        {
-          "file": "smile-variations-simple.psg",
-          "id": "fragment-smile-simple",
-          "name": "Simple Smile Variations",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "pale-green",
-          "collapsible": true
-        },
-        {
-          "file": "smile-variations-contextual.psg",
-          "id": "fragment-smile-contextual",
-          "name": "Contextual Smile System",
-          "type": "CONTEXTUAL",
-          "nodes": 4,
-          "combinations": 9,
-          "region": "gold",
-          "collapsible": true
-        },
-        {
-          "file": "eye-descriptors-multi-aspect.psg",
-          "id": "fragment-eyes-multi",
-          "name": "Multi-Aspect Eye System",
-          "type": "MULTI-ASPECT",
-          "nodes": 5,
-          "combinations": 40,
-          "region": "medium-purple",
-          "collapsible": true
-        },
-        {
-          "file": "skin-undertones.psg",
-          "id": "fragment-skin-undertones",
-          "name": "Skin Undertones",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "plum",
-          "collapsible": true
-        },
-        {
-          "file": "age-indicators.psg",
-          "id": "fragment-age-indicators",
-          "name": "Age Indicators",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "khaki",
-          "collapsible": true
-        },
-        {
-          "file": "facial-hair-styles.psg",
-          "id": "fragment-facial-hair",
-          "name": "Facial Hair Styles",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "saddle-brown",
-          "collapsible": true
-        },
-        {
-          "file": "facial-symmetry.psg",
-          "id": "fragment-facial-symmetry",
-          "name": "Facial Symmetry",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 11,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "makeup-accents.psg",
-          "id": "fragment-makeup",
-          "name": "Make-up Accents",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 13,
-          "region": "hot-pink",
-          "collapsible": true
-        },
-        {
-          "file": "piercings-mods.psg",
-          "id": "fragment-piercings",
-          "name": "Piercings & Mods",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 13,
-          "region": "silver",
-          "collapsible": true
-        },
-        {
-          "file": "iconic-features.psg",
-          "id": "fragment-iconic-features",
-          "name": "Iconic Features",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 14,
-          "region": "gold",
-          "collapsible": true
-        }
-      ]
+  "fragments": [
+    {
+      "id": "fragment-smile-simple",
+      "name": "Simple Smile Variations",
+      "description": "Basic smile descriptors and expressions",
+      "path": "./facial-features/smile-variations-simple.psg",
+      "category": "facial-features",
+      "tags": ["face", "smile", "expression", "emotion"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
     },
-    "hair": {
-      "name": "Hair System",
-      "description": "Complete hair appearance and styling options",
-      "icon": "💇",
-      "path": "./hair/",
-      "fragments": [
-        {
-          "file": "hair-lengths.psg",
-          "id": "fragment-hair-lengths",
-          "name": "Hair Lengths",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 11,
-          "region": "peru",
-          "collapsible": true
-        },
-        {
-          "file": "hair-textures.psg",
-          "id": "fragment-hair-textures",
-          "name": "Hair Textures",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "chocolate",
-          "collapsible": true
-        },
-        {
-          "file": "hair-colors-natural.psg",
-          "id": "fragment-hair-colors-natural",
-          "name": "Natural Hair Colors",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "saddle-brown",
-          "collapsible": true
-        },
-        {
-          "file": "hair-colors-fantasy.psg",
-          "id": "fragment-hair-colors-fantasy",
-          "name": "Fantasy Hair Colors",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "violet",
-          "collapsible": true
-        },
-        {
-          "file": "hair-cuts-neutral.psg",
-          "id": "fragment-hair-cuts-neutral",
-          "name": "Gender-Neutral Cuts",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "light-sea-green",
-          "collapsible": true
-        },
-        {
-          "file": "hair-styles-masculine.psg",
-          "id": "fragment-hair-styles-masculine",
-          "name": "Masculine Styles",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "royal-blue",
-          "collapsible": true
-        },
-        {
-          "file": "hair-styles-feminine.psg",
-          "id": "fragment-hair-styles-feminine",
-          "name": "Feminine Styles",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "deep-pink",
-          "collapsible": true
-        },
-        {
-          "file": "hair-accessories.psg",
-          "id": "fragment-hair-accessories",
-          "name": "Hair Accessories",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 13,
-          "region": "light-pink",
-          "collapsible": true
-        },
-        {
-          "file": "hair-weathered-details.psg",
-          "id": "fragment-hair-weathered",
-          "name": "Weathered Details",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "goldenrod",
-          "collapsible": true
-        },
-        {
-          "file": "hair-motion-cues.psg",
-          "id": "fragment-hair-motion",
-          "name": "Motion Cues",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 12,
-          "region": "steel-blue",
-          "collapsible": true
-        }
-      ]
+    {
+      "id": "fragment-smile-contextual",
+      "name": "Contextual Smile System",
+      "description": "Context-aware smile variations",
+      "path": "./facial-features/smile-variations-contextual.psg",
+      "category": "facial-features",
+      "tags": ["face", "smile", "contextual", "emotion"],
+      "nodeCount": 4,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
     },
-    "body-silhouette": {
-      "name": "Body & Silhouette",
-      "description": "Body types, postures, movements, and physical markers",
-      "icon": "🚶",
-      "path": "./body-silhouette/",
-      "fragments": [
-        {
-          "file": "body-types.psg",
-          "id": "fragment-body-types",
-          "name": "Body Types",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "posture-keys.psg",
-          "id": "fragment-posture-keys",
-          "name": "Posture Keys",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "movement-quality.psg",
-          "id": "fragment-movement-quality",
-          "name": "Movement Quality",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "scars-tattoos.psg",
-          "id": "fragment-scars-tattoos",
-          "name": "Scars & Tattoos",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "clothing-fit.psg",
-          "id": "fragment-clothing-fit",
-          "name": "Clothing Fit",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "accessory-silhouettes.psg",
-          "id": "fragment-accessory-silhouettes",
-          "name": "Accessory Silhouettes",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "athletic-markers.psg",
-          "id": "fragment-athletic-markers",
-          "name": "Athletic Markers",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "assistive-gear.psg",
-          "id": "fragment-assistive-gear",
-          "name": "Assistive Gear",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "stage-presence.psg",
-          "id": "fragment-stage-presence",
-          "name": "Stage Presence Flags",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "gesture-starters.psg",
-          "id": "fragment-gesture-starters",
-          "name": "Gesture Starters",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "steel-blue",
-          "collapsible": true
-        }
-      ]
+    {
+      "id": "fragment-eyes-multi",
+      "name": "Multi-Aspect Eye System",
+      "description": "Comprehensive eye descriptors",
+      "path": "./facial-features/eye-descriptors-multi-aspect.psg",
+      "category": "facial-features",
+      "tags": ["face", "eyes", "multi-aspect", "features"],
+      "nodeCount": 5,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
     },
-    "emotion-mood": {
-      "name": "Emotion & Mood",
-      "description": "Emotional states, moods, and affective dynamics",
-      "icon": "😊",
-      "path": "./emotion-mood/",
-      "fragments": [
-        {
-          "file": "primary-emotions.psg",
-          "id": "fragment-primary-emotions",
-          "name": "Primary Emotion Tags",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "gold",
-          "collapsible": true
-        },
-        {
-          "file": "nuanced-feels.psg",
-          "id": "fragment-nuanced-feels",
-          "name": "Nuanced Feels",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "orange",
-          "collapsible": true
-        },
-        {
-          "file": "intensity-modifiers.psg",
-          "id": "fragment-intensity-modifiers",
-          "name": "Intensity Modifiers",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "crimson",
-          "collapsible": true
-        },
-        {
-          "file": "affect-masks.psg",
-          "id": "fragment-affect-masks",
-          "name": "Affect Masks",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "coral",
-          "collapsible": true
-        },
-        {
-          "file": "temporal-mood-shifts.psg",
-          "id": "fragment-temporal-mood-shifts",
-          "name": "Temporal Mood Shifts",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "gold",
-          "collapsible": true
-        },
-        {
-          "file": "group-mood-fields.psg",
-          "id": "fragment-group-mood-fields",
-          "name": "Group Mood Fields",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "orange",
-          "collapsible": true
-        },
-        {
-          "file": "subtext-signals.psg",
-          "id": "fragment-subtext-signals",
-          "name": "Subtext Signals",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "salmon",
-          "collapsible": true
-        },
-        {
-          "file": "energy-levels.psg",
-          "id": "fragment-energy-levels",
-          "name": "Energy Levels",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "yellow",
-          "collapsible": true
-        },
-        {
-          "file": "empathetic-echoes.psg",
-          "id": "fragment-empathetic-echoes",
-          "name": "Empathetic Echoes",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 10,
-          "region": "light-coral",
-          "collapsible": true
-        },
-        {
-          "file": "conflict-escalation.psg",
-          "id": "fragment-conflict-escalation",
-          "name": "Conflict Escalation Stages",
-          "type": "SIMPLE",
-          "nodes": 1,
-          "options": 12,
-          "region": "red",
-          "collapsible": true
-        }
-      ]
+    {
+      "id": "fragment-skin-undertones",
+      "name": "Skin Undertones",
+      "description": "Skin color and undertone variations",
+      "path": "./facial-features/skin-undertones.psg",
+      "category": "facial-features",
+      "tags": ["face", "skin", "color", "undertones"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
     },
-    "vehicles-mobility": {
-      "name": "Vehicles & Mobility",
-      "description": "Ground, air, water, space mobility and styling",
-      "icon": "🚗",
-      "path": "./vehicles-mobility/",
-      "fragments": [
-        {
-          "file": "ground-rigs.psg",
-          "id": "fragment-vehicles-ground-rigs",
-          "name": "Ground Rigs",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "airframes.psg",
-          "id": "fragment-vehicles-airframes",
-          "name": "Airframes",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "watercraft.psg",
-          "id": "fragment-vehicles-watercraft",
-          "name": "Watercraft",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "spacecraft-classes.psg",
-          "id": "fragment-vehicles-spacecraft-classes",
-          "name": "Spacecraft Classes",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "locomotion-traits.psg",
-          "id": "fragment-vehicles-locomotion-traits",
-          "name": "Locomotion Traits",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 4,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "cockpit-vibes.psg",
-          "id": "fragment-vehicles-cockpit-vibes",
-          "name": "Cockpit Vibes",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "signature-exhaust.psg",
-          "id": "fragment-vehicles-signature-exhaust",
-          "name": "Signature Exhaust",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "damage-states.psg",
-          "id": "fragment-vehicles-damage-states",
-          "name": "Damage States",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "paint-job-styles.psg",
-          "id": "fragment-vehicles-paint-job-styles",
-          "name": "Paint-Job Styles",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        },
-        {
-          "file": "call-sign-decals.psg",
-          "id": "fragment-vehicles-call-sign-decals",
-          "name": "Call-Sign Decals",
-          "type": "SIMPLE",
-          "nodes": 2,
-          "options": 3,
-          "region": "steel-blue",
-          "collapsible": true
-        }
-      ]
+    {
+      "id": "fragment-age-indicators",
+      "name": "Age Indicators",
+      "description": "Age-related facial characteristics",
+      "path": "./facial-features/age-indicators.psg",
+      "category": "facial-features",
+      "tags": ["face", "age", "wrinkles", "features"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-facial-hair",
+      "name": "Facial Hair Styles",
+      "description": "Beard, mustache, and facial hair variations",
+      "path": "./facial-features/facial-hair-styles.psg",
+      "category": "facial-features",
+      "tags": ["face", "hair", "beard", "mustache"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-facial-symmetry",
+      "name": "Facial Symmetry",
+      "description": "Symmetry and balance descriptors",
+      "path": "./facial-features/facial-symmetry.psg",
+      "category": "facial-features",
+      "tags": ["face", "symmetry", "balance", "features"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-makeup",
+      "name": "Make-up Accents",
+      "description": "Makeup styles and applications",
+      "path": "./facial-features/makeup-accents.psg",
+      "category": "facial-features",
+      "tags": ["face", "makeup", "cosmetics", "style"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-piercings",
+      "name": "Piercings & Mods",
+      "description": "Facial piercings and modifications",
+      "path": "./facial-features/piercings-mods.psg",
+      "category": "facial-features",
+      "tags": ["face", "piercings", "mods", "accessories"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-iconic-features",
+      "name": "Iconic Features",
+      "description": "Distinctive facial characteristics",
+      "path": "./facial-features/iconic-features.psg",
+      "category": "facial-features",
+      "tags": ["face", "iconic", "distinctive", "features"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-lengths",
+      "name": "Hair Lengths",
+      "description": "Hair length variations",
+      "path": "./hair/hair-lengths.psg",
+      "category": "hair",
+      "tags": ["hair", "length", "style", "appearance"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-textures",
+      "name": "Hair Textures",
+      "description": "Hair texture and curl patterns",
+      "path": "./hair/hair-textures.psg",
+      "category": "hair",
+      "tags": ["hair", "texture", "curls", "waves"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-colors-natural",
+      "name": "Natural Hair Colors",
+      "description": "Natural hair color variations",
+      "path": "./hair/hair-colors-natural.psg",
+      "category": "hair",
+      "tags": ["hair", "color", "natural", "shades"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-colors-fantasy",
+      "name": "Fantasy Hair Colors",
+      "description": "Unnatural and fantasy hair colors",
+      "path": "./hair/hair-colors-fantasy.psg",
+      "category": "hair",
+      "tags": ["hair", "color", "fantasy", "vibrant"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-cuts-neutral",
+      "name": "Gender-Neutral Cuts",
+      "description": "Gender-neutral haircut styles",
+      "path": "./hair/hair-cuts-neutral.psg",
+      "category": "hair",
+      "tags": ["hair", "cuts", "neutral", "unisex"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-styles-masculine",
+      "name": "Masculine Styles",
+      "description": "Masculine-coded hairstyles",
+      "path": "./hair/hair-styles-masculine.psg",
+      "category": "hair",
+      "tags": ["hair", "masculine", "styles", "men"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-styles-feminine",
+      "name": "Feminine Styles",
+      "description": "Feminine-coded hairstyles",
+      "path": "./hair/hair-styles-feminine.psg",
+      "category": "hair",
+      "tags": ["hair", "feminine", "styles", "women"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-accessories",
+      "name": "Hair Accessories",
+      "description": "Hair decorations and accessories",
+      "path": "./hair/hair-accessories.psg",
+      "category": "hair",
+      "tags": ["hair", "accessories", "decoration", "style"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-weathered",
+      "name": "Weathered Details",
+      "description": "Weather-affected hair states",
+      "path": "./hair/hair-weathered-details.psg",
+      "category": "hair",
+      "tags": ["hair", "weathered", "environmental", "effects"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-hair-motion",
+      "name": "Motion Cues",
+      "description": "Hair movement and dynamics",
+      "path": "./hair/hair-motion-cues.psg",
+      "category": "hair",
+      "tags": ["hair", "motion", "movement", "dynamics"],
+      "nodeCount": 2,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-body-types",
+      "name": "Body Types",
+      "description": "Body build variations",
+      "path": "./body-silhouette/body-types.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "types", "build", "physique"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-posture-keys",
+      "name": "Posture Keys",
+      "description": "Body posture and stance",
+      "path": "./body-silhouette/posture-keys.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "posture", "stance", "position"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-movement-quality",
+      "name": "Movement Quality",
+      "description": "Movement characteristics",
+      "path": "./body-silhouette/movement-quality.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "movement", "quality", "dynamics"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-scars-tattoos",
+      "name": "Scars & Tattoos",
+      "description": "Body markings and modifications",
+      "path": "./body-silhouette/scars-tattoos.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "scars", "tattoos", "markings"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-clothing-fit",
+      "name": "Clothing Fit",
+      "description": "Clothing fit and drape",
+      "path": "./body-silhouette/clothing-fit.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "clothing", "fit", "fashion"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-accessory-silhouettes",
+      "name": "Accessory Silhouettes",
+      "description": "Accessory shapes and forms",
+      "path": "./body-silhouette/accessory-silhouettes.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "accessories", "silhouette", "fashion"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-athletic-markers",
+      "name": "Athletic Markers",
+      "description": "Athletic and fitness indicators",
+      "path": "./body-silhouette/athletic-markers.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "athletic", "fitness", "sports"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-assistive-gear",
+      "name": "Assistive Gear",
+      "description": "Mobility and assistive devices",
+      "path": "./body-silhouette/assistive-gear.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "assistive", "disability", "mobility"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-stage-presence",
+      "name": "Stage Presence Flags",
+      "description": "Performance and presence indicators",
+      "path": "./body-silhouette/stage-presence.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "presence", "performance", "charisma"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-gesture-starters",
+      "name": "Gesture Starters",
+      "description": "Hand and body gestures",
+      "path": "./body-silhouette/gesture-starters.psg",
+      "category": "body-silhouette",
+      "tags": ["body", "gestures", "hands", "communication"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-primary-emotions",
+      "name": "Primary Emotion Tags",
+      "description": "Basic emotional states",
+      "path": "./emotion-mood/primary-emotions.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "mood", "feelings", "primary"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-nuanced-feels",
+      "name": "Nuanced Feels",
+      "description": "Complex emotional states",
+      "path": "./emotion-mood/nuanced-feels.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "mood", "nuanced", "complex"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-intensity-modifiers",
+      "name": "Intensity Modifiers",
+      "description": "Emotional intensity levels",
+      "path": "./emotion-mood/intensity-modifiers.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "intensity", "level", "modifier"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-affect-masks",
+      "name": "Affect Masks",
+      "description": "Emotional facades and masks",
+      "path": "./emotion-mood/affect-masks.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "mask", "facade", "pretense"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-temporal-mood-shifts",
+      "name": "Temporal Mood Shifts",
+      "description": "Time-based emotional changes",
+      "path": "./emotion-mood/temporal-mood-shifts.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "temporal", "shift", "change"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-group-mood-fields",
+      "name": "Group Mood Fields",
+      "description": "Collective emotional states",
+      "path": "./emotion-mood/group-mood-fields.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "group", "collective", "crowd"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-subtext-signals",
+      "name": "Subtext Signals",
+      "description": "Underlying emotional signals",
+      "path": "./emotion-mood/subtext-signals.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "subtext", "hidden", "underlying"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-energy-levels",
+      "name": "Energy Levels",
+      "description": "Energy and vitality states",
+      "path": "./emotion-mood/energy-levels.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "energy", "vitality", "vigor"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-empathetic-echoes",
+      "name": "Empathetic Echoes",
+      "description": "Empathetic responses and mirroring",
+      "path": "./emotion-mood/empathetic-echoes.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "empathy", "mirror", "response"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-conflict-escalation",
+      "name": "Conflict Escalation Stages",
+      "description": "Stages of conflict intensity",
+      "path": "./emotion-mood/conflict-escalation.psg",
+      "category": "emotion-mood",
+      "tags": ["emotion", "conflict", "escalation", "tension"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-high-impact-moves",
+      "name": "High-Impact Moves",
+      "description": "Powerful action movements",
+      "path": "./action-dynamics/high-impact-moves.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "impact", "movement", "power"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-subtle-micro-actions",
+      "name": "Subtle Micro-Actions",
+      "description": "Small subtle movements",
+      "path": "./action-dynamics/subtle-micro-actions.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "subtle", "micro", "small"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-crowd-behaviors",
+      "name": "Crowd Behaviors",
+      "description": "Group movement patterns",
+      "path": "./action-dynamics/crowd-behaviors.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "crowd", "group", "collective"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-facial-micro-gestures",
+      "name": "Facial Micro-Gestures",
+      "description": "Small facial movements",
+      "path": "./action-dynamics/facial-micro-gestures.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "facial", "micro", "gesture"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-object-interactions",
+      "name": "Object Interactions",
+      "description": "Interactions with objects",
+      "path": "./action-dynamics/object-interactions.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "object", "interaction", "manipulation"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-group-dynamics",
+      "name": "Emergent Group Dynamics",
+      "description": "Emergent group behaviors",
+      "path": "./action-dynamics/group-dynamics.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "group", "emergent", "dynamics"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-stealth-movements",
+      "name": "Stealth Movements",
+      "description": "Stealthy and sneaky movements",
+      "path": "./action-dynamics/stealth-movements.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "stealth", "sneak", "quiet"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-aerial-motions",
+      "name": "Aerial Motions",
+      "description": "Airborne movements",
+      "path": "./action-dynamics/aerial-motions.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "aerial", "flying", "airborne"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-reaction-beats",
+      "name": "Reaction Beats",
+      "description": "Reaction movements and responses",
+      "path": "./action-dynamics/reaction-beats.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "reaction", "response", "reflex"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-transformative-actions",
+      "name": "Transformative Actions",
+      "description": "Shape-changing and transformative movements",
+      "path": "./action-dynamics/transformative-actions.psg",
+      "category": "action-dynamics",
+      "tags": ["action", "transform", "change", "morph"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-lighting-moods",
+      "name": "Lighting Moods",
+      "description": "Cinematic and atmospheric lighting",
+      "path": "./setting-environment/lighting-moods.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "lighting", "atmosphere", "mood"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-weather-snapshots",
+      "name": "Weather Snapshots",
+      "description": "Weather conditions and phenomena",
+      "path": "./setting-environment/weather-snapshots.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "weather", "climate", "conditions"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-geology-touches",
+      "name": "Geology Touches",
+      "description": "Geological formations and features",
+      "path": "./setting-environment/geology-touches.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "geology", "terrain", "landscape"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-architectural-styles",
+      "name": "Architectural Styles",
+      "description": "Building and architectural styles",
+      "path": "./setting-environment/architectural-styles.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "architecture", "buildings", "structures"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-temporal-markers",
+      "name": "Temporal Markers",
+      "description": "Time-of-day indicators",
+      "path": "./setting-environment/temporal-markers.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "time", "temporal", "daylight"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-atmospherics",
+      "name": "Atmospherics",
+      "description": "Atmospheric particles and effects",
+      "path": "./setting-environment/atmospherics.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "atmosphere", "particles", "effects"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-sound-snippets",
+      "name": "Sound Snippets",
+      "description": "Environmental sounds and audio",
+      "path": "./setting-environment/sound-snippets.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "sound", "audio", "ambience"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-crowd-density",
+      "name": "Crowd Density Tags",
+      "description": "Population density descriptions",
+      "path": "./setting-environment/crowd-density.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "crowd", "density", "population"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-backdrop-adjectives",
+      "name": "Backdrop Adjectives",
+      "description": "Scene-setting descriptors",
+      "path": "./setting-environment/backdrop-adjectives.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "backdrop", "scene", "descriptive"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
+    },
+    {
+      "id": "fragment-spatial-relations",
+      "name": "Spatial Relations",
+      "description": "Spatial dimensions and relationships",
+      "path": "./setting-environment/spatial-relations.psg",
+      "category": "setting-environment",
+      "tags": ["environment", "spatial", "dimensions", "space"],
+      "nodeCount": 1,
+      "metadata": {
+        "author": "Aspen",
+        "created": "2025-01-15",
+        "updated": "2025-01-15",
+        "version": "1.0.0"
+      }
     }
-  },
+  ],
   "statistics": {
-    "total_fragments": 50,
-    "total_nodes": 84,
-    "total_options": 491,
-    "categories": 5
-  },
-  "metadata": {
-    "format": "PSG",
-    "fileExtension": ".psg",
-    "manifestType": "asset-fragments",
-    "differentFrom": ["presets", "graphs"],
-    "purpose": "Modular building blocks for larger graphs"
+    "total_fragments": 60,
+    "categories": [
+      "facial-features",
+      "hair",
+      "body-silhouette",
+      "emotion-mood",
+      "action-dynamics",
+      "setting-environment"
+    ]
   }
 }

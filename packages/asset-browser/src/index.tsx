@@ -11,6 +11,7 @@ import { UserProvider as OriginalUserProvider, useUserId } from './user/UserProv
 import { EnhancedAssetBrowser } from './components/EnhancedAssetBrowser';
 import { EnhancedPresetGrid } from './components/EnhancedPresetGrid';
 import { EnhancedPresetCard } from './components/EnhancedPresetCard';
+import { ProAssetBrowser } from './components/ProAssetBrowser';
 
 // Services
 import { FragmentManifestLoader } from './services/FragmentManifestLoader';
@@ -47,6 +48,7 @@ export {
   EnhancedAssetBrowser,
   EnhancedPresetGrid,
   EnhancedPresetCard,
+  ProAssetBrowser,
   FragmentManifestLoader,
   useAssetBrowserStore
 };

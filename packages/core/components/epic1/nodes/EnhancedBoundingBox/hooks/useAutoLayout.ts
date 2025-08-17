@@ -64,7 +64,6 @@ export function useAutoLayout(
   const applyLayout = useCallback(
     (options: LayoutOptions = {}) => {
       if (!enabled || containedNodes.length === 0) {
-        console.debug('[Auto Layout] Skipped - disabled or no nodes');
         return;
       }
       
@@ -76,7 +75,6 @@ export function useAutoLayout(
       const boxNode = allNodes.find(n => n.id === boxId);
       
       if (!boxNode) {
-        console.warn(`[Auto Layout] Bounding box ${boxId} not found`);
         setIsLayouting(false);
         return;
       }
@@ -107,10 +105,6 @@ export function useAutoLayout(
       const duration = performance.now() - start;
       perfMonitor.record('boundingBox.autoLayout', duration);
       perfMonitor.record('boundingBox.autoLayoutNodes', containedNodes.length);
-      
-      console.debug(
-        `[Auto Layout] Positioned ${containedNodes.length} nodes in ${duration.toFixed(2)}ms`
-      );
       
       // Clean up transition styles after animation
       setTimeout(() => {

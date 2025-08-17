@@ -2,46 +2,19 @@
 > @prompt-spaghetti/ui-kit@0.1.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/ui-kit
 > tsc
 
-src/adapters/react-native/RNButton.tsx(6,18): error TS2459: Module '"../../components/Button"' declares 'ButtonProps' locally, but it is not exported.
-src/adapters/react-native/RNButton.tsx(21,3): error TS2339: Property 'onClick' does not exist on type 'RNButtonProps'.
-src/adapters/react-native/RNButton.tsx(22,3): error TS2339: Property 'onLongPress' does not exist on type 'RNButtonProps'.
-src/adapters/react-native/RNButton.tsx(23,3): error TS2339: Property 'children' does not exist on type 'RNButtonProps'.
-src/adapters/react-native/RNButton.tsx(48,25): error TS7053: Element implicitly has an 'any' type because expression of type '"aria-label"' can't be used to index type '{}'.
-  Property 'aria-label' does not exist on type '{}'.
-src/adapters/react-native/RNButton.tsx(50,29): error TS2339: Property 'testId' does not exist on type '{}'.
-src/adapters/react-native/RNButton.tsx(53,16): error TS2339: Property 'style' does not exist on type '{}'.
-src/adapters/react-native/RNGraphCanvas.tsx(6,23): error TS2724: '"../../components/GraphCanvas"' has no exported member named 'GraphCanvasProps'. Did you mean 'GraphCanvas'?
-src/adapters/react-native/RNGraphCanvas.tsx(33,3): error TS2339: Property 'onNodeSelect' does not exist on type 'RNGraphCanvasProps'.
-src/adapters/react-native/RNGraphCanvas.tsx(34,3): error TS2339: Property 'onNodeMove' does not exist on type 'RNGraphCanvasProps'.
-src/adapters/react-native/RNGraphCanvas.tsx(35,3): error TS2339: Property 'onEdgeCreate' does not exist on type 'RNGraphCanvasProps'.
-src/adapters/react-native/RNGraphCanvas.tsx(36,3): error TS2339: Property 'onEdgeDelete' does not exist on type 'RNGraphCanvasProps'.
-src/adapters/react-native/RNGraphCanvas.tsx(132,17): error TS2339: Property 'readOnly' does not exist on type '{}'.
-src/adapters/react-native/RNGraphCanvas.tsx(161,16): error TS2339: Property 'style' does not exist on type '{}'.
-src/adapters/react-native/RNGraphCanvas.tsx(177,18): error TS2322: Type '{ flex: number; backgroundColor: string; transform: ({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { ...; } | { ...; })[]; }' is not assignable to type 'Properties<string | number, string & {}>'.
+src/adapters/react-native/RNButton.tsx(23,3): error TS2339: Property 'onLongPress' does not exist on type 'RNButtonProps'.
+src/adapters/react-native/RNGraphCanvas.tsx(178,18): error TS2322: Type '{ flex: number; backgroundColor: string; transform: ({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { ...; } | { ...; })[]; }' is not assignable to type 'Properties<string | number, string & {}>'.
   Types of property 'transform' are incompatible.
     Type '({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { translateY: number; scale?: undefined; translateX?: undefined; rotate?: undefined; } | { ...; })[]' is not assignable to type 'Transform | undefined'.
       Type '({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { translateY: number; scale?: undefined; translateX?: undefined; rotate?: undefined; } | { ...; })[]' is not assignable to type 'string & {}'.
         Type '({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { translateY: number; scale?: undefined; translateX?: undefined; rotate?: undefined; } | { ...; })[]' is not assignable to type 'string'.
-src/adapters/react-native/RNGraphCanvas.tsx(178,16): error TS2741: Property 'graph' is missing in type '{ onNodeSelect: (node: any) => void; onNodeMove: any; onEdgeCreate: any; onEdgeDelete: any; style: any; }' but required in type 'GraphCanvasProps'.
-src/adapters/react-native/RNGraphCanvas.tsx(188,10): error TS2322: Type '{ flex: number; backgroundColor: string; transform: ({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { ...; } | { ...; })[]; }' is not assignable to type 'Properties<string | number, string & {}>'.
+src/adapters/react-native/RNGraphCanvas.tsx(189,10): error TS2322: Type '{ flex: number; backgroundColor: string; transform: ({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { ...; } | { ...; })[]; }' is not assignable to type 'Properties<string | number, string & {}>'.
   Types of property 'transform' are incompatible.
     Type '({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { translateY: number; scale?: undefined; translateX?: undefined; rotate?: undefined; } | { ...; })[]' is not assignable to type 'Transform | undefined'.
       Type '({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { translateY: number; scale?: undefined; translateX?: undefined; rotate?: undefined; } | { ...; })[]' is not assignable to type 'string & {}'.
         Type '({ scale: number; translateX?: undefined; translateY?: undefined; rotate?: undefined; } | { translateX: number; scale?: undefined; translateY?: undefined; rotate?: undefined; } | { translateY: number; scale?: undefined; translateX?: undefined; rotate?: undefined; } | { ...; })[]' is not assignable to type 'string'.
-src/adapters/react-native/RNGraphCanvas.tsx(189,8): error TS2741: Property 'graph' is missing in type '{ onNodeSelect: (node: any) => void; onNodeMove: any; onEdgeCreate: any; onEdgeDelete: any; style: any; }' but required in type 'GraphCanvasProps'.
-src/adapters/react-native/RNInput.tsx(6,17): error TS2459: Module '"../../components/Input"' declares 'InputProps' locally, but it is not exported.
-src/adapters/react-native/RNInput.tsx(6,39): error TS2305: Module '"../../components/Input"' has no exported member 'TextAreaProps'.
-src/adapters/react-native/RNInput.tsx(97,3): error TS2339: Property 'type' does not exist on type 'RNInputProps'.
-src/adapters/react-native/RNInput.tsx(152,29): error TS2339: Property 'testId' does not exist on type '{}'.
-src/adapters/react-native/RNInput.tsx(156,16): error TS2339: Property 'style' does not exist on type '{}'.
-src/adapters/react-native/RNInput.tsx(204,29): error TS2339: Property 'testId' does not exist on type '{}'.
-src/adapters/react-native/RNInput.tsx(209,16): error TS2339: Property 'style' does not exist on type '{}'.
-src/adapters/react-native/RNModal.tsx(6,17): error TS2459: Module '"../../components/Modal"' declares 'ModalProps' locally, but it is not exported.
-src/adapters/react-native/RNModal.tsx(27,3): error TS2339: Property 'isOpen' does not exist on type 'RNModalProps'.
-src/adapters/react-native/RNModal.tsx(28,3): error TS2339: Property 'onClose' does not exist on type 'RNModalProps'.
-src/adapters/react-native/RNModal.tsx(29,3): error TS2339: Property 'children' does not exist on type 'RNModalProps'.
-src/adapters/react-native/RNModal.tsx(51,29): error TS2339: Property 'testId' does not exist on type '{}'.
-src/adapters/react-native/RNModal.tsx(55,16): error TS2339: Property 'style' does not exist on type '{}'.
+src/adapters/react-native/RNInput.tsx(115,12): error TS2678: Type '"tel"' is not comparable to type '"number" | "text" | "search" | "url" | "password" | "email" | undefined'.
+src/adapters/react-native/RNInput.tsx(133,12): error TS2678: Type '"tel"' is not comparable to type '"number" | "text" | "search" | "url" | "password" | "email" | undefined'.
 src/adapters/ReactNativeAdapter.ts(96,16): error TS2304: Cannot find name 'HapticFeedback'.
 src/adapters/ReactNativeAdapter.ts(97,17): error TS2304: Cannot find name 'HapticFeedback'.
 src/adapters/ReactNativeAdapter.ts(98,16): error TS2304: Cannot find name 'HapticFeedback'.

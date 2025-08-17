@@ -46,6 +46,8 @@ import { edgeTypes } from './EdgeRenderingFix';
 import { AuthModal } from '../auth/AuthModal';
 import { supabase } from '../../utils/supabaseClient';
 import { useAutoLayout } from './hooks/useAutoLayout';
+import { usePreviewTrayLayout } from './hooks/usePreviewTrayLayout';
+import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import './ReactFlowOverrides.css'; // Import first to ensure overrides work
 import './Epic1GraphEditor.css';
 import './KeyboardShortcuts.css';
@@ -106,6 +108,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 }) => {
   // Use droppable node types if asset library is shown
   const nodeTypes = showAssetLibrary ? droppableEpic1NodeTypes : epic1NodeTypes;
+  
+  // Use preview tray layout hook to push content up
+  usePreviewTrayLayout(showPreview);
   
   // Load persisted state on mount
   const loadPersistedState = useCallback(() => {
@@ -757,9 +762,10 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Toggle preview panel
   const handleTogglePreview = useCallback(() => {
-    setIsPreviewVisible(prev => !prev);
-    showToast('info', `Preview ${!isPreviewVisible ? 'shown' : 'hidden'}`);
-  }, [isPreviewVisible, showToast]);
+    const { toggleTray, isOpen } = usePreviewTrayStore.getState();
+    toggleTray();
+    showToast('info', `Preview ${!isOpen ? 'shown' : 'hidden'}`);
+  }, [showToast]);
 
   // Handle seed changes from preview panel
   const handlePreviewSeedChange = useCallback((seeds: (string | number)[]) => {
@@ -1099,6 +1105,17 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       id: createNodeId(),
       type: nodeType || 'textBlock', // Ensure type is never undefined
       position: validPosition,
+      // Add width/height for bounding box nodes
+      ...(nodeType === 'boundingBox' && { 
+        width: 400,
+        height: 300,
+        measured: { width: 400, height: 300 }
+      }),
+      ...(nodeType === 'enhancedBoundingBox' && { 
+        width: 400,
+        height: 300,
+        measured: { width: 400, height: 300 }
+      }),
       data: {
         nodeType: nodeType, // CRITICAL: This is required for the runtime to identify the node type
         // Default data based on node type - set both value AND the specific properties expected by nodeFactory
@@ -1128,6 +1145,19 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         ...(nodeType === 'output' && { 
           value: 'output',
           label: 'output' 
+        }),
+        ...((nodeType === 'boundingBox' || nodeType === 'enhancedBoundingBox') && {
+          title: 'New Region',
+          description: '',
+          backgroundColor: '#CC567D',
+          opacity: 0.3,
+          borderColor: '#666',
+          borderStyle: 'dashed',
+          borderWidth: 2,
+          locked: false,
+          isCollapsed: false,
+          width: 400,
+          height: 300
         }),
       },
     };
@@ -1259,6 +1289,9 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       type: 'enhancedBoundingBox',
       position,
       selectable: true,
+      width: 400,  // Set width at node level for React Flow
+      height: 300, // Set height at node level for React Flow
+      measured: { width: 400, height: 300 }, // Also set measured for immediate rendering
       data: {
         title: 'New Region',
         description: '',
@@ -1268,6 +1301,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         borderStyle: 'dashed',
         borderWidth: 2,
         locked: false,
+        isCollapsed: false,
         width: 400,
         height: 300
       }
@@ -1389,6 +1423,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     <div className="epic1-graph-editor" style={editorStyle}
          onDrop={onDrop}
          onDragOver={onDragOver}>
+      <div className="epic1-main-layout">
         <ReactFlow
             nodes={enhancedNodes}
             edges={edges.map(edge => ({
@@ -1419,14 +1454,14 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               animated: false,
               style: { stroke: '#9ca3af', strokeWidth: 3 }
             }}
-            fitView={true}
+            fitView={false}
             fitViewOptions={{
               padding: 0.2,
               includeHiddenNodes: false,
               minZoom: 0.3,
               maxZoom: 2
             }}
-            defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+            defaultViewport={{ x: 100, y: 100, zoom: 0.8 }}
             attributionPosition="bottom-left"
             panOnScroll={false}
             zoomOnScroll={true}
@@ -1598,6 +1633,31 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               >
                 🪄 Wizard
               </button>
+              
+              <button 
+                className="epic1-preview-button"
+                onClick={handleTogglePreview}
+                title="Toggle Preview Output (P)"
+                style={{
+                  padding: '10px 16px',
+                  background: '#10b981',
+                  border: 'none',
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  width: '160px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  transition: 'background 0.2s'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#059669'}
+                onMouseLeave={(e) => e.currentTarget.style.background = '#10b981'}
+              >
+                📊 Preview
+              </button>
             </div>
           </div>
 
@@ -1633,8 +1693,32 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             }}
           />
         </ReactFlow>
+        
+        {/* Tabbed Side Panel - combines Preview and Asset Browser */}
+        {(showPreview || showAssetLibrary) && (
+          <TabbedSidePanel
+            previewEngine={previewEngineRef.current}
+            onPresetDrag={(preset) => {
+              // TODO: Implement preset application to nodes
+            }}
+            onPresetSelect={(preset) => {
+              // TODO: Implement preset selection
+            }}
+            onInsert={(preset) => {
+              const pos = reactFlowInstance
+                ? reactFlowInstance.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
+                : { x: 250, y: 250 };
+              void insertPresetByMeta(preset);
+            }}
+            position="right"
+            defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}
+            showAssets={showAssetLibrary}
+            showPreview={false}
+          />
+        )}
+      </div>
 
-        {/* Toast notifications */}
+      {/* Toast notifications */}
         {toasts.map((toast) => (
           <ConnectionToast
             key={toast.id}
@@ -1652,29 +1736,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />
-      
-      {/* Tabbed Side Panel - combines Preview and Asset Browser */}
-      {(showPreview || showAssetLibrary) && (
-        <TabbedSidePanel
-          previewEngine={previewEngineRef.current}
-          onPresetDrag={(preset) => {
-            // TODO: Implement preset application to nodes
-          }}
-          onPresetSelect={(preset) => {
-            // TODO: Implement preset selection
-          }}
-          onInsert={(preset) => {
-            const pos = reactFlowInstance
-              ? reactFlowInstance.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
-              : { x: 250, y: 250 };
-            void insertPresetByMeta(preset, pos);
-          }}
-          position="right"
-          defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}
-          showAssets={showAssetLibrary}
-          showPreview={showPreview}
-        />
-      )}
       
       {/* Context Menu */}
       {contextMenuPosition && contextMenuNodeId && (
@@ -2144,44 +2205,50 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         }}
       />
       
-      {/* Preview Tray - Bottom output panel */}
+      {/* Preview Tray - Bottom output panel as sibling */}
+      {/*
+        IMPORTANT: The internal PreviewTray here must NOT be an overlay.
+        Do not pass overlay={true}. It should remain a normal flex child so it
+        pushes content above it. Overlay mode previously caused UX issues.
+      */}
       {showPreview && (
         <PreviewTray
-          seeds={currentSeeds}
-          results={previewResults}
-          isExecuting={isPreviewExecuting}
-          error={previewError}
-          onSeedsChange={setCurrentSeeds}
-          onExecute={() => {
-            const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
-            if (runtimeGraph && previewEngineRef.current) {
-              previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
-            }
-          }}
-          onCancel={() => {
-            previewEngineRef.current?.cancelExecution();
-          }}
-          onCopy={(text) => {
-            navigator.clipboard.writeText(text).then(() => {
-              showToast('success', 'Results copied to clipboard');
-            });
-          }}
-          onExport={(format) => {
-            // Export functionality
-            const data = format === 'json' 
-              ? JSON.stringify(previewResults, null, 2)
-              : previewResults.map(r => `Seed ${r.seed}: ${r.result}`).join('\n');
-            const blob = new Blob([data], { type: format === 'json' ? 'application/json' : 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `preview-results.${format}`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('success', `Results exported as ${format.toUpperCase()}`);
-          }}
-        />
-      )}
+        resizable={false}
+        seeds={currentSeeds}
+        results={previewResults}
+        isExecuting={isPreviewExecuting}
+        error={previewError}
+        onSeedsChange={setCurrentSeeds}
+        onExecute={() => {
+          const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
+          if (runtimeGraph && previewEngineRef.current) {
+            previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
+          }
+        }}
+        onCancel={() => {
+          previewEngineRef.current?.cancelExecution();
+        }}
+        onCopy={(text) => {
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('success', 'Results copied to clipboard');
+          });
+        }}
+        onExport={(format) => {
+          // Export functionality
+          const data = format === 'json' 
+            ? JSON.stringify(previewResults, null, 2)
+            : previewResults.map(r => `Seed ${r.seed}: ${r.result}`).join('\n');
+          const blob = new Blob([data], { type: format === 'json' ? 'application/json' : 'text/csv' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `preview-results.${format}`;
+          a.click();
+          URL.revokeObjectURL(url);
+          showToast('success', `Results exported as ${format.toUpperCase()}`);
+        }}
+      />
+    )}
     </div>
   );
   

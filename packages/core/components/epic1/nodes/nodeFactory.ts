@@ -17,6 +17,7 @@ import {
 } from '../../../runtime/nodes/epic1/VariableNode';
 import { OutputNode } from '../../../runtime/nodes/epic1/OutputNode';
 import { debugLogEpic1 } from '../../../utils/debug';
+import { nodeRegistry } from '../../../runtime/nodeRegistry';
 
 /**
  * Convert a React Flow node to an Epic 1 runtime node
@@ -171,6 +172,15 @@ export function nodeDataToRuntimeNode(
         );
         return node;
       }
+
+      // UI-only nodes that don't need runtime conversion
+      case 'boundingBox':
+      case 'enhancedBoundingBox':
+      case 'postItNote':
+      case 'group':
+        // These are UI-only nodes, no runtime conversion needed
+        debugLogEpic1(`[nodeFactory] Skipping UI-only node type: ${type}`);
+        return null;
 
       default:
         console.warn(`Unknown node type: ${type}`);

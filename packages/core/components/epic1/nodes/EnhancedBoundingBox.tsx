@@ -2,6 +2,13 @@ import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { NodeProps, useReactFlow, Handle, Position, Edge, useStore } from 'reactflow';
 // CSS imports removed - using inline styles only
 
+// Feature flag for gradual migration to refactored version
+// Using legacy version as it has the correct collapse/expand functionality
+const USE_REFACTORED_VERSION = false; // Force legacy version which has proper collapse/expand with ports
+
+// Import refactored version
+import { EnhancedBoundingBox as EnhancedBoundingBoxRefactored } from './EnhancedBoundingBox/index';
+
 export interface Port {
   id: string;
   label: string;
@@ -37,6 +44,8 @@ const defaultColors = [
   '#C7CEEA', // Items-Periwinkle
   '#FFDAB9', // Gameplay-Peach
   '#E0E0E0', // Experimental-Gray
+  '#B19CD9', // Soft Purple
+  'custom',  // Custom color picker
 ];
 
 const COLLAPSED_HEIGHT = 90;  // Taller to accommodate title, buttons, and node indicators
@@ -49,7 +58,7 @@ const PADDING = 20;
 /**
  * Enhanced Bounding Box with collapse/expand and port system
  */
-export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
+const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
   data,
   selected,
   id,
@@ -69,6 +78,7 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
   const [isAnimating, setIsAnimating] = useState(false);
   const [isLocked, setIsLocked] = useState(data.locked || false);
   const [ports, setPorts] = useState<Port[]>(data.ports || []);
+  const [showColorPicker, setShowColorPicker] = useState(false);
   
   const [size, setSize] = useState({
     width: isCollapsed ? COLLAPSED_WIDTH : (data.width || 400),
@@ -113,7 +123,7 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
       );
     });
     
-    console.log(`[BoundingBox ${id}] Found ${contained.length} contained nodes:`, contained.map(n => ({ id: n.id, hidden: n.hidden })));
+    // Found contained nodes - tracked via performance monitor
     return contained;
   }, [id, size.width, getNodes]);
   
@@ -244,7 +254,7 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
     // This is critical - we need to check containment with the expanded size
     const nodesToToggle = getContainedNodes();
     const edges = getEdges();
-    console.log(`[Collapse Toggle] ${newCollapsed ? 'Collapsing' : 'Expanding'}, nodes to hide/show:`, nodesToToggle.map(n => n.id));
+    // Toggle collapse state for contained nodes
     
     // Find edges connected to contained nodes
     const nodeIds = new Set(nodesToToggle.map(n => n.id));
@@ -264,7 +274,7 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
       setNodes((nodes) => {
         return nodes.map((node) => {
           if (hiddenNodeIds.includes(node.id)) {
-            console.log(`[Collapse] Hiding node ${node.id}`);
+            // Hide node
             return { 
               ...node, 
               hidden: true,
@@ -308,7 +318,7 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
       const boxNode = getNodes().find(n => n.id === id);
       const collapsedNodeIds = boxNode?.data?.collapsedNodeIds || [];
       
-      console.log(`[Expand] Restoring nodes:`, collapsedNodeIds);
+      // Restore nodes from collapsed state
       
       // Show contained nodes and their edges IMMEDIATELY
       setNodes((nodes) => {
@@ -316,7 +326,7 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
           // Check if this node was hidden when we collapsed
           if (collapsedNodeIds.includes(node.id) || node.data?.wasContainedWhenCollapsed) {
             const wasHidden = node.data?.wasHiddenBeforeCollapse || false;
-            console.log(`[Expand] Showing node ${node.id} (was hidden before: ${wasHidden})`);
+            // Show node with preserved hidden state
             return { 
               ...node, 
               hidden: wasHidden, // Restore original hidden state
@@ -769,18 +779,256 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
         )}
         
         {!isCollapsed && (
-          <div className="bounding-box-description">
-            {description || <span className="placeholder">Click to add description...</span>}
+          <div 
+            className="bounding-box-description"
+            onClick={() => setIsEditingDescription(true)}
+            style={{ cursor: 'text' }}
+          >
+            {isEditingDescription ? (
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                onBlur={() => {
+                  setIsEditingDescription(false);
+                  setNodes((nodes) =>
+                    nodes.map((node) =>
+                      node.id === id
+                        ? { ...node, data: { ...node.data, description } }
+                        : node
+                    )
+                  );
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.metaKey) {
+                    setIsEditingDescription(false);
+                    setNodes((nodes) =>
+                      nodes.map((node) =>
+                        node.id === id
+                          ? { ...node, data: { ...node.data, description } }
+                          : node
+                      )
+                    );
+                  } else if (e.key === 'Escape') {
+                    setDescription(data.description || '');
+                    setIsEditingDescription(false);
+                  }
+                }}
+                autoFocus
+                style={{
+                  width: '100%',
+                  background: 'rgba(0, 0, 0, 0.5)',
+                  border: '1px solid #444',
+                  color: '#e0e0e0',
+                  padding: '4px',
+                  borderRadius: '4px',
+                  resize: 'none',
+                  minHeight: '40px'
+                }}
+                placeholder="Add description..."
+              />
+            ) : (
+              description || <span className="placeholder">Click to add description...</span>
+            )}
           </div>
         )}
       </div>
       
       {/* Status or Node Indicators */}
       {!isCollapsed ? (
-        <div className="bounding-box-status">
-          <span className="contained-count">
+        <div style={{
+          position: 'absolute',
+          bottom: '8px',
+          left: '12px',
+          right: '12px',
+          height: '28px',
+          padding: '0 8px',
+          background: 'rgba(38, 38, 38, 0.95)',
+          borderRadius: '4px',
+          backdropFilter: 'blur(8px)',
+          zIndex: 10,
+          pointerEvents: 'auto'
+        }}>
+          <span style={{
+            position: 'absolute',
+            left: '8px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            fontSize: '12px',
+            color: '#999',
+            fontWeight: '500'
+          }}>
             {containedNodes.length} node{containedNodes.length !== 1 ? 's' : ''}
           </span>
+          {/* Color Picker Button inside status bar */}
+          {selected && (
+            <div style={{ 
+              position: 'absolute',
+              right: '8px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 20
+            }}>
+              <button
+                className="nodrag nopan"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  setShowColorPicker(!showColorPicker);
+                }}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  backgroundColor: data.backgroundColor || defaultColors[0],
+                  border: showColorPicker ? '2px solid #1890ff' : '2px solid #666',
+                  borderRadius: '3px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'block',
+                  pointerEvents: 'auto'
+                }}
+                title="Change color"
+              />
+              {showColorPicker && (
+                <div 
+                  className="nodrag nopan"
+                  style={{
+                    position: 'absolute',
+                    bottom: '24px',
+                    right: '-4px',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(5, 28px)',
+                    gap: '4px',
+                    padding: '8px',
+                    background: 'rgba(20, 20, 20, 0.98)',
+                    border: '1px solid #444',
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.6)',
+                    zIndex: 10000
+                  }}
+                >
+                  {defaultColors.map((color, index) => {
+                    const isCustom = color === 'custom';
+                    const isSelected = !isCustom && data.backgroundColor === color;
+                    
+                    if (isCustom) {
+                      return (
+                        <label
+                          key="custom"
+                          className="nodrag nopan"
+                          style={{
+                            width: '28px',
+                            height: '28px',
+                            border: '2px solid #666',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: '#3a3a3a',
+                            position: 'relative',
+                            overflow: 'hidden'
+                          }}
+                          title="Custom color"
+                        >
+                          <input
+                            type="color"
+                            style={{
+                              position: 'absolute',
+                              width: '100%',
+                              height: '100%',
+                              opacity: 0,
+                              cursor: 'pointer'
+                            }}
+                            onChange={(e) => {
+                              e.stopPropagation();
+                              const customColor = e.target.value;
+                              setNodes((nodes) =>
+                                nodes.map((node) =>
+                                  node.id === id
+                                    ? { ...node, data: { ...node.data, backgroundColor: customColor } }
+                                    : node
+                                )
+                              );
+                              setShowColorPicker(false);
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            onMouseDown={(e) => e.stopPropagation()}
+                          />
+                          <svg 
+                            width="14" 
+                            height="14" 
+                            viewBox="0 0 14 14" 
+                            fill="none" 
+                            style={{ 
+                              pointerEvents: 'none',
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)'
+                            }}
+                          >
+                            <path 
+                              d="M10.5 1.5l2 2L7 9l-2.5.5.5-2.5 5.5-5.5z"
+                              stroke="#bbb"
+                              strokeWidth="1.2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <path 
+                              d="M3 11.5l-1.5 1.5M1.5 12L3 13.5"
+                              stroke="#bbb"
+                              strokeWidth="1.2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </label>
+                      );
+                    }
+                    
+                    return (
+                      <button
+                        key={color}
+                        className="nodrag nopan"
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          backgroundColor: color,
+                          border: isSelected ? '2px solid #1890ff' : '2px solid #555',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          transform: isSelected ? 'scale(1.1)' : 'scale(1)',
+                          transition: 'all 0.15s',
+                          boxShadow: isSelected ? '0 0 0 1px #1890ff' : 'none'
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setNodes((nodes) =>
+                            nodes.map((node) =>
+                              node.id === id
+                                ? { ...node, data: { ...node.data, backgroundColor: color } }
+                                : node
+                            )
+                          );
+                          setShowColorPicker(false);
+                        }}
+                        onMouseDown={(e) => e.stopPropagation()}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = isSelected ? 'scale(1.1)' : 'scale(1)'}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ) : (() => {
         // When collapsed, use stored node count since containedNodes will be empty
@@ -1005,4 +1253,11 @@ export const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> =
   );
 };
 
+// Set display name
 EnhancedBoundingBox.displayName = 'EnhancedBoundingBox';
+EnhancedBoundingBoxRefactored.displayName = 'EnhancedBoundingBox';
+
+// Export appropriate version based on feature flag
+const ExportedComponent = USE_REFACTORED_VERSION ? EnhancedBoundingBoxRefactored : EnhancedBoundingBox;
+
+export { ExportedComponent as EnhancedBoundingBox };

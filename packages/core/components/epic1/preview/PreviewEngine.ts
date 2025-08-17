@@ -436,6 +436,13 @@ export class PreviewEngine {
   setSeeds(seeds: (string | number)[]): void {
     this.seeds = seeds;
   }
+  
+  /**
+   * Update seeds (alias for setSeeds)
+   */
+  updateSeeds(seeds: (string | number)[]): void {
+    this.setSeeds(seeds);
+  }
 
   /**
    * Get current seeds

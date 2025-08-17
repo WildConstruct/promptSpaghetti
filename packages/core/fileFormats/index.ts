@@ -5,3 +5,4 @@
  */
 
 export * from './psglib.js';
+export * from './psg.js';

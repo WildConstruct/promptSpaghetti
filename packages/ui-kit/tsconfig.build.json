@@ -1,0 +1,46 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "incremental": true,
+    "jsx": "react-jsx",
+    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "paths": {
+      "@prompt-spaghetti/graph-core": ["../graph-core/dist"]
+    }
+  },
+  "include": [
+    "src/types.ts",
+    "src/platform.ts",
+    "src/components/GraphCanvas.tsx",
+    "src/components/Button.tsx",
+    "src/hooks.ts",
+    "src/hooks/**/*",
+    "src/utils.ts",
+    "src/utils/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "src/__tests__/**/*",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.tsx",
+    "**/*.stories.ts",
+    "**/*.stories.mdx",
+    "src/index.ts",
+    "src/components.ts",
+    "src/stories/**/*",
+    "src/mobile/**/*",
+    "src/platform/**/*",
+    "src/adapters/**/*",
+    "src/touch/**/*",
+    "src/responsive/**/*"
+  ],
+  "references": []
+}

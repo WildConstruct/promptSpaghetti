@@ -47,6 +47,8 @@ export const useSupabaseFileOperations = ({
   const [isLoading, setIsLoading] = useState(false);
   const [showOpenDialog, setShowOpenDialog] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [showNewDocumentModal, setShowNewDocumentModal] = useState(false);
+  const [pendingNewDocument, setPendingNewDocument] = useState<{ nodes: Node[], edges: Edge[] } | null>(null);
 
   // Check authentication status
   useEffect(() => {
@@ -488,20 +490,26 @@ export const useSupabaseFileOperations = ({
       setShowSaveDialog(true);
     },
     handleNew: (demoNodes: Node[], demoEdges: Edge[]) => {
-      // Use setTimeout to prevent immediate dismissal of dialog
-      setTimeout(() => {
-        if (
-          window.confirm('Create a new graph? Any unsaved changes will be lost.')
-        ) {
-          onNodesChange(demoNodes);
-          onEdgesChange(demoEdges);
-          onEditorKeyChange(prev => prev + 1);
-          localStorage.removeItem('epic1-graph');
-          localStorage.removeItem('promptgraph:state:v1'); // Clear persisted state
-          showToast('New graph created', 'success');
-        }
-      }, 0);
+      setPendingNewDocument({ nodes: demoNodes, edges: demoEdges });
+      setShowNewDocumentModal(true);
     },
+    confirmNewDocument: () => {
+      if (pendingNewDocument) {
+        onNodesChange(pendingNewDocument.nodes);
+        onEdgesChange(pendingNewDocument.edges);
+        onEditorKeyChange(prev => prev + 1);
+        localStorage.removeItem('epic1-graph');
+        localStorage.removeItem('promptgraph:state:v1'); // Clear persisted state
+        showToast('New graph created', 'success');
+        setShowNewDocumentModal(false);
+        setPendingNewDocument(null);
+      }
+    },
+    cancelNewDocument: () => {
+      setShowNewDocumentModal(false);
+      setPendingNewDocument(null);
+    },
+    showNewDocumentModal,
     handleQuit: (currentNodes: Node[], currentEdges: Edge[]) => {
       const graphData = { nodes: currentNodes, edges: currentEdges };
       localStorage.setItem('epic1-graph-autosave', JSON.stringify(graphData));

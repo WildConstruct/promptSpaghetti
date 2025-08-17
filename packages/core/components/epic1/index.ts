@@ -13,6 +13,10 @@ export {
 } from './Epic1GraphEditor';
 export type { Epic1GraphEditorProps } from './Epic1GraphEditor';
 
+// Graph Editor with proper workspace layout
+export { GraphEditorWorkspace } from './GraphEditorWorkspace';
+export type { GraphEditorWorkspaceProps } from './GraphEditorWorkspace';
+
 // Export all node types
 export * from './nodes';
 

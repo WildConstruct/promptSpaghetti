@@ -34,6 +34,12 @@ export const useEditOperations = ({
   const [historyIndex, setHistoryIndex] = useState(0);
   const [clipboard, setClipboard] = useState<HistoryState | null>(null);
   const [lastChangeTime, setLastChangeTime] = useState(Date.now());
+  
+  // Track changes to nodes and edges for undo/redo history
+  const prevNodesRef = useRef<Node[]>(currentNodes);
+  const prevEdgesRef = useRef<Edge[]>(currentEdges);
+  const changeTimeoutRef = useRef<NodeJS.Timeout>();
+  const isApplyingHistory = useRef(false);
 
   const addToHistory = useCallback((nodes: Node[], edges: Edge[]) => {
     const newHistory = history.slice(0, historyIndex + 1);
@@ -52,10 +58,23 @@ export const useEditOperations = ({
     if (historyIndex > 0) {
       const newIndex = historyIndex - 1;
       const state = history[newIndex];
-      onNodesChange([...state.nodes]);
-      onEdgesChange([...state.edges]);
+      isApplyingHistory.current = true;
+      
+      // Deep clone to ensure React Flow detects changes
+      const restoredNodes = JSON.parse(JSON.stringify(state.nodes));
+      const restoredEdges = JSON.parse(JSON.stringify(state.edges));
+      
+      // Apply both nodes and edges with their full state including positions
+      onNodesChange(restoredNodes);
+      onEdgesChange(restoredEdges);
       setHistoryIndex(newIndex);
       onEditorKeyChange(prev => prev + 1);
+      
+      // Reset flag after a delay to allow React Flow to process
+      setTimeout(() => {
+        isApplyingHistory.current = false;
+      }, 100);
+      
       showToast('Undo successful', 'success');
     } else {
       showToast('Nothing to undo', 'info');
@@ -66,10 +85,23 @@ export const useEditOperations = ({
     if (historyIndex < history.length - 1) {
       const newIndex = historyIndex + 1;
       const state = history[newIndex];
-      onNodesChange([...state.nodes]);
-      onEdgesChange([...state.edges]);
+      isApplyingHistory.current = true;
+      
+      // Deep clone to ensure React Flow detects changes
+      const restoredNodes = JSON.parse(JSON.stringify(state.nodes));
+      const restoredEdges = JSON.parse(JSON.stringify(state.edges));
+      
+      // Apply both nodes and edges with their full state including positions
+      onNodesChange(restoredNodes);
+      onEdgesChange(restoredEdges);
       setHistoryIndex(newIndex);
       onEditorKeyChange(prev => prev + 1);
+      
+      // Reset flag after a delay to allow React Flow to process
+      setTimeout(() => {
+        isApplyingHistory.current = false;
+      }, 100);
+      
       showToast('Redo successful', 'success');
     } else {
       showToast('Nothing to redo', 'info');
@@ -151,13 +183,15 @@ export const useEditOperations = ({
     
     showToast(`Pasted ${pastedNodes.length} node${pastedNodes.length !== 1 ? 's' : ''}`, 'success');
   }, [clipboard, currentNodes, currentEdges, onNodesChange, onEdgesChange, onEditorKeyChange, addToHistory, showToast]);
-
-  // Track changes to nodes and edges for undo/redo history
-  const prevNodesRef = useRef<Node[]>(currentNodes);
-  const prevEdgesRef = useRef<Edge[]>(currentEdges);
-  const changeTimeoutRef = useRef<NodeJS.Timeout>();
   
   useEffect(() => {
+    // Skip if we're applying history (undo/redo)
+    if (isApplyingHistory.current) {
+      prevNodesRef.current = currentNodes;
+      prevEdgesRef.current = currentEdges;
+      return;
+    }
+    
     // Skip if no actual changes
     const nodesChanged = JSON.stringify(prevNodesRef.current) !== JSON.stringify(currentNodes);
     const edgesChanged = JSON.stringify(prevEdgesRef.current) !== JSON.stringify(currentEdges);
@@ -179,7 +213,8 @@ export const useEditOperations = ({
         JSON.stringify(currentState.nodes) === JSON.stringify(currentNodes) &&
         JSON.stringify(currentState.edges) === JSON.stringify(currentEdges);
       
-      if (!isUndoRedo && (currentNodes.length > 0 || currentEdges.length > 0)) {
+      if (!isUndoRedo && (currentNodes.length > 0 || currentEdges.length > 0 || history.length === 1)) {
+        // Include ALL node data including positions and other properties
         addToHistory(currentNodes, currentEdges);
       }
       

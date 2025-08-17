@@ -167,13 +167,23 @@ export function convertPSGToPSGLib(psg: PSGFile): any {
   
   // Create the graph nodes using their original positions
   const contentNodes = nodesToImport.map((node) => {
-    // Map node type to React Flow compatible type - MUST match registered types exactly
-    const nodeType = node.type === 'WeightedChoice' ? 'weightedChoice' : 
-                    node.type === 'Output' ? 'output' :
-                    node.type === 'Concat' ? 'concat' :
-                    node.type === 'TextBlock' ? 'textBlock' :
-                    node.type === 'Variable' ? 'variable' :
-                    node.type;
+    // Use the node registry to convert PSG type to React Flow type
+    // This ensures consistent type mapping across the system
+    let nodeType: string;
+    try {
+      // Try to import the registry dynamically to avoid circular dependencies
+      const { convertNodeType } = require('../runtime/nodeRegistry');
+      nodeType = convertNodeType(node.type, 'psg');
+    } catch (e) {
+      // Fallback to manual mapping if registry not available
+      console.warn('Node registry not available, using fallback mapping');
+      nodeType = node.type === 'WeightedChoice' ? 'weightedChoice' : 
+                      node.type === 'Output' ? 'output' :
+                      node.type === 'Concat' ? 'concat' :
+                      node.type === 'TextBlock' ? 'textBlock' :
+                      node.type === 'Variable' ? 'variable' :
+                      node.type;
+    }
     
     // Build proper data structure based on node type
     let nodeData: any = {
