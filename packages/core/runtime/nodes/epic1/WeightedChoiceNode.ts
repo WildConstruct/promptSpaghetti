@@ -59,9 +59,9 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<
     initialValue: WeightedChoiceValue = [],
     config: WeightedChoiceConfig = {}
   ) {
-    // Ensure at least 2 options by default
+    // Allow single options, only add defaults if completely empty
     const defaultValue =
-      initialValue.length >= 2
+      initialValue.length > 0
         ? initialValue
         : [
             { id: 'option-1', text: 'Option 1', weight: 50 },
@@ -73,7 +73,7 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<
       normalizeWeights: true,
       showPercentages: true,
       allowAddRemove: true,
-      minOptions: 2,
+      minOptions: 1,  // Allow single options
       ...config
     };
   }
@@ -86,6 +86,11 @@ export class WeightedChoiceNode extends BaseInlineEditableNode<
 
     if (options.length === 0) {
       return '';
+    }
+
+    // If there's only one option, return it directly
+    if (options.length === 1) {
+      return options[0].text;
     }
 
     // Calculate total weight

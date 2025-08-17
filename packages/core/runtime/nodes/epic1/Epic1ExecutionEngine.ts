@@ -116,10 +116,16 @@ export class Epic1ExecutionEngine {
         outputNodes.map(([id]) => id)
       );
       debugLogExecution(
+        '[ExecutionEngine] Total nodes in graph:',
+        this.graph.nodes.size,
+        'Node IDs:',
+        Array.from(this.graph.nodes.keys())
+      );
+      debugLogExecution(
         '[ExecutionEngine] Graph edges:',
         this.graph.edges.length,
         'edges:',
-        this.graph.edges
+        this.graph.edges.map(e => `${e.source} --[${e.sourceHandle || 'output'}]--> ${e.target}[${e.targetHandle || 'input'}]`)
       );
 
       if (outputNodes.length === 0) {
@@ -299,15 +305,22 @@ export class Epic1ExecutionEngine {
   ): Promise<string> {
     const value = node.getCurrentValue();
 
+    debugLogExecution(
+      `[ExecutionEngine] Executing TextBlock with value "${value}" and ${inputs.length} input(s)`
+    );
+
     // Substitute variables
     const substituted = this.context.substituteVariables(value);
     
     // If there are inputs, prepend them to the output
     if (inputs.length > 0) {
-      const inputStr = inputs.map(i => String(i || '')).join(' ');
-      return inputStr ? `${inputStr} ${substituted}` : substituted;
+      const inputStr = inputs.map(i => String(i || '')).filter(s => s).join(' ');
+      const result = inputStr ? `${inputStr} ${substituted}` : substituted;
+      debugLogExecution(`[ExecutionEngine] TextBlock with input, output: "${result}"`);
+      return result;
     }
 
+    debugLogExecution(`[ExecutionEngine] TextBlock output: "${substituted}"`);
     return substituted;
   }
 
@@ -319,34 +332,75 @@ export class Epic1ExecutionEngine {
     inputs: any[]
   ): Promise<string> {
     const options = node.getData().value;
+    const nodeId = node.serialize().id;
+
+    debugLogExecution(
+      `[ExecutionEngine] Executing WeightedChoice ${nodeId} with ${options.length} option(s) and ${inputs.length} input(s):`,
+      { options, inputs }
+    );
+
+    // Process inputs first - concatenate them if there are any
+    let inputStr = '';
+    if (inputs.length > 0) {
+      inputStr = inputs.map(i => String(i || '')).filter(s => s).join(' ');
+      debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} input string: "${inputStr}"`);
+    }
 
     if (options.length === 0) {
-      return '';
+      // If no options, just return the input
+      return inputStr;
     }
 
-    // Calculate total weight
-    const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
+    let selectedText = '';
+    let selectedIndex = 0;
 
-    if (totalWeight === 0) {
-      return options[0].text; // Fallback to first option
-    }
+    // If there's only one option, return it directly
+    if (options.length === 1) {
+      selectedText = this.context.substituteVariables(options[0].text);
+      selectedIndex = 0;
+      debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} single option, selected: "${selectedText}"`);
+    } else {
+      // Calculate total weight
+      const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
 
-    // Get node-specific PRNG for deterministic selection
-    const prng = this.context.getNodePRNG(node.serialize().id);
-    const random = prng() * totalWeight;
+      if (totalWeight === 0) {
+        selectedText = options[0].text; // Fallback to first option
+        selectedIndex = 0;
+      } else {
+        // Get node-specific PRNG for deterministic selection
+        const prng = this.context.getNodePRNG(nodeId);
+        const random = prng() * totalWeight;
 
-    // Select based on weight
-    let accumulator = 0;
-    for (const option of options) {
-      accumulator += option.weight;
-      if (random <= accumulator) {
-        // Substitute variables in the selected text
-        return this.context.substituteVariables(option.text);
+        // Select based on weight
+        let accumulator = 0;
+        for (let i = 0; i < options.length; i++) {
+          const option = options[i];
+          accumulator += option.weight;
+          if (random <= accumulator) {
+            // Substitute variables in the selected text
+            selectedText = this.context.substituteVariables(option.text);
+            selectedIndex = i;
+            debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} selected option ${i}: "${selectedText}"`);
+            break;
+          }
+        }
+
+        // Fallback (shouldn't reach here)
+        if (!selectedText && options.length > 0) {
+          selectedText = options[options.length - 1].text;
+          selectedIndex = options.length - 1;
+        }
       }
     }
 
-    // Fallback (shouldn't reach here)
-    return options[options.length - 1].text;
+    // Store which branch was selected for potential branch routing
+    // This could be used later if we implement branch-specific outputs
+    debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} selected branch index: ${selectedIndex}`);
+
+    // Concatenate input with selected text
+    const result = inputStr ? `${inputStr} ${selectedText}` : selectedText;
+    debugLogExecution(`[ExecutionEngine] WeightedChoice ${nodeId} final output: "${result}"`);
+    return result;
   }
 
   /**
@@ -433,23 +487,29 @@ export class Epic1ExecutionEngine {
    * Execute an Output node
    */
   private async executeOutput(node: OutputNode, inputs: any[]): Promise<any> {
-    // If multiple inputs, concatenate them with spaces
-    const input = inputs.length > 1 
-      ? inputs.map(i => String(i || '')).join(' ')
-      : (inputs.length > 0 ? inputs[0] : '');
     debugLogExecution(
       '[ExecutionEngine] Output node receiving',
       inputs.length,
       'input(s):',
-      inputs,
-      '-> concatenated:',
-      input
+      inputs
     );
 
-    // Set the input on the node for display
-    node.setInput(input);
+    // Pass all inputs to the OutputNode - it will handle concatenation
+    if (inputs.length > 1) {
+      // Pass array for auto-concatenation
+      node.setInput(inputs.map(i => String(i || '')));
+    } else if (inputs.length === 1) {
+      // Single input
+      node.setInput(String(inputs[0] || ''));
+    } else {
+      // No inputs
+      node.setInput('');
+    }
 
-    return input;
+    // Return the concatenated result
+    const result = await node.run(this.context);
+    debugLogExecution('[ExecutionEngine] Output node result:', result);
+    return result;
   }
 
   /**
@@ -461,6 +521,15 @@ export class Epic1ExecutionEngine {
     // Find edges targeting this node
     const incomingEdges = this.graph.edges.filter(
       edge => edge.target === nodeId
+    );
+
+    debugLogExecution(
+      `[ExecutionEngine] Node ${nodeId} has ${incomingEdges.length} incoming edges:`,
+      incomingEdges.map(e => ({
+        source: e.source,
+        sourceHandle: e.sourceHandle || 'output',
+        targetHandle: e.targetHandle || 'input'
+      }))
     );
 
     // Sort by targetHandle to maintain order
@@ -486,13 +555,22 @@ export class Epic1ExecutionEngine {
 
       if (sourceResult && !sourceResult.error) {
         inputs.push(sourceResult.output);
+        debugLogExecution(
+          `[ExecutionEngine] Added input from ${edge.source} (via ${edge.sourceHandle || 'output'}): "${sourceResult.output}"`
+        );
+      } else if (!sourceResult) {
+        debugLogExecution(
+          `[ExecutionEngine] WARNING: No result found for source node ${edge.source}`
+        );
+      } else if (sourceResult.error) {
+        debugLogExecution(
+          `[ExecutionEngine] WARNING: Source node ${edge.source} has error: ${sourceResult.error}`
+        );
       }
     }
 
     debugLogExecution(
-      `[ExecutionEngine] Node ${nodeId} incoming edges:`,
-      incomingEdges.map(e => ({ source: e.source, targetHandle: e.targetHandle })),
-      'collected inputs:',
+      `[ExecutionEngine] Node ${nodeId} collected ${inputs.length} inputs:`,
       inputs
     );
 
@@ -536,6 +614,8 @@ export class Epic1ExecutionEngine {
       const dependencies = this.graph.edges
         .filter(edge => edge.target === nodeId)
         .map(edge => edge.source);
+      
+      debugLogExecution(`[ExecutionEngine] Node ${nodeId} has dependencies:`, dependencies);
 
       for (const dep of dependencies) {
         visit(dep);

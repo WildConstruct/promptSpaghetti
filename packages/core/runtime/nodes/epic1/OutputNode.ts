@@ -14,7 +14,7 @@ import {
  * Usually locked and used for displaying results
  */
 export class OutputNode extends BaseInlineEditableNode<string, string> {
-  private input: string = '';
+  private inputs: string[] = [];
 
   constructor(
     id: string,
@@ -29,22 +29,27 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
   }
 
   /**
-   * Set the input value
-   * This would typically be called by the graph execution engine
+   * Set the input value(s)
+   * Can accept a single string or array of strings to concatenate
    */
-  setInput(value: string): void {
-    this.input = String(value || '');
-    // Update the display value
-    this.data.value = this.input;
+  setInput(value: string | string[]): void {
+    if (Array.isArray(value)) {
+      this.inputs = value.map(v => String(v || ''));
+      // Concatenate all inputs with spaces
+      this.data.value = this.inputs.filter(v => v).join(' ');
+    } else {
+      this.inputs = [String(value || '')];
+      this.data.value = this.inputs[0];
+    }
     this.data.lastPreviewUpdate = new Date().toISOString();
   }
 
   /**
-   * Execute the node - simply returns the input
+   * Execute the node - concatenates all inputs
    */
   async run(ctx: ExecutionContext): Promise<string> {
-    // For output nodes, we return the input value
-    return this.input;
+    // For output nodes, we concatenate all inputs
+    return this.inputs.filter(v => v).join(' ');
   }
 
   /**
@@ -93,7 +98,7 @@ export class OutputNode extends BaseInlineEditableNode<string, string> {
    * Clear the output
    */
   clearOutput(): void {
-    this.input = '';
+    this.inputs = [];
     this.data.value = '';
     this.data.lastPreviewUpdate = new Date().toISOString();
   }

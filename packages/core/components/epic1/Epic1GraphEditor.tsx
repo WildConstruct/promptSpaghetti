@@ -313,7 +313,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [isPreviewExecuting, setIsPreviewExecuting] = useState(false);
   const [previewError, setPreviewError] = useState<Error | undefined>();
   const [currentSeeds, setCurrentSeeds] = useState<number[]>(
-    previewSeeds as number[] || [3141, 5926, 5358]
+    previewSeeds as number[] || [3141, 5926, 5358, 9793]
   );
   
   // Toast system for error messages (moved before useEffects that use it)
@@ -392,14 +392,23 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     if (!previewEngineRef.current) return;
     
     const unsubscribe = previewEngineRef.current.subscribe((update) => {
+      console.log('[Preview] Engine update received:', update);
       setIsPreviewExecuting(update.state === 'executing' || update.state === 'pending');
       if (update.results) {
-        setPreviewResults(update.results.map(r => ({
+        console.log('[Preview] Got results:', update.results);
+        console.log('[Preview] Result details:');
+        update.results.forEach((r, i) => {
+          console.log(`  Result ${i}: seed=${r.seed}, output="${r.output}", type=${typeof r.output}, length=${r.output?.length || 0}`);
+        });
+        const mappedResults = update.results.map(r => ({
           seed: r.seed,
           result: r.output
-        })));
+        }));
+        console.log('[Preview] Mapped results:', mappedResults);
+        setPreviewResults(mappedResults);
       }
       if (update.error) {
+        console.error('[Preview] Got error:', update.error);
         setPreviewError(update.error);
       } else {
         setPreviewError(undefined);
@@ -574,11 +583,20 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Update preview when graph changes (but not during dragging)
   useEffect(() => {
+    console.log('[Preview] Auto-update check:', {
+      isPreviewVisible,
+      hasEngine: !!previewEngineRef.current,
+      isDragging,
+      nodeCount: enhancedNodes.length,
+      edgeCount: edges.length
+    });
+    
     if (!isPreviewVisible || !previewEngineRef.current || isDragging) return;
 
     const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
+    console.log('[Preview] Auto-update runtime graph:', runtimeGraph);
     if (runtimeGraph) {
-      // Removed console.log that was causing performance issues
+      console.log('[Preview] Auto-updating preview');
       previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
     }
   }, [enhancedNodes, edges, isPreviewVisible, convertToRuntimeGraph, isDragging]);
@@ -2220,9 +2238,19 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         error={previewError}
         onSeedsChange={setCurrentSeeds}
         onExecute={() => {
+          console.log('[Preview] Execute button clicked');
+          console.log('[Preview] Current nodes:', enhancedNodes);
+          console.log('[Preview] Current edges:', edges);
           const runtimeGraph = convertToRuntimeGraph(enhancedNodes, edges);
+          console.log('[Preview] Converted runtime graph:', runtimeGraph);
           if (runtimeGraph && previewEngineRef.current) {
+            console.log('[Preview] Updating preview with graph');
             previewEngineRef.current.updatePreview(runtimeGraph, enhancedNodes, edges);
+          } else {
+            console.warn('[Preview] Missing runtime graph or preview engine', {
+              runtimeGraph,
+              previewEngine: previewEngineRef.current
+            });
           }
         }}
         onCancel={() => {

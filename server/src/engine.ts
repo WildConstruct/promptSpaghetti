@@ -30,6 +30,81 @@ import { v4 as uuidv4 } from 'uuid';
 let analyticsCollector: any = null;
 let analyticsDAO: any = null;
 
+// Stub RuntimeNode interface
+interface RuntimeNode<T> {
+  run(ctx: any): Promise<T> | T;
+}
+
+// Stub node implementations for server startup
+class WeightedChoiceNode implements RuntimeNode<string> {
+  constructor(private id: string, private choices: any[]) {}
+  run(ctx: any): string {
+    if (!this.choices || this.choices.length === 0) return '';
+    // Simple random choice for now
+    const choice = this.choices[Math.floor(Math.random() * this.choices.length)];
+    return choice.text || choice.value || '';
+  }
+}
+
+class ConcatNode implements RuntimeNode<string> {
+  constructor(private id: string, private inputs: string[]) {}
+  run(ctx: any): string {
+    return this.inputs.filter(Boolean).join(' ');
+  }
+}
+
+class OutputNode implements RuntimeNode<string> {
+  private inputs: string[] = [];
+  private value: string = '';
+  
+  constructor(private id: string) {}
+  
+  setInput(value: string | string[]): void {
+    if (Array.isArray(value)) {
+      this.inputs = value.map(v => String(v || ''));
+      // Auto-concatenate multiple inputs with spaces
+      this.value = this.inputs.filter(v => v).join(' ');
+    } else {
+      this.inputs = [String(value || '')];
+      this.value = this.inputs[0];
+    }
+  }
+  
+  run(ctx: any): string {
+    return this.value;
+  }
+}
+
+class IncludeNode implements RuntimeNode<string> {
+  constructor(private id: string, private name: string, private lookup: any) {}
+  run(ctx: any): string {
+    return this.lookup[this.name] || '';
+  }
+}
+
+class SetVariableNode implements RuntimeNode<void> {
+  constructor(private id: string, private key: string, private value: any) {}
+  run(ctx: any): void {
+    if (ctx.variables) {
+      ctx.variables[this.key] = this.value;
+    }
+  }
+}
+
+class GetVariableNode implements RuntimeNode<any> {
+  constructor(private id: string, private key: string) {}
+  run(ctx: any): any {
+    return ctx.variables?.[this.key];
+  }
+}
+
+class TextBlockNode implements RuntimeNode<string> {
+  constructor(private id: string, private text: string) {}
+  run(ctx: any): string {
+    return this.text || '';
+  }
+}
+
 /**
  * Simplified stub for server startup
  */
@@ -378,15 +453,22 @@ function createRuntimeNode(
   case 'Concat':
     return new ConcatNode(node.id, resolvedInputs as string[]);
   case 'Output': {
-    // Process template if available, otherwise use first input (backward compatibility)
-    let output = resolvedInputs[0];
+    // Process template if available, otherwise concatenate all inputs
+    let output: string | string[];
     if (node.template && node.template.trim()) {
       const processedTemplate = processTemplateVariables(node.template, executionContext);
-      // Only use processed template if it's different and valid
-      output = processedTemplate || output;
+      // Use processed template if valid
+      output = processedTemplate || resolvedInputs.join(' ');
+    } else {
+      // Pass all inputs to OutputNode for auto-concatenation
+      output = resolvedInputs.length === 1 ? resolvedInputs[0] : resolvedInputs;
+    }
+    const outputNode = new OutputNode(node.id);
+    outputNode.setInput(output);
+    return outputNode;
 
-    return new OutputNode(node.id, output);
-
+  case 'TextBlock':
+    return new TextBlockNode(node.id, node.text || node.value || '');
   case 'Include':
     return new IncludeNode(node.id, node.name, {});
   case 'SetVariable': {

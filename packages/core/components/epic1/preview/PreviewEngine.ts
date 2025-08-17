@@ -358,7 +358,13 @@ export class PreviewEngine {
         );
       });
 
-      return Promise.race([engine.execute(), timeoutPromise, abortPromise]);
+      const result = await Promise.race([engine.execute(), timeoutPromise, abortPromise]);
+      
+      // Add the seed to the result
+      return {
+        ...result,
+        seed: seed
+      };
     });
 
     // Store current execution promise

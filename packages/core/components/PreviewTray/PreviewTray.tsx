@@ -54,6 +54,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   resizable = true,
   overlay = false,
 }) => {
+  console.log('[PreviewTray] Rendering with results:', results);
+  console.log('[PreviewTray] Seeds:', seeds);
+  
   const {
     isOpen,
     height,
@@ -335,9 +338,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   right: '400px', // Updated to match much wider actions panel
                   bottom: 0,
                   display: 'flex',
-                  gap: '12px',
-                  padding: '0 12px', // Remove top padding entirely
-                  paddingRight: '20px', // Just a small buffer
+                  gap: '10px', // Slightly smaller gap to fit 4 boxes better
+                  padding: '0 10px', // Consistent smaller padding
+                  paddingRight: '10px',
                   overflowX: 'auto',
                   overflowY: 'hidden',
                   scrollBehavior: 'smooth'
@@ -385,14 +388,22 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   <>
                 {/* All seeds */}
                 {seeds.map((seed, index) => {
-                  const result = results.find(r => r.seed === seed);
+                  // Convert both to numbers for consistent comparison
+                  const seedNum = typeof seed === 'string' ? parseInt(seed, 10) : seed;
+                  const result = results.find(r => {
+                    const resultSeedNum = typeof r.seed === 'string' ? parseInt(r.seed, 10) : r.seed;
+                    return resultSeedNum === seedNum;
+                  });
+                  console.log(`[PreviewTray] Looking for result with seed ${seedNum}:`, result);
+                  console.log(`[PreviewTray] Available results:`, results);
+                  console.log(`[PreviewTray] Seed types - current: ${typeof seed}, in results:`, results.map(r => `${r.seed} (${typeof r.seed})`));
                   return (
                     <div
                       key={`seed-${seed}-${index}`}
                       className="preview-result-box"
                       style={{
-                        flex: '0 0 380px', // Wider boxes
-                        minWidth: '380px',
+                        flex: '0 0 440px', // Wider boxes to better fill space
+                        minWidth: '440px',
                         border: '1px solid #444',
                         borderRadius: '6px',
                         background: '#1a1a1a',
@@ -553,8 +564,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                 <div
                   className="preview-add-seed-box"
                   style={{
-                    flex: '0 0 80px',
-                    minWidth: '80px',
+                    flex: '0 0 60px',
+                    minWidth: '60px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -563,8 +574,8 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
                   <button
                     onClick={handleAddSeed}
                     style={{
-                      width: '48px',
-                      height: '48px',
+                      width: '40px',
+                      height: '40px',
                       border: '2px dashed #444',
                       borderRadius: '6px',
                       background: 'transparent',
