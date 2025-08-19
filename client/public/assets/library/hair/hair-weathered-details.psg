@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "hair-condition",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "weathered", "environmental", "condition", "texture"],
+    "tags": [
+      "hair",
+      "weathered",
+      "environmental",
+      "condition",
+      "texture"
+    ],
     "fragment_id": "hair-weathered",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-weathered-output",
-      "type": "Output",
-      "name": "Weathered Hair Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-weathered}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-weathered",
-      "target": "hair-weathered-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-weathered-fragment",
       "name": "Weathered Hair Fragment",
       "color": "#DAA520",
       "color_comment": "Goldenrod - Environmental effects",
-      "nodes": ["hair-weathered", "hair-weathered-output"],
+      "nodes": [
+        "hair-weathered"
+      ],
       "description": "Weathered conditions as single unit",
       "metadata": {
         "fragment_type": "hair_condition",

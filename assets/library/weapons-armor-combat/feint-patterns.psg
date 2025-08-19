@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "technique", "feint"],
+    "tags": [
+      "weapons",
+      "technique",
+      "feint"
+    ],
     "fragment_id": "weapons-feint-patterns",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "high-line feint", "weight": 12 },
-        { "text": "low-line feint", "weight": 11 },
-        { "text": "shoulder drop feint", "weight": 10 },
-        { "text": "double feint", "weight": 9 },
-        { "text": "false step", "weight": 8 },
-        { "text": "weapon pump-fake", "weight": 7 },
-        { "text": "disguised draw", "weight": 6 },
-        { "text": "guard tap feint", "weight": 5 },
-        { "text": "range bait", "weight": 4 },
-        { "text": "hip fake", "weight": 3 },
-        { "text": "cadence break", "weight": 2 },
-        { "text": "line change feint", "weight": 1 }
+        {
+          "text": "high-line feint",
+          "weight": 12
+        },
+        {
+          "text": "low-line feint",
+          "weight": 11
+        },
+        {
+          "text": "shoulder drop feint",
+          "weight": 10
+        },
+        {
+          "text": "double feint",
+          "weight": 9
+        },
+        {
+          "text": "false step",
+          "weight": 8
+        },
+        {
+          "text": "weapon pump-fake",
+          "weight": 7
+        },
+        {
+          "text": "disguised draw",
+          "weight": 6
+        },
+        {
+          "text": "guard tap feint",
+          "weight": 5
+        },
+        {
+          "text": "range bait",
+          "weight": 4
+        },
+        {
+          "text": "hip fake",
+          "weight": 3
+        },
+        {
+          "text": "cadence break",
+          "weight": 2
+        },
+        {
+          "text": "line change feint",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "feint-patterns-output",
-      "type": "Output",
-      "name": "Feint Pattern",
-      "x": 520,
-      "y": 200,
-      "template": "{{feint-patterns}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "feint-patterns", "target": "feint-patterns-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-feint-patterns-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["feint-patterns", "feint-patterns-output"],
+      "nodes": [
+        "feint-patterns"
+      ],
       "description": "Feint patterns as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

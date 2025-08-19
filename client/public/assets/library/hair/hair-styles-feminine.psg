@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "hair-styles",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "feminine", "traditional", "salon", "style"],
+    "tags": [
+      "hair",
+      "feminine",
+      "traditional",
+      "salon",
+      "style"
+    ],
     "fragment_id": "hair-styles-feminine",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-style-feminine-output",
-      "type": "Output",
-      "name": "Feminine Style Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-style-feminine}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-style-feminine",
-      "target": "hair-style-feminine-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-style-feminine-fragment",
       "name": "Feminine Styles Fragment",
       "color": "#FF1493",
       "color_comment": "Deep Pink - Traditional feminine",
-      "nodes": ["hair-style-feminine", "hair-style-feminine-output"],
+      "nodes": [
+        "hair-style-feminine"
+      ],
       "description": "Feminine-coded styles as single unit",
       "metadata": {
         "fragment_type": "hair_style",

@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "aiming", "sights"],
+    "tags": [
+      "weapons",
+      "aiming",
+      "sights"
+    ],
     "fragment_id": "weapons-sighting-methods",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "front sight focus", "weight": 12 },
-        { "text": "flash sight picture", "weight": 11 },
-        { "text": "red dot occluded (both eyes)", "weight": 10 },
-        { "text": "Bindon aiming concept", "weight": 9 },
-        { "text": "ghost-ring rapid", "weight": 8 },
-        { "text": "co-witness alignment", "weight": 7 },
-        { "text": "snapshot from low ready", "weight": 6 },
-        { "text": "point shooting (close)", "weight": 5 },
-        { "text": "mechanical offset hold", "weight": 4 },
-        { "text": "center hold", "weight": 3 },
-        { "text": "six o'clock hold", "weight": 2 },
-        { "text": "offset irons (45°)", "weight": 1 }
+        {
+          "text": "front sight focus",
+          "weight": 12
+        },
+        {
+          "text": "flash sight picture",
+          "weight": 11
+        },
+        {
+          "text": "red dot occluded (both eyes)",
+          "weight": 10
+        },
+        {
+          "text": "Bindon aiming concept",
+          "weight": 9
+        },
+        {
+          "text": "ghost-ring rapid",
+          "weight": 8
+        },
+        {
+          "text": "co-witness alignment",
+          "weight": 7
+        },
+        {
+          "text": "snapshot from low ready",
+          "weight": 6
+        },
+        {
+          "text": "point shooting (close)",
+          "weight": 5
+        },
+        {
+          "text": "mechanical offset hold",
+          "weight": 4
+        },
+        {
+          "text": "center hold",
+          "weight": 3
+        },
+        {
+          "text": "six o'clock hold",
+          "weight": 2
+        },
+        {
+          "text": "offset irons (45°)",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "sighting-methods-output",
-      "type": "Output",
-      "name": "Sighting Method",
-      "x": 520,
-      "y": 200,
-      "template": "{{sighting-methods}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "sighting-methods", "target": "sighting-methods-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-sighting-methods-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["sighting-methods", "sighting-methods-output"],
+      "nodes": [
+        "sighting-methods"
+      ],
       "description": "Sighting methods as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

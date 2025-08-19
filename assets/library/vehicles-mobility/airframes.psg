@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "vehicles-mobility",
     "type": "ASSET_FRAGMENT",
-    "tags": ["vehicles", "air", "mobility"],
+    "tags": [
+      "vehicles",
+      "air",
+      "mobility"
+    ],
     "fragment_id": "vehicles-airframes",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "gyrocopter", "weight": 10 },
-        { "text": "solar drone swarm", "weight": 9 },
-        { "text": "dragonback saddle", "weight": 8 }
+        {
+          "text": "gyrocopter",
+          "weight": 10
+        },
+        {
+          "text": "solar drone swarm",
+          "weight": 9
+        },
+        {
+          "text": "dragonback saddle",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "airframes-output",
-      "type": "Output",
-      "name": "Airframe",
-      "x": 520,
-      "y": 200,
-      "template": "{{airframes}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "airframes", "target": "airframes-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "vehicles-airframes-fragment",
       "name": "Vehicles & Mobility Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Vehicles & Mobility",
-      "nodes": ["airframes", "airframes-output"],
+      "nodes": [
+        "airframes"
+      ],
       "description": "Airframes as a single collapsible unit",
-      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

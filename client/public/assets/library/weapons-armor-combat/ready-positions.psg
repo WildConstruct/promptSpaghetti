@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "ready", "positions"],
+    "tags": [
+      "weapons",
+      "ready",
+      "positions"
+    ],
     "fragment_id": "weapons-ready-positions",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "high ready", "weight": 12 },
-        { "text": "low ready", "weight": 11 },
-        { "text": "compressed ready", "weight": 10 },
-        { "text": "Sul position", "weight": 9 },
-        { "text": "temple index", "weight": 8 },
-        { "text": "high port", "weight": 7 },
-        { "text": "low port", "weight": 6 },
-        { "text": "muzzle up patrol", "weight": 5 },
-        { "text": "muzzle down patrol", "weight": 4 },
-        { "text": "sling low ready", "weight": 3 },
-        { "text": "on-rail ready", "weight": 2 },
-        { "text": "search vs. alert ready", "weight": 1 }
+        {
+          "text": "high ready",
+          "weight": 12
+        },
+        {
+          "text": "low ready",
+          "weight": 11
+        },
+        {
+          "text": "compressed ready",
+          "weight": 10
+        },
+        {
+          "text": "Sul position",
+          "weight": 9
+        },
+        {
+          "text": "temple index",
+          "weight": 8
+        },
+        {
+          "text": "high port",
+          "weight": 7
+        },
+        {
+          "text": "low port",
+          "weight": 6
+        },
+        {
+          "text": "muzzle up patrol",
+          "weight": 5
+        },
+        {
+          "text": "muzzle down patrol",
+          "weight": 4
+        },
+        {
+          "text": "sling low ready",
+          "weight": 3
+        },
+        {
+          "text": "on-rail ready",
+          "weight": 2
+        },
+        {
+          "text": "search vs. alert ready",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "ready-positions-output",
-      "type": "Output",
-      "name": "Ready Position",
-      "x": 520,
-      "y": 200,
-      "template": "{{ready-positions}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "ready-positions", "target": "ready-positions-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-ready-positions-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["ready-positions", "ready-positions-output"],
+      "nodes": [
+        "ready-positions"
+      ],
       "description": "Ready positions as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

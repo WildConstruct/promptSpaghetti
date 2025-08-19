@@ -7,7 +7,14 @@
     "author": "Aspen",
     "category": "facial-expressions",
     "type": "SIMPLE",
-    "tags": ["smile", "expression", "face", "emotion", "simple", "direct"],
+    "tags": [
+      "smile",
+      "expression",
+      "face",
+      "emotion",
+      "simple",
+      "direct"
+    ],
     "totalOptions": 12
   },
   "nodes": [
@@ -119,31 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "smile-output-simple",
-      "type": "Output",
-      "name": "Simple Smile Output",
-      "description": "Direct output from simple selection",
-      "x": 500,
-      "y": 200,
-      "template": "{{smile-variations-simple}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "smile-variations-simple",
-      "target": "smile-output-simple"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "region-simple-system",
       "name": "SIMPLE Smile System",
       "color": "#98FB98",
       "color_comment": "Pale Green - Simple/basic system",
-      "nodes": ["smile-variations-simple", "smile-output-simple"],
+      "nodes": [
+        "smile-variations-simple"
+      ],
       "description": "Simple, direct smile selection without modifiers"
     }
   ]

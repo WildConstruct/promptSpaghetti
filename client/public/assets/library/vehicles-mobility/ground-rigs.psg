@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "vehicles-mobility",
     "type": "ASSET_FRAGMENT",
-    "tags": ["vehicles", "ground", "mobility"],
+    "tags": [
+      "vehicles",
+      "ground",
+      "mobility"
+    ],
     "fragment_id": "vehicles-ground-rigs",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "dune buggy", "weight": 10 },
-        { "text": "armored tuk-tuk", "weight": 9 },
-        { "text": "maglev sled", "weight": 8 }
+        {
+          "text": "dune buggy",
+          "weight": 10
+        },
+        {
+          "text": "armored tuk-tuk",
+          "weight": 9
+        },
+        {
+          "text": "maglev sled",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "ground-rigs-output",
-      "type": "Output",
-      "name": "Ground Rig",
-      "x": 520,
-      "y": 200,
-      "template": "{{ground-rigs}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "ground-rigs", "target": "ground-rigs-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "vehicles-ground-rigs-fragment",
       "name": "Vehicles & Mobility Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Vehicles & Mobility",
-      "nodes": ["ground-rigs", "ground-rigs-output"],
+      "nodes": [
+        "ground-rigs"
+      ],
       "description": "Ground rigs options as a single collapsible unit",
-      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

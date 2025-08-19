@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "ballistics", "compensation"],
+    "tags": [
+      "weapons",
+      "ballistics",
+      "compensation"
+    ],
     "fragment_id": "weapons-wind-and-drop-compensation",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "hold for wind (L/R)", "weight": 12 },
-        { "text": "dial elevation", "weight": 11 },
-        { "text": "holdover ladder", "weight": 10 },
-        { "text": "Kentucky windage", "weight": 9 },
-        { "text": "DOPE card reference", "weight": 8 },
-        { "text": "waterline hold", "weight": 7 },
-        { "text": "favor edge in gusts", "weight": 6 },
-        { "text": "spin drift compensation", "weight": 5 },
-        { "text": "lead a moving target", "weight": 4 },
-        { "text": "truing at distance", "weight": 3 },
-        { "text": "coriolis long-range adjust", "weight": 2 },
-        { "text": "mirage read for wind", "weight": 1 }
+        {
+          "text": "hold for wind (L/R)",
+          "weight": 12
+        },
+        {
+          "text": "dial elevation",
+          "weight": 11
+        },
+        {
+          "text": "holdover ladder",
+          "weight": 10
+        },
+        {
+          "text": "Kentucky windage",
+          "weight": 9
+        },
+        {
+          "text": "DOPE card reference",
+          "weight": 8
+        },
+        {
+          "text": "waterline hold",
+          "weight": 7
+        },
+        {
+          "text": "favor edge in gusts",
+          "weight": 6
+        },
+        {
+          "text": "spin drift compensation",
+          "weight": 5
+        },
+        {
+          "text": "lead a moving target",
+          "weight": 4
+        },
+        {
+          "text": "truing at distance",
+          "weight": 3
+        },
+        {
+          "text": "coriolis long-range adjust",
+          "weight": 2
+        },
+        {
+          "text": "mirage read for wind",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "wind-and-drop-compensation-output",
-      "type": "Output",
-      "name": "Compensation Method",
-      "x": 520,
-      "y": 200,
-      "template": "{{wind-and-drop-compensation}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "wind-and-drop-compensation", "target": "wind-and-drop-compensation-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-wind-and-drop-compensation-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["wind-and-drop-compensation", "wind-and-drop-compensation-output"],
+      "nodes": [
+        "wind-and-drop-compensation"
+      ],
       "description": "Wind/drop compensation as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

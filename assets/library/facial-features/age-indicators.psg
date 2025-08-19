@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "appearance-modifier",
     "type": "ASSET_FRAGMENT",
-    "tags": ["age", "texture", "skin", "maturity", "experience"],
+    "tags": [
+      "age",
+      "texture",
+      "skin",
+      "maturity",
+      "experience"
+    ],
     "fragment_id": "age-indicators",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "age-output",
-      "type": "Output",
-      "name": "Age Indicator Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{age-indicator}} complexion"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "age-indicator",
-      "target": "age-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "age-indicator-fragment",
       "name": "Age Indicator Fragment",
       "color": "#F0E68C",
       "color_comment": "Khaki - Time/experience modifier",
-      "nodes": ["age-indicator", "age-output"],
+      "nodes": [
+        "age-indicator"
+      ],
       "description": "Age and texture descriptors as single unit",
       "metadata": {
         "fragment_type": "appearance_modifier",

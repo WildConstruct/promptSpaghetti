@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "historical", "techniques"],
+    "tags": [
+      "weapons",
+      "historical",
+      "techniques"
+    ],
     "fragment_id": "weapons-historical-techniques",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "German half-sword", "weight": 10 },
-        { "text": "Zulu horn-formation", "weight": 9 },
-        { "text": "Viking shield-wall", "weight": 8 }
+        {
+          "text": "German half-sword",
+          "weight": 10
+        },
+        {
+          "text": "Zulu horn-formation",
+          "weight": 9
+        },
+        {
+          "text": "Viking shield-wall",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "historical-techniques-output",
-      "type": "Output",
-      "name": "Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{historical-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "historical-techniques", "target": "historical-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-historical-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["historical-techniques", "historical-techniques-output"],
+      "nodes": [
+        "historical-techniques"
+      ],
       "description": "Historical techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

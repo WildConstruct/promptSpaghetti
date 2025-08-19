@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "facial-features",
     "type": "ASSET_FRAGMENT",
-    "tags": ["facial-hair", "beard", "mustache", "grooming", "style"],
+    "tags": [
+      "facial-hair",
+      "beard",
+      "mustache",
+      "grooming",
+      "style"
+    ],
     "fragment_id": "facial-hair",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "facial-hair-output",
-      "type": "Output",
-      "name": "Facial Hair Description",
-      "x": 500,
-      "y": 200,
-      "template": "with {{facial-hair-style}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "facial-hair-style",
-      "target": "facial-hair-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "facial-hair-fragment",
       "name": "Facial Hair Fragment",
       "color": "#8B4513",
       "color_comment": "Saddle Brown - Hair/grooming feature",
-      "nodes": ["facial-hair-style", "facial-hair-output"],
+      "nodes": [
+        "facial-hair-style"
+      ],
       "description": "Facial hair options as single unit",
       "metadata": {
         "fragment_type": "facial_feature",

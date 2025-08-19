@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "hair-styles",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "masculine", "traditional", "barbershop", "style"],
+    "tags": [
+      "hair",
+      "masculine",
+      "traditional",
+      "barbershop",
+      "style"
+    ],
     "fragment_id": "hair-styles-masculine",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-style-masculine-output",
-      "type": "Output",
-      "name": "Masculine Style Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-style-masculine}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-style-masculine",
-      "target": "hair-style-masculine-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-style-masculine-fragment",
       "name": "Masculine Styles Fragment",
       "color": "#4169E1",
       "color_comment": "Royal Blue - Traditional masculine",
-      "nodes": ["hair-style-masculine", "hair-style-masculine-output"],
+      "nodes": [
+        "hair-style-masculine"
+      ],
       "description": "Masculine-coded styles as single unit",
       "metadata": {
         "fragment_type": "hair_style",

@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "hair-styles",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "haircut", "gender-neutral", "inclusive", "style"],
+    "tags": [
+      "hair",
+      "haircut",
+      "gender-neutral",
+      "inclusive",
+      "style"
+    ],
     "fragment_id": "hair-cuts-neutral",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-cut-neutral-output",
-      "type": "Output",
-      "name": "Gender-Neutral Cut Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-cut-neutral}} style"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-cut-neutral",
-      "target": "hair-cut-neutral-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-cut-neutral-fragment",
       "name": "Gender-Neutral Cuts Fragment",
       "color": "#20B2AA",
       "color_comment": "Light Sea Green - Inclusive/neutral",
-      "nodes": ["hair-cut-neutral", "hair-cut-neutral-output"],
+      "nodes": [
+        "hair-cut-neutral"
+      ],
       "description": "Gender-neutral cuts as single unit",
       "metadata": {
         "fragment_type": "hair_style",

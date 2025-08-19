@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "transitions", "shoulder"],
+    "tags": [
+      "weapons",
+      "transitions",
+      "shoulder"
+    ],
     "fragment_id": "weapons-shoulder-transitions",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "switch on cover side", "weight": 12 },
-        { "text": "switch on the move", "weight": 11 },
-        { "text": "switch at ready then present", "weight": 10 },
-        { "text": "high-ready cross transition", "weight": 9 },
-        { "text": "low-ready cross transition", "weight": 8 },
-        { "text": "sling-assisted switch", "weight": 7 },
-        { "text": "CQB tuck then swap", "weight": 6 },
-        { "text": "swap during reload", "weight": 5 },
-        { "text": "swap after malfunction clear", "weight": 4 },
-        { "text": "mirror stance adjust", "weight": 3 },
-        { "text": "indexing hand swap", "weight": 2 },
-        { "text": "return to strong shoulder", "weight": 1 }
+        {
+          "text": "switch on cover side",
+          "weight": 12
+        },
+        {
+          "text": "switch on the move",
+          "weight": 11
+        },
+        {
+          "text": "switch at ready then present",
+          "weight": 10
+        },
+        {
+          "text": "high-ready cross transition",
+          "weight": 9
+        },
+        {
+          "text": "low-ready cross transition",
+          "weight": 8
+        },
+        {
+          "text": "sling-assisted switch",
+          "weight": 7
+        },
+        {
+          "text": "CQB tuck then swap",
+          "weight": 6
+        },
+        {
+          "text": "swap during reload",
+          "weight": 5
+        },
+        {
+          "text": "swap after malfunction clear",
+          "weight": 4
+        },
+        {
+          "text": "mirror stance adjust",
+          "weight": 3
+        },
+        {
+          "text": "indexing hand swap",
+          "weight": 2
+        },
+        {
+          "text": "return to strong shoulder",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "shoulder-transitions-output",
-      "type": "Output",
-      "name": "Shoulder Transition",
-      "x": 520,
-      "y": 200,
-      "template": "{{shoulder-transitions}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "shoulder-transitions", "target": "shoulder-transitions-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-shoulder-transitions-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["shoulder-transitions", "shoulder-transitions-output"],
+      "nodes": [
+        "shoulder-transitions"
+      ],
       "description": "Shoulder transitions as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

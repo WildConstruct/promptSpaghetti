@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "technique", "disarm"],
+    "tags": [
+      "weapons",
+      "technique",
+      "disarm"
+    ],
     "fragment_id": "weapons-disarm-maneuvers",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "wrist twist", "weight": 12 },
-        { "text": "lever strip", "weight": 11 },
-        { "text": "thumb peel", "weight": 10 },
-        { "text": "two-on-one strip", "weight": 9 },
-        { "text": "entangle disarm", "weight": 8 },
-        { "text": "bind-and-roll", "weight": 7 },
-        { "text": "pommel pry", "weight": 6 },
-        { "text": "guard pass strip", "weight": 5 },
-        { "text": "trap-and-rip", "weight": 4 },
-        { "text": "spiral disarm", "weight": 3 },
-        { "text": "cinch yank", "weight": 2 },
-        { "text": "hook disarm", "weight": 1 }
+        {
+          "text": "wrist twist",
+          "weight": 12
+        },
+        {
+          "text": "lever strip",
+          "weight": 11
+        },
+        {
+          "text": "thumb peel",
+          "weight": 10
+        },
+        {
+          "text": "two-on-one strip",
+          "weight": 9
+        },
+        {
+          "text": "entangle disarm",
+          "weight": 8
+        },
+        {
+          "text": "bind-and-roll",
+          "weight": 7
+        },
+        {
+          "text": "pommel pry",
+          "weight": 6
+        },
+        {
+          "text": "guard pass strip",
+          "weight": 5
+        },
+        {
+          "text": "trap-and-rip",
+          "weight": 4
+        },
+        {
+          "text": "spiral disarm",
+          "weight": 3
+        },
+        {
+          "text": "cinch yank",
+          "weight": 2
+        },
+        {
+          "text": "hook disarm",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "disarm-maneuvers-output",
-      "type": "Output",
-      "name": "Disarm Maneuver",
-      "x": 520,
-      "y": 200,
-      "template": "{{disarm-maneuvers}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "disarm-maneuvers", "target": "disarm-maneuvers-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-disarm-maneuvers-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["disarm-maneuvers", "disarm-maneuvers-output"],
+      "nodes": [
+        "disarm-maneuvers"
+      ],
       "description": "Disarm maneuvers as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "ranged", "stance"],
+    "tags": [
+      "weapons",
+      "ranged",
+      "stance"
+    ],
     "fragment_id": "weapons-ranged-stances",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "prone supported", "weight": 12 },
-        { "text": "kneeling braced", "weight": 11 },
-        { "text": "standing isosceles", "weight": 10 },
-        { "text": "Weaver stance", "weight": 9 },
-        { "text": "offhand lean", "weight": 8 },
-        { "text": "sitting supported", "weight": 7 },
-        { "text": "bench rest", "weight": 6 },
-        { "text": "high ready", "weight": 5 },
-        { "text": "low ready", "weight": 4 },
-        { "text": "urban kneel", "weight": 3 },
-        { "text": "supported barricade", "weight": 2 },
-        { "text": "prone offhand", "weight": 1 }
+        {
+          "text": "prone supported",
+          "weight": 12
+        },
+        {
+          "text": "kneeling braced",
+          "weight": 11
+        },
+        {
+          "text": "standing isosceles",
+          "weight": 10
+        },
+        {
+          "text": "Weaver stance",
+          "weight": 9
+        },
+        {
+          "text": "offhand lean",
+          "weight": 8
+        },
+        {
+          "text": "sitting supported",
+          "weight": 7
+        },
+        {
+          "text": "bench rest",
+          "weight": 6
+        },
+        {
+          "text": "high ready",
+          "weight": 5
+        },
+        {
+          "text": "low ready",
+          "weight": 4
+        },
+        {
+          "text": "urban kneel",
+          "weight": 3
+        },
+        {
+          "text": "supported barricade",
+          "weight": 2
+        },
+        {
+          "text": "prone offhand",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "ranged-stances-output",
-      "type": "Output",
-      "name": "Ranged Stance",
-      "x": 520,
-      "y": 200,
-      "template": "{{ranged-stances}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "ranged-stances", "target": "ranged-stances-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-ranged-stances-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["ranged-stances", "ranged-stances-output"],
+      "nodes": [
+        "ranged-stances"
+      ],
       "description": "Ranged stances as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

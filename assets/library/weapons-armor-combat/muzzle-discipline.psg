@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "safety", "discipline"],
+    "tags": [
+      "weapons",
+      "safety",
+      "discipline"
+    ],
     "fragment_id": "weapons-muzzle-discipline",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "safe low/high port through stack", "weight": 12 },
-        { "text": "avoid cross-cover in hallways", "weight": 11 },
-        { "text": "flag avoidance on corners", "weight": 10 },
-        { "text": "vertical safety angles indoors", "weight": 9 },
-        { "text": "horizontal safety arcs outdoors", "weight": 8 },
-        { "text": "laser/optic confirms muzzle index", "weight": 7 },
-        { "text": "verbal callouts for crossing", "weight": 6 },
-        { "text": "reholster/reindex safely", "weight": 5 },
-        { "text": "safe ready in tight spaces", "weight": 4 },
-        { "text": "muzzle discipline with light use", "weight": 3 },
-        { "text": "weapon pass behind teammate", "weight": 2 },
-        { "text": "post-engagement safe sweep", "weight": 1 }
+        {
+          "text": "safe low/high port through stack",
+          "weight": 12
+        },
+        {
+          "text": "avoid cross-cover in hallways",
+          "weight": 11
+        },
+        {
+          "text": "flag avoidance on corners",
+          "weight": 10
+        },
+        {
+          "text": "vertical safety angles indoors",
+          "weight": 9
+        },
+        {
+          "text": "horizontal safety arcs outdoors",
+          "weight": 8
+        },
+        {
+          "text": "laser/optic confirms muzzle index",
+          "weight": 7
+        },
+        {
+          "text": "verbal callouts for crossing",
+          "weight": 6
+        },
+        {
+          "text": "reholster/reindex safely",
+          "weight": 5
+        },
+        {
+          "text": "safe ready in tight spaces",
+          "weight": 4
+        },
+        {
+          "text": "muzzle discipline with light use",
+          "weight": 3
+        },
+        {
+          "text": "weapon pass behind teammate",
+          "weight": 2
+        },
+        {
+          "text": "post-engagement safe sweep",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "muzzle-discipline-output",
-      "type": "Output",
-      "name": "Muzzle Discipline Element",
-      "x": 520,
-      "y": 200,
-      "template": "{{muzzle-discipline}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "muzzle-discipline", "target": "muzzle-discipline-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-muzzle-discipline-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["muzzle-discipline", "muzzle-discipline-output"],
+      "nodes": [
+        "muzzle-discipline"
+      ],
       "description": "Muzzle discipline concepts as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

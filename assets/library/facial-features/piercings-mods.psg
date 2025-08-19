@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "appearance-modifier",
     "type": "ASSET_FRAGMENT",
-    "tags": ["piercings", "modifications", "jewelry", "alternative", "accessories"],
+    "tags": [
+      "piercings",
+      "modifications",
+      "jewelry",
+      "alternative",
+      "accessories"
+    ],
     "fragment_id": "piercings-mods",
     "collapsible": true
   },
@@ -128,30 +134,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "piercing-output",
-      "type": "Output",
-      "name": "Piercing/Mod Description",
-      "x": 500,
-      "y": 200,
-      "template": "sporting {{piercing-mod}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "piercing-mod",
-      "target": "piercing-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "piercing-mod-fragment",
       "name": "Piercings & Mods Fragment",
       "color": "#C0C0C0",
       "color_comment": "Silver - Metallic accessories",
-      "nodes": ["piercing-mod", "piercing-output"],
+      "nodes": [
+        "piercing-mod"
+      ],
       "description": "Body modification options as single unit",
       "metadata": {
         "fragment_type": "appearance_modifier",

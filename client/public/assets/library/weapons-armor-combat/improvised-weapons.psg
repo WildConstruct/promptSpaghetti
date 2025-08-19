@@ -7,7 +7,10 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "improvised"],
+    "tags": [
+      "weapons",
+      "improvised"
+    ],
     "fragment_id": "weapons-improvised-weapons",
     "collapsible": true
   },
@@ -20,32 +23,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "broken bottle", "weight": 10 },
-        { "text": "pool cue", "weight": 9 },
-        { "text": "frying pan", "weight": 8 }
+        {
+          "text": "broken bottle",
+          "weight": 10
+        },
+        {
+          "text": "pool cue",
+          "weight": 9
+        },
+        {
+          "text": "frying pan",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "improvised-weapons-output",
-      "type": "Output",
-      "name": "Improvised Weapon",
-      "x": 520,
-      "y": 200,
-      "template": "{{improvised-weapons}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "improvised-weapons", "target": "improvised-weapons-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-improvised-weapons-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["improvised-weapons", "improvised-weapons-output"],
+      "nodes": [
+        "improvised-weapons"
+      ],
       "description": "Improvised weapons as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

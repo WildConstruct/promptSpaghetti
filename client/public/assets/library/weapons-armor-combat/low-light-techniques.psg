@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "low-light", "flashlight"],
+    "tags": [
+      "weapons",
+      "low-light",
+      "flashlight"
+    ],
     "fragment_id": "weapons-low-light-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "momentary light usage", "weight": 12 },
-        { "text": "spill/splash illumination", "weight": 11 },
-        { "text": "Harries technique", "weight": 10 },
-        { "text": "neck index technique", "weight": 9 },
-        { "text": "temple index light", "weight": 8 },
-        { "text": "syringe grip (Rogers)", "weight": 7 },
-        { "text": "strobe disorientation", "weight": 6 },
-        { "text": "indirect wall bounce", "weight": 5 },
-        { "text": "search vs. target light discipline", "weight": 4 },
-        { "text": "WML activation timing", "weight": 3 },
-        { "text": "track with feet, not light", "weight": 2 },
-        { "text": "mask light spill behind cover", "weight": 1 }
+        {
+          "text": "momentary light usage",
+          "weight": 12
+        },
+        {
+          "text": "spill/splash illumination",
+          "weight": 11
+        },
+        {
+          "text": "Harries technique",
+          "weight": 10
+        },
+        {
+          "text": "neck index technique",
+          "weight": 9
+        },
+        {
+          "text": "temple index light",
+          "weight": 8
+        },
+        {
+          "text": "syringe grip (Rogers)",
+          "weight": 7
+        },
+        {
+          "text": "strobe disorientation",
+          "weight": 6
+        },
+        {
+          "text": "indirect wall bounce",
+          "weight": 5
+        },
+        {
+          "text": "search vs. target light discipline",
+          "weight": 4
+        },
+        {
+          "text": "WML activation timing",
+          "weight": 3
+        },
+        {
+          "text": "track with feet, not light",
+          "weight": 2
+        },
+        {
+          "text": "mask light spill behind cover",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "low-light-techniques-output",
-      "type": "Output",
-      "name": "Low-Light Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{low-light-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "low-light-techniques", "target": "low-light-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-low-light-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["low-light-techniques", "low-light-techniques-output"],
+      "nodes": [
+        "low-light-techniques"
+      ],
       "description": "Low-light methods as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

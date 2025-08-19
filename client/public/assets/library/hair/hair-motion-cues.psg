@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "hair-motion",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "motion", "movement", "dynamic", "action"],
+    "tags": [
+      "hair",
+      "motion",
+      "movement",
+      "dynamic",
+      "action"
+    ],
     "fragment_id": "hair-motion",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-motion-output",
-      "type": "Output",
-      "name": "Hair Motion Description",
-      "x": 500,
-      "y": 200,
-      "template": "hair {{hair-motion}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-motion",
-      "target": "hair-motion-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-motion-fragment",
       "name": "Hair Motion Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Dynamic movement",
-      "nodes": ["hair-motion", "hair-motion-output"],
+      "nodes": [
+        "hair-motion"
+      ],
       "description": "Motion cues as single unit",
       "metadata": {
         "fragment_type": "hair_motion",

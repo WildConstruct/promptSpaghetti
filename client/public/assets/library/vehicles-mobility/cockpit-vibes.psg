@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "vehicles-mobility",
     "type": "ASSET_FRAGMENT",
-    "tags": ["vehicles", "cockpit", "mobility"],
+    "tags": [
+      "vehicles",
+      "cockpit",
+      "mobility"
+    ],
     "fragment_id": "vehicles-cockpit-vibes",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "open air", "weight": 10 },
-        { "text": "heads-up canopy", "weight": 9 },
-        { "text": "claustrophobic crawlspace", "weight": 8 }
+        {
+          "text": "open air",
+          "weight": 10
+        },
+        {
+          "text": "heads-up canopy",
+          "weight": 9
+        },
+        {
+          "text": "claustrophobic crawlspace",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "cockpit-vibes-output",
-      "type": "Output",
-      "name": "Cockpit Vibe",
-      "x": 520,
-      "y": 200,
-      "template": "{{cockpit-vibes}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "cockpit-vibes", "target": "cockpit-vibes-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "vehicles-cockpit-vibes-fragment",
       "name": "Vehicles & Mobility Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Vehicles & Mobility",
-      "nodes": ["cockpit-vibes", "cockpit-vibes-output"],
+      "nodes": [
+        "cockpit-vibes"
+      ],
       "description": "Cockpit vibes as a single collapsible unit",
-      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "technique", "draw"],
+    "tags": [
+      "weapons",
+      "technique",
+      "draw"
+    ],
     "fragment_id": "weapons-draw-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "flash draw", "weight": 12 },
-        { "text": "iaijutsu cut", "weight": 11 },
-        { "text": "reverse-grip snap draw", "weight": 10 },
-        { "text": "shoulder sweep draw", "weight": 9 },
-        { "text": "long unsheathe", "weight": 8 },
-        { "text": "back scabbard pull", "weight": 7 },
-        { "text": "cross-draw flick", "weight": 6 },
-        { "text": "retention draw", "weight": 5 },
-        { "text": "cloak-concealed draw", "weight": 4 },
-        { "text": "underhand draw", "weight": 3 },
-        { "text": "spin-draw flourish", "weight": 2 },
-        { "text": "pocket sheath pop", "weight": 1 }
+        {
+          "text": "flash draw",
+          "weight": 12
+        },
+        {
+          "text": "iaijutsu cut",
+          "weight": 11
+        },
+        {
+          "text": "reverse-grip snap draw",
+          "weight": 10
+        },
+        {
+          "text": "shoulder sweep draw",
+          "weight": 9
+        },
+        {
+          "text": "long unsheathe",
+          "weight": 8
+        },
+        {
+          "text": "back scabbard pull",
+          "weight": 7
+        },
+        {
+          "text": "cross-draw flick",
+          "weight": 6
+        },
+        {
+          "text": "retention draw",
+          "weight": 5
+        },
+        {
+          "text": "cloak-concealed draw",
+          "weight": 4
+        },
+        {
+          "text": "underhand draw",
+          "weight": 3
+        },
+        {
+          "text": "spin-draw flourish",
+          "weight": 2
+        },
+        {
+          "text": "pocket sheath pop",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "draw-techniques-output",
-      "type": "Output",
-      "name": "Draw Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{draw-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "draw-techniques", "target": "draw-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-draw-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["draw-techniques", "draw-techniques-output"],
+      "nodes": [
+        "draw-techniques"
+      ],
       "description": "Draw techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

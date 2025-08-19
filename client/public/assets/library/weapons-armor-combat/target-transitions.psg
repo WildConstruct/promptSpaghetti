@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "transitions", "targets"],
+    "tags": [
+      "weapons",
+      "transitions",
+      "targets"
+    ],
     "fragment_id": "weapons-target-transitions",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "eyes then gun shift", "weight": 12 },
-        { "text": "snap to nearest next", "weight": 11 },
-        { "text": "transition through center", "weight": 10 },
-        { "text": "overswing brake control", "weight": 9 },
-        { "text": "call your next target", "weight": 8 },
-        { "text": "transition on reset", "weight": 7 },
-        { "text": "wide-to-narrow sequence", "weight": 6 },
-        { "text": "priority by threat", "weight": 5 },
-        { "text": "priority by exposure", "weight": 4 },
-        { "text": "anchor then sweep", "weight": 3 },
-        { "text": "double on anchor then move", "weight": 2 },
-        { "text": "timer-driven cadence", "weight": 1 }
+        {
+          "text": "eyes then gun shift",
+          "weight": 12
+        },
+        {
+          "text": "snap to nearest next",
+          "weight": 11
+        },
+        {
+          "text": "transition through center",
+          "weight": 10
+        },
+        {
+          "text": "overswing brake control",
+          "weight": 9
+        },
+        {
+          "text": "call your next target",
+          "weight": 8
+        },
+        {
+          "text": "transition on reset",
+          "weight": 7
+        },
+        {
+          "text": "wide-to-narrow sequence",
+          "weight": 6
+        },
+        {
+          "text": "priority by threat",
+          "weight": 5
+        },
+        {
+          "text": "priority by exposure",
+          "weight": 4
+        },
+        {
+          "text": "anchor then sweep",
+          "weight": 3
+        },
+        {
+          "text": "double on anchor then move",
+          "weight": 2
+        },
+        {
+          "text": "timer-driven cadence",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "target-transitions-output",
-      "type": "Output",
-      "name": "Target Transition Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{target-transitions}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "target-transitions", "target": "target-transitions-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-target-transitions-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["target-transitions", "target-transitions-output"],
+      "nodes": [
+        "target-transitions"
+      ],
       "description": "Target transitions as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

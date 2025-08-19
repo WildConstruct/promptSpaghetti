@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "grapple", "entry"],
+    "tags": [
+      "weapons",
+      "grapple",
+      "entry"
+    ],
     "fragment_id": "weapons-grapple-entries",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "double-leg shot", "weight": 12 },
-        { "text": "single-leg shot", "weight": 11 },
-        { "text": "body lock", "weight": 10 },
-        { "text": "arm drag", "weight": 9 },
-        { "text": "clinch entry", "weight": 8 },
-        { "text": "duck-under", "weight": 7 },
-        { "text": "ankle pick", "weight": 6 },
-        { "text": "snap-down", "weight": 5 },
-        { "text": "collar tie", "weight": 4 },
-        { "text": "over-under pummel", "weight": 3 },
-        { "text": "outside trip", "weight": 2 },
-        { "text": "foot sweep", "weight": 1 }
+        {
+          "text": "double-leg shot",
+          "weight": 12
+        },
+        {
+          "text": "single-leg shot",
+          "weight": 11
+        },
+        {
+          "text": "body lock",
+          "weight": 10
+        },
+        {
+          "text": "arm drag",
+          "weight": 9
+        },
+        {
+          "text": "clinch entry",
+          "weight": 8
+        },
+        {
+          "text": "duck-under",
+          "weight": 7
+        },
+        {
+          "text": "ankle pick",
+          "weight": 6
+        },
+        {
+          "text": "snap-down",
+          "weight": 5
+        },
+        {
+          "text": "collar tie",
+          "weight": 4
+        },
+        {
+          "text": "over-under pummel",
+          "weight": 3
+        },
+        {
+          "text": "outside trip",
+          "weight": 2
+        },
+        {
+          "text": "foot sweep",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "grapple-entries-output",
-      "type": "Output",
-      "name": "Grapple Entry",
-      "x": 520,
-      "y": 200,
-      "template": "{{grapple-entries}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "grapple-entries", "target": "grapple-entries-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-grapple-entries-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["grapple-entries", "grapple-entries-output"],
+      "nodes": [
+        "grapple-entries"
+      ],
       "description": "Grapple entries as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

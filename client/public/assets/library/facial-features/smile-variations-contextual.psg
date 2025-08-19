@@ -7,7 +7,14 @@
     "author": "Aspen",
     "category": "facial-expressions",
     "type": "CONTEXTUAL",
-    "tags": ["smile", "expression", "face", "emotion", "contextual", "modifiers"],
+    "tags": [
+      "smile",
+      "expression",
+      "face",
+      "emotion",
+      "contextual",
+      "modifiers"
+    ],
     "totalCombinations": 9
   },
   "nodes": [
@@ -67,7 +74,7 @@
           "weight": 40,
           "weight_comment": "No modifier - natural intensity",
           "meta": {
-            "modifier_strength": 1.0,
+            "modifier_strength": 1,
             "description": "Default intensity"
           }
         },
@@ -82,16 +89,6 @@
       ]
     },
     {
-      "id": "smile-expression-output",
-      "type": "Output",
-      "name": "Complete Smile Expression",
-      "description": "CONTEXTUAL - Combines intensity with smile type dynamically",
-      "x": 400,
-      "y": 150,
-      "template": "{{intensity-modifier}}{{#intensity-modifier}} {{/intensity-modifier}}{{smile-type}}",
-      "template_comment": "Smart spacing - only adds space if modifier exists"
-    },
-    {
       "id": "all-combinations",
       "type": "WeightedChoice",
       "name": "All Smile Combinations (Precomputed)",
@@ -102,71 +99,90 @@
         {
           "text": "subtle closed-lip grin",
           "weight": 10,
-          "meta": { "intensity": "low", "emotion": "friendly" }
+          "meta": {
+            "intensity": "low",
+            "emotion": "friendly"
+          }
         },
         {
           "text": "closed-lip grin",
           "weight": 13,
-          "meta": { "intensity": "moderate", "emotion": "friendly" }
+          "meta": {
+            "intensity": "moderate",
+            "emotion": "friendly"
+          }
         },
         {
           "text": "exaggerated closed-lip grin",
           "weight": 10,
-          "meta": { "intensity": "high", "emotion": "friendly" }
+          "meta": {
+            "intensity": "high",
+            "emotion": "friendly"
+          }
         },
         {
           "text": "subtle half-smirk",
           "weight": 10,
-          "meta": { "intensity": "low", "emotion": "playful" }
+          "meta": {
+            "intensity": "low",
+            "emotion": "playful"
+          }
         },
         {
           "text": "half-smirk",
           "weight": 14,
           "weight_comment": "Most versatile expression",
-          "meta": { "intensity": "moderate", "emotion": "playful" }
+          "meta": {
+            "intensity": "moderate",
+            "emotion": "playful"
+          }
         },
         {
           "text": "exaggerated half-smirk",
           "weight": 10,
-          "meta": { "intensity": "high", "emotion": "playful" }
+          "meta": {
+            "intensity": "high",
+            "emotion": "playful"
+          }
         },
         {
           "text": "subtle toothy beam",
           "weight": 10,
-          "meta": { "intensity": "low", "emotion": "joyful" }
+          "meta": {
+            "intensity": "low",
+            "emotion": "joyful"
+          }
         },
         {
           "text": "toothy beam",
           "weight": 13,
-          "meta": { "intensity": "moderate", "emotion": "joyful" }
+          "meta": {
+            "intensity": "moderate",
+            "emotion": "joyful"
+          }
         },
         {
           "text": "exaggerated toothy beam",
           "weight": 10,
-          "meta": { "intensity": "high", "emotion": "joyful" }
+          "meta": {
+            "intensity": "high",
+            "emotion": "joyful"
+          }
         }
       ]
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "intensity-modifier",
-      "target": "smile-expression-output"
-    },
-    {
-      "id": "e2",
-      "source": "smile-type",
-      "target": "smile-expression-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "region-smile-system",
       "name": "Contextual Smile System",
       "color": "#FFD700",
       "color_comment": "Gold - Primary feature region",
-      "nodes": ["smile-type", "intensity-modifier", "smile-expression-output"],
+      "nodes": [
+        "smile-type",
+        "intensity-modifier"
+      ],
       "description": "Core smile generation system with contextual modifiers"
     },
     {
@@ -174,7 +190,9 @@
       "name": "Precomputed Combinations",
       "color": "#87CEEB",
       "color_comment": "Sky Blue - Alternative/optimization",
-      "nodes": ["all-combinations"],
+      "nodes": [
+        "all-combinations"
+      ],
       "description": "All combinations pre-calculated for performance"
     }
   ]

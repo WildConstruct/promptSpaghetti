@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "blade", "bind"],
+    "tags": [
+      "weapons",
+      "blade",
+      "bind"
+    ],
     "fragment_id": "weapons-bind-and-wind",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "bind high", "weight": 12 },
-        { "text": "bind low", "weight": 11 },
-        { "text": "wind inside", "weight": 10 },
-        { "text": "wind outside", "weight": 9 },
-        { "text": "disengage and wind", "weight": 8 },
-        { "text": "pressure test", "weight": 7 },
-        { "text": "slice through", "weight": 6 },
-        { "text": "glide thrust", "weight": 5 },
-        { "text": "bind to grapple", "weight": 4 },
-        { "text": "yield and wind", "weight": 3 },
-        { "text": "roll over bind", "weight": 2 },
-        { "text": "wind to cut", "weight": 1 }
+        {
+          "text": "bind high",
+          "weight": 12
+        },
+        {
+          "text": "bind low",
+          "weight": 11
+        },
+        {
+          "text": "wind inside",
+          "weight": 10
+        },
+        {
+          "text": "wind outside",
+          "weight": 9
+        },
+        {
+          "text": "disengage and wind",
+          "weight": 8
+        },
+        {
+          "text": "pressure test",
+          "weight": 7
+        },
+        {
+          "text": "slice through",
+          "weight": 6
+        },
+        {
+          "text": "glide thrust",
+          "weight": 5
+        },
+        {
+          "text": "bind to grapple",
+          "weight": 4
+        },
+        {
+          "text": "yield and wind",
+          "weight": 3
+        },
+        {
+          "text": "roll over bind",
+          "weight": 2
+        },
+        {
+          "text": "wind to cut",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "bind-and-wind-output",
-      "type": "Output",
-      "name": "Bind/Wind Action",
-      "x": 520,
-      "y": 200,
-      "template": "{{bind-and-wind}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "bind-and-wind", "target": "bind-and-wind-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-bind-and-wind-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["bind-and-wind", "bind-and-wind-output"],
+      "nodes": [
+        "bind-and-wind"
+      ],
       "description": "Bind and wind as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

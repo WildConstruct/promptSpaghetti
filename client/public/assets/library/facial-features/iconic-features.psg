@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "distinctive-features",
     "type": "ASSET_FRAGMENT",
-    "tags": ["iconic", "distinctive", "memorable", "unique", "features"],
+    "tags": [
+      "iconic",
+      "distinctive",
+      "memorable",
+      "unique",
+      "features"
+    ],
     "fragment_id": "iconic-features",
     "collapsible": true
   },
@@ -136,30 +142,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "iconic-output",
-      "type": "Output",
-      "name": "Iconic Feature Description",
-      "x": 500,
-      "y": 200,
-      "template": "featuring {{iconic-feature}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "iconic-feature",
-      "target": "iconic-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "iconic-feature-fragment",
       "name": "Iconic Feature Fragment",
       "color": "#FFD700",
       "color_comment": "Gold - Standout memorable feature",
-      "nodes": ["iconic-feature", "iconic-output"],
+      "nodes": [
+        "iconic-feature"
+      ],
       "description": "Distinctive features as single unit",
       "metadata": {
         "fragment_type": "distinctive_feature",

@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "timing", "tempo"],
+    "tags": [
+      "weapons",
+      "timing",
+      "tempo"
+    ],
     "fragment_id": "weapons-tempo-control",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "slow-to-fast acceleration", "weight": 12 },
-        { "text": "fast-to-slow deceleration", "weight": 11 },
-        { "text": "break rhythm feint", "weight": 10 },
-        { "text": "half-beat insert", "weight": 9 },
-        { "text": "off-beat attack", "weight": 8 },
-        { "text": "pause to draw response", "weight": 7 },
-        { "text": "double-time press", "weight": 6 },
-        { "text": "delayed counter", "weight": 5 },
-        { "text": "sync with footwork", "weight": 4 },
-        { "text": "interrupt timing", "weight": 3 },
-        { "text": "reset distance", "weight": 2 },
-        { "text": "bait and wait", "weight": 1 }
+        {
+          "text": "slow-to-fast acceleration",
+          "weight": 12
+        },
+        {
+          "text": "fast-to-slow deceleration",
+          "weight": 11
+        },
+        {
+          "text": "break rhythm feint",
+          "weight": 10
+        },
+        {
+          "text": "half-beat insert",
+          "weight": 9
+        },
+        {
+          "text": "off-beat attack",
+          "weight": 8
+        },
+        {
+          "text": "pause to draw response",
+          "weight": 7
+        },
+        {
+          "text": "double-time press",
+          "weight": 6
+        },
+        {
+          "text": "delayed counter",
+          "weight": 5
+        },
+        {
+          "text": "sync with footwork",
+          "weight": 4
+        },
+        {
+          "text": "interrupt timing",
+          "weight": 3
+        },
+        {
+          "text": "reset distance",
+          "weight": 2
+        },
+        {
+          "text": "bait and wait",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "tempo-control-output",
-      "type": "Output",
-      "name": "Tempo Control Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{tempo-control}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "tempo-control", "target": "tempo-control-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-tempo-control-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["tempo-control", "tempo-control-output"],
+      "nodes": [
+        "tempo-control"
+      ],
       "description": "Tempo control as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

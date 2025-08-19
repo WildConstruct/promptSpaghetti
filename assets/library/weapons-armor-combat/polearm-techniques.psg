@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "polearm", "technique"],
+    "tags": [
+      "weapons",
+      "polearm",
+      "technique"
+    ],
     "fragment_id": "weapons-polearm-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "long thrust", "weight": 12 },
-        { "text": "short haft jab", "weight": 11 },
-        { "text": "hook sweep", "weight": 10 },
-        { "text": "butt-end strike", "weight": 9 },
-        { "text": "shaft push", "weight": 8 },
-        { "text": "overhead chop", "weight": 7 },
-        { "text": "foot pin", "weight": 6 },
-        { "text": "trip pull", "weight": 5 },
-        { "text": "parry and thrust", "weight": 4 },
-        { "text": "cross-check", "weight": 3 },
-        { "text": "sliding thrust", "weight": 2 },
-        { "text": "spear cast", "weight": 1 }
+        {
+          "text": "long thrust",
+          "weight": 12
+        },
+        {
+          "text": "short haft jab",
+          "weight": 11
+        },
+        {
+          "text": "hook sweep",
+          "weight": 10
+        },
+        {
+          "text": "butt-end strike",
+          "weight": 9
+        },
+        {
+          "text": "shaft push",
+          "weight": 8
+        },
+        {
+          "text": "overhead chop",
+          "weight": 7
+        },
+        {
+          "text": "foot pin",
+          "weight": 6
+        },
+        {
+          "text": "trip pull",
+          "weight": 5
+        },
+        {
+          "text": "parry and thrust",
+          "weight": 4
+        },
+        {
+          "text": "cross-check",
+          "weight": 3
+        },
+        {
+          "text": "sliding thrust",
+          "weight": 2
+        },
+        {
+          "text": "spear cast",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "polearm-techniques-output",
-      "type": "Output",
-      "name": "Polearm Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{polearm-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "polearm-techniques", "target": "polearm-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-polearm-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["polearm-techniques", "polearm-techniques-output"],
+      "nodes": [
+        "polearm-techniques"
+      ],
       "description": "Polearm techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "distance", "movement"],
+    "tags": [
+      "weapons",
+      "distance",
+      "movement"
+    ],
     "fragment_id": "weapons-distance-management",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "extend to edge of measure", "weight": 12 },
-        { "text": "compress to jam", "weight": 11 },
-        { "text": "step-in lunge", "weight": 10 },
-        { "text": "retreat to reset", "weight": 9 },
-        { "text": "lateral sidestep", "weight": 8 },
-        { "text": "off-line advance", "weight": 7 },
-        { "text": "circle step outside", "weight": 6 },
-        { "text": "passing step exit", "weight": 5 },
-        { "text": "weave and bob entry", "weight": 4 },
-        { "text": "half-beat entry", "weight": 3 },
-        { "text": "float then crash", "weight": 2 },
-        { "text": "micro-adjust footwork", "weight": 1 }
+        {
+          "text": "extend to edge of measure",
+          "weight": 12
+        },
+        {
+          "text": "compress to jam",
+          "weight": 11
+        },
+        {
+          "text": "step-in lunge",
+          "weight": 10
+        },
+        {
+          "text": "retreat to reset",
+          "weight": 9
+        },
+        {
+          "text": "lateral sidestep",
+          "weight": 8
+        },
+        {
+          "text": "off-line advance",
+          "weight": 7
+        },
+        {
+          "text": "circle step outside",
+          "weight": 6
+        },
+        {
+          "text": "passing step exit",
+          "weight": 5
+        },
+        {
+          "text": "weave and bob entry",
+          "weight": 4
+        },
+        {
+          "text": "half-beat entry",
+          "weight": 3
+        },
+        {
+          "text": "float then crash",
+          "weight": 2
+        },
+        {
+          "text": "micro-adjust footwork",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "distance-management-output",
-      "type": "Output",
-      "name": "Distance Management Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{distance-management}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "distance-management", "target": "distance-management-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-distance-management-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["distance-management", "distance-management-output"],
+      "nodes": [
+        "distance-management"
+      ],
       "description": "Distance management as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

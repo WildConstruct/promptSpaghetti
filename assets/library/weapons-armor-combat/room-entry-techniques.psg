@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "cqb", "entry"],
+    "tags": [
+      "weapons",
+      "cqb",
+      "entry"
+    ],
     "fragment_id": "weapons-room-entry-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "buttonhook entry", "weight": 12 },
-        { "text": "crisscross entry", "weight": 11 },
-        { "text": "threshold clear", "weight": 10 },
-        { "text": "limited penetration", "weight": 9 },
-        { "text": "deep corner clear", "weight": 8 },
-        { "text": "center-fed entry", "weight": 7 },
-        { "text": "corner-fed entry", "weight": 6 },
-        { "text": "ad hoc stack", "weight": 5 },
-        { "text": "solo entry", "weight": 4 },
-        { "text": "pair entry", "weight": 3 },
-        { "text": "dynamic entry", "weight": 2 },
-        { "text": "deliberate entry", "weight": 1 }
+        {
+          "text": "buttonhook entry",
+          "weight": 12
+        },
+        {
+          "text": "crisscross entry",
+          "weight": 11
+        },
+        {
+          "text": "threshold clear",
+          "weight": 10
+        },
+        {
+          "text": "limited penetration",
+          "weight": 9
+        },
+        {
+          "text": "deep corner clear",
+          "weight": 8
+        },
+        {
+          "text": "center-fed entry",
+          "weight": 7
+        },
+        {
+          "text": "corner-fed entry",
+          "weight": 6
+        },
+        {
+          "text": "ad hoc stack",
+          "weight": 5
+        },
+        {
+          "text": "solo entry",
+          "weight": 4
+        },
+        {
+          "text": "pair entry",
+          "weight": 3
+        },
+        {
+          "text": "dynamic entry",
+          "weight": 2
+        },
+        {
+          "text": "deliberate entry",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "room-entry-output",
-      "type": "Output",
-      "name": "Room Entry Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{room-entry-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "room-entry-techniques", "target": "room-entry-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-room-entry-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["room-entry-techniques", "room-entry-output"],
+      "nodes": [
+        "room-entry-techniques"
+      ],
       "description": "Room entry techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

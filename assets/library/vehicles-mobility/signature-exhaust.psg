@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "vehicles-mobility",
     "type": "ASSET_FRAGMENT",
-    "tags": ["vehicles", "exhaust", "mobility"],
+    "tags": [
+      "vehicles",
+      "exhaust",
+      "mobility"
+    ],
     "fragment_id": "vehicles-signature-exhaust",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "blue ion plume", "weight": 10 },
-        { "text": "steam puff", "weight": 9 },
-        { "text": "gritty diesel cough", "weight": 8 }
+        {
+          "text": "blue ion plume",
+          "weight": 10
+        },
+        {
+          "text": "steam puff",
+          "weight": 9
+        },
+        {
+          "text": "gritty diesel cough",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "signature-exhaust-output",
-      "type": "Output",
-      "name": "Exhaust Effect",
-      "x": 520,
-      "y": 200,
-      "template": "{{signature-exhaust}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "signature-exhaust", "target": "signature-exhaust-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "vehicles-signature-exhaust-fragment",
       "name": "Vehicles & Mobility Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Vehicles & Mobility",
-      "nodes": ["signature-exhaust", "signature-exhaust-output"],
+      "nodes": [
+        "signature-exhaust"
+      ],
       "description": "Signature exhaust as a single collapsible unit",
-      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

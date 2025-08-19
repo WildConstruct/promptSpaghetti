@@ -37,6 +37,27 @@ interface GroupNodeData {
  */
 const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
   ({ data, selected, id }) => {
+    // Handle undefined data gracefully
+    if (!data || !data.group) {
+      console.warn(`[GroupNode] Missing data for node ${id}`, { data });
+      return (
+        <div className="group-node-error" style={{
+          padding: '8px',
+          borderRadius: '8px',
+          backgroundColor: '#ffebee',
+          border: '2px dashed #f44336',
+          minWidth: '200px',
+          minHeight: '60px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#f44336'
+        }}>
+          ⚠️ Invalid Group Node
+        </div>
+      );
+    }
+    
     const { group, nodeCount, onToggle, onEdit, performanceMetrics } = data;
     const [isEditing, setIsEditing] = useState(false);
     const [isCalculating, setIsCalculating] = useState(false);
@@ -241,7 +262,7 @@ const GroupNode: React.FC<NodeProps<GroupNodeData>> = memo(
           <span>{nodeCount} nodes</span>
 
           {/* Nesting indicator */}
-          {group.parentId && (
+          {group.parentGroupId && (
             <span
               style={{
                 backgroundColor: 'rgba(0,0,0,0.1)',

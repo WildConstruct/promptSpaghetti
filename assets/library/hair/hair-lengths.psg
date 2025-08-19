@@ -7,7 +7,12 @@
     "author": "Aspen",
     "category": "hair-appearance",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "length", "hairstyle", "appearance"],
+    "tags": [
+      "hair",
+      "length",
+      "hairstyle",
+      "appearance"
+    ],
     "fragment_id": "hair-lengths",
     "collapsible": true
   },
@@ -113,30 +118,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-length-output",
-      "type": "Output",
-      "name": "Hair Length Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-length}} hair"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-length",
-      "target": "hair-length-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-length-fragment",
       "name": "Hair Length Fragment",
       "color": "#CD853F",
       "color_comment": "Peru - Hair base attribute",
-      "nodes": ["hair-length", "hair-length-output"],
+      "nodes": [
+        "hair-length"
+      ],
       "description": "Hair length options as single collapsible unit",
       "metadata": {
         "fragment_type": "hair_base",

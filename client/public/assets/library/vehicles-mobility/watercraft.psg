@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "vehicles-mobility",
     "type": "ASSET_FRAGMENT",
-    "tags": ["vehicles", "water", "mobility"],
+    "tags": [
+      "vehicles",
+      "water",
+      "mobility"
+    ],
     "fragment_id": "vehicles-watercraft",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "coracle", "weight": 10 },
-        { "text": "hydrofoil racer", "weight": 9 },
-        { "text": "junk rig sailer", "weight": 8 }
+        {
+          "text": "coracle",
+          "weight": 10
+        },
+        {
+          "text": "hydrofoil racer",
+          "weight": 9
+        },
+        {
+          "text": "junk rig sailer",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "watercraft-output",
-      "type": "Output",
-      "name": "Watercraft",
-      "x": 520,
-      "y": 200,
-      "template": "{{watercraft}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "watercraft", "target": "watercraft-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "vehicles-watercraft-fragment",
       "name": "Vehicles & Mobility Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Vehicles & Mobility",
-      "nodes": ["watercraft", "watercraft-output"],
+      "nodes": [
+        "watercraft"
+      ],
       "description": "Watercraft as a single collapsible unit",
-      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

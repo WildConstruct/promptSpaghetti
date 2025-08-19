@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "vehicles-mobility",
     "type": "ASSET_FRAGMENT",
-    "tags": ["vehicles", "damage", "mobility"],
+    "tags": [
+      "vehicles",
+      "damage",
+      "mobility"
+    ],
     "fragment_id": "vehicles-damage-states",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "bullet-scarred hull", "weight": 10 },
-        { "text": "cracked viewport", "weight": 9 },
-        { "text": "jury-rigged patch", "weight": 8 }
+        {
+          "text": "bullet-scarred hull",
+          "weight": 10
+        },
+        {
+          "text": "cracked viewport",
+          "weight": 9
+        },
+        {
+          "text": "jury-rigged patch",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "damage-states-output",
-      "type": "Output",
-      "name": "Damage State",
-      "x": 520,
-      "y": 200,
-      "template": "{{damage-states}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "damage-states", "target": "damage-states-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "vehicles-damage-states-fragment",
       "name": "Vehicles & Mobility Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Vehicles & Mobility",
-      "nodes": ["damage-states", "damage-states-output"],
+      "nodes": [
+        "damage-states"
+      ],
       "description": "Damage states as a single collapsible unit",
-      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

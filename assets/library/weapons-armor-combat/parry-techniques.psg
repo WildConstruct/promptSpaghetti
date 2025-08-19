@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "technique", "parry"],
+    "tags": [
+      "weapons",
+      "technique",
+      "parry"
+    ],
     "fragment_id": "weapons-parry-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "outside parry", "weight": 12 },
-        { "text": "inside parry", "weight": 11 },
-        { "text": "circular parry", "weight": 10 },
-        { "text": "beat parry", "weight": 9 },
-        { "text": "hanging parry", "weight": 8 },
-        { "text": "cross parry", "weight": 7 },
-        { "text": "rising parry", "weight": 6 },
-        { "text": "low sweep parry", "weight": 5 },
-        { "text": "bind and parry", "weight": 4 },
-        { "text": "deflect-and-cut", "weight": 3 },
-        { "text": "palm parry", "weight": 2 },
-        { "text": "shield catch", "weight": 1 }
+        {
+          "text": "outside parry",
+          "weight": 12
+        },
+        {
+          "text": "inside parry",
+          "weight": 11
+        },
+        {
+          "text": "circular parry",
+          "weight": 10
+        },
+        {
+          "text": "beat parry",
+          "weight": 9
+        },
+        {
+          "text": "hanging parry",
+          "weight": 8
+        },
+        {
+          "text": "cross parry",
+          "weight": 7
+        },
+        {
+          "text": "rising parry",
+          "weight": 6
+        },
+        {
+          "text": "low sweep parry",
+          "weight": 5
+        },
+        {
+          "text": "bind and parry",
+          "weight": 4
+        },
+        {
+          "text": "deflect-and-cut",
+          "weight": 3
+        },
+        {
+          "text": "palm parry",
+          "weight": 2
+        },
+        {
+          "text": "shield catch",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "parry-techniques-output",
-      "type": "Output",
-      "name": "Parry Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{parry-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "parry-techniques", "target": "parry-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-parry-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["parry-techniques", "parry-techniques-output"],
+      "nodes": [
+        "parry-techniques"
+      ],
       "description": "Parry techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

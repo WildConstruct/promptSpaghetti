@@ -7,7 +7,12 @@
     "author": "Aspen",
     "category": "hair-appearance",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "texture", "curl-pattern", "appearance"],
+    "tags": [
+      "hair",
+      "texture",
+      "curl-pattern",
+      "appearance"
+    ],
     "fragment_id": "hair-textures",
     "collapsible": true
   },
@@ -121,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-texture-output",
-      "type": "Output",
-      "name": "Hair Texture Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-texture}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-texture",
-      "target": "hair-texture-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-texture-fragment",
       "name": "Hair Texture Fragment",
       "color": "#D2691E",
       "color_comment": "Chocolate - Hair texture attribute",
-      "nodes": ["hair-texture", "hair-texture-output"],
+      "nodes": [
+        "hair-texture"
+      ],
       "description": "Hair texture patterns as single unit",
       "metadata": {
         "fragment_type": "hair_texture",

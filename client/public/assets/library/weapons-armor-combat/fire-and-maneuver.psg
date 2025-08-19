@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "tactics", "movement"],
+    "tags": [
+      "weapons",
+      "tactics",
+      "movement"
+    ],
     "fragment_id": "weapons-fire-and-maneuver",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "bounding overwatch", "weight": 12 },
-        { "text": "leapfrog advance", "weight": 11 },
-        { "text": "peel back retreat", "weight": 10 },
-        { "text": "suppress then shift", "weight": 9 },
-        { "text": "smoke cover push", "weight": 8 },
-        { "text": "flank under cover", "weight": 7 },
-        { "text": "alternating fire", "weight": 6 },
-        { "text": "base-of-fire hold", "weight": 5 },
-        { "text": "buddy rush", "weight": 4 },
-        { "text": "break contact drill", "weight": 3 },
-        { "text": "cross-load ammo", "weight": 2 },
-        { "text": "cover callouts", "weight": 1 }
+        {
+          "text": "bounding overwatch",
+          "weight": 12
+        },
+        {
+          "text": "leapfrog advance",
+          "weight": 11
+        },
+        {
+          "text": "peel back retreat",
+          "weight": 10
+        },
+        {
+          "text": "suppress then shift",
+          "weight": 9
+        },
+        {
+          "text": "smoke cover push",
+          "weight": 8
+        },
+        {
+          "text": "flank under cover",
+          "weight": 7
+        },
+        {
+          "text": "alternating fire",
+          "weight": 6
+        },
+        {
+          "text": "base-of-fire hold",
+          "weight": 5
+        },
+        {
+          "text": "buddy rush",
+          "weight": 4
+        },
+        {
+          "text": "break contact drill",
+          "weight": 3
+        },
+        {
+          "text": "cross-load ammo",
+          "weight": 2
+        },
+        {
+          "text": "cover callouts",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "fire-and-maneuver-output",
-      "type": "Output",
-      "name": "Fire/Maneuver Pattern",
-      "x": 520,
-      "y": 200,
-      "template": "{{fire-and-maneuver}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "fire-and-maneuver", "target": "fire-and-maneuver-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-fire-and-maneuver-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["fire-and-maneuver", "fire-and-maneuver-output"],
+      "nodes": [
+        "fire-and-maneuver"
+      ],
       "description": "Fire and maneuver as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

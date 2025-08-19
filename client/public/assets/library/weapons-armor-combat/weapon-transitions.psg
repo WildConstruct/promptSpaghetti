@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "transition", "manipulation"],
+    "tags": [
+      "weapons",
+      "transition",
+      "manipulation"
+    ],
     "fragment_id": "weapons-weapon-transitions",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "draw-to-strike", "weight": 12 },
-        { "text": "strike-to-parry", "weight": 11 },
-        { "text": "parry-to-thrust", "weight": 10 },
-        { "text": "primary-to-secondary", "weight": 9 },
-        { "text": "reload-to-cover", "weight": 8 },
-        { "text": "sling-to-ready", "weight": 7 },
-        { "text": "shoulder switch", "weight": 6 },
-        { "text": "hand switch", "weight": 5 },
-        { "text": "retention-to-extension", "weight": 4 },
-        { "text": "two-hand-to-one-hand", "weight": 3 },
-        { "text": "baton-to-blade", "weight": 2 },
-        { "text": "sheath-to-grab", "weight": 1 }
+        {
+          "text": "draw-to-strike",
+          "weight": 12
+        },
+        {
+          "text": "strike-to-parry",
+          "weight": 11
+        },
+        {
+          "text": "parry-to-thrust",
+          "weight": 10
+        },
+        {
+          "text": "primary-to-secondary",
+          "weight": 9
+        },
+        {
+          "text": "reload-to-cover",
+          "weight": 8
+        },
+        {
+          "text": "sling-to-ready",
+          "weight": 7
+        },
+        {
+          "text": "shoulder switch",
+          "weight": 6
+        },
+        {
+          "text": "hand switch",
+          "weight": 5
+        },
+        {
+          "text": "retention-to-extension",
+          "weight": 4
+        },
+        {
+          "text": "two-hand-to-one-hand",
+          "weight": 3
+        },
+        {
+          "text": "baton-to-blade",
+          "weight": 2
+        },
+        {
+          "text": "sheath-to-grab",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "weapon-transitions-output",
-      "type": "Output",
-      "name": "Weapon Transition",
-      "x": 520,
-      "y": 200,
-      "template": "{{weapon-transitions}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "weapon-transitions", "target": "weapon-transitions-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-weapon-transitions-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["weapon-transitions", "weapon-transitions-output"],
+      "nodes": [
+        "weapon-transitions"
+      ],
       "description": "Weapon transitions as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

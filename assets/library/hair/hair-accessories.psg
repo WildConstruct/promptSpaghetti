@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "hair-accessories",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "accessories", "decoration", "styling", "adornment"],
+    "tags": [
+      "hair",
+      "accessories",
+      "decoration",
+      "styling",
+      "adornment"
+    ],
     "fragment_id": "hair-accessories",
     "collapsible": true
   },
@@ -128,30 +134,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-accessory-output",
-      "type": "Output",
-      "name": "Hair Accessory Description",
-      "x": 500,
-      "y": 200,
-      "template": "adorned with {{hair-accessory}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-accessory",
-      "target": "hair-accessory-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-accessory-fragment",
       "name": "Hair Accessories Fragment",
       "color": "#FFB6C1",
       "color_comment": "Light Pink - Decorative element",
-      "nodes": ["hair-accessory", "hair-accessory-output"],
+      "nodes": [
+        "hair-accessory"
+      ],
       "description": "Hair accessories as single unit",
       "metadata": {
         "fragment_type": "hair_accessory",

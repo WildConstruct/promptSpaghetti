@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "blade", "angles"],
+    "tags": [
+      "weapons",
+      "blade",
+      "angles"
+    ],
     "fragment_id": "weapons-cut-angle-sets",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "downward diagonal right", "weight": 12 },
-        { "text": "downward diagonal left", "weight": 11 },
-        { "text": "upward diagonal right", "weight": 10 },
-        { "text": "upward diagonal left", "weight": 9 },
-        { "text": "horizontal right", "weight": 8 },
-        { "text": "horizontal left", "weight": 7 },
-        { "text": "vertical down", "weight": 6 },
-        { "text": "vertical up", "weight": 5 },
-        { "text": "oblique inside", "weight": 4 },
-        { "text": "oblique outside", "weight": 3 },
-        { "text": "moulinet vertical", "weight": 2 },
-        { "text": "moulinet horizontal", "weight": 1 }
+        {
+          "text": "downward diagonal right",
+          "weight": 12
+        },
+        {
+          "text": "downward diagonal left",
+          "weight": 11
+        },
+        {
+          "text": "upward diagonal right",
+          "weight": 10
+        },
+        {
+          "text": "upward diagonal left",
+          "weight": 9
+        },
+        {
+          "text": "horizontal right",
+          "weight": 8
+        },
+        {
+          "text": "horizontal left",
+          "weight": 7
+        },
+        {
+          "text": "vertical down",
+          "weight": 6
+        },
+        {
+          "text": "vertical up",
+          "weight": 5
+        },
+        {
+          "text": "oblique inside",
+          "weight": 4
+        },
+        {
+          "text": "oblique outside",
+          "weight": 3
+        },
+        {
+          "text": "moulinet vertical",
+          "weight": 2
+        },
+        {
+          "text": "moulinet horizontal",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "cut-angle-sets-output",
-      "type": "Output",
-      "name": "Cut Angle",
-      "x": 520,
-      "y": 200,
-      "template": "{{cut-angle-sets}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "cut-angle-sets", "target": "cut-angle-sets-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-cut-angle-sets-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["cut-angle-sets", "cut-angle-sets-output"],
+      "nodes": [
+        "cut-angle-sets"
+      ],
       "description": "Cut angle sets as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "hair-appearance",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "color", "fantasy", "unnatural", "creative"],
+    "tags": [
+      "hair",
+      "color",
+      "fantasy",
+      "unnatural",
+      "creative"
+    ],
     "fragment_id": "hair-colors-fantasy",
     "collapsible": true
   },
@@ -120,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-color-fantasy-output",
-      "type": "Output",
-      "name": "Fantasy Hair Color Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-color-fantasy}} hair"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-color-fantasy",
-      "target": "hair-color-fantasy-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-color-fantasy-fragment",
       "name": "Fantasy Hair Color Fragment",
       "color": "#9400D3",
       "color_comment": "Violet - Fantasy/unnatural colors",
-      "nodes": ["hair-color-fantasy", "hair-color-fantasy-output"],
+      "nodes": [
+        "hair-color-fantasy"
+      ],
       "description": "Fantasy hair colors as single unit",
       "metadata": {
         "fragment_type": "hair_color",

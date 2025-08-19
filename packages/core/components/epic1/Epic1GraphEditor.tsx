@@ -136,7 +136,51 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   }, []);
 
   // Initialize with persisted state or initial props
-  const persistedState = useMemo(() => loadPersistedState(), []);
+  const persistedState = useMemo(() => {
+    const state = loadPersistedState();
+    if (state && state.nodes) {
+      // Deduplicate nodes by ID - keep the first occurrence
+      const seenIds = new Set<string>();
+      const uniqueNodes = state.nodes.filter((node: Node) => {
+        if (seenIds.has(node.id)) {
+          console.warn(`[Epic1GraphEditor] Removing duplicate node with ID: ${node.id}`);
+          return false;
+        }
+        seenIds.add(node.id);
+        return true;
+      });
+      
+      // Build a set of all node IDs for parent validation
+      const nodeIds = new Set(uniqueNodes.map((n: Node) => n.id));
+      
+      // Filter out nodes with invalid parent references and GroupNodes without proper data
+      const validNodes = uniqueNodes.filter((node: Node) => {
+        // Check for invalid GroupNode
+        if (node.type === 'group' && (!node.data || !node.data.group)) {
+          console.warn(`[Epic1GraphEditor] Filtering out invalid GroupNode: ${node.id}`);
+          return false;
+        }
+        
+        // Check for orphaned child nodes (nodes with non-existent parents)
+        if (node.parentNode && !nodeIds.has(node.parentNode)) {
+          console.warn(`[Epic1GraphEditor] Removing orphaned node ${node.id} with missing parent ${node.parentNode}`);
+          return false;
+        }
+        
+        // Clean up any nodes that reference the problematic region
+        if (node.parentNode === 'region-1755479434134-jzx1jm81c' || 
+            node.id === 'region-1755479434134-jzx1jm81c') {
+          console.warn(`[Epic1GraphEditor] Removing node related to problematic region: ${node.id}`);
+          return false;
+        }
+        
+        return true;
+      });
+      
+      return { ...state, nodes: validNodes };
+    }
+    return state;
+  }, []);
   const [hasRestoredState] = useState(() => !!persistedState);
   const [nodes, setNodes, onNodesChangeBase] = useNodesState<EditableNodeData>(
     persistedState?.nodes || initialNodes
@@ -1059,6 +1103,12 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
           throw new Error(`Failed to load preset: ${resp.status} ${resp.statusText}`);
         }
         content = await resp.text();
+        console.log('[Epic1GraphEditor] Fetched content:', {
+          url: normalized,
+          contentLength: content.length,
+          hasEdges: content.includes('"edges"'),
+          edgesSection: content.indexOf('"edges"') > -1 ? content.substring(content.indexOf('"edges"'), content.indexOf('"edges"') + 200) : 'not found'
+        });
       }
 
       if (!content) throw new Error('Preset content is empty.');
@@ -1069,14 +1119,41 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         throw new Error(validation.error || 'Preset failed validation');
       }
 
+      // Check if this is a fragment to preserve positions
+      let preservePositions = false;
+      try {
+        const data = JSON.parse(content);
+        // Check for regions (fragments) or enhancedBoundingBox
+        if (data.regions || data.graph?.nodes?.some((n: any) => n.type === 'enhancedBoundingBox')) {
+          preservePositions = true;
+          console.log('[Epic1GraphEditor] Fragment detected, preserving positions');
+        }
+      } catch (e) {
+        // Not JSON or can't parse, use default
+      }
+
       const result = await insertPreset(content, {
         position,
+        preservePositions, // Preserve positions for fragments
         snapToGrid: true,
         selectAfterInsert: true
       });
 
+      console.log('[Epic1GraphEditor] Preset insertion result:', {
+        nodes: result.nodes?.length || 0,
+        edges: result.edges?.length || 0,
+        edgeDetails: result.edges
+      });
+
       setNodes(nds => nds.concat(result.nodes as any));
-      setEdges(eds => eds.concat(result.edges as any));
+      setEdges(eds => {
+        console.log('[Epic1GraphEditor] Adding edges:', {
+          current: eds.length,
+          new: result.edges?.length || 0,
+          newEdges: result.edges
+        });
+        return eds.concat(result.edges as any);
+      });
 
       // Optional: bounce first node for feedback
       try {
@@ -1726,7 +1803,7 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
               const pos = reactFlowInstance
                 ? reactFlowInstance.screenToFlowPosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
                 : { x: 250, y: 250 };
-              void insertPresetByMeta(preset);
+              void insertPresetByMeta(preset, pos);
             }}
             position="right"
             defaultTab={showAssetLibrary ? 'assets' : isPreviewVisible ? 'preview' : null}

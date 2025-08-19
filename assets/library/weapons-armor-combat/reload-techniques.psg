@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "technique", "reload"],
+    "tags": [
+      "weapons",
+      "technique",
+      "reload"
+    ],
     "fragment_id": "weapons-reload-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "speed reload", "weight": 12 },
-        { "text": "tactical reload", "weight": 11 },
-        { "text": "emergency reload", "weight": 10 },
-        { "text": "one-handed reload", "weight": 9 },
-        { "text": "retention reload", "weight": 8 },
-        { "text": "mag drop and insert", "weight": 7 },
-        { "text": "strip and rack", "weight": 6 },
-        { "text": "tube-feed quick load", "weight": 5 },
-        { "text": "moon clip swap", "weight": 4 },
-        { "text": "shotgun port load", "weight": 3 },
-        { "text": "over-the-top rack", "weight": 2 },
-        { "text": "press-check reload", "weight": 1 }
+        {
+          "text": "speed reload",
+          "weight": 12
+        },
+        {
+          "text": "tactical reload",
+          "weight": 11
+        },
+        {
+          "text": "emergency reload",
+          "weight": 10
+        },
+        {
+          "text": "one-handed reload",
+          "weight": 9
+        },
+        {
+          "text": "retention reload",
+          "weight": 8
+        },
+        {
+          "text": "mag drop and insert",
+          "weight": 7
+        },
+        {
+          "text": "strip and rack",
+          "weight": 6
+        },
+        {
+          "text": "tube-feed quick load",
+          "weight": 5
+        },
+        {
+          "text": "moon clip swap",
+          "weight": 4
+        },
+        {
+          "text": "shotgun port load",
+          "weight": 3
+        },
+        {
+          "text": "over-the-top rack",
+          "weight": 2
+        },
+        {
+          "text": "press-check reload",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "reload-techniques-output",
-      "type": "Output",
-      "name": "Reload Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{reload-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "reload-techniques", "target": "reload-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-reload-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["reload-techniques", "reload-techniques-output"],
+      "nodes": [
+        "reload-techniques"
+      ],
       "description": "Reload techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

@@ -7,7 +7,10 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "explosives"],
+    "tags": [
+      "weapons",
+      "explosives"
+    ],
     "fragment_id": "weapons-explosives",
     "collapsible": true
   },
@@ -20,32 +23,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "flash bang", "weight": 10 },
-        { "text": "thermite charge", "weight": 9 },
-        { "text": "sticky gel orb", "weight": 8 }
+        {
+          "text": "flash bang",
+          "weight": 10
+        },
+        {
+          "text": "thermite charge",
+          "weight": 9
+        },
+        {
+          "text": "sticky gel orb",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "explosives-output",
-      "type": "Output",
-      "name": "Explosive",
-      "x": 520,
-      "y": 200,
-      "template": "{{explosives}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "explosives", "target": "explosives-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-explosives-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["explosives", "explosives-output"],
+      "nodes": [
+        "explosives"
+      ],
       "description": "Explosives as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "appearance-base",
     "type": "ASSET_FRAGMENT",
-    "tags": ["skin", "undertones", "complexion", "diversity", "inclusive"],
+    "tags": [
+      "skin",
+      "undertones",
+      "complexion",
+      "diversity",
+      "inclusive"
+    ],
     "fragment_id": "skin-undertones",
     "collapsible": true
   },
@@ -122,30 +128,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "skin-output",
-      "type": "Output",
-      "name": "Skin Undertone Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{skin-undertone}} skin"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "skin-undertone",
-      "target": "skin-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "skin-undertone-fragment",
       "name": "Skin Undertone Fragment",
       "color": "#DDA0DD",
       "color_comment": "Plum - Base appearance feature",
-      "nodes": ["skin-undertone", "skin-output"],
+      "nodes": [
+        "skin-undertone"
+      ],
       "description": "Skin tone descriptor as single collapsible unit",
       "metadata": {
         "fragment_type": "appearance_base",

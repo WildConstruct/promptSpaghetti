@@ -141,6 +141,10 @@ export async function insertPreset(
       psglib.graph.edges
     );
 
+    // Don't create group nodes for fragments - they already have enhancedBoundingBox from psg.ts
+    // This was causing the duplicate purple container issue
+    let regions: any[] = [];
+
     // Calculate bounds of the preset
     const bounds = calculateBounds(nodes);
 
@@ -169,10 +173,17 @@ export async function insertPreset(
       positionedNodes.forEach(node => {
         (node as any).selected = true;
       });
+      // Also select regions
+      regions.forEach(region => {
+        (region as any).selected = true;
+      });
     }
 
+    // Combine positioned nodes with region group nodes
+    const allNodes = [...regions, ...positionedNodes];
+
     return {
-      nodes: positionedNodes,
+      nodes: allNodes,
       edges: mappedEdges,
       bounds: {
         minX: position.x,
@@ -203,8 +214,22 @@ export async function insertPresetFromDrop(
       }
     : dropPosition;
 
+  // Check if this preset contains a region box (fragment)
+  // If so, preserve positions to maintain the spatial relationship
+  let preservePositions = false;
+  try {
+    const data = JSON.parse(presetContent);
+    // Check if it has an enhancedBoundingBox (Region Box)
+    if (data.graph?.nodes?.some((n: any) => n.type === 'enhancedBoundingBox')) {
+      preservePositions = true;
+    }
+  } catch (e) {
+    // If we can't parse, use default behavior
+  }
+
   return insertPreset(presetContent, {
     position: graphPosition,
+    preservePositions,
     snapToGrid: true,
     selectAfterInsert: true
   });

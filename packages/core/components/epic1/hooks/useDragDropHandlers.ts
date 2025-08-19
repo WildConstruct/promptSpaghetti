@@ -153,9 +153,22 @@ export function useDragDropHandlers({
           throw new Error(validation.error || 'Preset failed validation');
         }
 
+        // Check if this is a fragment (has regions) to preserve positions
+        let shouldPreservePositions = false;
+        try {
+          const data = JSON.parse(content);
+          // Check for regions (fragments) or enhancedBoundingBox
+          if (data.regions || data.graph?.nodes?.some((n: any) => n.type === 'enhancedBoundingBox')) {
+            shouldPreservePositions = true;
+            console.log('[DragDrop] Fragment detected, preserving positions');
+          }
+        } catch (e) {
+          // Not JSON or can't parse, use default
+        }
+
         const result = await insertPreset(content, {
           position,
-          preservePositions: false, // Let auto-layout handle positioning
+          preservePositions: shouldPreservePositions, // Preserve for fragments
           snapToGrid: true,
           selectAfterInsert: true
         });
@@ -165,9 +178,9 @@ export function useDragDropHandlers({
           throw new Error('Preset insertion returned no nodes');
         }
 
-        // Apply auto-layout if multiple nodes
+        // Apply auto-layout if multiple nodes (but not for fragments with preserved positions)
         let nodesToAdd = result.nodes as Node[];
-        if (nodesToAdd && nodesToAdd.length > 1) {
+        if (nodesToAdd && nodesToAdd.length > 1 && !shouldPreservePositions) {
           console.log('[DragDrop] Applying auto-layout to', nodesToAdd.length, 'nodes');
           // Get existing nodes for layout context
           const existingNodes = [] as Node[]; // We don't need existing nodes for new layout
@@ -185,10 +198,23 @@ export function useDragDropHandlers({
           } else {
             console.warn('[DragDrop] Layout failed, using original positions');
           }
+        } else if (shouldPreservePositions) {
+          console.log('[DragDrop] Skipping auto-layout for fragment with preserved positions');
         }
 
+        // Debug logging for edges
+        console.log('[DragDrop] Adding nodes:', nodesToAdd.length, 'nodes');
+        console.log('[DragDrop] Adding edges:', result.edges?.length || 0, 'edges');
+        if (result.edges && result.edges.length > 0) {
+          console.log('[DragDrop] Edge details:', result.edges);
+        }
+        
         setNodes(nds => nds.concat(nodesToAdd as any));
-        setEdges(eds => eds.concat((result.edges || []) as any));
+        setEdges(eds => {
+          const newEdges = (result.edges || []) as any;
+          console.log('[DragDrop] Current edges:', eds.length, 'New edges to add:', newEdges.length);
+          return eds.concat(newEdges);
+        });
 
         // Optional: bounce first node for feedback
         try {

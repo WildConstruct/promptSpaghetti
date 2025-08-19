@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "fx", "projectile"],
+    "tags": [
+      "weapons",
+      "fx",
+      "projectile"
+    ],
     "fragment_id": "weapons-projectile-trails",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "ion streak", "weight": 12 },
-        { "text": "ember trail", "weight": 11 },
-        { "text": "frost spiral", "weight": 10 },
-        { "text": "smoke corkscrew", "weight": 9 },
-        { "text": "tracer arc", "weight": 8 },
-        { "text": "plasma ribbon", "weight": 7 },
-        { "text": "particle sparkle", "weight": 6 },
-        { "text": "neon contrail", "weight": 5 },
-        { "text": "dust ribbon", "weight": 4 },
-        { "text": "shockwave ring", "weight": 3 },
-        { "text": "electro crackle", "weight": 2 },
-        { "text": "arcane glyphs", "weight": 1 }
+        {
+          "text": "ion streak",
+          "weight": 12
+        },
+        {
+          "text": "ember trail",
+          "weight": 11
+        },
+        {
+          "text": "frost spiral",
+          "weight": 10
+        },
+        {
+          "text": "smoke corkscrew",
+          "weight": 9
+        },
+        {
+          "text": "tracer arc",
+          "weight": 8
+        },
+        {
+          "text": "plasma ribbon",
+          "weight": 7
+        },
+        {
+          "text": "particle sparkle",
+          "weight": 6
+        },
+        {
+          "text": "neon contrail",
+          "weight": 5
+        },
+        {
+          "text": "dust ribbon",
+          "weight": 4
+        },
+        {
+          "text": "shockwave ring",
+          "weight": 3
+        },
+        {
+          "text": "electro crackle",
+          "weight": 2
+        },
+        {
+          "text": "arcane glyphs",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "projectile-trails-output",
-      "type": "Output",
-      "name": "Projectile Trail",
-      "x": 520,
-      "y": 200,
-      "template": "{{projectile-trails}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "projectile-trails", "target": "projectile-trails-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-projectile-trails-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["projectile-trails", "projectile-trails-output"],
+      "nodes": [
+        "projectile-trails"
+      ],
       "description": "Projectile trails as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

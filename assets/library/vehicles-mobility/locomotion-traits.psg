@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "vehicles-mobility",
     "type": "ASSET_FRAGMENT",
-    "tags": ["vehicles", "traits", "mobility"],
+    "tags": [
+      "vehicles",
+      "traits",
+      "mobility"
+    ],
     "fragment_id": "vehicles-locomotion-traits",
     "collapsible": true
   },
@@ -20,33 +24,40 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "rickety", "weight": 9 },
-        { "text": "whisper-quiet", "weight": 10 },
-        { "text": "overclocked", "weight": 8 },
-        { "text": "retro-fitted", "weight": 7 }
+        {
+          "text": "rickety",
+          "weight": 9
+        },
+        {
+          "text": "whisper-quiet",
+          "weight": 10
+        },
+        {
+          "text": "overclocked",
+          "weight": 8
+        },
+        {
+          "text": "retro-fitted",
+          "weight": 7
+        }
       ]
-    },
-    {
-      "id": "locomotion-traits-output",
-      "type": "Output",
-      "name": "Locomotion Trait",
-      "x": 520,
-      "y": 200,
-      "template": "{{locomotion-traits}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "locomotion-traits", "target": "locomotion-traits-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "vehicles-locomotion-traits-fragment",
       "name": "Vehicles & Mobility Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Vehicles & Mobility",
-      "nodes": ["locomotion-traits", "locomotion-traits-output"],
+      "nodes": [
+        "locomotion-traits"
+      ],
       "description": "Locomotion traits as a single collapsible unit",
-      "metadata": { "fragment_type": "vehicles_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "vehicles_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

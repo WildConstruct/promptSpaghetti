@@ -7,7 +7,13 @@
     "author": "Aspen",
     "category": "facial-structure",
     "type": "ASSET_FRAGMENT",
-    "tags": ["symmetry", "balance", "facial-structure", "proportion", "aesthetic"],
+    "tags": [
+      "symmetry",
+      "balance",
+      "facial-structure",
+      "proportion",
+      "aesthetic"
+    ],
     "fragment_id": "facial-symmetry",
     "collapsible": true
   },
@@ -111,30 +117,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "symmetry-output",
-      "type": "Output",
-      "name": "Facial Symmetry Description",
-      "x": 500,
-      "y": 200,
-      "template": "with {{facial-symmetry}}"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "facial-symmetry",
-      "target": "symmetry-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "facial-symmetry-fragment",
       "name": "Facial Symmetry Fragment",
       "color": "#4682B4",
       "color_comment": "Steel Blue - Structural characteristic",
-      "nodes": ["facial-symmetry", "symmetry-output"],
+      "nodes": [
+        "facial-symmetry"
+      ],
       "description": "Symmetry descriptors as single unit",
       "metadata": {
         "fragment_type": "facial_structure",

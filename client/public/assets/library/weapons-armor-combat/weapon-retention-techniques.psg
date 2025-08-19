@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "retention", "defense"],
+    "tags": [
+      "weapons",
+      "retention",
+      "defense"
+    ],
     "fragment_id": "weapons-weapon-retention-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "elbow clamp", "weight": 12 },
-        { "text": "body turn cover", "weight": 11 },
-        { "text": "muzzle tuck", "weight": 10 },
-        { "text": "holster wedge", "weight": 9 },
-        { "text": "two-on-one clamp", "weight": 8 },
-        { "text": "seatbelt wrap", "weight": 7 },
-        { "text": "index to body", "weight": 6 },
-        { "text": "push-pull stabilize", "weight": 5 },
-        { "text": "wrist trap", "weight": 4 },
-        { "text": "shoulder pin", "weight": 3 },
-        { "text": "sling wrap", "weight": 2 },
-        { "text": "scabbard trap", "weight": 1 }
+        {
+          "text": "elbow clamp",
+          "weight": 12
+        },
+        {
+          "text": "body turn cover",
+          "weight": 11
+        },
+        {
+          "text": "muzzle tuck",
+          "weight": 10
+        },
+        {
+          "text": "holster wedge",
+          "weight": 9
+        },
+        {
+          "text": "two-on-one clamp",
+          "weight": 8
+        },
+        {
+          "text": "seatbelt wrap",
+          "weight": 7
+        },
+        {
+          "text": "index to body",
+          "weight": 6
+        },
+        {
+          "text": "push-pull stabilize",
+          "weight": 5
+        },
+        {
+          "text": "wrist trap",
+          "weight": 4
+        },
+        {
+          "text": "shoulder pin",
+          "weight": 3
+        },
+        {
+          "text": "sling wrap",
+          "weight": 2
+        },
+        {
+          "text": "scabbard trap",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "weapon-retention-techniques-output",
-      "type": "Output",
-      "name": "Weapon Retention Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{weapon-retention-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "weapon-retention-techniques", "target": "weapon-retention-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-weapon-retention-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["weapon-retention-techniques", "weapon-retention-techniques-output"],
+      "nodes": [
+        "weapon-retention-techniques"
+      ],
       "description": "Weapon retention techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

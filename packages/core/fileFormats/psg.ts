@@ -28,7 +28,9 @@ export const PSGNodeSchema = z.object({
 export const PSGEdgeSchema = z.object({
   id: z.string(),
   source: z.string(),
-  target: z.string()
+  target: z.string(),
+  sourceHandle: z.string().optional(),
+  targetHandle: z.string().optional()
 });
 
 export const PSGRegionSchema = z.object({
@@ -70,11 +72,45 @@ export type PSGRegion = z.infer<typeof PSGRegionSchema>;
 export function parsePSG(content: string): PSGFile {
   try {
     const data = JSON.parse(content);
+    console.log('[PSG] Raw parsed JSON:', {
+      hasNodes: !!data.nodes,
+      hasEdges: !!data.edges,
+      hasRegions: !!data.regions,
+      rawEdges: data.edges
+    });
+    console.log('[PSG] Parsed JSON data:', {
+      nodes: data.nodes?.length || 0,
+      edges: data.edges?.length || 0,
+      regions: data.regions?.length || 0,
+      edgeIds: data.edges?.map((e: any) => e.id)
+    });
+    
+    // Try to parse edges separately to see what's happening
+    if (data.edges) {
+      console.log('[PSG] Validating edges individually:');
+      data.edges.forEach((edge: any, i: number) => {
+        const edgeResult = PSGEdgeSchema.safeParse(edge);
+        if (!edgeResult.success) {
+          console.error(`[PSG] Edge ${i} validation failed:`, edge, edgeResult.error);
+        } else {
+          console.log(`[PSG] Edge ${i} valid:`, edge);
+        }
+      });
+    }
+    
     const result = PSGFileSchema.safeParse(data);
     
     if (!result.success) {
+      console.error('[PSG] Schema validation failed:', result.error);
+      console.error('[PSG] Full error details:', JSON.stringify(result.error.errors, null, 2));
       throw new Error(`Invalid PSG file: ${result.error.message}`);
     }
+    
+    console.log('[PSG] Schema validation passed:', {
+      nodes: result.data.nodes?.length || 0,
+      edges: result.data.edges?.length || 0,
+      regions: result.data.regions?.length || 0
+    });
     
     return result.data;
   } catch (error) {
@@ -89,83 +125,165 @@ export function parsePSG(content: string): PSGFile {
  * Convert PSG format to PSGLib format for compatibility
  */
 export function convertPSGToPSGLib(psg: PSGFile): any {
-  console.log('Converting PSG to PSGLib:', psg);
+  console.log('[PSG] Converting PSG to PSGLib:', {
+    nodes: psg.nodes?.length || 0,
+    edges: psg.edges?.length || 0,
+    regions: psg.regions?.length || 0,
+    edgeDetails: psg.edges
+  });
   
   // Check if this is a fragment
-  const isFragment = psg.metadata?.type === 'MULTI-ASPECT' || psg.regions?.length > 0;
+  const isFragment = psg.metadata?.type === 'MULTI-ASPECT' || psg.metadata?.type === 'ASSET_FRAGMENT' || psg.regions?.length > 0;
   
-  // Filter out Output nodes for fragments
-  const nodesToImport = isFragment 
-    ? psg.nodes.filter(n => n.type !== 'Output')
-    : psg.nodes;
+  // Include all nodes - Output nodes are needed for preview functionality
+  const nodesToImport = psg.nodes;
   
-  console.log('Nodes to import:', nodesToImport);
+  // Get the IDs of nodes we're actually importing
+  const importedNodeIds = new Set(nodesToImport.map(n => n.id));
   
   // Initialize the nodes array
   const graphNodes: any[] = [];
   
-  // For fragments with regions, create an enhancedBoundingBox
-  if (isFragment && psg.regions?.length > 0) {
-    const region = psg.regions[0]; // Use the first region
+  // For fragments with regions, create an EnhancedBoundingBox to contain them
+  let boundingBoxId: string | null = null;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  
+  // Optimize layout for fragments - compact vertical stacking
+  let optimizedPositions: Record<string, {x: number, y: number}> = {};
+  
+  if (isFragment && nodesToImport.length <= 5) {
+    // For small fragments, use compact vertical stacking with more spacing
+    let currentY = 0;
+    nodesToImport.forEach((node, index) => {
+      optimizedPositions[node.id] = {
+        x: 0,  // All nodes in single column
+        y: currentY
+      };
+      // Calculate height based on node type
+      let nodeHeight = 180;
+      if (node.type === 'WeightedChoice') {
+        const optionCount = node.options?.length || 5;
+        nodeHeight = Math.max(200, 80 + (optionCount * 35));
+      } else if (node.type === 'Output') {
+        nodeHeight = 100; // Output nodes are smaller
+      }
+      currentY += nodeHeight + 60; // Increased spacing between nodes for edges
+    });
+  } else if (isFragment) {
+    // For larger fragments, use multi-column layout
+    const cols = Math.ceil(Math.sqrt(nodesToImport.length));
+    nodesToImport.forEach((node, index) => {
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+      optimizedPositions[node.id] = {
+        x: col * 520,  // 520px spacing for wider WeightedChoice nodes
+        y: row * 250   // Vertical spacing
+      };
+    });
+  }
+
+  if (isFragment && psg.regions && psg.regions.length > 0) {
+    const region = psg.regions[0];
     
-    // Find the bounds of all nodes in the fragment (use original positions)
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    // WeightedChoice nodes in display mode are much smaller than edit mode
-    const nodeWidth = 280; // Approximate width in display mode
-    const nodeHeight = 180; // Approximate height in display mode
+    // Calculate bounds for the bounding box
+    minX = 0;
+    minY = 0;
+    maxX = 0;
+    maxY = 0;
     
-    nodesToImport.forEach(node => {
-      const x = node.x || 0;
-      const y = node.y || 0;
-      minX = Math.min(minX, x);
-      minY = Math.min(minY, y);
-      maxX = Math.max(maxX, x + nodeWidth);
-      maxY = Math.max(maxY, y + nodeHeight);
+    // If we're using optimized layout, calculate based on that
+    if (Object.keys(optimizedPositions).length > 0) {
+      // Calculate bounds from optimized positions
+      nodesToImport.forEach(node => {
+        const pos = optimizedPositions[node.id];
+        let nodeWidth = 520; // Wider WeightedChoice width to prevent cutoff
+        let nodeHeight = 180; // default
+        
+        if (node.type === 'WeightedChoice') {
+          const optionCount = node.options?.length || 5;
+          nodeHeight = Math.max(200, 80 + (optionCount * 35));
+        } else if (node.type === 'Output') {
+          nodeHeight = 100; // Output nodes are smaller
+        }
+        
+        maxX = Math.max(maxX, pos.x + nodeWidth);
+        maxY = Math.max(maxY, pos.y + nodeHeight);
+      });
+    } else {
+      // Fall back to original position calculation
+      nodesToImport.forEach(node => {
+        const x = node.x || 0;
+        const y = node.y || 0;
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        
+        let nodeWidth = 520; // Wider to accommodate WeightedChoice nodes
+        let nodeHeight = 180;
+        
+        if (node.type === 'WeightedChoice') {
+          const optionCount = node.options?.length || 5;
+          nodeHeight = Math.max(200, 100 + (optionCount * 35));
+        }
+        
+        maxX = Math.max(maxX, x + nodeWidth);
+        maxY = Math.max(maxY, y + nodeHeight);
+      });
+    }
+    
+    console.log('Fragment bounds calculation:', {
+      minX, minY, maxX, maxY,
+      nodeCount: nodesToImport.length,
+      hasOptimizedLayout: Object.keys(optimizedPositions).length > 0
     });
     
     // Add padding around the content
-    const boxPadding = 40;
-    const boxX = minX - boxPadding;
-    const boxY = minY - boxPadding - 40; // Extra space for title
+    const boxPadding = 60; // Increased padding for better spacing
     const boxWidth = (maxX - minX) + (boxPadding * 2);
-    const boxHeight = (maxY - minY) + (boxPadding * 2) + 40; // Extra for title
+    const boxHeight = (maxY - minY) + (boxPadding * 2) + 80; // Extra space for header
     
-    // Create a bounding box that contains all the nodes
+    console.log('Final box dimensions:', {
+      boxWidth, boxHeight,
+      calculatedMaxX: maxX,
+      calculatedMaxY: maxY
+    });
+    
+    // Create a unique ID for this bounding box
+    boundingBoxId = `region-${region.id || 'fragment'}-${Date.now()}`;
+    
+    // Create an EnhancedBoundingBox - the existing working system
     const boundingBox = {
-      id: `region-${region.id}`,
+      id: boundingBoxId,
       type: 'enhancedBoundingBox',
       position: {
-        x: boxX,
-        y: boxY
+        x: 0,  // Will be positioned by drop location
+        y: 0   // Will be positioned by drop location
       },
       data: {
-        title: region.name || 'Fragment Group',
+        title: region.name || psg.name || 'Asset Fragment',
         description: region.description || psg.description || '',
         backgroundColor: '#1a202c',
-        opacity: 0.1, // Slightly visible background
-        borderColor: '#22d3ee',
+        opacity: 0.1,
+        borderColor: region.color || '#22d3ee',
         borderStyle: 'solid' as const,
         borderWidth: 2,
         locked: false,
+        isCollapsed: false,  // Start expanded so nodes are visible
+        ports: region.ports || [],
+        // IMPORTANT: EnhancedBoundingBox expects dimensions in data, not at top level
         width: boxWidth,
-        height: boxHeight,
-        isCollapsed: false, // Start expanded
-        // Define explicit ports for the bounding box (optional)
-        ports: region.ports || []
+        height: boxHeight
       },
       style: {
         width: boxWidth,
         height: boxHeight,
-        zIndex: -1 // Ensure it's behind other nodes
-      },
-      zIndex: -1 // Lower z-index to render behind
+        zIndex: -1  // Behind the nodes
+      }
     };
     
-    // Add the bounding box first
     graphNodes.push(boundingBox);
   }
   
-  // Create the graph nodes using their original positions
+  // Create the graph nodes using optimized or original positions
   const contentNodes = nodesToImport.map((node) => {
     // Use the node registry to convert PSG type to React Flow type
     // This ensures consistent type mapping across the system
@@ -206,16 +324,44 @@ export function convertPSGToPSGLib(psg: PSGFile): any {
       }
     }
     
-    // Use the original positions from the PSG file
-    const result = {
+    // Handle Output nodes
+    if (node.type === 'Output') {
+      nodeData.template = node.template || '';
+      nodeData.value = node.template || '';
+    }
+    
+    // Build the node with proper parent relationship
+    const result: any = {
       id: node.id,
       type: nodeType,
-      position: {
-        x: node.x || 100,
-        y: node.y || 100
-      },
       data: nodeData
     };
+    
+    // Position nodes appropriately
+    if (boundingBoxId) {
+      // Use optimized positions if available, otherwise fall back to original
+      const pos = optimizedPositions[node.id] || {x: node.x || 0, y: node.y || 0};
+      
+      // For optimized layout, positions are already relative
+      if (optimizedPositions[node.id]) {
+        result.position = {
+          x: pos.x + 40,  // Add padding
+          y: pos.y + 80   // Add header space
+        };
+      } else {
+        // Use original positions, make them relative to box
+        result.position = {
+          x: (pos.x - minX) + 40,  // Relative position inside box with padding
+          y: (pos.y - minY) + 80   // Add extra padding for the header
+        };
+      }
+    } else {
+      // Standalone node, use absolute position
+      result.position = {
+        x: node.x || 100,
+        y: node.y || 100
+      };
+    }
     
     console.log('Created node:', result);
     return result;
@@ -223,6 +369,60 @@ export function convertPSGToPSGLib(psg: PSGFile): any {
   
   // Add content nodes after the bounding box
   graphNodes.push(...contentNodes);
+  
+  // Process edges
+  const processedEdges = psg.edges ? psg.edges
+          .filter(edge => {
+            // Only include edges where both source and target are imported
+            return importedNodeIds.has(edge.source) && importedNodeIds.has(edge.target);
+          })
+          .map(edge => {
+            // Find source and target nodes to determine their types
+            const sourceNode = nodesToImport.find(n => n.id === edge.source);
+            const targetNode = nodesToImport.find(n => n.id === edge.target);
+            
+            // Set handles based on node types
+            let sourceHandle = edge.sourceHandle || null;
+            let targetHandle = edge.targetHandle || null;
+            
+            // Source handles (only set if not already specified)
+            if (!sourceHandle) {
+              if (sourceNode?.type === 'WeightedChoice') {
+                sourceHandle = 'source'; // WeightedChoice outputs from 'source' (not 'main')
+              } else if (sourceNode?.type === 'Output') {
+                sourceHandle = 'source'; // Output nodes also use 'source'
+              } else {
+                sourceHandle = 'source'; // Default source handle for most nodes
+              }
+            }
+            
+            // Target handles (only set if not already specified)
+            if (!targetHandle) {
+              // All nodes receive at 'target' handle
+              targetHandle = 'target';
+            }
+            
+            return {
+              id: edge.id,
+              source: edge.source,
+              target: edge.target,
+              sourceHandle,
+              targetHandle
+            };
+          }) : [];
+  
+  console.log('[PSG] Processing edges for fragment:', {
+    originalEdges: psg.edges,
+    processedEdges,
+    nodeIds: Array.from(importedNodeIds),
+    edgeDetails: processedEdges.map(e => ({
+      id: e.id,
+      source: e.source,
+      target: e.target,
+      sourceHandle: e.sourceHandle,
+      targetHandle: e.targetHandle
+    }))
+  });
   
   return {
     fileType: 'psglib',
@@ -247,79 +447,7 @@ export function convertPSGToPSGLib(psg: PSGFile): any {
     },
     graph: {
       nodes: graphNodes,
-      edges: isFragment 
-        ? // For fragments, filter out edges that connect to Output nodes we've removed
-          psg.edges.filter(edge => {
-            const sourceExists = nodesToImport.some(n => n.id === edge.source);
-            const targetExists = nodesToImport.some(n => n.id === edge.target);
-            return sourceExists && targetExists;
-          }).map(edge => {
-            // Find source and target nodes to determine their types
-            const sourceNode = psg.nodes.find(n => n.id === edge.source);
-            const targetNode = psg.nodes.find(n => n.id === edge.target);
-            
-            // Set handles based on node types
-            let sourceHandle = null;
-            let targetHandle = null;
-            
-            // Source handles
-            if (sourceNode?.type === 'WeightedChoice') {
-              sourceHandle = 'main'; // WeightedChoice outputs from 'main'
-            } else if (sourceNode?.type === 'Output') {
-              sourceHandle = 'output'; // Output nodes output from 'output'
-            }
-            
-            // Target handles  
-            if (targetNode?.type === 'Output') {
-              targetHandle = 'target'; // Output nodes receive at 'target'
-            } else if (targetNode?.type === 'WeightedChoice') {
-              targetHandle = 'target'; // WeightedChoice receives at 'target'
-            } else if (targetNode?.type === 'Concat') {
-              targetHandle = 'target'; // Concat receives at 'target'
-            }
-            
-            return {
-              id: edge.id,
-              source: edge.source,
-              target: edge.target,
-              sourceHandle,
-              targetHandle
-            };
-          })
-        : // For non-fragments, map all edges with proper handles
-          psg.edges.map(edge => {
-            // Find source and target nodes to determine their types
-            const sourceNode = psg.nodes.find(n => n.id === edge.source);
-            const targetNode = psg.nodes.find(n => n.id === edge.target);
-            
-            // Set handles based on node types
-            let sourceHandle = null;
-            let targetHandle = null;
-            
-            // Source handles
-            if (sourceNode?.type === 'WeightedChoice') {
-              sourceHandle = 'main'; // WeightedChoice outputs from 'main'
-            } else if (sourceNode?.type === 'Output') {
-              sourceHandle = 'output'; // Output nodes output from 'output'
-            }
-            
-            // Target handles  
-            if (targetNode?.type === 'Output') {
-              targetHandle = 'target'; // Output nodes receive at 'target'
-            } else if (targetNode?.type === 'WeightedChoice') {
-              targetHandle = 'target'; // WeightedChoice receives at 'target'
-            } else if (targetNode?.type === 'Concat') {
-              targetHandle = 'target'; // Concat receives at 'target'
-            }
-            
-            return {
-              id: edge.id,
-              source: edge.source,
-              target: edge.target,
-              sourceHandle,
-              targetHandle
-            };
-          })
+      edges: processedEdges
     },
     // Store regions in metadata for preservation
     additionalData: {

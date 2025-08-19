@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "martial", "stances"],
+    "tags": [
+      "weapons",
+      "martial",
+      "stances"
+    ],
     "fragment_id": "weapons-martial-stances",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "horse stance", "weight": 10 },
-        { "text": "capoera ginga", "weight": 9 },
-        { "text": "CQC knife-lead", "weight": 8 }
+        {
+          "text": "horse stance",
+          "weight": 10
+        },
+        {
+          "text": "capoera ginga",
+          "weight": 9
+        },
+        {
+          "text": "CQC knife-lead",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "martial-stances-output",
-      "type": "Output",
-      "name": "Martial Stance",
-      "x": 520,
-      "y": 200,
-      "template": "{{martial-stances}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "martial-stances", "target": "martial-stances-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-martial-stances-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["martial-stances", "martial-stances-output"],
+      "nodes": [
+        "martial-stances"
+      ],
       "description": "Martial stances as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

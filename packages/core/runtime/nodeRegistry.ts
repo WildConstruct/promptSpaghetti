@@ -560,6 +560,9 @@ class NodeTypeRegistry {
       isVisualOnly: true,
       tags: ['group', 'container', 'visual', 'organize']
     });
+
+    // Fragment Container removed - using EnhancedBoundingBox for fragments instead
+    // This was causing duplicate containers with conflicting systems
     
     // Post-It Note (Visual Only)
     this.register({

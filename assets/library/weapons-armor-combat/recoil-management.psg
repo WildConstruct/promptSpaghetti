@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "ranged", "control"],
+    "tags": [
+      "weapons",
+      "ranged",
+      "control"
+    ],
     "fragment_id": "weapons-recoil-management",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "high grip clamp", "weight": 12 },
-        { "text": "forward pressure stance", "weight": 11 },
-        { "text": "stock into pocket", "weight": 10 },
-        { "text": "elbows down tension", "weight": 9 },
-        { "text": "lean into recoil", "weight": 8 },
-        { "text": "burst control", "weight": 7 },
-        { "text": "muzzle brake benefit", "weight": 6 },
-        { "text": "follow-through reset", "weight": 5 },
-        { "text": "grip tape assist", "weight": 4 },
-        { "text": "sling tension aid", "weight": 3 },
-        { "text": "breathing control", "weight": 2 },
-        { "text": "weight shift forward", "weight": 1 }
+        {
+          "text": "high grip clamp",
+          "weight": 12
+        },
+        {
+          "text": "forward pressure stance",
+          "weight": 11
+        },
+        {
+          "text": "stock into pocket",
+          "weight": 10
+        },
+        {
+          "text": "elbows down tension",
+          "weight": 9
+        },
+        {
+          "text": "lean into recoil",
+          "weight": 8
+        },
+        {
+          "text": "burst control",
+          "weight": 7
+        },
+        {
+          "text": "muzzle brake benefit",
+          "weight": 6
+        },
+        {
+          "text": "follow-through reset",
+          "weight": 5
+        },
+        {
+          "text": "grip tape assist",
+          "weight": 4
+        },
+        {
+          "text": "sling tension aid",
+          "weight": 3
+        },
+        {
+          "text": "breathing control",
+          "weight": 2
+        },
+        {
+          "text": "weight shift forward",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "recoil-management-output",
-      "type": "Output",
-      "name": "Recoil Management Method",
-      "x": 520,
-      "y": 200,
-      "template": "{{recoil-management}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "recoil-management", "target": "recoil-management-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-recoil-management-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["recoil-management", "recoil-management-output"],
+      "nodes": [
+        "recoil-management"
+      ],
       "description": "Recoil management as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

@@ -237,47 +237,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "eye-description-output",
-      "type": "Output",
-      "name": "Complete Eye Description",
-      "description": "Combines all aspects into natural description",
-      "x": 450,
-      "y": 250,
-      "template": "{{eye-size-position}}{{#eye-size-position}} {{/eye-size-position}}{{eye-color-feature}} {{eye-shape}} eyes",
-      "template_comment": "Smart spacing - only adds space if size/position exists"
-    },
-    {
-      "id": "simple-eye-output",
-      "type": "Output",
-      "name": "Simple Eye Description",
-      "description": "Shape-only description for minimal approach",
-      "x": 450,
-      "y": 100,
-      "template": "{{eye-shape}} eyes"
     }
   ],
   "edges": [
     {
-      "id": "e1",
+      "id": "edge-shape-to-color",
       "source": "eye-shape",
-      "target": "eye-description-output"
+      "target": "eye-color-feature"
     },
     {
-      "id": "e2",
+      "id": "edge-color-to-position",
       "source": "eye-color-feature",
-      "target": "eye-description-output"
-    },
-    {
-      "id": "e3",
-      "source": "eye-size-position",
-      "target": "eye-description-output"
-    },
-    {
-      "id": "e4",
-      "source": "eye-shape",
-      "target": "simple-eye-output"
+      "target": "eye-size-position"
     }
   ],
   "regions": [
@@ -289,9 +260,7 @@
       "nodes": [
         "eye-shape",
         "eye-color-feature",
-        "eye-size-position",
-        "eye-description-output",
-        "simple-eye-output"
+        "eye-size-position"
       ],
       "description": "Complete eye description system as a single collapsible unit",
       "metadata": {

@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "CQC", "technique"],
+    "tags": [
+      "weapons",
+      "CQC",
+      "technique"
+    ],
     "fragment_id": "weapons-close-quarters-techniques",
     "collapsible": true
   },
@@ -20,41 +24,72 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "elbow spike", "weight": 12 },
-        { "text": "knee strike", "weight": 11 },
-        { "text": "headbutt", "weight": 10 },
-        { "text": "buttstock jab", "weight": 9 },
-        { "text": "muzzle strike", "weight": 8 },
-        { "text": "shoulder shove", "weight": 7 },
-        { "text": "collar choke", "weight": 6 },
-        { "text": "underhook control", "weight": 5 },
-        { "text": "hip check", "weight": 4 },
-        { "text": "forearm frame", "weight": 3 },
-        { "text": "retention clamp", "weight": 2 },
-        { "text": "edge drag", "weight": 1 }
+        {
+          "text": "elbow spike",
+          "weight": 12
+        },
+        {
+          "text": "knee strike",
+          "weight": 11
+        },
+        {
+          "text": "headbutt",
+          "weight": 10
+        },
+        {
+          "text": "buttstock jab",
+          "weight": 9
+        },
+        {
+          "text": "muzzle strike",
+          "weight": 8
+        },
+        {
+          "text": "shoulder shove",
+          "weight": 7
+        },
+        {
+          "text": "collar choke",
+          "weight": 6
+        },
+        {
+          "text": "underhook control",
+          "weight": 5
+        },
+        {
+          "text": "hip check",
+          "weight": 4
+        },
+        {
+          "text": "forearm frame",
+          "weight": 3
+        },
+        {
+          "text": "retention clamp",
+          "weight": 2
+        },
+        {
+          "text": "edge drag",
+          "weight": 1
+        }
       ]
-    },
-    {
-      "id": "close-quarters-techniques-output",
-      "type": "Output",
-      "name": "CQC Technique",
-      "x": 520,
-      "y": 200,
-      "template": "{{close-quarters-techniques}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "close-quarters-techniques", "target": "close-quarters-techniques-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-close-quarters-techniques-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["close-quarters-techniques", "close-quarters-techniques-output"],
+      "nodes": [
+        "close-quarters-techniques"
+      ],
       "description": "CQC techniques as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

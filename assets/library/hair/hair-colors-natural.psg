@@ -7,7 +7,12 @@
     "author": "Aspen",
     "category": "hair-appearance",
     "type": "ASSET_FRAGMENT",
-    "tags": ["hair", "color", "natural", "realistic"],
+    "tags": [
+      "hair",
+      "color",
+      "natural",
+      "realistic"
+    ],
     "fragment_id": "hair-colors-natural",
     "collapsible": true
   },
@@ -121,30 +126,18 @@
           }
         }
       ]
-    },
-    {
-      "id": "hair-color-natural-output",
-      "type": "Output",
-      "name": "Natural Hair Color Description",
-      "x": 500,
-      "y": 200,
-      "template": "{{hair-color-natural}} hair"
     }
   ],
-  "edges": [
-    {
-      "id": "e1",
-      "source": "hair-color-natural",
-      "target": "hair-color-natural-output"
-    }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "hair-color-natural-fragment",
       "name": "Natural Hair Color Fragment",
       "color": "#8B4513",
       "color_comment": "Saddle Brown - Natural hair colors",
-      "nodes": ["hair-color-natural", "hair-color-natural-output"],
+      "nodes": [
+        "hair-color-natural"
+      ],
       "description": "Natural hair colors as single unit",
       "metadata": {
         "fragment_type": "hair_color",

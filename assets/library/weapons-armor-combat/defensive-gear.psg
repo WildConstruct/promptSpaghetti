@@ -7,7 +7,11 @@
     "author": "Aspen",
     "category": "weapons-armor-combat",
     "type": "ASSET_FRAGMENT",
-    "tags": ["weapons", "defense", "armor"],
+    "tags": [
+      "weapons",
+      "defense",
+      "armor"
+    ],
     "fragment_id": "weapons-defensive-gear",
     "collapsible": true
   },
@@ -20,32 +24,36 @@
       "x": 200,
       "y": 200,
       "options": [
-        { "text": "kite shield", "weight": 10 },
-        { "text": "carbon weave vest", "weight": 9 },
-        { "text": "kinetic bubble", "weight": 8 }
+        {
+          "text": "kite shield",
+          "weight": 10
+        },
+        {
+          "text": "carbon weave vest",
+          "weight": 9
+        },
+        {
+          "text": "kinetic bubble",
+          "weight": 8
+        }
       ]
-    },
-    {
-      "id": "defensive-gear-output",
-      "type": "Output",
-      "name": "Defensive Gear",
-      "x": 520,
-      "y": 200,
-      "template": "{{defensive-gear}}"
     }
   ],
-  "edges": [
-    { "id": "e1", "source": "defensive-gear", "target": "defensive-gear-output" }
-  ],
+  "edges": [],
   "regions": [
     {
       "id": "weapons-defensive-gear-fragment",
       "name": "Weapons & Combat Fragment",
       "color": "#DC143C",
       "color_comment": "Crimson - Weapons/Combat",
-      "nodes": ["defensive-gear", "defensive-gear-output"],
+      "nodes": [
+        "defensive-gear"
+      ],
       "description": "Defensive gear as a single collapsible unit",
-      "metadata": { "fragment_type": "weapons_base", "integration_priority": 1 }
+      "metadata": {
+        "fragment_type": "weapons_base",
+        "integration_priority": 1
+      }
     }
   ]
 }

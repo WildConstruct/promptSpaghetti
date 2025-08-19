@@ -96,7 +96,7 @@ const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
     sizeRef.current = size;
   }, [size]);
   
-  // Calculate contained nodes
+  // Calculate contained nodes - use position-based containment
   const getContainedNodes = useCallback(() => {
     const allNodes = getNodes();
     const thisBox = allNodes.find(n => n.id === id);
@@ -105,6 +105,7 @@ const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
     const contained = allNodes.filter(node => {
       if (node.id === id || node.type === 'boundingBox' || node.type === 'enhancedBoundingBox') return false;
       
+      // Check position-based containment
       const nodeX = node.position.x;
       const nodeY = node.position.y;
       const nodeWidth = node.width || 150;
@@ -123,7 +124,6 @@ const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
       );
     });
     
-    // Found contained nodes - tracked via performance monitor
     return contained;
   }, [id, size.width, getNodes]);
   
@@ -142,6 +142,7 @@ const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
         const nodesToMove = getContainedNodes();
         setNodes((nodes) =>
           nodes.map((node) => {
+            // Move nodes that are contained in this box
             if (nodesToMove.some(cn => cn.id === node.id)) {
               return {
                 ...node,
@@ -303,12 +304,50 @@ const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
         });
       });
       
-      // Hide edges connected to hidden nodes
+      // Hide internal edges and reroute external edges through ports
       setEdges((edges) => {
         return edges.map((edge) => {
-          if (edgesToToggle.some(e => e.id === edge.id)) {
+          const sourceInside = nodeIds.has(edge.source);
+          const targetInside = nodeIds.has(edge.target);
+          
+          // Both nodes inside - hide the edge
+          if (sourceInside && targetInside) {
             return { ...edge, hidden: true };
           }
+          
+          // Edge crosses boundary - reroute through port
+          if (sourceInside !== targetInside) {
+            if (sourceInside) {
+              // Source inside, target outside - reroute from output port
+              return {
+                ...edge,
+                source: id, // Connect from bounding box
+                sourceHandle: `${id}-default-output`, // Use the default output port
+                hidden: false,
+                data: {
+                  ...edge.data,
+                  originalSource: edge.source,
+                  originalSourceHandle: edge.sourceHandle,
+                  reroutedByCollapse: true
+                }
+              };
+            } else if (targetInside) {
+              // Source outside, target inside - reroute to input port
+              return {
+                ...edge,
+                target: id, // Connect to bounding box
+                targetHandle: `${id}-default-input`, // Use the default input port
+                hidden: false,
+                data: {
+                  ...edge.data,
+                  originalTarget: edge.target,
+                  originalTargetHandle: edge.targetHandle,
+                  reroutedByCollapse: true
+                }
+              };
+            }
+          }
+          
           return edge;
         });
       });
@@ -359,14 +398,39 @@ const EnhancedBoundingBox: React.FC<NodeProps<EnhancedBoundingBoxData>> = ({
         });
       });
       
-      // Show edges that were hidden
+      // Restore original edges
       setEdges((edges) => {
         return edges.map((edge) => {
+          // Restore rerouted edges to their original state
+          if (edge.data?.reroutedByCollapse) {
+            const restoredEdge = { ...edge };
+            
+            // Restore original source if it was rerouted
+            if (edge.data.originalSource) {
+              restoredEdge.source = edge.data.originalSource;
+              restoredEdge.sourceHandle = edge.data.originalSourceHandle || null;
+            }
+            
+            // Restore original target if it was rerouted
+            if (edge.data.originalTarget) {
+              restoredEdge.target = edge.data.originalTarget;
+              restoredEdge.targetHandle = edge.data.originalTargetHandle || null;
+            }
+            
+            // Clean up the rerouting data
+            const { originalSource, originalSourceHandle, originalTarget, originalTargetHandle, reroutedByCollapse, ...restData } = restoredEdge.data || {};
+            restoredEdge.data = restData;
+            restoredEdge.hidden = false;
+            
+            return restoredEdge;
+          }
+          
           // Show edges connected to nodes that were hidden
           const shouldShow = collapsedNodeIds.includes(edge.source) || collapsedNodeIds.includes(edge.target);
           if (shouldShow) {
             return { ...edge, hidden: false };
           }
+          
           return edge;
         });
       });
