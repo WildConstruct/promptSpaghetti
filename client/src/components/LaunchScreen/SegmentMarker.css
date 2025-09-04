@@ -1,0 +1,147 @@
+/* Segment Marker Styles - After Effects inspired */
+.segment-marker {
+  position: relative;
+  display: inline;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.segment-marker.mapped {
+  /* Has node mapping - show handles on hover */
+}
+
+.segment-marker.dragging {
+  opacity: 0.8;
+  cursor: ew-resize;
+}
+
+/* Resize handles - inspired by After Effects markers */
+.segment-handle {
+  position: absolute;
+  width: 8px;
+  height: 100%;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: ew-resize;
+  z-index: 30;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Show handles on hover or when selected */
+.segment-marker:hover .segment-handle,
+.segment-marker.selected .segment-handle,
+.segment-marker.dragging .segment-handle {
+  opacity: 1;
+}
+
+.segment-handle-start {
+  left: -4px;
+  background: linear-gradient(to right, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.2) 30%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    rgba(255, 255, 255, 0.2) 70%, 
+    transparent 100%
+  );
+  border-left: 2px solid currentColor;
+}
+
+.segment-handle-end {
+  right: -4px;
+  background: linear-gradient(to left, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.2) 30%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    rgba(255, 255, 255, 0.2) 70%, 
+    transparent 100%
+  );
+  border-right: 2px solid currentColor;
+}
+
+/* Visual feedback on handle hover */
+.segment-handle:hover {
+  background: linear-gradient(to right, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.3) 30%, 
+    rgba(255, 255, 255, 0.6) 50%, 
+    rgba(255, 255, 255, 0.3) 70%, 
+    transparent 100%
+  );
+}
+
+.segment-handle-start:hover {
+  border-left-color: #4a9eff;
+}
+
+.segment-handle-end:hover {
+  border-right-color: #4a9eff;
+}
+
+/* Active dragging state */
+.segment-marker.dragging .segment-handle {
+  background: rgba(74, 158, 255, 0.3);
+}
+
+/* Selection indicator */
+.segment-marker.selected {
+  outline: 2px solid rgba(74, 158, 255, 0.5);
+  outline-offset: 2px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    outline-color: rgba(74, 158, 255, 0.5);
+  }
+  50% {
+    outline-color: rgba(74, 158, 255, 0.8);
+  }
+}
+
+/* Hover state */
+.segment-marker.hovered {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+}
+
+/* Visual marker bounds indicator (like After Effects) */
+.segment-marker::before,
+.segment-marker::after {
+  content: '';
+  position: absolute;
+  width: 1px;
+  height: 120%;
+  top: -10%;
+  background: currentColor;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.segment-marker::before {
+  left: 0;
+}
+
+.segment-marker::after {
+  right: 0;
+}
+
+.segment-marker:hover::before,
+.segment-marker:hover::after,
+.segment-marker.selected::before,
+.segment-marker.selected::after {
+  opacity: 0.3;
+}
+
+/* Cursor hints */
+.segment-marker .segment-handle-start {
+  cursor: w-resize;
+}
+
+.segment-marker .segment-handle-end {
+  cursor: e-resize;
+}
