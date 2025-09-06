@@ -1196,7 +1196,7 @@
 .section-container.collapsed .keyword-buttons-section {
   display: none;
 }
-EOF < /dev/null
+
 /* ============================================
    AFTER EFFECTS STYLE SECTIONS
    ============================================ */
@@ -1406,4 +1406,3 @@ EOF < /dev/null
 .ae-section-content {
   transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-EOF < /dev/null

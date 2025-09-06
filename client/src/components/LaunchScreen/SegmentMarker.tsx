@@ -16,6 +16,8 @@ interface SegmentMarkerProps {
   isHovered?: boolean;
   onHover?: (hovered: boolean) => void;
   onClick?: () => void;
+  onChangeNodeType?: (newType: 'Text' | 'Choice' | 'Variable') => void;
+  onDelete?: () => void;
 }
 
 export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
@@ -27,7 +29,23 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
   isHovered,
   onHover,
   onClick,
+  onChangeNodeType,
+  onDelete,
 }) => {
+  const FALLBACK_COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#FFB347','#B19CD9'];
+  const hexToRgba = useCallback((hex?: string, alpha = 0.7) => {
+    if (!hex) return `rgba(0,0,0,0)`;
+    const h = hex.replace('#', '');
+    const bigint = parseInt(h, 16);
+    if (h.length === 6) {
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+    // fallback
+    return `rgba(0,0,0,0.45)`;
+  }, []);
   const [isDraggingStart, setIsDraggingStart] = useState(false);
   const [isDraggingEnd, setIsDraggingEnd] = useState(false);
   const [localStart, setLocalStart] = useState(segment.startIndex);
@@ -61,7 +79,6 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
     const handleMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
 
-      const rect = containerRef.current.getBoundingClientRect();
       const parentRect = containerRef.current.parentElement?.getBoundingClientRect();
       if (!parentRect) return;
 
@@ -100,18 +117,27 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
   }, [isDraggingStart, isDraggingEnd, localStart, localEnd, fullText.length, index, onSegmentUpdate]);
 
   const displayText = fullText.slice(localStart, localEnd);
+  const ensureColor = (id?: string, color?: string) => {
+    if (color) return color;
+    if (!id) return FALLBACK_COLORS[0];
+    let h = 0;
+    for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+    return FALLBACK_COLORS[h % FALLBACK_COLORS.length];
+  };
+  const resolvedColor = ensureColor(segment.nodeId, segment.color);
 
   return (
     <span
       ref={containerRef}
       className={`segment-marker ${segment.nodeId ? 'mapped' : ''} ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''} ${isDraggingStart || isDraggingEnd ? 'dragging' : ''}`}
       style={{
-        backgroundColor: segment.color ? `${segment.color}66` : 'transparent',
-        borderBottom: segment.color ? `3px solid ${segment.color}` : 'none',
-        color: '#e1e1e1',
-        textShadow: segment.color ? '0 1px 3px rgba(0, 0, 0, 0.8)' : 'none',
-        borderRadius: segment.color ? '3px' : '0',
-        fontWeight: segment.color ? '600' : 'normal',
+        backgroundColor: hexToRgba(resolvedColor, 0.5),
+        borderBottom: `4px solid ${resolvedColor}`,
+        color: '#f0f3f6',
+        textShadow: '0 1px 3px rgba(0, 0, 0, 0.9)',
+        boxShadow: `0 0 0 1px ${resolvedColor}55`,
+        borderRadius: '3px',
+        fontWeight: '600',
         position: 'relative',
       }}
       onMouseEnter={() => onHover?.(true)}
@@ -139,6 +165,31 @@ export const SegmentMarker: React.FC<SegmentMarkerProps> = ({
           onMouseDown={handleEndDragBegin}
           title="Drag to adjust end"
         />
+      )}
+
+      {/* Inline node type menu when selected or hovered */}
+      {(isSelected || isHovered) && segment.nodeId && (
+        <span className="segment-inline-menu" onClick={(e) => e.stopPropagation()} style={{ pointerEvents: 'auto', zIndex: 100000 }}>
+          <button
+            className="segment-inline-btn"
+            title="Set to Text"
+            onClick={() => onChangeNodeType?.('Text')}
+          >T</button>
+          <button
+            className="segment-inline-btn"
+            title="Set to Choice"
+            onClick={() => onChangeNodeType?.('Choice')}
+          >C</button>
+          <button
+            className="segment-inline-btn"
+            title="Delete segment mapping"
+            aria-label="Delete segment"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.();
+            }}
+          >✕</button>
+        </span>
       )}
     </span>
   );

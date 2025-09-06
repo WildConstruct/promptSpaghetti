@@ -6,34 +6,160 @@
   height: 100%;
 }
 
+
+/* Selected node full-text preview under toolbar */
+.selected-node-preview {
+  margin: -0.25rem 4px 0.25rem 4px;
+  padding: 6px 8px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #cfd8dc;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  max-height: 96px;
+  overflow: visible; /* avoid clipping inline menus */
+}
+
 /* Input Container */
 .dissector-input-container {
   position: relative;
   flex: 1;
   min-height: 200px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px; /* Restored rounded corners */
+  overflow: visible; /* allow menus to render outside without clipping */
+  background: transparent; /* Remove dark background for initial state */
+  border: 1px solid rgba(103, 126, 234, 0.3) !important; /* Purple border matching theme */
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-/* Overlay for highlights */
+/* Prevent green focus outline on container */
+.dissector-input-container:focus-within {
+  border: 1px solid rgba(103, 126, 234, 0.5) !important; /* Slightly brighter purple on focus */
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Override any browser default outlines */
+.dissector-input-container *:focus,
+.dissector-input-container *:focus-visible,
+.dissector-input-container *:active,
+.dissector-input-container *:focus-within {
+  outline: none !important;
+  outline-color: transparent !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure container itself maintains purple border on all states */
+.dissector-input-container:focus,
+.dissector-input-container:active,
+.dissector-input-container:focus-visible {
+  border: 1px solid rgba(103, 126, 234, 0.5) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Inline toolbar - compact like original */
+.dissector-toolbar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px; /* 50% taller */
+  margin: 0 0 4px 0; /* Reduced bottom margin to match stats spacing */
+  background: rgba(20, 22, 28, 0.95);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(103, 126, 234, 0.3); /* Match text box border color and thickness */
+  border-radius: 8px; /* Match other rounded corners */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  z-index: 10;
+  pointer-events: auto;
+  width: 100%; /* Make toolbar full width to match text box */
+  box-sizing: border-box;
+}
+
+.dissector-toolbar-sep {
+  width: 1px;
+  height: 24px; /* Taller separator to match buttons */
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 2px;
+}
+
+.dissector-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  color: #e1e1e1;
+  font-size: 12px; /* Slightly larger font */
+  line-height: 1;
+  padding: 6px 10px; /* Bigger buttons */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dissector-btn:hover:not([disabled]) {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+  transform: translateY(-0.5px);
+}
+
+.dissector-btn:active:not([disabled]) {
+  transform: translateY(0);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+}
+
+.dissector-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Debug chip to confirm UI is active */
+.dissector-debug-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  margin-left: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9be79b;
+  background: rgba(0, 128, 0, 0.15);
+  border: 1px solid rgba(0, 255, 0, 0.2);
+  border-radius: 6px;
+}
+
+/* Overlay for highlights - positioned BEHIND text for legibility */
 .dissector-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 60px; /* Leave space for buttons */
   padding: 1rem;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
   font-size: 1rem;
   line-height: 1.6;
-  color: transparent;
-  pointer-events: none;
+  color: transparent; /* child markers will set their own color */
+  pointer-events: none; /* let events fall through */
   overflow: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
-  z-index: 1;
+  z-index: 3; /* Above textarea but allow pointer events through */
+}
+
+/* Hide overlay completely in edit mode */
+.dissector-overlay.edit-mode {
+  display: none;
+}
+
+/* Allow mapped segments to receive pointer events for interaction */
+.dissector-overlay .highlight-segment.mapped {
+  pointer-events: auto;
 }
 
 .dissector-highlights {
@@ -47,19 +173,25 @@
   transition: all 0.2s ease;
   border-radius: 3px;
   padding: 2px 0;
+  pointer-events: none; /* non-mapped spans do not block textarea interactions */
 }
 
 .highlight-segment.mapped {
   pointer-events: auto;
   cursor: pointer;
+  position: relative;
 }
 
 .highlight-segment.mapped:hover {
-  filter: brightness(1.2);
+  /* Disable brightness change to avoid flicker */
+  filter: none;
 }
 
 .highlight-segment.selected {
-  animation: pulse 1s ease-in-out infinite;
+  /* Remove pulse to avoid perceived flicker */
+  animation: none;
+  outline: 1px solid rgba(255,255,255,0.15);
+  z-index: 2;
 }
 
 @keyframes pulse {
@@ -72,28 +204,308 @@
 }
 
 .highlight-segment.hovered {
-  filter: brightness(1.3);
+  filter: brightness(1.2);
   transform: translateY(-1px);
 }
 
-/* Textarea */
-.dissector-textarea {
-  position: relative;
+/* Inline close button - white X on segment */
+.segment-inline-close {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 16px;
+  height: 16px;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid currentColor; /* inherits segment's color */
+  border-radius: 50%;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  pointer-events: auto;
+  transition: all 0.15s ease;
+}
+
+.segment-inline-close:hover {
+  background: rgba(0, 0, 0, 1);
+  transform: scale(1.1);
+}
+
+/* Type menu - appears below segment on hover */
+.segment-type-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  display: inline-flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 3px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.segment-type-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.segment-type-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* Simple textarea for editing */
+.dissector-textarea-simple {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 60px); /* Leave space for buttons */
   padding: 1rem;
   background: transparent;
-  border: none;
-  outline: none;
+  border: none !important;
+  outline: none !important;
+  border-radius: 12px;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.8; /* Match content display line height */
   color: #e1e1e1;
   resize: none;
-  z-index: 2;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+/* Initial state - no background */
+.dissector-textarea-simple.initial {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.dissector-textarea-simple.edit-mode {
+  background: rgba(20, 22, 28, 0.98) !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* Prevent any focus styles on textarea */
+.dissector-textarea-simple:focus,
+.dissector-textarea-simple:focus-visible,
+.dissector-textarea-simple:active {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Content display with inline spans */
+.dissector-content-display {
+  padding: 1rem;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 1rem;
+  line-height: 1.8; /* Increased line spacing */
+  color: #e1e1e1;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 200px;
+  max-height: calc(100% - 60px); /* Leave space for buttons */
+  overflow: auto;
+}
+
+/* Inline segments */
+.segment-inline {
+  position: relative;
+  display: inline; /* Back to inline to prevent full-width wrapping */
+  transition: all 0.2s ease;
+}
+
+.segment-inline.plain {
+  color: #e1e1e1;
+}
+
+.segment-inline.mapped {
+  cursor: pointer;
+  position: relative;
+}
+
+.segment-inline.mapped:hover {
+  filter: brightness(1.2);
+}
+
+.segment-inline.selected {
+  /* Remove outline since we're using underline only on selection */
+}
+
+/* Delete button for segments */
+.segment-delete-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  color: black;
+  font-size: 10px;
+  font-weight: bold;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  padding: 0;
+  line-height: 1;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.segment-inline.selected .segment-delete-btn {
+  display: flex;
+}
+
+.segment-delete-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* Inline delete button that flows with text */
+.segment-delete-btn-inline {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  color: black;
+  font-size: 10px;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  padding: 0;
+  margin-left: 12px; /* Moved 10px more to the right */
+  margin-right: 2px;
+  vertical-align: super;
+  line-height: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  top: -4px;
+}
+
+.segment-delete-btn-inline:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* Prevent focus styles from changing background */
+.dissector-textarea:focus {
+  background: transparent !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Prevent any active or focus-visible styles */
+.dissector-textarea:active,
+.dissector-textarea:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* When readonly (not in edit mode), prevent text cursor */
+.dissector-textarea:read-only {
+  cursor: default;
+  user-select: auto; /* allow selection but not editing */
+}
+
+/* In edit mode, give textarea a background and text cursor */
+.dissector-textarea.edit-mode {
+  background: rgba(20, 22, 28, 0.98) !important;
+  z-index: 10;
+  cursor: text;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Edit trigger button - lower right corner */
+.dissector-edit-trigger-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 6px 16px;
+  background: rgba(30, 32, 38, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #e1e1e1;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 100; /* High z-index to ensure clickability */
+  pointer-events: auto; /* Ensure pointer events work */
+}
+
+.dissector-edit-trigger-btn:hover {
+  background: rgba(40, 42, 48, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Edit mode hint text */
+.dissector-edit-hint {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Edit mode action bar - OK/Cancel buttons */
+.dissector-editbar {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  background: rgba(30, 32, 38, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+  z-index: 10000; /* Even higher z-index */
+  pointer-events: auto !important; /* Force pointer events */
+  isolation: isolate; /* Create new stacking context */
+}
+
+.dissector-editbar * {
+  pointer-events: auto !important; /* Ensure all children can be clicked */
+}
+
+/* Removed menu layer - not needed with inline approach */
 
 .dissector-textarea::placeholder {
   color: rgba(255, 255, 255, 0.3);
@@ -105,8 +517,9 @@
   gap: 1.5rem;
   padding: 0.75rem 1rem;
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 6px;
+  border-radius: 8px; /* Match other rounded corners */
   border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0.5rem; /* Add consistent spacing */
 }
 
 .stat-item {
@@ -142,12 +555,14 @@
   color: #999;
   font-size: 0.9rem;
   font-weight: 600;
+  margin-right: 0.5rem;
 }
 
 .legend-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  min-width: 100px; /* consistent minimum width */
 }
 
 .legend-color {
@@ -155,11 +570,13 @@
   height: 16px;
   border-radius: 3px;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0; /* prevent shrinking */
 }
 
 .legend-label {
   color: #e1e1e1;
   font-size: 0.85rem;
+  white-space: nowrap; /* prevent wrapping */
 }
 
 /* Scrollbar styling */

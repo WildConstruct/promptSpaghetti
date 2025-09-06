@@ -134,9 +134,9 @@
 .launch-actions {
   padding: 1.5rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .launch-button-primary {
@@ -176,6 +176,16 @@
   border-radius: 4px;
   font-family: monospace;
   font-size: 0.85rem;
+}
+
+.launch-inline-actions {
+  margin-left: auto; /* push to right side */
+}
+
+.launch-inline-actions-row {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 /* Tips */

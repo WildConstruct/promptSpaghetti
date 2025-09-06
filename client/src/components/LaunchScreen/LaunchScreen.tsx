@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { PromptDissector } from './PromptDissector';
+import { PromptDissectorErrorBoundary } from './PromptDissectorErrorBoundary';
 import { NodePreview } from './NodePreview';
 import { QuickActions } from './QuickActions';
 import type { PromptAnalysis } from '../../lib/simplePromptParser';
@@ -36,9 +37,8 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
       setIsAnalyzing(false);
       setSelectedNodeId(null);
       setNodeOverrides({});
-    } else {
-      setIsAnalyzing(true);
     }
+    // Don't automatically set isAnalyzing - let PromptDissector control when analysis starts
   }, []);
 
   // Handle analysis results from PromptDissector
@@ -150,14 +150,18 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
         <div className="launch-column launch-column-left">
           <div className="launch-section">
             <h2>Enter Your Prompt</h2>
-            <PromptDissector
-              value={promptText}
-              onChange={handlePromptChange}
-              onAnalysisComplete={handleAnalysisComplete}
-              selectedNodeId={selectedNodeId}
-              focusOnValueChange
-              placeholder="Type or paste your prompt here... For example: 'A warrior with a sword and shield, wearing armor or leather clothing'"
-            />
+            <PromptDissectorErrorBoundary>
+              <PromptDissector
+                value={promptText}
+                onChange={handlePromptChange}
+                onAnalysisComplete={handleAnalysisComplete}
+                onAnalysisStart={() => setIsAnalyzing(true)}
+                selectedNodeId={selectedNodeId}
+                onSelectNode={handleNodeSelect}
+                focusOnValueChange
+                placeholder="Type or paste your prompt here... For example: 'A warrior with a sword and shield, wearing armor or leather clothing'"
+              />
+            </PromptDissectorErrorBoundary>
           </div>
           
           {/* Analysis Status */}
@@ -180,21 +184,7 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             />
           </div>
 
-          {/* Node Actions for selected node */}
-          {selectedNodeId && mergedAnalysis && (() => {
-            const sel = mergedAnalysis.nodes.find(n => n.node.id === selectedNodeId)?.node;
-            if (!sel || sel.nodeType === 'Output') return null; // hide actions for Output
-            return (
-            <div className="node-actions">
-              <h3>Node Actions</h3>
-              <div className="node-actions-row">
-                <button className="launch-button-secondary" onClick={() => applyNodeType('Text')}>Make Text</button>
-                <button className="launch-button-secondary" onClick={() => applyNodeType('Choice')}>Make Choice</button>
-                <button className="launch-button-tertiary" onClick={resetNodeOverride}>Reset</button>
-              </div>
-            </div>
-            );
-          })()}
+          {/* Node Actions are now persistent and placed near Launch Editor */}
           
           {/* Launch Button */}
           <div className="launch-actions">
@@ -208,6 +198,20 @@ export const LaunchScreen: React.FC<LaunchScreenProps> = ({ onLaunch }) => {
             <span className="launch-hint">
               or press <kbd>⌘</kbd> + <kbd>Enter</kbd>
             </span>
+
+            <div className="launch-inline-actions">
+              {(() => {
+                const selNode = mergedAnalysis?.nodes.find(n => n.node.id === selectedNodeId)?.node;
+                const disabled = !selectedNodeId || !selNode || selNode.nodeType === 'Output';
+                return (
+                  <div className="launch-inline-actions-row">
+                    <button className="launch-button-secondary" onClick={() => applyNodeType('Text')} disabled={disabled}>Make Text</button>
+                    <button className="launch-button-secondary" onClick={() => applyNodeType('Choice')} disabled={disabled}>Make Choice</button>
+                    <button className="launch-button-tertiary" onClick={resetNodeOverride} disabled={disabled}>Reset</button>
+                  </div>
+                );
+              })()}
+            </div>
           </div>
         </div>
 

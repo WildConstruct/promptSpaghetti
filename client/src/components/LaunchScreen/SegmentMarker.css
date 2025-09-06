@@ -8,10 +8,6 @@
   -webkit-user-select: none;
 }
 
-.segment-marker.mapped {
-  /* Has node mapping - show handles on hover */
-}
-
 .segment-marker.dragging {
   opacity: 0.8;
   cursor: ew-resize;
@@ -106,6 +102,37 @@
 .segment-marker.hovered {
   filter: brightness(1.2);
   transform: translateY(-1px);
+}
+
+/* Inline node-type menu */
+.segment-inline-menu {
+  position: absolute;
+  bottom: -32px; /* render below the segment to avoid clipping by overlay's top */
+  left: 0;
+  display: inline-flex;
+  gap: 6px;
+  padding: 4px 6px;
+  background: rgba(20, 22, 28, 0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+  z-index: 99999; /* force above */
+}
+
+.segment-inline-btn {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  color: #eaeaea;
+  font-size: 11px;
+  line-height: 1;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.segment-inline-btn:hover {
+  border-color: rgba(255,255,255,0.22);
 }
 
 /* Visual marker bounds indicator (like After Effects) */

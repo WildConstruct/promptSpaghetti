@@ -256,69 +256,14 @@
             </div>
           </div>
 
-          <div class="content-body"><h1>Chapter 1: Introduction & Overview</h1><p>Welcome to the <strong>Content Authoring Handbook</strong> for Prompt Spaghetti! This comprehensive guide will teach you how to create, manage, and optimize content generators using our powerful node-based system.</p><h2>What is Prompt Spaghetti?</h2><p>Prompt Spaghetti is a sophisticated content generation system that combines:</p>
-<ul><li><strong>Visual Node-Based Editing</strong>: Create generators using an intuitive graph interface</li>
-<li><strong>Deterministic Randomization</strong>: Generate varied but reproducible content using seeds</li>
-<li><strong>Modular Architecture</strong>: Build complex generators from reusable components</li>
-<li><strong>Rich Rule System</strong>: Express complex content patterns with weighted choices, conditionals, and variables</li>
-<li><strong>Professional Tooling</strong>: Debug overlays, testing frameworks, and performance optimization</li><p>At its core, Prompt Spaghetti transforms structured rule definitions into dynamic, varied output while maintaining complete control over the generation process.</p><h2>Key Concepts and Terminology</h2><p>Before diving in, let's establish the fundamental concepts:</p><h3>Generators</h3><p>A <strong>generator</strong> is a collection of rules that produce randomized content. Generators are defined in JSON format and contain:</p>
-<li>Metadata (name, author, version)</li>
-<li>Grammar rules (the content patterns)</li>
-<li>Variables (dynamic values)</li>
-<li>Entry points (where generation begins)</li><h3>Nodes</h3><p>In the visual editor, content is created using <strong>nodes</strong> - visual components that represent different operations:</p>
-<li><strong>WeightedChoice</strong>: Selects from weighted options</li>
-<li><strong>Concat</strong>: Combines multiple inputs</li>
-<li><strong>Output</strong>: Produces final text</li>
-<li><strong>SetVariable/GetVariable</strong>: Manages dynamic values</li>
-<li><strong>Conditional</strong>: Branches based on conditions</li>
-<li><strong>Sequential</strong>: Processes items in order</li>
-<li><strong>Markov</strong>: State-based transitions</li><h3>Rules</h3><strong>Rules</strong> define how content varies. They can be:</p>
-<li>Simple strings: <code>"Hello, world!"</code></li>
-<li>Arrays of options: <code>["red", "blue", "green"]</code></li>
-<li>Weighted choices: <code>[{"w": 2, "v": "common"}, {"w": 1, "v": "rare"}]</code></li>
-<li>Nested structures with modifiers and conditions</li><h3>Deterministic Execution</h3><p>Unlike pure random generation, Prompt Spaghetti uses <strong>deterministic randomization</strong>:</p>
-<li>Same seed + same generator = identical output</li>
-<li>Enables reproducible results</li>
-<li>Allows "favorite" generations to be saved</li>
-<li>Facilitates testing and debugging</li><h3>Variable Context</h3><p>The <strong>variable context</strong> flows through the generation process:</p>
-<li>Variables can be set and retrieved at any point</li>
-<li>Context propagates through connected nodes</li>
-<li>Enables dynamic, context-aware generation</li><h2>How This Handbook is Organized</h2><p>This handbook is structured to support different learning paths:</p><h3>Progressive Learning Path</h3><p>1. <strong>Foundation</strong> (Part 1): Understand the system architecture</p>
+          <div class="content-body"><h1>Chapter 1: Introduction & Overview</h1></p><p>Welcome to the <strong>Content Authoring Handbook</strong> for Prompt Spaghetti! This comprehensive guide will teach you how to create, manage, and optimize content generators using our powerful node-based system.</p></p><h2>What is Prompt Spaghetti?</h2></p><p>Prompt Spaghetti is a sophisticated content generation system that combines:</p><ul><li><strong>Visual Node-Based Editing</strong>: Create generators using an intuitive graph interface</li><li><strong>Deterministic Randomization</strong>: Generate varied but reproducible content using seeds</li><li><strong>Modular Architecture</strong>: Build complex generators from reusable components</li><li><strong>Rich Rule System</strong>: Express complex content patterns with weighted choices, conditionals, and variables</li><li><strong>Professional Tooling</strong>: Debug overlays, testing frameworks, and performance optimization</li></p><p>At its core, Prompt Spaghetti transforms structured rule definitions into dynamic, varied output while maintaining complete control over the generation process.</p></p><h2>Key Concepts and Terminology</h2></p><p>Before diving in, let's establish the fundamental concepts:</p></p><h3>Generators</h3></p><p>A <strong>generator</strong> is a collection of rules that produce randomized content. Generators are defined in JSON format and contain:</p><li>Metadata (name, author, version)</li><li>Grammar rules (the content patterns)</li><li>Variables (dynamic values)</li><li>Entry points (where generation begins)</li></p><h3>Nodes</h3></p><p>In the visual editor, content is created using <strong>nodes</strong> - visual components that represent different operations:</p><li><strong>WeightedChoice</strong>: Selects from weighted options</li><li><strong>Concat</strong>: Combines multiple inputs</li><li><strong>Output</strong>: Produces final text</li><li><strong>SetVariable/GetVariable</strong>: Manages dynamic values</li><li><strong>Conditional</strong>: Branches based on conditions</li><li><strong>Sequential</strong>: Processes items in order</li><li><strong>Markov</strong>: State-based transitions</li></p><h3>Rules</h3></p><strong>Rules</strong> define how content varies. They can be:</p><li>Simple strings: <code>"Hello, world!"</code></li><li>Arrays of options: <code>["red", "blue", "green"]</code></li><li>Weighted choices: <code>[{"w": 2, "v": "common"}, {"w": 1, "v": "rare"}]</code></li><li>Nested structures with modifiers and conditions</li></p><h3>Deterministic Execution</h3></p><p>Unlike pure random generation, Prompt Spaghetti uses <strong>deterministic randomization</strong>:</p><li>Same seed + same generator = identical output</li><li>Enables reproducible results</li><li>Allows "favorite" generations to be saved</li><li>Facilitates testing and debugging</li></p><h3>Variable Context</h3></p><p>The <strong>variable context</strong> flows through the generation process:</p><li>Variables can be set and retrieved at any point</li><li>Context propagates through connected nodes</li><li>Enables dynamic, context-aware generation</li></p><h2>How This Handbook is Organized</h2></p><p>This handbook is structured to support different learning paths:</p></p><h3>Progressive Learning Path</h3></p><p>1. <strong>Foundation</strong> (Part 1): Understand the system architecture</p>
 <p>2. <strong>Content Development</strong> (Part 2): Learn to create generators</p>
 <p>3. <strong>Practical Guides</strong> (Part 4): Follow step-by-step tutorials</p>
 <p>4. <strong>Engine Reference</strong> (Part 3): Deep dive into technical details</p>
-<p>5. <strong>Advanced Topics</strong> (Part 5): Master complex techniques</p><h3>Reference Path</h3>
-<li><strong>Quick Start</strong>: Jump to Chapter 14 for immediate hands-on experience</li>
-<li><strong>API Reference</strong>: Part 3 for technical documentation</li>
-<li><strong>Troubleshooting</strong>: Chapter 17 for problem-solving</li>
-<li><strong>Quick References</strong>: Part 6 for cheat sheets and tables</li><h3>Use Case Paths</h3><h4>For Content Creators</h4>
-<li>Start with Chapter 4: Basic Generator Creation</li>
-<li>Focus on Part 2: Content Development</li>
-<li>Reference Chapter 22: Quick Reference Tables</li><h4>For Developers</h4>
-<li>Begin with Chapter 2: Architecture</li>
-<li>Study Part 3: Engine Reference</li>
-<li>Explore Part 5: Advanced Topics</li><h4>For LLM Integration</h4>
-<li>Review Chapter 8: Slot Taxonomy</li>
-<li>Study Chapter 15: Expansion Recipes</li>
-<li>Understand Chapter 20: Integration Patterns</li><h2>Prerequisites and Assumptions</h2><p>To get the most from this handbook, you should have:</p><h3>Technical Prerequisites</h3>
-<li>Basic understanding of JSON syntax</li>
-<li>Familiarity with text editors or IDEs</li>
-<li>Elementary programming concepts (variables, conditionals)</li><h3>Helpful but Not Required</h3>
-<li>JavaScript/TypeScript knowledge (for advanced features)</li>
-<li>Regular expressions (for complex patterns)</li>
-<li>Node.js experience (for CLI usage)</li><h3>What You'll Need</h3>
-<li>A modern web browser (Chrome, Firefox, Safari, Edge)</li>
-<li>A text editor (VS Code recommended)</li>
-<li>The Prompt Spaghetti application (web or local)</li><h2>Getting Started</h2><p>Ready to begin? Here are your next steps:</p><p>1. <strong>New Users</strong>: Continue to Chapter 2 to understand the architecture</p>
+<p>5. <strong>Advanced Topics</strong> (Part 5): Master complex techniques</p></p><h3>Reference Path</h3><li><strong>Quick Start</strong>: Jump to Chapter 14 for immediate hands-on experience</li><li><strong>API Reference</strong>: Part 3 for technical documentation</li><li><strong>Troubleshooting</strong>: Chapter 17 for problem-solving</li><li><strong>Quick References</strong>: Part 6 for cheat sheets and tables</li></p><h3>Use Case Paths</h3></p><h4>For Content Creators</h4><li>Start with Chapter 4: Basic Generator Creation</li><li>Focus on Part 2: Content Development</li><li>Reference Chapter 22: Quick Reference Tables</li></p><h4>For Developers</h4><li>Begin with Chapter 2: Architecture</li><li>Study Part 3: Engine Reference</li><li>Explore Part 5: Advanced Topics</li></p><h4>For LLM Integration</h4><li>Review Chapter 8: Slot Taxonomy</li><li>Study Chapter 15: Expansion Recipes</li><li>Understand Chapter 20: Integration Patterns</li></p><h2>Prerequisites and Assumptions</h2></p><p>To get the most from this handbook, you should have:</p></p><h3>Technical Prerequisites</h3><li>Basic understanding of JSON syntax</li><li>Familiarity with text editors or IDEs</li><li>Elementary programming concepts (variables, conditionals)</li></p><h3>Helpful but Not Required</h3><li>JavaScript/TypeScript knowledge (for advanced features)</li><li>Regular expressions (for complex patterns)</li><li>Node.js experience (for CLI usage)</li></p><h3>What You'll Need</h3><li>A modern web browser (Chrome, Firefox, Safari, Edge)</li><li>A text editor (VS Code recommended)</li><li>The Prompt Spaghetti application (web or local)</li></p><h2>Getting Started</h2></p><p>Ready to begin? Here are your next steps:</p></p><p>1. <strong>New Users</strong>: Continue to Chapter 2 to understand the architecture</p>
 <p>2. <strong>Hands-On Learners</strong>: Jump to Chapter 14 for a complete tutorial</p>
 <p>3. <strong>Experienced Users</strong>: Check Part 5 for advanced techniques</p>
-<p>4. <strong>Migrating Users</strong>: See Appendix B for migration guides</p><h2>Conventions Used in This Handbook</h2><p>Throughout this handbook, we use consistent formatting:</p>
-<li><code>Code snippets</code> appear in monospace font</li>
-<li><strong>Important terms</strong> are bolded on first use</li>
-<li>📝 Notes provide additional context</li>
-<li>⚠️ Warnings highlight potential issues</li>
-<li>💡 Tips offer best practices</li>
-<li>🚀 Examples show real-world usage</li><h3>Code Examples</h3><p>Examples show both JSON generator format:</p><p>``<code>json</p>
+<p>4. <strong>Migrating Users</strong>: See Appendix B for migration guides</p></p><h2>Conventions Used in This Handbook</h2></p><p>Throughout this handbook, we use consistent formatting:</p><li><code>Code snippets</code> appear in monospace font</li><li><strong>Important terms</strong> are bolded on first use</li><li>📝 Notes provide additional context</li><li>⚠️ Warnings highlight potential issues</li><li>💡 Tips offer best practices</li><li>🚀 Examples show real-world usage</li></p><h3>Code Examples</h3></p><p>Examples show both JSON generator format:</p></p><p>``<code>json</p>
 <p>{</p>
 <p>  "name": "Simple Generator",</p>
 <p>  "grammar": {</p>
@@ -326,11 +271,7 @@
 <p>    "name": ["Alice", "Bob", "Charlie"]</p>
 <p>  }</p>
 <p>}</p>
-</code>``</p><p>And node-based representations when applicable.</p><h2>Community and Support</h2><p>Prompt Spaghetti has an active community:</p>
-<li><strong>GitHub Repository</strong>: Report issues and contribute</li>
-<li><strong>Discord Server</strong>: Get help and share generators</li>
-<li><strong>Example Gallery</strong>: Learn from community creations</li>
-<li><strong>Video Tutorials</strong>: Visual learning resources</li></ul><h2>Ready to Create?</h2><p>You now have the foundation to begin your journey with Prompt Spaghetti. Whether you're creating character generators, story prompts, technical documentation, or entirely new types of content, this handbook will guide you every step of the way.</p><p>Let's start building amazing generators together!</p><p>---</p><strong>Next Chapter</strong>: <a href="02-architecture.md">Architecture & Core Concepts</a> →</p>
+</code>``</p></p><p>And node-based representations when applicable.</p></p><h2>Community and Support</h2></p><p>Prompt Spaghetti has an active community:</p><li><strong>GitHub Repository</strong>: Report issues and contribute</li><li><strong>Discord Server</strong>: Get help and share generators</li><li><strong>Example Gallery</strong>: Learn from community creations</li><li><strong>Video Tutorials</strong>: Visual learning resources</li></ul></p><h2>Ready to Create?</h2></p><p>You now have the foundation to begin your journey with Prompt Spaghetti. Whether you're creating character generators, story prompts, technical documentation, or entirely new types of content, this handbook will guide you every step of the way.</p></p><p>Let's start building amazing generators together!</p></p><p>---</p></p><strong>Next Chapter</strong>: <a href="02-architecture.md">Architecture & Core Concepts</a> →</p>
 </div>
 
           <div class="content-footer">

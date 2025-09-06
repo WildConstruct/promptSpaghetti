@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm --filter client build)",
+      "Bash(pnpm dev:*)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

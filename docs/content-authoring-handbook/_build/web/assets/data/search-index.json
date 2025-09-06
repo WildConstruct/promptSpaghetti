@@ -182,58 +182,6 @@
     "id": "2e93f6a8"
   },
   {
-    "title": "Content Authoring Handbook",
-    "url": "README.html",
-    "content": "Content Authoring Handbook Epic 8.3 Implementation - A comprehensive guide to creating and managing content with the Prompt Spaghetti system 📚 Handbook Structure This handbook is organized into six main parts, designed to take you from basic concepts to advanced techniques: Part 1: Foundation Introduction & Overview Architecture & Core Concepts Generator JSON Schema Reference Part 2: Content Development Basic Generator Creation Advanced Rule Syntax Modularization & Organization UI Integration & Lockable Rules Slot Taxonomy & Prompt Assembly Part 3: Engine Reference Engine API Documentation Modifier System Variable System Conditional Logic Performance Optimization Part 4: Practical Guides Step-by-Step Generator Creation Expansion Recipes for LLMs Testing & Quality Assurance Debug Tools & Troubleshooting Part 5: Advanced Topics Custom Extensions Security Best Practices Integration Patterns Generator Design Patterns Part 6: Reference Materials Quick Reference Tables Templates & Boilerpla",
-    "type": "chapter",
-    "difficulty": "intermediate",
-    "part": "other",
-    "keywords": [
-      "content",
-      "authoring",
-      "handbook",
-      "part",
-      "generator",
-      "reference",
-      "prompt",
-      "spaghetti",
-      "advanced",
-      "integration",
-      "engine",
-      "rule",
-      "variable",
-      "schema",
-      "json"
-    ],
-    "id": "791872fc"
-  },
-  {
-    "title": "Version Control and Updates",
-    "url": "VERSION_CONTROL.html",
-    "content": "Version Control and Updates Epic 8.3 Story 8.3.5 - Version Control and Updates Implementation 📋 Overview This document outlines the version control strategy and update management system for the Content Authoring Handbook. The handbook uses Git-based version control with automated builds and a structured contribution process. 🔄 Version Control Strategy Repository Structure `` docs/content-authoring-handbook/ ├── .github/ │ └── workflows/ │ ├── build-handbook.yml # Automated builds │ ├── update-search.yml # Search index updates │ └── deploy-handbook.yml # Deployment workflow ├── VERSION # Current handbook version ├── CHANGELOG.md # Version history ├── assets/ # Static assets and tools ├── part1-foundation/ # Content chapters ├── part2-content-development/ ├── part3-engine-reference/ ├── part4-practical-guides/ ├── part5-advanced-topics/ ├── part6-reference-materials/ └── _build/ # Generated content (ignored) ` Branching Strategy main: Production-ready handbook content develop: Integrat",
-    "type": "chapter",
-    "difficulty": "intermediate",
-    "part": "other",
-    "keywords": [
-      "version",
-      "control",
-      "and",
-      "updates",
-      "content",
-      "build",
-      "update",
-      "automated",
-      "changes",
-      "review",
-      "handbook",
-      "process",
-      "release",
-      "node",
-      "json"
-    ],
-    "id": "723b9447"
-  },
-  {
     "title": "Chapter 3: Generator JSON Schema Reference",
     "url": "part1-foundation/03-schema-reference.html",
     "content": "Chapter 3: Generator JSON Schema Reference This chapter provides a complete reference for the Generator JSON format, which serves as both the storage format and the interchange format for Prompt Spaghetti generators. Schema Overview A generator file consists of several key sections: ``json { \"meta\": { \"name\": \"Generator Name\", \"author\": \"Author Name\", \"version\": \"1.0.0\", \"description\": \"What this generator creates\" }, \"variables\": { \"variableName\": \"defaultValue\" }, \"grammar\": { \"start\": [\"Entry point rule\"], \"ruleName\": [\"array\", \"of\", \"options\"] }, \"includes\": { \"external\": \"./path/to/file.json\" }, \"config\": { \"maxDepth\": 10, \"enableDebug\": false } } ` Metadata Structure The meta section contains information about the generator: Required Fields `json { \"meta\": { \"name\": \"Character Generator\", \"version\": \"1.0.0\" } } ` name (string, required): Display name for the generator version (string, required): Semantic version number Optional Fields `json { \"meta\": { \"author\": \"Jane Doe\", \"desc",
@@ -284,6 +232,58 @@
       "variable"
     ],
     "id": "b5184b0a"
+  },
+  {
+    "title": "Content Authoring Handbook",
+    "url": "README.html",
+    "content": "Content Authoring Handbook Epic 8.3 Implementation - A comprehensive guide to creating and managing content with the Prompt Spaghetti system 📚 Handbook Structure This handbook is organized into six main parts, designed to take you from basic concepts to advanced techniques: Part 1: Foundation Introduction & Overview Architecture & Core Concepts Generator JSON Schema Reference Part 2: Content Development Basic Generator Creation Advanced Rule Syntax Modularization & Organization UI Integration & Lockable Rules Slot Taxonomy & Prompt Assembly Part 3: Engine Reference Engine API Documentation Modifier System Variable System Conditional Logic Performance Optimization Part 4: Practical Guides Step-by-Step Generator Creation Expansion Recipes for LLMs Testing & Quality Assurance Debug Tools & Troubleshooting Part 5: Advanced Topics Custom Extensions Security Best Practices Integration Patterns Generator Design Patterns Part 6: Reference Materials Quick Reference Tables Templates & Boilerpla",
+    "type": "chapter",
+    "difficulty": "intermediate",
+    "part": "other",
+    "keywords": [
+      "content",
+      "authoring",
+      "handbook",
+      "part",
+      "generator",
+      "reference",
+      "prompt",
+      "spaghetti",
+      "advanced",
+      "integration",
+      "engine",
+      "rule",
+      "variable",
+      "schema",
+      "json"
+    ],
+    "id": "791872fc"
+  },
+  {
+    "title": "Version Control and Updates",
+    "url": "VERSION_CONTROL.html",
+    "content": "Version Control and Updates Epic 8.3 Story 8.3.5 - Version Control and Updates Implementation 📋 Overview This document outlines the version control strategy and update management system for the Content Authoring Handbook. The handbook uses Git-based version control with automated builds and a structured contribution process. 🔄 Version Control Strategy Repository Structure `` docs/content-authoring-handbook/ ├── .github/ │ └── workflows/ │ ├── build-handbook.yml # Automated builds │ ├── update-search.yml # Search index updates │ └── deploy-handbook.yml # Deployment workflow ├── VERSION # Current handbook version ├── CHANGELOG.md # Version history ├── assets/ # Static assets and tools ├── part1-foundation/ # Content chapters ├── part2-content-development/ ├── part3-engine-reference/ ├── part4-practical-guides/ ├── part5-advanced-topics/ ├── part6-reference-materials/ └── _build/ # Generated content (ignored) ` Branching Strategy main: Production-ready handbook content develop: Integrat",
+    "type": "chapter",
+    "difficulty": "intermediate",
+    "part": "other",
+    "keywords": [
+      "version",
+      "control",
+      "and",
+      "updates",
+      "content",
+      "build",
+      "update",
+      "automated",
+      "changes",
+      "review",
+      "handbook",
+      "process",
+      "release",
+      "node",
+      "json"
+    ],
+    "id": "723b9447"
   },
   {
     "title": "Chapter 14: Interactive Tutorial - Your First Generator",

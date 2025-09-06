@@ -256,7 +256,7 @@
             </div>
           </div>
 
-          <div class="content-body"><h1>Chapter 22: Quick Reference Tables</h1><p>This chapter provides quick-lookup tables for common generator development tasks. Keep this handy while building generators!</p><h2>Modifier Reference Table</h2><p>Modifiers transform text after rule expansion. Apply them using dot notation: <code>[rule.modifier]</code><p>| Modifier     | Purpose                     | Example Input | Example Output |</p>
+          <div class="content-body"><h1>Chapter 22: Quick Reference Tables</h1></p><p>This chapter provides quick-lookup tables for common generator development tasks. Keep this handy while building generators!</p></p><h2>Modifier Reference Table</h2></p><p>Modifiers transform text after rule expansion. Apply them using dot notation: <code>[rule.modifier]</code></p><p>| Modifier     | Purpose                     | Example Input | Example Output |</p>
 <p>| ------------ | --------------------------- | ------------- | -------------- |</p>
 <p>| <code>capitalize</code> | Capitalizes first character | <code>hello world</code> | <code>Hello world</code>  |</p>
 <p>| <code>upper</code>      | Converts to UPPERCASE       | <code>hello world</code> | <code>HELLO WORLD</code>  |</p>
@@ -267,39 +267,39 @@
 <p>| <code>possessive</code> | Adds possessive form        | <code>dog</code>         | <code>dog's</code>        |</p>
 <p>| <code>trim</code>       | Removes whitespace          | <code>  text  </code>    | <code>text</code>         |</p>
 <p>| <code>snake</code>      | Converts to snake_case      | <code>Hello World</code> | <code>hello_world</code>  |</p>
-<p>| <code>kebab</code>      | Converts to kebab-case      | <code>Hello World</code> | <code>hello-world</code>  |</p><h3>Usage Examples</h3><p>``<code>json</p>
+<p>| <code>kebab</code>      | Converts to kebab-case      | <code>Hello World</code> | <code>hello-world</code>  |</p></p><h3>Usage Examples</h3></p><p>``<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "item": "[object.a_an.capitalize]",</p>
-<p>    "object": ["apple", "sword", "umbrella"],</p><p>    "title": "[name.upper] the [epithet.capitalize]",</p>
+<p>    "object": ["apple", "sword", "umbrella"],</p></p><p>    "title": "[name.upper] the [epithet.capitalize]",</p>
 <p>    "name": ["aragorn", "gandalf"],</p>
-<p>    "epithet": ["brave", "wise"],</p><p>    "filename": "[project.snake]_[version]",</p>
+<p>    "epithet": ["brave", "wise"],</p></p><p>    "filename": "[project.snake]_[version]",</p>
 <p>    "project": ["My Cool Project", "Test File"],</p>
 <p>    "version": ["v1", "v2"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Node Type Reference</h2><h3>Basic Nodes</h3><p>| Node Type        | Purpose                       | Key Properties               |</p>
+</code>`<code></p></p><h2>Node Type Reference</h2></p><h3>Basic Nodes</h3></p><p>| Node Type        | Purpose                       | Key Properties               |</p>
 <p>| ---------------- | ----------------------------- | ---------------------------- |</p>
 <p>| </code>WeightedChoice<code> | Random selection with weights | </code>choices: [{value, weight}]<code> |</p>
 <p>| </code>Concat<code>         | Combine multiple inputs       | </code>inputs: [node_ids]<code>         |</p>
 <p>| </code>Output<code>         | Produce final result          | </code>template: string<code>           |</p>
 <p>| </code>Include<code>        | Reference external rule       | </code>name: string<code>               |</p>
 <p>| </code>SetVariable<code>    | Store a value                 | </code>key: string, value: any<code>    |</p>
-<p>| </code>GetVariable<code>    | Retrieve a value              | </code>key: string<code>                |</p><h3>Advanced Nodes (Epic 7)</h3><p>| Node Type          | Purpose               | Key Properties                           |</p>
+<p>| </code>GetVariable<code>    | Retrieve a value              | </code>key: string<code>                |</p></p><h3>Advanced Nodes (Epic 7)</h3></p><p>| Node Type          | Purpose               | Key Properties                           |</p>
 <p>| ------------------ | --------------------- | ---------------------------------------- |</p>
 <p>| </code>WeightedAdvanced<code> | Complex distributions | </code>distributionConfig: {type, parameters}<code> |</p>
 <p>| </code>Conditional<code>      | If-then-else logic    | </code>branches: [{condition, output}]<code>        |</p>
 <p>| </code>Sequential<code>       | Ordered processing    | </code>sequence: [items], pattern: {type}<code>     |</p>
-<p>| </code>Markov<code>           | State transitions     | </code>states: {state: {next: probability}}<code>   |</p><h3>Python Integration (Epic 8)</h3><p>| Node Type         | Purpose             | Key Properties                  |</p>
+<p>| </code>Markov<code>           | State transitions     | </code>states: {state: {next: probability}}<code>   |</p></p><h3>Python Integration (Epic 8)</h3></p><p>| Node Type         | Purpose             | Key Properties                  |</p>
 <p>| ----------------- | ------------------- | ------------------------------- |</p>
-<p>| </code>PythonTransform<code> | Execute Python code | </code>code: string, timeout: number<code> |</p><h2>Variable Functions Reference</h2><p>Built-in functions available in conditional expressions:</p><p>| Function                  | Purpose             | Example                      |</p>
+<p>| </code>PythonTransform<code> | Execute Python code | </code>code: string, timeout: number<code> |</p></p><h2>Variable Functions Reference</h2></p><p>Built-in functions available in conditional expressions:</p></p><p>| Function                  | Purpose             | Example                      |</p>
 <p>| ------------------------- | ------------------- | ---------------------------- |</p>
 <p>| </code>startsWith(str, prefix)<code> | Check string prefix | </code>startsWith({name}, 'A')<code>    |</p>
 <p>| </code>endsWith(str, suffix)<code>   | Check string suffix | </code>endsWith({file}, '.txt')<code>   |</p>
 <p>| </code>includes(str, sub)<code>      | Check substring     | </code>includes({text}, 'magic')<code>  |</p>
 <p>| </code>getType(value)<code>          | Get value type      | </code>getType({data}) == 'array'<code> |</p>
 <p>| </code>toNumber(value)<code>         | Convert to number   | </code>toNumber({score}) > 50<code>     |</p>
-<p>| </code>toString(value)<code>         | Convert to string   | </code>toString({id}) == '123'<code>    |</p><h3>Operators</h3><p>| Operator   | Purpose               | Example                                  |</p>
+<p>| </code>toString(value)<code>         | Convert to string   | </code>toString({id}) == '123'<code>    |</p></p><h3>Operators</h3></p><p>| Operator   | Purpose               | Example                                  |</p>
 <p>| ---------- | --------------------- | ---------------------------------------- |</p>
 <p>| </code>==<code>       | Equality              | </code>{level} == 5<code>                           |</p>
 <p>| </code>!=<code>       | Inequality            | </code>{class} != 'warrior'<code>                   |</p>
@@ -307,43 +307,43 @@
 <p>| </code>>=<code>, </code><=<code> | Greater/Less or equal | </code>{age} >= 18<code>                            |</p>
 <p>| </code>&&<code>       | Logical AND           | </code>{level} > 5 && {class} == 'mage'<code>       |</p>
 <p>| </code>\|\|<code>     | Logical OR            | </code>{race} == 'elf' \|\| {race} == 'human'<code> |</p>
-<p>| </code>!<code>        | Logical NOT           | </code>!{isDead}<code>                              |</p><h2>Grammar Pattern Quick Reference</h2><h3>Basic Patterns</h3></code>`<code>json</p>
+<p>| </code>!<code>        | Logical NOT           | </code>!{isDead}<code>                              |</p></p><h2>Grammar Pattern Quick Reference</h2></p><h3>Basic Patterns</h3></p></code>`<code>json</p>
 <p>// Simple random choice</p>
-<p>"color": ["red", "blue", "green"]</p><p>// Weighted choice</p>
+<p>"color": ["red", "blue", "green"]</p></p><p>// Weighted choice</p>
 <p>"rarity": [</p>
 <p>  {"w": 60, "v": "common"},</p>
 <p>  {"w": 30, "v": "uncommon"},</p>
 <p>  {"w": 10, "v": "rare"}</p>
-<p>]</p><p>// Reference expansion</p>
-<p>"phrase": "[greeting], [name]!"</p><p>// Variable interpolation</p>
-<p>"message": "Welcome, {username}!"</p><p>// Modifier application</p>
+<p>]</p></p><p>// Reference expansion</p>
+<p>"phrase": "[greeting], [name]!"</p></p><p>// Variable interpolation</p>
+<p>"message": "Welcome, {username}!"</p></p><p>// Modifier application</p>
 <p>"title": "[name.capitalize] the [class.upper]"</p>
-</code>`<code></p><h3>Advanced Patterns</h3></code>`<code>json</p>
+</code>`<code></p></p><h3>Advanced Patterns</h3></p></code>`<code>json</p>
 <p>// Conditional generation</p>
 <p>{</p>
 <p>  "type": "conditional",</p>
 <p>  "condition": "{level} > 10",</p>
 <p>  "true": "veteran",</p>
 <p>  "false": "novice"</p>
-<p>}</p><p>// Setting variables</p>
+<p>}</p></p><p>// Setting variables</p>
 <p>{</p>
 <p>  "type": "setVariable",</p>
 <p>  "key": "chosen_class",</p>
 <p>  "value": "[classes]"</p>
-<p>}</p><p>// Sequential processing</p>
+<p>}</p></p><p>// Sequential processing</p>
 <p>{</p>
 <p>  "type": "Sequential",</p>
 <p>  "sequence": ["first", "second", "third"],</p>
 <p>  "pattern": {"type": "linear"}</p>
 <p>}</p>
-</code>`<code></p><h2>Common Rule Structures</h2><h3>Character Generator Pattern</h3></code>`<code>json</p>
+</code>`<code></p></p><h2>Common Rule Structures</h2></p><h3>Character Generator Pattern</h3></p></code>`<code>json</p>
 <p>{</p>
 <p>  "character": "[name] the [adjective] [class]",</p>
 <p>  "name": ["Aria", "Bjorn", "Cara"],</p>
 <p>  "adjective": ["brave", "wise", "swift"],</p>
 <p>  "class": ["warrior", "mage", "rogue"]</p>
 <p>}</p>
-</code>`<code></p><h3>Item Generator Pattern</h3></code>`<code>json</p>
+</code>`<code></p></p><h3>Item Generator Pattern</h3></p></code>`<code>json</p>
 <p>{</p>
 <p>  "item": "[quality] [material] [type] of [property]",</p>
 <p>  "quality": ["crude", "fine", "masterwork"],</p>
@@ -351,7 +351,7 @@
 <p>  "type": ["sword", "shield", "armor"],</p>
 <p>  "property": ["strength", "speed", "protection"]</p>
 <p>}</p>
-</code>`<code></p><h3>Story Prompt Pattern</h3></code>`<code>json</p>
+</code>`<code></p></p><h3>Story Prompt Pattern</h3></p></code>`<code>json</p>
 <p>{</p>
 <p>  "prompt": "[genre]: [protagonist] must [goal] before [deadline]",</p>
 <p>  "genre": ["Fantasy", "Sci-Fi", "Mystery"],</p>
@@ -359,7 +359,7 @@
 <p>  "goal": ["save the kingdom", "find the artifact", "solve the mystery"],</p>
 <p>  "deadline": ["sunset", "the army arrives", "time runs out"]</p>
 <p>}</p>
-</code>`<code></p><h2>File Organization Reference</h2><h3>Recommended Structure</h3></code>`<code></p>
+</code>`<code></p></p><h2>File Organization Reference</h2></p><h3>Recommended Structure</h3></p></code>`<code></p>
 <p>my-generator/</p>
 <p>├── generator.json          # Main generator file</p>
 <p>├── data/                   # Modular data files</p>
@@ -373,25 +373,25 @@
 <p>│   └── README.md</p>
 <p>└── tests/                  # Test files</p>
 <p>    └── test-cases.json</p>
-</code>`<code></p><h3>Include Syntax</h3></code>`<code>json</p>
+</code>`<code></p></p><h3>Include Syntax</h3></p></code>`<code>json</p>
 <p>// Basic include</p>
-<p>"names": {"$include": "./data/names.json"}</p><p>// Include with metadata</p>
+<p>"names": {"$include": "./data/names.json"}</p></p><p>// Include with metadata</p>
 <p>"locations": [</p>
 <p>  {"_meta": {"uiLabel": "Locations"}},</p>
 <p>  {"$include": "./data/locations.json"}</p>
 <p>]</p>
-</code>`<code></p><h2>Performance Guidelines</h2><p>| Optimization      | Impact | When to Use        |</p>
+</code>`<code></p></p><h2>Performance Guidelines</h2></p><p>| Optimization      | Impact | When to Use        |</p>
 <p>| ----------------- | ------ | ------------------ |</p>
 <p>| Variable caching  | High   | Repeated values    |</p>
 <p>| Shallow nesting   | Medium | Complex generators |</p>
 <p>| Array limits      | Low    | Large choice lists |</p>
-<p>| Include splitting | High   | 1000+ line files   |</p><h3>Performance Patterns</h3></code>`<code>json</p>
+<p>| Include splitting | High   | 1000+ line files   |</p></p><h3>Performance Patterns</h3></p></code>`<code>json</p>
 <p>// Good: Cache repeated lookups</p>
 <p>{</p>
 <p>  "start": "[setName][useName][useName]",</p>
 <p>  "setName": {"type": "setVariable", "key": "name", "value": "[names]"},</p>
 <p>  "useName": "Hello, {name}!"</p>
-<p>}</p><p>// Avoid: Deep nesting</p>
+<p>}</p></p><p>// Avoid: Deep nesting</p>
 <p>{</p>
 <p>  "a": "[b]",</p>
 <p>  "b": "[c]",</p>
@@ -399,27 +399,19 @@
 <p>  "d": "[e]",</p>
 <p>  "e": "final"  // 5 levels deep!</p>
 <p>}</p>
-</code>`<code></p><h2>Debugging Checklist</h2>
-<ul><li>[ ] All </code>[references]<code> have corresponding rules</li>
-<li>[ ] No circular references (A→B→A)</li>
-<li>[ ] Variables initialized before use</li>
-<li>[ ] Proper JSON syntax (quotes, commas)</li>
-<li>[ ] Weights are positive numbers</li>
-<li>[ ] File paths in includes are correct</li>
-<li>[ ] Special characters are escaped</li>
-<li>[ ] Output formatting is consistent</li></ul><h2>Keyboard Shortcuts</h2><p>| Shortcut       | Action               |</p>
+</code>`<code></p></p><h2>Debugging Checklist</h2><ul><li>[ ] All </code>[references]<code> have corresponding rules</li><li>[ ] No circular references (A→B→A)</li><li>[ ] Variables initialized before use</li><li>[ ] Proper JSON syntax (quotes, commas)</li><li>[ ] Weights are positive numbers</li><li>[ ] File paths in includes are correct</li><li>[ ] Special characters are escaped</li><li>[ ] Output formatting is consistent</li></ul></p><h2>Keyboard Shortcuts</h2></p><p>| Shortcut       | Action               |</p>
 <p>| -------------- | -------------------- |</p>
 <p>| </code>Ctrl+\<code>       | Toggle debug overlay |</p>
 <p>| </code>Ctrl+S<code>       | Save generator       |</p>
 <p>| </code>Ctrl+P<code>       | Preview generation   |</p>
 <p>| </code>Ctrl+Z<code>       | Undo                 |</p>
-<p>| </code>Ctrl+Shift+Z` | Redo                 |</p><h2>Error Messages Quick Fix</h2><p>| Error                    | Likely Cause               | Fix                     |</p>
+<p>| </code>Ctrl+Shift+Z` | Redo                 |</p></p><h2>Error Messages Quick Fix</h2></p><p>| Error                    | Likely Cause               | Fix                     |</p>
 <p>| ------------------------ | -------------------------- | ----------------------- |</p>
 <p>| "Unknown rule: [x]"      | Missing rule definition    | Add rule "x" to grammar |</p>
 <p>| "Circular reference"     | Rules reference each other | Break the cycle         |</p>
 <p>| "Invalid JSON"           | Syntax error               | Check quotes and commas |</p>
 <p>| "Variable not found"     | Uninitialized variable     | Set variable before use |</p>
-<p>| "Maximum depth exceeded" | Too much nesting           | Simplify rule structure |</p><p>---</p><strong>Next Chapter</strong>: <a href="23-templates.md">Templates & Boilerplates</a> →</p>
+<p>| "Maximum depth exceeded" | Too much nesting           | Simplify rule structure |</p></p><p>---</p></p><strong>Next Chapter</strong>: <a href="23-templates.md">Templates & Boilerplates</a> →</p>
 </div>
 
           <div class="content-footer">

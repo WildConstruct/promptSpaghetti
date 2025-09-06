@@ -256,7 +256,7 @@
             </div>
           </div>
 
-          <div class="content-body"><h1>Chapter 4: Basic Generator Creation</h1><p>Welcome to hands-on generator creation! This chapter walks you through building your first generators, from simple random selections to more sophisticated content generation patterns.</p><h2>Your First Generator</h2><p>Let's start with the simplest possible generator - a greeting generator.</p><h3>Step 1: Basic Structure</h3><p>Create a new file called <code>greeting-generator.json</code>:</p><p>``<code>json</p>
+          <div class="content-body"><h1>Chapter 4: Basic Generator Creation</h1></p><p>Welcome to hands-on generator creation! This chapter walks you through building your first generators, from simple random selections to more sophisticated content generation patterns.</p></p><h2>Your First Generator</h2></p><p>Let's start with the simplest possible generator - a greeting generator.</p></p><h3>Step 1: Basic Structure</h3></p><p>Create a new file called <code>greeting-generator.json</code>:</p></p><p>``<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "My First Generator",</p>
@@ -266,7 +266,7 @@
 <p>    "start": "Hello, world!"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>This generator always outputs "Hello, world!" - not very exciting, but it's valid!</p><h3>Step 2: Adding Randomness</h3><p>Let's make it more interesting by adding random selection:</p></code>`<code>json</p>
+</code>`<code></p></p><p>This generator always outputs "Hello, world!" - not very exciting, but it's valid!</p></p><h3>Step 2: Adding Randomness</h3></p><p>Let's make it more interesting by adding random selection:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Random Greeting Generator",</p>
@@ -276,7 +276,7 @@
 <p>    "start": ["Hello, world!", "Hi there!", "Greetings!", "Welcome!"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>Now the generator randomly picks one of the four greetings.</p><h3>Step 3: Combining Elements</h3><p>Real generators combine multiple random elements:</p></code>`<code>json</p>
+</code>`<code></p></p><p>Now the generator randomly picks one of the four greetings.</p></p><h3>Step 3: Combining Elements</h3></p><p>Real generators combine multiple random elements:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Dynamic Greeting Generator",</p>
@@ -288,19 +288,19 @@
 <p>    "subject": ["friend", "there", "everyone", "stranger"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>This creates combinations like "Hello, friend!" or "Hey, everyone!"</p><h2>Understanding Rules and Variations</h2><p>Rules are the building blocks of generators. Let's explore different rule types:</p><h3>String Rules</h3><p>The simplest rule type - just plain text:</p></code>`<code>json</p>
+</code>`<code></p></p><p>This creates combinations like "Hello, friend!" or "Hey, everyone!"</p></p><h2>Understanding Rules and Variations</h2></p><p>Rules are the building blocks of generators. Let's explore different rule types:</p></p><h3>String Rules</h3></p><p>The simplest rule type - just plain text:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "companyName": "Acme Corporation"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Array Rules</h3><p>Arrays create variation through random selection:</p></code>`<code>json</p>
+</code>`<code></p></p><h3>Array Rules</h3></p><p>Arrays create variation through random selection:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "color": ["red", "blue", "green", "yellow", "purple"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Reference Rules</h3><p>References let you combine other rules using </code>[ruleName]<code> syntax:</p></code>`<code>json</p>
+</code>`<code></p></p><h3>Reference Rules</h3></p><p>References let you combine other rules using </code>[ruleName]<code> syntax:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "The [size] [color] [animal]",</p>
@@ -309,7 +309,7 @@
 <p>    "animal": ["cat", "dog", "bird", "fish"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>This might generate: "The tiny blue cat" or "The huge spotted fish"</p><h3>Nested References</h3><p>Rules can reference other rules that contain references:</p></code>`<code>json</p>
+</code>`<code></p></p><p>This might generate: "The tiny blue cat" or "The huge spotted fish"</p></p><h3>Nested References</h3></p><p>Rules can reference other rules that contain references:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "[character] [action]",</p>
@@ -321,7 +321,7 @@
 <p>    "enemy": ["dark sorcerer", "fierce dragon", "evil king"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Basic Randomization Patterns</h2><p>Let's explore common patterns for creating varied content:</p><h3>Pattern 1: Simple Alternatives</h3><p>When you need straightforward variation:</p></code>`<code>json</p>
+</code>`<code></p></p><h2>Basic Randomization Patterns</h2></p><p>Let's explore common patterns for creating varied content:</p></p><h3>Pattern 1: Simple Alternatives</h3></p><p>When you need straightforward variation:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "weather": ["sunny", "cloudy", "rainy", "stormy", "foggy"],</p>
@@ -329,32 +329,32 @@
 <p>    "time": ["morning", "afternoon", "evening", "night", "dawn"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Pattern 2: Structured Combinations</h3><p>Building complex outputs from simple parts:</p></code>`<code>json</p>
+</code>`<code></p></p><h3>Pattern 2: Structured Combinations</h3></p><p>Building complex outputs from simple parts:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
-<p>    "start": "[setup]. [conflict]. [resolution].",</p><p>    "setup": ["Once upon a time in [location]", "Long ago in [location]", "In the distant land of [location]"],</p><p>    "location": ["a magical forest", "an ancient kingdom", "a hidden valley"],</p><p>    "conflict": [</p>
+<p>    "start": "[setup]. [conflict]. [resolution].",</p></p><p>    "setup": ["Once upon a time in [location]", "Long ago in [location]", "In the distant land of [location]"],</p></p><p>    "location": ["a magical forest", "an ancient kingdom", "a hidden valley"],</p></p><p>    "conflict": [</p>
 <p>      "A terrible curse befell the land",</p>
 <p>      "An evil wizard threatened the peace",</p>
 <p>      "A mysterious plague spread rapidly"</p>
-<p>    ],</p><p>    "resolution": [</p>
+<p>    ],</p></p><p>    "resolution": [</p>
 <p>      "But a hero arose to save the day",</p>
 <p>      "Until a brave soul discovered the cure",</p>
 <p>      "When an unlikely alliance formed"</p>
 <p>    ]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Pattern 3: Variable Depth</h3><p>Some outputs need more detail than others:</p></code>`<code>json</p>
+</code>`<code></p></p><h3>Pattern 3: Variable Depth</h3></p><p>Some outputs need more detail than others:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
-<p>    "character": ["[name]", "[name] the [adjective]", "[name] the [adjective] [profession]"],</p><p>    "name": ["Alex", "Morgan", "Jordan", "Casey"],</p>
+<p>    "character": ["[name]", "[name] the [adjective]", "[name] the [adjective] [profession]"],</p></p><p>    "name": ["Alex", "Morgan", "Jordan", "Casey"],</p>
 <p>    "adjective": ["brave", "clever", "mysterious"],</p>
 <p>    "profession": ["warrior", "scholar", "merchant"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>This creates names with varying levels of detail.</p><h2>Testing Your Generator</h2><p>Testing is crucial for ensuring your generator works as expected.</p><h3>Manual Testing</h3><p>1. <strong>Load in Editor</strong>: Open your generator in the Prompt Spaghetti editor</p>
+</code>`<code></p></p><p>This creates names with varying levels of detail.</p></p><h2>Testing Your Generator</h2></p><p>Testing is crucial for ensuring your generator works as expected.</p></p><h3>Manual Testing</h3></p><p>1. <strong>Load in Editor</strong>: Open your generator in the Prompt Spaghetti editor</p>
 <p>2. <strong>Preview Multiple Seeds</strong>: Use the preview panel with different seeds</p>
 <p>3. <strong>Check All Paths</strong>: Ensure every rule can be reached</p>
-<p>4. <strong>Verify Output</strong>: Confirm formatting and grammar are correct</p><h3>Common Test Cases</h3><p>Test these scenarios for every generator:</p></code>`<code>json</p>
+<p>4. <strong>Verify Output</strong>: Confirm formatting and grammar are correct</p></p><h3>Common Test Cases</h3></p><p>Test these scenarios for every generator:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "test_cases": {</p>
 <p>    "minimum": "Check shortest possible output",</p>
@@ -364,23 +364,23 @@
 <p>    "references": "Ensure all [references] resolve"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Using Debug Mode</h3><p>Enable debug mode to see how rules are evaluated:</p><p>1. Add </code>?dev=1<code> to your URL</p>
+</code>`<code></p></p><h3>Using Debug Mode</h3></p><p>Enable debug mode to see how rules are evaluated:</p></p><p>1. Add </code>?dev=1<code> to your URL</p>
 <p>2. Press </code>Ctrl+\<code> (or </code>Cmd+\<code> on Mac) to toggle debug overlay</p>
-<p>3. Generate content to see the expansion tree</p><h2>Common Mistakes to Avoid</h2><p>Learn from these frequent beginner errors:</p><h3>Mistake 1: Circular References</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
+<p>3. Generate content to see the expansion tree</p></p><h2>Common Mistakes to Avoid</h2></p><p>Learn from these frequent beginner errors:</p></p><h3>Mistake 1: Circular References</h3></p><p>❌ <strong>Wrong:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "a": "[b]",</p>
 <p>    "b": "[a]"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>✅ <strong>Right:</strong></code>`<code>json</p>
+</code>`<code></p></p><p>✅ <strong>Right:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "a": "[b]",</p>
 <p>    "b": "final value"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Mistake 2: Missing References</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
+</code>`<code></p></p><h3>Mistake 2: Missing References</h3></p><p>❌ <strong>Wrong:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "The [color] [object]",</p>
@@ -388,7 +388,7 @@
 <p>    // Missing "object" rule!</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>✅ <strong>Right:</strong></code>`<code>json</p>
+</code>`<code></p></p><p>✅ <strong>Right:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "The [color] [object]",</p>
@@ -396,7 +396,7 @@
 <p>    "object": ["ball", "box", "book"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Mistake 3: Inconsistent Formatting</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
+</code>`<code></p></p><h3>Mistake 3: Inconsistent Formatting</h3></p><p>❌ <strong>Wrong:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "[greeting][punctuation]",</p>
@@ -404,7 +404,7 @@
 <p>    "punctuation": ["!", ".", "?"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>This creates inconsistent spacing.</p><p>✅ <strong>Right:</strong></code>`<code>json</p>
+</code>`<code></p></p><p>This creates inconsistent spacing.</p></p><p>✅ <strong>Right:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "[greeting][punctuation]",</p>
@@ -412,23 +412,23 @@
 <p>    "punctuation": ["!", ".", "?"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h3>Mistake 4: Unescaped Special Characters</h3><p>❌ <strong>Wrong:</strong></code>`<code>json</p>
+</code>`<code></p></p><h3>Mistake 4: Unescaped Special Characters</h3></p><p>❌ <strong>Wrong:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "price": "$[amount]",</p>
 <p>    "amount": ["10", "20", "30"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><p>✅ <strong>Right:</strong></code>`<code>json</p>
+</code>`<code></p></p><p>✅ <strong>Right:</strong></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "price": "\\$[amount]",</p>
 <p>    "amount": ["10", "20", "30"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><h2>Building a Complete Example</h2><p>Let's create a more sophisticated generator step by step:</p><h3>Fantasy Shop Generator</h3><strong>Goal</strong>: Generate descriptions of items in a fantasy shop.</p><strong>Step 1</strong>: Plan the structure</p></code>`<code></p>
+</code>`<code></p></p><h2>Building a Complete Example</h2></p><p>Let's create a more sophisticated generator step by step:</p></p><h3>Fantasy Shop Generator</h3></p><strong>Goal</strong>: Generate descriptions of items in a fantasy shop.</p></p><strong>Step 1</strong>: Plan the structure</p></p></code>`<code></p>
 <p>[quality] [item] of [property] - [price] gold</p>
-</code>`<code></p><strong>Step 2</strong>: Create the base generator</p></code>`<code>json</p>
+</code>`<code></p></p><strong>Step 2</strong>: Create the base generator</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Fantasy Shop Items",</p>
@@ -437,10 +437,10 @@
 <p>    "description": "Generates random fantasy shop inventory"</p>
 <p>  },</p>
 <p>  "grammar": {</p>
-<p>    "start": "[quality] [item] of [property] - [price] gold",</p><p>    "quality": ["Common", "Uncommon", "Rare", "Legendary"],</p><p>    "item": ["sword", "shield", "potion", "scroll", "ring", "amulet", "cloak", "boots"],</p><p>    "property": ["fire", "ice", "lightning", "healing", "strength", "wisdom", "speed", "protection"],</p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "5000"]</p>
+<p>    "start": "[quality] [item] of [property] - [price] gold",</p></p><p>    "quality": ["Common", "Uncommon", "Rare", "Legendary"],</p></p><p>    "item": ["sword", "shield", "potion", "scroll", "ring", "amulet", "cloak", "boots"],</p></p><p>    "property": ["fire", "ice", "lightning", "healing", "strength", "wisdom", "speed", "protection"],</p></p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "5000"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><strong>Step 3</strong>: Add variation and polish</p></code>`<code>json</p>
+</code>`<code></p></p><strong>Step 3</strong>: Add variation and polish</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Fantasy Shop Items",</p>
@@ -449,11 +449,11 @@
 <p>    "description": "Generates random fantasy shop inventory"</p>
 <p>  },</p>
 <p>  "grammar": {</p>
-<p>    "start": "[item_description]\n[price_line]",</p><p>    "item_description": [</p>
+<p>    "start": "[item_description]\n[price_line]",</p></p><p>    "item_description": [</p>
 <p>      "[quality] [item] of [property]",</p>
 <p>      "[quality] [material] [item]",</p>
 <p>      "[quality] [item] with [enhancement]"</p>
-<p>    ],</p><p>    "price_line": ["Price: [price] gold", "Cost: [price] gold pieces", "Yours for only [price] gold!"],</p><p>    "quality": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],</p><p>    "item": [</p>
+<p>    ],</p></p><p>    "price_line": ["Price: [price] gold", "Cost: [price] gold pieces", "Yours for only [price] gold!"],</p></p><p>    "quality": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],</p></p><p>    "item": [</p>
 <p>      "sword",</p>
 <p>      "shield",</p>
 <p>      "potion",</p>
@@ -466,7 +466,7 @@
 <p>      "gauntlets",</p>
 <p>      "staff",</p>
 <p>      "bow"</p>
-<p>    ],</p><p>    "material": ["iron", "steel", "silver", "gold", "mithril", "adamantine", "crystal", "dragon scale"],</p><p>    "property": [</p>
+<p>    ],</p></p><p>    "material": ["iron", "steel", "silver", "gold", "mithril", "adamantine", "crystal", "dragon scale"],</p></p><p>    "property": [</p>
 <p>      "fire",</p>
 <p>      "ice",</p>
 <p>      "lightning",</p>
@@ -479,7 +479,7 @@
 <p>      "telepathy",</p>
 <p>      "regeneration",</p>
 <p>      "luck"</p>
-<p>    ],</p><p>    "enhancement": [</p>
+<p>    ],</p></p><p>    "enhancement": [</p>
 <p>      "+1 attack",</p>
 <p>      "+2 defense",</p>
 <p>      "glowing runes",</p>
@@ -490,22 +490,15 @@
 <p>      "star-blessed",</p>
 <p>      "demon-ward",</p>
 <p>      "fey-crafted"</p>
-<p>    ],</p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "2500", "5000", "10000"]</p>
+<p>    ],</p></p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "2500", "5000", "10000"]</p>
 <p>  }</p>
 <p>}</p>
-</code>``</p><strong>Sample Outputs</strong>:</p>
-<ul><li>"Rare mithril sword\nPrice: 1000 gold"</li>
-<li>"Epic ring of telepathy\nYours for only 2500 gold!"</li>
-<li>"Legendary cloak with star-blessed\nCost: 10000 gold pieces"</li><h2>Next Steps</h2><p>Now that you understand the basics:</p><p>1. <strong>Experiment</strong>: Modify the examples to create your own variations</p>
+</code>``</p></p><strong>Sample Outputs</strong>:</p><ul><li>"Rare mithril sword\nPrice: 1000 gold"</li><li>"Epic ring of telepathy\nYours for only 2500 gold!"</li><li>"Legendary cloak with star-blessed\nCost: 10000 gold pieces"</li></p><h2>Next Steps</h2></p><p>Now that you understand the basics:</p></p><p>1. <strong>Experiment</strong>: Modify the examples to create your own variations</p>
 <p>2. <strong>Combine Patterns</strong>: Mix different techniques in one generator</p>
 <p>3. <strong>Add Complexity</strong>: Try nested rules and multiple entry points</p>
-<p>4. <strong>Test Thoroughly</strong>: Ensure all combinations work well</p><h3>Practice Exercises</h3><p>1. <strong>Weather Report Generator</strong>: Create a generator that produces varied weather reports</p>
+<p>4. <strong>Test Thoroughly</strong>: Ensure all combinations work well</p></p><h3>Practice Exercises</h3></p><p>1. <strong>Weather Report Generator</strong>: Create a generator that produces varied weather reports</p>
 <p>2. <strong>Menu Generator</strong>: Build a restaurant menu with appetizers, mains, and desserts</p>
-<p>3. <strong>Character Name Generator</strong>: Design a generator for fantasy character names with titles</p><h3>Moving Forward</h3><p>You've learned the fundamentals of generator creation. In the next chapters, we'll explore:</p>
-<li>Advanced rule syntax and weighted choices</li>
-<li>Variables and conditional logic</li>
-<li>Modularization for large projects</li>
-<li>Performance optimization</li></ul><p>Remember: Start simple, test often, and gradually add complexity. Happy generating!</p><p>---</p><strong>Next Chapter</strong>: <a href="05-advanced-rules.md">Advanced Rule Syntax</a> →</p>
+<p>3. <strong>Character Name Generator</strong>: Design a generator for fantasy character names with titles</p></p><h3>Moving Forward</h3></p><p>You've learned the fundamentals of generator creation. In the next chapters, we'll explore:</p><li>Advanced rule syntax and weighted choices</li><li>Variables and conditional logic</li><li>Modularization for large projects</li><li>Performance optimization</li></ul></p><p>Remember: Start simple, test often, and gradually add complexity. Happy generating!</p></p><p>---</p></p><strong>Next Chapter</strong>: <a href="05-advanced-rules.md">Advanced Rule Syntax</a> →</p>
 </div>
 
           <div class="content-footer">

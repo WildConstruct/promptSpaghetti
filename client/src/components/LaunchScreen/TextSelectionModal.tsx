@@ -18,7 +18,7 @@ interface TextSelectionModalProps {
 const NODE_TYPES = [
   { value: 'text', label: 'Text Block' },
   { value: 'choice', label: 'Weighted Choice' },
-  { value: 'variable', label: 'Variable' },
+  // { value: 'variable', label: 'Variable' }, // hidden for initial release
 ];
 
 const SWATCH_COLORS = [
@@ -69,7 +69,7 @@ export const TextSelectionModal: React.FC<TextSelectionModalProps> = ({
           {/* Show selected text preview */}
           <div className="selection-preview">
             <label>Selected Text:</label>
-            <div className="selected-text">"{selection.text}"</div>
+            <div className="selected-text">&quot;{selection.text}&quot;</div>
           </div>
 
           {/* Node type selector */}
