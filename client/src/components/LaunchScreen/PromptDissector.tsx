@@ -165,19 +165,33 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     }
 
     debounceTimerRef.current = setTimeout(() => {
+      const startTime = performance.now();
+      const charCount = value.length;
+      
       try {
         onAnalysisStart?.();
         const newAnalysis = parserRef.current.parse(value);
         setAnalysis(newAnalysis);
         setHasBeenAnalyzed(true);
         onAnalysisComplete(newAnalysis);
+        
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        
         // eslint-disable-next-line no-console
         console.log('[PromptDissector] parsed', {
           textLength: value.length,
           segments: newAnalysis.segments.length,
           nodes: newAnalysis.nodes.length,
           mappings: newAnalysis.mappings.length,
+          performanceMs: duration.toFixed(2),
+          charsPerMs: (charCount / duration).toFixed(2),
         });
+        
+        // Performance warning for large prompts
+        if (charCount > 2000 && duration > 500) {
+          console.warn(`[PromptDissector] Performance warning: ${charCount} chars took ${duration.toFixed(2)}ms (target: <500ms for 2-3k chars)`);
+        }
         
         // Convert analysis to highlight segments
         const segments: HighlightSegment[] = [];
@@ -1036,6 +1050,27 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     }
   }, [onAnalysisComplete, value]);
 
+  // Keyboard shortcuts for Edit Mode (Escape to cancel, Ctrl+Enter to apply)
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Escape key to cancel
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        handleCancelEditMode();
+      }
+      // Ctrl+Enter or Cmd+Enter to apply changes
+      else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        handleApplyEditMode();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isEditMode, handleCancelEditMode, handleApplyEditMode]);
+
   return (
     <>
     {/* Removed floating button overlay - buttons now inside container */}
@@ -1195,11 +1230,11 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         {/* Edit mode controls - OK and Cancel buttons in lower right */}
         {isEditMode && (
           <div className="dissector-editbar">
-            <button className="dissector-btn" onClick={handleApplyEditMode} title="Apply changes">OK</button>
+            <button className="dissector-btn" onClick={handleApplyEditMode} title="Apply changes (Ctrl+Enter)">OK</button>
             <button 
               className="dissector-btn" 
               onClick={handleCancelEditMode}
-              title="Cancel changes"
+              title="Cancel changes (Escape)"
             >
               Cancel
             </button>
