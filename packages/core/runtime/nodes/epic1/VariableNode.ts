@@ -46,6 +46,11 @@ export interface VariableConfig {
 }
 
 /**
+ * Merge modes for data inlet (Story 1.5)
+ */
+export type MergeMode = 'override' | 'template' | 'append';
+
+/**
  * Extended configuration for Variable nodes
  */
 export interface VariableNodeConfig extends InlineEditableConfig {
@@ -55,6 +60,10 @@ export interface VariableNodeConfig extends InlineEditableConfig {
   scope?: 'local' | 'global';
   /** Mode of operation */
   mode?: VariableMode;
+  /** Merge mode for data inlet (Story 1.5) */
+  mergeMode?: MergeMode;
+  /** Whether this node has a data inlet (Story 1.5) */
+  hasDataInlet?: boolean;
 }
 
 /**
@@ -63,6 +72,8 @@ export interface VariableNodeConfig extends InlineEditableConfig {
 export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
   private nodeConfig: VariableNodeConfig;
   private input: any = undefined;
+  private dataInlet: any = undefined;
+  private dataSource: 'inlet' | 'input' | 'default' = 'default';
 
   constructor(
     id: string,
@@ -74,6 +85,8 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
       variableType: 'any',
       scope: 'local',
       mode: 'both',
+      mergeMode: 'override',
+      hasDataInlet: true, // Enable by default for Story 1.5
       ...config
     };
   }
@@ -86,7 +99,15 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
   }
 
   /**
+   * Set the data inlet value (Story 1.5)
+   */
+  setDataInlet(value: any): void {
+    this.dataInlet = value;
+  }
+
+  /**
    * Execute the node - get or set variable based on mode
+   * Story 1.5: Implements data resolution priority
    */
   async run(ctx: ExecutionContext): Promise<any> {
     const config = this.getCurrentValue();
@@ -97,24 +118,45 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
       throw new Error(`Invalid variable name: ${config.name}`);
     }
 
+    // Story 1.5: Data resolution priority
+    let resolvedValue: any;
+    
+    // Priority 1: Data inlet (if connected and has value)
+    if (this.dataInlet !== undefined && this.nodeConfig.hasDataInlet) {
+      resolvedValue = this.mergeData(this.dataInlet, this.input);
+      this.dataSource = 'inlet';
+    }
+    // Priority 2: Input connection (if connected and has value)
+    else if (this.input !== undefined) {
+      resolvedValue = this.input;
+      this.dataSource = 'input';
+    }
+    // Priority 3: Current value (if set in node configuration)
+    else if (config.currentValue !== undefined) {
+      resolvedValue = config.currentValue;
+      this.dataSource = 'default';
+    }
+    // Priority 4: Default value (fallback)
+    else {
+      resolvedValue = config.defaultValue;
+      this.dataSource = 'default';
+    }
+
     if (mode === 'set' || mode === 'both') {
       // Set variable mode
-      const valueToSet =
-        this.input !== undefined ? this.input : config.currentValue;
-
-      if (valueToSet !== undefined) {
+      if (resolvedValue !== undefined) {
         // Validate type if configured
         if (
           this.nodeConfig.variableType !== 'any' &&
-          !this.validateType(valueToSet)
+          !this.validateType(resolvedValue)
         ) {
           throw new Error(
-            `Type mismatch: expected ${this.nodeConfig.variableType}, got ${typeof valueToSet}`
+            `Type mismatch: expected ${this.nodeConfig.variableType}, got ${typeof resolvedValue}`
           );
         }
 
         // Store the value
-        ctx.variables[config.name] = this.sanitizeValue(valueToSet);
+        ctx.variables[config.name] = this.sanitizeValue(resolvedValue);
       }
     }
 
@@ -123,12 +165,53 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
       if (Object.prototype.hasOwnProperty.call(ctx.variables, config.name)) {
         return ctx.variables[config.name];
       } else {
-        return config.defaultValue;
+        return resolvedValue ?? config.defaultValue;
       }
     }
 
-    // For set-only mode, return the value that was set
-    return this.input !== undefined ? this.input : config.currentValue;
+    // For set-only mode, return the resolved value
+    return resolvedValue;
+  }
+
+  /**
+   * Merge data based on configured merge mode (Story 1.5)
+   */
+  private mergeData(dataInlet: any, input: any): any {
+    const mergeMode = this.nodeConfig.mergeMode || 'override';
+    
+    switch (mergeMode) {
+      case 'override':
+        // Data inlet completely replaces input
+        return dataInlet;
+        
+      case 'template':
+        // Input acts as template, data fills placeholders
+        if (typeof input === 'string' && typeof dataInlet === 'object') {
+          let result = input;
+          for (const [key, value] of Object.entries(dataInlet)) {
+            const placeholder = `{${key}}`;
+            result = result.replace(new RegExp(placeholder, 'g'), String(value));
+          }
+          return result;
+        }
+        return dataInlet;
+        
+      case 'append':
+        // Combine both values
+        if (Array.isArray(dataInlet) && Array.isArray(input)) {
+          return [...input, ...dataInlet];
+        }
+        if (typeof dataInlet === 'string' && typeof input === 'string') {
+          return input + dataInlet;
+        }
+        if (typeof dataInlet === 'object' && typeof input === 'object') {
+          return { ...input, ...dataInlet };
+        }
+        return dataInlet;
+        
+      default:
+        return dataInlet;
+    }
   }
 
   /**
@@ -421,6 +504,49 @@ export class VariableNode extends BaseInlineEditableNode<VariableConfig, any> {
    */
   getNodeConfig(): VariableNodeConfig {
     return { ...this.nodeConfig };
+  }
+
+  /**
+   * Set merge mode (Story 1.5)
+   */
+  setMergeMode(mode: MergeMode): void {
+    this.nodeConfig.mergeMode = mode;
+  }
+
+  /**
+   * Get merge mode (Story 1.5)
+   */
+  getMergeMode(): MergeMode {
+    return this.nodeConfig.mergeMode || 'override';
+  }
+
+  /**
+   * Get data source (Story 1.5)
+   */
+  getDataSource(): 'inlet' | 'input' | 'default' {
+    return this.dataSource;
+  }
+
+  /**
+   * Check if data inlet is connected (Story 1.5)
+   */
+  isDataInletConnected(): boolean {
+    return this.dataInlet !== undefined;
+  }
+
+  /**
+   * Get resolved value (Story 1.5)
+   */
+  getResolvedValue(): any {
+    // Simulate resolution without executing
+    if (this.dataInlet !== undefined && this.nodeConfig.hasDataInlet) {
+      return this.mergeData(this.dataInlet, this.input);
+    } else if (this.input !== undefined) {
+      return this.input;
+    } else {
+      const config = this.getCurrentValue();
+      return config.currentValue ?? config.defaultValue;
+    }
   }
 
   /**

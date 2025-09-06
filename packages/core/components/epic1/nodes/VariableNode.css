@@ -1,0 +1,131 @@
+/* Variable Node Styles - Story 1.5: Three-handle data hub */
+
+.epic1-editable-node.variable {
+  position: relative;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Data connected state - visual glow */
+.epic1-editable-node.variable.data-connected {
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+/* Data inlet handle styling */
+.epic1-handle.data-inlet {
+  cursor: crosshair;
+  transition: all 0.3s ease;
+}
+
+.epic1-handle.data-inlet:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+}
+
+.epic1-handle.data-inlet.connected {
+  animation: dataFlow 2s infinite;
+}
+
+@keyframes dataFlow {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.4);
+  }
+}
+
+/* Data inlet badge */
+.data-inlet-badge {
+  margin-left: 8px;
+  font-size: 14px;
+  cursor: help;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Data source indicator */
+.epic1-data-source-indicator {
+  margin-top: 4px;
+  padding: 2px 6px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 4px;
+  font-size: 11px;
+  color: #4CAF50;
+  text-align: center;
+}
+
+.data-source-label {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* Variable display adjustments for three-handle mode */
+.epic1-variable-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 8px;
+}
+
+.epic1-variable-name {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.epic1-variable-prefix {
+  color: #666;
+  margin-right: 4px;
+}
+
+/* First-use tooltip */
+.epic1-handle.data-inlet::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.epic1-handle.data-inlet:hover::after {
+  opacity: 1;
+}
+
+/* Connection line animation for data flow */
+.react-flow__edge.data-flow {
+  stroke-dasharray: 5;
+  animation: flowAnimation 1s linear infinite;
+}
+
+@keyframes flowAnimation {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
