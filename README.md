@@ -1,10 +1,11 @@
-# PromptScape Randomizer Graph
+# 🍝 Prompt Spaghetti: The Revenge
 
-[![codecov](https://codecov.io/gh/WildConstruct/prompt-spaghetti/branch/main/graph/badge.svg)](https://codecov.io/gh/WildConstruct/prompt-spaghetti)
-[![CI](https://github.com/WildConstruct/prompt-spaghetti/workflows/CI/badge.svg)](https://github.com/WildConstruct/prompt-spaghetti/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
+[![React](https://img.shields.io/badge/react-18.3-blue)](https://reactjs.org/)
+[![Demo](https://img.shields.io/badge/demo-live-ff69b4)](https://promptscape-graph.vercel.app)
 
-A powerful node-based visual editor for creating deterministic prompt generation graphs. Build complex branching grammars with an intuitive drag-and-drop interface, then execute them with reproducible results.
+> A powerful node-based visual editor for creating deterministic prompt generation graphs. Build complex branching grammars with an intuitive drag-and-drop interface, then execute them with reproducible results.
 
 ## 🚀 Features
 

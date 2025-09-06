@@ -1,8 +1,26 @@
 {
-  "name": "promptscape-graph",
-  "version": "0.1.0-alpha",
-  "private": true,
-  "description": "Monorepo for PromptScape Randomizer Graph editor and executor.",
+  "name": "prompt-spaghetti-revenge",
+  "version": "1.0.0-demo",
+  "private": false,
+  "description": "A powerful visual graph editor for creating dynamic, randomized text generation workflows",
+  "author": "WildConstruct",
+  "license": "MIT",
+  "homepage": "https://github.com/WildConstruct/prompt_spaghetti_the_revenge",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WildConstruct/prompt_spaghetti_the_revenge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/WildConstruct/prompt_spaghetti_the_revenge/issues"
+  },
+  "keywords": [
+    "prompt-engineering",
+    "graph-editor",
+    "text-generation",
+    "visual-programming",
+    "node-based",
+    "react-flow"
+  ],
   "packageManager": "pnpm@8.15.4",
   "pnpm": {
     "overrides": {
