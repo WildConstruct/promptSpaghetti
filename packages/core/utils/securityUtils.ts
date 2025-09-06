@@ -253,3 +253,45 @@ export function generateSecureId(length: number = 16): string {
 
   return Array.from(array, byte => chars[byte % chars.length]).join('');
 }
+
+/**
+ * Generate secure token for authentication
+ */
+export function generateSecureToken(length: number = 32): string {
+  return generateSecureId(length);
+}
+
+/**
+ * Hash password using a simple implementation
+ * Note: In production, use bcrypt or similar
+ */
+export function hashPassword(password: string): string {
+  // This is a placeholder implementation
+  // In production, use bcrypt.hash(password, saltRounds)
+  return Buffer.from(password).toString('base64');
+}
+
+/**
+ * Verify password against hash
+ * Note: In production, use bcrypt or similar
+ */
+export function verifyPassword(password: string, hash: string): boolean {
+  // This is a placeholder implementation
+  // In production, use bcrypt.compare(password, hash)
+  return Buffer.from(password).toString('base64') === hash;
+}
+
+/**
+ * Sanitize input (alias for sanitizeText)
+ */
+export function sanitizeInput(input: string): string {
+  return sanitizeText(input);
+}
+
+/**
+ * Validate email format
+ */
+export function validateEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}

@@ -103,7 +103,7 @@ export function useSectionResize({
     document.body.style.userSelect = 'none';
     // Prevent text selection during drag
     document.body.style.webkitUserSelect = 'none';
-    document.body.style.msUserSelect = 'none';
+    (document.body.style as any).msUserSelect = 'none';
   }, [sectionStates]);
 
   // Throttled height update for visual feedback
@@ -168,7 +168,7 @@ export function useSectionResize({
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
     document.body.style.webkitUserSelect = '';
-    document.body.style.msUserSelect = '';
+    (document.body.style as any).msUserSelect = '';
   }, [resizingSection, tempHeight, saveHeights, onHeightChange]);
 
   // Toggle section collapse

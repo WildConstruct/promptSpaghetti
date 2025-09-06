@@ -150,6 +150,7 @@ import modelEvaluationWebhooks from './routes/model-evaluation-webhooks';
 import { ModelEvaluationTriggerService, defaultModelEvaluationConfig } from './services/ModelEvaluationTriggerService';
 import { conflictResolutionRoutes } from './api/collaboration/conflict-resolution';
 import { Epic23WorkspaceDAO } from './database/epic23-workspace-dao';
+import { llmRoutes } from './routes/llm';
 
 // Error Handling & Resilience System
 import { errorHandlerPlugin } from './middleware/error-handler';
@@ -1526,6 +1527,10 @@ try {
   // Register System Monitoring & Error Handling routes
   server.register(systemMonitoringRoutes, { prefix: '/api' });
   console.log('System monitoring and error handling routes registered successfully');
+
+  // Register LLM Service routes
+  server.register(llmRoutes);
+  console.log('LLM service routes registered successfully');
 
   // Register Model Interpretation & Token Analysis routes
   try {

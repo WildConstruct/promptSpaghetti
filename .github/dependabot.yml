@@ -83,6 +83,24 @@ updates:
       - 'automated'
       - 'critical'
 
+  # Eval package dependencies (ML/AI related)
+  - package-ecosystem: 'npm'
+    directory: '/packages/eval'
+    schedule:
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:15'
+      timezone: 'UTC'
+    open-pull-requests-limit: 3
+    reviewers:
+      - 'promptscape/ml-team'
+    commit-message:
+      prefix: 'deps(eval)'
+    labels:
+      - 'dependencies'
+      - 'ml'
+      - 'automated'
+
   # Analytics SDK
   - package-ecosystem: 'npm'
     directory: '/packages/analytics-sdk'

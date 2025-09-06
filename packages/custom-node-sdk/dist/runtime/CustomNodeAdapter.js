@@ -112,7 +112,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
         const schema = this.customConfig.schema;
         for (const [inputName, inputSpec] of Object.entries(schema.inputs)) {
             // Get value from context variables
-            const value = ctx.variables.get(inputName);
+            const value = ctx.variables[inputName];
             if (value !== undefined) {
                 inputs[inputName] = value;
             }
@@ -134,7 +134,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
             context: ctx,
             inputs,
             utils: {
-                random: () => ctx.prng(),
+                random: () => ctx.prng ? ctx.prng() : Math.random(),
                 log: (level, message, data) => {
                     console[level](`[${nodeId}] ${message}`, data || '');
                 },
@@ -165,15 +165,19 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
      * Update execution statistics in the context
      */
     updateExecutionStats(ctx, executionTime, metadata) {
-        if (ctx.executionMeta) {
-            if (!ctx.executionMeta.nodeStats) {
-                ctx.executionMeta.nodeStats = new Map();
-            }
-            ctx.executionMeta.nodeStats.set(this.id, {
+        // Store execution stats in performance metrics if available
+        if (ctx.performanceMetrics) {
+            const metrics = ctx.performanceMetrics.get(this.id) || { startTime: Date.now() - executionTime };
+            metrics.endTime = Date.now();
+            ctx.performanceMetrics.set(this.id, metrics);
+        }
+        // Store custom metrics in outputs if needed
+        if (metadata && ctx.outputs) {
+            ctx.outputs[`${this.id}_metrics`] = {
                 executionTime,
-                memoryUsed: metadata?.memoryUsed || 0,
-                customMetrics: metadata?.metrics || {},
-            });
+                memoryUsed: metadata.memoryUsed || 0,
+                customMetrics: metadata.metrics || {},
+            };
         }
     }
     /**
@@ -181,11 +185,12 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
      */
     logExecutionError(ctx, error, executionTime) {
         console.error(`[${this.id}] Execution failed after ${executionTime}ms:`, error);
-        if (ctx.executionMeta) {
-            if (!ctx.executionMeta.errors) {
-                ctx.executionMeta.errors = [];
+        // Store error information in outputs if available
+        if (ctx.outputs) {
+            if (!ctx.outputs['_errors']) {
+                ctx.outputs['_errors'] = [];
             }
-            ctx.executionMeta.errors.push({
+            ctx.outputs['_errors'].push({
                 nodeId: this.id,
                 error: error.message,
                 timestamp: new Date().toISOString(),
@@ -206,6 +211,26 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
      */
     getCustomMetadata() {
         return this.customConfig.metadata;
+    }
+    /**
+     * Serialize the node's complete state for persistence/export
+     */
+    serialize() {
+        return {
+            id: this.id,
+            type: this.customConfig.metadata?.type || 'custom',
+            config: this.config,
+            data: {
+                customConfig: this.customConfig,
+                customNodeType: this.customNode.constructor.name,
+                metadata: this.customConfig.metadata,
+            },
+            metadata: {
+                version: this.customConfig.metadata?.version || '1.0.0',
+                created: new Date().toISOString(),
+                lastModified: new Date().toISOString(),
+            },
+        };
     }
 }
 //# sourceMappingURL=CustomNodeAdapter.js.map

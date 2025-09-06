@@ -1,0 +1,158 @@
+/* Error Recovery Toast Styles */
+/* Story 2.5a: Asset Browser Integration MVP */
+
+.error-recovery-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  min-width: 320px;
+  max-width: 480px;
+  background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  z-index: 10000;
+  animation: slideIn 0.3s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.error-recovery-toast.error-type_incompatibility {
+  border-left: 4px solid #ff9800;
+}
+
+.error-recovery-toast.error-connection_conflict {
+  border-left: 4px solid #f44336;
+}
+
+.error-recovery-toast.error-invalid_position {
+  border-left: 4px solid #2196f3;
+}
+
+.error-recovery-toast.error-general {
+  border-left: 4px solid #9e9e9e;
+}
+
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast-icon {
+  font-size: 20px;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.toast-close:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.toast-content {
+  padding: 16px;
+}
+
+.error-message {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.recovery-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.recovery-action {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.recovery-action:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.recovery-action.primary {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  border-color: #4CAF50;
+  color: white;
+  font-weight: 500;
+}
+
+.recovery-action.primary:hover {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  border-color: #45a049;
+}
+
+.action-icon {
+  font-size: 14px;
+}
+
+.action-label {
+  font-size: 12px;
+}
+
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4CAF50 0%, #8BC34A 100%);
+  transition: width 0.1s linear;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Highlight conflicting connections */
+.react-flow__edge.highlight-conflict {
+  animation: pulseRed 0.5s ease-in-out 3;
+}
+
+@keyframes pulseRed {
+  0%, 100% {
+    stroke: #f44336;
+    stroke-width: 2;
+  }
+  50% {
+    stroke: #ff6b6b;
+    stroke-width: 3;
+  }
+}

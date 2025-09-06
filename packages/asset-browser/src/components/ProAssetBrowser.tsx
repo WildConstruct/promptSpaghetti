@@ -240,14 +240,11 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
             id: fp.id,
             name: fp.name,
             tags: fp.tags,
-            type: fp.type || 'graph',
+            type: (fp.type || 'graph') as Preset['type'],
             category: fp.category,
-            // Add metadata as extra fields
+            // Add metadata fields if they exist
             nodes: fp.metadata?.nodes as number | undefined,
-            options: fp.metadata?.options as string[] | undefined,
-            combinations: fp.metadata?.combinations as number | undefined,
-            region: fp.metadata?.region as string | undefined,
-            path: fp.path || fp.metadata?.file
+            path: (fp as any).path || fp.metadata?.file
           }));
           
           // Combine regular presets with validated fragment presets
@@ -405,9 +402,10 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
   const generateSampleOutput = (preset: Preset): string => {
     try {
       // If preset has actual graph data, try to extract sample output
-      if (preset.data?.nodes) {
+      const graphData = preset.data as any;
+      if (graphData?.nodes) {
         // Find output nodes
-        const outputNodes = preset.data.nodes.filter((n: any) => 
+        const outputNodes = graphData.nodes.filter((n: any) => 
           n.type === 'Output' || n.type === 'output' || n.data?.type === 'Output'
         );
         
@@ -422,7 +420,7 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
         }
         
         // Check for WeightedChoice nodes to show sample options
-        const weightedNodes = preset.data.nodes.filter((n: any) => 
+        const weightedNodes = graphData.nodes.filter((n: any) => 
           n.type === 'WeightedChoice' || n.type === 'weightedChoice' || n.data?.type === 'WeightedChoice'
         );
         
@@ -1000,9 +998,9 @@ export function ProAssetBrowser({ onInsert }: ProAssetBrowserProps) {
                       <div style={{ paddingLeft: '8px' }}>
                         • {preset.nodes || 0} nodes
                       </div>
-                      {preset.data?.nodes && (
+                      {(preset.data as { nodes?: any[] })?.nodes && (
                         <>
-                          {preset.data.nodes.slice(0, 2).map((node: any, idx: number) => (
+                          {(preset.data as { nodes?: any[] }).nodes?.slice(0, 2).map((node: any, idx: number) => (
                             <div key={idx} style={{ paddingLeft: '16px', fontSize: '10px' }}>
                               - {node.type || node.data?.type || 'Node'}
                             </div>

@@ -1,0 +1,113 @@
+/* Collapsible Section Styles - Story 2.7 */
+
+.collapsible-section {
+  margin-bottom: 8px;
+  border: 1px solid var(--section-border, #e5e7eb);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--section-bg, #ffffff);
+}
+
+.section-header {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: var(--section-header-bg, #f9fafb);
+  color: var(--section-header-text, #374151);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.15s ease;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.section-header:hover {
+  background: var(--section-header-hover, #f3f4f6);
+}
+
+.section-header:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+.section-header:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--section-title, #1f2937);
+}
+
+.expand-icon {
+  transition: transform 0.2s ease;
+  color: var(--section-expand, #6b7280);
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.section-content {
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease;
+}
+
+.section-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.section-content.expanded {
+  max-height: 500px; /* Adjust based on content */
+  opacity: 1;
+}
+
+.content-inner {
+  padding: 12px;
+}
+
+/* Disabled state */
+.collapsible-section.disabled {
+  opacity: 0.6;
+}
+
+.collapsible-section.disabled .section-header {
+  cursor: not-allowed;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .collapsible-section {
+    --section-border: #374151;
+    --section-bg: #1f2937;
+    --section-header-bg: #111827;
+    --section-header-text: #d1d5db;
+    --section-header-hover: #374151;
+    --section-title: #f9fafb;
+    --section-expand: #9ca3af;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .section-content,
+  .expand-icon {
+    transition: none;
+  }
+}

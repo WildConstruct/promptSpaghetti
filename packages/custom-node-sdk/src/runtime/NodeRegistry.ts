@@ -159,7 +159,7 @@ export class DefaultNodeRegistry implements CustomNodeRegistry {
         this.register(registration);
         registered.push(registration.metadata.type);
       } catch (error) {
-        errors.push(`${registration.metadata.type}: ${error.message}`);
+        errors.push(`${registration.metadata.type}: ${error instanceof Error ? error.message : String(error)}`);
       }
     }
 

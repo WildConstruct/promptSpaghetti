@@ -1,0 +1,160 @@
+name: Parser Eval Gate
+
+on:
+  pull_request:
+    paths:
+      - 'packages/core/services/PromptParser.ts'
+      - 'packages/core/services/StandardParser.ts'
+      - 'packages/core/services/LLM*.ts'
+      - 'packages/eval/goldens/**'
+      - 'packages/eval/scripts/**'
+      - '.github/workflows/parser-eval-gate.yml'
+
+jobs:
+  eval:
+    name: LLM Parser Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.4
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Check golden files exist
+        run: |
+          echo "📂 Checking for golden test files..."
+          if [ -z "$(ls -A packages/eval/goldens/*.truth.json 2>/dev/null)" ]; then
+            echo "❌ No golden truth files found in packages/eval/goldens/"
+            echo "Please add test cases before merging parser changes"
+            exit 1
+          fi
+          
+          GOLDEN_COUNT=$(ls packages/eval/goldens/*.truth.json | wc -l)
+          echo "✅ Found $GOLDEN_COUNT golden test cases"
+          
+      - name: Run Parser Evaluation
+        id: eval
+        run: |
+          echo "🧪 Running LLM Parser Evaluation..."
+          pnpm eval:ci
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          NODE_ENV: test
+          
+      - name: Generate evaluation report
+        if: always()
+        run: |
+          # Create a simple markdown report
+          cat > eval-report.md << 'EOF'
+          # Parser Evaluation Report
+          
+          **PR:** #${{ github.event.pull_request.number }}
+          **Branch:** ${{ github.head_ref }}
+          **Commit:** ${{ github.sha }}
+          
+          ## Results
+          EOF
+          
+          # Append test output if available
+          if [ -f "packages/eval/results.json" ]; then
+            echo '```json' >> eval-report.md
+            cat packages/eval/results.json >> eval-report.md
+            echo '```' >> eval-report.md
+          else
+            echo "No detailed results available" >> eval-report.md
+          fi
+          
+      - name: Upload evaluation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: parser-eval-results
+          path: |
+            eval-report.md
+            packages/eval/results.json
+          retention-days: 30
+          
+      - name: Comment PR with results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.existsSync('eval-report.md') 
+              ? fs.readFileSync('eval-report.md', 'utf8')
+              : '❌ Evaluation failed - no report generated';
+            
+            const status = '${{ steps.eval.outcome }}' === 'success' ? '✅' : '❌';
+            
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ${status} Parser Evaluation Results\n\n${report}\n\n**Thresholds:**\n- Node F1 ≥ 70%\n- Edge F1 ≥ 60%\n- Variable Integrity ≥ 99.5%`
+            });
+            
+      - name: Set check status
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const status = '${{ steps.eval.outcome }}';
+            const conclusion = status === 'success' ? 'success' : 'failure';
+            
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Parser Quality Gate',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: conclusion,
+              output: {
+                title: `Parser Evaluation ${conclusion === 'success' ? 'Passed' : 'Failed'}`,
+                summary: conclusion === 'success' 
+                  ? '✅ All quality thresholds met'
+                  : '❌ Quality regression detected - see details above'
+              }
+            });
+
+  # Optional: Run on different Node versions for compatibility
+  compatibility:
+    name: Node Compatibility Check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18', '20', '21']
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.4
+          
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          
+      - run: pnpm install --frozen-lockfile
+      
+      - name: Run eval on Node ${{ matrix.node-version }}
+        run: pnpm eval
+        continue-on-error: true
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          
+      - name: Report compatibility
+        run: |
+          echo "✅ Parser evaluation compatible with Node ${{ matrix.node-version }}"

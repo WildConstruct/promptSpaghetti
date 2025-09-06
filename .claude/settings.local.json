@@ -7,9 +7,31 @@
       "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
       "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
       "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
-      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)"
+      "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
+      "Bash(pnpm --filter core test -- services/PromptParser)",
+      "Bash(pnpm --filter core test -- services/PromptParser --passWithNoTests)",
+      "Bash(git log:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm test:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(node:*)",
+      "Bash(pnpm build:*)",
+      "Bash(grep:*)",
+      "Bash(npx tsc:*)",
+      "Bash(sed:*)",
+      "Bash(pnpm --filter @prompt-graph/targeting build)",
+      "Bash(pnpm --filter @prompt-spaghetti/graph-core build)",
+      "Bash(pnpm --filter @prompt-spaghetti/ui-kit build)",
+      "Bash(pnpm --filter @prompt-spaghetti/custom-node-sdk build)",
+      "Bash(pnpm --filter @promptscape/core build)",
+      "Bash(pnpm --filter server build)",
+      "Bash(rm:*)"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "C:\\c\\Users\\Owner\\CascadeProjects"
+    ]
   }
 }

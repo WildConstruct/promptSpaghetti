@@ -1,0 +1,115 @@
+/* Virtual List Styles - Story 2.7 */
+
+.virtual-list {
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid var(--virtual-list-border, #e5e7eb);
+  border-radius: 4px;
+  background: var(--virtual-list-bg, #ffffff);
+}
+
+.virtual-list:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+.virtual-list-content {
+  position: relative;
+}
+
+.virtual-list-item {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--virtual-list-item-border, #f3f4f6);
+}
+
+.virtual-list-item:last-child {
+  border-bottom: none;
+}
+
+.virtual-list-item:hover {
+  background: var(--virtual-list-item-hover, #f9fafb);
+}
+
+.virtual-list-item:focus-within {
+  background: var(--virtual-list-item-focus, #eff6ff);
+}
+
+/* Empty state */
+.virtual-list.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-message {
+  color: var(--virtual-list-empty-text, #6b7280);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Scrollbar styling */
+.virtual-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.virtual-list::-webkit-scrollbar-track {
+  background: var(--virtual-list-scrollbar-track, #f1f5f9);
+}
+
+.virtual-list::-webkit-scrollbar-thumb {
+  background: var(--virtual-list-scrollbar-thumb, #cbd5e1);
+  border-radius: 3px;
+}
+
+.virtual-list::-webkit-scrollbar-thumb:hover {
+  background: var(--virtual-list-scrollbar-thumb-hover, #94a3b8);
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .virtual-list {
+    --virtual-list-border: #374151;
+    --virtual-list-bg: #1f2937;
+    --virtual-list-item-border: #374151;
+    --virtual-list-item-hover: #374151;
+    --virtual-list-item-focus: #1e40af;
+    --virtual-list-empty-text: #9ca3af;
+    --virtual-list-scrollbar-track: #374151;
+    --virtual-list-scrollbar-thumb: #6b7280;
+    --virtual-list-scrollbar-thumb-hover: #9ca3af;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .virtual-list {
+    border-width: 2px;
+  }
+  
+  .virtual-list-item {
+    border-bottom-width: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .virtual-list {
+    scroll-behavior: auto;
+  }
+}

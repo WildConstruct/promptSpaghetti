@@ -2,6 +2,7 @@
 // Shared Zod schema for a graph JSON used by both UI and executor.
 // Nodes are stored in an object keyed by node id for O(1) lookup.
 import { z } from 'zod';
+import { SecurityValidation } from './validation/security';
 
 export const NodeTypeEnum = z.enum([
   'WeightedChoice',
@@ -53,18 +54,18 @@ export const OutputNodeSchema = BaseNode.extend({
 
 export const IncludeNodeSchema = BaseNode.extend({
   type: z.literal('Include'),
-  name: SecureValidation.safePropertyKey()
+  name: SecurityValidation.safePropertyKey()
 });
 
 export const SetVariableNodeSchema = BaseNode.extend({
   type: z.literal('SetVariable'),
-  key: SecureValidation.variableName(),
-  value: SecureValidation.safeValue()
+  key: SecurityValidation.variableName(),
+  value: SecurityValidation.safeValue()
 });
 
 export const GetVariableNodeSchema = BaseNode.extend({
   type: z.literal('GetVariable'),
-  key: SecureValidation.variableName()
+  key: SecurityValidation.variableName()
 });
 
 // Epic 7 Advanced Node Schemas
@@ -85,16 +86,16 @@ export const ConditionalNodeSchema = BaseNode.extend({
   type: z.literal('Conditional'),
   branches: z.array(
     z.object({
-      condition: SecureValidation.safeExpression(),
-      output: SecureValidation.safeString(),
-      label: SecureValidation.safeString().optional()
+      condition: SecurityValidation.safeExpression(),
+      output: SecurityValidation.safeString(),
+      label: SecurityValidation.safeString().optional()
     })
   ).optional(),
-  defaultOutput: SecureValidation.safeString().optional(),
+  defaultOutput: SecurityValidation.safeString().optional(),
   conditionalConfig: z.object({
     allowVariableAccess: z.boolean().optional(),
     strictMode: z.boolean().optional(),
-    customFunctions: z.record(SecureValidation.safeValue()).optional()
+    customFunctions: z.record(SecurityValidation.safeValue()).optional()
   }).optional()
 });
 

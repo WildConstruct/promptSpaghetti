@@ -1,4 +1,0 @@
-
-> @prompt-spaghetti/custom-node-sdk@0.1.0 build /Users/brianbehm/CascadeProjects/prompt-spaghetti/packages/custom-node-sdk
-> tsc && npm run copy-templates
-

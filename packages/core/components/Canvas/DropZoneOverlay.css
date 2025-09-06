@@ -1,0 +1,126 @@
+/* Drop Zone Overlay Styles */
+/* Story 2.5a: Asset Browser Integration MVP */
+
+.drop-zone-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.drop-zone-overlay.valid-drop {
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(76, 175, 80, 0.15) 0%,
+    rgba(76, 175, 80, 0.05) 50%,
+    transparent 100%
+  );
+  border: 2px dashed #4CAF50;
+}
+
+.drop-zone-overlay.invalid-drop {
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(244, 67, 54, 0.15) 0%,
+    rgba(244, 67, 54, 0.05) 50%,
+    transparent 100%
+  );
+  border: 2px dashed #f44336;
+}
+
+.drop-zone-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.drop-zone-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.valid-drop .drop-zone-icon {
+  background: #4CAF50;
+  color: white;
+}
+
+.invalid-drop .drop-zone-icon {
+  background: #f44336;
+  color: white;
+}
+
+.drop-position-marker {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+/* Draggable Asset Styles */
+.draggable-asset {
+  transition: opacity 0.2s ease;
+}
+
+.draggable-asset.dragging {
+  opacity: 0.5;
+  cursor: grabbing !important;
+}
+
+.drag-ghost-preview {
+  animation: ghostFloat 0.3s ease-out;
+}
+
+@keyframes ghostFloat {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}

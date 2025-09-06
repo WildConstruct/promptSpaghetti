@@ -8,6 +8,9 @@ module.exports = {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
+  moduleNameMapper: {
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+  },
   clearMocks: true,
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
 };

@@ -1,0 +1,282 @@
+/* LLM Monitor Admin Panel Styles */
+
+.llm-monitor {
+  padding: 20px;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.llm-monitor.loading,
+.llm-monitor.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 18px;
+}
+
+.llm-monitor.error {
+  color: #ff6b6b;
+}
+
+.llm-monitor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.llm-monitor-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.monitor-controls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.monitor-controls label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.monitor-controls select {
+  padding: 5px 10px;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  border-radius: 4px;
+}
+
+.monitor-controls button {
+  padding: 8px 16px;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.monitor-controls button:hover {
+  background: #0052aa;
+}
+
+.offline-banner {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  right: 20px;
+  padding: 10px;
+  background: #ff9800;
+  color: #000;
+  text-align: center;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.monitor-section {
+  margin-bottom: 40px;
+}
+
+.monitor-section h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #4CAF50;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: #2a2a2a;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.stat-quota {
+  font-size: 14px;
+  color: #999;
+  font-weight: 400;
+  margin-left: 8px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4CAF50;
+  transition: width 0.3s ease;
+}
+
+.progress-bar.caution .progress-fill {
+  background: #FFC107;
+}
+
+.progress-bar.warning .progress-fill {
+  background: #FF9800;
+}
+
+.progress-bar.danger .progress-fill {
+  background: #F44336;
+}
+
+.model-table {
+  overflow-x: auto;
+}
+
+.model-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.model-table th,
+.model-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.model-table th {
+  background: #2a2a2a;
+  color: #999;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.model-table td {
+  font-size: 14px;
+}
+
+.model-type {
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.model-type.free {
+  background: #4CAF50;
+  color: white;
+}
+
+.model-type.paid {
+  background: #FF9800;
+  color: white;
+}
+
+.quota-details {
+  background: #2a2a2a;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.quota-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+}
+
+.quota-item:last-child {
+  border-bottom: none;
+}
+
+.quota-item span:first-child {
+  color: #999;
+}
+
+.quota-item span:last-child {
+  font-weight: 500;
+}
+
+.quota-item span.safe {
+  color: #4CAF50;
+}
+
+.quota-item span.caution {
+  color: #FFC107;
+}
+
+.quota-item span.warning {
+  color: #FF9800;
+}
+
+.quota-item span.danger {
+  color: #F44336;
+}
+
+.alert-text {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid #FF9800;
+  border-radius: 4px;
+  color: #FF9800;
+  font-size: 12px;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .llm-monitor-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .monitor-controls {
+    flex-wrap: wrap;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .model-table {
+    font-size: 12px;
+  }
+
+  .model-table th,
+  .model-table td {
+    padding: 8px;
+  }
+}

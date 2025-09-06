@@ -68,7 +68,7 @@ export class ValidationEngine {
             }
         }
         catch (error) {
-            errors.push(`Schema validation failed: ${error.message}`);
+            errors.push(`Schema validation failed: ${error instanceof Error ? error.message : String(error)}`);
         }
         return {
             valid: errors.length === 0,
@@ -102,7 +102,7 @@ export class ValidationEngine {
                                 errors.push(`Input '${inputName}' validation failed: ${messages}`);
                             }
                             else {
-                                errors.push(`Input '${inputName}' validation failed: ${validationError.message}`);
+                                errors.push(`Input '${inputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`);
                             }
                         }
                     }
@@ -116,7 +116,7 @@ export class ValidationEngine {
             }
         }
         catch (error) {
-            errors.push(`Input validation failed: ${error.message}`);
+            errors.push(`Input validation failed: ${error instanceof Error ? error.message : String(error)}`);
         }
         return {
             valid: errors.length === 0,
@@ -148,7 +148,7 @@ export class ValidationEngine {
                             errors.push(`Output '${outputName}' validation failed: ${messages}`);
                         }
                         else {
-                            errors.push(`Output '${outputName}' validation failed: ${validationError.message}`);
+                            errors.push(`Output '${outputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`);
                         }
                     }
                 }
@@ -161,7 +161,7 @@ export class ValidationEngine {
             }
         }
         catch (error) {
-            errors.push(`Output validation failed: ${error.message}`);
+            errors.push(`Output validation failed: ${error instanceof Error ? error.message : String(error)}`);
         }
         return {
             valid: errors.length === 0,
@@ -190,7 +190,7 @@ export class ValidationEngine {
                 return { valid: false, errors: messages, warnings: [] };
             }
             else {
-                return { valid: false, errors: [error.message], warnings: [] };
+                return { valid: false, errors: [error instanceof Error ? error.message : String(error)], warnings: [] };
             }
         }
     }

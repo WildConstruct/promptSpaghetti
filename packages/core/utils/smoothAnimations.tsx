@@ -1,30 +1,33 @@
 /**
  * Smooth Animation Utilities
  * Epic 8.1: Task 4 - Cinema 4D quality smooth animations and transitions
- * 
+ *
  * Provides professional animation utilities for 60fps interactions
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 
 // Animation easing functions inspired by Cinema 4D
-export const easingFunctions = { // Cinema 4D style easing curves
-  cinema4d: {,
-  ease: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-  easeIn: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
-  easeOut: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
-  easeInOut: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
-  // Professional motion easing
-  professional: 'cubic-bezier(0.4, 0, 0.2, 1)',
-  sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
-  // Smooth anticipation curves
-  anticipate: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-  bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-  // Substance Designer inspired
-  substance: 'cubic-bezier(0.23, 1, 0.32, 1)' }
-};
+export const easingFunctions = {
+  // Cinema 4D style easing curves
+  cinema4d: {
+    ease: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    easeIn: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
+    easeOut: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+    easeInOut: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
+    // Professional motion easing
+    professional: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
+    // Smooth anticipation curves
+    anticipate: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+    bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+    // Substance Designer inspired
+    substance: 'cubic-bezier(0.23, 1, 0.32, 1)'
+  }
+} as const;
 
 // Animation duration constants (60fps optimized)
-export const animationDurations = { // Micro-interactions (hover, click)
+export const animationDurations = {
+  // Micro-interactions (hover, click)
   micro: 150,
   // UI element transitions
   fast: 200,
@@ -35,219 +38,272 @@ export const animationDurations = { // Micro-interactions (hover, click)
   // Complex animations
   complex: 500,
   // Loading states
-  loading: 800 }
-};
+  loading: 800
+} as const;
 
 // CSS animation classes
-export const cssAnimationClasses = { nodeCreate: 'animate-node-create',
+export const cssAnimationClasses = {
+  nodeCreate: 'animate-node-create',
   nodeDelete: 'animate-node-delete',
   nodeHover: 'animate-node-hover',
   panelExpand: 'animate-panel-expand',
   panelCollapse: 'animate-panel-collapse',
   loadingSpinner: 'animate-loading-spinner',
-  hoverLift: 'animate-hover-lift' }
-};
+  hoverLift: 'animate-hover-lift'
+} as const;
+
 /**
  * Creates smooth animation styles for React components
  */
-export function createAnimationStyle(property: string);
+export function createAnimationStyle(
+  property: string,
   duration: number = animationDurations.normal,
-  easing: string = easingFunctions.cinema4d.professional): React.CSSProperties {,
+  easing: string = easingFunctions.cinema4d.professional
+): React.CSSProperties {
   return {
-    transition: `${property} ${duration}ms ${easing}`}
-},
-  willChange: property;
+    transition: `${property} ${duration}ms ${easing}`,
+    willChange: property
   };
+}
+
 /**
  * Creates a comprehensive transition style for multiple properties
  */
-export function createSmoothTransition(properties: string),
+export function createSmoothTransition(
+  properties: string[],
   duration: number = animationDurations.normal,
-  easing: string = easingFunctions.cinema4d.professional): React.CSSProperties {,
+  easing: string = easingFunctions.cinema4d.professional
+): React.CSSProperties {
   return {
-    transition: properties.map(prop => `${prop} ${duration}ms ${easing}`).join(', ')}
-},
-  willChange: properties.join(', ')
+    transition: properties.map((prop) => `${prop} ${duration}ms ${easing}`).join(', '),
+    willChange: properties.join(', ')
   };
+}
+
 /**
  * Animation state management hook
  */
-export function useAnimation(initialState: boolean = false) { const [isAnimating, setIsAnimating] = React.useState(initialState);
-  const timeoutRef = React.useRef<NodeJS.Timeout>();
-  const startAnimation = React.useCallback((duration?: number) => { }
-  setIsAnimating(true);
-  if (timeoutRef.current) { clearTimeout(timeoutRef.current);
-  if (duration) {
-  timeoutRef.current = setTimeout(() => {
-  setIsAnimating(false) }, duration);
-  }, []);
-  const stopAnimation = React.useCallback(() => { setIsAnimating(false);
+export function useAnimation(initialState: boolean = false) {
+  const [isAnimating, setIsAnimating] = React.useState(initialState);
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const startAnimation = React.useCallback((duration?: number) => {
+    setIsAnimating(true);
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current) }, []);
-  React.useEffect(() => { return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current) };
+      clearTimeout(timeoutRef.current);
+    }
+    if (duration) {
+      timeoutRef.current = setTimeout(() => {
+        setIsAnimating(false);
+      }, duration);
+    }
   }, []);
-  return { isAnimating
-    startAnimation }
-    stopAnimation
-  };
+
+  const stopAnimation = React.useCallback(() => {
+    setIsAnimating(false);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+
+  React.useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  return { isAnimating, startAnimation, stopAnimation };
+}
+
 /**
  * Smooth scroll utilities
  */
-export function smoothScrollTo(element: HTMLElement)
-  top: number
-  duration: number = animationDurations.smooth): void { 
+export function smoothScrollTo(element: HTMLElement, top: number, duration: number = animationDurations.smooth): void {
   const start = element.scrollTop;
   const change = top - start;
   const startTime = performance.now();
+
   function animateScroll(currentTime: number) {
-  const elapsed = currentTime - startTime;
-  const progress = Math.min(elapsed / duration, 1);
-  // Use easeOutQuart for smooth scrolling
-  const easeProgress = 1 - Math.pow(1 - progress, 4);
-  element.scrollTop = start + (change * easeProgress);
-  if (progress < 1) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Use easeOutQuart for smooth scrolling
+    const easeProgress = 1 - Math.pow(1 - progress, 4);
+    element.scrollTop = start + change * easeProgress;
+    if (progress < 1) {
+      requestAnimationFrame(animateScroll);
+    }
+  }
+
   requestAnimationFrame(animateScroll);
-  requestAnimationFrame(animateScroll);
-  /**
-  * Performance-optimized animation utilities
-  */
-  export class AnimationManager {
+}
+
+/**
+ * Performance-optimized animation utilities
+ */
+export class AnimationManager {
   private activeAnimations = new Set<string>();
   private rafId: number | null = null;
+
   /**
-  * Register an animation to prevent overlapping animations
-  */
+   * Register an animation to prevent overlapping animations
+   */
   registerAnimation(id: string): boolean {
-  if (this.activeAnimations.has(id)) {
-  return false; // Animation already running
-  this.activeAnimations.add(id);
-  return true;
+    if (this.activeAnimations.has(id)) {
+      return false; // Animation already running
+    }
+    this.activeAnimations.add(id);
+    return true;
+  }
+
   /**
-  * Unregister an animation
-  */
+   * Unregister an animation
+   */
   unregisterAnimation(id: string): void {
-  this.activeAnimations.delete(id);
+    this.activeAnimations.delete(id);
+  }
+
   /**
-  * Check if animation is running
-  */
+   * Check if animation is running
+   */
   isAnimationActive(id: string): boolean {
-  return this.activeAnimations.has(id);
+    return this.activeAnimations.has(id);
+  }
+
   /**
-  * Batch DOM updates for 60fps performance
-  */
-  batchUpdate(callback: () => void): void { }
-  if (this.rafId) { cancelAnimationFrame(this.rafId);
-  this.rafId = requestAnimationFrame(() => {
-  callback();
-  this.rafId = null });
+   * Batch DOM updates for 60fps performance
+   */
+  batchUpdate(callback: () => void): void {
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+    }
+    this.rafId = requestAnimationFrame(() => {
+      callback();
+      this.rafId = null;
+    });
+  }
+
   /**
    * Cleanup all animations
    */
-  cleanup(): void { this.activeAnimations.clear();
-  if (this.rafId) {
-  cancelAnimationFrame(this.rafId);
-  this.rafId = null;
-  // Global animation manager instance
-  export const globalAnimationManager = new AnimationManager();
-  /**
-  * Hook for managing element hover states with smooth transitions
-  */
-  export function useSmoothHover()
-  duration: number = animationDurations.micro }
+  cleanup(): void {
+    this.activeAnimations.clear();
+    if (this.rafId) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+}
+
+// Global animation manager instance
+export const globalAnimationManager = new AnimationManager();
+
+/**
+ * Hook for managing element hover states with smooth transitions
+ */
+export function useSmoothHover(duration: number = animationDurations.micro) {
   const [isHovered, setIsHovered] = React.useState(false);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
-  const handleMouseEnter = React.useCallback(() => { setIsHovered(true);
-  setIsTransitioning(true);
-  setTimeout(() => setIsTransitioning(false), duration) }, [duration]);
-  const handleMouseLeave = React.useCallback(() => { setIsHovered(false);
+
+  const handleMouseEnter = React.useCallback(() => {
+    setIsHovered(true);
     setIsTransitioning(true);
-    setTimeout(() => setIsTransitioning(false), duration) }, [duration]);
-  const hoverProps = { onMouseEnter: handleMouseEnter
-  onMouseLeave: handleMouseLeave }
-};
-  return { isHovered
-    isTransitioning }
-    hoverProps
-  };
+    setTimeout(() => setIsTransitioning(false), duration);
+  }, [duration]);
+
+  const handleMouseLeave = React.useCallback(() => {
+    setIsHovered(false);
+    setIsTransitioning(true);
+    setTimeout(() => setIsTransitioning(false), duration);
+  }, [duration]);
+
+  const hoverProps = { onMouseEnter: handleMouseEnter, onMouseLeave: handleMouseLeave };
+
+  return { isHovered, isTransitioning, hoverProps };
+}
+
 /**
  * Loading animation utilities
  */
-export const loadingAnimations = { /**
-  * Creates a spinning animation for loading spinners
-  */
+export const loadingAnimations = {
+  /**
+   * Creates a spinning animation for loading spinners
+   */
   createSpinner(): React.CSSProperties {
-  return {
-  animation: 'spin 1s linear infinite'
-  willChange: 'transform' }
-};
+    return {
+      animation: 'spin 1s linear infinite',
+      willChange: 'transform'
+    };
+  },
 
   /**
    * Creates a pulsing animation for loading states
    */
-  createPulse(): React.CSSProperties { return {
-  animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
-  willChange: 'opacity' }
+  createPulse(): React.CSSProperties {
+    return {
+      animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      willChange: 'opacity'
+    };
+  }
 };
-};
+
 /**
  * React component wrapper for smooth animations
  */
-
-
-interface AnimatedProps { children: React.ReactNode;
+interface AnimatedProps {
+  children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
   animationType?: 'fade' | 'slide' | 'scale' | 'lift';
   duration?: number;
   delay?: number;
   isVisible?: boolean;
-  export const AnimatedContainer: React.FC<AnimatedProps> = ({);
-  children;
-  className;
-  style;
-  animationType = 'fade';
-  duration = animationDurations.normal;
-  delay = 0 }
+}
+
+export const AnimatedContainer: React.FC<AnimatedProps> = ({
+  children,
+  className,
+  style,
+  animationType = 'fade',
+  duration = animationDurations.normal,
+  delay = 0,
   isVisible = true
+}) => {
+  const [mounted, setMounted] = React.useState(false);
 
-
-}) => { const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => {
     const timer = setTimeout(() => setMounted(true), delay);
-    return () => clearTimeout(timer) }, [delay]);
+    return () => clearTimeout(timer);
+  }, [delay]);
+
   const getAnimationStyle = (): React.CSSProperties => {
-    const baseStyle = {
-      transition: `all ${duration}ms ${easingFunctions.cinema4d.professional}`}
-},
-  willChange: 'transform, opacity'
+    const baseStyle: React.CSSProperties = {
+      transition: `all ${duration}ms ${easingFunctions.cinema4d.professional}`,
+      willChange: 'transform, opacity'
     };
+
     if (!mounted || !isVisible) {
       switch (animationType) {
-      case 'fade':
-        return { ...baseStyle, opacity: 0 };
-      case 'slide':
-        return { ...baseStyle, opacity: 0, transform: 'translateY(20px)' };
-      case 'scale':
-        return { ...baseStyle, opacity: 0, transform: 'scale(0.95)' };
-      case 'lift':
-        return { ...baseStyle, opacity: 0, transform: 'translateY(10px)' };
-      default:
-        return { ...baseStyle, opacity: 0 };
-    return { ...baseStyle,
-  opacity: 1,
-  transform: 'translateY(0) scale(1)' }
-};
-  };
-  return;
-    <div 
-      className={className}
-      style={ {
-        ...getAnimationStyle() }
-        ...style
+        case 'fade':
+          return { ...baseStyle, opacity: 0 };
+        case 'slide':
+          return { ...baseStyle, opacity: 0, transform: 'translateY(20px)' };
+        case 'scale':
+          return { ...baseStyle, opacity: 0, transform: 'scale(0.95)' };
+        case 'lift':
+          return { ...baseStyle, opacity: 0, transform: 'translateY(10px)' };
+        default:
+          return { ...baseStyle, opacity: 0 };
+      }
+    }
 
-    >
+    return { ...baseStyle, opacity: 1, transform: 'translateY(0) scale(1)' };
+  };
+
+  return (
+    <div className={className} style={{ ...getAnimationStyle(), ...style }}>
       {children}
     </div>
   );

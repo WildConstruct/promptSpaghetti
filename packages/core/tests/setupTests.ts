@@ -1,6 +1,19 @@
 import '@testing-library/jest-dom';
 import { TextDecoder as NodeTextDecoder, TextEncoder as NodeTextEncoder } from 'util';
 
+// Add OpenAI Node.js shim for tests
+import 'openai/shims/node';
+
+// Add fetch polyfill for OpenAI
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+    text: () => Promise.resolve(''),
+    ok: true,
+    status: 200,
+  } as Response)
+);
+
 // Optional safe polyfills for jsdom gaps used in some tests/components
 if (!('scrollTo' in window)) {
   // @ts-expect-error jsdom doesn't implement scrollTo in older versions

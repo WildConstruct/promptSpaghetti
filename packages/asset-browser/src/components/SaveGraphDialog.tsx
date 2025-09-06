@@ -1,5 +1,5 @@
 import React from 'react';
-import { deriveEnableSupabaseProp } from '@promptscape/core/utils';
+import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
 import { useUserId } from '../user/UserProvider';
 
 export type SaveGraphDialogProps = {

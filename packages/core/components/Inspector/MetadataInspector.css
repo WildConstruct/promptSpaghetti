@@ -1,0 +1,250 @@
+/* Metadata Inspector Styles for Story 2.3a */
+
+.metadata-inspector {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.inspector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inspector-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cache-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+}
+
+.stat {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Metadata Content */
+.metadata-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.metadata-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metadata-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.field-label {
+  min-width: 80px;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+}
+
+.field-value {
+  flex: 1;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Intensity Bar */
+.intensity-bar {
+  display: inline-flex;
+  width: 100px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.intensity-fill {
+  background: linear-gradient(90deg, #4CAF50, #FF9800, #F44336);
+  transition: width 0.3s ease;
+}
+
+.intensity-value {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: 4px;
+}
+
+/* Tags */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag-chip {
+  padding: 4px 8px;
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+/* Extraction Info */
+.extraction-info {
+  opacity: 0.7;
+  font-size: 11px;
+}
+
+/* Actions */
+.metadata-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn.primary {
+  background: #2196F3;
+  color: white;
+  border-color: #2196F3;
+}
+
+.action-btn.primary:hover:not(:disabled) {
+  background: #1976D2;
+}
+
+.action-btn.danger {
+  background: rgba(244, 67, 54, 0.2);
+  color: #F44336;
+  border-color: #F44336;
+}
+
+.action-btn.danger:hover:not(:disabled) {
+  background: rgba(244, 67, 54, 0.3);
+}
+
+/* Raw JSON */
+.raw-json {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.raw-json pre {
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* No Metadata */
+.no-metadata {
+  text-align: center;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.no-metadata p {
+  margin: 0 0 16px 0;
+  font-size: 13px;
+}
+
+/* Extraction Log */
+.extraction-log {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.extraction-log h4 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.log-content {
+  max-height: 150px;
+  overflow-y: auto;
+  font-size: 11px;
+}
+
+.log-entry {
+  padding: 2px 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Courier New', monospace;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+/* Scrollbar */
+.raw-json::-webkit-scrollbar,
+.log-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.raw-json::-webkit-scrollbar-track,
+.log-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.raw-json::-webkit-scrollbar-thumb,
+.log-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.raw-json::-webkit-scrollbar-thumb:hover,
+.log-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}

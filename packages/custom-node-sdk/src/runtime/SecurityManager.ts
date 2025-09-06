@@ -3,7 +3,8 @@
  * Provides sandboxing and resource limitations for third-party code
  */
 
-import { AdvancedExecutionContext, ValidationResult } from '@prompt-spaghetti/graph-core';
+import { AdvancedExecutionContext } from '@promptscape/core';
+import { ValidationResult } from '../types';
 import { CustomNodeConfig } from '../types';
 
 /**

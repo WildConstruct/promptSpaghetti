@@ -1,0 +1,75 @@
+# CODEOWNERS for Prompt Spaghetti
+# This file defines who is automatically requested for review when PRs touch specific paths
+
+# Default owners for everything in the repo
+*                                    @promptspaghetti-team
+
+# Core engine and runtime - requires senior review
+/packages/core/runtime/              @senior-engineers @architecture-team
+/packages/core/validation/           @senior-engineers @architecture-team
+/server/src/engine.ts                @senior-engineers @architecture-team
+
+# LLM and AI features - requires ML team review
+/packages/core/services/LLM*.ts      @ml-team @ai-specialists
+/packages/eval/                      @ml-team @quality-team
+/docs/stories/2.6-*.md              @ml-team @product-team
+
+# Frontend components - UI/UX team
+/client/src/components/              @frontend-team @ux-team
+/packages/core/components/           @frontend-team @ux-team
+/client/src/professional-theme.css   @ux-team @design-team
+
+# Inspector and editor systems
+/packages/core/components/Inspector/ @frontend-team @senior-engineers
+/packages/core/GraphEditor.tsx       @frontend-team @architecture-team
+
+# Asset browser and file formats
+/packages/asset-browser/             @frontend-team @backend-team
+/packages/core/fileFormats/          @backend-team @architecture-team
+
+# Security-sensitive files
+/.github/workflows/                  @security-team @devops-team
+/server/src/auth/                    @security-team @backend-team
+/packages/core/services/ParserSecurity.ts @security-team @ml-team
+
+# Documentation - requires product review
+/docs/                               @documentation-team @product-team
+/README.md                           @documentation-team @product-team
+/CLAUDE.md                           @ai-agents-team @architecture-team
+
+# CI/CD and automation
+/.github/workflows/parser-eval-gate.yml @ml-team @devops-team
+/scripts/                            @devops-team @automation-team
+/tests/                              @quality-team
+
+# Dependencies and config
+/package.json                        @senior-engineers @devops-team
+/pnpm-lock.yaml                      @senior-engineers @devops-team
+/turbo.json                          @devops-team @architecture-team
+
+# Database and migrations
+/server/src/db/                      @backend-team @database-team
+/migrations/                         @database-team @backend-team
+
+# API routes
+/server/src/routes/                  @backend-team @api-team
+/api/                                @backend-team @serverless-team
+
+# Performance-critical paths
+/packages/core/runtime/nodes/WeightedAdvanced.ts @performance-team @ml-team
+/packages/core/runtime/nodes/Markov.ts           @performance-team @ml-team
+/packages/core/runtime/advanced.ts               @performance-team @architecture-team
+
+# Epic-specific ownership
+/packages/core/runtime/nodes/epic1/  @epic1-team @architecture-team
+/docs/epics/epic-2-*.md             @epic2-team @product-team
+/docs/stories/2.7-*.md               @epic2-team @ux-team
+
+# Quality gates and testing
+/packages/eval/goldens/              @ml-team @quality-team
+/tests/regression/                   @quality-team @architecture-team
+/jest.config.js                      @quality-team @devops-team
+
+# Note: Replace the team handles above with actual GitHub usernames or team handles
+# Format: @username or @org/team-name
+# Example: @john-doe @jane-smith @myorg/frontend-team

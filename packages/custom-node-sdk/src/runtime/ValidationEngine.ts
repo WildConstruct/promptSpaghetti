@@ -3,8 +3,7 @@
  * Provides comprehensive validation using Zod schemas and custom rules
  */
 
-import { ValidationResult } from '@prompt-spaghetti/graph-core';
-import { NodeIOSchema } from '../types';
+import { NodeIOSchema, ValidationResult } from '../types';
 import { z } from 'zod';
 
 /**
@@ -82,7 +81,7 @@ export class ValidationEngine {
         }
       }
     } catch (error) {
-      errors.push(`Schema validation failed: ${error.message}`);
+      errors.push(`Schema validation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     return {
@@ -118,7 +117,7 @@ export class ValidationEngine {
                 const messages = validationError.errors.map(err => err.message).join(', ');
                 errors.push(`Input '${inputName}' validation failed: ${messages}`);
               } else {
-                errors.push(`Input '${inputName}' validation failed: ${validationError.message}`);
+                errors.push(`Input '${inputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`);
               }
             }
           }
@@ -132,7 +131,7 @@ export class ValidationEngine {
         }
       }
     } catch (error) {
-      errors.push(`Input validation failed: ${error.message}`);
+      errors.push(`Input validation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     return {
@@ -166,7 +165,7 @@ export class ValidationEngine {
               const messages = validationError.errors.map(err => err.message).join(', ');
               errors.push(`Output '${outputName}' validation failed: ${messages}`);
             } else {
-              errors.push(`Output '${outputName}' validation failed: ${validationError.message}`);
+              errors.push(`Output '${outputName}' validation failed: ${validationError instanceof Error ? validationError.message : String(validationError)}`);
             }
           }
         }
@@ -179,7 +178,7 @@ export class ValidationEngine {
         }
       }
     } catch (error) {
-      errors.push(`Output validation failed: ${error.message}`);
+      errors.push(`Output validation failed: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     return {
@@ -207,7 +206,7 @@ export class ValidationEngine {
         const messages = error.errors.map(err => err.message);
         return { valid: false, errors: messages, warnings: [] };
       } else {
-        return { valid: false, errors: [error.message], warnings: [] };
+        return { valid: false, errors: [error instanceof Error ? error.message : String(error)], warnings: [] };
       }
     }
   }

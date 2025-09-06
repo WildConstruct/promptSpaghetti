@@ -8,11 +8,12 @@ import { SecurityValidation } from '../validation/security';
 import { ExecutionContext, RuntimeNode } from './types.js';
 
 // Re-export types
-export { ExecutionContext, RuntimeNode } from './types.js';
+export type { ExecutionContext, RuntimeNode } from './types.js';
 export {
   AdvancedRuntimeNode,
-  AdvancedExecutionContext,
-  AdvancedNodeConfig
+  type AdvancedExecutionContext,
+  type AdvancedNodeConfig,
+  type ValidationResult
 } from './advanced.js';
 
 /* ------------------------- Core node runtimes ------------------------- */

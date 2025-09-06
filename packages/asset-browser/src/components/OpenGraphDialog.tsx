@@ -1,5 +1,5 @@
 import React from 'react';
-import { deriveEnableSupabaseProp } from '@promptscape/core/utils';
+import { deriveEnableSupabaseProp } from '@promptscape/core/utils/supabaseFeature';
 import { useUserId } from '../user/UserProvider';
 import { loadServerGraphs, type GraphEntry } from '../services/GraphManifestLoader';
 import { EmptyState } from './ui/EmptyState';

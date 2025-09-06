@@ -1,0 +1,200 @@
+// Drag and Drop Handler for Asset Browser
+// Story 2.5a: Asset Browser Integration MVP
+
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useDrag, useDrop, DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DragPerformanceMonitor } from '../../services/performanceMonitor';
+
+export interface DraggedAsset {
+  type: 'psg' | 'psglib';
+  id: string;
+  name: string;
+  metadata?: {
+    theme?: string;
+    mood?: string;
+    setting?: string;
+    tags?: string[];
+  };
+  content: any;
+}
+
+export interface DropResult {
+  position: { x: number; y: number };
+  targetNode?: string;
+  action: 'create' | 'replace' | 'add-choice';
+}
+
+interface DragDropHandlerProps {
+  asset: DraggedAsset;
+  onDrop?: (result: DropResult) => void;
+  children: React.ReactNode;
+  disabled?: boolean;
+}
+
+const performanceMonitor = new DragPerformanceMonitor();
+
+export const DragDropHandler: React.FC<DragDropHandlerProps> = ({
+  asset,
+  onDrop,
+  children,
+  disabled = false
+}) => {
+  const dragId = useRef<string>('');
+  
+  const [{ isDragging }, drag, preview] = useDrag({
+    type: 'ASSET',
+    item: () => {
+      dragId.current = `drag-${Date.now()}`;
+      performanceMonitor.startDragOperation(dragId.current);
+      return asset;
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging()
+    }),
+    canDrag: !disabled,
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult() as DropResult | null;
+      if (dropResult && onDrop) {
+        performanceMonitor.recordDragEvent(dragId.current, 'drop');
+        onDrop(dropResult);
+      }
+    }
+  });
+
+  // Create ghost preview
+  useEffect(() => {
+    if (isDragging) {
+      const ghostEl = document.createElement('div');
+      ghostEl.className = 'drag-ghost-preview';
+      ghostEl.textContent = asset.name;
+      ghostEl.style.cssText = `
+        position: fixed;
+        padding: 8px 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border-radius: 4px;
+        pointer-events: none;
+        z-index: 10000;
+        font-size: 12px;
+        opacity: 0.9;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      `;
+      document.body.appendChild(ghostEl);
+      
+      const handleMouseMove = (e: MouseEvent) => {
+        ghostEl.style.left = `${e.clientX + 10}px`;
+        ghostEl.style.top = `${e.clientY + 10}px`;
+        performanceMonitor.recordDragEvent(dragId.current, 'hover');
+      };
+      
+      document.addEventListener('mousemove', handleMouseMove);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        ghostEl.remove();
+      };
+    }
+  }, [isDragging, asset.name]);
+
+  return (
+    <div 
+      ref={drag}
+      className={`draggable-asset ${isDragging ? 'dragging' : ''}`}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        cursor: disabled ? 'not-allowed' : 'grab'
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+// Canvas Drop Target Component
+export interface CanvasDropTargetProps {
+  onDrop: (asset: DraggedAsset, position: { x: number; y: number }, targetNode?: string) => void;
+  onHover?: (isOver: boolean, canDrop: boolean) => void;
+  children: React.ReactNode;
+  acceptTypes?: string[];
+}
+
+export const CanvasDropTarget: React.FC<CanvasDropTargetProps> = ({
+  onDrop,
+  onHover,
+  children,
+  acceptTypes = ['psg', 'psglib']
+}) => {
+  const dropRef = useRef<HTMLDivElement>(null);
+  
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: 'ASSET',
+    drop: (item: DraggedAsset, monitor) => {
+      const clientOffset = monitor.getClientOffset();
+      if (clientOffset && dropRef.current) {
+        const rect = dropRef.current.getBoundingClientRect();
+        const position = {
+          x: clientOffset.x - rect.left,
+          y: clientOffset.y - rect.top
+        };
+        
+        // Check if dropped on a node
+        const targetNode = getNodeAtPosition(position);
+        onDrop(item, position, targetNode);
+        
+        return {
+          position,
+          targetNode,
+          action: targetNode ? 'replace' : 'create'
+        } as DropResult;
+      }
+    },
+    canDrop: (item: DraggedAsset) => {
+      return acceptTypes.includes(item.type);
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  });
+
+  useEffect(() => {
+    if (onHover) {
+      onHover(isOver, canDrop);
+    }
+  }, [isOver, canDrop, onHover]);
+
+  drop(dropRef);
+
+  return (
+    <div 
+      ref={dropRef}
+      className={`canvas-drop-target ${isOver ? 'drag-over' : ''} ${canDrop ? 'can-drop' : ''}`}
+      style={{
+        width: '100%',
+        height: '100%',
+        position: 'relative'
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+// Helper function to detect node at position
+function getNodeAtPosition(position: { x: number; y: number }): string | undefined {
+  // This would integrate with React Flow to detect nodes
+  // For now, returning undefined (drop on empty canvas)
+  const elements = document.elementsFromPoint(position.x, position.y);
+  const nodeElement = elements.find(el => el.classList.contains('react-flow__node'));
+  return nodeElement?.getAttribute('data-id') || undefined;
+}
+
+// Wrapper component to provide DnD context
+export const AssetBrowserDndProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      {children}
+    </DndProvider>
+  );
+};

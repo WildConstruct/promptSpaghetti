@@ -10,10 +10,10 @@
 // here due to incomplete implementations that can break consumers during type-checking.
 // If/when stabilized, they can be re-added.
 
-export * from './supabaseClient.js';
-export * from './psgStorage.js';
-export * from './supabaseFeature.js';
-export * from './psgCodec.js';
-export * from './persistenceUtils.js';
+// Only export stable utils that don't have import issues - using explicit exports to avoid conflicts
+export * from './debug';
+export { RateLimiter as RequestRateLimiter, authRateLimiter } from './rateLimiter';
+export { RateLimiter as SecurityRateLimiter, hashPassword, verifyPassword, generateSecureToken, sanitizeInput, validateEmail } from './securityUtils';
+export * from './performanceUtils';
 // Temporarily exclude stateRestoration due to duplicate export conflict
 // export * from './stateRestoration.js';

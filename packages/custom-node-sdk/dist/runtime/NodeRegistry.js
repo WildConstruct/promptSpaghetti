@@ -134,7 +134,7 @@ export class DefaultNodeRegistry {
                 registered.push(registration.metadata.type);
             }
             catch (error) {
-                errors.push(`${registration.metadata.type}: ${error.message}`);
+                errors.push(`${registration.metadata.type}: ${error instanceof Error ? error.message : String(error)}`);
             }
         }
         if (errors.length > 0) {
