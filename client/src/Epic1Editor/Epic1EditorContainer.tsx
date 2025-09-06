@@ -727,11 +727,8 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
 
     const loadComponents = async () => {
       try {
-        const [epic1Module, menuBarModule] = await Promise.all([
-          import('@promptscape/core/components/epic1/Epic1GraphEditor'),
-          showMenuBar
-            ? import('@promptscape/core/components/MenuBar/ProfessionalMenuBar')
-            : Promise.resolve(null)
+        const [epic1Module] = await Promise.all([
+          import('@promptscape/core/components/epic1/Epic1GraphEditor')
         ]);
 
         if (!mounted) return;
@@ -740,11 +737,7 @@ export const Epic1EditorContainer: React.FC<Epic1EditorContainerProps> = ({
           setEditorComponent(() => epic1Module.Epic1GraphEditorWithProvider);
         }
 
-        if (menuBarModule?.ProfessionalMenuBar) {
-          setMenuBarComponent(
-            () => menuBarModule.ProfessionalMenuBar as unknown as React.ComponentType<Record<string, unknown>>
-          );
-        }
+        // MenuBar removed - not needed for demo
       } catch (err) {
         if (mounted) {
           setLoadError((err as Error).message || 'Failed to load components');
