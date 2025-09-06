@@ -1,0 +1,146 @@
+story:
+  id: STORY-WIZ-MOCK
+  title: Mock Asset Service for Wizard Development
+  epic: EPIC-WIZARD-001
+  priority: P0
+  points: 5
+  status: ready
+  blocker_for: [STORY-WIZ-005, STORY-WIZ-006]
+  
+  description: |
+    Create a mock asset service to unblock wizard development while the real
+    Asset Browser infrastructure is being built. This service will provide
+    realistic test data and search functionality for development and testing.
+  
+  business_value: |
+    Unblocks $150k worth of wizard development work. Allows parallel development
+    of wizard features without waiting for Asset Browser completion. Provides
+    test infrastructure that can be used long-term for unit tests.
+  
+  technical_context: |
+    The wizard needs to search and bind assets (cameras, lenses, LUTs, etc.) to
+    prompt spans. The real Asset Browser is not yet implemented. This mock service
+    will simulate the API contract defined in the research docs, using the sample
+    data provided, allowing the wizard team to proceed independently.
+
+  acceptance_criteria:
+    - id: AC-1
+      given: The mock service is initialized
+      when: Started for the first time
+      then: Load 100+ mock assets from JSON fixture within 50ms
+      
+    - id: AC-2
+      given: A search query "leica"
+      when: Searching the mock index
+      then: Return all Leica-related assets sorted by relevance within 20ms
+      
+    - id: AC-3
+      given: A category filter for "lens"
+      when: Applied to search results
+      then: Return only lens-type assets
+      
+    - id: AC-4
+      given: An asset ID "lens_leica_m_summicron_50_v1"
+      when: Fetching full details
+      then: Return complete asset metadata including thumbnail URL
+      
+    - id: AC-5
+      given: The mock service API
+      when: Comparing to planned Asset Browser API
+      then: Interfaces must be identical to allow drop-in replacement
+      
+    - id: AC-6
+      given: A fuzzy search "sumicron" (misspelled)
+      when: Searching
+      then: Still find "Summicron" lenses with lower confidence score
+      
+    - id: AC-7
+      given: Multiple concurrent searches
+      when: Executed simultaneously
+      then: All return correct results without race conditions
+
+  implementation_details:
+    architecture:
+      - Create as standalone module: packages/asset-browser-mock/
+      - Implement both Worker and HTTP interfaces
+      - Use same TypeScript interfaces as planned Asset Browser
+      - Include Fuse.js for fuzzy matching
+      
+    data_structure:
+      asset_schema: |
+        interface MockAsset {
+          id: string;
+          type: 'lens' | 'camera' | 'lut' | 'grain' | 'backdrop' | 'preset';
+          name: string;
+          brand?: string;
+          tags: string[];
+          aliases?: string[];
+          thumb: string;
+          metadata?: Record<string, any>;
+        }
+      
+      search_response: |
+        interface SearchResponse {
+          results: Array<{
+            asset: MockAsset;
+            score: number;
+            matchedFields: string[];
+          }>;
+          totalCount: number;
+          searchTime: number;
+        }
+    
+    api_endpoints:
+      - GET /api/mock-assets/search?q={query}&types={types}&limit={limit}
+      - GET /api/mock-assets/{id}
+      - GET /api/mock-assets/categories
+      - POST /api/mock-assets/resolve
+    
+    test_data_source: |
+      Use the asset data from:
+      - docs/wizard_thoughts/prompt→nodes_wizard_asset_binding_mock_flow.md
+      - Expand to 100+ items by generating variations
+      - Include edge cases (unicode names, long descriptions, missing fields)
+
+  test_scenarios:
+    - Exact match search: "Leica M Monochrom" → exact asset
+    - Partial match: "50mm" → all 50mm lenses
+    - Category search: type=lut → all LUTs
+    - No results: "xyz123" → empty results with proper message
+    - Special characters: "f/1.4" → finds lenses with that aperture
+    - Performance: 1000 searches → average < 10ms
+
+  dependencies:
+    internal:
+      - TypeScript interfaces from wizard design docs
+      - Mock data from research documentation
+    external:
+      - Fuse.js for fuzzy search (add to package.json)
+      - Worker thread support (already available)
+
+  definition_of_done:
+    - [ ] Mock service module created and building
+    - [ ] 100+ mock assets loaded from fixture
+    - [ ] All API endpoints returning correct data
+    - [ ] Search functionality with scoring/ranking
+    - [ ] Fuzzy matching working with threshold 0.8
+    - [ ] Unit tests achieving 90% coverage
+    - [ ] Performance benchmarks documented
+    - [ ] Integration test with wizard component
+    - [ ] README with usage examples
+    - [ ] Can be toggled via feature flag
+
+  notes: |
+    This is a tactical solution to unblock development. The mock should be
+    high-quality enough to use in demos and testing indefinitely. When the
+    real Asset Browser is ready, we can switch via feature flag without
+    changing wizard code.
+
+  effort_breakdown:
+    setup: 2h - Create module structure, TypeScript configs
+    data: 2h - Generate 100+ mock assets from templates
+    search: 4h - Implement search with Fuse.js
+    api: 3h - Create API endpoints and Worker interface
+    tests: 3h - Unit and integration tests
+    docs: 1h - README and examples
+    total: 15h (5 story points)

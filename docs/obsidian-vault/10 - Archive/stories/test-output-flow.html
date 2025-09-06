@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Output Node Flow Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #00ff00;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #00ffff;
+        }
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+        .checklist li {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        .pass { color: #00ff00; }
+        .fail { color: #ff0000; }
+        .info { color: #ffff00; }
+        code {
+            background: #2a2a2a;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Output Node → Preview Panel Test Guide</h1>
+    
+    <div class="test-section">
+        <div class="test-title">1. VERIFY OUTPUT NODE EXISTS</div>
+        <ul class="checklist">
+            <li>✓ Check if at least one Output node is in the graph</li>
+            <li>✓ Output nodes should appear with label "Output"</li>
+            <li>✓ Output nodes are LOCKED (read-only) by design</li>
+            <li class="info">→ If missing: Drag an Output node from the palette</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">2. CHECK NODE CONNECTIONS</div>
+        <ul class="checklist">
+            <li>✓ Verify Output node has incoming edge(s)</li>
+            <li>✓ Source node (TextBlock, WeightedChoice, etc.) connects to Output</li>
+            <li>✓ Edge should be visible as a line between nodes</li>
+            <li class="info">→ To connect: Drag from source node's output handle to Output node's input handle</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">3. TEST EXECUTION FLOW</div>
+        <ul class="checklist">
+            <li>✓ Add a TextBlock node with text: "Hello World"</li>
+            <li>✓ Connect TextBlock → Output node</li>
+            <li>✓ Preview panel should show "Hello World" after ~300ms</li>
+            <li>✓ Multiple seeds should show same result for deterministic nodes</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">4. PREVIEW PANEL VISIBILITY</div>
+        <ul class="checklist">
+            <li>✓ Preview panel should be visible on the right side</li>
+            <li>✓ Check for loading spinner during execution</li>
+            <li>✓ Results appear under seed numbers (e.g., "Seed: 1234")</li>
+            <li class="info">→ If hidden: Press 'P' key or toggle preview button</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">5. CONSOLE DIAGNOSTICS</div>
+        <p>Open browser DevTools console and check for:</p>
+        <ul class="checklist">
+            <li><code>console.log</code> from PreviewEngine updates</li>
+            <li><code>console.error</code> for execution failures</li>
+            <li><code>console.warn</code> for validation issues</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">6. WORKING EXAMPLE GRAPH</div>
+        <pre style="background: #2a2a2a; padding: 10px; overflow-x: auto;">
+{
+  "nodes": [
+    {
+      "id": "text1",
+      "type": "textBlock",
+      "position": { "x": 100, "y": 100 },
+      "data": { "text": "The quick brown fox" }
+    },
+    {
+      "id": "output1",
+      "type": "output",
+      "position": { "x": 400, "y": 100 },
+      "data": { "label": "Output" }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge1",
+      "source": "text1",
+      "target": "output1",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    }
+  ]
+}
+        </pre>
+        <p class="info">Copy this JSON and load it in the editor to test</p>
+    </div>
+
+    <div class="test-section">
+        <div class="test-title">COMMON ISSUES & FIXES</div>
+        <ul class="checklist">
+            <li class="fail">❌ "No output node found" → Add an Output node</li>
+            <li class="fail">❌ Preview empty → Check edges are connected</li>
+            <li class="fail">❌ Preview not updating → Check debounce delay (300ms default)</li>
+            <li class="fail">❌ Graph validation failed → Check for cycles or invalid connections</li>
+        </ul>
+    </div>
+
+    <script>
+        // Quick diagnostic script
+        console.log('%c🧪 Output Flow Test Guide Loaded', 'color: #00ff00; font-size: 16px; font-weight: bold');
+        console.log('%cOpen this in browser to follow the test steps', 'color: #ffff00');
+        console.log('%cThe issue is likely a missing Output node or disconnected edge', 'color: #00ffff');
+    </script>
+</body>
+</html>
