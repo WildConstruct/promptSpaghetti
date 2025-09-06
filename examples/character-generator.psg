@@ -1,0 +1,101 @@
+{
+  "version": "1.0.0",
+  "type": "fragment",
+  "metadata": {
+    "title": "Character Generator",
+    "description": "Complete character generation for film and game production",
+    "author": "Wild Construct",
+    "category": "Creative Development",
+    "tags": ["character", "npc", "casting", "personality"]
+  },
+  "nodes": [
+    {
+      "id": "name-choice",
+      "type": "WeightedChoice",
+      "position": { "x": 100, "y": 100 },
+      "data": {
+        "options": [
+          { "value": "Marcus", "weight": 1 },
+          { "value": "Elena", "weight": 1 },
+          { "value": "Kai", "weight": 1 },
+          { "value": "Sophia", "weight": 1 },
+          { "value": "Darius", "weight": 1 }
+        ]
+      }
+    },
+    {
+      "id": "trait-choice",
+      "type": "WeightedChoice",
+      "position": { "x": 100, "y": 250 },
+      "data": {
+        "options": [
+          { "value": "brave but reckless", "weight": 2 },
+          { "value": "intelligent but cynical", "weight": 2 },
+          { "value": "loyal but stubborn", "weight": 2 },
+          { "value": "charming but manipulative", "weight": 1 },
+          { "value": "creative but chaotic", "weight": 1 }
+        ]
+      }
+    },
+    {
+      "id": "profession-choice",
+      "type": "WeightedChoice",
+      "position": { "x": 100, "y": 400 },
+      "data": {
+        "options": [
+          { "value": "retired soldier", "weight": 2 },
+          { "value": "street artist", "weight": 1 },
+          { "value": "tech entrepreneur", "weight": 2 },
+          { "value": "investigative journalist", "weight": 2 },
+          { "value": "underground medic", "weight": 1 }
+        ]
+      }
+    },
+    {
+      "id": "character-template",
+      "type": "Template",
+      "position": { "x": 400, "y": 250 },
+      "data": {
+        "template": "{{name}} is a {{profession}} who is {{trait}}. They carry themselves with a sense of purpose that comes from years of experience in their field."
+      }
+    },
+    {
+      "id": "character-output",
+      "type": "Output",
+      "position": { "x": 700, "y": 250 },
+      "data": {
+        "label": "Generated Character"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "name-choice",
+      "target": "character-template",
+      "sourceHandle": "output",
+      "targetHandle": "name"
+    },
+    {
+      "id": "e2",
+      "source": "trait-choice",
+      "target": "character-template",
+      "sourceHandle": "output",
+      "targetHandle": "trait"
+    },
+    {
+      "id": "e3",
+      "source": "profession-choice",
+      "target": "character-template",
+      "sourceHandle": "output",
+      "targetHandle": "profession"
+    },
+    {
+      "id": "e4",
+      "source": "character-template",
+      "target": "character-output",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    }
+  ]
+}

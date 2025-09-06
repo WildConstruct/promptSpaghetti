@@ -1,10 +1,10 @@
 {
   "name": "prompt-spaghetti-revenge",
   "version": "1.0.0-demo",
-  "private": false,
+  "private": true,
   "description": "A powerful visual graph editor for creating dynamic, randomized text generation workflows",
   "author": "WildConstruct",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "homepage": "https://github.com/WildConstruct/prompt_spaghetti_the_revenge",
   "repository": {
     "type": "git",

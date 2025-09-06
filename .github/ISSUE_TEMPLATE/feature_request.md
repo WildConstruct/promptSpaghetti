@@ -1,64 +1,70 @@
 ---
-name: Feature request
-about: Suggest an idea for this project
+name: Feature Request
+about: Suggest an idea for improving the Prompt Spaghetti toolset
 title: '[FEATURE] '
-labels: 'enhancement, needs-triage'
+labels: 'enhancement'
 assignees: ''
-
 ---
 
+# Feature Request
+
+## Feature Summary
+A clear and concise description of the feature you'd like to see added.
+
 ## Problem Statement
-A clear and concise description of the problem you're trying to solve.
-Ex. I'm always frustrated when [...]
+**Is your feature request related to a problem? Please describe.**
+A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
 ## Proposed Solution
+**Describe the solution you'd like**
 A clear and concise description of what you want to happen.
 
 ## Alternative Solutions
+**Describe alternatives you've considered**
 A clear and concise description of any alternative solutions or features you've considered.
 
-## Use Case
-Describe how you would use this feature in your workflow:
-1. I would...
-2. Then I would...
-3. This would help me...
+## Film Industry Use Case
+- **Primary Workflow:** [e.g., Pre-production, Asset Creation, Post-production]
+- **Team Size:** [e.g., Solo artist, Small team (2-10), Large studio (10+)]
+- **Pipeline Integration:** [e.g., Maya, Houdini, Nuke, Custom tools]
+- **Asset Types:** [e.g., Characters, Environments, VFX, Motion Graphics]
 
-## User Story
-As a [type of user], I want [some goal] so that [some reason].
+## Expected Benefits
+- [ ] Improves creative workflow efficiency
+- [ ] Reduces manual/repetitive tasks
+- [ ] Enhances collaboration capabilities
+- [ ] Improves asset management
+- [ ] Increases performance/scalability
+- [ ] Better pipeline integration
+- [ ] Enhanced quality control
 
 ## Acceptance Criteria
-- [ ] When [context], if [action], then [expected result]
-- [ ] The feature should...
-- [ ] It should not...
+**What would make this feature complete?**
+- [ ] Specific functionality requirement 1
+- [ ] Specific functionality requirement 2
+- [ ] Performance requirements (if applicable)
+- [ ] Integration requirements (if applicable)
 
-## Design Mockups
-If applicable, add mockups, wireframes, or design concepts.
+## Priority Level
+- [ ] Critical (blocking current work)
+- [ ] High (significant productivity impact)
+- [ ] Medium (nice to have, improves workflow)
+- [ ] Low (future enhancement)
 
-## Technical Considerations
-- **Affected Components**: [e.g., GraphEditor, Parser, Runtime Engine]
-- **Performance Impact**: [e.g., minimal, requires optimization]
-- **Breaking Changes**: Yes/No - [explain if yes]
-- **Dependencies**: [any new libraries or services needed]
-
-## Priority and Effort
-- **Priority**: Low / Medium / High / Critical
-- **Estimated Effort**: Small (1-2 days) / Medium (3-5 days) / Large (1-2 weeks) / XL (2+ weeks)
-- **Epic/Story**: [if this relates to an existing epic or story]
+## Timeline Considerations
+**When would this feature be most valuable?**
+- [ ] Needed immediately for current project
+- [ ] Needed within next month
+- [ ] Needed within next quarter
+- [ ] Future planning
 
 ## Additional Context
-Add any other context, examples, or references about the feature request here.
-- Similar features in other tools
-- Research or articles supporting this feature
-- Community discussions or requests
+Add any other context, mockups, examples, or screenshots about the feature request here.
 
-## Success Metrics
-How will we know if this feature is successful?
-- [ ] Metric 1: [e.g., 50% of users adopt within first month]
-- [ ] Metric 2: [e.g., Reduces time to complete X task by 30%]
-- [ ] Metric 3: [e.g., Positive user feedback score > 4.0]
+## Related Features
+List any existing features this would complement or depend on.
 
-## Checklist
-- [ ] I have searched existing issues to ensure this isn't a duplicate
-- [ ] I have clearly described the problem this solves
-- [ ] I have provided at least one use case
-- [ ] I have considered alternative solutions
+---
+**Requested by:** [Your Name/Studio]  
+**Contact:** Brian Behm / Wild Construct  
+**Project:** Prompt Spaghetti - Professional Film Industry Toolset
