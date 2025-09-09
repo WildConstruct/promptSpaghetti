@@ -33,7 +33,14 @@ export class LLMService {
     this.config = config;
   }
   async parse(prompt: string, request: AnyObj = {}): Promise<AnyObj> {
-    return postJson('/api/llm/parse', { prompt, ...request });
+    // Try the new endpoint first to bypass caching issues
+    try {
+      return await postJson('/api/ai/parse', { prompt, ...request });
+    } catch (e) {
+      // Fallback to original endpoint
+      console.warn('Falling back to /api/llm/parse due to error:', e);
+      return postJson('/api/llm/parse', { prompt, ...request });
+    }
   }
   async complete(request: AnyObj): Promise<AnyObj> {
     return postJson('/api/llm/complete', { config: this.config, request });
