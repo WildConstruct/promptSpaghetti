@@ -105,17 +105,25 @@ export class LLMResponseProcessor {
   private createNode(nodeData: any, nodeId: string, index: number): Node {
     const nodeType = this.mapNodeType(nodeData.type);
     const position = this.calculateNodePosition(index);
+    const typeSpecificData = this.getTypeSpecificData(nodeData);
 
     const node: Node = {
       id: nodeId,
       type: nodeType,
       position,
       data: {
+        // Required fields for Epic1 nodes
+        nodeType: nodeType,
+        value: nodeData.content || '',
+        // Legacy fields for compatibility
         label: nodeData.content || '',
         content: nodeData.content,
+        // Add text field for TextBlock nodes
+        ...(nodeType === 'textBlock' && { text: nodeData.content || '' }),
+        // Add metadata
         metadata: nodeData.metadata || {},
         // Add any type-specific data
-        ...this.getTypeSpecificData(nodeData)
+        ...typeSpecificData
       }
     };
 
@@ -157,15 +165,21 @@ export class LLMResponseProcessor {
    */
   private createVariableNode(varName: string, index: number): Node {
     const nodeId = this.generateNodeId();
+    const variableContent = `{${varName}}`;
 
     return {
       id: nodeId,
       type: 'variable',
       position: this.calculateNodePosition(index),
       data: {
-        label: `{${varName}}`,
+        // Required fields for Epic1 nodes
+        nodeType: 'variable',
+        value: variableContent,
+        variableName: varName,
+        // Legacy fields
+        label: variableContent,
         name: varName,
-        content: `{${varName}}`,
+        content: variableContent,
         isVariable: true
       }
     };
@@ -457,12 +471,16 @@ export class LLMResponseProcessor {
         // Parse choices from content or metadata
         const choices =
           nodeData.metadata?.alternatives || nodeData.content.split(/\s*\|\s*/);
+        const options = choices.map((choice: string, i: number) => ({
+          id: `option-${i + 1}`,
+          text: choice.trim(),
+          weight: Math.floor(100 / choices.length),
+          hasBranch: false
+        }));
         return {
-          options: choices.map((choice: string, i: number) => ({
-            id: `opt-${i}`,
-            text: choice.trim(),
-            weight: 100 / choices.length
-          }))
+          options: options,
+          // For Epic1 compatibility, also serialize as value
+          value: JSON.stringify(options, null, 2)
         };
 
       case 'Variable':
