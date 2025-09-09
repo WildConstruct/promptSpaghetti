@@ -17,20 +17,13 @@ function withBase(path: string): string {
 }
 
 async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
-  // Get API key from localStorage or environment
-  const apiKey =
-    localStorage.getItem('openrouter-api-key') ||
-    (typeof import.meta !== 'undefined' &&
-      (import.meta as any).env?.VITE_OPENROUTER_API_KEY);
-
+  // Client should NOT handle API keys - server should have them configured
   const headers: Record<string, string> = {
     'Content-Type': 'application/json'
   };
 
-  // Add authorization header if API key is available
-  if (apiKey) {
-    headers['Authorization'] = `Bearer ${apiKey}`;
-  }
+  // Debug logging
+  console.log('[LLM Service] Making request to:', url);
 
   const res = await fetch(withBase(url), {
     method: 'POST',
@@ -42,8 +35,10 @@ async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
   if (!res.ok) {
     // Try to get error details from response
     let errorMessage = `LLM endpoint error: ${res.status}`;
+    let errorDetails = null;
     try {
       const errorData = await res.json();
+      errorDetails = errorData;
       if (errorData.error) {
         errorMessage = errorData.error;
         if (errorData.details) {
@@ -56,6 +51,19 @@ async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
         errorMessage = `LLM endpoint error: ${res.status} ${res.statusText}`;
       }
     }
+
+    // Log detailed error info
+    console.error('[LLM Service] Request failed:', {
+      status: res.status,
+      statusText: res.statusText,
+      url: url,
+      errorDetails: errorDetails,
+      headers: {
+        hasAuth: !!headers['Authorization'],
+        authPrefix: headers['Authorization']?.substring(0, 20)
+      }
+    });
+
     throw new Error(errorMessage);
   }
 
