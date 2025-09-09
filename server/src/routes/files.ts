@@ -1,12 +1,15 @@
 import { FastifyInstance } from 'fastify';
-import { getSupabaseAdmin } from '../services/supabase';
+import { z } from 'zod';
+import { getSupabaseAdmin, verifySupabaseToken } from '../services/supabase';
 
 export async function filesRoutes(app: FastifyInstance) {
   app.get('/api/files/list', async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
-    // Basic user scoping by header (JWT from client). In real app, verify JWT and extract user id.
-    const userId = (req.headers['x-user-id'] as string) || 'anonymous';
+    const auth = String((req.headers['authorization'] as string) || '');
+    const token = auth.startsWith('Bearer ') ? auth.slice(7) : undefined;
+    const userId = await verifySupabaseToken(token);
+    if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
     const path = `${userId}/`;
     const { data, error } = await admin.storage.from(bucket).list(path, { limit: 100, offset: 0, sortBy: { column: 'name', order: 'asc' } });
@@ -17,12 +20,20 @@ export async function filesRoutes(app: FastifyInstance) {
   app.post('/api/files/upload', async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
-    const body = (req as any).body as { filename: string; content: string; userId?: string };
-    if (!body || !body.filename || !body.content) return reply.status(400).send({ error: 'filename and content required' });
-    const userId = body.userId || (req.headers['x-user-id'] as string) || 'anonymous';
+    const auth = String((req.headers['authorization'] as string) || '');
+    const token = auth.startsWith('Bearer ') ? auth.slice(7) : undefined;
+    const userId = await verifySupabaseToken(token);
+    if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+
+    const schema = z.object({ filename: z.string().min(1).max(200), content: z.string().min(1) });
+    const parsed = schema.safeParse((req as any).body);
+    if (!parsed.success) return reply.status(400).send({ error: 'Invalid payload' });
+    const { filename, content } = parsed.data;
+    // sanitize filename: allow letters, numbers, . _ -
+    if (!/^[a-zA-Z0-9._-]+$/.test(filename)) return reply.status(400).send({ error: 'Invalid filename' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
-    const path = `${userId}/${body.filename}`;
-    const { error } = await admin.storage.from(bucket).upload(path, Buffer.from(body.content, 'utf-8'), { upsert: true, contentType: 'application/json' });
+    const path = `${userId}/${filename}`;
+    const { error } = await admin.storage.from(bucket).upload(path, Buffer.from(content, 'utf-8'), { upsert: true, contentType: 'application/json' });
     if (error) return reply.status(500).send({ error: error.message });
     return { success: true, path };
   });
@@ -30,11 +41,16 @@ export async function filesRoutes(app: FastifyInstance) {
   app.get('/api/files/download', async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
-    const query = (req as any).query as { filename: string; userId?: string };
-    if (!query || !query.filename) return reply.status(400).send({ error: 'filename required' });
-    const userId = query.userId || (req.headers['x-user-id'] as string) || 'anonymous';
+    const auth = String((req.headers['authorization'] as string) || '');
+    const token = auth.startsWith('Bearer ') ? auth.slice(7) : undefined;
+    const userId = await verifySupabaseToken(token);
+    if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+    const qs = z.object({ filename: z.string().min(1).max(200) }).safeParse((req as any).query);
+    if (!qs.success) return reply.status(400).send({ error: 'Invalid query' });
+    const { filename } = qs.data;
+    if (!/^[a-zA-Z0-9._-]+$/.test(filename)) return reply.status(400).send({ error: 'Invalid filename' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
-    const path = `${userId}/${query.filename}`;
+    const path = `${userId}/${filename}`;
     const { data, error } = await admin.storage.from(bucket).download(path);
     if (error || !data) return reply.status(404).send({ error: error?.message || 'Not found' });
     reply.header('Content-Type', 'application/json');
@@ -44,14 +60,19 @@ export async function filesRoutes(app: FastifyInstance) {
   app.delete('/api/files/delete', async (req, reply) => {
     const admin = getSupabaseAdmin();
     if (!admin) return reply.status(501).send({ error: 'Supabase not configured on server' });
-    const body = (req as any).body as { filename: string; userId?: string };
-    if (!body || !body.filename) return reply.status(400).send({ error: 'filename required' });
-    const userId = body.userId || (req.headers['x-user-id'] as string) || 'anonymous';
+    const auth = String((req.headers['authorization'] as string) || '');
+    const token = auth.startsWith('Bearer ') ? auth.slice(7) : undefined;
+    const userId = await verifySupabaseToken(token);
+    if (!userId) return reply.status(401).send({ error: 'Unauthorized' });
+    const schema = z.object({ filename: z.string().min(1).max(200) });
+    const parsed = schema.safeParse((req as any).body);
+    if (!parsed.success) return reply.status(400).send({ error: 'Invalid payload' });
+    const { filename } = parsed.data;
+    if (!/^[a-zA-Z0-9._-]+$/.test(filename)) return reply.status(400).send({ error: 'Invalid filename' });
     const bucket = process.env.SUPABASE_BUCKET || 'graphs';
-    const path = `${userId}/${body.filename}`;
+    const path = `${userId}/${filename}`;
     const { error } = await admin.storage.from(bucket).remove([path]);
     if (error) return reply.status(500).send({ error: error.message });
     return { success: true };
   });
 }
-
