@@ -31,12 +31,26 @@ export default async function handler(req, res) {
     const openaiKey = process.env.OPENAI_API_KEY;
     const openrouterKey = process.env.OPENROUTER_API_KEY;
 
+    // Debug logging
+    console.log('[API] Environment check:', {
+      hasOpenAI: !!openaiKey,
+      hasOpenRouter: !!openrouterKey,
+      vercel: !!process.env.VERCEL,
+      vercelEnv: process.env.VERCEL_ENV
+    });
+
     if (!openaiKey && !openrouterKey) {
       console.error('[API] No API keys configured in environment variables');
+      // Return 503 instead of 401 - service unavailable, not unauthorized
       return res.status(503).json({
         error: 'LLM service unavailable',
         details:
-          'The server is not configured with LLM API keys. Please contact the administrator.'
+          'The server is not configured with LLM API keys. Please contact the administrator.',
+        debug: {
+          hasKeys: false,
+          vercel: !!process.env.VERCEL,
+          timestamp: new Date().toISOString()
+        }
       });
     }
 

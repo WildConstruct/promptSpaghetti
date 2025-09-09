@@ -256,7 +256,7 @@
             </div>
           </div>
 
-          <div class="content-body"><h1>Chapter 2: Architecture & Core Concepts</h1></p><p>Understanding the architecture of Prompt Spaghetti is crucial for creating effective generators. This chapter explores the system's design, execution model, and core concepts that power content generation.</p></p><h2>System Architecture Overview</h2></p><p>Prompt Spaghetti follows a modular, layered architecture:</p></p><p>``<code></p>
+          <div class="content-body"><h1>Chapter 2: Architecture & Core Concepts</h1><p>Understanding the architecture of Prompt Spaghetti is crucial for creating effective generators. This chapter explores the system's design, execution model, and core concepts that power content generation.</p><h2>System Architecture Overview</h2><p>Prompt Spaghetti follows a modular, layered architecture:</p><p>``<code></p>
 <p>┌─────────────────────────────────────────────────────┐</p>
 <p>│                   User Interface                     │</p>
 <p>│         (Visual Editor / Inspector Panel)            │</p>
@@ -273,7 +273,18 @@
 <p>│                Storage & Export                      │</p>
 <p>│        (JSON / Database / Bundle Export)             │</p>
 <p>└─────────────────────────────────────────────────────┘</p>
-</code>`<code></p></p><h3>Key Components</h3></p><h4>1. Visual Editor</h4><ul><li><strong>React Flow Canvas</strong>: Drag-and-drop node interface</li><li><strong>Inspector Panel</strong>: Node configuration and properties</li><li><strong>Preview System</strong>: Real-time generation preview</li><li><strong>Palette</strong>: Available node types</li></p><h4>2. Runtime Engine</h4><li><strong>Node Execution</strong>: Processes the graph structure</li><li><strong>Context Management</strong>: Maintains variables and state</li><li><strong>Deterministic RNG</strong>: Seeded random number generation</li><li><strong>Performance Optimization</strong>: Caching and efficiency</li></p><h4>3. Schema Layer</h4><li><strong>Zod Validation</strong>: Type-safe data structures</li><li><strong>Graph Validation</strong>: Connection rules and constraints</li><li><strong>Serialization</strong>: Save/load functionality</li></p><h2>The Generator Engine</h2></p><p>The heart of Prompt Spaghetti is its generator engine, which transforms node graphs into generated content.</p></p><h3>Execution Model</h3></p><p>1. <strong>Graph Traversal</strong></p><p>   </code>`<code>typescript</p>
+</code>`<code></p><h3>Key Components</h3><h4>1. Visual Editor</h4>
+<ul><li><strong>React Flow Canvas</strong>: Drag-and-drop node interface</li>
+<li><strong>Inspector Panel</strong>: Node configuration and properties</li>
+<li><strong>Preview System</strong>: Real-time generation preview</li>
+<li><strong>Palette</strong>: Available node types</li><h4>2. Runtime Engine</h4>
+<li><strong>Node Execution</strong>: Processes the graph structure</li>
+<li><strong>Context Management</strong>: Maintains variables and state</li>
+<li><strong>Deterministic RNG</strong>: Seeded random number generation</li>
+<li><strong>Performance Optimization</strong>: Caching and efficiency</li><h4>3. Schema Layer</h4>
+<li><strong>Zod Validation</strong>: Type-safe data structures</li>
+<li><strong>Graph Validation</strong>: Connection rules and constraints</li>
+<li><strong>Serialization</strong>: Save/load functionality</li><h2>The Generator Engine</h2><p>The heart of Prompt Spaghetti is its generator engine, which transforms node graphs into generated content.</p><h3>Execution Model</h3><p>1. <strong>Graph Traversal</strong><p>   </code>`<code>typescript</p>
 <p>   // Simplified execution flow</p>
 <p>   function execute(nodeId: string, context: ExecutionContext) {</p>
 <p>     const node = getNode(nodeId);</p>
@@ -281,13 +292,23 @@
 <p>     const output = node.execute(inputs, context);</p>
 <p>     return output;</p>
 <p>   }</p>
-<p>   </code>`<code></p></p><p>2. <strong>Depth-First Processing</strong><li>Starts from Output nodes</li><li>Recursively resolves dependencies</li><li>Builds result bottom-up</li></p><p>3. <strong>Lazy Evaluation</strong><li>Nodes execute only when needed</li><li>Results cached within execution</li><li>Efficient for complex graphs</li></p><h3>Deterministic Execution</h3></p><p>Prompt Spaghetti ensures reproducible results through deterministic execution:</p></p></code>`<code>javascript</p>
+<p>   </code>`<code></p><p>2. <strong>Depth-First Processing</strong>
+<li>Starts from Output nodes</li>
+<li>Recursively resolves dependencies</li>
+<li>Builds result bottom-up</li><p>3. <strong>Lazy Evaluation</strong>
+<li>Nodes execute only when needed</li>
+<li>Results cached within execution</li>
+<li>Efficient for complex graphs</li><h3>Deterministic Execution</h3><p>Prompt Spaghetti ensures reproducible results through deterministic execution:</p></code>`<code>javascript</p>
 <p>// Every execution with same seed produces identical output</p>
 <p>const seed = 'abc123';</p>
 <p>const result1 = generator.execute(seed);</p>
 <p>const result2 = generator.execute(seed);</p>
 <p>console.log(result1 === result2); // true</p>
-</code>`<code></p></p><p>Key principles:</p><li><strong>Seeded RNG</strong>: Uses seedrandom for predictable randomness</li><li><strong>Sub-seed Generation</strong>: </code>hash(nodeId + parentSeed)<code> for node isolation</li><li><strong>No External State</strong>: Pure functions throughout</li><li><strong>Consistent Ordering</strong>: Stable array iterations</li></p><h2>Node-Based Graph System</h2></p><p>Content generation uses a directed acyclic graph (DAG) of nodes:</p></p><h3>Node Types</h3></p><h4>Core Nodes</h4></p><p>1. <strong>WeightedChoice</strong>: Probabilistic selection</p></p><p>   </code>`<code>json</p>
+</code>`<code></p><p>Key principles:</p>
+<li><strong>Seeded RNG</strong>: Uses seedrandom for predictable randomness</li>
+<li><strong>Sub-seed Generation</strong>: </code>hash(nodeId + parentSeed)<code> for node isolation</li>
+<li><strong>No External State</strong>: Pure functions throughout</li>
+<li><strong>Consistent Ordering</strong>: Stable array iterations</li><h2>Node-Based Graph System</h2><p>Content generation uses a directed acyclic graph (DAG) of nodes:</p><h3>Node Types</h3><h4>Core Nodes</h4><p>1. <strong>WeightedChoice</strong>: Probabilistic selection</p><p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "WeightedChoice",</p>
 <p>     "choices": [</p>
@@ -295,34 +316,34 @@
 <p>       { "weight": 30, "value": "rare" }</p>
 <p>     ]</p>
 <p>   }</p>
-<p>   </code>`<code></p></p><p>2. <strong>Concat</strong>: String concatenation</p></p><p>   </code>`<code>json</p>
+<p>   </code>`<code></p><p>2. <strong>Concat</strong>: String concatenation</p><p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "Concat",</p>
 <p>     "inputs": ["Hello, ", { "$ref": "nameNode" }, "!"]</p>
 <p>   }</p>
-<p>   </code>`<code></p></p><p>3. <strong>Output</strong>: Final result production</p>
+<p>   </code>`<code></p><p>3. <strong>Output</strong>: Final result production</p>
 <p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "Output",</p>
 <p>     "template": "Generated: {input}"</p>
 <p>   }</p>
-<p>   </code>`<code></p></p><h4>Variable Nodes</h4></p><p>1. <strong>SetVariable</strong>: Store values</p></p><p>   </code>`<code>json</p>
+<p>   </code>`<code></p><h4>Variable Nodes</h4><p>1. <strong>SetVariable</strong>: Store values</p><p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "SetVariable",</p>
 <p>     "variableName": "character_name",</p>
 <p>     "value": { "$ref": "nameGenerator" }</p>
 <p>   }</p>
-<p>   </code>`<code></p></p><p>2. <strong>GetVariable</strong>: Retrieve values</p>
+<p>   </code>`<code></p><p>2. <strong>GetVariable</strong>: Retrieve values</p>
 <p>   </code>`<code>json</p>
 <p>   {</p>
 <p>     "type": "GetVariable",</p>
 <p>     "variableName": "character_name",</p>
 <p>     "defaultValue": "Unknown"</p>
 <p>   }</p>
-<p>   </code>`<code></p></p><h4>Advanced Nodes (Epic 7)</h4></p><p>1. <strong>Conditional</strong>: Logic branching</p>
+<p>   </code>`<code></p><h4>Advanced Nodes (Epic 7)</h4><p>1. <strong>Conditional</strong>: Logic branching</p>
 <p>2. <strong>Sequential</strong>: Ordered processing</p>
 <p>3. <strong>Markov</strong>: State transitions</p>
-<p>4. <strong>WeightedAdvanced</strong>: Complex distributions</p></p><h3>Node Connections</h3></p><p>Nodes connect through edges that define data flow:</p></p></code>`<code>typescript</p>
+<p>4. <strong>WeightedAdvanced</strong>: Complex distributions</p><h3>Node Connections</h3><p>Nodes connect through edges that define data flow:</p></code>`<code>typescript</p>
 <p>interface Edge {</p>
 <p>  id: string;</p>
 <p>  source: string; // Source node ID</p>
@@ -330,62 +351,109 @@
 <p>  sourceHandle: string; // Output port</p>
 <p>  targetHandle: string; // Input port</p>
 <p>}</p>
-</code>`<code></p></p><p>Connection rules:</p><li>No cycles allowed (DAG constraint)</li><li>Type compatibility enforced</li><li>Multiple inputs supported</li><li>Single output per port</li></p><h2>Variable Context and Scoping</h2></p><p>Variables provide dynamic behavior within generators:</p></p><h3>Context Flow</h3></p></code>`<code></p>
+</code>`<code></p><p>Connection rules:</p>
+<li>No cycles allowed (DAG constraint)</li>
+<li>Type compatibility enforced</li>
+<li>Multiple inputs supported</li>
+<li>Single output per port</li><h2>Variable Context and Scoping</h2><p>Variables provide dynamic behavior within generators:</p><h3>Context Flow</h3></code>`<code></p>
 <p>┌─────────────┐     ┌─────────────┐     ┌─────────────┐</p>
 <p>│ SetVariable │────▶│   Process   │────▶│ GetVariable │</p>
 <p>│  name=Alice │     │   Context   │     │  name=?     │</p>
 <p>└─────────────┘     └─────────────┘     └─────────────┘</p>
-</code>`<code></p></p><h3>Scoping Rules</h3></p><p>1. <strong>Global Scope</strong>: Variables persist across entire execution</p>
+</code>`<code></p><h3>Scoping Rules</h3><p>1. <strong>Global Scope</strong>: Variables persist across entire execution</p>
 <p>2. <strong>Node Isolation</strong>: Each node gets context copy</p>
 <p>3. <strong>Immutable Updates</strong>: Context never mutated directly</p>
-<p>4. <strong>Default Values</strong>: Fallbacks for missing variables</p></p><p>Example context flow:</p></p></code>`<code>javascript</p>
+<p>4. <strong>Default Values</strong>: Fallbacks for missing variables</p><p>Example context flow:</p></code>`<code>javascript</p>
 <p>// Initial context</p>
-<p>{ seed: "123", variables: {} }</p></p><p>// After SetVariable</p>
-<p>{ seed: "123", variables: { name: "Alice" } }</p></p><p>// After nested execution</p>
+<p>{ seed: "123", variables: {} }</p><p>// After SetVariable</p>
+<p>{ seed: "123", variables: { name: "Alice" } }</p><p>// After nested execution</p>
 <p>{ seed: "123-sub", variables: { name: "Alice", age: 25 } }</p>
-</code>`<code></p></p><h2>Execution Flow and Rule Resolution</h2></p><p>Understanding how rules resolve is key to effective generator design:</p></p><h3>Rule Types</h3></p><p>1. <strong>String Rules</strong></p><p>   </code>`<code>json</p>
+</code>`<code></p><h2>Execution Flow and Rule Resolution</h2><p>Understanding how rules resolve is key to effective generator design:</p><h3>Rule Types</h3><p>1. <strong>String Rules</strong><p>   </code>`<code>json</p>
 <p>   "rule": "Simple text output"</p>
-<p>   </code>`<code></p></p><p>2. <strong>Array Rules</strong> (random selection)</p></p><p>   </code>`<code>json</p>
+<p>   </code>`<code></p><p>2. <strong>Array Rules</strong> (random selection)</p><p>   </code>`<code>json</p>
 <p>   "rule": ["option1", "option2", "option3"]</p>
-<p>   </code>`<code></p></p><p>3. <strong>Weighted Rules</strong></p><p>   </code>`<code>json</p>
+<p>   </code>`<code></p><p>3. <strong>Weighted Rules</strong><p>   </code>`<code>json</p>
 <p>   "rule": [</p>
 <p>     {"w": 60, "v": "common"},</p>
 <p>     {"w": 30, "v": "uncommon"},</p>
 <p>     {"w": 10, "v": "rare"}</p>
 <p>   ]</p>
-<p>   </code>`<code></p></p><p>4. <strong>Reference Rules</strong>
+<p>   </code>`<code></p><p>4. <strong>Reference Rules</strong>
 <p>   </code>`<code>json</p>
 <p>   "rule": "[adjective] [noun]"</p>
-<p>   </code>`<code></p></p><h3>Resolution Process</h3></p><p>1. <strong>Tokenization</strong>: Parse rule for references </code>[ruleName]<code></p>
+<p>   </code>`<code></p><h3>Resolution Process</h3><p>1. <strong>Tokenization</strong>: Parse rule for references </code>[ruleName]<code></p>
 <p>2. <strong>Reference Resolution</strong>: Replace with sub-rule results</p>
 <p>3. <strong>Modifier Application</strong>: Apply any text transformations</p>
 <p>4. <strong>Variable Interpolation</strong>: Replace </code>{varName}<code> with values</p>
-<p>5. <strong>Final Assembly</strong>: Combine all pieces</p></p><p>Example resolution:</p></p></code>`<code></p>
+<p>5. <strong>Final Assembly</strong>: Combine all pieces</p><p>Example resolution:</p></code>`<code></p>
 <p>Input:  "The [size] [color] [animal]"</p>
 <p>Step 1: "The " + resolve([size]) + " " + resolve([color]) + " " + resolve([animal])</p>
 <p>Step 2: "The " + "large" + " " + "blue" + " " + "elephant"</p>
 <p>Result: "The large blue elephant"</p>
-</code>`<code></p></p><h2>Performance Considerations</h2></p><p>Efficient execution is crucial for responsive generation:</p></p><h3>Optimization Strategies</h3></p><p>1. <strong>Result Caching</strong><li>Cache within single execution</li><li>Invalidate between executions</li><li>Memory-time tradeoff</li></p><p>2. <strong>Lazy Evaluation</strong><li>Don't compute unused branches</li><li>Defer expensive operations</li><li>Stream large outputs</li></p><p>3. <strong>Sub-seed Optimization</strong><li>Pre-compute common seeds</li><li>Use efficient hashing</li><li>Minimize seed generation</li></p><h3>Performance Patterns</h3></p></code>`<code>javascript</p>
+</code>`<code></p><h2>Performance Considerations</h2><p>Efficient execution is crucial for responsive generation:</p><h3>Optimization Strategies</h3><p>1. <strong>Result Caching</strong>
+<li>Cache within single execution</li>
+<li>Invalidate between executions</li>
+<li>Memory-time tradeoff</li><p>2. <strong>Lazy Evaluation</strong>
+<li>Don't compute unused branches</li>
+<li>Defer expensive operations</li>
+<li>Stream large outputs</li><p>3. <strong>Sub-seed Optimization</strong>
+<li>Pre-compute common seeds</li>
+<li>Use efficient hashing</li>
+<li>Minimize seed generation</li><h3>Performance Patterns</h3></code>`<code>javascript</p>
 <p>// Good: Reference reuse</p>
 <p>{</p>
 <p>  "character": "[name]",</p>
 <p>  "greeting": "Hello, [name]!"  // Reuses same result</p>
-<p>}</p></p><p>// Better: Variable storage</p>
+<p>}</p><p>// Better: Variable storage</p>
 <p>{</p>
 <p>  "character": {"$set": "name", "value": "[names]"},</p>
 <p>  "greeting": "Hello, {name}!"  // Even more efficient</p>
 <p>}</p>
-</code>`<code></p></p><h2>Security and Sandboxing</h2></p><p>Prompt Spaghetti implements multiple security layers:</p></p><h3>Input Validation</h3><li>Schema validation on all inputs</li><li>Size limits on generated content</li><li>Recursive depth limits</li></p><h3>Safe Execution</h3><li>No eval() or code execution</li><li>Sandboxed expression evaluation</li><li>Pattern detection for malicious content</li></p><h3>Resource Limits</h3><li>Maximum execution time</li><li>Memory usage caps</li><li>Recursion depth limits</li></p><h2>Integration Points</h2></p><p>The architecture provides multiple integration options:</p></p><h3>API Integration</h3></p></code>`<code>javascript</p>
+</code>`<code></p><h2>Security and Sandboxing</h2><p>Prompt Spaghetti implements multiple security layers:</p><h3>Input Validation</h3>
+<li>Schema validation on all inputs</li>
+<li>Size limits on generated content</li>
+<li>Recursive depth limits</li><h3>Safe Execution</h3>
+<li>No eval() or code execution</li>
+<li>Sandboxed expression evaluation</li>
+<li>Pattern detection for malicious content</li><h3>Resource Limits</h3>
+<li>Maximum execution time</li>
+<li>Memory usage caps</li>
+<li>Recursion depth limits</li><h2>Integration Points</h2><p>The architecture provides multiple integration options:</p><h3>API Integration</h3></code>`<code>javascript</p>
 <p>// JavaScript API</p>
 <p>import { Generator } from '@prompt-spaghetti/core';</p>
 <p>const gen = new Generator(config);</p>
-<p>const result = gen.execute(seed);</p></p><p>// REST API</p>
+<p>const result = gen.execute(seed);</p><p>// REST API</p>
 <p>POST /api/generate</p>
 <p>{</p>
 <p>  "generator": "character",</p>
 <p>  "seed": "12345"</p>
 <p>}</p>
-</code>``</p></p><h3>Extension System</h3><li>Custom node types</li><li>Modifier plugins</li><li>Storage adapters</li><li>UI components</li></p><h3>Export Formats</h3><li>Native JSON format</li><li>Generator bundles</li><li>Compiled executables</li><li>Web embeds</li></p><h2>Best Practices</h2></p><p>When working with the architecture:</p></p><p>1. <strong>Design for Determinism</strong><li>Avoid external dependencies</li><li>Use provided RNG only</li><li>Test with multiple seeds</li></p><p>2. <strong>Optimize Graph Structure</strong><li>Minimize node count</li><li>Reuse common patterns</li><li>Leverage variables</li></p><p>3. <strong>Plan for Scale</strong><li>Modularize large generators</li><li>Use includes wisely</li><li>Profile performance</li></p><p>4. <strong>Ensure Compatibility</strong><li>Version your generators</li><li>Document requirements</li><li>Test across platforms</li></p><h2>Summary</h2></p><p>The Prompt Spaghetti architecture provides a robust foundation for content generation:</p><li><strong>Visual Editing</strong>: Intuitive node-based interface</li><li><strong>Deterministic Engine</strong>: Reproducible results</li><li><strong>Flexible System</strong>: Extensible and integrable</li><li><strong>Performance Focus</strong>: Optimized execution</li><li><strong>Security First</strong>: Safe content generation</li></ul></p><p>Understanding these architectural principles enables you to create more effective, efficient, and maintainable generators.</p></p><p>---</p></p><strong>Next Chapter</strong>: <a href="03-schema-reference.md">Generator JSON Schema Reference</a> →</p>
+</code>``</p><h3>Extension System</h3>
+<li>Custom node types</li>
+<li>Modifier plugins</li>
+<li>Storage adapters</li>
+<li>UI components</li><h3>Export Formats</h3>
+<li>Native JSON format</li>
+<li>Generator bundles</li>
+<li>Compiled executables</li>
+<li>Web embeds</li><h2>Best Practices</h2><p>When working with the architecture:</p><p>1. <strong>Design for Determinism</strong>
+<li>Avoid external dependencies</li>
+<li>Use provided RNG only</li>
+<li>Test with multiple seeds</li><p>2. <strong>Optimize Graph Structure</strong>
+<li>Minimize node count</li>
+<li>Reuse common patterns</li>
+<li>Leverage variables</li><p>3. <strong>Plan for Scale</strong>
+<li>Modularize large generators</li>
+<li>Use includes wisely</li>
+<li>Profile performance</li><p>4. <strong>Ensure Compatibility</strong>
+<li>Version your generators</li>
+<li>Document requirements</li>
+<li>Test across platforms</li><h2>Summary</h2><p>The Prompt Spaghetti architecture provides a robust foundation for content generation:</p>
+<li><strong>Visual Editing</strong>: Intuitive node-based interface</li>
+<li><strong>Deterministic Engine</strong>: Reproducible results</li>
+<li><strong>Flexible System</strong>: Extensible and integrable</li>
+<li><strong>Performance Focus</strong>: Optimized execution</li>
+<li><strong>Security First</strong>: Safe content generation</li></ul><p>Understanding these architectural principles enables you to create more effective, efficient, and maintainable generators.</p><p>---</p><strong>Next Chapter</strong>: <a href="03-schema-reference.md">Generator JSON Schema Reference</a> →</p>
 </div>
 
           <div class="content-footer">

@@ -16,7 +16,7 @@ export class SecurityManager {
             allowNetworkAccess: false,
             maxExecutionTime: 30000, // 30 seconds default
             memoryLimit: 100 * 1024 * 1024, // 100MB default
-            ...securityConfig,
+            ...securityConfig
         };
     }
     /**
@@ -25,13 +25,16 @@ export class SecurityManager {
     validateConfiguration() {
         const errors = [];
         const warnings = [];
-        if (this.securityConfig?.maxExecutionTime && this.securityConfig.maxExecutionTime < 1000) {
+        if (this.securityConfig?.maxExecutionTime &&
+            this.securityConfig.maxExecutionTime < 1000) {
             warnings.push('Maximum execution time is very low (< 1 second), this may cause timeouts');
         }
-        if (this.securityConfig?.maxExecutionTime && this.securityConfig.maxExecutionTime > 300000) {
+        if (this.securityConfig?.maxExecutionTime &&
+            this.securityConfig.maxExecutionTime > 300000) {
             warnings.push('Maximum execution time is very high (> 5 minutes), consider lowering for better UX');
         }
-        if (this.securityConfig?.memoryLimit && this.securityConfig.memoryLimit > 1024 * 1024 * 1024) {
+        if (this.securityConfig?.memoryLimit &&
+            this.securityConfig.memoryLimit > 1024 * 1024 * 1024) {
             warnings.push('Memory limit is very high (> 1GB), consider lowering to prevent system issues');
         }
         if (this.securityConfig?.allowFileAccess) {
@@ -43,7 +46,7 @@ export class SecurityManager {
         return {
             valid: errors.length === 0,
             errors,
-            warnings,
+            warnings
         };
     }
     /**
@@ -75,13 +78,17 @@ export class SecurityManager {
         }
         const executionTime = Date.now() - this.executionStartTime;
         const currentMemory = this.getCurrentMemoryUsage();
-        const memoryUsed = this.memoryUsageStart ? currentMemory - this.memoryUsageStart : currentMemory;
+        const memoryUsed = this.memoryUsageStart
+            ? currentMemory - this.memoryUsageStart
+            : currentMemory;
         // Check execution time
-        if (this.securityConfig?.maxExecutionTime && executionTime > this.securityConfig.maxExecutionTime) {
+        if (this.securityConfig?.maxExecutionTime &&
+            executionTime > this.securityConfig.maxExecutionTime) {
             throw new SecurityError(`Execution time limit exceeded: ${executionTime}ms > ${this.securityConfig.maxExecutionTime}ms`);
         }
         // Check memory usage
-        if (this.securityConfig?.memoryLimit && memoryUsed > this.securityConfig.memoryLimit) {
+        if (this.securityConfig?.memoryLimit &&
+            memoryUsed > this.securityConfig.memoryLimit) {
             throw new SecurityError(`Memory limit exceeded: ${memoryUsed} bytes > ${this.securityConfig.memoryLimit} bytes`);
         }
     }
@@ -102,7 +109,7 @@ export class SecurityManager {
             'Object',
             'Map',
             'Set',
-            'Promise',
+            'Promise'
         ];
         const sandbox = {
             // Provide safe globals
@@ -113,7 +120,7 @@ export class SecurityManager {
             fetch: this.securityConfig?.allowNetworkAccess ? fetch : undefined,
             require: this.securityConfig?.allowFileAccess ? require : undefined,
             // Security monitoring
-            __securityManager: this,
+            __securityManager: this
         };
         return sandbox;
     }
@@ -125,17 +132,39 @@ export class SecurityManager {
         const warnings = [];
         // Check for dangerous patterns
         const dangerousPatterns = [
-            { pattern: /eval\s*\(/g, message: 'eval() is not allowed for security reasons' },
-            { pattern: /Function\s*\(/g, message: 'Function constructor is not allowed for security reasons' },
-            { pattern: /process\s*\./g, message: 'Process access is not allowed for security reasons' },
-            { pattern: /global\s*\./g, message: 'Global object access is not allowed for security reasons' },
-            { pattern: /__dirname|__filename/g, message: 'File system path access is restricted' },
-            { pattern: /require\s*\(/g, message: 'Require is only allowed if file access is enabled' },
-            { pattern: /import\s+.*\s+from/g, message: 'Dynamic imports may be restricted' },
+            {
+                pattern: /eval\s*\(/g,
+                message: 'eval() is not allowed for security reasons'
+            },
+            {
+                pattern: /Function\s*\(/g,
+                message: 'Function constructor is not allowed for security reasons'
+            },
+            {
+                pattern: /process\s*\./g,
+                message: 'Process access is not allowed for security reasons'
+            },
+            {
+                pattern: /global\s*\./g,
+                message: 'Global object access is not allowed for security reasons'
+            },
+            {
+                pattern: /__dirname|__filename/g,
+                message: 'File system path access is restricted'
+            },
+            {
+                pattern: /require\s*\(/g,
+                message: 'Require is only allowed if file access is enabled'
+            },
+            {
+                pattern: /import\s+.*\s+from/g,
+                message: 'Dynamic imports may be restricted'
+            }
         ];
         for (const { pattern, message } of dangerousPatterns) {
             if (pattern.test(code)) {
-                if (pattern.source.includes('require') && this.securityConfig?.allowFileAccess) {
+                if (pattern.source.includes('require') &&
+                    this.securityConfig?.allowFileAccess) {
                     continue; // Allow require if file access is enabled
                 }
                 errors.push(message);
@@ -143,9 +172,18 @@ export class SecurityManager {
         }
         // Check for potentially dangerous but not necessarily forbidden patterns
         const warningPatterns = [
-            { pattern: /setTimeout|setInterval/g, message: 'Timers should be used carefully to avoid blocking execution' },
-            { pattern: /while\s*\(.*true.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' },
-            { pattern: /for\s*\(.*;;.*\)/g, message: 'Infinite loops detected - ensure they have break conditions' },
+            {
+                pattern: /setTimeout|setInterval/g,
+                message: 'Timers should be used carefully to avoid blocking execution'
+            },
+            {
+                pattern: /while\s*\(.*true.*\)/g,
+                message: 'Infinite loops detected - ensure they have break conditions'
+            },
+            {
+                pattern: /for\s*\(.*;;.*\)/g,
+                message: 'Infinite loops detected - ensure they have break conditions'
+            }
         ];
         for (const { pattern, message } of warningPatterns) {
             if (pattern.test(code)) {
@@ -155,16 +193,20 @@ export class SecurityManager {
         return {
             valid: errors.length === 0,
             errors,
-            warnings,
+            warnings
         };
     }
     /**
      * Finalize execution monitoring
      */
     finalizeExecution() {
-        const executionTime = this.executionStartTime ? Date.now() - this.executionStartTime : 0;
+        const executionTime = this.executionStartTime
+            ? Date.now() - this.executionStartTime
+            : 0;
         const currentMemory = this.getCurrentMemoryUsage();
-        const memoryUsed = this.memoryUsageStart ? currentMemory - this.memoryUsageStart : 0;
+        const memoryUsed = this.memoryUsageStart
+            ? currentMemory - this.memoryUsageStart
+            : 0;
         // Clear monitoring
         this.executionStartTime = undefined;
         this.memoryUsageStart = undefined;
@@ -172,9 +214,11 @@ export class SecurityManager {
             executionTime,
             memoryUsed,
             withinLimits: {
-                time: !this.securityConfig?.maxExecutionTime || executionTime <= this.securityConfig.maxExecutionTime,
-                memory: !this.securityConfig?.memoryLimit || memoryUsed <= this.securityConfig.memoryLimit,
-            },
+                time: !this.securityConfig?.maxExecutionTime ||
+                    executionTime <= this.securityConfig.maxExecutionTime,
+                memory: !this.securityConfig?.memoryLimit ||
+                    memoryUsed <= this.securityConfig.memoryLimit
+            }
         };
     }
     /**

@@ -73,7 +73,7 @@ export class ValidationEngine {
         return {
             valid: errors.length === 0,
             errors,
-            warnings,
+            warnings
         };
     }
     /**
@@ -98,7 +98,9 @@ export class ValidationEngine {
                         }
                         catch (validationError) {
                             if (validationError instanceof z.ZodError) {
-                                const messages = validationError.errors.map(err => err.message).join(', ');
+                                const messages = validationError.errors
+                                    .map(err => err.message)
+                                    .join(', ');
                                 errors.push(`Input '${inputName}' validation failed: ${messages}`);
                             }
                             else {
@@ -121,7 +123,7 @@ export class ValidationEngine {
         return {
             valid: errors.length === 0,
             errors,
-            warnings,
+            warnings
         };
     }
     /**
@@ -144,7 +146,9 @@ export class ValidationEngine {
                     }
                     catch (validationError) {
                         if (validationError instanceof z.ZodError) {
-                            const messages = validationError.errors.map(err => err.message).join(', ');
+                            const messages = validationError.errors
+                                .map(err => err.message)
+                                .join(', ');
                             errors.push(`Output '${outputName}' validation failed: ${messages}`);
                         }
                         else {
@@ -166,7 +170,7 @@ export class ValidationEngine {
         return {
             valid: errors.length === 0,
             errors,
-            warnings,
+            warnings
         };
     }
     /**
@@ -190,7 +194,11 @@ export class ValidationEngine {
                 return { valid: false, errors: messages, warnings: [] };
             }
             else {
-                return { valid: false, errors: [error instanceof Error ? error.message : String(error)], warnings: [] };
+                return {
+                    valid: false,
+                    errors: [error instanceof Error ? error.message : String(error)],
+                    warnings: []
+                };
             }
         }
     }
@@ -262,7 +270,14 @@ export class ValidationEngine {
      * Check if a type string is valid
      */
     isValidType(type) {
-        const validTypes = ['string', 'number', 'boolean', 'array', 'object', 'any'];
+        const validTypes = [
+            'string',
+            'number',
+            'boolean',
+            'array',
+            'object',
+            'any'
+        ];
         return validTypes.includes(type);
     }
     /**
@@ -276,7 +291,8 @@ export class ValidationEngine {
             }
         }
         else if (type === 'number') {
-            if (validation.minLength !== undefined || validation.maxLength !== undefined) {
+            if (validation.minLength !== undefined ||
+                validation.maxLength !== undefined) {
                 errors.push(`Input '${inputName}': use min/max for numbers, not minLength/maxLength`);
             }
             if (validation.pattern) {
@@ -310,7 +326,8 @@ export class ValidationEngine {
                 valid = Array.isArray(value);
                 break;
             case 'object':
-                valid = typeof value === 'object' && value !== null && !Array.isArray(value);
+                valid =
+                    typeof value === 'object' && value !== null && !Array.isArray(value);
                 break;
             case 'any':
                 valid = true; // Any type is always valid

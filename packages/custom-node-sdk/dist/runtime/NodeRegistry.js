@@ -117,7 +117,7 @@ export class DefaultNodeRegistry {
             categoriesCount: categories.size,
             authorsCount: authors.size,
             categories: Object.fromEntries(categories),
-            authors: Object.fromEntries(authors),
+            authors: Object.fromEntries(authors)
         };
     }
     /**

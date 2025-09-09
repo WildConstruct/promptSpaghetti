@@ -256,7 +256,7 @@
             </div>
           </div>
 
-          <div class="content-body"><h1>Chapter 14: Interactive Tutorial - Your First Generator</h1></p><p>Welcome to the interactive tutorial! This chapter combines theory with hands-on practice using live examples you can edit and test directly in your browser.</p></p><h2>Getting Started</h2></p><p>Before we begin, make sure you have the interactive examples loaded. If you don't see live editors below, refresh the page or check that JavaScript is enabled.</p></p><h3>Example 1: Hello World</h3></p><p>Let's start with the simplest possible generator. Try editing the code below and see the results change in real-time:</p></p><div id="example-hello" data-interactive-example </p>
+          <div class="content-body"><h1>Chapter 14: Interactive Tutorial - Your First Generator</h1><p>Welcome to the interactive tutorial! This chapter combines theory with hands-on practice using live examples you can edit and test directly in your browser.</p><h2>Getting Started</h2><p>Before we begin, make sure you have the interactive examples loaded. If you don't see live editors below, refresh the page or check that JavaScript is enabled.</p><h3>Example 1: Hello World</h3><p>Let's start with the simplest possible generator. Try editing the code below and see the results change in real-time:</p><div id="example-hello" data-interactive-example </p>
 <p>     data-title="Hello World Generator" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -267,7 +267,7 @@
 <p>  "grammar": {</p>
 <p>    "start": "Hello, world!"</p>
 <p>  }</p>
-<p>}'></div></p><strong>Try this</strong>: Change "world" to "universe" and click Run to see the output update.</p></p><h3>Example 2: Random Selection</h3></p><p>Now let's add some randomness. This generator will randomly pick from several options:</p></p><div id="example-random" data-interactive-example </p>
+<p>}'></div><strong>Try this</strong>: Change "world" to "universe" and click Run to see the output update.</p><h3>Example 2: Random Selection</h3><p>Now let's add some randomness. This generator will randomly pick from several options:</p><div id="example-random" data-interactive-example </p>
 <p>     data-title="Random Greeting Generator" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -280,9 +280,9 @@
 <p>    "greeting": ["Hello", "Hi", "Hey", "Greetings"],</p>
 <p>    "subject": ["friend", "world", "there", "everyone"]</p>
 <p>  }</p>
-<p>}'></div></p><strong>Try this</strong>:</p></p><p>1. Add new greetings to the array: <code>"Welcome"</code>, <code>"Salutations"</code>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Add new greetings to the array: <code>"Welcome"</code>, <code>"Salutations"</code>
 <p>2. Try different seeds to see different outputs</p>
-<p>3. Add more subjects like <code>"stranger"</code>, <code>"adventurer"</code></p><h3>Example 3: Weighted Choices</h3></p><p>Sometimes you want some options to appear more often than others. Let's use weighted choices:</p></p><div id="example-weighted" data-interactive-example </p>
+<p>3. Add more subjects like <code>"stranger"</code>, <code>"adventurer"</code><h3>Example 3: Weighted Choices</h3><p>Sometimes you want some options to appear more often than others. Let's use weighted choices:</p><div id="example-weighted" data-interactive-example </p>
 <p>     data-title="Weighted Character Generator" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -301,9 +301,9 @@
 <p>      {"w": 5, "v": "Paladin"}</p>
 <p>    ]</p>
 <p>  }</p>
-<p>}'></div></p><strong>Try this</strong>:</p></p><p>1. Notice how "Warrior" appears more often than "Paladin"</p>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Notice how "Warrior" appears more often than "Paladin"</p>
 <p>2. Change the weights - make "Mage" have weight 50</p>
-<p>3. Add a new class with weight 15</p></p><h3>Example 4: Variables and Context</h3></p><p>Variables let you store and reuse values throughout generation:</p></p><div id="example-variables" data-interactive-example </p>
+<p>3. Add a new class with weight 15</p><h3>Example 4: Variables and Context</h3><p>Variables let you store and reuse values throughout generation:</p><div id="example-variables" data-interactive-example </p>
 <p>     data-title="Variable Usage Example" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -339,9 +339,9 @@
 <p>      "solve the ancient riddle"</p>
 <p>    ]</p>
 <p>  }</p>
-<p>}'></div></p><strong>Try this</strong>:</p></p><p>1. Notice how the name is consistent throughout</p>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Notice how the name is consistent throughout</p>
 <p>2. Add a new variable for the hero's weapon</p>
-<p>3. Use the weapon variable in both introduction and quest</p></p><h3>Example 5: Modularization with Includes</h3></p><p>For larger generators, you can split content into separate files:</p></p><div id="example-includes" data-interactive-example </p>
+<p>3. Use the weapon variable in both introduction and quest</p><h3>Example 5: Modularization with Includes</h3><p>For larger generators, you can split content into separate files:</p><div id="example-includes" data-interactive-example </p>
 <p>     data-title="Generator with Includes" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -366,9 +366,9 @@
 <p>      "the Crystal Cave"</p>
 <p>    ]</p>
 <p>  }</p>
-<p>}'></div></p><strong>Try this</strong>:</p></p><p>1. Change from "warriors" to "mages" or "rogues"</p>
+<p>}'></div><strong>Try this</strong>:</p><p>1. Change from "warriors" to "mages" or "rogues"</p>
 <p>2. Add your own character categories</p>
-<p>3. Try mixing different character types</p></p><h2>Interactive Exercises</h2></p><p>Now it's your turn! Use the examples below to practice creating generators:</p></p><h3>Exercise 1: Build a Restaurant Menu</h3></p><p>Create a generator that produces items for a restaurant menu:</p></p><div id="exercise-menu" data-interactive-example </p>
+<p>3. Try mixing different character types</p><h2>Interactive Exercises</h2><p>Now it's your turn! Use the examples below to practice creating generators:</p><h3>Exercise 1: Build a Restaurant Menu</h3><p>Create a generator that produces items for a restaurant menu:</p><div id="exercise-menu" data-interactive-example </p>
 <p>     data-title="Restaurant Menu Exercise" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -380,7 +380,11 @@
 <p>    "start": "Today\\'s Special: [dish]",</p>
 <p>    "dish": "Replace this with your menu items!"</p>
 <p>  }</p>
-<p>}'></div></p><strong>Your task</strong>: Create a menu generator with:</p><ul><li>Appetizers, main courses, and desserts</li><li>Weighted choices (some items more common)</li><li>Price ranges</li><li>Cooking styles (grilled, fried, baked)</li></p><h3>Exercise 2: Weather Report Generator</h3></p><p>Build a generator that creates weather reports:</p></p><div id="exercise-weather" data-interactive-example </p>
+<p>}'></div><strong>Your task</strong>: Create a menu generator with:</p>
+<ul><li>Appetizers, main courses, and desserts</li>
+<li>Weighted choices (some items more common)</li>
+<li>Price ranges</li>
+<li>Cooking styles (grilled, fried, baked)</li><h3>Exercise 2: Weather Report Generator</h3><p>Build a generator that creates weather reports:</p><div id="exercise-weather" data-interactive-example </p>
 <p>     data-title="Weather Report Exercise" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -392,7 +396,12 @@
 <p>    "start": "Today will be [weather]",</p>
 <p>    "weather": ["sunny", "cloudy", "rainy"]</p>
 <p>  }</p>
-<p>}'></div></p><strong>Your task</strong>: Expand this to include:</p><li>Temperature ranges</li><li>Wind conditions</li><li>Humidity levels</li><li>Time-of-day variations</li><li>Seasonal differences</li></p><h3>Exercise 3: Story Prompt Generator</h3></p><p>Create a generator for creative writing prompts:</p></p><div id="exercise-story" data-interactive-example </p>
+<p>}'></div><strong>Your task</strong>: Expand this to include:</p>
+<li>Temperature ranges</li>
+<li>Wind conditions</li>
+<li>Humidity levels</li>
+<li>Time-of-day variations</li>
+<li>Seasonal differences</li><h3>Exercise 3: Story Prompt Generator</h3><p>Create a generator for creative writing prompts:</p><div id="exercise-story" data-interactive-example </p>
 <p>     data-title="Story Prompt Exercise" </p>
 <p>     data-variations="true"</p>
 <p>     data-code='{</p>
@@ -404,20 +413,30 @@
 <p>    "start": "Write a story about [premise]",</p>
 <p>    "premise": "a mysterious stranger"</p>
 <p>  }</p>
-<p>}'></div></p><strong>Your task</strong>: Build a comprehensive story prompt generator with:</p><li>Different genres (fantasy, sci-fi, mystery)</li><li>Character types and motivations</li><li>Settings and time periods</li><li>Conflicts and challenges</li><li>Plot twists</li></p><h2>Advanced Interactive Features</h2></p><h3>Real-time Validation</h3></p><p>Notice how the editors show validation status:</p><li>✓ Valid JSON - Your code is syntactically correct</li><li>✗ Invalid JSON - There's a syntax error to fix</li></p><h3>Seed Control</h3></p><p>Use the seed input to get reproducible results:</p><li>Same seed = same output</li><li>Different seeds = different variations</li><li>Click 🎲 for random seeds</li></ul></p><h3>Multiple Outputs</h3></p><p>Enable "Show Variations" to see how different seeds produce different outputs from the same generator.</p></p><h2>Troubleshooting Interactive Examples</h2></p><p>If the interactive examples aren't working:</p></p><p>1. <strong>Check JavaScript</strong>: Make sure JavaScript is enabled</p>
+<p>}'></div><strong>Your task</strong>: Build a comprehensive story prompt generator with:</p>
+<li>Different genres (fantasy, sci-fi, mystery)</li>
+<li>Character types and motivations</li>
+<li>Settings and time periods</li>
+<li>Conflicts and challenges</li>
+<li>Plot twists</li><h2>Advanced Interactive Features</h2><h3>Real-time Validation</h3><p>Notice how the editors show validation status:</p>
+<li>✓ Valid JSON - Your code is syntactically correct</li>
+<li>✗ Invalid JSON - There's a syntax error to fix</li><h3>Seed Control</h3><p>Use the seed input to get reproducible results:</p>
+<li>Same seed = same output</li>
+<li>Different seeds = different variations</li>
+<li>Click 🎲 for random seeds</li></ul><h3>Multiple Outputs</h3><p>Enable "Show Variations" to see how different seeds produce different outputs from the same generator.</p><h2>Troubleshooting Interactive Examples</h2><p>If the interactive examples aren't working:</p><p>1. <strong>Check JavaScript</strong>: Make sure JavaScript is enabled</p>
 <p>2. <strong>Refresh Page</strong>: Sometimes a refresh helps</p>
 <p>3. <strong>Browser Compatibility</strong>: Use a modern browser (Chrome, Firefox, Safari, Edge)</p>
-<p>4. <strong>Console Errors</strong>: Check browser developer console for error messages</p></p><h2>Tips for Success</h2></p><p>1. <strong>Start Simple</strong>: Begin with basic generators and add complexity gradually</p>
+<p>4. <strong>Console Errors</strong>: Check browser developer console for error messages</p><h2>Tips for Success</h2><p>1. <strong>Start Simple</strong>: Begin with basic generators and add complexity gradually</p>
 <p>2. <strong>Test Frequently</strong>: Use the Run button often to see your changes</p>
 <p>3. <strong>Use Different Seeds</strong>: Test with various seeds to ensure good variation</p>
 <p>4. <strong>Validate JSON</strong>: Fix syntax errors before testing logic</p>
-<p>5. <strong>Save Your Work</strong>: Use the Copy or Download buttons to save good examples</p></p><h2>Next Steps</h2></p><p>Now that you've experienced interactive generator creation:</p></p><p>1. <strong>Practice More</strong>: Try the exercises above</p>
+<p>5. <strong>Save Your Work</strong>: Use the Copy or Download buttons to save good examples</p><h2>Next Steps</h2><p>Now that you've experienced interactive generator creation:</p><p>1. <strong>Practice More</strong>: Try the exercises above</p>
 <p>2. <strong>Explore Advanced Features</strong>: Learn about conditional logic and advanced nodes</p>
 <p>3. <strong>Build Real Generators</strong>: Create generators for your own projects</p>
-<p>4. <strong>Share and Learn</strong>: Join the community to share your creations</p></p><p>The interactive examples continue throughout this handbook - look for the live editors in other chapters to practice specific concepts!</p></p><p>---</p></p><strong>Next Chapter</strong>: <a href="15-expansion-recipes.md">Expansion Recipes for LLMs</a> →</p></p><style></p>
+<p>4. <strong>Share and Learn</strong>: Join the community to share your creations</p><p>The interactive examples continue throughout this handbook - look for the live editors in other chapters to practice specific concepts!</p><p>---</p><strong>Next Chapter</strong>: <a href="15-expansion-recipes.md">Expansion Recipes for LLMs</a> →</p><style></p>
 <p>/<em> Ensure interactive examples are properly styled </em>/</p>
 <p>@import url('../assets/css/interactive-examples.css');</p>
-</style></p><script></p>
+</style><script></p>
 <p>/<em> Load interactive examples framework </em>/</p>
 <p>document.addEventListener('DOMContentLoaded', function() {</p>
 <p>  const script = document.createElement('script');</p>

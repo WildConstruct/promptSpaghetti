@@ -26,7 +26,7 @@ class HandbookBuilder {
       version: '1.0.0',
       baseUrl: '',
       githubUrl: 'https://github.com/your-org/prompt-spaghetti',
-      ...options,
+      ...options
     };
 
     this.chapters = [];
@@ -36,14 +36,14 @@ class HandbookBuilder {
       author: this.options.author,
       version: this.options.version,
       generated: new Date().toISOString(),
-      formats: {},
+      formats: {}
     };
 
     this.templates = {
       web: path.join(__dirname, '../templates/handbook-template.html'),
       pdf: path.join(__dirname, '../templates/pdf-template.html'),
       epub: path.join(__dirname, '../templates/epub-template.html'),
-      print: path.join(__dirname, '../templates/print-template.html'),
+      print: path.join(__dirname, '../templates/print-template.html')
     };
   }
 
@@ -89,11 +89,31 @@ class HandbookBuilder {
 
     const parts = [
       { id: 'part1', title: 'Part 1: Foundation', dir: 'part1-foundation' },
-      { id: 'part2', title: 'Part 2: Content Development', dir: 'part2-content-development' },
-      { id: 'part3', title: 'Part 3: Engine Reference', dir: 'part3-engine-reference' },
-      { id: 'part4', title: 'Part 4: Practical Guides', dir: 'part4-practical-guides' },
-      { id: 'part5', title: 'Part 5: Advanced Topics', dir: 'part5-advanced-topics' },
-      { id: 'part6', title: 'Part 6: Reference Materials', dir: 'part6-reference-materials' },
+      {
+        id: 'part2',
+        title: 'Part 2: Content Development',
+        dir: 'part2-content-development'
+      },
+      {
+        id: 'part3',
+        title: 'Part 3: Engine Reference',
+        dir: 'part3-engine-reference'
+      },
+      {
+        id: 'part4',
+        title: 'Part 4: Practical Guides',
+        dir: 'part4-practical-guides'
+      },
+      {
+        id: 'part5',
+        title: 'Part 5: Advanced Topics',
+        dir: 'part5-advanced-topics'
+      },
+      {
+        id: 'part6',
+        title: 'Part 6: Reference Materials',
+        dir: 'part6-reference-materials'
+      }
     ];
 
     for (const part of parts) {
@@ -119,7 +139,7 @@ class HandbookBuilder {
             part: part,
             order: this.extractOrder(file),
             difficulty: this.extractDifficulty(content),
-            type: this.extractType(content, file),
+            type: this.extractType(content, file)
           };
 
           this.chapters.push(chapter);
@@ -131,7 +151,11 @@ class HandbookBuilder {
   }
 
   generateChapterId(filename) {
-    return crypto.createHash('md5').update(filename).digest('hex').substring(0, 8);
+    return crypto
+      .createHash('md5')
+      .update(filename)
+      .digest('hex')
+      .substring(0, 8);
   }
 
   extractTitle(content) {
@@ -146,7 +170,11 @@ class HandbookBuilder {
 
   extractDifficulty(content) {
     const contentLower = content.toLowerCase();
-    if (contentLower.includes('beginner') || contentLower.includes('basic') || contentLower.includes('introduction')) {
+    if (
+      contentLower.includes('beginner') ||
+      contentLower.includes('basic') ||
+      contentLower.includes('introduction')
+    ) {
       return 'beginner';
     }
     if (contentLower.includes('advanced') || contentLower.includes('expert')) {
@@ -159,10 +187,16 @@ class HandbookBuilder {
     const contentLower = content.toLowerCase();
     const filenameLower = filename.toLowerCase();
 
-    if (contentLower.includes('reference') || filenameLower.includes('reference')) {
+    if (
+      contentLower.includes('reference') ||
+      filenameLower.includes('reference')
+    ) {
       return 'reference';
     }
-    if (contentLower.includes('tutorial') || filenameLower.includes('tutorial')) {
+    if (
+      contentLower.includes('tutorial') ||
+      filenameLower.includes('tutorial')
+    ) {
       return 'tutorial';
     }
     if (contentLower.includes('example') || filenameLower.includes('example')) {
@@ -181,7 +215,7 @@ class HandbookBuilder {
       if (!parts[partId]) {
         parts[partId] = {
           title: chapter.part.title,
-          chapters: [],
+          chapters: []
         };
       }
       parts[partId].chapters.push(chapter);
@@ -339,7 +373,7 @@ class HandbookBuilder {
       PAGE_DIFFICULTY: 'all',
       PAGE_PART: 'home',
       BREADCRUMB_ITEMS: breadcrumbs,
-      CONTENT: indexContent,
+      CONTENT: indexContent
     });
 
     fs.writeFileSync(path.join(webDir, 'index.html'), html);
@@ -366,7 +400,7 @@ class HandbookBuilder {
       BREADCRUMB_ITEMS: breadcrumbs,
       CONTENT: htmlContent,
       PREV_PAGE: navigation.prev,
-      NEXT_PAGE: navigation.next,
+      NEXT_PAGE: navigation.next
     });
 
     // Ensure directory exists
@@ -403,7 +437,7 @@ class HandbookBuilder {
       TITLE: this.options.title,
       AUTHOR: this.options.author,
       VERSION: this.options.version,
-      CONTENT: combinedContent,
+      CONTENT: combinedContent
     });
   }
 
@@ -415,12 +449,12 @@ class HandbookBuilder {
         process.env.CHROME_PATH,
         '/usr/bin/google-chrome',
         '/usr/bin/chromium-browser',
-        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
       ];
       const executablePath = possiblePaths.find(p => p && fs.existsSync(p));
       const browser = await puppeteer.launch({
         executablePath,
-        headless: 'new',
+        headless: 'new'
       });
       const page = await browser.newPage();
 
@@ -434,8 +468,8 @@ class HandbookBuilder {
           top: '20mm',
           right: '20mm',
           bottom: '20mm',
-          left: '20mm',
-        },
+          left: '20mm'
+        }
       });
 
       await browser.close();
@@ -475,7 +509,7 @@ class HandbookBuilder {
       'OEBPS/content.opf': this.generateContentOPF(),
       'OEBPS/toc.ncx': this.generateTOCNCX(),
       'OEBPS/nav.xhtml': this.generateNavXHTML(),
-      'OEBPS/styles.css': this.generateEPUBStyles(),
+      'OEBPS/styles.css': this.generateEPUBStyles()
     };
 
     // Write structure files
@@ -558,7 +592,7 @@ class HandbookBuilder {
 
     return this.processTemplate(template, {
       TITLE: this.options.title,
-      CONTENT: content,
+      CONTENT: content
     });
   }
 
@@ -567,7 +601,10 @@ class HandbookBuilder {
     fs.mkdirSync(printAssetsDir, { recursive: true });
 
     // Copy only print-relevant assets
-    const printCSS = fs.readFileSync(path.join(this.options.assetsDir, 'css/print.css'), 'utf8');
+    const printCSS = fs.readFileSync(
+      path.join(this.options.assetsDir, 'css/print.css'),
+      'utf8'
+    );
 
     fs.writeFileSync(path.join(printAssetsDir, 'print.css'), printCSS);
   }
@@ -585,7 +622,7 @@ class HandbookBuilder {
     const defaults = {
       BASE_URL: this.options.baseUrl,
       ASSETS_PATH: './assets',
-      GITHUB_EDIT_URL: `${this.options.githubUrl}/edit/main/docs/content-authoring-handbook`,
+      GITHUB_EDIT_URL: `${this.options.githubUrl}/edit/main/docs/content-authoring-handbook`
     };
 
     for (const [key, value] of Object.entries(defaults)) {
@@ -674,7 +711,10 @@ class HandbookBuilder {
 
     return {
       prev: currentIndex > 0 ? allChapters[currentIndex - 1] : null,
-      next: currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null,
+      next:
+        currentIndex < allChapters.length - 1
+          ? allChapters[currentIndex + 1]
+          : null
     };
   }
 
@@ -702,7 +742,7 @@ class HandbookBuilder {
   generateSearchIndex(webDir) {
     const searchIndexBuilder = require('./build-search-index');
     const builder = new searchIndexBuilder({
-      outputPath: path.join(webDir, 'assets/data/search-index.json'),
+      outputPath: path.join(webDir, 'assets/data/search-index.json')
     });
 
     return builder.build();
@@ -710,19 +750,36 @@ class HandbookBuilder {
 
   async generateMetadata() {
     this.metadata.formats = {
-      web: { path: 'web/', size: await this.getDirectorySize(path.join(this.options.outputDir, 'web')) },
+      web: {
+        path: 'web/',
+        size: await this.getDirectorySize(
+          path.join(this.options.outputDir, 'web')
+        )
+      },
       pdf: {
         path: 'pdf/',
-        size: await this.getFileSize(path.join(this.options.outputDir, 'pdf/content-authoring-handbook.pdf')),
+        size: await this.getFileSize(
+          path.join(
+            this.options.outputDir,
+            'pdf/content-authoring-handbook.pdf'
+          )
+        )
       },
       epub: {
         path: 'epub/',
-        size: await this.getFileSize(path.join(this.options.outputDir, 'epub/content-authoring-handbook.epub')),
+        size: await this.getFileSize(
+          path.join(
+            this.options.outputDir,
+            'epub/content-authoring-handbook.epub'
+          )
+        )
       },
       print: {
         path: 'print/',
-        size: await this.getFileSize(path.join(this.options.outputDir, 'print/handbook-print.html')),
-      },
+        size: await this.getFileSize(
+          path.join(this.options.outputDir, 'print/handbook-print.html')
+        )
+      }
     };
 
     const metadataPath = path.join(this.options.outputDir, 'metadata.json');
@@ -765,10 +822,15 @@ class HandbookBuilder {
 
   generateContentOPF() {
     const chapters = this.chapters
-      .map(c => `<item id="chapter-${c.id}" href="chapter-${c.id}.xhtml" media-type="application/xhtml+xml"/>`)
+      .map(
+        c =>
+          `<item id="chapter-${c.id}" href="chapter-${c.id}.xhtml" media-type="application/xhtml+xml"/>`
+      )
       .join('\n    ');
 
-    const spine = this.chapters.map(c => `<itemref idref="chapter-${c.id}"/>`).join('\n    ');
+    const spine = this.chapters
+      .map(c => `<itemref idref="chapter-${c.id}"/>`)
+      .join('\n    ');
 
     return `<?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid">

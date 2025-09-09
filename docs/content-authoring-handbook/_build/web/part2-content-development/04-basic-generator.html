@@ -332,7 +332,11 @@
 </code>`<code></p></p><h3>Pattern 2: Structured Combinations</h3></p><p>Building complex outputs from simple parts:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
-<p>    "start": "[setup]. [conflict]. [resolution].",</p></p><p>    "setup": ["Once upon a time in [location]", "Long ago in [location]", "In the distant land of [location]"],</p></p><p>    "location": ["a magical forest", "an ancient kingdom", "a hidden valley"],</p></p><p>    "conflict": [</p>
+<p>    "start": "[setup]. [conflict]. [resolution].",</p></p><p>    "setup": [</p>
+<p>      "Once upon a time in [location]",</p>
+<p>      "Long ago in [location]",</p>
+<p>      "In the distant land of [location]"</p>
+<p>    ],</p></p><p>    "location": ["a magical forest", "an ancient kingdom", "a hidden valley"],</p></p><p>    "conflict": [</p>
 <p>      "A terrible curse befell the land",</p>
 <p>      "An evil wizard threatened the peace",</p>
 <p>      "A mysterious plague spread rapidly"</p>
@@ -346,7 +350,11 @@
 </code>`<code></p></p><h3>Pattern 3: Variable Depth</h3></p><p>Some outputs need more detail than others:</p></p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
-<p>    "character": ["[name]", "[name] the [adjective]", "[name] the [adjective] [profession]"],</p></p><p>    "name": ["Alex", "Morgan", "Jordan", "Casey"],</p>
+<p>    "character": [</p>
+<p>      "[name]",</p>
+<p>      "[name] the [adjective]",</p>
+<p>      "[name] the [adjective] [profession]"</p>
+<p>    ],</p></p><p>    "name": ["Alex", "Morgan", "Jordan", "Casey"],</p>
 <p>    "adjective": ["brave", "clever", "mysterious"],</p>
 <p>    "profession": ["warrior", "scholar", "merchant"]</p>
 <p>  }</p>
@@ -437,7 +445,25 @@
 <p>    "description": "Generates random fantasy shop inventory"</p>
 <p>  },</p>
 <p>  "grammar": {</p>
-<p>    "start": "[quality] [item] of [property] - [price] gold",</p></p><p>    "quality": ["Common", "Uncommon", "Rare", "Legendary"],</p></p><p>    "item": ["sword", "shield", "potion", "scroll", "ring", "amulet", "cloak", "boots"],</p></p><p>    "property": ["fire", "ice", "lightning", "healing", "strength", "wisdom", "speed", "protection"],</p></p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "5000"]</p>
+<p>    "start": "[quality] [item] of [property] - [price] gold",</p></p><p>    "quality": ["Common", "Uncommon", "Rare", "Legendary"],</p></p><p>    "item": [</p>
+<p>      "sword",</p>
+<p>      "shield",</p>
+<p>      "potion",</p>
+<p>      "scroll",</p>
+<p>      "ring",</p>
+<p>      "amulet",</p>
+<p>      "cloak",</p>
+<p>      "boots"</p>
+<p>    ],</p></p><p>    "property": [</p>
+<p>      "fire",</p>
+<p>      "ice",</p>
+<p>      "lightning",</p>
+<p>      "healing",</p>
+<p>      "strength",</p>
+<p>      "wisdom",</p>
+<p>      "speed",</p>
+<p>      "protection"</p>
+<p>    ],</p></p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "5000"]</p>
 <p>  }</p>
 <p>}</p>
 </code>`<code></p></p><strong>Step 3</strong>: Add variation and polish</p></p></code>`<code>json</p>
@@ -453,7 +479,11 @@
 <p>      "[quality] [item] of [property]",</p>
 <p>      "[quality] [material] [item]",</p>
 <p>      "[quality] [item] with [enhancement]"</p>
-<p>    ],</p></p><p>    "price_line": ["Price: [price] gold", "Cost: [price] gold pieces", "Yours for only [price] gold!"],</p></p><p>    "quality": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],</p></p><p>    "item": [</p>
+<p>    ],</p></p><p>    "price_line": [</p>
+<p>      "Price: [price] gold",</p>
+<p>      "Cost: [price] gold pieces",</p>
+<p>      "Yours for only [price] gold!"</p>
+<p>    ],</p></p><p>    "quality": ["Common", "Uncommon", "Rare", "Epic", "Legendary"],</p></p><p>    "item": [</p>
 <p>      "sword",</p>
 <p>      "shield",</p>
 <p>      "potion",</p>
@@ -466,7 +496,16 @@
 <p>      "gauntlets",</p>
 <p>      "staff",</p>
 <p>      "bow"</p>
-<p>    ],</p></p><p>    "material": ["iron", "steel", "silver", "gold", "mithril", "adamantine", "crystal", "dragon scale"],</p></p><p>    "property": [</p>
+<p>    ],</p></p><p>    "material": [</p>
+<p>      "iron",</p>
+<p>      "steel",</p>
+<p>      "silver",</p>
+<p>      "gold",</p>
+<p>      "mithril",</p>
+<p>      "adamantine",</p>
+<p>      "crystal",</p>
+<p>      "dragon scale"</p>
+<p>    ],</p></p><p>    "property": [</p>
 <p>      "fire",</p>
 <p>      "ice",</p>
 <p>      "lightning",</p>
@@ -490,7 +529,18 @@
 <p>      "star-blessed",</p>
 <p>      "demon-ward",</p>
 <p>      "fey-crafted"</p>
-<p>    ],</p></p><p>    "price": ["10", "25", "50", "100", "250", "500", "1000", "2500", "5000", "10000"]</p>
+<p>    ],</p></p><p>    "price": [</p>
+<p>      "10",</p>
+<p>      "25",</p>
+<p>      "50",</p>
+<p>      "100",</p>
+<p>      "250",</p>
+<p>      "500",</p>
+<p>      "1000",</p>
+<p>      "2500",</p>
+<p>      "5000",</p>
+<p>      "10000"</p>
+<p>    ]</p>
 <p>  }</p>
 <p>}</p>
 </code>``</p></p><strong>Sample Outputs</strong>:</p><ul><li>"Rare mithril sword\nPrice: 1000 gold"</li><li>"Epic ring of telepathy\nYours for only 2500 gold!"</li><li>"Legendary cloak with star-blessed\nCost: 10000 gold pieces"</li></p><h2>Next Steps</h2></p><p>Now that you understand the basics:</p></p><p>1. <strong>Experiment</strong>: Modify the examples to create your own variations</p>

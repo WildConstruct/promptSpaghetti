@@ -256,7 +256,7 @@
             </div>
           </div>
 
-          <div class="content-body"><h1>Chapter 3: Generator JSON Schema Reference</h1></p><p>This chapter provides a complete reference for the Generator JSON format, which serves as both the storage format and the interchange format for Prompt Spaghetti generators.</p></p><h2>Schema Overview</h2></p><p>A generator file consists of several key sections:</p></p><p>``<code>json</p>
+          <div class="content-body"><h1>Chapter 3: Generator JSON Schema Reference</h1><p>This chapter provides a complete reference for the Generator JSON format, which serves as both the storage format and the interchange format for Prompt Spaghetti generators.</p><h2>Schema Overview</h2><p>A generator file consists of several key sections:</p><p>``<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Generator Name",</p>
@@ -279,14 +279,16 @@
 <p>    "enableDebug": false</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h2>Metadata Structure</h2></p><p>The </code>meta<code> section contains information about the generator:</p></p><h3>Required Fields</h3></p></code>`<code>json</p>
+</code>`<code></p><h2>Metadata Structure</h2><p>The </code>meta<code> section contains information about the generator:</p><h3>Required Fields</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Character Generator",</p>
 <p>    "version": "1.0.0"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><ul><li><strong>name</strong> (string, required): Display name for the generator</li><li><strong>version</strong> (string, required): Semantic version number</li></p><h3>Optional Fields</h3></p></code>`<code>json</p>
+</code>`<code></p>
+<ul><li><strong>name</strong> (string, required): Display name for the generator</li>
+<li><strong>version</strong> (string, required): Semantic version number</li><h3>Optional Fields</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "author": "Jane Doe",</p>
@@ -298,19 +300,26 @@
 <p>    "minEngineVersion": "2.0.0"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p><li><strong>author</strong> (string): Creator's name or handle</li><li><strong>description</strong> (string): Detailed explanation of generator purpose</li><li><strong>tags</strong> (array): Searchable keywords</li><li><strong>license</strong> (string): Distribution license</li><li><strong>homepage</strong> (string): Project or documentation URL</li><li><strong>category</strong> (string): Classification for organization</li><li><strong>minEngineVersion</strong> (string): Minimum compatible engine version</li></p><h2>Grammar Rules Definition</h2></p><p>The </code>grammar<code> section contains the generation rules:</p></p><h3>Basic Rule Types</h3></p><h4>String Rules</h4></p><p>Simple text output:</p></p></code>`<code>json</p>
+</code>`<code></p>
+<li><strong>author</strong> (string): Creator's name or handle</li>
+<li><strong>description</strong> (string): Detailed explanation of generator purpose</li>
+<li><strong>tags</strong> (array): Searchable keywords</li>
+<li><strong>license</strong> (string): Distribution license</li>
+<li><strong>homepage</strong> (string): Project or documentation URL</li>
+<li><strong>category</strong> (string): Classification for organization</li>
+<li><strong>minEngineVersion</strong> (string): Minimum compatible engine version</li><h2>Grammar Rules Definition</h2><p>The </code>grammar<code> section contains the generation rules:</p><h3>Basic Rule Types</h3><h4>String Rules</h4><p>Simple text output:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "greeting": "Hello, world!"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h4>Array Rules</h4></p><p>Random selection from options:</p></p></code>`<code>json</p>
+</code>`<code></p><h4>Array Rules</h4><p>Random selection from options:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "color": ["red", "blue", "green", "yellow"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h4>Weighted Rules</h4></p><p>Probability-based selection:</p></p></code>`<code>json</p>
+</code>`<code></p><h4>Weighted Rules</h4><p>Probability-based selection:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "rarity": [</p>
@@ -321,7 +330,7 @@
 <p>    ]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Advanced Rule Patterns</h3></p><h4>Reference Expansion</h4></p><p>Reference other rules using square brackets:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Advanced Rule Patterns</h3><h4>Reference Expansion</h4><p>Reference other rules using square brackets:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "character": "[name] the [class]",</p>
@@ -329,7 +338,7 @@
 <p>    "class": ["Warrior", "Mage", "Rogue"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h4>Nested References</h4></p><p>Build complex structures:</p></p></code>`<code>json</p>
+</code>`<code></p><h4>Nested References</h4><p>Build complex structures:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "npc": "[greeting], I am [character]",</p>
@@ -340,7 +349,7 @@
 <p>    "class": ["knight", "wizard", "thief"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h4>Modifier Application</h4></p><p>Apply text transformations:</p></p></code>`<code>json</p>
+</code>`<code></p><h4>Modifier Application</h4><p>Apply text transformations:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "title": "[name.capitalize] the [epithet.allcaps]",</p>
@@ -348,7 +357,7 @@
 <p>    "epithet": ["great", "terrible"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h2>Variables and Their Types</h2></p><p>Variables provide dynamic state during generation:</p></p><h3>Variable Declaration</h3></p></code>`<code>json</p>
+</code>`<code></p><h2>Variables and Their Types</h2><p>Variables provide dynamic state during generation:</p><h3>Variable Declaration</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "variables": {</p>
 <p>    "playerName": "Hero",</p>
@@ -357,14 +366,19 @@
 <p>    "inventory": []</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Variable Types</h3><li><strong>String</strong>: Text values</li><li><strong>Number</strong>: Integers or decimals</li><li><strong>Boolean</strong>: true/false</li><li><strong>Array</strong>: Lists of values</li><li><strong>Object</strong>: Nested structures</li></p><h3>Variable Usage</h3></p><p>Reference variables with curly braces:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Variable Types</h3>
+<li><strong>String</strong>: Text values</li>
+<li><strong>Number</strong>: Integers or decimals</li>
+<li><strong>Boolean</strong>: true/false</li>
+<li><strong>Array</strong>: Lists of values</li>
+<li><strong>Object</strong>: Nested structures</li><h3>Variable Usage</h3><p>Reference variables with curly braces:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "greeting": "Welcome, {playerName}!",</p>
 <p>    "levelUp": "You are now level {playerLevel}!"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Dynamic Variables</h3></p><p>Set variables during generation:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Dynamic Variables</h3><p>Set variables during generation:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "[setName][greet]",</p>
@@ -377,13 +391,13 @@
 <p>    "greet": "Hello, {userName}!"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h2>Entry Points and Execution</h2></p><p>Entry points determine where generation begins:</p></p><h3>Default Entry Point</h3></p><p>The </code>start<code> rule is the default:</p></p></code>`<code>json</p>
+</code>`<code></p><h2>Entry Points and Execution</h2><p>Entry points determine where generation begins:</p><h3>Default Entry Point</h3><p>The </code>start<code> rule is the default:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": "This is where generation begins"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Multiple Entry Points</h3></p><p>Define multiple starting options:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Multiple Entry Points</h3><p>Define multiple starting options:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "entryPoints": ["character", "location", "item"],</p>
 <p>  "grammar": {</p>
@@ -392,7 +406,7 @@
 <p>    "item": "[quality] [itemType]"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Execution Configuration</h3></p><p>Control execution behavior:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Execution Configuration</h3><p>Control execution behavior:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "config": {</p>
 <p>    "defaultEntryPoint": "start",</p>
@@ -402,7 +416,7 @@
 <p>    "strictMode": false</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h2>Include Patterns and Modularization</h2></p><p>Break large generators into manageable pieces:</p></p><h3>Basic Include</h3></p></code>`<code>json</p>
+</code>`<code></p><h2>Include Patterns and Modularization</h2><p>Break large generators into manageable pieces:</p><h3>Basic Include</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "includes": {</p>
 <p>    "names": "./data/names.json",</p>
@@ -412,12 +426,12 @@
 <p>    "character": "[names:first] from [locations:city]"</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Include File Format</h3></p></code>names.json<code>:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Include File Format</h3></code>names.json<code>:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "first": ["Alice", "Bob", "Charlie"],</p>
 <p>  "last": ["Smith", "Jones", "Brown"]</p>
 <p>}</p>
-</code>`<code></p></p><h3>Meta Merge Arrays</h3></p><p>Special </code>_meta<code> array for extending includes:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Meta Merge Arrays</h3><p>Special </code>_meta<code> array for extending includes:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "includes": {</p>
 <p>    "base": "./base-generator.json"</p>
@@ -432,7 +446,7 @@
 <p>    }</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h2>Node Type Definitions</h2></p><p>When using the visual editor, nodes map to JSON structures:</p></p><h3>WeightedChoice Node</h3></p></code>`<code>json</p>
+</code>`<code></p><h2>Node Type Definitions</h2><p>When using the visual editor, nodes map to JSON structures:</p><h3>WeightedChoice Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "WeightedChoice",</p>
 <p>  "choices": [</p>
@@ -440,36 +454,36 @@
 <p>    { "value": "rare", "weight": 30 }</p>
 <p>  ]</p>
 <p>}</p>
-</code>`<code></p></p><h3>Concat Node</h3></p></code>`<code>json</p>
+</code>`<code></p><h3>Concat Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Concat",</p>
 <p>  "inputs": ["Hello, ", "[name]", "!"]</p>
 <p>}</p>
-</code>`<code></p></p><h3>Output Node</h3></p></code>`<code>json</p>
+</code>`<code></p><h3>Output Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Output",</p>
 <p>  "template": "Generated: {result}"</p>
 <p>}</p>
-</code>`<code></p></p><h3>SetVariable Node</h3></p></code>`<code>json</p>
+</code>`<code></p><h3>SetVariable Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "SetVariable",</p>
 <p>  "key": "characterName",</p>
 <p>  "value": "[generateName]"</p>
 <p>}</p>
-</code>`<code></p></p><h3>GetVariable Node</h3></p></code>`<code>json</p>
+</code>`<code></p><h3>GetVariable Node</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "GetVariable",</p>
 <p>  "key": "characterName",</p>
 <p>  "default": "Unknown"</p>
 <p>}</p>
-</code>`<code></p></p><h2>Advanced Schema Features</h2></p><h3>Conditional Rules</h3></p></code>`<code>json</p>
+</code>`<code></p><h2>Advanced Schema Features</h2><h3>Conditional Rules</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "conditional",</p>
 <p>  "condition": "{playerLevel} > 5",</p>
 <p>  "true": "You are experienced!",</p>
 <p>  "false": "You are a novice."</p>
 <p>}</p>
-</code>`<code></p></p><h3>Sequential Patterns</h3></p></code>`<code>json</p>
+</code>`<code></p><h3>Sequential Patterns</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Sequential",</p>
 <p>  "sequence": ["First", "Second", "Third"],</p>
@@ -480,7 +494,7 @@
 <p>    }</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Markov Chains</h3></p></code>`<code>json</p>
+</code>`<code></p><h3>Markov Chains</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "type": "Markov",</p>
 <p>  "states": {</p>
@@ -495,14 +509,28 @@
 <p>  },</p>
 <p>  "initial": "happy"</p>
 <p>}</p>
-</code>`<code></p></p><h2>Validation Rules</h2></p><p>The schema enforces several validation rules:</p></p><h3>Structure Validation</h3><li>Valid JSON syntax required</li><li>All references must resolve</li><li>No circular dependencies</li><li>Proper type matching</li></p><h3>Weight Validation</h3><li>Weights must be positive numbers</li><li>At least one non-zero weight required</li><li>Weights automatically normalized</li></p><h3>Variable Validation</h3><li>Variable names must be valid identifiers</li><li>No reserved keywords</li><li>Type consistency maintained</li></p><h3>Performance Limits</h3><li>Maximum recursion depth</li><li>String length limits</li><li>Array size limits</li><li>Execution timeout</li></p><h2>Migration and Compatibility</h2></p><h3>Version Detection</h3></p></code>`<code>json</p>
+</code>`<code></p><h2>Validation Rules</h2><p>The schema enforces several validation rules:</p><h3>Structure Validation</h3>
+<li>Valid JSON syntax required</li>
+<li>All references must resolve</li>
+<li>No circular dependencies</li>
+<li>Proper type matching</li><h3>Weight Validation</h3>
+<li>Weights must be positive numbers</li>
+<li>At least one non-zero weight required</li>
+<li>Weights automatically normalized</li><h3>Variable Validation</h3>
+<li>Variable names must be valid identifiers</li>
+<li>No reserved keywords</li>
+<li>Type consistency maintained</li><h3>Performance Limits</h3>
+<li>Maximum recursion depth</li>
+<li>String length limits</li>
+<li>Array size limits</li>
+<li>Execution timeout</li><h2>Migration and Compatibility</h2><h3>Version Detection</h3></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "version": "2.0.0",</p>
 <p>    "compatibleWith": ["1.x", "2.x"]</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Legacy Format Support</h3></p><p>Older formats automatically upgraded:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Legacy Format Support</h3><p>Older formats automatically upgraded:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "grammar": {</p>
 <p>    "start": {</p>
@@ -511,14 +539,26 @@
 <p>    }</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h3>Future-Proofing</h3></p><p>Use extension fields:</p></p></code>`<code>json</p>
+</code>`<code></p><h3>Future-Proofing</h3><p>Use extension fields:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "x-custom-field": "value",</p>
 <p>    "x-plugin-config": {}</p>
 <p>  }</p>
 <p>}</p>
-</code>`<code></p></p><h2>Best Practices</h2></p><p>When creating generator JSON:</p></p><p>1. <strong>Use Semantic Versioning</strong><li>Major.Minor.Patch format</li><li>Increment appropriately</li><li>Document changes</li></p><p>2. <strong>Organize Rules Logically</strong><li>Group related rules</li><li>Use clear naming</li><li>Add comments via </code>_comment<code></li></p><p>3. <strong>Optimize for Performance</strong><li>Minimize deep nesting</li><li>Reuse common patterns</li><li>Use variables for repeated values</li></p><p>4. <strong>Plan for Modularity</strong><li>Split large generators</li><li>Use includes effectively</li><li>Create reusable components</li></ul></p><h2>Complete Example</h2></p><p>Here's a full generator demonstrating all major features:</p></p></code>`<code>json</p>
+</code>`<code></p><h2>Best Practices</h2><p>When creating generator JSON:</p><p>1. <strong>Use Semantic Versioning</strong>
+<li>Major.Minor.Patch format</li>
+<li>Increment appropriately</li>
+<li>Document changes</li><p>2. <strong>Organize Rules Logically</strong>
+<li>Group related rules</li>
+<li>Use clear naming</li>
+<li>Add comments via </code>_comment<code></li><p>3. <strong>Optimize for Performance</strong>
+<li>Minimize deep nesting</li>
+<li>Reuse common patterns</li>
+<li>Use variables for repeated values</li><p>4. <strong>Plan for Modularity</strong>
+<li>Split large generators</li>
+<li>Use includes effectively</li>
+<li>Create reusable components</li></ul><h2>Complete Example</h2><p>Here's a full generator demonstrating all major features:</p></code>`<code>json</p>
 <p>{</p>
 <p>  "meta": {</p>
 <p>    "name": "Fantasy Character Generator",</p>
@@ -558,7 +598,7 @@
 <p>    "enableDebug": true</p>
 <p>  }</p>
 <p>}</p>
-</code>``</p></p><p>This schema reference provides the foundation for understanding how Prompt Spaghetti generators work at the data level. Whether you're hand-crafting JSON or using the visual editor, these principles remain consistent.</p></p><p>---</p></p><strong>Next Chapter</strong>: <a href="../part2-content-development/04-basic-generator.md">Basic Generator Creation</a> →</p>
+</code>``</p><p>This schema reference provides the foundation for understanding how Prompt Spaghetti generators work at the data level. Whether you're hand-crafting JSON or using the visual editor, these principles remain consistent.</p><p>---</p><strong>Next Chapter</strong>: <a href="../part2-content-development/04-basic-generator.md">Basic Generator Creation</a> →</p>
 </div>
 
           <div class="content-footer">

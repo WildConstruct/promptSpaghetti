@@ -13,7 +13,7 @@ export class MockContext {
             seed: String(seed || 'test-seed'),
             variables: {},
             nodeStates: {},
-            trackPerformance: true,
+            trackPerformance: true
         };
     }
     getContext() {
@@ -37,7 +37,7 @@ export class MockContextFactory {
             evaluationDepth: 0,
             cache: new Map(),
             prng,
-            performanceMetrics: trackPerformance ? new Map() : undefined,
+            performanceMetrics: trackPerformance ? new Map() : undefined
         };
     }
     /**
@@ -46,7 +46,7 @@ export class MockContextFactory {
     static createMinimal(variables = {}) {
         return this.create({
             variables,
-            trackPerformance: false,
+            trackPerformance: false
         });
     }
     /**
@@ -56,7 +56,7 @@ export class MockContextFactory {
         return this.create({
             variables,
             nodeStates: initialStates,
-            trackPerformance: true,
+            trackPerformance: true
         });
     }
     /**
@@ -83,9 +83,9 @@ export class TestScenarios {
             variables: {
                 input,
                 text: input,
-                content: input,
+                content: input
             },
-            seed: 'string-test',
+            seed: 'string-test'
         });
     }
     /**
@@ -97,9 +97,9 @@ export class TestScenarios {
                 numbers,
                 values: numbers,
                 data: numbers,
-                input: numbers[0] || 0,
+                input: numbers[0] || 0
             },
-            seed: 'numeric-test',
+            seed: 'numeric-test'
         });
     }
     /**
@@ -111,9 +111,9 @@ export class TestScenarios {
                 condition,
                 trueValue,
                 falseValue,
-                input: condition,
+                input: condition
             },
-            seed: 'conditional-test',
+            seed: 'conditional-test'
         });
     }
     /**
@@ -125,9 +125,9 @@ export class TestScenarios {
                 items,
                 array: items,
                 list: items,
-                input: items,
+                input: items
             },
-            seed: 'array-test',
+            seed: 'array-test'
         });
     }
     /**
@@ -138,9 +138,9 @@ export class TestScenarios {
             variables: {
                 object,
                 data: object,
-                input: object,
+                input: object
             },
-            seed: 'object-test',
+            seed: 'object-test'
         });
     }
     /**
@@ -151,9 +151,9 @@ export class TestScenarios {
             variables: {
                 shouldError,
                 throwError: shouldError,
-                simulateError: shouldError,
+                simulateError: shouldError
             },
-            seed: 'error-test',
+            seed: 'error-test'
         });
     }
 }

@@ -48,19 +48,19 @@ async function promptForConfig() {
                 if (!/^[a-zA-Z0-9.-]+$/.test(input))
                     return 'Name must contain only alphanumeric characters, dots, and hyphens';
                 return true;
-            },
+            }
         },
         {
             type: 'input',
             name: 'displayName',
             message: 'Display name:',
-            validate: (input) => (input.trim() ? true : 'Display name is required'),
+            validate: (input) => input.trim() ? true : 'Display name is required'
         },
         {
             type: 'input',
             name: 'description',
             message: 'Description:',
-            validate: (input) => (input.trim() ? true : 'Description is required'),
+            validate: (input) => input.trim() ? true : 'Description is required'
         },
         {
             type: 'list',
@@ -73,44 +73,44 @@ async function promptForConfig() {
                 'External APIs',
                 'Math & Computation',
                 'Utilities',
-                'Custom',
-            ],
+                'Custom'
+            ]
         },
         {
             type: 'input',
             name: 'author',
             message: 'Author name:',
-            validate: (input) => (input.trim() ? true : 'Author name is required'),
+            validate: (input) => input.trim() ? true : 'Author name is required'
         },
         {
             type: 'input',
             name: 'email',
-            message: 'Author email (optional):',
+            message: 'Author email (optional):'
         },
         {
             type: 'confirm',
             name: 'stateful',
             message: 'Does this node maintain state between executions?',
-            default: false,
+            default: false
         },
         {
             type: 'confirm',
             name: 'cacheable',
             message: 'Can results be cached for performance?',
-            default: true,
+            default: true
         },
         {
             type: 'confirm',
             name: 'allowFileAccess',
             message: 'Does this node need file system access?',
-            default: false,
+            default: false
         },
         {
             type: 'confirm',
             name: 'allowNetworkAccess',
             message: 'Does this node need network access?',
-            default: false,
-        },
+            default: false
+        }
     ]);
     // Prompt for inputs
     const inputs = [];
@@ -120,8 +120,8 @@ async function promptForConfig() {
             {
                 type: 'input',
                 name: 'name',
-                message: 'Input name (leave empty to stop adding inputs):',
-            },
+                message: 'Input name (leave empty to stop adding inputs):'
+            }
         ]);
         if (!inputConfig.name.trim()) {
             addingInputs = false;
@@ -132,25 +132,25 @@ async function promptForConfig() {
                 type: 'list',
                 name: 'type',
                 message: 'Input type:',
-                choices: ['string', 'number', 'boolean', 'array', 'object', 'any'],
+                choices: ['string', 'number', 'boolean', 'array', 'object', 'any']
             },
             {
                 type: 'confirm',
                 name: 'required',
                 message: 'Is this input required?',
-                default: true,
+                default: true
             },
             {
                 type: 'input',
                 name: 'description',
-                message: 'Input description (optional):',
-            },
+                message: 'Input description (optional):'
+            }
         ]);
         inputs.push({
             name: inputConfig.name,
             type: inputDetails.type,
             required: inputDetails.required,
-            description: inputDetails.description || undefined,
+            description: inputDetails.description || undefined
         });
     }
     // Prompt for outputs
@@ -161,8 +161,8 @@ async function promptForConfig() {
             {
                 type: 'input',
                 name: 'name',
-                message: 'Output name (leave empty to stop adding outputs):',
-            },
+                message: 'Output name (leave empty to stop adding outputs):'
+            }
         ]);
         if (!outputConfig.name.trim()) {
             addingOutputs = false;
@@ -173,22 +173,27 @@ async function promptForConfig() {
                 type: 'list',
                 name: 'type',
                 message: 'Output type:',
-                choices: ['string', 'number', 'boolean', 'array', 'object', 'any'],
+                choices: ['string', 'number', 'boolean', 'array', 'object', 'any']
             },
             {
                 type: 'input',
                 name: 'description',
-                message: 'Output description (optional):',
-            },
+                message: 'Output description (optional):'
+            }
         ]);
         outputs.push({
             name: outputConfig.name,
             type: outputDetails.type,
-            description: outputDetails.description || undefined,
+            description: outputDetails.description || undefined
         });
     }
     if (inputs.length === 0) {
-        inputs.push({ name: 'input', type: 'any', required: true, description: 'Main input' });
+        inputs.push({
+            name: 'input',
+            type: 'any',
+            required: true,
+            description: 'Main input'
+        });
     }
     if (outputs.length === 0) {
         outputs.push({ name: 'result', type: 'any', description: 'Main output' });
@@ -206,8 +211,8 @@ async function promptForConfig() {
         cacheable: answers.cacheable,
         security: {
             allowFileAccess: answers.allowFileAccess,
-            allowNetworkAccess: answers.allowNetworkAccess,
-        },
+            allowNetworkAccess: answers.allowNetworkAccess
+        }
     };
 }
 function getDefaultConfig() {
@@ -217,14 +222,16 @@ function getDefaultConfig() {
         description: 'An example custom node implementation',
         category: 'Utilities',
         author: 'Developer',
-        inputs: [{ name: 'input', type: 'any', required: true, description: 'Main input' }],
+        inputs: [
+            { name: 'input', type: 'any', required: true, description: 'Main input' }
+        ],
         outputs: [{ name: 'result', type: 'any', description: 'Main output' }],
         stateful: false,
         cacheable: true,
         security: {
             allowFileAccess: false,
-            allowNetworkAccess: false,
-        },
+            allowNetworkAccess: false
+        }
     };
 }
 async function scaffoldNode(config, outputDir) {
@@ -249,20 +256,24 @@ async function generatePackageJson(config, outputDir) {
             build: 'tsc',
             test: 'jest',
             'test:watch': 'jest --watch',
-            dev: 'tsc --watch',
+            dev: 'tsc --watch'
         },
         dependencies: {
-            '@prompt-spaghetti/custom-node-sdk': '^0.1.0',
+            '@prompt-spaghetti/custom-node-sdk': '^0.1.0'
         },
         devDependencies: {
             '@types/jest': '^29.0.0',
             '@types/node': '^20.0.0',
             jest: '^29.0.0',
             'ts-jest': '^29.0.0',
-            typescript: '^5.0.0',
+            typescript: '^5.0.0'
         },
         author: config.email ? `${config.author} <${config.email}>` : config.author,
-        keywords: ['promptscape', 'custom-node', config.category.toLowerCase().replace(/\s+/g, '-')],
+        keywords: [
+            'promptscape',
+            'custom-node',
+            config.category.toLowerCase().replace(/\s+/g, '-')
+        ]
     };
     await fs.writeFile(path.join(outputDir, 'package.json'), JSON.stringify(packageJson, null, 2));
 }
@@ -548,10 +559,10 @@ async function generateTsConfig(outputDir) {
             strict: true,
             esModuleInterop: true,
             skipLibCheck: true,
-            forceConsistentCasingInFileNames: true,
+            forceConsistentCasingInFileNames: true
         },
         include: ['*.ts'],
-        exclude: ['dist', 'node_modules', '**/*.test.ts'],
+        exclude: ['dist', 'node_modules', '**/*.test.ts']
     };
     await fs.writeFile(path.join(outputDir, 'tsconfig.json'), JSON.stringify(tsConfig, null, 2));
 }

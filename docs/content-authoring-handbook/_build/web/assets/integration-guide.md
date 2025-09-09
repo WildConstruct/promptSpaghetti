@@ -91,13 +91,13 @@ const example = new InteractiveExample('my-container', {
   initialCode: JSON.stringify(
     {
       meta: { name: 'Custom Generator' },
-      grammar: { start: 'Hello!' },
+      grammar: { start: 'Hello!' }
     },
     null,
     2
   ),
   autoRun: true,
-  showVariations: true,
+  showVariations: true
 });
 ```
 
@@ -151,7 +151,12 @@ Customize appearance using CSS variables:
 Create themed examples:
 
 ```html
-<div id="dark-example" data-interactive-example class="dark-theme" data-title="Dark Theme Example"></div>
+<div
+  id="dark-example"
+  data-interactive-example
+  class="dark-theme"
+  data-title="Dark Theme Example"
+></div>
 ```
 
 ```css
@@ -293,7 +298,12 @@ example.destroy();
 - Status announcements
 
 ```html
-<div id="accessible-example" data-interactive-example aria-label="Interactive generator example" role="region"></div>
+<div
+  id="accessible-example"
+  data-interactive-example
+  aria-label="Interactive generator example"
+  role="region"
+></div>
 ```
 
 ## Testing
@@ -325,7 +335,7 @@ describe('Generator Integration', () => {
   it('should execute simple generator', async () => {
     const generator = {
       meta: { name: 'Test' },
-      grammar: { start: 'Hello' },
+      grammar: { start: 'Hello' }
     };
 
     const result = await executeGenerator(generator, 'test-seed');
@@ -357,7 +367,10 @@ For CMS integration:
 Host assets on CDN for better performance:
 
 ```html
-<link rel="stylesheet" href="https://cdn.example.com/interactive-examples.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.example.com/interactive-examples.css"
+/>
 <script src="https://cdn.example.com/interactive-examples.js"></script>
 ```
 
@@ -380,7 +393,10 @@ function sanitizeJSON(input) {
 Configure CSP headers:
 
 ```html
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline';" />
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline';"
+/>
 ```
 
 ## Support and Community

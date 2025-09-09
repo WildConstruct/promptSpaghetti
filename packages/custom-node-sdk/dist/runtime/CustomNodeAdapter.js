@@ -19,7 +19,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
             deterministic: customConfig.deterministic ?? true,
             cacheable: customConfig.cacheable ?? true,
             stateful: customConfig.stateful ?? false,
-            performanceHints: customConfig.performanceHints,
+            performanceHints: customConfig.performanceHints
         };
         super(id, advancedConfig);
         this.customNode = customNode;
@@ -50,14 +50,14 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
             return {
                 valid: true,
                 errors: [],
-                warnings: [],
+                warnings: []
             };
         }
         catch (error) {
             return {
                 valid: false,
                 errors: [`Validation failed: ${error.message}`],
-                warnings: [],
+                warnings: []
             };
         }
     }
@@ -134,14 +134,14 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
             context: ctx,
             inputs,
             utils: {
-                random: () => ctx.prng ? ctx.prng() : Math.random(),
+                random: () => (ctx.prng ? ctx.prng() : Math.random()),
                 log: (level, message, data) => {
                     console[level](`[${nodeId}] ${message}`, data || '');
                 },
                 validate: (data, schema) => this.validationEngine.validateData(data, schema),
                 getState: () => ctx.nodeStates.get(nodeId),
-                setState: state => ctx.nodeStates.set(nodeId, state),
-            },
+                setState: state => ctx.nodeStates.set(nodeId, state)
+            }
         };
     }
     /**
@@ -167,7 +167,9 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
     updateExecutionStats(ctx, executionTime, metadata) {
         // Store execution stats in performance metrics if available
         if (ctx.performanceMetrics) {
-            const metrics = ctx.performanceMetrics.get(this.id) || { startTime: Date.now() - executionTime };
+            const metrics = ctx.performanceMetrics.get(this.id) || {
+                startTime: Date.now() - executionTime
+            };
             metrics.endTime = Date.now();
             ctx.performanceMetrics.set(this.id, metrics);
         }
@@ -176,7 +178,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
             ctx.outputs[`${this.id}_metrics`] = {
                 executionTime,
                 memoryUsed: metadata.memoryUsed || 0,
-                customMetrics: metadata.metrics || {},
+                customMetrics: metadata.metrics || {}
             };
         }
     }
@@ -194,7 +196,7 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
                 nodeId: this.id,
                 error: error.message,
                 timestamp: new Date().toISOString(),
-                executionTime,
+                executionTime
             });
         }
     }
@@ -223,13 +225,13 @@ export class CustomNodeAdapter extends AdvancedRuntimeNode {
             data: {
                 customConfig: this.customConfig,
                 customNodeType: this.customNode.constructor.name,
-                metadata: this.customConfig.metadata,
+                metadata: this.customConfig.metadata
             },
             metadata: {
                 version: this.customConfig.metadata?.version || '1.0.0',
                 created: new Date().toISOString(),
-                lastModified: new Date().toISOString(),
-            },
+                lastModified: new Date().toISOString()
+            }
         };
     }
 }

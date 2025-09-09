@@ -390,7 +390,10 @@
 <p>}</p>
 </code>`<code></p></p><p>Main file reference:</p></p></code>`<code>json</p>
 <p>{</p>
-<p>  "locations": [{ "_meta": { "uiLabel": "Locations" } }, { "$include": "./data/locations.json" }]</p>
+<p>  "locations": [</p>
+<p>    { "_meta": { "uiLabel": "Locations" } },</p>
+<p>    { "$include": "./data/locations.json" }</p>
+<p>  ]</p>
 <p>}</p>
 </code>`<code></p></p><h2>Slot-Based Content Assembly</h2></p><h3>Understanding Slot Taxonomy</h3></p><p>The slot system determines how content pieces are assembled into natural language:</p></p></code>`<code></p>
 <p>subject → style → condition → size → age → purpose → materials →</p>
@@ -410,15 +413,33 @@
 <p>  },</p>
 <p>  "device_materials": {</p>
 <p>    "_meta": { "slot": "materials", "connector": "made of" },</p>
-<p>    "values": ["carbon fiber", "transparent aluminum", "bio-plastic", "quantum glass", "neo-steel"]</p>
+<p>    "values": [</p>
+<p>      "carbon fiber",</p>
+<p>      "transparent aluminum",</p>
+<p>      "bio-plastic",</p>
+<p>      "quantum glass",</p>
+<p>      "neo-steel"</p>
+<p>    ]</p>
 <p>  },</p>
 <p>  "device_displays": {</p>
 <p>    "_meta": { "slot": "displays", "connector": "featuring" },</p>
-<p>    "values": ["holographic readouts", "neural interfaces", "quantum displays", "bio-feedback monitors", "AR overlays"]</p>
+<p>    "values": [</p>
+<p>      "holographic readouts",</p>
+<p>      "neural interfaces",</p>
+<p>      "quantum displays",</p>
+<p>      "bio-feedback monitors",</p>
+<p>      "AR overlays"</p>
+<p>    ]</p>
 <p>  },</p>
 <p>  "device_controls": {</p>
 <p>    "_meta": { "slot": "controls", "connector": "controlled by" },</p>
-<p>    "values": ["gesture recognition", "voice commands", "neural link", "haptic panels", "eye tracking"]</p>
+<p>    "values": [</p>
+<p>      "gesture recognition",</p>
+<p>      "voice commands",</p>
+<p>      "neural link",</p>
+<p>      "haptic panels",</p>
+<p>      "eye tracking"</p>
+<p>    ]</p>
 <p>  }</p>
 <p>}</p>
 </code>`<code></p></p><h2>Style and Tone Matching</h2></p><h3>Analyzing Existing Style</h3></p><h4>Recipe: Style Replication</h4></p></code>`<code>markdown</p>
@@ -477,7 +498,11 @@
 <p>    "type": "getVariable",</p>
 <p>    "key": "basic_desc"</p>
 <p>  },</p>
-<p>  "details": ["[detail1]", "[detail1] and [detail2]", "[detail1], [detail2], and [detail3]"]</p>
+<p>  "details": [</p>
+<p>    "[detail1]",</p>
+<p>    "[detail1] and [detail2]",</p>
+<p>    "[detail1], [detail2], and [detail3]"</p>
+<p>  ]</p>
 <p>}</p>
 </code>`<code></p></p><h2>Best Practices for LLM Expansion</h2></p><h3>Do's</h3></p><p>1. <strong>Provide Clear Context</strong>: Always include theme, style, and purpose</p>
 <p>2. <strong>Show Examples</strong>: Include 3-5 existing entries for pattern matching</p>
