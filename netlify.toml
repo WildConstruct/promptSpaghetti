@@ -11,8 +11,8 @@
   NPM_CONFIG_LEGACY_PEER_DEPS = "true"
   # Skip Netlify's automatic dependency installation
   # NPM_FLAGS removed
-  # Production API URL - Update this to your actual API endpoint
-  VITE_API_URL = "https://api.promptscape.app"
+  # In production, keep client calls relative and use Netlify redirects below
+  # If you prefer absolute API calls, set VITE_API_URL in the Netlify UI instead.
   # Enable analytics in production
   VITE_ANALYTICS_ENABLED = "true"
   # Disable debug mode in production
@@ -69,3 +69,17 @@
   port = 3000
   targetPort = 3000
   framework = "#custom"
+
+# Proxy API calls to the backend (Option A)
+[[redirects]]
+  from = "/api/*"
+  to = "http://ps.wildconstruct.com:8000/api/:splat"
+  status = 200
+  force = true
+
+# Optional: expose backend admin via app domain (ensure backend auth!)
+[[redirects]]
+  from = "/admin/*"
+  to = "http://ps.wildconstruct.com:8000/admin/:splat"
+  status = 200
+  force = true
