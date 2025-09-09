@@ -29,6 +29,12 @@
     },
     "api/deployment-gate.js": {
       "maxDuration": 30
+    },
+    "api/admin.js": {
+      "maxDuration": 10
+    },
+    "api/admin-config.js": {
+      "maxDuration": 10
     }
   },
   "env": {
