@@ -1,48 +1,10 @@
 {
-  "version": 2,
-  "name": "promptscape-graph",
-  "builds": [
-    {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/$1"
-    }
-  ],
+  "buildCommand": "mkdir -p public && echo '<!DOCTYPE html><html><body><h1>API Server</h1><p>Visit <a href=\"/api/admin\">/api/admin</a> for admin panel</p></body></html>' > public/index.html",
+  "installCommand": "echo 'Skipping install for API-only deployment'",
+  "outputDirectory": "public",
   "functions": {
-    "api/preview.js": {
+    "api/*.js": {
       "maxDuration": 30
-    },
-    "api/export.js": {
-      "maxDuration": 30
-    },
-    "api/deployment-gate.js": {
-      "maxDuration": 30
-    },
-    "api/admin.js": {
-      "maxDuration": 10
-    },
-    "api/admin-config.js": {
-      "maxDuration": 10
-    }
-  },
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
     }
   }
 }

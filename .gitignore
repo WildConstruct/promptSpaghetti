@@ -45,3 +45,4 @@ assets/generated/
 asset-gen
 # Ignore stray Windows device filename artifact
 nul
+.vercel

@@ -44,7 +44,8 @@
       "Read(c:\\Users\\Owner\\Pictures\\Screenshots/**)",
       "Bash(PORT=8002 npx ts-node src/index-minimal.ts)",
       "Bash(taskkill:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(vercel:*)"
     ],
     "deny": [],
     "ask": [],

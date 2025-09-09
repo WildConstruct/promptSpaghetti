@@ -63,7 +63,6 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "prepare": "husky install",
     "pre-commit": "lint-staged",
     "lint:fix": "node scripts/fix-lint-errors.js",
     "test:docs": "jest tests/documentation --testPathPattern=\"docs\"",
