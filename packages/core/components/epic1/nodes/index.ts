@@ -1,4 +1,5 @@
 // Epic 1 Custom React Flow Nodes - Consolidated version
+// Source of truth for WeightedChoice: EnhancedBranchingNode (aliased as WeightedChoiceNode)
 
 // Import the components
 import { BaseEditableNode } from './BaseEditableNode';
@@ -23,7 +24,8 @@ export type {
 export { TextBlockNode };
 export type { TextBlockNodeData } from './TextBlockNode';
 
-export { EnhancedBranchingNode as WeightedChoiceNode };
+export { EnhancedBranchingNode };
+export { EnhancedBranchingNode as WeightedChoiceNode }; // Alias for compatibility
 export type {
   EnhancedBranchingNodeData as WeightedChoiceNodeData,
   WeightedOption
@@ -55,7 +57,7 @@ export { GroupNode };
 // Now we can safely create the node type mapping
 export const epic1NodeTypes = {
   textBlock: TextBlockNode,
-  weightedChoice: EnhancedBranchingNode, // Use EnhancedBranchingNode with proper handle logic
+  weightedChoice: EnhancedBranchingNode, // Use EnhancedBranchingNode (modern UI with Epic 2 integration)
   concat: ConcatNode,
   variable: VariableNode,
   setVariable: VariableNode,

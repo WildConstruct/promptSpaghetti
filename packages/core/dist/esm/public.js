@@ -5,3 +5,7 @@ export { AdvancedRuntimeNode } from './runtime';
 // export * from './utils/index';
 // Export specific utils that are needed by client
 export { readPsg, writePsg, fromLegacyGraph } from './utils/psgCodec';
+// Epic 2 LLM components and services
+export { LLMToggle } from './components/LLMToggle/LLMToggle';
+export { LLMConfigDialog } from './components/LLMConfigDialog/LLMConfigDialog';
+export { SimpleLLMService, getLLMService } from './services/SimpleLLMService';

@@ -1,5 +1,78 @@
 /* WeightedChoice Node Styles */
 
+/* Intelligent Features Styling */
+.epic1-intelligent-controls {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px dashed rgba(59, 130, 246, 0.2);
+  border-radius: 6px;
+}
+
+.epic1-suggestion-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.epic1-suggestion-buttons .populate-choices-btn,
+.epic1-suggestion-buttons .optimize-weights-btn {
+  flex: 1;
+  min-width: 120px;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.epic1-suggestion-buttons .populate-choices-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.epic1-suggestion-buttons .populate-choices-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.epic1-suggestion-buttons .optimize-weights-btn {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.epic1-suggestion-buttons .optimize-weights-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(245, 87, 108, 0.3);
+}
+
+.epic1-intelligent-controls .inspiration-prompt {
+  text-align: center;
+}
+
+.epic1-intelligent-controls .inspiration-btn {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.epic1-intelligent-controls .inspiration-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(250, 112, 154, 0.3);
+}
+
 /* Branch toggle button */
 .epic1-branch-toggle {
   width: 24px;

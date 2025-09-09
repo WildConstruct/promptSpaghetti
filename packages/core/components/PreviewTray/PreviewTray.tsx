@@ -3,6 +3,7 @@ import { PreviewResult } from '../epic1/contexts/PreviewContext';
 import { usePreviewTrayStore } from '../../stores/previewTrayStore';
 import { usePreviewTrayKeyboardShortcuts } from './useKeyboardShortcuts';
 import { VirtualResultsList } from './VirtualResultsList';
+import { LLMToggle } from '../LLMToggle/LLMToggle';
 import './PreviewTray.css';
 
 export interface PreviewTrayProps {
@@ -31,6 +32,10 @@ export interface PreviewTrayProps {
    * Do not pass overlay={true} in Epic1 contexts.
    */
   overlay?: boolean;
+  /** LLM mode settings */
+  llmMode?: 'standard' | 'llm-enhanced';
+  onLLMModeChange?: (mode: 'standard' | 'llm-enhanced') => void;
+  onLLMConfigClick?: () => void;
 }
 
 const TRAY_MIN_HEIGHT = 100;
@@ -53,6 +58,9 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
   virtualizeThreshold = 100,
   resizable = true,
   overlay = false,
+  llmMode = 'standard',
+  onLLMModeChange,
+  onLLMConfigClick,
 }) => {
   console.log('[PreviewTray] Rendering with results:', results);
   console.log('[PreviewTray] Seeds:', seeds);
@@ -266,6 +274,15 @@ export const PreviewTray: React.FC<PreviewTrayProps> = ({
             </span>
           )}
         </div>
+        
+        {/* LLM Mode Toggle */}
+        <div style={{ marginLeft: 'auto', marginRight: '12px' }}>
+          <LLMToggle
+            onModeChange={onLLMModeChange}
+            onConfigClick={onLLMConfigClick}
+          />
+        </div>
+        
         <div className="preview-tray-controls">
           <button 
             className="tray-control-btn minimize"

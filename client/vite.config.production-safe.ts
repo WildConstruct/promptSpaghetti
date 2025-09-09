@@ -37,10 +37,25 @@ export default defineConfig({
     strictPort: true,
   },
   resolve: {
-    // No alias needed in production - core files are local
+    alias: {
+      '@promptscape/core': path.resolve(__dirname, '../packages/core'),
+      '@prompt/asset-browser': path.resolve(
+        __dirname,
+        '../packages/asset-browser/src'
+      ),
+      'openai': path.resolve(__dirname, './src/shims/openai.ts'),
+      'openai/shims/node': path.resolve(__dirname, './src/shims/openai-shim-node.ts'),
+      'openai/_shims/node-runtime.mjs': path.resolve(__dirname, './src/shims/openai-shim-node.ts'),
+      '@promptscape/core/services/llm': path.resolve(__dirname, './src/shims/llm-service.ts'),
+      '@promptscape/core/services/llm/LLMService': path.resolve(__dirname, './src/shims/llm-service.ts'),
+      '@promptscape/core/services/SimpleLLMService': path.resolve(__dirname, './src/shims/llm-service.ts'),
+      [path.resolve(__dirname, '../packages/core/services/llm/LLMService.ts')]: path.resolve(__dirname, './src/shims/llm-service.ts'),
+      [path.resolve(__dirname, '../packages/core/services/SimpleLLMService.ts')]: path.resolve(__dirname, './src/shims/llm-service.ts'),
+    }
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'reactflow', 'zod', 'zustand'],
+    exclude: ['openai'],
     esbuildOptions: {
       // Allow overwriting CommonJS variables
       define: {

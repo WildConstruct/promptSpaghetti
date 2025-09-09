@@ -101,6 +101,16 @@ export class DragPerformanceMonitor {
     
     // Report to analytics
     this.reportToAnalytics(dragId, event, duration, true);
+    // Also emit perf_violation for dashboards expecting this event name
+    if (typeof window !== 'undefined' && (window as any).analyticsReporter) {
+      (window as any).analyticsReporter.track('perf_violation', {
+        dragId,
+        event,
+        duration,
+        target,
+        timestamp: Date.now()
+      });
+    }
     
     // Store violation for reporting
     const metrics = this.metrics.get(dragId);

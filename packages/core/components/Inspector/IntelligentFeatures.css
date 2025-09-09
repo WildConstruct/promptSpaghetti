@@ -7,6 +7,72 @@
   border-radius: 6px;
 }
 
+/* Count Prompt */
+.count-prompt {
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.count-prompt-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.count-prompt-content label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.count-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.count-input {
+  width: 80px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+}
+
+.count-submit-btn,
+.count-cancel-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.count-submit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.count-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.count-cancel-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #a0a0a0;
+}
+
+.count-cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
 /* Buttons */
 .populate-choices-btn,
 .optimize-weights-btn,

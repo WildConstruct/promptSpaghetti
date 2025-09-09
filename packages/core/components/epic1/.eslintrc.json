@@ -1,0 +1,20 @@
+{
+  "root": false,
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          "**/_quarantined/**",
+          "**/Epic1GraphEditorFinal*"
+        ],
+        "paths": [
+          {
+            "name": "./_quarantined/Epic1GraphEditorFinal.quarantined",
+            "message": "Do not import quarantined editor — use Epic1GraphEditor (Monolithic)."
+          }
+        ]
+      }
+    ]
+  }
+}

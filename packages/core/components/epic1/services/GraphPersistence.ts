@@ -143,6 +143,23 @@ export class GraphPersistence {
   }
 
   /**
+   * Pop last history snapshot (undo)
+   */
+  static popHistory(): { nodes: Node<EditableNodeData>[]; edges: Edge[] } | null {
+    try {
+      const historyStr = localStorage.getItem(HISTORY_KEY);
+      const history = historyStr ? JSON.parse(historyStr) : [];
+      if (!history.length) return null;
+      const last = history.pop();
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      return { nodes: last.nodes, edges: last.edges };
+    } catch (error) {
+      console.error('GraphPersistence: Failed to pop history:', error);
+      return null;
+    }
+  }
+
+  /**
    * Clear all saved data
    */
   static clearAll(): void {

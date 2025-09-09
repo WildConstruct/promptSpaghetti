@@ -12,16 +12,14 @@ interface ExecutionContext {
   variables: Record<string, any>;
   seed: number;
   rng: seedrandom.PRNG;
-
-
-
+}
 
 /**
  * Simple analytics stub
  */
 export function initializeAnalytics(): void {
   console.log('Analytics initialized (basic mode)');
-
+}
 
 /**
  * Basic graph executor with support for core node types
@@ -29,8 +27,7 @@ export function initializeAnalytics(): void {
 export async function executeGraph(graph: Graph, sessionId?: string, userId?: number): Promise<{
   outputs: string[];
   executionPath?: any;
-> {
-
+}> {
   console.log(`[BASIC] Executing graph with ${graph.nodes?.length || 0} nodes`);
   
   // Create execution context
@@ -50,7 +47,8 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
     nodeMap.set(node.id, node);
     if (node.type === 'Output') {
       outputNodes.push(node);
-
+    }
+  }
 
   
   // Memoization for node results
@@ -64,24 +62,23 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
     // Prevent infinite recursion
     if (depth > 100) {
       throw new Error(`Maximum execution depth exceeded at node ${nodeId}`);
-
-    
+    }    
     // Return memoized result if available
     if (memo.has(nodeId)) {
       return memo.get(nodeId);
-
-    
+    }    
     const node = nodeMap.get(nodeId);
     if (!node) {
       throw new Error(`Node ${nodeId} not found`);
-
-    
+    }    
     // Execute input nodes first
     const inputValues: any[] = [];
     if (node.inputs && node.inputs.length > 0) {
       for (const inputId of node.inputs) {
         const inputValue = await executeNode(inputId, depth + 1);
         inputValues.push(inputValue);
+      }
+    }
 
 
     
@@ -104,9 +101,9 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         const choices = (node as any).choices || [];
         if (choices.length === 0) {
           result = '';
- else if (choices.length === 1) {
+        } else if (choices.length === 1) {
           result = typeof choices[0] === 'string' ? choices[0] : choices[0].value;
- else {
+        } else {
           // Extract weights and values
           const items = choices.map((choice: any) => ({
             value: typeof choice === 'string' ? choice : choice.value,
@@ -125,14 +122,13 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
             if (random <= currentWeight) {
               result = item.value;
               break;
-
-
-          
+            }
+          }          
           // Fallback to first item
           if (result === undefined) {
             result = items[0].value;
-
-
+          }
+        }
         break;
         
       case 'SetVariable':
@@ -141,6 +137,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         const value = (node as any).value || inputValues[0] || '';
         if (key) {
           context.variables[key] = value;
+        }
 
         result = value;
         break;
@@ -160,31 +157,29 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         console.warn(`Unsupported node type: ${node.type}, returning empty string`);
         result = '';
         break;
-
-    
+    }    
     // Memoize the result
     memo.set(nodeId, result);
     return result;
-
-  
+  }  
   // Execute all output nodes
   const outputs: string[] = [];
   
   if (outputNodes.length === 0) {
     // No output nodes, return a message
     outputs.push('Graph has no output nodes');
- else {
+  } else {
     // Execute each output node
     for (const outputNode of outputNodes) {
       try {
         const output = await executeNode(outputNode.id);
         outputs.push(String(output || ''));
- catch (error) {
+      } catch (error) {
         console.error(`Error executing output node ${outputNode.id}:`, error);
         outputs.push(`Error: ${error.message}`);
-
-
-
+      }
+    }
+  }
   
   return {
     outputs,
@@ -193,14 +188,14 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       outputCount: outputs.length,
       seed,
       variables: context.variables
-
+    }
   };
-
+}
 
 /**
  * Legacy wrapper for backward compatibility
  */
 export async function executeGraphLegacy(graph: Graph, sessionId?: string, userId?: number): Promise<string[]> {
-
   const result = await executeGraph(graph, sessionId, userId);
   return result.outputs;
+}

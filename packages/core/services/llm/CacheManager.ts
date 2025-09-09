@@ -1,7 +1,17 @@
 // LRU Cache Manager for LLM Responses
 
-import { createHash } from 'crypto';
 import { CacheEntry, LLMRequest, LLMResponse } from './types';
+
+// Browser-compatible hash function
+function simpleHash(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return Math.abs(hash).toString(36);
+}
 
 export class CacheManager {
   private cache: Map<string, CacheEntry> = new Map();
@@ -24,9 +34,7 @@ export class CacheManager {
       taskType: request.taskType,
     };
     
-    const hash = createHash('sha256');
-    hash.update(JSON.stringify(keyData));
-    return hash.digest('hex');
+    return simpleHash(JSON.stringify(keyData));
   }
 
   get(request: LLMRequest, model: string): LLMResponse | null {

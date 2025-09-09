@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { simplePromptParser, PromptAnalysis, GeneratedNodeInternal, GeneratedNode, NodeMapping } from '../../lib/simplePromptParser';
 import { reconcileAnalysis } from '../../lib/analysisReconciler';
+import LLMService from '../../shims/llm-service';
 import './PromptDissector.css';
 import { TextSelectionModal, TextSelection } from './TextSelectionModal';
+import GrokParsingLoader from './GrokParsingLoader';
 
 interface PromptDissectorProps {
   value: string;
@@ -13,6 +15,12 @@ interface PromptDissectorProps {
   onSelectNode?: (nodeId: string) => void;
   placeholder?: string;
   focusOnValueChange?: boolean;
+}
+
+interface CaretPosition {
+  index: number;
+  x: number;
+  y: number;
 }
 
 interface HighlightSegment {
@@ -48,6 +56,19 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   // State declarations (must come before any useMemo that depends on them)
   const [analysis, setAnalysis] = useState<PromptAnalysis | null>(null);
   const [highlightSegments, setHighlightSegments] = useState<HighlightSegment[]>([]);
+  const [llmMode, setLlmMode] = useState<'standard' | 'llm-enhanced'>('standard');
+  const parsedResultsRef = useRef<{
+    standard: { text: string; analysis: PromptAnalysis } | null;
+    'llm-enhanced': { text: string; analysis: PromptAnalysis } | null;
+  }>({ standard: null, 'llm-enhanced': null });
+  const [isLLMParsing, setIsLLMParsing] = useState(false);
+  // Wrap parent callback to avoid setState during render warnings
+  const safeOnAnalysisComplete = useCallback((a: PromptAnalysis) => {
+    Promise.resolve().then(() => onAnalysisComplete(a));
+  }, [onAnalysisComplete]);
+  
+  // Debug wrapper for setIsLLMParsing
+  const [caretPosition, setCaretPosition] = useState<CaretPosition | null>(null);
   
   // Utility to convert hex color to rgba with alpha - memoized
   const hexToRgba = useCallback((hex: string, alpha = 0.6) => {
@@ -101,21 +122,21 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   // Debug: mount
   useEffect(() => {
     // eslint-disable-next-line no-console
-    console.log('[PromptDissector] mounted');
+    // console.log('[PromptDissector] mounted');
     // Extra: log toolbar rect if present
     const el = toolbarRef.current;
     if (el) {
       const rect = el.getBoundingClientRect();
       const styles = window.getComputedStyle(el);
       // eslint-disable-next-line no-console
-      console.log('[PromptDissector] toolbar rect', rect, {
-        position: styles.position,
-        zIndex: styles.zIndex,
-        pointerEvents: styles.pointerEvents,
-        display: styles.display,
-        visibility: styles.visibility,
-        opacity: styles.opacity,
-      });
+      // console.log('[PromptDissector] toolbar rect', rect, {
+      //   position: styles.position,
+      //   zIndex: styles.zIndex,
+      //   pointerEvents: styles.pointerEvents,
+      //   display: styles.display,
+      //   visibility: styles.visibility,
+      //   opacity: styles.opacity,
+      // });
     }
   }, []);
 
@@ -142,6 +163,141 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     }
   }, [value, focusOnValueChange]);
 
+  // Helper function to convert analysis to highlight segments
+  const convertAnalysisToSegments = useCallback((analysis: PromptAnalysis, text: string): HighlightSegment[] => {
+    const segments: HighlightSegment[] = [];
+    let lastEnd = 0;
+    const sortedMappings = [...analysis.mappings].sort((a, b) => a.startIndex - b.startIndex);
+    
+    sortedMappings.forEach((mapping, index) => {
+      // Add non-highlighted text before this mapping
+      if (mapping.startIndex > lastEnd) {
+        segments.push({
+          text: text.slice(lastEnd, mapping.startIndex),
+          startIndex: lastEnd,
+          endIndex: mapping.startIndex,
+        });
+      }
+      
+      // Add highlighted segment
+      segments.push({
+        text: text.slice(mapping.startIndex, mapping.endIndex),
+        startIndex: mapping.startIndex,
+        endIndex: mapping.endIndex,
+        nodeId: mapping.nodeId,
+        color: mapping.highlightColor || HIGHLIGHT_COLORS[index % HIGHLIGHT_COLORS.length],
+        isSelected: false,
+      });
+      
+      lastEnd = mapping.endIndex;
+    });
+    
+    // Add any remaining text
+    if (lastEnd < text.length) {
+      segments.push({
+        text: text.slice(lastEnd),
+        startIndex: lastEnd,
+        endIndex: text.length,
+      });
+    }
+    
+    return segments;
+  }, []);
+
+  // LLM service adapter (browser -> server)
+  const llmServiceRef = useRef(new LLMService({}));
+
+  // Modular parsing function that can be reused
+  const performParse = useCallback(async (text: string, mode: 'standard' | 'llm-enhanced', showLoading: boolean = true) => {
+    const startTime = performance.now();
+    const charCount = text.length;
+    
+    let newAnalysis: PromptAnalysis;
+    
+    if (mode === 'llm-enhanced') {
+      if (showLoading) {
+        setIsLLMParsing(true);
+      }
+      const result = await llmServiceRef.current.parse(text, { mode: 'llm-enhanced' });
+      
+      // Create segments from the nodes
+      const segments = result.nodes.filter(n => n.type !== 'output').map(node => ({
+        text: node.data.content || node.data.label || '',
+        type: node.type
+      }));
+      
+      // Create mappings with actual text positions
+      let currentPos = 0;
+      const mappings = result.nodes.filter(n => n.type !== 'output').map((node, idx) => {
+        const nodeText = node.data.content || node.data.label || '';
+        // Try to find this text in the original prompt
+        let startIdx = text.indexOf(nodeText, currentPos);
+        if (startIdx === -1) {
+          // If exact text not found, use approximate positioning
+          startIdx = currentPos;
+        }
+        const endIdx = startIdx + nodeText.length;
+        currentPos = endIdx;
+        
+        return {
+          nodeId: node.id,
+          startIndex: startIdx,
+          endIndex: endIdx,
+          highlightColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4'][idx % 4]
+        };
+      });
+      
+      // Convert LLM result to expected format
+      newAnalysis = {
+        segments: segments,
+        nodes: result.nodes.map(node => ({
+          node: {
+            id: node.id,
+            nodeType: node.type === 'weightedChoice' ? 'Choice' : 
+                     node.type === 'variable' ? 'Variable' : 
+                     node.type === 'output' ? 'Output' : 'Text',
+            content: node.data.content || node.data.label || '',
+            metadata: node.data.metadata,
+            getPreviewText: () => node.data.content || node.data.label || ''
+          }
+        })),
+        edges: result.edges,
+        mappings: mappings,
+        llmMetadata: result.metadata,
+        rawPrompt: text
+      };
+      if (showLoading) {
+        setIsLLMParsing(false);
+      }
+    } else {
+      // Use standard parser
+      newAnalysis = parserRef.current.parse(text);
+    }
+    
+    const endTime = performance.now();
+    const duration = endTime - startTime;
+    
+    // console.log('[PromptDissector] parsed', {
+    //   mode,
+    //   textLength: text.length,
+    //   segments: newAnalysis.segments.length,
+    //   nodes: newAnalysis.nodes.length,
+    //   mappings: newAnalysis.mappings.length,
+        //   performanceMs: duration.toFixed(2),
+    //   charsPerMs: (charCount / duration).toFixed(2),
+    // });
+    
+    // Store the parsed results for this mode
+    parsedResultsRef.current[mode] = { text, analysis: newAnalysis };
+    
+    // Performance warning for large prompts
+    if (charCount > 2000 && duration > 500) {
+      console.warn(`[PromptDissector] Performance warning: ${charCount} chars took ${duration.toFixed(2)}ms (target: <500ms for 2-3k chars)`);
+    }
+    
+    return newAnalysis;
+  }, []);
+
   // Parse the prompt with debouncing
   useEffect(() => {
     if (isEditMode) {
@@ -164,34 +320,30 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       return;
     }
 
-    debounceTimerRef.current = setTimeout(() => {
-      const startTime = performance.now();
-      const charCount = value.length;
-      
+    // Check if we already have results for this mode and text
+    const existingResult = parsedResultsRef.current[llmMode];
+    const shouldParse = !existingResult || existingResult.text !== value;
+    
+    if (!shouldParse) {
+      console.log('[Parse Skip] Already have results for', llmMode, 'mode with this text');
+      return;
+    }
+
+    debounceTimerRef.current = setTimeout(async () => {
       try {
-        onAnalysisStart?.();
-        const newAnalysis = parserRef.current.parse(value);
-        setAnalysis(newAnalysis);
-        setHasBeenAnalyzed(true);
-        onAnalysisComplete(newAnalysis);
-        
-        const endTime = performance.now();
-        const duration = endTime - startTime;
-        
-        // eslint-disable-next-line no-console
-        console.log('[PromptDissector] parsed', {
+        console.log('[PromptDissector] parsing', {
           textLength: value.length,
-          segments: newAnalysis.segments.length,
-          nodes: newAnalysis.nodes.length,
-          mappings: newAnalysis.mappings.length,
-          performanceMs: duration.toFixed(2),
-          charsPerMs: (charCount / duration).toFixed(2),
+          mode: llmMode,
         });
         
-        // Performance warning for large prompts
-        if (charCount > 2000 && duration > 500) {
-          console.warn(`[PromptDissector] Performance warning: ${charCount} chars took ${duration.toFixed(2)}ms (target: <500ms for 2-3k chars)`);
-        }
+        onAnalysisStart?.();
+        
+        // Use our modular parsing function
+        const newAnalysis = await performParse(value, llmMode);
+        
+        setAnalysis(newAnalysis);
+        setHasBeenAnalyzed(true);
+        safeOnAnalysisComplete(newAnalysis);
         
         // Convert analysis to highlight segments
         const segments: HighlightSegment[] = [];
@@ -253,7 +405,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [value, onAnalysisComplete, isEditMode, hasBeenAnalyzed]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [value, onAnalysisComplete, isEditMode, hasBeenAnalyzed, llmMode, performParse]);
 
   // Handle text change - already optimized with useCallback
   const handleChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -280,9 +432,22 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   }, []);
 
   // Locally select a segment - optimized with useCallback
-  const handleSegmentClickLocal = useCallback((nodeId: string | null, segIndex: number) => {
+  const handleSegmentClickLocal = useCallback((nodeId: string | null, segIndex: number, event?: React.MouseEvent) => {
     if (!nodeId) return;
-    setHighlightSegments((prev) => prev.map((s, i) => s.nodeId ? { ...s, isSelected: i === segIndex } : s));
+    
+    // Check if Ctrl/Cmd key is held for multi-selection
+    const isMultiSelect = event && (event.ctrlKey || event.metaKey);
+    
+    setHighlightSegments((prev) => prev.map((s, i) => {
+      if (!s.nodeId) return s;
+      if (isMultiSelect) {
+        // Toggle selection for clicked segment, keep others
+        return i === segIndex ? { ...s, isSelected: !s.isSelected } : s;
+      } else {
+        // Single selection - clear others
+        return { ...s, isSelected: i === segIndex };
+      }
+    }));
     setSelectedSegIndex(segIndex);
     setHoveredNodeId(nodeId);
     onSelectNode?.(nodeId);
@@ -379,7 +544,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           const outputNode = filteredNodes.find((n) => n.node.nodeType === 'Output');
           const orderedNodes = outputNode ? [...nonOutput, outputNode] : nonOutput;
           const updated: PromptAnalysis = { ...prevAnalysis, nodes: orderedNodes, mappings: filteredMappings };
-          onAnalysisComplete(updated);
+          safeOnAnalysisComplete(updated);
           return updated;
         });
       }
@@ -402,7 +567,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       ),
     } as PromptAnalysis;
     setAnalysis(updated);
-    onAnalysisComplete(updated);
+    safeOnAnalysisComplete(updated);
     // reflect selection visually
     setHighlightSegments((prev) => prev.map((s, i) => s.nodeId ? { ...s, isSelected: i === effectiveIndex } : s));
     setSelectedSegIndex(effectiveIndex);
@@ -511,7 +676,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       const outputNode = updatedNodes.find((n) => n.node.nodeType === 'Output');
       const orderedNodes = outputNode ? [...nonOutput, outputNode] : nonOutput;
       const updated: PromptAnalysis = { ...prev, nodes: orderedNodes, mappings: updatedMappings };
-      onAnalysisComplete(updated);
+      safeOnAnalysisComplete(updated);
       return updated;
     });
   }, [highlightSegments, onAnalysisComplete, selectedSegIndex, value]);
@@ -555,14 +720,38 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
   // Split at cursor for plain segments only (safe minimal impl)
   const handleSplitAtCursor = useCallback(() => {
     // eslint-disable-next-line no-console
-    console.log('[PromptDissector] handleSplitAtCursor');
-    const el = textareaRef.current;
-    if (!el) return;
-    const cursor = el.selectionStart ?? 0;
-    if (cursor <= 0 || cursor >= value.length) return;
+    console.log('[PromptDissector] handleSplitAtCursor called');
+    
+    // Use caret position if available (AI-Enhanced mode), otherwise use textarea cursor
+    let cursor = 0;
+    if (llmMode === 'llm-enhanced' && caretPosition) {
+      cursor = caretPosition.index;
+      console.log('[Split Debug] Using caretPosition:', cursor);
+    } else if (textareaRef.current && textareaRef.current.selectionStart !== null) {
+      cursor = textareaRef.current.selectionStart;
+      console.log('[Split Debug] Using textarea cursor:', cursor);
+    } else {
+      console.log('[Split Debug] No cursor position available. CaretPos:', caretPosition, 'TextareaRef:', textareaRef.current);
+      return;
+    }
+    
+    console.log('[Split Debug] Cursor position:', cursor, 'Value length:', value.length);
+    if (cursor <= 0 || cursor >= value.length) {
+      console.log('[Split Debug] Cursor out of range');
+      return;
+    }
 
     setHighlightSegments((prev) => {
+      console.log('[Split Debug] Looking for segment containing cursor:', cursor);
+      console.log('[Split Debug] Segments:', prev.map(s => ({ 
+        text: s.text.substring(0, 20) + '...', 
+        start: s.startIndex, 
+        end: s.endIndex,
+        hasNode: !!s.nodeId 
+      })));
+      
       const idx = prev.findIndex(seg => cursor > seg.startIndex && cursor < seg.endIndex);
+      console.log('[Split Debug] Found segment at index:', idx);
       if (idx < 0) return prev;
       const target = prev[idx];
 
@@ -636,7 +825,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           const outputNode = updatedNodes.find(n => n.node.nodeType === 'Output');
           const orderedNodes = outputNode ? [...nonOutputNodes, outputNode] : nonOutputNodes;
           const updated: PromptAnalysis = { ...prevAnalysis, nodes: orderedNodes, mappings: updatedMappings };
-          onAnalysisComplete(updated);
+          safeOnAnalysisComplete(updated);
           return updated;
         });
 
@@ -658,12 +847,28 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       const next = [...prev.slice(0, idx), left, right, ...prev.slice(idx + 1)];
       return next;
     });
-  }, [value, onAnalysisComplete]);
+  }, [value, onAnalysisComplete, caretPosition, llmMode]);
 
   // Split selection and create a node mapping via modal
   const handleSplitSelection = useCallback(() => {
     // eslint-disable-next-line no-console
     console.log('[PromptDissector] handleSplitSelection');
+    
+    // In AI-Enhanced mode, use the selected segment if available
+    if (llmMode === 'llm-enhanced' && selectedSegIndex !== null) {
+      const segment = highlightSegments[selectedSegIndex];
+      if (segment) {
+        setSelection({ 
+          start: segment.startIndex, 
+          end: segment.endIndex, 
+          text: segment.text 
+        });
+        setIsModalOpen(true);
+        return;
+      }
+    }
+    
+    // Otherwise use textarea selection
     const el = textareaRef.current;
     if (!el) return;
     const start = el.selectionStart ?? 0;
@@ -671,7 +876,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     if (start === end) return;
     setSelection({ start, end, text: value.slice(start, end) });
     setIsModalOpen(true);
-  }, [value]);
+  }, [value, llmMode, selectedSegIndex, highlightSegments]);
 
   const handleCreateNodeFromSelection = useCallback((nodeTypeValue: string, color: string) => {
     if (!selection) return;
@@ -698,7 +903,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           nodes: [ { node: { id: nodeId, nodeType: (nodeTypeValue === 'choice' ? 'Choice' : nodeTypeValue === 'variable' ? 'Variable' : 'Text'), getPreviewText: () => selection.text } } ],
           mappings: [ { nodeId, startIndex: start, endIndex: end, highlightColor: color } ],
         };
-        onAnalysisComplete(fresh);
+        safeOnAnalysisComplete(fresh);
         return fresh;
       }
 
@@ -746,7 +951,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         const output2 = updatedNodes.find(n => n.node.nodeType === 'Output');
         const ordered2: GeneratedNode[] = output2 ? [...nonOutput2, output2] : nonOutput2;
         const updatedTri: PromptAnalysis = { ...prev, nodes: ordered2, mappings: updatedMappings };
-        onAnalysisComplete(updatedTri);
+        safeOnAnalysisComplete(updatedTri);
         return updatedTri;
       }
 
@@ -774,7 +979,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       const outputNode = baseUpdated.nodes.find(n => n.node.nodeType === 'Output');
       const orderedNodes = outputNode ? [...nonOutputNodes, outputNode] : nonOutputNodes;
       const updated: PromptAnalysis = { ...baseUpdated, nodes: orderedNodes };
-      onAnalysisComplete(updated);
+    safeOnAnalysisComplete(updated);
       return updated;
     });
 
@@ -840,11 +1045,38 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
   // Combine selection into a single mapped segment, merging across boundaries
   const handleCombineSelection = useCallback(() => {
-    const el = textareaRef.current;
-    if (!el) return;
-    const start = el.selectionStart ?? 0;
-    const end = el.selectionEnd ?? 0;
-    if (start === end) return;
+    let start = 0;
+    let end = 0;
+    
+    // In AI-Enhanced mode, check if we have multiple selected segments
+    if (llmMode === 'llm-enhanced') {
+      // Find the range of selected segments
+      const selectedIndices = highlightSegments
+        .map((seg, idx) => seg.isSelected ? idx : -1)
+        .filter(idx => idx >= 0);
+      
+      if (selectedIndices.length > 1) {
+        const firstIdx = selectedIndices[0];
+        const lastIdx = selectedIndices[selectedIndices.length - 1];
+        start = highlightSegments[firstIdx].startIndex;
+        end = highlightSegments[lastIdx].endIndex;
+      } else if (selectedSegIndex !== null) {
+        // Single segment selected
+        const segment = highlightSegments[selectedSegIndex];
+        if (!segment) return;
+        start = segment.startIndex;
+        end = segment.endIndex;
+      } else {
+        return; // No selection
+      }
+    } else {
+      // Standard mode - use textarea selection
+      const el = textareaRef.current;
+      if (!el) return;
+      start = el.selectionStart ?? 0;
+      end = el.selectionEnd ?? 0;
+      if (start === end) return;
+    }
 
     // Determine keepNodeId: prefer mapped segment that contains the start; else first mapped within selection; else new id
     const startMap = analysis?.mappings.find(m => m.startIndex <= start && start < m.endIndex);
@@ -905,7 +1137,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       const output = updatedNodes.find(n => n.node.nodeType === 'Output');
       const ordered = output ? [...nonOutput, output] : nonOutput;
       const updated: PromptAnalysis = { ...prevAnalysis, nodes: ordered, mappings: updatedMappings };
-      onAnalysisComplete(updated);
+      safeOnAnalysisComplete(updated);
       return updated;
     });
 
@@ -954,7 +1186,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       }
       return next.sort((a, b) => a.startIndex - b.startIndex);
     });
-  }, [analysis, onAnalysisComplete, value]);
+  }, [analysis, onAnalysisComplete, value, llmMode, highlightSegments, selectedSegIndex]);
 
   const handleCancelCreate = useCallback(() => {
     setIsModalOpen(false);
@@ -1015,7 +1247,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
       }
       setAnalysis(updated);
       setHasBeenAnalyzed(true);
-      onAnalysisComplete(updated);
+      safeOnAnalysisComplete(updated);
       // rebuild highlights from updated mappings
       const segments: HighlightSegment[] = [];
       let lastEnd = 0;
@@ -1050,33 +1282,67 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     }
   }, [onAnalysisComplete, value]);
 
-  // Keyboard shortcuts for Edit Mode (Escape to cancel, Ctrl+Enter to apply)
+  // Keyboard shortcuts for Edit Mode and Caret navigation
   useEffect(() => {
-    if (!isEditMode) return;
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Escape key to cancel
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        handleCancelEditMode();
-      }
-      // Ctrl+Enter or Cmd+Enter to apply changes
-      else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        handleApplyEditMode();
+      if (isEditMode) {
+        // Escape key to cancel
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          handleCancelEditMode();
+        }
+        // Ctrl+Enter or Cmd+Enter to apply changes
+        else if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          handleApplyEditMode();
+        }
+      } else if (llmMode === 'llm-enhanced' && caretPosition) {
+        // Arrow key navigation for caret in AI-Enhanced mode
+        if (e.key === 'ArrowLeft' && caretPosition.index > 0) {
+          const newIndex = caretPosition.index - 1;
+          // Find the segment containing this index
+          const segment = highlightSegments.find(s => 
+            newIndex >= s.startIndex && newIndex <= s.endIndex
+          );
+          if (segment) {
+            // Calculate new position (simplified - would need actual character measurements)
+            setCaretPosition({
+              index: newIndex,
+              x: caretPosition.x - 10, // Approximate
+              y: caretPosition.y
+            });
+            if (textareaRef.current) {
+              textareaRef.current.setSelectionRange(newIndex, newIndex);
+            }
+          }
+        } else if (e.key === 'ArrowRight' && caretPosition.index < value.length - 1) {
+          const newIndex = caretPosition.index + 1;
+          // Find the segment containing this index
+          const segment = highlightSegments.find(s => 
+            newIndex >= s.startIndex && newIndex <= s.endIndex
+          );
+          if (segment) {
+            // Calculate new position (simplified - would need actual character measurements)
+            setCaretPosition({
+              index: newIndex,
+              x: caretPosition.x + 10, // Approximate
+              y: caretPosition.y
+            });
+            if (textareaRef.current) {
+              textareaRef.current.setSelectionRange(newIndex, newIndex);
+            }
+          }
+        }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isEditMode, handleCancelEditMode, handleApplyEditMode]);
+  }, [isEditMode, handleCancelEditMode, handleApplyEditMode, llmMode, caretPosition, value, highlightSegments]);
 
   return (
-    <>
-    {/* Removed floating button overlay - buttons now inside container */}
-    
     <div className="prompt-dissector">
-      {/* Persistent toolbar placed under section title and above the prompt window */}
+      {/* Persistent toolbar at the top like a word processor */}
       {!isEditMode && (
         <div
           ref={toolbarRef}
@@ -1084,109 +1350,266 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           role="toolbar"
           aria-label="Inline segment tools"
         >
-            {(() => {
-              const firstMappedIndexRender = highlightSegments.findIndex(s => !!s.nodeId);
-              const effectiveIndexRender = selectedSegIndex ?? firstMappedIndexRender;
-              const hasSelectedMapping = effectiveIndexRender >= 0 && !!highlightSegments[effectiveIndexRender]?.nodeId;
-              return (
-                <>
-            <button className="dissector-btn" onClick={handleUndo} title="Undo" disabled={!canUndo}>↶</button>
-            <button className="dissector-btn" onClick={handleRedo} title="Redo" disabled={!canRedo}>↷</button>
-            <div className="dissector-toolbar-sep" />
-            <button className="dissector-btn" onClick={handleSplitAtCursor} title="Split at Cursor">Split</button>
-            <button className="dissector-btn" onClick={handleSplitSelection} title="Split Selection">Split Selection</button>
-            <div className="dissector-toolbar-sep" />
-            <button className="dissector-btn" onClick={handleCombineSelection} title="Combine Selection">Combine</button>
-            <button className="dissector-btn" onClick={handleMergeWithNext} title="Merge with Next">Merge →</button>
-            <div className="dissector-toolbar-sep" />
-            <button 
-              className="dissector-btn" 
-              onClick={() => {
-                // If a segment is selected, edit it; otherwise create new
-                if (selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId) {
-                  // Edit the selected segment - open modal with current segment info
-                  const segment = highlightSegments[selectedSegIndex];
-                  const nodeId = segment.nodeId;
-                  const node = analysis?.nodes.find(n => n.node.id === nodeId);
-                  if (node) {
-                    // Set selection to the segment's text for the modal
-                    setSelection({ 
-                      start: segment.startIndex, 
-                      end: segment.endIndex, 
-                      text: segment.text 
-                    });
-                    setIsModalOpen(true);
-                  }
-                } else {
-                  // Create a new node from current selection or entire text
-                  const el = textareaRef.current;
-                  if (!el && !value.trim()) return;
-                  
-                  if (value.trim() && !hasBeenAnalyzed) {
-                    // Parse the entire text first
-                    const nodeId = `node-${Math.random().toString(36).slice(2, 9)}`;
-                    const newAnalysis: PromptAnalysis = {
-                      segments: [],
-                      nodes: [{ node: { id: nodeId, nodeType: 'Text', getPreviewText: () => value } }],
-                      mappings: [{ nodeId, startIndex: 0, endIndex: value.length, highlightColor: HIGHLIGHT_COLORS[0] }]
-                    };
-                    setAnalysis(newAnalysis);
-                    onAnalysisComplete(newAnalysis);
-                    setHasBeenAnalyzed(true);
-                    
-                    // Build highlight segments
-                    setHighlightSegments([{
-                      text: value,
-                      startIndex: 0,
-                      endIndex: value.length,
-                      nodeId,
-                      color: HIGHLIGHT_COLORS[0],
-                      isSelected: false
-                    }]);
-                  } else if (el) {
-                    const start = el.selectionStart ?? 0;
-                    const end = el.selectionEnd ?? 0;
-                    if (start !== end) {
-                      // Create from selection
-                      setSelection({ start, end, text: value.slice(start, end) });
-                      setIsModalOpen(true);
-                    }
-                  }
-                }
-              }}
-              title={selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId ? "Edit Selected Node" : "Create Node"}
-            >
-              {selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId ? "Edit Node" : "Create Node"}
-            </button>
-            {/* Delete button for selected segment */}
-            {selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId && (
+          {(() => {
+            const firstMappedIndexRender = highlightSegments.findIndex(s => !!s.nodeId);
+            const effectiveIndexRender = selectedSegIndex ?? firstMappedIndexRender;
+            const hasSelectedMapping = effectiveIndexRender >= 0 && !!highlightSegments[effectiveIndexRender]?.nodeId;
+            return (
               <>
+                <button className="dissector-btn" onClick={handleUndo} title="Undo" disabled={!canUndo}>↶</button>
+                <button className="dissector-btn" onClick={handleRedo} title="Redo" disabled={!canRedo}>↷</button>
+                <div className="dissector-toolbar-sep" />
+                <button className="dissector-btn" onClick={handleSplitAtCursor} title="Split at Cursor">Split</button>
+                <button className="dissector-btn" onClick={handleSplitSelection} title="Split Selection">Split Selection</button>
+                <div className="dissector-toolbar-sep" />
+                <button className="dissector-btn" onClick={handleCombineSelection} title="Combine Selection">Combine</button>
+                <button className="dissector-btn" onClick={handleMergeWithNext} title="Merge with Next">Merge →</button>
                 <div className="dissector-toolbar-sep" />
                 <button 
-                  className="dissector-btn"
+                  className="dissector-btn" 
                   onClick={() => {
-                    if (window.confirm('Delete this segment mapping?')) {
-                      handleDeleteSegment(selectedSegIndex);
+                    // If a segment is selected, edit it; otherwise create new
+                    if (selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId) {
+                      // Edit the selected segment - open modal with current segment info
+                      const segment = highlightSegments[selectedSegIndex];
+                      const nodeId = segment.nodeId;
+                      const node = analysis?.nodes.find(n => n.node.id === nodeId);
+                      if (node) {
+                        // Set selection to the segment's text for the modal
+                        setSelection({ 
+                          start: segment.startIndex, 
+                          end: segment.endIndex, 
+                          text: segment.text 
+                        });
+                        setIsModalOpen(true);
+                      }
+                    } else {
+                      // Create a new node from current selection or entire text
+                      const el = textareaRef.current;
+                      if (!el && !value.trim()) return;
+                      
+                      if (value.trim() && !hasBeenAnalyzed) {
+                        // Parse the entire text first
+                        const nodeId = `node-${Math.random().toString(36).slice(2, 9)}`;
+                        const newAnalysis: PromptAnalysis = {
+                          segments: [],
+                          nodes: [{ node: { id: nodeId, nodeType: 'Text', getPreviewText: () => value } }],
+                          mappings: [{ nodeId, startIndex: 0, endIndex: value.length, highlightColor: HIGHLIGHT_COLORS[0] }]
+                        };
+                        setAnalysis(newAnalysis);
+                        safeOnAnalysisComplete(newAnalysis);
+                        setHasBeenAnalyzed(true);
+                        
+                        // Build highlight segments
+                        setHighlightSegments([{
+                          text: value,
+                          startIndex: 0,
+                          endIndex: value.length,
+                          nodeId,
+                          color: HIGHLIGHT_COLORS[0],
+                          isSelected: false
+                        }]);
+                      } else if (el) {
+                        const start = el.selectionStart ?? 0;
+                        const end = el.selectionEnd ?? 0;
+                        if (start !== end) {
+                          // Create from selection
+                          setSelection({ start, end, text: value.slice(start, end) });
+                          setIsModalOpen(true);
+                        }
+                      }
                     }
                   }}
-                  title="Delete Selected Segment"
-                  style={{ color: '#ff6b6b' }}
+                  title={selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId ? "Edit Selected Node" : "Create Node"}
                 >
-                  Delete
+                  {selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId ? "Edit Node" : "Create Node"}
                 </button>
+                {/* Delete button for selected segment */}
+                {selectedSegIndex !== null && highlightSegments[selectedSegIndex]?.nodeId && (
+                  <>
+                    <div className="dissector-toolbar-sep" />
+                    <button 
+                      className="dissector-btn"
+                      onClick={() => {
+                        if (window.confirm('Delete this segment mapping?')) {
+                          handleDeleteSegment(selectedSegIndex);
+                        }
+                      }}
+                      title="Delete Selected Segment"
+                      style={{ color: '#ff6b6b' }}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
               </>
-            )}
-                </>
-              );
-            })()}
+            );
+          })()}
         </div>
       )}
-
-      {/* Removed selected node preview as requested */}
-
+      
+      {/* Tab interface integrated with text area */}
+      <div className="dissector-tabs-container">
+        <div className="dissector-tabs">
+        <button 
+          className={`dissector-tab ${llmMode === 'standard' ? 'active' : ''}`}
+          onClick={async () => {
+            if (llmMode !== 'standard') {
+              setLlmMode('standard');
+              // Check if we have results for standard mode with this text
+              if (value && hasBeenAnalyzed && !isEditMode) {
+                const existingStandard = parsedResultsRef.current.standard;
+                const shouldReparse = !existingStandard || existingStandard.text !== value;
+                if (shouldReparse) {
+                  console.log('[Tab Click] Re-parsing for Standard mode');
+                  // Trigger re-parse with standard mode
+                  const newAnalysis = await performParse(value, 'standard', false);
+                  setAnalysis(newAnalysis);
+                  safeOnAnalysisComplete(newAnalysis);
+                  
+                  // Update highlight segments
+                  const segments: HighlightSegment[] = [];
+                  let lastEnd = 0;
+                  const sortedMappings = [...newAnalysis.mappings].sort((a, b) => a.startIndex - b.startIndex);
+                  
+                  sortedMappings.forEach((mapping, index) => {
+                    if (mapping.startIndex > lastEnd) {
+                      segments.push({
+                        text: value.slice(lastEnd, mapping.startIndex),
+                        startIndex: lastEnd,
+                        endIndex: mapping.startIndex,
+                      });
+                    }
+                    segments.push({
+                      text: value.slice(mapping.startIndex, mapping.endIndex),
+                      startIndex: mapping.startIndex,
+                      endIndex: mapping.endIndex,
+                      nodeId: mapping.nodeId,
+                      color: mapping.highlightColor || HIGHLIGHT_COLORS[index % HIGHLIGHT_COLORS.length],
+                      isSelected: false,
+                    });
+                    lastEnd = mapping.endIndex;
+                  });
+                  
+                  if (lastEnd < value.length) {
+                    segments.push({
+                      text: value.slice(lastEnd),
+                      startIndex: lastEnd,
+                      endIndex: value.length,
+                    });
+                  }
+                  
+                  const firstMappedIndex = segments.findIndex(s => !!s.nodeId);
+                  if (firstMappedIndex >= 0) {
+                    segments[firstMappedIndex] = { ...segments[firstMappedIndex], isSelected: true };
+                  }
+                  setHighlightSegments(segments);
+                  setSelectedSegIndex(firstMappedIndex >= 0 ? firstMappedIndex : null);
+                } else {
+                  // Use existing Standard results
+                  console.log('[Tab Skip] Using existing Standard results');
+                  const existingResult = existingStandard!;
+                  setAnalysis(existingResult.analysis);
+                  safeOnAnalysisComplete(existingResult.analysis);
+                  
+                  // Convert to segments
+                  const segments = convertAnalysisToSegments(existingResult.analysis, value);
+                  const firstMappedIndex = segments.findIndex(s => !!s.nodeId);
+                  if (firstMappedIndex >= 0) {
+                    segments[firstMappedIndex] = { ...segments[firstMappedIndex], isSelected: true };
+                  }
+                  setHighlightSegments(segments);
+                  setSelectedSegIndex(firstMappedIndex >= 0 ? firstMappedIndex : null);
+                }
+              }
+            }
+          }}
+        >
+          Standard
+        </button>
+        <button 
+          className={`dissector-tab ${llmMode === 'llm-enhanced' ? 'active' : ''}`}
+          onClick={async () => {
+            if (llmMode !== 'llm-enhanced') {
+              setLlmMode('llm-enhanced');
+              // Check if we have results for llm-enhanced mode with this text
+              if (value && hasBeenAnalyzed && !isEditMode) {
+                const existingEnhanced = parsedResultsRef.current['llm-enhanced'];
+                const shouldReparse = !existingEnhanced || existingEnhanced.text !== value;
+                if (shouldReparse) {
+                  console.log('[Tab Click] Re-parsing for AI-Enhanced mode');
+                  // Trigger re-parse with llm-enhanced mode, show loading since it's a real parse
+                  const newAnalysis = await performParse(value, 'llm-enhanced', true);
+                  setAnalysis(newAnalysis);
+                  safeOnAnalysisComplete(newAnalysis);
+                  
+                  // Update highlight segments
+                  const segments: HighlightSegment[] = [];
+                  let lastEnd = 0;
+                  const sortedMappings = [...newAnalysis.mappings].sort((a, b) => a.startIndex - b.startIndex);
+                  
+                  sortedMappings.forEach((mapping, index) => {
+                    if (mapping.startIndex > lastEnd) {
+                      segments.push({
+                        text: value.slice(lastEnd, mapping.startIndex),
+                        startIndex: lastEnd,
+                        endIndex: mapping.startIndex,
+                      });
+                    }
+                    segments.push({
+                      text: value.slice(mapping.startIndex, mapping.endIndex),
+                      startIndex: mapping.startIndex,
+                      endIndex: mapping.endIndex,
+                      nodeId: mapping.nodeId,
+                      color: mapping.highlightColor || HIGHLIGHT_COLORS[index % HIGHLIGHT_COLORS.length],
+                      isSelected: false,
+                    });
+                    lastEnd = mapping.endIndex;
+                  });
+                  
+                  if (lastEnd < value.length) {
+                    segments.push({
+                      text: value.slice(lastEnd),
+                      startIndex: lastEnd,
+                      endIndex: value.length,
+                    });
+                  }
+                  
+                  const firstMappedIndex = segments.findIndex(s => !!s.nodeId);
+                  if (firstMappedIndex >= 0) {
+                    segments[firstMappedIndex] = { ...segments[firstMappedIndex], isSelected: true };
+                  }
+                  setHighlightSegments(segments);
+                  setSelectedSegIndex(firstMappedIndex >= 0 ? firstMappedIndex : null);
+                } else {
+                  // Use existing AI-Enhanced results
+                  console.log('[Tab Skip] Using existing AI-Enhanced results');
+                  const existingResult = existingEnhanced!;
+                  setAnalysis(existingResult.analysis);
+                  safeOnAnalysisComplete(existingResult.analysis);
+                  
+                  // Convert to segments
+                  const segments = convertAnalysisToSegments(existingResult.analysis, value);
+                  const firstMappedIndex = segments.findIndex(s => !!s.nodeId);
+                  if (firstMappedIndex >= 0) {
+                    segments[firstMappedIndex] = { ...segments[firstMappedIndex], isSelected: true };
+                  }
+                  setHighlightSegments(segments);
+                  setSelectedSegIndex(firstMappedIndex >= 0 ? firstMappedIndex : null);
+                }
+              }
+            }
+          }}
+        >
+          AI-Enhanced
+        </button>
+      </div>
+      {/* Input container inside tabs container */}
       <div className="dissector-input-container">
-        {/* Show textarea when editing or before analysis, otherwise show inline spans */}
-        {(isEditMode || !hasBeenAnalyzed) ? (
+        {/* Show parsing loader when LLM is parsing */}
+        {isLLMParsing ? (
+          <GrokParsingLoader prompt={value} message="Analyzing prompt structure..." />
+        ) : (isEditMode || !hasBeenAnalyzed) ? (
           <textarea
             ref={textareaRef}
             className={`dissector-textarea-simple ${isEditMode ? 'edit-mode' : 'initial'}`}
@@ -1198,10 +1621,21 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
             spellCheck={false}
           />
         ) : (
-          <div className="dissector-content-display">
-            {console.log('Rendering segments:', highlightSegments)}
-            {highlightSegments.length === 0 && <div>No segments to display</div>}
-            {highlightSegments.map((segment, index) => {
+          <>
+            {/* Hidden textarea for cursor tracking in AI-Enhanced mode */}
+            {llmMode === 'llm-enhanced' && (
+              <textarea
+                ref={textareaRef}
+                style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px' }}
+                value={value}
+                readOnly
+                aria-hidden="true"
+                data-testid="hidden-textarea-for-cursor"
+              />
+            )}
+            <div className="dissector-content-display">
+              {highlightSegments.length === 0 && <div>No segments to display</div>}
+              {highlightSegments.map((segment, index) => {
               if (segment.nodeId) {
                 const isHovered = hoveredNodeId === segment.nodeId;
                 const isSelected = !!segment.isSelected;
@@ -1211,20 +1645,70 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                     className={`segment-inline mapped ${isSelected ? 'selected' : ''} ${isHovered ? 'hovered' : ''}`}
                     onMouseEnter={() => handleSegmentHover(segment.nodeId!)}
                     onMouseLeave={() => handleSegmentHover(null)}
-                    onClick={() => handleSegmentClickLocal(segment.nodeId!, index)}
-                    style={segmentStyles[index]}
+                    onClick={(e) => {
+                      // Handle both selection and caret positioning
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const charWidth = rect.width / segment.text.length;
+                      const charIndex = Math.floor(x / charWidth);
+                      const globalIndex = segment.startIndex + charIndex;
+                      
+                      // Set caret position
+                      setCaretPosition({
+                        index: globalIndex,
+                        x: rect.left + (charIndex * charWidth),
+                        y: rect.top  // Back to original baseline
+                      });
+                      
+                      // Set cursor position in hidden textarea
+                      if (textareaRef.current) {
+                        textareaRef.current.focus();
+                        textareaRef.current.setSelectionRange(globalIndex, globalIndex);
+                      }
+                      
+                      // Also handle segment selection if Ctrl/Cmd is held
+                      handleSegmentClickLocal(segment.nodeId!, index, e);
+                    }}
+                    style={{ ...segmentStyles[index], cursor: 'text' }}
                   >
                     {segment.text}
                   </span>
                 );
               }
               return (
-                <span key={index} className="segment-inline plain">
+                <span 
+                  key={index} 
+                  className="segment-inline plain"
+                  onClick={(e) => {
+                    // Calculate click position within the segment
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const charWidth = rect.width / segment.text.length;
+                    const charIndex = Math.floor(x / charWidth);
+                    const globalIndex = segment.startIndex + charIndex;
+                    
+                    
+                    // Set caret position for visual indicator
+                    setCaretPosition({
+                      index: globalIndex,
+                      x: rect.left + (charIndex * charWidth),
+                      y: rect.top  // Back to original baseline
+                    });
+                    
+                    // Set cursor position in hidden textarea for split functionality
+                    if (textareaRef.current) {
+                      textareaRef.current.focus();
+                      textareaRef.current.setSelectionRange(globalIndex, globalIndex);
+                    }
+                  }}
+                  style={{ cursor: 'text' }}
+                >
                   {segment.text}
                 </span>
               );
             })}
-          </div>
+            </div>
+          </>
         )}
 
         {/* Edit mode controls - OK and Cancel buttons in lower right */}
@@ -1267,41 +1751,46 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
                 // Force immediate parse
                 if (value && value.trim().length > 0) {
                   onAnalysisStart?.();
-                  const newAnalysis = parserRef.current.parse(value);
-                  setAnalysis(newAnalysis);
-                  setHasBeenAnalyzed(true);
-                  onAnalysisComplete(newAnalysis);
                   
-                  // Build highlight segments from analysis
-                  const segments: HighlightSegment[] = [];
-                  let lastEnd = 0;
-                  const sortedMappings = [...newAnalysis.mappings].sort((a, b) => a.startIndex - b.startIndex);
-                  sortedMappings.forEach((mapping, idx) => {
-                    if (mapping.startIndex > lastEnd) {
+                  // Use async parsing with modular function
+                  (async () => {
+                    const newAnalysis = await performParse(value, llmMode);
+                    
+                    setAnalysis(newAnalysis);
+                    setHasBeenAnalyzed(true);
+                    safeOnAnalysisComplete(newAnalysis);
+                    
+                    // Build highlight segments from analysis
+                    const segments: HighlightSegment[] = [];
+                    let lastEnd = 0;
+                    const sortedMappings = [...newAnalysis.mappings].sort((a, b) => a.startIndex - b.startIndex);
+                    sortedMappings.forEach((mapping, idx) => {
+                      if (mapping.startIndex > lastEnd) {
+                        segments.push({
+                          text: value.slice(lastEnd, mapping.startIndex),
+                          startIndex: lastEnd,
+                          endIndex: mapping.startIndex,
+                        });
+                      }
                       segments.push({
-                        text: value.slice(lastEnd, mapping.startIndex),
+                        text: value.slice(mapping.startIndex, mapping.endIndex),
+                        startIndex: mapping.startIndex,
+                        endIndex: mapping.endIndex,
+                        nodeId: mapping.nodeId,
+                        color: mapping.highlightColor || HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length],
+                        isSelected: false,
+                      });
+                      lastEnd = mapping.endIndex;
+                    });
+                    if (lastEnd < value.length) {
+                      segments.push({
+                        text: value.slice(lastEnd),
                         startIndex: lastEnd,
-                        endIndex: mapping.startIndex,
+                        endIndex: value.length,
                       });
                     }
-                    segments.push({
-                      text: value.slice(mapping.startIndex, mapping.endIndex),
-                      startIndex: mapping.startIndex,
-                      endIndex: mapping.endIndex,
-                      nodeId: mapping.nodeId,
-                      color: mapping.highlightColor || HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length],
-                      isSelected: false,
-                    });
-                    lastEnd = mapping.endIndex;
-                  });
-                  if (lastEnd < value.length) {
-                    segments.push({
-                      text: value.slice(lastEnd),
-                      startIndex: lastEnd,
-                      endIndex: value.length,
-                    });
-                  }
-                  setHighlightSegments(segments);
+                    setHighlightSegments(segments);
+                  })(); // Close and execute the async function
                 }
               }}
               title="Parse prompt"
@@ -1327,6 +1816,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           </div>
         )}
       </div>
+    </div> {/* End of tabs container */}
 
       {/* Analysis stats */}
       {analysis && (
@@ -1345,6 +1835,34 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           </div>
         </div>
       )}
+      
+      {/* LLM Parsing Indicator */}
+      {isLLMParsing && (
+        <div style={{
+          position: 'absolute',
+          top: 'calc(75% - 40px)',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          background: 'rgba(0, 0, 0, 0.8)',
+          color: 'white',
+          padding: '12px 24px',
+          borderRadius: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          zIndex: 10000
+        }}>
+          <div style={{
+            width: '16px',
+            height: '16px',
+            border: '2px solid #667eea',
+            borderTopColor: 'transparent',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <span>AI is analyzing your prompt...</span>
+        </div>
+      )}
 
       {/* Removed Node Types legend as requested */}
       {/* Selection modal for creating nodes from selection */}
@@ -1354,7 +1872,24 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         onConfirm={handleCreateNodeFromSelection}
         onCancel={handleCancelCreate}
       />
+      
+      {/* Visual caret indicator - moved to top level */}
+      {caretPosition && llmMode === 'llm-enhanced' && !isEditMode && (
+        <div 
+          style={{
+            position: 'fixed',
+            left: `${caretPosition.x + 2}px`,
+            top: `${caretPosition.y - 3}px`,
+            width: '3px',
+            height: '28px',
+            backgroundColor: 'rgba(255, 255, 255, 0.45)',
+            boxShadow: '0 0 6px rgba(255, 255, 255, 0.25)',
+            animation: 'blink 2s step-end infinite',
+            pointerEvents: 'none',
+            zIndex: 999999
+          }}
+        />
+      )}
     </div>
-    </>
   );
 };

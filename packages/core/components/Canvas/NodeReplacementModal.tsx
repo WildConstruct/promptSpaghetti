@@ -27,13 +27,21 @@ interface NodeReplacementModalProps {
   onReplace: () => void;
   onCancel: () => void;
   isVisible: boolean;
+  advancedActions?: {
+    onMergeChoices?: () => void;
+    onCreateVariant?: () => void;
+    onSmartSwap?: () => void;
+    onReplaceAllSimilar?: () => void;
+    onReplaceAllSelected?: () => void;
+  };
 }
 
 export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
   info,
   onReplace,
   onCancel,
-  isVisible
+  isVisible,
+  advancedActions
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -144,6 +152,33 @@ export const NodeReplacementModal: React.FC<NodeReplacementModalProps> = ({
           >
             {hasConnectionLoss ? 'Replace Anyway' : 'Replace Node'}
           </button>
+        </div>
+        <div className="modal-advanced" style={{ padding: '12px 16px', borderTop: '1px dashed rgba(255,255,255,0.15)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {advancedActions?.onMergeChoices && (
+            <button className="modal-button" onClick={advancedActions.onMergeChoices}>
+              Merge Choices
+            </button>
+          )}
+          {advancedActions?.onCreateVariant && (
+            <button className="modal-button" onClick={advancedActions.onCreateVariant}>
+              Create Variant
+            </button>
+          )}
+          {advancedActions?.onSmartSwap && (
+            <button className="modal-button" onClick={advancedActions.onSmartSwap}>
+              Smart Swap
+            </button>
+          )}
+          {advancedActions?.onReplaceAllSimilar && (
+            <button className="modal-button" onClick={advancedActions.onReplaceAllSimilar}>
+              Replace All Similar
+            </button>
+          )}
+          {advancedActions?.onReplaceAllSelected && (
+            <button className="modal-button" onClick={advancedActions.onReplaceAllSelected}>
+              Replace All Selected
+            </button>
+          )}
         </div>
       </div>
     </>

@@ -12,6 +12,18 @@ interface Message {
   text: string;
 }
 
+interface ConnectionStatus {
+  configured: boolean;
+  reachable: boolean;
+  status?: number | null;
+  error?: string;
+}
+
+interface AdminStatus {
+  supabase: ConnectionStatus;
+  openrouter: ConnectionStatus;
+}
+
 interface PromptTemplate {
   id: string;
   name: string;
@@ -100,7 +112,7 @@ const AVAILABLE_MODELS = [
 /**
  * Enhanced HTML admin panel
  */
-const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: Message) => {
+const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: Message, status?: AdminStatus) => {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -127,7 +139,17 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+        .banner { margin-bottom: 16px; padding: 12px 14px; border-radius: 8px; }
+        .banner.success { background: #063b2a; color: #a7f3d0; border: 1px solid #10b981; }
+        .banner.error { background: #3b0610; color: #fecaca; border: 1px solid #ef4444; }
+        .banner.info { background: #0a2540; color: #93c5fd; border: 1px solid #3b82f6; }
+        .status-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; }
+        .dot-ok { background:#10b981; }
+        .dot-bad { background:#ef4444; }
+        .kv { display:flex; gap:8px; align-items:center; margin: 4px 0; }
+        .danger { color:#fecaca; }
+        .delete-form { margin-top:8px; padding:8px; background:#1f2937; border-radius:6px; border:1px solid rgba(255,255,255,0.08); }
+      
         h1 {
             color: #10b981;
             margin-bottom: 2rem;
@@ -431,8 +453,20 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
             display: block;
             margin-top: 0.25rem;
         }
-    </style>
+</style>
     <script>
+        // Auto-dismiss flash banner after save
+        document.addEventListener('DOMContentLoaded', function () {
+            const banner = document.querySelector('.banner');
+            if (banner) {
+                setTimeout(() => {
+                    if (banner && banner.parentElement) {
+                        banner.parentElement.removeChild(banner);
+                    }
+                }, 2500);
+            }
+        });
+
         function switchTab(tabName) {
             // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(content => {
@@ -495,8 +529,27 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
         };
     </script>
 </head>
-<body>
+  <body>
     <div class="container">
+      ${message ? `<div class=\"banner ${message.type}\">${message.text}</div>` : ''}
+      <div style="margin-bottom:16px; padding:12px 14px; border:1px solid rgba(255,255,255,0.1); border-radius:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div style="font-weight:600;">Connection Status</div>
+          <div style="display:flex; gap:8px;">
+            <button id="reload-status" style="padding:4px 8px;">Reload</button>
+          </div>
+        </div>
+        <div class="kv">
+          <span id="supabase-dot" class="status-dot ${status?.supabase?.reachable ? 'dot-ok' : 'dot-bad'}"></span>
+          <span id="supabase-text">Supabase: ${status?.supabase?.configured ? 'Configured' : 'Not configured'} — ${status?.supabase?.reachable ? 'Reachable' : 'Unreachable'}${status?.supabase?.status ? ` (HTTP ${status.supabase.status})` : ''}${status?.supabase?.error ? ` — ${status.supabase.error}` : ''}</span>
+          <button id="test-supabase" style="margin-left:auto; padding:4px 8px;">Test</button>
+        </div>
+        <div class="kv">
+          <span id="openrouter-dot" class="status-dot ${status?.openrouter?.reachable ? 'dot-ok' : 'dot-bad'}"></span>
+          <span id="openrouter-text">OpenRouter: ${status?.openrouter?.configured ? 'Configured' : 'Not configured'} — ${status?.openrouter?.reachable ? 'Reachable' : 'Unreachable'}${status?.openrouter?.status ? ` (HTTP ${status.openrouter.status})` : ''}${status?.openrouter?.error ? ` — ${status.openrouter.error}` : ''}</span>
+          <button id="test-openrouter" style="margin-left:auto; padding:4px 8px;">Test</button>
+        </div>
+      </div>
         <h1>⚙️ Enhanced Admin Panel</h1>
         
         ${message ? `<div class="${message.type}">${message.text}</div>` : ''}
@@ -583,6 +636,20 @@ const getEnhancedAdminHTML = (config: any, prompts: PromptTemplate[], message?: 
                     
                     <button type="submit">Save OpenRouter Config</button>
                 </form>
+                <div class="delete-form">
+                  <div class="danger">Delete a stored key</div>
+                  <form action="/admin/delete-key" method="post" style="display: grid; gap: 8px; margin-top: 6px;">
+                    <label>
+                      <div>Key to delete (allowed: SUPABASE_ANON_KEY, OPENROUTER_API_KEY, OPENAI_API_KEY)</div>
+                      <input type="text" name="key_name" placeholder="e.g. OPENROUTER_API_KEY" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #e2e8f0;">
+                    </label>
+                    <label>
+                      <div>Type exactly: <code>Yes I want to delete this key</code></div>
+                      <input type="text" name="confirmation" placeholder="Yes I want to delete this key" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #e2e8f0;">
+                    </label>
+                    <button type="submit" style="padding: 8px 12px; background: #ef4444; color: #fff; border: none; border-radius: 6px; cursor: pointer;">Delete Key</button>
+                  </form>
+                </div>
             </div>
         </div>
         
@@ -837,7 +904,99 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
     
     const prompts = loadPrompts();
     
-    reply.type('text/html').send(getEnhancedAdminHTML(config, prompts));
+    // Compute connection status
+    const status = await (async (): Promise<AdminStatus> => {
+      const supabaseUrl = process.env.SUPABASE_URL;
+      const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+      const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+      // Supabase: try /auth/v1/health
+      const supabase: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+      if (supabaseUrl) {
+        try {
+          const controller = new AbortController();
+          const to = setTimeout(() => controller.abort(), 4000);
+          let res = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`, { signal: controller.signal as any });
+          clearTimeout(to);
+          if (res.status === 401 && process.env.SUPABASE_ANON_KEY) {
+            const controller2 = new AbortController();
+            const to2 = setTimeout(() => controller2.abort(), 4000);
+            res = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`, {
+              headers: { apikey: process.env.SUPABASE_ANON_KEY, Authorization: `Bearer ${process.env.SUPABASE_ANON_KEY}` },
+              signal: controller2.signal as any,
+            });
+            clearTimeout(to2);
+          }
+          supabase.status = res.status;
+          supabase.reachable = res.ok || res.status === 200;
+        } catch (e: any) {
+          supabase.error = e?.message || 'request failed';
+        }
+
+        // (client-side script for status buttons is injected in HTML template <script>)
+      }
+      // OpenRouter: GET /models with Authorization if key present
+      const openrouter: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+      if (orKey) {
+        try {
+          const controller = new AbortController();
+          const to = setTimeout(() => controller.abort(), 5000);
+          const res = await fetch(`${orBase.replace(/\/$/, '')}/models`, {
+            headers: { Authorization: `Bearer ${orKey}` },
+            signal: controller.signal as any,
+          });
+          clearTimeout(to);
+          openrouter.status = res.status;
+          openrouter.reachable = res.ok;
+        } catch (e: any) {
+          openrouter.error = e?.message || 'request failed';
+        }
+      }
+      return { supabase, openrouter };
+    })();
+
+    reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, undefined, status));
+  });
+
+  // Return current connection status as JSON
+  server.get('/admin/connection-status', async (request, reply) => {
+    if (!checkAdminAuth(request, reply)) return;
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+    const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+    const supabase: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+    if (supabaseUrl) {
+      try { const r = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`); supabase.status = r.status; supabase.reachable = r.ok; } catch (e: any) { supabase.error = e?.message; }
+    }
+    const openrouter: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+    if (orKey) {
+      try { const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, { headers: { Authorization: `Bearer ${orKey}` } }); openrouter.status = r.status; openrouter.reachable = r.ok; } catch (e: any) { openrouter.error = e?.message; }
+    }
+    return { supabase, openrouter } as AdminStatus;
+  });
+
+  // Test connection for a single provider
+  server.post('/admin/test-connection', async (request, reply) => {
+    if (!checkAdminAuth(request, reply)) return;
+    const { provider } = (request.body as any) || {};
+    if (provider !== 'supabase' && provider !== 'openrouter') {
+      return reply.status(400).send({ error: 'Invalid provider' });
+    }
+    if (provider === 'supabase') {
+      const supabaseUrl = process.env.SUPABASE_URL;
+      const status: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+      if (supabaseUrl) {
+        try { const r = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`); status.status = r.status; status.reachable = r.ok; } catch (e: any) { status.error = e?.message; }
+      }
+      return status;
+    } else {
+      const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+      const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+      const status: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+      if (orKey) {
+        try { const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, { headers: { Authorization: `Bearer ${orKey}` } }); status.status = r.status; status.reachable = r.ok; } catch (e: any) { status.error = e?.message; }
+      }
+      return status;
+    }
   });
   
   // Handle config updates
@@ -903,14 +1062,93 @@ export async function registerEnhancedAdminRoutes(server: FastifyInstance) {
       };
       
       const prompts = loadPrompts();
-      
+      // refresh status
+      const status = await (async (): Promise<AdminStatus> => {
+        const supabaseUrl = process.env.SUPABASE_URL;
+        const orBase = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
+        const orKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
+        const supabase: ConnectionStatus = { configured: !!supabaseUrl, reachable: false, status: null };
+        if (supabaseUrl) {
+          try { const r = await fetch(`${supabaseUrl.replace(/\/$/, '')}/auth/v1/health`); supabase.status = r.status; supabase.reachable = r.ok; } catch (e: any) { supabase.error = e?.message; }
+        }
+        const openrouter: ConnectionStatus = { configured: !!orKey, reachable: false, status: null };
+        if (orKey) {
+          try { const r = await fetch(`${orBase.replace(/\/$/, '')}/models`, { headers: { Authorization: `Bearer ${orKey}` } }); openrouter.status = r.status; openrouter.reachable = r.ok; } catch (e: any) { openrouter.error = e?.message; }
+        }
+        return { supabase, openrouter };
+      })();
+
       reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, {
         type: 'success',
         text: 'Configuration updated successfully!'
-      }));
+      }, status));
     } catch (error) {
       console.error('Error updating config:', error);
       reply.status(500).send('Failed to update configuration');
+    }
+  });
+
+  // Delete a key with confirmation phrase
+  server.post('/admin/delete-key', async (request, reply) => {
+    if (!checkAdminAuth(request, reply)) return;
+
+    const { key_name, confirmation } = (request.body as any) || {};
+    const allowed = new Set(['SUPABASE_ANON_KEY', 'OPENROUTER_API_KEY', 'OPENAI_API_KEY']);
+    const envPath = path.join(__dirname, '../.env');
+
+    if (!key_name || !allowed.has(key_name)) {
+      return reply.status(400).send('Invalid key name');
+    }
+    if (confirmation !== 'Yes I want to delete this key') {
+      const config = {
+        SUPABASE_URL: process.env.SUPABASE_URL,
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
+        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
+        OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+        DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
+        PRIMARY_MODEL: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
+        FALLBACK_MODELS: process.env.FALLBACK_MODELS || 'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
+        MAX_TOKENS: process.env.MAX_TOKENS || '200',
+        TEMPERATURE: process.env.TEMPERATURE || '0.7',
+        NODE_ENV: process.env.NODE_ENV,
+        ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+      };
+      const prompts = loadPrompts();
+      const status = { supabase: { configured: !!process.env.SUPABASE_URL, reachable: false }, openrouter: { configured: !!(process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY), reachable: false } } as AdminStatus;
+      return reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, { type: 'error', text: 'Confirmation phrase mismatch.' }, status));
+    }
+
+    try {
+      let envContent = '';
+      if (fs.existsSync(envPath)) envContent = fs.readFileSync(envPath, 'utf-8');
+      const lineRegex = new RegExp(`^${key_name}=.*$\\r?\\n?`, 'gm');
+      envContent = envContent.replace(lineRegex, '');
+      fs.writeFileSync(envPath, envContent);
+      delete (process.env as any)[key_name];
+
+      const config = {
+        SUPABASE_URL: process.env.SUPABASE_URL,
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY ? '***' + process.env.SUPABASE_ANON_KEY.slice(-8) : '',
+        OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY ? '***' + process.env.OPENROUTER_API_KEY.slice(-8) : '',
+        OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+        DAILY_COST_LIMIT: process.env.DAILY_COST_LIMIT || '0.10',
+        PRIMARY_MODEL: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
+        FALLBACK_MODELS: process.env.FALLBACK_MODELS || 'deepseek/deepseek-r1:free,mistral/mistral-medium-3.1:free',
+        MAX_TOKENS: process.env.MAX_TOKENS || '200',
+        TEMPERATURE: process.env.TEMPERATURE || '0.7',
+        NODE_ENV: process.env.NODE_ENV,
+        ENABLE_ADMIN: process.env.ENABLE_ADMIN,
+      };
+      const prompts = loadPrompts();
+      const status = await (async (): Promise<AdminStatus> => {
+        const supabase: ConnectionStatus = { configured: !!process.env.SUPABASE_URL, reachable: false };
+        const openrouter: ConnectionStatus = { configured: !!(process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY), reachable: false };
+        return { supabase, openrouter };
+      })();
+      reply.type('text/html').send(getEnhancedAdminHTML(config, prompts, { type: 'success', text: `${key_name} deleted.` }, status));
+    } catch (err) {
+      console.error('Error deleting key:', err);
+      reply.status(500).send('Failed to delete key');
     }
   });
   

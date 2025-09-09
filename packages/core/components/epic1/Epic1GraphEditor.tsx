@@ -35,7 +35,7 @@ import { AssetLibrary, Preset } from './asset-library';
 import { SaveAsPresetDialog } from './asset-library/SaveAsPresetDialog';
 import { TabbedSidePanel } from './TabbedSidePanel';
 import { NodeToolbar } from './NodeToolbar';
-import { NodePalette } from './NodePalette';
+  import { NodePalette } from './NodePalette';
 import { NodeContextMenu, ContextMenuPosition } from './nodes/NodeContextMenu';
 import { CanvasContextMenu } from './nodes/CanvasContextMenu';
 import { MagneticSnapHandler } from './interactions/MagneticSnapHandler';
@@ -43,6 +43,8 @@ import { SelectionFeedback, useNodeInteractions } from './interactions/NodeInter
 import { MicroInteraction, useMicroInteractions } from './animations/MicroInteractions';
 import { SafeReactFlowWrapper } from './SafeReactFlowWrapper';
 import { edgeTypes } from './EdgeRenderingFix';
+import { captureViewport, restoreViewport } from './utils/viewport';
+import { HistoryPalette } from './components/HistoryPalette';
 import { AuthModal } from '../auth/AuthModal';
 import { supabase } from '../../utils/supabaseClient';
 import { useAutoLayout } from './hooks/useAutoLayout';
@@ -60,6 +62,7 @@ import {
   STORAGE_KEY,
   clearPersistedState 
 } from '../../utils/persistenceUtils';
+import { IntelligenceProvider } from './contexts/IntelligenceContext';
 
 // Simple debounce utility
 function debounce<T extends (...args: any[]) => void>(
@@ -191,6 +194,55 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   const [activatedEdges, setActivatedEdges] = useState<Set<string>>(new Set());
   const [isSelecting, setIsSelecting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  // React Flow instance ref/state
+  const reactFlowRef = useRef<ReactFlowInstance | null>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+
+  // Local history ring (50 entries)
+  const [history, setHistory] = useState<Array<{ nodes: Node<EditableNodeData>[]; edges: Edge[]; timestamp: number }>>([]);
+  const [historyIndex, setHistoryIndex] = useState<number>(-1);
+  const [historyVisible, setHistoryVisible] = useState<boolean>(false);
+  const pushSnapshot = useCallback((nodesSnap: Node<EditableNodeData>[], edgesSnap: Edge[]) => {
+    setHistory(prev => {
+      const base = historyIndex >= 0 ? prev.slice(0, historyIndex + 1) : prev;
+      const next = [...base, { nodes: nodesSnap, edges: edgesSnap, timestamp: Date.now() }];
+      // keep last 50
+      return next.length > 50 ? next.slice(next.length - 50) : next;
+    });
+    setHistoryIndex(idx => {
+      const nextLen = historyIndex >= 0 ? Math.min(history.length, 49) + 1 : history.length + 1;
+      return Math.min(nextLen - 1, 49);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history.length, historyIndex]);
+
+  // Snapshot on nodes/edges change (debounced by previous autosave)
+  useEffect(() => {
+    // Only snapshot when graph has content
+    if ((nodes?.length || 0) + (edges?.length || 0) === 0) return;
+    pushSnapshot(nodes as any, edges as any);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodes, edges]);
+
+  const undo = useCallback(() => {
+    if (historyIndex <= 0 || history.length === 0) return;
+    const vp = captureViewport(reactFlowRef.current as any);
+    const target = history[historyIndex - 1];
+    setNodes(target.nodes as any);
+    setEdges(target.edges as any);
+    setHistoryIndex(historyIndex - 1);
+    if (vp) restoreViewport(reactFlowRef.current as any, vp);
+  }, [history, historyIndex, reactFlowInstance, setNodes, setEdges]);
+
+  const redo = useCallback(() => {
+    if (historyIndex >= history.length - 1) return;
+    const vp = captureViewport(reactFlowRef.current as any);
+    const target = history[historyIndex + 1];
+    setNodes(target.nodes as any);
+    setEdges(target.edges as any);
+    setHistoryIndex(historyIndex + 1);
+    if (vp) restoreViewport(reactFlowRef.current as any, vp);
+  }, [history, historyIndex, reactFlowInstance, setNodes, setEdges]);
   
   // Autosave to local storage (includes post-it notes)
   const saveToLocalStorage = useCallback((currentNodes: Node[], currentEdges: Edge[]) => {
@@ -339,7 +391,6 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
   }, [nodes, edges]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(showPreview);
-  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [nodePaletteCollapsed, setNodePaletteCollapsed] = useState(false);
   
   // Context menu and save-as-preset state
@@ -691,31 +742,42 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
     showToast('success', 'Graph exported!');
   }, [enhancedNodes, edges, showToast]);
 
+  // Handle node deletion through proper React Flow callbacks to enable undo/redo
+  const handleNodesDelete = useCallback((nodesToDelete: Node[]) => {
+    const nodeIds = new Set(nodesToDelete.map(n => n.id));
+    
+    // Filter out deleted nodes
+    const newNodes = nodes.filter(n => !nodeIds.has(n.id));
+    
+    // Filter out edges connected to deleted nodes
+    const newEdges = edges.filter(e => !nodeIds.has(e.source) && !nodeIds.has(e.target));
+    
+    // Use the proper change handlers to trigger undo/redo tracking
+    onNodesChange?.(newNodes);
+    onEdgesChange?.(newEdges);
+    
+    showToast('info', `Deleted ${nodesToDelete.length} node(s)`);
+  }, [nodes, edges, onNodesChange, onEdgesChange, showToast]);
+
+  // Handle edge deletion through proper React Flow callbacks  
+  const handleEdgesDelete = useCallback((edgesToDelete: Edge[]) => {
+    const edgeIds = new Set(edgesToDelete.map(e => e.id));
+    const newEdges = edges.filter(e => !edgeIds.has(e.id));
+    onEdgesChange?.(newEdges);
+  }, [edges, onEdgesChange]);
+
+  // Legacy delete handler for backward compatibility (keyboard shortcuts, context menu)
   const handleDelete = useCallback((nodesToDelete?: Node[]) => {
-    // Use the nodes passed or get them from current state
     if (nodesToDelete && nodesToDelete.length > 0) {
-      const nodeIds = nodesToDelete.map(n => n.id);
-      setNodes((nds) => nds.filter(n => !nodeIds.includes(n.id)));
-      setEdges((eds) => eds.filter(e => !nodeIds.includes(e.source) && !nodeIds.includes(e.target)));
-      showToast('info', `Deleted ${nodeIds.length} node(s)`);
+      handleNodesDelete(nodesToDelete);
     } else {
-      // Delete selected nodes from current state
-      const selectedNodeIds: string[] = [];
-      setNodes((nds) => {
-        const selectedNodes = nds.filter(n => n.selected);
-        if (selectedNodes.length === 0) return nds;
-        selectedNodes.forEach(n => selectedNodeIds.push(n.id));
-        showToast('info', `Deleted ${selectedNodes.length} node(s)`);
-        return nds.filter(n => !n.selected);
-      });
-      // Clean up edges connected to deleted nodes
-      if (selectedNodeIds.length > 0) {
-        setEdges((eds) => eds.filter(e => 
-          !selectedNodeIds.includes(e.source) && !selectedNodeIds.includes(e.target)
-        ));
+      // Delete selected nodes
+      const selectedNodes = nodes.filter(n => n.selected);
+      if (selectedNodes.length > 0) {
+        handleNodesDelete(selectedNodes);
       }
     }
-  }, [nodes, setNodes, setEdges, showToast]);
+  }, [nodes, handleNodesDelete]);
 
   const handleDuplicate = useCallback((nodesToDuplicate: Node[]) => {
     const newNodes = nodesToDuplicate.map(node => ({
@@ -1175,18 +1237,22 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 
   // Handle ReactFlow initialization
   const onInit = useCallback((instance: ReactFlowInstance) => {
+    reactFlowRef.current = instance;
     setReactFlowInstance(instance);
     // Fit view to show all nodes properly positioned at frame edges
     setTimeout(() => {
-      instance.fitView({ 
-        padding: 0.1,
-        includeHiddenNodes: false,
-        minZoom: 0.5,
-        maxZoom: 1.5
-      });
+      // Avoid hard camera jumps after initial mount if nodes exist; fit only when empty
+      if ((nodes?.length || 0) + (edges?.length || 0) === 0) {
+        instance.fitView({ 
+          padding: 0.1,
+          includeHiddenNodes: false,
+          minZoom: 0.5,
+          maxZoom: 1.5
+        });
+      }
       setReactFlowInstance(instance);
     }, 100);
-  }, []);
+  }, [nodes, edges]);
 
   // Handle node drop from toolbar
   const handleNodeDrop = useCallback((nodeType: string, position: { x: number; y: number }) => {
@@ -1528,6 +1594,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             }))}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onNodesDelete={handleNodesDelete}
+            onEdgesDelete={handleEdgesDelete}
             onConnect={onConnect}
             onPaneClick={handlePaneClick}
             onPaneContextMenu={handlePaneClick}
@@ -1613,8 +1681,8 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
             />
           )}
           
-          {/* Epic 1 specific controls */}
-          <Panel position="top-right">
+      {/* Epic 1 specific controls */}
+      <Panel position="top-right">
             <div className="epic1-controls">
               {onExecute && (
                 <button 
@@ -1827,7 +1895,138 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
         position="left" 
         defaultCollapsed={false} 
         onCollapsedChange={setNodePaletteCollapsed}
-      />
+      >
+        {/* Moved bottom-left buttons into the palette footer */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {currentUser ? (
+            <button 
+              className="epic1-auth-button"
+              onClick={async () => {
+                await supabase?.auth.signOut();
+                showToast('success', 'Logged out successfully');
+              }}
+              title="Sign out"
+              style={{
+                padding: '10px 16px',
+                background: '#333',
+                border: '1px solid #444',
+                borderRadius: '6px',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ fontSize: '12px', opacity: 0.8 }}>
+                {currentUser.email?.split('@')[0]}
+              </span>
+              🚪
+            </button>
+          ) : (
+            <button 
+              className="epic1-auth-button"
+              onClick={() => setIsAuthModalOpen(true)}
+              title="Sign in"
+              style={{
+                padding: '10px 16px',
+                background: '#2563eb',
+                border: 'none',
+                borderRadius: '6px',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+              }}
+            >
+              🔐 Sign In
+            </button>
+          )}
+
+          <button 
+            className="epic1-wizard-button"
+            onClick={() => setIsPromptWizardOpen(true)}
+            title="Open Prompt Wizard (W)"
+            style={{
+              padding: '10px 16px',
+              background: '#9d70f7',
+              border: 'none',
+              borderRadius: '6px',
+              color: 'white',
+              cursor: 'pointer',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+            }}
+          >
+            🪄 Wizard
+          </button>
+
+          <button 
+            className="epic1-preview-button"
+            onClick={handleTogglePreview}
+            title="Toggle Preview Output (P)"
+            style={{
+              padding: '10px 16px',
+              background: '#10b981',
+              border: 'none',
+              borderRadius: '6px',
+              color: 'white',
+              cursor: 'pointer',
+              fontSize: '14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+            }}
+          >
+            📊 Preview
+          </button>
+        </div>
+      </NodePalette>
+      {/* History quick access button near the asset browser */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 120,
+          left: nodePaletteCollapsed ? '68px' : '220px',
+          zIndex: 16,
+          transition: 'left 0.3s ease'
+        }}
+      >
+        <button
+          className="epic1-history-button"
+          onClick={() => setHistoryVisible(true)}
+          title="History"
+        >
+          History
+        </button>
+      </div>
+
+      {/* History palette overlay */}
+      {historyVisible && (
+        <HistoryPalette
+          entries={history as any}
+          currentIndex={historyIndex}
+          onSelect={(index) => {
+            if (index < 0 || index >= history.length) return;
+            const vp = captureViewport(reactFlowRef.current as any);
+            const target = history[index];
+            setNodes(target.nodes as any);
+            setEdges(target.edges as any);
+            setHistoryIndex(index);
+            if (vp) restoreViewport(reactFlowRef.current as any, vp);
+          }}
+          onClose={() => setHistoryVisible(false)}
+        />
+      )}
       
       {/* Node Toolbar */}
       <NodeToolbar position="top" />
@@ -2366,23 +2565,20 @@ const Epic1GraphEditorInner: React.FC<Epic1GraphEditorProps> = ({
 // Original monolithic implementation (now legacy)
 const Epic1GraphEditorMonolithic: React.FC<Epic1GraphEditorProps> = (props) => {
   return (
-    <ReactFlowProvider>
-      <Epic1GraphEditorInner {...props} />
-    </ReactFlowProvider>
+    <IntelligenceProvider>
+      <ReactFlowProvider>
+        <Epic1GraphEditorInner {...props} />
+      </ReactFlowProvider>
+    </IntelligenceProvider>
   );
 };
 
-// Import the refactored version
-import { Epic1GraphEditorFinal } from './Epic1GraphEditorFinal';
-
-// DEFAULT EXPORT: Using the legacy version until refactored version is fully complete
-// The refactored version is missing preview window, context menus, and select all functionality
+// DEFAULT EXPORT: Using the legacy version which includes all features
 export const Epic1GraphEditor = Epic1GraphEditorMonolithic;
 
 // Legacy exports for backward compatibility if needed
 export const Epic1GraphEditorLegacy = Epic1GraphEditorMonolithic;
-export const Epic1GraphEditorWithProvider = Epic1GraphEditorMonolithic; // Use legacy until refactor is complete
+export const Epic1GraphEditorWithProvider = Epic1GraphEditorMonolithic;
 
-// Conditional export based on feature flag (can force refactored if needed)
-export const Epic1GraphEditorConditional = 
-  process.env.USE_REFACTORED_EDITOR === 'true' ? Epic1GraphEditorFinal : Epic1GraphEditorMonolithic;
+// Conditional export: keep pointing at legacy to avoid importing unfinished/corrupted variants
+export const Epic1GraphEditorConditional = Epic1GraphEditorMonolithic;

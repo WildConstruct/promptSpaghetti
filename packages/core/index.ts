@@ -40,6 +40,11 @@ export interface Graph {
 export { nodeSchemas } from './nodeSchemas';
 export { useGraphStore } from './graphStore';
 
+// Epic 2 LLM components
+export { LLMToggle } from './components/LLMToggle/LLMToggle';
+export { SimpleLLMService, getLLMService } from './services/SimpleLLMService';
+export type { LLMConfig, ParseOptions, ParseResult } from './services/SimpleLLMService';
+
 // Professional Interface Integration - DISABLED (components don't exist)
 // export { ProfessionalIntegration } from './components/CommandPalette/ProfessionalIntegration';
 // export { CommandPalette } from './components/CommandPalette/CommandPalette';

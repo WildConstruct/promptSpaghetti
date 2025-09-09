@@ -23,6 +23,9 @@ const WEIGHT_PRESETS = {
 };
 
 /**
+ * @deprecated This component is deprecated. Use WeightedChoiceNode.tsx instead, 
+ * which includes Epic 2 AI integrations (PopulateChoicesButton, OptimizeWeightsButton, InspirationMode).
+ * 
  * Improved WeightedChoice node with raw weights and presets
  */
 export const ImprovedWeightedChoiceNode = memo((props: NodeProps<WeightedChoiceNodeData>) => {

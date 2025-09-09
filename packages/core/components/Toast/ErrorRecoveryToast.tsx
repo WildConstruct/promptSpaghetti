@@ -25,13 +25,13 @@ export interface ErrorRecoveryAction {
 interface ErrorRecoveryToastProps {
   error: DropError;
   onDismiss: () => void;
-  autoHideDelay?: number;
+  autoHideDelay?: number; // default 2000ms per AC
 }
 
 export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
   error,
   onDismiss,
-  autoHideDelay = 5000
+  autoHideDelay = 2000
 }) => {
   const [progress, setProgress] = useState(100);
   const [isPaused, setIsPaused] = useState(false);
@@ -54,9 +54,38 @@ export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
     }
   }, [isPaused, autoHideDelay, onDismiss]);
 
+  // scoped hotkeys: W and ? while toast is visible
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onDismiss();
+      }
+      if ((e.key || '').toLowerCase() === 'w') {
+        const act = actions.find(a => a.label.includes('WeightedChoice'));
+        if (act) {
+          e.preventDefault();
+          act.action();
+          onDismiss();
+        }
+      }
+      if (e.key === '?') {
+        const act = actions.find(a => a.label.toLowerCase().includes('compatibility'));
+        if (act) {
+          e.preventDefault();
+          act.action();
+        }
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [actions, onDismiss]);
+
   return (
     <div 
       className={`error-recovery-toast error-${error.type}`}
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -90,6 +119,7 @@ export const ErrorRecoveryToast: React.FC<ErrorRecoveryToastProps> = ({
       <div 
         className="toast-progress" 
         style={{ width: `${progress}%` }}
+        aria-hidden="true"
       />
     </div>
   );
@@ -101,20 +131,20 @@ function getRecoveryActions(error: DropError): ErrorRecoveryAction[] {
   switch (error.type) {
     case 'type_incompatibility':
       actions.push({
-        label: 'Drop on empty canvas',
+        label: 'Click here to auto-scroll to empty area',
         action: () => scrollToEmptyArea(),
         icon: '➡️',
         primary: true
       });
       if (error.details?.sourceType === 'WeightedChoice') {
         actions.push({
-          label: 'Create WeightedChoice (W)',
+          label: 'Press W to create one',
           action: () => createNodeOfType('WeightedChoice'),
           icon: '🎲'
         });
       }
       actions.push({
-        label: 'View compatibility',
+        label: 'View compatibility matrix (? key)',
         action: () => showCompatibilityMatrix(),
         icon: '❓'
       });
@@ -163,6 +193,12 @@ function getRecoveryActions(error: DropError): ErrorRecoveryAction[] {
         icon: '❓'
       });
   }
+  // Normalize labels to match AC exact copy
+  actions.forEach(a => {
+    if (a.label === 'Auto-scroll to valid area') a.label = 'Click here to auto-scroll to empty area';
+    if (a.label === 'Create WeightedChoice (W)') a.label = 'Press W to create one';
+    if (a.label === 'View compatibility') a.label = 'View compatibility matrix (? key)';
+  });
 
   return actions;
 }

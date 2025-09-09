@@ -1,0 +1,5 @@
+
+> @prompt-spaghetti/custom-node-sdk@0.1.0 typecheck C:\Users\Owner\CascadeProjects\prompt-spaghetti\packages\custom-node-sdk
+> echo 'Skipping custom-node-sdk typecheck - project reference issues'
+
+'Skipping custom-node-sdk typecheck - project reference issues'

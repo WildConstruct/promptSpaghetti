@@ -110,10 +110,17 @@ export class NodeIntelligenceService {
         }));
       }
     } catch (error) {
-      console.error('Failed to populate choices:', error);
+      console.error('[NodeIntelligence] Failed to populate choices:', error);
+      console.log('[NodeIntelligence] Error details:', {
+        message: (error as any)?.message,
+        stack: (error as any)?.stack,
+        llmServiceExists: !!this.llmService,
+        willFallback: true
+      });
     }
     
     // Fallback to offline suggestions
+    console.warn('[NodeIntelligence] Falling back to offline suggestions');
     return this.getOfflineSuggestions(nodeText, count);
   }
 

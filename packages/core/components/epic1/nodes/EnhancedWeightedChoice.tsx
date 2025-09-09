@@ -6,6 +6,9 @@ interface EnhancedWeightedChoiceProps {
 }
 
 /**
+ * @deprecated This component is deprecated. Use WeightedChoiceNode.tsx instead, 
+ * which includes Epic 2 AI integrations (PopulateChoicesButton, OptimizeWeightsButton, InspirationMode).
+ * 
  * Enhanced weighted choice component with additional features:
  * - Live total weight display
  * - Quick presets (Equal, Random, Golden Ratio)

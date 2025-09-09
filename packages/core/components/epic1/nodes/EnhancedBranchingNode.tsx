@@ -1,6 +1,14 @@
-import React, { memo, useState, useCallback, useRef, useLayoutEffect } from 'react';
+import React, { memo, useState, useCallback, useRef, useLayoutEffect, useEffect } from 'react';
 import { NodeProps, Handle, Position } from 'reactflow';
 import { BaseEditableNode, EditableNodeData } from './BaseEditableNode';
+import { 
+  PopulateChoicesButton,
+  OptimizeWeightsButton,
+  InspirationMode 
+} from '../../Inspector/IntelligentFeatures';
+import { useIntelligence } from '../contexts/IntelligenceContext';
+import type { Choice, WeightOptimizationResult } from '../../../services/llm';
+import type { SegmentMetadata } from '../../../services/llm/MetadataExtractor';
 import './WeightedChoiceNode.css';
 import './EnhancedBranching.css';
 
@@ -13,6 +21,7 @@ export interface WeightedOption {
 export interface EnhancedBranchingNodeData extends EditableNodeData {
   options: WeightedOption[];
   title?: string;
+  metadata?: SegmentMetadata;
 }
 
 // Brighter drag handle icon
@@ -200,6 +209,19 @@ const WEIGHT_PRESETS = {
 };
 
 const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeData>) => {
+  const intelligence = useIntelligence();
+  const [showMetadata, setShowMetadata] = useState(false);
+  const [metadata, setMetadata] = useState<SegmentMetadata | null>(props.data?.metadata || null);
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const [isExtractingMetadata, setIsExtractingMetadata] = useState(false);
+  
+  // Debug logging for Epic 2 integration
+  console.log('[EnhancedBranchingNode] Intelligence context:', {
+    consentGiven: intelligence.consentGiven,
+    hasNodeIntelligence: !!intelligence.nodeIntelligence,
+    isOffline: intelligence.isOffline
+  });
+  
   // Ensure all options have hasBranch set to false by default
   const initializeOptions = () => {
     // Check if options are in props.data.options
@@ -239,12 +261,65 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [mainHandleTop, setMainHandleTop] = useState(35);
   const [branchHandleTops, setBranchHandleTops] = useState<number[]>([]);
-  const nodeRef = useRef<HTMLDivElement>(null);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   
   const hasBranching = options.some(opt => opt.hasBranch);
   
+  // Normalize weights to ensure they sum to 100
+  const normalizeWeights = (opts: WeightedOption[]): WeightedOption[] => {
+    const totalWeight = opts.reduce((sum, opt) => sum + opt.weight, 0);
+    if (totalWeight === 0) return opts;
+    
+    return opts.map(opt => ({
+      ...opt,
+      weight: Math.round((opt.weight / totalWeight) * 100)
+    }));
+  };
+  
   // Calculate the position of the main handle and each branch handle relative to the node box
+  // Extract metadata when text changes
+  useEffect(() => {
+    if (intelligence.metadataExtractor && !showMetadata && !metadata && options.length > 0) {
+      const allText = options.map(opt => opt.text).filter(t => t).join(' ');
+      if (allText.length > 10) {
+        setIsExtractingMetadata(true);
+        intelligence.metadataExtractor.extract(allText).then(result => {
+          if (result) {
+            setMetadata(result.metadata);
+          }
+          setIsExtractingMetadata(false);
+        }).catch(() => {
+          setIsExtractingMetadata(false);
+        });
+      }
+    }
+  }, [options, intelligence.metadataExtractor, showMetadata, metadata]);
+
+  // Keyboard handler for metadata toggle
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only toggle if THIS node is selected
+      if (e.key === 'm' && (e.metaKey || e.ctrlKey) && props.selected) {
+        e.preventDefault();
+        setShowMetadata(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [props.selected]);
+
+  // Debug effect to monitor flip state changes
+  useEffect(() => {
+    console.log('🎭 Flip State Changed:', {
+      showMetadata,
+      flipCard: document.querySelector('.flip-card'),
+      hasFlippedClass: !!document.querySelector('.flip-card.flipped'),
+      allFlipCards: document.querySelectorAll('.flip-card').length,
+      computedTransform: window.getComputedStyle(document.querySelector('.flip-card') || document.createElement('div')).transform,
+    });
+  }, [showMetadata]);
+
   useLayoutEffect(() => {
     if (!nodeRef.current) return;
 
@@ -450,10 +525,55 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
   const percentages = calculatePercentages(options);
   const totalWeight = options.reduce((sum, opt) => sum + opt.weight, 0);
 
+  // AI suggestion handlers
+  const handleChoicesGenerated = useCallback((choices: Choice[]) => {
+    // Smart choice generation that respects existing options
+    const existingFilledOptions = options.filter(opt => opt.text && opt.text.trim() !== '');
+    const blankOptionCount = options.filter(opt => !opt.text || opt.text.trim() === '').length;
+    
+    // If we have blank options, fill them intelligently
+    if (blankOptionCount > 0 && choices.length > 0) {
+      let choiceIndex = 0;
+      const updatedOptions = options.map(opt => {
+        // Keep filled options as-is
+        if (opt.text && opt.text.trim() !== '') {
+          return opt;
+        }
+        // Fill blank options with generated choices
+        if (choiceIndex < choices.length) {
+          const choice = choices[choiceIndex++];
+          return {
+            text: choice.text,
+            weight: opt.weight || choice.weight || 50,
+            hasBranch: opt.hasBranch || false
+          };
+        }
+        return opt;
+      });
+      setOptions(normalizeWeights(updatedOptions));
+    } else if (choices.length > 0) {
+      // No blank options, so append the new choices to existing ones
+      const newOptions = choices.map(choice => ({
+        text: choice.text,
+        weight: choice.weight || 50,
+        hasBranch: false
+      }));
+      setOptions(normalizeWeights([...options, ...newOptions]));
+    }
+  }, [options]);
+
+  const handleWeightsOptimized = useCallback((result: WeightOptimizationResult) => {
+    const optimizedOptions = result.optimized.map((choice, index) => ({
+      ...options[index],
+      weight: choice.weight
+    }));
+    setOptions(optimizedOptions);
+  }, [options]);
+
   return (
     <BaseEditableNode
       {...props}
-      className="weighted-choice enhanced-branching"
+      className={`weighted-choice enhanced-branching flippable ${showMetadata ? 'node-flipped' : ''}`}
       style={{ width: '520px' }}
       minWidth={520}
       minHeight={180}
@@ -470,9 +590,13 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
       {({ isEditing, confirmEdit, cancelEdit }) => {
         if (isEditing) {
           return (
-            <div ref={nodeRef} className="enhanced-branching-editor" onMouseDown={(e) => e.stopPropagation()}>
+            <div ref={nodeRef} className={`enhanced-branching-editor flip-container`} onMouseDown={(e) => e.stopPropagation()}>
               {/* Main output is handled by BaseEditableNode when no branching */}
 
+              {/* The entire content flips as one card */}
+              <div className={`flip-card ${showMetadata ? 'flipped' : ''}`}>
+                {/* Front side - normal editor */}
+                <div className="card-face node-front">
               {/* Title section with edit capability */}
               <div className="enhanced-title-section">
                 {isEditingTitle ? (
@@ -520,6 +644,40 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 <div className="total-weight">
                   Total: {totalWeight}
                 </div>
+                {/* Metadata toggle button */}
+                <button
+                  className="metadata-toggle-btn nodrag"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newState = !showMetadata;
+                    console.log('🔄 Flip Toggle:', {
+                      previousState: showMetadata,
+                      newState,
+                      flipCardElement: document.querySelector('.flip-card'),
+                      hasFlippedClass: document.querySelector('.flip-card.flipped'),
+                    });
+                    setShowMetadata(newState);
+                  }}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  title="Toggle metadata view (Ctrl+M)"
+                  style={{
+                    marginLeft: '10px',
+                    background: showMetadata ? '#10b981' : '#374151',
+                    border: '1px solid #4b5563',
+                    borderRadius: '4px',
+                    color: '#fff',
+                    padding: '2px 6px',
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minWidth: '28px',
+                    height: '28px'
+                  }}
+                >
+                  {showMetadata ? '📊' : '🔍'}
+                </button>
               </div>
 
               {/* Options list with scroll support */}
@@ -642,6 +800,60 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 <div className="hints">
                   Drag to reorder • ⚡ = branch output • Click and drag dials to adjust weights
                 </div>
+                
+                {/* Epic 2 AI Integration */}
+                {intelligence.consentGiven && intelligence.nodeIntelligence && (
+                  <div className="epic2-ai-controls" style={{ marginBottom: '10px', padding: '10px', borderTop: '1px solid #333' }}>
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                      {/* Show InspirationMode only when there are NO options at all */}
+                      {options.length === 0 && (
+                        <InspirationMode
+                          upstreamContext="weighted choice node"
+                          onInspirationSelected={handleChoicesGenerated}
+                          intelligenceService={intelligence.nodeIntelligence}
+                        />
+                      )}
+                      
+                      {/* Show PopulateChoices when we need more options (less than 3) or have blank ones */}
+                      {(options.length < 3 || options.some(opt => !opt.text || opt.text.trim() === '')) && (
+                        <PopulateChoicesButton
+                          nodeText={title || 'weighted choice node'}
+                          context={`Node title: ${title || 'Weighted Choice'}. ${options.filter(opt => opt.text).map(opt => opt.text).join(', ')}`}
+                          currentChoices={options.map(opt => ({ text: opt.text, weight: opt.weight }))}
+                          onChoicesGenerated={handleChoicesGenerated}
+                          intelligenceService={intelligence.nodeIntelligence}
+                          requestedCount={options.filter(opt => !opt.text || opt.text.trim() === '').length || (3 - options.length)}
+                        />
+                      )}
+                      
+                      {/* Show OptimizeWeights only when we have 2+ filled options */}
+                      {options.filter(opt => opt.text && opt.text.trim() !== '').length > 1 && (
+                        <OptimizeWeightsButton
+                          choices={options.map(opt => ({ text: opt.text, weight: opt.weight }))}
+                          context="weighted choice context"
+                          onWeightsOptimized={handleWeightsOptimized}
+                          intelligenceService={intelligence.nodeIntelligence}
+                        />
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Debug info if consent not given */}
+                {!intelligence.consentGiven && (
+                  <div style={{ padding: '8px', fontSize: '11px', color: '#666', textAlign: 'center' }}>
+                    <div>AI Features: {intelligence.consentGiven ? 'Enabled' : 'Disabled'}</div>
+                    {!intelligence.consentGiven && (
+                      <button 
+                        onClick={() => intelligence.setConsent(true)}
+                        style={{ marginTop: '4px', fontSize: '10px', padding: '2px 6px' }}
+                      >
+                        Enable AI Features
+                      </button>
+                    )}
+                  </div>
+                )}
+                
                 <div className="footer-controls">
                   <button className="add-option-btn" onClick={addOption}>
                     + Add Option
@@ -698,7 +910,144 @@ const EnhancedBranchingNodeComponent = (props: NodeProps<EnhancedBranchingNodeDa
                 />
               )}
               {/* Note: Main output when no branching is handled by BaseEditableNode */}
-            </div>
+                  </div>
+                  
+                  {/* Back side - metadata view */}
+                  <div className="card-face metadata-view">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <h3 style={{ margin: 0, fontSize: '14px', fontWeight: 'bold', color: '#10b981' }}>
+                      Metadata Analysis
+                    </h3>
+                    <button
+                      className="metadata-close-btn nodrag"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowMetadata(false);
+                      }}
+                      style={{
+                        background: '#374151',
+                        border: '1px solid #4b5563',
+                        borderRadius: '4px',
+                        color: '#e5e7eb',
+                        padding: '4px 8px',
+                        cursor: 'pointer',
+                        fontSize: '12px',
+                        transition: 'background 0.2s'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.background = '#4b5563'}
+                      onMouseLeave={(e) => e.currentTarget.style.background = '#374151'}
+                    >
+                      ✕ Close
+                    </button>
+                  </div>
+                  {isExtractingMetadata ? (
+                    <div style={{ textAlign: 'center', padding: '20px' }}>
+                      <span className="spinner" /> Extracting metadata...
+                    </div>
+                  ) : metadata ? (
+                    <div className="metadata-content" style={{ fontSize: '12px' }}>
+                      {metadata.subject && (
+                        <div style={{ marginBottom: '8px' }}>
+                          <strong>Subject:</strong> {metadata.subject}
+                        </div>
+                      )}
+                      {metadata.action && (
+                        <div style={{ marginBottom: '8px' }}>
+                          <strong>Action:</strong> {metadata.action}
+                        </div>
+                      )}
+                      {metadata.location && (
+                        <div style={{ marginBottom: '8px' }}>
+                          <strong>Location:</strong> {metadata.location}
+                        </div>
+                      )}
+                      {metadata.mood && (
+                        <div style={{ marginBottom: '8px' }}>
+                          <strong>Mood:</strong> {metadata.mood}
+                        </div>
+                      )}
+                      {metadata.intensity !== undefined && (
+                        <div style={{ marginBottom: '8px' }}>
+                          <strong>Intensity:</strong> 
+                          <div style={{
+                            display: 'inline-block',
+                            marginLeft: '10px',
+                            width: '100px',
+                            height: '8px',
+                            background: '#374151',
+                            borderRadius: '4px',
+                            position: 'relative'
+                          }}>
+                            <div style={{
+                              width: `${(metadata.intensity / 10) * 100}%`,
+                              height: '100%',
+                              background: metadata.intensity > 7 ? '#ef4444' : metadata.intensity > 4 ? '#f59e0b' : '#10b981',
+                              borderRadius: '4px'
+                            }} />
+                          </div>
+                          <span style={{ marginLeft: '5px' }}>{metadata.intensity}/10</span>
+                        </div>
+                      )}
+                      {metadata.tags && metadata.tags.length > 0 && (
+                        <div style={{ marginBottom: '8px' }}>
+                          <strong>Tags:</strong>
+                          <div style={{ marginTop: '5px' }}>
+                            {metadata.tags.map((tag, i) => (
+                              <span key={i} style={{
+                                display: 'inline-block',
+                                background: '#374151',
+                                padding: '2px 8px',
+                                borderRadius: '12px',
+                                marginRight: '5px',
+                                marginBottom: '5px',
+                                fontSize: '11px'
+                              }}>
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      <button
+                        className="refresh-metadata-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMetadata(null);
+                          const allText = options.map(opt => opt.text).filter(t => t).join(' ');
+                          if (intelligence.metadataExtractor && allText.length > 10) {
+                            setIsExtractingMetadata(true);
+                            intelligence.metadataExtractor.extract(allText).then(result => {
+                              if (result) {
+                                setMetadata(result.metadata);
+                              }
+                              setIsExtractingMetadata(false);
+                            }).catch(() => {
+                              setIsExtractingMetadata(false);
+                            });
+                          }
+                        }}
+                        style={{
+                          marginTop: '10px',
+                          background: '#374151',
+                          border: 'none',
+                          borderRadius: '4px',
+                          color: '#fff',
+                          padding: '4px 8px',
+                          fontSize: '11px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        Refresh Analysis
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', padding: '20px', color: '#6b7280' }}>
+                      No metadata extracted yet. Add some content to analyze.
+                    </div>
+                  )}
+                  </div>
+                </div>
+              </div>
           );
         }
 

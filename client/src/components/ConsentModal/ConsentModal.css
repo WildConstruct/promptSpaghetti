@@ -1,0 +1,154 @@
+.consent-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.consent-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.consent-modal h2 {
+  color: #333;
+  font-size: 1.4rem;
+  margin: 0 0 1rem 0;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+}
+
+.consent-content {
+  padding: 0 1.5rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.consent-content p {
+  margin: 0 0 1rem 0;
+}
+
+.consent-content ul {
+  margin: 0 0 1.5rem 0;
+  padding-left: 1.2rem;
+}
+
+.consent-content li {
+  margin-bottom: 0.5rem;
+}
+
+.consent-privacy {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.consent-privacy h3 {
+  color: #333;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.consent-privacy ul {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.consent-actions {
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.consent-accept {
+  flex: 1;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.consent-accept:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+}
+
+.consent-decline {
+  flex: 1;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.consent-decline:hover {
+  background: #545b62;
+  transform: translateY(-1px);
+}
+
+.consent-accept:active,
+.consent-decline:active {
+  transform: translateY(0);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .consent-modal {
+    background: #2d3748;
+    color: #e2e8f0;
+  }
+  
+  .consent-modal h2 {
+    color: #f7fafc;
+  }
+  
+  .consent-privacy {
+    background: #4a5568;
+  }
+  
+  .consent-privacy h3 {
+    color: #f7fafc;
+  }
+  
+  .consent-actions {
+    border-top-color: #4a5568;
+  }
+}

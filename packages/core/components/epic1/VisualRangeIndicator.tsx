@@ -211,6 +211,9 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
           const fromY = line.from.top + line.from.height / 2;
           const toX = line.to.left + line.to.width / 2;
           const toY = line.to.top + line.to.height / 2;
+          if (!Number.isFinite(fromX) || !Number.isFinite(fromY) || !Number.isFinite(toX) || !Number.isFinite(toY)) {
+            return null;
+          }
 
           // Calculate control points for curved line
           const dx = toX - fromX;
@@ -230,8 +233,8 @@ export const VisualRangeIndicator: React.FC<VisualRangeIndicatorProps> = ({
                 strokeDasharray="5,5"
                 opacity="0.7"
               />
-              <circle cx={fromX} cy={fromY} r="4" fill={line.color} />
-              <circle cx={toX} cy={toY} r="4" fill={line.color} />
+              <circle cx={fromX} cy={fromY} r={4} fill={line.color} />
+              <circle cx={toX} cy={toY} r={4} fill={line.color} />
             </g>
           );
         })}

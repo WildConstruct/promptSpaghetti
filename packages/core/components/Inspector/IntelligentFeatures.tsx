@@ -16,6 +16,7 @@ interface PopulateChoicesButtonProps {
   currentChoices: Choice[];
   onChoicesGenerated: (choices: Choice[]) => void;
   intelligenceService: NodeIntelligenceService;
+  requestedCount?: number; // Optional: specific count to generate
 }
 
 export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
@@ -23,24 +24,64 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
   context,
   currentChoices,
   onChoicesGenerated,
-  intelligenceService
+  intelligenceService,
+  requestedCount
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCountPrompt, setShowCountPrompt] = useState(false);
+  const [choiceCount, setChoiceCount] = useState(3);
 
-  const handlePopulate = useCallback(async () => {
+  const handlePopulate = useCallback(async (count?: number) => {
     setLoading(true);
     setError(null);
+
+    // Determine how many choices to generate
+    let numToGenerate = count || requestedCount || 5;
+    
+    // Count blank options to determine how many we need
+    const blankCount = currentChoices.filter(c => !c.text || c.text.trim() === '').length;
+    const filledCount = currentChoices.filter(c => c.text && c.text.trim() !== '').length;
+    
+    // If we have blank options, generate that many
+    if (blankCount > 0) {
+      numToGenerate = blankCount;
+    } else if (currentChoices.length > 0 && currentChoices.length < 3 && blankCount === 0 && !count && !requestedCount) {
+      // If we have 1-2 filled options and no count specified, ask how many more
+      setShowCountPrompt(true);
+      setLoading(false);
+      return;
+    } else if (currentChoices.length > 0 && currentChoices.length < 3 && blankCount === 0) {
+      // If we have 1-2 filled options, generate based on count or default
+      numToGenerate = count || requestedCount || (3 - currentChoices.length);
+    } else if (currentChoices.length === 0 && !count && !requestedCount) {
+      // If no options exist and no count specified, show prompt
+      setShowCountPrompt(true);
+      setLoading(false);
+      return;
+    }
+
+    // Build context from existing filled options
+    const existingText = currentChoices
+      .filter(c => c.text && c.text.trim() !== '')
+      .map(c => c.text)
+      .join(', ');
+    
+    // Combine nodeText with existing filled options for better context
+    const enrichedContext = existingText 
+      ? `${context}. Existing options: ${existingText}. Generate ${numToGenerate} additional complementary options.`
+      : `${context}. Generate ${numToGenerate} options based on: ${nodeText}`;
 
     try {
       const choices = await intelligenceService.populateChoices(
         nodeText,
-        context,
-        5
+        enrichedContext,
+        numToGenerate
       );
       
       if (choices && choices.length > 0) {
         onChoicesGenerated(choices);
+        setShowCountPrompt(false);
       } else {
         setError('No suggestions available');
       }
@@ -49,18 +90,52 @@ export const PopulateChoicesButton: React.FC<PopulateChoicesButtonProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [nodeText, context, intelligenceService, onChoicesGenerated]);
+  }, [nodeText, context, currentChoices, requestedCount, intelligenceService, onChoicesGenerated]);
 
-  // Only show button for nodes with <3 choices
-  if (currentChoices.length >= 3 && currentChoices.some(c => c.text)) {
-    return null;
+  const handleCountSubmit = useCallback(() => {
+    setShowCountPrompt(false);
+    handlePopulate(choiceCount);
+  }, [choiceCount, handlePopulate]);
+
+  // Show count prompt if needed
+  if (showCountPrompt) {
+    return (
+      <div className="intelligent-feature count-prompt">
+        <div className="count-prompt-content">
+          <label>How many options would you like?</label>
+          <div className="count-input-group">
+            <input
+              type="number"
+              min="2"
+              max="10"
+              value={choiceCount}
+              onChange={(e) => setChoiceCount(parseInt(e.target.value) || 3)}
+              className="count-input"
+            />
+            <button
+              className="count-submit-btn"
+              onClick={handleCountSubmit}
+            >
+              Generate
+            </button>
+            <button
+              className="count-cancel-btn"
+              onClick={() => setShowCountPrompt(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
+  // Don't hide the button - always show it when relevant
   return (
     <div className="intelligent-feature">
       <button
         className="populate-choices-btn"
-        onClick={handlePopulate}
+        onClick={() => handlePopulate()}
         disabled={loading}
       >
         {loading ? (

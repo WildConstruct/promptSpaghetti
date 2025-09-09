@@ -13,13 +13,9 @@ interface ConditionalBranch {
   condition: string;
   output: string;
   label?: string;
-
-
-
-
+}
 
 // Minimal engine for server startup - bypassing problematic imports
-import { Graph, Node, NodeTypeEnum } from '../../packages/core/graphSchema';
 import { v4 as uuidv4 } from 'uuid';
 
 // Temporarily stub out problematic imports for server startup
@@ -118,7 +114,7 @@ function processTemplateVariables(template: string, executionContext: any): stri
  */
 export function initializeAnalytics(): void {
   console.log('Analytics initialization skipped (stub mode)');
-
+}
 
 /**
  * Simplified stub for server startup  
@@ -126,7 +122,7 @@ export function initializeAnalytics(): void {
 export async function executeGraph(graph: Graph, sessionId?: string, userId?: number): Promise<{
   outputs: string[];
   executionPath?: any;
-> {
+}> {
 
   const graphId = graph.id || uuidv4();
   const executionId = uuidv4();
@@ -148,12 +144,12 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
             event.success,
             event.error
           );
- else if (event.type === 'event') {
+        } else if (event.type === 'event') {
           analyticsCollector.recordEvent(event.data);
-
+        }
       });
       analyticsBuffer.length = 0; // Clear buffer
-
+    }
   };
   
   // Epic 8.5: Initialize execution tracking
@@ -179,7 +175,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       ? AdvancedExecutionUtils.enhanceContext({ 
         variables: {}, 
         seed: graph.seed ?? Date.now() 
-
+      })
       : { variables: {}, seed: graph.seed ?? Date.now() } as ExecutionContext;
 
     const nodeMap = new Map<string, Node>();
@@ -212,7 +208,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
             nodeType: node.type,
             graphId,
             executionId
-
+          }
         });
 
 
@@ -278,7 +274,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
         });
 
         return result;
- catch (error) {
+      } catch (error) {
         // Record failed node execution
         const nodeEndTime = Date.now();
         const executionTimeMs = nodeEndTime - nodeStartTime;
@@ -352,7 +348,7 @@ export async function executeGraph(graph: Graph, sessionId?: string, userId?: nu
       outputs,
       executionPath
     };
- catch (error) {
+  } catch (error) {
     // Record failed graph execution
     const endTime = Date.now();
     const executionTimeMs = endTime - startTime;
@@ -431,12 +427,12 @@ function isAdvancedNodeType(nodeType: string): boolean {
         const nodeTypes = nodeExtension.getNodeTypes();
         if (nodeTypes.some(type => type.id === nodeType)) {
           return true; // Assume extension nodes use advanced context for safety
-
-
-
- catch (error) {
+        }
+      }
+    }
+  } catch (error) {
     // Ignore errors in extension checking
-
+  }
   
   return false;
 
@@ -466,6 +462,7 @@ function createRuntimeNode(
     const outputNode = new OutputNode(node.id);
     outputNode.setInput(output);
     return outputNode;
+  }
 
   case 'TextBlock':
     return new TextBlockNode(node.id, node.text || node.value || '');
@@ -478,8 +475,9 @@ function createRuntimeNode(
       const processedTemplate = processTemplateVariables(node.template, executionContext);
       // Only use processed template if it's different and valid
       value = processedTemplate || value;
-
+    }
     return new SetVariableNode(node.id, node.key, value);
+  }
 
   case 'GetVariable':
     return new GetVariableNode(node.id, node.key);
@@ -501,20 +499,21 @@ function createRuntimeNode(
       for (const [key, value] of Object.entries(config.customFunctions)) {
         if (typeof value === 'function') {
           funcs[key] = value;
- else {
+        } else {
           // Convert constants to functions that return the constant
           funcs[key] = () => value;
-
+        }
+      }
 
       config.customFunctions = funcs;
-
+    }
     return new ConditionalNode(
       node.id,
       node.branches || [],
       node.defaultOutput || '',
       config
     );
-
+  }
     
   case 'Sequential':
     const patternConfig = node.pattern?.config || {};
@@ -555,11 +554,11 @@ function createRuntimeNode(
     const extensionNode = tryCreateExtensionNode(node, resolvedInputs, executionContext);
     if (extensionNode) {
       return extensionNode;
-
+    }
     // Exhaustive check
     throw new Error(`Unsupported node type ${(node as any).type}`);
-
-
+  }
+}
 
 /**
  * Check if a node type involves randomization for execution path tracking
@@ -612,7 +611,7 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
           selectedOption: result,
           selectionReason: `Advanced weighted selection of "${result}"`
         };
-
+      }
       break;
 
       
@@ -624,7 +623,7 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
         selectedOption: result,
         selectionReason: `Conditional evaluation resulted in "${result}"`
       };
-
+    }
       
     case 'Sequential': {
       const sequence = node.sequence as string[] || [];
@@ -634,7 +633,7 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
         selectedOption: result,
         selectionReason: `Sequential selection of "${result}"`
       };
-
+    }
       
     case 'Markov': {
       const states = node.states as string[] || [];
@@ -644,9 +643,9 @@ function extractRandomChoiceInfo(node: Node, result: unknown, resolvedInputs: un
         selectedOption: result,
         selectionReason: `Markov state transition to "${result}"`
       };
-
-
- catch (error) {
+    }
+  }
+  } catch (error) {
     console.warn(`Failed to extract random choice info for ${node.type}:`, error);
 
   
@@ -681,14 +680,16 @@ function tryCreateExtensionNode(
           // Wrap in a RuntimeNode adapter if needed
           if (extensionNode && typeof extensionNode.run === 'function') {
             return extensionNode as RuntimeNode<any>;
-
-
-
-
+          }
+        }
+      }
+    }
     
     return null;
- catch (error) {
+  } catch (error) {
     console.warn(`Failed to create extension node for type ${node.type}:`, error);
     return null;
+  }
+}
 
 
