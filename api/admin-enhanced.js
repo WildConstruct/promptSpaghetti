@@ -77,7 +77,7 @@ function getAdminHTML(authenticated = false, session = null) {
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             margin: 0;
             padding: 0;
             min-height: 100vh;
@@ -86,15 +86,16 @@ function getAdminHTML(authenticated = false, session = null) {
             justify-content: center;
         }
         .login-container {
-            background: white;
+            background: #1e293b;
             border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             width: 100%;
             max-width: 400px;
+            border: 1px solid #334155;
         }
         h1 {
-            color: #333;
+            color: #e2e8f0;
             margin-bottom: 30px;
             text-align: center;
         }
@@ -105,14 +106,21 @@ function getAdminHTML(authenticated = false, session = null) {
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            color: #555;
+            color: #94a3b8;
         }
         input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid #475569;
             border-radius: 6px;
             font-size: 16px;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         button {
             width: 100%;
@@ -129,11 +137,12 @@ function getAdminHTML(authenticated = false, session = null) {
             background: #5a67d8;
         }
         .error {
-            background: #f8d7da;
-            color: #721c24;
+            background: #7f1d1d;
+            color: #fca5a5;
             padding: 12px;
             border-radius: 6px;
             margin-bottom: 20px;
+            border: 1px solid #991b1b;
         }
     </style>
 </head>
@@ -181,47 +190,58 @@ function getAdminHTML(authenticated = false, session = null) {
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            background: #0f172a;
+            color: #e2e8f0;
             padding: 20px;
         }
         .header {
-            background: white;
+            background: #1e293b;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
         }
         h1 {
-            color: #667eea;
+            color: #818cf8;
         }
         .logout {
-            background: #dc3545;
+            background: #dc2626;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
+            transition: background 0.3s;
+        }
+        .logout:hover {
+            background: #b91c1c;
         }
         .tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
-            background: white;
+            background: #1e293b;
             padding: 10px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
         }
         .tab {
             padding: 10px 20px;
-            background: #f0f0f0;
+            background: #334155;
+            color: #94a3b8;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
+        }
+        .tab:hover {
+            background: #475569;
+            color: #cbd5e1;
         }
         .tab.active {
             background: #667eea;
@@ -229,10 +249,11 @@ function getAdminHTML(authenticated = false, session = null) {
         }
         .tab-content {
             display: none;
-            background: white;
+            background: #1e293b;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
         }
         .tab-content.active {
             display: block;
@@ -241,10 +262,14 @@ function getAdminHTML(authenticated = false, session = null) {
             margin-bottom: 30px;
         }
         h2 {
-            color: #444;
+            color: #cbd5e1;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #334155;
+        }
+        h3 {
+            color: #94a3b8;
+            margin-bottom: 15px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -253,18 +278,26 @@ function getAdminHTML(authenticated = false, session = null) {
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            color: #555;
+            color: #94a3b8;
         }
         input, select, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #475569;
             border-radius: 6px;
             font-size: 14px;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         textarea {
             min-height: 120px;
             resize: vertical;
+            font-family: 'Monaco', 'Menlo', monospace;
         }
         button {
             background: #667eea;
@@ -285,30 +318,33 @@ function getAdminHTML(authenticated = false, session = null) {
             margin-top: 20px;
         }
         .model-card {
-            border: 2px solid #e0e0e0;
+            border: 2px solid #334155;
+            background: #0f172a;
             border-radius: 8px;
             padding: 15px;
             cursor: pointer;
             transition: all 0.3s;
         }
         .model-card:hover {
-            border-color: #667eea;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: #475569;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
         .model-card.selected {
             border-color: #667eea;
-            background: #f0f4ff;
+            background: #1e293b;
         }
         .model-name {
             font-weight: 600;
             margin-bottom: 5px;
+            color: #e2e8f0;
         }
         .model-info {
             font-size: 12px;
-            color: #666;
+            color: #64748b;
         }
         .prompt-card {
-            border: 1px solid #e0e0e0;
+            border: 1px solid #334155;
+            background: #0f172a;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
@@ -322,9 +358,11 @@ function getAdminHTML(authenticated = false, session = null) {
         .prompt-title {
             font-weight: 600;
             font-size: 18px;
+            color: #e2e8f0;
         }
         .prompt-category {
-            background: #e0e0e0;
+            background: #334155;
+            color: #94a3b8;
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 12px;
@@ -337,17 +375,22 @@ function getAdminHTML(authenticated = false, session = null) {
             margin-right: 5px;
         }
         .status-indicator.configured {
-            background: #28a745;
+            background: #10b981;
         }
         .status-indicator.not-configured {
-            background: #dc3545;
+            background: #ef4444;
         }
         .info-box {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: #1e293b;
+            color: #60a5fa;
             padding: 15px;
             border-radius: 6px;
             margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        p {
+            color: #cbd5e1;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -521,12 +564,12 @@ function getAdminHTML(authenticated = false, session = null) {
                 
                 const data = await response.json();
                 if (data.success) {
-                    resultDiv.innerHTML = '<div style="background: #d4edda; padding: 15px; border-radius: 6px;"><strong>Success!</strong><br>' + data.response + '</div>';
+                    resultDiv.innerHTML = '<div style="background: #065f46; padding: 15px; border-radius: 6px; border: 1px solid #10b981; color: #6ee7b7;"><strong>Success!</strong><br>' + data.response + '</div>';
                 } else {
-                    resultDiv.innerHTML = '<div style="background: #f8d7da; padding: 15px; border-radius: 6px;"><strong>Error:</strong> ' + data.error + '</div>';
+                    resultDiv.innerHTML = '<div style="background: #7f1d1d; padding: 15px; border-radius: 6px; border: 1px solid #991b1b; color: #fca5a5;"><strong>Error:</strong> ' + data.error + '</div>';
                 }
             } catch (error) {
-                resultDiv.innerHTML = '<div style="background: #f8d7da; padding: 15px; border-radius: 6px;"><strong>Error:</strong> ' + error.message + '</div>';
+                resultDiv.innerHTML = '<div style="background: #7f1d1d; padding: 15px; border-radius: 6px; border: 1px solid #991b1b; color: #fca5a5;"><strong>Error:</strong> ' + error.message + '</div>';
             }
         }
     </script>
@@ -559,6 +602,15 @@ export default function handler(req, res) {
     // Handle login
     if (username && password) {
       const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+      
+      // Log for debugging (will show in Vercel function logs)
+      console.log('Login attempt:', {
+        username,
+        password_length: password.length,
+        env_password_set: !!process.env.ADMIN_PASSWORD,
+        env_password_length: process.env.ADMIN_PASSWORD ? process.env.ADMIN_PASSWORD.length : 0,
+        passwords_match: password === adminPassword
+      });
       
       if (username === 'admin' && password === adminPassword) {
         // Generate session token

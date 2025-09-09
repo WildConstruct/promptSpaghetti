@@ -45,7 +45,8 @@
       "Bash(PORT=8002 npx ts-node src/index-minimal.ts)",
       "Bash(taskkill:*)",
       "Bash(git add:*)",
-      "Bash(vercel:*)"
+      "Bash(vercel:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": [],
