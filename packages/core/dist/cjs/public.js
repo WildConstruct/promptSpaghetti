@@ -1,10 +1,19 @@
 "use strict";
 // Minimal stable public API for @promptscape/core
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLLMService = exports.SimpleLLMService = exports.LLMConfigDialog = exports.LLMToggle = exports.fromLegacyGraph = exports.writePsg = exports.readPsg = exports.AdvancedRuntimeNode = void 0;
-// Export both types and classes for Advanced runtime
-var runtime_1 = require("./runtime");
-Object.defineProperty(exports, "AdvancedRuntimeNode", { enumerable: true, get: function () { return runtime_1.AdvancedRuntimeNode; } });
+exports.getLLMService = exports.SimpleLLMService = exports.LLMConfigDialog = exports.LLMToggle = exports.fromLegacyGraph = exports.writePsg = exports.readPsg = void 0;
+// Runtime system exports - commented out to fix Netlify build
+// export type { 
+//   ExecutionContext,
+//   RuntimeNode
+// } from './runtime';
+// Export both types and classes for Advanced runtime - commented out to fix Netlify build  
+// export { 
+//   AdvancedRuntimeNode,
+//   type AdvancedExecutionContext,
+//   type AdvancedNodeConfig,
+//   type ValidationResult
+// } from './runtime';
 // Public Utils surface - temporarily disabled due to import issues
 // export * from './utils/index';
 // Export specific utils that are needed by client
