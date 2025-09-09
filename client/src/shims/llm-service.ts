@@ -17,13 +17,48 @@ function withBase(path: string): string {
 }
 
 async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
+  // Get API key from localStorage or environment
+  const apiKey =
+    localStorage.getItem('openrouter-api-key') ||
+    (typeof import.meta !== 'undefined' &&
+      (import.meta as any).env?.VITE_OPENROUTER_API_KEY);
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json'
+  };
+
+  // Add authorization header if API key is available
+  if (apiKey) {
+    headers['Authorization'] = `Bearer ${apiKey}`;
+  }
+
   const res = await fetch(withBase(url), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(body),
     credentials: 'include'
   });
-  if (!res.ok) throw new Error(`LLM endpoint error: ${res.status}`);
+
+  if (!res.ok) {
+    // Try to get error details from response
+    let errorMessage = `LLM endpoint error: ${res.status}`;
+    try {
+      const errorData = await res.json();
+      if (errorData.error) {
+        errorMessage = errorData.error;
+        if (errorData.details) {
+          errorMessage += ` - ${errorData.details}`;
+        }
+      }
+    } catch {
+      // If response isn't JSON, use status text
+      if (res.statusText) {
+        errorMessage = `LLM endpoint error: ${res.status} ${res.statusText}`;
+      }
+    }
+    throw new Error(errorMessage);
+  }
+
   return (await res.json()) as T;
 }
 

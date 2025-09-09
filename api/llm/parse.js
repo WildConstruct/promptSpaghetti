@@ -27,15 +27,25 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Prompt is required (string)' });
     }
 
-    // API keys
-    const openaiKey = process.env.OPENAI_API_KEY;
-    const openrouterKey = process.env.OPENROUTER_API_KEY;
+    // API keys - check environment first, then authorization header
+    let openaiKey = process.env.OPENAI_API_KEY;
+    let openrouterKey = process.env.OPENROUTER_API_KEY;
+
+    // Check if API key was passed in Authorization header
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const providedKey = authHeader.substring(7);
+      // If no env keys, use the provided key as OpenRouter key
+      if (!openaiKey && !openrouterKey && providedKey) {
+        openrouterKey = providedKey;
+      }
+    }
 
     if (!openaiKey && !openrouterKey) {
-      return res.status(500).json({
+      return res.status(401).json({
         error: 'No LLM API keys configured',
         details:
-          'Please configure OPENAI_API_KEY or OPENROUTER_API_KEY in environment variables'
+          'Please configure API keys in environment variables or pass via Authorization header'
       });
     }
 
