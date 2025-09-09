@@ -263,6 +263,13 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
           throw e;
         }
 
+        // Check if result is valid
+        if (!result || !result.nodes) {
+          console.error('[PromptDissector] Invalid LLM response:', result);
+          if (showLoading) setIsLLMParsing(false);
+          throw new Error('Invalid response from LLM service');
+        }
+
         // Create segments from the nodes
         const segments = result.nodes
           .filter(n => n.type !== 'output')
@@ -2280,49 +2287,58 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
 
                     // Use async parsing with modular function
                     (async () => {
-                      const newAnalysis = await performParse(value, llmMode);
+                      try {
+                        const newAnalysis = await performParse(value, llmMode);
 
-                      setAnalysis(newAnalysis);
-                      setHasBeenAnalyzed(true);
-                      safeOnAnalysisComplete(newAnalysis);
+                        setAnalysis(newAnalysis);
+                        setHasBeenAnalyzed(true);
+                        safeOnAnalysisComplete(newAnalysis);
 
-                      // Build highlight segments from analysis
-                      const segments: HighlightSegment[] = [];
-                      let lastEnd = 0;
-                      const sortedMappings = [...newAnalysis.mappings].sort(
-                        (a, b) => a.startIndex - b.startIndex
-                      );
-                      sortedMappings.forEach((mapping, idx) => {
-                        if (mapping.startIndex > lastEnd) {
+                        // Build highlight segments from analysis
+                        const segments: HighlightSegment[] = [];
+                        let lastEnd = 0;
+                        const sortedMappings = [...newAnalysis.mappings].sort(
+                          (a, b) => a.startIndex - b.startIndex
+                        );
+                        sortedMappings.forEach((mapping, idx) => {
+                          if (mapping.startIndex > lastEnd) {
+                            segments.push({
+                              text: value.slice(lastEnd, mapping.startIndex),
+                              startIndex: lastEnd,
+                              endIndex: mapping.startIndex
+                            });
+                          }
                           segments.push({
-                            text: value.slice(lastEnd, mapping.startIndex),
+                            text: value.slice(
+                              mapping.startIndex,
+                              mapping.endIndex
+                            ),
+                            startIndex: mapping.startIndex,
+                            endIndex: mapping.endIndex,
+                            nodeId: mapping.nodeId,
+                            color:
+                              mapping.highlightColor ||
+                              HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length],
+                            isSelected: false
+                          });
+                          lastEnd = mapping.endIndex;
+                        });
+                        if (lastEnd < value.length) {
+                          segments.push({
+                            text: value.slice(lastEnd),
                             startIndex: lastEnd,
-                            endIndex: mapping.startIndex
+                            endIndex: value.length
                           });
                         }
-                        segments.push({
-                          text: value.slice(
-                            mapping.startIndex,
-                            mapping.endIndex
-                          ),
-                          startIndex: mapping.startIndex,
-                          endIndex: mapping.endIndex,
-                          nodeId: mapping.nodeId,
-                          color:
-                            mapping.highlightColor ||
-                            HIGHLIGHT_COLORS[idx % HIGHLIGHT_COLORS.length],
-                          isSelected: false
-                        });
-                        lastEnd = mapping.endIndex;
-                      });
-                      if (lastEnd < value.length) {
-                        segments.push({
-                          text: value.slice(lastEnd),
-                          startIndex: lastEnd,
-                          endIndex: value.length
-                        });
+                        setHighlightSegments(segments);
+                      } catch (error) {
+                        console.error('[PromptDissector] Parse failed:', error);
+                        setIsLLMParsing(false);
+                        // Optionally show an error message to the user
+                        alert(
+                          'Failed to parse prompt. Please try again or use Standard mode.'
+                        );
                       }
-                      setHighlightSegments(segments);
                     })(); // Close and execute the async function
                   }
                 }}
