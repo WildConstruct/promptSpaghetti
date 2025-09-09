@@ -40,21 +40,28 @@ export default async function handler(req, res) {
     }
 
     // Build the parsing prompt
-    const systemPrompt = `You are a prompt parsing assistant. Analyze the given prompt and extract its components into a structured graph format.
+    const systemPrompt = `You are a prompt parsing assistant. Analyze the given prompt and extract MEANINGFUL components into a structured graph format.
+
+IMPORTANT: Create nodes for semantic units, NOT individual words. Group related text together.
 
 Extract:
-1. Characters/subjects (nouns, entities)
-2. Actions/verbs (what they do)
-3. Variations/choices (alternative options)
-4. Variables (placeholders like {name})
-5. Connections between elements
+1. Main subjects/characters (group descriptors with their noun)
+2. Key actions or events (include full verb phrases)
+3. Descriptive phrases (keep adjectives with what they describe)
+4. Choices/variations (if text has options separated by "or", "/" etc)
+5. Variables (placeholders like {name} or [topic])
 
 Return a JSON object with:
 - nodes: Array of {id, type, text, data}
 - edges: Array of {id, source, target}
 
 Node types: 'subject', 'action', 'choice', 'variable', 'output'
-Keep the structure simple and connected.`;
+
+Example: "A beautiful Korean woman with long black hair"
+GOOD: One node with text "beautiful Korean woman with long black hair"
+BAD: Separate nodes for "beautiful", "Korean", "woman", "long", "black", "hair"
+
+Keep nodes meaningful and the structure simple.`;
 
     const userPrompt = `Parse this prompt into a graph structure:\n"${prompt}"`;
 
@@ -155,12 +162,16 @@ Keep the structure simple and connected.`;
       parsedGraph.edges = [];
     }
 
-    // Add IDs if missing
+    // Add IDs if missing and ensure proper data structure
     parsedGraph.nodes = parsedGraph.nodes.map((node, index) => ({
       id: node.id || `node-${index}`,
       type: node.type || 'subject',
       text: node.text || '',
-      data: node.data || {},
+      data: {
+        ...node.data,
+        label: node.text || node.data?.label || '',
+        content: node.text || node.data?.content || ''
+      },
       position: node.position || { x: 100 + index * 150, y: 100 + index * 50 }
     }));
 
