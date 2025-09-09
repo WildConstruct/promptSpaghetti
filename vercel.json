@@ -3,7 +3,7 @@
   "installCommand": "echo 'Skipping install for API-only deployment'",
   "outputDirectory": "public",
   "functions": {
-    "api/*.js": {
+    "api/**/*.js": {
       "maxDuration": 30
     }
   }
