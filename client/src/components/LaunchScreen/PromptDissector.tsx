@@ -264,10 +264,24 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         }
 
         // Check if result is valid
-        if (!result || !result.nodes) {
-          console.error('[PromptDissector] Invalid LLM response:', result);
+        // Handle both old format (graph.nodes) and new format (nodes)
+        if (!result) {
+          console.error('[PromptDissector] No response from LLM service');
           if (showLoading) setIsLLMParsing(false);
-          throw new Error('Invalid response from LLM service');
+          throw new Error('No response from LLM service');
+        }
+
+        // Support both old and new API response formats
+        if (result.graph && result.graph.nodes) {
+          console.log('[PromptDissector] Using old API format (graph.nodes)');
+          result = result.graph; // Unwrap the nested structure
+        } else if (!result.nodes) {
+          console.error(
+            '[PromptDissector] Invalid LLM response - no nodes found:',
+            result
+          );
+          if (showLoading) setIsLLMParsing(false);
+          throw new Error('Invalid response from LLM service - no nodes found');
         }
 
         // Create segments from the nodes
