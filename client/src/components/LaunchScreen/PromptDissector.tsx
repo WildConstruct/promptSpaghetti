@@ -215,10 +215,15 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
     let newAnalysis: PromptAnalysis;
     
     if (mode === 'llm-enhanced') {
-      if (showLoading) {
-        setIsLLMParsing(true);
+      if (showLoading) setIsLLMParsing(true);
+      let result: any;
+      try {
+        result = await llmServiceRef.current.parse(text, { mode: 'llm-enhanced' });
+      } catch (e: any) {
+        console.error('[PromptDissector] LLM parse failed:', e?.message || e);
+        if (showLoading) setIsLLMParsing(false);
+        throw e;
       }
-      const result = await llmServiceRef.current.parse(text, { mode: 'llm-enhanced' });
       
       // Create segments from the nodes
       const segments = result.nodes.filter(n => n.type !== 'output').map(node => ({
@@ -266,9 +271,7 @@ export const PromptDissector: React.FC<PromptDissectorProps> = ({
         llmMetadata: result.metadata,
         rawPrompt: text
       };
-      if (showLoading) {
-        setIsLLMParsing(false);
-      }
+      if (showLoading) setIsLLMParsing(false);
     } else {
       // Use standard parser
       newAnalysis = parserRef.current.parse(text);

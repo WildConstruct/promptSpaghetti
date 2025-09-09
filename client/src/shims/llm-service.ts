@@ -1,8 +1,20 @@
 // Browser build stub for LLMService to avoid pulling in OpenAI SDK.
 type AnyObj = Record<string, any>;
 
+const API_BASE = (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_API_URL) || '';
+
+function withBase(path: string): string {
+  if (!path) return path;
+  if (API_BASE) {
+    if (path.startsWith('http')) return path;
+    if (path.startsWith('/')) return API_BASE.replace(/\/$/, '') + path;
+    return API_BASE.replace(/\/$/, '') + '/' + path;
+  }
+  return path;
+}
+
 async function postJson<T = any>(url: string, body: AnyObj): Promise<T> {
-  const res = await fetch(url, {
+  const res = await fetch(withBase(url), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
