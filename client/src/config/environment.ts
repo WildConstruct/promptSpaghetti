@@ -34,8 +34,9 @@ export const env: EnvironmentConfig = {
 };
 
 // Validate required environment variables in production
+// Note: VITE_API_URL is intentionally NOT required - we use relative URLs with Netlify redirects
 if (import.meta.env.PROD) {
-  const requiredVars = ['VITE_API_URL'];
+  const requiredVars: string[] = []; // No required vars for now
   const missingVars = requiredVars.filter(key => !import.meta.env[key]);
 
   if (missingVars.length > 0) {

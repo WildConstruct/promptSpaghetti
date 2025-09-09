@@ -269,7 +269,7 @@ async function llmEnhancedParse(
     // Detect variables in molecular chunks
     const variablePattern = /\{([^}]+)\}|\[([^\]]+)\]|<([^>]+)>/g;
     const varMatches = group.text.matchAll(variablePattern);
-    const foundVars = Array.from(varMatches);
+    const foundVars = Array.from(varMatches) as RegExpMatchArray[];
 
     if (foundVars.length > 0) {
       nodeType = 'variable';
@@ -287,7 +287,7 @@ async function llmEnhancedParse(
 
     // Detect choice patterns from POS analysis
     const hasChoiceWords = group.chunks.some(
-      chunk =>
+      (chunk: any) =>
         chunk.pos === 'conjunction' && /\b(or|either)\b/i.test(chunk.text)
     );
 
@@ -308,7 +308,7 @@ async function llmEnhancedParse(
 
     // Detect conditional patterns
     const hasConditional = group.chunks.some(
-      chunk =>
+      (chunk: any) =>
         chunk.pos === 'conditional' || /\b(if|when|unless)\b/i.test(chunk.text)
     );
 
@@ -696,7 +696,7 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
       currentGroup.chunks.pop(); // Remove 'or' from current group
       if (currentGroup.chunks.length > 0) {
         currentGroup.text = currentGroup.chunks
-          .map(c => c.text)
+          .map((c: any) => c.text)
           .join(' ')
           .trim();
         groups.push(currentGroup);
@@ -721,7 +721,7 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
     if (shouldBreak) {
       // Join chunks without adding spaces - preserve original spacing
       currentGroup.text = currentGroup.chunks
-        .map(c => c.text)
+        .map((c: any) => c.text)
         .join('')
         .trim();
       if (
@@ -744,7 +744,7 @@ function groupChunksIntoSemanticUnits(chunks: MolecularChunk[]): any[] {
   if (currentGroup.chunks.length > 0) {
     // Join chunks without adding spaces - preserve original spacing
     currentGroup.text = currentGroup.chunks
-      .map(c => c.text)
+      .map((c: any) => c.text)
       .join('')
       .trim();
     if (currentGroup.text && currentGroup.text !== '.') {

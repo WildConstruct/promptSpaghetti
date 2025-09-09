@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
   try {
     const { prompt, mode } = req.body;
-    
+
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
@@ -30,11 +30,12 @@ export default async function handler(req, res) {
     // Check for API keys
     const openaiKey = process.env.OPENAI_API_KEY;
     const openrouterKey = process.env.OPENROUTER_API_KEY;
-    
+
     if (!openaiKey && !openrouterKey) {
-      return res.status(500).json({ 
+      return res.status(500).json({
         error: 'No LLM API keys configured',
-        details: 'Please configure OPENAI_API_KEY or OPENROUTER_API_KEY in environment variables'
+        details:
+          'Please configure OPENAI_API_KEY or OPENROUTER_API_KEY in environment variables'
       });
     }
 
@@ -58,33 +59,36 @@ Keep the structure simple and connected.`;
     const userPrompt = `Parse this prompt into a graph structure:\n"${prompt}"`;
 
     let response;
-    
+
     if (openrouterKey) {
       // Use OpenRouter
-      const apiResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openrouterKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://promptscape.com',
-          'X-Title': 'PromptScape Parser'
-        },
-        body: JSON.stringify({
-          model: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt }
-          ],
-          max_tokens: 1000,
-          temperature: 0.3,
-          response_format: { type: 'json_object' }
-        })
-      });
+      const apiResponse = await fetch(
+        'https://openrouter.ai/api/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${openrouterKey}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': 'https://promptscape.com',
+            'X-Title': 'PromptScape Parser'
+          },
+          body: JSON.stringify({
+            model: process.env.PRIMARY_MODEL || 'openai/gpt-4o-mini',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt }
+            ],
+            max_tokens: 1000,
+            temperature: 0.3,
+            response_format: { type: 'json_object' }
+          })
+        }
+      );
 
       if (!apiResponse.ok) {
         const error = await apiResponse.text();
         console.error('OpenRouter error:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
           error: 'LLM API error',
           details: error
         });
@@ -92,31 +96,33 @@ Keep the structure simple and connected.`;
 
       const data = await apiResponse.json();
       response = data.choices[0].message.content;
-      
     } else if (openaiKey) {
       // Use OpenAI directly
-      const apiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openaiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt }
-          ],
-          max_tokens: 1000,
-          temperature: 0.3,
-          response_format: { type: 'json_object' }
-        })
-      });
+      const apiResponse = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${openaiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userPrompt }
+            ],
+            max_tokens: 1000,
+            temperature: 0.3,
+            response_format: { type: 'json_object' }
+          })
+        }
+      );
 
       if (!apiResponse.ok) {
         const error = await apiResponse.text();
         console.error('OpenAI error:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
           error: 'LLM API error',
           details: error
         });
@@ -155,7 +161,7 @@ Keep the structure simple and connected.`;
       type: node.type || 'subject',
       text: node.text || '',
       data: node.data || {},
-      position: node.position || { x: 100 + (index * 150), y: 100 + (index * 50) }
+      position: node.position || { x: 100 + index * 150, y: 100 + index * 50 }
     }));
 
     parsedGraph.edges = parsedGraph.edges.map((edge, index) => ({
@@ -165,16 +171,16 @@ Keep the structure simple and connected.`;
       type: edge.type || 'default'
     }));
 
-    // Return the parsed graph
+    // Return the parsed graph directly (client expects { nodes, edges })
     res.status(200).json({
+      nodes: parsedGraph.nodes,
+      edges: parsedGraph.edges,
       success: true,
-      graph: parsedGraph,
       mode: mode || 'llm-enhanced'
     });
-
   } catch (error) {
     console.error('Parse endpoint error:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to parse prompt',
       details: error.message
     });
